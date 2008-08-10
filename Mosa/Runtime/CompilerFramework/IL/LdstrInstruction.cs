@@ -1,0 +1,74 @@
+/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Mosa.Runtime.Metadata;
+using System.Diagnostics;
+using Mosa.Runtime.Metadata.Signatures;
+
+namespace Mosa.Runtime.CompilerFramework.IL
+{
+    public class LdstrInstruction : LoadInstruction
+    {
+        #region Data members
+
+        /// <summary>
+        /// The string value, which is loaded.
+        /// </summary>
+        private string _value;
+
+        #endregion // Data members
+
+        #region Construction
+
+        public LdstrInstruction(OpCode code)
+            : base(code)
+        {
+            Debug.Assert(OpCode.Ldstr == code);
+            if (OpCode.Ldstr != code)
+                throw new ArgumentException(@"Invalid opcode.");
+        }
+
+        #endregion // Construction
+
+        #region Methods
+
+        /// <summary>
+        /// Initializes the arithmetic instruction.
+        /// </summary>
+        /// <param name="decoder">The decoder to initialize from.</param>
+        public override void Decode(IInstructionDecoder decoder)
+        {
+            // Decode base classes first
+            base.Decode(decoder);
+
+            // Load the string value, it's a token
+            IMetadataProvider metadata = decoder.Metadata;
+            TokenTypes token = TokenTypes.UserString | decoder.DecodeToken();
+            metadata.Read(token, out _value);
+
+            // Set the result
+            SetResult(0, CreateResultOperand(decoder.Architecture, new SigType(CilElementType.String)));
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0} = \"{1}\"", this.Results[0], _value);
+        }
+
+        public sealed override void Visit(IILVisitor visitor)
+        {
+            visitor.Ldstr(this);
+        }
+
+        #endregion // Methods
+    }
+}
