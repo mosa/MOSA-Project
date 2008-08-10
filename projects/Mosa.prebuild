@@ -25,7 +25,7 @@
       </Options>
     </Configuration>
     
-    <Project name="ClassLib" type="Library" path="..\Mosa\ClassLib" language="C#" runtime="Microsoft" rootNamespace="Mosa.ClassLib" assemblyName="Mosa.ClassLib">
+    <Project name="Mosa.ClassLib" type="Library" path="..\Mosa\ClassLib" language="C#" runtime="Microsoft" rootNamespace="Mosa.ClassLib" assemblyName="Mosa.ClassLib">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../build/debug</OutputPath>
@@ -48,7 +48,7 @@
       </Files>
     </Project>
 
-    <Project name="DeviceDrivers" type="Library" path="..\Mosa\Devices" language="C#" runtime="Microsoft" rootNamespace="Mosa.Devices" assemblyName="Mosa.Devices">
+    <Project name="Mosa.DeviceDrivers" type="Library" path="..\Mosa\Devices" language="C#" runtime="Microsoft" rootNamespace="Mosa.Devices" assemblyName="Mosa.Devices">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../build/debug</OutputPath>
@@ -68,7 +68,7 @@
         </Options>
       </Configuration>
       
-      <Reference name="ClassLib" localCopy="true"/>
+      <Reference name="Mosa.ClassLib" localCopy="true"/>
       
       <Files>
         <Match pattern="*.cs" path="." recurse="true"/>
