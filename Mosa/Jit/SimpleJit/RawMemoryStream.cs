@@ -10,7 +10,7 @@
 using System;
 using System.IO;
 
-namespace Mosa.Runtime.Jit.SimpleJit
+namespace Mosa.Jit.SimpleJit
 {
     /// <summary>
     /// Implements a raw memory stream on top of UnmanagedMemoryStream.

@@ -103,8 +103,8 @@
     <Project name="Mosa.Platforms.x86" type="Library" path="..\Mosa\Platforms\x86" language="C#" runtime="Microsoft" rootNamespace="Mosa.Platforms.x86" assemblyName="Mosa.Platforms.x86">
       <Configuration name="Debug">
         <Options>
-          <OutputPath>../build/debug</OutputPath>
-          <XmlDocFile>../build/Mosa.Platforms.x86.xml</XmlDocFile>
+          <OutputPath>../../build/debug</OutputPath>
+          <XmlDocFile>../../build/Mosa.Platforms.x86.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>
@@ -112,8 +112,8 @@
       </Configuration>
       <Configuration name="Release">
         <Options>
-          <OutputPath>../build/release</OutputPath>
-          <XmlDocFile>../build/Mosa.Platforms.x86.xml</XmlDocFile>
+          <OutputPath>../../build/release</OutputPath>
+          <XmlDocFile>../../build/Mosa.Platforms.x86.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>
@@ -131,8 +131,8 @@
     <Project name="Mosa.Jit.SimpleJit" type="Library" path="..\Mosa\Jit\SimpleJit" language="C#" runtime="Microsoft" rootNamespace="Mosa.Jit.SimpleJit" assemblyName="Mosa.Jit.SimpleJit">
       <Configuration name="Debug">
         <Options>
-          <OutputPath>../build/debug</OutputPath>
-          <XmlDocFile>../build/Mosa.Jit.SimpleJit.xml</XmlDocFile>
+          <OutputPath>../../build/debug</OutputPath>
+          <XmlDocFile>../../build/Mosa.Jit.SimpleJit.xml</XmlDocFile>
           <AllowUnsafe>true</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>
@@ -140,8 +140,8 @@
       </Configuration>
       <Configuration name="Release">
         <Options>
-          <OutputPath>../build/release</OutputPath>
-          <XmlDocFile>../build/Mosa.Jit.SimpleJit.xml</XmlDocFile>
+          <OutputPath>../../build/release</OutputPath>
+          <XmlDocFile>../../build/Mosa.Jit.SimpleJit.xml</XmlDocFile>
           <AllowUnsafe>true</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>
@@ -188,8 +188,8 @@
 
       <Configuration name="Debug">
         <Options>
-          <OutputPath>../build/debug</OutputPath>
-          <XmlDocFile>../build/mosacl.xml</XmlDocFile>
+          <OutputPath>../../build/debug</OutputPath>
+          <XmlDocFile>../../build/mosacl.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>
@@ -197,8 +197,8 @@
       </Configuration>
       <Configuration name="Release">
         <Options>
-          <OutputPath>../build/release</OutputPath>
-          <XmlDocFile>../build/mosacl.xml</XmlDocFile>
+          <OutputPath>../../build/release</OutputPath>
+          <XmlDocFile>../../build/mosacl.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>
@@ -218,8 +218,8 @@
 
       <Configuration name="Debug">
         <Options>
-          <OutputPath>../build/debug</OutputPath>
-          <XmlDocFile>../build/Test.Mosa.Runtime.CompilerFramework.xml</XmlDocFile>
+          <OutputPath>../../../build/debug</OutputPath>
+          <XmlDocFile>../../../build/Test.Mosa.Runtime.CompilerFramework.xml</XmlDocFile>
           <AllowUnsafe>true</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>
@@ -227,8 +227,8 @@
       </Configuration>
       <Configuration name="Release">
         <Options>
-          <OutputPath>../build/release</OutputPath>
-          <XmlDocFile>../build/Test.Mosa.Runtime.CompilerFramework.xml</XmlDocFile>
+          <OutputPath>../../build/release</OutputPath>
+          <XmlDocFile>../../build/Test.Mosa.Runtime.CompilerFramework.xml</XmlDocFile>
           <AllowUnsafe>true</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>
@@ -238,6 +238,7 @@
       <Reference name="Mosa.Kernel" localCopy="true" />
       <Reference name="Mosa.Platforms.x86" localCopy="true" />
       <Reference name="Mosa.Runtime" localCopy="true" />
+      <Reference name="Mosa.Jit.SimpleJit" localCopy="true" />
       <Reference name="System" version="2.0.0.0" />
       <Reference name="System.Xml" version="2.0.0.0" />
       <Reference name="MbUnit.Framework" />

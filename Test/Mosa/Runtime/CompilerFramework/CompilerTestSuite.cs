@@ -42,7 +42,7 @@ namespace cltester
         {
             XmlSerializer serializer = new XmlSerializer(typeof(CompilerTestCaseList));
             TestSuite suite = new TestSuite(@"MOSA Compiler Tests");
-            string testPath = @"..\\..\\Tests\\tests.xml";
+            string testPath = @"tests.xml";
             Debug.Assert(true == File.Exists(testPath), @"Can't find test path file at ..\\..\\Tests\\tests.xml");
             using (TextReader reader = new StreamReader(testPath))
             {

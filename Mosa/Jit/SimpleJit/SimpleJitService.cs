@@ -12,10 +12,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 
-namespace Mosa.Runtime.Jit.SimpleJit
+namespace Mosa.Jit.SimpleJit
 {
     /// <summary>
     /// Provides a basic jit compiler that runs without many optimizations.

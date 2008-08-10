@@ -13,7 +13,7 @@ using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Runtime.Jit.SimpleJit
+namespace Mosa.Jit.SimpleJit
 {
     /// <summary>
     /// The first stage in a method compiler building the call trampoline.
