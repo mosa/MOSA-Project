@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Prebuild xmlns="http://dnpb.sourceforge.net/schemas/prebuild-1.7.xsd" version="1.7">
-  <Solution name="MOSA" path=".">
+  <Solution name="MOSA" path="../Mosa">
     <Configuration name="Debug">
       <Options>
         <OutputPath>../build/debug</OutputPath>
@@ -25,7 +25,7 @@
       </Options>
     </Configuration>
     
-    <Project name="ClassLib" type="Library" path="ClassLib" language="C#" runtime="Microsoft" rootNamespace="Mosa.ClassLib" assemblyName="Mosa.ClassLib">
+    <Project name="ClassLib" type="Library" path="..\Mosa\ClassLib" language="C#" runtime="Microsoft" rootNamespace="Mosa.ClassLib" assemblyName="Mosa.ClassLib">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../build/debug</OutputPath>
@@ -50,7 +50,7 @@
       </Files>
     </Project>
 
-    <Project name="DeviceDrivers" type="Library" path="Devices" language="C#" runtime="Microsoft" rootNamespace="Mosa.Devices" assemblyName="Mosa.Devices">
+    <Project name="DeviceDrivers" type="Library" path="..\Mosa\Devices" language="C#" runtime="Microsoft" rootNamespace="Mosa.Devices" assemblyName="Mosa.Devices">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../build/debug</OutputPath>
