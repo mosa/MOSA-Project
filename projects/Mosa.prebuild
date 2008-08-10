@@ -29,14 +29,14 @@
       <Configuration name="Debug">
         <Options>
           <OutputPath>../build/debug</OutputPath>
-          <XmlDocFile>../build/ClassLib.xml</XmlDocFile>
+          <XmlDocFile>../build/Mosa.ClassLib.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe> 
         </Options>
       </Configuration>
       <Configuration name="Release">
         <Options>
           <OutputPath>../build/release</OutputPath>
-          <XmlDocFile>../build/ClassLib.xml</XmlDocFile>
+          <XmlDocFile>../build/Mosa.ClassLib.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
         </Options>
       </Configuration>
@@ -52,7 +52,7 @@
       <Configuration name="Debug">
         <Options>
           <OutputPath>../build/debug</OutputPath>
-          <XmlDocFile>../build/DeviceDrivers.xml</XmlDocFile>
+          <XmlDocFile>../build/Mosa.Devices.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>
@@ -61,7 +61,7 @@
       <Configuration name="Release">
         <Options>
           <OutputPath>../build/release</OutputPath>
-          <XmlDocFile>../build/DeviceDrivers.xml</XmlDocFile>
+          <XmlDocFile>../build/Mosa.Devices.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>
@@ -75,5 +75,177 @@
       </Files>
     </Project>
 
+    <Project name="Mosa.Kernel" type="Library" path="..\Mosa\Kernel" language="C#" runtime="Microsoft" rootNamespace="Mosa.Kernel" assemblyName="Mosa.Kernel">
+      <Configuration name="Debug">
+        <Options>
+          <OutputPath>../build/debug</OutputPath>
+          <XmlDocFile>../build/Mosa.Kernel.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OutputPath>../build/release</OutputPath>
+          <XmlDocFile>../build/Mosa.Kernel.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+
+      <Files>
+        <Match pattern="*.cs" path="." recurse="true"/>
+      </Files>
+    </Project>
+
+    <Project name="Mosa.Platforms.x86" type="Library" path="..\Mosa\Platforms\x86" language="C#" runtime="Microsoft" rootNamespace="Mosa.Platforms.x86" assemblyName="Mosa.Platforms.x86">
+      <Configuration name="Debug">
+        <Options>
+          <OutputPath>../build/debug</OutputPath>
+          <XmlDocFile>../build/Mosa.Platforms.x86.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OutputPath>../build/release</OutputPath>
+          <XmlDocFile>../build/Mosa.Platforms.x86.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+
+      <Reference name="Mosa.Runtime" localCopy="true" />
+      <Reference name="System" version="2.0.0.0" />
+
+      <Files>
+        <Match pattern="*.cs" path="." recurse="true"/>
+      </Files>
+    </Project>
+
+    <Project name="Mosa.Jit.SimpleJit" type="Library" path="..\Mosa\Jit\SimpleJit" language="C#" runtime="Microsoft" rootNamespace="Mosa.Jit.SimpleJit" assemblyName="Mosa.Jit.SimpleJit">
+      <Configuration name="Debug">
+        <Options>
+          <OutputPath>../build/debug</OutputPath>
+          <XmlDocFile>../build/Mosa.Jit.SimpleJit.xml</XmlDocFile>
+          <AllowUnsafe>true</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OutputPath>../build/release</OutputPath>
+          <XmlDocFile>../build/Mosa.Jit.SimpleJit.xml</XmlDocFile>
+          <AllowUnsafe>true</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+
+      <Reference name="Mosa.Runtime" localCopy="true" />
+      <Reference name="System" version="2.0.0.0" />
+
+      <Files>
+        <Match pattern="*.cs" path="." recurse="true"/>
+      </Files>
+    </Project>
+
+    <Project name="Mosa.Runtime" type="Library" path="..\Mosa\Runtime" language="C#" runtime="Microsoft" rootNamespace="Mosa.Runtime" assemblyName="Mosa.Runtime">
+      <Configuration name="Debug">
+        <Options>
+          <OutputPath>../build/debug</OutputPath>
+          <XmlDocFile>../build/Mosa.Runtime.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OutputPath>../build/release</OutputPath>
+          <XmlDocFile>../build/Mosa.Runtime.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+
+      <Reference name="Mosa.Kernel" localCopy="true" />
+      <Reference name="System" version="2.0.0.0" />
+
+      <Files>
+        <Match pattern="*.cs" path="." recurse="true"/>
+      </Files>
+    </Project>
+
+    <Project name="mosacl" type="Exe" path="..\Mosa\Tools\Compiler" language="C#" runtime="Microsoft" rootNamespace="Mosa.Tools.Compiler" assemblyName="mosacl">
+
+      <Configuration name="Debug">
+        <Options>
+          <OutputPath>../build/debug</OutputPath>
+          <XmlDocFile>../build/mosacl.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OutputPath>../build/release</OutputPath>
+          <XmlDocFile>../build/mosacl.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+
+      <Reference name="Mosa.Kernel" localCopy="true" />
+      <Reference name="Mosa.Platforms.x86" localCopy="true" />
+      <Reference name="Mosa.Runtime" localCopy="true" />
+
+      <Files>
+        <Match pattern="*.cs" path="." recurse="true"/>
+      </Files>
+    </Project>
+
+    <Project name="Test.Mosa.Runtime.CompilerFramework" type="Library" path="..\Test\Mosa\Runtime\CompilerFramework" language="C#" runtime="Microsoft" rootNamespace="Test.Mosa.Runtime.CompilerFramework" assemblyName="Test.Mosa.Runtime.CompilerFramework">
+
+      <Configuration name="Debug">
+        <Options>
+          <OutputPath>../build/debug</OutputPath>
+          <XmlDocFile>../build/Test.Mosa.Runtime.CompilerFramework.xml</XmlDocFile>
+          <AllowUnsafe>true</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OutputPath>../build/release</OutputPath>
+          <XmlDocFile>../build/Test.Mosa.Runtime.CompilerFramework.xml</XmlDocFile>
+          <AllowUnsafe>true</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+
+      <Reference name="Mosa.Kernel" localCopy="true" />
+      <Reference name="Mosa.Platforms.x86" localCopy="true" />
+      <Reference name="Mosa.Runtime" localCopy="true" />
+      <Reference name="System" version="2.0.0.0" />
+      <Reference name="System.Xml" version="2.0.0.0" />
+      <Reference name="MbUnit.Framework" />
+
+      <Files>
+        <Match pattern="*.cs" path="." recurse="true"/>
+      </Files>
+    </Project>
+    
   </Solution>
 </Prebuild>
