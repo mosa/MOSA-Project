@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Prebuild xmlns="http://dnpb.sourceforge.net/schemas/prebuild-1.7.xsd" version="1.7">
+  <Solution name="MOSA" path=".">
+    <Configuration name="Debug">
+      <Options>
+        <OutputPath>../build/debug</OutputPath>
+        <XmlDocFile>../build/Mosa.xml</XmlDocFile>
+        <IncrementalBuild>true</IncrementalBuild>
+        <CompilerDefines>DEBUG;TRACE</CompilerDefines>
+        <OptimizeCode>false</OptimizeCode>
+        <AllowUnsafe>true</AllowUnsafe>
+        <DebugInformation>true</DebugInformation>
+        <WarningLevel>0</WarningLevel>
+      </Options>
+    </Configuration>
+    <Configuration name="Release">
+      <Options>
+        <OutputPath>../build/release</OutputPath>
+        <XmlDocFile>../build/Mosa.xml</XmlDocFile>
+        <CompilerDefines>TRACE</CompilerDefines>
+        <OptimizeCode>true</OptimizeCode>
+        <AllowUnsafe>true</AllowUnsafe>
+        <DebugInformation>false</DebugInformation>
+        <WarningLevel>0</WarningLevel>
+      </Options>
+    </Configuration>
+    
+    <Project name="ClassLib" type="Library" path="ClassLib" language="C#" runtime="Microsoft" rootNamespace="Mosa.ClassLib" assemblyName="Mosa.ClassLib">
+      <Configuration name="Debug">
+        <Options>
+          <OutputPath>../build/debug</OutputPath>
+          <XmlDocFile>../build/ClassLib.xml</XmlDocFile>
+          <AllowUnsafe>true</AllowUnsafe>
+          <NoStdLib>true</NoStdLib>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OutputPath>../build/release</OutputPath>
+          <XmlDocFile>../build/ClassLib.xml</XmlDocFile>
+          <AllowUnsafe>true</AllowUnsafe>
+          <NoStdLib>true</NoStdLib>
+        </Options>
+      </Configuration>
+      
+      <Reference name="System" version="2.0.0.0" />
+      
+      <Files>
+        <Match pattern="*.cs" path="." recurse="true"/>
+      </Files>
+    </Project>
+
+    <Project name="DeviceDrivers" type="Library" path="Devices" language="C#" runtime="Microsoft" rootNamespace="Mosa.Devices" assemblyName="Mosa.Devices">
+      <Configuration name="Debug">
+        <Options>
+          <OutputPath>../build/debug</OutputPath>
+          <XmlDocFile>../build/DeviceDrivers.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines>ENSEMBLE</CompilerDefines>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OutputPath>../build/release</OutputPath>
+          <XmlDocFile>../build/DeviceDrivers.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines>ENSEMBLE</CompilerDefines>
+        </Options>
+      </Configuration>
+      
+      <Reference name="ClassLib" localCopy="true"/>
+      
+      <Files>
+        <Match pattern="*.cs" path="." recurse="true"/>
+      </Files>
+    </Project>
+
+  </Solution>
+</Prebuild>
