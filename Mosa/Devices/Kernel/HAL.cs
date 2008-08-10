@@ -11,6 +11,19 @@ namespace Mosa.Devices.Kernel
 {
     public static class HAL
     {
+        public delegate IReadWriteIOPort CreatePort(ushort port);
+
+        static private CreatePort createPort;
+
+        /// <summary>
+        /// Sets the create port method.
+        /// </summary>
+        /// <param name="createPort">The create port.</param>
+        public static void SetCreatePortMethod(CreatePort createPort)
+        {
+            HAL.createPort = createPort;
+        }
+
         /// <summary>
         /// Requests an IO read/write port interface from the kernel
         /// </summary>
@@ -18,7 +31,7 @@ namespace Mosa.Devices.Kernel
         /// <returns></returns>
         public static IReadWriteIOPort RequestIOPort(ushort port)
         {
-            return new IOPortKernelAdapter(Ensemble.Kernel.BootEntry.ResourceManager.RequestIOPort(port));
+            return createPort(port);
         }
 
         /// <summary>
@@ -38,3 +51,4 @@ namespace Mosa.Devices.Kernel
         }
     }
 }
+
