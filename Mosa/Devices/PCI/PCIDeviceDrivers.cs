@@ -11,8 +11,6 @@
  * PCIDeviceDrivers.cs: Container for all the PCI device drivers
 */
 
-#if ENSEMBLE
-
 using System;
 using System.Reflection;
 using Mosa.ClassLib;
@@ -103,5 +101,3 @@ namespace Mosa.Devices.PCI
         }
     }
 }
-
-#endif

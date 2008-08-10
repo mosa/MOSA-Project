@@ -30,16 +30,14 @@
         <Options>
           <OutputPath>../build/debug</OutputPath>
           <XmlDocFile>../build/ClassLib.xml</XmlDocFile>
-          <AllowUnsafe>true</AllowUnsafe>
-          <NoStdLib>true</NoStdLib>
+          <AllowUnsafe>false</AllowUnsafe> 
         </Options>
       </Configuration>
       <Configuration name="Release">
         <Options>
           <OutputPath>../build/release</OutputPath>
           <XmlDocFile>../build/ClassLib.xml</XmlDocFile>
-          <AllowUnsafe>true</AllowUnsafe>
-          <NoStdLib>true</NoStdLib>
+          <AllowUnsafe>false</AllowUnsafe>
         </Options>
       </Configuration>
       
@@ -57,7 +55,7 @@
           <XmlDocFile>../build/DeviceDrivers.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
-          <CompilerDefines>ENSEMBLE</CompilerDefines>
+          <CompilerDefines></CompilerDefines>
         </Options>
       </Configuration>
       <Configuration name="Release">
@@ -66,7 +64,7 @@
           <XmlDocFile>../build/DeviceDrivers.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
-          <CompilerDefines>ENSEMBLE</CompilerDefines>
+          <CompilerDefines></CompilerDefines>
         </Options>
       </Configuration>
       
