@@ -24,13 +24,13 @@
         <WarningLevel>0</WarningLevel>
       </Options>
     </Configuration>
-    
+
     <Project name="Mosa.ClassLib" type="Library" path="..\Mosa\ClassLib" language="C#" runtime="Microsoft" rootNamespace="Mosa.ClassLib" assemblyName="Mosa.ClassLib">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../build/debug</OutputPath>
           <XmlDocFile>../build/Mosa.ClassLib.xml</XmlDocFile>
-          <AllowUnsafe>false</AllowUnsafe> 
+          <AllowUnsafe>false</AllowUnsafe>
         </Options>
       </Configuration>
       <Configuration name="Release">
@@ -40,9 +40,9 @@
           <AllowUnsafe>false</AllowUnsafe>
         </Options>
       </Configuration>
-      
+
       <Reference name="System" version="2.0.0.0" />
-      
+
       <Files>
         <Match pattern="*.cs" path="." recurse="true"/>
       </Files>
@@ -67,9 +67,9 @@
           <CompilerDefines></CompilerDefines>
         </Options>
       </Configuration>
-      
+
       <Reference name="Mosa.ClassLib" localCopy="true"/>
-      
+
       <Files>
         <Match pattern="*.cs" path="." recurse="true"/>
       </Files>
@@ -247,6 +247,61 @@
         <Match pattern="*.cs" path="." recurse="true"/>
       </Files>
     </Project>
-    
+
+    <Project name="Mosa.EmulatedDevices" type="Library" path="..\Mosa\EmulatedDevices" language="C#" runtime="Microsoft" rootNamespace="Mosa.EmulatedDevices" assemblyName="Mosa.EmulatedDevices">
+      <Configuration name="Debug">
+        <Options>
+          <OutputPath>../build/debug</OutputPath>
+          <XmlDocFile>../build/Mosa.EmulatedDevices.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OutputPath>../build/release</OutputPath>
+          <XmlDocFile>../build/Mosa.EmulatedDevices.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+      <Reference name="System" version="2.0.0.0" />
+      <Reference name="Mosa.ClassLib" localCopy="true" />
+      <Reference name="Mosa.DeviceDrivers" localCopy="true" />
+      <Files>
+        <Match pattern="*.cs" path="." recurse="true"/>
+      </Files>
+    </Project>
+
+    <Project name="Mosa.Emulator" type="Exe" path="..\Mosa\Emulator" language="C#" runtime="Microsoft" rootNamespace="Mosa.Emulator" assemblyName="Mosa.Emulator">
+      <Configuration name="Debug">
+        <Options>
+          <OutputPath>../build/debug</OutputPath>
+          <XmlDocFile>../build/Mosa.Emulator.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OutputPath>../build/release</OutputPath>
+          <XmlDocFile>../build/Mosa.Emulator.xml</XmlDocFile>
+          <AllowUnsafe>false</AllowUnsafe>
+          <NoStdLib>false</NoStdLib>
+          <CompilerDefines></CompilerDefines>
+        </Options>
+      </Configuration>
+      <Reference name="System" version="2.0.0.0" />
+      <Reference name="Mosa.EmulatedDevices" localCopy="true" />
+      <Reference name="Mosa.ClassLib" localCopy="true" />
+      <Reference name="Mosa.DeviceDrivers" localCopy="true" />
+      <Files>
+        <Match pattern="*.cs" path="." recurse="true"/>
+      </Files>
+    </Project>
+
   </Solution>
 </Prebuild>

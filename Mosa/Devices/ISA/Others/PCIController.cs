@@ -46,9 +46,9 @@ namespace Mosa.Devices.ISA
 
         public override bool Probe()
         {
-            ConfigAddress.Write32Bits(BaseValue);
+            ConfigAddress.Write32(BaseValue);
 
-            if (ConfigAddress.Read32Bits() != BaseValue)
+            if (ConfigAddress.Read32() != BaseValue)
                 return false;
 
             return true;
@@ -77,25 +77,25 @@ namespace Mosa.Devices.ISA
 
         public uint ReadConfig(uint bus, uint slot, uint function, uint register)
         {
-            ConfigAddress.Write32Bits(BaseValue
+            ConfigAddress.Write32(BaseValue
                        | ((bus & 0xFF) << 16)
                        | ((slot & 0x0F) << 11)
                        | ((function & 0x07) << 8)
                        | (register & 0xFC));
 
-            return ConfigData.Read32Bits();
+            return ConfigData.Read32();
         }
 
         public void WriteConfig(uint bus, uint slot, uint function, uint register, uint value)
         {
 
-            ConfigAddress.Write32Bits(BaseValue
+            ConfigAddress.Write32(BaseValue
                        | ((bus & 0xFF) << 16)
                        | ((slot & 0x0F) << 11)
                        | ((function & 0x07) << 8)
                        | (register & 0xFC));
 
-            ConfigData.Write32Bits(value);
+            ConfigData.Write32(value);
         }
 
         public bool ProbeDevice(uint bus, uint slot, uint fun)

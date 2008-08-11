@@ -161,28 +161,28 @@ namespace Mosa.Devices.ISA
             ///TODO: could use BIOS to help w/ detection; 0x0400-x0403 supply base address for COM1-4
 
             // Disable all UART interrupts
-            IERBase.Write8Bits(0x00);
+            IERBase.Write8(0x00);
 
             // Enable DLAB (set baud rate divisor)
-            LCRBase.Write8Bits((byte)LCR.DLAB);
+            LCRBase.Write8((byte)LCR.DLAB);
 
             // Set Baud rate
             int baudRate = 115200;
             int divisor = 115200 / baudRate;
-            DLLBase.Write8Bits((byte)(divisor & 0xFF));
-            DLMBase.Write8Bits((byte)(divisor >> 8 & 0xFF));
+            DLLBase.Write8((byte)(divisor & 0xFF));
+            DLMBase.Write8((byte)(divisor >> 8 & 0xFF));
 
             // Reset DLAB, Set 8 bits, no parity, one stop bit
-            LCRBase.Write8Bits((byte)(LCR.CS8 | LCR.ST1 | LCR.PNO));
+            LCRBase.Write8((byte)(LCR.CS8 | LCR.ST1 | LCR.PNO));
 
             // Enable FIFO, clear them, with 14-byte threshold
-            FCRBase.Write8Bits((byte)(FCR.Enabled | FCR.CLR_RCVR | FCR.CLR_XMIT | FCR.TL14));
+            FCRBase.Write8((byte)(FCR.Enabled | FCR.CLR_RCVR | FCR.CLR_XMIT | FCR.TL14));
 
             // IRQs enabled, RTS/DSR set
-            MCRBase.Write8Bits((byte)(MCR.DTR | MCR.RTS | MCR.OUT2));
+            MCRBase.Write8((byte)(MCR.DTR | MCR.RTS | MCR.OUT2));
 
             // Interrupt when data received
-            IERBase.Write8Bits((byte)IER.DR);
+            IERBase.Write8((byte)IER.DR);
 
             return true;
         }
@@ -239,7 +239,7 @@ namespace Mosa.Devices.ISA
 
         protected bool CanTransmit()
         {
-            return ((LSRBase.Read8Bits() & (byte)LSR.THRE) != 0);
+            return ((LSRBase.Read8() & (byte)LSR.THRE) != 0);
         }
 
         public void Write(byte ch)
@@ -250,7 +250,7 @@ namespace Mosa.Devices.ISA
                 while (!CanTransmit())
                     ;
 
-                THRBase.Write8Bits(ch);
+                THRBase.Write8(ch);
             }
             finally {
                 spinLock.Exit();
@@ -259,7 +259,7 @@ namespace Mosa.Devices.ISA
 
         protected bool CanRead()
         {
-            return ((LSRBase.Read8Bits()) & (byte)LSR.DR) != 0;
+            return ((LSRBase.Read8()) & (byte)LSR.DR) != 0;
         }
 
         protected void ReadSerial()
@@ -269,7 +269,7 @@ namespace Mosa.Devices.ISA
 
                 if (!IsFIFOFull())
                     while (CanRead())
-                        AddToFIFO(RBRBase.Read8Bits());
+                        AddToFIFO(RBRBase.Read8());
             }
             finally {
                 spinLock.Exit();
@@ -278,16 +278,16 @@ namespace Mosa.Devices.ISA
 
         public void DisableDataReceivedInterrupt()
         {
-            IER ier = (IER)(IERBase.Read8Bits());
+            IER ier = (IER)(IERBase.Read8());
             ier &= ~IER.DR;
-            IERBase.Write8Bits((byte)ier);
+            IERBase.Write8((byte)ier);
         }
 
         public void EnableDataReceivedInterrupt()
         {
-            byte ier = IERBase.Read8Bits();
+            byte ier = IERBase.Read8();
             ier |= (byte)IER.DR;
-            IERBase.Write8Bits(ier);
+            IERBase.Write8(ier);
         }
 
         public int ReadByte()

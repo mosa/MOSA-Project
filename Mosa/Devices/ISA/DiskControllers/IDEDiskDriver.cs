@@ -124,9 +124,9 @@ namespace Mosa.Devices.ISA.DiskControllers
 
         public override bool Probe()
         {
-            LBALowPort.Write8Bits(0x88);
+            LBALowPort.Write8(0x88);
 
-            if (LBALowPort.Read8Bits() != 0x88)
+            if (LBALowPort.Read8() != 0x88)
                 return false;
 
             return true;
@@ -134,20 +134,20 @@ namespace Mosa.Devices.ISA.DiskControllers
 
         public override bool Start()
         {
-            DeviceHeadPort.Write8Bits(0xA0);
+            DeviceHeadPort.Write8(0xA0);
 
             // TODO
             //Timer.Delay(1000 / 250); // wait 1/250th of a second
 
-            if ((StatusPort.Read8Bits() & 0x40) == 0x40)
+            if ((StatusPort.Read8() & 0x40) == 0x40)
                 driveInfo[0].Present = true;
 
-            DeviceHeadPort.Write8Bits(0xB0);
+            DeviceHeadPort.Write8(0xB0);
 
             // TODO
             //Timer.Delay(1000 / 250); // wait 1/250th of a second
 
-            if ((StatusPort.Read8Bits() & 0x40) == 0x40)
+            if ((StatusPort.Read8() & 0x40) == 0x40)
                 driveInfo[1].Present = true;
 
             return true;
@@ -179,7 +179,7 @@ namespace Mosa.Devices.ISA.DiskControllers
         protected bool WaitForReqisterReady()
         {
             while (true) {
-                uint status = StatusPort.Read8Bits();
+                uint status = StatusPort.Read8();
 
                 if ((status & 0x08) == 0x08)
                     return true;
@@ -194,19 +194,19 @@ namespace Mosa.Devices.ISA.DiskControllers
 
         protected bool PerformLBA28(SectorOperation operation, uint driveNbr, uint lba, byte[] data, uint offset)
         {
-            FeaturePort.Write8Bits(0);
-            SectorCountPort.Write8Bits(1);
+            FeaturePort.Write8(0);
+            SectorCountPort.Write8(1);
 
-            LBALowPort.Write8Bits((byte)(lba & 0xFF));
-            LBAMidPort.Write8Bits((byte)((lba >> 8) & 0xFF));
-            LBAHighPort.Write8Bits((byte)((lba >> 16) & 0xFF));
+            LBALowPort.Write8((byte)(lba & 0xFF));
+            LBAMidPort.Write8((byte)((lba >> 8) & 0xFF));
+            LBAHighPort.Write8((byte)((lba >> 16) & 0xFF));
 
-            DeviceHeadPort.Write8Bits((byte)(0xE0 | (driveNbr << 4) | ((lba >> 24) & 0x0F)));
+            DeviceHeadPort.Write8((byte)(0xE0 | (driveNbr << 4) | ((lba >> 24) & 0x0F)));
 
             if (operation == SectorOperation.Write)
-                CommandPort.Write8Bits(IDECommand.WriteSectorsWithRetry);
+                CommandPort.Write8(IDECommand.WriteSectorsWithRetry);
             else
-                CommandPort.Write8Bits(IDECommand.ReadSectorsWithRetry);
+                CommandPort.Write8(IDECommand.ReadSectorsWithRetry);
 
             if (!WaitForReqisterReady())
                 return false;
@@ -216,11 +216,11 @@ namespace Mosa.Devices.ISA.DiskControllers
             //TODO: Don't use PIO
             if (operation == SectorOperation.Read) {
                 for (uint index = 0; index < 256; index++)
-                    sector.SetUShort(offset + (index * 2), DataPort.Read16Bits());
+                    sector.SetUShort(offset + (index * 2), DataPort.Read16());
             }
             else {
                 for (uint index = 0; index < 256; index++)
-                    DataPort.Write16Bits(sector.GetUShort(offset + (index * 2)));
+                    DataPort.Write16(sector.GetUShort(offset + (index * 2)));
             }
 
             return true;
@@ -269,14 +269,14 @@ namespace Mosa.Devices.ISA.DiskControllers
         public bool Open(uint driveNbr)
         {
             if (driveNbr == 0)
-                DeviceHeadPort.Write8Bits(0xA0);
+                DeviceHeadPort.Write8(0xA0);
             else
                 if (driveNbr == 1)
-                    DeviceHeadPort.Write8Bits(0xB0);
+                    DeviceHeadPort.Write8(0xB0);
                 else
                     return false;
 
-            CommandPort.Write8Bits(IDECommand.IdentifyDrive);
+            CommandPort.Write8(IDECommand.IdentifyDrive);
 
             if (!WaitForReqisterReady())
                 return false;
@@ -284,7 +284,7 @@ namespace Mosa.Devices.ISA.DiskControllers
             BinaryFormat info = new BinaryFormat(new byte[512]);
 
             for (uint index = 0; index < 256; index++)
-                info.SetUShort(index * 2, DataPort.Read16Bits());
+                info.SetUShort(index * 2, DataPort.Read16());
 
             driveInfo[driveNbr].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA28);
 

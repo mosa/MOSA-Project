@@ -86,23 +86,23 @@ namespace Mosa.Devices.ISA.VideoCards
 
         public override bool Start()
         {
-            colorMode = ((miscellaneousOutput.Read8Bits() & 1) == 1);
+            colorMode = ((miscellaneousOutput.Read8() & 1) == 1);
 
             if (colorMode) {
                 offset = 0x8000;
-                crtControllerIndexColor.Write8Bits(CRTCommands.HorizontalDisplayed);
-                width = crtControllerDataColor.Read8Bits();
-                crtControllerIndexColor.Write8Bits(CRTCommands.VerticalDisplayed);
-                height = crtControllerDataColor.Read8Bits();
+                crtControllerIndexColor.Write8(CRTCommands.HorizontalDisplayed);
+                width = crtControllerDataColor.Read8();
+                crtControllerIndexColor.Write8(CRTCommands.VerticalDisplayed);
+                height = crtControllerDataColor.Read8();
                 width++;
                 scanLine = width / 2;
             }
             else {
                 offset = 0x0;
-                crtControllerIndex.Write8Bits(CRTCommands.HorizontalDisplayed);
-                width = crtControllerData.Read8Bits();
-                crtControllerIndex.Write8Bits(CRTCommands.VerticalDisplayed);
-                height = crtControllerData.Read8Bits();
+                crtControllerIndex.Write8(CRTCommands.HorizontalDisplayed);
+                width = crtControllerData.Read8();
+                crtControllerIndex.Write8(CRTCommands.VerticalDisplayed);
+                height = crtControllerData.Read8();
                 width++;
                 scanLine = width;
             }
@@ -136,14 +136,14 @@ namespace Mosa.Devices.ISA.VideoCards
             ushort position = (ushort)(x + (y * width));
 
             if (colorMode) {
-                crtControllerIndexColor.Write8Bits(CRTCommands.CursorLocation);
-                crtControllerDataColor.Write8Bits((byte)((position >> 8) & 0xff));
-                crtControllerDataColorLow.Write8Bits((byte)(position & 0xff));
+                crtControllerIndexColor.Write8(CRTCommands.CursorLocation);
+                crtControllerDataColor.Write8((byte)((position >> 8) & 0xff));
+                crtControllerDataColorLow.Write8((byte)(position & 0xff));
             }
             else {
-                crtControllerIndex.Write8Bits(CRTCommands.CursorLocation);
-                crtControllerData.Write8Bits((byte)((position >> 8) & 0xff));
-                crtControllerDataLow.Write8Bits((byte)(position & 0xff));
+                crtControllerIndex.Write8(CRTCommands.CursorLocation);
+                crtControllerData.Write8((byte)((position >> 8) & 0xff));
+                crtControllerDataLow.Write8((byte)(position & 0xff));
             }
         }
     }

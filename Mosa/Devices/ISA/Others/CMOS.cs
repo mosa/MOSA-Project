@@ -43,8 +43,8 @@ namespace Mosa.Devices.ISA
         public byte Read(byte address)
         {
             spinLock.Enter();
-            commandPort.Write8Bits(address);
-            byte b = dataPort.Read8Bits();
+            commandPort.Write8(address);
+            byte b = dataPort.Read8();
             spinLock.Exit();
             return b;
         }

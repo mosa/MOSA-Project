@@ -9,34 +9,34 @@
 
 using Mosa.Devices.Kernel;
 
-namespace Mosa.Devices.Kernel
+namespace Mosa.Devices
 {
     public interface IReadWriteIOPort : IReadOnlyIOPort, IWriteOnlyIOPort
     {
         ushort Address { get; }
 
-        byte Read8Bits();
-        void Write8Bits(byte data);
-        ushort Read16Bits();
-        void Write16Bits(ushort data);
-        uint Read32Bits();
-        void Write32Bits(uint data);
+        byte Read8();
+        void Write8(byte data);
+        ushort Read16();
+        void Write16(ushort data);
+        uint Read32();
+        void Write32(uint data);
     }
 
     public interface IReadOnlyIOPort
     {
         ushort Address { get; }
-        byte Read8Bits();
-        ushort Read16Bits();
-        uint Read32Bits();
+        byte Read8();
+        ushort Read16();
+        uint Read32();
     }
 
     public interface IWriteOnlyIOPort
     {
         ushort Address { get; }
-        void Write8Bits(byte data);
-        void Write16Bits(ushort data);
-        void Write32Bits(uint data);
+        void Write8(byte data);
+        void Write16(ushort data);
+        void Write32(uint data);
     }
 
 
