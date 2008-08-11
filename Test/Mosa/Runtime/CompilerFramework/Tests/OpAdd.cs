@@ -20,9 +20,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
             return (i == 48 ? 1 : 0);
         }
 
-        public static int _Test_AddDouble()
+        public static int Test_AddDouble()
         {
-            return 0;
+            double i = 1.2;
+            double j = 1.5;
+            for (int a = 0; a < 5; a++)
+            {
+                i = i + j;
+            }
+            return (i == 8.7 ? 1 : 0);
         }
     }
 }

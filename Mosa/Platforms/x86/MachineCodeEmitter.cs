@@ -282,7 +282,31 @@ namespace Mosa.Platforms.x86
 
         public void Cmp(Operand op1, Operand op2)
         {
-            if (op2 is MemoryOperand && op1 is RegisterOperand)
+            if (op1.StackType == StackTypeCode.F || op2.StackType == StackTypeCode.F)
+            {
+                byte[] code = { 0xF2, 0x0F };
+                byte[] eq = { 0x0 };
+                if (op1 is RegisterOperand)
+                {
+                    Emit(code);
+                    Emit(0xC2, 0, op1, op2);
+                    Emit(eq);
+                }
+                else if (op2 is RegisterOperand)
+                {
+                    Emit(code);
+                    Emit(0xC2, 0, op2, op1);
+                    Emit(eq);
+                }
+                else
+                {
+                    Mov(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0), op1);
+                    Emit(code);
+                    Emit(0xC2, 0, new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0), op2);
+                    Emit(eq);
+                }
+            }
+            else if (op2 is MemoryOperand && op1 is RegisterOperand)
                 Emit(0x39, 0, op2, op1);
             else if (op2 is RegisterOperand && op1 is MemoryOperand)
                 Emit(0x3B, 0, op2, op1);
@@ -395,7 +419,7 @@ namespace Mosa.Platforms.x86
             // FIXME: Insert correct opcode here
             byte[] code = { 0xF2, 0x0F };
             Emit(code);
-            Emit(0x58, 1, src, null);
+            Emit(0x58, 0, src, null);
         }
 
         public void SseSub(Operand dest, Operand src)
@@ -444,7 +468,7 @@ namespace Mosa.Platforms.x86
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
-            Emit(0xF7, 7, dest, src);
+            Emit(0xF7, 7, src, null);
         }
 
         public void Mov(Operand dest, Operand src)
@@ -542,8 +566,12 @@ namespace Mosa.Platforms.x86
             // Write the opcode byte
             if (src is ConstantOperand)
                 Emit(0x81, 5, dest, src);
-            else 
+            else if (dest is RegisterOperand)
                 Emit(0x2B, 0, dest, src);
+            else if (dest is MemoryOperand && src is RegisterOperand)
+                Emit(0x29, 0, dest, src);
+            else
+                throw new NotImplementedException();
         }
 
         #endregion // ICodeEmitter Members

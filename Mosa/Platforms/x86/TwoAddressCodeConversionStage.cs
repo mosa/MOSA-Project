@@ -499,26 +499,38 @@ namespace Mosa.Platforms.x86
         {
             Operand result = instruction.Results[0];
             Operand[] ops = instruction.Operands;
-
             Operand tmp = ops[0];
             ops[0] = ops[1];
             ops[1] = tmp;
-
-            // For multiplication...
-            RegisterOperand eax = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
-            _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[0]));
-
-            if (ops[1] is ConstantOperand)
+            // If destination is a register...
+            if (result is RegisterOperand)
             {
-                RegisterOperand edx = new RegisterOperand(result.Type, GeneralPurposeRegister.EDX);
-                _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(edx, ops[1]));
-                ops[1] = edx;
-            }
+                // Move the an operand there, unless it is equal...
+                bool op1IsResult = Object.ReferenceEquals(result, ops[0]);
+                bool op2IsResult = Object.ReferenceEquals(result, ops[1]);
+                if (false == op1IsResult && false == op2IsResult)
+                {
+                    _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(result, ops[0]));
+                }
+                else if (true == op2IsResult)
+                {
+                    Operand t = ops[0];
+                    ops[0] = ops[1];
+                    ops[1] = t;
+                }
 
-            //_instructions.Add(instruction);
-            instruction.Results[0] = eax;
-            if (false == result.IsRegister || false == Object.ReferenceEquals(eax.Register, ((RegisterOperand)result).Register))
+                //_instructions.Add(instruction);
+            }
+            // x86 can't do memory += memory instructions
+            else if (false == result.IsRegister)
+            {
+                // i = x + y style
+                RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX);
+                _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[0]));
+                //_instructions.Add(instruction);
+                instruction.Results[0] = eax;
                 _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(result, eax));
+            }
         }
 
         void IX86InstructionVisitor.Mul(MulInstruction instruction)
