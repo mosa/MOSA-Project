@@ -429,12 +429,11 @@ namespace Mosa.Platforms.x86
                     goto case Mosa.Runtime.Metadata.CilElementType.I4;
 
                 case Mosa.Runtime.Metadata.CilElementType.I4:
-                    int tmp = (int)data;
-                    result = ((uint)tmp).ToString();
+                    result = data.ToString();
                     break;
 
                 case Mosa.Runtime.Metadata.CilElementType.I2:
-                    result = ((ushort)data).ToString();
+                    result = data.ToString();
                     break;
 
                 case Mosa.Runtime.Metadata.CilElementType.R4:

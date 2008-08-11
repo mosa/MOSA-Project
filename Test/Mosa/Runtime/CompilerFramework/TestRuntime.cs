@@ -16,9 +16,9 @@ using Mosa.Runtime.Vm;
 using Mosa.Kernel.Memory;
 using Mosa.Jit.SimpleJit;
 
-using cltester.Kernel.Memory;
+using Test.Mosa.Runtime.CompilerFramework.Kernel.Memory;
 
-namespace cltester
+namespace Test.Mosa.Runtime.CompilerFramework
 {
     /// <summary>
     /// An implementation of the MOSA runtime for test purposes.

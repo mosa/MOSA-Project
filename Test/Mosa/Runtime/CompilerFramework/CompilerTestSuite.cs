@@ -25,7 +25,7 @@ using Mosa.Runtime.CompilerFramework;
 using System.IO;
 using System.Diagnostics;
 
-namespace cltester
+namespace Test.Mosa.Runtime.CompilerFramework
 {
     /// <summary>
     /// Builds a dynamic compiler test suite from an xml configuration file.
@@ -40,6 +40,8 @@ namespace cltester
         [TestSuite]
         public TestSuite BuildCompilerTestSuite()
         {
+            Tests.OpAdd.Test_AddInt32();
+
             Debug.Listeners.Insert(0, new DefaultTraceListener());
 
             XmlSerializer serializer = new XmlSerializer(typeof(CompilerTestCaseList));

@@ -7,7 +7,7 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-namespace cltester.Tests
+namespace Test.Mosa.Runtime.CompilerFramework.Tests
 {
     public static class FloatingPointMul
     {

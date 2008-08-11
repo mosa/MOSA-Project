@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Mosa.Kernel.Memory;
 
-namespace cltester
+namespace Test.Mosa.Runtime.CompilerFramework
 {
     /// <summary>
     /// Provides a stream around virtual memory.

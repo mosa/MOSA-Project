@@ -10,7 +10,11 @@
 <TestCases>
   
   <!-- Opcode tests sorted alphabetically by opcode name -->
-  <TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="IL bitwise and" language="C#">
+  <TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="IL add" language="C#">
+    <Description>Tests the addition operation.</Description>
+    <Source>OpAdd.cs</Source>
+  </TestCase>
+  <TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="IL and" language="C#">
     <Description>Tests the bitwise and operation.</Description>
     <Source>OpAnd.cs</Source>
   </TestCase>

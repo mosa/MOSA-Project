@@ -22,7 +22,7 @@ using Mosa.Runtime;
 using System.Diagnostics;
 
 
-namespace cltester
+namespace Test.Mosa.Runtime.CompilerFramework
 {
     /// <summary>
     /// XML serializable type, that represents a single executable test case.

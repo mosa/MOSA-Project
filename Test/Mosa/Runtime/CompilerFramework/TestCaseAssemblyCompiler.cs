@@ -12,11 +12,11 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Platforms.x86;
+using x86 = Mosa.Platforms.x86;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;
 
-namespace cltester
+namespace Test.Mosa.Runtime.CompilerFramework
 {
     class TestCaseAssemblyCompiler : AssemblyCompiler
     {
@@ -34,7 +34,8 @@ namespace cltester
 
         public static void Compile(IMetadataModule module)
         {
-            IArchitecture architecture = Mosa.Platforms.x86.Architecture.CreateArchitecture(module.Metadata, ArchitectureFeatureFlags.AutoDetect);
+
+            IArchitecture architecture = x86.Architecture.CreateArchitecture(module.Metadata, x86.ArchitectureFeatureFlags.AutoDetect);
             new TestCaseAssemblyCompiler(architecture, module).Compile();
         }
 

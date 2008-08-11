@@ -14,7 +14,7 @@ using System.Text;
 using Mosa.Kernel.Memory;
 using System.Runtime.InteropServices;
 
-namespace cltester.Kernel.Memory
+namespace Test.Mosa.Runtime.CompilerFramework.Kernel.Memory
 {
     /// <summary>
     /// Provides implementation of <see cref="Mosa.Kernel.Memory.IMemoryPageManager"/> based on Win32 virtual memory.

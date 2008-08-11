@@ -18,7 +18,7 @@ using Mosa.Runtime.CompilerFramework.IL;
 using Mosa.Runtime;
 using Mosa.Runtime.Loader;
 
-namespace cltester
+namespace Test.Mosa.Runtime.CompilerFramework
 {
     class TestCaseMethodCompiler : MethodCompilerBase
     {

@@ -7,7 +7,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
     /// <summary>
     /// Holds test cases for the bitwise and operation.
     /// </summary>
-    static class OpAnd
+    public static class OpAnd
     {
         /// <summary>
         /// Tests the bitwise and operation on 32-bit integers.

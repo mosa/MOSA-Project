@@ -288,6 +288,8 @@ namespace Mosa.Platforms.x86
                 Emit(0x3B, 0, op2, op1);
             else if (op1 is ConstantOperand)
                 Emit(0x81, 7, op2, op1);
+            else if (op2 is ConstantOperand)
+                Emit(0x81, 7, op1, op2);
             else
                 throw new NotSupportedException();
         }
@@ -843,15 +845,15 @@ namespace Mosa.Platforms.x86
                 switch (op.Type.Type)
                 {
                     case CilElementType.I:
-                        code.AddRange(BitConverter.GetBytes((int)co.Value));
+                        code.AddRange(BitConverter.GetBytes(Convert.ToInt32(co.Value)));
                         break;
 
                     case CilElementType.I4:
-                        code.AddRange(BitConverter.GetBytes((int)co.Value));
+                        code.AddRange(BitConverter.GetBytes(Convert.ToInt32(co.Value)));
                         break;
 
                     case CilElementType.I2:
-                        code.AddRange(BitConverter.GetBytes((short)co.Value));
+                        code.AddRange(BitConverter.GetBytes(Convert.ToInt32(co.Value)));
                         break;
                     default:
                         throw new NotImplementedException();

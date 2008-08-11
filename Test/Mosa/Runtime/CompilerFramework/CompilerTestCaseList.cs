@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace cltester
+namespace Test.Mosa.Runtime.CompilerFramework
 {
     /// <summary>
     /// XML root for xml deserialization of the tests.xml test configuration file.
