@@ -70,8 +70,25 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         public override object Expand(MethodCompilerBase methodCompiler)
         {
-            // A ret jumps to the epilogue to leave
-            return methodCompiler.Architecture.CreateInstruction(typeof(BranchInstruction), OpCode.Br, new int[] { Int32.MaxValue });
+            IArchitecture arch = methodCompiler.Architecture;
+
+            // Do we have an operand to return?
+            if (null != this.Operands[0])
+            {
+                ICallingConvention cc = methodCompiler.Architecture.GetCallingConvention(methodCompiler.Method.Signature.CallingConvention);
+                List<Instruction> instructions = new List<Instruction>();
+                Instruction[] resmove = cc.MoveReturnValue(arch, this.Operands[0]);
+                if (null != resmove)
+                    instructions.AddRange(resmove);
+                instructions.Add(arch.CreateInstruction(typeof(BranchInstruction), OpCode.Br, new int[] { Int32.MaxValue }));
+                return instructions.ToArray();
+            }
+            else
+            {
+                // HACK: Should really use the calling convention here
+                // A ret jumps to the epilogue to leave
+                return arch.CreateInstruction(typeof(BranchInstruction), OpCode.Br, new int[] { Int32.MaxValue });
+            }
         }
 
         public sealed override void Visit(IILVisitor visitor)

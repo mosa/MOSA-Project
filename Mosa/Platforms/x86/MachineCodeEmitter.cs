@@ -40,6 +40,14 @@ namespace Mosa.Platforms.x86
             public long position;
         }
 
+        struct CodeDef
+        {
+            public Type firstOp;
+            public Type secondOp;
+            public byte[] code;
+            public int immediate;
+        }
+
         #endregion // Types
 
         #region Data members
@@ -223,6 +231,26 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        public void And(Operand dest, Operand src)
+        {
+            if (src is ConstantOperand)
+            {
+                Emit(0x81, 4, dest, src);
+            }
+            else if (src is RegisterOperand)
+            {
+                Emit(0x21, 0, dest, src);
+            }
+            else if (dest is RegisterOperand && src is MemoryOperand)
+            {
+                Emit(0x23, 0, dest, src);
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
+
         public void Add(Operand dest, Operand src)
         {
             // Write the opcode byte
@@ -254,7 +282,14 @@ namespace Mosa.Platforms.x86
 
         public void Cmp(Operand op1, Operand op2)
         {
-            Emit(0x81, 7, op2, op1);
+            if (op2 is MemoryOperand && op1 is RegisterOperand)
+                Emit(0x39, 0, op2, op1);
+            else if (op2 is RegisterOperand && op1 is MemoryOperand)
+                Emit(0x3B, 0, op2, op1);
+            else if (op1 is ConstantOperand)
+                Emit(0x81, 7, op2, op1);
+            else
+                throw new NotSupportedException();
         }
 
         public void In(Operand dest, Operand src)
@@ -273,6 +308,12 @@ namespace Mosa.Platforms.x86
             Emit(new byte[] { 0xCC });
         }
 
+        public void Ja(int dest)
+        {
+            Emit(new byte[] { 0x0F, 0x87 }, 2);
+            EmitRelativeBranchTarget(dest);
+        }
+
         public void Jae(int dest)
         {
             Emit(new byte[] { 0x0F, 0x83 }, 2);
@@ -282,6 +323,48 @@ namespace Mosa.Platforms.x86
         public void Jb(int dest)
         {
             Emit(new byte[] { 0x0F, 0x82 }, 2);
+            EmitRelativeBranchTarget(dest);
+        }
+
+        public void Jbe(int dest)
+        {
+            Emit(new byte[] { 0x0F, 0x86 }, 2);
+            EmitRelativeBranchTarget(dest);
+        }
+
+        public void Je(int dest)
+        {
+            Emit(new byte[] { 0x0F, 0x84 }, 2);
+            EmitRelativeBranchTarget(dest);
+        }
+
+        public void Jg(int dest)
+        {
+            Emit(new byte[] { 0x0F, 0x8F }, 2);
+            EmitRelativeBranchTarget(dest);
+        }
+
+        public void Jge(int dest)
+        {
+            Emit(new byte[] { 0x0F, 0x8D }, 2);
+            EmitRelativeBranchTarget(dest);
+        }
+
+        public void Jl(int dest)
+        {
+            Emit(new byte[] { 0x0F, 0x8C }, 2);
+            EmitRelativeBranchTarget(dest);
+        }
+
+        public void Jle(int dest)
+        {
+            Emit(new byte[] { 0x0F, 0x8E }, 2);
+            EmitRelativeBranchTarget(dest);
+        }
+
+        public void Jne(int dest)
+        {
+            Emit(new byte[] { 0x0F, 0x85 }, 2);
             EmitRelativeBranchTarget(dest);
         }
 
@@ -345,7 +428,7 @@ namespace Mosa.Platforms.x86
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && (src is ConstantOperand || src is MemoryOperand));
-            Emit(0xD1, 4, src, null);
+            Emit(0xD1, 4, dest, src);
         }
 
         public void Shr(Operand dest, Operand src)

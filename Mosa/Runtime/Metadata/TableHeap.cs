@@ -102,7 +102,7 @@ namespace Mosa.Runtime.Metadata {
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="NetOS.Runtime.MetadataTableHeap"/>.
+		/// Initializes a new instance of <see cref="Mosa.Runtime.MetadataTableHeap"/>.
 		/// </summary>
 		/// <param name="provider">The provider buffer to use for the heap.</param>
 		/// <param name="offset">The offset into the provider buffer, where the table heap starts.</param>

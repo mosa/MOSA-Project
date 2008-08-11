@@ -28,7 +28,7 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="NetOS.Runtime.CompilerFramework.FunctionCallInliningProcessor"/>.
+		/// Initializes a new instance of <see cref="Mosa.Runtime.CompilerFramework.FunctionCallInliningProcessor"/>.
 		/// </summary>
 		public FunctionCallInliningProcessor()
 		{

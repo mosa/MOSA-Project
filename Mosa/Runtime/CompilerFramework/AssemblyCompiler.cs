@@ -21,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 	/// <summary>
 	/// Base class for just-in-time and ahead-of-time compilers, which use
-	/// the NetOS.Runtime.CompilerFramework framework.
+	/// the Mosa.Runtime.CompilerFramework framework.
 	/// </summary>
 	public abstract class AssemblyCompiler/* : ITypeResolutionContext */
     {

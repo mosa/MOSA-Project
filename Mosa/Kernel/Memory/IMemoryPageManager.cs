@@ -28,7 +28,6 @@ namespace Mosa.Kernel.Memory
         /// <param name="address">A starting address from a previous call, which reserved memory or IntPtr.Zero.</param>
         /// <param name="size">The number of bytes to reserve.</param>
         /// <param name="protectionFlags">One or more flag that controls the protection of the retrieved pages.</param>
-        /// <param name="flags">Flags, that control the behavior of the Allocate function.</param>
         /// <returns>An IntPtr to the allocated memory.</returns>
         IntPtr Allocate(IntPtr address, ulong size, PageProtectionFlags protectionFlags);
 
@@ -37,7 +36,6 @@ namespace Mosa.Kernel.Memory
         /// </summary>
         /// <param name="address">The starting address, where pages are freed.</param>
         /// <param name="size">The number of bytes to free.</param>
-        /// <param name="flags">Flags that control if the Free function decommits or releases the associated pages.</param>
         void Free(IntPtr address, ulong size);
 
         /// <summary>

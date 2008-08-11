@@ -106,6 +106,14 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        public void And(Operand dest, Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.And(dest, src);
+            });
+        }
+
         public void Add(Operand op1, Operand op2)
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)
@@ -162,6 +170,14 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        public void Ja(int dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Ja(dest);
+            });
+        }
+
         public void Jae(int dest)
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)
@@ -175,6 +191,62 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Jb(dest);
+            });
+        }
+
+        public void Jbe(int dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Jbe(dest);
+            });
+        }
+
+        public void Je(int dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Je(dest);
+            });
+        }
+
+        public void Jg(int dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Jg(dest);
+            });
+        }
+
+        public void Jge(int dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Jge(dest);
+            });
+        }
+
+        public void Jl(int dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Jl(dest);
+            });
+        }
+
+        public void Jle(int dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Jle(dest);
+            });
+        }
+
+        public void Jne(int dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Jne(dest);
             });
         }
 

@@ -82,6 +82,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
             SetResult(0, decoder.GetLocalOperand(locIdx));
         }
 
+        public override object Expand(MethodCompilerBase methodCompiler)
+        {
+            IArchitecture arch = methodCompiler.Architecture;
+            return arch.CreateInstruction(typeof(IR.MoveInstruction), this.Results[0], this.Operands[0]);
+        }
+
         public sealed override void Visit(IILVisitor visitor)
         {
             visitor.Stloc(this);

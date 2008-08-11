@@ -26,9 +26,9 @@ namespace Mosa.Tools.Compiler {
 	/// Implements the ahead of time compiler.
 	/// </summary>
 	/// <remarks>
-	/// This class implements the ahead of time compiler for NetOS. The AoT uses 
-	/// the compiler services offered in NetOS.Runtime.CompilerServices in order
-	/// to share as much code as possible with assembly jit compiler in NetOS. The 
+    /// This class implements the ahead of time compiler for MOSA. The AoT uses 
+	/// the compiler services offered in Mosa.Runtime.CompilerFramework in order
+	/// to share as much code as possible with assembly jit compiler in MOSA. The 
 	/// primary difference between the two compilers is primarily the number and
 	/// quality of compilation stages used. The AoT compiler makes use of assembly lot
 	/// more optimizations than the jit. The jit is tweaked for execution speed. 

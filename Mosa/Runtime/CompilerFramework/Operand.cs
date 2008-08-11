@@ -223,7 +223,7 @@ namespace Mosa.Runtime.CompilerFramework
             int opIdx;
 
             // Iterate all definition sites first
-            foreach (Instruction def in _definitions.ToArray())
+            foreach (Instruction def in this.Definitions.ToArray())
             {
                 opIdx = 0;
                 foreach (Operand r in def.Results)
@@ -237,7 +237,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
 
             // Iterate all use sites
-            foreach (Instruction instr in _uses.ToArray())
+            foreach (Instruction instr in this.Uses.ToArray())
             {
                 opIdx = 0;
                 foreach (Operand r in instr.Operands)

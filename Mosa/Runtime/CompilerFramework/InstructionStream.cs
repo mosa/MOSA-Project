@@ -55,7 +55,7 @@ namespace Mosa.Runtime.CompilerFramework {
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="NetOS.SharpOS.Runtime.Jit.CILInstructionStream"/>.
+		/// Initializes a new instance of <see cref="Mosa.SharpOS.Runtime.Jit.CILInstructionStream"/>.
 		/// </summary>
 		/// <param name="assemblyStream">The stream, which represents the IL assembly.</param>
 		/// <param name="offset">The offset, where the IL stream starts.</param> 

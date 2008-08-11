@@ -41,6 +41,15 @@ namespace Mosa.Runtime.CompilerFramework
         void GetStackRequirements(StackOperand stackOperand, out int size, out int alignment);
 
         /// <summary>
+        /// Requests the calling convention to create an appropriate move instruction to populate the return 
+        /// value of a method.
+        /// </summary>
+        /// <param name="architecture">The architecture to emit the instruction for.</param>
+        /// <param name="operand">The operand, that's holding the return value.</param>
+        /// <returns>An instruction, which represents the appropriate move.</returns>
+        Instruction[] MoveReturnValue(IArchitecture architecture, Operand operand);
+
+        /// <summary>
         /// Retrieves the offset of the first local variable from the stack frame start.
         /// </summary>
         int OffsetOfFirstLocal { get; }

@@ -100,6 +100,14 @@ namespace Mosa.Platforms.x86
             _textWriter.WriteLine("C_{0:x}:\n\t\tdq\t{1}", label, WriteLiteral(type, data));
         }
 
+        public void And(Operand dest, Operand src)
+        {
+            if (dest is ConstantOperand)
+                throw new NotSupportedException(@"Constants are not allowed as destination.");
+            _textWriter.WriteLine("\t\tand\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
+
+        }
+
         public void Add(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -138,16 +146,54 @@ namespace Mosa.Platforms.x86
             
         }
 
+        public void Ja(int dest)
+        {
+            _textWriter.WriteLine("\t\tja\tL_{0:x}", dest);
+        }
+
         public void Jae(int dest)
         {
-            _textWriter.WriteLine("\t\tjae\tL_{0:x}", dest);
-            
+            _textWriter.WriteLine("\t\tjae\tL_{0:x}", dest);  
         }
 
         public void Jb(int dest)
         {
-            _textWriter.WriteLine("\t\tjb\tL_{0:x}", dest);
-            
+            _textWriter.WriteLine("\t\tjb\tL_{0:x}", dest);            
+        }
+
+        public void Jbe(int dest)
+        {
+            _textWriter.WriteLine("\t\tjbe\tL_{0:x}", dest);
+        }
+        
+        public void Je(int dest)
+        {
+            _textWriter.WriteLine("\t\tje\tL_{0:x}", dest);
+        }
+
+        public void Jg(int dest)
+        {
+            _textWriter.WriteLine("\t\tjg\tL_{0:x}", dest);
+        }
+
+        public void Jge(int dest)
+        {
+            _textWriter.WriteLine("\t\tjge\tL_{0:x}", dest);
+        }
+
+        public void Jl(int dest)
+        {
+            _textWriter.WriteLine("\t\tjl\tL_{0:x}", dest);
+        }
+
+        public void Jle(int dest)
+        {
+            _textWriter.WriteLine("\t\tjle\tL_{0:x}", dest);
+        }
+
+        public void Jne(int dest)
+        {
+            _textWriter.WriteLine("\t\tjne\tL_{0:x}", dest);
         }
 
         public void Jmp(int dest)

@@ -35,7 +35,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
         /// Tests the bitwise and operation on 64-bit integers.
         /// </summary>
         /// <returns>Non-zero on success, zero on failure.</returns>
-        public static int Test_AndOnInt64()
+        public static int _Test_AndOnInt64()
         {
             return 0;
         }
@@ -44,7 +44,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
         /// Tests the bitwise and operation on native integers.
         /// </summary>
         /// <returns>Non-zero on success, zero on failure.</returns>
-        public static int Test_AndOnNativeInt()
+        public static int _Test_AndOnNativeInt()
         {
             //IntPtr i1, i2;
             return 0;

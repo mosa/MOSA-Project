@@ -13,6 +13,8 @@ using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
 using IL = Mosa.Runtime.CompilerFramework.IL;
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Metadata;
 
 namespace Mosa.Platforms.x86
 {
@@ -48,23 +50,49 @@ namespace Mosa.Platforms.x86
             throw new NotImplementedException();
         }
 
+        Instruction[] ICallingConvention.MoveReturnValue(IArchitecture architecture, Operand operand)
+        {
+            int size, alignment;
+            GetStackRequirements(operand.Type, out size, out alignment);
+
+            if (4 == size)
+            {
+                return new Instruction[] { architecture.CreateInstruction(typeof(MoveInstruction), new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand) };
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+
+        }
+
         void ICallingConvention.GetStackRequirements(StackOperand stackOperand, out int size, out int alignment)
         {
             // Special treatment for some stack types
-            // FIXME: Handle the size and alignment requirements of value types 
-            switch (stackOperand.StackType)
+            // FIXME: Handle the size and alignment requirements of value types
+            GetStackRequirements(stackOperand.Type, out size, out alignment);
+        }
+
+        private void GetStackRequirements(SigType sigType, out int size, out int alignment)
+        {
+            switch (sigType.Type)
             {
-                case StackTypeCode.F:
+                case CilElementType.R4: goto case CilElementType.R8;
+                case CilElementType.R8:
                     // Default alignment and size are 4
-                    size = alignment = -8;
+                    size = alignment = 8;
                     break;
 
-                case StackTypeCode.Int64:
-                    size = alignment = -8;
+                case CilElementType.I8: goto case CilElementType.U8;
+                case CilElementType.U8:
+                    size = alignment = 8;
                     break;
+
+                case CilElementType.ValueType:
+                    throw new NotSupportedException();
 
                 default:
-                    size = alignment = -4;
+                    size = alignment = 4;
                     break;
             }
         }

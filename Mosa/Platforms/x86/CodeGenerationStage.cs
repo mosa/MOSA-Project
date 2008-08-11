@@ -58,7 +58,7 @@ namespace Mosa.Platforms.x86
 
         protected override void BeginGenerate()
         {
-            FileInfo t = new FileInfo("asm_output.txt");
+            FileInfo t = new FileInfo(String.Format("{0}.asm", this._compiler.Method.Name));
             StreamWriter textwriter = t.CreateText();
             MultiplexingCodeEmitter mce = new MultiplexingCodeEmitter();
             mce.Emitters.Add(new AsmCodeEmitter(textwriter));
@@ -127,7 +127,7 @@ namespace Mosa.Platforms.x86
         void IX86InstructionVisitor.Shift(x86.ShiftInstruction instruction)
         {
             if (instruction.Code == IL.OpCode.Shl)
-                _emitter.Shl(instruction.Results[0], instruction.Operands[1]);
+                _emitter.Shl(instruction.Results[0], instruction.Operands[0]);
             else
                 _emitter.Shr(instruction.Results[0], instruction.Operands[0]);
         }
@@ -233,36 +233,8 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.Stloc(IL.StlocInstruction instruction)
         {
-            Operand dst = instruction.Results[0], src = instruction.Operands[0];
-
-            // FIXME: This should actually be expanded somewhere else
-            if (src is LabelOperand)
-            {
-                switch (src.Type.Type)
-                {
-                    case CilElementType.R4:
-                        goto case CilElementType.R8;
-
-                    case CilElementType.R8:
-                        Operand tmp = new RegisterOperand(src.Type, SSE2Register.XMM0);
-                        _emitter.Mov(tmp, src);
-                        _emitter.Mov(dst, tmp);
-                        break;
-
-                    case CilElementType.I8:
-                        goto case CilElementType.U8;
-
-                    case CilElementType.U8:
-                        throw new NotImplementedException();
-
-                    case CilElementType.Object:
-                        throw new NotImplementedException();
-                }
-            }
-            else
-            {
-                _emitter.Mov(dst, src);
-            }
+            // Should never happen, the StlocInstruction expands itself into an IR.MoveInstruction
+            throw new NotImplementedException();
         }
 
         void IL.IILVisitor.Starg(IL.StargInstruction instruction)
@@ -362,18 +334,45 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.BinaryBranch(IL.BinaryBranchInstruction instruction)
         {
-            //throw new NotImplementedException();
-
+            int[] targets = instruction.BranchTargets;
+            
+            _emitter.Cmp(instruction.First, instruction.Second);
             switch (instruction.Code)
             {
+                // Signed
+                case IL.OpCode.Beq_s: _emitter.Je(targets[0]); break;
+                case IL.OpCode.Bge_s: _emitter.Jge(targets[0]); break;
+                case IL.OpCode.Bgt_s: _emitter.Jg(targets[0]); break;
+                case IL.OpCode.Ble_s: _emitter.Jle(targets[0]); break;
+                case IL.OpCode.Blt_s: _emitter.Jl(targets[0]); break;
+                
+                // Unsigned
+                case IL.OpCode.Bne_un_s: _emitter.Jne(targets[0]); break;
+                case IL.OpCode.Bge_un_s: _emitter.Jae(targets[0]); break;
+                case IL.OpCode.Bgt_un_s: _emitter.Ja(targets[0]); break;
+                case IL.OpCode.Ble_un_s: _emitter.Jbe(targets[0]); break;
+                case IL.OpCode.Blt_un_s: _emitter.Jb(targets[0]); break;
+
+                // Long form signed
+                case IL.OpCode.Beq: goto case IL.OpCode.Beq_s;
+                case IL.OpCode.Bge: goto case IL.OpCode.Bge_s;
+                case IL.OpCode.Bgt: goto case IL.OpCode.Bgt_s;
+                case IL.OpCode.Ble: goto case IL.OpCode.Ble_s;
                 case IL.OpCode.Blt: goto case IL.OpCode.Blt_s;
-                case IL.OpCode.Blt_s:
-                    _emitter.Cmp(instruction.First, instruction.Second);
-                    _emitter.Jb(instruction.BranchTargets[0]);
-                    _emitter.Jae(instruction.BranchTargets[1]);
-                    break;
+
+                // Long form unsigned
+                case IL.OpCode.Bne_un: goto case IL.OpCode.Bne_un_s;
+                case IL.OpCode.Bge_un: goto case IL.OpCode.Bge_un_s;
+                case IL.OpCode.Bgt_un: goto case IL.OpCode.Bgt_un_s;
+                case IL.OpCode.Ble_un: goto case IL.OpCode.Ble_un_s;
+                case IL.OpCode.Blt_un: goto case IL.OpCode.Blt_un_s;
+
+                default:
+                    throw new NotImplementedException();
             }
 
+            // Emit a regular jump for the second case
+            _emitter.Jmp(instruction.BranchTargets[1]);
         }
 
         void IL.IILVisitor.Switch(IL.SwitchInstruction instruction)
@@ -738,9 +737,43 @@ namespace Mosa.Platforms.x86
             _emitter.Literal(instruction.Label, instruction.Type, instruction.Data);
         }
 
+        void IR.IIrVisitor.Visit(IR.LogicalAndInstruction instruction)
+        {
+            _emitter.And(instruction.Destination, instruction.Operand2);
+        }
+
         void IR.IIrVisitor.Visit(IR.MoveInstruction instruction)
         {
-            _emitter.Mov(instruction.Destination, instruction.Source);
+            Operand dst = instruction.Results[0], src = instruction.Operands[0];
+
+            // FIXME: This should actually be expanded somewhere else
+            if (src is LabelOperand)
+            {
+                switch (src.Type.Type)
+                {
+                    case CilElementType.R4:
+                        goto case CilElementType.R8;
+
+                    case CilElementType.R8:
+                        Operand tmp = new RegisterOperand(src.Type, SSE2Register.XMM0);
+                        _emitter.Mov(tmp, src);
+                        _emitter.Mov(dst, tmp);
+                        break;
+
+                    case CilElementType.I8:
+                        goto case CilElementType.U8;
+
+                    case CilElementType.U8:
+                        throw new NotImplementedException();
+
+                    case CilElementType.Object:
+                        throw new NotImplementedException();
+                }
+            }
+            else
+            {
+                _emitter.Mov(dst, src);
+            }
         }
 
         void IR.IIrVisitor.Visit(IR.PopInstruction instruction)

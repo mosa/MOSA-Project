@@ -120,7 +120,7 @@ namespace Mosa.Runtime.CompilerFramework
                     case FlowControl.ConditionalBranch: 
                         IBranchInstruction branch = (IBranchInstruction)i;
                         int[] targets = branch.BranchTargets;
-                        Array.Sort<int>(targets);
+                        //Array.Sort<int>(targets);
                         foreach (int target in targets)
                         {
                             BasicBlock newBlock = FindOrCreateBlock(currentBlock, target);

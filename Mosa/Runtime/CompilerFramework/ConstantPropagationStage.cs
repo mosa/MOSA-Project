@@ -57,9 +57,13 @@ namespace Mosa.Runtime.CompilerFramework
                         if (co is ConstantOperand)
                         {
                             Operand res = instruction.Results[0];
-                            Debug.Assert(1 == res.Definitions.Count, @"Operand defined multiple times. Instruction stream not in SSA form!");
-                            res.Replace(co);
-                            remove = true;
+                            // HACK: We can't track a constant through a register, so we keep those moves
+                            if (false == res.IsRegister)
+                            {
+                                Debug.Assert(1 == res.Definitions.Count, @"Operand defined multiple times. Instruction stream not in SSA form!");
+                                res.Replace(co);
+                                remove = true;
+                            }
                         }
                     }
                     else if (instruction is IR.PhiInstruction)
@@ -70,9 +74,13 @@ namespace Mosa.Runtime.CompilerFramework
                         {
                             // We can remove the phi, as it is only defined once
                             Operand res = instruction.Results[0];
-                            Debug.Assert(1 == res.Definitions.Count, @"Operand defined multiple times. Instruction stream not in SSA form!");
-                            res.Replace(co);
-                            remove = true;
+                            // HACK: We can't track a constant through a register, so we keep those moves
+                            if (false == res.IsRegister)
+                            {
+                                Debug.Assert(1 == res.Definitions.Count, @"Operand defined multiple times. Instruction stream not in SSA form!");
+                                res.Replace(co);
+                                remove = true;
+                            }
                         }
                     }
 

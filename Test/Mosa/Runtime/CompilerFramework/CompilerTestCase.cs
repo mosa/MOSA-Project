@@ -19,6 +19,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Vm;
 using System.Runtime.InteropServices;
 using Mosa.Runtime;
+using System.Diagnostics;
 
 
 namespace cltester
@@ -150,6 +151,7 @@ namespace cltester
         /// <returns>?</returns>
         public object Invoke(object o, System.Collections.IList args)
         {
+            Debug.Listeners.Insert(0, new ConsoleTraceListener(true));
             Console.WriteLine("Executing {0} compiler...", _language);
             CompilerResults compilerResults = ExecuteCompiler();
 
@@ -170,14 +172,8 @@ namespace cltester
                             NativeCode fn = (NativeCode)Marshal.GetDelegateForFunctionPointer(method.Address, typeof(NativeCode));
                             exitCode = fn();
 
-                            /*
-                            IntPtr hDll = GetModuleHandle(@"kernel32.dll");
-                            IntPtr ptrGetTickCount = GetProcAddress(hDll, @"GetTickCount");
-                            NativeCode fn = (NativeCode)Marshal.GetDelegateForFunctionPointer(ptrGetTickCount, typeof(NativeCode));
-                            exitCode = fn();
-                             */
-
                             Console.WriteLine("Done. (Exit code: {0})", exitCode);
+                            Assert.AreNotEqual(exitCode, 0, String.Format("Testmethod {0} failed.", method.Name));
                         }
                     }
                 }

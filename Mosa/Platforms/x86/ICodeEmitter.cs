@@ -52,6 +52,13 @@ namespace Mosa.Platforms.x86
         #region x86 instructions
 
         /// <summary>
+        /// Emits an AND instruction.
+        /// </summary>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
+        void And(Operand dest, Operand src);
+
+        /// <summary>
         /// Emits an Add instruction.
         /// </summary>
         /// <param name="op1">The first operand and destination of the instruction.</param>
@@ -102,16 +109,64 @@ namespace Mosa.Platforms.x86
         void Jmp(int dest);
 
         /// <summary>
-        /// Emits a conditional jump below.
+        /// Emits a conditional jump above.
         /// </summary>
         /// <param name="dest">The target label of the jump.</param>
-        void Jb(int dest);
+        void Ja(int dest);
 
         /// <summary>
         /// Emits a conditional jump above or equal.
         /// </summary>
         /// <param name="dest">The target label of the jump.</param>
         void Jae(int dest);
+
+        /// <summary>
+        /// Emits a conditional jump below.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
+        void Jb(int dest);
+
+        /// <summary>
+        /// Emits a conditional jump below or equal.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
+        void Jbe(int dest);
+
+        /// <summary>
+        /// Emits a conditional jump equal.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
+        void Je(int dest);
+
+        /// <summary>
+        /// Emits a conditional jump greater then.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
+        void Jg(int dest);
+
+        /// <summary>
+        /// Emits a conditional jump greater then or equal.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
+        void Jge(int dest);
+
+        /// <summary>
+        /// Emits a conditional jump less then.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
+        void Jl(int dest);
+
+        /// <summary>
+        /// Emits a conditional jump less then or equal.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
+        void Jle(int dest);
+
+        /// <summary>
+        /// Emits a conditional jump not equal.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
+        void Jne(int dest);
 
         /// <summary>
         /// Emits a mul instruction.

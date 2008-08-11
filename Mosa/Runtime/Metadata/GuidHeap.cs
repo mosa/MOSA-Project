@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Metadata {
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="NetOS.Runtime.Metadata.GuidHeap"/>.
+		/// Initializes a new instance of <see cref="Mosa.Runtime.Metadata.GuidHeap"/>.
 		/// </summary>
 		/// <param name="provider">The provider buffer, where the guid heap is located.</param>
 		/// <param name="offset">The offset into the buffer, where the GUID heap starts.</param>

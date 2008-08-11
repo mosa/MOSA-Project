@@ -55,6 +55,19 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        public override object Expand(MethodCompilerBase methodCompiler)
+        {
+            IArchitecture arch = methodCompiler.Architecture;
+            switch (this.Code)
+            {
+                case OpCode.And:
+                    return arch.CreateInstruction(typeof(IR.LogicalAndInstruction), this.Results[0], this.First, this.Second);
+
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         public override void Validate(MethodCompilerBase compiler)
         {
             base.Validate(compiler);

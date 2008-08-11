@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=false)]
 	public sealed class NakedAttribute : Attribute {
 		/// <summary>
-		/// Initializes a new instance of <see cref="NetOS.SharpOS.Runtime.Jit.CustomAttributes.NakedAttribute"/>.
+		/// Initializes a new instance of <see cref="Mosa.SharpOS.Runtime.Jit.CustomAttributes.NakedAttribute"/>.
 		/// </summary>
 		public NakedAttribute()
 		{

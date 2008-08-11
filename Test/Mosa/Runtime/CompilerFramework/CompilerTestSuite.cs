@@ -40,6 +40,8 @@ namespace cltester
         [TestSuite]
         public TestSuite BuildCompilerTestSuite()
         {
+            Debug.Listeners.Insert(0, new DefaultTraceListener());
+
             XmlSerializer serializer = new XmlSerializer(typeof(CompilerTestCaseList));
             TestSuite suite = new TestSuite(@"MOSA Compiler Tests");
             string testPath = @"tests.xml";

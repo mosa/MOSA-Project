@@ -151,7 +151,7 @@ namespace Mosa.Runtime.CompilerFramework
                 // Does the offset fit the alignment requirement?
                 cc.GetStackRequirements(lvo, out size, out alignment);
                 padding = (offset % alignment);
-                offset += padding + size;
+                offset -= (padding + size);
                 lvo.Offset = new IntPtr(offset);
                 //offset += size;
             }
