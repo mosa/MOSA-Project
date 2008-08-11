@@ -8,7 +8,7 @@
  */
 
 using System;
-using Mosa.Devices;
+using Mosa.DeviceDrivers;
 using Mosa.ClassLib;
 
 namespace Mosa.Emulator
@@ -18,15 +18,15 @@ namespace Mosa.Emulator
         public static void Main(string[] args)
         {
             // Set Device Driver system to the emulator port method
-            Devices.Kernel.HAL.SetCreatePortMethod(Mosa.Emulator.EmulatedPorts.RegisterPort);
+            DeviceDrivers.Kernel.HAL.SetCreatePortMethod(Mosa.Emulator.EmulatedPorts.RegisterPort);
 
             // Start the emulated devices
             EmulatedDevices.Setup.Initialize();
 
             // Start driver system
-            Devices.Setup.Initialize();
+            DeviceDrivers.Setup.Initialize();
 
-            LinkedList<IDevice> devices = Devices.Setup.DeviceManager.GetAllDevices();
+            LinkedList<IDevice> devices = DeviceDrivers.Setup.DeviceManager.GetAllDevices();
 
             foreach (IDevice device in devices) {
                 Console.WriteLine(device.Name);

@@ -48,11 +48,11 @@
       </Files>
     </Project>
 
-    <Project name="Mosa.DeviceDrivers" type="Library" path="..\Mosa\Devices" language="C#" runtime="Microsoft" rootNamespace="Mosa.Devices" assemblyName="Mosa.Devices">
+    <Project name="Mosa.DeviceDrivers" type="Library" path="..\Mosa\DeviceDrivers" language="C#" runtime="Microsoft" rootNamespace="Mosa.Devices" assemblyName="Mosa.Devices">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../build/debug</OutputPath>
-          <XmlDocFile>../build/Mosa.Devices.xml</XmlDocFile>
+          <XmlDocFile>../build/Mosa.DeviceDrivers.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>
@@ -61,7 +61,7 @@
       <Configuration name="Release">
         <Options>
           <OutputPath>../build/release</OutputPath>
-          <XmlDocFile>../build/Mosa.Devices.xml</XmlDocFile>
+          <XmlDocFile>../build/Mosa.DeviceDrivers.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>

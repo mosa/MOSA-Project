@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Devices;
+using Mosa.DeviceDrivers;
 
 namespace Mosa.Emulator
 {
