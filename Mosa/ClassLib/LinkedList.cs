@@ -15,13 +15,13 @@ namespace Mosa.ClassLib
 {
     public class LinkedList<T> : IEnumerable<T>, ICollection<T>
     {
-        public class LinkedListNode<T>
+        public class LinkedListNode<U>
         {
-            public T value;
-            public LinkedListNode<T> next;
-            public LinkedListNode<T> previous;
+            public U value;
+            public LinkedListNode<U> next;
+            public LinkedListNode<U> previous;
 
-            public LinkedListNode(T value, LinkedListNode<T> previous, LinkedListNode<T> next)
+            public LinkedListNode(U value, LinkedListNode<U> previous, LinkedListNode<U> next)
             {
                 this.value = value;
                 this.next = next;

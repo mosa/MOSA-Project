@@ -10,7 +10,7 @@
         <OptimizeCode>false</OptimizeCode>
         <AllowUnsafe>true</AllowUnsafe>
         <DebugInformation>true</DebugInformation>
-        <WarningLevel>0</WarningLevel>
+        <WarningLevel>4</WarningLevel>
       </Options>
     </Configuration>
     <Configuration name="Release">
@@ -21,7 +21,7 @@
         <OptimizeCode>true</OptimizeCode>
         <AllowUnsafe>true</AllowUnsafe>
         <DebugInformation>false</DebugInformation>
-        <WarningLevel>0</WarningLevel>
+        <WarningLevel>2</WarningLevel>
       </Options>
     </Configuration>
 

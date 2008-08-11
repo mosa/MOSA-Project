@@ -17,15 +17,15 @@ namespace Mosa.ClassLib
     {
         protected enum Color { Red = 1, Black = 0 };
 
-        protected class RedBlackTreeNode<K, T> where K : IComparable
+        protected class RedBlackTreeNode<NK, NT> where NK : IComparable
         {
             public Color color;
-            public T data;
-            public K key;
+            public NT data;
+            public NK key;
 
-            public RedBlackTreeNode<K, T> parent, left, right;
+            public RedBlackTreeNode<NK, NT> parent, left, right;
 
-            public RedBlackTreeNode(K key, T data, Color color)
+            public RedBlackTreeNode(NK key, NT data, Color color)
             {
                 this.key = key;
                 this.color = color;
