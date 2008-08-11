@@ -1,4 +1,4 @@
-/*
+﻿/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -7,64 +7,24 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
+using Mosa.DeviceDrivers;
 
 namespace Mosa.EmulatedDevices
 {
-
-    public class EmulatedIOPort<T>
+    public class EmulatedIOPort : IReadWriteIOPort
     {
-        public delegate T Reader(T newValue);
-        public delegate T Writer(T currentValue);
-
         protected ushort port;
-        public T Value;
 
-        private Reader reader;
-        private Writer writer;
+        public EmulatedIOPort(ushort port) { this.port = port; }
 
-        public ushort Port
-        {
-            get
-            {
-                return port;
-            }
-        }
+        public ushort Address { get { return port; } }
 
-        public EmulatedIOPort(int port)
-        {
-            this.port = (ushort)port;
-        }
+        public byte Read8() { return EmulatedIOPorts.Read8(port); }
+        public ushort Read16() { return EmulatedIOPorts.Read16(port); }
+        public uint Read32() { return EmulatedIOPorts.Read32(port); }
 
-        public EmulatedIOPort(int port, T value)
-        {
-            this.port = (ushort)port;
-            this.Value = value;
-        }
-
-        public EmulatedIOPort(int port, T value, Reader reader, Writer writer)
-        {
-            this.port = (ushort)port;
-            this.Value = value;
-            this.reader = reader;
-            this.writer = writer;
-        }
-
-        public void SetValue(T value)
-        {
-            if (writer == null) {
-                this.Value = value;
-                return;
-            }
-
-            this.Value = writer(value);
-        }
-
-        public T ReadValue()
-        {
-            if (reader != null)
-                this.Value = reader(this.Value);
-            return this.Value;
-        }
+        public void Write8(byte data) { EmulatedIOPorts.Write8(port, data); }
+        public void Write16(ushort data) { EmulatedIOPorts.Write16(port, data); }
+        public void Write32(uint data) { EmulatedIOPorts.Write32(port, data); }
     }
 }

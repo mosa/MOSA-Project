@@ -11,27 +11,27 @@ namespace Mosa.DeviceDrivers.Kernel
 {
     public static class HAL
     {
-        public delegate IReadWriteIOPort CreatePort(ushort port);
+        public delegate IReadWriteIOPort CreateIOPort(ushort port);
 
-        static private CreatePort createPort;
+        static private CreateIOPort createIOPort;
 
         /// <summary>
-        /// Sets the create port method.
+        /// Sets the create IO port factory.
         /// </summary>
-        /// <param name="createPort">The create port.</param>
-        public static void SetCreatePortMethod(CreatePort createPort)
+        /// <param name="createIOPort">The create IO port.</param>
+        public static void SetIOPortFactory(CreateIOPort createIOPort)
         {
-            HAL.createPort = createPort;
+            HAL.createIOPort = createIOPort;
         }
 
         /// <summary>
         /// Requests an IO read/write port interface from the kernel
         /// </summary>
-        /// <param name="portNbr">The port number.</param>
+        /// <param name="port">The port number.</param>
         /// <returns></returns>
         public static IReadWriteIOPort RequestIOPort(ushort port)
         {
-            return createPort(port);
+            return createIOPort(port);
         }
 
         /// <summary>

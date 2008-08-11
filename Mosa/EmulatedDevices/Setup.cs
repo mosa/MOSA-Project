@@ -16,7 +16,7 @@ namespace Mosa.EmulatedDevices
             new CMOS(CMOS.StandardIOBase);
 
             string[] files = new string[1];
-            files[0] = @"..\..\hd.img";
+            files[0] = @"..\..\..\hd.img";
 
             new IDEDiskDevice(IDEDiskDevice.PrimaryIOBase,files);
         }

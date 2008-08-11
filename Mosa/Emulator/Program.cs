@@ -19,7 +19,7 @@ namespace Mosa.Emulator
         public static void Main(string[] args)
         {
             // Set Device Driver system to the emulator port method
-            DeviceDrivers.Kernel.HAL.SetCreatePortMethod(Mosa.Emulator.EmulatedPorts.RegisterPort);
+            DeviceDrivers.Kernel.HAL.SetIOPortFactory(Mosa.EmulatedDevices.EmulatedIOPorts.RegisterPort);
 
             // Start the emulated devices
             EmulatedDevices.Setup.Initialize();

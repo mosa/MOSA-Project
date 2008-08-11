@@ -11,7 +11,6 @@ using System;
 using Mosa.DeviceDrivers;
 using Mosa.DeviceDrivers.Kernel;
 using Mosa.ClassLib;
-using Mosa.DeviceDrivers;
 
 namespace Mosa.DeviceDrivers.ISA
 {
@@ -40,8 +39,6 @@ namespace Mosa.DeviceDrivers.ISA
         protected byte[] fifoBuffer;
         protected uint fifoStart;
         protected uint fifoEnd;
-
-        protected ushort ioBase;
 
         #region Flags
 
@@ -131,7 +128,7 @@ namespace Mosa.DeviceDrivers.ISA
 
         public override bool Setup()
         {
-            base.name = "COM_0x" + ((uint)ioBase).ToString("X");
+            base.name = "COM_0x" + base.isaBusResources.GetIOPortRegion(0).GetPort(0).Address.ToString("X");
 
             RBRBase = base.isaBusResources.GetIOPortRegion(0).GetPort(0); // Receive Buffer Register (read only)
             THRBase = base.isaBusResources.GetIOPortRegion(0).GetPort(0); // Transmitter Holding Register (write only)

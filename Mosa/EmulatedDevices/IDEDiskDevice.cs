@@ -23,17 +23,17 @@ namespace Mosa.EmulatedDevices
 
         protected ushort ioBase;
 
-        protected EmulatedIOPort<byte> dataPort;
-        protected EmulatedIOPort<ushort> dataPort2;
-        protected EmulatedIOPort<byte> featureAndErrorPort;
-        protected EmulatedIOPort<byte> sectorCountPort;
-        protected EmulatedIOPort<byte> lbaLowPort;
-        protected EmulatedIOPort<byte> lbaHighPort;
-        protected EmulatedIOPort<byte> lbaMidPort;
-        protected EmulatedIOPort<byte> deviceHead;
-        protected EmulatedIOPort<byte> commandAndStatusPort;
-        protected EmulatedIOPort<byte> altCommandAndStatusPort;
-        protected EmulatedIOPort<byte> driveAddress;
+        protected IOPort<byte> dataPort;
+        protected IOPort<ushort> dataPort2;
+        protected IOPort<byte> featureAndErrorPort;
+        protected IOPort<byte> sectorCountPort;
+        protected IOPort<byte> lbaLowPort;
+        protected IOPort<byte> lbaHighPort;
+        protected IOPort<byte> lbaMidPort;
+        protected IOPort<byte> deviceHead;
+        protected IOPort<byte> commandAndStatusPort;
+        protected IOPort<byte> altCommandAndStatusPort;
+        protected IOPort<byte> driveAddress;
 
         protected byte numDrives;
         protected FileStream[] driveFiles;
@@ -56,45 +56,45 @@ namespace Mosa.EmulatedDevices
                 driveFiles[i] = new FileStream(filenames[i], FileMode.OpenOrCreate);
             }
 
-            dataPort = new EmulatedIOPort<byte>(ioBase + 0, 0, DataPortRead, null);
-            dataPort2 = new EmulatedIOPort<ushort>(ioBase + 0, 0, DataPortRead2, null);
-            featureAndErrorPort = new EmulatedIOPort<byte>(ioBase + 1, 1);
-            sectorCountPort = new EmulatedIOPort<byte>(ioBase + 2, 1);
-            lbaLowPort = new EmulatedIOPort<byte>(ioBase + 3, 1);
-            lbaMidPort = new EmulatedIOPort<byte>(ioBase + 4, 0);
-            lbaHighPort = new EmulatedIOPort<byte>(ioBase + 5, 0);
-            deviceHead = new EmulatedIOPort<byte>(ioBase + 6, 0, null, DeviceHeadPortWrite);
-            commandAndStatusPort = new EmulatedIOPort<byte>(ioBase + 7, 0, null, CommandPortWrite);
-            altCommandAndStatusPort = new EmulatedIOPort<byte>(ioBase + 6 + 0x200, 0);
-            driveAddress = new EmulatedIOPort<byte>(ioBase + 7 + 0x200, 0);
+            dataPort = new IOPort<byte>(ioBase + 0, 0, DataPortRead, null);
+            dataPort2 = new IOPort<ushort>(ioBase + 0, 0, DataPortRead2, null);
+            featureAndErrorPort = new IOPort<byte>(ioBase + 1, 1);
+            sectorCountPort = new IOPort<byte>(ioBase + 2, 1);
+            lbaLowPort = new IOPort<byte>(ioBase + 3, 1);
+            lbaMidPort = new IOPort<byte>(ioBase + 4, 0);
+            lbaHighPort = new IOPort<byte>(ioBase + 5, 0);
+            deviceHead = new IOPort<byte>(ioBase + 6, 0, null, DeviceHeadPortWrite);
+            commandAndStatusPort = new IOPort<byte>(ioBase + 7, 0, null, CommandPortWrite);
+            altCommandAndStatusPort = new IOPort<byte>(ioBase + 6 + 0x200, 0);
+            driveAddress = new IOPort<byte>(ioBase + 7 + 0x200, 0);
 
-            IOPort.RegisterPort(dataPort);
-            IOPort.RegisterPort(dataPort2);
-            IOPort.RegisterPort(featureAndErrorPort);
-            IOPort.RegisterPort(sectorCountPort);
-            IOPort.RegisterPort(lbaLowPort);
-            IOPort.RegisterPort(lbaMidPort);
-            IOPort.RegisterPort(lbaHighPort);
-            IOPort.RegisterPort(deviceHead);
-            IOPort.RegisterPort(commandAndStatusPort);
-            IOPort.RegisterPort(altCommandAndStatusPort);
-            IOPort.RegisterPort(driveAddress);
+            IOPorts.RegisterPort(dataPort);
+            IOPorts.RegisterPort(dataPort2);
+            IOPorts.RegisterPort(featureAndErrorPort);
+            IOPorts.RegisterPort(sectorCountPort);
+            IOPorts.RegisterPort(lbaLowPort);
+            IOPorts.RegisterPort(lbaMidPort);
+            IOPorts.RegisterPort(lbaHighPort);
+            IOPorts.RegisterPort(deviceHead);
+            IOPorts.RegisterPort(commandAndStatusPort);
+            IOPorts.RegisterPort(altCommandAndStatusPort);
+            IOPorts.RegisterPort(driveAddress);
         }
 
         public void Dispose()
         {
             foreach (FileStream driveFile in driveFiles) { driveFile.Close(); }
 
-            IOPort.UnregisterPort(dataPort);
-            IOPort.UnregisterPort(featureAndErrorPort);
-            IOPort.UnregisterPort(sectorCountPort);
-            IOPort.UnregisterPort(lbaLowPort);
-            IOPort.UnregisterPort(lbaMidPort);
-            IOPort.UnregisterPort(lbaHighPort);
-            IOPort.UnregisterPort(deviceHead);
-            IOPort.UnregisterPort(commandAndStatusPort);
-            IOPort.UnregisterPort(altCommandAndStatusPort);
-            IOPort.UnregisterPort(driveAddress);
+            IOPorts.UnregisterPort(dataPort);
+            IOPorts.UnregisterPort(featureAndErrorPort);
+            IOPorts.UnregisterPort(sectorCountPort);
+            IOPorts.UnregisterPort(lbaLowPort);
+            IOPorts.UnregisterPort(lbaMidPort);
+            IOPorts.UnregisterPort(lbaHighPort);
+            IOPorts.UnregisterPort(deviceHead);
+            IOPorts.UnregisterPort(commandAndStatusPort);
+            IOPorts.UnregisterPort(altCommandAndStatusPort);
+            IOPorts.UnregisterPort(driveAddress);
         }
 
         public byte DeviceHeadPortWrite(byte data)

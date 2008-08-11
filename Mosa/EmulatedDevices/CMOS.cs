@@ -19,22 +19,22 @@ namespace Mosa.EmulatedDevices
     {
         public const ushort StandardIOBase = 0x70;
 
-        protected EmulatedIOPort<byte> commandPort;
-        protected EmulatedIOPort<byte> dataPort;
+        protected IOPort<byte> commandPort;
+        protected IOPort<byte> dataPort;
 
         public CMOS(ushort ioBase)
         {
-            commandPort = new EmulatedIOPort<byte>(ioBase, 0, null, CommandWrite);
-            dataPort = new EmulatedIOPort<byte>(ioBase + 1, 0);
+            commandPort = new IOPort<byte>(ioBase, 0, null, CommandWrite);
+            dataPort = new IOPort<byte>(ioBase + 1, 0);
 
-            IOPort.RegisterPort(commandPort);
-            IOPort.RegisterPort(dataPort);
+            IOPorts.RegisterPort(commandPort);
+            IOPorts.RegisterPort(dataPort);
         }
 
         public void Dispose()
         {
-            IOPort.UnregisterPort(commandPort);
-            IOPort.UnregisterPort(dataPort);
+            IOPorts.UnregisterPort(commandPort);
+            IOPorts.UnregisterPort(dataPort);
         }
 
         protected byte CommandWrite(byte data)
