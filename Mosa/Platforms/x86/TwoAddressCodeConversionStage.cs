@@ -497,7 +497,28 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor.Sub(SubInstruction instruction)
         {
-            HandleArith(instruction);
+            Operand result = instruction.Results[0];
+            Operand[] ops = instruction.Operands;
+
+            Operand tmp = ops[0];
+            ops[0] = ops[1];
+            ops[1] = tmp;
+
+            // For multiplication...
+            RegisterOperand eax = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+            _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[0]));
+
+            if (ops[1] is ConstantOperand)
+            {
+                RegisterOperand edx = new RegisterOperand(result.Type, GeneralPurposeRegister.EDX);
+                _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(edx, ops[1]));
+                ops[1] = edx;
+            }
+
+            //_instructions.Add(instruction);
+            instruction.Results[0] = eax;
+            if (false == result.IsRegister || false == Object.ReferenceEquals(eax.Register, ((RegisterOperand)result).Register))
+                _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(result, eax));
         }
 
         void IX86InstructionVisitor.Mul(MulInstruction instruction)
@@ -559,7 +580,7 @@ namespace Mosa.Platforms.x86
             {
                 // i = x * y style
                 RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX);
-                _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[0]));
+                _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[1]));
                 //_instructions.Add(instruction);
                 instruction.Results[0] = eax;
                 _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(result, eax));

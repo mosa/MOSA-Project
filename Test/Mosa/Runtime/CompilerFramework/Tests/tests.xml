@@ -8,26 +8,38 @@
   Michael Ruck (<mailto:sharpos@michaelruck.de>)
 -->
 <TestCases>
-  
+
   <!-- Opcode tests sorted alphabetically by opcode name -->
   <TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="IL add" language="C#">
     <Description>Tests the addition operation.</Description>
     <Source>OpAdd.cs</Source>
   </TestCase>
+  <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="IL sub" language="C#">
+    <Description>Tests the substraction operation.</Description>
+    <Source>OpSub.cs</Source>
+  </TestCase>
+  <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="IL mul" language="C#">
+    <Description>Tests the integer multiplication operation.</Description>
+    <Source>OpMul.cs</Source>
+  </TestCase>
+  <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="IL div" language="C#">
+    <Description>Tests the integer division operation.</Description>
+    <Source>OpDiv.cs</Source>
+  </TestCase>
   <TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="IL and" language="C#">
     <Description>Tests the bitwise and operation.</Description>
     <Source>OpAnd.cs</Source>
   </TestCase>
-  
-  
+
+
   <!-- Older test cases to be refactored in above style -->
-  <TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="Integer Addition" language="C#">
+  <!--<TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="Integer Addition" language="C#">
     <Description>Tests the addition of integers of various sizes.</Description>
     <Source>IntegerAdd.cs</Source>
   </TestCase>  
   <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="Floatingpoint Multiplication" language="C#">
     <Description>Tests the multiplication of floatingpoint values of various sizes.</Description>
     <Source>FloatingPointMul.cs</Source>
-  </TestCase>
+  </TestCase>-->
   
 </TestCases>

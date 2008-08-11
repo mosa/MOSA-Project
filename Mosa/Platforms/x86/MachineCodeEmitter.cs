@@ -429,22 +429,22 @@ namespace Mosa.Platforms.x86
         public void Shl(Operand dest, Operand src)
         {
             // Write the opcode byte
-            Debug.Assert(dest is RegisterOperand && (src is ConstantOperand || src is MemoryOperand));
-            Emit(0xD1, 4, dest, src);
+            Debug.Assert(dest is RegisterOperand && (src is ConstantOperand /*|| src is MemoryOperand*/));
+            Emit(0xC1, 4, dest, src);
         }
 
         public void Shr(Operand dest, Operand src)
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && (src is ConstantOperand || src is MemoryOperand));
-            Emit(0xD1, 5, src, null);
+            Emit(0xC1, 5, src, null);
         }
 
         public void Div(Operand dest, Operand src)
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
-            Emit(0xF6, 6, src, null);
+            Emit(0xF7, 7, dest, src);
         }
 
         public void Mov(Operand dest, Operand src)
@@ -542,12 +542,8 @@ namespace Mosa.Platforms.x86
             // Write the opcode byte
             if (src is ConstantOperand)
                 Emit(0x81, 5, dest, src);
-            else if (dest is RegisterOperand)
+            else 
                 Emit(0x2B, 0, dest, src);
-            else if (dest is MemoryOperand && src is RegisterOperand)
-                Emit(0x29, 0, dest, src);
-            else
-                throw new NotImplementedException();
         }
 
         #endregion // ICodeEmitter Members
@@ -854,6 +850,9 @@ namespace Mosa.Platforms.x86
 
                     case CilElementType.I2:
                         code.AddRange(BitConverter.GetBytes(Convert.ToInt32(co.Value)));
+                        break;
+                    case CilElementType.R8:
+                        code.AddRange(BitConverter.GetBytes(Convert.ToDouble(co.Value)));
                         break;
                     default:
                         throw new NotImplementedException();

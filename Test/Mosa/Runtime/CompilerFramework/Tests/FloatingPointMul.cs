@@ -11,15 +11,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
 {
     public static class FloatingPointMul
     {
-        public static double Test_Foo()
+        public static int Test_Foo()
         {
-            double i = 8.5;
-            double j = 8.5;
-            for (int a = 0; a < 5; a++)
+            double i = 1.2;
+            double j = 1.5;
+
+            for (int x = 0; x < 2; x++)
             {
-                i = i * j;
+                i = i + 1.5;
             }
-            return i * j;
+
+            return ((i == 4.2) ? 1 : 0);
         }
     }
 }
