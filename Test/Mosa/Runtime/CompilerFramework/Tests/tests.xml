@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  (c) 2008 MOSA - The Managed Operating System Alliance
+
+  Licensed under the terms of the New BSD License.
+
+  Authors:
+  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+-->
+<TestCases>
+  
+  <!-- Opcode tests sorted alphabetically by opcode name -->
+  <TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="IL bitwise and" language="C#">
+    <Description>Tests the bitwise and operation.</Description>
+    <Source>OpAnd.cs</Source>
+  </TestCase>
+  
+  
+  <!-- Older test cases to be refactored in above style -->
+  <TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="Integer Addition" language="C#">
+    <Description>Tests the addition of integers of various sizes.</Description>
+    <Source>IntegerAdd.cs</Source>
+  </TestCase>  
+  <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="Floatingpoint Multiplication" language="C#">
+    <Description>Tests the multiplication of floatingpoint values of various sizes.</Description>
+    <Source>FloatingPointMul.cs</Source>
+  </TestCase>
+  
+</TestCases>
