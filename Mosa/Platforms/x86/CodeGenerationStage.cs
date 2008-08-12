@@ -127,9 +127,9 @@ namespace Mosa.Platforms.x86
         void IX86InstructionVisitor.Shift(x86.ShiftInstruction instruction)
         {
             if (instruction.Code == IL.OpCode.Shl)
-                _emitter.Shl(instruction.Results[0], instruction.Operands[0]);
+                _emitter.Shl(instruction.Results[0], instruction.Operands[1]);
             else
-                _emitter.Shr(instruction.Results[0], instruction.Operands[0]);
+                _emitter.Shr(instruction.Results[0], instruction.Operands[1]);
         }
 
         void IX86InstructionVisitor.Ldit(LditInstruction instruction)
@@ -390,6 +390,7 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.Div(IL.DivInstruction instruction)
         {
+            _emitter.Div(instruction.Results[0], instruction.Operands[1]);
         }
 
         void IL.IILVisitor.Mul(IL.MulInstruction instruction)
@@ -507,7 +508,7 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.UnaryArithmetic(IL.UnaryArithmeticInstruction instruction)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         void IL.IILVisitor.Mkrefany(IL.MkrefanyInstruction instruction)
@@ -743,6 +744,16 @@ namespace Mosa.Platforms.x86
         void IR.IIrVisitor.Visit(IR.LogicalAndInstruction instruction)
         {
             _emitter.And(instruction.Destination, instruction.Operand2);
+        }
+
+        void IR.IIrVisitor.Visit(IR.LogicalOrInstruction instruction)
+        {
+            _emitter.Or(instruction.Destination, instruction.Operand2);
+        }
+
+        void IR.IIrVisitor.Visit(IR.LogicalNotInstruction instruction)
+        {
+            _emitter.Not(instruction.Destination);
         }
 
         void IR.IIrVisitor.Visit(IR.MoveInstruction instruction)

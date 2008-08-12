@@ -330,6 +330,22 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        public void Not(Operand dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Not(dest);
+            });
+        }
+
+        public void Or(Operand dest, Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Or(dest, src);
+            });
+        }
+
         public void Pop(Operand operand)
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)

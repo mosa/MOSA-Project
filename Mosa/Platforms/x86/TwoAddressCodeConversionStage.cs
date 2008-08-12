@@ -372,7 +372,11 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.UnaryArithmetic(IL.UnaryArithmeticInstruction instruction)
         {
-            throw new NotImplementedException();
+            Operand[] ops = instruction.Operands;
+
+            RegisterOperand eax = new RegisterOperand(ops[0].Type, GeneralPurposeRegister.EAX);
+            _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[0]));
+            _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(instruction.Results[0], eax));
         }
 
         void IL.IILVisitor.Mkrefany(IL.MkrefanyInstruction instruction)
@@ -463,6 +467,14 @@ namespace Mosa.Platforms.x86
         }
 
         void IR.IIrVisitor.Visit(IR.LogicalAndInstruction instruction)
+        {
+        }
+
+        void IR.IIrVisitor.Visit(IR.LogicalOrInstruction instruction)
+        {
+        }
+
+        void IR.IIrVisitor.Visit(IR.LogicalNotInstruction instruction)
         {
         }
 

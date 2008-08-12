@@ -14,40 +14,43 @@ using System.Text;
 namespace Test.Mosa.Runtime.CompilerFramework.Tests
 {
     /// <summary>
-    /// Holds test cases for the bitwise shift left operation.
+    /// Holds test cases for the bitwise or operation.
     /// </summary>
-    static class OpShl
+    public static class OpOr
     {
         /// <summary>
-        /// Tests the bitwise left-shift
+        /// Tests the bitwise or operation on 32-bit integers.
         /// </summary>
         /// <returns>Non-zero on success, zero on failure.</returns>
-        public static int Test_ShlOnInt32()
+        public static int Test_OrOnInt32()
         {
-            int a = 2;
+            int a, b = 0;
 
-            for (int b = 1; b < 4; b++)
+            for (a = 1; a <= 32; a = a * 2)
             {
-                a = a << b;
+                b = (b | a);
             }
 
-            return (a == 128) ? 1 : 0;
+            if (b == 63)
+                return 1;
+
+            return 0;
         }
 
         /// <summary>
-        /// Tests the bitwise and operation on 64-bit integers.
+        /// Tests the bitwise or operation on 64-bit integers.
         /// </summary>
         /// <returns>Non-zero on success, zero on failure.</returns>
-        public static int _Test_ShlOnInt64()
+        public static int _Test_OrOnInt64()
         {
             return 0;
         }
 
         /// <summary>
-        /// Tests the bitwise and operation on native integers.
+        /// Tests the bitwise or operation on native integers.
         /// </summary>
         /// <returns>Non-zero on success, zero on failure.</returns>
-        public static int _Test_ShlOnNativeInt()
+        public static int _Test_OrOnNativeInt()
         {
             //IntPtr i1, i2;
             return 0;

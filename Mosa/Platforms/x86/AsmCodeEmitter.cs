@@ -307,6 +307,22 @@ namespace Mosa.Platforms.x86
             
         }
 
+        public void Not(Operand dest)
+        {
+            if (dest is ConstantOperand)
+                throw new NotSupportedException(@"Constants are not allowed as destination.");
+            _textWriter.WriteLine("\t\tnot\t{0}", WriteOperand(dest));
+
+        }
+
+        public void Or(Operand dest, Operand src)
+        {
+            if (dest is ConstantOperand)
+                throw new NotSupportedException(@"Constants are not allowed as destination.");
+            _textWriter.WriteLine("\t\tor\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
+
+        }
+
         public void Pop(Operand operand)
         {
             _textWriter.WriteLine("\t\tpop\t{0}", WriteOperand(operand));

@@ -176,6 +176,20 @@ namespace Mosa.Platforms.x86
         void Mul(Operand op1, Operand op2);
 
         /// <summary>
+        /// Emits an NOT instruction.
+        /// </summary>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
+        void Not(Operand dest);
+
+        /// <summary>
+        /// Emits an OR instruction.
+        /// </summary>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
+        void Or(Operand dest, Operand src);
+
+        /// <summary>
         /// Emits a addsd instruction.
         /// </summary>
         /// <param name="op1">The first operand and destination of the instruction.</param>
