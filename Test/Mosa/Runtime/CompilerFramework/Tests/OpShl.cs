@@ -1,34 +1,37 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Test.Mosa.Runtime.CompilerFramework.Tests
 {
     /// <summary>
-    /// Holds test cases for the bitwise and operation.
+    /// Holds test cases for the bitwise shift left operation.
     /// </summary>
-    public static class OpAnd
+    static class OpShl
     {
         /// <summary>
-        /// Tests the bitwise and operation on 32-bit integers.
+        /// Tests the bitwise left-shift
         /// </summary>
         /// <returns>Non-zero on success, zero on failure.</returns>
-        public static int Test_AndOnInt32()
+        public static int Test_ShlOnInt32()
         {
-            int a, b;
+            int a = 2;
 
-            for (a = Int32.MinValue; a < Int32.MaxValue; a++)
+            for (int b = 1; b < 4; b++)
             {
-                b = a;
-                if (!(a == (a & b)))
-                    return 0;
+                a = a << 1;
             }
 
-            b = a;
-            if (!(a == (a & b)))
-                return 0;
-
-            return 1;
+            return (a == 16) ? 1 : 0;
         }
 
         /// <summary>

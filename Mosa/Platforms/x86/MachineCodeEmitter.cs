@@ -415,7 +415,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Shr(Operand dest, Operand src)
         {
             // Write the opcode byte
-            Debug.Assert(dest is RegisterOperand && (src is ConstantOperand || src is MemoryOperand));
+            Debug.Assert(dest is RegisterOperand && (src is ConstantOperand));
             Emit(dest, src, cd_shr);
         }
 
@@ -494,9 +494,10 @@ namespace Mosa.Platforms.x86
         };
 
         private static readonly CodeDef[] cd_and = new CodeDef[] {
-            new CodeDef(typeof(Operand),         typeof(ConstantOperand),   new byte[] { 0x81 }, 4),
-            new CodeDef(typeof(Operand),         typeof(RegisterOperand),   new byte[] { 0x21 }, null),
+            new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),   new byte[] { 0x81 }, 4),
             new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),     new byte[] { 0x23 }, null),
+            new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),   new byte[] { 0x23 }, null),
+            new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),   new byte[] { 0x21 }, null),
         };
 
         private static readonly CodeDef[] cd_cmpsd = new CodeDef[] {
@@ -506,8 +507,7 @@ namespace Mosa.Platforms.x86
         private static readonly CodeDef[] cd_cmp = new CodeDef[] {
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x39 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x3B }, null),
-            new CodeDef(typeof(ConstantOperand),    typeof(MemoryOperand),      new byte[] { 0x81 }, 7),
-            new CodeDef(typeof(ConstantOperand),    typeof(RegisterOperand),    new byte[] { 0x81 }, 7),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),      new byte[] { 0x3B }, null),
             new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0x81 }, 7),
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x81 }, 7),
         };

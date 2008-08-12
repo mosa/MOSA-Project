@@ -335,8 +335,11 @@ namespace Mosa.Platforms.x86
         void IL.IILVisitor.BinaryBranch(IL.BinaryBranchInstruction instruction)
         {
             int[] targets = instruction.BranchTargets;
+            int tmp = targets[0];
+            targets[0] = targets[1];
+            targets[1] = tmp;
             
-            _emitter.Cmp(instruction.First, instruction.Second);
+            _emitter.Cmp(instruction.Second, instruction.First);
             switch (instruction.Code)
             {
                 // Signed

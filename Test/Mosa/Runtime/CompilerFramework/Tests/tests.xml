@@ -26,6 +26,10 @@
     <Description>Tests the integer division operation.</Description>
     <Source>OpDiv.cs</Source>
   </TestCase>
+  <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="IL shl" language="C#">
+    <Description>Tests the bitwise shift left operation.</Description>
+    <Source>OpShl.cs</Source>
+  </TestCase>
   <TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="IL and" language="C#">
     <Description>Tests the bitwise and operation.</Description>
     <Source>OpAnd.cs</Source>
