@@ -43,6 +43,7 @@ namespace Mosa.Platforms.x86
             { typeof(IR.LiteralInstruction), typeof(x86.LiteralInstruction) },
             { typeof(IR.LogicalAndInstruction), typeof(x86.LogicalAndInstruction) },
             { typeof(IR.LogicalOrInstruction), typeof(x86.LogicalOrInstruction) },
+            { typeof(IR.LogicalXorInstruction), typeof(x86.LogicalXorInstruction) },
             { typeof(IR.LogicalNotInstruction), typeof(x86.LogicalNotInstruction) },
             { typeof(IR.MoveInstruction), typeof(x86.MoveInstruction) },
             { typeof(IR.PrologueInstruction), typeof(x86.PrologueInstruction) },

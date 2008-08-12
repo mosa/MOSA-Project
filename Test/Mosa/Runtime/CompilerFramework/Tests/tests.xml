@@ -38,6 +38,10 @@
     <Description>Tests the bitwise or operation.</Description>
     <Source>OpOr.cs</Source>
   </TestCase>
+  <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="IL xor" language="C#">
+    <Description>Tests the bitwise xor operation.</Description>
+    <Source>OpXor.cs</Source>
+  </TestCase>
   <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="IL not" language="C#">
     <Description>Tests the bitwise negation.</Description>
     <Source>OpNot.cs</Source>

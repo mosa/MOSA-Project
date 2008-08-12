@@ -494,6 +494,11 @@ namespace Mosa.Platforms.x86
             Emit(dest, src, cd_sub);
         }
 
+        void ICodeEmitter.Xor(Operand dest, Operand src)
+        {
+            Emit(dest, src, cd_xor);
+        }
+
         #endregion // ICodeEmitter Members
 
         #region Code Definition Tables
@@ -512,6 +517,13 @@ namespace Mosa.Platforms.x86
         };
 
         private static readonly CodeDef[] cd_or = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 6),
+            new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x33 }, null),
+            new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0x33 }, null),
+            new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x31 }, null),
+        };
+
+        private static readonly CodeDef[] cd_xor = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 1),
             new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x0B }, null),
             new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0x0B }, null),

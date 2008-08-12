@@ -474,6 +474,10 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IR.IIrVisitor.Visit(IR.LogicalXorInstruction instruction)
+        {
+        }
+
         void IR.IIrVisitor.Visit(IR.LogicalNotInstruction instruction)
         {
         }

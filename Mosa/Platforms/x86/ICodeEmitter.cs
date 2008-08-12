@@ -279,6 +279,13 @@ namespace Mosa.Platforms.x86
         /// <param name="src">The source operand.</param>
         void Sub(Operand dest, Operand src);
 
+        /// <summary>
+        /// Emits an Xor instruction.
+        /// </summary>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
+        void Xor(Operand dest, Operand src);
+
         #endregion // x86 instructions
     }
 }

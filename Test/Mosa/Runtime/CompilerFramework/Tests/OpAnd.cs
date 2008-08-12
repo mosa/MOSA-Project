@@ -17,7 +17,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
         {
             int a, b;
 
-            for (a = 0; a < 10/*Int32.MaxValue*/; a++)
+            for (a = 0; a < 10; a++)
             {
                 b = a;
                 if (!(a == (a & b)))

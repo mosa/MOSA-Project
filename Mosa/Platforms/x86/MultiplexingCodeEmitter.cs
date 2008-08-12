@@ -386,6 +386,14 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        public void Xor(Operand dest, Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Xor(dest, src);
+            });
+        }
+
         #endregion // ICodeEmitter Members
     }
 }

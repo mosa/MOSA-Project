@@ -382,6 +382,14 @@ namespace Mosa.Platforms.x86
             
         }
 
+        public void Xor(Operand dest, Operand src)
+        {
+            if (dest is ConstantOperand)
+                throw new NotSupportedException(@"Constants are not allowed as destination.");
+            _textWriter.WriteLine("\t\txor\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
+
+        }
+
         #endregion // ICodeEmitter Members
 
         #region Internals

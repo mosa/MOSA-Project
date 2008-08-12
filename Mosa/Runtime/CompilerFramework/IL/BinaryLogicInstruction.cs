@@ -64,6 +64,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     return arch.CreateInstruction(typeof(IR.LogicalAndInstruction), this.Results[0], this.First, this.Second);
                 case OpCode.Or:
                     return arch.CreateInstruction(typeof(IR.LogicalOrInstruction), this.Results[0], this.First, this.Second);
+                case OpCode.Xor:
+                    return arch.CreateInstruction(typeof(IR.LogicalXorInstruction), this.Results[0], this.First, this.Second);
                 default:
                     throw new NotImplementedException();
             }

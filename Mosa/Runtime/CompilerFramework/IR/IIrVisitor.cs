@@ -41,6 +41,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
         void Visit(LogicalOrInstruction instruction);
 
         /// <summary>
+        /// Visitation function for <see cref="LogicalXorInstruction"/> instructions.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        void Visit(LogicalXorInstruction instruction);
+
+        /// <summary>
         /// Visitation function for <see cref="LogicalNotInstruction"/> instructions.
         /// </summary>
         /// <param name="instruction">The visiting instruction.</param>

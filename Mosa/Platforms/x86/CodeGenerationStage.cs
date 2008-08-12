@@ -751,6 +751,11 @@ namespace Mosa.Platforms.x86
             _emitter.Or(instruction.Destination, instruction.Operand2);
         }
 
+        void IR.IIrVisitor.Visit(IR.LogicalXorInstruction instruction)
+        {
+            _emitter.Xor(instruction.Destination, instruction.Operand2);
+        }
+
         void IR.IIrVisitor.Visit(IR.LogicalNotInstruction instruction)
         {
             _emitter.Not(instruction.Destination);
