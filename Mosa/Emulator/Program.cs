@@ -28,18 +28,18 @@ namespace Mosa.Emulator
             DeviceDrivers.Setup.Initialize();
 
             LinkedList<IDevice> devices = DeviceDrivers.Setup.DeviceManager.GetAllDevices();
-            Console.WriteLine("Device: ");
+            Console.WriteLine("Devices: ");
             foreach (IDevice device in devices) {
 
                 Console.Write(device.Name);
                 Console.Write(" [");
 
                 switch (device.Status) {
-                    case DeviceStatus.Error: Console.Write("Error"); break;
-                    case DeviceStatus.Offline: Console.Write("Offline"); break;
                     case DeviceStatus.Online: Console.Write("Online"); break;
+                    case DeviceStatus.Available: Console.Write("Available"); break;
                     case DeviceStatus.Initializing: Console.Write("Initializing"); break;
                     case DeviceStatus.NotFound: Console.Write("Not Found"); break;
+                    case DeviceStatus.Error: Console.Write("Error"); break;
                 }
                 Console.Write("]");
 

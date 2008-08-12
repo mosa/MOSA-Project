@@ -10,6 +10,7 @@
 using System;
 using System.IO;
 using Mosa.ClassLib;
+using Mosa.DeviceDrivers;
 
 namespace Mosa.EmulatedDevices
 {

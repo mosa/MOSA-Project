@@ -168,7 +168,11 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
                     //TextMode.Write("MB, LBA=", (int)driveInfo[drive].MaxLBA);
                     //TextMode.WriteLine("");
 
-                    devices.Add(new DiskDevice(this, drive, false));
+                    IDiskDevice diskDevice = new DiskDevice(this, drive, false);
+                    devices.Add((IDevice)diskDevice);
+
+                    foreach (IDevice device in diskDevice.CreatePartitionDevices())
+                        devices.Add(device);
                 }
             }
             return devices;

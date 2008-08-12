@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.ClassLib;
+
 namespace Mosa.DeviceDrivers
 {
 
@@ -44,11 +46,6 @@ namespace Mosa.DeviceDrivers
                 this.readOnly = this.diskController.CanWrite(driveNbr);
 
             mbr = new MasterBootBlock(this);
-
-            if (mbr.Valid)
-                for (uint i = 0; i < MasterBootBlock.MaxMBRPartitions; i++)
-                    if (mbr[i].PartitionType != PartitionTypes.Empty)
-                        new PartitionDevice(mbr[i], this, readOnly);
         }
 
         public byte[] ReadBlock(uint block, uint count)
@@ -68,6 +65,16 @@ namespace Mosa.DeviceDrivers
             return diskController.WriteBlock(driveNbr, block, count, data);
         }
 
+        public LinkedList<IDevice> CreatePartitionDevices()
+        {
+            LinkedList<IDevice> devices = new LinkedList<IDevice>();
 
+            if (mbr.Valid)
+                for (uint i = 0; i < MasterBootBlock.MaxMBRPartitions; i++)
+                    if (mbr[i].PartitionType != PartitionTypes.Empty)
+                        devices.Add(new PartitionDevice(mbr[i], this, readOnly));
+
+            return devices;
+        }
     }
 }

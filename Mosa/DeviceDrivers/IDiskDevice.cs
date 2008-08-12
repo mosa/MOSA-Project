@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.ClassLib;
+
 namespace Mosa.DeviceDrivers
 {
     public interface IDiskDevice
@@ -19,5 +21,7 @@ namespace Mosa.DeviceDrivers
         byte[] ReadBlock(uint block, uint count);
         bool ReadBlock(uint block, uint count, byte[] data);
         bool WriteBlock(uint block, uint count, byte[] data);
+
+        LinkedList<IDevice> CreatePartitionDevices();
     }
 }

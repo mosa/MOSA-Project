@@ -16,15 +16,15 @@ namespace Mosa.DeviceDrivers
         protected uint baseAddress;
         protected uint size;
 
+        public uint BaseAddress { get { return baseAddress; } }
+        public uint Size { get { return size; } }
+
         public MemoryRegion(MemorySpace memorySpace, uint baseAddress, uint size)
         {
             this.memorySpace = memorySpace;
             this.baseAddress = baseAddress;
             this.size = size;
         }
-
-        public uint BaseAddress { get { return baseAddress; } }
-        public uint Size { get { return size; } }
 
         public byte[] GetMemory()
         {

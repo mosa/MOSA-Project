@@ -56,7 +56,7 @@ namespace Mosa.DeviceDrivers.PCI
         {
             base.parent = pciController as Device;
             base.name = base.parent.Name + "/" + bus.ToString() + "/" + slot.ToString() + "/" + fun.ToString();
-            base.deviceStatus = DeviceStatus.Offline; 
+            base.deviceStatus = DeviceStatus.Available;
 
             this.pciController = pciController;
             this.bus = bus;

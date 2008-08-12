@@ -10,7 +10,7 @@
 namespace Mosa.DeviceDrivers
 {
 
-    public class PartitionDevice : Device, IPartitionDevice, IDevice
+    public class PartitionDevice : Device, IDevice, IPartitionDevice
     {
         private IDiskDevice diskDevice;
         private uint start;

@@ -175,13 +175,13 @@ namespace Mosa.DeviceDrivers
             }
         }
 
-        public class Offline : IFindDevice
+        public class Available : IFindDevice
         {
-            public Offline() { }
+            public Available() { }
 
             public bool IsMatch(IDevice device)
             {
-                return device.Status == DeviceStatus.Offline;
+                return device.Status == DeviceStatus.Available;
             }
         }
 
