@@ -343,18 +343,18 @@ namespace Mosa.Platforms.x86
             switch (instruction.Code)
             {
                 // Signed
-                case IL.OpCode.Beq_s: _emitter.Je(targets[0]); break;
-                case IL.OpCode.Bge_s: _emitter.Jge(targets[0]); break;
-                case IL.OpCode.Bgt_s: _emitter.Jg(targets[0]); break;
-                case IL.OpCode.Ble_s: _emitter.Jle(targets[0]); break;
-                case IL.OpCode.Blt_s: _emitter.Jl(targets[0]); break;
+                case IL.OpCode.Beq_s: _emitter.Jne(targets[0]); break;
+                case IL.OpCode.Bge_s: _emitter.Jl(targets[0]); break;
+                case IL.OpCode.Bgt_s: _emitter.Jle(targets[0]); break;
+                case IL.OpCode.Ble_s: _emitter.Jg(targets[0]); break;
+                case IL.OpCode.Blt_s: _emitter.Jge(targets[0]); break;
                 
                 // Unsigned
-                case IL.OpCode.Bne_un_s: _emitter.Jne(targets[0]); break;
-                case IL.OpCode.Bge_un_s: _emitter.Jae(targets[0]); break;
-                case IL.OpCode.Bgt_un_s: _emitter.Ja(targets[0]); break;
-                case IL.OpCode.Ble_un_s: _emitter.Jbe(targets[0]); break;
-                case IL.OpCode.Blt_un_s: _emitter.Jb(targets[0]); break;
+                case IL.OpCode.Bne_un_s: _emitter.Je(targets[0]); break;
+                case IL.OpCode.Bge_un_s: _emitter.Jb(targets[0]); break;
+                case IL.OpCode.Bgt_un_s: _emitter.Jbe(targets[0]); break;
+                case IL.OpCode.Ble_un_s: _emitter.Ja(targets[0]); break;
+                case IL.OpCode.Blt_un_s: _emitter.Jae(targets[0]); break;
 
                 // Long form signed
                 case IL.OpCode.Beq: goto case IL.OpCode.Beq_s;
