@@ -28,17 +28,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
 
             for (int b = 1; b < 4; b++)
             {
-                a = a << 1;
+                a = a << b;
             }
 
-            return (a == 16) ? 1 : 0;
+            return (a == 128) ? 1 : 0;
         }
 
         /// <summary>
         /// Tests the bitwise and operation on 64-bit integers.
         /// </summary>
         /// <returns>Non-zero on success, zero on failure.</returns>
-        public static int _Test_AndOnInt64()
+        public static int _Test_ShlOnInt64()
         {
             return 0;
         }
@@ -47,7 +47,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
         /// Tests the bitwise and operation on native integers.
         /// </summary>
         /// <returns>Non-zero on success, zero on failure.</returns>
-        public static int _Test_AndOnNativeInt()
+        public static int _Test_ShlOnNativeInt()
         {
             //IntPtr i1, i2;
             return 0;

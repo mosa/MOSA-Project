@@ -540,7 +540,7 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor.Div(DivInstruction instruction)
         {
-            HandleArith(instruction);
+            HandleDiv(instruction);
         }
 
         void IX86InstructionVisitor.SseAdd(SseAddInstruction instruction)
@@ -568,33 +568,44 @@ namespace Mosa.Platforms.x86
             Operand result = instruction.Results[0];
             Operand[] ops = instruction.Operands;
 
+            /*
+             * ops[0]: shiftAmount
+             * ops[1]: Variable to shift
+             * 
+             * Essentially, the shift looks like
+             * 
+             * result = ops[1] << ops[0]
+             * 
+             */
+
             // If destination is a register...
-            if (result is RegisterOperand)
+            RegisterOperand rop = result as RegisterOperand;
+            if (null != rop)
             {
-                // Move the an operand there, unless it is equal...
-                bool op1IsResult = Object.ReferenceEquals(result, ops[0]);
-                bool op2IsResult = Object.ReferenceEquals(result, ops[1]);
-                if (false == op1IsResult && false == op2IsResult)
+                // Move the shift amount to ECX, if it isn't there
+                if (false == (ops[0] is RegisterOperand) || false == Object.ReferenceEquals(((RegisterOperand)ops[0]).Register, GeneralPurposeRegister.ECX))
+                {
+                    RegisterOperand ecx = new RegisterOperand(ops[0].Type, GeneralPurposeRegister.ECX);
+                    _currentBlock.Instructions.Insert(_instructionIdx++, new IR.MoveInstruction(ecx, ops[0]));
+                }
+
+                // Move the ops[1] to EAX, unless it is already there...                
+                bool op1IsResult = (ops[1] is RegisterOperand && true == Object.ReferenceEquals(rop.Register, ((RegisterOperand)ops[0]).Register));
+                if (false == op1IsResult)
                 {
                     _currentBlock.Instructions.Insert(_instructionIdx++, new IR.MoveInstruction(result, ops[1]));
                 }
-                else if (true == op2IsResult)
-                {
-                    Operand t = ops[0];
-                    ops[0] = ops[1];
-                    ops[1] = t;
-                }
-
-                //_instructions.Add(instruction);
             }
-            // x86 can't do memory *= memory instructions
+            // x86 can't do memory <<= memory instructions
             else if (false == result.IsRegister)
             {
-                // i = x * y style
-                RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX);
+                // i = x << y style
+                RegisterOperand eax = new RegisterOperand(ops[1].Type, GeneralPurposeRegister.EAX);
+                RegisterOperand ecx = new RegisterOperand(ops[0].Type, GeneralPurposeRegister.ECX);
+                _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(ecx, ops[0]));
                 _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[1]));
-                //_instructions.Add(instruction);
-                instruction.Results[0] = eax;
+                instruction.SetResult(0, eax);
+                instruction.SetOperand(1, ecx);
                 _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(result, eax));
             }
         }
@@ -647,6 +658,61 @@ namespace Mosa.Platforms.x86
                 RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX);
                 _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[0]));
                 //_instructions.Add(instruction);
+                instruction.Results[0] = eax;
+                _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(result, eax));
+            }
+        }
+
+        private void HandleDiv(DivInstruction instruction)
+        {
+            Operand result = instruction.Results[0];
+            Operand[] ops = instruction.Operands;
+
+            /*
+             * NOTE:
+             * 
+             * The operands are mixed up in DivInstruction, to be diagnosed
+             * at appropriate time. The current fix is to move them to the right
+             * place here.
+             * 
+             * 
+             */
+
+            // Clear EDX, if there's no data in it
+            RegisterOperand edx = new RegisterOperand(result.Type, GeneralPurposeRegister.EDX);
+            _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(edx, new ConstantOperand(result.Type, 0)));
+            
+            // If destination is a register...
+            RegisterOperand rop = result as RegisterOperand;
+            if (null != rop)
+            {
+                RegisterOperand eax = new RegisterOperand(rop.Type, GeneralPurposeRegister.EAX);
+                
+                RegisterOperand op2 = ops[1] as RegisterOperand;
+                if (null == op2 || false == Object.ReferenceEquals(op2.Register, rop.Register))
+                {
+                    // Move ops[1] to eax
+                    _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[1]));
+                }
+
+                if (ops[0] is ConstantOperand)
+                {
+                    RegisterOperand ecx = new RegisterOperand(ops[0].Type, GeneralPurposeRegister.ECX);
+                    _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(ecx, ops[0]));
+                    instruction.SetOperand(0, ecx);
+                }
+
+                if (false == Object.ReferenceEquals(eax.Register, rop.Register))
+                {
+                    _currentBlock.Instructions.Insert(_instructionIdx + 1, new MoveInstruction(rop, eax));
+                }
+            }
+            // x86 can't do memory += memory instructions
+            else if (false == result.IsRegister)
+            {
+                // i = x / y style
+                RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX);
+                _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[1]));
                 instruction.Results[0] = eax;
                 _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(result, eax));
             }

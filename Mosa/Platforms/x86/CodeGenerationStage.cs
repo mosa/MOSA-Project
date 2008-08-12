@@ -101,7 +101,7 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor.Div(DivInstruction instruction)
         {
-            _emitter.Div(instruction.Results[0], instruction.Operands[1]);
+            _emitter.Div(instruction.Results[0], instruction.Operands[0]);
         }
 
         void IX86InstructionVisitor.SseAdd(SseAddInstruction instruction)

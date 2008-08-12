@@ -406,24 +406,24 @@ namespace Mosa.Platforms.x86
 
         void ICodeEmitter.Shl(Operand dest, Operand src)
         {
-            // Write the opcode byte
-            Debug.Assert(dest is RegisterOperand && (src is ConstantOperand /*|| src is MemoryOperand*/));
+            // We force the shl reg, ecx notion
+            Debug.Assert(dest is RegisterOperand && src is RegisterOperand);
             // FIXME: Make sure the constant is emitted as a single-byte opcode
-            Emit(dest, src, cd_shl);
+            Emit(dest, null, cd_shl);
         }
 
         void ICodeEmitter.Shr(Operand dest, Operand src)
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && (src is ConstantOperand));
-            Emit(dest, src, cd_shr);
+            Emit(dest, null, cd_shr);
         }
 
         void ICodeEmitter.Div(Operand dest, Operand src)
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
-            Emit(dest, src, cd_div);
+            Emit(src, null, cd_div);
         }
 
         void ICodeEmitter.Mov(Operand dest, Operand src)
@@ -489,8 +489,9 @@ namespace Mosa.Platforms.x86
         #region Code Definition Tables
 
         private static readonly CodeDef[] cd_add = new CodeDef[] {
-            new CodeDef(typeof(Operand),            typeof(ConstantOperand),    new byte[] { 0x81 }, 0),
-            new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0x03 }, null)
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x81 }, 0),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x03 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x03 }, null)
         };
 
         private static readonly CodeDef[] cd_and = new CodeDef[] {
@@ -537,16 +538,16 @@ namespace Mosa.Platforms.x86
         };
 
         private static readonly CodeDef[] cd_shl = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC1 }, 4),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xD3 }, 4),
         };
 
         private static readonly CodeDef[] cd_shr = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC1 }, 5),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xC1 }, 5),
         };
 
         private static readonly CodeDef[] cd_div = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF7 }, 7),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF7 }, 7),
+            new CodeDef(typeof(RegisterOperand),    null,    new byte[] { 0xF7 }, 7),
+            new CodeDef(typeof(MemoryOperand),      null,    new byte[] { 0xF7 }, 7),
         };
 
         private static readonly CodeDef[] cd_mov = new CodeDef[] {
@@ -584,7 +585,7 @@ namespace Mosa.Platforms.x86
         {
             foreach (CodeDef cd in codeDef)
             {
-                if (true == cd.dest.IsInstanceOfType(dest) && true == cd.src.IsInstanceOfType(src))
+                if (true == cd.dest.IsInstanceOfType(dest) && (null == src || true == cd.src.IsInstanceOfType(src)))
                 {
                     Emit(cd.code, cd.regField, dest, src);
                     return;
@@ -755,96 +756,81 @@ namespace Mosa.Platforms.x86
         /// <param name="sib">A potential SIB byte to emit.</param>
         /// <param name="displacement">An immediate displacement to emit.</param>
         /// <returns>The value of the modR/M byte.</returns>
-        private byte? CalculateModRM(byte? regField, Operand dest, Operand src, out byte? sib, out IntPtr? displacement)
+        private byte? CalculateModRM(byte? regField, Operand op1, Operand op2, out byte? sib, out IntPtr? displacement)
         {
-            MemoryOperand memAddrOp = null;
+            byte? modRM = null;
 
             displacement = null;
-            sib = null;
 
-            if (null != dest)
+            // FIXME: Handle the SIB byte
+            sib = null; 
+
+            RegisterOperand rop1 = op1 as RegisterOperand, rop2 = op2 as RegisterOperand;
+            MemoryOperand mop1 = op1 as MemoryOperand, mop2 = op2 as MemoryOperand;
+
+            // Normalize the operand order
+            if (null == rop1 && null != rop2)
             {
-                byte modRM = 0;
-                if (dest is RegisterOperand && src is RegisterOperand)
-                {
-                    modRM |= 3 << 6;
-                    modRM |= (byte)(((RegisterOperand)dest).Register.RegisterCode << 3);
-                    modRM |= (byte)((RegisterOperand)src).Register.RegisterCode;
-                }
-                else
-                {
-                    if (null != regField)
-                    {
-                        modRM |= (byte)(regField.Value << 3);
-                    }
-
-                    RegisterOperand registerOp = null;
-                    if (dest is MemoryOperand)
-                    {
-                        memAddrOp = (MemoryOperand)dest;
-                        registerOp = src as RegisterOperand;
-
-                        displacement = memAddrOp.Offset;
-                        if (null != memAddrOp.Base && displacement != IntPtr.Zero)
-                        {
-                            modRM |= (byte)((2 << 6) | memAddrOp.Base.RegisterCode);
-                        }
-                        else
-                        {
-                            modRM |= 5;
-                        }
-
-/* FIXME: Fix SIB byte support
-                        if (memAddrOp.Base != null && (memAddrOp.IndexRegister != null && (byte)memAddrOp.Scale > 0))
-                        {
-                            SIBByte = BuildSIBByte(memAddrOp);
-                            modRM |= 3;
-                        }
-                        else 
- */
-                        if (null != registerOp)
-                            modRM |= (byte)(registerOp.Register.RegisterCode << 3);
-                    }
-                    else if (dest is RegisterOperand)
-                    {
-                        registerOp = (RegisterOperand)dest;
-                        memAddrOp = src as MemoryOperand;
-
-                        if (null == memAddrOp)
-                        {
-                            modRM |= 0xC0;
-                        }
-                        else
-                        {
-                            displacement = memAddrOp.Offset;
-                            if (null != memAddrOp.Base && displacement != IntPtr.Zero)
-                            {
-                                modRM |= (byte)((2 << 6) | memAddrOp.Base.RegisterCode);
-                            }
-                            else
-                            {
-                                modRM |= 5;
-                            }
-
-/* FIXME: Fix SIB support
-                            if (memAddrOp.Base != null && (memAddrOp.IndexRegister != null && (byte)memAddrOp.Scale > 0))
-                            {
-                                SIBByte = BuildSIBByte(memAddrOp);
-                                modRM |= 3;
-                            }
-*/
-                        }
-
-                        if (null != registerOp)
-                            modRM |= (byte)registerOp.Register.RegisterCode;
-                    }
-
-                }
-
-                return modRM;
+                // Swap the memory operands
+                rop1 = rop2; rop2 = null;
+                mop2 = mop1; mop1 = null; 
             }
 
-            return null;
+            if (null != regField)
+                modRM = (byte)(regField.Value << 3);
+
+            if (null != rop1 && null != rop2)
+            {
+                // mod = 11b, reg = rop1, r/m = rop2
+                modRM = (byte)((3 << 6) | (rop1.Register.RegisterCode << 3) | rop2.Register.RegisterCode);
+            }
+            // Check for register/memory combinations
+            else if (null != mop2 && null != mop2.Base)
+            {
+                // mod = 10b, reg = rop1, r/m = mop2
+                modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | (byte)mop2.Base.RegisterCode);
+                if (null != rop1)
+                {
+                    modRM |= (byte)(rop1.Register.RegisterCode << 3);
+                }
+                displacement = mop2.Offset;
+            }
+            else if (null != mop2)
+            {
+                // mod = 10b, r/m = mop1, reg = rop2
+                modRM = (byte)(modRM.GetValueOrDefault() | 5);
+                if (null != rop1)
+                {
+                    modRM |= (byte)(rop1.Register.RegisterCode << 3);
+                }
+                displacement = mop2.Offset;
+            }
+            else if (null != mop1 && null != mop1.Base)
+            {
+                // mod = 10b, r/m = mop1, reg = rop2
+                modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | mop1.Base.RegisterCode);
+                if (null != rop2)
+                {
+                    modRM |= (byte)(rop2.Register.RegisterCode << 3);
+                }
+                displacement = mop1.Offset;
+            }
+            else if (null != mop1)
+            {
+                // mod = 10b, r/m = mop1, reg = rop2
+                modRM = (byte)(modRM.GetValueOrDefault() | 5);
+                if (null != rop2)
+                {
+                    modRM |= (byte)(rop2.Register.RegisterCode << 3);
+                }
+                displacement = mop1.Offset;
+            }
+            else if (null != rop1)
+            {
+                modRM = (byte)(modRM.GetValueOrDefault() | (3 << 6) | rop1.Register.RegisterCode);
+            }
+
+            return modRM;
         }
 
         #endregion // Code Generation

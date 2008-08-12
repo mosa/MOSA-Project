@@ -56,7 +56,7 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
                 // int 3
-                architecture.CreateInstruction(typeof(IL.BreakInstruction), IL.OpCode.Break),
+                //architecture.CreateInstruction(typeof(IL.BreakInstruction), IL.OpCode.Break),
                 // push ebp
                 architecture.CreateInstruction(typeof(IR.PushInstruction), ebp),
                 // mov ebp, esp
