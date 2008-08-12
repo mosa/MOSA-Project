@@ -80,18 +80,23 @@
         <Options>
           <OutputPath>../build/debug</OutputPath>
           <XmlDocFile>../build/Mosa.Kernel.xml</XmlDocFile>
-          <AllowUnsafe>false</AllowUnsafe>
-          <NoStdLib>false</NoStdLib>
-          <CompilerDefines></CompilerDefines>
+          <IncrementalBuild>true</IncrementalBuild>
+          <CompilerDefines>DEBUG;TRACE</CompilerDefines>
+          <OptimizeCode>false</OptimizeCode>
+          <AllowUnsafe>true</AllowUnsafe>
+          <DebugInformation>true</DebugInformation>
+          <WarningLevel>4</WarningLevel>
         </Options>
       </Configuration>
       <Configuration name="Release">
         <Options>
           <OutputPath>../build/release</OutputPath>
           <XmlDocFile>../build/Mosa.Kernel.xml</XmlDocFile>
-          <AllowUnsafe>false</AllowUnsafe>
-          <NoStdLib>false</NoStdLib>
-          <CompilerDefines></CompilerDefines>
+          <CompilerDefines>TRACE</CompilerDefines>
+          <OptimizeCode>true</OptimizeCode>
+          <AllowUnsafe>true</AllowUnsafe>
+          <DebugInformation>false</DebugInformation>
+          <WarningLevel>2</WarningLevel>
         </Options>
       </Configuration>
 
@@ -105,18 +110,23 @@
         <Options>
           <OutputPath>../../build/debug</OutputPath>
           <XmlDocFile>../../build/Mosa.Platforms.x86.xml</XmlDocFile>
-          <AllowUnsafe>false</AllowUnsafe>
-          <NoStdLib>false</NoStdLib>
-          <CompilerDefines></CompilerDefines>
+          <IncrementalBuild>true</IncrementalBuild>
+          <CompilerDefines>DEBUG;TRACE</CompilerDefines>
+          <OptimizeCode>false</OptimizeCode>
+          <AllowUnsafe>true</AllowUnsafe>
+          <DebugInformation>true</DebugInformation>
+          <WarningLevel>4</WarningLevel>
         </Options>
       </Configuration>
       <Configuration name="Release">
         <Options>
           <OutputPath>../../build/release</OutputPath>
           <XmlDocFile>../../build/Mosa.Platforms.x86.xml</XmlDocFile>
-          <AllowUnsafe>false</AllowUnsafe>
-          <NoStdLib>false</NoStdLib>
-          <CompilerDefines></CompilerDefines>
+          <CompilerDefines>TRACE</CompilerDefines>
+          <OptimizeCode>true</OptimizeCode>
+          <AllowUnsafe>true</AllowUnsafe>
+          <DebugInformation>false</DebugInformation>
+          <WarningLevel>2</WarningLevel>
         </Options>
       </Configuration>
 
@@ -133,18 +143,23 @@
         <Options>
           <OutputPath>../../build/debug</OutputPath>
           <XmlDocFile>../../build/Mosa.Jit.SimpleJit.xml</XmlDocFile>
+          <IncrementalBuild>true</IncrementalBuild>
+          <CompilerDefines>DEBUG;TRACE</CompilerDefines>
+          <OptimizeCode>false</OptimizeCode>
           <AllowUnsafe>true</AllowUnsafe>
-          <NoStdLib>false</NoStdLib>
-          <CompilerDefines></CompilerDefines>
+          <DebugInformation>true</DebugInformation>
+          <WarningLevel>4</WarningLevel>
         </Options>
       </Configuration>
       <Configuration name="Release">
         <Options>
           <OutputPath>../../build/release</OutputPath>
           <XmlDocFile>../../build/Mosa.Jit.SimpleJit.xml</XmlDocFile>
+          <CompilerDefines>TRACE</CompilerDefines>
+          <OptimizeCode>true</OptimizeCode>
           <AllowUnsafe>true</AllowUnsafe>
-          <NoStdLib>false</NoStdLib>
-          <CompilerDefines></CompilerDefines>
+          <DebugInformation>false</DebugInformation>
+          <WarningLevel>2</WarningLevel>
         </Options>
       </Configuration>
 
@@ -161,18 +176,23 @@
         <Options>
           <OutputPath>../build/debug</OutputPath>
           <XmlDocFile>../build/Mosa.Runtime.xml</XmlDocFile>
-          <AllowUnsafe>false</AllowUnsafe>
-          <NoStdLib>false</NoStdLib>
-          <CompilerDefines></CompilerDefines>
+          <IncrementalBuild>true</IncrementalBuild>
+          <CompilerDefines>DEBUG;TRACE</CompilerDefines>
+          <OptimizeCode>false</OptimizeCode>
+          <AllowUnsafe>true</AllowUnsafe>
+          <DebugInformation>true</DebugInformation>
+          <WarningLevel>4</WarningLevel>
         </Options>
       </Configuration>
       <Configuration name="Release">
         <Options>
           <OutputPath>../build/release</OutputPath>
           <XmlDocFile>../build/Mosa.Runtime.xml</XmlDocFile>
-          <AllowUnsafe>false</AllowUnsafe>
-          <NoStdLib>false</NoStdLib>
-          <CompilerDefines></CompilerDefines>
+          <CompilerDefines>TRACE</CompilerDefines>
+          <OptimizeCode>true</OptimizeCode>
+          <AllowUnsafe>true</AllowUnsafe>
+          <DebugInformation>false</DebugInformation>
+          <WarningLevel>2</WarningLevel>
         </Options>
       </Configuration>
 
@@ -190,18 +210,23 @@
         <Options>
           <OutputPath>../../build/debug</OutputPath>
           <XmlDocFile>../../build/mosacl.xml</XmlDocFile>
-          <AllowUnsafe>false</AllowUnsafe>
-          <NoStdLib>false</NoStdLib>
-          <CompilerDefines></CompilerDefines>
+          <IncrementalBuild>true</IncrementalBuild>
+          <CompilerDefines>DEBUG;TRACE</CompilerDefines>
+          <OptimizeCode>false</OptimizeCode>
+          <AllowUnsafe>true</AllowUnsafe>
+          <DebugInformation>true</DebugInformation>
+          <WarningLevel>4</WarningLevel>
         </Options>
       </Configuration>
       <Configuration name="Release">
         <Options>
           <OutputPath>../../build/release</OutputPath>
           <XmlDocFile>../../build/mosacl.xml</XmlDocFile>
-          <AllowUnsafe>false</AllowUnsafe>
-          <NoStdLib>false</NoStdLib>
-          <CompilerDefines></CompilerDefines>
+          <CompilerDefines>TRACE</CompilerDefines>
+          <OptimizeCode>true</OptimizeCode>
+          <AllowUnsafe>true</AllowUnsafe>
+          <DebugInformation>false</DebugInformation>
+          <WarningLevel>2</WarningLevel>
         </Options>
       </Configuration>
 
@@ -220,18 +245,23 @@
         <Options>
           <OutputPath>../../../build/debug</OutputPath>
           <XmlDocFile>../../../build/Test.Mosa.Runtime.CompilerFramework.xml</XmlDocFile>
+          <IncrementalBuild>true</IncrementalBuild>
+          <CompilerDefines>DEBUG;TRACE</CompilerDefines>
+          <OptimizeCode>false</OptimizeCode>
           <AllowUnsafe>true</AllowUnsafe>
-          <NoStdLib>false</NoStdLib>
-          <CompilerDefines></CompilerDefines>
+          <DebugInformation>true</DebugInformation>
+          <WarningLevel>4</WarningLevel>
         </Options>
       </Configuration>
       <Configuration name="Release">
         <Options>
           <OutputPath>../../build/release</OutputPath>
           <XmlDocFile>../../build/Test.Mosa.Runtime.CompilerFramework.xml</XmlDocFile>
+          <CompilerDefines>TRACE</CompilerDefines>
+          <OptimizeCode>true</OptimizeCode>
           <AllowUnsafe>true</AllowUnsafe>
-          <NoStdLib>false</NoStdLib>
-          <CompilerDefines></CompilerDefines>
+          <DebugInformation>false</DebugInformation>
+          <WarningLevel>2</WarningLevel>
         </Options>
       </Configuration>
 
