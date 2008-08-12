@@ -12,27 +12,27 @@ using Mosa.DeviceDrivers;
 namespace Mosa.DeviceDrivers.ISA
 {
 
-    public class ISABusResources
-    {
-        protected IOPortRegion[] ioPortRegions;
-        protected MemoryRegion[] memoryRegion;
+	public class ISABusResources
+	{
+		protected IOPortRegion[] ioPortRegions;
+		protected MemoryRegion[] memoryRegion;
 
-        public ISABusResources(IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegion)
-        {
-            this.ioPortRegions = ioPortRegions;
-            this.memoryRegion = memoryRegion;
-        }
+		public ISABusResources(IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegion)
+		{
+			this.ioPortRegions = ioPortRegions;
+			this.memoryRegion = memoryRegion;
+		}
 
-        public IOPortRegion GetIOPortRegion(byte index)
-        {
-            return ioPortRegions[index];
-        }
+		public IOPortRegion GetIOPortRegion(byte index)
+		{
+			return ioPortRegions[index];
+		}
 
-        public MemoryRegion GetMemoryRegion(byte index)
-        {
-            return memoryRegion[index];
-        }
+		public MemoryRegion GetMemoryRegion(byte index)
+		{
+			return memoryRegion[index];
+		}
 
-    }
+	}
 
 }

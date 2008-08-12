@@ -9,13 +9,13 @@
 
 namespace Mosa.DeviceDrivers
 {
-    public class MemorySpace
-    {
-        public MemorySpace() { }
+	public class MemorySpace
+	{
+		public MemorySpace() { }
 
-        public byte[] GetMemory(uint address)
-        {
-            return null; // TODO
-        }
-    }
+		public byte[] GetMemory(uint address)
+		{
+			return null; // TODO
+		}
+	}
 }

@@ -9,23 +9,14 @@
 
 namespace Mosa.DeviceDrivers
 {
+	public abstract class Device : IDevice
+	{
+		protected string name;
+		protected IDevice parent;
+		protected DeviceStatus deviceStatus;
 
-    public abstract class Device : IDevice
-    {
-        protected string name;
-        protected IDevice parent;
-        protected DeviceStatus deviceStatus;
-
-        public string Name { get { return name; } }
-        public IDevice Parent { get { return parent; } }
-        public DeviceStatus Status { get { return deviceStatus; } }
-
-        public Device()
-        {
-            name = string.Empty;
-            parent = null;
-            deviceStatus = DeviceStatus.Error;
-        }
-
-    }
+		public string Name { get { return name; } }
+		public IDevice Parent { get { return parent; } }
+		public DeviceStatus Status { get { return deviceStatus; } }
+	}
 }

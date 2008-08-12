@@ -9,16 +9,16 @@
 
 namespace Mosa.EmulatedDevices
 {
-    public static class Setup
-    {
-        public static void Initialize()
-        {
-            new CMOS(CMOS.StandardIOBase);
+	public static class Setup
+	{
+		public static void Initialize()
+		{
+			new CMOS(CMOS.StandardIOBase);
 
-            string[] files = new string[1];
-            files[0] = @"..\..\..\hd.img";
+			string[] files = new string[1];
+			files[0] = @"..\..\..\hd.img";
 
-            new IDEDiskDevice(IDEDiskDevice.PrimaryIOBase,files);
-        }
-    }
+			new IDEDiskDevice(IDEDiskDevice.PrimaryIOBase, files);
+		}
+	}
 }

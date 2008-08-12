@@ -12,7 +12,7 @@ namespace Mosa.DeviceDrivers
 	///TODO: Add API to set Serial settings, like baud rate, parity, etc.
 	public interface ISerialDevice
 	{
-		 void Write (byte ch);
-		 int ReadByte ();
+		void Write(byte ch);
+		int ReadByte();
 	}
 }

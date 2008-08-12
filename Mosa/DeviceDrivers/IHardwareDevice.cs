@@ -11,13 +11,13 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers
 {
-    public interface IHardwareDevice 
-    {       
-        bool Setup();
-        bool Probe();
-        bool Start();
-        LinkedList<IDevice> CreateSubDevices();
-        bool OnInterrupt();
-        bool Activate(DeviceManager deviceManager);
-    }
+	public interface IHardwareDevice
+	{
+		bool Setup();
+		bool Probe();
+		bool Start();
+		LinkedList<IDevice> CreateSubDevices();
+		bool OnInterrupt();
+		bool Activate(DeviceManager deviceManager);
+	}
 }

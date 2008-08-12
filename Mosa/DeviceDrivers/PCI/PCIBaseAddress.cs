@@ -1,66 +1,62 @@
 ﻿/*
- * (c) 2008 The Ensemble OS Project
- * http://www.ensemble-os.org
- * All Rights Reserved
+ * (c) 2008 MOSA - The Managed Operating System Alliance
  *
- * This code is covered by the New BSD License, found in license.txt
+ * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *
- * PCIBaseAddress.cs: 
-*/
+ */
 
 using Mosa.DeviceDrivers;
 using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.PCI
 {
-    public enum AddressRegion : byte
-    {
-        IO,
-        Memory,
-        Unimplemented
-    }
+	public enum AddressRegion : byte
+	{
+		IO,
+		Memory,
+		Unimplemented
+	}
 
-    public class PCIBaseAddress
-    {
-        protected uint address;
-        protected uint size;
-        protected AddressRegion region;
-        protected bool prefetchable;
+	public class PCIBaseAddress
+	{
+		protected uint address;
+		protected uint size;
+		protected AddressRegion region;
+		protected bool prefetchable;
 
-        public uint Address { get { return address; } }
-        public uint Size { get { return size; } }
-        public AddressRegion Region { get { return region; } }
-        public bool Prefetchable { get { return prefetchable; } }
+		public uint Address { get { return address; } }
+		public uint Size { get { return size; } }
+		public AddressRegion Region { get { return region; } }
+		public bool Prefetchable { get { return prefetchable; } }
 
-        public PCIBaseAddress()
-        {
-            region = AddressRegion.Unimplemented;
-        }
+		public PCIBaseAddress()
+		{
+			region = AddressRegion.Unimplemented;
+		}
 
-        public PCIBaseAddress(AddressRegion region, uint address, uint size, bool prefetchable)
-        {
-            this.region = region;
-            this.address = address;
-            this.size = size;
-            this.prefetchable = prefetchable;
-        }
+		public PCIBaseAddress(AddressRegion region, uint address, uint size, bool prefetchable)
+		{
+			this.region = region;
+			this.address = address;
+			this.size = size;
+			this.prefetchable = prefetchable;
+		}
 
-        public override string ToString()
-        {
-            if (region == AddressRegion.Unimplemented)
-                return string.Empty;
+		public override string ToString()
+		{
+			if (region == AddressRegion.Unimplemented)
+				return string.Empty;
 
-            if (region == AddressRegion.IO)
-                return "I/O Port at 0x" + address.ToString("X") + " [size=" + size.ToString() + "]";
+			if (region == AddressRegion.IO)
+				return "I/O Port at 0x" + address.ToString("X") + " [size=" + size.ToString() + "]";
 
-            if (prefetchable)
-                return "Memory at 0x" + address.ToString("X") + " [size=" + size.ToString() + "] (prefetchable)";
+			if (prefetchable)
+				return "Memory at 0x" + address.ToString("X") + " [size=" + size.ToString() + "] (prefetchable)";
 
-            return "Memory at 0x" + address.ToString("X") + " [size=" + size.ToString() + "] (non-prefetchable)";
-        }
+			return "Memory at 0x" + address.ToString("X") + " [size=" + size.ToString() + "] (non-prefetchable)";
+		}
 
-    }
+	}
 }

@@ -11,28 +11,28 @@ using Mosa.DeviceDrivers;
 
 namespace Mosa.DeviceDrivers
 {
-    public static class Setup
-    {
-        static private DeviceManager deviceManager;
+	public static class Setup
+	{
+		static private DeviceManager deviceManager;
 
-        static public DeviceManager DeviceManager { get { return deviceManager; } }
+		static public DeviceManager DeviceManager { get { return deviceManager; } }
 
-        static public void Initialize()
-        {
-            deviceManager = new DeviceManager();
-            PortIOSpace portIOSpace = new PortIOSpace();
-            MemorySpace memorySpace = new MemorySpace();
+		static public void Initialize()
+		{
+			deviceManager = new DeviceManager();
+			PortIOSpace portIOSpace = new PortIOSpace();
+			MemorySpace memorySpace = new MemorySpace();
 
-            ISA.ISADeviceDrivers isaDeviceDrivers = new Mosa.DeviceDrivers.ISA.ISADeviceDrivers();
+			ISA.ISADeviceDrivers isaDeviceDrivers = new Mosa.DeviceDrivers.ISA.ISADeviceDrivers();
 
-            isaDeviceDrivers.RegisterBuildInDeviceDrivers();
+			isaDeviceDrivers.RegisterBuildInDeviceDrivers();
 
-            isaDeviceDrivers.StartDrivers(deviceManager, portIOSpace, memorySpace);
+			isaDeviceDrivers.StartDrivers(deviceManager, portIOSpace, memorySpace);
 
-            PCI.PCIDeviceDrivers pciDeviceDrivers = new Mosa.DeviceDrivers.PCI.PCIDeviceDrivers();
+			PCI.PCIDeviceDrivers pciDeviceDrivers = new Mosa.DeviceDrivers.PCI.PCIDeviceDrivers();
 
-            pciDeviceDrivers.StartDrivers(deviceManager, portIOSpace, memorySpace);
-        }
+			pciDeviceDrivers.StartDrivers(deviceManager, portIOSpace, memorySpace);
+		}
 
-    }
+	}
 }

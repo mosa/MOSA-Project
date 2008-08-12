@@ -11,9 +11,9 @@
 
 namespace Mosa.DeviceDrivers
 {
-    public struct SpinLock
-    {
-        public void Enter() { }
-        public void Exit() { }
-    }
+	public struct SpinLock
+	{
+		public void Enter() { }
+		public void Exit() { }
+	}
 }

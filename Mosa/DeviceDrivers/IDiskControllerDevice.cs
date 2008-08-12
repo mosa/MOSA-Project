@@ -9,16 +9,16 @@
 
 namespace Mosa.DeviceDrivers
 {
-    public interface IDiskControllerDevice
-    {
-        bool Open(uint drive);
-        bool Release(uint drive);
+	public interface IDiskControllerDevice
+	{
+		bool Open(uint drive);
+		bool Release(uint drive);
 
-        bool ReadBlock(uint drive, uint block, uint count, byte[] data);
-        bool WriteBlock(uint drive, uint block, uint count, byte[] data);
+		bool ReadBlock(uint drive, uint block, uint count, byte[] data);
+		bool WriteBlock(uint drive, uint block, uint count, byte[] data);
 
-        uint GetSectorSize(uint drive);
-        uint GetTotalSectors(uint drive);
-        bool CanWrite(uint drive);
-    }
+		uint GetSectorSize(uint drive);
+		uint GetTotalSectors(uint drive);
+		bool CanWrite(uint drive);
+	}
 }

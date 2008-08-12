@@ -9,10 +9,10 @@
 
 namespace Mosa.DeviceDrivers
 {
-    public interface IDevice
-    {
-        string Name { get; }
-        IDevice Parent { get; }
-        DeviceStatus Status { get; }
-    }
+	public interface IDevice
+	{
+		string Name { get; }
+		IDevice Parent { get; }
+		DeviceStatus Status { get; }
+	}
 }

@@ -14,98 +14,100 @@ using Mosa.ClassLib;
 
 namespace Mosa.Emulator
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            // Set Device Driver system to the emulator port method
-            DeviceDrivers.Kernel.HAL.SetIOPortFactory(Mosa.EmulatedDevices.EmulatedIOPorts.RegisterPort);
+	public class Program
+	{
+		public static void Main(string[] args)
+		{
+			// Set Device Driver system to the emulator port method
+			DeviceDrivers.Kernel.HAL.SetIOPortFactory(Mosa.EmulatedDevices.EmulatedIOPorts.RegisterPort);
 
-            // Start the emulated devices
-            EmulatedDevices.Setup.Initialize();
+			// Start the emulated devices
+			EmulatedDevices.Setup.Initialize();
 
-            // Start driver system
-            DeviceDrivers.Setup.Initialize();
+			// Start driver system
+			DeviceDrivers.Setup.Initialize();
 
-            LinkedList<IDevice> devices = DeviceDrivers.Setup.DeviceManager.GetAllDevices();
-            Console.WriteLine("Devices: ");
-            foreach (IDevice device in devices) {
+			// Get a list of all devices
+			LinkedList<IDevice> devices = DeviceDrivers.Setup.DeviceManager.GetAllDevices();
 
-                Console.Write(device.Name);
-                Console.Write(" [");
+			// Print them
+			Console.WriteLine("Devices: ");
+			foreach (IDevice device in devices) {
 
-                switch (device.Status) {
-                    case DeviceStatus.Online: Console.Write("Online"); break;
-                    case DeviceStatus.Available: Console.Write("Available"); break;
-                    case DeviceStatus.Initializing: Console.Write("Initializing"); break;
-                    case DeviceStatus.NotFound: Console.Write("Not Found"); break;
-                    case DeviceStatus.Error: Console.Write("Error"); break;
-                }
-                Console.Write("]");
+				Console.Write(device.Name);
+				Console.Write(" [");
 
-                if (device.Parent != null) {
-                    Console.Write(" - Parent: ");
-                    Console.Write(device.Parent.Name);
-                }
-                Console.WriteLine();
+				switch (device.Status) {
+					case DeviceStatus.Online: Console.Write("Online"); break;
+					case DeviceStatus.Available: Console.Write("Available"); break;
+					case DeviceStatus.Initializing: Console.Write("Initializing"); break;
+					case DeviceStatus.NotFound: Console.Write("Not Found"); break;
+					case DeviceStatus.Error: Console.Write("Error"); break;
+				}
+				Console.Write("]");
 
-                if (device is PCIDevice) {
-                    PCIDevice pciDevice = (device as PCIDevice);
+				if (device.Parent != null) {
+					Console.Write(" - Parent: ");
+					Console.Write(device.Parent.Name);
+				}
+				Console.WriteLine();
 
-                    Console.Write("  Vendor:0x");
-                    Console.Write(pciDevice.VendorID.ToString("X"));
-                    Console.Write(" Device:0x");
-                    Console.Write(pciDevice.DeviceID.ToString("X"));
-                    Console.Write(" Class:0x");
-                    Console.Write(pciDevice.ClassCode.ToString("X"));
-                    Console.Write(" Rev:0x");
-                    Console.Write(pciDevice.RevisionID.ToString("X"));
-                    Console.WriteLine();
+				if (device is PCIDevice) {
+					PCIDevice pciDevice = (device as PCIDevice);
 
-                    foreach (PCIBaseAddress address in pciDevice.BaseAddresses) {
-                        if (address.Address != 0) {
-                            Console.Write("    ");
-                            //Console.WriteLine (address.ToString ());
+					Console.Write("  Vendor:0x");
+					Console.Write(pciDevice.VendorID.ToString("X"));
+					Console.Write(" Device:0x");
+					Console.Write(pciDevice.DeviceID.ToString("X"));
+					Console.Write(" Class:0x");
+					Console.Write(pciDevice.ClassCode.ToString("X"));
+					Console.Write(" Rev:0x");
+					Console.Write(pciDevice.RevisionID.ToString("X"));
+					Console.WriteLine();
 
-                            if (address.Region == AddressRegion.IO)
-                                Console.Write("I/O Port at 0x");
-                            else
-                                Console.Write("Memory at 0x");
+					foreach (PCIBaseAddress address in pciDevice.BaseAddresses) {
+						if (address.Address != 0) {
+							Console.Write("    ");
 
-                            Console.Write(address.Address.ToString("X"));
+							if (address.Region == AddressRegion.IO)
+								Console.Write("I/O Port at 0x");
+							else
+								Console.Write("Memory at 0x");
 
-                            Console.Write(" [size=");
+							Console.Write(address.Address.ToString("X"));
 
-                            if ((address.Size & 0xFFFFF) == 0) {
-                                Console.Write((address.Size >> 20).ToString());
-                                Console.Write("M");
-                            }
-                            else if ((address.Size & 0x3FF) == 0) {
-                                Console.Write((address.Size >> 10).ToString());
-                                Console.Write("K");
-                            }
-                            else
-                                Console.Write(address.Size.ToString());
+							Console.Write(" [size=");
 
-                            Console.Write("]");
+							if ((address.Size & 0xFFFFF) == 0) {
+								Console.Write((address.Size >> 20).ToString());
+								Console.Write("M");
+							}
+							else if ((address.Size & 0x3FF) == 0) {
+								Console.Write((address.Size >> 10).ToString());
+								Console.Write("K");
+							}
+							else
+								Console.Write(address.Size.ToString());
 
-                            if (address.Prefetchable)
-                                Console.Write("(prefetchable)");
+							Console.Write("]");
 
-                            Console.WriteLine();
-                        }
-                    }
+							if (address.Prefetchable)
+								Console.Write("(prefetchable)");
 
-                    if (pciDevice.IRQ != 0) {
-                        Console.Write("    ");
-                        Console.Write("IRQ at ");
-                        Console.Write(pciDevice.IRQ.ToString());
-                        Console.WriteLine();
-                    }
-                }
-            }
+							Console.WriteLine();
+						}
+					}
 
-            return;
-        }
-    }
+					if (pciDevice.IRQ != 0) {
+						Console.Write("    ");
+						Console.Write("IRQ at ");
+						Console.Write(pciDevice.IRQ.ToString());
+						Console.WriteLine();
+					}
+				}
+			}
+
+			return;
+		}
+	}
 }

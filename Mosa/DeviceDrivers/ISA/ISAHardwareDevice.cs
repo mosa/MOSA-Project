@@ -10,16 +10,16 @@
 namespace Mosa.DeviceDrivers.ISA
 {
 
-    public abstract class ISAHardwareDevice : HardwareDevice
-    {
-        protected ISABusResources isaBusResources;
+	public abstract class ISAHardwareDevice : HardwareDevice
+	{
+		protected ISABusResources isaBusResources;
 
-        public ISAHardwareDevice() : base() { }
+		public ISAHardwareDevice() : base() { }
 
-        public void AssignResources(ISABusResources isaBusResources)
-        {
-            this.isaBusResources = isaBusResources;
-        }
+		public void AssignResources(ISABusResources isaBusResources)
+		{
+			this.isaBusResources = isaBusResources;
+		}
 
-    }
+	}
 }

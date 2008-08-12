@@ -14,39 +14,39 @@ using Mosa.DeviceDrivers.Kernel;
 
 namespace Mosa.DeviceDrivers.ISA
 {
-    [ISADeviceSignature(AutoLoad = true, BasePort = 0x0070, PortRange = 2)]
-    public class CMOSDriver : ISAHardwareDevice, IDevice, IHardwareDevice
-    {
+	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0070, PortRange = 2)]
+	public class CMOSDriver : ISAHardwareDevice, IDevice, IHardwareDevice
+	{
 
-        protected IReadWriteIOPort commandPort;
-        protected IReadWriteIOPort dataPort;
-        protected SpinLock spinLock;
+		protected IReadWriteIOPort commandPort;
+		protected IReadWriteIOPort dataPort;
+		protected SpinLock spinLock;
 
-        public CMOSDriver() { }
-        public void Dispose() { }
+		public CMOSDriver() { }
+		public void Dispose() { }
 
-        public override bool Setup()
-        {
-            base.name = "CMOS";
+		public override bool Setup()
+		{
+			base.name = "CMOS";
 
-            commandPort = base.isaBusResources.GetIOPortRegion(0).GetPort(0);
-            dataPort = base.isaBusResources.GetIOPortRegion(0).GetPort(4);
+			commandPort = base.isaBusResources.GetIOPortRegion(0).GetPort(0);
+			dataPort = base.isaBusResources.GetIOPortRegion(0).GetPort(4);
 
-            return true;
-        }
+			return true;
+		}
 
-        public override bool Start() { return true; }
-        public override bool Probe() { return true; }
-        public override LinkedList<IDevice> CreateSubDevices() { return null; }
-        public override bool OnInterrupt() { return true; }
+		public override bool Start() { return true; }
+		public override bool Probe() { return true; }
+		public override LinkedList<IDevice> CreateSubDevices() { return null; }
+		public override bool OnInterrupt() { return true; }
 
-        public byte Read(byte address)
-        {
-            spinLock.Enter();
-            commandPort.Write8(address);
-            byte b = dataPort.Read8();
-            spinLock.Exit();
-            return b;
-        }
-    }
+		public byte Read(byte address)
+		{
+			spinLock.Enter();
+			commandPort.Write8(address);
+			byte b = dataPort.Read8();
+			spinLock.Exit();
+			return b;
+		}
+	}
 }

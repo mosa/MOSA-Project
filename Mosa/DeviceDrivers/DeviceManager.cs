@@ -11,190 +11,190 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers
 {
-    public interface IFindDevice
-    {
-        bool IsMatch(IDevice device);
-    }
+	public class DeviceManager
+	{
+		private LinkedList<IDevice> devices;
+		private SpinLock spinLock;
 
-    public class DeviceManager
-    {
-        private LinkedList<IDevice> devices;
-        private SpinLock spinLock;
+		public DeviceManager()
+		{
+			devices = new LinkedList<IDevice>();
+		}
 
-        public DeviceManager()
-        {
-            devices = new LinkedList<IDevice>();
-        }
+		public void Add(IDevice device)
+		{
+			spinLock.Enter();
+			devices.Add(device);
+			spinLock.Exit();
+		}
 
-        public void Add(IDevice device)
-        {
-            spinLock.Enter();
-            devices.Add(device);
-            spinLock.Exit();
-        }
+		public LinkedList<IDevice> GetDevices(IFindDevice match)
+		{
+			spinLock.Enter();
 
-        public LinkedList<IDevice> GetDevices(IFindDevice match)
-        {
-            spinLock.Enter();
+			LinkedList<IDevice> list = new LinkedList<IDevice>();
 
-            LinkedList<IDevice> list = new LinkedList<IDevice>();
+			foreach (IDevice device in devices)
+				if (match.IsMatch(device))
+					list.Add(device);
 
-            foreach (IDevice device in devices)
-                if (match.IsMatch(device))
-                    list.Add(device);
+			spinLock.Exit();
 
-            spinLock.Exit();
+			return list;
+		}
 
-            return list;
-        }
+		public LinkedList<IDevice> GetDevices(IFindDevice match1, IFindDevice match2)
+		{
+			spinLock.Enter();
 
-        public LinkedList<IDevice> GetDevices(IFindDevice match1, IFindDevice match2)
-        {
-            spinLock.Enter();
+			LinkedList<IDevice> list = new LinkedList<IDevice>();
 
-            LinkedList<IDevice> list = new LinkedList<IDevice>();
+			foreach (IDevice device in devices)
+				if (match1.IsMatch(device) && (match2.IsMatch(device)))
+					list.Add(device);
 
-            foreach (IDevice device in devices)
-                if (match1.IsMatch(device) && (match2.IsMatch(device)))
-                    list.Add(device);
+			spinLock.Exit();
 
-            spinLock.Exit();
+			return list;
+		}
 
-            return list;
-        }
+		public LinkedList<IDevice> GetDevices(IFindDevice match1, IFindDevice match2, IFindDevice match3)
+		{
+			spinLock.Enter();
 
-        public LinkedList<IDevice> GetDevices(IFindDevice match1, IFindDevice match2, IFindDevice match3)
-        {
-            spinLock.Enter();
+			LinkedList<IDevice> list = new LinkedList<IDevice>();
 
-            LinkedList<IDevice> list = new LinkedList<IDevice>();
+			foreach (IDevice device in devices)
+				if (match1.IsMatch(device) && (match2.IsMatch(device)) && (match3.IsMatch(device)))
+					list.Add(device);
 
-            foreach (IDevice device in devices)
-                if (match1.IsMatch(device) && (match2.IsMatch(device)) && (match3.IsMatch(device)))
-                    list.Add(device);
+			spinLock.Exit();
 
-            spinLock.Exit();
+			return list;
+		}
 
-            return list;
-        }
+		public LinkedList<IDevice> GetDevices(IFindDevice[] matches)
+		{
+			spinLock.Enter();
 
-        public LinkedList<IDevice> GetDevices(IFindDevice[] matches)
-        {
-            spinLock.Enter();
+			LinkedList<IDevice> list = new LinkedList<IDevice>();
 
-            LinkedList<IDevice> list = new LinkedList<IDevice>();
+			foreach (IDevice device in devices) {
+				bool matched = true;
 
-            foreach (IDevice device in devices) {
-                bool matched = true;
+				foreach (IFindDevice find in matches)
+					if (!find.IsMatch(device)) {
+						matched = false;
+						break;
+					}
 
-                foreach (IFindDevice find in matches)
-                    if (!find.IsMatch(device)) {
-                        matched = false;
-                        break;
-                    }
+				if (matched)
+					list.Add(device);
+			}
 
-                if (matched)
-                    list.Add(device);
-            }
+			spinLock.Exit();
 
-            spinLock.Exit();
+			return list;
+		}
 
-            return list;
-        }
+		public LinkedList<IDevice> GetChildrenOf(IDevice parent)
+		{
+			return GetDevices(new ParentOf(parent));
+		}
 
-        public LinkedList<IDevice> GetChildrenOf(IDevice parent)
-        {
-            return GetDevices(new ParentOf(parent));
-        }
+		public LinkedList<IDevice> GetAllDevices()
+		{
+			spinLock.Enter();
 
-        public LinkedList<IDevice> GetAllDevices()
-        {
-            spinLock.Enter();
+			LinkedList<IDevice> list = new LinkedList<IDevice>();
 
-            LinkedList<IDevice> list = new LinkedList<IDevice>();
+			foreach (IDevice device in devices)
+				list.Add(device);
 
-            foreach (IDevice device in devices)
-                list.Add(device);
+			spinLock.Exit();
 
-            spinLock.Exit();
+			return list;
+		}
 
-            return list;
-        }
+		public interface IFindDevice
+		{
+			bool IsMatch(IDevice device);
+		}
 
-        // Helper Find Classes
+		// Helper Find Classes
 
-        public class ParentOf : IFindDevice
-        {
-            private IDevice parent;
-            public ParentOf(IDevice parent)
-            {
-                this.parent = parent;
-            }
-            public bool IsMatch(IDevice device)
-            {
-                return (parent == device);
-            }
-        }
+		public class ParentOf : IFindDevice
+		{
+			private IDevice parent;
+			public ParentOf(IDevice parent)
+			{
+				this.parent = parent;
+			}
+			public bool IsMatch(IDevice device)
+			{
+				return (parent == device);
+			}
+		}
 
-        //public class TypeOf : IFindDevice
-        //{
-        //    private Type type;
+		//public class TypeOf : IFindDevice
+		//{
+		//    private Type type;
 
-        //    public TypeOf(IDevice parent)
-        //    {
-        //        this.type = type;
-        //    }
+		//    public TypeOf(IDevice parent)
+		//    {
+		//        this.type = type;
+		//    }
 
-        //    public bool IsMatch(IDevice device)
-        //    {
-        //        return ((device.IsSubclassOf(type)) || (device == type) || (device.IsAssignableFrom(type)) || (type.IsAssignableFrom(device)));
-        //    }
-        //}
+		//    public bool IsMatch(IDevice device)
+		//    {
+		//        return ((device.IsSubclassOf(type)) || (device == type) || (device.IsAssignableFrom(type)) || (type.IsAssignableFrom(device)));
+		//    }
+		//}
 
-        public class WithName : IFindDevice
-        {
-            private string name;
+		public class WithName : IFindDevice
+		{
+			private string name;
 
-            public WithName(IDevice parent)
-            {
-                this.name = name;
-            }
-            public bool IsMatch(IDevice device)
-            {
-                return (device.Name == name);
-            }
-        }
+			public WithName(IDevice parent)
+			{
+				this.name = name;
+			}
+			public bool IsMatch(IDevice device)
+			{
+				return (device.Name == name);
+			}
+		}
 
-        public class Online : IFindDevice
-        {
-            public Online() { }
+		public class Online : IFindDevice
+		{
+			public Online() { }
 
-            public bool IsMatch(IDevice device)
-            {
-                return device.Status == DeviceStatus.Online;
-            }
-        }
+			public bool IsMatch(IDevice device)
+			{
+				return device.Status == DeviceStatus.Online;
+			}
+		}
 
-        public class Available : IFindDevice
-        {
-            public Available() { }
+		public class Available : IFindDevice
+		{
+			public Available() { }
 
-            public bool IsMatch(IDevice device)
-            {
-                return device.Status == DeviceStatus.Available;
-            }
-        }
+			public bool IsMatch(IDevice device)
+			{
+				return device.Status == DeviceStatus.Available;
+			}
+		}
 
-        public class WithStatus : IFindDevice
-        {
-            protected DeviceStatus deviceStatus;
+		public class WithStatus : IFindDevice
+		{
+			protected DeviceStatus deviceStatus;
 
-            public WithStatus(DeviceStatus deviceStatus) { this.deviceStatus = deviceStatus; }
+			public WithStatus(DeviceStatus deviceStatus) { this.deviceStatus = deviceStatus; }
 
-            public bool IsMatch(IDevice device)
-            {
-                return device.Status == deviceStatus;
-            }
-        }
-    }
+			public bool IsMatch(IDevice device)
+			{
+				return device.Status == deviceStatus;
+			}
+		}
+	}
 }
