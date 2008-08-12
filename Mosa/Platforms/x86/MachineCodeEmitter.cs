@@ -42,10 +42,18 @@ namespace Mosa.Platforms.x86
 
         struct CodeDef
         {
-            public Type firstOp;
-            public Type secondOp;
+            public CodeDef(Type dest, Type src, byte[] code, byte? regField)
+            {
+                this.dest = dest;
+                this.src = src;
+                this.code = code;
+                this.regField = regField;
+            }
+
+            public Type dest;
+            public Type src;
             public byte[] code;
-            public int immediate;
+            public byte? regField;
         }
 
         #endregion // Types
@@ -107,7 +115,7 @@ namespace Mosa.Platforms.x86
 
         #region ICodeEmitter Members
 
-        public void Comment(string comment)
+        void ICodeEmitter.Comment(string comment)
         {
             /*
              * The machine code emitter does not support comments. They're simply ignored.
@@ -115,7 +123,7 @@ namespace Mosa.Platforms.x86
              */
         }
 
-        public void Label(int label)
+        void ICodeEmitter.Label(int label)
         {
             /*
              * FIXME: Labels are used to resolve branches inside a procedure. Branches outside
@@ -142,7 +150,8 @@ namespace Mosa.Platforms.x86
                 {
                     _codeStream.Position = p.position;
                     relOffset = (int)currentPosition - ((int)p.position + 4);
-                    WriteImmediate(relOffset);
+                    byte[] bytes = BitConverter.GetBytes(relOffset);
+                    _codeStream.Write(bytes, 0, bytes.Length);
                     return true;
                 }
 
@@ -175,7 +184,7 @@ namespace Mosa.Platforms.x86
             //}
         }
 
-        public void Literal(int label, SigType type, object data)
+        void ICodeEmitter.Literal(int label, SigType type, object data)
         {
             // Save the current position
             long currentPosition = _codeStream.Position;
@@ -194,8 +203,8 @@ namespace Mosa.Platforms.x86
                     _codeStream.Position = p.position;
                     // HACK: We can't do PIC right now
                     //relOffset = (int)currentPosition - ((int)p.position + 4);
-                    relOffset = (int)currentPosition;
-                    WriteImmediate(relOffset);
+                    bytes = BitConverter.GetBytes((int)currentPosition);
+                    _codeStream.Write(bytes, 0, bytes.Length);
                     return true;
                 }
 
@@ -227,393 +236,424 @@ namespace Mosa.Platforms.x86
                         throw new NotImplementedException();
                 }
 
-                Emit(bytes, bytes.Length);
+                _codeStream.Write(bytes, 0, bytes.Length);
             }
         }
 
-        public void And(Operand dest, Operand src)
+        void ICodeEmitter.And(Operand dest, Operand src)
         {
-            if (src is ConstantOperand)
-            {
-                Emit(0x81, 4, dest, src);
-            }
-            else if (src is RegisterOperand)
-            {
-                Emit(0x21, 0, dest, src);
-            }
-            else if (dest is RegisterOperand && src is MemoryOperand)
-            {
-                Emit(0x23, 0, dest, src);
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
+            Emit(dest, src, cd_and);
         }
 
-        public void Add(Operand dest, Operand src)
+        void ICodeEmitter.Add(Operand dest, Operand src)
         {
-            // Write the opcode byte
-            if (src is ConstantOperand)
-                Emit(0x81, 0, dest, src);
-            else
-                Emit(0x03, 0, dest, src);
+            Emit(dest, src, cd_add);
         }
 
-        public void Call(RuntimeMethod method)
+        void ICodeEmitter.Call(RuntimeMethod method)
         {
+            throw new NotImplementedException();
+/*
             _codeStream.WriteByte(0xE8);
 
             // Calculate the relative call destination
             int relOffset = method.Address.ToInt32() - ((int)_codeStream.Position + 4);
             WriteImmediate(relOffset);
+ */
         }
 
-        public void Call(int label)
+        void ICodeEmitter.Call(int label)
         {
             _codeStream.WriteByte(0xE8);
             EmitRelativeBranchTarget(label);
         }
 
-        public void Cli()
+        void ICodeEmitter.Cli()
         {
-            Emit(new byte[] { (byte)(0xFA) }, 1);
+            _codeStream.WriteByte(0xFA);
         }
 
-        public void Cmp(Operand op1, Operand op2)
+        void ICodeEmitter.Cmp(Operand op1, Operand op2)
         {
             if (op1.StackType == StackTypeCode.F || op2.StackType == StackTypeCode.F)
             {
-                byte[] code = { 0xF2, 0x0F };
-                byte[] eq = { 0x0 };
-                if (op1 is RegisterOperand)
+                RegisterOperand rop;
+
+                if (op1 is MemoryOperand)
                 {
-                    Emit(code);
-                    Emit(0xC2, 0, op1, op2);
-                    Emit(eq);
-                }
-                else if (op2 is RegisterOperand)
-                {
-                    Emit(code);
-                    Emit(0xC2, 0, op2, op1);
-                    Emit(eq);
+                    rop = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0);
+                    ((ICodeEmitter)this).Mov(rop, op1);
+                    Emit(rop, op2, cd_cmpsd);
                 }
                 else
                 {
-                    Mov(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0), op1);
-                    Emit(code);
-                    Emit(0xC2, 0, new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0), op2);
-                    Emit(eq);
+                    Emit(op1, op2, cd_cmpsd);
                 }
+
+                _codeStream.WriteByte(0x00);    // EQ
             }
-            else if (op2 is MemoryOperand && op1 is RegisterOperand)
-                Emit(0x39, 0, op2, op1);
-            else if (op2 is RegisterOperand && op1 is MemoryOperand)
-                Emit(0x3B, 0, op2, op1);
-            else if (op1 is ConstantOperand)
-                Emit(0x81, 7, op2, op1);
-            else if (op2 is ConstantOperand)
-                Emit(0x81, 7, op1, op2);
             else
-                throw new NotSupportedException();
+            {
+                Emit(op1, op2, cd_cmp);
+            }
         }
 
-        public void In(Operand dest, Operand src)
+        void ICodeEmitter.Int3()
         {
-            // TODO   
+            _codeStream.WriteByte(0xCC);
         }
 
-        public void Out(Operand dest, Operand src)
+        void ICodeEmitter.Ja(int dest)
         {
-            // TODO   
+            EmitBranch(new byte[] { 0x0F, 0x87 }, dest);
         }
 
-        public void Int3()
+        void ICodeEmitter.Jae(int dest)
         {
-            // FIXME: Use a code table for the instructions, so we don't allocate things all the time
-            Emit(new byte[] { 0xCC });
+            EmitBranch(new byte[] { 0x0F, 0x83 }, dest);
         }
 
-        public void Ja(int dest)
+        void ICodeEmitter.Jb(int dest)
         {
-            Emit(new byte[] { 0x0F, 0x87 }, 2);
-            EmitRelativeBranchTarget(dest);
+            EmitBranch(new byte[] { 0x0F, 0x82 }, dest);
         }
 
-        public void Jae(int dest)
+        void ICodeEmitter.Jbe(int dest)
         {
-            Emit(new byte[] { 0x0F, 0x83 }, 2);
-            EmitRelativeBranchTarget(dest);
+            EmitBranch(new byte[] { 0x0F, 0x86 }, dest);
         }
 
-        public void Jb(int dest)
+        void ICodeEmitter.Je(int dest)
         {
-            Emit(new byte[] { 0x0F, 0x82 }, 2);
-            EmitRelativeBranchTarget(dest);
+            EmitBranch(new byte[] { 0x0F, 0x84 }, dest);
         }
 
-        public void Jbe(int dest)
+        void ICodeEmitter.Jg(int dest)
         {
-            Emit(new byte[] { 0x0F, 0x86 }, 2);
-            EmitRelativeBranchTarget(dest);
+            EmitBranch(new byte[] { 0x0F, 0x8F }, dest);
         }
 
-        public void Je(int dest)
+        void ICodeEmitter.Jge(int dest)
         {
-            Emit(new byte[] { 0x0F, 0x84 }, 2);
-            EmitRelativeBranchTarget(dest);
+            EmitBranch(new byte[] { 0x0F, 0x8D }, dest);
         }
 
-        public void Jg(int dest)
+        void ICodeEmitter.Jl(int dest)
         {
-            Emit(new byte[] { 0x0F, 0x8F }, 2);
-            EmitRelativeBranchTarget(dest);
+            EmitBranch(new byte[] { 0x0F, 0x8C }, dest);
         }
 
-        public void Jge(int dest)
+        void ICodeEmitter.Jle(int dest)
         {
-            Emit(new byte[] { 0x0F, 0x8D }, 2);
-            EmitRelativeBranchTarget(dest);
+            EmitBranch(new byte[] { 0x0F, 0x8E }, dest);
         }
 
-        public void Jl(int dest)
+        void ICodeEmitter.Jne(int dest)
         {
-            Emit(new byte[] { 0x0F, 0x8C }, 2);
-            EmitRelativeBranchTarget(dest);
+            EmitBranch(new byte[] { 0x0F, 0x85 }, dest);
         }
 
-        public void Jle(int dest)
+        void ICodeEmitter.Jmp(int dest)
         {
-            Emit(new byte[] { 0x0F, 0x8E }, 2);
-            EmitRelativeBranchTarget(dest);
+            EmitBranch(new byte[] { 0xE9 }, dest);
         }
 
-        public void Jne(int dest)
+        void ICodeEmitter.Nop()
         {
-            Emit(new byte[] { 0x0F, 0x85 }, 2);
-            EmitRelativeBranchTarget(dest);
+            _codeStream.WriteByte(0x90);
         }
 
-        public void Jmp(int dest)
-        {
-            _codeStream.WriteByte(0xE9);
-            EmitRelativeBranchTarget(dest);
-        }
-
-        public void Nop()
-        {
-            Emit(new byte[] { 0x90 });
-        }
-
-        public void Mul(Operand dest, Operand src)
+        void ICodeEmitter.Mul(Operand dest, Operand src)
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
-            Emit(0xF7, 4, src, null);
+            Emit(dest, src, cd_mul);
         }
 
-        public void SseAdd(Operand dest, Operand src)
+        void ICodeEmitter.SseAdd(Operand dest, Operand src)
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
             // FIXME: Insert correct opcode here
-            byte[] code = { 0xF2, 0x0F };
-            Emit(code);
-            Emit(0x58, 0, src, null);
+            Emit(dest, src, cd_addsd);
         }
 
-        public void SseSub(Operand dest, Operand src)
+        void ICodeEmitter.SseSub(Operand dest, Operand src)
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
             // FIXME: Insert correct opcode here
-            Emit(0xD8, 1, src, null);
+            Emit(dest, src, cd_subsd);
         }
 
-        public void SseMul(Operand dest, Operand src)
+        void ICodeEmitter.SseMul(Operand dest, Operand src)
         {
             // Write the opcode byte
             //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register && ((SSE2Register)((RegisterOperand)dest).Register).RegisterCode == SSE2Register.XMM0.RegisterCode);
             // HACK: Until we get a real register allocator (EAX == XMM0)
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
             // FIXME: Insert correct opcode here
-            byte[] code = { 0xF2, 0x0F };
-            Emit(code);
-            Emit(0x59, 0, dest, src);
+            Emit(dest, src, cd_mulsd);
         }
 
-        public void SseDiv(Operand dest, Operand src)
+        void ICodeEmitter.SseDiv(Operand dest, Operand src)
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
             // FIXME: Insert correct opcode here
-            Emit(0xD8, 1, src, null);
+            Emit(dest, src, cd_divsd);
         }
 
-        public void Shl(Operand dest, Operand src)
+        void ICodeEmitter.Shl(Operand dest, Operand src)
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && (src is ConstantOperand /*|| src is MemoryOperand*/));
-            Emit(0xC1, 4, dest, src);
+            // FIXME: Make sure the constant is emitted as a single-byte opcode
+            Emit(dest, src, cd_shl);
         }
 
-        public void Shr(Operand dest, Operand src)
+        void ICodeEmitter.Shr(Operand dest, Operand src)
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && (src is ConstantOperand || src is MemoryOperand));
-            Emit(0xC1, 5, src, null);
+            Emit(dest, src, cd_shr);
         }
 
-        public void Div(Operand dest, Operand src)
+        void ICodeEmitter.Div(Operand dest, Operand src)
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
-            Emit(0xF7, 7, src, null);
+            Emit(dest, src, cd_div);
         }
 
-        public void Mov(Operand dest, Operand src)
+        void ICodeEmitter.Mov(Operand dest, Operand src)
         {
             if (dest.StackType != StackTypeCode.F && src.StackType != StackTypeCode.F)
             {
-                if (src is ConstantOperand)
-                {
-                    Emit(0xC7, 0, dest, src);
-                }
-                else if (dest is RegisterOperand)
-                {
-                    RegisterOperand ro = (RegisterOperand)dest;
-                    Emit(0x8B, 0, dest, src);
-                }
-                else if (dest is MemoryOperand && src is RegisterOperand)
-                {
-                    Emit(0x89, 0, dest, src);
-                }
-                else if (dest is MemoryOperand && src is MemoryOperand)
-                {
-                    throw new NotSupportedException(@"Move from Memory to Memory not supported.");
-                }
-            }
-            else if (src is LabelOperand)
-            {
-                // Move to a register only
-                Debug.Assert(dest is RegisterOperand);
-                byte[] code = new byte[] { 0xF2, 0x0F };
-                Emit(code);
-                Emit(0x10, 0, dest, src);
-            }
-            else if (dest is MemoryOperand && src is MemoryOperand)
-            {
-                throw new NotSupportedException(@"Move from Memory to Memory not supported.");
+                Emit(dest, src, cd_mov);
             }
             else
             {
-                byte[] base_op_code = { 0xF2, 0x0F };
-
-                if (dest is RegisterOperand)
-                {
-                    Emit(base_op_code);
-                    Emit(0x10, 0, new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.R8), SSE2Register.XMM0), src);
-                }
-                else if (dest is MemoryOperand)
-                {
-                    Emit(base_op_code);
-                    Emit(0x11, 0, dest, new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.R8), SSE2Register.XMM0));
-                }
+                Emit(dest, src, cd_movsd);
             }
         }
 
-        public void Pop(Operand operand)
+        void ICodeEmitter.Pop(Operand operand)
         {
             if (operand is RegisterOperand)
             {
                 RegisterOperand ro = (RegisterOperand)operand;
-                Emit(new byte[] { (byte)(0x58 + ro.Register.RegisterCode) }, 1);
+                _codeStream.WriteByte((byte)(0x58 + ro.Register.RegisterCode));
             }
             else
             {
-                Emit(0x8F, 0, operand);
+                Emit(new byte[] { 0x8F }, 0, operand, null);
             }
         }
 
-        public void Push(Operand operand)
+        void ICodeEmitter.Push(Operand operand)
         {
             if (operand is ConstantOperand)
             {
                 _codeStream.WriteByte(0x68);
-                WriteImmediate((int)((ConstantOperand)operand).Value);
+                EmitImmediate(operand);
             }
             else if (operand is RegisterOperand)
             {
                 RegisterOperand ro = (RegisterOperand)operand;
-                Emit(new byte[] { (byte)(0x50 + ro.Register.RegisterCode) }, 1);
+                _codeStream.WriteByte((byte)(0x50 + ro.Register.RegisterCode));
             }
             else
-                Emit(0xFF, 6, operand);
+            {
+                Emit(new byte[] { 0xFF }, 6, operand, null);
+            }
         }
 
-        public void Ret()
+        void ICodeEmitter.Ret()
         {
-            Emit(new byte[] { 0xC3 });
+            _codeStream.WriteByte(0xC3);
         }
 
-        public void Sti()
+        void ICodeEmitter.Sti()
         {
-            Emit(new byte[] { (byte)(0xFB) }, 1);
+            _codeStream.WriteByte(0xFB);
         }
 
-        public void Sub(Operand dest, Operand src)
+        void ICodeEmitter.Sub(Operand dest, Operand src)
         {
-            // Write the opcode byte
-            if (src is ConstantOperand)
-                Emit(0x81, 5, dest, src);
-            else if (dest is RegisterOperand)
-                Emit(0x2B, 0, dest, src);
-            else if (dest is MemoryOperand && src is RegisterOperand)
-                Emit(0x29, 0, dest, src);
-            else
-                throw new NotImplementedException();
+            Emit(dest, src, cd_sub);
         }
 
         #endregion // ICodeEmitter Members
 
-        #region Internals
+        #region Code Definition Tables
 
-        private byte CalculateModRM(byte reg, Operand dest, Operand src)
+        private static readonly CodeDef[] cd_add = new CodeDef[] {
+            new CodeDef(typeof(Operand),            typeof(ConstantOperand),    new byte[] { 0x81 }, 0),
+            new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0x03 }, null)
+        };
+
+        private static readonly CodeDef[] cd_and = new CodeDef[] {
+            new CodeDef(typeof(Operand),         typeof(ConstantOperand),   new byte[] { 0x81 }, 4),
+            new CodeDef(typeof(Operand),         typeof(RegisterOperand),   new byte[] { 0x21 }, null),
+            new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),     new byte[] { 0x23 }, null),
+        };
+
+        private static readonly CodeDef[] cd_cmpsd = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0xF2, 0x0F, 0xC2 }, null),
+        };
+
+        private static readonly CodeDef[] cd_cmp = new CodeDef[] {
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x39 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x3B }, null),
+            new CodeDef(typeof(ConstantOperand),    typeof(MemoryOperand),      new byte[] { 0x81 }, 7),
+            new CodeDef(typeof(ConstantOperand),    typeof(RegisterOperand),    new byte[] { 0x81 }, 7),
+            new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0x81 }, 7),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x81 }, 7),
+        };
+
+        private static readonly CodeDef[] cd_mul = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0xF7 }, 4),
+        };
+
+        private static readonly CodeDef[] cd_addsd = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x58 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x58 }, null),
+        };
+
+        private static readonly CodeDef[] cd_subsd = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x5C }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x5C }, null)
+        };
+
+        private static readonly CodeDef[] cd_mulsd = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x59 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x59 }, null),
+        };
+
+        private static readonly CodeDef[] cd_divsd = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x5E }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x5E }, null),
+        };
+
+        private static readonly CodeDef[] cd_shl = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC1 }, 4),
+        };
+
+        private static readonly CodeDef[] cd_shr = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC1 }, 5),
+        };
+
+        private static readonly CodeDef[] cd_div = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF7 }, 7),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF7 }, 7),
+        };
+
+        private static readonly CodeDef[] cd_mov = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC7 }, 0),
+            new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC7 }, 0),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x8B }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x8B }, null),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x89 }, null),
+        };
+
+        private static readonly CodeDef[] cd_movsd = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0xF2, 0x0F, 0x10 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),       new byte[] { 0xF2, 0x0F, 0x10 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),       new byte[] { 0xF2, 0x0F, 0x10 }, null),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),       new byte[] { 0xF2, 0x0F, 0x11 }, null),
+        };
+
+        private static readonly CodeDef[] cd_sub = new CodeDef[] {
+            new CodeDef(typeof(Operand),            typeof(ConstantOperand),    new byte[] { 0x81 }, 5),
+            new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0x2B }, 0),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x29 }, 0),
+        };
+
+        #endregion // Code Definition Tables
+
+        #region Code Generation
+
+        /// <summary>
+        /// Walks the code definition array for a matching combination and emits the corresponding code.
+        /// </summary>
+        /// <param name="dest">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
+        /// <param name="codeDef">The code definition array.</param>
+        private void Emit(Operand dest, Operand src, CodeDef[] codeDef)
         {
-            byte mod = 0, rm = 0;
-            if (0 == reg)
+            foreach (CodeDef cd in codeDef)
             {
-                if (dest is RegisterOperand)
+                if (true == cd.dest.IsInstanceOfType(dest) && true == cd.src.IsInstanceOfType(src))
                 {
-                    mod = 3;
-                    RegisterOperand ro = (RegisterOperand)dest;
-                    reg = (byte)ro.Register.RegisterCode;
-
-                    if (src is RegisterOperand)
-                    {
-                        ro = (RegisterOperand)src;
-                        rm = (byte)ro.Register.RegisterCode;
-                    }
-                }
-                else if (dest is StackOperand)
-                {
-                    // [EBP+displacement]
-                    mod = 2;
-                    rm = 5;
-                }
-                else if (dest is ObjectFieldOperand)
-                {
-                    // [base+displacement]
-                    mod = 2;
-                    rm = 1;
-                }
-                else
-                {
-                    // [displacement]
+                    Emit(cd.code, cd.regField, dest, src);
+                    return;
                 }
             }
 
-            return (byte)(((mod & 3) << 6) | ((reg & 7) << 3) | (rm & 7));
+            // If this is reached, the operand combination could not be emitted as it is
+            // not specified in the code definition table
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Emits relative branch code.
+        /// </summary>
+        /// <param name="code">The branch instruction code.</param>
+        /// <param name="dest">The destination label.</param>
+        private void EmitBranch(byte[] code, int dest)
+        {
+            _codeStream.Write(code, 0, code.Length);
+            EmitRelativeBranchTarget(dest);
+        }
+
+        /// <summary>
+        /// Emits the given code.
+        /// </summary>
+        /// <param name="code">The opcode bytes.</param>
+        /// <param name="regField">The modR/M regfield.</param>
+        /// <param name="dest">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
+        private void Emit(byte[] code, byte? regField, Operand dest, Operand src)
+        {
+            byte? sib = null, modRM = null;
+            IntPtr? displacement = null;
+
+            // Write the opcode
+            _codeStream.Write(code, 0, code.Length);
+
+            // Write the mod R/M byte
+            modRM = CalculateModRM(regField, dest, src, out sib, out displacement);
+            if (null != modRM)
+            {
+                _codeStream.WriteByte(modRM.Value);
+                if (true == sib.HasValue)
+                {
+                    _codeStream.WriteByte(sib.Value);
+                }
+            }
+
+            // Add displacement to the code
+            if (null != displacement)
+            {
+                LabelOperand label = src as LabelOperand;
+                if (null != label)
+                {
+                    // HACK: PIC and FP won't work for now, have to really fix this for moveable 
+                    // jitted code though
+                    displacement = IntPtr.Zero;
+                    _literals.Add(new Patch(label.Label, _codeStream.Position));
+                }
+
+                byte[] disp = BitConverter.GetBytes(displacement.Value.ToInt32());
+                _codeStream.Write(disp, 0, disp.Length);
+            }
+
+            // Add immediate bytes
+            if (dest is ConstantOperand)
+                EmitImmediate(dest);
+            if (src is ConstantOperand)
+                EmitImmediate(src);
         }
 
         private void EmitRelativeBranchTarget(int label)
@@ -636,60 +676,92 @@ namespace Mosa.Platforms.x86
             }
 
             // Emit the relative jump offset (zero if we don't know it yet!)
-            WriteImmediate(relOffset);
+            byte[] bytes = BitConverter.GetBytes(relOffset);
+            _codeStream.Write(bytes, 0, bytes.Length);
         }
 
-        private void Emit(byte opcode, byte regField, Operand dest)
+
+        /// <summary>
+        /// Emits an immediate operand.
+        /// </summary>
+        /// <param name="op">The immediate operand to emit.</param>
+        private void EmitImmediate(Operand op)
         {
-            List<byte> code = new List<byte>();
+            byte[] imm = null;
+            if (op is LocalVariableOperand)
+            {
+                // Add the displacement
+                StackOperand so = (StackOperand)op;
+                imm = BitConverter.GetBytes(so.Offset.ToInt32());
+            }
+            else if (op is LabelOperand)
+            {
+                _literals.Add(new Patch((op as LabelOperand).Label, _codeStream.Position));
+                imm = new byte[4];
+            }
+            else if (op is MemoryOperand)
+            {
+                // Add the displacement
+                MemoryOperand mo = (MemoryOperand)op;
+                imm = BitConverter.GetBytes(mo.Offset.ToInt32());
+            }
+            else if (op is ConstantOperand)
+            {
+                // Add the immediate
+                ConstantOperand co = (ConstantOperand)op;
+                switch (op.Type.Type)
+                {
+                    case CilElementType.I: 
+                        imm = BitConverter.GetBytes(Convert.ToInt32(co.Value));
+                        break;
 
-            // Write the opcode
-            code.Add(opcode);
+                    case CilElementType.I1: goto case CilElementType.I;
+                    case CilElementType.I2: goto case CilElementType.I;
+                    case CilElementType.I4: goto case CilElementType.I;
 
-            // Add the ModR/M byte
-            code.Add(CalculateModRM(regField, dest, null));
+                    case CilElementType.U1: goto case CilElementType.I;
+                    case CilElementType.U2: goto case CilElementType.I;
+                    case CilElementType.U4: goto case CilElementType.I;
 
-            // Add the displacement of the destination
-            AddDisplacementOrImmediate(code, dest, false);
+                    case CilElementType.I8: goto case CilElementType.R8;
+                    case CilElementType.U8: goto case CilElementType.R8;
+                    case CilElementType.R4: goto case CilElementType.R8;
+                    case CilElementType.R8: goto default;
+                    default:
+                        throw new NotSupportedException();
+                        break;
+                }
+            }
+            else if (op is RegisterOperand)
+            {
+                // Nothing to do...
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
 
-            Emit(code.ToArray());
+            // Emit the immediate constant to the code
+            if (null != imm)
+                _codeStream.Write(imm, 0, imm.Length);
         }
 
         /// <summary>
-        /// Builds the Scaled Index Base byte.
+        /// Calculates the value of the modR/M byte and SIB bytes.
         /// </summary>
-        /// <param name="param">The memory address to encode</param>
-        /// <returns>The built SIB byte</returns>
-        private static byte BuildSIBByte(MemoryOperand operand)
+        /// <param name="regField">The modR/M regfield value.</param>
+        /// <param name="dest">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
+        /// <param name="sib">A potential SIB byte to emit.</param>
+        /// <param name="displacement">An immediate displacement to emit.</param>
+        /// <returns>The value of the modR/M byte.</returns>
+        private byte? CalculateModRM(byte? regField, Operand dest, Operand src, out byte? sib, out IntPtr? displacement)
         {
-            byte SIB = 0;
-            //SIB |= (byte)((byte)param.Scale << 6);
-            //SIB |= (byte)(param.BaseRegister.Index << 3);
-            //SIB |= param.IndexRegister.Index;
-            return SIB;
-        }
-
-        private void Emit(byte opcode, byte? regField, Operand dest, Operand src)
-        {
-            byte? sib = null;
-            IntPtr? displacement = null;
-            List<byte> code = new List<byte>();
-
-            // Write the opcode
-            code.Add(opcode);
-            /*
-                        // Add the ModR/M byte
-                        code.Add(CalculateModRM(regField, dest, src));
-
-                        // Add the displacement of the destination
-                        AddDisplacementOrImmediate(code, dest, false);
-            
-                        // Add the immediate bytes
-                        AddDisplacementOrImmediate(code, src, true);
-            */
             MemoryOperand memAddrOp = null;
 
-            //#region ModR/M byte & SIB byte
+            displacement = null;
+            sib = null;
+
             if (null != dest)
             {
                 byte modRM = 0;
@@ -701,10 +773,11 @@ namespace Mosa.Platforms.x86
                 }
                 else
                 {
-                    if (regField != null)
+                    if (null != regField)
                     {
                         modRM |= (byte)(regField.Value << 3);
                     }
+
                     RegisterOperand registerOp = null;
                     if (dest is MemoryOperand)
                     {
@@ -721,14 +794,14 @@ namespace Mosa.Platforms.x86
                             modRM |= 5;
                         }
 
-                        /* FIXME
-                                                if (memAddrOp.Base != null && (memAddrOp.IndexRegister != null && (byte)memAddrOp.Scale > 0))
-                                                {
-                                                    SIBByte = BuildSIBByte(memAddrOp);
-                                                    modRM |= 3;
-                                                }
-                                                else 
-                         */
+/* FIXME: Fix SIB byte support
+                        if (memAddrOp.Base != null && (memAddrOp.IndexRegister != null && (byte)memAddrOp.Scale > 0))
+                        {
+                            SIBByte = BuildSIBByte(memAddrOp);
+                            modRM |= 3;
+                        }
+                        else 
+ */
                         if (null != registerOp)
                             modRM |= (byte)(registerOp.Register.RegisterCode << 3);
                     }
@@ -753,13 +826,12 @@ namespace Mosa.Platforms.x86
                                 modRM |= 5;
                             }
 
-                            /* FIXME
+/* FIXME: Fix SIB support
                             if (memAddrOp.Base != null && (memAddrOp.IndexRegister != null && (byte)memAddrOp.Scale > 0))
                             {
                                 SIBByte = BuildSIBByte(memAddrOp);
                                 modRM |= 3;
                             }
-                            else 
 */
                         }
 
@@ -767,151 +839,14 @@ namespace Mosa.Platforms.x86
                             modRM |= (byte)registerOp.Register.RegisterCode;
                     }
 
-#if FALSE
-                    if (dest is MemoryOperand)
-                        memAddrOp = (MemoryOperand)dest;
-                    else if (src is MemoryOperand)
-                        memAddrOp = (MemoryOperand)src;
-
-                    if (src is RegisterOperand)
-                        registerOp = (RegisterOperand)src;
-                    else if (dest is RegisterOperand)
-                        registerOp = (RegisterOperand)dest;
-
-
-                    if (memAddrOp != null)
-                    {
-                        if (memAddrOp.Offset != null)
-                        {
-                            displacement = memAddrOp.Offset;
-                            modRM |= 2 << 6;
-                            if (memAddrOp.Base == null) // && memAddrOp.IndexRegister == null)
-                            {
-                                // displacement only
-                                modRM |= 5;
-                            }
-                        }
-/* FIXME
-                        if (memAddrOp.Base != null && (memAddrOp.IndexRegister != null && (byte)memAddrOp.Scale > 0))
-                        {
-                            SIBByte = BuildSIBByte(memAddrOp);
-                            modRM |= 3;
-                        }
-                        else 
- */
-                        { 
-                            modRM |= (byte)memAddrOp.Base.RegisterCode; 
-                        }
-                    }
-                    if (null != registerOp)
-                        modRM |= (byte)(registerOp.Register.RegisterCode << 3);
-#endif // #if FALSE
-                }
-                code.Add(modRM);
-            }
-
-            if (sib != null)
-            {
-                code.Add(sib.Value);
-            }
-
-            /* Add displacement */
-            if (null != displacement)
-            {
-                LabelOperand label = src as LabelOperand;
-                if (null != label)
-                {
-                    // HACK: PIC and FP won't work for now, have to really fix this for moveable 
-                    // jitted code though
-                    displacement = IntPtr.Zero;
-                    _literals.Add(new Patch(label.Label, _codeStream.Position + code.Count));
                 }
 
-                code.AddRange(BitConverter.GetBytes(displacement.Value.ToInt32()));
+                return modRM;
             }
 
-            /* Add immediate bytes */
-            if (dest is ConstantOperand)
-                AddDisplacementOrImmediate(code, dest, true);
-            if (src is ConstantOperand)
-                AddDisplacementOrImmediate(code, src, true);
-
-            Emit(code.ToArray(), code.Count);
+            return null;
         }
 
-        private void AddDisplacementOrImmediate(List<byte> code, Operand op, bool immediate)
-        {
-            if (op is LocalVariableOperand)
-            {
-                // Add the displacement
-                StackOperand so = (StackOperand)op;
-                byte[] disp = BitConverter.GetBytes(so.Offset.ToInt32());
-                //Array.Reverse(disp);
-                code.AddRange(disp);
-            }
-            else if (op is LabelOperand)
-            {
-                _literals.Add(new Patch((op as LabelOperand).Label, _codeStream.Position + code.Count));
-                code.AddRange(new byte[4]);
-            }
-            else if (op is MemoryOperand)
-            {
-                // Add the displacement
-                MemoryOperand mo = (MemoryOperand)op;
-                byte[] disp = BitConverter.GetBytes(mo.Offset.ToInt32());
-                //Array.Reverse(disp);
-                code.AddRange(disp);
-            }
-            else if (true == immediate && op is ConstantOperand)
-            {
-                // Add the immediate
-                ConstantOperand co = (ConstantOperand)op;
-                switch (op.Type.Type)
-                {
-                    case CilElementType.I:
-                        code.AddRange(BitConverter.GetBytes(Convert.ToInt32(co.Value)));
-                        break;
-
-                    case CilElementType.I4:
-                        code.AddRange(BitConverter.GetBytes(Convert.ToInt32(co.Value)));
-                        break;
-
-                    case CilElementType.I2:
-                        code.AddRange(BitConverter.GetBytes(Convert.ToInt32(co.Value)));
-                        break;
-                    case CilElementType.R8:
-                        code.AddRange(BitConverter.GetBytes(Convert.ToDouble(co.Value)));
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
-            }
-            else if (op is RegisterOperand)
-            {
-                // Nothing to do...
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        private void Emit(byte[] code)
-        {
-            Emit(code, code.Length);
-        }
-
-        private void Emit(byte[] code, int length)
-        {
-            _codeStream.Write(code, 0, length);
-        }
-
-        private void WriteImmediate(int value)
-        {
-            byte[] imm = BitConverter.GetBytes(value);
-            _codeStream.Write(imm, 0, imm.Length);
-        }
-
-        #endregion // Internals
+        #endregion // Code Generation
     }
 }
