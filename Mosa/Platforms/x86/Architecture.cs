@@ -173,6 +173,7 @@ namespace Mosa.Platforms.x86
                 new ConstantRemovalStage(),
                 InstructionLogger.Instance,
                 new TwoAddressCodeConversionStage(),
+                new ConstantFoldingStage(),
                 new CodeGenerator()
             });
         }

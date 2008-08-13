@@ -34,7 +34,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
             this.Pipeline.AddRange(new IMethodCompilerStage[] {
                 new ILDecodingStage(),
                 new BasicBlockBuilderStage(),
-
                 //InstructionLogger.Instance,
                 new InstructionExpansionStage(),
                 //InstructionLogger.Instance,
@@ -43,6 +42,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 new EnterSSA(),
                 //InstructionLogger.Instance,
                 new ConstantPropagationStage(),
+                new ConstantFoldingStage(),
                 new LeaveSSA(),
                 InstructionLogger.Instance,
 

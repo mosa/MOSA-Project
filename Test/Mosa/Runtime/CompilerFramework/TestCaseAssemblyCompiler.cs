@@ -27,7 +27,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
             CompilerPipeline<IAssemblyCompilerStage> pipeline = this.Pipeline;
             pipeline.AddRange(new IAssemblyCompilerStage[] {
                 new TypeLayoutStage(),
-                new MethodCompilerBuilderStage()
+                new MethodCompilerBuilderStage(),
             });
             architecture.ExtendAssemblyCompilerPipeline(pipeline);
         }

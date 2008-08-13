@@ -51,6 +51,11 @@
     <Source>OpAnd.cs</Source>
   </TestCase>
 
+  <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="ConstantFolding" language="C#">
+    <Description>Tests the constant folding stage.</Description>
+    <Source>ConstantFolding.cs</Source>
+  </TestCase>
+
 
   <!-- Older test cases to be refactored in above style -->
   <!--<TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="Integer Addition" language="C#">
