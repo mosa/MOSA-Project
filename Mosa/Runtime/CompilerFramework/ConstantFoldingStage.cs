@@ -14,8 +14,8 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// Performs IR expansion of instructions to more machine specific representations of
-    /// individual operations.
+    /// Performs IR constant folding of arithmetic instructions to optimize
+    /// the code down to fewer calculations.
     /// </summary>
     public sealed class ConstantFoldingStage : IMethodCompilerStage
     {
@@ -34,34 +34,48 @@ namespace Mosa.Runtime.CompilerFramework
 
             bool remove = false;
 
+            // Loop through all blocks
             foreach (BasicBlock block in blockProvider)
             {
                 bool nothing_left = false;
+                // Loop over instructionlist until there is nothing
+                // left to fold.
                 while (!nothing_left)
                 {
                     nothing_left = true;
+                    // Iterate over all instructions within this block
+                    // and look for places to fold.
                     List<Instruction> instructions = block.Instructions;
                     for (int i = 0; i < instructions.Count; i++)
                     {
                         Instruction instruction = instructions[i];
-                        Operand[] op = new Operand[1];
+                        Operand op = null;
 
+                        // Watch out for arithmetic instructions as they
+                        // are the only place where constant folding is needed.
                         if (instruction is IL.ArithmeticInstruction)
                         {
                             Operand first = instruction.Operands[0];
                             Operand second = instruction.Operands[1];
 
+                            // To fold, we need an arithmetic instruction operating
+                            // on 2 constants.
                             if (first is ConstantOperand && second is ConstantOperand)
                             {
+                                // Check for type of instruction
                                 if (instruction is IL.AddInstruction)
-                                    Add(ref op[0], first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
+                                    op = Add(first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
                                 else if (instruction is IL.SubInstruction)
-                                    Sub(ref op[0], first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
+                                    op = Sub(first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
                                 else if (instruction is IL.MulInstruction)
-                                    Mul(ref op[0], first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
+                                    op = Mul(first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
                                 else if (instruction is IL.DivInstruction)
-                                    Div(ref op[0], first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
+                                    op = Div(first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
+
+                                // We folded, so replace the current instruction
                                 remove = true;
+
+                                // We folded, so check the block again
                                 nothing_left = false;
                             }
                         }
@@ -69,11 +83,15 @@ namespace Mosa.Runtime.CompilerFramework
                         // Shall we remove this instruction?
                         if (true == remove)
                         {
+                            // Remove the arithmetic instruction and replace it
+                            // by a store instruction
                             Instruction new_instruction = new IL.StlocInstruction(Mosa.Runtime.CompilerFramework.IL.OpCode.Stloc);
                             new_instruction.Results = new Operand[1];
                             new_instruction.Results[0] = instruction.Results[0];
-                            new_instruction.Operands[0] = op[0];
+                            new_instruction.Operands[0] = op;
                             instructions[i] = new_instruction;
+
+                            // Reset flag
                             remove = false;
                         }
                     }
@@ -85,79 +103,95 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Internals
 
-        private void Add(ref Operand op, ConstantOperand first, ConstantOperand second, StackTypeCode type)
+        /// <summary>
+        /// Fold 2 constants by adding them
+        /// </summary>
+        /// <param name="first">First constant to fold</param>
+        /// <param name="second">Second constant to fold</param>
+        /// <param name="type">Stacktype for the result</param>
+        private Operand Add(ConstantOperand first, ConstantOperand second, StackTypeCode type)
         {
             switch (type)
             {
                 case StackTypeCode.N:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), (int)first.Value + (int)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), (int)first.Value + (int)second.Value);
                 case StackTypeCode.Int32:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), (Int32)first.Value + (Int32)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), (Int32)first.Value + (Int32)second.Value);
                 case StackTypeCode.Int64:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), (Int64)first.Value + (Int64)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), (Int64)first.Value + (Int64)second.Value);
                 case StackTypeCode.F:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.R8), (double)first.Value + (double)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.R8), (double)first.Value + (double)second.Value);
+                default:
+                    throw new NotSupportedException();
             }
         }
 
-        private void Sub(ref Operand op, ConstantOperand first, ConstantOperand second, StackTypeCode type)
+        /// <summary>
+        /// Fold 2 constants by substracting them
+        /// </summary>
+        /// <param name="first">First constant to fold</param>
+        /// <param name="second">Second constant to fold</param>
+        /// <param name="type">Stacktype for the result</param>
+        private Operand Sub(ConstantOperand first, ConstantOperand second, StackTypeCode type)
         {
             switch (type)
             {
                 case StackTypeCode.N:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), (int)first.Value - (int)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), (int)first.Value - (int)second.Value);
                 case StackTypeCode.Int32:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), (Int32)first.Value - (Int32)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), (Int32)first.Value - (Int32)second.Value);
                 case StackTypeCode.Int64:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), (Int64)first.Value - (Int64)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), (Int64)first.Value - (Int64)second.Value);
                 case StackTypeCode.F:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.R8), (double)first.Value - (double)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.R8), (double)first.Value - (double)second.Value);
+                default:
+                    throw new NotSupportedException();
             }
         }
 
-        private void Mul(ref Operand op, ConstantOperand first, ConstantOperand second, StackTypeCode type)
+        /// <summary>
+        /// Fold 2 constants by multiplying them
+        /// </summary>
+        /// <param name="first">First constant to fold</param>
+        /// <param name="second">Second constant to fold</param>
+        /// <param name="type">Stacktype for the result</param>
+        private Operand Mul(ConstantOperand first, ConstantOperand second, StackTypeCode type)
         {
             switch (type)
             {
                 case StackTypeCode.N:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), (int)first.Value * (int)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), (int)first.Value * (int)second.Value);
                 case StackTypeCode.Int32:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), (Int32)first.Value * (Int32)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), (Int32)first.Value * (Int32)second.Value);
                 case StackTypeCode.Int64:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), (Int64)first.Value * (Int64)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), (Int64)first.Value * (Int64)second.Value);
                 case StackTypeCode.F:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.R8), (double)first.Value * (double)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.R8), (double)first.Value * (double)second.Value);
+                default:
+                    throw new NotSupportedException();
             }
         }
 
-        private void Div(ref Operand op, ConstantOperand first, ConstantOperand second, StackTypeCode type)
+        /// <summary>
+        /// Fold 2 constants by dividing them
+        /// </summary>
+        /// <param name="first">First constant to fold</param>
+        /// <param name="second">Second constant to fold</param>
+        /// <param name="type">Stacktype for the result</param>
+        private Operand Div(ConstantOperand first, ConstantOperand second, StackTypeCode type)
         {
             switch (type)
             {
                 case StackTypeCode.N:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), (int)first.Value / (int)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), (int)first.Value / (int)second.Value);
                 case StackTypeCode.Int32:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), (Int32)first.Value / (Int32)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), (Int32)first.Value / (Int32)second.Value);
                 case StackTypeCode.Int64:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), (Int64)first.Value / (Int64)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), (Int64)first.Value / (Int64)second.Value);
                 case StackTypeCode.F:
-                    op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.R8), (double)first.Value / (double)second.Value);
-                    break;
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.R8), (double)first.Value / (double)second.Value);
+                default:
+                    throw new NotSupportedException();
             }
         }
         #endregion // Internals
