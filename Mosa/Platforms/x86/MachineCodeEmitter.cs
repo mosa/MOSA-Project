@@ -417,7 +417,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Shl(Operand dest, Operand src)
         {
             // We force the shl reg, ecx notion
-            Debug.Assert(dest is RegisterOperand && src is RegisterOperand);
+            Debug.Assert(dest is RegisterOperand);
             // FIXME: Make sure the constant is emitted as a single-byte opcode
             Emit(dest, null, cd_shl);
         }
@@ -425,7 +425,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Shr(Operand dest, Operand src)
         {
             // Write the opcode byte
-            Debug.Assert(dest is RegisterOperand && (src is ConstantOperand));
+            Debug.Assert(dest is RegisterOperand);
             Emit(dest, null, cd_shr);
         }
 
