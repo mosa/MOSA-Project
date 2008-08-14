@@ -25,8 +25,8 @@ namespace Mosa.Tools.Compiler
     {
         #region Construction
 
-        public AotMethodCompiler(IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method)
-            : base(architecture, module, type, method)
+        public AotMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method)
+            : base(linker, architecture, module, type, method)
         {
             this.Pipeline.AddRange(new IMethodCompilerStage[] {
                 new ILDecodingStage(),

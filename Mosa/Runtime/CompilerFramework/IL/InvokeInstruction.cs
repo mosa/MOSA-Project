@@ -56,16 +56,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         protected RuntimeMethod _invokeTarget;
 
-        /// <summary>
-        /// Holds the parameter types of the function called.
-        /// </summary>
-        protected SigType[] _arguments;
-
-        /// <summary>
-        /// The target token.
-        /// </summary>
-        protected TokenTypes _token;
-
         #endregion // Data members
 
         #region Construction
@@ -132,7 +122,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             // Retrieve the immediate argument - it contains the token
             // of the methoddef, methodref, methodspec or callsite to call.
-            callTarget = _token = decoder.DecodeToken();
+            callTarget = decoder.DecodeToken();
             targetType = (TokenTypes.TableMask & callTarget);
             if (false == IsCallTargetSupported(targetType, flags))
                 throw new InvalidOperationException(@"Invalid IL call target specification.");
@@ -140,7 +130,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             switch (targetType)
             {
                 case TokenTypes.MethodDef:
-                    // FIXME: _invokeTarget = DefaultTypeSystem.GetMethod(decoder.Method.Module, callTarget);
+                    _invokeTarget = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method.Module, callTarget);
                     break;
 
                 case TokenTypes.MemberRef:
@@ -164,34 +154,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (true == signature.HasThis && false == signature.HasExplicitThis)
                 paramCount++;
 
-            // Process parameters
-            // FIXME: _operands = new Operand[paramCount];
+            // Setup operands for parameters and the return value
+            SetOperandCount(paramCount, (signature.ReturnType.Type != CilElementType.Void ? 1 : 0));
 
             // Is the function returning void?
             if (signature.ReturnType.Type != CilElementType.Void)
             {
                 SetResult(0, CreateResultOperand(decoder.Architecture, signature.ReturnType));
             }
-
-/*
-            TokenTypes token, tokenType;
-            IMetadataProvider provider = decoder.Metadata;
-            IMethodSignature method;
-
-            // Figure out the token type
-            switch (tokenType)
-            {
-                case TokenTypes.MemberRef:
-                    method = new MetadataMemberReference(provider, token).Resolve() as IMethodSignature;
-                    break;
-
-                case TokenTypes.MethodSpec:
-                    method = new MetadataMethodSpecification(provider, token);
-                    break;
-            }
-
-            // FIXME: decoder.AssemblyCompiler.ScheduleMethodForCompilation(_invokeTarget);
- */ 
         }
 
         public override object Expand(MethodCompilerBase methodCompiler)
@@ -338,12 +308,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         {
             // Decode the jump target
             DecodeInvocationTarget(decoder, this.InvokeSupport);
-
-            // Create an operand set for the call
-            if (null != _arguments && 0 != _arguments.Length)
-            {
-                // FIXME: _operands = new Operand[_arguments.Length];
-            }
         }
 
         /// <summary>
@@ -379,7 +343,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             // Validate the operands...
             Operand[] ops = this.Operands;
-            Debug.Assert(ops.Length == _arguments.Length, @"Operand count doesn't match parameter count.");
+            Debug.Assert(ops.Length == _invokeTarget.Parameters.Count, @"Operand count doesn't match parameter count.");
             for (int i = 0; i < ops.Length; i++)
             {
                 if (null != ops[i])

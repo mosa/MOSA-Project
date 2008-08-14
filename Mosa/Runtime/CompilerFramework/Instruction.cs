@@ -218,6 +218,28 @@ namespace Mosa.Runtime.CompilerFramework
         #region Methods
 
         /// <summary>
+        /// Sets the operand count of the instruction.
+        /// </summary>
+        /// <param name="operands">The number of supported operands.</param>
+        /// <param name="results">The number of supported results.</param>
+        protected void SetOperandCount(int operands, int results)
+        {
+            if (null != _operands)
+            {
+                foreach (Operand op in _operands)
+                    op.Uses.Remove(this);
+            }
+            _operands = new Operand[operands];
+
+            if (null != _results)
+            {
+                foreach (Operand op in _results)
+                    op.Definitions.Remove(this);
+            }
+            _results = new Operand[results];
+        }
+
+        /// <summary>
         /// Adds the operand at the given position in the operand list and maintains the operands the use list.
         /// </summary>
         /// <param name="index">The index, where this operand is added.</param>

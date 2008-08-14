@@ -47,7 +47,95 @@ namespace Mosa.Platforms.x86
 
         object ICallingConvention.Expand(IArchitecture architecture, IL.InvokeInstruction instruction)
         {
-            throw new NotImplementedException();
+            /*
+             * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
+             * types 4 bytes or less, XMM0 for floating point and EAX:EDX for 64-bit. If this is a method
+             * of a type, the this argument is moved to ECX right before the call.
+             * 
+             */
+
+            List<Instruction> instructions = new List<Instruction>();
+            SigType I = new SigType(CilElementType.I);
+            RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
+            bool moveThis = instruction.InvokeTarget.Signature.HasThis;
+            int stackSize = CalculateStackSizeForParameters(instruction, moveThis);
+            if (0 != stackSize)
+            {
+                Queue<Operand> ops = new Queue<Operand>(instruction.Operands.Length);
+                int thisArg = 1;
+                foreach (Operand op in instruction.Operands)
+                {
+                    if (true == moveThis && 1 == thisArg)
+                    {
+                        thisArg = 0;
+                        continue;
+                    }
+                    ops.Enqueue(op);
+                }
+
+                while (0 != ops.Count)
+                {
+                    Operand op = ops.Dequeue();
+                    Push(instructions, architecture, op);
+                }
+            }
+
+            if (true == moveThis)
+            {
+                RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
+                instructions.Add(architecture.CreateInstruction(typeof(MoveInstruction), ecx, instruction.Operands[0]));
+            }
+            instructions.Add(architecture.CreateInstruction(typeof(x86.CallInstruction), instruction.InvokeTarget));
+            if (0 != stackSize)
+            {
+                instructions.Add(architecture.CreateInstruction(typeof(x86.AddInstruction), IL.OpCode.Add, esp, new ConstantOperand(I, stackSize)));
+            }
+
+            return instructions;
+        }
+
+        private void Push(List<Instruction> instructions, IArchitecture arch, Operand op)
+        {
+            if (op is MemoryOperand)
+            {
+                RegisterOperand rop;
+                switch (op.StackType)
+                {
+                    case StackTypeCode.O: goto case StackTypeCode.N;
+                    case StackTypeCode.Ptr: goto case StackTypeCode.N;
+                    case StackTypeCode.Int32: goto case StackTypeCode.N;
+                    case StackTypeCode.N:
+                        rop = new RegisterOperand(op.Type, GeneralPurposeRegister.EAX);
+                        break;
+
+                    case StackTypeCode.F:
+                        rop = new RegisterOperand(op.Type, SSE2Register.XMM0);
+                        break;
+
+                    case StackTypeCode.Int64:
+                        throw new NotImplementedException();
+                        
+                    default:
+                        throw new NotSupportedException();
+                }
+                instructions.Add(arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IR.MoveInstruction), rop, op));
+                op = rop;
+            }
+
+            instructions.Add(arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IR.PushInstruction), op));
+        }
+
+        private int CalculateStackSizeForParameters(IL.InvokeInstruction instruction, bool hasThis)
+        {
+            int result = (true == hasThis ? -4 : 0);
+            int size, alignment;
+            // FIXME: This will not work for an instance method with the first arg being a fp value
+            foreach (Operand op in instruction.Operands)
+            {
+                GetStackRequirements(op.Type, out size, out alignment);
+                result += size;
+            }
+            return result;
         }
 
         Instruction[] ICallingConvention.MoveReturnValue(IArchitecture architecture, Operand operand)
@@ -55,9 +143,14 @@ namespace Mosa.Platforms.x86
             int size, alignment;
             GetStackRequirements(operand.Type, out size, out alignment);
 
+            // FIXME: Do not issue a move, if the operand is already the destination register
             if (4 == size)
             {
                 return new Instruction[] { architecture.CreateInstruction(typeof(MoveInstruction), new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand) };
+            }
+            else if (8 == size && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
+            {
+                return new Instruction[] { architecture.CreateInstruction(typeof(MoveInstruction), new RegisterOperand(operand.Type, SSE2Register.XMM0), operand) };
             }
             else
             {
@@ -118,6 +211,21 @@ namespace Mosa.Platforms.x86
             }
         }
 
+
+        int ICallingConvention.OffsetOfFirstParameter
+        {
+            get 
+            { 
+                /*
+                 * The first parameter is offset by 8 bytes from the start of
+                 * the stack frame. [EBP+08h]. [EBP+04h] holds the return address,
+                 * which was pushed by the call instruction.
+                 * 
+                 */
+                return 4; 
+            }
+        }
+        
         #endregion // ICallingConvention Members
     }
 }

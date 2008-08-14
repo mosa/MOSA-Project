@@ -94,12 +94,18 @@ namespace Mosa.Runtime.Vm
             _module = module;
             _nameStringIdx = method.NameStringIdx;
             _signatureBlobIdx = method.SignatureBlobIdx;
-
-            int p = (int)(method.ParamList & TokenTypes.RowIndexMask) + RuntimeBase.Instance.TypeLoader.GetModuleOffset(module).ParameterOffset;
-            int count = (maxParam - method.ParamList);
-            if (0 > count) count = 0;
-            _parameters = new ReadOnlyRuntimeParameterListView(p, count);
             _rva = method.Rva;
+
+            if (method.ParamList < maxParam)
+            {
+                int count = maxParam - method.ParamList;
+                int p = (int)(method.ParamList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset(module).ParameterOffset;
+                _parameters = new ReadOnlyRuntimeParameterListView(p, count);
+            }
+            else
+            {
+                _parameters = ReadOnlyRuntimeParameterListView.Empty;
+            }
         }
 
         #endregion // Construction

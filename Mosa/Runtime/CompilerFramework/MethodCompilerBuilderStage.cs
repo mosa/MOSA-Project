@@ -21,8 +21,14 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Builds and schedules method compilers for a type.
     /// </summary>
-    public sealed class MethodCompilerBuilderStage : IAssemblyCompilerStage
+    public class MethodCompilerBuilderStage : IAssemblyCompilerStage, IMethodCompilerBuilder
     {
+        #region Data members
+
+        private List<MethodCompilerBase> _methodCompilers = new List<MethodCompilerBase>();
+
+        #endregion // Data members
+
         #region IAssemblyCompilerStage members
 
         string IAssemblyCompilerStage.Name
@@ -62,10 +68,21 @@ namespace Mosa.Runtime.CompilerFramework
 				// Schedule the method for compilation...
 				// FIXME: Do we really want to do it this way? Shouldn't we use some compilation service for this?
 				// REFACTOR out of the AssemblyCompiler class
-				compiler.ScheduleMethodForCompilation(type, method);
+                MethodCompilerBase mcb = compiler.CreateMethodCompiler(type, method);
+				ScheduleMethod(mcb);
 			}
         }
 
+        private void ScheduleMethod(MethodCompilerBase mcb)
+        {
+            _methodCompilers.Add(mcb);
+        }
+
         #endregion // IAssemblyCompilerStage members
+
+        IEnumerable<MethodCompilerBase> IMethodCompilerBuilder.Scheduled
+        {
+            get { return _methodCompilers; }
+        }
     }
 }

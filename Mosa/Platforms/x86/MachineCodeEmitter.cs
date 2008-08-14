@@ -66,19 +66,24 @@ namespace Mosa.Platforms.x86
         private Stream _codeStream;
 
         /// <summary>
-        /// Patches we need to perform.
-        /// </summary>
-        private List<Patch> _patches = new List<Patch>();
-
-        /// <summary>
         /// List of labels that were emitted.
         /// </summary>
         private Dictionary<int, long> _labels = new Dictionary<int, long>();
 
         /// <summary>
+        /// Holds the linker used to resolve externals.
+        /// </summary>
+        private IAssemblyLinker _linker;
+
+        /// <summary>
         /// List of literal patches we need to perform.
         /// </summary>
         private List<Patch> _literals = new List<Patch>();
+
+        /// <summary>
+        /// Patches we need to perform.
+        /// </summary>
+        private List<Patch> _patches = new List<Patch>();
 
         #endregion // Data members
 
@@ -88,13 +93,18 @@ namespace Mosa.Platforms.x86
         /// Initializes a new instance of <see cref="MachineCodeEmitter"/>.
         /// </summary>
         /// <param name="codeStream">The stream the machine code is written to.</param>
-        public MachineCodeEmitter(Stream codeStream)
+        /// <param name="linker">The linker used to resolve external addresses.</param>
+        public MachineCodeEmitter(Stream codeStream, IAssemblyLinker linker)
         {
             Debug.Assert(null != codeStream, @"MachineCodeEmitter needs a code stream.");
             if (null == codeStream)
                 throw new ArgumentNullException(@"codeStream");
+            Debug.Assert(null != linker, @"MachineCodeEmitter needs a linker.");
+            if (null == linker)
+                throw new ArgumentNullException(@"linker");
 
             _codeStream = codeStream;
+            _linker = linker;
         }
 
         #endregion // Construction
@@ -139,49 +149,58 @@ namespace Mosa.Platforms.x86
              */
 
             // Save the current position
-            long currentPosition = _codeStream.Position;
+            long currentPosition = _codeStream.Position, pos;
             // Relative branch offset
             int relOffset;
 
-            // Check if this label has forward references on it...
-            _patches.RemoveAll(delegate(Patch p)
+            if (true == _labels.TryGetValue(label, out pos))
             {
-                if (p.label == label)
+                Debug.Assert(pos == currentPosition);
+                if (pos != currentPosition)
+                    throw new ArgumentException(@"Label already defined for another code point.", @"label");
+            }
+            else
+            {
+                // Check if this label has forward references on it...
+                _patches.RemoveAll(delegate(Patch p)
                 {
-                    _codeStream.Position = p.position;
-                    relOffset = (int)currentPosition - ((int)p.position + 4);
-                    byte[] bytes = BitConverter.GetBytes(relOffset);
-                    _codeStream.Write(bytes, 0, bytes.Length);
-                    return true;
-                }
+                    if (p.label == label)
+                    {
+                        _codeStream.Position = p.position;
+                        relOffset = (int)currentPosition - ((int)p.position + 4);
+                        byte[] bytes = BitConverter.GetBytes(relOffset);
+                        _codeStream.Write(bytes, 0, bytes.Length);
+                        return true;
+                    }
 
-                return false;
-            });
+                    return false;
+                });
 
-            // Add this label to the label list, so we can resolve the jump later on
-            _labels.Add(label, currentPosition);
+                // Add this label to the label list, so we can resolve the jump later on
+                _labels.Add(label, currentPosition);
 
-            // Reset the position
-            _codeStream.Position = currentPosition;
+                // Reset the position
+                _codeStream.Position = currentPosition;
 
-            // HACK: The machine code emitter needs to replace FP constants
-            // with an EIP relative address, but these are not possible on x86,
-            // so we store the EIP via a call in the right place on the stack
-            //if (0 == label)
-            //{
-            //    // FIXME: This code doesn't need to be emitted if there are no
-            //    // large constants used.
-            //    _codeStream.WriteByte(0xE8);
-            //    WriteImmediate(0);
+                // HACK: The machine code emitter needs to replace FP constants
+                // with an EIP relative address, but these are not possible on x86,
+                // so we store the EIP via a call in the right place on the stack
+                //if (0 == label)
+                //{
+                //    // FIXME: This code doesn't need to be emitted if there are no
+                //    // large constants used.
+                //    _codeStream.WriteByte(0xE8);
+                //    WriteImmediate(0);
 
-            //    SigType i4 = new SigType(CilElementType.I4);
+                //    SigType i4 = new SigType(CilElementType.I4);
 
-            //    RegisterOperand eax = new RegisterOperand(i4, GeneralPurposeRegister.EAX);
-            //    Pop(eax);
+                //    RegisterOperand eax = new RegisterOperand(i4, GeneralPurposeRegister.EAX);
+                //    Pop(eax);
 
-            //    MemoryOperand mo = new MemoryOperand(i4, GeneralPurposeRegister.EBP, new IntPtr(-8));
-            //    Mov(mo, eax);
-            //}
+                //    MemoryOperand mo = new MemoryOperand(i4, GeneralPurposeRegister.EBP, new IntPtr(-8));
+                //    Mov(mo, eax);
+                //}
+            }
         }
 
         void ICodeEmitter.Literal(int label, SigType type, object data)
@@ -262,14 +281,9 @@ namespace Mosa.Platforms.x86
 
         void ICodeEmitter.Call(RuntimeMethod method)
         {
-            throw new NotImplementedException();
-/*
             _codeStream.WriteByte(0xE8);
-
-            // Calculate the relative call destination
-            int relOffset = method.Address.ToInt32() - ((int)_codeStream.Position + 4);
-            WriteImmediate(relOffset);
- */
+            byte[] relOffset = BitConverter.GetBytes((int)_linker.Link(method, _codeStream.Position, _codeStream.Position + 4));
+            _codeStream.Write(relOffset, 0, relOffset.Length);
         }
 
         void ICodeEmitter.Call(int label)
@@ -631,6 +645,7 @@ namespace Mosa.Platforms.x86
 
             // If this is reached, the operand combination could not be emitted as it is
             // not specified in the code definition table
+            Debug.Assert(false, @"Failed to find an opcode for the instruction.");
             throw new NotSupportedException();
         }
 

@@ -29,5 +29,7 @@ namespace Mosa.Platforms.x86
         void Cli(CliInstruction instruction);
         void Ldit(LditInstruction instruction);
         void Sti(StiInstruction instruction);
+
+        void Call(CallInstruction instruction);
     }
 }

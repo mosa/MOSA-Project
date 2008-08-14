@@ -62,6 +62,7 @@ namespace Mosa.Runtime.Vm
 			_methods = new RuntimeMethod[0];
 			_fields = new RuntimeField[0];
 			_types = new RuntimeType[0];
+            _parameters = new RuntimeParameter[0];
 			_moduleOffsets = new ModuleOffsets[0];
 		}
 
@@ -370,7 +371,7 @@ namespace Mosa.Runtime.Vm
                 }
                 else
                 {
-                    maxParam = md.GetMaxTokenValue(TokenTypes.Param);
+                    maxParam = md.GetMaxTokenValue(TokenTypes.Param) + 1;
                 }
 
                 _methods[offset++] = new RuntimeMethod(offset, module, ref methodDef, maxParam);

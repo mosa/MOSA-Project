@@ -99,20 +99,23 @@ namespace Mosa.Runtime.CompilerFramework
                 changed = false;
                 foreach (BasicBlock b in revPostOrder)
                 {
-                    BasicBlock idom = b.PreviousBlocks[0];
-                    //Debug.Assert(-1 !=  Array.IndexOf(_doms, idom));
-
-                    for (int idx = 1; idx < b.PreviousBlocks.Count; idx++)
+                    if (null != b)
                     {
-                        BasicBlock p = b.PreviousBlocks[idx];
-                        if (null != _doms[p.Index])
-                            idom = Intersect(p, idom);
-                    }
+                        BasicBlock idom = b.PreviousBlocks[0];
+                        //Debug.Assert(-1 !=  Array.IndexOf(_doms, idom));
 
-                    if (false == Object.ReferenceEquals(_doms[b.Index], idom))
-                    {
-                        _doms[b.Index] = idom;
-                        changed = true;
+                        for (int idx = 1; idx < b.PreviousBlocks.Count; idx++)
+                        {
+                            BasicBlock p = b.PreviousBlocks[idx];
+                            if (null != _doms[p.Index])
+                                idom = Intersect(p, idom);
+                        }
+
+                        if (false == Object.ReferenceEquals(_doms[b.Index], idom))
+                        {
+                            _doms[b.Index] = idom;
+                            changed = true;
+                        }
                     }
                 }
             }
@@ -133,7 +136,7 @@ namespace Mosa.Runtime.CompilerFramework
                     foreach (BasicBlock p in b.PreviousBlocks)
                     {
                         BasicBlock runner = p;
-                        while (false == Object.ReferenceEquals(runner, _doms[b.Index]))
+                        while (null != runner && false == Object.ReferenceEquals(runner, _doms[b.Index]))
                         {
                             List<BasicBlock> runnerFrontier = domFrontiers[runner.Index];
                             if (null == runnerFrontier)

@@ -24,8 +24,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
     {
         private Stream _stream;
 
-        public TestCaseMethodCompiler(IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method) :
-            base(architecture, module, type, method)
+        public TestCaseMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method) :
+            base(linker, architecture, module, type, method)
         {
             // Request 64K of memory
             _stream = new VirtualMemoryStream(RuntimeBase.Instance.MemoryManager, 16 * 4096);

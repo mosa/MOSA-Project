@@ -58,7 +58,7 @@ namespace Mosa.Runtime.CompilerFramework
                         {
                             Operand res = instruction.Results[0];
                             // HACK: We can't track a constant through a register, so we keep those moves
-                            if (false == res.IsRegister)
+                            if (res is StackOperand)
                             {
                                 Debug.Assert(1 == res.Definitions.Count, @"Operand defined multiple times. Instruction stream not in SSA form!");
                                 res.Replace(co);

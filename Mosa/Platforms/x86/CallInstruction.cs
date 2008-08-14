@@ -14,19 +14,39 @@ using IL = Mosa.Runtime.CompilerFramework.IL;
 using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86
 {
-    class CallInstruction : IL.CallInstruction, IRegisterConstraint
+    class CallInstruction : Instruction, IRegisterConstraint
     {
+        #region Data members
+
+        private RuntimeMethod _invokeTarget;
+
+        #endregion // Data members
+
         #region Construction
 
-        public CallInstruction(IL.OpCode code) :
-            base(code)
+        public CallInstruction(RuntimeMethod method) :
+            base(0, 0)
         {
+            if (null == method)
+                throw new ArgumentNullException(@"method");
+
+            _invokeTarget = method;
         }
 
         #endregion // Construction
+
+        #region Properties
+
+        public RuntimeMethod InvokeTarget
+        {
+            get { return _invokeTarget; }
+        }
+
+        #endregion // Properties
 
         #region IRegisterConstraint Members
 
@@ -40,10 +60,13 @@ namespace Mosa.Platforms.x86
             return null;
         }
 
-        public override object Expand(MethodCompilerBase methodCompiler)
+        public override void Visit(IInstructionVisitor visitor)
         {
-            // TODO
-            return this;
+            IX86InstructionVisitor x86v = visitor as IX86InstructionVisitor;
+            if (null == x86v)
+                throw new ArgumentException(@"Visitor doesn't implement IX86InstructionVisitor.");
+
+            x86v.Call(this);
         }
 
         #endregion // IRegisterConstraint Members

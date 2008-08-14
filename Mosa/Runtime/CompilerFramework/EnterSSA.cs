@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -116,7 +117,13 @@ namespace Mosa.Runtime.CompilerFramework
              * assignment to a parameter is also SSA related.
              */
             IDictionary<StackOperand, StackOperand> liveIn = new Dictionary<StackOperand, StackOperand>(s_comparer);
-
+            IInstructionDecoder decoder = (IInstructionDecoder)compiler.GetPreviousStage(typeof(IInstructionDecoder));
+            for (int i = 0; i < compiler.Method.Parameters.Count; i++)
+            {
+                StackOperand param = (StackOperand)decoder.GetParameterOperand(i);
+                liveIn.Add(param, param);
+            }
+            
             // Start with the very first block
             workList.Enqueue(new WorkItem(blockProvider[0], null, liveIn));
 

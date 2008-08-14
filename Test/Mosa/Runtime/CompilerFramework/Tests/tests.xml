@@ -14,6 +14,10 @@
     <Description>Tests the addition operation.</Description>
     <Source>OpAdd.cs</Source>
   </TestCase>
+  <TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="IL call" language="C#">
+    <Description>Tests the addition operation.</Description>
+    <Source>OpCall.cs</Source>
+  </TestCase>
   <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="IL sub" language="C#">
     <Description>Tests the substraction operation.</Description>
     <Source>OpSub.cs</Source>

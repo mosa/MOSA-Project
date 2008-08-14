@@ -62,7 +62,7 @@ namespace Mosa.Platforms.x86
             StreamWriter textwriter = t.CreateText();
             MultiplexingCodeEmitter mce = new MultiplexingCodeEmitter();
             mce.Emitters.Add(new AsmCodeEmitter(textwriter));
-            mce.Emitters.Add(new MachineCodeEmitter(_codeStream));
+            mce.Emitters.Add(new MachineCodeEmitter(_codeStream, _compiler.Linker));
             _emitter = mce;
 
             //_emitter = new MachineCodeEmitter(_codeStream);
@@ -145,6 +145,11 @@ namespace Mosa.Platforms.x86
         void IX86InstructionVisitor.Sti(StiInstruction instruction)
         {
             _emitter.Sti();
+        }
+
+        void IX86InstructionVisitor.Call(CallInstruction instruction)
+        {
+            _emitter.Call(instruction.InvokeTarget);
         }
 
         #endregion // IX86InstructionVisitor Members
@@ -334,48 +339,89 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.BinaryBranch(IL.BinaryBranchInstruction instruction)
         {
+            bool swap = instruction.First is ConstantOperand;
             int[] targets = instruction.BranchTargets;
-            int tmp = targets[0];
-            targets[0] = targets[1];
-            targets[1] = tmp;
-            
-            _emitter.Cmp(instruction.Second, instruction.First);
-            switch (instruction.Code)
+            if (true == swap)
             {
-                // Signed
-                case IL.OpCode.Beq_s: _emitter.Jne(targets[0]); break;
-                case IL.OpCode.Bge_s: _emitter.Jl(targets[0]); break;
-                case IL.OpCode.Bgt_s: _emitter.Jle(targets[0]); break;
-                case IL.OpCode.Ble_s: _emitter.Jg(targets[0]); break;
-                case IL.OpCode.Blt_s: _emitter.Jge(targets[0]); break;
-                
-                // Unsigned
-                case IL.OpCode.Bne_un_s: _emitter.Je(targets[0]); break;
-                case IL.OpCode.Bge_un_s: _emitter.Jb(targets[0]); break;
-                case IL.OpCode.Bgt_un_s: _emitter.Jbe(targets[0]); break;
-                case IL.OpCode.Ble_un_s: _emitter.Ja(targets[0]); break;
-                case IL.OpCode.Blt_un_s: _emitter.Jae(targets[0]); break;
+                int tmp = targets[0];
+                targets[0] = targets[1];
+                targets[1] = tmp;
 
-                // Long form signed
-                case IL.OpCode.Beq: goto case IL.OpCode.Beq_s;
-                case IL.OpCode.Bge: goto case IL.OpCode.Bge_s;
-                case IL.OpCode.Bgt: goto case IL.OpCode.Bgt_s;
-                case IL.OpCode.Ble: goto case IL.OpCode.Ble_s;
-                case IL.OpCode.Blt: goto case IL.OpCode.Blt_s;
+                _emitter.Cmp(instruction.Second, instruction.First);
+                switch (instruction.Code)
+                {
+                    // Signed
+                    case IL.OpCode.Beq_s: _emitter.Jne(targets[0]); break;
+                    case IL.OpCode.Bge_s: _emitter.Jl(targets[0]); break;
+                    case IL.OpCode.Bgt_s: _emitter.Jle(targets[0]); break;
+                    case IL.OpCode.Ble_s: _emitter.Jg(targets[0]); break;
+                    case IL.OpCode.Blt_s: _emitter.Jge(targets[0]); break;
 
-                // Long form unsigned
-                case IL.OpCode.Bne_un: goto case IL.OpCode.Bne_un_s;
-                case IL.OpCode.Bge_un: goto case IL.OpCode.Bge_un_s;
-                case IL.OpCode.Bgt_un: goto case IL.OpCode.Bgt_un_s;
-                case IL.OpCode.Ble_un: goto case IL.OpCode.Ble_un_s;
-                case IL.OpCode.Blt_un: goto case IL.OpCode.Blt_un_s;
+                    // Unsigned
+                    case IL.OpCode.Bne_un_s: _emitter.Je(targets[0]); break;
+                    case IL.OpCode.Bge_un_s: _emitter.Jb(targets[0]); break;
+                    case IL.OpCode.Bgt_un_s: _emitter.Jbe(targets[0]); break;
+                    case IL.OpCode.Ble_un_s: _emitter.Ja(targets[0]); break;
+                    case IL.OpCode.Blt_un_s: _emitter.Jae(targets[0]); break;
 
-                default:
-                    throw new NotImplementedException();
+                    // Long form signed
+                    case IL.OpCode.Beq: goto case IL.OpCode.Beq_s;
+                    case IL.OpCode.Bge: goto case IL.OpCode.Bge_s;
+                    case IL.OpCode.Bgt: goto case IL.OpCode.Bgt_s;
+                    case IL.OpCode.Ble: goto case IL.OpCode.Ble_s;
+                    case IL.OpCode.Blt: goto case IL.OpCode.Blt_s;
+
+                    // Long form unsigned
+                    case IL.OpCode.Bne_un: goto case IL.OpCode.Bne_un_s;
+                    case IL.OpCode.Bge_un: goto case IL.OpCode.Bge_un_s;
+                    case IL.OpCode.Bgt_un: goto case IL.OpCode.Bgt_un_s;
+                    case IL.OpCode.Ble_un: goto case IL.OpCode.Ble_un_s;
+                    case IL.OpCode.Blt_un: goto case IL.OpCode.Blt_un_s;
+
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            else
+            {
+                _emitter.Cmp(instruction.First, instruction.Second);
+                switch (instruction.Code)
+                {
+                    // Signed
+                    case IL.OpCode.Beq_s: _emitter.Je(targets[0]); break;
+                    case IL.OpCode.Bge_s: _emitter.Jge(targets[0]); break;
+                    case IL.OpCode.Bgt_s: _emitter.Jg(targets[0]); break;
+                    case IL.OpCode.Ble_s: _emitter.Jle(targets[0]); break;
+                    case IL.OpCode.Blt_s: _emitter.Jl(targets[0]); break;
+
+                    // Unsigned
+                    case IL.OpCode.Bne_un_s: _emitter.Jne(targets[0]); break;
+                    case IL.OpCode.Bge_un_s: _emitter.Jae(targets[0]); break;
+                    case IL.OpCode.Bgt_un_s: _emitter.Ja(targets[0]); break;
+                    case IL.OpCode.Ble_un_s: _emitter.Jbe(targets[0]); break;
+                    case IL.OpCode.Blt_un_s: _emitter.Jb(targets[0]); break;
+
+                    // Long form signed
+                    case IL.OpCode.Beq: goto case IL.OpCode.Beq_s;
+                    case IL.OpCode.Bge: goto case IL.OpCode.Bge_s;
+                    case IL.OpCode.Bgt: goto case IL.OpCode.Bgt_s;
+                    case IL.OpCode.Ble: goto case IL.OpCode.Ble_s;
+                    case IL.OpCode.Blt: goto case IL.OpCode.Blt_s;
+
+                    // Long form unsigned
+                    case IL.OpCode.Bne_un: goto case IL.OpCode.Bne_un_s;
+                    case IL.OpCode.Bge_un: goto case IL.OpCode.Bge_un_s;
+                    case IL.OpCode.Bgt_un: goto case IL.OpCode.Bgt_un_s;
+                    case IL.OpCode.Ble_un: goto case IL.OpCode.Ble_un_s;
+                    case IL.OpCode.Blt_un: goto case IL.OpCode.Blt_un_s;
+
+                    default:
+                        throw new NotImplementedException();
+                }
             }
 
             // Emit a regular jump for the second case
-            _emitter.Jmp(instruction.BranchTargets[1]);
+            _emitter.Jmp(targets[1]);
         }
 
         void IL.IILVisitor.Switch(IL.SwitchInstruction instruction)

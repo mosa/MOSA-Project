@@ -215,7 +215,7 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.Call(IL.CallInstruction instruction)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         void IL.IILVisitor.Calli(IL.CalliInstruction instruction)
@@ -640,6 +640,11 @@ namespace Mosa.Platforms.x86
         {
             throw new NotImplementedException();
         }
+
+        void IX86InstructionVisitor.Call(CallInstruction instruction)
+        {
+        }
+
         #endregion // IX86InstructionVisitor Members
 
         #region Internals

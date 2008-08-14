@@ -40,6 +40,11 @@ namespace Mosa.Runtime.CompilerFramework
         private IArchitecture _architecture;
 
         /// <summary>
+        /// Holds the linker used to resolve external symbols.
+        /// </summary>
+        private IAssemblyLinker _linker;
+
+        /// <summary>
         /// The method definition being compiled.
         /// </summary>
         private RuntimeMethod _method;
@@ -65,12 +70,15 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="module">The metadata module, that contains the type.</param>
         /// <param name="type">The type, which owns the method to compile.</param>
         /// <param name="method">The method to compile by this instance.</param>
-        protected MethodCompilerBase(IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method)
+        protected MethodCompilerBase(IAssemblyLinker linker, IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method)
         {
             if (null == architecture)
                 throw new ArgumentNullException(@"architecture");
+            if (null == linker)
+                throw new ArgumentNullException(@"linker");
 
             _architecture = architecture;
+            _linker = linker;
             _method = method;
             _module = module;
             _type = type;
@@ -94,6 +102,14 @@ namespace Mosa.Runtime.CompilerFramework
         public IMetadataModule Assembly
         {
             get { return _module; }
+        }
+
+        /// <summary>
+        /// Retrieves the linker used to resolve external symbols.
+        /// </summary>
+        public IAssemblyLinker Linker
+        {
+            get { return _linker; }
         }
 
         /// <summary>

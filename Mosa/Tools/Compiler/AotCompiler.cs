@@ -65,7 +65,7 @@ namespace Mosa.Tools.Compiler {
         public override MethodCompilerBase CreateMethodCompiler(RuntimeType type, RuntimeMethod method)
         {
             IArchitecture arch = this.Architecture;
-            MethodCompilerBase mc = new AotMethodCompiler(this.Architecture, this.Assembly, type, method);
+            MethodCompilerBase mc = new AotMethodCompiler(this.Pipeline.Find<IAssemblyLinker>(), this.Architecture, this.Assembly, type, method);
             arch.ExtendMethodCompilerPipeline(mc.Pipeline);
             return mc;
         }

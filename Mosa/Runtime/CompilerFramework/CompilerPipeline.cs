@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    public sealed class CompilerPipeline<T> : IEnumerable<T>
+    public sealed class CompilerPipeline<T> : IEnumerable<T> where T: class
     {
         #region Data members
 
@@ -124,5 +124,18 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         #endregion // IEnumerable members
+
+        public StageType Find<StageType>() where StageType: class
+        {
+            StageType result = default(StageType);
+            foreach (object o in _pipeline)
+            {
+                result = o as StageType;
+                if (null != result)
+                    break;
+            }
+
+            return result;
+        }
     }
 }

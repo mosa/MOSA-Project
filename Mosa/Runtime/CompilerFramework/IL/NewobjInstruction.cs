@@ -138,7 +138,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             // Validate the operands...
             Operand[] ops = this.Operands;
-            Debug.Assert(ops.Length == _arguments.Length - 1, @"Operand count doesn't match parameter count.");
+            Debug.Assert(ops.Length == this._invokeTarget.Parameters.Count - 1, @"Operand count doesn't match parameter count.");
             for (int i = 0; i < ops.Length; i++)
             {
                 if (null != ops[i])

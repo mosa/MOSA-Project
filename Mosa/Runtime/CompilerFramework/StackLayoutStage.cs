@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -55,7 +56,7 @@ namespace Mosa.Runtime.CompilerFramework
             // Instruction lists for the prologue/epilogue instructions
             List<Instruction> prologueBlock, epilogueBlock;
             // Allocate a list of locals
-            List<LocalVariableOperand> locals = new List<LocalVariableOperand>();
+            List<StackOperand> locals = new List<StackOperand>();
             // Architecture
             IArchitecture arch = methodCompiler.Architecture;
 
@@ -94,12 +95,28 @@ namespace Mosa.Runtime.CompilerFramework
             OrderVariables(locals, cc);
 
             // Now we assign increasing stack offsets to each variable
-            _localsSize = LayoutVariables(locals, cc);
+            _localsSize = LayoutVariables(locals, cc, cc.OffsetOfFirstLocal, 1);
+
+            // Layout parameters
+            LayoutParameters(methodCompiler, cc);
+
 
             // Create a prologue instruction
             prologueBlock.Insert(0, arch.CreateInstruction(typeof(IR.PrologueInstruction), _localsSize));
             // Create an epilogue instruction
             epilogueBlock.Add(arch.CreateInstruction(typeof(IR.EpilogueInstruction), _localsSize));
+        }
+
+        private void LayoutParameters(MethodCompilerBase compiler, ICallingConvention cc)
+        {
+            IInstructionDecoder decoder = (IInstructionDecoder)compiler.GetPreviousStage(typeof(IInstructionDecoder));
+            List<StackOperand> paramOps = new List<StackOperand>();
+            for (int i = 0; i < compiler.Method.Parameters.Count; i++)
+            {
+                paramOps.Add((StackOperand)decoder.GetParameterOperand(i));
+            }
+
+            LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter, -1);
         }
 
         #endregion // IMethodCompilerStage Members
@@ -120,7 +137,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="locals">Holds all locals found by the stage.</param>
         /// <param name="instructions">The enumerable instruction list, which may contain assignments to local variables.</param>
-        private static void CollectLocalVariables(List<LocalVariableOperand> locals, IEnumerable<Instruction> instructions)
+        private static void CollectLocalVariables(List<StackOperand> locals, IEnumerable<Instruction> instructions)
         {
             // Iterate all instructions
             foreach (Instruction i in instructions)
@@ -141,17 +158,28 @@ namespace Mosa.Runtime.CompilerFramework
         /// Performs a stack layout of all local variables in the list.
         /// </summary>
         /// <param name="locals">The enumerable holding all locals.</param>
-        /// <param name="cc">The calling convention used to determine size and alignment of a local.</param>
-        private static int LayoutVariables(IEnumerable<LocalVariableOperand> locals, ICallingConvention cc)
+        /// <param name="offsetOfFirst">Specifies the offset of the first stack operand in the list.</param>
+        private static int LayoutVariables(IEnumerable<StackOperand> locals, ICallingConvention cc, int offsetOfFirst, int direction)
         {
-            int offset = cc.OffsetOfFirstLocal;
+            int offset = offsetOfFirst;
             int size, alignment, padding;
-            foreach (LocalVariableOperand lvo in locals)
+            foreach (StackOperand lvo in locals)
             {
                 // Does the offset fit the alignment requirement?
                 cc.GetStackRequirements(lvo, out size, out alignment);
-                padding = (offset % alignment);
-                offset -= (padding + size);
+                if (1 == direction)
+                {
+                    padding = (offset % alignment);
+                    offset -= (padding + size);
+                }
+                else
+                {
+                    padding = (offset % alignment);
+                    if (0 != padding)
+                        padding = alignment - padding;
+
+                    offset += (padding + size);
+                }
                 lvo.Offset = new IntPtr(offset);
                 //offset += size;
             }
@@ -164,12 +192,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="locals">Holds all local variables to sort..</param>
         /// <param name="cc">The calling convention used to determine size and alignment requirements.</param>
-        private static void OrderVariables(List<LocalVariableOperand> locals, ICallingConvention cc)
+        private static void OrderVariables(List<StackOperand> locals, ICallingConvention cc)
         {
             /* Sort the list by stack size requirements - this moves equally sized operands closer together,
              * in the hope that this reduces padding on the stack to enforce HW alignment requirements.
              */
-            locals.Sort(delegate(LocalVariableOperand op1, LocalVariableOperand op2)
+            locals.Sort(delegate(StackOperand op1, StackOperand op2)
             {
                 int size1, size2, alignment;
                 cc.GetStackRequirements(op1, out size1, out alignment);

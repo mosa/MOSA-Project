@@ -28,6 +28,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
             pipeline.AddRange(new IAssemblyCompilerStage[] {
                 new TypeLayoutStage(),
                 new MethodCompilerBuilderStage(),
+                new MethodCompilerRunnerStage(),
+                new TestAssemblyLinker(),
             });
             architecture.ExtendAssemblyCompilerPipeline(pipeline);
         }
@@ -42,7 +44,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
         public override MethodCompilerBase CreateMethodCompiler(RuntimeType type, RuntimeMethod method)
         {
             IArchitecture arch = this.Architecture;
-            MethodCompilerBase mc = new TestCaseMethodCompiler(this.Architecture, this.Assembly, type, method);
+            MethodCompilerBase mc = new TestCaseMethodCompiler(this.Pipeline.Find<IAssemblyLinker>(), this.Architecture, this.Assembly, type, method);
             arch.ExtendMethodCompilerPipeline(mc.Pipeline);
             return mc;
         }
