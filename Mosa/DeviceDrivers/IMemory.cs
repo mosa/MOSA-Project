@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -9,13 +9,13 @@
 
 namespace Mosa.DeviceDrivers
 {
-	public class MemorySpace
+	public interface IMemory
 	{
-		public MemorySpace() { }
+		uint Address { get; }
+		uint Size { get; }
 
-		public IMemory GetMemory(uint address, uint size)
-		{
-			return Kernel.HAL.RequestMemory(address, size);
-		}
+		byte this[uint index] { get; set; }
+		byte this[long index] { get; set; }
 	}
+
 }

@@ -25,15 +25,11 @@ namespace Mosa.DeviceDrivers
 			this.size = size;
 		}
 
-		public byte[] GetMemory()
+		public IMemory GetMemory()
 		{
-			return memorySpace.GetMemory(baseAddress);
+			return memorySpace.GetMemory(baseAddress, size);
 		}
 
-		public byte[] GetMemory(uint offset)
-		{
-			return memorySpace.GetMemory(baseAddress + offset);
-		}
 	}
 
 }

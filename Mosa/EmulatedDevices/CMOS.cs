@@ -14,6 +14,7 @@ using Mosa.ClassLib;
 namespace Mosa.EmulatedDevices
 {
 	/// <summary>
+	/// Represents an emulated CMOS chip
 	/// </summary>
 	public class CMOS : IDisposable
 	{

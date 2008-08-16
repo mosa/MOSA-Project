@@ -13,11 +13,11 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.ISA
 {
-	public class ISADeviceDrivers
+	public class ISARegistry
 	{
 		protected LinkedList<Pair<ISADeviceSignatureAttribute, Type>> drivers;
 
-		public ISADeviceDrivers()
+		public ISARegistry()
 		{
 			drivers = new LinkedList<Pair<ISADeviceSignatureAttribute, Type>>();
 		}
@@ -29,7 +29,7 @@ namespace Mosa.DeviceDrivers.ISA
 
 		public void RegisterBuildInDeviceDrivers()
 		{
-			Assembly assemblyInfo = typeof(ISADeviceDrivers).Module.Assembly;
+			Assembly assemblyInfo = typeof(ISARegistry).Module.Assembly;
 			RegisterDeviceDrivers(assemblyInfo);
 		}
 

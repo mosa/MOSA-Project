@@ -12,16 +12,27 @@ namespace Mosa.DeviceDrivers.Kernel
 	public static class HAL
 	{
 		public delegate IReadWriteIOPort CreateIOPort(ushort port);
+		public delegate IMemory CreateMemory(uint port, uint size);
 
 		static private CreateIOPort createIOPort;
+		static private CreateMemory createMemory;
 
 		/// <summary>
 		/// Sets the create IO port factory.
 		/// </summary>
-		/// <param name="createIOPort">The create IO port.</param>
+		/// <param name="createIOPort">The create IO port factory method.</param>
 		public static void SetIOPortFactory(CreateIOPort createIOPort)
 		{
 			HAL.createIOPort = createIOPort;
+		}
+
+		/// <summary>
+		/// Sets the memory factory.
+		/// </summary>
+		/// <param name="createMemory">The memory factory method.</param>
+		public static void SetMemoryFactory(CreateMemory createMemory)
+		{
+			HAL.createMemory = createMemory;
 		}
 
 		/// <summary>
@@ -31,7 +42,18 @@ namespace Mosa.DeviceDrivers.Kernel
 		/// <returns></returns>
 		public static IReadWriteIOPort RequestIOPort(ushort port)
 		{
-			return createIOPort(port);
+			return HAL.createIOPort(port);
+		}
+
+		/// <summary>
+		/// Requests a block of memory from the kernel
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <param name="size">The size.</param>
+		/// <returns></returns>
+		public static IMemory RequestMemory(uint address, uint size)
+		{
+			return HAL.createMemory(address, size);
 		}
 
 		/// <summary>

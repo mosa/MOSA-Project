@@ -26,7 +26,7 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 
 		#region Definitions
 
-		internal struct IDECommand
+		internal struct IDECommands
 		{
 			internal const byte ReadSectorsWithRetry = 0x20;
 			internal const byte WriteSectorsWithRetry = 0x30;
@@ -208,9 +208,9 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			DeviceHeadPort.Write8((byte)(0xE0 | (driveNbr << 4) | ((lba >> 24) & 0x0F)));
 
 			if (operation == SectorOperation.Write)
-				CommandPort.Write8(IDECommand.WriteSectorsWithRetry);
+				CommandPort.Write8(IDECommands.WriteSectorsWithRetry);
 			else
-				CommandPort.Write8(IDECommand.ReadSectorsWithRetry);
+				CommandPort.Write8(IDECommands.ReadSectorsWithRetry);
 
 			if (!WaitForReqisterReady())
 				return false;
@@ -280,7 +280,7 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 				else
 					return false;
 
-			CommandPort.Write8(IDECommand.IdentifyDrive);
+			CommandPort.Write8(IDECommands.IdentifyDrive);
 
 			if (!WaitForReqisterReady())
 				return false;

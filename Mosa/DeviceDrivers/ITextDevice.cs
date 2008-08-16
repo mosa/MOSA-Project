@@ -9,6 +9,14 @@
 
 namespace Mosa.DeviceDrivers
 {
+	public interface ITextDevice
+	{
+		void WriteChar(ushort x, ushort y, char c, TextColor foreground, TextColor background);
+		void SetCursor(ushort x, ushort y);
+		void ClearScreen();
+		void ScrollUp();
+	}
+
 	public enum TextColor : byte
 	{
 		Black,
@@ -29,9 +37,4 @@ namespace Mosa.DeviceDrivers
 		BrightWhite
 	}
 
-	public interface ITextDevice
-	{
-		void WriteChar(ushort x, ushort y, char c, TextColor foreground, TextColor background);
-		void SetCursor(ushort x, ushort y);
-	}
 }

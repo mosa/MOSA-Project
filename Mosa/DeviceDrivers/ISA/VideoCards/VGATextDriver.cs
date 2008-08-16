@@ -54,15 +54,15 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		protected IReadWriteIOPort crtControllerDataColor;
 		protected IReadWriteIOPort crtControllerDataColorLow;
 
-		protected byte[] memory;
+		protected IMemory memory;
 
 		protected SpinLock spinLock;
 
-		protected uint scanLine = 80;
 		protected bool colorMode = false;
 		protected uint offset = 0x8000;
 		protected uint width = 80;
 		protected uint height = 25;
+		protected TextColor defaultBackground = TextColor.White;
 
 		public VGATextDriver() { }
 		public void Dispose() { }
@@ -95,7 +95,7 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 				crtControllerIndexColor.Write8(CRTCommands.VerticalDisplayed);
 				height = crtControllerDataColor.Read8();
 				width++;
-				scanLine = width / 2;
+				width = width / 2;
 			}
 			else {
 				offset = 0x0;
@@ -104,7 +104,6 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 				crtControllerIndex.Write8(CRTCommands.VerticalDisplayed);
 				height = crtControllerData.Read8();
 				width++;
-				scanLine = width;
 			}
 
 			height = 25; // override
@@ -116,21 +115,34 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		public override LinkedList<IDevice> CreateSubDevices() { return null; }
 		public override bool OnInterrupt() { return true; }
 
+		/// <summary>
+		/// Writes the char at the position indicated.
+		/// </summary>
+		/// <param name="x">The x position.</param>
+		/// <param name="y">The y position.</param>
+		/// <param name="c">The character.</param>
+		/// <param name="foreground">The foreground color.</param>
+		/// <param name="background">The background color.</param>
 		public void WriteChar(ushort x, ushort y, char c, TextColor foreground, TextColor background)
 		{
-			uint index = y * scanLine + offset;
 
 			if (colorMode) {
-				index = (uint)(index + (x * 2));
+				uint index = offset + (y * width * 2);
 				memory[index] = (byte)c;
 				memory[index + 1] = (byte)((byte)foreground | ((byte)background << 4));
 			}
 			else {
+				uint index = offset + (y * width);
 				index = index + x;
 				memory[index] = (byte)c;
 			}
 		}
 
+		/// <summary>
+		/// Sets the cursor position.
+		/// </summary>
+		/// <param name="x">The x position.</param>
+		/// <param name="y">The y position.</param>
 		public void SetCursor(ushort x, ushort y)
 		{
 			ushort position = (ushort)(x + (y * width));
@@ -144,6 +156,52 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 				crtControllerIndex.Write8(CRTCommands.CursorLocation);
 				crtControllerData.Write8((byte)((position >> 8) & 0xff));
 				crtControllerDataLow.Write8((byte)(position & 0xff));
+			}
+		}
+
+		/// <summary>
+		/// Clears the screen.
+		/// </summary>
+		public void ClearScreen()
+		{
+			uint index = offset;
+			uint size = height * width;
+
+			if (colorMode) {
+				size = size * 2;
+				for (int i = 0; i < size; i = i + 2) {
+					memory[index + i] = 0;
+					memory[index + i + 1] = (byte)defaultBackground;
+				}
+			}
+			else {
+				for (int i = 0; i < size; i++)
+					memory[index + i] = 0;
+			}
+		}
+
+		public void ScrollUp()
+		{
+			uint index = offset;
+			uint size = (height * width) - width;
+
+			if (colorMode) {
+				size = size * 2;
+				for (uint i = index; i < (index + size); i++)
+					memory[i] = memory[i + width];
+
+				index = index + ((height - 1) * width * 2);
+				for (uint i = index; i < width; i++)
+					memory[i] = 0;
+
+			}
+			else {
+				for (uint i = index; i < (index + size); i++)
+					memory[i] = memory[i + width];
+
+				index = index + ((height - 1) * width);
+				for (uint i = index; i < width; i++)
+					memory[i] = 0;
 			}
 		}
 	}

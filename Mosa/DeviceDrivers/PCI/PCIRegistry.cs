@@ -13,11 +13,11 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.PCI
 {
-	public class PCIDeviceDrivers
+	public class PCIRegistry
 	{
 		protected LinkedList<Pair<PCIDeviceSignatureAttribute, Type>> drivers;
 
-		public PCIDeviceDrivers()
+		public PCIRegistry()
 		{
 			drivers = new LinkedList<Pair<PCIDeviceSignatureAttribute, Type>>();
 		}
@@ -56,7 +56,7 @@ namespace Mosa.DeviceDrivers.PCI
 
 		public void RegisterBuildInDeviceDrivers()
 		{
-			Assembly assemblyInfo = typeof(PCIDeviceDrivers).Module.Assembly;
+			Assembly assemblyInfo = typeof(PCIRegistry).Module.Assembly;
 			RegisterDeviceDrivers(assemblyInfo);
 		}
 

@@ -23,13 +23,13 @@ namespace Mosa.DeviceDrivers
 			PortIOSpace portIOSpace = new PortIOSpace();
 			MemorySpace memorySpace = new MemorySpace();
 
-			ISA.ISADeviceDrivers isaDeviceDrivers = new Mosa.DeviceDrivers.ISA.ISADeviceDrivers();
+			ISA.ISARegistry isaDeviceDrivers = new Mosa.DeviceDrivers.ISA.ISARegistry();
 
 			isaDeviceDrivers.RegisterBuildInDeviceDrivers();
 
 			isaDeviceDrivers.StartDrivers(deviceManager, portIOSpace, memorySpace);
 
-			PCI.PCIDeviceDrivers pciDeviceDrivers = new Mosa.DeviceDrivers.PCI.PCIDeviceDrivers();
+			PCI.PCIRegistry pciDeviceDrivers = new Mosa.DeviceDrivers.PCI.PCIRegistry();
 
 			pciDeviceDrivers.StartDrivers(deviceManager, portIOSpace, memorySpace);
 		}

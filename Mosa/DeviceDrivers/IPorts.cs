@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.DeviceDrivers.Kernel;
-
 namespace Mosa.DeviceDrivers
 {
 	public interface IReadWriteIOPort : IReadOnlyIOPort, IWriteOnlyIOPort

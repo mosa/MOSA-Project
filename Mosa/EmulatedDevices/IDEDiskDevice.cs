@@ -15,6 +15,7 @@ using Mosa.DeviceDrivers;
 namespace Mosa.EmulatedDevices
 {
 	/// <summary>
+	/// Represents an emulated a simple IDE controller
 	/// </summary>
 	public class IDEDiskDevice : IDisposable
 	{
