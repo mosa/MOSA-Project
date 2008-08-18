@@ -155,7 +155,7 @@ namespace Mosa.DeviceDrivers
 		{
 			private string name;
 
-			public WithName(IDevice parent)
+			public WithName(string name)
 			{
 				this.name = name;
 			}

@@ -14,7 +14,7 @@ using Mosa.DeviceDrivers.Kernel;
 
 namespace Mosa.DeviceDrivers.ISA.VideoCards
 {
-	[ISADeviceSignature(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x4000)]
+	[ISADeviceSignature(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000)]
 	public class VGATextDriver : ISAHardwareDevice, IDevice, ITextDevice
 	{
 		#region Definitions
@@ -36,10 +36,8 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 			internal const byte StartAddress = 0x0C;
 			internal const byte StartAddressHigh = 0x0C;
 			internal const byte StartAddressLow = 0x0D;
-			internal const byte CursorLocation = 0x0E;
 			internal const byte CursorLocationHigh = 0x0E;
 			internal const byte CursorLocationLow = 0x0F;
-			internal const byte LightPen = 0x10;
 			internal const byte LightPenHigh = 0x10;
 			internal const byte LightPenLow = 0x11;
 		}
@@ -49,19 +47,20 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		protected IReadWriteIOPort miscellaneousOutput;
 		protected IReadWriteIOPort crtControllerIndex;
 		protected IReadWriteIOPort crtControllerData;
-		protected IReadWriteIOPort crtControllerDataLow;
 		protected IReadWriteIOPort crtControllerIndexColor;
 		protected IReadWriteIOPort crtControllerDataColor;
-		protected IReadWriteIOPort crtControllerDataColorLow;
 
 		protected IMemory memory;
 
-		protected SpinLock spinLock;
+		protected IReadWriteIOPort activeControllerIndex;
+		protected IReadWriteIOPort activeControllerData;
 
 		protected bool colorMode = false;
 		protected uint offset = 0x8000;
-		protected uint width = 80;
-		protected uint height = 25;
+		protected byte width = 80;
+		protected byte height = 25;
+		protected byte bytePerChar = 2;
+
 		protected TextColor defaultBackground = TextColor.White;
 
 		public VGATextDriver() { }
@@ -71,13 +70,13 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		{
 			base.name = "VGA";
 
-			miscellaneousOutput = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3cc - 0x3b0)); // 3b0
-			crtControllerIndex = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3d4 - 0x3b0)); // 3d4
-			crtControllerData = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3d5 - 0x3b0)); // 3d5
-			crtControllerDataLow = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3d5 - 0x3b0 + 1)); // 3d6
-			crtControllerIndexColor = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3b4 - 0x3b0)); // 3b4
-			crtControllerDataColor = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3b5 - 0x3b0)); // 3b5
-			crtControllerDataColorLow = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3d5 - 0x3b0 + 1)); // 3d6
+			miscellaneousOutput = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3CC - 0x3B0));
+
+			crtControllerIndex = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3B4 - 0x3B0));
+			crtControllerData = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3B5 - 0x3B0));
+
+			crtControllerIndexColor = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3D4 - 0x3B0));
+			crtControllerDataColor = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3D5 - 0x3B0));
 
 			memory = base.isaBusResources.GetMemoryRegion(0).GetMemory();
 
@@ -90,23 +89,24 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 
 			if (colorMode) {
 				offset = 0x8000;
-				crtControllerIndexColor.Write8(CRTCommands.HorizontalDisplayed);
-				width = crtControllerDataColor.Read8();
-				crtControllerIndexColor.Write8(CRTCommands.VerticalDisplayed);
-				height = crtControllerDataColor.Read8();
-				width++;
-				width = width / 2;
+				bytePerChar = 2;
+				activeControllerIndex = crtControllerIndexColor;
+				activeControllerData = crtControllerDataColor;
 			}
 			else {
 				offset = 0x0;
-				crtControllerIndex.Write8(CRTCommands.HorizontalDisplayed);
-				width = crtControllerData.Read8();
-				crtControllerIndex.Write8(CRTCommands.VerticalDisplayed);
-				height = crtControllerData.Read8();
-				width++;
+				bytePerChar = 1;
+				activeControllerIndex = crtControllerIndex;
+				activeControllerData = crtControllerData;
 			}
 
-			height = 25; // override
+			width = GetValue(CRTCommands.HorizontalDisplayed);
+			height = GetValue(CRTCommands.VerticalDisplayed);
+
+			width++;
+			width = (byte)(width / bytePerChar);
+
+			height = 25; // override for bug?
 
 			return true;
 		}
@@ -114,6 +114,41 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		public override bool Probe() { return true; }
 		public override LinkedList<IDevice> CreateSubDevices() { return null; }
 		public override bool OnInterrupt() { return true; }
+
+		protected void SendCommand(byte command, byte value)
+		{
+			activeControllerIndex.Write8(command);
+			activeControllerData.Write8(value);
+		}
+
+		protected byte GetValue(byte command)
+		{
+			activeControllerIndex.Write8(command);
+			return activeControllerData.Read8();
+		}
+
+		/// <summary>
+		/// Sets the size of the cursor.
+		/// </summary>
+		/// <param name="start">The start.</param>
+		/// <param name="end">The end.</param>
+		protected void SetCursorSize(byte start, byte end)
+		{
+			SendCommand(CRTCommands.CursorStart, start);
+			SendCommand(CRTCommands.CursorEnd, end);
+		}
+
+		/// <summary>
+		/// Gets the width.
+		/// </summary>
+		/// <returns></returns>
+		public byte GetWidth() { return width; }
+
+		/// <summary>
+		/// Gets the height.
+		/// </summary>
+		/// <returns></returns>
+		public byte GetHeight() { return height; }
 
 		/// <summary>
 		/// Writes the char at the position indicated.
@@ -127,12 +162,12 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		{
 
 			if (colorMode) {
-				uint index = offset + (y * width * 2);
+				uint index = (ushort)(offset + (((y * width) + x) * 2));
 				memory[index] = (byte)c;
 				memory[index + 1] = (byte)((byte)foreground | ((byte)background << 4));
 			}
 			else {
-				uint index = offset + (y * width);
+				uint index = (ushort)(offset + (y * width) + x);
 				index = index + x;
 				memory[index] = (byte)c;
 			}
@@ -145,64 +180,41 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		/// <param name="y">The y position.</param>
 		public void SetCursor(ushort x, ushort y)
 		{
-			ushort position = (ushort)(x + (y * width));
-
-			if (colorMode) {
-				crtControllerIndexColor.Write8(CRTCommands.CursorLocation);
-				crtControllerDataColor.Write8((byte)((position >> 8) & 0xff));
-				crtControllerDataColorLow.Write8((byte)(position & 0xff));
-			}
-			else {
-				crtControllerIndex.Write8(CRTCommands.CursorLocation);
-				crtControllerData.Write8((byte)((position >> 8) & 0xff));
-				crtControllerDataLow.Write8((byte)(position & 0xff));
-			}
+			uint position = (uint)(x + (y * width));
+			SendCommand(CRTCommands.CursorLocationHigh, (byte)((position >> 8) & 0xFF));
+			SendCommand(CRTCommands.CursorLocationLow, (byte)(position & 0xFF));
 		}
 
 		/// <summary>
 		/// Clears the screen.
 		/// </summary>
-		public void ClearScreen()
+		public void Clear()
 		{
 			uint index = offset;
-			uint size = height * width;
+			uint size = (uint)(height * width);
 
-			if (colorMode) {
-				size = size * 2;
-				for (int i = 0; i < size; i = i + 2) {
+			if (bytePerChar == 2)
+				for (int i = 0; i < size; i = i + bytePerChar) {
 					memory[index + i] = 0;
 					memory[index + i + 1] = (byte)defaultBackground;
 				}
-			}
-			else {
-				for (int i = 0; i < size; i++)
+			else
+				for (int i = 0; i < size * bytePerChar; i++)
 					memory[index + i] = 0;
-			}
 		}
 
 		public void ScrollUp()
 		{
 			uint index = offset;
-			uint size = (height * width) - width;
+			uint size = (uint)(((height * width) - width) * bytePerChar);
 
-			if (colorMode) {
-				size = size * 2;
-				for (uint i = index; i < (index + size); i++)
-					memory[i] = memory[i + width];
+			for (uint i = index; i < (index + size); i++)
+				memory[i] = memory[i + width];
 
-				index = index + ((height - 1) * width * 2);
-				for (uint i = index; i < width; i++)
-					memory[i] = 0;
+			index = (uint)(index + ((height - 1) * width * bytePerChar));
 
-			}
-			else {
-				for (uint i = index; i < (index + size); i++)
-					memory[i] = memory[i + width];
-
-				index = index + ((height - 1) * width);
-				for (uint i = index; i < width; i++)
-					memory[i] = 0;
-			}
+			for (int i = 0; i < size; i++)
+				memory[index + i] = 0;
 		}
 	}
 }

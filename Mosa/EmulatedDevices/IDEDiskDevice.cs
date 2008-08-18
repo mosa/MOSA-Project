@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using Mosa.ClassLib;
 using Mosa.DeviceDrivers;
+using Mosa.EmulatedDevices.Utils;
 
 namespace Mosa.EmulatedDevices
 {
@@ -70,33 +71,33 @@ namespace Mosa.EmulatedDevices
 			altCommandAndStatusPort = new IOPort<byte>(ioBase + 6 + 0x200, 0);
 			driveAddress = new IOPort<byte>(ioBase + 7 + 0x200, 0);
 
-			IOPorts.RegisterPort(dataPort);
-			IOPorts.RegisterPort(dataPort2);
-			IOPorts.RegisterPort(featureAndErrorPort);
-			IOPorts.RegisterPort(sectorCountPort);
-			IOPorts.RegisterPort(lbaLowPort);
-			IOPorts.RegisterPort(lbaMidPort);
-			IOPorts.RegisterPort(lbaHighPort);
-			IOPorts.RegisterPort(deviceHead);
-			IOPorts.RegisterPort(commandAndStatusPort);
-			IOPorts.RegisterPort(altCommandAndStatusPort);
-			IOPorts.RegisterPort(driveAddress);
+			IOPortDispatch.RegisterPort(dataPort);
+			IOPortDispatch.RegisterPort(dataPort2);
+			IOPortDispatch.RegisterPort(featureAndErrorPort);
+			IOPortDispatch.RegisterPort(sectorCountPort);
+			IOPortDispatch.RegisterPort(lbaLowPort);
+			IOPortDispatch.RegisterPort(lbaMidPort);
+			IOPortDispatch.RegisterPort(lbaHighPort);
+			IOPortDispatch.RegisterPort(deviceHead);
+			IOPortDispatch.RegisterPort(commandAndStatusPort);
+			IOPortDispatch.RegisterPort(altCommandAndStatusPort);
+			IOPortDispatch.RegisterPort(driveAddress);
 		}
 
 		public void Dispose()
 		{
 			foreach (FileStream driveFile in driveFiles) { driveFile.Close(); }
 
-			IOPorts.UnregisterPort(dataPort);
-			IOPorts.UnregisterPort(featureAndErrorPort);
-			IOPorts.UnregisterPort(sectorCountPort);
-			IOPorts.UnregisterPort(lbaLowPort);
-			IOPorts.UnregisterPort(lbaMidPort);
-			IOPorts.UnregisterPort(lbaHighPort);
-			IOPorts.UnregisterPort(deviceHead);
-			IOPorts.UnregisterPort(commandAndStatusPort);
-			IOPorts.UnregisterPort(altCommandAndStatusPort);
-			IOPorts.UnregisterPort(driveAddress);
+			IOPortDispatch.UnregisterPort(dataPort);
+			IOPortDispatch.UnregisterPort(featureAndErrorPort);
+			IOPortDispatch.UnregisterPort(sectorCountPort);
+			IOPortDispatch.UnregisterPort(lbaLowPort);
+			IOPortDispatch.UnregisterPort(lbaMidPort);
+			IOPortDispatch.UnregisterPort(lbaHighPort);
+			IOPortDispatch.UnregisterPort(deviceHead);
+			IOPortDispatch.UnregisterPort(commandAndStatusPort);
+			IOPortDispatch.UnregisterPort(altCommandAndStatusPort);
+			IOPortDispatch.UnregisterPort(driveAddress);
 		}
 
 		public byte DeviceHeadPortWrite(byte data)

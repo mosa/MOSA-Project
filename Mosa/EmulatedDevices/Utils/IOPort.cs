@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.EmulatedDevices
+namespace Mosa.EmulatedDevices.Utils
 {
 
 	public class IOPort<T>

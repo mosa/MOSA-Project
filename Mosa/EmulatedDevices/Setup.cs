@@ -14,6 +14,7 @@ namespace Mosa.EmulatedDevices
 		public static void Initialize()
 		{
 			new CMOS(CMOS.StandardIOBase);
+			new VGATextDriver(VGATextDriver.StandardAddressBase);
 
 			string[] files = new string[1];
 			files[0] = @"..\..\..\hd.img";

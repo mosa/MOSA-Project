@@ -13,8 +13,10 @@ namespace Mosa.DeviceDrivers
 	{
 		void WriteChar(ushort x, ushort y, char c, TextColor foreground, TextColor background);
 		void SetCursor(ushort x, ushort y);
-		void ClearScreen();
+		void Clear();
 		void ScrollUp();
+		byte GetWidth();
+		byte GetHeight();
 	}
 
 	public enum TextColor : byte

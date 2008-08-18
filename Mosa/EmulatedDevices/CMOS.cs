@@ -10,6 +10,7 @@
 using System;
 using System.IO;
 using Mosa.ClassLib;
+using Mosa.EmulatedDevices.Utils;
 
 namespace Mosa.EmulatedDevices
 {
@@ -28,14 +29,14 @@ namespace Mosa.EmulatedDevices
 			commandPort = new IOPort<byte>(ioBase, 0, null, CommandWrite);
 			dataPort = new IOPort<byte>(ioBase + 1, 0);
 
-			IOPorts.RegisterPort(commandPort);
-			IOPorts.RegisterPort(dataPort);
+			IOPortDispatch.RegisterPort(commandPort);
+			IOPortDispatch.RegisterPort(dataPort);
 		}
 
 		public void Dispose()
 		{
-			IOPorts.UnregisterPort(commandPort);
-			IOPorts.UnregisterPort(dataPort);
+			IOPortDispatch.UnregisterPort(commandPort);
+			IOPortDispatch.UnregisterPort(dataPort);
 		}
 
 		protected byte CommandWrite(byte data)

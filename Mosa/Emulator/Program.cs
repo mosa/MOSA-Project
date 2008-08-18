@@ -19,7 +19,8 @@ namespace Mosa.Emulator
 		public static void Main(string[] args)
 		{
 			// Set Device Driver system to the emulator port method
-			DeviceDrivers.Kernel.HAL.SetIOPortFactory(Mosa.EmulatedDevices.EmulatedIOPorts.RegisterPort);
+			DeviceDrivers.Kernel.HAL.SetIOPortFactory(Mosa.EmulatedDevices.IOPortDispatch.RegisterPort);
+			DeviceDrivers.Kernel.HAL.SetMemoryFactory(Mosa.EmulatedDevices.MemoryDispatch.RegisterMemory);
 
 			// Start the emulated devices
 			EmulatedDevices.Setup.Initialize();
@@ -27,82 +28,88 @@ namespace Mosa.Emulator
 			// Start driver system
 			DeviceDrivers.Setup.Initialize();
 
-			// Get a list of all devices
-			LinkedList<IDevice> devices = DeviceDrivers.Setup.DeviceManager.GetAllDevices();
+			// Get the Text VGA device
+			LinkedList<IDevice> devices = DeviceDrivers.Setup.DeviceManager.GetDevices(new DeviceManager.WithName("VGA"));
 
-			// Print them
-			Console.WriteLine("Devices: ");
+			// Create a screen interface to the Text VGA device
+			Screen screen = new Screen((ITextDevice)devices.First.value);
+
+			// Get a list of all devices
+			devices = DeviceDrivers.Setup.DeviceManager.GetAllDevices();
+
+			// Print them 
+			screen.WriteLine("Devices: ");
 			foreach (IDevice device in devices) {
 
-				Console.Write(device.Name);
-				Console.Write(" [");
+				screen.Write(device.Name);
+				screen.Write(" [");
 
 				switch (device.Status) {
-					case DeviceStatus.Online: Console.Write("Online"); break;
-					case DeviceStatus.Available: Console.Write("Available"); break;
-					case DeviceStatus.Initializing: Console.Write("Initializing"); break;
-					case DeviceStatus.NotFound: Console.Write("Not Found"); break;
-					case DeviceStatus.Error: Console.Write("Error"); break;
+					case DeviceStatus.Online: screen.Write("Online"); break;
+					case DeviceStatus.Available: screen.Write("Available"); break;
+					case DeviceStatus.Initializing: screen.Write("Initializing"); break;
+					case DeviceStatus.NotFound: screen.Write("Not Found"); break;
+					case DeviceStatus.Error: screen.Write("Error"); break;
 				}
-				Console.Write("]");
+				screen.Write("]");
 
 				if (device.Parent != null) {
-					Console.Write(" - Parent: ");
-					Console.Write(device.Parent.Name);
+					screen.Write(" - Parent: ");
+					screen.Write(device.Parent.Name);
 				}
-				Console.WriteLine();
+				screen.WriteLine();
 
 				if (device is PCIDevice) {
 					PCIDevice pciDevice = (device as PCIDevice);
 
-					Console.Write("  Vendor:0x");
-					Console.Write(pciDevice.VendorID.ToString("X"));
-					Console.Write(" Device:0x");
-					Console.Write(pciDevice.DeviceID.ToString("X"));
-					Console.Write(" Class:0x");
-					Console.Write(pciDevice.ClassCode.ToString("X"));
-					Console.Write(" Rev:0x");
-					Console.Write(pciDevice.RevisionID.ToString("X"));
-					Console.WriteLine();
+					screen.Write("  Vendor:0x");
+					screen.Write(pciDevice.VendorID.ToString("X"));
+					screen.Write(" Device:0x");
+					screen.Write(pciDevice.DeviceID.ToString("X"));
+					screen.Write(" Class:0x");
+					screen.Write(pciDevice.ClassCode.ToString("X"));
+					screen.Write(" Rev:0x");
+					screen.Write(pciDevice.RevisionID.ToString("X"));
+					screen.WriteLine();
 
 					foreach (PCIBaseAddress address in pciDevice.BaseAddresses) {
 						if (address.Address != 0) {
-							Console.Write("    ");
+							screen.Write("    ");
 
 							if (address.Region == AddressRegion.IO)
-								Console.Write("I/O Port at 0x");
+								screen.Write("I/O Port at 0x");
 							else
-								Console.Write("Memory at 0x");
+								screen.Write("Memory at 0x");
 
-							Console.Write(address.Address.ToString("X"));
+							screen.Write(address.Address.ToString("X"));
 
-							Console.Write(" [size=");
+							screen.Write(" [size=");
 
 							if ((address.Size & 0xFFFFF) == 0) {
-								Console.Write((address.Size >> 20).ToString());
-								Console.Write("M");
+								screen.Write((address.Size >> 20).ToString());
+								screen.Write("M");
 							}
 							else if ((address.Size & 0x3FF) == 0) {
-								Console.Write((address.Size >> 10).ToString());
-								Console.Write("K");
+								screen.Write((address.Size >> 10).ToString());
+								screen.Write("K");
 							}
 							else
-								Console.Write(address.Size.ToString());
+								screen.Write(address.Size.ToString());
 
-							Console.Write("]");
+							screen.Write("]");
 
 							if (address.Prefetchable)
-								Console.Write("(prefetchable)");
+								screen.Write("(prefetchable)");
 
-							Console.WriteLine();
+							screen.WriteLine();
 						}
 					}
 
 					if (pciDevice.IRQ != 0) {
-						Console.Write("    ");
-						Console.Write("IRQ at ");
-						Console.Write(pciDevice.IRQ.ToString());
-						Console.WriteLine();
+						screen.Write("    ");
+						screen.Write("IRQ at ");
+						screen.Write(pciDevice.IRQ.ToString());
+						screen.WriteLine();
 					}
 				}
 			}
