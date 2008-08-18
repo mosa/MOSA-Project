@@ -38,6 +38,10 @@
     <Description>Tests the bitwise shift right operation.</Description>
     <Source>OpShr.cs</Source>
   </TestCase>
+  <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="IL switch" language="C#">
+    <Description>Tests the switch instruction.</Description>
+    <Source>OpSwitch.cs</Source>
+  </TestCase>
   <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="IL or" language="C#">
     <Description>Tests the bitwise or operation.</Description>
     <Source>OpOr.cs</Source>
