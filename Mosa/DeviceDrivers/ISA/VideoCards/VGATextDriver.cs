@@ -160,7 +160,6 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		/// <param name="background">The background color.</param>
 		public void WriteChar(ushort x, ushort y, char c, TextColor foreground, TextColor background)
 		{
-
 			if (colorMode) {
 				uint index = (ushort)(offset + (((y * width) + x) * 2));
 				memory[index] = (byte)c;

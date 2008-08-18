@@ -43,7 +43,7 @@ namespace Mosa.EmulatedDevices
 	#endregion
 
 	/// <summary>
-	/// Represents an emulated a vga text driver
+	/// Represents an emulated vga text device
 	/// </summary>
 	public class VGATextDriver : IDisposable
 	{
@@ -61,8 +61,8 @@ namespace Mosa.EmulatedDevices
 
 		protected byte height;
 		protected byte width;
-		protected byte cursorX;
-		protected byte cursorY;
+		protected ushort cursorPosition;
+		protected byte lastCommand;
 
 		public VGATextDriver(uint baseAddress)
 		{
@@ -70,9 +70,9 @@ namespace Mosa.EmulatedDevices
 
 			miscellaneousOutput = new IOPort<byte>(0x3CC, 0, null, null);
 			crtControllerIndex = new IOPort<byte>(0x3B4, 0, null, CommandWrite);
-			crtControllerData = new IOPort<byte>(0x3B5, 0, null, null);
+			crtControllerData = new IOPort<byte>(0x3B5, 0, null, IndexWrite);
 			crtControllerIndexColor = new IOPort<byte>(0x3D4, 0, null, CommandWriteColor);
-			crtControllerDataColor = new IOPort<byte>(0x3D5, 0, null, null);
+			crtControllerDataColor = new IOPort<byte>(0x3D5, 0, null, IndexWrite);
 
 			IOPortDispatch.RegisterPort(miscellaneousOutput);
 			IOPortDispatch.RegisterPort(crtControllerIndex);
@@ -84,16 +84,16 @@ namespace Mosa.EmulatedDevices
 
 			width = 80;
 			height = 25;
-			cursorX = 0;
-			cursorY = 0;
+			cursorPosition = 0;
+			lastCommand = 0;
 
 			miscellaneousOutput.Value = 0x01;	// set color mode
 
 			Console.Clear();
 			Console.SetWindowPosition(0, 0);
 			Console.SetCursorPosition(0, 0);
-			Console.SetWindowSize(width, height);
-			Console.SetBufferSize(width, height);
+			Console.SetWindowSize(width, height + 1);
+			Console.SetBufferSize(width, height + 1);
 			Console.CursorSize = 1;
 		}
 
@@ -124,7 +124,7 @@ namespace Mosa.EmulatedDevices
 
 		public void Write8(uint address, byte value)
 		{
-			if (memory[address - baseAddress] == value)
+			if ((value != 0) && (memory[address - baseAddress] == value))
 				return;
 
 			memory[address - baseAddress] = value;
@@ -140,13 +140,25 @@ namespace Mosa.EmulatedDevices
 				PutChar(x, y, (char)value);
 		}
 
+		protected void SetCursor()
+		{
+			int y = (int)(cursorPosition / width);
+			int x = (int)(cursorPosition - (y * width));
+
+			Console.SetCursorPosition(x, y);
+		}
+
 		public byte CommandWrite(byte data)
 		{
 			switch (data) {
 				case CRTCommands.HorizontalDisplayed: crtControllerData.Value = (byte)(width); break;
 				case CRTCommands.VerticalDisplayed: crtControllerData.Value = height; break;
+				case CRTCommands.CursorLocationHigh: break;
+				case CRTCommands.CursorLocationLow: break;
 				default: break;
 			}
+
+			lastCommand = data;
 
 			return crtControllerIndex.Value;
 		}
@@ -156,11 +168,26 @@ namespace Mosa.EmulatedDevices
 			switch (data) {
 				case CRTCommands.HorizontalDisplayed: crtControllerDataColor.Value = (byte)(width * 2); break;
 				case CRTCommands.VerticalDisplayed: crtControllerDataColor.Value = height; break;
+				case CRTCommands.CursorLocationHigh: break;
+				case CRTCommands.CursorLocationLow: break;
 				default: break;
 			}
+
+			lastCommand = data;
 
 			return crtControllerIndexColor.Value;
 		}
 
+		public byte IndexWrite(byte data)
+		{
+
+			switch (lastCommand) {
+				case CRTCommands.CursorLocationHigh: cursorPosition = (ushort)(((cursorPosition & 0x00FF) | (data << 8))); SetCursor(); break;
+				case CRTCommands.CursorLocationLow: cursorPosition = (ushort)(((cursorPosition & 0xFF00) | data)); SetCursor(); break;
+				default: break;
+			}
+
+			return data;
+		}
 	}
 }

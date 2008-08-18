@@ -75,6 +75,7 @@ namespace Mosa.DeviceDrivers
 			}
 
 			cursorX = 0;
+			SetCursor();
 		}
 
 		public void WriteLine(string text)
