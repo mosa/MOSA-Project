@@ -94,7 +94,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
         }
 
-        public sealed override void Visit(IILVisitor visitor)
+        public override void Visit(IILVisitor visitor)
         {
             visitor.UnaryBranch(this);
         }

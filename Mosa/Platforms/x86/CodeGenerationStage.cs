@@ -426,7 +426,9 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.Switch(IL.SwitchInstruction instruction)
         {
-            throw new NotImplementedException();
+            foreach (int target in instruction.BranchTargets)
+                _emitter.Jmp(target);
+            //throw new NotImplementedException();
         }
 
         void IL.IILVisitor.Add(IL.AddInstruction instruction)

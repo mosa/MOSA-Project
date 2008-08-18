@@ -84,7 +84,7 @@ namespace Mosa.Runtime.CompilerFramework
                             Operand first = instruction.Operands[0];
                             Operand second = instruction.Operands[1];
 
-                            // To fold, we need an arithmetic instruction operating
+                            // To fold, we need an binary logic instruction operating
                             // on 2 constants.
                             if (first is ConstantOperand && second is ConstantOperand)
                             {

@@ -59,6 +59,11 @@ namespace Mosa.Runtime.CompilerFramework.IL
             return String.Format(@"switch (...)");
         }
 
+        public sealed override void Visit(IILVisitor visitor)
+        {
+            visitor.Switch(this);
+        }
+
         #endregion // Methods
     }
 }
