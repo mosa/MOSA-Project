@@ -1,0 +1,3 @@
+pci.db
+- GPL (v2 or later) or 3-clause BSD License
+- http://pciids.sourceforge.net/
