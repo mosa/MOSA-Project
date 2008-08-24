@@ -11,7 +11,7 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers
 {
-	public class DeviceManager
+	public class DeviceManager : IDeviceManager
 	{
 		private LinkedList<IDevice> devices;
 		private SpinLock spinLock;
@@ -116,11 +116,6 @@ namespace Mosa.DeviceDrivers
 			return list;
 		}
 
-		public interface IFindDevice
-		{
-			bool IsMatch(IDevice device);
-		}
-
 		// Helper Find Classes
 
 		public class ParentOf : IFindDevice
@@ -140,7 +135,7 @@ namespace Mosa.DeviceDrivers
 		//{
 		//    private Type type;
 
-		//    public TypeOf(IDevice parent)
+		//    public TypeOf(Type type)
 		//    {
 		//        this.type = type;
 		//    }

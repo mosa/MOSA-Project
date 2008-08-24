@@ -23,7 +23,7 @@ namespace Mosa.DeviceDrivers
 		public abstract LinkedList<IDevice> CreateSubDevices();
 		public abstract bool OnInterrupt();
 
-		public bool Activate(DeviceManager deviceManager)
+		public bool Activate(IDeviceManager deviceManager)
 		{
 			base.deviceStatus = DeviceStatus.Initializing;
 

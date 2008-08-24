@@ -72,7 +72,7 @@ namespace Mosa.DeviceDrivers.PCI
 			}
 		}
 
-		public class IsPCIDevice : DeviceManager.IFindDevice
+		public class IsPCIDevice : IFindDevice
 		{
 			public IsPCIDevice() { }
 
@@ -82,7 +82,7 @@ namespace Mosa.DeviceDrivers.PCI
 			}
 		}
 
-		public void StartDrivers(DeviceManager deviceManager, PortIOSpace portIOSpace, MemorySpace memorySpace)
+		public void StartDrivers(IDeviceManager deviceManager, PortIOSpace portIOSpace, MemorySpace memorySpace)
 		{
 			foreach (IDevice device in deviceManager.GetDevices(new IsPCIDevice(), new DeviceManager.Available())) {
 				PCIDevice pciDevice = (PCIDevice)device;

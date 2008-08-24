@@ -1,4 +1,4 @@
-/*
+﻿/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -11,13 +11,8 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers
 {
-	public interface IHardwareDevice
+	public interface IFindDevice
 	{
-		bool Setup();
-		bool Probe();
-		bool Start();
-		LinkedList<IDevice> CreateSubDevices();
-		bool OnInterrupt();
-		bool Activate(IDeviceManager deviceManager);
+		bool IsMatch(IDevice device);
 	}
 }

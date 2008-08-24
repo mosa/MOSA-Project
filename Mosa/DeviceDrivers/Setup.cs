@@ -13,9 +13,9 @@ namespace Mosa.DeviceDrivers
 {
 	public static class Setup
 	{
-		static private DeviceManager deviceManager;
+		static private IDeviceManager deviceManager;
 
-		static public DeviceManager DeviceManager { get { return deviceManager; } }
+		static public IDeviceManager DeviceManager { get { return deviceManager; } }
 
 		static public void Initialize()
 		{

@@ -101,7 +101,7 @@ namespace Mosa.DeviceDrivers.PCI
 			}
 		}
 
-		public bool Start(DeviceManager deviceManager, PCIHardwareDevice pciHardwareDevice)
+		public bool Start(IDeviceManager deviceManager, PCIHardwareDevice pciHardwareDevice)
 		{
 			pciHardwareDevice.Activate(deviceManager);
 
