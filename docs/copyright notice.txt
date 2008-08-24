@@ -1,0 +1,4 @@
+The documents in this directory and the directories beneath it are committed for development purposes.
+
+The copyright is with the respective copyright owner. In case you see this is as a violation of your rights,
+notify the project administrators and the documents will be removed immediately.

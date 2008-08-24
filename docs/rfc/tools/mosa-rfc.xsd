@@ -1,0 +1,379 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+
+Copyright (c) 1999 - 2008 Managed Operating Systems Alliance (MOSA)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+-->
+
+<xs:schema
+    xmlns:xs='http://www.w3.org/2001/XMLSchema'
+    targetNamespace='http://www.mosa.org/schemas/mosa-rfc.xsd'
+    xmlns='http://www.mosa.org/schemas/mosa-rfc.xsd'
+    elementFormDefault='qualified'>
+
+  <xs:element name='rfc'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='header' minOccurs='1' maxOccurs='1' />
+        <xs:element ref='section1' maxOccurs='unbounded' />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='header'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name='title' type='xs:string' minOccurs='1' maxOccurs='1'/>
+        <xs:element name='abstract' type='xs:string' minOccurs='1' maxOccurs='1'/>
+        <xs:element name='number' type='xs:string' minOccurs='1' maxOccurs='1'/>
+        <xs:element ref='status'/>
+        <xs:element ref='type'/>
+        <xs:element name='sig' type='xs:string'/>
+        <xs:element ref='dependencies'/>
+        <xs:element ref='supersedes'/>
+        <xs:element ref='supersededby'/>
+        <xs:element ref='author' minOccurs='1' maxOccurs='unbounded'/>
+        <xs:element ref='revision' minOccurs='1' maxOccurs='unbounded'/>
+        <xs:element ref='conformanceterms' minOccurs='1' maxOccurs='1'/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='conformanceterms'>
+    <xs:complexType>
+      <xs:attribute name='used' type='xs:boolean' use='required'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='status'>
+    <xs:simpleType>
+      <xs:restriction base='xs:NCName'>
+        <xs:enumeration value='Standard'/>
+        <xs:enumeration value='Deprecated'/>
+        <xs:enumeration value='Draft'/>
+        <xs:enumeration value='Experimental'/>
+        <xs:enumeration value='Proposal'/>
+        <xs:enumeration value='Rejected'/>
+        <xs:enumeration value='Retracted'/>
+        <xs:enumeration value='Obsolete'/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+
+  <xs:element name='type'>
+    <xs:simpleType>
+      <xs:restriction base='xs:string'>
+        <xs:enumeration value='Historical'/>
+        <xs:enumeration value='Humorous'/>
+        <xs:enumeration value='Informational'/>
+        <xs:enumeration value='Organizational'/>
+        <xs:enumeration value='Standards Track'/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+
+  <xs:element name='dependencies'>
+    <xs:complexType>
+      <xs:sequence minOccurs='0' maxOccurs='unbounded'>
+        <xs:element ref='spec' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='supersedes'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='spec' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='supersededby'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='spec' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='spec' type='xs:string'/>
+
+  <xs:element name='author'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name='firstname' type='xs:string'/>
+        <xs:element name='surname' type='xs:string'/>
+        <xs:element name='authornote' type='empty' minOccurs='0'/>
+        <xs:element name='org' type='xs:string' minOccurs='1'/>
+        <xs:element name='uri' type='xs:string' minOccurs='0'/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='revision'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name='version' type='xs:string'/>
+        <xs:element name='date' type='xs:dateTime'/>
+        <xs:element name='initials' type='xs:NCName'/>
+        <xs:element ref='remark'/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='remark'>
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref='p' minOccurs='0' maxOccurs='1'/>
+        <xs:element ref='ul' minOccurs='0' maxOccurs='1'/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='section1'>
+    <xs:complexType>
+      <xs:choice maxOccurs='unbounded'>
+        <xs:element ref='code' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='diagram' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='div' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='example' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='ol' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='p' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='section2' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='table' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='ul' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice>
+      <xs:attribute name='topic' type='xs:string' use='required'/>
+      <xs:attribute name='anchor' type='xs:string' use='optional'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='section2'>
+    <xs:complexType>
+      <xs:choice maxOccurs='unbounded'>
+        <xs:element ref='code' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='diagram' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='div' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='example' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='ol' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='p' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='section3' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='table' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='ul' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice>
+      <xs:attribute name='topic' type='xs:string' use='required'/>
+      <xs:attribute name='anchor' type='xs:string' use='optional'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='section3'>
+    <xs:complexType>
+      <xs:choice maxOccurs='unbounded'>
+        <xs:element ref='code' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='diagram' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='div' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='example' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='ol' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='p' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='section4' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='table' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='ul' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice>
+      <xs:attribute name='topic' type='xs:string' use='required'/>
+      <xs:attribute name='anchor' type='xs:string' use='optional'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='section4'>
+    <xs:complexType>
+      <xs:choice maxOccurs='unbounded'>
+        <xs:element ref='code' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='diagram' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='div' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='example' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='ol' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='p' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='table' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='ul' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice>
+      <xs:attribute name='topic' type='xs:string' use='required'/>
+      <xs:attribute name='anchor' type='xs:string' use='optional'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='div'>
+    <xs:complexType>
+      <xs:choice maxOccurs='unbounded'>
+        <xs:element ref='div' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='p' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='example' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='code' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='diagram' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='ul' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='ol' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice>
+      <xs:attribute name='class' type='xs:string' use='optional'/>
+      <xs:attribute name='style' type='xs:string' use='optional'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='p' type='markup'/>
+
+  <xs:element name='ul'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='li' minOccurs='1' maxOccurs='unbounded'/>
+      </xs:sequence>
+      <xs:attribute name='class' type='xs:string' use='optional'/>
+      <xs:attribute name='style' type='xs:string' use='optional'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='ol'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='li' minOccurs='1' maxOccurs='unbounded'/>
+      </xs:sequence>
+      <xs:attribute name='class' type='xs:string' use='optional'/>
+      <xs:attribute name='start' type='xs:byte' use='optional'/>
+      <xs:attribute name='style' type='xs:string' use='optional'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='li' type='markup'/>
+
+  <xs:element name='img'>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base='empty'>
+          <xs:attribute name='source' use='required'/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='link'>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base='xs:string'>
+          <xs:attribute name='url' use='required'/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='note' type='markup'/>
+
+  <xs:element name='example'>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base='xs:string'>
+          <xs:attribute name='caption' use='optional'/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='code'>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base='xs:string'>
+          <xs:attribute name='caption' use='optional'/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='diagram'>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base='xs:string'>
+          <xs:attribute name='caption' use='optional'/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name='table'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref='tr' minOccurs='1' maxOccurs='unbounded'/>
+      </xs:sequence>
+      <xs:attribute name='caption' type='xs:string' use='optional'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='tr'>
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref='th' minOccurs='0' maxOccurs='unbounded'/>
+        <xs:element ref='td' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='th'>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base='xs:string'>
+          <xs:attribute name='colspan' use='optional'/>
+          <xs:attribute name='rowspan' use='optional'/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='td'>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base='xs:string'>
+          <xs:attribute name='colspan' use='optional'/>
+          <xs:attribute name='rowspan' use='optional'/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name='markup' mixed='true'>
+    <xs:choice minOccurs='0' maxOccurs='unbounded'>
+      <xs:element name='cite' type='xs:token'/>
+      <xs:element name='dfn' type='xs:token'/>
+      <xs:element name='em' type='xs:token'/>
+      <xs:element ref='img'/>
+      <xs:element ref='link'/>
+      <xs:element ref='note'/>
+      <xs:element name='span' type='xs:token'/>
+      <xs:element name='strong' type='xs:token'/>
+      <xs:element name='tt' type='xs:token'/>
+      <xs:element ref='spec'/>
+    </xs:choice>
+    <xs:attribute name='class' type='xs:string' use='optional'/>
+    <xs:attribute name='style' type='xs:string' use='optional'/>
+  </xs:complexType>
+
+  <xs:simpleType name='empty'>
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value=''/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
