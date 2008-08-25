@@ -27,7 +27,7 @@ namespace Mosa.DeviceDrivers.Kernel
 		}
 
 		/// <summary>
-		/// Sets the memory factory.
+		/// Sets the create memory factory.
 		/// </summary>
 		/// <param name="createMemory">The memory factory method.</param>
 		public static void SetMemoryFactory(CreateMemory createMemory)
