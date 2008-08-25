@@ -14,24 +14,32 @@ namespace Mosa.DeviceDrivers
 	public static class Setup
 	{
 		static private IDeviceManager deviceManager;
+		static private IResourceManager resourceManager;
 
 		static public IDeviceManager DeviceManager { get { return deviceManager; } }
+		static public IResourceManager ResourceManager { get { return resourceManager; } }
 
 		static public void Initialize()
 		{
+			// Create Resource Manager
+			resourceManager = new ResourceManager();
+	
+			// Create Device Manager
 			deviceManager = new DeviceManager();
-			IOPortResources portIOSpace = new IOPortResources();
-			MemoryResources memorySpace = new MemoryResources();
 
+			// Setup ISA Driver Registry
 			ISA.ISARegistry isaDeviceDrivers = new Mosa.DeviceDrivers.ISA.ISARegistry();
-
+			// Load registry with build-in drivers
 			isaDeviceDrivers.RegisterBuildInDeviceDrivers();
+			// Start drivers for devices
+			isaDeviceDrivers.StartDrivers(deviceManager, resourceManager);
 
-			isaDeviceDrivers.StartDrivers(deviceManager, portIOSpace, memorySpace);
-
+			// Setup PCI Driver Registry
 			PCI.PCIRegistry pciDeviceDrivers = new Mosa.DeviceDrivers.PCI.PCIRegistry();
-
-			pciDeviceDrivers.StartDrivers(deviceManager, portIOSpace, memorySpace);
+			// Load registry with build-in drivers
+			pciDeviceDrivers.RegisterBuildInDeviceDrivers();
+			// Start drivers for devices
+			pciDeviceDrivers.StartDrivers(deviceManager, resourceManager);
 		}
 
 	}

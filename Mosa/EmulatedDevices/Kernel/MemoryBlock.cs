@@ -13,40 +13,40 @@ namespace Mosa.EmulatedDevices.Kernel
 {
 	public class MemoryBlock : IMemory
 	{
-		private ulong address;
-		private ulong size;
-		private ulong end;
+		private uint address;
+		private uint size;
+		private uint end;
 
-		public MemoryBlock(ulong address, ulong size)
+		public MemoryBlock(uint address, uint size)
 		{
 			this.address = address;
 			this.size = size;
 			this.end = address + size - 1;
 		}
 
-		public ulong Address { get { return address; } }
-		public ulong Size { get { return size; } }
+		public uint Address { get { return address; } }
+		public uint Size { get { return size; } }
 
-		public byte this[ulong index]
+		public byte this[uint index]
 		{
 			get
 			{
-				return MemoryDispatch.Read8((ulong)(address + index));
+				return MemoryDispatch.Read8((uint)(address + index));
 			}
 			set
 			{
-				MemoryDispatch.Write8((ulong)(address + index), value);
+				MemoryDispatch.Write8((uint)(address + index), value);
 			}
 		}
 
-		public byte Read8(ulong index)
+		public byte Read8(uint index)
 		{
-			return MemoryDispatch.Read8((ulong)(address + index));
+			return MemoryDispatch.Read8((uint)(address + index));
 		}
 
-		public void Write8(ulong index, byte value)
+		public void Write8(uint index, byte value)
 		{
-			MemoryDispatch.Write8((ulong)(address + index), value);
+			MemoryDispatch.Write8((uint)(address + index), value);
 		}
 
 	}

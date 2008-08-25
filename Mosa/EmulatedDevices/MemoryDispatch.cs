@@ -14,8 +14,8 @@ using Mosa.EmulatedDevices.Kernel;
 
 namespace Mosa.EmulatedDevices
 {
-	public delegate byte MemoryRead8(ulong address);
-	public delegate void MemoryWrite8(ulong address, byte value);
+	public delegate byte MemoryRead8(uint address);
+	public delegate void MemoryWrite8(uint address, byte value);
 
 	public static class MemoryDispatch
 	{
@@ -28,7 +28,7 @@ namespace Mosa.EmulatedDevices
 		/// <param name="size">The size.</param>
 		/// <param name="read8">The read8 delegate.</param>
 		/// <param name="write8">The write8 delegate.</param>
-		public static void RegisterMemory(ulong address, ulong size, MemoryRead8 read8, MemoryWrite8 write8)
+		public static void RegisterMemory(uint address, uint size, MemoryRead8 read8, MemoryWrite8 write8)
 		{
 			dispatches.Add(new MemoryRange(address, size, read8, write8));
 		}
@@ -38,7 +38,7 @@ namespace Mosa.EmulatedDevices
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
-		public static MemoryRange Find(ulong address)
+		public static MemoryRange Find(uint address)
 		{
 			foreach (MemoryRange memoryRange in dispatches)
 				if (memoryRange.Contains(address))
@@ -52,7 +52,7 @@ namespace Mosa.EmulatedDevices
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <param name="value">The value.</param>
-		public static void Write8(ulong address, byte value)
+		public static void Write8(uint address, byte value)
 		{
 			MemoryRange memoryRange = Find(address);
 
@@ -68,7 +68,7 @@ namespace Mosa.EmulatedDevices
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
-		public static byte Read8(ulong address)
+		public static byte Read8(uint address)
 		{
 			MemoryRange memoryRange = Find(address);
 
@@ -85,7 +85,7 @@ namespace Mosa.EmulatedDevices
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public static IMemory RegisterMemory(ulong address, ulong size)
+		public static IMemory RegisterMemory(uint address, uint size)
 		{
 			return new MemoryBlock(address, size);
 		}

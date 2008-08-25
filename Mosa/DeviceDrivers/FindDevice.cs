@@ -89,5 +89,15 @@ namespace Mosa.DeviceDrivers
 		//    }
 		//}
 
+		public class IsPCIDevice : IFindDevice
+		{
+			public IsPCIDevice() { }
+
+			public bool IsMatch(IDevice device)
+			{
+				return device is PCI.PCIDevice;
+			}
+		}
+
 	}
 }

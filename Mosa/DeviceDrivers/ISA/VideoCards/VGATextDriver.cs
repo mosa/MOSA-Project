@@ -194,12 +194,12 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 
 			if (bytePerChar == 2)
 				for (int i = 0; i < size; i = i + bytePerChar) {
-					memory[(ulong)(index + i)] = 0;
-					memory[(ulong)(index + i + 1)] = (byte)defaultBackground;
+					memory[(uint)(index + i)] = 0;
+					memory[(uint)(index + i + 1)] = (byte)defaultBackground;
 				}
 			else
 				for (int i = 0; i < size * bytePerChar; i++)
-					memory[(ulong)(index + i)] = 0;
+					memory[(uint)(index + i)] = 0;
 		}
 
 		public void ScrollUp()
@@ -213,7 +213,7 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 			index = (uint)(index + ((height - 1) * width * bytePerChar));
 
 			for (int i = 0; i < size; i++)
-				memory[(ulong)(index + i)] = 0;
+				memory[(uint)(index + i)] = 0;
 		}
 	}
 }

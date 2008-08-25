@@ -103,6 +103,9 @@ namespace Mosa.DeviceDrivers.PCI
 
 		public bool Start(IDeviceManager deviceManager, PCIHardwareDevice pciHardwareDevice)
 		{
+
+			//pciHardwareDevice.AssignResources(); // TODO!
+
 			pciHardwareDevice.Activate(deviceManager);
 
 			base.deviceStatus = pciHardwareDevice.Status;

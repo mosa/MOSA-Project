@@ -11,18 +11,18 @@ namespace Mosa.DeviceDrivers
 {
 	public interface IMemory
 	{
-		ulong Address { get; }
-		ulong Size { get; }
+		uint Address { get; }
+		uint Size { get; }
 
-		byte this[ulong index] { get; set; }
+		byte this[uint index] { get; set; }
 
-		byte Read8(ulong index);
-		void Write8(ulong index, byte value);
+		byte Read8(uint index);
+		void Write8(uint index, byte value);
 
-		// ushort Read16(ulong index);
-		// void Write16(ulong index, ushort value);
-		// uint Read32(ulong index);
-		// void Write32(ulong index, uint value);
+		// ushort Read16(uint index);
+		// void Write16(uint index, ushort value);
+		// uint Read32(uint index);
+		// void Write32(uint index, uint value);
 	}
 
 }

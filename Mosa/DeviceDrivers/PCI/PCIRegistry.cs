@@ -72,19 +72,9 @@ namespace Mosa.DeviceDrivers.PCI
 			}
 		}
 
-		public class IsPCIDevice : IFindDevice
+		public void StartDrivers(IDeviceManager deviceManager, IResourceManager resourceManager)
 		{
-			public IsPCIDevice() { }
-
-			public bool IsMatch(IDevice device)
-			{
-				return device is PCIDevice;
-			}
-		}
-
-		public void StartDrivers(IDeviceManager deviceManager, IOPortResources portIOSpace, MemoryResources memorySpace)
-		{
-			foreach (IDevice device in deviceManager.GetDevices(new IsPCIDevice(), new FindDevice.IsAvailable())) {
+			foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable())) {
 				PCIDevice pciDevice = (PCIDevice)device;
 				PCIHardwareDevice pciHardwareDevice = CreateDevice(pciDevice);
 				if (pciHardwareDevice != null)
@@ -92,7 +82,6 @@ namespace Mosa.DeviceDrivers.PCI
 				else
 					pciDevice.SetNoDeviceFound();
 			}
-
 		}
 	}
 }
