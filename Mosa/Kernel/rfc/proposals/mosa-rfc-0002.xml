@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet type='text/xsl' href='../tools/mosa-rfc-transform.xsl'?>
+
+<rfc xmlns='http://www.mosa.org/schemas/mosa-rfc.xsd'>
+
+  <header>
+    <title>MOSA License Affilliation</title>
+    <abstract>This specification provides a means for MOSA members to allow other MOSA members to use or port, and relicense certain portions of code.</abstract>
+    <number>0002</number>
+    <status>Proposal</status>
+    <type>Informational</type>
+    <sig>Standards</sig>
+    <dependencies/>
+    <supersedes/>
+    <supersededby/>
+    <author>
+      <firstname>Jonathan</firstname>
+      <surname>Dickinson</surname>
+      <org>Ensemble</org>
+    </author>
+    <revision>
+      <version>0.0.1</version>
+      <date>2008-05-23T00:00:00.0000000+00:00</date>
+      <initials>jcd</initials>
+      <remark>
+        <p>First draft.</p>
+      </remark>
+    </revision>
+    <revision>
+      <version>0.0.2</version>
+      <date>2008-05-28T00:00:00.0000000+00:00</date>
+      <initials>jcd</initials>
+      <remark>
+        <p>Ammended a problem where projects could remove the header and cause legal issues.</p>
+      </remark>
+    </revision>
+    <conformanceterms used='true'/>
+  </header>
+
+  <section1 topic='Introduction' anchor='intro'>
+    <p>
+      Bodies within MOSA may wish to license their code in such a way that it may be (one or more of):
+    </p>
+    <ul>
+      <li>Ported</li>
+      <li>Used directly</li>
+      <li>Dynamically Linked</li>
+      <li>Statically Linked</li>
+    </ul>
+    <p>
+      In such a way that all of the following conditions are met:
+    </p>
+    <ul>
+      <li>The license may be changed to the new project's license of choice</li>
+      <li>Recognition will be given to all authors</li>
+      <li>Applicable changes are submitted to the original project</li>
+    </ul>
+  </section1>
+    
+  <section1 topic='Business Rules' anchor='rules'>
+    <p>
+      A project that wants to share code should add this code header to applicable files. This header
+      MUST be placed below an OSI-approved license header.
+    </p>
+    <code caption='MOSA License Header'>
+      /* This project is affiliated with MOSA (Managed Operating Systems Alliance).
+       * Please see the mosalicense.txt for information on the license.
+       *
+       * If this file is copied place relevant information at the end of the authors 
+       * section below according to the format:
+       * &lt; First Name &gt; &lt; Family Name &gt;:
+       *   &lt; Project &gt; - &lt; License Name &gt;
+       *
+       * Authors:
+       */
+    </code>
+    <p>
+      The following file MUST be included in the repository in an obvious location,
+      and MUST not be modified unless this document is ammended.
+    </p>
+    <code caption='mosalicense.txt'>
+      This project is affiliated with MOSA (Managed Operating Systems Alliance).
+      Other projects within MOSA may code files within this code repository that
+      have the MOSA license header. They are allowed to use the files containing
+      the header in the following ways:
+      
+      o Port it directly to another programming language,
+      o Use it directly,
+      o Compile against it in a dynamically linked fashion,
+      o Compile against it in a statically linked fashion,
+
+      without the former licensing provided that they:
+
+      o Only append author, project and licensing information to the header.
+      o Provide feedback and patches to the original project (for any portable
+        changes).
+      o Place the header in their code, below their license agreement.
+      o Place a new OSI-approved license header in the code file.
+        o This license must idemnify all contributors to the code from all
+          liabilities.
+      
+      This exception is bound to the specific version of the file, that version of that
+      file is known as affiliated. If the header is removed from the affiliated file, 
+      the new version of the file becomes known as removed. All projects that use
+      the affiliated file may continue to do so: but are not required to submit
+      updates to the originating project. If the originating project re-adds the
+      header to the removed file and wishes to obtain updates it must inform all the 
+      other projects within MOSA of this action.
+      
+      Destination projects will not be held responsible for not providing updates
+      to a previously removed file if they were not made aware that it became affiliated
+      once again.
+    </code>
+  </section1>
+    
+  <section1 topic='Security Considerations' anchor='security'>
+    <p>Futher consideration must be given to the legalities of the process.</p>
+  </section1>
+</rfc>
