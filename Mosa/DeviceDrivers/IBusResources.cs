@@ -15,6 +15,13 @@ namespace Mosa.DeviceDrivers
 	{
 		IIOPortRegion GetIOPortRegion(byte index);
 		IMemoryRegion GetMemoryRegion(byte index);
+
+		IMemory GetMemory(byte region);
+		IReadWriteIOPort GetIOPort(byte region, ushort index);
+		
+		byte IRQ { get; }
+		void EnableIRQ();
+		void DisableIRQ();
 	}
 
 }

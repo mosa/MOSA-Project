@@ -49,17 +49,25 @@ namespace Mosa.DeviceDrivers.ISA
 		{
 			foreach (Pair<ISADeviceSignatureAttribute, Type> entry in drivers) {
 				if (entry.First.AutoLoad) {
-					IIOPortRegion[] ioPortRegions = new IOPortRegion[1];
-					IMemoryRegion[] memoryRegion = new MemoryRegion[1];
+					IIOPortRegion[] ioPortRegions;
+					IMemoryRegion[] memoryRegion;
 
-					if (entry.First.BasePort != 0x0)
+					if (entry.First.BasePort != 0x0) {
+						ioPortRegions = new IOPortRegion[1];
 						ioPortRegions[0] = new IOPortRegion(resourceManager.IOPortResources, entry.First.BasePort, entry.First.PortRange);
+					}
+					else
+						ioPortRegions = new IOPortRegion[0];
 
-					if (entry.First.BaseAddress != 0x0)
-						memoryRegion[0] = new MemoryRegion(resourceManager.MemoryResources, entry.First.BaseAddress, entry.First.AddressRange);
+					if (entry.First.BaseAddress != 0x0) {
+						memoryRegion = new MemoryRegion[1];
+						memoryRegion[0] = new MemoryRegion(entry.First.BaseAddress, entry.First.AddressRange);
+					}
+					else
+						memoryRegion = new MemoryRegion[0];
 
-					IBusResources busResources = new BusResources(ioPortRegions, memoryRegion);
 					ISAHardwareDevice isaHardwareDevice = (ISAHardwareDevice)Activator.CreateInstance(entry.Second);
+					IBusResources busResources = new BusResources(resourceManager, ioPortRegions, memoryRegion, new InterruptHandler(resourceManager.InterruptManager, entry.First.IRQ, isaHardwareDevice));
 
 					isaHardwareDevice.AssignBusResources(busResources);
 

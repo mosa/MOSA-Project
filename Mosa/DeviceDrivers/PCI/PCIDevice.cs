@@ -101,10 +101,10 @@ namespace Mosa.DeviceDrivers.PCI
 			}
 		}
 
-		public bool Start(IDeviceManager deviceManager, PCIHardwareDevice pciHardwareDevice)
+		public bool Start(IDeviceManager deviceManager, IResourceManager resourceManager, PCIHardwareDevice pciHardwareDevice)
 		{
 
-			//pciHardwareDevice.AssignResources(); // TODO!
+			//pciHardwareDevice.AssignBusResources(); // TODO!
 
 			pciHardwareDevice.Activate(deviceManager);
 
@@ -113,7 +113,7 @@ namespace Mosa.DeviceDrivers.PCI
 			return (base.deviceStatus == DeviceStatus.Online);
 		}
 
-		public void SetNoDeviceFound()
+		public void SetNoDriverFound()
 		{
 			base.deviceStatus = DeviceStatus.NotFound;
 		}

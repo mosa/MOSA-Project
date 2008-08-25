@@ -30,7 +30,7 @@ namespace Mosa.DeviceDrivers.PCI
 		{
 			base.name = "TEST_0x" + busResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-			TestPort = busResources.GetIOPortRegion(0).GetIOPort(0);
+			TestPort = busResources.GetIOPort(0,0);
 
 			return true;
 		}

@@ -12,7 +12,7 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceDrivers
 {
 
-	public abstract class HardwareDevice : Device
+	public abstract class HardwareDevice : Device, IHardwareDevice
 	{
 		protected IBusResources busResources;
 
@@ -24,6 +24,8 @@ namespace Mosa.DeviceDrivers
 		public abstract LinkedList<IDevice> CreateSubDevices();
 		public abstract bool OnInterrupt();
 
+		public bool Stop() { return false; }
+
 		public bool Activate(IDeviceManager deviceManager)
 		{
 			base.deviceStatus = DeviceStatus.Initializing;
@@ -32,6 +34,8 @@ namespace Mosa.DeviceDrivers
 				base.deviceStatus = DeviceStatus.Error;
 				return false;
 			}
+
+			//this.busResources.GetInterruptRequest();
 
 			if (!Probe()) {
 				base.deviceStatus = DeviceStatus.NotFound;

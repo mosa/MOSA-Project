@@ -78,9 +78,9 @@ namespace Mosa.DeviceDrivers.PCI
 				PCIDevice pciDevice = (PCIDevice)device;
 				PCIHardwareDevice pciHardwareDevice = CreateDevice(pciDevice);
 				if (pciHardwareDevice != null)
-					pciDevice.Start(deviceManager, pciHardwareDevice);
+					pciDevice.Start(deviceManager, resourceManager, pciHardwareDevice);
 				else
-					pciDevice.SetNoDeviceFound();
+					pciDevice.SetNoDriverFound();
 			}
 		}
 	}

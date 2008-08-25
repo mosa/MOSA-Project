@@ -18,8 +18,9 @@ namespace Mosa.DeviceDrivers
 		bool Start();
 		LinkedList<IDevice> CreateSubDevices();
 		bool OnInterrupt();
-		bool Activate(IDeviceManager deviceManager);
+		bool Stop();
 
 		void AssignBusResources(IBusResources busResources);
+		bool Activate(IDeviceManager deviceManager);
 	}
 }

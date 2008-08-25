@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -9,12 +9,10 @@
 
 namespace Mosa.DeviceDrivers
 {
-	public interface IMemoryRegion
+	public interface IInterruptHandler
 	{
-		uint BaseAddress { get; }
-		uint Size { get; }
-
-		//IMemory GetMemory();
+		byte IRQ { get; }
+		void Enable();
+		void Disable();
 	}
-
 }

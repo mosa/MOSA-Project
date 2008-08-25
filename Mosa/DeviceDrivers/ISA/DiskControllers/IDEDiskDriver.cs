@@ -101,18 +101,18 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 
 		public override bool Setup()
 		{
-			base.name = "IDE_0x" + base.busResources.GetIOPortRegion(0).GetIOPort(0).Address.ToString("X");
+			base.name = "IDE_0x" + base.busResources.GetIOPort(0,0).Address.ToString("X");
 
-			DataPort = base.busResources.GetIOPortRegion(0).GetIOPort(0);
-			ErrorPort = base.busResources.GetIOPortRegion(0).GetIOPort(1);
-			FeaturePort = base.busResources.GetIOPortRegion(0).GetIOPort(1);
-			SectorCountPort = base.busResources.GetIOPortRegion(0).GetIOPort(2);
-			LBALowPort = base.busResources.GetIOPortRegion(0).GetIOPort(3);
-			LBAMidPort = base.busResources.GetIOPortRegion(0).GetIOPort(4);
-			LBAHighPort = base.busResources.GetIOPortRegion(0).GetIOPort(5);
-			DeviceHeadPort = base.busResources.GetIOPortRegion(0).GetIOPort(6);
-			CommandPort = base.busResources.GetIOPortRegion(0).GetIOPort(7);
-			StatusPort = base.busResources.GetIOPortRegion(0).GetIOPort(7);
+			DataPort = base.busResources.GetIOPort(0,0);
+			ErrorPort = base.busResources.GetIOPort(0,1);
+			FeaturePort = base.busResources.GetIOPort(0,1);
+			SectorCountPort = base.busResources.GetIOPort(0,2);
+			LBALowPort = base.busResources.GetIOPort(0,3);
+			LBAMidPort = base.busResources.GetIOPort(0,4);
+			LBAHighPort = base.busResources.GetIOPort(0,5);
+			DeviceHeadPort = base.busResources.GetIOPort(0,6);
+			CommandPort = base.busResources.GetIOPort(0,7);
+			StatusPort = base.busResources.GetIOPort(0,7);
 
 			for (int drive = 0; drive < DrivesPerConroller; drive++) {
 				driveInfo[drive].Present = false;
