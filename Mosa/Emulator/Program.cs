@@ -32,7 +32,7 @@ namespace Mosa.Emulator
 			LinkedList<IDevice> devices = DeviceDrivers.Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGA"));
 
 			// Create a screen interface to the Text VGA device
-			IScreen screen = new Screen((ITextDevice)devices.First.value);
+			ITextScreen screen = new TextScreen((ITextDevice)devices.First.value);
 
 			// Get a list of all devices
 			devices = DeviceDrivers.Setup.DeviceManager.GetAllDevices();

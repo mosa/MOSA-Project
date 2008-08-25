@@ -9,25 +9,25 @@
 
 using Mosa.DeviceDrivers;
 
-namespace Mosa.DeviceDrivers.PCI
+namespace Mosa.DeviceDrivers
 {
-	public class PCIBusResources
+	public class BusResources
 	{
-		protected IOPortRegion[] ioPortRegions;
-		protected MemoryRegion[] memoryRegions;
+		protected IIOPortRegion[] ioPortRegions;
+		protected IMemoryRegion[] memoryRegions;
 
-		public PCIBusResources(IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegions)
+		public BusResources(IIOPortRegion[] ioPortRegions, IMemoryRegion[] memoryRegions)
 		{
 			this.ioPortRegions = ioPortRegions;
 			this.memoryRegions = memoryRegions;
 		}
 
-		public IOPortRegion GetIOPortRegion(byte index)
+		public IIOPortRegion GetIOPortRegion(byte index)
 		{
 			return ioPortRegions[index];
 		}
 
-		public MemoryRegion GetMemoryRegion(byte index)
+		public IMemoryRegion GetMemoryRegion(byte index)
 		{
 			return memoryRegions[index];
 		}

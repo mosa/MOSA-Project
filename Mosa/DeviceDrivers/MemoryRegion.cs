@@ -9,7 +9,7 @@
 
 namespace Mosa.DeviceDrivers
 {
-	public class MemoryRegion
+	public class MemoryRegion : IMemoryRegion
 	{
 		protected MemorySpace memorySpace;
 		protected uint baseAddress;

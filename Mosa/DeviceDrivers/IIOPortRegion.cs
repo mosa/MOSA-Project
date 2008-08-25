@@ -7,14 +7,15 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.DeviceDrivers.Kernel;
+
 namespace Mosa.DeviceDrivers
 {
-	public interface IScreen
+	public interface IIOPortRegion
 	{
-		void Clear();
-		void SetCursor(ushort cursorX, ushort cursorY);
-		void Write(string text);
-		void WriteLine();
-		void WriteLine(string text);
+		ushort BaseIOPort { get ; }
+		ushort Size { get ;  }
+		IReadWriteIOPort GetPort(ushort index);		
 	}
+
 }

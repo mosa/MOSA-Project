@@ -28,9 +28,9 @@ namespace Mosa.DeviceDrivers.PCI
 
 		public override bool Setup()
 		{
-			base.name = "TEST_0x" + pciBusResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+			base.name = "TEST_0x" + busResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-			TestPort = pciBusResources.GetIOPortRegion(0).GetPort(0);
+			TestPort = busResources.GetIOPortRegion(0).GetPort(0);
 
 			return true;
 		}

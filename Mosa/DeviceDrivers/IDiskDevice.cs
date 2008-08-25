@@ -13,7 +13,6 @@ namespace Mosa.DeviceDrivers
 {
 	public interface IDiskDevice
 	{
-		GenericPartition this[uint partitionNbr] { get; }
 		bool CanWrite { get; }
 		uint TotalBlocks { get; }
 		uint BlockSize { get; }
@@ -22,6 +21,7 @@ namespace Mosa.DeviceDrivers
 		bool ReadBlock(uint block, uint count, byte[] data);
 		bool WriteBlock(uint block, uint count, byte[] data);
 
+		GenericPartition this[uint partitionNbr] { get; }
 		LinkedList<IDevice> CreatePartitionDevices();
 	}
 }

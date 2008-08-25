@@ -12,7 +12,7 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceDrivers
 {
 
-	public class Screen : IScreen
+	public class TextScreen : ITextScreen
 	{
 		protected ITextDevice textDevice;
 		protected ushort cursorX;
@@ -22,7 +22,7 @@ namespace Mosa.DeviceDrivers
 		protected ushort width;
 		protected ushort height;
 
-		public Screen(ITextDevice textDevice)
+		public TextScreen(ITextDevice textDevice)
 		{
 			this.textDevice = textDevice;
 			width = textDevice.GetWidth();

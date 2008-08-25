@@ -36,10 +36,10 @@ namespace Mosa.DeviceDrivers.ISA
 
 		public override bool Setup()
 		{
-			base.name = "PCI_0x" + base.isaBusResources.GetIOPortRegion(0).GetPort(0).Address.ToString("X");
+			base.name = "PCI_0x" + base.busResources.GetIOPortRegion(0).GetPort(0).Address.ToString("X");
 
-			ConfigAddress = base.isaBusResources.GetIOPortRegion(0).GetPort(0);
-			ConfigData = base.isaBusResources.GetIOPortRegion(0).GetPort(4);
+			ConfigAddress = base.busResources.GetIOPortRegion(0).GetPort(0);
+			ConfigData = base.busResources.GetIOPortRegion(0).GetPort(4);
 
 			return true;
 		}

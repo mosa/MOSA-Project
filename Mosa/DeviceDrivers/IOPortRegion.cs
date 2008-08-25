@@ -11,7 +11,7 @@ using Mosa.DeviceDrivers.Kernel;
 
 namespace Mosa.DeviceDrivers
 {
-	public class IOPortRegion
+	public class IOPortRegion : IIOPortRegion
 	{
 		protected PortIOSpace portIOSpace;
 		protected ushort baseIOPort;

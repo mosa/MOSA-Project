@@ -70,15 +70,15 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		{
 			base.name = "VGA";
 
-			miscellaneousOutput = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3CC - 0x3B0));
+			miscellaneousOutput = base.busResources.GetIOPortRegion(0).GetPort((byte)(0x3CC - 0x3B0));
 
-			crtControllerIndex = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3B4 - 0x3B0));
-			crtControllerData = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3B5 - 0x3B0));
+			crtControllerIndex = base.busResources.GetIOPortRegion(0).GetPort((byte)(0x3B4 - 0x3B0));
+			crtControllerData = base.busResources.GetIOPortRegion(0).GetPort((byte)(0x3B5 - 0x3B0));
 
-			crtControllerIndexColor = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3D4 - 0x3B0));
-			crtControllerDataColor = base.isaBusResources.GetIOPortRegion(0).GetPort((byte)(0x3D5 - 0x3B0));
+			crtControllerIndexColor = base.busResources.GetIOPortRegion(0).GetPort((byte)(0x3D4 - 0x3B0));
+			crtControllerDataColor = base.busResources.GetIOPortRegion(0).GetPort((byte)(0x3D5 - 0x3B0));
 
-			memory = base.isaBusResources.GetMemoryRegion(0).GetMemory();
+			memory = base.busResources.GetMemoryRegion(0).GetMemory();
 
 			return true;
 		}

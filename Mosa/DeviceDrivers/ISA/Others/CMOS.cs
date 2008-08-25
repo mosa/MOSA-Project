@@ -29,8 +29,8 @@ namespace Mosa.DeviceDrivers.ISA
 		{
 			base.name = "CMOS";
 
-			commandPort = base.isaBusResources.GetIOPortRegion(0).GetPort(0);
-			dataPort = base.isaBusResources.GetIOPortRegion(0).GetPort(4);
+			commandPort = base.busResources.GetIOPortRegion(0).GetPort(0);
+			dataPort = base.busResources.GetIOPortRegion(0).GetPort(4);
 
 			return true;
 		}

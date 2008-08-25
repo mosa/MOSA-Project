@@ -128,20 +128,20 @@ namespace Mosa.DeviceDrivers.ISA
 
 		public override bool Setup()
 		{
-			base.name = "COM_0x" + base.isaBusResources.GetIOPortRegion(0).GetPort(0).Address.ToString("X");
+			base.name = "COM_0x" + base.busResources.GetIOPortRegion(0).GetPort(0).Address.ToString("X");
 
-			RBRBase = base.isaBusResources.GetIOPortRegion(0).GetPort(0); // Receive Buffer Register (read only)
-			THRBase = base.isaBusResources.GetIOPortRegion(0).GetPort(0); // Transmitter Holding Register (write only)
-			IERBase = base.isaBusResources.GetIOPortRegion(0).GetPort(1); // Interrupt Enable Register
-			DLLBase = base.isaBusResources.GetIOPortRegion(0).GetPort(0); // Divisor Latch (LSB and MSB)
-			DLMBase = base.isaBusResources.GetIOPortRegion(0).GetPort(1);
-			IIRBase = base.isaBusResources.GetIOPortRegion(0).GetPort(2); // Interrupt Identification Register (read only)
-			FCRBase = base.isaBusResources.GetIOPortRegion(0).GetPort(2); // FIFO Control Register (write only, 16550+ only)
-			LCRBase = base.isaBusResources.GetIOPortRegion(0).GetPort(3); // Line Control Register
-			MCRBase = base.isaBusResources.GetIOPortRegion(0).GetPort(4); // Modem Control Register
-			LSRBase = base.isaBusResources.GetIOPortRegion(0).GetPort(5); // Line Status Register
-			MSRBase = base.isaBusResources.GetIOPortRegion(0).GetPort(6); // Modem Status Register
-			SCRBase = base.isaBusResources.GetIOPortRegion(0).GetPort(7); // Scratch Register (16450+ and some 8250s, special use with some boards)
+			RBRBase = base.busResources.GetIOPortRegion(0).GetPort(0); // Receive Buffer Register (read only)
+			THRBase = base.busResources.GetIOPortRegion(0).GetPort(0); // Transmitter Holding Register (write only)
+			IERBase = base.busResources.GetIOPortRegion(0).GetPort(1); // Interrupt Enable Register
+			DLLBase = base.busResources.GetIOPortRegion(0).GetPort(0); // Divisor Latch (LSB and MSB)
+			DLMBase = base.busResources.GetIOPortRegion(0).GetPort(1);
+			IIRBase = base.busResources.GetIOPortRegion(0).GetPort(2); // Interrupt Identification Register (read only)
+			FCRBase = base.busResources.GetIOPortRegion(0).GetPort(2); // FIFO Control Register (write only, 16550+ only)
+			LCRBase = base.busResources.GetIOPortRegion(0).GetPort(3); // Line Control Register
+			MCRBase = base.busResources.GetIOPortRegion(0).GetPort(4); // Modem Control Register
+			LSRBase = base.busResources.GetIOPortRegion(0).GetPort(5); // Line Status Register
+			MSRBase = base.busResources.GetIOPortRegion(0).GetPort(6); // Modem Status Register
+			SCRBase = base.busResources.GetIOPortRegion(0).GetPort(7); // Scratch Register (16450+ and some 8250s, special use with some boards)
 
 			this.fifoBuffer = new byte[FIFOSize];
 			this.fifoStart = 0;
