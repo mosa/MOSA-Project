@@ -11,23 +11,23 @@ namespace Mosa.DeviceDrivers
 {
 	public class MemoryRegion : IMemoryRegion
 	{
-		protected MemorySpace memorySpace;
+		protected MemoryResources memoryResources;
 		protected uint baseAddress;
 		protected uint size;
 
 		public uint BaseAddress { get { return baseAddress; } }
 		public uint Size { get { return size; } }
 
-		public MemoryRegion(MemorySpace memorySpace, uint baseAddress, uint size)
+		public MemoryRegion(MemoryResources memoryResources, uint baseAddress, uint size)
 		{
-			this.memorySpace = memorySpace;
+			this.memoryResources = memoryResources;
 			this.baseAddress = baseAddress;
 			this.size = size;
 		}
 
 		public IMemory GetMemory()
 		{
-			return memorySpace.GetMemory(baseAddress, size);
+			return memoryResources.GetMemory(baseAddress, size);
 		}
 
 	}

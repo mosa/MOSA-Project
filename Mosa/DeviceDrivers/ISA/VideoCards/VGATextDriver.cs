@@ -70,13 +70,13 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		{
 			base.name = "VGA";
 
-			miscellaneousOutput = base.busResources.GetIOPortRegion(0).GetPort((byte)(0x3CC - 0x3B0));
+			miscellaneousOutput = base.busResources.GetIOPortRegion(0).GetIOPort((byte)(0x3CC - 0x3B0));
 
-			crtControllerIndex = base.busResources.GetIOPortRegion(0).GetPort((byte)(0x3B4 - 0x3B0));
-			crtControllerData = base.busResources.GetIOPortRegion(0).GetPort((byte)(0x3B5 - 0x3B0));
+			crtControllerIndex = base.busResources.GetIOPortRegion(0).GetIOPort((byte)(0x3B4 - 0x3B0));
+			crtControllerData = base.busResources.GetIOPortRegion(0).GetIOPort((byte)(0x3B5 - 0x3B0));
 
-			crtControllerIndexColor = base.busResources.GetIOPortRegion(0).GetPort((byte)(0x3D4 - 0x3B0));
-			crtControllerDataColor = base.busResources.GetIOPortRegion(0).GetPort((byte)(0x3D5 - 0x3B0));
+			crtControllerIndexColor = base.busResources.GetIOPortRegion(0).GetIOPort((byte)(0x3D4 - 0x3B0));
+			crtControllerDataColor = base.busResources.GetIOPortRegion(0).GetIOPort((byte)(0x3D5 - 0x3B0));
 
 			memory = base.busResources.GetMemoryRegion(0).GetMemory();
 
@@ -194,12 +194,12 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 
 			if (bytePerChar == 2)
 				for (int i = 0; i < size; i = i + bytePerChar) {
-					memory[index + i] = 0;
-					memory[index + i + 1] = (byte)defaultBackground;
+					memory[(ulong)(index + i)] = 0;
+					memory[(ulong)(index + i + 1)] = (byte)defaultBackground;
 				}
 			else
 				for (int i = 0; i < size * bytePerChar; i++)
-					memory[index + i] = 0;
+					memory[(ulong)(index + i)] = 0;
 		}
 
 		public void ScrollUp()
@@ -213,7 +213,7 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 			index = (uint)(index + ((height - 1) * width * bytePerChar));
 
 			for (int i = 0; i < size; i++)
-				memory[index + i] = 0;
+				memory[(ulong)(index + i)] = 0;
 		}
 	}
 }

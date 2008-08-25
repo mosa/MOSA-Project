@@ -13,23 +13,23 @@ namespace Mosa.DeviceDrivers
 {
 	public class IOPortRegion : IIOPortRegion
 	{
-		protected PortIOSpace portIOSpace;
+		protected IOPortResources portIOResources;
 		protected ushort baseIOPort;
 		protected ushort size;
 
 		public ushort BaseIOPort { get { return baseIOPort; } }
 		public ushort Size { get { return size; } }
 
-		public IOPortRegion(PortIOSpace portIOSpace, ushort baseIOPort, ushort size)
+		public IOPortRegion(IOPortResources portIOResources, ushort baseIOPort, ushort size)
 		{
-			this.portIOSpace = portIOSpace;
+			this.portIOResources = portIOResources;
 			this.baseIOPort = baseIOPort;
 			this.size = size;
 		}
 
-		public IReadWriteIOPort GetPort(ushort index)
+		public IReadWriteIOPort GetIOPort(ushort index)
 		{
-			return portIOSpace.GetIOPort(baseIOPort, index);
+			return portIOResources.GetIOPort(baseIOPort, index);
 		}
 
 	}

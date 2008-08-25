@@ -45,7 +45,7 @@ namespace Mosa.DeviceDrivers.ISA
 			}
 		}
 
-		public void StartDrivers(IDeviceManager deviceManager, PortIOSpace portIOSpace, MemorySpace memorySpace)
+		public void StartDrivers(IDeviceManager deviceManager, IOPortResources portIOSpace, MemoryResources memorySpace)
 		{
 			foreach (Pair<ISADeviceSignatureAttribute, Type> entry in drivers) {
 				if (entry.First.AutoLoad) {

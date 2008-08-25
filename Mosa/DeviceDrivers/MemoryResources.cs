@@ -9,9 +9,9 @@
 
 namespace Mosa.DeviceDrivers
 {
-	public class MemorySpace
+	public class MemoryResources
 	{
-		public MemorySpace() { }
+		public MemoryResources() { }
 
 		public IMemory GetMemory(uint address, uint size)
 		{

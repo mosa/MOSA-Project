@@ -11,7 +11,7 @@ using Mosa.DeviceDrivers.Kernel;
 
 namespace Mosa.DeviceDrivers
 {
-	public class PortIOSpace
+	public class IOPortResources
 	{
 		// This array represents a bit map of IO ports which should not be
 		// used by Plug-and-Play (PnP) systems, such as for ISA and PCI
@@ -25,7 +25,7 @@ namespace Mosa.DeviceDrivers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortIOSpace"/> class.
 		/// </summary>
-		public PortIOSpace()
+		public IOPortResources()
 		{
 			reservedForLegacyISADevices = new byte[Size / 8];
 			ReserveDefaultLegacyISADevicePorts();

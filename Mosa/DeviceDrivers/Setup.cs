@@ -20,8 +20,8 @@ namespace Mosa.DeviceDrivers
 		static public void Initialize()
 		{
 			deviceManager = new DeviceManager();
-			PortIOSpace portIOSpace = new PortIOSpace();
-			MemorySpace memorySpace = new MemorySpace();
+			IOPortResources portIOSpace = new IOPortResources();
+			MemoryResources memorySpace = new MemoryResources();
 
 			ISA.ISARegistry isaDeviceDrivers = new Mosa.DeviceDrivers.ISA.ISARegistry();
 

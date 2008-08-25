@@ -12,7 +12,7 @@ namespace Mosa.DeviceDrivers.Kernel
 	public static class HAL
 	{
 		public delegate IReadWriteIOPort CreateIOPort(ushort port);
-		public delegate IMemory CreateMemory(uint port, uint size);
+		public delegate IMemory CreateMemory(ulong address, ulong size);
 
 		static private CreateIOPort createIOPort;
 		static private CreateMemory createMemory;

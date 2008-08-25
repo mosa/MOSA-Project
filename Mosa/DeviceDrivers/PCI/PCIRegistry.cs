@@ -82,7 +82,7 @@ namespace Mosa.DeviceDrivers.PCI
 			}
 		}
 
-		public void StartDrivers(IDeviceManager deviceManager, PortIOSpace portIOSpace, MemorySpace memorySpace)
+		public void StartDrivers(IDeviceManager deviceManager, IOPortResources portIOSpace, MemoryResources memorySpace)
 		{
 			foreach (IDevice device in deviceManager.GetDevices(new IsPCIDevice(), new FindDevice.IsAvailable())) {
 				PCIDevice pciDevice = (PCIDevice)device;

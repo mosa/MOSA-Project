@@ -117,22 +117,22 @@ namespace Mosa.EmulatedDevices
 			IOPortDispatch.UnregisterPort(crtControllerDataColor);
 		}
 
-		public byte Read8(uint address)
+		public byte Read8(ulong address)
 		{
 			return memory[address - baseAddress];
 		}
 
-		public void Write8(uint address, byte value)
+		public void Write8(ulong address, byte value)
 		{
 			if ((value != 0) && (memory[address - baseAddress] == value))
 				return;
 
 			memory[address - baseAddress] = value;
 
-			uint index = address - 0xB8000;
+			ulong index = address - 0xB8000;
 
-			ushort y = (ushort)(index / (width * 2));
-			ushort x2 = (ushort)(index - (y * width * 2));
+			ushort y = (ushort)(index / ((uint)width * 2));
+			ushort x2 = (ushort)(index - (y * (uint)width * 2));
 
 			ushort x = (ushort)(x2 >> 1);
 

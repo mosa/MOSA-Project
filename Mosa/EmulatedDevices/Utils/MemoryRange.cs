@@ -14,12 +14,12 @@ namespace Mosa.EmulatedDevices.Utils
 
 	public class MemoryRange
 	{
-		public uint address;
-		public uint size;
+		public ulong address;
+		public ulong size;
 		public MemoryRead8 read8;
 		public MemoryWrite8 write8;
 
-		public MemoryRange(uint address, uint size, MemoryRead8 read8, MemoryWrite8 write8)
+		public MemoryRange(ulong address, ulong size, MemoryRead8 read8, MemoryWrite8 write8)
 		{
 			this.address = address;
 			this.size = size;
@@ -27,7 +27,7 @@ namespace Mosa.EmulatedDevices.Utils
 			this.write8 = write8;
 		}
 
-		public bool Contains(uint address)
+		public bool Contains(ulong address)
 		{
 			return ((address >= this.address) && (address < (this.address + this.size)));
 		}
