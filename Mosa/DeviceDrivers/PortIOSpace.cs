@@ -88,7 +88,7 @@ namespace Mosa.DeviceDrivers
 			return (value & (byte)(1 << (port % 8))) != 0;
 		}
 
-		public IReadWriteIOPort GetPort(ushort port, ushort offset)
+		public IReadWriteIOPort GetIOPort(ushort port, ushort offset)
 		{
 			return HAL.RequestIOPort((ushort)(port + offset));
 		}

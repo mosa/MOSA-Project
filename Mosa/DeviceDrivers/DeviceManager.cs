@@ -99,7 +99,7 @@ namespace Mosa.DeviceDrivers
 
 		public LinkedList<IDevice> GetChildrenOf(IDevice parent)
 		{
-			return GetDevices(new ParentOf(parent));
+			return GetDevices(new FindDevice.WithParent(parent));
 		}
 
 		public LinkedList<IDevice> GetAllDevices()
@@ -114,82 +114,6 @@ namespace Mosa.DeviceDrivers
 			spinLock.Exit();
 
 			return list;
-		}
-
-		// Helper Find Classes
-
-		public class ParentOf : IFindDevice
-		{
-			private IDevice parent;
-			public ParentOf(IDevice parent)
-			{
-				this.parent = parent;
-			}
-			public bool IsMatch(IDevice device)
-			{
-				return (parent == device);
-			}
-		}
-
-		//public class TypeOf : IFindDevice
-		//{
-		//    private Type type;
-
-		//    public TypeOf(Type type)
-		//    {
-		//        this.type = type;
-		//    }
-
-		//    public bool IsMatch(IDevice device)
-		//    {
-		//        return ((device.IsSubclassOf(type)) || (device == type) || (device.IsAssignableFrom(type)) || (type.IsAssignableFrom(device)));
-		//    }
-		//}
-
-		public class WithName : IFindDevice
-		{
-			private string name;
-
-			public WithName(string name)
-			{
-				this.name = name;
-			}
-			public bool IsMatch(IDevice device)
-			{
-				return (device.Name == name);
-			}
-		}
-
-		public class Online : IFindDevice
-		{
-			public Online() { }
-
-			public bool IsMatch(IDevice device)
-			{
-				return device.Status == DeviceStatus.Online;
-			}
-		}
-
-		public class Available : IFindDevice
-		{
-			public Available() { }
-
-			public bool IsMatch(IDevice device)
-			{
-				return device.Status == DeviceStatus.Available;
-			}
-		}
-
-		public class WithStatus : IFindDevice
-		{
-			protected DeviceStatus deviceStatus;
-
-			public WithStatus(DeviceStatus deviceStatus) { this.deviceStatus = deviceStatus; }
-
-			public bool IsMatch(IDevice device)
-			{
-				return device.Status == deviceStatus;
-			}
 		}
 	}
 }

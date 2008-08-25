@@ -46,7 +46,7 @@ namespace Mosa.EmulatedDevices
 		public static void SetWrite16(ushort port, IOPortWrite16 write) { write16[port] = write; }
 		public static void SetWrite32(ushort port, IOPortWrite32 write) { write32[port] = write; }
 
-		public static IReadWriteIOPort RegisterPort(ushort port)
+		public static IReadWriteIOPort RegisterIOPort(ushort port)
 		{
 			return new IOPort(port);
 		}

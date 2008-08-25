@@ -29,7 +29,7 @@ namespace Mosa.DeviceDrivers
 
 		public IReadWriteIOPort GetPort(ushort index)
 		{
-			return portIOSpace.GetPort(baseIOPort, index);
+			return portIOSpace.GetIOPort(baseIOPort, index);
 		}
 
 	}

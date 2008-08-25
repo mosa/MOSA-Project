@@ -12,7 +12,7 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceDrivers
 {
 
-	public class Screen
+	public class Screen : IScreen
 	{
 		protected ITextDevice textDevice;
 		protected ushort cursorX;
@@ -35,6 +35,13 @@ namespace Mosa.DeviceDrivers
 		protected void SetCursor()
 		{
 			textDevice.SetCursor(cursorX, cursorY);
+		}
+
+		public void SetCursor(ushort cursorX, ushort cursorY)
+		{
+			this.cursorX = cursorX;
+			this.cursorY = cursorY;
+			SetCursor();
 		}
 
 		public void Clear()
