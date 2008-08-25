@@ -58,10 +58,10 @@ namespace Mosa.DeviceDrivers.ISA
 					if (entry.First.BaseAddress != 0x0)
 						memoryRegion[0] = new MemoryRegion(resourceManager.MemoryResources, entry.First.BaseAddress, entry.First.AddressRange);
 
-					BusResources busResources = new BusResources(ioPortRegions, memoryRegion);
+					IBusResources busResources = new BusResources(ioPortRegions, memoryRegion);
 					ISAHardwareDevice isaHardwareDevice = (ISAHardwareDevice)Activator.CreateInstance(entry.Second);
 
-					isaHardwareDevice.AssignResources(busResources);
+					isaHardwareDevice.AssignBusResources(busResources);
 
 					deviceManager.Add(isaHardwareDevice);
 

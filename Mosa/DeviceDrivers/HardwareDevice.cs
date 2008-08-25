@@ -14,6 +14,7 @@ namespace Mosa.DeviceDrivers
 
 	public abstract class HardwareDevice : Device
 	{
+		protected IBusResources busResources;
 
 		public HardwareDevice() { base.deviceStatus = DeviceStatus.Initializing; }
 
@@ -51,6 +52,11 @@ namespace Mosa.DeviceDrivers
 					deviceManager.Add(device);
 
 			return true;
+		}
+
+		public void AssignBusResources(IBusResources busResources)
+		{
+			this.busResources = busResources;
 		}
 
 	}

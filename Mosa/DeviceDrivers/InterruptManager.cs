@@ -11,10 +11,17 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers
 {
-	public interface IResourceManager
+	public class InterruptManager
 	{
-		IOPortResources IOPortResources { get; }
-		MemoryResources MemoryResources { get; }
-		InterruptManager InterruptManager { get; }
+		// TODO: array of devices for each IRQ 
+
+		public InterruptManager() { }
+
+		public void ProcessInterrupt(byte irq)
+		{
+		}
+
+		// TODO: register an IRQ to a device
+		// TODO: unregister a device from an IRQ
 	}
 }

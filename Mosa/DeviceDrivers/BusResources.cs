@@ -11,7 +11,7 @@ using Mosa.DeviceDrivers;
 
 namespace Mosa.DeviceDrivers
 {
-	public class BusResources
+	public class BusResources : IBusResources
 	{
 		protected IIOPortRegion[] ioPortRegions;
 		protected IMemoryRegion[] memoryRegions;
@@ -31,6 +31,7 @@ namespace Mosa.DeviceDrivers
 		{
 			return memoryRegions[index];
 		}
+
 	}
 
 }

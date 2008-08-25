@@ -12,15 +12,7 @@ namespace Mosa.DeviceDrivers.PCI
 
 	public abstract class PCIHardwareDevice : HardwareDevice
 	{
-		protected BusResources busResources;
-
 		public PCIHardwareDevice(PCIDevice pciDevice) : base() { base.parent = (IDevice)pciDevice; }
-
-		public void AssignResources(BusResources busResources)
-		{
-			this.busResources = busResources;
-		}
-
 	}
 
 }

@@ -15,17 +15,17 @@ namespace Mosa.DeviceDrivers
 	{
 		protected IOPortResources ioPortResources;
 		protected MemoryResources memoryResources;
-		protected InterruptHandler interruptHandler;
+		protected InterruptManager interruptManager;
 
 		public IOPortResources IOPortResources { get { return ioPortResources; } }
 		public MemoryResources MemoryResources { get { return memoryResources; } }
-		public InterruptHandler InterruptHandler { get { return interruptHandler; } }
+		public InterruptManager InterruptManager { get { return interruptManager; } }
 
 		public ResourceManager()
 		{
 			ioPortResources = new IOPortResources();
 			memoryResources = new MemoryResources();
-			interruptHandler = new InterruptHandler();
+			interruptManager = new InterruptManager();
 		}
 	}
 }

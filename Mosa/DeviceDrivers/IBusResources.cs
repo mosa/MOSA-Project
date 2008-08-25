@@ -7,14 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.DeviceDrivers;
+
 namespace Mosa.DeviceDrivers
 {
-	public class InterruptHandler
+	public interface IBusResources
 	{
-		public InterruptHandler() { }
-
-		public void ProcessInterrupt(byte irq)
-		{
-		}
+		IIOPortRegion GetIOPortRegion(byte index);
+		IMemoryRegion GetMemoryRegion(byte index);
 	}
+
 }
