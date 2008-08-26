@@ -28,11 +28,12 @@ namespace Mosa.DeviceDrivers.PCI
 		protected ushort subDeviceID;
 		protected byte progIF;
 		protected byte irq;
-		protected PCIBaseAddress[] addresses;
+		protected PCIBaseAddress[] pciBaseAddresses;
+		protected byte memoryRegionCount;
+		protected byte ioPortRegionCount;
 
 		protected IPCIController pciController;
 
-		public PCIBaseAddress[] BaseAddresses { get { return addresses; } }
 		public uint Bus { get { return bus; } }
 		public uint Slot { get { return slot; } }
 		public uint Function { get { return function; } }
@@ -45,6 +46,8 @@ namespace Mosa.DeviceDrivers.PCI
 		public ushort SubVendorID { get { return subVendorID; } }
 		public ushort SubDeviceID { get { return subDeviceID; } }
 		public byte IRQ { get { return irq; } }
+
+		public PCIBaseAddress[] BaseAddresses { get { return pciBaseAddresses; } }
 
 		/// <summary>
 		/// Create a new PCIDevice instance at the selected PCI address
@@ -60,7 +63,7 @@ namespace Mosa.DeviceDrivers.PCI
 			this.slot = slot;
 			this.function = fun;
 
-			this.addresses = new PCIBaseAddress[6];
+			this.pciBaseAddresses = new PCIBaseAddress[6];
 
 			uint data = pciController.ReadConfig(bus, slot, fun, 0);
 			this.vendorID = (ushort)(data & 0xFFFF);
@@ -93,18 +96,36 @@ namespace Mosa.DeviceDrivers.PCI
 
 					HAL.EnableAllInterrupts();
 
-					if (baseAddress % 2 == 1)
-						addresses[i] = new PCIBaseAddress(AddressRegion.IO, baseAddress & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
-					else
-						addresses[i] = new PCIBaseAddress(AddressRegion.Memory, baseAddress & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((baseAddress & 0x08) == 1));
+					if (baseAddress % 2 == 1) {
+						pciBaseAddresses[i] = new PCIBaseAddress(AddressRegion.IO, baseAddress & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
+						ioPortRegionCount++;
+					}
+					else {
+						pciBaseAddresses[i] = new PCIBaseAddress(AddressRegion.Memory, baseAddress & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((baseAddress & 0x08) == 1));
+						memoryRegionCount++;
+					}
 				}
 			}
 		}
 
 		public bool Start(IDeviceManager deviceManager, IResourceManager resourceManager, PCIHardwareDevice pciHardwareDevice)
 		{
+			IIOPortRegion[] ioPortRegions = new IIOPortRegion[ioPortRegionCount];
+			IMemoryRegion[] memoryRegion = new IMemoryRegion[memoryRegionCount];
 
-			//pciHardwareDevice.AssignBusResources(); // TODO!
+			int ioRegions = 0;
+			int memoryRegions = 0;
+
+			foreach (PCIBaseAddress pciBaseAddress in pciBaseAddresses)
+				switch (pciBaseAddress.Region) {
+					case AddressRegion.IO: ioPortRegions[ioRegions++] = new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size); break;
+					case AddressRegion.Memory: memoryRegion[memoryRegions++] = new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size); break;
+					default: break;
+				}
+
+			IBusResources busResources = new BusResources(resourceManager, ioPortRegions, memoryRegion, new InterruptHandler(resourceManager.InterruptManager, IRQ, pciHardwareDevice));
+
+			pciHardwareDevice.AssignBusResources(busResources);
 
 			pciHardwareDevice.Activate(deviceManager);
 

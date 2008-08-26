@@ -15,10 +15,13 @@ namespace Mosa.DeviceDrivers.PCI
 {
 	public class PCIRegistry
 	{
+		PlatformArchitecture platformArchitecture;
+
 		protected LinkedList<Pair<PCIDeviceSignatureAttribute, Type>> drivers;
 
-		public PCIRegistry()
+		public PCIRegistry(PlatformArchitecture platformArchitecture)
 		{
+			this.platformArchitecture = platformArchitecture;
 			drivers = new LinkedList<Pair<PCIDeviceSignatureAttribute, Type>>();
 		}
 
@@ -34,7 +37,7 @@ namespace Mosa.DeviceDrivers.PCI
 			if (deviceType == null)
 				return null;
 
-			return (PCIHardwareDevice)Activator.CreateInstance(deviceType, pciDevice);
+			return Activator.CreateInstance(deviceType, pciDevice) as PCIHardwareDevice;
 		}
 
 		public Type FindDriver(PCIDevice pciDevice)
@@ -68,14 +71,15 @@ namespace Mosa.DeviceDrivers.PCI
 				object[] attributes = type.GetCustomAttributes(typeof(PCIDeviceSignatureAttribute), false);
 
 				foreach (object attribute in attributes)
-					AddDeviceDriver((PCIDeviceSignatureAttribute)attribute, type);
+					if (((attribute as PCIDeviceSignatureAttribute).Platforms & platformArchitecture) != 0)
+						AddDeviceDriver(attribute as PCIDeviceSignatureAttribute, type);
 			}
 		}
 
 		public void StartDrivers(IDeviceManager deviceManager, IResourceManager resourceManager)
 		{
 			foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable())) {
-				PCIDevice pciDevice = (PCIDevice)device;
+				PCIDevice pciDevice = device as PCIDevice;
 				PCIHardwareDevice pciHardwareDevice = CreateDevice(pciDevice);
 				if (pciHardwareDevice != null)
 					pciDevice.Start(deviceManager, resourceManager, pciHardwareDevice);

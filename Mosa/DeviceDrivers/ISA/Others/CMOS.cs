@@ -14,7 +14,7 @@ using Mosa.DeviceDrivers.Kernel;
 
 namespace Mosa.DeviceDrivers.ISA
 {
-	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0070, PortRange = 2)]
+	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0070, PortRange = 2, Platforms = PlatformArchitecture.x86)]
 	public class CMOSDriver : ISAHardwareDevice, IDevice, IHardwareDevice
 	{
 
@@ -29,8 +29,8 @@ namespace Mosa.DeviceDrivers.ISA
 		{
 			base.name = "CMOS";
 
-			commandPort = base.busResources.GetIOPort(0,0);
-			dataPort = base.busResources.GetIOPort(0,4);
+			commandPort = base.busResources.GetIOPort(0, 0);
+			dataPort = base.busResources.GetIOPort(0, 4);
 
 			return true;
 		}

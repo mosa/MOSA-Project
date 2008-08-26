@@ -14,6 +14,7 @@ namespace Mosa.DeviceDrivers.ISA
 	[AttributeUsage(AttributeTargets.All | AttributeTargets.Property, AllowMultiple = true)]
 	public class ISADeviceSignatureAttribute : System.Attribute
 	{
+		public PlatformArchitecture Platforms = PlatformArchitecture.None;
 		public ushort BasePort = 0x00;
 		public ushort PortRange = 0;
 		public bool AutoLoad = false;   // (For built-in drivers only) Set to true if device is expected and has a relatively safe probe method.

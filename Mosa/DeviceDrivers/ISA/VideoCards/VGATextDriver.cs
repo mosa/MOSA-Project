@@ -14,7 +14,7 @@ using Mosa.DeviceDrivers.Kernel;
 
 namespace Mosa.DeviceDrivers.ISA.VideoCards
 {
-	[ISADeviceSignature(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000)]
+	[ISADeviceSignature(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class VGATextDriver : ISAHardwareDevice, IDevice, ITextDevice
 	{
 		#region Definitions

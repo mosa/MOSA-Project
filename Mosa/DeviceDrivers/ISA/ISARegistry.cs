@@ -15,10 +15,13 @@ namespace Mosa.DeviceDrivers.ISA
 {
 	public class ISARegistry
 	{
+		protected PlatformArchitecture platformArchitecture;
+
 		protected LinkedList<Pair<ISADeviceSignatureAttribute, Type>> drivers;
 
-		public ISARegistry()
+		public ISARegistry(PlatformArchitecture platformArchitecture)
 		{
+			this.platformArchitecture = platformArchitecture;
 			drivers = new LinkedList<Pair<ISADeviceSignatureAttribute, Type>>();
 		}
 
@@ -41,7 +44,8 @@ namespace Mosa.DeviceDrivers.ISA
 				object[] attributes = type.GetCustomAttributes(typeof(ISADeviceSignatureAttribute), false);
 
 				foreach (object attribute in attributes)
-					AddDeviceDriver((ISADeviceSignatureAttribute)attribute, type);
+					if (((attribute as ISADeviceSignatureAttribute).Platforms & platformArchitecture) != 0)
+						AddDeviceDriver(attribute as ISADeviceSignatureAttribute, type);
 			}
 		}
 
@@ -54,19 +58,21 @@ namespace Mosa.DeviceDrivers.ISA
 
 					if (entry.First.BasePort != 0x0) {
 						ioPortRegions = new IOPortRegion[1];
-						ioPortRegions[0] = new IOPortRegion(resourceManager.IOPortResources, entry.First.BasePort, entry.First.PortRange);
+						ioPortRegions[0] = new IOPortRegion(entry.First.BasePort, entry.First.PortRange);
 					}
-					else
+					else {
 						ioPortRegions = new IOPortRegion[0];
+					}
 
 					if (entry.First.BaseAddress != 0x0) {
 						memoryRegion = new MemoryRegion[1];
 						memoryRegion[0] = new MemoryRegion(entry.First.BaseAddress, entry.First.AddressRange);
 					}
-					else
+					else {
 						memoryRegion = new MemoryRegion[0];
+					}
 
-					ISAHardwareDevice isaHardwareDevice = (ISAHardwareDevice)Activator.CreateInstance(entry.Second);
+					ISAHardwareDevice isaHardwareDevice = Activator.CreateInstance(entry.Second) as ISAHardwareDevice;
 					IBusResources busResources = new BusResources(resourceManager, ioPortRegions, memoryRegion, new InterruptHandler(resourceManager.InterruptManager, entry.First.IRQ, isaHardwareDevice));
 
 					isaHardwareDevice.AssignBusResources(busResources);

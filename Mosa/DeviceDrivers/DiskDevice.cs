@@ -32,7 +32,7 @@ namespace Mosa.DeviceDrivers
 		/// <param name="readOnly">if set to <c>true</c> [read only].</param>
 		public DiskDevice(IDiskControllerDevice diskController, uint driveNbr, bool readOnly)
 		{
-			base.parent = (diskController as Device);
+			base.parent = diskController as Device;
 			base.name = base.parent.Name + "/Disk" + driveNbr.ToString();
 			base.deviceStatus = DeviceStatus.Online;
 			this.totalSectors = diskController.GetTotalSectors(driveNbr);

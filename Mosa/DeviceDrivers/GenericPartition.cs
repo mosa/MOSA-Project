@@ -43,68 +43,42 @@ namespace Mosa.DeviceDrivers
 		/// Gets or sets a value indicating whether this <see cref="GenericPartition"/> is bootable.
 		/// </summary>
 		/// <value><c>true</c> if bootable; otherwise, <c>false</c>.</value>
-		public bool Bootable
-		{
-			get { return bootable; }
-			set { bootable = value; }
-		}
+		public bool Bootable { get { return bootable; } set { bootable = value; } }
 
 		/// <summary>
 		/// Gets the partition index.
 		/// </summary>
 		/// <value>The partition index.</value>
-		public uint Index
-		{
-			get { return index; }
-		}
+		public uint Index { get { return index; } }
 
 		/// <summary>
 		/// Gets or sets the start LBA.
 		/// </summary>
 		/// <value>The start LBA.</value>
-		public uint StartLBA
-		{
-			get { return startLBA; }
-			set { startLBA = value; }
-		}
+		public uint StartLBA { get { return startLBA; } set { startLBA = value; } }
 
 		/// <summary>
 		/// Gets the end LBA.
 		/// </summary>
 		/// <value>The end LBA.</value>
-		public uint EndLBA
-		{
-			get { return startLBA + totalBlocks; }
-		}
+		public uint EndLBA { get { return startLBA + totalBlocks; } }
 
 		/// <summary>
 		/// Gets or sets the total blocks.
 		/// </summary>
 		/// <value>The total blocks.</value>
-		public uint TotalBlocks
-		{
-			get { return totalBlocks; }
-			set { totalBlocks = value; }
-		}
+		public uint TotalBlocks { get { return totalBlocks; } set { totalBlocks = value; } }
 
 		/// <summary>
 		/// Gets or sets the type of the partition.
 		/// </summary>
 		/// <value>The type of the partition.</value>
-		public byte PartitionType
-		{
-			get { return type; }
-			set { type = value; }
-		}
+		public byte PartitionType { get { return type; } set { type = value; } }
 
 		/// <summary>
 		/// Gets or sets the GUID.
 		/// </summary>
 		/// <value>The GUID.</value>
-		public uint[] GUID
-		{
-			get { return guid; }
-			set { guid = value; }
-		}
+		public uint[] GUID { get { return guid; } set { guid = value; } }
 	}
 }

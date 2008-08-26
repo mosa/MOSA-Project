@@ -19,8 +19,8 @@ using Mosa.DeviceDrivers.Kernel;    // for IIPort
 
 namespace Mosa.DeviceDrivers.ISA.DiskControllers
 {
-	[ISADeviceSignature(AutoLoad = true, BasePort = 0x1F0, PortRange = 8)]
-	[ISADeviceSignature(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2")]
+	[ISADeviceSignature(AutoLoad = true, BasePort = 0x1F0, PortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[ISADeviceSignature(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2", Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class IDEDiskDriver : ISAHardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
 	{
 
@@ -83,11 +83,6 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			public uint MaxLBA;
 
 			public LBAType LBAType;
-
-			// legacy info
-			public uint Cylinders;
-			public uint Heads;
-			public uint SectorsPerTrack;
 		}
 
 		protected DriveInfo[] driveInfo;
@@ -169,7 +164,7 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 					//TextMode.WriteLine("");
 
 					IDiskDevice diskDevice = new DiskDevice(this, drive, false);
-					devices.Add((IDevice)diskDevice);
+					devices.Add(diskDevice as IDevice);
 
 					foreach (IDevice device in diskDevice.CreatePartitionDevices())
 						devices.Add(device);
@@ -291,11 +286,6 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 				info.SetUShort(index * 2, DataPort.Read16());
 
 			driveInfo[driveNbr].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA28);
-
-			// legacy info
-			driveInfo[driveNbr].Heads = info.GetUShort(IdentifyDrive.LogicalHeads);
-			driveInfo[driveNbr].Cylinders = info.GetUShort(IdentifyDrive.LogicalCylinders);
-			driveInfo[driveNbr].SectorsPerTrack = info.GetUShort(IdentifyDrive.LogicalSectors);
 
 			return true;
 		}

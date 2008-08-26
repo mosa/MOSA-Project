@@ -14,7 +14,7 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.ISA
 {
-	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8)]
+	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class PCIController : ISAHardwareDevice, IDevice, IHardwareDevice, IPCIController
 	{
 

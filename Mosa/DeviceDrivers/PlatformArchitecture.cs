@@ -7,12 +7,18 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace Mosa.DeviceDrivers
 {
-	public interface IMemoryRegion
+	[Flags]
+	public enum PlatformArchitecture
 	{
-		uint BaseAddress { get; }
-		uint Size { get; }
-	}
+		None = 0,	
 
+		x86 = 1,
+		x64 = 2,
+		
+		Both_x86_and_x64 = PlatformArchitecture.x86 | PlatformArchitecture.x64,
+	}
 }

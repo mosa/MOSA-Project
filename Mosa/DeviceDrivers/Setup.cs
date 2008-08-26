@@ -28,14 +28,14 @@ namespace Mosa.DeviceDrivers
 			deviceManager = new DeviceManager();
 
 			// Setup ISA Driver Registry
-			ISA.ISARegistry isaDeviceDrivers = new Mosa.DeviceDrivers.ISA.ISARegistry();
+			ISA.ISARegistry isaDeviceDrivers = new Mosa.DeviceDrivers.ISA.ISARegistry(PlatformArchitecture.x86);
 			// Load registry with build-in drivers
 			isaDeviceDrivers.RegisterBuildInDeviceDrivers();
 			// Start drivers for devices
 			isaDeviceDrivers.StartDrivers(deviceManager, resourceManager);
 
 			// Setup PCI Driver Registry
-			PCI.PCIRegistry pciDeviceDrivers = new Mosa.DeviceDrivers.PCI.PCIRegistry();
+			PCI.PCIRegistry pciDeviceDrivers = new Mosa.DeviceDrivers.PCI.PCIRegistry(PlatformArchitecture.x86);
 			// Load registry with build-in drivers
 			pciDeviceDrivers.RegisterBuildInDeviceDrivers();
 			// Start drivers for devices

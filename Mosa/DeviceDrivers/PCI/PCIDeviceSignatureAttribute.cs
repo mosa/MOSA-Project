@@ -14,6 +14,8 @@ namespace Mosa.DeviceDrivers.PCI
 	[AttributeUsage(AttributeTargets.All | AttributeTargets.Property, AllowMultiple = true)]
 	public class PCIDeviceSignatureAttribute : System.Attribute
 	{
+		public PlatformArchitecture Platforms = PlatformArchitecture.None;
+
 		[Flags]
 		protected enum Field : byte { DeviceID = 1, VendorID = 2, SubVendorID = 4, SubDeviceID = 8, RevisionID = 16, ProgIF = 32, ClassCode = 64, SubClassCode = 128 };
 

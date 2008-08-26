@@ -14,10 +14,10 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.ISA
 {
-	[ISADeviceSignature(AutoLoad = true, BasePort = 0x03F8, PortRange = 8, IRQ = 4)]
-	[ISADeviceSignature(AutoLoad = false, BasePort = 0x02F8, PortRange = 8, IRQ = 3)]
-	[ISADeviceSignature(AutoLoad = false, BasePort = 0x03E8, PortRange = 8, IRQ = 4)]
-	[ISADeviceSignature(AutoLoad = false, BasePort = 0x02E8, PortRange = 8, IRQ = 3)]
+	[ISADeviceSignature(AutoLoad = true, BasePort = 0x03F8, PortRange = 8, IRQ = 4, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[ISADeviceSignature(AutoLoad = false, BasePort = 0x02F8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[ISADeviceSignature(AutoLoad = false, BasePort = 0x03E8, PortRange = 8, IRQ = 4, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[ISADeviceSignature(AutoLoad = false, BasePort = 0x02E8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class SerialDriver : ISAHardwareDevice, IDevice, IHardwareDevice, ISerialDevice
 	{
 		protected IReadOnlyIOPort RBRBase; // Receive Buffer Register (read only)		

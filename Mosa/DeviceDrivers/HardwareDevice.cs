@@ -35,7 +35,7 @@ namespace Mosa.DeviceDrivers
 				return false;
 			}
 
-			//this.busResources.GetInterruptRequest();
+			this.busResources.EnableIRQ();
 
 			if (!Probe()) {
 				base.deviceStatus = DeviceStatus.NotFound;

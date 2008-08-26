@@ -31,11 +31,6 @@ namespace Mosa.DeviceDrivers.PCI
 		public AddressRegion Region { get { return region; } }
 		public bool Prefetchable { get { return prefetchable; } }
 
-		public PCIBaseAddress()
-		{
-			region = AddressRegion.Unimplemented;
-		}
-
 		public PCIBaseAddress(AddressRegion region, uint address, uint size, bool prefetchable)
 		{
 			this.region = region;

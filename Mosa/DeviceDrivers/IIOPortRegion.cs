@@ -15,7 +15,6 @@ namespace Mosa.DeviceDrivers
 	{
 		ushort BaseIOPort { get ; }
 		ushort Size { get ;  }
-		//IReadWriteIOPort GetIOPort(ushort index);
 	}
 
 }
