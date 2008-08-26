@@ -502,6 +502,10 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IR.IIrVisitor.Visit(IR.SConversionInstruction instruction)
+        {
+        }
+
         #endregion // IIrVisitor Members
 
         #region IX86InstructionVisitor Members

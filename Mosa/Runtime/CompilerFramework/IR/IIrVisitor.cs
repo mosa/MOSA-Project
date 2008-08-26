@@ -81,5 +81,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// </summary>
         /// <param name="instruction">The visiting instruction.</param>
         void Visit(ReturnInstruction instruction);
+
+        /// <summary>
+        /// Visitation function for <see cref="SConversionInstruction"/> instructions.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        void Visit(SConversionInstruction instruction);
     }
 }

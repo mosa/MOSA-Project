@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Base class for just-in-time and ahead-of-time compilers, which use
 	/// the Mosa.Runtime.CompilerFramework framework.
 	/// </summary>
-	public abstract class AssemblyCompiler/* : ITypeResolutionContext */
+	public abstract class AssemblyCompiler
     {
 		#region Data members
 
@@ -154,6 +154,7 @@ namespace Mosa.Runtime.CompilerFramework
             {
                 MethodCompilerBase mc = _schedule.Dequeue();
                 mc.Compile();
+                mc.Dispose();
             }
         }
 

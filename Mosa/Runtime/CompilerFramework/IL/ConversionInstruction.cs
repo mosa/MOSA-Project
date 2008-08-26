@@ -39,6 +39,28 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
 		#region Methods
 
+        public override object Expand(MethodCompilerBase methodCompiler)
+        {
+            IArchitecture arch = methodCompiler.Architecture;
+            switch (this.Code)
+            {
+                case OpCode.Conv_i1:
+                    return arch.CreateInstruction(typeof(IR.SConversionInstruction), this.Results[0], this.Operands[0]);
+
+                case OpCode.Conv_i2:
+                    return arch.CreateInstruction(typeof(IR.SConversionInstruction), this.Results[0], this.Operands[0]);
+
+                case OpCode.Conv_i4:
+                    return arch.CreateInstruction(typeof(IR.SConversionInstruction), this.Results[0], this.Operands[0]);
+
+                case OpCode.Conv_i8:
+                    return arch.CreateInstruction(typeof(IR.SConversionInstruction), this.Results[0], this.Operands[0]);
+
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         public sealed override void Validate(MethodCompilerBase compiler)
         {
 			// Validate the typecode & determine the resulting stack type

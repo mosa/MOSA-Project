@@ -64,6 +64,9 @@ namespace Mosa.Platforms.x86
         {
             // Flush and release the text writer
             _textWriter.Flush();
+
+            // HACK: This is wrong, but only this allows us to do a clean compilation
+            _textWriter.Dispose();
             _textWriter = null;
         }
 
@@ -299,6 +302,16 @@ namespace Mosa.Platforms.x86
             }
             else
                 _textWriter.WriteLine("\t\tmov\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
+        }
+
+        public void Movsx(Operand dest, Operand src)
+        {
+            if (!(dest is RegisterOperand))
+                throw new NotSupportedException(@"Only register destination supported.");
+            if (src is ConstantOperand)
+                throw new NotSupportedException(@"Source must be memory or register.");
+
+            _textWriter.WriteLine("\t\tmovsx\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
         }
 
         public void Nop()

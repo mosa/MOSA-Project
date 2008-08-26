@@ -165,9 +165,14 @@ namespace Mosa.Runtime.CompilerFramework
             else
             {
                 // FIXME: Make this thread safe
-                List<LinkRequest> list = new List<LinkRequest>();
+                List<LinkRequest> list;
+                if (false == _linkRequests.TryGetValue(member, out list))
+                {
+                    list = new List<LinkRequest>();
+                    _linkRequests.Add(member, list);
+                }
+
                 list.Add(new LinkRequest(address, relativeBase));
-                _linkRequests.Add(member, list);
             }
 
             return result;

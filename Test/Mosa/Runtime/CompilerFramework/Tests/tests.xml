@@ -65,6 +65,11 @@
   </TestCase>
 
 
+  <TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="IL conv.i1" language="C#">
+    <Description>Tests the sign extended conversion to I1 from various types.</Description>
+    <Source>OpConvI1.cs</Source>
+  </TestCase>
+  
   <!-- Older test cases to be refactored in above style -->
   <!--<TestCase author="Michael Ruck" contact="sharpos@michaelruck.de" name="Integer Addition" language="C#">
     <Description>Tests the addition of integers of various sizes.</Description>

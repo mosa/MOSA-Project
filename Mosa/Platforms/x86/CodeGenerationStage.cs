@@ -864,6 +864,26 @@ namespace Mosa.Platforms.x86
             _emitter.Ret();
         }
 
+        void IR.IIrVisitor.Visit(IR.SConversionInstruction instruction)
+        {
+            switch (instruction.Destination.Type.Type)
+            {
+                case CilElementType.I1:
+                    _emitter.Movsx(instruction.Destination, instruction.Source);
+                    break;
+
+                case CilElementType.I2: goto case CilElementType.I1;
+
+                case CilElementType.I4: goto case CilElementType.I1;
+
+                case CilElementType.I8:
+                    throw new NotImplementedException();
+
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         #endregion // IIrVisitor Members
     }
 }

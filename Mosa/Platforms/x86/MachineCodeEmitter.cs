@@ -462,6 +462,29 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        void ICodeEmitter.Movsx(Operand dest, Operand src)
+        {
+            if (!(dest is RegisterOperand))
+                throw new ArgumentException(@"Destination must be RegisterOperand.", @"dest");
+            if (src is ConstantOperand)
+                throw new ArgumentException(@"Source must not be ConstantOperand.", @"src");
+
+            switch (src.Type.Type)
+            {
+                case CilElementType.I1:
+                    Emit(dest, src, cd_movsx8);
+                    break;
+
+                case CilElementType.I2:
+                    Emit(dest, src, cd_movsx16);
+                    break;
+
+                case CilElementType.I4:
+                    Emit(dest, src, cd_mov);
+                    break;
+            }
+        }
+
         void ICodeEmitter.Pop(Operand operand)
         {
             if (operand is RegisterOperand)
@@ -607,6 +630,16 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x8B }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x8B }, null),
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x89 }, null),
+        };
+
+        private static readonly CodeDef[] cd_movsx8 = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xBE }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),    new byte[] { 0x0F, 0xBE }, null),
+        };
+
+        private static readonly CodeDef[] cd_movsx16 = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xBF }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),    new byte[] { 0x0F, 0xBF }, null),
         };
 
         private static readonly CodeDef[] cd_movsd = new CodeDef[] {

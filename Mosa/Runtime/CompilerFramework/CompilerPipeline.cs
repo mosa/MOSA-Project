@@ -87,6 +87,11 @@ namespace Mosa.Runtime.CompilerFramework
             _pipeline.AddRange(stages);
         }
 
+        public void Clear()
+        {
+            _pipeline.Clear();
+        }
+
         public void Execute(Action<T> action)
         {
             _currentStage = 0; 

@@ -30,7 +30,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// created by invoking CreateMethodCompiler on a specific compiler
     /// instance.
     /// </remarks>
-    public abstract class MethodCompilerBase : CompilerBase<IMethodCompilerStage>
+    public abstract class MethodCompilerBase : CompilerBase<IMethodCompilerStage>, IDisposable
     {
         #region Data members
 
@@ -159,5 +159,33 @@ namespace Mosa.Runtime.CompilerFramework
         public abstract Stream RequestCodeStream();
 
         #endregion // Methods
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            if (null == _pipeline)
+                throw new ObjectDisposedException(@"MethodCompilerBase");
+
+            foreach (IMethodCompilerStage mcs in _pipeline)
+            {
+                IDisposable d = mcs as IDisposable;
+                if (null != d)
+                {
+                    d.Dispose();
+                }
+            }
+
+            _pipeline.Clear();
+            _pipeline = null;
+
+            _architecture = null;
+            _linker = null;
+            _method = null;
+            _module = null;
+            _type = null;
+        }
+
+        #endregion // IDisposable Members
     }
 }

@@ -57,9 +57,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
         #region Instruction Overrides
 
         /// <summary>
-        /// Returns a string representation of the <see cref="MoveInstruction"/>.
+        /// Returns a string representation of the <see cref="LogicalAndInstruction"/>.
         /// </summary>
-        /// <returns>A string representation of the move instruction.</returns>
+        /// <returns>A string representation of the and instruction.</returns>
         public override string ToString()
         {
             return String.Format(@"IR and {0} <- {1} & {2}", this.Destination, this.Operand1, this.Operand2);
