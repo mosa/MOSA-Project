@@ -13,11 +13,11 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
-    public sealed class ValueType : SigType
+    public sealed class ValueTypeSigType : SigType
     {
         private TokenTypes _token;
 
-        public ValueType(TokenTypes token)
+        public ValueTypeSigType(TokenTypes token)
             : base(CilElementType.ValueType)
         {
             _token = token;

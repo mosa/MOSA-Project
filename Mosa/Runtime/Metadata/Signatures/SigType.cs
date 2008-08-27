@@ -108,32 +108,32 @@ namespace Mosa.Runtime.Metadata.Signatures
         private static SigType ParseVar(byte[] buffer, ref int index)
         {
             int varIdx = Utilities.ReadCompressedInt32(buffer, ref index);
-            return new Var(varIdx);
+            return new VarSigType(varIdx);
         }
 
         private static SigType ParseValueType(byte[] buffer, ref int index)
         {
             TokenTypes token = ReadTypeDefOrRefEncoded(buffer, ref index);
-            return new ValueType(token);
+            return new ValueTypeSigType(token);
         }
 
         private static SigType ParsePointer(byte[] buffer, ref int index)
         {
             CustomMod[] mods = CustomMod.ParseCustomMods(buffer, ref index);
             SigType type = ParseTypeSignature(buffer, ref index);
-            return new Ptr(mods, type);
+            return new PtrSigType(mods, type);
         }
 
         private static SigType ParseReference(byte[] buffer, ref int index)
         {
             SigType type = ParseTypeSignature(buffer, ref index);
-            return new Ref(type);
+            return new RefSigType(type);
         }
 
         private static SigType ParseMVar(byte[] buffer, ref int index)
         {
             int varIdx = Utilities.ReadCompressedInt32(buffer, ref index);
-            return new MVar(varIdx);
+            return new MVarSigType(varIdx);
         }
 
         private static SigType ParseGenericInstance(byte[] buffer, ref int index)
@@ -161,7 +161,7 @@ namespace Mosa.Runtime.Metadata.Signatures
                 genArgs[i] = ParseTypeSignature(buffer, ref index);
             }
 
-            return new GenericInst(originalType, genArgs);
+            return new GenericInstSigType(originalType, genArgs);
         }
 
         private static SigType ParseFunctionPointer(byte[] buffer, ref int index)
@@ -173,7 +173,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         private static SigType ParseClassSignature(byte[] buffer, ref int index)
         {
             TokenTypes token = ReadTypeDefOrRefEncoded(buffer, ref index);
-            return new Class(token);
+            return new ClassSigType(token);
         }
 
         private static SigType ParseArraySignature(byte[] buffer, ref int index)
@@ -193,14 +193,14 @@ namespace Mosa.Runtime.Metadata.Signatures
             for (int i = 0; i < count; i++)
                 lowerBounds[i] = Utilities.ReadCompressedInt32(buffer, ref index);
 
-            return new Array(elementType, rank, sizes, lowerBounds);
+            return new ArraySigType(elementType, rank, sizes, lowerBounds);
         }
 
         private static SigType ParseSZArraySignature(byte[] buffer, ref int index)
         {
             CustomMod[] customMods = CustomMod.ParseCustomMods(buffer, ref index);
             SigType elementType = ParseTypeSignature(buffer, ref index);
-            return new SZArray(customMods, elementType);
+            return new SZArraySigType(customMods, elementType);
         }
 
         private static readonly TokenTypes[] _typeDefOrRefEncodedTables = new TokenTypes[] { TokenTypes.TypeDef, TokenTypes.TypeRef, TokenTypes.TypeSpec };

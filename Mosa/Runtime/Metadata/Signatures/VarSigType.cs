@@ -13,12 +13,12 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
-    public sealed class MVar : SigType
+    public sealed class VarSigType : SigType
     {
         private int _index;
 
-        public MVar(int index)
-            : base(CilElementType.MVar)
+        public VarSigType(int index)
+            : base(CilElementType.Var)
         {
             _index = index;
         }

@@ -13,7 +13,16 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
-    public class StandaloneMethodSig : MethodReferenceSignature
+    public sealed class ClassSigType : SigType
     {
+        private TokenTypes _token;
+
+        public ClassSigType(TokenTypes token)
+            : base(CilElementType.Class)
+        {
+            _token = token;
+        }
+
+        public TokenTypes Token { get { return _token; } }
     }
 }

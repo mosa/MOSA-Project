@@ -13,6 +13,7 @@ using System.Text;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
+using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
@@ -61,7 +62,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             MethodSignature sig = decoder.Method.Signature;
             if (sig.ReturnType.Type == CilElementType.Void)
             {
-                //_operands = ILInstruction.NoOperands;
+                SetOperandCount(0, 0);
                 return;
             }
 
@@ -73,8 +74,9 @@ namespace Mosa.Runtime.CompilerFramework.IL
             IArchitecture arch = methodCompiler.Architecture;
 
             // Do we have an operand to return?
-            if (null != this.Operands[0])
+            if (0 != this.Operands.Length)
             {
+                Debug.Assert(1 == this.Operands.Length, @"Can't return more than one operand.");
                 ICallingConvention cc = methodCompiler.Architecture.GetCallingConvention(methodCompiler.Method.Signature.CallingConvention);
                 List<Instruction> instructions = new List<Instruction>();
                 Instruction[] resmove = cc.MoveReturnValue(arch, this.Operands[0]);

@@ -18,6 +18,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
         public static int Test_CallEmpty()
         {
             int i = CallEmpty();
+            DoNothing();
             return i;
         }
 
@@ -34,6 +35,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
         private static int Div(int dividend, int divisor)
         {
             return (dividend / divisor);
+        }
+
+        private static void DoNothing()
+        {
         }
     }
 }

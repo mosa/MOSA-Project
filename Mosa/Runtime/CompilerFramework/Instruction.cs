@@ -224,19 +224,40 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="results">The number of supported results.</param>
         protected void SetOperandCount(int operands, int results)
         {
-            if (null != _operands)
+            if (operands != _operands.Length)
             {
-                foreach (Operand op in _operands)
-                    op.Uses.Remove(this);
+                if (null != _operands && operands < _operands.Length)
+                {
+                    for (int i = operands; i < _operands.Length; i++)
+                    {
+                        Operand op = _operands[i];
+                        if (null != op)
+                            op.Uses.Remove(this);
+                    }
+                }
+                if (0 != operands)
+                    Array.Resize<Operand>(ref _operands, operands);
+                else
+                    _operands = Instruction.NoOperands;
             }
-            _operands = new Operand[operands];
 
-            if (null != _results)
+            if (results != _results.Length)
             {
-                foreach (Operand op in _results)
-                    op.Definitions.Remove(this);
+                if (null != _results && results < _results.Length)
+                {
+                    for (int i = results; i < _results.Length; i++)
+                    {
+                        Operand op = _results[i];
+                        if (null != op)
+                            op.Definitions.Remove(this);
+                    }
+                }
+
+                if (0 != results)
+                    Array.Resize<Operand>(ref _results, results);
+                else
+                    _results = Instruction.NoOperands;
             }
-            _results = new Operand[results];
         }
 
         /// <summary>

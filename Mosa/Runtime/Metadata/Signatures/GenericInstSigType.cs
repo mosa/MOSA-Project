@@ -13,12 +13,12 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
-    public sealed class GenericInst : SigType
+    public sealed class GenericInstSigType : SigType
     {
         private SigType _baseType;
         private SigType[] _genericArgs;
 
-        public GenericInst(SigType baseType, SigType[] genericArgs)
+        public GenericInstSigType(SigType baseType, SigType[] genericArgs)
             : base(CilElementType.GenericInst)
         {
             _baseType = baseType;

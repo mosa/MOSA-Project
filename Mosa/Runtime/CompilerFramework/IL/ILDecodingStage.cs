@@ -366,7 +366,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             {
                 if (0 == index)
                 {
-                    return new ParameterOperand(_compiler.Architecture.StackFrameRegister, new RuntimeParameter(_method.Module, @"this", 0, ParameterAttributes.In), new Class(_compiler.Type.Token));
+                    return new ParameterOperand(_compiler.Architecture.StackFrameRegister, new RuntimeParameter(_method.Module, @"this", 0, ParameterAttributes.In), new ClassSigType(_compiler.Type.Token));
                 }
                 else
                 {

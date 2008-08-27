@@ -13,19 +13,16 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
-    public sealed class SZArray : SigType
+    public class RefSigType : SigType
     {
-        private CustomMod[] _customMods;
         private SigType _type;
 
-        public SZArray(CustomMod[] customMods, SigType type)
-            : base(CilElementType.SZArray)
+        public RefSigType(SigType type)
+            : base(CilElementType.ByRef)
         {
-            _customMods = customMods;
             _type = type;
         }
 
-        public CustomMod[] CustomMods { get { return _customMods; } }
         public SigType ElementType { get { return _type; } }
     }
 }

@@ -13,14 +13,14 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
-    public sealed class Array : SigType
+    public sealed class ArraySigType : SigType
     {
         private SigType _type;
         private int _rank;
         private int[] _sizes;
         private int[] _lowbounds;
 
-        public Array(SigType type, int rank, int[] sizes, int[] lowBounds)
+        public ArraySigType(SigType type, int rank, int[] sizes, int[] lowBounds)
             : base(CilElementType.Array)
         {
             _type = type;

@@ -13,12 +13,12 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
-    public sealed class Ptr : SigType
+    public sealed class PtrSigType : SigType
     {
         private CustomMod[] _customMods;
         private SigType _type;
 
-        public Ptr(CustomMod[] customMods, SigType type)
+        public PtrSigType(CustomMod[] customMods, SigType type)
             : base(CilElementType.Ptr)
         {
             _customMods = customMods;
