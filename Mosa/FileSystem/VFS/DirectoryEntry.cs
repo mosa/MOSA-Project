@@ -11,7 +11,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mosa.VFS
+namespace Mosa.FileSystem.VFS
 {
 	public sealed class DirectoryEntry
 	{

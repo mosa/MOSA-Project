@@ -11,7 +11,7 @@
 using System;
 using System.IO;
 
-namespace Mosa.VFS
+namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
 	/// Interface implemented by all VFS nodes.

@@ -11,7 +11,7 @@
 using System;
 using System.IO;
 
-namespace Mosa.VFS
+namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
 	/// Implements path resolution functionality for the <see cref="Mosa.VFS.VirtualFileSystem"/>.

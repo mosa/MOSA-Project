@@ -278,11 +278,11 @@
       </Files>
     </Project>
 
-    <Project name="Mosa.VFS" type="Library" path="..\Mosa\VFS" language="C#" runtime="Microsoft" rootNamespace="Mosa.VFS" assemblyName="Mosa.VFS">
+    <Project name="Mosa.FileSystem" type="Library" path="..\Mosa\FileSystem" language="C#" runtime="Microsoft" rootNamespace="Mosa.FileSystem" assemblyName="Mosa.FileSystem">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../build/debug</OutputPath>
-          <XmlDocFile>../build/Mosa.VFS.xml</XmlDocFile>
+          <XmlDocFile>../build/Mosa.FileSystem.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>
@@ -291,7 +291,7 @@
       <Configuration name="Release">
         <Options>
           <OutputPath>../build/release</OutputPath>
-          <XmlDocFile>../build/Mosa.VFS.xml</XmlDocFile>
+          <XmlDocFile>../build/Mosa.FileSystem.xml</XmlDocFile>
           <AllowUnsafe>false</AllowUnsafe>
           <NoStdLib>false</NoStdLib>
           <CompilerDefines></CompilerDefines>

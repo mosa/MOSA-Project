@@ -10,7 +10,7 @@
 
 using System;
 
-namespace Mosa.VFS
+namespace Mosa.FileSystem.VFS
 {
 
 	/// <summary>

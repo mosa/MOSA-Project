@@ -8,7 +8,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.VFS
+namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
 	/// Specifies the type of the node in the virtual file system.

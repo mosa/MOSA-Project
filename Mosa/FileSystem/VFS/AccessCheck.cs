@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.VFS
+namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
 	/// Flags for the <see cref="Mosa.VFS.VirtualFileSystem.AccessCheck"/> function.

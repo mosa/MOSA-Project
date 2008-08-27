@@ -13,7 +13,7 @@ using System.Collections;
 using System.IO;
 
 
-namespace Mosa.VFS
+namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
 	/// Represents a basic directory in the VFS namespace.

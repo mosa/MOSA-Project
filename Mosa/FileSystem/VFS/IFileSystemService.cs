@@ -11,7 +11,7 @@
 using System;
 using Mosa.FileSystem;
 
-namespace Mosa.VFS
+namespace Mosa.FileSystem.VFS
 {
 
 	/// <summary>

@@ -13,7 +13,7 @@ using System;
 using System.IO;
 using Mosa.FileSystem;
 
-namespace Mosa.VFS
+namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
 	/// Implements the virtual file system service for the kernel.

@@ -9,9 +9,8 @@
  */
 
 using System.IO;
-using Mosa.VFS;
 
-namespace Mosa.VFS
+namespace Mosa.FileSystem.VFS
 {
 	public sealed class FileSystemFactory
 	{

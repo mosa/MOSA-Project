@@ -12,7 +12,7 @@
 using System;
 using System.IO;
 
-namespace Mosa.VFS
+namespace Mosa.FileSystem.VFS
 {
 	public sealed class SymbolicLinkNode : NodeBase
 	{

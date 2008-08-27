@@ -10,7 +10,7 @@
 
 using System;
 
-namespace Mosa.VFS
+namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
 	/// The access mode enumeration is used to determine accessibility of the file by the immediate caller. <see cref="Mosa.VFS.VirtualFileSystem.Access(System.String,Mosa.VFS.AccessMode)"/> for more information.
