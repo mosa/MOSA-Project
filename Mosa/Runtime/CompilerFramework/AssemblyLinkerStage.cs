@@ -96,7 +96,7 @@ namespace Mosa.Runtime.CompilerFramework
             RuntimeMethod method = member as RuntimeMethod;
             if (null != method)
             {
-                Debug.Assert(MethodAttributes.Static == (method.Attributes & MethodAttributes.Static));
+                Debug.Assert(MethodAttributes.Abstract != (method.Attributes & MethodAttributes.Abstract), @"Can't link an abstract method.");
                 address = method.Address.ToInt64();
             }
             else
