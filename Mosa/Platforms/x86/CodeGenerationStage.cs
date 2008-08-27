@@ -426,8 +426,11 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.Switch(IL.SwitchInstruction instruction)
         {
-            foreach (int target in instruction.BranchTargets)
-                _emitter.Jmp(target);
+            for (int i = 0; i < instruction.BranchTargets.Length; i++)
+            {
+                _emitter.Cmp(instruction.Operands[0], new ConstantOperand(new SigType(CilElementType.I), i));
+                _emitter.Je(instruction.BranchTargets[i]);
+            }
             //throw new NotImplementedException();
         }
 

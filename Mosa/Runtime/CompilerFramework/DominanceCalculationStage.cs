@@ -234,12 +234,12 @@ namespace Mosa.Runtime.CompilerFramework
         {
             BasicBlock f1 = b1, f2 = b2;
 
-            while (f1.Index != f2.Index)
+            while (f2 != null && f1 != null && f1.Index != f2.Index)
             {
-                while (f1.Index > f2.Index)
+                while (f2 != null && f1 != null && f1.Index > f2.Index)
                     f1 = _doms[f1.Index];
 
-                while (f2.Index > f1.Index)
+                while (f2 != null && f1 != null && f2.Index > f1.Index)
                     f2 = _doms[f2.Index];
             }
 

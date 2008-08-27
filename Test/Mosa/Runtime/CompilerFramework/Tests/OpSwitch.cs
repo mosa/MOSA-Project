@@ -12,18 +12,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
         public static int Test_Switch()
         {
             int x = 0;
-            int j = 4;
+            int j = 2;
+            int k = j + 1;
 
-            switch (j)
+            switch (k)
             {
                 case 1:
-                    x = 1;
+                    x = 9;
                     break;
                 case 2:
                     x = 2;
                     break;
                 case 3:
-                    x = 3;
+                    x = 7;
                     break;
                 case 4:
                     x = 4;
@@ -33,7 +34,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
                     break;
             }
 
-            return (x == 4 ? 1 : 0);
+            return (x == 7 ? 1 : 0);
         }
     }
 }
