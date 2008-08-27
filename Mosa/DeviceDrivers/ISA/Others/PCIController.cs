@@ -29,8 +29,6 @@ namespace Mosa.DeviceDrivers.ISA
 		protected IReadWriteIOPort ConfigAddress;
 		protected IReadWriteIOPort ConfigData;
 
-		protected ushort ioBase;
-
 		public PCIController() { }
 		public void Dispose() { }
 

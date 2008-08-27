@@ -131,16 +131,14 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 		{
 			DeviceHeadPort.Write8(0xA0);
 
-			// TODO
-			//Timer.Delay(1000 / 250); // wait 1/250th of a second
+			HAL.Sleep(1000 / 250); // wait 1/250th of a second
 
 			if ((StatusPort.Read8() & 0x40) == 0x40)
 				driveInfo[0].Present = true;
 
 			DeviceHeadPort.Write8(0xB0);
 
-			// TODO
-			//Timer.Delay(1000 / 250); // wait 1/250th of a second
+			HAL.Sleep(1000 / 250); // wait 1/250th of a second
 
 			if ((StatusPort.Read8() & 0x40) == 0x40)
 				driveInfo[1].Present = true;
@@ -158,18 +156,20 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 
 					//TextMode.Write(base.name);
 					//TextMode.Write(": Disk #");
-					//TextMode.Write((int)drive);
-					//TextMode.Write(" - ", (int)(driveInfo[drive].MaxLBA / 1024 / 2));
-					//TextMode.Write("MB, LBA=", (int)driveInfo[drive].MaxLBA);
+					//TextMode.Write(drive.ToString());
+					//TextMode.Write(" - ", (driveInfo[drive].MaxLBA / 1024 / 2).ToString());
+					//TextMode.Write("MB, LBA=", driveInfo[drive].MaxLBAToString());
 					//TextMode.WriteLine("");
 
 					IDiskDevice diskDevice = new DiskDevice(this, drive, false);
 					devices.Add(diskDevice as IDevice);
 
+					// TODO: Move the following outside of the driver
 					foreach (IDevice device in diskDevice.CreatePartitionDevices())
 						devices.Add(device);
 				}
 			}
+
 			return devices;
 		}
 

@@ -71,6 +71,15 @@ namespace Mosa.DeviceDrivers.Kernel
 		{
 			// TODO
 		}
+
+		/// <summary>
+		/// Sleeps the specified milliseconds.
+		/// </summary>
+		/// <param name="milliseconds">The milliseconds.</param>
+		public static void Sleep(uint milliseconds)
+		{
+			// TODO
+		}
 	}
 }
 

@@ -35,7 +35,7 @@ namespace Mosa.DeviceDrivers.ISA
 
 		protected SpinLock spinLock;
 
-		protected const ushort FIFOSize = 256;
+		protected const ushort fifoSize = 256;
 		protected byte[] fifoBuffer;
 		protected uint fifoStart;
 		protected uint fifoEnd;
@@ -143,7 +143,7 @@ namespace Mosa.DeviceDrivers.ISA
 			MSRBase = base.busResources.GetIOPort(0,6); // Modem Status Register
 			SCRBase = base.busResources.GetIOPort(0,7); // Scratch Register (16450+ and some 8250s, special use with some boards)
 
-			this.fifoBuffer = new byte[FIFOSize];
+			this.fifoBuffer = new byte[fifoSize];
 			this.fifoStart = 0;
 			this.fifoEnd = 0;
 
@@ -196,7 +196,7 @@ namespace Mosa.DeviceDrivers.ISA
 		{
 			uint next = fifoEnd + 1;
 
-			if (next == FIFOSize)
+			if (next == fifoSize)
 				next = 0;
 
 			if (next == fifoStart)
@@ -215,7 +215,7 @@ namespace Mosa.DeviceDrivers.ISA
 
 			fifoStart++;
 
-			if (fifoStart == FIFOSize)
+			if (fifoStart == fifoSize)
 				fifoStart = 0;
 
 			return value;
@@ -228,7 +228,7 @@ namespace Mosa.DeviceDrivers.ISA
 
 		protected bool IsFIFOFull()
 		{
-			if ((((fifoEnd + 1) == FIFOSize) ? 0 : fifoEnd + 1) == fifoStart)
+			if ((((fifoEnd + 1) == fifoSize) ? 0 : fifoEnd + 1) == fifoStart)
 				return true;
 			else
 				return false;
