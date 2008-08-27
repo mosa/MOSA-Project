@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Alex Lyman (<?>)
  */
 
 using System;
@@ -15,6 +16,7 @@ using System.Text;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.Vm
 {
@@ -252,17 +254,40 @@ namespace Mosa.Runtime.Vm
             if (null == scope)
                 throw new ArgumentNullException(@"scope");
 
-            Debug.Assert(TokenTypes.MethodDef == (TokenTypes.TableMask & token), @"Only MethodDef tokens supported!");
-            if (TokenTypes.MemberRef == (TokenTypes.TableMask & token))
+            switch (TokenTypes.TableMask & token)
             {
-                MemberRefRow row;
-                scope.Metadata.Read(token, out row);
-                throw new NotImplementedException();
-                // token = row
-            }
+                case TokenTypes.MethodDef:
+                    {
+                        ModuleOffsets offsets = GetModuleOffset(scope);
+                        return _methods[offsets.MethodOffset + (int)(TokenTypes.RowIndexMask & token) - 1];
+                    }
 
-            ModuleOffsets offsets = GetModuleOffset(scope);
-            return _methods[offsets.MethodOffset + (int)(TokenTypes.RowIndexMask & token) - 1];
+                case TokenTypes.MemberRef:
+                    {
+                        MemberRefRow row;
+                        scope.Metadata.Read(token, out row);
+                        RuntimeType type = this.ResolveTypeRef(scope, row.ClassTableIdx);
+                        string nameString;
+                        scope.Metadata.Read(row.NameStringIdx, out nameString);
+                        Signature sig = Signature.FromMemberRefSignatureToken(scope.Metadata, row.SignatureBlobIdx);
+                        List<RuntimeMethod> methods = new List<RuntimeMethod>(type.Methods);
+                        foreach (RuntimeMethod method in type.Methods)
+                        {
+                            if (method.Name != nameString)
+                                continue;
+                            if (!method.Signature.Equals(sig))
+                                continue;
+                            return method;
+                        }
+                        throw new MissingMethodException(type.Name, nameString);
+                    }
+
+                case TokenTypes.MethodSpec:
+                    throw new NotImplementedException();
+
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
         #endregion // ITypeSystem Members
@@ -631,7 +656,36 @@ namespace Mosa.Runtime.Vm
 
         private RuntimeType ResolveTypeRef(IMetadataModule module, TokenTypes tokenTypes)
         {
-            throw new Exception("The method or operation is not implemented.");
+            // MR, 2008-08-26, patch by Alex Lyman (thanks!)
+            TypeRefRow row;
+            module.Metadata.Read(tokenTypes, out row);
+            switch (row.ResolutionScopeIdx & TokenTypes.TableMask)
+            {
+                case TokenTypes.Module:
+                case TokenTypes.ModuleRef:
+                case TokenTypes.TypeRef:
+                    throw new NotImplementedException();
+                case TokenTypes.AssemblyRef:
+                    AssemblyRefRow asmRefRow;
+                    module.Metadata.Read(row.ResolutionScopeIdx, out asmRefRow);
+                    string typeNamespace, typeName;
+                    module.Metadata.Read(row.TypeNameIdx, out typeName);
+                    module.Metadata.Read(row.TypeNamespaceIdx, out typeNamespace);
+                    IMetadataModule resolvedModule = RuntimeBase.Instance.AssemblyLoader.Resolve(module.Metadata, asmRefRow);
+
+                    // HACK: If there's an easier way to do this without all those string comparisons, I'm all for it
+                    foreach (RuntimeType type in ((ITypeSystem)this).GetTypesFromModule(resolvedModule))
+                    {
+                        if (type.Name != typeName)
+                            continue;
+                        if (type.Namespace != typeNamespace)
+                            continue;
+                        return type;
+                    }
+                    throw new TypeLoadException("Could not find type: " + typeNamespace + Type.Delimiter + typeName);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
         #endregion // Internals
