@@ -51,13 +51,9 @@ namespace Mosa.Tools.Compiler {
 		/// Compiles an entire assemblyName.
 		/// </summary>
 		/// <param name="assemblyName">The compiled assemblyName.</param>
-		public static void Compile(string assemblyName)
+        public static void Compile(IArchitecture architecture, string assemblyName)
 		{
             IMetadataModule assembly = RuntimeBase.Instance.AssemblyLoader.Load(assemblyName);
-
-            // FIXME: Use compiler command line options to determine architecture and feature flags
-            IArchitecture architecture = Mosa.Platforms.x86.Architecture.CreateArchitecture(assembly.Metadata, ArchitectureFeatureFlags.AutoDetect);
-
             AotCompiler c = new AotCompiler(architecture, assembly);
             c.Compile();
 		}

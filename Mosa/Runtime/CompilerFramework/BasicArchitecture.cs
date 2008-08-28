@@ -30,18 +30,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         private SigType _nativeType;
 
-        /// <summary>
-        /// The metadata provider.
-        /// </summary>
-        protected IMetadataProvider _metadataProvider;
-
         #endregion // Data members
 
         #region Construction
 
-        public BasicArchitecture(IMetadataProvider provider)
+        public BasicArchitecture()
         {
-            _metadataProvider = provider;
         }
 
         #endregion // Construction

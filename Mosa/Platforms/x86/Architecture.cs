@@ -97,8 +97,7 @@ namespace Mosa.Platforms.x86
 
         #region Construction
 
-        protected Architecture(IMetadataProvider provider, ArchitectureFeatureFlags features)
-            : base(provider)
+        protected Architecture(ArchitectureFeatureFlags features)
         {
             _features = features;
         }
@@ -116,12 +115,12 @@ namespace Mosa.Platforms.x86
         /// This method creates an instance of an appropriate architecture class, which supports the specific
         /// architecture features.
         /// </remarks>
-        public static IArchitecture CreateArchitecture(IMetadataProvider provider, ArchitectureFeatureFlags features)
+        public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags features)
         {
             if (features == ArchitectureFeatureFlags.AutoDetect)
                 features = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE;
 
-            return new Architecture(provider, features);
+            return new Architecture(features);
         }
 
         #endregion // Methods

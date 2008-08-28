@@ -14,6 +14,7 @@ using Mosa.Runtime.Loader.PE;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Loader;
+using Mosa.Platforms.x86;
 
 namespace Mosa.Tools.Compiler {
 	public static class Program {
@@ -27,12 +28,13 @@ namespace Mosa.Tools.Compiler {
 
             string assembly = args[0], path;
 
+            IArchitecture architecture = Architecture.CreateArchitecture(ArchitectureFeatureFlags.AutoDetect);
+
             using (CompilationRuntime cr = new CompilationRuntime())
             {
                 path = Path.GetDirectoryName(assembly);
                 cr.AssemblyLoader.AppendPrivatePath(path);
-
-                AotCompiler.Compile(assembly);
+                AotCompiler.Compile(architecture, assembly);
             }
             //CompilerScheduler.Wait();
 		}
