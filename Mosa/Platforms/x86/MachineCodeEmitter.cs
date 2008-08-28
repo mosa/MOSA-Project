@@ -804,6 +804,8 @@ namespace Mosa.Platforms.x86
                     case CilElementType.I1: goto case CilElementType.I;
                     case CilElementType.I2: goto case CilElementType.I;
                     case CilElementType.I4: goto case CilElementType.I;
+                    case CilElementType.Ptr: goto case CilElementType.I;
+                    case CilElementType.ByRef: goto case CilElementType.I;
 
                     case CilElementType.U1: goto case CilElementType.I;
                     case CilElementType.U2: goto case CilElementType.I;

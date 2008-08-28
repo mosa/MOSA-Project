@@ -120,6 +120,7 @@ namespace Mosa.Runtime.CompilerFramework
                 case CilElementType.I: result = StackTypeCode.N; break;
                 case CilElementType.U: result = StackTypeCode.N; break;
                 case CilElementType.Ptr: result = StackTypeCode.Ptr; break;
+                case CilElementType.ByRef: result = StackTypeCode.Ptr; break;
                 case CilElementType.Object: result = StackTypeCode.O; break;
                 case CilElementType.String: result = StackTypeCode.O; break;
                 case CilElementType.ValueType: result = StackTypeCode.O; break;

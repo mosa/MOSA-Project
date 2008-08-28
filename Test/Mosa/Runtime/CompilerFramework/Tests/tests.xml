@@ -22,6 +22,10 @@
     <Description>Tests the substraction operation.</Description>
     <Source>OpSub.cs</Source>
   </TestCase>
+  <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="IL ldarga" language="C#">
+    <Description>Tests the ldarga operation.</Description>
+    <Source>OpLdarga.cs</Source>
+  </TestCase>
   <TestCase author="Simon Wollwage" contact="simon_wollwage@yahoo.co.jp" name="IL mul" language="C#">
     <Description>Tests the integer multiplication operation.</Description>
     <Source>OpMul.cs</Source>

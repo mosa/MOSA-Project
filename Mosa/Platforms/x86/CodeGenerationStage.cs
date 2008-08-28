@@ -173,7 +173,8 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.Ldarga(IL.LdargaInstruction instruction)
         {
-            throw new NotImplementedException();
+            _emitter.Mov(instruction.Results[0], new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EBP));
+            _emitter.Add(instruction.Results[0], new ConstantOperand(new SigType(CilElementType.Ptr), instruction.Offset));
         }
 
         void IL.IILVisitor.Ldloc(IL.LdlocInstruction instruction)
@@ -183,7 +184,8 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.Ldloca(IL.LdlocaInstruction instruction)
         {
-            throw new NotImplementedException();
+            _emitter.Mov(instruction.Results[0], new RegisterOperand(instruction.Results[0].Type, GeneralPurposeRegister.EBP));
+            _emitter.Add(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, instruction.Offset));
         }
 
         void IL.IILVisitor.Ldc(IL.LdcInstruction instruction)
@@ -249,7 +251,7 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.Stobj(IL.StobjInstruction instruction)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         void IL.IILVisitor.Stfld(IL.StfldInstruction instruction)

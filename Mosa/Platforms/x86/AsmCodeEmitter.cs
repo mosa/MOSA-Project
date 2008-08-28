@@ -462,6 +462,10 @@ namespace Mosa.Platforms.x86
             // Convert value from decimal to hexadecimal
             switch (type.Type)
             {
+                case Mosa.Runtime.Metadata.CilElementType.ByRef:
+                    goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                case Mosa.Runtime.Metadata.CilElementType.Ptr:
+                    goto case Mosa.Runtime.Metadata.CilElementType.I4;
                 case Mosa.Runtime.Metadata.CilElementType.I:
                     goto case Mosa.Runtime.Metadata.CilElementType.I4;
 

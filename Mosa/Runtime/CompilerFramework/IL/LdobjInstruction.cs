@@ -87,7 +87,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         {
             // Decode base first
             base.Decode(decoder);
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
 
             // Do we have a type?
             if (null == _typeRef)

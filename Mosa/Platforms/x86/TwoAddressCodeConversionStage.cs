@@ -187,7 +187,7 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor.Stobj(IL.StobjInstruction instruction)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         void IL.IILVisitor.Stfld(IL.StfldInstruction instruction)
