@@ -11,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
+
 namespace Mosa.Platforms.x86
 {
     /// <summary>
@@ -163,6 +166,26 @@ namespace Mosa.Platforms.x86
         #endregion // Properties
 
         #region Methods
+
+        /// <summary>
+        /// Determines if the signature type fits into the register.
+        /// </summary>
+        /// <param name="type">The signature type to check.</param>
+        /// <returns>True if the signature type fits.</returns>
+        public override bool IsValidSigType(SigType type)
+        {
+            return (type.Type == CilElementType.I ||
+                    type.Type == CilElementType.I1 ||
+                    type.Type == CilElementType.I2 ||
+                    type.Type == CilElementType.I4 ||
+                    type.Type == CilElementType.U1 ||
+                    type.Type == CilElementType.U2 ||
+                    type.Type == CilElementType.U4 ||
+                    type.Type == CilElementType.Ptr ||
+                    type.Type == CilElementType.ByRef ||
+                    type.Type == CilElementType.FunctionPtr ||
+                    type.Type == CilElementType.Object);
+        }
 
         /// <summary>
         /// Returns the name of the general purpose register.

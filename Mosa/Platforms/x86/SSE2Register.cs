@@ -11,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
+
 namespace Mosa.Platforms.x86
 {
     /// <summary>
@@ -118,6 +121,16 @@ namespace Mosa.Platforms.x86
         #endregion // Properties
 
         #region Methods
+
+        /// <summary>
+        /// Checks if the signature type is valid for this register type.
+        /// </summary>
+        /// <param name="type">The signature type to check.</param>
+        /// <returns>True, if the register can store this signature type.</returns>
+        public override bool IsValidSigType(SigType type)
+        {
+            return (type.Type == CilElementType.R4 || type.Type == CilElementType.R8 || type.Type == CilElementType.I8 || type.Type == CilElementType.U8);
+        }
 
         /// <summary>
         /// Retrieves the SSE2 register name.

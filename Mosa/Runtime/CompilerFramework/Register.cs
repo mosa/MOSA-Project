@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -32,5 +33,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// Returns the width of the register in bits.
         /// </summary>
         public abstract int Width { get; }
+
+        /// <summary>
+        /// Determines if the given signature type can be stored in this register.
+        /// </summary>
+        /// <param name="type">The signature type to check.</param>
+        /// <returns>The return value is true if <paramref name="type"/> can be stored in this register.</returns>
+        public abstract bool IsValidSigType(SigType type);
     }
 }
