@@ -235,6 +235,9 @@ namespace Mosa.Platforms.x86
         /// <returns>An object specifying the register constraints or null, if there are no constraints.</returns>
         public override IRegisterConstraint GetRegisterConstraint(Instruction instruction)
         {
+            if (instruction is AddInstruction)
+                return new Constraints.AddConstraint();
+
             return null;
         }
 
