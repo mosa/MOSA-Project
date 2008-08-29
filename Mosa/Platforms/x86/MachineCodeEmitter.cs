@@ -397,7 +397,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.SseAdd(Operand dest, Operand src)
         {
             // Write the opcode byte
-            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
+            //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
             Emit(dest, src, cd_addsd);
         }
@@ -405,7 +405,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.SseSub(Operand dest, Operand src)
         {
             // Write the opcode byte
-            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
+            //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
             Emit(dest, src, cd_subsd);
         }
@@ -413,7 +413,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.SseMul(Operand dest, Operand src)
         {
             // Write the opcode byte
-            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
+            //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
             Emit(dest, src, cd_mulsd);
         }
@@ -421,7 +421,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.SseDiv(Operand dest, Operand src)
         {
             // Write the opcode byte
-            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
+            //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
             Emit(dest, src, cd_divsd);
         }
