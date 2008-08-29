@@ -14,7 +14,7 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.Constraints
 {
-    public class DivConstraint : IRegisterConstraint
+    public class LogicalAndConstraint : IRegisterConstraint
     {
         /// <summary>
         /// Determines if this is a valid operand of the instruction.
@@ -30,6 +30,8 @@ namespace Mosa.Platforms.x86.Constraints
 
             if (opIdx == 0)
                 return (op is MemoryOperand || op is RegisterOperand);
+            else if (opIdx == 1)
+                return (op is MemoryOperand || op is RegisterOperand || op is ConstantOperand);
 
             return false;
         }
@@ -46,7 +48,7 @@ namespace Mosa.Platforms.x86.Constraints
                 || op.StackType == StackTypeCode.Ptr))
                 return false;
 
-            return (op is RegisterOperand);
+            return (op is MemoryOperand || op is RegisterOperand);
         }
 
         /// <summary>
@@ -66,8 +68,7 @@ namespace Mosa.Platforms.x86.Constraints
         /// <param name="resIdx">The result operand index to check.</param>
         public Register[] GetRegistersForResult(int resIdx)
         {
-            Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EDX };
-            return valid;
+            return GetRegistersForOperand(resIdx);
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace Mosa.Platforms.x86.Constraints
         /// <returns>An array of registers used by the instruction.</returns>
         public Register[] GetRegistersUsed()
         {
-            Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EDX };
+            Register[] valid = { };
             return valid;
         }
     }

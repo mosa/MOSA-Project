@@ -14,7 +14,7 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.Constraints
 {
-    public class DivConstraint : IRegisterConstraint
+    public class MulConstraint : IRegisterConstraint
     {
         /// <summary>
         /// Determines if this is a valid operand of the instruction.

@@ -14,7 +14,7 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.Constraints
 {
-    public class DivConstraint : IRegisterConstraint
+    public class SseAddConstraint : IRegisterConstraint
     {
         /// <summary>
         /// Determines if this is a valid operand of the instruction.
@@ -24,11 +24,12 @@ namespace Mosa.Platforms.x86.Constraints
         /// <returns>True if the used operand is valid or false, if it is not valid.</returns>
         public bool IsValidOperand(int opIdx, Operand op)
         {
-            if (!(op.StackType == StackTypeCode.Int32 || op.StackType == StackTypeCode.Int64 || op.StackType == StackTypeCode.N
-                || op.StackType == StackTypeCode.Ptr))
+            if (!(op.StackType == StackTypeCode.F))
                 return false;
 
             if (opIdx == 0)
+                return (op is RegisterOperand);
+            else if (opIdx == 1)
                 return (op is MemoryOperand || op is RegisterOperand);
 
             return false;
@@ -42,11 +43,10 @@ namespace Mosa.Platforms.x86.Constraints
         /// <returns>True if the used operand is valid or false, if it is not valid.</returns>
         public bool IsValidResult(int resIdx, Operand op)
         {
-            if (!(op.StackType == StackTypeCode.Int32 || op.StackType == StackTypeCode.Int64 || op.StackType == StackTypeCode.N
-                || op.StackType == StackTypeCode.Ptr))
+            if (!(op.StackType == StackTypeCode.F))
                 return false;
 
-            return (op is RegisterOperand);
+            return (op is MemoryOperand || op is RegisterOperand);
         }
 
         /// <summary>
@@ -55,8 +55,9 @@ namespace Mosa.Platforms.x86.Constraints
         /// <param name="opIdx">The operand index to check.</param>
         public Register[] GetRegistersForOperand(int opIdx)
         {
-            Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EBX, 
-                                 x86.GeneralPurposeRegister.ECX, x86.GeneralPurposeRegister.EDX };
+            Register[] valid = { x86.SSE2Register.XMM0, x86.SSE2Register.XMM1, x86.SSE2Register.XMM2, 
+                                 x86.SSE2Register.XMM7, x86.SSE2Register.XMM6, x86.SSE2Register.XMM5, 
+                                 x86.SSE2Register.XMM6, x86.SSE2Register.XMM7 };
             return valid;
         }
 
@@ -66,8 +67,7 @@ namespace Mosa.Platforms.x86.Constraints
         /// <param name="resIdx">The result operand index to check.</param>
         public Register[] GetRegistersForResult(int resIdx)
         {
-            Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EDX };
-            return valid;
+            return GetRegistersForOperand(resIdx);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Mosa.Platforms.x86.Constraints
         /// <returns>An array of registers used by the instruction.</returns>
         public Register[] GetRegistersUsed()
         {
-            Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EDX };
+            Register[] valid = { };
             return valid;
         }
     }
