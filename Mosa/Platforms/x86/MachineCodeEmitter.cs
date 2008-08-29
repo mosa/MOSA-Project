@@ -397,7 +397,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.SseAdd(Operand dest, Operand src)
         {
             // Write the opcode byte
-            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
+            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
             Emit(dest, src, cd_addsd);
         }
@@ -405,7 +405,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.SseSub(Operand dest, Operand src)
         {
             // Write the opcode byte
-            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
+            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
             Emit(dest, src, cd_subsd);
         }
@@ -413,9 +413,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.SseMul(Operand dest, Operand src)
         {
             // Write the opcode byte
-            //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register && ((SSE2Register)((RegisterOperand)dest).Register).RegisterCode == SSE2Register.XMM0.RegisterCode);
-            // HACK: Until we get a real register allocator (EAX == XMM0)
-            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
+            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
             Emit(dest, src, cd_mulsd);
         }
@@ -423,7 +421,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.SseDiv(Operand dest, Operand src)
         {
             // Write the opcode byte
-            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
+            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
             Emit(dest, src, cd_divsd);
         }
@@ -471,15 +469,42 @@ namespace Mosa.Platforms.x86
 
             switch (src.Type.Type)
             {
+                case CilElementType.U1: goto case CilElementType.I1;
                 case CilElementType.I1:
                     Emit(dest, src, cd_movsx8);
                     break;
 
+                case CilElementType.U2: goto case CilElementType.I2;
                 case CilElementType.I2:
                     Emit(dest, src, cd_movsx16);
                     break;
 
-                case CilElementType.I4:
+                default:
+                    Emit(dest, src, cd_mov);
+                    break;
+            }
+        }
+
+        void ICodeEmitter.Movzx(Operand dest, Operand src)
+        {
+            if (!(dest is RegisterOperand))
+                throw new ArgumentException(@"Destination must be RegisterOperand.", @"dest");
+            if (src is ConstantOperand)
+                throw new ArgumentException(@"Source must not be ConstantOperand.", @"src");
+
+            switch (src.Type.Type)
+            {
+                case CilElementType.I1: goto case CilElementType.U1;
+                case CilElementType.U1:
+                    Emit(dest, src, cd_movzx8);
+                    break;
+
+                case CilElementType.I2: goto case CilElementType.U2;
+                case CilElementType.U2:
+                    Emit(dest, src, cd_movzx16);
+                    break;
+
+                default:
                     Emit(dest, src, cd_mov);
                     break;
             }
@@ -640,6 +665,16 @@ namespace Mosa.Platforms.x86
         private static readonly CodeDef[] cd_movsx16 = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xBF }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),    new byte[] { 0x0F, 0xBF }, null),
+        };
+
+        private static readonly CodeDef[] cd_movzx8 = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xB6 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),    new byte[] { 0x0F, 0xB6 }, null),
+        };
+
+        private static readonly CodeDef[] cd_movzx16 = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xB7 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),    new byte[] { 0x0F, 0xB7 }, null),
         };
 
         private static readonly CodeDef[] cd_movsd = new CodeDef[] {
@@ -804,8 +839,6 @@ namespace Mosa.Platforms.x86
                     case CilElementType.I1: goto case CilElementType.I;
                     case CilElementType.I2: goto case CilElementType.I;
                     case CilElementType.I4: goto case CilElementType.I;
-                    case CilElementType.Ptr: goto case CilElementType.I;
-                    case CilElementType.ByRef: goto case CilElementType.I;
 
                     case CilElementType.U1: goto case CilElementType.I;
                     case CilElementType.U2: goto case CilElementType.I;

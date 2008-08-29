@@ -329,7 +329,15 @@ namespace Mosa.Platforms.x86
                 emitter.Movsx(dest, src);
             });
         }
-        
+
+        public void Movzx(Operand dest, Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Movzx(dest, src);
+            });
+        }
+
         public void Nop()
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)

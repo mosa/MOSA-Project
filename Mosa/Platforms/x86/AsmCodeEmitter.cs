@@ -314,6 +314,16 @@ namespace Mosa.Platforms.x86
             _textWriter.WriteLine("\t\tmovsx\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
         }
 
+        public void Movzx(Operand dest, Operand src)
+        {
+            if (!(dest is RegisterOperand))
+                throw new NotSupportedException(@"Only register destination supported.");
+            if (src is ConstantOperand)
+                throw new NotSupportedException(@"Source must be memory or register.");
+
+            _textWriter.WriteLine("\t\tmovzx\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
+        }
+
         public void Nop()
         {
             _textWriter.WriteLine("\t\tnop");
@@ -462,10 +472,6 @@ namespace Mosa.Platforms.x86
             // Convert value from decimal to hexadecimal
             switch (type.Type)
             {
-                case Mosa.Runtime.Metadata.CilElementType.ByRef:
-                    goto case Mosa.Runtime.Metadata.CilElementType.I4;
-                case Mosa.Runtime.Metadata.CilElementType.Ptr:
-                    goto case Mosa.Runtime.Metadata.CilElementType.I4;
                 case Mosa.Runtime.Metadata.CilElementType.I:
                     goto case Mosa.Runtime.Metadata.CilElementType.I4;
 

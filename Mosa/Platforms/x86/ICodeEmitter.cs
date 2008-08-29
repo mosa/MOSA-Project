@@ -253,6 +253,13 @@ namespace Mosa.Platforms.x86
         void Movsx(Operand dest, Operand src);
 
         /// <summary>
+        /// Emits a mov zero extend instruction.
+        /// </summary>
+        /// <param name="dest">The destination register.</param>
+        /// <param name="src">The source register.</param>
+        void Movzx(Operand dest, Operand src);
+
+        /// <summary>
         /// Emits a nop instructions.
         /// </summary>
         void Nop();
