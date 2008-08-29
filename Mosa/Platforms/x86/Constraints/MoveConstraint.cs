@@ -12,9 +12,9 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Platforms.x86.Constraints 
+namespace Mosa.Platforms.x86.Constraints
 {
-    public class AddConstraint : IRegisterConstraint
+    public class MoveConstraint : IRegisterConstraint
     {
         /// <summary>
         /// Determines if this is a valid operand of the instruction.
@@ -30,7 +30,7 @@ namespace Mosa.Platforms.x86.Constraints
 
             if (opIdx == 0)
                 return (op is MemoryOperand || op is RegisterOperand);
-            else if (opIdx == 1)
+            if (opIdx == 1)
                 return (op is MemoryOperand || op is RegisterOperand || op is ConstantOperand);
 
             return false;
@@ -48,7 +48,7 @@ namespace Mosa.Platforms.x86.Constraints
                 || op.StackType == StackTypeCode.Ptr))
                 return false;
 
-            return (op is MemoryOperand || op is RegisterOperand);
+            return (op is RegisterOperand || op is MemoryOperand);
         }
 
         /// <summary>
@@ -58,7 +58,9 @@ namespace Mosa.Platforms.x86.Constraints
         public Register[] GetRegistersForOperand(int opIdx)
         {
             Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EBX, 
-                                 x86.GeneralPurposeRegister.ECX, x86.GeneralPurposeRegister.EDX };
+                                 x86.GeneralPurposeRegister.ECX, x86.GeneralPurposeRegister.EDX,
+                                 x86.GeneralPurposeRegister.EBP, x86.GeneralPurposeRegister.EDI,
+                                 x86.GeneralPurposeRegister.ESI, x86.GeneralPurposeRegister.ESP };
             return valid;
         }
 
@@ -68,7 +70,7 @@ namespace Mosa.Platforms.x86.Constraints
         /// <param name="resIdx">The result operand index to check.</param>
         public Register[] GetRegistersForResult(int resIdx)
         {
-            return GetRegistersForOperand(resIdx);
+            return GetRegistersForOperand(0);
         }
 
         /// <summary>
