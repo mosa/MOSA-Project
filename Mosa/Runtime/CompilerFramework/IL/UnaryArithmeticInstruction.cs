@@ -34,9 +34,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
-        public override void Visit(IILVisitor visitor)
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public override void Visit<ArgType>(IILVisitor<ArgType> visitor, ArgType arg)
         {
-            visitor.UnaryArithmetic(this);
+            visitor.UnaryArithmetic(this, arg);
         }
 
         public override void Validate(MethodCompilerBase compiler)

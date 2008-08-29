@@ -111,9 +111,19 @@ namespace Mosa.Runtime.CompilerFramework.IR
             return builder.ToString();
         }
 
-        public override void Visit(IInstructionVisitor visitor)
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
         {
-            throw new NotImplementedException();
+            IIrVisitor<ArgType> irv = visitor as IIrVisitor<ArgType>;
+            if (null == irv)
+                throw new ArgumentException(@"Must implement IIrVisitor!", @"visitor");
+
+            irv.Visit(this, arg);            
         }
 
         #endregion // Instruction Overrides

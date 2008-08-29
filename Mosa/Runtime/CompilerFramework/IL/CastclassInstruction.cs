@@ -59,9 +59,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
             return String.Format(@"{0} = {1} is {2}", this.Results[0], this.Operands[0], this.Results[0].Type);
         }
 
-        public sealed override void Visit(IILVisitor visitor)
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public sealed override void Visit<ArgType>(IILVisitor<ArgType> visitor, ArgType arg)
         {
-            visitor.Castclass(this);
+            visitor.Castclass(this, arg);
         }
 
         #endregion // Methods

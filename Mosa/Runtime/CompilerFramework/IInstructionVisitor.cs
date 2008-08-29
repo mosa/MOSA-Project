@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Provides a visitor interface for instructions.
     /// </summary>
-    public interface IInstructionVisitor
+    public interface IInstructionVisitor<ArgType>
     {
     }
 }

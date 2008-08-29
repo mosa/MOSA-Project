@@ -58,9 +58,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // FIXME:     throw new InvalidOperationException(@"IL operand stack is not empty.");
         }
 
-        public sealed override void Visit(IILVisitor visitor)
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public sealed override void Visit<ArgType>(IILVisitor<ArgType> visitor, ArgType arg)
         {
-            visitor.Jmp(this);
+            visitor.Jmp(this, arg);
         }
 
         #endregion // Methods

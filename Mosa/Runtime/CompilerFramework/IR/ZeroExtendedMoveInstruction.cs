@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <remarks>
     /// This instruction takes the source operand and converts to the request size maintaining its sign.
     /// </remarks>
-    public class SConversionInstruction : Instruction
+    public class ZeroExtendedMoveInstruction : Instruction
     {
         #region Data members
 
@@ -24,20 +33,20 @@ namespace Mosa.Runtime.CompilerFramework.IR
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SConversionInstruction"/>.
+        /// Initializes a new instance of the <see cref="ZeroExtendedMoveInstruction"/>.
         /// </summary>
-        public SConversionInstruction() :
+        public ZeroExtendedMoveInstruction() :
             base(1, 1)
         {
             _size = 4;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SConversionInstruction"/>.
+        /// Initializes a new instance of the <see cref="ZeroExtendedMoveInstruction"/>.
         /// </summary>
         /// <param name="destination">The destination operand for the conversion.</param>
         /// <param name="source">The source operand for the conversion.</param>
-        public SConversionInstruction(Operand destination, Operand source) :
+        public ZeroExtendedMoveInstruction(Operand destination, Operand source) :
             base(1, 1)
         {
             SetOperand(0, source);
@@ -86,25 +95,27 @@ namespace Mosa.Runtime.CompilerFramework.IR
         #region Instruction Overrides
 
         /// <summary>
-        /// Returns a string representation of <see cref="SConversionInstruction"/>.
+        /// Returns a string representation of <see cref="SignExtendedMoveInstruction"/>.
         /// </summary>
         /// <returns>A string representation of the instruction.</returns>
         public override string ToString()
         {
-            return String.Format(@"IR sconv {0} <- {1}", this.Destination, this.Source);
+            return String.Format(@"IR zconv {0} <- {1}", this.Destination, this.Source);
         }
 
         /// <summary>
-        /// Implementation of the visitor pattern.
+        /// Allows visitor based dispatch for this instruction object.
         /// </summary>
-        /// <param name="visitor">The visitor requesting visitation. The object must implement <see cref="IIrVisitor"/>.</param>
-        public override void Visit(IInstructionVisitor visitor)
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
         {
-            IIrVisitor irv = visitor as IIrVisitor;
+            IIrVisitor<ArgType> irv = visitor as IIrVisitor<ArgType>;
             if (null == irv)
                 throw new ArgumentException(@"Must implement IIrVisitor!", @"visitor");
 
-            irv.Visit(this);
+            irv.Visit(this, arg);
         }
 
         #endregion // Instruction Overrides

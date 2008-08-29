@@ -80,9 +80,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
             return String.Format("{0} L_{1:X4}", base.ToString(), _branchTargets[0]);
         }
 
-        public sealed override void Visit(IILVisitor visitor)
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public sealed override void Visit<ArgType>(IILVisitor<ArgType> visitor, ArgType arg)
         {
-            visitor.Branch(this);
+            visitor.Branch(this, arg);
         }
 
         #endregion // Methods

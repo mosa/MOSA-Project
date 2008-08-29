@@ -405,8 +405,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
         /// </summary>
-        /// <param name="visitor"></param>
-        public abstract void Visit(IInstructionVisitor visitor);
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public abstract void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg);
 
         #endregion // Methods
     }

@@ -50,9 +50,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
             SetResult(0, CreateResultOperand(decoder.Architecture, new RefSigType(decoder.GetParameterOperand(argIdx).Type)));
         }
 
-        public sealed override void Visit(IILVisitor visitor)
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public sealed override void Visit<ArgType>(IILVisitor<ArgType> visitor, ArgType arg)
         {
-            visitor.Ldarga(this);
+            visitor.Ldarga(this, arg);
         }
 
         #endregion // Methods

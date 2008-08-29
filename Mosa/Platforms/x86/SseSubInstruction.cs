@@ -34,14 +34,14 @@ namespace Mosa.Platforms.x86
             Results[0] = ops[2];
         }
 
-        public override void Visit(IInstructionVisitor visitor)
+        public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
         {
-            IX86InstructionVisitor x86 = visitor as IX86InstructionVisitor;
+            IX86InstructionVisitor<ArgType> x86 = visitor as IX86InstructionVisitor<ArgType>;
             Debug.Assert(null != x86);
             if (null != x86)
-                x86.SseSub(this);
+                x86.SseSub(this, arg);
             else
-                base.Visit(visitor);
+                base.Visit(visitor, arg);
         }
 
         #region IRegisterConstraint Members

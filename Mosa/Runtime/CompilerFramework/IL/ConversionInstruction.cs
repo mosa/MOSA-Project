@@ -45,16 +45,16 @@ namespace Mosa.Runtime.CompilerFramework.IL
             switch (this.Code)
             {
                 case OpCode.Conv_i1:
-                    return arch.CreateInstruction(typeof(IR.SConversionInstruction), this.Results[0], this.Operands[0]);
+                    return arch.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), this.Results[0], this.Operands[0]);
 
                 case OpCode.Conv_i2:
-                    return arch.CreateInstruction(typeof(IR.SConversionInstruction), this.Results[0], this.Operands[0]);
+                    return arch.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), this.Results[0], this.Operands[0]);
 
                 case OpCode.Conv_i4:
-                    return arch.CreateInstruction(typeof(IR.SConversionInstruction), this.Results[0], this.Operands[0]);
+                    return arch.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), this.Results[0], this.Operands[0]);
 
                 case OpCode.Conv_i8:
-                    return arch.CreateInstruction(typeof(IR.SConversionInstruction), this.Results[0], this.Operands[0]);
+                    return arch.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), this.Results[0], this.Operands[0]);
 
                 default:
                     throw new NotImplementedException();
@@ -67,9 +67,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
             SetResult(0, CreateResultOperand(compiler.Architecture, GetResultStackType()));
 		}
 
-        public sealed override void Visit(IILVisitor visitor)
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public sealed override void Visit<ArgType>(IILVisitor<ArgType> visitor, ArgType arg)
         {
-            visitor.Conversion(this);
+            visitor.Conversion(this, arg);
         }
 
 		private StackTypeCode GetResultStackType()

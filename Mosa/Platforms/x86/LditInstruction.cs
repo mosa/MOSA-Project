@@ -31,12 +31,18 @@ namespace Mosa.Platforms.x86
 
         #region ILInstruction Overrides
 
-        public override void Visit(IInstructionVisitor visitor)
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
         {
-            IX86InstructionVisitor x86visitor = visitor as IX86InstructionVisitor;
+            IX86InstructionVisitor<ArgType> x86visitor = visitor as IX86InstructionVisitor<ArgType>;
             Debug.Assert(null != x86visitor);
             if (null != x86visitor)
-                x86visitor.Ldit(this);
+                x86visitor.Ldit(this, arg);
         }
 
         #endregion // ILInstruction Overrides

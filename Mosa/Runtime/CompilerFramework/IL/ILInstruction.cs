@@ -128,15 +128,27 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Instruction Overrides
 
-        public override void Visit(IInstructionVisitor visitor)
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
         {
-            IILVisitor ilv = visitor as IILVisitor;
+            IILVisitor<ArgType> ilv = visitor as IILVisitor<ArgType>;
             Debug.Assert(null != ilv);
             if (null != ilv)
-                Visit(ilv);
+                Visit(ilv, arg);
         }
 
-        public abstract void Visit(IILVisitor visitor);
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public abstract void Visit<ArgType>(IILVisitor<ArgType> visitor, ArgType arg);
 
         #endregion // Instruction Overrides
 

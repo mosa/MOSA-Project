@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Base class for code generation stages.
     /// </summary>
-    public abstract class CodeGenerationStage : IMethodCompilerStage, IInstructionVisitor
+    public abstract class CodeGenerationStage<ContextType> : IMethodCompilerStage, IInstructionVisitor<ContextType>
     {
         #region Data members
 
@@ -101,6 +101,8 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         protected virtual void EmitInstructions()
         {
+            ContextType ct = default(ContextType);
+
             // Retrieve the latest basic block decoder
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)_compiler.GetPreviousStage(typeof(IBasicBlockProvider));
             Debug.Assert(null != blockProvider, @"Code generation requires a basic block provider.");
@@ -112,7 +114,7 @@ namespace Mosa.Runtime.CompilerFramework
                 BlockStart(block);
                 foreach (Instruction instruction in block.Instructions)
                 {
-                    instruction.Visit(this);
+                    instruction.Visit<ContextType>(this, ct);
                 }
                 BlockEnd(block);
             }

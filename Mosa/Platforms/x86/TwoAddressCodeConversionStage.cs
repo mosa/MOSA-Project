@@ -46,10 +46,10 @@ namespace Mosa.Platforms.x86
     /// </remarks>
     public class TwoAddressCodeConversionStage : 
         IMethodCompilerStage,
-        IInstructionVisitor,
-        IL.IILVisitor,
-        IR.IIrVisitor,
-        IX86InstructionVisitor
+        IInstructionVisitor<int>,
+        IL.IILVisitor<int>,
+        IR.IIrVisitor<int>,
+        IX86InstructionVisitor<int>
     {
         public TwoAddressCodeConversionStage()
         {
@@ -78,7 +78,7 @@ namespace Mosa.Platforms.x86
                 for (_instructionIdx = 0; _instructionIdx < block.Instructions.Count; _instructionIdx++)
                 {
                     Instruction instruction = block.Instructions[_instructionIdx];
-                    instruction.Visit(this);
+                    instruction.Visit(this, 0);
                 }
 
             }
@@ -99,278 +99,278 @@ namespace Mosa.Platforms.x86
 
         #region IILVisitor Members
 
-        void IL.IILVisitor.Nop(IL.NopInstruction instruction)
+        void IL.IILVisitor<int>.Nop(IL.NopInstruction instruction, int arg)
         {
         }
 
-        void IL.IILVisitor.Break(IL.BreakInstruction instruction)
+        void IL.IILVisitor<int>.Break(IL.BreakInstruction instruction, int arg)
         {
         }
 
-        void IL.IILVisitor.Ldarg(IL.LdargInstruction instruction)
-        {
-            //throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor.Ldarga(IL.LdargaInstruction instruction)
+        void IL.IILVisitor<int>.Ldarg(IL.LdargInstruction instruction, int arg)
         {
             //throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldloc(IL.LdlocInstruction instruction)
+        void IL.IILVisitor<int>.Ldarga(IL.LdargaInstruction instruction, int arg)
         {
             //throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldloca(IL.LdlocaInstruction instruction)
+        void IL.IILVisitor<int>.Ldloc(IL.LdlocInstruction instruction, int arg)
         {
             //throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldc(IL.LdcInstruction instruction)
+        void IL.IILVisitor<int>.Ldloca(IL.LdlocaInstruction instruction, int arg)
         {
             //throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldobj(IL.LdobjInstruction instruction)
+        void IL.IILVisitor<int>.Ldc(IL.LdcInstruction instruction, int arg)
+        {
+            //throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<int>.Ldobj(IL.LdobjInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldstr(IL.LdstrInstruction instruction)
+        void IL.IILVisitor<int>.Ldstr(IL.LdstrInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldfld(IL.LdfldInstruction instruction)
+        void IL.IILVisitor<int>.Ldfld(IL.LdfldInstruction instruction, int arg)
         {
             //throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldflda(IL.LdfldaInstruction instruction)
+        void IL.IILVisitor<int>.Ldflda(IL.LdfldaInstruction instruction, int arg)
         {
             //throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldsfld(IL.LdsfldInstruction instruction)
+        void IL.IILVisitor<int>.Ldsfld(IL.LdsfldInstruction instruction, int arg)
         {
             //throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldsflda(IL.LdsfldaInstruction instruction)
+        void IL.IILVisitor<int>.Ldsflda(IL.LdsfldaInstruction instruction, int arg)
         {
             //throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldftn(IL.LdftnInstruction instruction)
+        void IL.IILVisitor<int>.Ldftn(IL.LdftnInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldvirtftn(IL.LdvirtftnInstruction instruction)
+        void IL.IILVisitor<int>.Ldvirtftn(IL.LdvirtftnInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldtoken(IL.LdtokenInstruction instruction)
+        void IL.IILVisitor<int>.Ldtoken(IL.LdtokenInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Stloc(IL.StlocInstruction instruction)
+        void IL.IILVisitor<int>.Stloc(IL.StlocInstruction instruction, int arg)
         {
         }
 
-        void IL.IILVisitor.Starg(IL.StargInstruction instruction)
+        void IL.IILVisitor<int>.Starg(IL.StargInstruction instruction, int arg)
         {
         }
 
-        void IL.IILVisitor.Stobj(IL.StobjInstruction instruction)
+        void IL.IILVisitor<int>.Stobj(IL.StobjInstruction instruction, int arg)
         {
             //throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Stfld(IL.StfldInstruction instruction)
+        void IL.IILVisitor<int>.Stfld(IL.StfldInstruction instruction, int arg)
         {
         }
 
-        void IL.IILVisitor.Stsfld(IL.StsfldInstruction instruction)
+        void IL.IILVisitor<int>.Stsfld(IL.StsfldInstruction instruction, int arg)
         {
         }
 
-        void IL.IILVisitor.Dup(IL.DupInstruction instruction)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor.Pop(IL.PopInstruction instruction)
+        void IL.IILVisitor<int>.Dup(IL.DupInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Jmp(IL.JumpInstruction instruction)
+        void IL.IILVisitor<int>.Pop(IL.PopInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Call(IL.CallInstruction instruction)
+        void IL.IILVisitor<int>.Jmp(IL.JumpInstruction instruction, int arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<int>.Call(IL.CallInstruction instruction, int arg)
         {
             //throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Calli(IL.CalliInstruction instruction)
+        void IL.IILVisitor<int>.Calli(IL.CalliInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ret(IL.ReturnInstruction instruction)
+        void IL.IILVisitor<int>.Ret(IL.ReturnInstruction instruction, int arg)
         {
         }
 
-        void IL.IILVisitor.Branch(IL.BranchInstruction instruction)
+        void IL.IILVisitor<int>.Branch(IL.BranchInstruction instruction, int arg)
         {
         }
 
-        void IL.IILVisitor.UnaryBranch(IL.UnaryBranchInstruction instruction)
-        {
-            //throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor.BinaryBranch(IL.BinaryBranchInstruction instruction)
-        {
-        }
-
-        void IL.IILVisitor.Switch(IL.SwitchInstruction instruction)
+        void IL.IILVisitor<int>.UnaryBranch(IL.UnaryBranchInstruction instruction, int arg)
         {
             //throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Add(IL.AddInstruction instruction)
+        void IL.IILVisitor<int>.BinaryBranch(IL.BinaryBranchInstruction instruction, int arg)
+        {
+        }
+
+        void IL.IILVisitor<int>.Switch(IL.SwitchInstruction instruction, int arg)
+        {
+            //throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<int>.Add(IL.AddInstruction instruction, int arg)
         {
             HandleArith(instruction);
         }
 
-        void IL.IILVisitor.Sub(IL.SubInstruction instruction)
+        void IL.IILVisitor<int>.Sub(IL.SubInstruction instruction, int arg)
         {
             HandleArith(instruction);
         }
 
-        void IL.IILVisitor.Mul(IL.MulInstruction instruction)
+        void IL.IILVisitor<int>.Mul(IL.MulInstruction instruction, int arg)
         {
             HandleMul(instruction);
         }
 
-        void IL.IILVisitor.Div(IL.DivInstruction instruction)
+        void IL.IILVisitor<int>.Div(IL.DivInstruction instruction, int arg)
         {
             HandleArith(instruction);
         }
 
-        void IL.IILVisitor.Rem(IL.RemInstruction instruction)
+        void IL.IILVisitor<int>.Rem(IL.RemInstruction instruction, int arg)
         {
             HandleArith(instruction);
         }
 
-        void IL.IILVisitor.BinaryLogic(IL.BinaryLogicInstruction instruction)
+        void IL.IILVisitor<int>.BinaryLogic(IL.BinaryLogicInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Shift(IL.ShiftInstruction instruction)
+        void IL.IILVisitor<int>.Shift(IL.ShiftInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Neg(IL.NegInstruction instruction)
+        void IL.IILVisitor<int>.Neg(IL.NegInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Not(IL.NotInstruction instruction)
+        void IL.IILVisitor<int>.Not(IL.NotInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Conversion(IL.ConversionInstruction instruction)
+        void IL.IILVisitor<int>.Conversion(IL.ConversionInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Callvirt(IL.CallvirtInstruction instruction)
+        void IL.IILVisitor<int>.Callvirt(IL.CallvirtInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Cpobj(IL.CpobjInstruction instruction)
+        void IL.IILVisitor<int>.Cpobj(IL.CpobjInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Newobj(IL.NewobjInstruction instruction)
+        void IL.IILVisitor<int>.Newobj(IL.NewobjInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Castclass(IL.CastclassInstruction instruction)
+        void IL.IILVisitor<int>.Castclass(IL.CastclassInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Isinst(IL.IsInstInstruction instruction)
+        void IL.IILVisitor<int>.Isinst(IL.IsInstInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Unbox(IL.UnboxInstruction instruction)
+        void IL.IILVisitor<int>.Unbox(IL.UnboxInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Throw(IL.ThrowInstruction instruction)
+        void IL.IILVisitor<int>.Throw(IL.ThrowInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Box(IL.BoxInstruction instruction)
+        void IL.IILVisitor<int>.Box(IL.BoxInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Newarr(IL.NewarrInstruction instruction)
+        void IL.IILVisitor<int>.Newarr(IL.NewarrInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldlen(IL.LdlenInstruction instruction)
+        void IL.IILVisitor<int>.Ldlen(IL.LdlenInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldelema(IL.LdelemaInstruction instruction)
+        void IL.IILVisitor<int>.Ldelema(IL.LdelemaInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Ldelem(IL.LdelemInstruction instruction)
+        void IL.IILVisitor<int>.Ldelem(IL.LdelemInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Stelem(IL.StelemInstruction instruction)
+        void IL.IILVisitor<int>.Stelem(IL.StelemInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.UnboxAny(IL.UnboxAnyInstruction instruction)
+        void IL.IILVisitor<int>.UnboxAny(IL.UnboxAnyInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Refanyval(IL.RefanyvalInstruction instruction)
+        void IL.IILVisitor<int>.Refanyval(IL.RefanyvalInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.UnaryArithmetic(IL.UnaryArithmeticInstruction instruction)
+        void IL.IILVisitor<int>.UnaryArithmetic(IL.UnaryArithmeticInstruction instruction, int arg)
         {
             Operand[] ops = instruction.Operands;
 
@@ -379,77 +379,77 @@ namespace Mosa.Platforms.x86
             _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(instruction.Results[0], eax));
         }
 
-        void IL.IILVisitor.Mkrefany(IL.MkrefanyInstruction instruction)
+        void IL.IILVisitor<int>.Mkrefany(IL.MkrefanyInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.ArithmeticOverflow(IL.ArithmeticOverflowInstruction instruction)
+        void IL.IILVisitor<int>.ArithmeticOverflow(IL.ArithmeticOverflowInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Endfinally(IL.EndfinallyInstruction instruction)
+        void IL.IILVisitor<int>.Endfinally(IL.EndfinallyInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Leave(IL.LeaveInstruction instruction)
+        void IL.IILVisitor<int>.Leave(IL.LeaveInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Arglist(IL.ArglistInstruction instruction)
+        void IL.IILVisitor<int>.Arglist(IL.ArglistInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.BinaryComparison(IL.BinaryComparisonInstruction instruction)
+        void IL.IILVisitor<int>.BinaryComparison(IL.BinaryComparisonInstruction instruction, int arg)
         {
             //throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Localalloc(IL.LocalallocInstruction instruction)
+        void IL.IILVisitor<int>.Localalloc(IL.LocalallocInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Endfilter(IL.EndfilterInstruction instruction)
+        void IL.IILVisitor<int>.Endfilter(IL.EndfilterInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.InitObj(IL.InitObjInstruction instruction)
+        void IL.IILVisitor<int>.InitObj(IL.InitObjInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Cpblk(IL.CpblkInstruction instruction)
+        void IL.IILVisitor<int>.Cpblk(IL.CpblkInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Initblk(IL.InitblkInstruction instruction)
+        void IL.IILVisitor<int>.Initblk(IL.InitblkInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Prefix(IL.PrefixInstruction instruction)
+        void IL.IILVisitor<int>.Prefix(IL.PrefixInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Rethrow(IL.RethrowInstruction instruction)
+        void IL.IILVisitor<int>.Rethrow(IL.RethrowInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Sizeof(IL.SizeofInstruction instruction)
+        void IL.IILVisitor<int>.Sizeof(IL.SizeofInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IL.IILVisitor.Refanytype(IL.RefanytypeInstruction instruction)
+        void IL.IILVisitor<int>.Refanytype(IL.RefanytypeInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
@@ -458,51 +458,59 @@ namespace Mosa.Platforms.x86
 
         #region IIrVisitor Members
 
-        void IR.IIrVisitor.Visit(IR.EpilogueInstruction instruction)
+        void IR.IIrVisitor<int>.Visit(IR.EpilogueInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor.Visit(IR.LiteralInstruction instruction)
+        void IR.IIrVisitor<int>.Visit(IR.LiteralInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor.Visit(IR.LogicalAndInstruction instruction)
+        void IR.IIrVisitor<int>.Visit(IR.LogicalAndInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor.Visit(IR.LogicalOrInstruction instruction)
+        void IR.IIrVisitor<int>.Visit(IR.LogicalOrInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor.Visit(IR.LogicalXorInstruction instruction)
+        void IR.IIrVisitor<int>.Visit(IR.LogicalXorInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor.Visit(IR.LogicalNotInstruction instruction)
+        void IR.IIrVisitor<int>.Visit(IR.LogicalNotInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor.Visit(IR.MoveInstruction instruction)
+        void IR.IIrVisitor<int>.Visit(IR.MoveInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor.Visit(IR.PopInstruction instruction)
+        void IR.IIrVisitor<int>.Visit(IR.PhiInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor.Visit(IR.PrologueInstruction instruction)
+        void IR.IIrVisitor<int>.Visit(IR.PopInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor.Visit(IR.PushInstruction instruction)
+        void IR.IIrVisitor<int>.Visit(IR.PrologueInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor.Visit(IR.ReturnInstruction instruction)
+        void IR.IIrVisitor<int>.Visit(IR.PushInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor.Visit(IR.SConversionInstruction instruction)
+        void IR.IIrVisitor<int>.Visit(IR.ReturnInstruction instruction, int arg)
+        {
+        }
+
+        void IR.IIrVisitor<int>.Visit(IR.SignExtendedMoveInstruction instruction, int arg)
+        {
+        }
+
+        void IR.IIrVisitor<int>.Visit(IR.ZeroExtendedMoveInstruction instruction, int arg)
         {
         }
 
@@ -510,12 +518,12 @@ namespace Mosa.Platforms.x86
 
         #region IX86InstructionVisitor Members
 
-        void IX86InstructionVisitor.Add(AddInstruction instruction)
+        void IX86InstructionVisitor<int>.Add(AddInstruction instruction, int arg)
         {
             HandleArith(instruction);
         }
 
-        void IX86InstructionVisitor.Sub(SubInstruction instruction)
+        void IX86InstructionVisitor<int>.Sub(SubInstruction instruction, int arg)
         {
             Operand result = instruction.Results[0];
             Operand[] ops = instruction.Operands;
@@ -539,7 +547,7 @@ namespace Mosa.Platforms.x86
                     ops[1] = t;
                 }
 
-                //_instructions.Add(instruction);
+                //_instructions.Add(instruction, int arg);
             }
             // x86 can't do memory += memory instructions
             else if (false == result.IsRegister)
@@ -547,43 +555,43 @@ namespace Mosa.Platforms.x86
                 // i = x + y style
                 RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX);
                 _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[0]));
-                //_instructions.Add(instruction);
+                //_instructions.Add(instruction, int arg);
                 instruction.Results[0] = eax;
                 _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(result, eax));
             }
         }
 
-        void IX86InstructionVisitor.Mul(MulInstruction instruction)
+        void IX86InstructionVisitor<int>.Mul(MulInstruction instruction, int arg)
         {
             HandleArith(instruction);
         }
 
-        void IX86InstructionVisitor.Div(DivInstruction instruction)
+        void IX86InstructionVisitor<int>.Div(DivInstruction instruction, int arg)
         {
             HandleDiv(instruction);
         }
 
-        void IX86InstructionVisitor.SseAdd(SseAddInstruction instruction)
+        void IX86InstructionVisitor<int>.SseAdd(SseAddInstruction instruction, int arg)
         {
             HandleArith(instruction);
         }
 
-        void IX86InstructionVisitor.SseSub(SseSubInstruction instruction)
+        void IX86InstructionVisitor<int>.SseSub(SseSubInstruction instruction, int arg)
         {
             HandleArith(instruction);
         }
 
-        void IX86InstructionVisitor.SseMul(SseMulInstruction instruction)
+        void IX86InstructionVisitor<int>.SseMul(SseMulInstruction instruction, int arg)
         {
             HandleArith(instruction);
         }
 
-        void IX86InstructionVisitor.SseDiv(SseDivInstruction instruction)
+        void IX86InstructionVisitor<int>.SseDiv(SseDivInstruction instruction, int arg)
         {
             HandleArith(instruction);
         }
 
-        void IX86InstructionVisitor.Shift(ShiftInstruction instruction)
+        void IX86InstructionVisitor<int>.Shift(ShiftInstruction instruction, int arg)
         {
             Operand result = instruction.Results[0];
             Operand[] ops = instruction.Operands;
@@ -630,22 +638,22 @@ namespace Mosa.Platforms.x86
             }
         }
 
-        void IX86InstructionVisitor.Cli(CliInstruction instruction)
+        void IX86InstructionVisitor<int>.Cli(CliInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IX86InstructionVisitor.Ldit(LditInstruction instruction)
+        void IX86InstructionVisitor<int>.Ldit(LditInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IX86InstructionVisitor.Sti(StiInstruction instruction)
+        void IX86InstructionVisitor<int>.Sti(StiInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }
 
-        void IX86InstructionVisitor.Call(CallInstruction instruction)
+        void IX86InstructionVisitor<int>.Call(CallInstruction instruction, int arg)
         {
         }
 
@@ -674,7 +682,7 @@ namespace Mosa.Platforms.x86
                     ops[1] = t;
                 }
 
-                //_instructions.Add(instruction);
+                //_instructions.Add(instruction, int arg);
             }
             // x86 can't do memory += memory instructions
             else if (false == result.IsRegister)
@@ -682,7 +690,7 @@ namespace Mosa.Platforms.x86
                 // i = x + y style
                 RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX);
                 _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[0]));
-                //_instructions.Add(instruction);
+                //_instructions.Add(instruction, int arg);
                 instruction.Results[0] = eax;
                 _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(result, eax));
             }
@@ -759,7 +767,7 @@ namespace Mosa.Platforms.x86
                 ops[1] = edx;
             }
 
-            //_instructions.Add(instruction);
+            //_instructions.Add(instruction, int arg);
             instruction.Results[0] = eax;
             if (false == result.IsRegister || false == Object.ReferenceEquals(eax.Register, ((RegisterOperand)result).Register))
                 _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(result, eax));
