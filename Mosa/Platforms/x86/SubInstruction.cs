@@ -16,7 +16,7 @@ using System.Diagnostics;
 
 namespace Mosa.Platforms.x86
 {
-    sealed class SubInstruction : IL.SubInstruction, IRegisterConstraint
+    sealed class SubInstruction : IL.SubInstruction
     {
         #region Construction
 
@@ -42,25 +42,11 @@ namespace Mosa.Platforms.x86
                 base.Visit(visitor);
         }
 
-        #region IRegisterConstraint Members
-
-        Register[] IRegisterConstraint.GetConstraints()
-        {
-            return null;
-        }
-
-        Register[] IRegisterConstraint.GetRegistersUsed()
-        {
-            return null;
-        }
-
         public override object Expand(MethodCompilerBase methodCompiler)
         {
             if (First.StackType == StackTypeCode.F || Second.StackType == StackTypeCode.F)
                 return methodCompiler.Architecture.CreateInstruction(typeof(x86.SseSubInstruction), IL.OpCode.Sub, new Operand[] { First, Second, Results[0] });
             return this;
         }
-
-        #endregion // IRegisterConstraint Members
     }
 }

@@ -18,7 +18,7 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86
 {
-    class CallInstruction : Instruction, IRegisterConstraint
+    class CallInstruction : Instruction
     {
         #region Data members
 
@@ -48,18 +48,6 @@ namespace Mosa.Platforms.x86
 
         #endregion // Properties
 
-        #region IRegisterConstraint Members
-
-        Register[] IRegisterConstraint.GetConstraints()
-        {
-            return null;
-        }
-
-        Register[] IRegisterConstraint.GetRegistersUsed()
-        {
-            return null;
-        }
-
         public override void Visit(IInstructionVisitor visitor)
         {
             IX86InstructionVisitor x86v = visitor as IX86InstructionVisitor;
@@ -68,7 +56,5 @@ namespace Mosa.Platforms.x86
 
             x86v.Call(this);
         }
-
-        #endregion // IRegisterConstraint Members
     }
 }

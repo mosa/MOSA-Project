@@ -18,7 +18,7 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Platforms.x86
 {
-    class ShiftInstruction : IL.ShiftInstruction, IRegisterConstraint
+    class ShiftInstruction : IL.ShiftInstruction
     {
         public ShiftInstruction(IL.OpCode code) :
             base(code)
@@ -37,23 +37,9 @@ namespace Mosa.Platforms.x86
                 base.Visit(visitor);
         }
 
-        #region IRegisterConstraint Members
-
-        Register[] IRegisterConstraint.GetConstraints()
-        {
-            return null;
-        }
-
-        Register[] IRegisterConstraint.GetRegistersUsed()
-        {
-            return null;
-        }
-
         public override object Expand(MethodCompilerBase methodCompiler)
         {
             return this;
         }
-
-        #endregion // IRegisterConstraint Members
     }
 }

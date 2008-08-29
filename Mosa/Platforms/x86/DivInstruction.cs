@@ -18,7 +18,7 @@ using System.Diagnostics;
 
 namespace Mosa.Platforms.x86
 {
-    class DivInstruction : IL.DivInstruction, IRegisterConstraint
+    class DivInstruction : IL.DivInstruction
     {
         public DivInstruction(IL.OpCode code) :
             base(code)
@@ -33,18 +33,6 @@ namespace Mosa.Platforms.x86
                 x86.Div(this);
             else
                 base.Visit(visitor);
-        }
-
-        #region IRegisterConstraint Members
-
-        Register[] IRegisterConstraint.GetConstraints()
-        {
-            return null;
-        }
-
-        Register[] IRegisterConstraint.GetRegistersUsed()
-        {
-            return null;
         }
 
         public override object Expand(MethodCompilerBase methodCompiler)
@@ -69,7 +57,5 @@ namespace Mosa.Platforms.x86
             else
                 return this;
         }
-
-        #endregion // IRegisterConstraint Members
     }
 }

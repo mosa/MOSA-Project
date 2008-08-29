@@ -20,14 +20,32 @@ namespace Mosa.Runtime.CompilerFramework
     public interface IRegisterConstraint
     {
         /// <summary>
-        /// Returns an array of register constraints for the operands of the instruction.
+        /// Determines if this is a valid operand of the instruction.
         /// </summary>
-        /// <returns>
-        /// An array of register indices, which correspond to destination, first operand, 
-        /// second operand, ..., last operand. Each integer represents either no constraint (0) 
-        /// or the index of a required register.
-        /// </returns>
-        Register[] GetConstraints();
+        /// <param name="opIdx">The operand index to check.</param>
+        /// <param name="op">The operand in use.</param>
+        /// <returns>True if the used operand is valid or false, if it is not valid.</returns>
+        bool IsValidOperand(int opIdx, Operand op);
+
+        /// <summary>
+        /// Determines if this is a valid result operand of the instruction.
+        /// </summary>
+        /// <param name="resIdx">The result operand index to check.</param>
+        /// <param name="op">The operand in use.</param>
+        /// <returns>True if the used operand is valid or false, if it is not valid.</returns>
+        bool IsValidResult(int resIdx, Operand op);
+
+        /// <summary>
+        /// Returns an array of registers, that are valid for the specified operand of the instruction.
+        /// </summary>
+        /// <param name="opIdx">The operand index to check.</param>
+        Register[] GetRegistersForOperand(int opIdx);
+
+        /// <summary>
+        /// Returns an array of registers, that are valid for the specified result operand of the instruction.
+        /// </summary>
+        /// <param name="resIdx">The result operand index to check.</param>
+        Register[] GetRegistersForResult(int resIdx);
 
         /// <summary>
         /// Retrieves an array of registers used by this instruction. This function is
@@ -35,7 +53,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// the register allocator to perform proper register spilling, if a used register also
         /// hosts a variable.
         /// </summary>
-        /// <returns>An array of register codes.</returns>
+        /// <returns>An array of registers used by the instruction.</returns>
         Register[] GetRegistersUsed();
     }
 }
