@@ -38,11 +38,6 @@ namespace Mosa.Runtime.CompilerFramework
         private IMetadataModule _assembly;
 
         /// <summary>
-        /// Holds the current compilation type.
-        /// </summary>
-        private RuntimeType _currentType;
-
-        /// <summary>
         /// The pipeline of the assembly compiler.
         /// </summary>
         private CompilerPipeline<IAssemblyCompilerStage> _pipeline;
@@ -85,15 +80,9 @@ namespace Mosa.Runtime.CompilerFramework
             get { return _architecture; }
         }
 
-
         public IMetadataModule Assembly
         {
             get { return _assembly; }
-        }
-
-        public RuntimeType CurrentType
-        {
-            get { return _currentType; }
         }
 
         public virtual IMetadataProvider Metadata
@@ -131,40 +120,12 @@ namespace Mosa.Runtime.CompilerFramework
             //TokenTypes maxTypeToken = metadata.GetMaxTokenValue(TokenTypes.TypeDef);
 
             IMetadataModule module = this.Assembly;
-
-
-            ReadOnlyRuntimeTypeListView types = RuntimeBase.Instance.TypeLoader.GetTypesFromModule(this.Assembly);
-            foreach (RuntimeType type in types) 
+            this.Pipeline.Execute(delegate(IAssemblyCompilerStage stage)
             {
-                _currentType = type;
-                //_currentType = new MetadataTypeDefinition(metadata, typeToken);
-                //Debug.WriteLine(String.Format("Type: {0}", _currentType));
-                
-                // Do not compile generic types
-				if (false == _currentType.IsGeneric)
-				{
-                    this.Pipeline.Execute(delegate(IAssemblyCompilerStage stage) {
-                        stage.Run(this);
-                    });
-				}
-            }
-
-            // Run all scheduled method compilers...
-            while (0 != _schedule.Count)
-            {
-                MethodCompilerBase mc = _schedule.Dequeue();
-                mc.Compile();
-                mc.Dispose();
-            }
+                stage.Run(this);
+            });
         }
 
         #endregion // Methods
-
-        public void ScheduleMethodForCompilation(RuntimeType type, RuntimeMethod method)
-        {
-            MethodCompilerBase mc = CreateMethodCompiler(type, method);
-            _schedule.Enqueue(mc);
-            // FIXME: CompilerScheduler.Schedule(mc);
-        }
     }
 }
