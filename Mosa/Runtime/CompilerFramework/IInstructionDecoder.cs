@@ -19,9 +19,10 @@ namespace Mosa.Runtime.CompilerFramework
 {
     public interface IInstructionDecoder
     {
+        MethodCompilerBase Compiler { get; }
         RuntimeMethod Method { get; }
-        IMetadataProvider Metadata { get; }
-        IArchitecture Architecture { get; }
+        //IMetadataProvider Metadata { get; }
+        //IArchitecture Architecture { get; }
         //AssemblyCompiler AssemblyCompiler { get; }
 
         Operand GetLocalOperand(int idx);

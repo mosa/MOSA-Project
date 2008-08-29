@@ -60,6 +60,13 @@ namespace Mosa.Runtime.CompilerFramework
         ICallingConvention GetCallingConvention(CallingConvention cc);
 
         /// <summary>
+        /// Retrieves a register constraint description object.
+        /// </summary>
+        /// <param name="instruction">The instruction to retrieve the register constraint description for.</param>
+        /// <returns>A register constraint descriptor.</returns>
+        IRegisterConstraint GetRegisterConstraint(Instruction instruction);
+
+        /// <summary>
         /// Requests the architecture to add architecture specific compilation stages to the assembly compiler 
         /// pipeline. These may depend upon the current state of the pipeline.
         /// </summary>
@@ -88,10 +95,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Factory method for result operands of instructions.
         /// </summary>
-        /// <param name="instruction">The instruction to create a result operand for.</param>
         /// <param name="type">The datatype held in the result operand.</param>
         /// <returns>The operand, which holds the instruction result.</returns>
-        Operand CreateResultOperand(Instruction instruction, SigType type);
+        Operand CreateResultOperand(SigType type, int label, int index);
 
         #endregion // Methods
     }

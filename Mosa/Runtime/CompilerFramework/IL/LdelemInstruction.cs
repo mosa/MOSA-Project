@@ -90,7 +90,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
 
             // Push the loaded value
-            SetResult(0, CreateResultOperand(decoder.Architecture, _typeRef));
+            SetResult(0, decoder.Compiler.CreateResultOperand(_typeRef));
         }
 
         /// <summary>

@@ -44,7 +44,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             // Create a new operand based on the given one...
             // FIXME: Operand looses memory location information!!
-            SetResult(0, CreateResultOperand(decoder.Architecture, new RefSigType(decoder.GetLocalOperand(locIdx).Type)));
+            SetResult(0, decoder.Compiler.CreateResultOperand(new RefSigType(decoder.GetLocalOperand(locIdx).Type)));
         }
 
         /// <summary>

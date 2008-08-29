@@ -16,6 +16,7 @@ using Mosa.Runtime.CompilerFramework.Ir;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -55,6 +56,11 @@ namespace Mosa.Runtime.CompilerFramework
         private IMetadataModule _module;
 
         /// <summary>
+        /// Holds the next free stack slot index.
+        /// </summary>
+        private int _nextStackSlot;
+
+        /// <summary>
         /// Holds the type, which owns the method.
         /// </summary>
         private RuntimeType _type;
@@ -82,6 +88,9 @@ namespace Mosa.Runtime.CompilerFramework
             _method = method;
             _module = module;
             _type = type;
+
+            // HACK: Magic number, remove this once collisions with classical StackOperands are removed.
+            _nextStackSlot = 100000;
         }
 
         #endregion // Construction
@@ -141,6 +150,16 @@ namespace Mosa.Runtime.CompilerFramework
             {
                 stage.Run(this);
             });
+        }
+
+        /// <summary>
+        /// Creates a result operand for an instruction.
+        /// </summary>
+        /// <param name="type">The signature type of the operand to be created.</param>
+        /// <returns>A new temporary result operand.</returns>
+        public Operand CreateResultOperand(SigType type)
+        {
+            return _architecture.CreateResultOperand(type, _nextStackSlot, _nextStackSlot++);
         }
 
         /// <summary>

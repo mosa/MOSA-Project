@@ -42,7 +42,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             base.Decode(decoder);
 
             // FIXME: Validate operands & verify instruction
-            SetResult(0, CreateResultOperand(decoder.Architecture, new SigType(CilElementType.I4)));
+            SetResult(0, decoder.Compiler.CreateResultOperand(new SigType(CilElementType.I4)));
         }
 
         /// <summary>

@@ -45,7 +45,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             base.Decode(decoder);
 
             // Push the address on the stack
-            SetResult(0, CreateResultOperand(decoder.Architecture, new SigType(CilElementType.I)));
+            SetResult(0, decoder.Compiler.CreateResultOperand(new SigType(CilElementType.I)));
         }
 
         /// <summary>

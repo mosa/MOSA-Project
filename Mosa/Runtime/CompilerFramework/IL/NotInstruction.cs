@@ -65,7 +65,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (StackTypeCode.Unknown == result)
                 throw new InvalidOperationException(@"Invalid operand to Neg instruction.");
 
-            SetResult(0, CreateResultOperand(compiler.Architecture, ops[0].Type));
+            SetResult(0, compiler.CreateResultOperand(ops[0].Type));
         }
 
         #endregion // Methods

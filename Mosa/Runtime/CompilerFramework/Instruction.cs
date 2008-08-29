@@ -306,28 +306,6 @@ namespace Mosa.Runtime.CompilerFramework
                 old.Definitions.Remove(this);
         }
 
-        protected Operand CreateResultOperand(IArchitecture architecture, StackTypeCode code)
-        {
-            SigType type = null;
-            if (StackTypeCode.N == code)
-            {
-                type = architecture.NativeType;
-            }
-            else
-            {
-                type = Operand.SigTypeFromStackType(code);
-            }
-
-            Debug.Assert(null != type, @"Failed to determine type for stack type StackTypeCode." + code);
-            //return CreateResultOperand(type);
-            return architecture.CreateResultOperand(this, type);
-        }
-
-        protected Operand CreateResultOperand(IArchitecture architecture, SigType type)
-        {
-            return architecture.CreateResultOperand(this, type);
-        }
-
         /// <summary>
         /// Called by the intermediate to machine intermediate representation transformation
         /// to expand compound instructions into their basic instructions.

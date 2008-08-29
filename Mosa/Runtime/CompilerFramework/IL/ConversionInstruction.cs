@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         public sealed override void Validate(MethodCompilerBase compiler)
         {
 			// Validate the typecode & determine the resulting stack type
-            SetResult(0, CreateResultOperand(compiler.Architecture, GetResultStackType()));
+            SetResult(0, compiler.CreateResultOperand(Operand.SigTypeFromStackType(GetResultStackType())));
 		}
 
         /// <summary>

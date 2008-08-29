@@ -75,12 +75,21 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Methods
 
-        public static ConstantOperand FromValue(IMetadataProvider provider, int value)
+        /// <summary>
+        /// Creates a new <see cref="ConstantOperand"/> for the given integral value.
+        /// </summary>
+        /// <param name="value">The value to create the constant operand for.</param>
+        /// <returns>A new ConstantOperand representing the value <paramref name="value"/>.</returns>
+        public static ConstantOperand FromValue(int value)
         {
             return new ConstantOperand(new SigType(CilElementType.I4), value);
         }
 
-        public static ConstantOperand GetNull(IMetadataProvider provider)
+        /// <summary>
+        /// Retrieves a constant operand to represent the null-value.
+        /// </summary>
+        /// <returns>A new instance of <see cref="ConstantOperand"/>, that represents the null value.</returns>
+        public static ConstantOperand GetNull()
         {
             if (null == s_object)
                 s_object = new SigType(CilElementType.Object);

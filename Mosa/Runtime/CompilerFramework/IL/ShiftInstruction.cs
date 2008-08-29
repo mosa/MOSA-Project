@@ -63,7 +63,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (StackTypeCode.Unknown == result)
                 throw new ExecutionEngineException(@"Invalid stack state.");
 
-            SetResult(0, CreateResultOperand(compiler.Architecture, result));
+            SetResult(0, compiler.CreateResultOperand(Operand.SigTypeFromStackType(result)));
         }
 
         /// <summary>

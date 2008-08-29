@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             base.Validate(compiler);
 
             // Simple result is the same type as the unary argument
-            SetResult(0, CreateResultOperand(compiler.Architecture, this.Operands[0].Type));
+            SetResult(0, compiler.CreateResultOperand(this.Operands[0].Type));
         }
 
         #endregion // Methods

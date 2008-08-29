@@ -103,7 +103,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (StackTypeCode.Unknown == result)
                 throw new InvalidOperationException(@"Invalid operand types passed to " + _code);
 
-            SetResult(0, CreateResultOperand(compiler.Architecture, result));
+            SetResult(0, compiler.CreateResultOperand(Operand.SigTypeFromStackType(result)));
         }
 
         /// <summary>

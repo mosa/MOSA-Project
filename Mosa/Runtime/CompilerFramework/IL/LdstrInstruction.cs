@@ -51,12 +51,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
             base.Decode(decoder);
 
             // Load the string value, it's a token
-            IMetadataProvider metadata = decoder.Metadata;
+            IMetadataProvider metadata = decoder.Compiler.Assembly.Metadata;
             TokenTypes token = TokenTypes.UserString | decoder.DecodeToken();
             metadata.Read(token, out _value);
 
             // Set the result
-            SetResult(0, CreateResultOperand(decoder.Architecture, new SigType(CilElementType.String)));
+            SetResult(0, decoder.Compiler.CreateResultOperand(new SigType(CilElementType.String)));
         }
 
         public override string ToString()

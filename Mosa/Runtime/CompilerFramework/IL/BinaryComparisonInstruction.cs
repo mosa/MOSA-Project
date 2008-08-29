@@ -41,7 +41,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             base.Decode(decoder);
 
             // Set the result
-            SetResult(0, CreateResultOperand(decoder.Architecture, new SigType(CilElementType.I4)));
+            SetResult(0, decoder.Compiler.CreateResultOperand(new SigType(CilElementType.I4)));
         }
 
         public override string ToString()

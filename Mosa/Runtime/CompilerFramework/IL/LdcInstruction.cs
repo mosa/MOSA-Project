@@ -63,17 +63,17 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     result = new ConstantOperand(new SigType(CilElementType.R8), decoder.DecodeDouble());
                     break;
 
-                case OpCode.Ldnull: result = ConstantOperand.GetNull(decoder.Metadata); break;
-                case OpCode.Ldc_i4_0: result = ConstantOperand.FromValue(decoder.Metadata, 0); break;
-                case OpCode.Ldc_i4_1: result = ConstantOperand.FromValue(decoder.Metadata, 1); break;
-                case OpCode.Ldc_i4_2: result = ConstantOperand.FromValue(decoder.Metadata, 2); break;
-                case OpCode.Ldc_i4_3: result = ConstantOperand.FromValue(decoder.Metadata, 3); break;
-                case OpCode.Ldc_i4_4: result = ConstantOperand.FromValue(decoder.Metadata, 4); break;
-                case OpCode.Ldc_i4_5: result = ConstantOperand.FromValue(decoder.Metadata, 5); break;
-                case OpCode.Ldc_i4_6: result = ConstantOperand.FromValue(decoder.Metadata, 6); break;
-                case OpCode.Ldc_i4_7: result = ConstantOperand.FromValue(decoder.Metadata, 7); break;
-                case OpCode.Ldc_i4_8: result = ConstantOperand.FromValue(decoder.Metadata, 8); break;
-                case OpCode.Ldc_i4_m1: result = ConstantOperand.FromValue(decoder.Metadata, -1); break;
+                case OpCode.Ldnull: result = ConstantOperand.GetNull(); break;
+                case OpCode.Ldc_i4_0: result = ConstantOperand.FromValue(0); break;
+                case OpCode.Ldc_i4_1: result = ConstantOperand.FromValue(1); break;
+                case OpCode.Ldc_i4_2: result = ConstantOperand.FromValue(2); break;
+                case OpCode.Ldc_i4_3: result = ConstantOperand.FromValue(3); break;
+                case OpCode.Ldc_i4_4: result = ConstantOperand.FromValue(4); break;
+                case OpCode.Ldc_i4_5: result = ConstantOperand.FromValue(5); break;
+                case OpCode.Ldc_i4_6: result = ConstantOperand.FromValue(6); break;
+                case OpCode.Ldc_i4_7: result = ConstantOperand.FromValue(7); break;
+                case OpCode.Ldc_i4_8: result = ConstantOperand.FromValue(8); break;
+                case OpCode.Ldc_i4_m1: result = ConstantOperand.FromValue(-1); break;
 
                 default:
                     throw new NotImplementedException();

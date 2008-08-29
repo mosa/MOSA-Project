@@ -160,7 +160,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Is the function returning void?
             if (signature.ReturnType.Type != CilElementType.Void)
             {
-                SetResult(0, CreateResultOperand(decoder.Architecture, signature.ReturnType));
+                SetResult(0, decoder.Compiler.CreateResultOperand(signature.ReturnType));
             }
         }
 

@@ -34,7 +34,10 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Construction
 
-        public BasicArchitecture()
+        /// <summary>
+        /// Initializes a new instance of <see cref="BasicArchitecture"/>.
+        /// </summary>
+        protected BasicArchitecture()
         {
         }
 
@@ -50,6 +53,9 @@ namespace Mosa.Runtime.CompilerFramework
             get;
         }
 
+        /// <summary>
+        /// Retrieves the signature type of the native integer.
+        /// </summary>
         public SigType NativeType 
         {
             get
@@ -76,10 +82,20 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
+        /// <summary>
+        /// Retrieves the register set of the architecture.
+        /// </summary>
         public abstract Register[] RegisterSet { get; }
 
+        /// <summary>
+        /// Retrieves the stack frame register of the architecture.
+        /// </summary>
         public abstract Register StackFrameRegister { get; }
 
+        /// <summary>
+        /// Extends the assembly compiler pipeline with architecture specific assembly compiler stages.
+        /// </summary>
+        /// <param name="assemblyPipeline">The pipeline to extend.</param>
         public abstract void ExtendAssemblyCompilerPipeline(CompilerPipeline<IAssemblyCompilerStage> assemblyPipeline);
         public abstract void ExtendMethodCompilerPipeline(CompilerPipeline<IMethodCompilerStage> methodPipeline);
 
@@ -89,9 +105,14 @@ namespace Mosa.Runtime.CompilerFramework
             return (Instruction)Activator.CreateInstance(instructionType, args, new object[0]);
         }
 
-        public abstract Operand CreateResultOperand(Instruction instruction, SigType type);
+        public virtual Operand CreateResultOperand(SigType type, int label, int index)
+        {
+            return new TemporaryOperand(label, type, this.StackFrameRegister, index);
+        }
 
         public abstract ICallingConvention GetCallingConvention(CallingConvention cc);
+
+        public abstract IRegisterConstraint GetRegisterConstraint(Instruction instruction);
 
         #endregion // IArchitecture Members
     }

@@ -127,24 +127,37 @@ namespace Mosa.Platforms.x86
 
         #region IArchitecture Members
 
+        /// <summary>
+        /// Retrieves the native integer size of the x86 platform.
+        /// </summary>
+        /// <value>This property always returns 32.</value>
         public override int NativeIntegerSize
         {
             get { return 32; }
         }
 
+        /// <summary>
+        /// Retrieves the register set of the x86 platform.
+        /// </summary>
         public override Register[] RegisterSet
         {
-            get 
-            {
-                return _registers;
-            }
+            get { return _registers; }
         }
 
+        /// <summary>
+        /// Retrieves the stack frame register of the x86.
+        /// </summary>
         public override Register StackFrameRegister
         {
             get { return GeneralPurposeRegister.EBP; }
         }
 
+        /// <summary>
+        /// Creates a new instruction instance.
+        /// </summary>
+        /// <param name="instructionType">The instruction type to create.</param>
+        /// <param name="args">Arguments to pass to the instruction ctor.</param>
+        /// <returns>A new instance of the requested instruction or a derived type.</returns>
         public override Instruction CreateInstruction(Type instructionType, params object[] args)
         {
             // Make sure we use x86 specific override classes, if there's one defined.
@@ -159,10 +172,18 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        /// <summary>
+        /// Extends the assembly compiler pipeline with x86 specific stages.
+        /// </summary>
+        /// <param name="assemblyPipeline">The assembly compiler pipeline to extend.</param>
         public override void ExtendAssemblyCompilerPipeline(CompilerPipeline<IAssemblyCompilerStage> assemblyPipeline)
         {
         }
 
+        /// <summary>
+        /// Extends the method compiler pipeline with x86 specific stages.
+        /// </summary>
+        /// <param name="methodPipeline">The method compiler pipeline to extend.</param>
         public override void ExtendMethodCompilerPipeline(CompilerPipeline<IMethodCompilerStage> methodPipeline)
         {
             // FIXME: Create a specific code generator instance using requested feature flags.
@@ -177,34 +198,24 @@ namespace Mosa.Platforms.x86
             });
         }
 
-        private RegisterOperand EAX = null;
-
-        public override Operand CreateResultOperand(Instruction instruction, SigType type)
+        /// <summary>
+        /// Creates a new result operand of the requested type.
+        /// </summary>
+        /// <param name="type">The type requested.</param>
+        /// <param name="label">The label of the instruction requesting the operand.</param>
+        /// <param name="index">The stack index of the operand.</param>
+        /// <returns>A new operand usable as a result operand.</returns>
+        public override Operand CreateResultOperand(SigType type, int label, int index)
         {
-            /*
-                        List<Operand> result = new List<Operand>();
-
-                        // By default, results are placed in EAX
-                        result.Add(new RegisterOperand(type, GeneralPurposeRegister.EAX));
-
-                        // Handle extended instructions, which overwrite an additional register
-                        if (instruction is IL.ArithmeticInstruction)
-                        {
-                            IL.ILInstruction il = (IL.ILInstruction)instruction;
-                            switch (il.Code)
-                            {
-                                case IL.OpCode.Mul:
-                                    result.Add(new RegisterOperand(type, GeneralPurposeRegister.EDX));
-                                    break;
-                            }
-                        }
-             
-                        return result.ToArray();
-            */
-
             return new RegisterOperand(type, GeneralPurposeRegister.EAX);
         }
 
+        /// <summary>
+        /// Retrieves a calling convention object for the requested calling convention.
+        /// </summary>
+        /// <param name="cc">One of the defined calling conventions.</param>
+        /// <returns>An instance of <see cref="ICallingConvention"/>.</returns>
+        /// <exception cref="System.NotSupportedException"><paramref name="cc"/> is not a supported calling convention.</exception>
         public override ICallingConvention GetCallingConvention(CallingConvention cc)
         {
             switch (cc)
@@ -215,6 +226,16 @@ namespace Mosa.Platforms.x86
                 default:
                     throw new NotSupportedException();
             }
+        }
+
+        /// <summary>
+        /// Requests a <see cref="IRegisterConstraint"/> object for the given instruction.
+        /// </summary>
+        /// <param name="instruction">The <see cref="Instruction"/> to provide register constraints for.</param>
+        /// <returns>An object specifying the register constraints or null, if there are no constraints.</returns>
+        public override IRegisterConstraint GetRegisterConstraint(Instruction instruction)
+        {
+            return null;
         }
 
         #endregion // IArchitecture Members
