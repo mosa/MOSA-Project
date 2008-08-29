@@ -47,7 +47,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             base.Decode(decoder);
 
             // Read the no check code
-            _noCheck = decoder.DecodeByte();
+            decoder.Decode(out _noCheck);
         }
 
         #endregion // Methods

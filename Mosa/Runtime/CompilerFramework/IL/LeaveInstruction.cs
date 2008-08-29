@@ -32,14 +32,19 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Decode bases first
             base.Decode(decoder);
 
+            _branchTargets = new int[0];
             switch (_code)
             {
                 case OpCode.Leave_s:
-                    _branchTargets = new int[] { decoder.DecodeSByte() };
+                    {
+                        sbyte sb;
+                        decoder.Decode(out sb);
+                        _branchTargets[0] = sb;
+                    }
                     break;
 
                 case OpCode.Leave:
-                    _branchTargets = new int[] { decoder.DecodeInt32() };
+                    decoder.Decode(out _branchTargets[0]);
                     break;
             }
         }

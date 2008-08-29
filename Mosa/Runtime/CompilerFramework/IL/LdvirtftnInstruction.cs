@@ -46,7 +46,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Decode the base class
             base.Decode(decoder);
 
-            TokenTypes token = decoder.DecodeToken();
+            TokenTypes token;
+            decoder.Decode(out token);
             throw new NotImplementedException();
 //            _function = MetadataMemberReference.FromToken(decoder.Metadata, token);
 

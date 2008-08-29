@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         public override void Decode(IInstructionDecoder decoder)
         {
             base.Decode(decoder);
-            _alignment = decoder.DecodeByte();
+            decoder.Decode(out _alignment);
         }
 
         #endregion // Methods

@@ -52,7 +52,9 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             // Load the string value, it's a token
             IMetadataProvider metadata = decoder.Compiler.Assembly.Metadata;
-            TokenTypes token = TokenTypes.UserString | decoder.DecodeToken();
+            TokenTypes token;
+            decoder.Decode(out token);
+            token |= TokenTypes.UserString;
             metadata.Read(token, out _value);
 
             // Set the result

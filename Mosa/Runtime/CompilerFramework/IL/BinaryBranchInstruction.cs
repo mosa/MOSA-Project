@@ -73,13 +73,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
 				_code == OpCode.Bgt_un_s || _code == OpCode.Ble_s || _code == OpCode.Ble_un_s || _code == OpCode.Blt_s ||
 				_code == OpCode.Blt_un_s || _code == OpCode.Bne_un_s)
 			{
-				_targets[0] = decoder.DecodeSByte();
+                sbyte target;
+                decoder.Decode(out target);
+				_targets[0] = target;
 			}
 			else if (_code == OpCode.Beq || _code == OpCode.Bge || _code == OpCode.Bge_un || _code == OpCode.Bgt ||
 				_code == OpCode.Bgt_un || _code == OpCode.Ble || _code == OpCode.Ble_un || _code == OpCode.Blt ||
 				_code == OpCode.Blt_un || _code == OpCode.Bne_un)
 			{
-                _targets[0] = decoder.DecodeInt32();
+                decoder.Decode(out _targets[0]);
 			}
             else
             {

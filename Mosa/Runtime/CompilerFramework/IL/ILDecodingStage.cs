@@ -323,109 +323,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Returns the binary reader to access the code stream.
         /// </summary>
-        public BinaryReader CodeReader
-        {
-            get { return _codeReader; }
-        }
-
-        /// <summary>
-        /// Retrieves the current compiler context.
-        /// </summary>
-        public MethodCompilerBase Compiler
-        {
-            get { return _compiler; }
-        }
-
-        /// <summary>
-        /// Returns the currently compiled method.
-        /// </summary>
-        public RuntimeMethod Method
-        {
-            get { return _method; }
-        }
+        //public BinaryReader CodeReader
+        //{
+        //    get { return _codeReader; }
+        //}
 
         #endregion // Properties
-
-        #region Methods
-
-        /// <summary>
-        /// Retrieves an Operand, that represents a parameter of the current method.
-        /// </summary>
-        /// <param name="index">The parameter index to retrieve.</param>
-        /// <returns>An operand, that represents the requested parameter.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is invalid for the method.</exception>
-        public Operand GetParameterOperand(int index)
-        {
-            // HACK: Returning a new instance here breaks object identity. We should reuse operands,
-            // which represent the same memory location. If we need to move a variable in an optimization
-            // stage to a different memory location, it should actually be a new one so sharing object
-            // only saves runtime space/perf.
-
-            MethodSignature sig = _method.Signature;
-            if (true == sig.HasThis || true == sig.HasExplicitThis)
-            {
-                if (0 == index)
-                {
-                    return new ParameterOperand(_compiler.Architecture.StackFrameRegister, new RuntimeParameter(_method.Module, @"this", 0, ParameterAttributes.In), new ClassSigType(_compiler.Type.Token));
-                }
-                else
-                {
-                    // Decrement the index, as the caller actually wants a real parameter
-                    index--;
-                }
-            }
-
-            // A normal argument, decode it...
-            IList<RuntimeParameter> parameters = _method.Parameters;
-            Debug.Assert(null != parameters, @"Method doesn't have arguments.");
-            Debug.Assert(index < parameters.Count, @"Invalid argument index requested.");
-            if (null == parameters || parameters.Count <= index)
-                throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
-
-            Operand param = null;
-            if (_parameters.Count > index)
-                param = _parameters[index];
-
-            if (null == param)
-            {
-                param = new ParameterOperand(_compiler.Architecture.StackFrameRegister, parameters[index], sig.Parameters[index]);
-                _parameters[index] = param;
-            }
-
-            return param;
-        }
-
-        /// <summary>
-        /// Retrieves an operand, which represents a local variable in the method being compiled.
-        /// </summary>
-        /// <param name="index">The index of the local variable.</param>
-        /// <returns>An operand object, which represents the local variable.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is invalid for the method.</exception>
-        public Operand GetLocalOperand(int index)
-        {
-            // HACK: Returning a new instance here breaks object identity. We should reuse operands,
-            // which represent the same memory location. If we need to move a variable in an optimization
-            // stage to a different memory location, it should actually be a new one so sharing object
-            // only saves runtime space/perf.
-            Debug.Assert(null != _localsSig, @"Method doesn't have locals.");
-            Debug.Assert(index <= _localsSig.Types.Length, @"Invalid local index requested.");
-            if (null == _localsSig || _localsSig.Types.Length <= index)
-                throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
-
-            Operand local = null;
-            if (_locals.Count > index)
-                local = _locals[index];
-
-            if (null == local)
-            {
-                local = new LocalVariableOperand(_compiler.Architecture.StackFrameRegister, String.Format("L_{0}", index), index, _localsSig.Types[index]);
-                _locals[index] = local;
-            }
-
-            return local;
-        }
-
-        #endregion // Methods
 
         #region IMethodCompilerStage Members
 
@@ -443,9 +346,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (null == compiler)
                 throw new ArgumentNullException(@"compiler");
 
-            //Debug.Assert(0x06002448 != compiler.Method.Token);
-            //Debug.Assert(0x0600000E != compiler.Method.Token);
-            Debug.WriteLine(@"Decoding " + compiler.Type.ToString() + "." + compiler.Method.ToString());
+            //Debug.WriteLine(@"Decoding " + compiler.Type.ToString() + "." + compiler.Method.ToString());
 
             using (Stream code = compiler.GetInstructionStream())
             using (BinaryReader reader = new BinaryReader(code))
@@ -470,16 +371,9 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 /* Decode the instructions */
                 Decode(compiler, ref header);
 
-                /* Remove temporaries stored into locals */
-                //RemoveShortTemporaries();
-
-                /* Remove dead instructions */
-                //RemoveDeadInstructions();
-
                 // When we leave, the operand stack must only contain the locals...
                 //Debug.Assert(_operandStack.Count == _method.Locals.Count);
                 _codeReader = null;
-                //_method = null;
                 _compiler = null;
             }
         }
@@ -749,63 +643,133 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #endregion //  IInstructionsProvider members
 
-        #region IInstructionDecoder members
+        #region IInstructionDecoder Members
 
-        public byte DecodeByte()
+        MethodCompilerBase IInstructionDecoder.Compiler
         {
-            return _codeReader.ReadByte();
+            get { return _compiler; }
         }
 
-        public sbyte DecodeSByte()
+        RuntimeMethod IInstructionDecoder.Method
         {
-            return _codeReader.ReadSByte();
+            get { return _method; }
         }
 
-        public short DecodeInt16()
+        Operand IInstructionDecoder.GetLocalOperand(int idx)
         {
-            return _codeReader.ReadInt16();
+            // HACK: Returning a new instance here breaks object identity. We should reuse operands,
+            // which represent the same memory location. If we need to move a variable in an optimization
+            // stage to a different memory location, it should actually be a new one so sharing object
+            // only saves runtime space/perf.
+            Debug.Assert(null != _localsSig, @"Method doesn't have locals.");
+            Debug.Assert(idx <= _localsSig.Types.Length, @"Invalid local index requested.");
+            if (null == _localsSig || _localsSig.Types.Length <= idx)
+                throw new ArgumentOutOfRangeException(@"index", idx, @"Invalid parameter index");
+
+            Operand local = null;
+            if (_locals.Count > idx)
+                local = _locals[idx];
+
+            if (null == local)
+            {
+                local = new LocalVariableOperand(_compiler.Architecture.StackFrameRegister, String.Format("L_{0}", idx), idx, _localsSig.Types[idx]);
+                _locals[idx] = local;
+            }
+
+            return local;
         }
 
-        public ushort DecodeUInt16()
+        Operand IInstructionDecoder.GetParameterOperand(int idx)
         {
-            return _codeReader.ReadUInt16();
+            // HACK: Returning a new instance here breaks object identity. We should reuse operands,
+            // which represent the same memory location. If we need to move a variable in an optimization
+            // stage to a different memory location, it should actually be a new one so sharing object
+            // only saves runtime space/perf.
+
+            MethodSignature sig = _method.Signature;
+            if (true == sig.HasThis || true == sig.HasExplicitThis)
+            {
+                if (0 == idx)
+                {
+                    return new ParameterOperand(_compiler.Architecture.StackFrameRegister, new RuntimeParameter(_method.Module, @"this", 0, ParameterAttributes.In), new ClassSigType(_compiler.Type.Token));
+                }
+                else
+                {
+                    // Decrement the index, as the caller actually wants a real parameter
+                    idx--;
+                }
+            }
+
+            // A normal argument, decode it...
+            IList<RuntimeParameter> parameters = _method.Parameters;
+            Debug.Assert(null != parameters, @"Method doesn't have arguments.");
+            Debug.Assert(idx < parameters.Count, @"Invalid argument index requested.");
+            if (null == parameters || parameters.Count <= idx)
+                throw new ArgumentOutOfRangeException(@"index", idx, @"Invalid parameter index");
+
+            Operand param = null;
+            if (_parameters.Count > idx)
+                param = _parameters[idx];
+
+            if (null == param)
+            {
+                param = new ParameterOperand(_compiler.Architecture.StackFrameRegister, parameters[idx], sig.Parameters[idx]);
+                _parameters[idx] = param;
+            }
+
+            return param;
         }
 
-        public int DecodeInt32()
+        void IInstructionDecoder.Decode(out byte value)
         {
-            return _codeReader.ReadInt32();
+            value = _codeReader.ReadByte();
         }
 
-        public uint DecodeUInt32()
+        void IInstructionDecoder.Decode(out sbyte value)
         {
-            return _codeReader.ReadUInt32();
+            value = _codeReader.ReadSByte();
         }
 
-        public long DecodeInt64()
+        void IInstructionDecoder.Decode(out short value)
         {
-            return _codeReader.ReadInt64();
+            value = _codeReader.ReadInt16();
         }
 
-        public float DecodeSingle()
+        void IInstructionDecoder.Decode(out ushort value)
         {
-            return _codeReader.ReadSingle();
+            value = _codeReader.ReadUInt16();
         }
 
-        public double DecodeDouble()
+        void IInstructionDecoder.Decode(out int value)
         {
-            return _codeReader.ReadDouble();
+            value = _codeReader.ReadInt32();
         }
 
-        public TokenTypes DecodeToken()
+        void IInstructionDecoder.Decode(out uint value)
         {
-            return (TokenTypes)_codeReader.ReadUInt32();
+            value = _codeReader.ReadUInt32();
         }
 
-        public int GetStackSize()
+        void IInstructionDecoder.Decode(out long value)
         {
-            return _locals.Count;
+            value = _codeReader.ReadInt64();
         }
 
-        #endregion // IInstructionDecoder members
+        void IInstructionDecoder.Decode(out float value)
+        {
+            value = _codeReader.ReadSingle();
+        }
+
+        void IInstructionDecoder.Decode(out double value)
+        {
+            value = _codeReader.ReadDouble();
+        }
+
+        void IInstructionDecoder.Decode(out TokenTypes value)
+        {
+             value = (TokenTypes)_codeReader.ReadInt32();
+        }
+
+        #endregion
     }
 }

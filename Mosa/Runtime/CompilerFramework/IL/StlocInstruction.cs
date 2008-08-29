@@ -52,11 +52,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
             switch (_code)
             {
                 case OpCode.Stloc:
-                    locIdx = decoder.DecodeUInt16();
+                    decoder.Decode(out locIdx);
                     break;
 
                 case OpCode.Stloc_s:
-                    locIdx = decoder.DecodeByte();
+                    {
+                        byte loc;
+                        decoder.Decode(out loc);
+                        locIdx = loc;
+                    }
                     break;
 
                 case OpCode.Stloc_0:

@@ -38,9 +38,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             // Opcode specific handling 
             if (_code == OpCode.Ldloca_s)
-                locIdx = decoder.DecodeByte();
+            {
+                byte loc;
+                decoder.Decode(out loc);
+                locIdx = loc;
+            }
             else
-                locIdx = decoder.DecodeUInt16();
+            {
+                decoder.Decode(out locIdx);
+            }
 
             // Create a new operand based on the given one...
             // FIXME: Operand looses memory location information!!

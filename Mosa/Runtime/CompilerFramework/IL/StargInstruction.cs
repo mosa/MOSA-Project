@@ -35,9 +35,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             // Opcode specific handling 
             if (_code == OpCode.Starg_s)
-                argIdx = decoder.DecodeByte();
+            {
+                byte arg;
+                decoder.Decode(out arg);
+                argIdx = arg;
+            }
             else
-                argIdx = decoder.DecodeUInt16();
+            {
+                decoder.Decode(out argIdx);
+            }
 
             // The argument is the result
             this.SetResult(0, decoder.GetParameterOperand(argIdx));

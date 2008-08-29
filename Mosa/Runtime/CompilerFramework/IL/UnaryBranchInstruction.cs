@@ -78,11 +78,13 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Is this a short branch target?
             if (_code == OpCode.Brfalse_s || _code == OpCode.Brtrue_s)
             {
-                _branchTargets[0] = decoder.DecodeSByte();
+                sbyte target;
+                decoder.Decode(out target);
+                _branchTargets[0] = target;
             }
             else if (_code == OpCode.Brfalse || _code == OpCode.Brtrue)
             {
-                _branchTargets[0] = decoder.DecodeInt32();
+                decoder.Decode(out _branchTargets[0]);
             }
             else if (_code == OpCode.Switch)
             {

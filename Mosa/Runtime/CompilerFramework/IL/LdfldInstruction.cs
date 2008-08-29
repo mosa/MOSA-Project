@@ -55,7 +55,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
             base.Decode(decoder);
 
             // Load the _stackFrameIndex token from the immediate
-            TokenTypes token = decoder.DecodeToken();
+            TokenTypes token;
+            decoder.Decode(out token);
             throw new NotImplementedException();
 /*
             Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) || 

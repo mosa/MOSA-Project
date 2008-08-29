@@ -38,7 +38,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             // Get the size type
             // Load the _stackFrameIndex token from the immediate
-            TokenTypes token = decoder.DecodeToken();
+            TokenTypes token;
+            decoder.Decode(out token);
             throw new NotImplementedException();
 /*
             TypeReference _typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);

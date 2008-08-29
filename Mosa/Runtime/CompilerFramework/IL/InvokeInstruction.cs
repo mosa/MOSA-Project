@@ -122,7 +122,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             // Retrieve the immediate argument - it contains the token
             // of the methoddef, methodref, methodspec or callsite to call.
-            callTarget = decoder.DecodeToken();
+            decoder.Decode(out callTarget);
             targetType = (TokenTypes.TableMask & callTarget);
             if (false == IsCallTargetSupported(targetType, flags))
                 throw new InvalidOperationException(@"Invalid IL call target specification.");

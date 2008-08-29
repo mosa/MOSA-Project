@@ -41,7 +41,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
 			base.Decode(decoder);
 
 			// Retrieve the number of branch targets
-			uint count = decoder.DecodeUInt32();
+            uint count;
+            decoder.Decode(out count);
 
 			// Create an array for the branch targets
 			_branchTargets = new int[count];
@@ -49,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 			// Populate the array
 			for (uint i = 0; i < count; i++)
 			{
-				_branchTargets[i] = decoder.DecodeInt32();
+                decoder.Decode(out _branchTargets[i]);
 			}
         }
 

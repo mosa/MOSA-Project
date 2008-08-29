@@ -53,7 +53,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             base.Decode(decoder);
 
             // Retrieve the token from the code stream
-            _token = decoder.DecodeToken();
+            decoder.Decode(out _token);
             throw new NotImplementedException();
 /*
             TypeReference typeRef;

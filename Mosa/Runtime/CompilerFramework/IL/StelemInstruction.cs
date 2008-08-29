@@ -70,7 +70,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (null == _typeRef)
             {
                 // No, retrieve a type reference from the immediate argument
-                TokenTypes token = decoder.DecodeToken();
+                TokenTypes token;
+                decoder.Decode(out token);
                 throw new NotImplementedException();
                 //_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
             }            

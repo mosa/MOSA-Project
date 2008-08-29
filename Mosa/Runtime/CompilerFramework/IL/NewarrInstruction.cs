@@ -44,7 +44,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
             base.Decode(decoder);
 
             // Read the type specification
-            TokenTypes arrayEType = decoder.DecodeToken();
+            TokenTypes arrayEType;
+            decoder.Decode(out arrayEType);
             throw new NotImplementedException();
 /*
             TypeReference eType = MetadataTypeReference.FromToken(decoder.Metadata, arrayEType);

@@ -44,11 +44,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
             switch (_code)
             {
                 case OpCode.Ldarg:
-                    argIdx = decoder.DecodeUInt16();
+                    decoder.Decode(out argIdx);
                     break;
 
                 case OpCode.Ldarg_s:
-                    argIdx = decoder.DecodeByte();
+                    {
+                        byte arg;
+                        decoder.Decode(out arg);
+                        argIdx = arg;
+                    }
                     break;
 
                 case OpCode.Ldarg_0:
