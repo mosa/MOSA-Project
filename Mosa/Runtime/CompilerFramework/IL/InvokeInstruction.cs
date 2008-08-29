@@ -134,7 +134,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     break;
 
                 case TokenTypes.MemberRef:
-                    throw new NotImplementedException();
+                    _invokeTarget = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method.Module, callTarget);
                     break;
 
                 case TokenTypes.MethodSpec:

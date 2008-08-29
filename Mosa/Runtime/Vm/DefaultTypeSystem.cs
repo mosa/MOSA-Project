@@ -275,8 +275,9 @@ namespace Mosa.Runtime.Vm
                         {
                             if (method.Name != nameString)
                                 continue;
-                            if (!method.Signature.Equals(sig))
-                                continue;
+                            // FIXME: Check the signature
+                            //if (!method.Signature.Equals(sig))
+                            //    continue;
                             return method;
                         }
                         throw new MissingMethodException(type.Name, nameString);
