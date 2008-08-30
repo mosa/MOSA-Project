@@ -73,9 +73,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// A request to patch already emitted code by storing the calculated address value.
         /// </summary>
-        /// <param name="position">The position in code, where it should be patched.</param>
-        /// <param name="value">The value to store at the position in code.</param>
-        protected abstract void ApplyPatch(long position, long value);
+        /// <param name="method">The method whose code is being patched.</param>
+        /// <param name="address">The position in code, where it should be patched.</param>
+        /// <param name="relativeAddress">The value to store at the position in code.</param>
+        protected abstract void ApplyPatch(LinkType linkType, RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress);
 
         #endregion // Methods
 
@@ -88,7 +89,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="address">Receives the determined address of the runtime member.</param>
         /// <returns>The method returns true, when it was successfully resolved.</returns>
         protected virtual bool IsResolved(RuntimeMember member, out long address)
-        {          
+        {
             // Init out params
             address = 0;
 
@@ -132,7 +133,13 @@ namespace Mosa.Runtime.CompilerFramework
             foreach (LinkRequest request in requests)
             {
                 // Patch the code stream
-                ApplyPatch(request.Position, address - request.RelativeBase);
+                ApplyPatch(
+                    request.LinkType,
+                    request.Method,
+                    request.MethodOffset,
+                    request.MethodRelativeBase,
+                    address
+                );
             }
         }
 
@@ -140,24 +147,24 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IAssemblyLinker Members
 
-        public long Link(RuntimeMember member, long address, long relativeBase)
+        public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
-            Debug.Assert(null != member, @"A RuntimeMember must be passed to IAssemblyLinker.Link");
-            if (null == member)
+            Debug.Assert(null != target, @"A RuntimeMember must be passed to IAssemblyLinker.Link");
+            if (null == target)
                 throw new ArgumentNullException(@"member");
-            Debug.Assert(true == IsValid(member), @"Invalid RuntimeMember passed to IAssemblyLinker.Link");
-            if (false == IsValid(member))
+            Debug.Assert(true == IsValid(target), @"Invalid RuntimeMember passed to IAssemblyLinker.Link");
+            if (false == IsValid(target))
                 throw new ArgumentException(@"RuntimeMember is not a static field or method.", @"member");
 
 
             long result = 0;
-            if (true == IsResolved(member, out result))
+            if (true == IsResolved(target, out result))
             {
                 List<LinkRequest> patchList;
-                if (false == _linkRequests.TryGetValue(member, out patchList))
+                if (false == _linkRequests.TryGetValue(target, out patchList))
                 {
                     patchList = new List<LinkRequest>(1);
-                    patchList.Add(new LinkRequest(address, relativeBase));
+                    patchList.Add(new LinkRequest(linkType, method, methodOffset, methodRelativeBase, target));
                 }
 
                 PatchRequests(result, patchList);
@@ -166,13 +173,13 @@ namespace Mosa.Runtime.CompilerFramework
             {
                 // FIXME: Make this thread safe
                 List<LinkRequest> list;
-                if (false == _linkRequests.TryGetValue(member, out list))
+                if (false == _linkRequests.TryGetValue(target, out list))
                 {
                     list = new List<LinkRequest>();
-                    _linkRequests.Add(member, list);
+                    _linkRequests.Add(target, list);
                 }
 
-                list.Add(new LinkRequest(address, relativeBase));
+                list.Add(new LinkRequest(linkType, method, methodOffset, methodRelativeBase, target));
             }
 
             return result;

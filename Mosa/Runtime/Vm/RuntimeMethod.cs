@@ -33,11 +33,6 @@ namespace Mosa.Runtime.Vm
         #region Data members
 
         /// <summary>
-        /// Holds the in-memory address of the method.
-        /// </summary>
-        private IntPtr _address;
-
-        /// <summary>
         /// The implementation attributes of the method.
         /// </summary>
         private MethodImplAttributes _implFlags;
@@ -46,11 +41,6 @@ namespace Mosa.Runtime.Vm
         /// Generic attributes of the method.
         /// </summary>
         private MethodAttributes _attributes;
-
-        /// <summary>
-        /// Holds the module, which owns the method.
-        /// </summary>
-        private IMetadataModule _module;
 
         /// <summary>
         /// The name index of the method.
@@ -87,11 +77,10 @@ namespace Mosa.Runtime.Vm
         #region Construction
 
         public RuntimeMethod(int token, IMetadataModule module, ref MethodDefRow method, TokenTypes maxParam) :
-            base(token, null, null)
+            base(token, module, null, null)
         {
             _implFlags = method.ImplFlags;
             _attributes = method.Flags;
-            _module = module;
             _nameStringIdx = method.NameStringIdx;
             _signatureBlobIdx = method.SignatureBlobIdx;
             _rva = method.Rva;
@@ -111,15 +100,6 @@ namespace Mosa.Runtime.Vm
         #endregion // Construction
 
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the method compiler of this method.
-        /// </summary>
-        public IntPtr Address
-        {
-            get { return _address; }
-            set { _address = value; }
-        }
 
         /// <summary>
         /// Retrieves the method attributes.
@@ -147,24 +127,16 @@ namespace Mosa.Runtime.Vm
         }
 
         /// <summary>
-        /// Retrieves the module, which holds this method.
-        /// </summary>
-        public IMetadataModule Module
-        {
-            get { return _module; }
-        }
-
-        /// <summary>
         /// Retrieves the name of the method.
         /// </summary>
-        public string Name
+        public override string Name
         {
             get
             {
                 if (null != _name)
                     return _name;
 
-                _module.Metadata.Read(_nameStringIdx, out _name);
+                Module.Metadata.Read(_nameStringIdx, out _name);
                 return _name;
             }
         }
@@ -187,7 +159,7 @@ namespace Mosa.Runtime.Vm
                 if (null != _signature)
                     return _signature;
 
-                _signature = MethodSignature.Parse(_module.Metadata, _signatureBlobIdx);
+                _signature = MethodSignature.Parse(Module.Metadata, _signatureBlobIdx);
                 return _signature;
             }
         }
@@ -219,7 +191,7 @@ namespace Mosa.Runtime.Vm
 
         public bool Equals(RuntimeMethod other)
         {
-            return (_module == other._module && _nameStringIdx == other._nameStringIdx && _signatureBlobIdx == other._signatureBlobIdx);
+            return (Module == other.Module && _nameStringIdx == other._nameStringIdx && _signatureBlobIdx == other._signatureBlobIdx);
         }
 
         #endregion // IEquatable<RuntimeMethod> Members

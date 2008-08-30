@@ -269,15 +269,14 @@ namespace Mosa.Runtime.Vm
                         RuntimeType type = this.ResolveTypeRef(scope, row.ClassTableIdx);
                         string nameString;
                         scope.Metadata.Read(row.NameStringIdx, out nameString);
-                        Signature sig = Signature.FromMemberRefSignatureToken(scope.Metadata, row.SignatureBlobIdx);
+                        MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(scope.Metadata, row.SignatureBlobIdx);
                         List<RuntimeMethod> methods = new List<RuntimeMethod>(type.Methods);
                         foreach (RuntimeMethod method in type.Methods)
                         {
                             if (method.Name != nameString)
                                 continue;
-                            // FIXME: Check the signature
-                            //if (!method.Signature.Equals(sig))
-                            //    continue;
+                            if (!method.Signature.Matches(sig))
+                                continue;
                             return method;
                         }
                         throw new MissingMethodException(type.Name, nameString);

@@ -146,11 +146,23 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         public void Compile()
         {
+            this.BeginCompile();
             this.Pipeline.Execute(delegate(IMethodCompilerStage stage)
             {
                 stage.Run(this);
             });
+            this.EndCompile();
         }
+
+        /// <summary>
+        /// Called when compilation begins
+        /// </summary>
+        protected virtual void BeginCompile() { }
+
+        /// <summary>
+        /// Called when compilation finishes
+        /// </summary>
+        protected virtual void EndCompile() { }
 
         /// <summary>
         /// Creates a result operand for an instruction.

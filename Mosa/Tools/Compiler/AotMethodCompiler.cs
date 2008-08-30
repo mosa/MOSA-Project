@@ -18,17 +18,21 @@ using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 using System.IO;
+using Mosa.Runtime.CompilerFramework.ObjectFiles;
 
 namespace Mosa.Tools.Compiler
 {
     public sealed class AotMethodCompiler : MethodCompilerBase
     {
+        ObjectFileBuilderBase _objectFileBuilder;
+
         #region Construction
 
-        public AotMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method)
+        public AotMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method, ObjectFileBuilderBase objectFileBuilder)
             : base(linker, architecture, module, type, method)
         {
-            this.Pipeline.AddRange(new IMethodCompilerStage[] {
+            _objectFileBuilder = objectFileBuilder;
+            Pipeline.AddRange(new IMethodCompilerStage[] {
                 new ILDecodingStage(),
                 new BasicBlockBuilderStage(),
                 //InstructionLogger.Instance,
@@ -50,11 +54,23 @@ namespace Mosa.Tools.Compiler
 
         #region Methods
 
+        protected override void BeginCompile()
+        {
+            _objectFileBuilder.OnMethodCompileBegin(this);
+        }
+
+        protected override void EndCompile()
+        {
+            _objectFileBuilder.OnMethodCompileEnd(this);
+        }
+
+        MemoryStream stream = new MemoryStream();
+
         public override Stream RequestCodeStream()
         {
             // FIXME: Request a stream from the AOT assembly compiler to place the method into, save the rva address 
             // of the native code.
-            return Stream.Null;
+            return stream;
         }
 
         #endregion // Methods

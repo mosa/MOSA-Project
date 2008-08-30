@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 using Mosa.Runtime.CompilerFramework.Ir;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
@@ -98,6 +97,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="type">The datatype held in the result operand.</param>
         /// <returns>The operand, which holds the instruction result.</returns>
         Operand CreateResultOperand(SigType type, int label, int index);
+
+        /// <summary>
+        /// Gets object file builders for this architecture
+        /// </summary>
+        /// <returns>A list of ObjectFileBuilders</returns>
+        ObjectFileBuilderBase[] GetObjectFileBuilders();
 
         #endregion // Methods
     }

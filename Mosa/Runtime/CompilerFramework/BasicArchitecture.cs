@@ -9,10 +9,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-
 using System.Diagnostics;
-
+using System.Text;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
@@ -113,6 +111,8 @@ namespace Mosa.Runtime.CompilerFramework
         public abstract ICallingConvention GetCallingConvention(CallingConvention cc);
 
         public abstract IRegisterConstraint GetRegisterConstraint(Instruction instruction);
+        
+        public abstract ObjectFileBuilderBase[] GetObjectFileBuilders();
 
         #endregion // IArchitecture Members
     }

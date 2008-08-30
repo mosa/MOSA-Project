@@ -115,16 +115,29 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </remarks>
 		protected void Compile()
 		{
-
             IMetadataProvider metadata = this.Metadata;
             //TokenTypes maxTypeToken = metadata.GetMaxTokenValue(TokenTypes.TypeDef);
+
+            this.BeginCompile();
 
             IMetadataModule module = this.Assembly;
             this.Pipeline.Execute(delegate(IAssemblyCompilerStage stage)
             {
                 stage.Run(this);
             });
+
+            this.EndCompile();
         }
+
+        /// <summary>
+        /// Called when compilation begins
+        /// </summary>
+        protected virtual void BeginCompile() { }
+
+        /// <summary>
+        /// Called when compilation finishes
+        /// </summary>
+        protected virtual void EndCompile() { }
 
         #endregion // Methods
     }

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.Vm;
+using System.IO;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -30,14 +31,16 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Issues a linker request for the given runtime method.
         /// </summary>
-        /// <param name="member">The method or static field to link against.</param>
-        /// <param name="address">The address, where the retrieved address is stored in.</param>
-        /// <param name="relativeBase">The base address, if a relative link is required.</param>
+        /// <param name="linkType">The type of link required.</param>
+        /// <param name="method">The method the patched code belongs to.</param>
+        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
+        /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
+        /// <param name="target">The method or static field to link against.</param>
         /// <returns>
         /// The return value is the preliminary address to place in the generated machine 
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
-        long Link(RuntimeMember member, long address, long relativeBase);
+        long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target);
     }
 }

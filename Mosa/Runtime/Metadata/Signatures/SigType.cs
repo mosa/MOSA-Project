@@ -57,7 +57,7 @@ namespace Mosa.Runtime.Metadata.Signatures
                 case CilElementType.I: goto case CilElementType.Void;
                 case CilElementType.U: goto case CilElementType.Void;
                 case CilElementType.TypedByRef: goto case CilElementType.Void;
-                
+
                 case CilElementType.Array:
                     result = ParseArraySignature(buffer, ref index);
                     break;
@@ -211,6 +211,38 @@ namespace Mosa.Runtime.Metadata.Signatures
             Debug.Assert(0 != (value & 0xFFFFFFFC), @"Invalid TypeDefOrRefEncoded index value.");
             TokenTypes token = (TokenTypes)((value >> 2) | (int)_typeDefOrRefEncodedTables[value & 0x03]);
             return token;
+        }
+
+        public virtual bool Matches(SigType other)
+        {
+            if (object.ReferenceEquals(this, other))
+                return true;
+            // TODO: Check to make sure a SigType matches
+            if (other.Type != this.Type)
+                return false;
+            switch (this.Type)
+            {
+                case CilElementType.Void:
+                case CilElementType.Boolean:
+                case CilElementType.Char:
+                case CilElementType.I1:
+                case CilElementType.U1:
+                case CilElementType.I2:
+                case CilElementType.U2:
+                case CilElementType.I4:
+                case CilElementType.U4:
+                case CilElementType.I8:
+                case CilElementType.U8:
+                case CilElementType.R4:
+                case CilElementType.R8:
+                case CilElementType.String:
+                case CilElementType.I:
+                case CilElementType.U:
+                case CilElementType.Object:
+                    return true;
+                default:
+                    throw new NotImplementedException();
+            }
         }
     }
 }

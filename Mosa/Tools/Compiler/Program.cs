@@ -15,6 +15,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Loader;
 using Mosa.Platforms.x86;
+using Mosa.Runtime.CompilerFramework.ObjectFiles;
 
 namespace Mosa.Tools.Compiler {
 	public static class Program {
@@ -29,13 +30,14 @@ namespace Mosa.Tools.Compiler {
             string assembly = args[0], path;
 
             IArchitecture architecture = Architecture.CreateArchitecture(ArchitectureFeatureFlags.AutoDetect);
-
+            ObjectFileBuilderBase objfile = architecture.GetObjectFileBuilders()[0];
             using (CompilationRuntime cr = new CompilationRuntime())
             {
                 path = Path.GetDirectoryName(assembly);
                 cr.AssemblyLoader.AppendPrivatePath(path);
-                AotCompiler.Compile(architecture, assembly);
+                AotCompiler.Compile(architecture, assembly, objfile);
             }
+
             //CompilerScheduler.Wait();
 		}
 

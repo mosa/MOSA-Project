@@ -62,7 +62,7 @@ namespace Mosa.Platforms.x86
             StreamWriter textwriter = t.CreateText();
             MultiplexingCodeEmitter mce = new MultiplexingCodeEmitter();
             mce.Emitters.Add(new AsmCodeEmitter(textwriter));
-            mce.Emitters.Add(new MachineCodeEmitter(_codeStream, _compiler.Linker));
+            mce.Emitters.Add(new MachineCodeEmitter(_compiler, _codeStream, _compiler.Linker));
             _emitter = mce;
 
             //_emitter = new MachineCodeEmitter(_codeStream);

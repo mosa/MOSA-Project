@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mosa.Runtime.Loader;
 
 namespace Mosa.Runtime.Vm
 {
@@ -27,6 +28,11 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         private RuntimeType _declaringType;
 
+        /// <summary>
+        /// Holds the module, which owns the method.
+        /// </summary>
+        private IMetadataModule _module;
+
         #endregion // Data members
 
         #region Construction
@@ -37,9 +43,10 @@ namespace Mosa.Runtime.Vm
         /// <param name="token">Holds the token of this runtime metadata.</param>
         /// <param name="declaringType">The declaring type of the member.</param>
         /// <param name="attributes">Holds the attributes of the member.</param>
-        protected RuntimeMember(int token, RuntimeType declaringType, RuntimeAttribute[] attributes) :
+        protected RuntimeMember(int token, IMetadataModule module, RuntimeType declaringType, RuntimeAttribute[] attributes) :
             base(token)
         {
+            _module = module;
             _declaringType = declaringType;
             _attributes = attributes;
         }
@@ -54,6 +61,23 @@ namespace Mosa.Runtime.Vm
         public RuntimeType DeclaringType
         {
             get { return _declaringType; }
+        }
+
+        public abstract string Name { get; }
+
+        IntPtr _address;
+
+        public IntPtr Address { 
+            get { return _address; } 
+            set { _address = value; }
+        }
+
+        /// <summary>
+        /// Retrieves the module, which holds this member.
+        /// </summary>
+        public IMetadataModule Module
+        {
+            get { return _module; }
         }
 
         #endregion // Properties

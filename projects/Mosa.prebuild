@@ -130,6 +130,7 @@
         </Options>
       </Configuration>
 
+      <Reference name="Mosa.ObjectFiles.Elf32" localCopy="true" />
       <Reference name="Mosa.Runtime" localCopy="true" />
       <Reference name="System" version="2.0.0.0" />
 
@@ -360,7 +361,6 @@
       </Files>
     </Project>
 
-
     <Project name="Mosa.Tools.CreatePCIList" type="Exe" path="..\Mosa\Tools\CreatePCIList" language="C#" runtime="Microsoft" rootNamespace="Mosa.Tools.CreatePCIList" assemblyName="Mosa.Tools.CreatePCIList">
       <Configuration name="Debug">
         <Options>
@@ -386,5 +386,37 @@
       </Files>
     </Project>
 
+    <Project name="Mosa.ObjectFiles.Elf32" type="Library" path="..\Mosa\ObjectFiles\Elf32" language="C#" runtime="Microsoft" rootNamespace="Mosa.ObjectFiles.Elf32" assemblyName="Mosa.ObjectFiles.Elf32">
+      <Configuration name="Debug">
+        <Options>
+          <OutputPath>../../build/debug</OutputPath>
+          <XmlDocFile>../../build/Mosa.ObjectFiles.Elf32.xml</XmlDocFile>
+          <IncrementalBuild>true</IncrementalBuild>
+          <CompilerDefines>DEBUG;TRACE</CompilerDefines>
+          <OptimizeCode>false</OptimizeCode>
+          <AllowUnsafe>true</AllowUnsafe>
+          <DebugInformation>true</DebugInformation>
+          <WarningLevel>4</WarningLevel>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OutputPath>../../build/release</OutputPath>
+          <XmlDocFile>../../build/Mosa.ObjectFiles.Elf32.xml</XmlDocFile>
+          <CompilerDefines>TRACE</CompilerDefines>
+          <OptimizeCode>true</OptimizeCode>
+          <AllowUnsafe>true</AllowUnsafe>
+          <DebugInformation>false</DebugInformation>
+          <WarningLevel>2</WarningLevel>
+        </Options>
+      </Configuration>
+
+      <Reference name="Mosa.Runtime" localCopy="true" />
+      <Reference name="System" version="2.0.0.0" />
+
+      <Files>
+        <Match pattern="*.cs" path="." recurse="true"/>
+      </Files>
+    </Project>
   </Solution>
 </Prebuild>

@@ -32,11 +32,6 @@ namespace Mosa.Runtime.Vm
         #region Data members
 
         /// <summary>
-        /// The module, which defines the RuntimeField.
-        /// </summary>
-        private IMetadataModule _module;
-
-        /// <summary>
         /// Holds the attributes of the RuntimeField.
         /// </summary>
         private FieldAttributes _attributes;
@@ -57,6 +52,7 @@ namespace Mosa.Runtime.Vm
         private int _sig;
 
         private uint _offset;
+
         private uint _rva;
 
         #endregion // Data members
@@ -71,9 +67,8 @@ namespace Mosa.Runtime.Vm
         /// <param name="offset">Holds the offset of the _stackFrameIndex in the owner type.</param>
         /// <param name="rva">The RVA of the initialization data</param>
         public RuntimeField(IMetadataModule module, ref FieldRow field, uint offset, uint rva) :
-            base(0, null, null)
+            base(0, module, null, null)
         {
-            _module = module;
             _attributes = field.Flags;
             _nameIdx = field.NameStringIdx;
             _offset = offset;
@@ -86,12 +81,6 @@ namespace Mosa.Runtime.Vm
 
         #region Properties
 
-        public IntPtr Address
-        {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
-        }
-
         /// <summary>
         /// Gets the attributes of the field.
         /// </summary>
@@ -100,13 +89,14 @@ namespace Mosa.Runtime.Vm
             get { return _attributes; }
         }
 
-        public string Name
+        public override string Name
         {
             get
             {
                 if (null != _name)
                     return _name;
 
+                // FIXME: Load the name of the field
 
                 return _name;
             }
@@ -124,7 +114,7 @@ namespace Mosa.Runtime.Vm
 
         public bool Equals(RuntimeField other)
         {
-            return (_module == other._module && _attributes == other._attributes && _nameIdx == other._nameIdx && _sig == other._sig);
+            return (Module == other.Module && _attributes == other._attributes && _nameIdx == other._nameIdx && _sig == other._sig);
         }
 
         #endregion // IEquatable<RuntimeField> Members

@@ -19,51 +19,74 @@ using Mosa.Platforms.x86;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
+using Mosa.Runtime.CompilerFramework.ObjectFiles;
 
-namespace Mosa.Tools.Compiler {
+namespace Mosa.Tools.Compiler
+{
 
-	/// <summary>
-	/// Implements the ahead of time compiler.
-	/// </summary>
-	/// <remarks>
+    /// <summary>
+    /// Implements the ahead of time compiler.
+    /// </summary>
+    /// <remarks>
     /// This class implements the ahead of time compiler for MOSA. The AoT uses 
-	/// the compiler services offered in Mosa.Runtime.CompilerFramework in order
-	/// to share as much code as possible with assembly jit compiler in MOSA. The 
-	/// primary difference between the two compilers is primarily the number and
-	/// quality of compilation stages used. The AoT compiler makes use of assembly lot
-	/// more optimizations than the jit. The jit is tweaked for execution speed. 
-	/// </remarks>
-	sealed class AotCompiler : AssemblyCompiler {
+    /// the compiler services offered in Mosa.Runtime.CompilerFramework in order
+    /// to share as much code as possible with assembly jit compiler in MOSA. The 
+    /// primary difference between the two compilers is primarily the number and
+    /// quality of compilation stages used. The AoT compiler makes use of assembly lot
+    /// more optimizations than the jit. The jit is tweaked for execution speed. 
+    /// </remarks>
+    public sealed class AotCompiler : AssemblyCompiler
+    {
+        ObjectFileBuilderBase _objectFileBuilder;
 
-        public AotCompiler(IArchitecture architecture, IMetadataModule assembly)
-			: base(architecture, assembly)
-		{
+        public AotCompiler(IArchitecture architecture, IMetadataModule assembly, ObjectFileBuilderBase objectFileBuilder)
+            : base(architecture, assembly)
+        {
+            this._objectFileBuilder = objectFileBuilder;
             // Build the assembly compiler pipeline
-            CompilerPipeline<IAssemblyCompilerStage> pipeline = this.Pipeline;
-            pipeline.AddRange(new IAssemblyCompilerStage[] {
+            Pipeline.AddRange(new IAssemblyCompilerStage[] {
                 new TypeLayoutStage(),
                 new MethodCompilerBuilderStage(),
+                new MethodCompilerRunnerStage(),
+                new AotLinkerStage(objectFileBuilder),
             });
-            architecture.ExtendAssemblyCompilerPipeline(pipeline);
-		}
+            architecture.ExtendAssemblyCompilerPipeline(Pipeline);
+        }
 
-		/// <summary>
-		/// Compiles an entire assemblyName.
-		/// </summary>
-		/// <param name="assemblyName">The compiled assemblyName.</param>
-        public static void Compile(IArchitecture architecture, string assemblyName)
-		{
+        /// <summary>
+        /// Compiles an entire assemblyName.
+        /// </summary>
+        /// <param name="assemblyName">The compiled assemblyName.</param>
+        public static void Compile(IArchitecture architecture, string assemblyName, ObjectFileBuilderBase objectFileBuilder)
+        {
             IMetadataModule assembly = RuntimeBase.Instance.AssemblyLoader.Load(assemblyName);
-            AotCompiler c = new AotCompiler(architecture, assembly);
+            AotCompiler c = new AotCompiler(architecture, assembly, objectFileBuilder);
             c.Compile();
-		}
+        }
+
+        protected override void BeginCompile()
+        {
+            _objectFileBuilder.OnAssemblyCompileBegin(this);
+        }
+
+        protected override void EndCompile()
+        {
+            _objectFileBuilder.OnAssemblyCompileEnd(this);
+        }
 
         public override MethodCompilerBase CreateMethodCompiler(RuntimeType type, RuntimeMethod method)
         {
             IArchitecture arch = this.Architecture;
-            MethodCompilerBase mc = new AotMethodCompiler(this.Pipeline.Find<IAssemblyLinker>(), this.Architecture, this.Assembly, type, method);
+            MethodCompilerBase mc = new AotMethodCompiler(
+                this.Pipeline.Find<IAssemblyLinker>(),
+                this.Architecture,
+                this.Assembly, 
+                type,
+                method,
+                _objectFileBuilder
+            );
             arch.ExtendMethodCompilerPipeline(mc.Pipeline);
             return mc;
         }
-	}
+    }
 }

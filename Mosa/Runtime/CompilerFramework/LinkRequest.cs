@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.Vm;
+using System.IO;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -19,14 +20,29 @@ namespace Mosa.Runtime.CompilerFramework
         #region Data members
 
         /// <summary>
-        /// Holds the link request destination to patch up.
+        /// The method whose code is being patched.
         /// </summary>
-        private long _position;
+        RuntimeMethod _method;
+
+        /// <summary>
+        /// The position within the code stream where the address is patched
+        /// </summary>
+        private int _methodOffset;
 
         /// <summary>
         /// Holds the relative request flag.
         /// </summary>
-        private long _relativeBase;
+        private int _methodRelativeBase;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private LinkType _linkType;
+
+        /// <summary>
+        /// The target of this link request
+        /// </summary>
+        private RuntimeMember _target;
 
         #endregion // Data members
 
@@ -35,12 +51,16 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Initializes a new instance of LinkRequest.
         /// </summary>
-        /// <param name="position">The position in code to patch for this request.</param>
+        /// <param name="method">The method whose code is being patched.</param>
+        /// <param name="address">The address to patch for this request.</param>
         /// <param name="relativeBase">The base address for relative patching, otherwise zero.</param>
-        public LinkRequest(long position, long relativeBase)
+        public LinkRequest(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
-            _position = position;
-            _relativeBase = relativeBase;
+            _method = method;
+            _methodOffset = methodOffset;
+            _linkType = linkType;
+            _methodRelativeBase = methodRelativeBase;
+            _target = target;
         }
 
         #endregion // Construction
@@ -48,19 +68,43 @@ namespace Mosa.Runtime.CompilerFramework
         #region Properties
 
         /// <summary>
-        /// Determines the relative base of the link request.
+        /// The method whose code is being patched.
         /// </summary>
-        public long RelativeBase
+        public RuntimeMethod Method
         {
-            get { return _relativeBase; }
+            get { return _method; }
         }
 
         /// <summary>
-        /// Returns the position of code to patch for this request.
+        /// Determines the relative base of the link request.
         /// </summary>
-        public long Position
+        public int MethodRelativeBase
         {
-            get { return _position; }
+            get { return _methodRelativeBase; }
+        }
+
+        /// <summary>
+        /// The type of link required
+        /// </summary>
+        public LinkType LinkType
+        {
+            get { return _linkType; }
+        }
+
+        /// <summary>
+        /// The position within the code stream where the address is patched.
+        /// </summary>
+        public int MethodOffset
+        {
+            get { return _methodOffset; }
+        }
+
+        /// <summary>
+        /// The target of this link
+        /// </summary>
+        public RuntimeMember Target
+        {
+            get { return _target; }
         }
 
         #endregion // Properties

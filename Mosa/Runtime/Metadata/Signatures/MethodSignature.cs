@@ -111,5 +111,30 @@ namespace Mosa.Runtime.Metadata.Signatures
         private const byte GENERIC = 0x10;
         private const byte HAS_THIS = 0x20;
         private const byte HAS_EXPLICIT_THIS = 0x40;
+
+        public bool Matches(MethodSignature other)
+        {
+            if (object.ReferenceEquals(this, other))
+                return true;
+            // TODO: Check this to make sure it is correct
+            if (other.GenericParameterCount != this.GenericParameterCount)
+                return false;
+            if (other.CallingConvention != this.CallingConvention)
+                return false;
+            if (other.HasThis != this.HasThis)
+                return false;
+            if (other.HasExplicitThis != this.HasExplicitThis)
+                return false;
+            if (this.Parameters.Length != other.Parameters.Length)
+                return false;
+            if (!this.ReturnType.Matches(other.ReturnType))
+                return false;
+            for (int i = 0; i < this.Parameters.Length; i++)
+            {
+                if (!this.Parameters[i].Matches(other.Parameters[i]))
+                    return false;
+            }
+            return true;
+        }
     }
 }

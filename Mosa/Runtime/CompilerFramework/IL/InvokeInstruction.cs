@@ -341,9 +341,13 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Validate the base class first.
             base.Validate(compiler);
 
+            int paramCount = _invokeTarget.Signature.Parameters.Length;
+            if (true == _invokeTarget.Signature.HasThis && false == _invokeTarget.Signature.HasExplicitThis)
+                paramCount++;
+
             // Validate the operands...
             Operand[] ops = this.Operands;
-            Debug.Assert(ops.Length == _invokeTarget.Parameters.Count, @"Operand count doesn't match parameter count.");
+            Debug.Assert(ops.Length == paramCount, @"Operand count doesn't match parameter count.");
             for (int i = 0; i < ops.Length; i++)
             {
                 if (null != ops[i])

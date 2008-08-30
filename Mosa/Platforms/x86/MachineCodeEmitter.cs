@@ -61,9 +61,19 @@ namespace Mosa.Platforms.x86
         #region Data members
 
         /// <summary>
+        /// The compiler thats generating the code.
+        /// </summary>
+        MethodCompilerBase _compiler;
+
+        /// <summary>
         /// The stream used to write machine code bytes to.
         /// </summary>
         private Stream _codeStream;
+
+        /// <summary>
+        /// The position that the code stream starts.
+        /// </summary>
+        private long _codeStreamBasePosition;
 
         /// <summary>
         /// List of labels that were emitted.
@@ -94,8 +104,11 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="codeStream">The stream the machine code is written to.</param>
         /// <param name="linker">The linker used to resolve external addresses.</param>
-        public MachineCodeEmitter(Stream codeStream, IAssemblyLinker linker)
+        public MachineCodeEmitter(MethodCompilerBase compiler, Stream codeStream, IAssemblyLinker linker)
         {
+            Debug.Assert(null != compiler, @"MachineCodeEmitter needs a method compiler.");
+            if (null == compiler)
+                throw new ArgumentNullException(@"compiler");
             Debug.Assert(null != codeStream, @"MachineCodeEmitter needs a code stream.");
             if (null == codeStream)
                 throw new ArgumentNullException(@"codeStream");
@@ -103,7 +116,9 @@ namespace Mosa.Platforms.x86
             if (null == linker)
                 throw new ArgumentNullException(@"linker");
 
+            _compiler = compiler;
             _codeStream = codeStream;
+            _codeStreamBasePosition = codeStream.Position;
             _linker = linker;
         }
 
@@ -279,10 +294,18 @@ namespace Mosa.Platforms.x86
             Emit(dest, src, cd_add);
         }
 
-        void ICodeEmitter.Call(RuntimeMethod method)
+        void ICodeEmitter.Call(RuntimeMethod target)
         {
             _codeStream.WriteByte(0xE8);
-            byte[] relOffset = BitConverter.GetBytes((int)_linker.Link(method, _codeStream.Position, _codeStream.Position + 4));
+            byte[] relOffset = BitConverter.GetBytes(
+                (int)_linker.Link(
+                    LinkType.RelativeOffset | LinkType.I4,
+                    _compiler.Method,
+                    (int)(_codeStream.Position - _codeStreamBasePosition),
+                    (int)(_codeStream.Position - _codeStreamBasePosition) + 4,
+                    target
+                )
+            );
             _codeStream.Write(relOffset, 0, relOffset.Length);
         }
 
@@ -832,7 +855,7 @@ namespace Mosa.Platforms.x86
                 ConstantOperand co = (ConstantOperand)op;
                 switch (op.Type.Type)
                 {
-                    case CilElementType.I: 
+                    case CilElementType.I:
                         imm = BitConverter.GetBytes(Convert.ToInt32(co.Value));
                         break;
 
@@ -883,7 +906,7 @@ namespace Mosa.Platforms.x86
             displacement = null;
 
             // FIXME: Handle the SIB byte
-            sib = null; 
+            sib = null;
 
             RegisterOperand rop1 = op1 as RegisterOperand, rop2 = op2 as RegisterOperand;
             MemoryOperand mop1 = op1 as MemoryOperand, mop2 = op2 as MemoryOperand;
@@ -893,7 +916,7 @@ namespace Mosa.Platforms.x86
             {
                 // Swap the memory operands
                 rop1 = rop2; rop2 = null;
-                mop2 = mop1; mop1 = null; 
+                mop2 = mop1; mop1 = null;
             }
 
             if (null != regField)
