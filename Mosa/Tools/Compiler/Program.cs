@@ -5,17 +5,16 @@
  *
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
  */
 
 using System;
 using System.IO;
-
-using Mosa.Runtime.Loader.PE;
-using Mosa.Runtime.Metadata;
+using Mosa.Platforms.x86;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Loader;
-using Mosa.Platforms.x86;
-using Mosa.Runtime.CompilerFramework.ObjectFiles;
+using Mosa.Runtime.Loader.PE;
+using Mosa.Runtime.Metadata;
 
 namespace Mosa.Tools.Compiler {
 	public static class Program {

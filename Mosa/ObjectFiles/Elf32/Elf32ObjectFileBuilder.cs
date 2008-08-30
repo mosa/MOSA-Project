@@ -1,14 +1,21 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the GNU GPL v3, with Classpath Linking Exception
+ * Licensed under the terms of the New BSD License for exclusive use by the Ensemble OS Project
+ *
+ * Authors:
+ *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Text;
-using Mosa.Runtime.CompilerFramework.ObjectFiles;
+using System.IO;
+using System.Threading;
+using Mosa.ObjectFiles.Elf32.Format;
+using Mosa.ObjectFiles.Elf32.Format.Sections;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Vm;
-using System.Threading;
-using System.IO;
-using Mosa.ObjectFiles.Elf32.Format;
-using System.Xml;
-using Mosa.ObjectFiles.Elf32.Format.Sections;
 
 namespace Mosa.ObjectFiles.Elf32
 {
@@ -20,17 +27,8 @@ namespace Mosa.ObjectFiles.Elf32
         string _currentFilename;
         Elf32File _currentFile;
 
-        static XmlWriter debugOutput;
-
         static Elf32ObjectFileBuilder()
         {
-            debugOutput = XmlWriter.Create(
-                Console.OpenStandardOutput(1),
-                new XmlWriterSettings
-                {
-                    Indent = true
-                }
-            );
         }
 
         public Elf32ObjectFileBuilder(Elf32MachineKind machineType)
@@ -44,20 +42,12 @@ namespace Mosa.ObjectFiles.Elf32
         {
             _assemblySync.WaitOne();
             _currentFilename = Path.ChangeExtension(compiler.Assembly.Name, ".o");
-            debugOutput.WriteStartDocument();
-            debugOutput.WriteStartElement("Assembly");
-            debugOutput.WriteAttributeString("Name", compiler.Assembly.Name);
-            debugOutput.WriteAttributeString("Output", _currentFilename);
-            debugOutput.Flush();
             _currentFile = new Elf32File(_machineKind);
             _currentFile.SymbolTable.OnCreateSymbol += new CreateSymbolHandler(SymbolTable_OnCreateSymbol);
         }
 
         public override void OnAssemblyCompileEnd(AssemblyCompiler compiler)
         {
-            debugOutput.WriteEndElement();
-            debugOutput.WriteEndDocument();
-            debugOutput.Flush();
             ApplyLinks();
             using (Stream outputStream = File.Open(_currentFilename, FileMode.Create, FileAccess.Write))
             using (BinaryWriter writer = new BinaryWriter(outputStream))
@@ -85,9 +75,6 @@ namespace Mosa.ObjectFiles.Elf32
         public override void OnMethodCompileBegin(MethodCompilerBase compiler)
         {
             _methodSync.WaitOne();
-            debugOutput.WriteStartElement("Method");
-            debugOutput.WriteAttributeString("Name", compiler.Method.Name);
-            debugOutput.Flush();
             Elf32Symbol sym = _currentFile.SymbolTable.GetSymbol(compiler.Method);
             _currentFile.Code.BeginSymbol(sym);
         }
@@ -106,8 +93,6 @@ namespace Mosa.ObjectFiles.Elf32
                 0,
                 (int)codeStream.Length
             );
-            debugOutput.WriteEndElement();
-            debugOutput.Flush();
             _methodSync.Release();
         }
 
@@ -115,15 +100,6 @@ namespace Mosa.ObjectFiles.Elf32
 
         public override long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
-            debugOutput.WriteStartElement("Link");
-            debugOutput.WriteAttributeString("Type", linkType.ToString());
-            debugOutput.WriteAttributeString("From", method.Name);
-            debugOutput.WriteAttributeString("Offset", methodOffset.ToString());
-            debugOutput.WriteAttributeString("RelBase", methodRelativeBase.ToString());
-            debugOutput.WriteAttributeString("Target", target.Name);
-            debugOutput.WriteEndElement();
-            debugOutput.Flush();
-
             LinkRequest link = new LinkRequest(
                 linkType,
                 method,

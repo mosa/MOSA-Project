@@ -17,7 +17,6 @@ using Mosa.Runtime.Metadata.Signatures;
 
 using Mosa.Runtime.CompilerFramework;
 using IL = Mosa.Runtime.CompilerFramework.IL;
-using Mosa.Runtime.CompilerFramework.ObjectFiles;
 using Mosa.ObjectFiles.Elf32;
 using Mosa.ObjectFiles.Elf32.Format;
 

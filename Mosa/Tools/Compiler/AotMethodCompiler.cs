@@ -5,20 +5,19 @@
  *
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
  */
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.IL;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
-using System.IO;
-using Mosa.Runtime.CompilerFramework.ObjectFiles;
 
 namespace Mosa.Tools.Compiler
 {
