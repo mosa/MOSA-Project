@@ -15,6 +15,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
 {
     static class OpCall
     {
+        public static int Test_CallI4()
+        {
+            return 0 == CallI4(0) ? 1 : 0;
+        }
+
+        private static int CallI4(int i)
+        {
+            return i;
+        }
+
         public static int Test_CallEmpty()
         {
             int i = CallEmpty();
@@ -31,6 +41,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.Tests
         {
             return (2 == Div(14, 7) ? 1 : 0);
         }
+
+        //public static void Test_CallIgnoreResult()
+        //{
+        //    CallEmpty();
+        //}
 
         private static int Div(int dividend, int divisor)
         {
