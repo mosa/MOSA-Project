@@ -57,7 +57,13 @@ namespace Mosa.DeviceDrivers.ISA
 					IMemoryRegion[] memoryRegion;
 
 					if (entry.First.BasePort != 0x0) {
-						ioPortRegions = new IOPortRegion[1];
+						if (entry.First.AltBasePort != 0x0) {
+							ioPortRegions = new IOPortRegion[2];
+							ioPortRegions[1] = new IOPortRegion(entry.First.AltBasePort, entry.First.AltPortRange);
+						}
+						else {
+							ioPortRegions = new IOPortRegion[1];
+						}
 						ioPortRegions[0] = new IOPortRegion(entry.First.BasePort, entry.First.PortRange);
 					}
 					else {

@@ -17,6 +17,8 @@ namespace Mosa.DeviceDrivers.ISA
 		public PlatformArchitecture Platforms = PlatformArchitecture.None;
 		public ushort BasePort = 0x00;
 		public ushort PortRange = 0;
+		public ushort AltBasePort = 0x00;
+		public ushort AltPortRange = 0;
 		public bool AutoLoad = false;   // (For built-in drivers only) Set to true if device is expected and has a relatively safe probe method.
 		public string ForceOption = string.Empty;
 		public byte IRQ = 0;
