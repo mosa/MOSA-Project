@@ -205,7 +205,8 @@ namespace Mosa.Runtime.CompilerFramework
 					IBranchInstruction lastBranchInstruction = lastInstruction as IBranchInstruction;
 
 					// Clone the last instruction w/ targets
-					Instruction clonedInstruction = arch.CreateInstruction(typeof(IL.BranchInstruction), (lastInstruction as IL.ILInstruction).Code, lastBranchInstruction.BranchTargets);
+					//Instruction clonedInstruction = arch.CreateInstruction(typeof(IL.BranchInstruction), (lastInstruction as IL.ILInstruction).Code, lastBranchInstruction.BranchTargets);
+					Instruction clonedInstruction = CloneBranchInstruction(lastInstruction);
 
 					// Assign clonsed instruction to this block
 					clonedInstruction.Block = block.Index;
@@ -230,7 +231,57 @@ namespace Mosa.Runtime.CompilerFramework
 			return false;
 		}
 
-		#endregion // Methods
+		/// <summary>
+		/// Clones the branch instruction
+		/// </summary>
+		/// <param name="branchInstruction">The branch instruction.</param>
+		/// <returns></returns>
+		protected Instruction CloneBranchInstruction(IBranchInstruction branchInstruction)
+		{
+			Instruction result;
+			if (branchInstruction is IL.BinaryBranchInstruction) {
+				result = arch.CreateInstruction(
+					   typeof(IL.BinaryBranchInstruction),
+					   ((IL.BinaryBranchInstruction)branchInstruction).Code
+				);
+			}
+			else if (branchInstruction is IL.LeaveInstruction) { // Must be before IL.BranchInstruction
+				result = arch.CreateInstruction(
+					   typeof(IL.LeaveInstruction),
+					   ((IL.LeaveInstruction)branchInstruction).Code
+				);
+			}
+			else if (branchInstruction is IL.BranchInstruction) {
+				result = arch.CreateInstruction(
+					   typeof(IL.BranchInstruction),
+					   ((IL.BranchInstruction)branchInstruction).Code
+				);
+			}
+			else if (branchInstruction is IL.ReturnInstruction) {
+				result = arch.CreateInstruction(
+					   typeof(IL.ReturnInstruction),
+					   ((IL.ReturnInstruction)branchInstruction).Code
+				);
+			}
+			else if (branchInstruction is IL.SwitchInstruction) { // Must be before IL.SwitchInstruction
+				result = arch.CreateInstruction(
+					   typeof(IL.SwitchInstruction),
+					   ((IL.SwitchInstruction)branchInstruction).Code
+				);
+			}
+			else if (branchInstruction is IL.UnaryBranchInstruction) {
+				result = arch.CreateInstruction(
+					   typeof(IL.UnaryBranchInstruction),
+					   ((IL.UnaryBranchInstruction)branchInstruction).Code
+				);
+			}
+			else {
+				throw new NotImplementedException();
+			}
+			(result as IBranchInstruction).BranchTargets = branchInstruction.BranchTargets;
+			return result;
+		}
 
+		#endregion // Methods
 	}
 }
