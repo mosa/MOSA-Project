@@ -19,7 +19,7 @@ namespace Mosa.ObjectFiles.Elf32
     /// But the higher bits are used internally for differentiating between
     /// different architectures that use the same value here.
     /// </summary>
-    public enum Elf32MachineKind
+    public enum Elf32MachineKind : uint
     {
         ///<summary>No machine</summary>
         None = 0,
