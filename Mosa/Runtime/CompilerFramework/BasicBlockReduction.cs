@@ -206,7 +206,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 					// Clone the last instruction w/ targets
 					//Instruction clonedInstruction = arch.CreateInstruction(typeof(IL.BranchInstruction), (lastInstruction as IL.ILInstruction).Code, lastBranchInstruction.BranchTargets);
-					Instruction clonedInstruction = CloneBranchInstruction(lastInstruction);
+					Instruction clonedInstruction = CloneBranchInstruction(lastBranchInstruction);
 
 					// Assign clonsed instruction to this block
 					clonedInstruction.Block = block.Index;
@@ -263,7 +263,7 @@ namespace Mosa.Runtime.CompilerFramework
 					   ((IL.ReturnInstruction)branchInstruction).Code
 				);
 			}
-			else if (branchInstruction is IL.SwitchInstruction) { // Must be before IL.SwitchInstruction
+			else if (branchInstruction is IL.SwitchInstruction) { // Must be before IL.UnaryBranchInstruction
 				result = arch.CreateInstruction(
 					   typeof(IL.SwitchInstruction),
 					   ((IL.SwitchInstruction)branchInstruction).Code
