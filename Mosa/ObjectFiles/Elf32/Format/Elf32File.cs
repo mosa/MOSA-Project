@@ -94,13 +94,21 @@ namespace Mosa.ObjectFiles.Elf32.Format
                     writer.Write((byte)Elf32Class.ElfClass32);
                     writer.Write((byte)Elf32DataFormat.ElfData2Lsb);
                     break;
+                case Elf32MachineKind.Arm32Le:
+                    writer.Write((byte)Elf32Class.ElfClass32);
+                    writer.Write((byte)Elf32DataFormat.ElfData2Lsb);
+                    break;
+                case Elf32MachineKind.Arm32Be:
+                    writer.Write((byte)Elf32Class.ElfClass32);
+                    writer.Write((byte)Elf32DataFormat.ElfData2Msb);
+                    break;
                 default:
                     throw new NotSupportedException();
             }
             writer.Write((byte)Elf32Version.Current);
             writer.Write(new byte[16 - 7]);
             writer.Write((short)Elf32ObjectFileType.Relocatable);
-            writer.Write((short)MachineKind);
+            writer.Write((short)((int)MachineKind & 0xffff));
             writer.Write((int)Elf32Version.Current);
             writer.Write((int)0); // e_entry
             writer.Write((int)ProgramHeaderOffset); // e_phoff
