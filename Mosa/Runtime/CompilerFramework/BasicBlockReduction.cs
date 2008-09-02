@@ -19,44 +19,37 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// BasicBlockReduction attempts to eliminate useless control flow created as a side effect of other compiler optimizations.
 	/// </summary>
-	public class BasicBlockReduction
+	public class BasicBlockReduction : IMethodCompilerStage
 	{
 		#region Data members
 
-		protected BasicBlock first;
+		protected BasicBlock firstBlock;
 		protected IArchitecture arch;
 
 		#endregion // Data members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes common fields of the BasicBlockReduction.
-		/// </summary>
-		private BasicBlockReduction()
-		{
-
-		}
-
-		#endregion // Construction
 
 		#region Properties
 
 		#endregion // Properties
 
-		#region Methods
+		#region IMethodCompilerStage Members
+
+		string IMethodCompilerStage.Name
+		{
+			get { return @"Basic Block Reduction"; }
+		}
 
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		public void Run(MethodCompilerBase compiler)
+		void IMethodCompilerStage.Run(MethodCompilerBase compiler)
 		{
 			// Retrieve the basic block provider
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 
 			// Retreive the first block
-			first = blockProvider.FromLabel(-1);
+			firstBlock = blockProvider.FromLabel(-1);
 
 			// Architecture
 			arch = compiler.Architecture;
@@ -67,15 +60,51 @@ namespace Mosa.Runtime.CompilerFramework
 			bool changed = true;
 
 			do {
+				changed = false;
+
 				foreach (BasicBlock currentBlock in blockProvider) {
-					if (TryFoldingRedundantBranch(currentBlock))
+					if (TryToRemoveUnusedBlock(currentBlock))
 						changed = true;
 
-					if (TryCombineBlocks(currentBlock))
+					if (TryToFoldRedundantBranch(currentBlock))
 						changed = true;
+
+					if (TryToFoldRedundantBranch2(currentBlock))
+						changed = true;
+
+					if (TryToRemoveSelfCycleBlock(currentBlock))
+						changed = true;
+
+					//if (TryToCombineBlocks(currentBlock))
+					//    changed = true;
+
+					//if (TryToRemoveEmptyBlock(currentBlock))
+					//    changed = true;
+
+					//if (TryToHoistBranch(currentBlock))
+					//    changed = true;
 				}
 			}
-			while (!changed);
+			while (changed);
+		}
+
+		/// <summary>
+		/// Tries to remove unused blocks.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <returns></returns>
+		public bool TryToRemoveUnusedBlock(BasicBlock block)
+		{
+			if ((block.PreviousBlocks.Count == 0) && (block != firstBlock) && (block.NextBlocks.Count != 0)) {
+				foreach (BasicBlock nextblock in block.NextBlocks) {
+					while (nextblock.PreviousBlocks.Remove(block)) ;
+				}
+
+				block.Instructions.Clear();
+				block.NextBlocks.Clear();
+			}
+
+			return false;
 		}
 
 		/// <summary>
@@ -83,7 +112,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <returns></returns>
-		public bool TryFoldingRedundantBranch(BasicBlock block)
+		public bool TryToFoldRedundantBranch(BasicBlock block)
 		{
 			if (block.NextBlocks.Count == 2) {
 				if (block.NextBlocks[0] == block.NextBlocks[1]) {
@@ -113,11 +142,67 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Tries to the remove an empty block.
+		/// Tries to folding redundant branch.
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <returns></returns>
-		public bool TryRemoveEmptyBlock(BasicBlock block)
+		public bool TryToFoldRedundantBranch2(BasicBlock block)
+		{
+			if ((block.NextBlocks.Count != 0) && (block.Instructions.Count != 0)) {
+				IBranchInstruction lastInstruction = block.LastInstruction as IBranchInstruction;
+				if (lastInstruction.BranchTargets.Length == 2) {
+					if (lastInstruction.BranchTargets[0] == lastInstruction.BranchTargets[1]) {
+						// Replace conditional branch instruction with an unconditional jump instruction
+
+						// Remove last instruction of this block
+						block.Instructions.RemoveAt(block.Instructions.Count - 1);
+
+						// Create target list
+						int[] targets = new int[1];
+						targets[0] = block.NextBlocks[0].Label;
+
+						// Create JUMP instruction
+						Instruction instruction = arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IL.BranchInstruction), Mosa.Runtime.CompilerFramework.IL.OpCode.Br, targets);
+
+						// Assign block index to instruction
+						instruction.Block = block.Index;
+
+						// Add JUMP instruction to the next block
+						block.Instructions.Add(instruction);
+
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Tries to remove self cycle block.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <returns></returns>
+		public bool TryToRemoveSelfCycleBlock(BasicBlock block)
+		{
+			if ((block.PreviousBlocks.Count == 1) && (block.NextBlocks.Count == 1))
+				if (block.NextBlocks[0] == block)
+					if (block.PreviousBlocks[0] == block) {
+
+						block.Instructions.Clear();
+						block.NextBlocks.Clear();
+						block.PreviousBlocks.Clear();
+					}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Tries to remove empty block.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <returns></returns>
+		public bool TryToRemoveEmptyBlock(BasicBlock block)
 		{
 			if (block.Instructions.Count == 1) {
 				// Sanity check, a block with one instruction (which should be a JUMP) can only have one branch
@@ -135,10 +220,10 @@ namespace Mosa.Runtime.CompilerFramework
 					}
 
 					// Sanity check, last instruction must have an IBranchInstruction interface
-					Debug.Assert(previousBlock.Instructions[previousBlock.Instructions.Count - 1] is IBranchInstruction);
+					Debug.Assert(previousBlock.LastInstruction is IBranchInstruction);
 
 					// Get the last instruction in the previous block
-					IBranchInstruction lastInstruction = previousBlock.Instructions[previousBlock.Instructions.Count - 1] as IBranchInstruction;
+					IBranchInstruction lastInstruction = previousBlock.LastInstruction as IBranchInstruction;
 
 					// Replace targets labels in the last insturction in the previous block with new label
 					for (int i = lastInstruction.BranchTargets.Length - 1; i >= 0; i++) {
@@ -162,7 +247,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <returns></returns>
-		public bool TryCombineBlocks(BasicBlock block)
+		public bool TryToCombineBlocks(BasicBlock block)
 		{
 			if (block.NextBlocks.Count == 1) {
 				if (block.NextBlocks[0].PreviousBlocks.Count == 1) {
@@ -172,7 +257,37 @@ namespace Mosa.Runtime.CompilerFramework
 					Debug.Assert(nextBlock.PreviousBlocks[0] == block);
 
 					// Merge next block into current block
-					block.AppendBlock(nextBlock);
+
+					// Sanity check
+					Debug.Assert(block.LastInstruction is IBranchInstruction);
+
+					// Remove last instruction of current block
+					block.Instructions.RemoveAt(block.Instructions.Count - 1);
+
+					// Copy instructions from next block into the current block
+					foreach (Instruction instruction in nextBlock.Instructions) {
+						instruction.Block = block.Index;
+						block.Instructions.Add(instruction);
+					}
+
+					// Copy next block list from next block to the current block
+					block.NextBlocks.Clear();
+					foreach (BasicBlock next in nextBlock.NextBlocks) {
+						block.NextBlocks.Add(next);
+
+						// Also, remove all references to nextblock (which is being bypassed)
+						while (next.PreviousBlocks.Remove(nextBlock)) ;
+
+						// Add this block to the children of next block's
+						next.PreviousBlocks.Add(block);
+					}
+
+					//foreach (BasicBlock next in nextBlock.NextBlocks[0]
+
+					// Clear out the next block
+					nextBlock.Instructions.Clear();
+					nextBlock.PreviousBlocks.Clear();
+					nextBlock.NextBlocks.Clear();
 
 					return true;
 				}
@@ -186,22 +301,22 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <returns></returns>
-		public bool TryHoistingBranch(BasicBlock block)
+		public bool TryToHoistBranch(BasicBlock block)
 		{
 			if (block.NextBlocks.Count == 1) {
 				if (block.NextBlocks[0].Instructions.Count == 1) {
 					// Copy instruction from next block into current block
 
 					// Sanity check, last instruction must have an IBranchInstruction interface
-					Debug.Assert(block.NextBlocks[0].Instructions[0] is IBranchInstruction);
+					Debug.Assert(block.NextBlocks[0].LastInstruction is IBranchInstruction);
 
 					// Remove last instruction of this block
 					block.Instructions.RemoveAt(block.Instructions.Count - 1);
 
-					// Get the last instruction in the next block
+					// Get the only instruction in the next block
 					Instruction lastInstruction = block.NextBlocks[0].Instructions[0];
 
-					// Get the last instruction as an interface of a branch instruction
+					// Get the branch instruction interface
 					IBranchInstruction lastBranchInstruction = lastInstruction as IBranchInstruction;
 
 					// Clone the last instruction w/ targets

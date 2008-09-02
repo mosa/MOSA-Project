@@ -53,7 +53,12 @@ namespace Mosa.Runtime.CompilerFramework
                             op.Uses.Remove(phi);
 
                             List<Instruction> insts = phi.Blocks[i].Instructions;
-                            insts.Insert(insts.Count - 1, move);
+
+							if (0 < insts.Count && insts[insts.Count - 1] is IBranchInstruction)
+								insts.Insert(insts.Count - 1, move);
+							else {								
+								//insts.Add(move);
+							}
                         }
 
                         // Remove the PHI instruction

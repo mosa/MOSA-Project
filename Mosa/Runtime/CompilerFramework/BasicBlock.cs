@@ -156,6 +156,21 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
+		/// <summary>
+		/// Gets the last instruction.
+		/// </summary>
+		/// <value>The last instruction.</value>
+		public Instruction LastInstruction
+		{
+			get
+			{
+				if (_instructions.Count == 0)
+					return null;
+				else
+					return _instructions[_instructions.Count - 1];
+			}
+		}
+
 		#endregion // Properties
 
 		#region Methods
@@ -176,30 +191,6 @@ namespace Mosa.Runtime.CompilerFramework
 			_instructions.RemoveRange(index, length);
 
 			return result;
-		}
-
-		/// <summary>
-		/// Appends a basic block to this basic block.
-		/// </summary>
-		/// <param name="appendBlock">The append block.</param>
-		public void AppendBlock(BasicBlock appendBlock)
-		{
-			// Remove last instruction of this block
-			_instructions.RemoveAt(_instructions.Count - 1);
-
-			// Copy instructions from append block into this block
-			foreach (Instruction instruction in appendBlock._instructions)
-				_instructions.Add(instruction);
-
-			// Copy next block list from append block to this block
-			_nextBlocks.Clear();
-			foreach (BasicBlock next in appendBlock._nextBlocks)
-				_nextBlocks.Add(next);
-
-			// Clear out the append block
-			appendBlock._instructions.Clear();
-			appendBlock._previousBlocks.Clear();
-			appendBlock._nextBlocks.Clear();
 		}
 
 		#endregion // Methods
