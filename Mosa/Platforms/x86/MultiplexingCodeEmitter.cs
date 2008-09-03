@@ -410,6 +410,14 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        public void Setcc(Mosa.Runtime.CompilerFramework.IL.OpCode code)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Setcc(code);
+            });
+        }
+
         #endregion // ICodeEmitter Members
     }
 }

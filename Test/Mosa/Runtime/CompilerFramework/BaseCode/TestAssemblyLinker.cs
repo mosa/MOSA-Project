@@ -5,7 +5,7 @@ using Mosa.Runtime.CompilerFramework;
 using System.Diagnostics;
 using Mosa.Runtime.Vm;
 
-namespace Test.Mosa.Runtime.CompilerFramework
+namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
     public class TestAssemblyLinker : AssemblyLinkerStageBase
     {

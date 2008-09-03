@@ -413,6 +413,11 @@ namespace Mosa.Platforms.x86
 
         }
 
+        public void Setcc(Mosa.Runtime.CompilerFramework.IL.OpCode code)
+        {
+            _textWriter.WriteLine("\t\tseteq\teax");
+        }
+
         #endregion // ICodeEmitter Members
 
         #region Internals

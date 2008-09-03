@@ -16,7 +16,7 @@ using x86 = Mosa.Platforms.x86;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;
 
-namespace Test.Mosa.Runtime.CompilerFramework
+namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
     class TestCaseAssemblyCompiler : AssemblyCompiler
     {

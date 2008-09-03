@@ -10,15 +10,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mosa.Kernel.Memory;
 using Mosa.Runtime;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;
-using Mosa.Kernel.Memory;
 using Mosa.Jit.SimpleJit;
 
-using Test.Mosa.Runtime.CompilerFramework.Kernel.Memory;
-
-namespace Test.Mosa.Runtime.CompilerFramework
+namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
     /// <summary>
     /// An implementation of the MOSA runtime for test purposes.

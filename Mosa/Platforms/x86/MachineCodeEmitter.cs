@@ -328,9 +328,9 @@ namespace Mosa.Platforms.x86
 
                 if (op1 is MemoryOperand)
                 {
-                    rop = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0);
-                    ((ICodeEmitter)this).Mov(rop, op1);
-                    Emit(rop, op2, cd_cmpsd);
+                    //rop = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0);
+                    //((ICodeEmitter)this).Mov(rop, op1);
+                    Emit(op1, op2, cd_cmpsd);
                 }
                 else
                 {
@@ -467,10 +467,11 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Div(Operand dest, Operand src)
         {
             // Write the opcode byte
-            Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
-            Emit(src, null, cd_div);
+            byte[] code = { 0x99 };
+            Emit(code, null, null, null);
+            Emit(src, null, cd_idiv);
         }
-
+        
         void ICodeEmitter.Mov(Operand dest, Operand src)
         {
             if (dest.StackType != StackTypeCode.F && src.StackType != StackTypeCode.F)
@@ -588,6 +589,16 @@ namespace Mosa.Platforms.x86
 
         #region Code Definition Tables
 
+        private static readonly CodeDef[] cd_cwd = new CodeDef[] {
+            new CodeDef(typeof(ConstantOperand),    typeof(ConstantOperand),    new byte[] { 0x99 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x99 }, null),
+            new CodeDef(typeof(ConstantOperand),    typeof(RegisterOperand),    new byte[] { 0x99 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x99 }, null),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x99 }, null),
+            new CodeDef(typeof(MemoryOperand),      typeof(MemoryOperand),      new byte[] { 0x99 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x99 }, null)
+        };
+
         private static readonly CodeDef[] cd_add = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x81 }, 0),
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x03 }, null),
@@ -596,23 +607,24 @@ namespace Mosa.Platforms.x86
 
         private static readonly CodeDef[] cd_and = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 4),
+            new CodeDef(typeof(MemoryOperand), typeof(ConstantOperand),         new byte[] { 0x81 }, 4),
             new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x23 }, null),
             new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0x23 }, null),
-            new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x09 }, null),
+            new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x21 }, null),
         };
 
         private static readonly CodeDef[] cd_or = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 1),
+            new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x0B }, null),
+            new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0x0B }, null),
+            new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x09 }, null),
+        };
+
+        private static readonly CodeDef[] cd_xor = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 6),
             new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x33 }, null),
             new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0x33 }, null),
             new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x31 }, null),
-        };
-
-        private static readonly CodeDef[] cd_xor = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 1),
-            new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x0B }, null),
-            new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0x0B }, null),
-            new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x21 }, null),
         };
 
         private static readonly CodeDef[] cd_not = new CodeDef[] {
@@ -622,7 +634,10 @@ namespace Mosa.Platforms.x86
         };
 
         private static readonly CodeDef[] cd_cmpsd = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0xF2, 0x0F, 0xC2 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0xC2 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0xC2 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0xF2, 0x0F, 0xC2 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xF2, 0x0F, 0xC2 }, null),
         };
 
         private static readonly CodeDef[] cd_cmp = new CodeDef[] {
@@ -668,8 +683,13 @@ namespace Mosa.Platforms.x86
         };
 
         private static readonly CodeDef[] cd_div = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    null,    new byte[] { 0xF7 }, 7),
-            new CodeDef(typeof(MemoryOperand),      null,    new byte[] { 0xF7 }, 7),
+            new CodeDef(typeof(RegisterOperand),    null,                       new byte[] { 0xF7 }, 6),
+            new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0xF7 }, 6),
+        };
+
+        private static readonly CodeDef[] cd_idiv = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    null,                       new byte[] { 0xF7 }, 7),
+            new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0xF7 }, 7),
         };
 
         private static readonly CodeDef[] cd_mov = new CodeDef[] {
@@ -682,29 +702,29 @@ namespace Mosa.Platforms.x86
 
         private static readonly CodeDef[] cd_movsx8 = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xBE }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),    new byte[] { 0x0F, 0xBE }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0xBE }, null),
         };
 
         private static readonly CodeDef[] cd_movsx16 = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xBF }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),    new byte[] { 0x0F, 0xBF }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0xBF }, null),
         };
 
         private static readonly CodeDef[] cd_movzx8 = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xB6 }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),    new byte[] { 0x0F, 0xB6 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0xB6 }, null),
         };
 
         private static readonly CodeDef[] cd_movzx16 = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xB7 }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),    new byte[] { 0x0F, 0xB7 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0xB7 }, null),
         };
 
         private static readonly CodeDef[] cd_movsd = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0xF2, 0x0F, 0x10 }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),       new byte[] { 0xF2, 0x0F, 0x10 }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),       new byte[] { 0xF2, 0x0F, 0x10 }, null),
-            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),       new byte[] { 0xF2, 0x0F, 0x11 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x10 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x10 }, null),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x11 }, null),
         };
 
         private static readonly CodeDef[] cd_sub = new CodeDef[] {
@@ -974,6 +994,22 @@ namespace Mosa.Platforms.x86
             }
 
             return modRM;
+        }
+
+        void ICodeEmitter.Setcc(Mosa.Runtime.CompilerFramework.IL.OpCode code)
+        {
+            switch (code)
+            {
+                case Mosa.Runtime.CompilerFramework.IL.OpCode.Ceq:
+                    byte[] byte_code = { 0x0F, 0x94 };
+                    Emit(byte_code, null, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX), null);
+                    Emit(new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX), new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX), cd_mov);
+                    break;
+                case Mosa.Runtime.CompilerFramework.IL.OpCode.Clt:
+                    byte_code = new byte[]{ 0x0F, 0x9C };
+                    Emit(byte_code, null, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX), null);
+                    break;
+            }
         }
 
         #endregion // Code Generation

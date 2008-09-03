@@ -476,7 +476,7 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<int>.Not(IL.NotInstruction instruction, int arg)
         {
-            throw new NotImplementedException();
+            _emitter.Not(instruction.Operands[0]);
         }
 
         void IL.IILVisitor<int>.Conversion(IL.ConversionInstruction instruction, int arg)
@@ -591,7 +591,8 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<int>.BinaryComparison(IL.BinaryComparisonInstruction instruction, int arg)
         {
-            //throw new NotImplementedException();
+            _emitter.Cmp(instruction.First, instruction.Second);
+            _emitter.Setcc(instruction.Code);
         }
 
         void IL.IILVisitor<int>.Localalloc(IL.LocalallocInstruction instruction, int arg)

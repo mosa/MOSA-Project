@@ -48,8 +48,20 @@ namespace Mosa.Platforms.x86
                 return architecture.CreateInstruction(typeof(x86.SseMulInstruction), IL.OpCode.Mul, new Operand[] { First, Second, Results[0] });
             // FIXME
             // Waiting for ConstantPropagation to get shift/optimization to work.
+            else if (First is ConstantOperand)
+            {
+                if (((int)(First as ConstantOperand).Value) == 0)
+                {
+                    return new MoveInstruction(Results[0], new ConstantOperand(Results[0].Type, (int)0));
+                }
+                return this;
+            }
             else if (Second is ConstantOperand)
             {
+                if (((int)(Second as ConstantOperand).Value) == 0)
+                {
+                    return new MoveInstruction(Results[0], new ConstantOperand(Results[0].Type, (int)0));
+                }
                 int x = (int)(Second as ConstantOperand).Value;
                 // Check if it's a power of two
                 if ((x & (x - 1)) == 0)

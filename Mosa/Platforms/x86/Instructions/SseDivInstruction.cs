@@ -17,7 +17,7 @@ using IL = Mosa.Runtime.CompilerFramework.IL;
 
 namespace Mosa.Platforms.x86
 {
-    class SseDivInstruction : x86.MulInstruction
+    class SseDivInstruction : x86.DivInstruction
     {
         public SseDivInstruction(IL.OpCode code) :
             base(code)

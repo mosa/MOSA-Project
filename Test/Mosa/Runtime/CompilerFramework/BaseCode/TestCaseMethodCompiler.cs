@@ -18,7 +18,7 @@ using Mosa.Runtime.CompilerFramework.IL;
 using Mosa.Runtime;
 using Mosa.Runtime.Loader;
 
-namespace Test.Mosa.Runtime.CompilerFramework
+namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
     class TestCaseMethodCompiler : MethodCompilerBase
     {
@@ -43,9 +43,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 //InstructionLogger.Instance,
                 new ConstantPropagationStage(),
                 new ConstantFoldingStage(),
-
-				new BasicBlockReduction(),
-
                 new LeaveSSA(),
                 InstructionLogger.Instance,
 

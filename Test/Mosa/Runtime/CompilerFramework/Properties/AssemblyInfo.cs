@@ -1,26 +1,16 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the GNU GPL v3, with Classpath Linking Exception
- * Licensed under the terms of the New BSD License for exclusive use by the Ensemble OS Project
- *
- * Authors:
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
- */
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("cltester")]
+[assembly: AssemblyTitle("TestProject1")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("cltester")]
-[assembly: AssemblyCopyright("Copyright ©  2008")]
+[assembly: AssemblyCompany("Liquid Fission")]
+[assembly: AssemblyProduct("TestProject1")]
+[assembly: AssemblyCopyright("Copyright © Liquid Fission 2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -30,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3851bf12-393a-4065-8533-7f2b92ef569f")]
+[assembly: Guid("2a2327f9-89c9-4df4-87fe-e499d117e751")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -48,18 +48,18 @@ namespace Mosa.Platforms.x86
                 return architecture.CreateInstruction(typeof(x86.SseDivInstruction), IL.OpCode.Div, new Operand[] { First, Second, Results[0] });
             // FIXME
             // Waiting for ConstantPropagation to get shift/optimization to work.
-            else if (Second is ConstantOperand)
+            /*else if (Second is ConstantOperand)
             {
                 int x = (int)(Second as ConstantOperand).Value;
                 // Check if it's a power of two
-                if ((x & (x - 1)) == 0)
+                if ((x & (x - 1)) == 0 && x > 0)
                 {
                     ConstantOperand shift = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.I4), (int)System.Math.Log(x, 2));
                     return architecture.CreateInstruction(typeof(x86.ShiftInstruction), IL.OpCode.Shr, new Operand[] { First, shift });
                 }
                 else
                     return this;
-            }
+            }*/
             else
                 return this;
         }

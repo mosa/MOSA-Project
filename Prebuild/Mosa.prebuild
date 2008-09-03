@@ -354,7 +354,8 @@
           <Reference name="Mosa.Jit.SimpleJit" localCopy="true" />
           <Reference name="System" version="2.0.0.0" />
           <Reference name="System.Xml" version="2.0.0.0" />
-          <Reference name="MbUnit.Framework" />
+          <Reference name="MbUnit" version="3.0.0.179" />
+          <Reference name="Gallio" version="3.0.0.179" />
 
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
