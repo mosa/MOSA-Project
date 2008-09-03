@@ -150,7 +150,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(int.MinValue, 17)]
         [Row(int.MinValue, 123)]
         [Row(int.MinValue, -0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(int.MinValue, -1)]
+        [Row(int.MinValue, -1, ExpectedException = typeof(OverflowException))]
         [Row(int.MinValue, -17)]
         [Row(int.MinValue, -123)]
         // (MaxValue, X) Cases
@@ -159,7 +159,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(int.MaxValue, 17)]
         [Row(int.MaxValue, 123)]
         [Row(int.MaxValue, -0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(int.MaxValue, -1, ExpectedException = typeof(OverflowException))]
+        [Row(int.MaxValue, -1)]
         [Row(int.MaxValue, -17)]
         [Row(int.MaxValue, -123)]
         // (X, MinValue) Cases

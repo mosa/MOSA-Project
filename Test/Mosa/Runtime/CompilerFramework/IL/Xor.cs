@@ -6,7 +6,7 @@ using MbUnit.Framework;
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
     [TestFixture]
-    public class Or : MosaCompilerTestRunner
+    public class Xor : MosaCompilerTestRunner
     {
         delegate bool I4_I1_I1(int expect, sbyte a, sbyte b);
         // Normal Testcases + (0, 0)
@@ -61,11 +61,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(sbyte.MinValue, sbyte.MaxValue)]
         [Row(sbyte.MaxValue, sbyte.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void OrI1(sbyte a, sbyte b)
+        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        public void XorI1(sbyte a, sbyte b)
         {
-            CodeSource = "static class Test { static bool OrI1(int expect, sbyte a, sbyte b) { return expect == (a | b); } }";
-            Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "OrI1", a | b, a, b));
+            CodeSource = "static class Test { static bool XorI1(int expect, sbyte a, sbyte b) { return expect == (a ^ b); } }";
+            Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "XorI1", a ^ b, a, b));
         }
 
         delegate bool I4_I2_I2(int expect, short a, short b);
@@ -121,12 +121,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(short.MinValue, short.MaxValue)]
         [Row(short.MaxValue, short.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void OrI2(short a, short b)
+        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        public void XorI2(short a, short b)
         {
-            short e = (short)(a | b);
-            CodeSource = "static class Test { static bool OrI2(int expect, short a, short b) { return expect == (a | b); } }";
-            Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "OrI2", (a | b), a, b));
+            short e = (short)(a ^ b);
+            CodeSource = "static class Test { static bool XorI2(int expect, short a, short b) { return expect == (a ^ b); } }";
+            Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "XorI2", (a ^ b), a, b));
         }
 
         delegate bool I4_I4_I4(int expect, int a, int b);
@@ -182,11 +182,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(int.MinValue, int.MaxValue)]
         [Row(int.MaxValue, int.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void OrI4(int a, int b)
+        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        public void XorI4(int a, int b)
         {
-            CodeSource = "static class Test { static bool OrI4(int expect, int a, int b) { return expect == (a | b); } }";
-            Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "OrI4", (a | b), a, b));
+            CodeSource = "static class Test { static bool XorI4(int expect, int a, int b) { return expect == (a ^ b); } }";
+            Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "XorI4", (a ^ b), a, b));
         }
 
         delegate bool I8_I8_I8(long expect, long a, long b);
@@ -242,11 +242,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(long.MinValue, long.MaxValue)]
         [Row(long.MaxValue, long.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void OrI8(long a, long b)
+        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        public void XorI8(long a, long b)
         {
-            CodeSource = "static class Test { static bool OrI8(long expect, long a, long b) { return expect == (a | b); } }";
-            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "OrI8", (a | b), a, b));
+            CodeSource = "static class Test { static bool XorI8(long expect, long a, long b) { return expect == (a ^ b); } }";
+            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "XorI8", (a ^ b), a, b));
         }
     }
 }

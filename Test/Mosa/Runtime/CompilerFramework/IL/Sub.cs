@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using Gallio.Framework;
 using MbUnit.Framework;
+using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
     [TestFixture]
-    public class Or : MosaCompilerTestRunner
+    public class Sub : MosaCompilerTestRunner
     {
         delegate bool I4_I1_I1(int expect, sbyte a, sbyte b);
-        // Normal Testcases + (0, 0)
+        // Normal Testcases - (0, 0)
         [Row(1, 2)]
         [Row(23, 21)]
         [Row(1, -2)]
@@ -60,16 +60,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-123, sbyte.MaxValue)]
         // Extremvaluecases
         [Row(sbyte.MinValue, sbyte.MaxValue)]
-        [Row(sbyte.MaxValue, sbyte.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void OrI1(sbyte a, sbyte b)
+        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        public void AddI1(sbyte a, sbyte b)
         {
-            CodeSource = "static class Test { static bool OrI1(int expect, sbyte a, sbyte b) { return expect == (a | b); } }";
-            Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "OrI1", a | b, a, b));
+            CodeSource = "static class Test { static bool AddI1(int expect, sbyte a, sbyte b) { return expect == (a - b); } }";
+            Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "AddI1", a - b, a, b));
         }
 
         delegate bool I4_I2_I2(int expect, short a, short b);
-        // Normal Testcases + (0, 0)
+        // Normal Testcases - (0, 0)
         [Row(1, 2)]
         [Row(23, 21)]
         [Row(1, -2)]
@@ -120,17 +119,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-123, short.MaxValue)]
         // Extremvaluecases
         [Row(short.MinValue, short.MaxValue)]
-        [Row(short.MaxValue, short.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void OrI2(short a, short b)
+        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        public void AddI2(short a, short b)
         {
-            short e = (short)(a | b);
-            CodeSource = "static class Test { static bool OrI2(int expect, short a, short b) { return expect == (a | b); } }";
-            Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "OrI2", (a | b), a, b));
+            CodeSource = "static class Test { static bool AddI2(int expect, short a, short b) { return expect == (a - b); } }";
+            Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "AddI2", (a - b), a, b));
         }
 
         delegate bool I4_I4_I4(int expect, int a, int b);
-        // Normal Testcases + (0, 0)
+        // Normal Testcases - (0, 0)
         [Row(1, 2)]
         [Row(23, 21)]
         [Row(1, -2)]
@@ -181,72 +178,117 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-123, int.MaxValue)]
         // Extremvaluecases
         [Row(int.MinValue, int.MaxValue)]
-        [Row(int.MaxValue, int.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void OrI4(int a, int b)
+        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        public void AddI4(int a, int b)
         {
-            CodeSource = "static class Test { static bool OrI4(int expect, int a, int b) { return expect == (a | b); } }";
-            Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "OrI4", (a | b), a, b));
+            CodeSource = "static class Test { static bool AddI4(int expect, int a, int b) { return expect == (a - b); } }";
+            Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "AddI4", (a - b), a, b));
         }
 
-        delegate bool I8_I8_I8(long expect, long a, long b);
-        // Normal Testcases + (0, 0)
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0)]
-        [Row(-17, -2)]
-        // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        delegate bool R4_R4_R4(float expect, float a, float b);
+        // Normal Testcases - (0, 0)
+        [Row(1.2f, 2.1f)]
+        [Row(23.0f, 21.2578f)]
+        [Row(1.0f, -2.198f)]
+        [Row(-1.2f, 2.11f)]
+        [Row(0.0f, 0.0f)]
+        [Row(-17.1f, -2.3f)]
         // (MinValue, X) Cases
-        [Row(long.MinValue, 0)]
-        [Row(long.MinValue, 1)]
-        [Row(long.MinValue, 17)]
-        [Row(long.MinValue, 123)]
-        [Row(long.MinValue, -0)]
-        [Row(long.MinValue, -1)]
-        [Row(long.MinValue, -17)]
-        [Row(long.MinValue, -123)]
+        [Row(float.MinValue, 0.0f)]
+        [Row(float.MinValue, 1.2f)]
+        [Row(float.MinValue, 17.6f)]
+        [Row(float.MinValue, 123.1f)]
+        [Row(float.MinValue, -0.0f)]
+        [Row(float.MinValue, -1.5f)]
+        [Row(float.MinValue, -17.99f)]
+        [Row(float.MinValue, -123.235f)]
         // (MaxValue, X) Cases
-        [Row(long.MaxValue, 0)]
-        [Row(long.MaxValue, 1)]
-        [Row(long.MaxValue, 17)]
-        [Row(long.MaxValue, 123)]
-        [Row(long.MaxValue, -0)]
-        [Row(long.MaxValue, -1)]
-        [Row(long.MaxValue, -17)]
-        [Row(long.MaxValue, -123)]
+        [Row(float.MaxValue, 0.0f)]
+        [Row(float.MaxValue, 1.67f)]
+        [Row(float.MaxValue, 17.875f)]
+        [Row(float.MaxValue, 123.283f)]
+        [Row(float.MaxValue, -0.0f)]
+        [Row(float.MaxValue, -1.1497f)]
+        [Row(float.MaxValue, -17.12f)]
+        [Row(float.MaxValue, -123.34f)]
         // (X, MinValue) Cases
-        [Row(0, long.MinValue)]
-        [Row(1, long.MinValue)]
-        [Row(17, long.MinValue)]
-        [Row(123, long.MinValue)]
-        [Row(-0, long.MinValue)]
-        [Row(-1, long.MinValue)]
-        [Row(-17, long.MinValue)]
-        [Row(-123, long.MinValue)]
+        [Row(0.0f, float.MinValue)]
+        [Row(1.2, float.MinValue)]
+        [Row(17.4f, float.MinValue)]
+        [Row(123.561f, float.MinValue)]
+        [Row(-0.0f, float.MinValue)]
+        [Row(-1.78f, float.MinValue)]
+        [Row(-17.59f, float.MinValue)]
+        [Row(-123.41f, float.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, long.MaxValue)]
-        [Row(1, long.MaxValue)]
-        [Row(17, long.MaxValue)]
-        [Row(123, long.MaxValue)]
-        [Row(-0, long.MaxValue)]
-        [Row(-1, long.MaxValue)]
-        [Row(-17, long.MaxValue)]
-        [Row(-123, long.MaxValue)]
+        [Row(0.0f, float.MaxValue)]
+        [Row(1.00012f, float.MaxValue)]
+        [Row(17.094002f, float.MaxValue)]
+        [Row(123.001f, float.MaxValue)]
+        [Row(-0.0f, float.MaxValue)]
+        [Row(-1.045f, float.MaxValue)]
+        [Row(-17.0002501f, float.MaxValue)]
+        [Row(-123.023f, float.MaxValue)]
         // Extremvaluecases
-        [Row(long.MinValue, long.MaxValue)]
-        [Row(long.MaxValue, long.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void OrI8(long a, long b)
+        [Row(float.MinValue, float.MaxValue)]
+        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        public void AddR4(float a, float b)
         {
-            CodeSource = "static class Test { static bool OrI8(long expect, long a, long b) { return expect == (a | b); } }";
-            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "OrI8", (a | b), a, b));
+            CodeSource = "static class Test { static bool AddR4(float expect, float a, float b) { return expect == (a - b); } }";
+            Assert.IsTrue((bool)Run<R4_R4_R4>("", "Test", "AddR4", (a - b), a, b));
+        }
+
+        delegate bool R8_R8_R8(double expect, double a, double b);
+        // Normal Testcases - (0, 0)
+        [Row(1.2, 2.1)]
+        [Row(23.0, 21.2578)]
+        [Row(1.0, -2.198)]
+        [Row(-1.2, 2.11)]
+        [Row(0.0, 0.0)]
+        [Row(-17.1, -2.3)]
+        // (MinValue, X) Cases
+        [Row(double.MinValue, 0.0)]
+        [Row(double.MinValue, 1.2)]
+        [Row(double.MinValue, 17.6)]
+        [Row(double.MinValue, 123.1)]
+        [Row(double.MinValue, -0.0)]
+        [Row(double.MinValue, -1.5)]
+        [Row(double.MinValue, -17.99)]
+        [Row(double.MinValue, -123.235)]
+        // (MaxValue, X) Cases
+        [Row(double.MaxValue, 0.0)]
+        [Row(double.MaxValue, 1.67)]
+        [Row(double.MaxValue, 17.875)]
+        [Row(double.MaxValue, 123.283)]
+        [Row(double.MaxValue, -0.0)]
+        [Row(double.MaxValue, -1.1497)]
+        [Row(double.MaxValue, -17.12)]
+        [Row(double.MaxValue, -123.34)]
+        // (X, MinValue) Cases
+        [Row(0.0, double.MinValue)]
+        [Row(1.2, double.MinValue)]
+        [Row(17.4, double.MinValue)]
+        [Row(123.561, double.MinValue)]
+        [Row(-0.0, double.MinValue)]
+        [Row(-1.78, double.MinValue)]
+        [Row(-17.59, double.MinValue)]
+        [Row(-123.41, double.MinValue)]
+        // (X, MaxValue) Cases
+        [Row(0.0, double.MaxValue)]
+        [Row(1.00012, double.MaxValue)]
+        [Row(17.094002, double.MaxValue)]
+        [Row(123.001, double.MaxValue)]
+        [Row(-0.0, double.MaxValue)]
+        [Row(-1.045, double.MaxValue)]
+        [Row(-17.0002501, double.MaxValue)]
+        [Row(-123.023, double.MaxValue)]
+        // Extremvaluecases
+        [Row(double.MinValue, double.MaxValue)]
+        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        public void AddR8(double a, double b)
+        {
+            CodeSource = "static class Test { static bool AddR8(double expect, double a, double b) { return expect == (a - b); } }";
+            Assert.IsTrue((bool)Run<R8_R8_R8>("", "Test", "AddR8", (a - b), a, b));
         }
     }
 }
