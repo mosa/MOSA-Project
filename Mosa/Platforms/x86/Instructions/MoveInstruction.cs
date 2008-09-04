@@ -43,10 +43,11 @@ namespace Mosa.Platforms.x86
             // We need to replace ourselves in case of a Memory -> Memory transfer
             Operand dst = this.Destination;
             Operand src = this.Source;
+
             if (dst is MemoryOperand && src is MemoryOperand)
             {
                 RegisterOperand rop;
-                if (dst.StackType == StackTypeCode.F)
+                if (dst.StackType == StackTypeCode.F || src.StackType == StackTypeCode.F)
                 {
                     rop = new RegisterOperand(dst.Type, SSE2Register.XMM0);
                 }

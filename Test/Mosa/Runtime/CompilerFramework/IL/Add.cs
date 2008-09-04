@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
+ *  Simon Wollwage (<mailto:simon_wollwage@yahoo.co.jp>)
+ */
+
+using System;
 using Gallio.Framework;
 using MbUnit.Framework;
 using Test.Mosa.Runtime.CompilerFramework.BaseCode;
@@ -231,6 +241,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-123.023f, float.MaxValue)]
         // Extremvaluecases
         [Row(float.MinValue, float.MaxValue)]
+        [Row(1.0f, float.NaN)]
+        [Row(float.NaN, 1.0f)]
+        [Row(1.0f, float.PositiveInfinity)]
+        [Row(float.PositiveInfinity, 1.0f)]
+        [Row(1.0f, float.NegativeInfinity)]
+        [Row(float.NegativeInfinity, 1.0f)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void AddR4(float a, float b)
         {
@@ -284,6 +300,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-123.023, double.MaxValue)]
         // Extremvaluecases
         [Row(double.MinValue, double.MaxValue)]
+        [Row(1.0f, double.NaN)]
+        [Row(double.NaN, 1.0f)]
+        [Row(1.0f, double.PositiveInfinity)]
+        [Row(double.PositiveInfinity, 1.0f)]
+        [Row(1.0f, double.NegativeInfinity)]
+        [Row(double.NegativeInfinity, 1.0f)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void AddR8(double a, double b)
         {

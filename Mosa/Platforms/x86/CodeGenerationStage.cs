@@ -889,6 +889,11 @@ namespace Mosa.Platforms.x86
 
                 case CilElementType.I8:
                     throw new NotImplementedException();
+                    break;
+
+                case CilElementType.R4:
+                    _emitter.Mov(instruction.Destination, instruction.Source);
+                    break;
 
                 default:
                     throw new NotSupportedException();

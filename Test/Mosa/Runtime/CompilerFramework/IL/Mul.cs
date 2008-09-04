@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
+ *  Simon Wollwage (<mailto:simon_wollwage@yahoo.co.jp>)
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using MbUnit.Framework;
@@ -203,7 +213,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             CodeSource = "static class Test { static bool MulR4(float expect, float a, float b) { return expect == (a * b); } }";
             Assert.IsTrue((bool)Run<R4_R4_R4>("", "Test", "MulR4", (a * b), a, b));
         }
-
+        
         delegate bool R8_R8_R8(double expect, double a, double b);
         [Row(1.0, 2.0)]
         [Row(2.0, 0.0)]

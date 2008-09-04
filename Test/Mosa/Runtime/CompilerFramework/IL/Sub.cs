@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
+ *  Simon Wollwage (<mailto:simon_wollwage@yahoo.co.jp>)
+ */
+
+using System;
 using Gallio.Framework;
 using MbUnit.Framework;
 using Test.Mosa.Runtime.CompilerFramework.BaseCode;
@@ -61,10 +71,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(sbyte.MinValue, sbyte.MaxValue)]
         [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
-        public void AddI1(sbyte a, sbyte b)
+        public void SubI1(sbyte a, sbyte b)
         {
-            CodeSource = "static class Test { static bool AddI1(int expect, sbyte a, sbyte b) { return expect == (a - b); } }";
-            Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "AddI1", a - b, a, b));
+            CodeSource = "static class Test { static bool SubI1(int expect, sbyte a, sbyte b) { return expect == (a - b); } }";
+            Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "SubI1", a - b, a, b));
         }
 
         delegate bool I4_I2_I2(int expect, short a, short b);
@@ -120,10 +130,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(short.MinValue, short.MaxValue)]
         [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
-        public void AddI2(short a, short b)
+        public void SubI2(short a, short b)
         {
-            CodeSource = "static class Test { static bool AddI2(int expect, short a, short b) { return expect == (a - b); } }";
-            Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "AddI2", (a - b), a, b));
+            CodeSource = "static class Test { static bool SubI2(int expect, short a, short b) { return expect == (a - b); } }";
+            Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "SubI2", (a - b), a, b));
         }
 
         delegate bool I4_I4_I4(int expect, int a, int b);
@@ -179,10 +189,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(int.MinValue, int.MaxValue)]
         [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
-        public void AddI4(int a, int b)
+        public void SubI4(int a, int b)
         {
-            CodeSource = "static class Test { static bool AddI4(int expect, int a, int b) { return expect == (a - b); } }";
-            Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "AddI4", (a - b), a, b));
+            CodeSource = "static class Test { static bool SubI4(int expect, int a, int b) { return expect == (a - b); } }";
+            Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "SubI4", (a - b), a, b));
         }
 
         delegate bool R4_R4_R4(float expect, float a, float b);
@@ -231,11 +241,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-123.023f, float.MaxValue)]
         // Extremvaluecases
         [Row(float.MinValue, float.MaxValue)]
+        [Row(1.0f, float.NaN)]
+        [Row(float.NaN, 1.0f)]
+        [Row(1.0f, float.PositiveInfinity)]
+        [Row(float.PositiveInfinity, 1.0f)]
+        [Row(1.0f, float.NegativeInfinity)]
+        [Row(float.NegativeInfinity, 1.0f)]
         [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
-        public void AddR4(float a, float b)
+        public void SubR4(float a, float b)
         {
-            CodeSource = "static class Test { static bool AddR4(float expect, float a, float b) { return expect == (a - b); } }";
-            Assert.IsTrue((bool)Run<R4_R4_R4>("", "Test", "AddR4", (a - b), a, b));
+            CodeSource = "static class Test { static bool SubR4(float expect, float a, float b) { return expect == (a - b); } }";
+            Assert.IsTrue((bool)Run<R4_R4_R4>("", "Test", "SubR4", (a - b), a, b));
         }
 
         delegate bool R8_R8_R8(double expect, double a, double b);
@@ -284,11 +300,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-123.023, double.MaxValue)]
         // Extremvaluecases
         [Row(double.MinValue, double.MaxValue)]
+        [Row(1.0f, double.NaN)]
+        [Row(double.NaN, 1.0f)]
+        [Row(1.0f, double.PositiveInfinity)]
+        [Row(double.PositiveInfinity, 1.0f)]
+        [Row(1.0f, double.NegativeInfinity)]
+        [Row(double.NegativeInfinity, 1.0f)]
         [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
-        public void AddR8(double a, double b)
+        public void SubR8(double a, double b)
         {
-            CodeSource = "static class Test { static bool AddR8(double expect, double a, double b) { return expect == (a - b); } }";
-            Assert.IsTrue((bool)Run<R8_R8_R8>("", "Test", "AddR8", (a - b), a, b));
+            CodeSource = "static class Test { static bool SubR8(double expect, double a, double b) { return expect == (a - b); } }";
+            Assert.IsTrue((bool)Run<R8_R8_R8>("", "Test", "SubR8", (a - b), a, b));
         }
     }
 }

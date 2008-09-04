@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
+ *  Simon Wollwage (<mailto:simon_wollwage@yahoo.co.jp>)
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using MbUnit.Framework;
