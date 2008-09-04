@@ -67,8 +67,15 @@ namespace Mosa.Runtime.CompilerFramework
 
 				while (ProcessBlock(block)) ;
 
-				//workArray.Set(block.Index, false);
+				workArray.Set(block.Index, false);
 			}
+
+			for (int i = 0; i < 3; i++)
+				foreach (BasicBlock block in blockProvider) {
+					while (ProcessBlock(block)) ;
+
+					workArray.Set(block.Index, false);
+				}
 
 			// Pass Two
 
@@ -97,14 +104,14 @@ namespace Mosa.Runtime.CompilerFramework
 			if (TryToRemoveUnreferencedBlock(block))
 				changed = true;
 
-			if (TryToFoldRedundantBranch(block))
-				changed = true;
+			//if (TryToFoldRedundantBranch(block))
+			//    changed = true;
 
-			if (TryToFoldRedundantBranch2(block))
-				changed = true;
+			//if (TryToFoldRedundantBranch2(block))
+			//    changed = true;
 
-			if (TryToRemoveSelfCycleBlock(block))
-				changed = true;
+			//if (TryToRemoveSelfCycleBlock(block))
+			//    changed = true;
 
 			if (TryToCombineBlocks(block))
 				changed = true;
@@ -286,7 +293,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected bool TryToRemoveEmptyBlock(BasicBlock block)
 		{
-			if (block.Instructions.Count == 1) {
+			if ((block.Instructions.Count == 1) && (block != firstBlock)) {
 				// Sanity check, a block with one instruction (which should be a JUMP) can only have one branch
 				Debug.Assert(block.NextBlocks.Count == 1);
 
@@ -315,7 +322,13 @@ namespace Mosa.Runtime.CompilerFramework
 							lastInstruction.BranchTargets[i] = block.NextBlocks[i].Label;
 					}
 
+					// Add the previous block to the next blocks
+					if (!block.NextBlocks[0].PreviousBlocks.Contains(previousBlock))
+						block.NextBlocks[0].PreviousBlocks.Add(previousBlock);
 				}
+
+				// Remove this block from all the next blocks
+				while (block.NextBlocks[0].PreviousBlocks.Remove(block)) ;
 
 				// Clear out this block
 				block.Instructions.Clear();
@@ -360,16 +373,16 @@ namespace Mosa.Runtime.CompilerFramework
 					// Copy next block list from next block to the current block
 					block.NextBlocks.Clear();
 					foreach (BasicBlock next in nextBlock.NextBlocks) {
-						block.NextBlocks.Add(next);
+						if (!block.NextBlocks.Contains(next))
+							block.NextBlocks.Add(next);
 
 						// Also, remove all references to nextblock (which is being bypassed)
 						while (next.PreviousBlocks.Remove(nextBlock)) ;
 
 						// Add this block to the children of next block's
-						next.PreviousBlocks.Add(block);
+						if (!next.PreviousBlocks.Contains(block))
+							next.PreviousBlocks.Add(block);
 					}
-
-					//foreach (BasicBlock next in nextBlock.NextBlocks[0]
 
 					// Clear out the next block
 					nextBlock.Instructions.Clear();
