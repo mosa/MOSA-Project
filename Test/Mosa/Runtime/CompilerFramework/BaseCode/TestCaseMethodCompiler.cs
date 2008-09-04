@@ -44,6 +44,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 new ConstantPropagationStage(),
                 new ConstantFoldingStage(),
                 new LeaveSSA(),
+				//new BasicBlockReduction(),	// Experimental
                 InstructionLogger.Instance,
 
                 new StackLayoutStage(),
