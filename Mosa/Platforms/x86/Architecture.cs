@@ -78,7 +78,7 @@ namespace Mosa.Platforms.x86
             MMXRegister.MM7,
 
             ////////////////////////////////////////////////////////
-            // 64-bit floating point registers
+            // 128-bit floating point registers
             ////////////////////////////////////////////////////////
             SSE2Register.XMM0,
             SSE2Register.XMM1,

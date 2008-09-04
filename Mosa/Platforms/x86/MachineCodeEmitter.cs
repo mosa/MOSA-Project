@@ -259,7 +259,7 @@ namespace Mosa.Platforms.x86
                         break;
 
                     case CilElementType.R4:
-                        bytes = BitConverter.GetBytes((double)data);
+                        bytes = BitConverter.GetBytes((float)data);
                         break;
 
                     case CilElementType.R8:
@@ -325,34 +325,28 @@ namespace Mosa.Platforms.x86
             if (op1.StackType == StackTypeCode.F || op2.StackType == StackTypeCode.F)
             {
                 RegisterOperand rop;
-
+                if (op1.Type.Type == CilElementType.R4)
+                {
+                    Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0), op1, cd_cvtss2sd);
+                    op1 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0);
+                }
                 if (op2.Type.Type == CilElementType.R4)
                 {
-                    if (op1 is MemoryOperand)
-                    {
-                        Emit(op1, op2, cd_cmpss);
-                    }
-                    else
-                    {
-                        Emit(op1, op2, cd_cmpss);
-                    }
+                    Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1), op2, cd_cvtss2sd);
+                    op2 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
                 }
-                else
-                {
-
-                    if (op1 is MemoryOperand)
+                    if (op1 is MemoryOperand || op1 is LabelOperand)
                     {
                         //rop = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0);
                         //((ICodeEmitter)this).Mov(rop, op1);
-                        Emit(op1, op2, cd_cmpsd);
+                        Emit(op1, op2, cd_comisd);
                     }
                     else
                     {
-                        Emit(op1, op2, cd_cmpsd);
+                        Emit(op1, op2, cd_comisd);
                     }
-                }
 
-                _codeStream.WriteByte(0x00);    // EQ
+                //_codeStream.WriteByte(0x00);    // EQ
             }
             else
             {
@@ -437,6 +431,11 @@ namespace Mosa.Platforms.x86
             // Write the opcode byte
             //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
+            if (!(src is RegisterOperand) && src.Type.Type == CilElementType.R4)
+            {
+                Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1), src, cd_cvtss2sd);
+                src = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
+            }
             Emit(dest, src, cd_addsd);
         }
 
@@ -453,10 +452,7 @@ namespace Mosa.Platforms.x86
             // Write the opcode byte
             //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
-            if (src.Type.Type == CilElementType.R4)
-                Emit(dest, src, cd_mulss);
-            else
-                Emit(dest, src, cd_mulsd);
+            Emit(dest, src, cd_mulsd);
         }
 
         void ICodeEmitter.SseDiv(Operand dest, Operand src)
@@ -499,7 +495,7 @@ namespace Mosa.Platforms.x86
             else
             {
                 if (src.Type.Type == CilElementType.R4)
-                    Emit(dest, src, cd_movss);
+                    Emit(dest, src, cd_cvtss2sd);
                 else
                     Emit(dest, src, cd_movsd);
             }
@@ -661,11 +657,11 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xF2, 0x0F, 0xC2 }, null),
         };
 
-        private static readonly CodeDef[] cd_cmpss = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0xC2 }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF3, 0x0F, 0xC2 }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0xF3, 0x0F, 0xC2 }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xF3, 0x0F, 0xC2 }, null),
+        private static readonly CodeDef[] cd_comisd = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x66, 0x0F, 0x2F }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x66, 0x0F, 0x2F }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0x66, 0x0F, 0x2F }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x66, 0x0F, 0x2F }, null),
         };
 
         private static readonly CodeDef[] cd_cmp = new CodeDef[] {
@@ -693,11 +689,6 @@ namespace Mosa.Platforms.x86
         private static readonly CodeDef[] cd_mulsd = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x59 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x59 }, null),
-        };
-
-        private static readonly CodeDef[] cd_mulss = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0x59 }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF3, 0x0F, 0x59 }, null),
         };
 
         private static readonly CodeDef[] cd_divsd = new CodeDef[] {
@@ -760,11 +751,10 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x11 }, null),
         };
 
-        private static readonly CodeDef[] cd_movss = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0xF3, 0x0F, 0x10 }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF3, 0x0F, 0x10 }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0x10 }, null),
-            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0x11 }, null),
+        private static readonly CodeDef[] cd_cvtss2sd = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0xF3, 0x0F, 0x5A }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF3, 0x0F, 0x5A }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0x5A }, null),
         };
 
         private static readonly CodeDef[] cd_sub = new CodeDef[] {
@@ -929,7 +919,9 @@ namespace Mosa.Platforms.x86
 
                     case CilElementType.I8: goto case CilElementType.R8;
                     case CilElementType.U8: goto case CilElementType.R8;
-                    case CilElementType.R4: goto case CilElementType.R8;
+                    case CilElementType.R4:
+                        imm = BitConverter.GetBytes(Convert.ToSingle(co.Value));
+                        break;
                     case CilElementType.R8: goto default;
                     default:
                         throw new NotSupportedException();

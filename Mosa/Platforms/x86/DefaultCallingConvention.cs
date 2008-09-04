@@ -170,7 +170,10 @@ namespace Mosa.Platforms.x86
         {
             switch (sigType.Type)
             {
-                case CilElementType.R4: goto case CilElementType.R8;
+                    // TODO ROOTNODE
+                case CilElementType.R4:
+                    size = alignment = 4;
+                    break;
                 case CilElementType.R8:
                     // Default alignment and size are 4
                     size = alignment = 8;

@@ -17,7 +17,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
     [TestFixture]
     public class Add : MosaCompilerTestRunner
-    {
+    {/*
         delegate bool I4_I1_I1(int expect, sbyte a, sbyte b);
         // Normal Testcases + (0, 0)
         [Row(1, 2)]
@@ -193,13 +193,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         {
             CodeSource = "static class Test { static bool AddI4(int expect, int a, int b) { return expect == (a + b); } }";
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "AddI4", (a + b), a, b));
-        }
+        }*/
 
         delegate bool R4_R4_R4(float expect, float a, float b);
         // Normal Testcases + (0, 0)
-        [Row(1.2f, 2.1f)]
+        //[Row(1.0f, 1.0f)]
         [Row(23.0f, 21.2578f)]
-        [Row(1.0f, -2.198f)]
+        /*[Row(1.0f, -2.198f)]
         [Row(-1.2f, 2.11f)]
         [Row(0.0f, 0.0f)]
         [Row(-17.1f, -2.3f)]
@@ -246,14 +246,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(1.0f, float.PositiveInfinity)]
         [Row(float.PositiveInfinity, 1.0f)]
         [Row(1.0f, float.NegativeInfinity)]
-        [Row(float.NegativeInfinity, 1.0f)]
+        [Row(float.NegativeInfinity, 1.0f)]*/
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void AddR4(float a, float b)
         {
             CodeSource = "static class Test { static bool AddR4(float expect, float a, float b) { return expect == (a + b); } }";
-            Assert.IsTrue((bool)Run<R4_R4_R4>("", "Test", "AddR4", (a + b), a, b));
+            Assert.IsTrue((bool)Run<R4_R4_R4>("", "Test", "AddR4", a + b, a, b));
         }
-
+        /*
         delegate bool R8_R8_R8(double expect, double a, double b);
         // Normal Testcases + (0, 0)
         [Row(1.2, 2.1)]
@@ -311,6 +311,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         {
             CodeSource = "static class Test { static bool AddR8(double expect, double a, double b) { return expect == (a + b); } }";
             Assert.IsTrue((bool)Run<R8_R8_R8>("", "Test", "AddR8", (a + b), a, b));
-        }
+        }*/
     }
 }
