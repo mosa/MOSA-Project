@@ -194,15 +194,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             CodeSource = "static class Test { static bool AddI4(int expect, int a, int b) { return expect == (a + b); } }";
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "AddI4", (a + b), a, b));
         }
-
+        
         delegate bool R4_R4_R4(float expect, float a, float b);
         // Normal Testcases + (0, 0)
         [Row(1.0f, 1.0f)]
-        [Row(23.0f, 21.2578f)]
         [Row(1.0f, -2.198f)]
         [Row(-1.2f, 2.11f)]
         [Row(0.0f, 0.0f)]
-        [Row(-17.1f, -2.3f)]
         // (MinValue, X) Cases
         [Row(float.MinValue, 0.0f)]
         [Row(float.MinValue, 1.2f)]

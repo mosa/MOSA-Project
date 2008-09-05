@@ -444,6 +444,11 @@ namespace Mosa.Platforms.x86
             // Write the opcode byte
             //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
+            if (!(src is RegisterOperand) && src.Type.Type == CilElementType.R4)
+            {
+                Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1), src, cd_cvtss2sd);
+                src = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
+            }
             Emit(dest, src, cd_subsd);
         }
 
@@ -452,6 +457,11 @@ namespace Mosa.Platforms.x86
             // Write the opcode byte
             //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
+            if (!(src is RegisterOperand) && src.Type.Type == CilElementType.R4)
+            {
+                Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1), src, cd_cvtss2sd);
+                src = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
+            }
             Emit(dest, src, cd_mulsd);
         }
 
@@ -460,6 +470,11 @@ namespace Mosa.Platforms.x86
             // Write the opcode byte
             //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
             // FIXME: Insert correct opcode here
+            if (!(src is RegisterOperand) && src.Type.Type == CilElementType.R4)
+            {
+                Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1), src, cd_cvtss2sd);
+                src = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
+            }
             Emit(dest, src, cd_divsd);
         }
 
@@ -658,10 +673,10 @@ namespace Mosa.Platforms.x86
         };
 
         private static readonly CodeDef[] cd_comisd = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x66, 0x0F, 0x2F }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x66, 0x0F, 0x2F }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0x66, 0x0F, 0x2F }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x66, 0x0F, 0x2F }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x66, 0x0F, 0x2E }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x66, 0x0F, 0x2E }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0x66, 0x0F, 0x2E }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x66, 0x0F, 0x2E }, null),
         };
 
         private static readonly CodeDef[] cd_cmp = new CodeDef[] {
