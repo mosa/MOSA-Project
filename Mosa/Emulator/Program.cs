@@ -18,7 +18,7 @@ namespace Mosa.Emulator
 	{
 		public static void Main(string[] args)
 		{
-			// Set Device Driver system to the emulator port & memory methods
+			// Set Device Driver system to the emulator port and memory methods
 			DeviceDrivers.Kernel.HAL.SetIOPortFactory(Mosa.EmulatedDevices.IOPortDispatch.RegisterIOPort);
 			DeviceDrivers.Kernel.HAL.SetMemoryFactory(Mosa.EmulatedDevices.MemoryDispatch.RegisterMemory);
 
@@ -27,6 +27,9 @@ namespace Mosa.Emulator
 
 			// Start driver system
 			DeviceDrivers.Setup.Initialize();
+
+			// Set the interrupt handler
+			DeviceDrivers.Kernel.HAL.SetInterruptHandler(DeviceDrivers.Setup.ResourceManager.InterruptManager.ProcessInterrupt);
 
 			// Get the Text VGA device
 			LinkedList<IDevice> devices = DeviceDrivers.Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGA"));

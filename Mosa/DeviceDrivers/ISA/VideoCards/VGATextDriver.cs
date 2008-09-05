@@ -187,7 +187,7 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		/// <summary>
 		/// Clears the screen.
 		/// </summary>
-		public void Clear()
+		public void ClearScreen()
 		{
 			uint index = offset;
 			uint size = (uint)(height * width);

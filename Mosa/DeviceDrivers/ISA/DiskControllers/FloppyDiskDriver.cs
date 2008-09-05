@@ -19,7 +19,7 @@
 using Mosa.DeviceDrivers;
 using Mosa.ClassLib;
 using Mosa.DeviceDrivers.ISA;
-using Mosa.DeviceDrivers.Kernel;    // for IIPort
+using Mosa.DeviceDrivers.Kernel; 
 
 namespace Mosa.DeviceDrivers.ISA.DiskControllers
 {

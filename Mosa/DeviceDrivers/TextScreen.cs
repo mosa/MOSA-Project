@@ -12,6 +12,9 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceDrivers
 {
 
+	/// <summary>
+	/// Implements a text screen for a <see cref="ITextDevice"/>.
+	/// </summary>
 	public class TextScreen : ITextScreen
 	{
 		protected ITextDevice textDevice;
@@ -22,6 +25,10 @@ namespace Mosa.DeviceDrivers
 		protected ushort width;
 		protected ushort height;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TextScreen"/> class.
+		/// </summary>
+		/// <param name="textDevice">The text device.</param>
 		public TextScreen(ITextDevice textDevice)
 		{
 			this.textDevice = textDevice;
@@ -29,14 +36,22 @@ namespace Mosa.DeviceDrivers
 			height = textDevice.GetHeight();
 			foreground = TextColor.Black;
 			background = TextColor.White;
-			Clear();
+			ClearScreen();
 		}
 
+		/// <summary>
+		/// Sets the cursor.
+		/// </summary>
 		protected void SetCursor()
 		{
 			textDevice.SetCursor(cursorX, cursorY);
 		}
 
+		/// <summary>
+		/// Sets the cursor.
+		/// </summary>
+		/// <param name="cursorX">The cursor X.</param>
+		/// <param name="cursorY">The cursor Y.</param>
 		public void SetCursor(ushort cursorX, ushort cursorY)
 		{
 			this.cursorX = cursorX;
@@ -44,14 +59,21 @@ namespace Mosa.DeviceDrivers
 			SetCursor();
 		}
 
-		public void Clear()
+		/// <summary>
+		/// Clears the screen.
+		/// </summary>
+		public void ClearScreen()
 		{
 			cursorX = 0;
 			cursorY = 0;
-			textDevice.Clear();
+			textDevice.ClearScreen();
 			SetCursor();
 		}
 
+		/// <summary>
+		/// Writes the specified text to the screen.
+		/// </summary>
+		/// <param name="text">The text.</param>
 		public void Write(string text)
 		{
 			foreach (char c in text) {
@@ -72,6 +94,9 @@ namespace Mosa.DeviceDrivers
 			SetCursor();
 		}
 
+		/// <summary>
+		/// Writes an empty line to the screen.
+		/// </summary>
 		public void WriteLine()
 		{
 			cursorY++;
@@ -85,6 +110,10 @@ namespace Mosa.DeviceDrivers
 			SetCursor();
 		}
 
+		/// <summary>
+		/// Writes the line to the screen.
+		/// </summary>
+		/// <param name="text">The text.</param>
 		public void WriteLine(string text)
 		{
 			Write(text);

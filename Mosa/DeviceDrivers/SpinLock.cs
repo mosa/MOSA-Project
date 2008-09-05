@@ -11,9 +11,19 @@
 
 namespace Mosa.DeviceDrivers
 {
+	/// <summary>
+	/// Stub class for a SpinLock object
+	/// </summary>
 	public struct SpinLock
 	{
+		/// <summary>
+		/// Enters spinlock
+		/// </summary>
 		public void Enter() { }
+		
+		/// <summary>
+		/// Exits spinlock
+		/// </summary>
 		public void Exit() { }
 	}
 }

@@ -11,14 +11,29 @@ using Mosa.DeviceDrivers;
 
 namespace Mosa.DeviceDrivers
 {
+	/// <summary>
+	/// Setup for the Device Driver System.
+	/// </summary>
 	public static class Setup
 	{
 		static private IDeviceManager deviceManager;
 		static private IResourceManager resourceManager;
 
+		/// <summary>
+		/// Gets the device manager.
+		/// </summary>
+		/// <value>The device manager.</value>
 		static public IDeviceManager DeviceManager { get { return deviceManager; } }
+
+		/// <summary>
+		/// Gets the resource manager.
+		/// </summary>
+		/// <value>The resource manager.</value>
 		static public IResourceManager ResourceManager { get { return resourceManager; } }
 
+		/// <summary>
+		/// Initializes the Device Driver System.
+		/// </summary>
 		static public void Initialize()
 		{
 			// Create Resource Manager

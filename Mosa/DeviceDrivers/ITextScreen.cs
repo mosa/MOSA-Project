@@ -9,12 +9,38 @@
 
 namespace Mosa.DeviceDrivers
 {
+	/// <summary>
+	/// Interface to a text screen
+	/// </summary>
 	public interface ITextScreen
 	{
-		void Clear();
+		/// <summary>
+		/// Clears the screen scren.
+		/// </summary>
+		void ClearScreen();
+
+		/// <summary>
+		/// Sets the cursor.
+		/// </summary>
+		/// <param name="cursorX">The cursor X.</param>
+		/// <param name="cursorY">The cursor Y.</param>	
 		void SetCursor(ushort cursorX, ushort cursorY);
+
+		/// <summary>
+		/// Writes the specified text to the screen.
+		/// </summary>
+		/// <param name="text">The text.</param>
 		void Write(string text);
+
+		/// <summary>
+		/// Writes an empty line to the screen.
+		/// </summary>
 		void WriteLine();
+
+		/// <summary>
+		/// Writes the line to the screen.
+		/// </summary>
+		/// <param name="text">The text.</param>
 		void WriteLine(string text);
 	}
 }

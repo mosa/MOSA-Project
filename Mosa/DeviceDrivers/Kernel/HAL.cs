@@ -13,9 +13,11 @@ namespace Mosa.DeviceDrivers.Kernel
 	{
 		public delegate IReadWriteIOPort CreateIOPort(ushort port);
 		public delegate IMemory CreateMemory(uint address, uint size);
+		public delegate void HandleInterrupt(byte irq);
 
 		static private CreateIOPort createIOPort;
 		static private CreateMemory createMemory;
+		static private HandleInterrupt handleInterrupt;
 
 		/// <summary>
 		/// Sets the create IO port factory.
@@ -36,11 +38,29 @@ namespace Mosa.DeviceDrivers.Kernel
 		}
 
 		/// <summary>
+		/// Sets the interrupt handler.
+		/// </summary>
+		/// <param name="handleInterrupt">The handle interrupt.</param>
+		public static void SetInterruptHandler(HandleInterrupt handleInterrupt)
+		{
+			HAL.handleInterrupt = handleInterrupt;
+		}
+
+		/// <summary>
+		/// Processes the interrupt.
+		/// </summary>
+		/// <param name="irq">The irq.</param>
+		public static void ProcessInterrupt(byte irq)
+		{
+			HAL.handleInterrupt(irq);
+		}
+
+		/// <summary>
 		/// Requests an IO read/write port interface from the kernel
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		public static IReadWriteIOPort RequestIOPort(ushort port)
+		internal static IReadWriteIOPort RequestIOPort(ushort port)
 		{
 			return HAL.createIOPort(port);
 		}
@@ -51,7 +71,7 @@ namespace Mosa.DeviceDrivers.Kernel
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public static IMemory RequestMemory(uint address, uint size)
+		internal static IMemory RequestMemory(uint address, uint size)
 		{
 			return HAL.createMemory(address, size);
 		}
@@ -59,7 +79,7 @@ namespace Mosa.DeviceDrivers.Kernel
 		/// <summary>
 		/// Disables all interrupts.
 		/// </summary>
-		public static void DisableAllInterrupts()
+		internal static void DisableAllInterrupts()
 		{
 			// TODO
 		}
@@ -67,7 +87,7 @@ namespace Mosa.DeviceDrivers.Kernel
 		/// <summary>
 		/// Enables all interrupts.
 		/// </summary>
-		public static void EnableAllInterrupts()
+		internal static void EnableAllInterrupts()
 		{
 			// TODO
 		}
@@ -76,7 +96,7 @@ namespace Mosa.DeviceDrivers.Kernel
 		/// Sleeps the specified milliseconds.
 		/// </summary>
 		/// <param name="milliseconds">The milliseconds.</param>
-		public static void Sleep(uint milliseconds)
+		internal static void Sleep(uint milliseconds)
 		{
 			// TODO
 		}

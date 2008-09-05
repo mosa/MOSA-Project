@@ -9,11 +9,21 @@
 
 namespace Mosa.ClassLib
 {
+	/// <summary>
+	/// Generic class container for two related classes
+	/// </summary>
+	/// <typeparam name="F"></typeparam>
+	/// <typeparam name="S"></typeparam>
 	public class Pair<F, S>
 	{
 		public F First;
 		public S Second;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Pair&lt;F, S&gt;"/> class.
+		/// </summary>
+		/// <param name="first">The first.</param>
+		/// <param name="second">The second.</param>
 		public Pair(F first, S second)
 		{
 			this.First = first;
