@@ -70,15 +70,7 @@ namespace Mosa.Runtime.CompilerFramework
 				workArray.Set(block.Index, false);
 			}
 
-			for (int i = 0; i < 3; i++)
-				foreach (BasicBlock block in blockProvider) {
-					while (ProcessBlock(block)) ;
-
-					workArray.Set(block.Index, false);
-				}
-
 			// Pass Two
-
 			while (workList.Count != 0) {
 				BasicBlock block = workList.Pop();
 
@@ -104,14 +96,14 @@ namespace Mosa.Runtime.CompilerFramework
 			if (TryToRemoveUnreferencedBlock(block))
 				changed = true;
 
-			//if (TryToFoldRedundantBranch(block))
-			//    changed = true;
+			if (TryToFoldRedundantBranch(block))
+				changed = true;
 
-			//if (TryToFoldRedundantBranch2(block))
-			//    changed = true;
+			if (TryToFoldRedundantBranch2(block))
+				changed = true;
 
-			//if (TryToRemoveSelfCycleBlock(block))
-			//    changed = true;
+			if (TryToRemoveSelfCycleBlock(block))
+				changed = true;
 
 			if (TryToCombineBlocks(block))
 				changed = true;
@@ -157,7 +149,6 @@ namespace Mosa.Runtime.CompilerFramework
 				MarkBlocksForReview(previousBlock.NextBlocks);
 
 			MarkBlocksForReview(block.PreviousBlocks);
-
 			MarkBlocksForReview(block.NextBlocks);
 
 			foreach (BasicBlock nextBlock in block.NextBlocks)
@@ -348,18 +339,18 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			if (block.NextBlocks.Count == 1) {
 				if (block.NextBlocks[0].PreviousBlocks.Count == 1) {
+					// Merge next block into current block
+
 					BasicBlock nextBlock = block.NextBlocks[0];
 
 					// Sanity check
 					Debug.Assert(nextBlock.PreviousBlocks[0] == block);
 
-					// Mark blocks for review in second pass
-					MarkRelatedBlocksForReview(block, false);
-
-					// Merge next block into current block
-
 					// Sanity check
 					Debug.Assert(block.LastInstruction is IBranchInstruction);
+
+					// Mark blocks for review in second pass
+					MarkRelatedBlocksForReview(block, false);
 
 					// Remove last instruction of current block
 					block.Instructions.RemoveAt(block.Instructions.Count - 1);
