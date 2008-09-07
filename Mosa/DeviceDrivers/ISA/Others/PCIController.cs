@@ -30,7 +30,6 @@ namespace Mosa.DeviceDrivers.ISA
 		protected IReadWriteIOPort ConfigData;
 
 		public PCIController() { }
-		public void Dispose() { }
 
 		public override bool Setup()
 		{

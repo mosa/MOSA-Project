@@ -157,8 +157,6 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 				trackCache[drive].buffer = new byte[FDC.MaxBytesPerTrack];
 		}
 
-		public void Dispose() { }
-
 		public override bool Setup()
 		{
 			base.name = "FDC_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");

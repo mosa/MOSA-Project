@@ -87,12 +87,13 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 
 		protected DriveInfo[] driveInfo;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="IDEDiskDriver"/> class.
+		/// </summary>
 		public IDEDiskDriver()
 		{
 			driveInfo = new DriveInfo[DrivesPerConroller];
 		}
-
-		public void Dispose() { }
 
 		public override bool Setup()
 		{

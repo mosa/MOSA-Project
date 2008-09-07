@@ -24,7 +24,6 @@ namespace Mosa.DeviceDrivers.PCI
 		protected SpinLock spinLock;
 
 		public TestDriver(PCIDevice pciDevice) : base(pciDevice) { }
-		public void Dispose() { }
 
 		public override bool Setup()
 		{

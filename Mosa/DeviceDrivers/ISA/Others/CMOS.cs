@@ -23,7 +23,6 @@ namespace Mosa.DeviceDrivers.ISA
 		protected SpinLock spinLock;
 
 		public CMOSDriver() { }
-		public void Dispose() { }
 
 		public override bool Setup()
 		{

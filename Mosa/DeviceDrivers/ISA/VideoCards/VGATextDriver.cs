@@ -64,7 +64,6 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		protected TextColor defaultBackground = TextColor.White;
 
 		public VGATextDriver() { }
-		public void Dispose() { }
 
 		public override bool Setup()
 		{
