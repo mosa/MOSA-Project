@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
- *  Simon Wollwage (<mailto:simon_wollwage@yahoo.co.jp>)
+ *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  */
 
 using System;
@@ -31,7 +31,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(sbyte.MinValue)]
         // (MaxValue, X) Cases
         [Row(sbyte.MaxValue)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SwitchI1(sbyte a)
         {
             CodeSource = @"static class Test { 
@@ -86,7 +86,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(short.MinValue)]
         // (MaxValue, X) Cases
         [Row(short.MaxValue)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SwitchI2(short a)
         {
             CodeSource = @"static class Test { 
@@ -141,7 +141,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(int.MinValue)]
         // (MaxValue, X) Cases
         [Row(int.MaxValue)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SwitchI4(int a)
         {
             CodeSource = @"static class Test { 
@@ -196,7 +196,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(long.MinValue)]
         // (MaxValue, X) Cases
         [Row(long.MaxValue)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SwitchI8(long a)
         {
             CodeSource = @"static class Test { 

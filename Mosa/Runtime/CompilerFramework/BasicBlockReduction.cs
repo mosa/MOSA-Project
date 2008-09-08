@@ -93,28 +93,28 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			bool changed = false;
 
-			if (TryToRemoveUnreferencedBlock(block))
-				changed = true;
+            if (TryToRemoveUnreferencedBlock(block))
+                return true;
 
 			if (TryToFoldRedundantBranch(block))
-				changed = true;
+                return true;
 
 			if (TryToFoldRedundantBranch2(block))
-				changed = true;
+                return true;
 
 			if (TryToRemoveSelfCycleBlock(block))
-				changed = true;
+                return true;
 
 			if (TryToCombineBlocks(block))
-				changed = true;
+                return true;
 
 			if (TryToRemoveEmptyBlock(block))
-				changed = true;
+                return true;
 
 			//if (TryToHoistBranch(block))
 			//    changed = true;
 
-			return changed;
+			return false;
 		}
 
 		/// <summary>

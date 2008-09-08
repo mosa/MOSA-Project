@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
- *  Simon Wollwage (<mailto:simon_wollwage@yahoo.co.jp>)
+ *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  */
 
 using System;
@@ -70,7 +70,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-123, sbyte.MaxValue)]
         // Extremvaluecases
         [Row(sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SubI1(sbyte a, sbyte b)
         {
             CodeSource = "static class Test { static bool SubI1(int expect, sbyte a, sbyte b) { return expect == (a - b); } }";
@@ -129,7 +129,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-123, short.MaxValue)]
         // Extremvaluecases
         [Row(short.MinValue, short.MaxValue)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SubI2(short a, short b)
         {
             CodeSource = "static class Test { static bool SubI2(int expect, short a, short b) { return expect == (a - b); } }";
@@ -188,7 +188,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-123, int.MaxValue)]
         // Extremvaluecases
         [Row(int.MinValue, int.MaxValue)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SubI4(int a, int b)
         {
             CodeSource = "static class Test { static bool SubI4(int expect, int a, int b) { return expect == (a - b); } }";
@@ -247,7 +247,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(float.PositiveInfinity, 1.0f)]
         [Row(1.0f, float.NegativeInfinity)]
         [Row(float.NegativeInfinity, 1.0f)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SubR4(float a, float b)
         {
             CodeSource = "static class Test { static bool SubR4(float expect, float a, float b) { return expect == (a - b); } }";
@@ -306,7 +306,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(double.PositiveInfinity, 1.0f)]
         [Row(1.0f, double.NegativeInfinity)]
         [Row(double.NegativeInfinity, 1.0f)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SubR8(double a, double b)
         {
             CodeSource = "static class Test { static bool SubR8(double expect, double a, double b) { return expect == (a - b); } }";

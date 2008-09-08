@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
- *  Simon Wollwage (<mailto:simon_wollwage@yahoo.co.jp>)
+ *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  */
 
 using System;
@@ -35,7 +35,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-100)]
         [Row(sbyte.MinValue)]
         [Row(sbyte.MaxValue)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void NotI1(sbyte a)
         {
             CodeSource = "static class Test { static bool NotI1(int expect, sbyte a) { return expect == (~a); } }";

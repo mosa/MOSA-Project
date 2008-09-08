@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
- *  Simon Wollwage (<mailto:simon_wollwage@yahoo.co.jp>)
+ *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  */
 
 using System;
@@ -71,7 +71,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(sbyte.MinValue, sbyte.MaxValue)]
         [Row(sbyte.MaxValue, sbyte.MinValue)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void XorI1(sbyte a, sbyte b)
         {
             CodeSource = "static class Test { static bool XorI1(int expect, sbyte a, sbyte b) { return expect == (a ^ b); } }";
@@ -131,7 +131,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(short.MinValue, short.MaxValue)]
         [Row(short.MaxValue, short.MinValue)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void XorI2(short a, short b)
         {
             short e = (short)(a ^ b);
@@ -192,7 +192,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(int.MinValue, int.MaxValue)]
         [Row(int.MaxValue, int.MinValue)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void XorI4(int a, int b)
         {
             CodeSource = "static class Test { static bool XorI4(int expect, int a, int b) { return expect == (a ^ b); } }";
@@ -252,7 +252,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(long.MinValue, long.MaxValue)]
         [Row(long.MaxValue, long.MinValue)]
-        [Test, Author("rootnode", "simon_wollwage@yahoo.co.jp")]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void XorI8(long a, long b)
         {
             CodeSource = "static class Test { static bool XorI8(long expect, long a, long b) { return expect == (a ^ b); } }";
