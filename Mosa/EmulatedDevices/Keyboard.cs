@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -7,15 +7,15 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.ClassLib;
+using System;
+using Mosa.DeviceDrivers;
 
-namespace Mosa.DeviceDrivers
+namespace Mosa.EmulatedDevices
 {
-
 	/// <summary>
-	/// Interface for keyboard
+	/// Implements an emulated keyboard
 	/// </summary>
-	public interface IKeyboard
+	public class Keyboard : Device, IKeyboard
 	{
 		/// <summary>
 		/// Determines whether [scroll lock is on].
@@ -23,7 +23,7 @@ namespace Mosa.DeviceDrivers
 		/// <returns>
 		/// 	<c>true</c> if [scroll lock is on]; otherwise, <c>false</c>.
 		/// </returns>
-		bool IsScrollLockOn();
+		public bool IsScrollLockOn() { return false; }
 
 		/// <summary>
 		/// Determines whether [cap lock is on].
@@ -31,7 +31,7 @@ namespace Mosa.DeviceDrivers
 		/// <returns>
 		/// 	<c>true</c> if [cap lock is on]; otherwise, <c>false</c>.
 		/// </returns>
-		bool IsCapLockOn();
+		public bool IsCapLockOn() { return Console.CapsLock; }
 
 		/// <summary>
 		/// Determines whether [num lock is on].
@@ -39,7 +39,7 @@ namespace Mosa.DeviceDrivers
 		/// <returns>
 		/// 	<c>true</c> if [num lock is on]; otherwise, <c>false</c>.
 		/// </returns>
-		bool IsNumLockOn();
+		public bool IsNumLockOn() { return Console.NumberLock; }
 
 		/// <summary>
 		/// Determines whether [the control key is pressed].
@@ -47,7 +47,7 @@ namespace Mosa.DeviceDrivers
 		/// <returns>
 		/// 	<c>true</c> if [the control key is pressed]; otherwise, <c>false</c>.
 		/// </returns>
-		bool IsControlKeyPressed();
+		public bool IsControlKeyPressed() { return false; }
 
 		/// <summary>
 		/// Determines whether [the alt key is pressed].
@@ -55,7 +55,7 @@ namespace Mosa.DeviceDrivers
 		/// <returns>
 		/// 	<c>true</c> if [the alt key is pressed]; otherwise, <c>false</c>.
 		/// </returns>
-		bool IsAltKeyPressed();
+		public bool IsAltKeyPressed() { return false; }
 
 		/// <summary>
 		/// Determines whether [the shift key is pressed].
@@ -63,12 +63,17 @@ namespace Mosa.DeviceDrivers
 		/// <returns>
 		/// 	<c>true</c> if [the shift key is pressed]; otherwise, <c>false</c>.
 		/// </returns>
-		bool IsShiftKeyPressed();
+		public bool IsShiftKeyPressed() { return false; }
 
 		/// <summary>
 		/// Gets the key pressed.
 		/// </summary>
 		/// <returns></returns>
-		char GetKeyPressed();
+		public char GetKeyPressed()
+		{
+			ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+
+			return keyInfo.KeyChar;
+		}
 	}
 }

@@ -37,6 +37,9 @@ namespace Mosa.DeviceDrivers.ScanCodeMap
 		{
 			Key key = new Key();
 
+			if (scancode == 0)
+				return key;
+
 			if (keyState == KeyState.Normal) {
 				if (scancode == 0xE0) {
 					keyState = KeyState.Escaped;
