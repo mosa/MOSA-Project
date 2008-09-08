@@ -18,8 +18,8 @@ namespace Mosa.DeviceDrivers
 	{
 		public enum Press
 		{
-			Down,
-			Release
+			Make,
+			Break
 		};
 
 		public enum Special
@@ -38,9 +38,10 @@ namespace Mosa.DeviceDrivers
 			PageDown,
 			Insert,
 			Delete,
-			LShift,
-			RShift,
-			Alt,
+			LeftShift,
+			RightShift,
+			RightAlt,
+			LeftAlt,
 			CapsLock,
 			F1,
 			F2,
@@ -54,11 +55,32 @@ namespace Mosa.DeviceDrivers
 			F10,
 			F11,
 			F12,
+			LeftControl,
+			RightControl,
+			LeftWindow,
+			RightWindow,
+			Power,
+			Sleep,
+			Wake,
+			Menu,
+			PrintScreen,
+			ControlPrintScreen,
+			KeyboardError,
 		}
 
 		protected Special special;
 		protected Press press;
-		protected byte character;
+		protected char character;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Key"/> class.
+		/// </summary>
+		public Key()
+		{
+			special = Key.Special.NoKey;
+			press = Press.Make;
+			character = (char)0x00;
+		}
 
 		/// <summary>
 		/// Gets or sets the special key.
@@ -76,7 +98,7 @@ namespace Mosa.DeviceDrivers
 		/// Gets or sets the character.
 		/// </summary>
 		/// <value>The character.</value>
-		public byte Character { get { return character; } set { character = value; } }
+		public char Character { get { return character; } set { character = value; } }
 	}
 
 

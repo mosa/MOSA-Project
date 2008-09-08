@@ -12,17 +12,20 @@ using Mosa.DeviceDrivers;
 namespace Mosa.DeviceDrivers.ScanCodeMap
 {
 	/// <summary>
-	/// Implements the US Keyboard map
+	/// Implements the US Keyboard map (scan code set 2)
 	/// </summary>
 	public class US : IScanCodeMap
 	{
-		protected byte state;
+		protected enum KeyState { Normal, Escaped, Espaced2, EscapeBreak };
+
+		protected KeyState keyState;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="US"/> class.
 		/// </summary>
 		public US()
 		{
+			keyState = KeyState.Normal;
 		}
 
 		/// <summary>
@@ -34,10 +37,256 @@ namespace Mosa.DeviceDrivers.ScanCodeMap
 		{
 			Key key = new Key();
 
-			// TODO
+			if (keyState == KeyState.Normal) {
+				if (scancode == 0xE0) {
+					keyState = KeyState.Escaped;
+					return key;
+				}
+
+				if ((scancode & 0x80) != 0)
+					key.KeyPress = Key.Press.Break;
+				else
+					key.KeyPress = Key.Press.Make;
+
+				key.SpecialKey = Key.Special.RegularKey;
+
+				switch (scancode) {
+					case 1: key.Character = (char)27; break;
+					case 2: key.Character = '1'; break;
+					case 3: key.Character = '2'; break;
+					case 4: key.Character = '3'; break;
+					case 5: key.Character = '4'; break;
+					case 6: key.Character = '5'; break;
+					case 7: key.Character = '6'; break;
+					case 8: key.Character = '7'; break;
+					case 9: key.Character = '8'; break;
+					case 10: key.Character = '9'; break;
+					case 11: key.Character = '0'; break;
+					case 12: key.Character = '-'; break;
+					case 13: key.Character = '='; break;
+					case 14: key.Character = '\b'; break;
+					case 15: key.Character = '\t'; break;
+					case 16: key.Character = 'q'; break;
+					case 17: key.Character = 'w'; break;
+					case 18: key.Character = 'e'; break;
+					case 19: key.Character = 'r'; break;
+					case 20: key.Character = 't'; break;
+					case 21: key.Character = 'y'; break;
+					case 22: key.Character = 'u'; break;
+					case 23: key.Character = 'i'; break;
+					case 24: key.Character = 'o'; break;
+					case 25: key.Character = 'p'; break;
+					case 26: key.Character = '['; break;
+					case 27: key.Character = ']'; break;
+					case 28: key.Character = '\n'; break;
+					case 29: key.SpecialKey = Key.Special.LeftControl; break;
+					case 30: key.Character = 'a'; break;
+					case 31: key.Character = 's'; break;
+					case 32: key.Character = 'd'; break;
+					case 33: key.Character = 'f'; break;
+					case 34: key.Character = 'g'; break;
+					case 35: key.Character = 'h'; break;
+					case 36: key.Character = 'j'; break;
+					case 37: key.Character = 'k'; break;
+					case 38: key.Character = 'l'; break;
+					case 39: key.Character = ';'; break;
+					case 40: key.Character = '\''; break;
+					case 41: key.Character = '`'; break;
+					case 42: key.SpecialKey = Key.Special.LeftShift; break;
+					case 43: key.Character = '\\'; break;
+					case 44: key.Character = 'z'; break;
+					case 45: key.Character = 'x'; break;
+					case 46: key.Character = 'c'; break;
+					case 47: key.Character = 'v'; break;
+					case 48: key.Character = 'b'; break;
+					case 49: key.Character = 'n'; break;
+					case 50: key.Character = 'm'; break;
+					case 51: key.Character = ','; break;
+					case 52: key.Character = '.'; break;
+					case 53: key.Character = '/'; break;
+					case 54: key.SpecialKey = Key.Special.RightShift; break;
+					case 55: key.Character = '*'; break;
+					case 56: key.SpecialKey = Key.Special.LeftAlt; break;
+					case 57: key.Character = ' '; break;
+					case 58: key.SpecialKey = Key.Special.CapsLock; break;
+					case 59: key.SpecialKey = Key.Special.F1; break;
+					case 60: key.SpecialKey = Key.Special.F2; break;
+					case 61: key.SpecialKey = Key.Special.F3; break;
+					case 62: key.SpecialKey = Key.Special.F4; break;
+					case 63: key.SpecialKey = Key.Special.F5; break;
+					case 64: key.SpecialKey = Key.Special.F6; break;
+					case 65: key.SpecialKey = Key.Special.F7; break;
+					case 66: key.SpecialKey = Key.Special.F8; break;
+					case 67: key.SpecialKey = Key.Special.F9; break;
+					case 68: key.SpecialKey = Key.Special.F10; break;
+					case 69: key.SpecialKey = Key.Special.NumLock; break;
+					case 70: key.SpecialKey = Key.Special.ScrollLock; break;
+					case 71: key.SpecialKey = Key.Special.Home; break;
+					case 72: key.SpecialKey = Key.Special.UpArrow; break;
+					case 73: key.SpecialKey = Key.Special.PageUp; break;
+					case 74: key.Character = '-'; break;
+					case 75: key.SpecialKey = Key.Special.LeftArrow; break;
+					case 76: key.Character = (char)0; break;
+					case 77: key.SpecialKey = Key.Special.RightArrow; break;
+					case 78: key.Character = '+'; break;
+					case 79: key.SpecialKey = Key.Special.End; break;
+					case 80: key.SpecialKey = Key.Special.DownArrow; break;
+					case 81: key.SpecialKey = Key.Special.PageDown; break;
+					case 82: key.SpecialKey = Key.Special.Insert; break;
+					case 83: key.SpecialKey = Key.Special.Delete; break;
+					case 86: key.Character = '\\'; break;
+					case 87: key.SpecialKey = Key.Special.F11; break;
+					case 88: key.SpecialKey = Key.Special.F12; break;
+					case 129: key.Character = (char)27; break;
+					case 130: key.Character = '!'; break;
+					case 131: key.Character = '@'; break;
+					case 132: key.Character = '#'; break;
+					case 133: key.Character = '$'; break;
+					case 134: key.Character = '%'; break;
+					case 135: key.Character = '^'; break;
+					case 136: key.Character = '&'; break;
+					case 137: key.Character = '*'; break;
+					case 138: key.Character = '('; break;
+					case 139: key.Character = ')'; break;
+					case 140: key.Character = '_'; break;
+					case 141: key.Character = '+'; break;
+					case 142: key.Character = '\b'; break;
+					case 143: key.Character = '\t'; break;
+					case 144: key.Character = 'Q'; break;
+					case 145: key.Character = 'W'; break;
+					case 146: key.Character = 'E'; break;
+					case 147: key.Character = 'R'; break;
+					case 148: key.Character = 'T'; break;
+					case 149: key.Character = 'Y'; break;
+					case 150: key.Character = 'U'; break;
+					case 151: key.Character = 'I'; break;
+					case 152: key.Character = 'O'; break;
+					case 153: key.Character = 'P'; break;
+					case 154: key.Character = '{'; break;
+					case 155: key.Character = '}'; break;
+					case 156: key.Character = '\n'; break;
+					case 157: key.SpecialKey = Key.Special.RightControl; break;
+					case 158: key.Character = 'A'; break;
+					case 159: key.Character = 'S'; break;
+					case 160: key.Character = 'D'; break;
+					case 161: key.Character = 'F'; break;
+					case 162: key.Character = 'G'; break;
+					case 163: key.Character = 'H'; break;
+					case 164: key.Character = 'J'; break;
+					case 165: key.Character = 'K'; break;
+					case 166: key.Character = 'L'; break;
+					case 167: key.Character = ':'; break;
+					case 168: key.Character = '"'; break;
+					case 169: key.Character = '~'; break;
+					case 170: key.SpecialKey = Key.Special.LeftShift; break;
+					case 171: key.Character = '|'; break;
+					case 172: key.Character = 'Z'; break;
+					case 173: key.Character = 'X'; break;
+					case 174: key.Character = 'C'; break;
+					case 175: key.Character = 'V'; break;
+					case 176: key.Character = 'B'; break;
+					case 177: key.Character = 'N'; break;
+					case 178: key.Character = 'M'; break;
+					case 179: key.Character = '<'; break;
+					case 180: key.Character = '>'; break;
+					case 181: key.Character = '?'; break;
+					case 182: key.SpecialKey = Key.Special.RightShift; break;
+					case 183: key.Character = '*'; break;
+					case 184: key.SpecialKey = Key.Special.RightAlt; break;
+					case 185: key.Character = ' '; break;
+					case 186: key.SpecialKey = Key.Special.CapsLock; break;
+					case 187: key.SpecialKey = Key.Special.F1; break;
+					case 188: key.SpecialKey = Key.Special.F2; break;
+					case 189: key.SpecialKey = Key.Special.F3; break;
+					case 190: key.SpecialKey = Key.Special.F4; break;
+					case 191: key.SpecialKey = Key.Special.F5; break;
+					case 192: key.SpecialKey = Key.Special.F6; break;
+					case 193: key.SpecialKey = Key.Special.F7; break;
+					case 194: key.SpecialKey = Key.Special.F8; break;
+					case 195: key.SpecialKey = Key.Special.F9; break;
+					case 196: key.SpecialKey = Key.Special.F10; break;
+					case 197: key.SpecialKey = Key.Special.NumLock; break;
+					case 198: key.SpecialKey = Key.Special.ScrollLock; break;
+					case 199: key.SpecialKey = Key.Special.Home; break;
+					case 200: key.SpecialKey = Key.Special.UpArrow; break;
+					case 201: key.SpecialKey = Key.Special.PageUp; break;
+					case 202: key.Character = '-'; break;
+					case 203: key.SpecialKey = Key.Special.LeftArrow; break;
+					case 205: key.SpecialKey = Key.Special.RightArrow; break;
+					case 206: key.Character = '+'; break;
+					case 207: key.SpecialKey = Key.Special.End; break;
+					case 208: key.SpecialKey = Key.Special.DownArrow; break;
+					case 209: key.SpecialKey = Key.Special.PageDown; break;
+					case 210: key.SpecialKey = Key.Special.Insert; break;
+					case 211: key.SpecialKey = Key.Special.Delete; break;
+					case 214: key.Character = '|'; break;
+					case 215: key.SpecialKey = Key.Special.F11; break;
+					case 216: key.SpecialKey = Key.Special.F12; break;
+					default: break;
+				}
+
+				keyState = KeyState.Normal;
+				return key;
+			}
+			else if ((keyState == KeyState.Escaped) || (keyState == KeyState.EscapeBreak)) {
+				if (scancode == 0xE0) {
+
+					key.SpecialKey = Key.Special.RegularKey;
+
+					if (((scancode & 0x80) != 0) || (keyState == KeyState.EscapeBreak))
+						key.KeyPress = Key.Press.Break;
+					else
+						key.KeyPress = Key.Press.Make;
+
+					if (scancode == 0xF0) {
+						keyState = KeyState.EscapeBreak;
+						return key;
+					}
+
+					switch (scancode) {
+						case 0x1C: key.Character = '\n'; break;
+						case 0x1D: key.SpecialKey = Key.Special.LeftControl; break;
+						case 0x2A: key.SpecialKey = Key.Special.LeftShift; break;
+						case 0x35: key.Character = '/'; break;
+						case 0x36: key.SpecialKey = Key.Special.RightShift; break;
+
+						case 0x37: key.SpecialKey = Key.Special.ControlPrintScreen; break;
+						case 0x38: key.SpecialKey = Key.Special.LeftAlt; break; // ?
+
+						case 0x46: key.SpecialKey = Key.Special.ScrollLock; break;
+						case 0x47: key.SpecialKey = Key.Special.Home; break;
+						case 0x48: key.SpecialKey = Key.Special.UpArrow; break;
+						case 0x49: key.SpecialKey = Key.Special.PageUp; break;
+						case 0x4B: key.SpecialKey = Key.Special.LeftArrow; break;
+						case 0x4D: key.SpecialKey = Key.Special.RightArrow; break;
+
+						case 0x4F: key.SpecialKey = Key.Special.End; break;
+						case 0x50: key.SpecialKey = Key.Special.DownArrow; break;
+						case 0x51: key.SpecialKey = Key.Special.PageDown; break;
+						case 0x52: key.SpecialKey = Key.Special.Insert; break;
+						case 0x53: key.SpecialKey = Key.Special.Delete; break;
+
+						case 0x5B: key.SpecialKey = Key.Special.LeftWindow; break;
+						case 0x5C: key.SpecialKey = Key.Special.RightWindow; break;
+						case 0x5D: key.SpecialKey = Key.Special.Menu; break;
+
+						//case 0x37: key.SpecialKey = Key.Special.Power; break;
+						//case 0x3F: key.SpecialKey = Key.Special.Sleep; break;
+						//case 0x5E: key.SpecialKey = Key.Special.Wake; break;
+
+						default: break;
+					}
+
+					keyState = KeyState.Normal;
+					return key;
+				}
+				else if (keyState == KeyState.Espaced2) {
+					keyState = KeyState.Normal;
+					return key;
+				}
+			}
 
 			return key;
 		}
-
 	}
 }
