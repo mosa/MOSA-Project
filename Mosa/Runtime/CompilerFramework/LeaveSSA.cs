@@ -57,30 +57,39 @@ namespace Mosa.Runtime.CompilerFramework
 
                             if (false == Object.ReferenceEquals(res, op))
                             {
-                                List<Instruction> insts = phi.Blocks[i].Instructions;
-                                int insIdx = insts.Count - 1;
-
-                                /* If there's a use, insert the move right after the last use
-                                 * this really helps the register allocator as it keeps the lifetime
-                                 * of the temporary short.
-                                 */
-                                if (0 != op.Uses.Count)
+                                if (1 == op.Definitions.Count && 0 == op.Uses.Count)
                                 {
-                                    // FIXME: Depends on sortable instruction offsets, we really need a custom collection here
-                                    op.Uses.Sort(delegate(Instruction a, Instruction b)
-                                    {
-                                        return (a.Offset - b.Offset);
-                                    });
-
-                                    insIdx = insts.IndexOf(op.Uses[op.Uses.Count - 1]) + 1;
+                                    // Replace the operand, as it is only defined but never used again
+                                    op.Replace(res);
                                 }
+                                else
+                                {
+                                    List<Instruction> insts = phi.Blocks[i].Instructions;
+                                    int insIdx = insts.Count - 1;
 
-                                // Make sure we're inserting at a valid position
-                                if (insIdx == -1)
-                                    insIdx = 0;
+                                    /* If there's a use, insert the move right after the last use
+                                     * this really helps the register allocator as it keeps the lifetime
+                                     * of the temporary short.
+                                     */
+                                    if (0 != op.Uses.Count)
+                                    {
+                                        // FIXME: Depends on sortable instruction offsets, we really need a custom collection here
+                                        op.Uses.Sort(delegate(Instruction a, Instruction b)
+                                        {
+                                            return (a.Offset - b.Offset);
+                                        });
 
-                                Instruction move = arch.CreateInstruction(typeof(IR.MoveInstruction), res, op);
-                                insts.Insert(insIdx, move);
+                                        insIdx = insts.IndexOf(op.Uses[op.Uses.Count - 1]) + 1;
+                                    }
+
+
+                                    // Make sure we're inserting at a valid position
+                                    if (insIdx == -1)
+                                        insIdx = 0;
+
+                                    Instruction move = arch.CreateInstruction(typeof(IR.MoveInstruction), res, op);
+                                    insts.Insert(insIdx, move);
+                                }
                             }
                         }
 
