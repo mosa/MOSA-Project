@@ -14,6 +14,9 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
 {
+    /// <summary>
+    /// Represents an operand stored in a machine specific register.
+    /// </summary>
     public class RegisterOperand : Operand
     {
         #region Data members
@@ -65,6 +68,21 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Operand Overrides
 
+        /// <summary>
+        /// Compares with the given operand for equality.
+        /// </summary>
+        /// <param name="other">The other operand to compare with.</param>
+        /// <returns>The return value is true if the operands are equal; false if not.</returns>
+        public override bool Equals(Operand other)
+        {
+            RegisterOperand rop = other as RegisterOperand;
+            return (null != rop && true == Object.ReferenceEquals(rop.Register, this.Register));
+        }
+
+        /// <summary>
+        /// Returns a string representation of <see cref="RegisterOperand"/>.
+        /// </summary>
+        /// <returns>A string representation of the operand.</returns>
         public override string ToString()
         {
             return String.Format("{0} {1}", _register, base.ToString());

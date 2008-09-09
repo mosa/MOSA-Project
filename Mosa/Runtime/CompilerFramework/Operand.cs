@@ -18,12 +18,11 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-
 	/// <summary>
 	/// Abstract base class for IR instruction operands.
 	/// </summary>
-	public abstract class Operand {
-
+	public abstract class Operand : IEquatable<Operand>
+    {
 		#region Static data members
 
 		/// <summary>
@@ -87,6 +86,11 @@ namespace Mosa.Runtime.CompilerFramework
         public virtual bool IsRegister { get { return false; } }
 
         /// <summary>
+        /// Determines if the operand is a stack local variable.
+        /// </summary>
+        public virtual bool IsStackLocal { get { return false; } }
+
+        /// <summary>
         /// Returns the stack type of the operand.
         /// </summary>
         public StackTypeCode StackType 
@@ -97,6 +101,11 @@ namespace Mosa.Runtime.CompilerFramework
             } 
         }
 
+        /// <summary>
+        /// Retrieves the stack type from a sig type.
+        /// </summary>
+        /// <param name="type">The signature type to convert to a stack type code.</param>
+        /// <returns>The equivalent stack type code.</returns>
         public static StackTypeCode StackTypeFromSigType(SigType type)
         {
             StackTypeCode result = StackTypeCode.Unknown;
@@ -172,48 +181,6 @@ namespace Mosa.Runtime.CompilerFramework
 
         #endregion // Properties
 
-/*
- * This should be removed.
-        #region Static methods
-
-        public static TypeReference GetTypeReference(IMetadataProvider provider, StackTypeCode typeCode)
-        {
-            TypeReference result = null;
-            Debug.Assert(typeCode != StackTypeCode.N, @"Native types not supported by this method. Use IArchitecture.NativeType instead.");
-            switch (typeCode)
-            {
-                case StackTypeCode.Int32:
-                    result = NativeTypeReference.Int32;
-                    break;
-
-                case StackTypeCode.Int64:
-                    result = NativeTypeReference.Int64;
-                    break;
-
-                case StackTypeCode.N:
-                    throw new NotSupportedException(@"Can't generically determine the native unsigned integer type.");
-
-                case StackTypeCode.F:
-                    result = NativeTypeReference.Double;
-                    break;
-
-                case StackTypeCode.Ptr:
-                    result = new ReferenceTypeSpecification(NativeTypeReference.Void);
-                    break;
-
-                case StackTypeCode.O:
-                    result = TypeReference.FromName(provider, @"System", @"Object");
-                    break;
-
-                default:
-                    throw new ArgumentException(@"Invalid stack type code.", @"typeCode");
-            }
-
-            return result;
-        }
-
-        #endregion // Static methods
- */
         #region Methods
 
         /// <summary>
@@ -257,11 +224,26 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Object Overrides
 
+        /// <summary>
+        /// Returns a string representation of <see cref="Operand"/>.
+        /// </summary>
+        /// <returns>A string representation of the operand.</returns>
         public override string ToString()
         {
             return String.Format("[Type: {0}]", _type);
         }
 
         #endregion // Object Overrides
+
+        #region IEquatable<Operand> Members
+
+        /// <summary>
+        /// Compares with the given operand for equality.
+        /// </summary>
+        /// <param name="other">The other operand to compare with.</param>
+        /// <returns>The return value is true if the operands are equal; false if not.</returns>
+        public abstract bool Equals(Operand other);
+
+        #endregion // IEquatable<Operand> Members
     }
 }

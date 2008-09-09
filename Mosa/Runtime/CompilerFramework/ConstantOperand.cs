@@ -19,7 +19,8 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Represent a constant operand.
 	/// </summary>
-	public sealed class ConstantOperand : Operand {
+	public sealed class ConstantOperand : Operand
+    {
 		#region Static data members
 /*
 		public static Constant MinusOne = new Constant(TypeReference.Int32, -1);
@@ -101,6 +102,21 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Operand Overrides
 
+        /// <summary>
+        /// Compares with the given operand for equality.
+        /// </summary>
+        /// <param name="other">The other operand to compare with.</param>
+        /// <returns>The return value is true if the operands are equal; false if not.</returns>
+        public override bool Equals(Operand other)
+        {
+            ConstantOperand cop = other as ConstantOperand;
+            return (null != cop && null != cop.Value && null != this.Value && cop.Value.Equals(this.Value));
+        }
+
+        /// <summary>
+        /// Returns a string representation of <see cref="ConstantOperand"/>.
+        /// </summary>
+        /// <returns>A string representation of the operand.</returns>
         public override string ToString()
         {
             return String.Format("const {0} {1}", _value, _type);
