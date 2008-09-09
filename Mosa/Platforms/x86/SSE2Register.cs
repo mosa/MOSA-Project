@@ -31,42 +31,42 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Represents SSE2 register XMM0.
         /// </summary>
-        public static readonly SSE2Register XMM0 = new SSE2Register(0);
+        public static readonly SSE2Register XMM0 = new SSE2Register(16, 0);
 
         /// <summary>
         /// Represents SSE2 register XMM1.
         /// </summary>
-        public static readonly SSE2Register XMM1 = new SSE2Register(1);
+        public static readonly SSE2Register XMM1 = new SSE2Register(17, 1);
 
         /// <summary>
         /// Represents SSE2 register XMM2.
         /// </summary>
-        public static readonly SSE2Register XMM2 = new SSE2Register(2);
+        public static readonly SSE2Register XMM2 = new SSE2Register(18, 2);
 
         /// <summary>
         /// Represents SSE2 register XMM3.
         /// </summary>
-        public static readonly SSE2Register XMM3 = new SSE2Register(3);
+        public static readonly SSE2Register XMM3 = new SSE2Register(19, 3);
 
         /// <summary>
         /// Represents SSE2 register XMM4.
         /// </summary>
-        public static readonly SSE2Register XMM4 = new SSE2Register(4);
+        public static readonly SSE2Register XMM4 = new SSE2Register(20, 4);
 
         /// <summary>
         /// Represents SSE2 register XMM5.
         /// </summary>
-        public static readonly SSE2Register XMM5 = new SSE2Register(5);
+        public static readonly SSE2Register XMM5 = new SSE2Register(21, 5);
 
         /// <summary>
         /// Represents SSE2 register XMM6.
         /// </summary>
-        public static readonly SSE2Register XMM6 = new SSE2Register(6);
+        public static readonly SSE2Register XMM6 = new SSE2Register(22, 6);
 
         /// <summary>
         /// Represents SSE2 register XMM7.
         /// </summary>
-        public static readonly SSE2Register XMM7 = new SSE2Register(7);
+        public static readonly SSE2Register XMM7 = new SSE2Register(23, 7);
 
         #endregion // Static data members
 
@@ -85,7 +85,8 @@ namespace Mosa.Platforms.x86
         /// Initializes a new SSE2Register.
         /// </summary>
         /// <param name="registerCode">The SSE2 register index of this instance.</param>
-        private SSE2Register(int registerCode)
+        private SSE2Register(int index, int registerCode) :
+            base(index, false)
         {
             _registerCode = registerCode;
         }

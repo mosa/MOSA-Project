@@ -19,10 +19,42 @@ namespace Mosa.Runtime.CompilerFramework
     /// </summary>
     public abstract class Register
     {
+        #region Data members
+
         /// <summary>
-        /// Holds the machine specific index or code of the register.
+        /// Holds the register index.
         /// </summary>
-        public abstract int RegisterCode { get; }
+        private int _index;
+
+        #endregion // Data members
+
+        #region Construction
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="Register"/>.
+        /// </summary>
+        /// <param name="index">The numeric index of the register.</param>
+        protected Register(int index)
+        {
+            _index = index;
+        }
+
+        #endregion // Construction
+
+        #region Properties
+
+        /// <summary>
+        /// Retrieves the numeric index of this register in its architecture.
+        /// </summary>
+        public int Index
+        {
+            get { return _index; }
+        }
+
+        /// <summary>
+        /// Determines if this register is caller saved.
+        /// </summary>
+        public abstract bool IsCallerSaved { get; }
 
         /// <summary>
         /// Determines if this is a floating point register.
@@ -30,9 +62,18 @@ namespace Mosa.Runtime.CompilerFramework
         public abstract bool IsFloatingPoint { get; }
 
         /// <summary>
+        /// Holds the machine specific index or code of the register.
+        /// </summary>
+        public abstract int RegisterCode { get; }
+
+        /// <summary>
         /// Returns the width of the register in bits.
         /// </summary>
         public abstract int Width { get; }
+
+        #endregion // Properties
+
+        #region Methods
 
         /// <summary>
         /// Determines if the given signature type can be stored in this register.
@@ -40,5 +81,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="type">The signature type to check.</param>
         /// <returns>The return value is true if <paramref name="type"/> can be stored in this register.</returns>
         public abstract bool IsValidSigType(SigType type);
+
+        #endregion // Methods
     }
 }

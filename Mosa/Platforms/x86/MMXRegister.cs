@@ -26,42 +26,42 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Represents the MMX register MM0.
         /// </summary>
-        public static readonly MMXRegister MM0 = new MMXRegister(0);
+        public static readonly MMXRegister MM0 = new MMXRegister(8, 0);
 
         /// <summary>
         /// Represents the MMX register MM1.
         /// </summary>
-        public static readonly MMXRegister MM1 = new MMXRegister(1);
+        public static readonly MMXRegister MM1 = new MMXRegister(9, 1);
 
         /// <summary>
         /// Represents the MMX register MM2.
         /// </summary>
-        public static readonly MMXRegister MM2 = new MMXRegister(2);
+        public static readonly MMXRegister MM2 = new MMXRegister(10, 2);
 
         /// <summary>
         /// Represents the MMX register MM3.
         /// </summary>
-        public static readonly MMXRegister MM3 = new MMXRegister(3);
+        public static readonly MMXRegister MM3 = new MMXRegister(11, 3);
 
         /// <summary>
         /// Represents the MMX register MM4.
         /// </summary>
-        public static readonly MMXRegister MM4 = new MMXRegister(4);
+        public static readonly MMXRegister MM4 = new MMXRegister(12, 4);
 
         /// <summary>
         /// Represents the MMX register MM5.
         /// </summary>
-        public static readonly MMXRegister MM5 = new MMXRegister(5);
+        public static readonly MMXRegister MM5 = new MMXRegister(13, 5);
 
         /// <summary>
         /// Represents the MMX register MM6.
         /// </summary>
-        public static readonly MMXRegister MM6 = new MMXRegister(6);
+        public static readonly MMXRegister MM6 = new MMXRegister(14, 6);
 
         /// <summary>
         /// Represents the MMX register MM7.
         /// </summary>
-        public static readonly MMXRegister MM7 = new MMXRegister(7);
+        public static readonly MMXRegister MM7 = new MMXRegister(15, 7);
 
         #endregion // Static data members
 
@@ -80,7 +80,8 @@ namespace Mosa.Platforms.x86
         /// Initializes a new instance of the MMX register.
         /// </summary>
         /// <param name="registerCode">The MMX register index.</param>
-        private MMXRegister(int registerCode)
+        private MMXRegister(int index, int registerCode) :
+            base(index, false)
         {
             _registerCode = registerCode;
         }

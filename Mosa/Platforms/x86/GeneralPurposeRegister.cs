@@ -76,42 +76,42 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Represents the EAX register.
         /// </summary>
-        public static readonly GeneralPurposeRegister EAX = new GeneralPurposeRegister(GPR.EAX);
+        public static readonly GeneralPurposeRegister EAX = new GeneralPurposeRegister(0, GPR.EAX);
 
         /// <summary>
         /// Represents the ECX register.
         /// </summary>
-        public static readonly GeneralPurposeRegister ECX = new GeneralPurposeRegister(GPR.ECX);
+        public static readonly GeneralPurposeRegister ECX = new GeneralPurposeRegister(1, GPR.ECX);
 
         /// <summary>
         /// Represents the EDX register.
         /// </summary>
-        public static readonly GeneralPurposeRegister EDX = new GeneralPurposeRegister(GPR.EDX);
+        public static readonly GeneralPurposeRegister EDX = new GeneralPurposeRegister(2, GPR.EDX);
 
         /// <summary>
         /// Represents the EBX register.
         /// </summary>
-        public static readonly GeneralPurposeRegister EBX = new GeneralPurposeRegister(GPR.EBX);
+        public static readonly GeneralPurposeRegister EBX = new GeneralPurposeRegister(3, GPR.EBX);
 
         /// <summary>
         /// Represents the ESP register.
         /// </summary>
-        public static readonly GeneralPurposeRegister ESP = new GeneralPurposeRegister(GPR.ESP);
+        public static readonly GeneralPurposeRegister ESP = new GeneralPurposeRegister(4, GPR.ESP);
 
         /// <summary>
         /// Represents the EBP register.
         /// </summary>
-        public static readonly GeneralPurposeRegister EBP = new GeneralPurposeRegister(GPR.EBP);
+        public static readonly GeneralPurposeRegister EBP = new GeneralPurposeRegister(5, GPR.EBP);
 
         /// <summary>
         /// Represents the ESI register.
         /// </summary>
-        public static readonly GeneralPurposeRegister ESI = new GeneralPurposeRegister(GPR.ESI);
+        public static readonly GeneralPurposeRegister ESI = new GeneralPurposeRegister(6, GPR.ESI);
 
         /// <summary>
         /// Represents the EDI register.
         /// </summary>
-        public static readonly GeneralPurposeRegister EDI = new GeneralPurposeRegister(GPR.EDI);
+        public static readonly GeneralPurposeRegister EDI = new GeneralPurposeRegister(7, GPR.EDI);
 
         #endregion // Static data members
 
@@ -130,7 +130,8 @@ namespace Mosa.Platforms.x86
         /// Initializes a new instance of <see cref="GeneralPurposeRegister"/>.
         /// </summary>
         /// <param name="gpr">The general purpose register index.</param>
-        private GeneralPurposeRegister(GPR gpr)
+        private GeneralPurposeRegister(int index, GPR gpr) :
+            base(index, gpr == GPR.EAX)
         {
             _gpr = gpr;
         }
