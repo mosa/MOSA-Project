@@ -11,7 +11,6 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers
 {
-
 	/// <summary>
 	/// Implements a keyboard <see cref="IKeyboard"/>.
 	/// </summary>
@@ -24,12 +23,12 @@ namespace Mosa.DeviceDrivers
 		protected bool capLock;
 		protected bool numLock;
 
-		protected bool controlLeftKeyPressed;
-		protected bool controlRightKeyPressed;
-		protected bool altLeftKeyPressed;
-		protected bool altRightKeyPressed;
-		protected bool shiftLeftKeyPressed;
-		protected bool shiftRightKeyPressed;
+		protected bool leftControl;
+		protected bool rightControl;
+		protected bool leftAlt;
+		protected bool rightAlt;
+		protected bool leftShift;
+		protected bool rightShift;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Keyboard"/> class.
@@ -43,103 +42,160 @@ namespace Mosa.DeviceDrivers
 			capLock = false;
 			numLock = false;
 
-			controlLeftKeyPressed = false;
-			controlRightKeyPressed = false;
-			altLeftKeyPressed = false;
-			altRightKeyPressed = false;
-			shiftLeftKeyPressed = false;
-			shiftRightKeyPressed = false;
+			leftControl = false;
+			rightControl = false;
+			leftAlt = false;
+			rightAlt = false;
+			leftShift = false;
+			rightShift = false;
 		}
 
 		/// <summary>
 		/// Gets the key pressed.
 		/// </summary>
 		/// <returns></returns>
-		public char GetKeyPressed()
+		public Key GetKeyPressed()
 		{
 			for (; ; ) {
 				byte scanCode = keyboardDevice.GetScanCode();
 
-				Key key = scanCodeMap.ConvertScanCode(scanCode);
+				KeyEvent keyEvent = scanCodeMap.ConvertScanCode(scanCode);
 
-				if (key.SpecialKey == Key.Special.RegularKey)
-					return key.Character;
+				if (keyEvent.KeyType == KeyType.RegularKey) {
+					if (keyEvent.KeyPress == KeyEvent.Press.Make) {
+						Key key = new Key();
+						key.KeyType = KeyType.RegularKey;
+						key.Character = keyEvent.Character;
+						key.Alt = Alt;
+						key.Control = Control;
+						key.Shift = Shift;
+						return key;
+					}
+				}
 
-				if (key.SpecialKey == Key.Special.CapsLock)
-					capLock = (key.KeyPress == Key.Press.Make);
+				if (keyEvent.KeyType == KeyType.CapsLock)
+					capLock = (keyEvent.KeyPress == KeyEvent.Press.Make);
 
-				if (key.SpecialKey == Key.Special.NumLock)
-					numLock = (key.KeyPress == Key.Press.Make);
+				if (keyEvent.KeyType == KeyType.NumLock)
+					numLock = (keyEvent.KeyPress == KeyEvent.Press.Make);
 
-				if (key.SpecialKey == Key.Special.ScrollLock)
-					scrollLock = (key.KeyPress == Key.Press.Make);
+				if (keyEvent.KeyType == KeyType.ScrollLock)
+					scrollLock = (keyEvent.KeyPress == KeyEvent.Press.Make);
 
-				if (key.SpecialKey == Key.Special.LeftControl)
-					controlLeftKeyPressed = (key.KeyPress == Key.Press.Make);
+				if (keyEvent.KeyType == KeyType.LeftControl)
+					leftControl = (keyEvent.KeyPress == KeyEvent.Press.Make);
 
-				if (key.SpecialKey == Key.Special.RightControl)
-					controlRightKeyPressed = (key.KeyPress == Key.Press.Make);
-				
-				if (key.SpecialKey == Key.Special.LeftAlt)
-					altLeftKeyPressed = (key.KeyPress == Key.Press.Make);
-				
-				if (key.SpecialKey == Key.Special.RightAlt)
-					altRightKeyPressed = (key.KeyPress == Key.Press.Make);
-				
-				if (key.SpecialKey == Key.Special.LeftShift)
-					shiftLeftKeyPressed = (key.KeyPress == Key.Press.Make);
+				if (keyEvent.KeyType == KeyType.RightControl)
+					rightControl = (keyEvent.KeyPress == KeyEvent.Press.Make);
 
-				if (key.SpecialKey == Key.Special.RightShift)
-					shiftRightKeyPressed = (key.KeyPress == Key.Press.Make);
+				if (keyEvent.KeyType == KeyType.LeftAlt)
+					leftAlt = (keyEvent.KeyPress == KeyEvent.Press.Make);
+
+				if (keyEvent.KeyType == KeyType.RightAlt)
+					rightAlt = (keyEvent.KeyPress == KeyEvent.Press.Make);
+
+				if (keyEvent.KeyType == KeyType.LeftShift)
+					leftShift = (keyEvent.KeyPress == KeyEvent.Press.Make);
+
+				if (keyEvent.KeyType == KeyType.RightShift)
+					rightShift = (keyEvent.KeyPress == KeyEvent.Press.Make);
 			}
 		}
 
 		/// <summary>
-		/// Determines whether [scroll lock is pressed].
+		/// Gets a value indicating whether [the scroll lock key is pressed].
 		/// </summary>
-		/// <returns>
-		/// 	<c>true</c> if [scroll lock is pressed]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool IsScrollLockOn() { return scrollLock; }
+		/// <value>
+		/// 	<c>true</c> if [the scroll lock key is pressed]; otherwise, <c>false</c>.
+		/// </value>
+		public bool ScrollLock { get { return scrollLock; } set { scrollLock = value; } }
 
 		/// <summary>
-		/// Determines whether [cap lock is pressed].
+		/// Gets a value indicating whether [the cap lock key is pressed].
 		/// </summary>
-		/// <returns>
-		/// 	<c>true</c> if [cap lock is pressed]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool IsCapLockOn() { return capLock; }
+		/// <value>
+		/// 	<c>true</c> if [the cap lock key is pressed]; otherwise, <c>false</c>.
+		/// </value>
+		public bool CapLock { get { return capLock; } set { capLock = value; } }
 
 		/// <summary>
-		/// Determines whether [num lock is pressed].
+		/// Gets a value indicating whether [the num lock key is pressed].
 		/// </summary>
-		/// <returns>
-		/// 	<c>true</c> if [num lock is pressed]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool IsNumLockOn() { return numLock; }
+		/// <value>
+		/// 	<c>true</c> if [the num lock key is pressed]; otherwise, <c>false</c>.
+		/// </value>
+		public bool NumLock { get { return numLock; } set { numLock = value; } }
 
 		/// <summary>
-		/// Determines whether [the control key is pressed].
+		/// Gets a value indicating whether [the left control key is pressed].
 		/// </summary>
-		/// <returns>
-		/// 	<c>true</c> if [the control key is pressed]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool IsControlKeyPressed() { return (controlLeftKeyPressed || controlRightKeyPressed); }
+		/// <value>
+		/// 	<c>true</c> if [the left control key is pressed]; otherwise, <c>false</c>.
+		/// </value>
+		public bool LeftControl { get { return leftControl; } set { leftControl = value; } }
 
 		/// <summary>
-		/// Determines whether [the alt key is pressed].
+		/// Gets a value indicating whether [the right control key is pressed].
 		/// </summary>
-		/// <returns>
-		/// 	<c>true</c> if [the alt key is pressed]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool IsAltKeyPressed() { return (altLeftKeyPressed || altRightKeyPressed); }
+		/// <value>
+		/// 	<c>true</c> if [the right control key is pressed]; otherwise, <c>false</c>.
+		/// </value>
+		public bool RightControl { get { return rightControl; } set { rightControl = value; } }
 
 		/// <summary>
-		/// Determines whether [the shift key is pressed].
+		/// Gets a value indicating whether [the left alt key is pressed].
 		/// </summary>
-		/// <returns>
-		/// 	<c>true</c> if [the shift key is pressed]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool IsShiftKeyPressed() { return (shiftLeftKeyPressed || shiftRightKeyPressed); }
+		/// <value>
+		/// 	<c>true</c> if [the left alt key is pressed]; otherwise, <c>false</c>.
+		/// </value>
+		public bool LeftAlt { get { return leftAlt; } set { leftAlt = value; } }
+
+		/// <summary>
+		/// Gets a value indicating whether [the right alt key is pressed].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [the right alt key is pressed]; otherwise, <c>false</c>.
+		/// </value>
+		public bool RightAlt { get { return rightAlt; } set { rightAlt = value; } }
+
+		/// <summary>
+		/// Gets a value indicating whether [the left shift key is pressed].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [the left shift key is pressed]; otherwise, <c>false</c>.
+		/// </value>
+		public bool LeftShift { get { return leftShift; } set { leftShift = value; } }
+
+		/// <summary>
+		/// Gets a value indicating whether [the right shift key is pressed].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [the right shift key is pressed]; otherwise, <c>false</c>.
+		/// </value>
+		public bool RightShift { get { return rightShift; } set { rightShift = value; } }
+
+		/// <summary>
+		/// Gets a value indicating whether [any left control key is pressed].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [any control key is pressed]; otherwise, <c>false</c>.
+		/// </value>
+		public bool Control { get { return rightControl | leftControl; } set { leftControl = true; rightControl = false; } }
+
+		/// <summary>
+		/// Gets a value indicating whether [any alt key is pressed].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [any alt key is pressed]; otherwise, <c>false</c>.
+		/// </value>
+		public bool Alt { get { return rightAlt | leftAlt; } set { leftAlt = true; rightAlt = false; } }
+
+		/// <summary>
+		/// Gets a value indicating whether [any shift key is pressed].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [any shift key is pressed]; otherwise, <c>false</c>.
+		/// </value>
+		public bool Shift { get { return rightShift | leftShift; } set { leftShift = true; rightShift = false; } }
 	}
 }

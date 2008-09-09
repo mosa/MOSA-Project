@@ -18,6 +18,6 @@ namespace Mosa.DeviceDrivers
 		/// </summary>
 		/// <param name="scancode">The scancode.</param>
 		/// <returns></returns>
-		Key ConvertScanCode(byte scancode);
+		KeyEvent ConvertScanCode(byte scancode);
 	}
 }

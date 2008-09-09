@@ -14,8 +14,15 @@ using Mosa.ClassLib;
 
 namespace Mosa.Emulator
 {
+	/// <summary>
+	/// Program with CLR emulated devices
+	/// </summary>
 	public class Program
 	{
+		/// <summary>
+		/// Main
+		/// </summary>
+		/// <param name="args">The args.</param>
 		public static void Main(string[] args)
 		{
 			// Set Device Driver system to the emulator port and memory methods
@@ -30,6 +37,12 @@ namespace Mosa.Emulator
 
 			// Set the interrupt handler
 			DeviceDrivers.Kernel.HAL.SetInterruptHandler(DeviceDrivers.Setup.ResourceManager.InterruptManager.ProcessInterrupt);
+
+			// Create Emulated Keyboard device
+			Mosa.EmulatedDevices.Keyboard keyboard = new Mosa.EmulatedDevices.Keyboard();
+
+			// Added the emulated keyboard device to the device drivers
+			DeviceDrivers.Setup.DeviceManager.Add(keyboard);
 
 			// Get the Text VGA device
 			LinkedList<IDevice> devices = DeviceDrivers.Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGA"));
@@ -116,6 +129,8 @@ namespace Mosa.Emulator
 					}
 				}
 			}
+
+			Key key = keyboard.GetKeyPressed();
 
 			return;
 		}

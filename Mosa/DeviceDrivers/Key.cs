@@ -12,93 +12,58 @@ using Mosa.DeviceDrivers;
 namespace Mosa.DeviceDrivers
 {
 	/// <summary>
-	/// Implements a key event
+	/// Implements a key 
 	/// </summary>
 	public class Key
 	{
-		public enum Press
-		{
-			Make,
-			Break
-		};
+		protected KeyType keyType;
 
-		public enum Special
-		{
-			NoKey,
-			RegularKey,
-			NumLock,
-			ScrollLock,
-			Home,
-			UpArrow,
-			PageUp,
-			LeftArrow,
-			RightArrow,
-			End,
-			DownArrow,
-			PageDown,
-			Insert,
-			Delete,
-			LeftShift,
-			RightShift,
-			RightAlt,
-			LeftAlt,
-			CapsLock,
-			F1,
-			F2,
-			F3,
-			F4,
-			F5,
-			F6,
-			F7,
-			F8,
-			F9,
-			F10,
-			F11,
-			F12,
-			LeftControl,
-			RightControl,
-			LeftWindow,
-			RightWindow,
-			Power,
-			Sleep,
-			Wake,
-			Menu,
-			PrintScreen,
-			ControlPrintScreen,
-			KeyboardError,
-		}
-
-		protected Special special;
-		protected Press press;
 		protected char character;
+		protected bool control;
+		protected bool alt;
+		protected bool shift;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Key"/> class.
 		/// </summary>
 		public Key()
 		{
-			special = Key.Special.NoKey;
-			press = Press.Make;
+			keyType = KeyType.NoKey;
 			character = (char)0x00;
+			control = false;
+			alt = false;
+			shift = false;
 		}
 
 		/// <summary>
 		/// Gets or sets the special key.
 		/// </summary>
 		/// <value>The special key.</value>
-		public Special SpecialKey { get { return special; } set { special = value; } }
-
-		/// <summary>
-		/// Gets or sets the key press.
-		/// </summary>
-		/// <value>The key press.</value>
-		public Press KeyPress { get { return press; } set { press = value; } }
+		public KeyType KeyType { get { return keyType; } set { keyType = value; } }
 
 		/// <summary>
 		/// Gets or sets the character.
 		/// </summary>
 		/// <value>The character.</value>
 		public char Character { get { return character; } set { character = value; } }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the control key is pressed.
+		/// </summary>
+		/// <value><c>true</c> if control key pressed; otherwise, <c>false</c>.</value>
+		public bool Control { get { return control; } set { control = value; } }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the alt key is pressed.
+		/// </summary>
+		/// <value><c>true</c> if alt key pressed; otherwise, <c>false</c>.</value>	
+		public bool Alt { get { return alt; } set { alt = value; } }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the shift key is pressed.
+		/// </summary>
+		/// <value><c>true</c> if shift key pressed; otherwise, <c>false</c>.</value>
+		public bool Shift { get { return shift; } set { shift = value; } }
 	}
 
 
