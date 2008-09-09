@@ -160,10 +160,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(long.MaxValue, long.MinValue)]
         [Row(unchecked((long)0x8000000000000000), 64)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void ShrI4(long a, byte b)
+        public void ShrI8(long a, byte b)
         {
-            CodeSource = "static class Test { static bool ShrI4(long expect, long a, byte b) { return expect == (a >> b); } }";
-            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "ShrI4", (a >> b), a, b));
+            CodeSource = "static class Test { static bool ShrI8(long expect, long a, byte b) { return expect == (a >> b); } }";
+            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "ShrI8", (a >> b), a, b));
         }
     }
 }

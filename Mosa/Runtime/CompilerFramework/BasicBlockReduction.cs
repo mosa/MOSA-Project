@@ -108,8 +108,8 @@ namespace Mosa.Runtime.CompilerFramework
 			if (TryToCombineBlocks(block))
 				changed = true;
 
-			if (TryToRemoveEmptyBlock(block))
-				changed = true;
+			//if (TryToRemoveEmptyBlock(block))
+			//	changed = true;
 
 			//if (TryToHoistBranch(block))
 			//    changed = true;
@@ -308,9 +308,9 @@ namespace Mosa.Runtime.CompilerFramework
 					IBranchInstruction lastInstruction = previousBlock.LastInstruction as IBranchInstruction;
 
 					// Replace targets labels in the last instruction in the previous block with new label
-					for (int i = lastInstruction.BranchTargets.Length - 1; i >= 0; i++) {
+					for (int i = lastInstruction.BranchTargets.Length - 1; i >= 0; --i) {
 						if (lastInstruction.BranchTargets[i] == block.Label)
-							lastInstruction.BranchTargets[i] = block.NextBlocks[i].Label;
+							lastInstruction.BranchTargets[i] = block.NextBlocks[0].Label;
 					}
 
 					// Add the previous block to the next blocks

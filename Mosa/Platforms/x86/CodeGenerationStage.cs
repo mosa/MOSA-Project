@@ -834,7 +834,10 @@ namespace Mosa.Platforms.x86
                         break;
 
                     case CilElementType.I8:
-                        goto case CilElementType.U8;
+                        tmp = new RegisterOperand(src.Type, MMXRegister.MM0);
+                        _emitter.Mov(tmp, src);
+                        _emitter.Mov(dst, tmp);
+                        break;
 
                     case CilElementType.U8:
                         throw new NotImplementedException();
@@ -888,7 +891,7 @@ namespace Mosa.Platforms.x86
                 case CilElementType.I4: goto case CilElementType.I1;
 
                 case CilElementType.I8:
-                    throw new NotImplementedException();
+                    _emitter.Mov(instruction.Destination, instruction.Source);
                     break;
 
                 case CilElementType.R4:

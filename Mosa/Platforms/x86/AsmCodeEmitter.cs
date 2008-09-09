@@ -488,6 +488,10 @@ namespace Mosa.Platforms.x86
                     result = data.ToString();
                     break;
 
+                case Mosa.Runtime.Metadata.CilElementType.I8:
+                    result = ((long)data).ToString();
+                    break;
+
                 case Mosa.Runtime.Metadata.CilElementType.R4:
                     result = ((float)data).ToString(System.Globalization.NumberFormatInfo.InvariantInfo);
                     break;

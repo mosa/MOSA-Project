@@ -113,7 +113,8 @@ namespace Mosa.Platforms.x86
                         break;
 
                     case StackTypeCode.Int64:
-                        throw new NotImplementedException();
+                        rop = new RegisterOperand(op.Type, MMXRegister.MM0);
+                        break;
                         
                     default:
                         throw new NotSupportedException();

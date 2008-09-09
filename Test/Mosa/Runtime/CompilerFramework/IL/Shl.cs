@@ -134,8 +134,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ShlI8(long a, byte b)
         {
-            CodeSource = "static class Test { static bool ShrI8(long expect, long a, byte b) { return expect == (a << b); } }";
-            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "ShrI8", (a << b), a, b));
+            CodeSource = "static class Test { static bool ShlI8(long expect, long a, byte b) { return expect == (a << b); } }";
+            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "ShlI8", (a << b), a, b));
         }
     }
 }

@@ -350,6 +350,12 @@ namespace Mosa.Platforms.x86
             }
             else
             {
+                if (op1 is ConstantOperand && !(op2 is ConstantOperand))
+                {
+                    Operand tmp = op1;
+                    op1 = op2;
+                    op2 = tmp;
+                }
                 Emit(op1, op2, cd_cmp);
             }
         }
@@ -739,6 +745,10 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x89 }, null),
         };
 
+        private static readonly CodeDef[] cd_movmmxsse = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0xD6 }, null),
+        };
+
         private static readonly CodeDef[] cd_movsx8 = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xBE }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0xBE }, null),
@@ -932,8 +942,10 @@ namespace Mosa.Platforms.x86
                     case CilElementType.U2: goto case CilElementType.I;
                     case CilElementType.U4: goto case CilElementType.I;
 
-                    case CilElementType.I8: goto case CilElementType.R8;
-                    case CilElementType.U8: goto case CilElementType.R8;
+                    case CilElementType.I8: goto case CilElementType.U8;
+                    case CilElementType.U8:
+                        imm = BitConverter.GetBytes(Convert.ToInt64(co.Value));
+                        break;
                     case CilElementType.R4:
                         imm = BitConverter.GetBytes(Convert.ToSingle(co.Value));
                         break;

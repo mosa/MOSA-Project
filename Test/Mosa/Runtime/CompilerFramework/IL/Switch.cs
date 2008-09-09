@@ -27,52 +27,43 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // And reverse
         [Row(2)]
         [Row(-2)]       
-        // (MinValue, X) Cases
-        [Row(sbyte.MinValue)]
-        // (MaxValue, X) Cases
-        [Row(sbyte.MaxValue)]
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SwitchI1(sbyte a)
         {
             CodeSource = @"static class Test { 
-                static bool SwitchI1(sbyte expect, sbyte a) { return expect == Switch_Target(a); } 
-                static sbyte Switch_Target(sbyte a)
+                static bool SwitchI1(sbyte expect, sbyte a)
                 {
+                    sbyte x = sbyte.MinValue;
                     switch(a)
                     {
                         case 0:
-                            return 0;
+                            x =  0;
                             break;
                         case 1:
-                            return 1;
+                            x =  1;
                             break;
                         case -1:
-                            return -1;
+                            x =  -1;
                             break;
                         case 2:
-                            return 2;
+                            x =  2;
                             break;
                         case -2:
-                            return -2;
+                            x =  -2;
                             break;
                         case 23:
-                            return 23;
-                            break;
-                        case sbyte.MinValue:
-                            return sbyte.MinValue;
-                            break;
-                        case sbyte.MaxValue:
-                            return sbyte.MaxValue;
+                            x =  23;
                             break;
                         default:
-                            return 42;
+                            x =  42;
                             break;
                     }
+                    return expect == x;
                 }
             }";
             Assert.IsTrue((bool)Run<I1_I1>("", "Test", "SwitchI1", a, a));
         }
-
+        /*
         delegate bool I2_I2(short expect, short a);
         // Normal Testcases + (0, 0)
         [Row(1)]
@@ -236,6 +227,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                 }
             }";
             Assert.IsTrue((bool)Run<I8_I8>("", "Test", "SwitchI8", a, a));
-        }
+        }*/
     }
 }
