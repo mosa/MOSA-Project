@@ -41,28 +41,59 @@ namespace Mosa.Runtime.CompilerFramework
             {
                 if (block.Instructions.Count > 0)
                 {
-                    for (Instruction instruction = block.Instructions[0]; instruction is IR.PhiInstruction; instruction = block.Instructions[0])
+                    foreach (Instruction instruction in block.Instructions)
                     {
                         IR.PhiInstruction phi = instruction as IR.PhiInstruction;
+                        if (null == phi)
+                            break;
+
                         Operand res = phi.Result;
                         for (int i = 0; i < phi.Blocks.Count; i++)
                         {
                             Operand op = phi.Operands[i];
-                            Instruction move = arch.CreateInstruction(typeof(IR.MoveInstruction), res, op);
+
                             // HACK: Remove phi from the operand use list
                             op.Uses.Remove(phi);
 
-                            List<Instruction> insts = phi.Blocks[i].Instructions;
+                            if (false == Object.ReferenceEquals(res, op))
+                            {
+                                List<Instruction> insts = phi.Blocks[i].Instructions;
+                                int insIdx = insts.Count - 1;
 
-							if (0 < insts.Count && insts[insts.Count - 1] is IBranchInstruction)
-								insts.Insert(insts.Count - 1, move);
-							else {								
-								//insts.Add(move);
-							}
+                                /* If there's a use, insert the move right after the last use
+                                 * this really helps the register allocator as it keeps the lifetime
+                                 * of the temporary short.
+                                 */
+                                if (0 != op.Uses.Count)
+                                {
+                                    // FIXME: Depends on sortable instruction offsets, we really need a custom collection here
+                                    op.Uses.Sort(delegate(Instruction a, Instruction b)
+                                    {
+                                        return (a.Offset - b.Offset);
+                                    });
+
+                                    insIdx = insts.IndexOf(op.Uses[op.Uses.Count - 1]) + 1;
+                                }
+
+                                // Make sure we're inserting at a valid position
+                                if (insIdx == -1)
+                                    insIdx = 0;
+
+                                Instruction move = arch.CreateInstruction(typeof(IR.MoveInstruction), res, op);
+                                insts.Insert(insIdx, move);
+                            }
                         }
 
-                        // Remove the PHI instruction
-                        block.Instructions.RemoveAt(0);
+                        /* HACK: Hide the PHI instruction.
+                         * 
+                         * We're not removing the PHI instruction as it may still be valuable to calculate
+                         * live ranges in later stages (e.g. register allocation) in those cases, the PHI
+                         * function causes the live range to be virtually "extended".
+                         * 
+                         */
+                        phi.Ignore = true;
+                        //block.Instructions.RemoveAt(0);
+
                         // HACK: Remove phi from the operand def list
                         res.Definitions.Remove(phi);
                     }
