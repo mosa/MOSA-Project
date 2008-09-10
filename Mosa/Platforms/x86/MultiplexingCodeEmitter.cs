@@ -122,6 +122,14 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        public void Adc(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Adc(op1, op2);
+            });
+        }
+
         public void Call(RuntimeMethod method)
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)

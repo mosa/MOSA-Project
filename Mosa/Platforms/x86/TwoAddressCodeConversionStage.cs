@@ -523,6 +523,11 @@ namespace Mosa.Platforms.x86
             HandleArith(instruction);
         }
 
+        void IX86InstructionVisitor<int>.Adc(AdcInstruction instruction, int arg)
+        {
+            HandleArith(instruction);
+        }
+
         void IX86InstructionVisitor<int>.Sub(SubInstruction instruction, int arg)
         {
             Operand result = instruction.Results[0];
@@ -661,7 +666,7 @@ namespace Mosa.Platforms.x86
 
         #region Internals
 
-        private void HandleArith(IL.ArithmeticInstruction instruction)
+        private void HandleArith(Instruction instruction)
         {
             Operand result = instruction.Results[0];
             Operand[] ops = instruction.Operands;

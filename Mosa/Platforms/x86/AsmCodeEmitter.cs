@@ -119,6 +119,14 @@ namespace Mosa.Platforms.x86
             
         }
 
+        public void Adc(Operand op1, Operand op2)
+        {
+            if (op1 is ConstantOperand)
+                throw new NotSupportedException(@"Constants are not allowed as destination.");
+            _textWriter.WriteLine("\t\tadc\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
+
+        }
+
         public void Call(RuntimeMethod method)
         {
             // HACK: method.DeclaringType is not setup right now, just emit the method name.

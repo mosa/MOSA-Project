@@ -28,8 +28,16 @@ namespace Mosa.Platforms.x86
     {
         #region Types
 
+        /// <summary>
+        /// 
+        /// </summary>
         struct Patch
         {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="label"></param>
+            /// <param name="position"></param>
             public Patch(int label, long position)
             {
                 this.label = label;
@@ -37,11 +45,26 @@ namespace Mosa.Platforms.x86
             }
 
             public int label;
+            /// <summary>
+            /// The patch's position in the stream
+            /// </summary>
             public long position;
         }
 
+        /// <summary>
+        /// Used to define OpCodes for various Operations
+        /// and their different OpCodes for different
+        /// types of Operands.
+        /// </summary>
         struct CodeDef
         {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="dest">The destination Operand</param>
+            /// <param name="src">The source Operand</param>
+            /// <param name="code">The corresponding opcodes</param>
+            /// <param name="regField">Additonal parameterfield</param>
             public CodeDef(Type dest, Type src, byte[] code, byte? regField)
             {
                 this.dest = dest;
@@ -181,13 +204,18 @@ namespace Mosa.Platforms.x86
                 {
                     if (p.label == label)
                     {
+                        // Set new position
                         _codeStream.Position = p.position;
+                        // Compute relative offset
                         relOffset = (int)currentPosition - ((int)p.position + 4);
+                        // Write relative offset to stream
                         byte[] bytes = BitConverter.GetBytes(relOffset);
                         _codeStream.Write(bytes, 0, bytes.Length);
+
+                        // Success
                         return true;
                     }
-
+                    // Failed
                     return false;
                 });
 
@@ -292,6 +320,11 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Add(Operand dest, Operand src)
         {
             Emit(dest, src, cd_add);
+        }
+
+        void ICodeEmitter.Adc(Operand dest, Operand src)
+        {
+            Emit(dest, src, cd_adc);
         }
 
         void ICodeEmitter.Call(RuntimeMethod target)
@@ -469,8 +502,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Div(Operand dest, Operand src)
         {
             // Write the opcode byte
-            byte[] code = { 0x99 };
-            Emit(code, null, null, null);
+            Emit(null, null, cd_cwd);
             Emit(src, null, cd_idiv);
         }
         
@@ -639,6 +671,19 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x81 }, 0),
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x03 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x03 }, null)
+        };
+
+        /// <summary>
+        /// Asmcode: ADC
+        /// Adds two values, regarding the Carry-Flag
+        /// 
+        /// Section: Standard x86
+        /// </summary>
+        private static readonly CodeDef[] cd_adc = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x15 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x11 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x13 }, null),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x11 }, null),
         };
 
         /// <summary>

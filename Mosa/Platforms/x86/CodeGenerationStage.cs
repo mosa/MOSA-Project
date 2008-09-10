@@ -89,6 +89,11 @@ namespace Mosa.Platforms.x86
             _emitter.Add(instruction.Results[0], instruction.Operands[1]);
         }
 
+        void IX86InstructionVisitor<int>.Adc(AdcInstruction instruction, int arg)
+        {
+            _emitter.Adc(instruction.Results[0], instruction.Operands[1]);
+        }
+
         void IX86InstructionVisitor<int>.Sub(SubInstruction instruction, int arg)
         {
             _emitter.Sub(instruction.Results[0], instruction.Operands[1]);

@@ -66,6 +66,13 @@ namespace Mosa.Platforms.x86
         void Add(Operand op1, Operand op2);
 
         /// <summary>
+        /// Emits an Adc instruction.
+        /// </summary>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
+        void Adc(Operand op1, Operand op2);
+
+        /// <summary>
         /// Emits a Call instruction
         /// </summary>
         /// <param name="method">The method to be called.</param>
@@ -139,25 +146,25 @@ namespace Mosa.Platforms.x86
         void Je(int dest);
 
         /// <summary>
-        /// Emits a conditional jump greater then.
+        /// Emits a conditional jump greater than.
         /// </summary>
         /// <param name="dest">The target label of the jump.</param>
         void Jg(int dest);
 
         /// <summary>
-        /// Emits a conditional jump greater then or equal.
+        /// Emits a conditional jump greater than or equal.
         /// </summary>
         /// <param name="dest">The target label of the jump.</param>
         void Jge(int dest);
 
         /// <summary>
-        /// Emits a conditional jump less then.
+        /// Emits a conditional jump less than.
         /// </summary>
         /// <param name="dest">The target label of the jump.</param>
         void Jl(int dest);
 
         /// <summary>
-        /// Emits a conditional jump less then or equal.
+        /// Emits a conditional jump less than or equal.
         /// </summary>
         /// <param name="dest">The target label of the jump.</param>
         void Jle(int dest);
@@ -179,7 +186,6 @@ namespace Mosa.Platforms.x86
         /// Emits an NOT instruction.
         /// </summary>
         /// <param name="dest">The destination operand of the instruction.</param>
-        /// <param name="src">The source operand of the instruction.</param>
         void Not(Operand dest);
 
         /// <summary>

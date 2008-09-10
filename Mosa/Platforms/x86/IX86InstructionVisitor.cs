@@ -18,6 +18,7 @@ namespace Mosa.Platforms.x86
     interface IX86InstructionVisitor<ArgType> : IInstructionVisitor<ArgType>
     {
         void Add(AddInstruction addInstruction, ArgType arg);
+        void Adc(AdcInstruction adcInstruction, ArgType arg);
         void Sub(SubInstruction subInstruction, ArgType arg);
         void Mul(MulInstruction mulInstruction, ArgType arg);
         void Div(DivInstruction divInstruction, ArgType arg);
