@@ -319,7 +319,7 @@ namespace Mosa.Runtime.Vm
         /// Loads all types from the given metadata module.
         /// </summary>
         /// <param name="module">The metadata module to load the types from.</param>
-        /// <param name="typeOffset">The offset into the type array, where we start loading.</param>
+        /// <param name="offset">The offset into the type array, where we start loading.</param>
         private void LoadTypes(IMetadataModule module, int offset)
         {
             TokenTypes maxTypeDef, maxField, maxMethod, maxLayout, tokenLayout = TokenTypes.ClassLayout + 1;
@@ -491,7 +491,8 @@ namespace Mosa.Runtime.Vm
         /// Loads all generic parameter definitions of generic methods and types.
         /// </summary>
         /// <param name="module">The metadata module to load generic parameters from.</param>
-        /// <param name="modOffset">The module offsets structure.</param>
+        /// <param name="typeOffset"></param>
+        /// <param name="methodOffset">The module offsets structure.</param>
         private void LoadGenerics(IMetadataModule module, int typeOffset, int methodOffset)
         {
             IMetadataProvider md = module.Metadata;
@@ -560,7 +561,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Loads all custom attributes from the assembly.
         /// </summary>
-        /// <param name="metadata">The metadata to load attributes from.</param>
+        /// <param name="module">The module to load attributes from.</param>
         /// <param name="modOffset">The module offset.</param>
         private void LoadCustomAttributes(IMetadataModule module, ModuleOffsets modOffset)
         {

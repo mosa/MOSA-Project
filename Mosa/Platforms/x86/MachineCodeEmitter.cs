@@ -1132,7 +1132,6 @@ namespace Mosa.Platforms.x86
                     case CilElementType.R8: goto default;
                     default:
                         throw new NotSupportedException();
-                        break;
                 }
             }
             else if (op is RegisterOperand)
@@ -1153,8 +1152,8 @@ namespace Mosa.Platforms.x86
         /// Calculates the value of the modR/M byte and SIB bytes.
         /// </summary>
         /// <param name="regField">The modR/M regfield value.</param>
-        /// <param name="dest">The destination operand.</param>
-        /// <param name="src">The source operand.</param>
+        /// <param name="op1">The destination operand.</param>
+        /// <param name="op2">The source operand.</param>
         /// <param name="sib">A potential SIB byte to emit.</param>
         /// <param name="displacement">An immediate displacement to emit.</param>
         /// <returns>The value of the modR/M byte.</returns>

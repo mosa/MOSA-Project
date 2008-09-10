@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Vm
         /// Loads a _stackFrameIndex definition from metadata.
         /// </summary>
         /// <param name="module">The module to load the _stackFrameIndex from.</param>
-        /// <param name="_stackFrameIndex">The _stackFrameIndex metadata row.</param>
+        /// <param name="field">The field metadata row.</param>
         /// <param name="offset">Holds the offset of the _stackFrameIndex in the owner type.</param>
         /// <param name="rva">The RVA of the initialization data</param>
         public RuntimeField(IMetadataModule module, ref FieldRow field, uint offset, uint rva) :

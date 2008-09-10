@@ -101,7 +101,10 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.Mul(MulInstruction instruction, int arg)
         {
-            _emitter.Mul(instruction.Results[0], instruction.Operands[1]);
+            if (instruction.Results[0].StackType == StackTypeCode.Int64 || instruction.Operands[1].StackType == StackTypeCode.Int64)
+                MulI8(instruction.Results[0], instruction.Operands[1]);
+            else
+                _emitter.Mul(instruction.Results[0], instruction.Operands[1]);
         }
 
         void IX86InstructionVisitor<int>.Div(DivInstruction instruction, int arg)
@@ -783,6 +786,54 @@ namespace Mosa.Platforms.x86
         private void UnsupportedInstruction()
         {
             throw new NotSupportedException(@"Instruction can not be emitted and requires appropriate expansion and runtime support.");
+        }
+
+        private void MulI8(Operand dest, Operand src)
+        {
+            RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX);
+            RegisterOperand ebx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EBX);
+            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
+            RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX);
+
+            _emitter.Push(eax);
+            _emitter.Push(ebx);
+            _emitter.Push(ecx);
+            _emitter.Push(edx);
+
+            //_emitter.Mov(eax, HIWORD(A));
+            //_emitter.Mov(ecx, HIWORD(B));
+            _emitter.Or(ecx, eax);
+            //_emitter.Mov(ecx, LOWORD(B));
+
+            // jnz short hard
+
+            //_emitter.Mov(eax, LOWORD(A));
+            _emitter.Mul(null, ecx); 
+
+            // ret 16
+
+            // hard:
+
+            _emitter.Push(ebx);
+
+            _emitter.Mul(null, ecx);
+            _emitter.Mov(ebx, eax);
+            //_emitter.Mov(eax, LOWORD(A2));
+            //_emitter.Mul(null, HIWORD(B2));
+            _emitter.Add(ebx, eax);
+
+            //_emitter.Mov(eax, LOWORD(A2));
+            _emitter.Mul(null, ecx);
+            _emitter.Add(edx, ebx);
+
+            _emitter.Pop(ebx);
+
+            // ret 16
+
+            _emitter.Pop(edx);
+            _emitter.Pop(ecx);
+            _emitter.Pop(ebx);
+            _emitter.Pop(eax);
         }
 
         #endregion // Internal Helpers

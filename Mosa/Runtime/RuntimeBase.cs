@@ -114,7 +114,7 @@ namespace Mosa.Runtime {
 		/// This function requests allocation of a specific runtime type.
 		/// </summary>
 		/// <param name="type">The type of object to allocate.</param>
-		/// <param name="size">The number of elements to allocate.</param>
+		/// <param name="elements">The number of elements to allocate.</param>
 		/// <returns></returns>
         /// <remarks>
         /// The allocated object is not constructed, e.g. the caller must invoke

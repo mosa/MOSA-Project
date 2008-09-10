@@ -25,7 +25,7 @@ namespace Mosa.Runtime.Metadata {
 		/// <summary>
 		/// Initializes a new instance of <see cref="Mosa.Runtime.Metadata.BlobHeap"/>.
 		/// </summary>
-		/// <param name="provider">The provider buffer, which contains the blob heap.</param>
+        /// <param name="metadata">The provider buffer, which contains the blob heap.</param>
 		/// <param name="offset">The offset into the buffer, where the heap starts.</param>
 		/// <param name="size">The size of the heap.</param>
 		public BlobHeap(byte[] metadata, int offset, int size)
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata {
 		/// <summary>
 		/// Retrieves the blob at the specified offset.
 		/// </summary>
-		/// <param name="offset">The offset into the heap, where the blob begins.</param>
+		/// <param name="token">The token where the blob begins.</param>
 		/// <returns>A byte array, which represents the blob at the specified location.</returns>
 		public byte[] ReadBlob(TokenTypes token)
 		{

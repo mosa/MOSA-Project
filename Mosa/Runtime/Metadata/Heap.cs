@@ -42,7 +42,7 @@ namespace Mosa.Runtime.Metadata {
 		/// <summary>
 		/// Initializes a new instance of <see cref="Mosa.Runtime.Metadata.Heap"/>.
 		/// </summary>
-		/// <param name="provider">The byte array, which holds the provider.</param>
+        /// <param name="metadata">The byte array, which holds the provider.</param>
 		/// <param name="offset">The offset into the byte array, where the heap starts.</param>
 		/// <param name="size">The size of the heap in bytes.</param>
 		public Heap(byte[] metadata, int offset, int size)

@@ -424,7 +424,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 
 			// create fats
-			/// TODO: incomplete
+			// TODO: incomplete
 			BinaryFormat emptyFat = new BinaryFormat(512);
 
 			// clear primary & secondary fats entries

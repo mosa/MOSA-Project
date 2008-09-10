@@ -34,8 +34,8 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <summary>
         /// Initializes a new instance of <see cref="MethodSpecRow"/>.
         /// </summary>
-        /// <param name="methodTable">The method table index of the MethodSpecRow.</param>
-        /// <param name="instantiation">The instantiation blob index of the MethodSpecRow.</param>
+        /// <param name="methodTableIdx">The method table index of the MethodSpecRow.</param>
+        /// <param name="instantiationBlobIdx">The instantiation blob index of the MethodSpecRow.</param>
         public MethodSpecRow(TokenTypes methodTableIdx, TokenTypes instantiationBlobIdx)
         {
             _methodTableIdx = methodTableIdx;

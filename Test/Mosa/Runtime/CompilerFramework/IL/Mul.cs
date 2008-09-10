@@ -18,7 +18,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     [TestFixture]
     public class Mul : MosaCompilerTestRunner
     {
-        delegate bool I4_I1_I1(int expect, sbyte a, sbyte b);
+        /*delegate bool I4_I1_I1(int expect, sbyte a, sbyte b);
         // Normal Testcases + (0, 0)
         [Row(1, 2)]
         [Row(23, 21)]
@@ -196,8 +196,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         {
             CodeSource = "static class Test { static bool MulI4(int expect, int a, int b) { return expect == (a * b); } }";
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "MulI4", (a * b), a, b));
+        }*/
+         
+        delegate bool I8_I8_I8(long expect, long a, long b);
+        // Normal Testcases + (0, 0)
+        [Row(1, 2)]
+        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        public void MulI8(long a, long b)
+        {
+            CodeSource = "static class Test { static bool MulI8(long expect, long a, long b) { return expect == (a * b); } }";
+            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "MulI8", (a * b), a, b));
         }
-
+        /*
         delegate bool R4_R4_R4(float expect, float a, float b);
         [Row(1.0f, 2.0f)]
         [Row(2.0f, 0.0f)]
@@ -228,6 +238,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         {
             CodeSource = "static class Test { static bool MulR8(double expect, double a, double b) { return expect == (a * b); } }";
             Assert.IsTrue((bool)Run<R8_R8_R8>("", "Test", "MulR8", (a * b), a, b));
-        }
+        }*/
     }
 }

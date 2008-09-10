@@ -85,7 +85,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Emits a CALL instruction to the given label.
         /// </summary>
-        /// <param name="method">The label to be called.</param>
+        /// <param name="label">The label to be called.</param>
         /// <remarks>
         /// This only invokes the platform call, it does not push arguments, spill and
         /// save registers or handle the return value.
@@ -248,7 +248,7 @@ namespace Mosa.Platforms.x86
         /// Emits a mov instruction.
         /// </summary>
         /// <param name="dest">The destination of the move.</param>
-        /// <param name="op">The source of the move.</param>
+        /// <param name="src">The source of the move.</param>
         void Mov(Operand dest, Operand src);
 
         /// <summary>

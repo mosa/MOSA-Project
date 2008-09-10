@@ -121,7 +121,6 @@ namespace Mosa.FileSystem.VFS
 		/// Performs an iterative lookup of the given path starting from the root and obeying to the specified flags.
 		/// </summary>
 		/// <param name="path">The path to lookup. This can be a relative or absolute path. Path.DirectorySeparatorChar or Path.AltDirectorySeparatorChar are valid delimiters.</param>
-		/// <param name="root">The root directory to start lookup from.</param>
 		/// <param name="flags">The lookup flags, which control the lookup process.</param>
 		/// <returns>The directory entry of the resolved path.</returns>
 		/// <exception cref="System.Security.SecurityException">The caller does not have access to the path or a component. For example the caller does not have the right to traverse the path.</exception>

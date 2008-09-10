@@ -139,7 +139,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
                 case TokenTypes.MethodSpec:
                     throw new NotImplementedException();
-                    break;
 
                 default:
                     Debug.Assert(false, @"Should never reach this!");

@@ -25,7 +25,7 @@ namespace Mosa.Runtime.Metadata {
 		/// <summary>
 		/// Initializes a new instance of <see cref="Mosa.Runtime.Metadata.GuidHeap"/>.
 		/// </summary>
-		/// <param name="provider">The provider buffer, where the guid heap is located.</param>
+		/// <param name="metadata">The provider buffer, where the guid heap is located.</param>
 		/// <param name="offset">The offset into the buffer, where the GUID heap starts.</param>
 		/// <param name="size">The size of the GUID heap in bytes.</param>
 		public GuidHeap(byte[] metadata, int offset, int size)

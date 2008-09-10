@@ -466,7 +466,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// Decodes the instruction stream of the reader and populates the compiler.
         /// </summary>
         /// <param name="compiler">The compiler to populate.</param>
-        /// <param name="reader">The reader for the instruction stream.</param>
         /// <param name="header">The method header.</param>
         private void Decode(MethodCompilerBase compiler, ref MethodHeader header)
         {

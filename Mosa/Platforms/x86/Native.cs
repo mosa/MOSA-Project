@@ -30,7 +30,6 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Wraps the x86 cli instruction to disable interrupts
         /// </summary>
-        /// <param name="idt">A pointer to the interrupt descriptor table.</param>
         [Intrinsic(typeof(Architecture), typeof(CliInstruction))]
         public static void Cli() { ThrowPlatformNotSupported(); }
 

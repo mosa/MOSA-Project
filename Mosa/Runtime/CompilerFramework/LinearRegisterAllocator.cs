@@ -379,8 +379,8 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Creates a move instruction that moves the value of the operand to the specified register.
         /// </summary>
-        /// <param name="register">The destination register.</param>
-        /// <param name="op">The operand to move.</param>
+        /// <param name="dest">The destination register.</param>
+        /// <param name="src">The operand to move.</param>
         /// <returns>The move instruction.</returns>
         private MoveInstruction CreateMoveInstruction(Operand dest, Operand src)
         {

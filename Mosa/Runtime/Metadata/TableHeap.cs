@@ -258,7 +258,7 @@ namespace Mosa.Runtime.Metadata {
 		/// <summary>
 		/// Determines the size of indexes into the named heap.
 		/// </summary>
-		/// <param name="type">The heap type to retrieve the index size for.</param>
+		/// <param name="index">The heap type to retrieve the index size for.</param>
 		/// <returns>The size of an index in bytes into the requested index type in bytes.</returns>
         private int GetIndexSize(IndexType index)
 		{
@@ -334,7 +334,7 @@ namespace Mosa.Runtime.Metadata {
 		/// Read and decode an index value from the reader.
 		/// </summary>
 		/// <param name="reader">The reader to read from.</param>
-		/// <param name="index">The index type to read.</param>
+		/// <param name="table">The index type to read.</param>
 		/// <returns>The index value.</returns>
         private TokenTypes ReadIndexValue(BinaryReader reader, TokenTypes table)
 		{

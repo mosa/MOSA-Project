@@ -77,7 +77,7 @@ namespace Mosa.Runtime.Loader.PE {
 		/// <summary>
 		/// Tries to populate the provider root structure from the given stream.
 		/// </summary>
-		/// <param name="provider">Byte array, which holds the (uint)</param>
+        /// <param name="metadata">Byte array, which holds the (uint)</param>
 		/// <returns>True, if the stream contains a valid and supported provider format.</returns>
 		public void Initialize(byte[] metadata)
 		{

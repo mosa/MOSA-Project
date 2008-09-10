@@ -41,7 +41,6 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// Mounts a file system from the specified stream/device.
 		/// </summary>
-		/// <param name="path">The path to the device or file, which holds the filesystem to open.</param>
 		/// <returns>The mounted filesystem.</returns>
 		/// <remarks>
 		/// File system implementations should not blindly assume that the block device or file really
@@ -58,7 +57,6 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// Formats the media with the filesystem.
 		/// </summary>
-		/// <param name="path">The path of the stream/device to format with the file system.</param>
 		/// <param name="settings">The settings for the filesystem to create.</param>
 		/// <returns>The created and mounted filesystem.</returns>
 		bool Format(SettingsBase settings);

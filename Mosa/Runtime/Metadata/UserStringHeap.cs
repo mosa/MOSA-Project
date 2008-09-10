@@ -24,7 +24,7 @@ namespace Mosa.Runtime.Metadata {
 		/// <summary>
 		/// Initializes a new instance of the UserStringHeap.
 		/// </summary>
-		/// <param name="provider">The provider buffer, which contains the heap.</param>
+        /// <param name="metadata">The provider buffer, which contains the heap.</param>
 		/// <param name="offset">The offset into the buffer, where the heap starts.</param>
 		/// <param name="size">The size of the heap in bytes.</param>
 		public UserStringHeap(byte[] metadata, int offset, int size)

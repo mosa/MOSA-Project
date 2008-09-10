@@ -73,9 +73,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// A request to patch already emitted code by storing the calculated address value.
         /// </summary>
+        /// <param name="linkType"></param>
         /// <param name="method">The method whose code is being patched.</param>
-        /// <param name="address">The position in code, where it should be patched.</param>
-        /// <param name="relativeAddress">The value to store at the position in code.</param>
+        /// <param name="targetAddress">The position in code, where it should be patched.</param>
+        /// <param name="methodOffset">The value to store at the position in code.</param>
         protected abstract void ApplyPatch(LinkType linkType, RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress);
 
         #endregion // Methods

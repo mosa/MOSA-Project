@@ -33,7 +33,7 @@ namespace Mosa.Runtime.CompilerFramework
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of <see cref="StackLayoutStage">.
+        /// Initializes a new instance of <see cref="StackLayoutStage"/>.
         /// </summary>
         public StackLayoutStage()
         {
