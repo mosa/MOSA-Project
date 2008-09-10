@@ -273,8 +273,12 @@ namespace Mosa.Platforms.x86
 
         public void Mov(Operand dest, Operand src)
         {
-            if (dest is ConstantOperand)
-                throw new NotSupportedException(@"Constants are not allowed as destination.");
+            if (dest is ConstantOperand && !(src is ConstantOperand))
+            {
+                Operand tmp = dest;
+                dest = src;
+                src = tmp;
+            }
 
             if (src is ConstantOperand && src.StackType == StackTypeCode.F)
             {

@@ -322,34 +322,30 @@ namespace Mosa.Platforms.x86
 
         void ICodeEmitter.Cmp(Operand op1, Operand op2)
         {
+            // Check if we have to compare floatingpoint values
             if (op1.StackType == StackTypeCode.F || op2.StackType == StackTypeCode.F)
             {
                 RegisterOperand rop;
+                // Check for single precision and cast if necessary
                 if (op1.Type.Type == CilElementType.R4)
                 {
                     Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0), op1, cd_cvtss2sd);
                     op1 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0);
                 }
+                // Check for single precision and cast if necessary
                 if (op2.Type.Type == CilElementType.R4)
                 {
                     Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1), op2, cd_cvtss2sd);
                     op2 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
                 }
-                    if (op1 is MemoryOperand || op1 is LabelOperand)
-                    {
-                        //rop = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0);
-                        //((ICodeEmitter)this).Mov(rop, op1);
-                        Emit(op1, op2, cd_comisd);
-                    }
-                    else
-                    {
-                        Emit(op1, op2, cd_comisd);
-                    }
-
-                //_codeStream.WriteByte(0x00);    // EQ
+                if (op1 is MemoryOperand || op1 is LabelOperand)
+                    Emit(op1, op2, cd_comisd);
+                else
+                    Emit(op1, op2, cd_comisd);
             }
             else
             {
+                // Swap if needed
                 if (op1 is ConstantOperand && !(op2 is ConstantOperand))
                 {
                     Operand tmp = op1;
@@ -427,60 +423,31 @@ namespace Mosa.Platforms.x86
 
         void ICodeEmitter.Mul(Operand dest, Operand src)
         {
-            // Write the opcode byte
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
             Emit(dest, src, cd_mul);
         }
 
         void ICodeEmitter.SseAdd(Operand dest, Operand src)
         {
-            // Write the opcode byte
-            //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
-            // FIXME: Insert correct opcode here
-            if (!(src is RegisterOperand) && src.Type.Type == CilElementType.R4)
-            {
-                Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1), src, cd_cvtss2sd);
-                src = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
-            }
+            CheckAndConvertR4(ref src);
             Emit(dest, src, cd_addsd);
         }
 
         void ICodeEmitter.SseSub(Operand dest, Operand src)
         {
-            // Write the opcode byte
-            //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
-            // FIXME: Insert correct opcode here
-            if (!(src is RegisterOperand) && src.Type.Type == CilElementType.R4)
-            {
-                Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1), src, cd_cvtss2sd);
-                src = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
-            }
+            CheckAndConvertR4(ref src);
             Emit(dest, src, cd_subsd);
         }
 
         void ICodeEmitter.SseMul(Operand dest, Operand src)
         {
-            // Write the opcode byte
-            //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
-            // FIXME: Insert correct opcode here
-            if (!(src is RegisterOperand) && src.Type.Type == CilElementType.R4)
-            {
-                Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1), src, cd_cvtss2sd);
-                src = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
-            }
+            CheckAndConvertR4(ref src);
             Emit(dest, src, cd_mulsd);
         }
 
         void ICodeEmitter.SseDiv(Operand dest, Operand src)
         {
-            // Write the opcode byte
-            //Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is SSE2Register, @"Destination not an SSE2 register");
-            // FIXME: Insert correct opcode here
-            if (!(src is RegisterOperand) && src.Type.Type == CilElementType.R4)
-            {
-                Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1), src, cd_cvtss2sd);
-                src = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
-            }
+            CheckAndConvertR4(ref src);
             Emit(dest, src, cd_divsd);
         }
 
@@ -509,14 +476,32 @@ namespace Mosa.Platforms.x86
         
         void ICodeEmitter.Mov(Operand dest, Operand src)
         {
+            // If something like 
+            // MOV 3, EAX
+            // is encountered, then it|s highly possible that
+            // MOV EAX, 3
+            // was meant.
+            // So we swap both operands.
+            if (dest is ConstantOperand && !(src is ConstantOperand))
+            {
+                Operand tmp = dest;
+                dest = src;
+                src = tmp;
+            }
+
+            // Check that we're not dealing with floatingpoint values
             if (dest.StackType != StackTypeCode.F && src.StackType != StackTypeCode.F)
             {
                 Emit(dest, src, cd_mov);
             }
+            // We are dealing with floatingpoint values
             else
             {
+                // Check if we have to convert from single to double precision
+                // This also saves us the move operation.
                 if (src.Type.Type == CilElementType.R4)
                     Emit(dest, src, cd_cvtss2sd);
+                // Nope, going double precision
                 else
                     Emit(dest, src, cd_movsd);
             }
@@ -603,6 +588,7 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        /// <seealso cref="ICodeEmitter.Ret()"/>
         void ICodeEmitter.Ret()
         {
             _codeStream.WriteByte(0xC3);
@@ -627,6 +613,12 @@ namespace Mosa.Platforms.x86
 
         #region Code Definition Tables
 
+        /// <summary>
+        /// Asmcode: CWD
+        /// Converts a word into a doubleword
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_cwd = new CodeDef[] {
             new CodeDef(typeof(ConstantOperand),    typeof(ConstantOperand),    new byte[] { 0x99 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x99 }, null),
@@ -637,12 +629,24 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x99 }, null)
         };
 
+        /// <summary>
+        /// Asmcode: ADD
+        /// Adds two values
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_add = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x81 }, 0),
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x03 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x03 }, null)
         };
 
+        /// <summary>
+        /// Asmcode: AND
+        /// Bitwise And on given values
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_and = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 4),
             new CodeDef(typeof(MemoryOperand), typeof(ConstantOperand),         new byte[] { 0x81 }, 4),
@@ -651,6 +655,12 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x21 }, null),
         };
 
+        /// <summary>
+        /// Asmcode: OR
+        /// Bitwise OR on given values
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_or = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 1),
             new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x0B }, null),
@@ -658,6 +668,12 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x09 }, null),
         };
 
+        /// <summary>
+        /// Asmcode: XOR
+        /// Bitwise XOR on given values
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_xor = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 6),
             new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x33 }, null),
@@ -665,12 +681,26 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x31 }, null),
         };
 
+        /// <summary>
+        /// Asmcode: NOT
+        /// Bitwise negation
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_not = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0xF7 }, 2),
             new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0xF7 }, 2),
             new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0xF7 }, 2),
         };
 
+        /// <summary>
+        /// Asmcode: CMDSD
+        /// Compares 2 floatingpointvalues
+        /// 
+        /// Note: Does NOT set E-Flags
+        /// 
+        /// Section: SSE
+        /// </summary>
         private static readonly CodeDef[] cd_cmpsd = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0xC2 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0xC2 }, null),
@@ -678,6 +708,12 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xF2, 0x0F, 0xC2 }, null),
         };
 
+        /// <summary>
+        /// Asmcode: COMISD
+        /// Compares 2 floatingpoint values and sets E-Flags
+        /// 
+        /// Section: SSE
+        /// </summary>
         private static readonly CodeDef[] cd_comisd = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x66, 0x0F, 0x2E }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x66, 0x0F, 0x2E }, null),
@@ -685,6 +721,12 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x66, 0x0F, 0x2E }, null),
         };
 
+        /// <summary>
+        /// Asmcode: CMP
+        /// Compares 2 given values and sets E-Flags
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_cmp = new CodeDef[] {
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x39 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x3B }, null),
@@ -693,50 +735,121 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x81 }, 7),
         };
 
+        /// <summary>
+        /// Asmcode: MUL
+        /// Multiplies 2 given values
+        /// 
+        /// Note: Signed
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_mul = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0xF7 }, 4),
         };
 
+        /// <summary>
+        /// Asmcode: ADDSD
+        /// Adds 2 floatingpoinnt values
+        /// 
+        /// Section: SSE
+        /// </summary>
         private static readonly CodeDef[] cd_addsd = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x58 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x58 }, null),
         };
 
+        /// <summary>
+        /// Asmcode: SUBSD
+        /// Substracts 2 floatingpoint values
+        /// 
+        /// Section: SSE
+        /// </summary>
         private static readonly CodeDef[] cd_subsd = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x5C }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x5C }, null)
         };
 
+
+        /// <summary>
+        /// Asmcode: MULSD
+        /// Multiplies 2 floatingnpoint values
+        /// 
+        /// Section: SSE
+        /// </summary>
         private static readonly CodeDef[] cd_mulsd = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x59 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x59 }, null),
         };
 
+        /// <summary>
+        /// Asmcode: DIVSD
+        /// Divides 2 floatingpoint values
+        /// 
+        /// Section: SSE
+        /// </summary>
         private static readonly CodeDef[] cd_divsd = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x5E }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x5E }, null),
         };
 
+        /// <summary>
+        /// Asmcode: SHL
+        /// Shifts first parameter a given amount of times to the left
+        /// 
+        /// Note: Non-circular
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_shl = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xD3 }, 4),
             new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC1 }, 4),
         };
 
+        /// <summary>
+        /// Asmcode: SHR
+        /// Shifts first parameter a given amount of times to the right
+        /// 
+        /// Note: Non-circular
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_shr = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xD3 }, 5),
             new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC1 }, 5),
         };
 
+        /// <summary>
+        /// Asmcode: DIV
+        /// Divides 2 given values
+        /// 
+        /// Note: Unsigned
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_div = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    null,                       new byte[] { 0xF7 }, 6),
             new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0xF7 }, 6),
         };
 
+        /// <summary>
+        /// Asmcode: DIV
+        /// Divides 2 given values
+        /// 
+        /// Note: Signed
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_idiv = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    null,                       new byte[] { 0xF7 }, 7),
             new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0xF7 }, 7),
         };
 
+        /// <summary>
+        /// Asmcode: MOV
+        /// Moves second into first parameter
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_mov = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC7 }, 0),
             new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC7 }, 0),
@@ -745,10 +858,9 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x89 }, null),
         };
 
-        private static readonly CodeDef[] cd_movmmxsse = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0xD6 }, null),
-        };
-
+        /// <summary>
+        /// Asmcode: MOVSX8
+        /// </summary>
         private static readonly CodeDef[] cd_movsx8 = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xBE }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0xBE }, null),
@@ -769,6 +881,12 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0xB7 }, null),
         };
 
+        /// <summary>
+        /// Asmcode: MOVSD
+        /// Moves second into first parameter. Floatingpoint
+        /// 
+        /// Section: SSE
+        /// </summary>
         private static readonly CodeDef[] cd_movsd = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0xF2, 0x0F, 0x10 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x10 }, null),
@@ -776,12 +894,26 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x11 }, null),
         };
 
+        /// <summary>
+        /// Asmcode: CVTSS2SD
+        /// Converts single precision value into double precision floatingpoint value
+        /// 
+        /// Section: SSE
+        /// </summary>
         private static readonly CodeDef[] cd_cvtss2sd = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0xF3, 0x0F, 0x5A }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF3, 0x0F, 0x5A }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0x5A }, null),
         };
 
+        /// <summary>
+        /// Asmcode: SUB
+        /// Substracts 2 given values
+        /// 
+        /// Note: Signed
+        /// 
+        /// Section: Standard x86
+        /// </summary>
         private static readonly CodeDef[] cd_sub = new CodeDef[] {
             new CodeDef(typeof(Operand),            typeof(ConstantOperand),    new byte[] { 0x81 }, 5),
             new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0x2B }, 0),
@@ -922,7 +1054,10 @@ namespace Mosa.Platforms.x86
             {
                 // Add the displacement
                 MemoryOperand mo = (MemoryOperand)op;
-                imm = BitConverter.GetBytes(mo.Offset.ToInt32());
+                if (op.StackType == StackTypeCode.Int64)
+                    imm = BitConverter.GetBytes(mo.Offset.ToInt64());
+                else
+                    imm = BitConverter.GetBytes(mo.Offset.ToInt32());
             }
             else if (op is ConstantOperand)
             {
@@ -1071,6 +1206,21 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        /// <summary>
+        /// Checks if the given operand is a single precision floatingpoint value
+        /// and converts it to double precision for furhter usage.
+        /// </summary>
+        /// <param name="src">The operand to check</param>
+        private void CheckAndConvertR4(ref Operand src)
+        {
+            if (!(src is RegisterOperand) && src.Type.Type == CilElementType.R4)
+            {
+                // First, convert it to double precision
+                Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1), src, cd_cvtss2sd);
+                // New Operand is a Registeroperand
+                src = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
+            }
+        }
         #endregion // Code Generation
     }
 }

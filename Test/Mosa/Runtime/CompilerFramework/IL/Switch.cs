@@ -21,12 +21,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         delegate bool I1_I1(sbyte expect, sbyte a);
         // Normal Testcases + (0, 0)
         [Row(1)]
-        [Row(23)]
-        [Row(-1)]
-        [Row(0)]
+        //[Row(23)]
+        //[Row(-1)]
+        //[Row(0)]
         // And reverse
-        [Row(2)]
-        [Row(-2)]       
+        //[Row(2)]
+        //[Row(-2)]       
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SwitchI1(sbyte a)
         {
