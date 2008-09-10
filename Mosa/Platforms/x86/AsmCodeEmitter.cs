@@ -479,7 +479,7 @@ namespace Mosa.Platforms.x86
             }
             // Still here, so op is of an unknown or unsupported type.
             else
-                throw new NotSupportedException(@"Unknown operand type");
+                return "";// throw new NotSupportedException(@"Unknown operand type");
         }
 
         private string WriteLiteral(SigType type, object data)

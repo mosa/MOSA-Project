@@ -808,7 +808,7 @@ namespace Mosa.Platforms.x86
             // jnz short hard
 
             //_emitter.Mov(eax, LOWORD(A));
-            _emitter.Mul(null, ecx); 
+            _emitter.Mul(eax, ecx); 
 
             // ret 16
 
@@ -816,14 +816,14 @@ namespace Mosa.Platforms.x86
 
             _emitter.Push(ebx);
 
-            _emitter.Mul(null, ecx);
+            _emitter.Mul(eax, ecx);
             _emitter.Mov(ebx, eax);
             //_emitter.Mov(eax, LOWORD(A2));
             //_emitter.Mul(null, HIWORD(B2));
             _emitter.Add(ebx, eax);
 
             //_emitter.Mov(eax, LOWORD(A2));
-            _emitter.Mul(null, ecx);
+            _emitter.Mul(eax, ecx);
             _emitter.Add(edx, ebx);
 
             _emitter.Pop(ebx);
