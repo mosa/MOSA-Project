@@ -227,6 +227,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                 }
             }";
             Assert.IsTrue((bool)Run<I8_I8>("", "Test", "SwitchI8", a, a));
-        }*/
+        }
     }
 }
