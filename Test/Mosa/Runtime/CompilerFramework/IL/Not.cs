@@ -52,7 +52,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void NotI1(sbyte a)
         {
             CodeSource = "static class Test { static bool NotI1(int expect, sbyte a) { return expect == (~a); } }";
-            Assert.IsTrue((bool)Run<I4_I1>("", "Test", "NotI1", ~a, a));
+            Assert.IsTrue((bool)Run<I4_I1>("", "Test", "NotI1", (sbyte)~a, (sbyte)a));
         }
     }
 }
