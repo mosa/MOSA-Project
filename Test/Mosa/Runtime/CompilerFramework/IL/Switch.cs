@@ -76,8 +76,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<I1_I1>("", "Test", "SwitchI1", a, a));
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool I2_I2(short expect, short a);
-        // Normal Testcases + (0, 0)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
         [Row(1)]
         [Row(23)]
         [Row(-1)]
@@ -131,8 +140,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<I2_I2>("", "Test", "SwitchI2", a, a));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool I4_I4(int expect, int a);
-        // Normal Testcases + (0, 0)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
         [Row(1)]
         [Row(23)]
         [Row(-1)]
@@ -186,8 +204,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<I4_I4>("", "Test", "SwitchI4", a, a));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool I8_I8(long expect, long a);
-        // Normal Testcases + (0, 0)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
         [Row(1)]
         [Row(23)]
         [Row(-1)]
