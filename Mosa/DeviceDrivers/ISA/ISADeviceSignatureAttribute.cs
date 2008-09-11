@@ -21,7 +21,7 @@ namespace Mosa.DeviceDrivers.ISA
 		public ushort AltPortRange = 0;
 		public bool AutoLoad = false;   // (For built-in drivers only) Set to true if device is expected and has a relatively safe probe method.
 		public string ForceOption = string.Empty;
-		public byte IRQ = 0;
+		public byte IRQ = 0xFF; // 0xFF means unused
 		public uint BaseAddress = 0x00;
 		public uint AddressRange = 0x00;
 	}

@@ -52,7 +52,7 @@ namespace Mosa.DeviceDrivers
 			get
 			{
 				if (interruptHandler == null)
-					return 0;
+					return 0xFF;	// 0xFF means unused
 
 				return interruptHandler.IRQ;
 			}

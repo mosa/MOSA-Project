@@ -125,7 +125,7 @@ namespace Mosa.DeviceDrivers.ISA
 			// Cannot mask IRQ2
 			if (value == 2)
 				return;
-			
+
 			// Clear bit
 			masterInterruptMask = (byte)(masterInterruptMask & (~(1 << value)));
 			masterDataPort.Write8(masterInterruptMask);

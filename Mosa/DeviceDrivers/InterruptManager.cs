@@ -48,8 +48,6 @@ namespace Mosa.DeviceDrivers
         /// <param name="irq"></param>
 		public void ProcessInterrupt(byte irq)
 		{
-			if (irq == 0) return;
-
 			try {
 				spinLock.Enter();
 				foreach (IHardwareDevice hardwareDevice in interruptHandlers[irq])
@@ -67,8 +65,6 @@ namespace Mosa.DeviceDrivers
         /// <param name="hardwareDevice"></param>
 		public void AddInterruptHandler(byte irq, IHardwareDevice hardwareDevice)
 		{
-			if (irq == 0) return;
-
 			try {
 				spinLock.Enter();
 				interruptHandlers[irq].Add(hardwareDevice);
@@ -85,8 +81,6 @@ namespace Mosa.DeviceDrivers
         /// <param name="hardwareDevice"></param>
 		public void ReleaseInterruptHandler(byte irq, IHardwareDevice hardwareDevice)
 		{
-			if (irq == 0) return;
-
 			try {
 				spinLock.Enter();
 				interruptHandlers[irq].Remove(hardwareDevice);

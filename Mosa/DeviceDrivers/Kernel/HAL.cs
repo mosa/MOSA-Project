@@ -100,6 +100,17 @@ namespace Mosa.DeviceDrivers.Kernel
 		{
 			// TODO
 		}
+
+		/// <summary>
+		/// Delays for port IO.
+		/// </summary>
+		internal static void DelayForPortIO()
+		{
+			// Must delay for at least 4 ISA bus clocks
+			// Common approaches are to read and write to port 0x80, or 0xED 
+			// More advanced approaches check DMI (blacklist) to determine if port 0x80 is unsafe, and to use port 0xED instead
+			// Port 0x80 might not be safe on some HP laptops
+		}
 	}
 }
 

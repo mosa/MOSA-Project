@@ -26,12 +26,14 @@ namespace Mosa.DeviceDrivers
 
 		public void Enable()
 		{
-			interruptManager.AddInterruptHandler(irq, hardwareDevice);
+			if (irq != 0xFF)
+				interruptManager.AddInterruptHandler(irq, hardwareDevice);
 		}
 
 		public void Disable()
 		{
-			interruptManager.ReleaseInterruptHandler(irq, hardwareDevice);
+			if (irq != 0xFF)
+				interruptManager.ReleaseInterruptHandler(irq, hardwareDevice);
 		}
 	}
 }
