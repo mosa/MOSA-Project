@@ -35,6 +35,24 @@ namespace Mosa.Jit.SimpleJit
         /// </summary>
         private RawMemoryStream _stream;
 
+        /// <summary>
+        /// Gets the trampoline storage.
+        /// </summary>
+        /// <value>The trampoline storage.</value>
+        internal IntPtr TrampolineStorage
+        {
+            get { return _trampolineStorage; }
+        }
+
+        /// <summary>
+        /// Gets or sets the stream.
+        /// </summary>
+        /// <value>The stream.</value>
+        internal RawMemoryStream Stream
+        {
+            get { return _stream; }
+        }
+
         #endregion // Data members
 
         #region Construction
@@ -44,8 +62,8 @@ namespace Mosa.Jit.SimpleJit
         /// </summary>
         public SimpleJitService()
         {
-            _trampolineStorage = IntPtr.Zero;
-            _stream = (RawMemoryStream)RawMemoryStream.Null;
+            _trampolineStorage = TrampolineStorage;
+            _stream = Stream;
         }
 
         #endregion // Construction
