@@ -47,23 +47,75 @@ namespace Mosa.EmulatedDevices
 	/// </summary>
 	public class VGATextDriver : IDisposable
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public const ushort StandardIOBase = 0x03B0;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public const uint StandardAddressBase = 0xB0000;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> miscellaneousOutput;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> crtControllerIndex;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> crtControllerData;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> crtControllerIndexColor;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> crtControllerDataColor;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte[] memory = new byte[0x10000];
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint baseAddress;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte height;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte width;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort cursorPosition;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte lastCommand;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="baseAddress"></param>
 		public VGATextDriver(uint baseAddress)
 		{
 			this.baseAddress = baseAddress;
@@ -97,6 +149,12 @@ namespace Mosa.EmulatedDevices
 			Console.CursorSize = 1;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="c"></param>
 		public void PutChar(ushort x, ushort y, char c)
 		{
 			int cl = Console.CursorLeft;
@@ -108,6 +166,9 @@ namespace Mosa.EmulatedDevices
 			Console.SetCursorPosition(cl, ct);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public void Dispose()
 		{
 			IOPortDispatch.UnregisterPort(miscellaneousOutput);
@@ -117,11 +178,21 @@ namespace Mosa.EmulatedDevices
 			IOPortDispatch.UnregisterPort(crtControllerDataColor);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
 		public byte Read8(uint address)
 		{
 			return memory[address - baseAddress];
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="value"></param>
 		public void Write8(uint address, byte value)
 		{
 			if ((value != 0) && (memory[address - baseAddress] == value))
@@ -140,6 +211,9 @@ namespace Mosa.EmulatedDevices
 				PutChar(x, y, (char)value);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected void SetCursor()
 		{
 			int y = (int)(cursorPosition / width);
@@ -148,6 +222,11 @@ namespace Mosa.EmulatedDevices
 			Console.SetCursorPosition(x, y);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		public byte CommandWrite(byte data)
 		{
 			switch (data) {
@@ -163,6 +242,11 @@ namespace Mosa.EmulatedDevices
 			return crtControllerIndex.Value;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		public byte CommandWriteColor(byte data)
 		{
 			switch (data) {
@@ -178,6 +262,11 @@ namespace Mosa.EmulatedDevices
 			return crtControllerIndexColor.Value;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		public byte IndexWrite(byte data)
 		{
 

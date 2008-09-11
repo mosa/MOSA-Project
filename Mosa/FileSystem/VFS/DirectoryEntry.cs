@@ -13,6 +13,9 @@ using System.Collections.Generic;
 
 namespace Mosa.FileSystem.VFS
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public sealed class DirectoryEntry
 	{
 
@@ -55,6 +58,9 @@ namespace Mosa.FileSystem.VFS
 
 		#region Construction
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public DirectoryEntry()
 		{
 		}
@@ -62,7 +68,9 @@ namespace Mosa.FileSystem.VFS
 		#endregion // Construction
 
 		#region Properties
-
+        /// <summary>
+        /// 
+        /// </summary>
 		public string Name
 		{
 			get
@@ -71,6 +79,9 @@ namespace Mosa.FileSystem.VFS
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public IVfsNode Node
 		{
 			get
@@ -79,6 +90,9 @@ namespace Mosa.FileSystem.VFS
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public DirectoryEntry Parent
 		{
 			get
@@ -91,6 +105,11 @@ namespace Mosa.FileSystem.VFS
 
 		#region Methods
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
 		public DirectoryEntry Lookup(string name)
 		{
 			/*
@@ -133,6 +152,12 @@ namespace Mosa.FileSystem.VFS
 			return e;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="name"></param>
+        /// <param name="node"></param>
 		private void Setup(DirectoryEntry parent, string name, IVfsNode node)
 		{
 			if (!Object.ReferenceEquals(this, parent))
@@ -166,6 +191,10 @@ namespace Mosa.FileSystem.VFS
 
 		#region Child list functions
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="child"></param>
 		private void InsertChild(DirectoryEntry child)
 		{
 			/*
@@ -201,6 +230,10 @@ namespace Mosa.FileSystem.VFS
 			this.child = child;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="child"></param>
 		private void RemoveChild(DirectoryEntry child)
 		{
 			// FIXME: Thread safety
@@ -223,6 +256,9 @@ namespace Mosa.FileSystem.VFS
 
 		#region Static methods
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public static DirectoryEntry CurrentDirectoryEntry
 		{
 			get

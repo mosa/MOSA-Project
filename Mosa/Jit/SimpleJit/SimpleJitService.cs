@@ -39,8 +39,13 @@ namespace Mosa.Jit.SimpleJit
 
         #region Construction
 
+        /// <summary>
+        /// 
+        /// </summary>
         public SimpleJitService()
         {
+            _trampolineStorage = IntPtr.Zero;
+            _stream = (RawMemoryStream)RawMemoryStream.Null;
         }
 
         #endregion // Construction

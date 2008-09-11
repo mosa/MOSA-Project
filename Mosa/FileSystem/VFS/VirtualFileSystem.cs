@@ -62,6 +62,10 @@ namespace Mosa.FileSystem.VFS
 
 		// FIXME: This is not a good idea and should be removed (using by DirectoryEntry.CurrentDirectory, if no one is set) once
 		// we have a process structure supporting jails.
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public static DirectoryEntry RootDirectoryEntry
 		{
 			get
@@ -78,6 +82,7 @@ namespace Mosa.FileSystem.VFS
 		/// Checks if the caller has access to the inode 
 		/// </summary>
 		/// <param name="path">The resource to check permissions for.</param>
+        /// <param name="mode"></param>
 		/// <returns>True if the requested access mode combination is available to the immediate caller. If any one requested access mode is not available, the result is false.</returns>
 		public static bool Access(string path, AccessMode mode)
 		{
@@ -125,7 +130,6 @@ namespace Mosa.FileSystem.VFS
 		/// Changes the current directory in the thread execution block.
 		/// </summary>
 		/// <param name="path">The path to change to. This path may be relative or absolute.</param>
-		/// <
 		public static void ChangeDirectory(string path)
 		{
 			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path);
@@ -169,6 +173,13 @@ namespace Mosa.FileSystem.VFS
 			DirectoryEntry.Allocate(parent, path.Last, root.Root);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="access"></param>
+        /// <param name="share"></param>
+        /// <returns></returns>
 		public static object Open(string path, FileAccess access, FileShare share)
 		{
 			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path);
@@ -209,21 +220,26 @@ namespace Mosa.FileSystem.VFS
 			return entry.Node.Open(access, share);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="old"></param>
+        /// <param name="newname"></param>
 		public static void Rename(string old, string newname)
 		{
 			// FIXME: 
 			throw new NotImplementedException();
 		}
 
-		/// <summary>
-		/// Resolves the path evaluating all symbolic links.
-		/// </summary>
-		/// <param name="path">The path to resolve.</param>
-		/// <returns>The absolute path, which is actually represented by the given path.</returns>
-		/// <exception cref="System.IO.FileNotFoundException">A component of the path or a symbolic link in the path do not name an existing file system entry.</exception>
-		/// <exception cref="System.IO.PathTooLongException">The path represented by the given path is too long or symbolic links produced infinite recursion.</exception>
-		/// <exception cref="System.IO.IOException">An I/O exception occurred while resolving the path.</exception>
-		/// <exception cref="System.Security.SecurityException">A fragment of the path could not be traversed due to a denied search permission.</exception>
+		// <summary>
+		// Resolves the path evaluating all symbolic links.
+		// </summary>
+		// <param name="path">The path to resolve.</param>
+		// <returns>The absolute path, which is actually represented by the given path.</returns>
+		// <exception cref="System.IO.FileNotFoundException">A component of the path or a symbolic link in the path do not name an existing file system entry.</exception>
+		// <exception cref="System.IO.PathTooLongException">The path represented by the given path is too long or symbolic links produced infinite recursion.</exception>
+		// <exception cref="System.IO.IOException">An I/O exception occurred while resolving the path.</exception>
+		// <exception cref="System.Security.SecurityException">A fragment of the path could not be traversed due to a denied search permission.</exception>
 		//public static String ResolvePath(String path)
 		//{
 		//    DirectoryEntry entry = PathResolver.Resolve(_rootNode, ref path);

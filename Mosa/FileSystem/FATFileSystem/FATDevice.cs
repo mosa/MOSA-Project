@@ -14,8 +14,14 @@ using Mosa.FileSystem.VFS;
 
 namespace Mosa.FileSystem.FATFileSystem
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public class FATDevice : Device, IDevice, IFileSystemDevice
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public FATDevice()
 		{
 			base.name = "FAT";
@@ -23,6 +29,11 @@ namespace Mosa.FileSystem.FATFileSystem
 			base.deviceStatus = DeviceStatus.Available;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="partition"></param>
+        /// <returns></returns>
 		public GenericFileSystem Create(IPartitionDevice partition)
 		{
 			return new FAT(partition);

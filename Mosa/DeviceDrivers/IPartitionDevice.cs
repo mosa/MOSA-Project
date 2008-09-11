@@ -9,14 +9,50 @@
 
 namespace Mosa.DeviceDrivers
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public interface IPartitionDevice
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		uint BlockCount { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		uint BlockSize { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		bool CanWrite { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
 		byte[] ReadBlock(uint block, uint count);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="count"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		bool ReadBlock(uint block, uint count, byte[] data);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="count"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		bool WriteBlock(uint block, uint count, byte[] data);
 	}
 }

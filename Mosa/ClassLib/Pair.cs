@@ -16,7 +16,14 @@ namespace Mosa.ClassLib
 	/// <typeparam name="S"></typeparam>
 	public class Pair<F, S>
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public F First;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public S Second;
 
 		/// <summary>

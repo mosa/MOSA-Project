@@ -13,18 +13,62 @@ using System.Collections;
 
 namespace Mosa.ClassLib
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="K"></typeparam>
+    /// <typeparam name="T"></typeparam>
 	public class RedBlackTree<K, T> where K : IComparable
 	{
-		protected enum Color { Red = 1, Black = 0 };
+        /// <summary>
+        /// 
+        /// </summary>
+		protected enum Color 
+        { 
+            /// <summary>
+            /// 
+            /// </summary>
+            Red = 1, 
+            
+            /// <summary>
+            /// 
+            /// </summary>
+            Black = 0 
+        };
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="NK"></typeparam>
+        /// <typeparam name="NT"></typeparam>
 		protected class RedBlackTreeNode<NK, NT> where NK : IComparable
 		{
+            /// <summary>
+            /// 
+            /// </summary>
 			public Color color;
+
+            /// <summary>
+            /// 
+            /// </summary>
 			public NT data;
+
+            /// <summary>
+            /// 
+            /// </summary>
 			public NK key;
 
+            /// <summary>
+            /// 
+            /// </summary>
 			public RedBlackTreeNode<NK, NT> parent, left, right;
 
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="key"></param>
+            /// <param name="data"></param>
+            /// <param name="color"></param>
 			public RedBlackTreeNode(NK key, NT data, Color color)
 			{
 				this.key = key;
@@ -38,17 +82,35 @@ namespace Mosa.ClassLib
 			//}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected RedBlackTreeNode<K, T> root;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint size = 0;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public uint Size { get { return size; } }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public void Clear()
 		{
 			root = null;
 			size = 0;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
 		protected bool Contains(K key)
 		{
 			RedBlackTreeNode<K, T> cur = root;
@@ -69,6 +131,11 @@ namespace Mosa.ClassLib
 			return false;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
 		public void Insert(K key, T data)
 		{
 			RedBlackTreeNode<K, T> newnode = new RedBlackTree<K, T>.RedBlackTreeNode<K, T>(key, data, Color.Red);
@@ -83,6 +150,10 @@ namespace Mosa.ClassLib
 			size++;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
 		public void Delete(K key)
 		{
 			RedBlackTreeNode<K, T> deletenode = Find(key);
@@ -98,6 +169,11 @@ namespace Mosa.ClassLib
 			size--;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
 		protected RedBlackTreeNode<K, T> Find(K key)
 		{
 			RedBlackTreeNode<K, T> cur = root;
@@ -117,6 +193,11 @@ namespace Mosa.ClassLib
 			return null;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="newnode"></param>
 		protected void Insert(RedBlackTreeNode<K, T> parent, RedBlackTreeNode<K, T> newnode)
 		{
 			int cmp = newnode.key.CompareTo(parent.key);
@@ -138,6 +219,11 @@ namespace Mosa.ClassLib
 					Insert(parent.right, newnode);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
 		protected RedBlackTreeNode<K, T> GetGrandparent(RedBlackTreeNode<K, T> n)
 		{
 			if ((n != null) && (n.parent != null))
@@ -146,6 +232,11 @@ namespace Mosa.ClassLib
 				return null;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
 		protected RedBlackTreeNode<K, T> GetUncle(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> g = GetGrandparent(n);
@@ -157,6 +248,10 @@ namespace Mosa.ClassLib
 				return g.left;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="q"></param>
 		protected void RotateRight(RedBlackTreeNode<K, T> q)
 		{
 			RedBlackTreeNode<K, T> r = q.parent;
@@ -179,6 +274,10 @@ namespace Mosa.ClassLib
 				b.parent = q;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p"></param>
 		protected void RotateLeft(RedBlackTreeNode<K, T> p)
 		{
 			RedBlackTreeNode<K, T> r = p.parent;
@@ -201,11 +300,21 @@ namespace Mosa.ClassLib
 				b.parent = p;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
 		protected bool IsLeaf(RedBlackTreeNode<K, T> n)
 		{
 			return ((n.left == null) && (n.right == null));
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="c"></param>
 		protected void ReplaceNode(RedBlackTreeNode<K, T> n, RedBlackTreeNode<K, T> c)
 		{
 			if (n.parent.left == n)
@@ -216,6 +325,10 @@ namespace Mosa.ClassLib
 			c.parent = n.parent;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
 		protected void InsertCase1(RedBlackTreeNode<K, T> n)
 		{
 			if (n.parent == null)
@@ -224,6 +337,10 @@ namespace Mosa.ClassLib
 				InsertCase2(n);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
 		protected void InsertCase2(RedBlackTreeNode<K, T> n)
 		{
 			if (n.parent.color == Color.Black)
@@ -232,6 +349,10 @@ namespace Mosa.ClassLib
 				InsertCase3(n);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
 		protected void InsertCase3(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> u = GetUncle(n);
@@ -249,6 +370,10 @@ namespace Mosa.ClassLib
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
 		protected void InsertCase4(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> g = GetGrandparent(n);
@@ -264,6 +389,10 @@ namespace Mosa.ClassLib
 			InsertCase5(n);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
 		protected void InsertCase5(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> g = GetGrandparent(n);
@@ -278,6 +407,11 @@ namespace Mosa.ClassLib
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
 		protected RedBlackTreeNode<K, T> GetSibling(RedBlackTreeNode<K, T> n)
 		{
 			if (n == n.parent.left)
@@ -286,6 +420,10 @@ namespace Mosa.ClassLib
 				return n.parent.left;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
 		protected void DeleteOneChild(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> child = IsLeaf(n.right) ? n.left : n.right;
@@ -299,12 +437,20 @@ namespace Mosa.ClassLib
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
 		protected void DeleteCase1(RedBlackTreeNode<K, T> n)
 		{
 			if (n.parent != null)
 				DeleteCase2(n);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
 		protected void DeleteCase2(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> s = GetSibling(n);
@@ -320,6 +466,10 @@ namespace Mosa.ClassLib
 			DeleteCase3(n);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
 		protected void DeleteCase3(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> s = GetSibling(n);
@@ -334,7 +484,11 @@ namespace Mosa.ClassLib
 			else
 				DeleteCase4(n);
 		}
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
 		protected void DeleteCase4(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> s = GetSibling(n);
@@ -350,6 +504,10 @@ namespace Mosa.ClassLib
 				DeleteCase5(n);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
 		protected void DeleteCase5(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> s = GetSibling(n);
@@ -373,6 +531,10 @@ namespace Mosa.ClassLib
 			DeleteCase6(n);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
 		protected void DeleteCase6(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> s = GetSibling(n);
@@ -388,7 +550,12 @@ namespace Mosa.ClassLib
 				RotateRight(n.parent);
 			}
 		}
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
 		protected RedBlackTreeNode<K, T> FindMin(RedBlackTreeNode<K, T> s)
 		{
 			if (s == null)
@@ -402,6 +569,11 @@ namespace Mosa.ClassLib
 			return cur;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
 		protected RedBlackTreeNode<K, T> FindMax(RedBlackTreeNode<K, T> s)
 		{
 			if (s == null)

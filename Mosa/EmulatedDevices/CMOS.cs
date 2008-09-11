@@ -19,11 +19,25 @@ namespace Mosa.EmulatedDevices
 	/// </summary>
 	public class CMOS : IDisposable
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public const ushort StandardIOBase = 0x70;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> commandPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> dataPort;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ioBase"></param>
 		public CMOS(ushort ioBase)
 		{
 			commandPort = new IOPort<byte>(ioBase, 0, null, CommandWrite);
@@ -33,12 +47,20 @@ namespace Mosa.EmulatedDevices
 			IOPortDispatch.RegisterPort(dataPort);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public void Dispose()
 		{
 			IOPortDispatch.UnregisterPort(commandPort);
 			IOPortDispatch.UnregisterPort(dataPort);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		protected byte CommandWrite(byte data)
 		{
 			byte result = 0;

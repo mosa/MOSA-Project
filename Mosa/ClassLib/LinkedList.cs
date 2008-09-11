@@ -13,14 +13,39 @@ using System.Collections;
 
 namespace Mosa.ClassLib
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
 	public class LinkedList<T> : IEnumerable<T>, ICollection<T>
 	{
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="U"></typeparam>
 		public class LinkedListNode<U>
 		{
+            /// <summary>
+            /// 
+            /// </summary>
 			public U value;
+
+            /// <summary>
+            /// 
+            /// </summary>
 			public LinkedListNode<U> next;
+
+            /// <summary>
+            /// 
+            /// </summary>
 			public LinkedListNode<U> previous;
 
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="value"></param>
+            /// <param name="previous"></param>
+            /// <param name="next"></param>
 			public LinkedListNode(U value, LinkedListNode<U> previous, LinkedListNode<U> next)
 			{
 				this.value = value;
@@ -30,12 +55,29 @@ namespace Mosa.ClassLib
 
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected LinkedListNode<T> first;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected int count;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public bool IsReadOnly { get { return false; } }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public int Count { get { return count; } }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public LinkedListNode<T> First
 		{
 			get
@@ -44,8 +86,14 @@ namespace Mosa.ClassLib
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected LinkedListNode<T> last;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public LinkedListNode<T> Last
 		{
 			get
@@ -54,16 +102,27 @@ namespace Mosa.ClassLib
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public LinkedList()
 		{
 			first = last = null;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public void Clear()
 		{
 			first = last = null;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
 		public LinkedListNode<T> Find(T value)
 		{
 			LinkedListNode<T> cur = first;
@@ -76,11 +135,21 @@ namespace Mosa.ClassLib
 			return null;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
 		public bool Contains(T value)
 		{
 			return (Find(value) != null);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
 		public LinkedListNode<T> FindLast(T value)
 		{
 			LinkedListNode<T> found = null;
@@ -94,17 +163,31 @@ namespace Mosa.ClassLib
 			return found;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
 		public void Add(T value)
 		{
 			AddLast(value);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
 		public LinkedListNode<T> AddLast(T value)
 		{
 			LinkedListNode<T> node = new LinkedListNode<T>(value, last, null);
 			return AddLast(node);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
 		public LinkedListNode<T> AddLast(LinkedListNode<T> node)
 		{
 			if (first == null) {
@@ -120,12 +203,22 @@ namespace Mosa.ClassLib
 			return node;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
 		public LinkedListNode<T> AddFirst(T value)
 		{
 			LinkedListNode<T> node = new LinkedListNode<T>(value, null, first);
 			return AddFirst(node);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
 		public LinkedListNode<T> AddFirst(LinkedListNode<T> node)
 		{
 			if (first != null)
@@ -137,6 +230,12 @@ namespace Mosa.ClassLib
 			return node;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
 		public LinkedListNode<T> AddAfter(LinkedListNode<T> node, T value)
 		{
 			if (node == null)
@@ -155,6 +254,12 @@ namespace Mosa.ClassLib
 			return cur;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
 		public LinkedListNode<T> AddBefore(LinkedListNode<T> node, T value)
 		{
 			if (node == null)
@@ -173,6 +278,11 @@ namespace Mosa.ClassLib
 			return cur;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
 		public bool Remove(T value)
 		{
 			LinkedListNode<T> node = Find(value);
@@ -184,6 +294,10 @@ namespace Mosa.ClassLib
 			return true;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
 		public void Remove(LinkedListNode<T> node)
 		{
 			if (node == null)
@@ -204,6 +318,9 @@ namespace Mosa.ClassLib
 			count--;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public void RemoveFirst()
 		{
 			if (first == null)
@@ -218,6 +335,9 @@ namespace Mosa.ClassLib
 			count--;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public void RemoveLast()
 		{
 			if (last == null)
@@ -227,6 +347,11 @@ namespace Mosa.ClassLib
 			count--;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="arrayIndex"></param>
 		public void CopyTo(T[] array, int arrayIndex)
 		{
 			if (array == null)
@@ -249,12 +374,20 @@ namespace Mosa.ClassLib
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public IEnumerator<T> GetEnumerator()
 		{
 			for (LinkedListNode<T> cur = first; cur != null; cur = cur.next)
 				yield return cur.value;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			for (LinkedListNode<T> cur = first; cur != null; cur = cur.next)

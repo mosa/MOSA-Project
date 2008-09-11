@@ -18,6 +18,9 @@ namespace Mosa.FileSystem.FATFileSystem
 
 	#region Constants
 
+    /// <summary>
+    /// 
+    /// </summary>
 	internal struct BootSector
 	{
 		internal const uint JumpInstruction = 0x00; // 3 
@@ -64,6 +67,9 @@ namespace Mosa.FileSystem.FATFileSystem
 		internal const uint FAT32_OSBootCode = 0x5A; // 2
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
 	internal struct FSInfo
 	{
 		internal const uint FSI_LeadSignature = 0x00; // 4 - always 0x41615252
@@ -76,6 +82,9 @@ namespace Mosa.FileSystem.FATFileSystem
 		internal const uint FSI_TrailSignature2 = 510; // 4 - always 0xAA55
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
 	internal struct Entry
 	{
 		internal const uint DOSName = 0x00; // 8
@@ -94,20 +103,53 @@ namespace Mosa.FileSystem.FATFileSystem
 		internal const uint EntrySize = 32;
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
 	[Flags]
 	public enum FileAttributes : byte
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		ReadOnly = 0x01,
+        /// <summary>
+        /// 
+        /// </summary>
 		Hidden = 0x02,
+        /// <summary>
+        /// 
+        /// </summary>
 		System = 0x04,
+        /// <summary>
+        /// 
+        /// </summary>
 		VolumeLabel = 0x08,
+        /// <summary>
+        /// 
+        /// </summary>
 		SubDirectory = 0x10,
+        /// <summary>
+        /// 
+        /// </summary>
 		Archive = 0x20,
+        /// <summary>
+        /// 
+        /// </summary>
 		Device = 0x40,
+        /// <summary>
+        /// 
+        /// </summary>
 		Unused = 0x80,
+        /// <summary>
+        /// 
+        /// </summary>
 		LongFileName = 0x0F
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
 	internal struct FileNameAttribute
 	{
 		internal const uint LastEntry = 0x00;
@@ -116,83 +158,227 @@ namespace Mosa.FileSystem.FATFileSystem
 		internal const uint Deleted = 0xE5;
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
 	public enum FATType : byte
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		FAT12 = 12,
+        /// <summary>
+        /// 
+        /// </summary>
 		FAT16 = 16,
+        /// <summary>
+        /// 
+        /// </summary>
 		FAT32 = 32
 	}
 
 	#endregion
 
+    /// <summary>
+    /// 
+    /// </summary>
 	public class FAT : GenericFileSystem
 	{
 		// limitations: fat32 and vfat (long files) are not supported
 		// plus almost all testing has been against fat12 (not fat16)
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public interface ICompare
 		{
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="data"></param>
+            /// <param name="offset"></param>
+            /// <param name="type"></param>
+            /// <returns></returns>
 			bool Compare(byte[] data, uint offset, FATType type);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		private FATType fatType;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint last;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint bad;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint reserved;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint fatMask;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint bytesPerSector;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private byte sectorsPerCluster;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private byte reservedSectors;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private byte nbrFats;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint rootEntries;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint totalClusters;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint fatStart;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint rootDirSectors;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint firstDataSector;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint totalSectors;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint dataSectors;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint dataAreaStart;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint entriesPerSector;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint firstRootDirectorySector;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint fatEntries;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint clusterSizeInBytes;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="partition"></param>
 		public FAT(IPartitionDevice partition)
 			: base(partition)
 		{
 			ReadBootSector();
 		}
 
-		public object SettingsType { get { return new FATSettings(); } }
+        /// <summary>
+        /// 
+        /// </summary>
+		public object SettingsType 
+        { get { return new FATSettings(); } 
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public override IFileSystem CreateVFSMount()
 		{
 			return new VFSFileSystem(this);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public bool IsReadOnly { get { return true; } }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public uint ClusterSizeInBytes { get { return clusterSizeInBytes; } }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cluster"></param>
+        /// <returns></returns>
 		public byte[] ReadCluster(uint cluster)
 		{
 			return partition.ReadBlock(dataAreaStart + ((cluster - 1) * (uint)sectorsPerCluster), clusterSizeInBytes / blockSize);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cluster"></param>
+        /// <param name="block"></param>
+        /// <returns></returns>
 		public bool ReadCluster(uint cluster, byte[] block)
 		{
 			return partition.ReadBlock(dataAreaStart + ((cluster - 1) * (uint)sectorsPerCluster), clusterSizeInBytes / blockSize, block);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cluster"></param>
+        /// <param name="block"></param>
+        /// <returns></returns>
 		public bool WriteCluster(uint cluster, byte[] block)
 		{
 			return partition.WriteBlock(dataAreaStart + ((cluster - 1) * (uint)sectorsPerCluster), clusterSizeInBytes / blockSize, block);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		protected bool ReadBootSector()
 		{
 			valid = false;
@@ -293,6 +479,11 @@ namespace Mosa.FileSystem.FATFileSystem
 			return valid;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fatSettings"></param>
+        /// <returns></returns>
 		public bool Format(FATSettings fatSettings)
 		{
 			if (!partition.CanWrite)
@@ -440,31 +631,61 @@ namespace Mosa.FileSystem.FATFileSystem
 			return ReadBootSector();
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cluster"></param>
+        /// <returns></returns>
 		protected bool IsClusterFree(uint cluster)
 		{
 			return ((cluster & fatMask) == 0x00);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cluster"></param>
+        /// <returns></returns>
 		protected bool IsClusterReserved(uint cluster)
 		{
 			return (((cluster & fatMask) == 0x00) || ((cluster & fatMask) >= reserved) && ((cluster & fatMask) < bad));
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cluster"></param>
+        /// <returns></returns>
 		protected bool IsClusterBad(uint cluster)
 		{
 			return ((cluster & fatMask) == bad);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cluster"></param>
+        /// <returns></returns>
 		protected bool IsClusterLast(uint cluster)
 		{
 			return ((cluster & fatMask) >= last);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cluster"></param>
+        /// <returns></returns>
 		protected bool IsUsed(uint cluster)
 		{
 			return !IsClusterFree(cluster) && !IsClusterReserved(cluster) && !IsClusterBad(cluster) && !IsClusterLast(cluster);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sector"></param>
+        /// <returns></returns>
 		protected uint GetClusterBySector(uint sector)
 		{
 			if (sector < dataAreaStart)
@@ -478,6 +699,11 @@ namespace Mosa.FileSystem.FATFileSystem
 		//    return ((cluster - 2) * sectorspercluster) + firstdatasector;
 		//}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cluster"></param>
+        /// <returns></returns>
 		protected uint GetClusterEntryValue(uint cluster)
 		{
 			uint fatoffset = 0;
@@ -515,6 +741,12 @@ namespace Mosa.FileSystem.FATFileSystem
 			return clusterValue;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cluster"></param>
+        /// <param name="nextcluster"></param>
+        /// <returns></returns>
 		protected bool SetClusterEntryValue(uint cluster, uint nextcluster)
 		{
 			uint fatOffset = 0;
@@ -555,6 +787,12 @@ namespace Mosa.FileSystem.FATFileSystem
 			return true;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="sectors"></param>
+        /// <returns></returns>
 		public static byte GetSectorsPerClusterByTotalSectors(FATType type, uint sectors)
 		{
 			switch (type) {
@@ -590,6 +828,12 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
 		public static string ExtractFileName(byte[] directory, uint index)
 		{
 			// rewrite to use string
@@ -636,6 +880,11 @@ namespace Mosa.FileSystem.FATFileSystem
 			return name.ToString();
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
 		protected static bool IsValidFatCharacter(char c)
 		{
 			if ((c >= 'A') || (c <= 'Z'))
@@ -654,6 +903,13 @@ namespace Mosa.FileSystem.FATFileSystem
 			return false;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="index"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
 		static public uint GetClusterEntry(byte[] data, uint index, FATType type)
 		{
 			BinaryFormat entry = new BinaryFormat(data);
@@ -668,6 +924,12 @@ namespace Mosa.FileSystem.FATFileSystem
 			return cluster;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="compare"></param>
+        /// <param name="startCluster"></param>
+        /// <returns></returns>
 		public DirectoryEntryLocation FindEntry(FAT.ICompare compare, uint startCluster)
 		{
 			uint activeSector = (startCluster == 0) ? firstRootDirectorySector : (startCluster * this.sectorsPerCluster);
@@ -723,6 +985,12 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="directoryBlock"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
 		public uint GetFileSize(uint directoryBlock, uint index)
 		{
 			BinaryFormat directory = new BinaryFormat(partition.ReadBlock(directoryBlock, 1));
@@ -730,6 +998,12 @@ namespace Mosa.FileSystem.FATFileSystem
 			return directory.GetUInt((index * Entry.EntrySize) + Entry.FileSize);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="childBlock"></param>
+        /// <param name="parentBlock"></param>
+        /// <param name="parentBlockIndex"></param>
 		public void Delete(uint childBlock, uint parentBlock, uint parentBlockIndex)
 		{
 			BinaryFormat entry = new BinaryFormat(partition.ReadBlock(parentBlock, 1));
@@ -742,9 +1016,14 @@ namespace Mosa.FileSystem.FATFileSystem
 				throw new System.ArgumentException();	//throw new IOException ("Unable to free all cluster allocations in fat");
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="first"></param>
+        /// <returns></returns>
 		protected bool FreeClusterChain(uint first)
 		{
-			///TODO: add locking
+			//TODO: add locking
 			uint at = first;
 
 			while (true) {
@@ -761,6 +1040,12 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
 		public uint FindNthCluster(uint start, uint count)
 		{
 			// TODO: add locking
@@ -779,6 +1064,11 @@ namespace Mosa.FileSystem.FATFileSystem
 			return at;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <returns></returns>
 		public uint NextCluster(uint start)
 		{
 			// TODO: add locking
@@ -793,11 +1083,15 @@ namespace Mosa.FileSystem.FATFileSystem
 			return at;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		protected uint AllocateCluster()
 		{
-			///TODO: add locking
-			///TODO: improve performance by scanning the block directly for free entries (FAT16 & 32 only)
-			///TODO: keep cache of last allocation and re-use as next starting location
+			//TODO: add locking
+			//TODO: improve performance by scanning the block directly for free entries (FAT16 & 32 only)
+			//TODO: keep cache of last allocation and re-use as next starting location
 			uint at = 0;
 
 			while (at < fatEntries) {
@@ -930,14 +1224,39 @@ namespace Mosa.FileSystem.FATFileSystem
 		//    return file;
 		//}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public class DirectoryEntryLocation
 		{
+            /// <summary>
+            /// 
+            /// </summary>
 			public bool Valid;
+
+            /// <summary>
+            /// 
+            /// </summary>
 			public uint Block;
+
+            /// <summary>
+            /// 
+            /// </summary>
 			public uint DirectorySector;
+
+            /// <summary>
+            /// 
+            /// </summary>
 			public uint DirectoryIndex;
+
+            /// <summary>
+            /// 
+            /// </summary>
 			private bool directory;
 
+            /// <summary>
+            /// 
+            /// </summary>
 			public bool IsDirectory
 			{
 				get
@@ -946,11 +1265,21 @@ namespace Mosa.FileSystem.FATFileSystem
 				}
 			}
 
+            /// <summary>
+            /// 
+            /// </summary>
 			public DirectoryEntryLocation()
 			{
 				this.Valid = false;
 			}
 
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="block"></param>
+            /// <param name="directorySector"></param>
+            /// <param name="directoryIndex"></param>
+            /// <param name="directory"></param>
 			public DirectoryEntryLocation(uint block, uint directorySector, uint directoryIndex, bool directory)
 			{
 				this.Valid = true;
@@ -961,15 +1290,32 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public class FatMatchClusterComparer : FAT.ICompare
 		{
+            /// <summary>
+            /// 
+            /// </summary>
 			protected uint cluster;
 
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="cluster"></param>
 			public FatMatchClusterComparer(uint cluster)
 			{
 				this.cluster = cluster;
 			}
 
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="data"></param>
+            /// <param name="offset"></param>
+            /// <param name="type"></param>
+            /// <returns></returns>
 			public bool Compare(byte[] data, uint offset, FATType type)
 			{
 				BinaryFormat entry = new BinaryFormat(data);
@@ -994,14 +1340,30 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public class FatAnyExistComparer : FAT.ICompare
 		{
+            /// <summary>
+            /// 
+            /// </summary>
 			protected uint cluster;
 
+            /// <summary>
+            /// 
+            /// </summary>
 			public FatAnyExistComparer()
 			{
 			}
 
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="data"></param>
+            /// <param name="offset"></param>
+            /// <param name="type"></param>
+            /// <returns></returns>
 			public bool Compare(byte[] data, uint offset, FATType type)
 			{
 				BinaryFormat entry = new BinaryFormat(data);
@@ -1021,15 +1383,32 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public class FatEntityComparer : FAT.ICompare
 		{
+            /// <summary>
+            /// 
+            /// </summary>
 			protected string name;
 
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="name"></param>
 			public FatEntityComparer(string name)
 			{
 				this.name = name;
 			}
 
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="data"></param>
+            /// <param name="offset"></param>
+            /// <param name="type"></param>
+            /// <returns></returns>
 			public bool Compare(byte[] data, uint offset, FATType type)
 			{
 				BinaryFormat entry = new BinaryFormat(data);

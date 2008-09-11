@@ -12,6 +12,9 @@ using System.IO;
 
 namespace Mosa.FileSystem.VFS
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public sealed class FileSystemFactory
 	{
 		/// <summary>

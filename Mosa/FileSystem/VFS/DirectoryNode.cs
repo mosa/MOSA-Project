@@ -50,18 +50,36 @@ namespace Mosa.FileSystem.VFS
 
 		#region IVfsNode members
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="nodeType"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
 		public override IVfsNode Create(string name, VfsNodeType nodeType, object settings)
 		{
 			// FIXME: throw new NotImplementedException();
 			return null;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
 		public override IVfsNode Lookup(string name)
 		{
 			// FIXME: Lookup the node in the members
 			return null;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="access"></param>
+        /// <param name="sharing"></param>
+        /// <returns></returns>
 		public override object Open(FileAccess access, FileShare sharing)
 		{
 			// FIXME: return something like: new System.IO.DirectoryInfo(VirtualFileSystem.GetPath(this));
@@ -69,6 +87,11 @@ namespace Mosa.FileSystem.VFS
 			return null;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="child"></param>
+        /// <param name="dentry"></param>
 		public override void Delete(IVfsNode child, DirectoryEntry dentry)
 		{
 			// FIXME: throw new NotImplementedException();

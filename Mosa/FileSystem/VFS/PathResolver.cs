@@ -14,7 +14,7 @@ using System.IO;
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
-	/// Implements path resolution functionality for the <see cref="Mosa.VFS.VirtualFileSystem"/>.
+	/// Implements path resolution functionality for the Mosa.VFS.VirtualFileSystem.
 	/// </summary>
 	class PathResolver
 	{
@@ -26,9 +26,9 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private static readonly int MAX_SYMLINKS_TO_FOLLOW = 8;
 
-		/// <summary>
-		/// Array to split paths properly for the local system.
-		/// </summary>
+		// <summary>
+		// Array to split paths properly for the local system.
+		// </summary>
 		//private static readonly char[] splitChars = new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
 
 		#endregion // Constants

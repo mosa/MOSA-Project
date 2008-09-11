@@ -19,13 +19,18 @@ using Mosa.DeviceDrivers.Kernel;    // for IIPort
 
 namespace Mosa.DeviceDrivers.ISA.DiskControllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	[ISADeviceSignature(AutoLoad = true, BasePort = 0x1F0, PortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	[ISADeviceSignature(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2", Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class IDEDiskDriver : ISAHardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
 	{
 
 		#region Definitions
-
+        /// <summary>
+        /// 
+        /// </summary>
 		internal struct IDECommands
 		{
 			internal const byte ReadSectorsWithRetry = 0x20;
@@ -33,7 +38,9 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			internal const byte IdentifyDrive = 0xEC;
 		};
 
-
+        /// <summary>
+        /// 
+        /// </summary>
 		internal struct IdentifyDrive
 		{
 			internal const uint GeneralConfig = 0x00;
@@ -54,37 +61,108 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 
 		#endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected SpinLock spinLock;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public const uint DrivesPerConroller = 2; // the maximum supported
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort DataPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort FeaturePort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadOnlyIOPort ErrorPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort SectorCountPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort LBALowPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort LBAMidPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort LBAHighPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort DeviceHeadPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadOnlyIOPort StatusPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IWriteOnlyIOPort CommandPort;
 
 		//protected IRQHandler IdeIRQ;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public enum LBAType
 		{
+            /// <summary>
+            /// 
+            /// </summary>
 			LBA28,
+
+            /// <summary>
+            /// 
+            /// </summary>
 			LBA48
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected struct DriveInfo
 		{
+            /// <summary>
+            /// 
+            /// </summary>
 			public bool Present;
+
+            /// <summary>
+            /// 
+            /// </summary>
 			public uint MaxLBA;
 
+            /// <summary>
+            /// 
+            /// </summary>
 			public LBAType LBAType;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected DriveInfo[] driveInfo;
 
 		/// <summary>
@@ -95,6 +173,10 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			driveInfo = new DriveInfo[DrivesPerConroller];
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public override bool Setup()
 		{
 			base.name = "IDE_0x" + base.busResources.GetIOPort(0,0).Address.ToString("X");
@@ -118,6 +200,10 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			return true;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public override bool Probe()
 		{
 			LBALowPort.Write8(0x88);
@@ -128,6 +214,10 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			return true;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public override bool Start()
 		{
 			DeviceHeadPort.Write8(0xA0);
@@ -147,6 +237,10 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			return true;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public override LinkedList<IDevice> CreateSubDevices()
 		{
 			LinkedList<IDevice> devices = new LinkedList<IDevice>();
@@ -174,8 +268,16 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			return devices;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public override bool OnInterrupt() { return true; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		protected bool WaitForReqisterReady()
 		{
 			while (true) {
@@ -190,8 +292,31 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			//return false;
 		}
 
-		protected enum SectorOperation { Read, Write }
+        /// <summary>
+        /// 
+        /// </summary>
+		protected enum SectorOperation 
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            Read, 
+            
+            /// <summary>
+            /// 
+            /// </summary>
+            Write 
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="driveNbr"></param>
+        /// <param name="lba"></param>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
 		protected bool PerformLBA28(SectorOperation operation, uint driveNbr, uint lba, byte[] data, uint offset)
 		{
 			FeaturePort.Write8(0);
@@ -266,6 +391,11 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 		//    return true;
 		//}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="driveNbr"></param>
+        /// <returns></returns>
 		public bool Open(uint driveNbr)
 		{
 			if (driveNbr == 0)
@@ -291,26 +421,54 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			return true;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="driveNbr"></param>
+        /// <returns></returns>
 		public bool Release(uint driveNbr)
 		{
 			return true;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="driveNbr"></param>
+        /// <returns></returns>
 		public uint GetSectorSize(uint driveNbr)
 		{
 			return 512;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="driveNbr"></param>
+        /// <returns></returns>
 		public uint GetTotalSectors(uint driveNbr)
 		{
 			return driveInfo[driveNbr].MaxLBA;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="drive"></param>
+        /// <returns></returns>
 		public bool CanWrite(uint drive)
 		{
 			return true;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="driveNbr"></param>
+        /// <param name="block"></param>
+        /// <param name="count"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		public bool ReadBlock(uint driveNbr, uint block, uint count, byte[] data)
 		{
 			if (data.Length < count * 512)
@@ -329,6 +487,14 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="driveNbr"></param>
+        /// <param name="block"></param>
+        /// <param name="count"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		public bool WriteBlock(uint driveNbr, uint block, uint count, byte[] data)
 		{
 			if (data.Length < count * 512)

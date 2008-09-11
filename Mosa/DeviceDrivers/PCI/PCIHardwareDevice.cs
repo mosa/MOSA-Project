@@ -9,9 +9,15 @@
 
 namespace Mosa.DeviceDrivers.PCI
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
 	public abstract class PCIHardwareDevice : HardwareDevice
 	{
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pciDevice"></param>
 		public PCIHardwareDevice(PCIDevice pciDevice) : base() { base.parent = pciDevice as IDevice; }
 	}
 

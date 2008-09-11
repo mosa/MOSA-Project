@@ -11,18 +11,49 @@ using System;
 
 namespace Mosa.EmulatedDevices.Utils
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
 	public class IOPort<T>
 	{
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="newValue"></param>
+        /// <returns></returns>
 		public delegate T Reader(T newValue);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentValue"></param>
+        /// <returns></returns>
 		public delegate T Writer(T currentValue);
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort port;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public T Value;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		private Reader reader;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private Writer writer;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public ushort Port
 		{
 			get
@@ -31,17 +62,33 @@ namespace Mosa.EmulatedDevices.Utils
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="port"></param>
 		public IOPort(int port)
 		{
 			this.port = (ushort)port;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="port"></param>
+        /// <param name="value"></param>
 		public IOPort(int port, T value)
 		{
 			this.port = (ushort)port;
 			this.Value = value;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="port"></param>
+        /// <param name="value"></param>
+        /// <param name="reader"></param>
+        /// <param name="writer"></param>
 		public IOPort(int port, T value, Reader reader, Writer writer)
 		{
 			this.port = (ushort)port;
@@ -50,6 +97,10 @@ namespace Mosa.EmulatedDevices.Utils
 			this.writer = writer;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
 		public void SetValue(T value)
 		{
 			if (writer == null) {
@@ -60,6 +111,10 @@ namespace Mosa.EmulatedDevices.Utils
 			this.Value = writer(value);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public T ReadValue()
 		{
 			if (reader != null)

@@ -11,12 +11,29 @@ using System;
 
 namespace Mosa.FileSystem.FATFileSystem
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public class FATSettings : SettingsBase
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public FATType FatType;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public string VolumeLabel;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public byte[] SerialID;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public FATSettings()
 		{
 			this.FatType = FATType.FAT16;	// default

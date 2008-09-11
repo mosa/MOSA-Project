@@ -11,20 +11,61 @@ using Mosa.DeviceDrivers;
 
 namespace Mosa.EmulatedDevices.Kernel
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public class IOPort : IReadWriteIOPort
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort port;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="port"></param>
 		public IOPort(ushort port) { this.port = port; }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public ushort Address { get { return port; } }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public byte Read8() { return IOPortDispatch.Read8(port); }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public ushort Read16() { return IOPortDispatch.Read16(port); }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public uint Read32() { return IOPortDispatch.Read32(port); }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
 		public void Write8(byte data) { IOPortDispatch.Write8(port, data); }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
 		public void Write16(ushort data) { IOPortDispatch.Write16(port, data); }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
 		public void Write32(uint data) { IOPortDispatch.Write32(port, data); }
 	}
 }

@@ -9,9 +9,14 @@
 
 namespace Mosa.DeviceDrivers.ISA
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
 	public abstract class ISAHardwareDevice : HardwareDevice
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public ISAHardwareDevice() : base() { }
 	}
 }

@@ -15,7 +15,7 @@ using System.Text;
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
-	/// Flags for the <see cref="Mosa.VFS.VirtualFileSystem.AccessCheck"/> function.
+	/// Flags for the Mosa.FileSystem.VFS.VirtualFileSystem.AccessCheck function.
 	/// </summary>
 	[Flags]
 	public enum AccessCheckFlags
@@ -32,6 +32,9 @@ namespace Mosa.FileSystem.VFS
 		NoThrow = 0x00000001
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
 	public sealed class AccessCheck
 	{
 		/// <summary>

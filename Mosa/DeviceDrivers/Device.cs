@@ -14,8 +14,19 @@ namespace Mosa.DeviceDrivers
 	/// </summary>
 	public abstract class Device : IDevice
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		protected string name;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IDevice parent;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected DeviceStatus deviceStatus;
 
 		/// <summary>

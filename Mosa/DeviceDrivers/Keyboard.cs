@@ -16,18 +16,59 @@ namespace Mosa.DeviceDrivers
 	/// </summary>
 	public class Keyboard : IKeyboard
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IKeyboardDevice keyboardDevice;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IScanCodeMap scanCodeMap;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool scrollLock;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool capLock;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool numLock;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool leftControl;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool rightControl;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool leftAlt;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool rightAlt;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool leftShift;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool rightShift;
 
 		/// <summary>

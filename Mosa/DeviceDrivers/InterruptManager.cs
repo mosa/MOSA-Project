@@ -11,14 +11,29 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public class InterruptManager
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public const ushort MaxInterrupts = 16;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected LinkedList<IHardwareDevice>[] interruptHandlers;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected SpinLock spinLock;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public InterruptManager()
 		{
 			interruptHandlers = new LinkedList<IHardwareDevice>[MaxInterrupts];
@@ -27,6 +42,10 @@ namespace Mosa.DeviceDrivers
 				interruptHandlers[i] = new LinkedList<IHardwareDevice>();
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="irq"></param>
 		public void ProcessInterrupt(byte irq)
 		{
 			if (irq == 0) return;
@@ -41,6 +60,11 @@ namespace Mosa.DeviceDrivers
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="irq"></param>
+        /// <param name="hardwareDevice"></param>
 		public void AddInterruptHandler(byte irq, IHardwareDevice hardwareDevice)
 		{
 			if (irq == 0) return;
@@ -54,6 +78,11 @@ namespace Mosa.DeviceDrivers
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="irq"></param>
+        /// <param name="hardwareDevice"></param>
 		public void ReleaseInterruptHandler(byte irq, IHardwareDevice hardwareDevice)
 		{
 			if (irq == 0) return;

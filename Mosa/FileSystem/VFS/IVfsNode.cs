@@ -21,9 +21,9 @@ namespace Mosa.FileSystem.VFS
 
 		#region Properties
 
-		/// <summary>
-		/// Retrieves the filesystem, where the node belongs to.
-		/// </summary>
+		// <summary>
+		// Retrieves the filesystem, where the node belongs to.
+		// </summary>
 		//IFileSystem FileSystem { get; }
 
 		/// <summary>
@@ -43,7 +43,6 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="settings">Potential settings for the file systeme entry.</param>
 		/// <returns>The created file system node for the requested object.</returns>
 		/// <exception cref="System.NotSupportedException">The specified nodetype is not supported in the filesystem owning the node. See remarks about this.</exception>
-		/// <exception cref=""></exception>
 		/// <remarks>
 		/// In theory every filesystem should support any VfsNodeType. Standard objects, such as directories and files are obvious. For other objects however, the
 		/// file system is encouraged to store the passed settings in a specially marked file and treat these files as the appropriate node type. Instances of these

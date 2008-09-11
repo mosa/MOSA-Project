@@ -11,14 +11,38 @@ using System;
 
 namespace Mosa.EmulatedDevices.Utils
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
 	public class MemoryRange
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public uint address;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public uint size;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public MemoryRead8 read8;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public MemoryWrite8 write8;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="size"></param>
+        /// <param name="read8"></param>
+        /// <param name="write8"></param>
 		public MemoryRange(uint address, uint size, MemoryRead8 read8, MemoryWrite8 write8)
 		{
 			this.address = address;
@@ -27,6 +51,11 @@ namespace Mosa.EmulatedDevices.Utils
 			this.write8 = write8;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
 		public bool Contains(uint address)
 		{
 			return ((address >= this.address) && (address < (this.address + this.size)));

@@ -12,28 +12,88 @@ using System.IO;
 
 namespace Mosa.FileSystem.FATFileSystem
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public class FATFileStream : Stream
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint startCluster;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint currentCluster;
+        
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint directorySector;
+        
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint directoryIndex;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint nthCluster;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected long position;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected long length;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected long lengthOnDisk;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool read;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool write;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte[] data;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool dirty;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint clusterSize;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected FAT fs;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fs"></param>
+        /// <param name="startCluster"></param>
+        /// <param name="directorySector"></param>
+        /// <param name="directoryIndex"></param>
 		public FATFileStream(FAT fs, uint startCluster, uint directorySector, uint directoryIndex)
 		{
 			this.fs = fs;
@@ -55,7 +115,10 @@ namespace Mosa.FileSystem.FATFileSystem
 			if (length != 0)
 				ReadCluster(startCluster);
 		}
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
 		public override bool CanRead
 		{
 			get
@@ -64,6 +127,9 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public override bool CanSeek
 		{
 			get
@@ -72,6 +138,9 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public override bool CanWrite
 		{
 			get
@@ -80,6 +149,9 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public override bool CanTimeout
 		{
 			get
@@ -88,6 +160,9 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public override long Length
 		{
 			get
@@ -96,6 +171,9 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public override long Position
 		{
 			get
@@ -108,6 +186,9 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public override void Flush()
 		{
 			if (!dirty)
@@ -120,6 +201,13 @@ namespace Mosa.FileSystem.FATFileSystem
 			dirty = false;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			if (position >= length)
@@ -134,6 +222,10 @@ namespace Mosa.FileSystem.FATFileSystem
 			return index;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public override int ReadByte()
 		{
 			if (position >= length)
@@ -156,6 +248,12 @@ namespace Mosa.FileSystem.FATFileSystem
 			return b;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="origin"></param>
+        /// <returns></returns>
 		public override long Seek(long offset, SeekOrigin origin)
 		{
 			long newposition = position;
@@ -192,12 +290,19 @@ namespace Mosa.FileSystem.FATFileSystem
 			return position;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected void NextCluster()
 		{
 			uint newcluster = fs.NextCluster(currentCluster);
 			ReadCluster(newcluster);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cluster"></param>
 		protected void ReadCluster(uint cluster)
 		{
 			if (currentCluster == cluster)
@@ -210,6 +315,10 @@ namespace Mosa.FileSystem.FATFileSystem
 			dirty = false;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
 		public override void SetLength(long value)
 		{
 			// TODO: incomplete
@@ -224,11 +333,21 @@ namespace Mosa.FileSystem.FATFileSystem
 			return;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
 		public override void Write(byte[] buffer, int offset, int count)
 		{
 			// TODO
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
 		public override void WriteByte(byte value)
 		{
 			// TODO

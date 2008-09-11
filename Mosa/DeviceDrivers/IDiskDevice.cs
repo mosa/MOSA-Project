@@ -11,17 +11,63 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public interface IDiskDevice
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		bool CanWrite { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		uint TotalBlocks { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		uint BlockSize { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
 		byte[] ReadBlock(uint block, uint count);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="count"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		bool ReadBlock(uint block, uint count, byte[] data);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="count"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		bool WriteBlock(uint block, uint count, byte[] data);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="partitionNbr"></param>
+        /// <returns></returns>
 		GenericPartition this[uint partitionNbr] { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		LinkedList<IDevice> CreatePartitionDevices();
 	}
 }

@@ -36,8 +36,17 @@ namespace Mosa.Tools.Compiler
     /// </remarks>
     public sealed class AotCompiler : AssemblyCompiler
     {
+        /// <summary>
+        /// 
+        /// </summary>
         ObjectFileBuilderBase _objectFileBuilder;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="architecture"></param>
+        /// <param name="assembly"></param>
+        /// <param name="objectFileBuilder"></param>
         public AotCompiler(IArchitecture architecture, IMetadataModule assembly, ObjectFileBuilderBase objectFileBuilder)
             : base(architecture, assembly)
         {
@@ -55,7 +64,9 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Compiles an entire assemblyName.
         /// </summary>
-        /// <param name="assemblyName">The compiled assemblyName.</param>
+        /// <param name="architecture">The architecture to compile for</param>
+        /// <param name="assemblyName">The compiled assembly name</param>
+        /// <param name="objectFileBuilder">The objectfilebuilder to use</param>
         public static void Compile(IArchitecture architecture, string assemblyName, ObjectFileBuilderBase objectFileBuilder)
         {
             IMetadataModule assembly = RuntimeBase.Instance.AssemblyLoader.Load(assemblyName);
@@ -63,16 +74,28 @@ namespace Mosa.Tools.Compiler
             c.Compile();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void BeginCompile()
         {
             _objectFileBuilder.OnAssemblyCompileBegin(this);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void EndCompile()
         {
             _objectFileBuilder.OnAssemblyCompileEnd(this);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="method"></param>
+        /// <returns></returns>
         public override MethodCompilerBase CreateMethodCompiler(RuntimeType type, RuntimeMethod method)
         {
             IArchitecture arch = this.Architecture;

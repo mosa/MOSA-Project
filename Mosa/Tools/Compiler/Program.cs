@@ -17,6 +17,9 @@ using Mosa.Runtime.Loader.PE;
 using Mosa.Runtime.Metadata;
 
 namespace Mosa.Tools.Compiler {
+    /// <summary>
+    /// 
+    /// </summary>
 	public static class Program {
 		
 		/// <summary>

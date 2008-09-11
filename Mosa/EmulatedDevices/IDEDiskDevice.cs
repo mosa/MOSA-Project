@@ -20,32 +20,123 @@ namespace Mosa.EmulatedDevices
 	/// </summary>
 	public class IDEDiskDevice : IDisposable
 	{
-		protected enum DeviceStatus { Ready, ReadingSector, WritingSector, IdentifyDrive };
+        /// <summary>
+        /// 
+        /// </summary>
+		protected enum DeviceStatus 
+        { 
+            /// <summary>
+            /// IDE Device is ready and waiting for instructions
+            /// </summary>
+            Ready, 
+            /// <summary>
+            /// IDE Device is busy reading
+            /// </summary>
+            ReadingSector, 
+            /// <summary>
+            /// IDE Device is busy writing
+            /// </summary>
+            WritingSector, 
+            /// <summary>
+            /// IDE Device shall report itself
+            /// </summary>
+            IdentifyDrive 
+        };
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public const ushort PrimaryIOBase = 0x1F0;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort ioBase;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> dataPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<ushort> dataPort2;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> featureAndErrorPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> sectorCountPort;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> lbaLowPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> lbaHighPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> lbaMidPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> deviceHead;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> commandAndStatusPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> altCommandAndStatusPort;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IOPort<byte> driveAddress;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte numDrives;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected FileStream[] driveFiles;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte[] bufferData;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort bufferIndex;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected DeviceStatus status = DeviceStatus.Ready;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ioBase"></param>
+        /// <param name="filenames"></param>
 		public IDEDiskDevice(ushort ioBase, string[] filenames)
 		{
 			this.ioBase = ioBase;
@@ -84,6 +175,9 @@ namespace Mosa.EmulatedDevices
 			IOPortDispatch.RegisterPort(driveAddress);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public void Dispose()
 		{
 			foreach (FileStream driveFile in driveFiles) { driveFile.Close(); }
@@ -100,6 +194,11 @@ namespace Mosa.EmulatedDevices
 			IOPortDispatch.UnregisterPort(driveAddress);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		public byte DeviceHeadPortWrite(byte data)
 		{
 			byte head = (byte)(data | 0xA0 & ~0x40);    // force bits to 101xxxxx
@@ -118,6 +217,9 @@ namespace Mosa.EmulatedDevices
 			return head;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public void ReadLBA28IntoBuffer()
 		{
 			byte drive = (byte)(((deviceHead.Value & 0x10) != 0x10) ? 0 : 1);
@@ -129,6 +231,10 @@ namespace Mosa.EmulatedDevices
 			status = DeviceStatus.ReadingSector;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		protected uint GetLBA28()
 		{
 			return (uint)(
@@ -139,14 +245,23 @@ namespace Mosa.EmulatedDevices
 				);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lba28"></param>
 		protected void SetLBA28(uint lba28)
 		{
-			deviceHead.Value = (byte)((deviceHead.Value & 0x0F) | lba28 >> 24);
+			deviceHead.Value = (byte)((deviceHead.Value & 0x0F) | (byte)lba28 >> 24);
 			lbaHighPort.Value = (byte)((lba28 & 0xFF0000) >> 16);
 			lbaMidPort.Value = (byte)((lba28 & 0xFF00) >> 8);
 			lbaLowPort.Value = (byte)(lba28 & 0xFF);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		public byte DataPortRead(byte data)
 		{
 			if (status != DeviceStatus.ReadingSector) { return 0; }
@@ -165,8 +280,16 @@ namespace Mosa.EmulatedDevices
 			return data;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		public ushort DataPortRead2(ushort data) { return (ushort)(DataPortRead(0) | (DataPortRead(0) << 8)); }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public void IdentifyDrive()
 		{
 			byte drive = (byte)(((deviceHead.Value & 0x10) != 0x10) ? 0 : 1);
@@ -201,6 +324,11 @@ namespace Mosa.EmulatedDevices
 			status = DeviceStatus.IdentifyDrive;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		public byte CommandPortWrite(byte data)
 		{
 			switch (data) {

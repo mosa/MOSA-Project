@@ -14,11 +14,28 @@ using Mosa.EmulatedDevices.Kernel;
 
 namespace Mosa.EmulatedDevices
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="address"></param>
+    /// <returns></returns>
 	public delegate byte MemoryRead8(uint address);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="address"></param>
+    /// <param name="value"></param>
 	public delegate void MemoryWrite8(uint address, byte value);
 
+    /// <summary>
+    /// 
+    /// </summary>
 	public static class MemoryDispatch
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		private static List<MemoryRange> dispatches = new List<MemoryRange>();
 
 		/// <summary>

@@ -13,14 +13,40 @@ using Mosa.FileSystem.VFS;
 
 namespace Mosa.FileSystem
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public abstract class GenericFileSystem
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IPartitionDevice partition;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint blockSize;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool valid;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected string volumeLabel;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte[] serialNbr;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="partition"></param>
 		public GenericFileSystem(IPartitionDevice partition)
 		{
 			this.partition = partition;
@@ -30,11 +56,35 @@ namespace Mosa.FileSystem
 			this.serialNbr = new byte[0];
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public abstract IFileSystem CreateVFSMount();
 
-		public bool Valid { get { return valid; } }
-		public string VolumeLabel { get { return volumeLabel; } }
-		public byte[] SerialNbr { get { return serialNbr; } }
+        /// <summary>
+        /// 
+        /// </summary>
+		public bool Valid 
+        { 
+            get { return valid; } 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+		public string VolumeLabel 
+        { 
+            get { return volumeLabel; } 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+		public byte[] SerialNbr 
+        { 
+            get { return serialNbr; } 
+        }
 
 	}
 }

@@ -180,9 +180,9 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 
 			return false;
 
-			ResetController();
+			//ResetController();
 
-			return true;
+			//return true;
 		}
 
 		public override bool Start()

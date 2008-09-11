@@ -11,30 +11,30 @@ namespace Mosa.DeviceDrivers
 {
 	public interface IReadWriteIOPort : IReadOnlyIOPort, IWriteOnlyIOPort
 	{
-		ushort Address { get; }
+		new ushort Address { get; }
 
-		byte Read8();
-		void Write8(byte data);
-		ushort Read16();
-		void Write16(ushort data);
-		uint Read32();
-		void Write32(uint data);
+		new byte Read8();
+        new void Write8(byte data);
+        new ushort Read16();
+        new void Write16(ushort data);
+        new uint Read32();
+        new void Write32(uint data);
 	}
 
 	public interface IReadOnlyIOPort
 	{
-		ushort Address { get; }
-		byte Read8();
-		ushort Read16();
-		uint Read32();
+        ushort Address { get; }
+        byte Read8();
+        ushort Read16();
+        uint Read32();
 	}
 
 	public interface IWriteOnlyIOPort
 	{
-		ushort Address { get; }
-		void Write8(byte data);
-		void Write16(ushort data);
-		void Write32(uint data);
+        ushort Address { get; }
+        void Write8(byte data);
+        void Write16(ushort data);
+        void Write32(uint data);
 	}
 
 

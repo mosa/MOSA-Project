@@ -16,21 +16,47 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Tools.Compiler
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class AotLinkerStage : IAssemblyCompilerStage, IAssemblyLinker
     {
+        /// <summary>
+        /// 
+        /// </summary>
         ObjectFileBuilderBase _objectFileBuilder;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="objectFileBuilder"></param>
         public AotLinkerStage(ObjectFileBuilderBase objectFileBuilder)
         {
             this._objectFileBuilder = objectFileBuilder;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string Name { get { return "AOT Linker"; } }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="compiler"></param>
         public void Run(AssemblyCompiler compiler) { }
 
         #region IAssemblyLinker Members
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="linkType"></param>
+        /// <param name="method"></param>
+        /// <param name="methodOffset"></param>
+        /// <param name="methodRelativeBase"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
         public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
             return _objectFileBuilder.Link(

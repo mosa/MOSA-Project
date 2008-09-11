@@ -11,17 +11,56 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public class DiskDevice : Device, IDiskDevice, IDevice
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		private IDiskControllerDevice diskController;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint driveNbr;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint totalSectors;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private MasterBootBlock mbr;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private bool readOnly;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public bool CanWrite { get { return !readOnly; } }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public uint TotalBlocks { get { return totalSectors; } }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public uint BlockSize { get { return diskController.GetSectorSize(driveNbr); } }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="partitionNbr"></param>
+        /// <returns></returns>
 		public GenericPartition this[uint partitionNbr] { get { return mbr[partitionNbr]; } }
 
 		/// <summary>
@@ -47,6 +86,12 @@ namespace Mosa.DeviceDrivers
 			mbr = new MasterBootBlock(this);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
 		public byte[] ReadBlock(uint block, uint count)
 		{
 			byte[] data = new byte[count * BlockSize];
@@ -54,16 +99,34 @@ namespace Mosa.DeviceDrivers
 			return data;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="count"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		public bool ReadBlock(uint block, uint count, byte[] data)
 		{
 			return diskController.ReadBlock(driveNbr, block, count, data);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="count"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		public bool WriteBlock(uint block, uint count, byte[] data)
 		{
 			return diskController.WriteBlock(driveNbr, block, count, data);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public LinkedList<IDevice> CreatePartitionDevices()
 		{
 			LinkedList<IDevice> devices = new LinkedList<IDevice>();

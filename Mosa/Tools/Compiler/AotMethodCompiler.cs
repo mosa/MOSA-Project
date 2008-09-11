@@ -21,12 +21,32 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Tools.Compiler
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class AotMethodCompiler : MethodCompilerBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        MemoryStream stream = new MemoryStream();
+
+        /// <summary>
+        /// 
+        /// </summary>
         ObjectFileBuilderBase _objectFileBuilder;
 
         #region Construction
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="linker"></param>
+        /// <param name="architecture"></param>
+        /// <param name="module"></param>
+        /// <param name="type"></param>
+        /// <param name="method"></param>
+        /// <param name="objectFileBuilder"></param>
         public AotMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method, ObjectFileBuilderBase objectFileBuilder)
             : base(linker, architecture, module, type, method)
         {
@@ -53,18 +73,26 @@ namespace Mosa.Tools.Compiler
 
         #region Methods
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void BeginCompile()
         {
             _objectFileBuilder.OnMethodCompileBegin(this);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void EndCompile()
         {
             _objectFileBuilder.OnMethodCompileEnd(this);
         }
 
-        MemoryStream stream = new MemoryStream();
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override Stream RequestCodeStream()
         {
             // FIXME: Request a stream from the AOT assembly compiler to place the method into, save the rva address 

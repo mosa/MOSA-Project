@@ -14,7 +14,7 @@ namespace Mosa.FileSystem.VFS
 {
 
 	/// <summary>
-	/// Flags, which control the operation of the <see cref="Mosa.VFS.PathResolver"/>.
+	/// Flags, which control the operation of the Mosa.Filesystem.VFS.PathResolver.
 	/// </summary>
 	[Flags]
 	public enum PathResolutionFlags

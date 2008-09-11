@@ -63,6 +63,7 @@
               <AllowUnsafe>false</AllowUnsafe>
               <NoStdLib>false</NoStdLib>
               <CompilerDefines></CompilerDefines>
+              <WarningsAsErrors>true</WarningsAsErrors>
             </Options>
           </Configuration>
           <Configuration name="Release">
@@ -89,6 +90,7 @@
               <AllowUnsafe>false</AllowUnsafe>
               <NoStdLib>false</NoStdLib>
               <CompilerDefines></CompilerDefines>
+              <WarningsAsErrors>true</WarningsAsErrors>
             </Options>
           </Configuration>
           <Configuration name="Release">
@@ -144,6 +146,7 @@
               <AllowUnsafe>false</AllowUnsafe>
               <NoStdLib>false</NoStdLib>
               <CompilerDefines></CompilerDefines>
+              <WarningsAsErrors>true</WarningsAsErrors>
             </Options>
           </Configuration>
           <Configuration name="Release">
@@ -171,6 +174,7 @@
             <OutputPath>../build/debug</OutputPath>
             <XmlDocFile>../build/Mosa.ClassLib.xml</XmlDocFile>
             <AllowUnsafe>false</AllowUnsafe>
+              <WarningsAsErrors>true</WarningsAsErrors>
           </Options>
         </Configuration>
         <Configuration name="Release">
@@ -230,6 +234,7 @@
             <AllowUnsafe>true</AllowUnsafe>
             <DebugInformation>true</DebugInformation>
             <WarningLevel>4</WarningLevel>
+              <WarningsAsErrors>true</WarningsAsErrors>
           </Options>
         </Configuration>
         <Configuration name="Release">
@@ -264,6 +269,7 @@
             <OptimizeCode>false</OptimizeCode>
             <AllowUnsafe>true</AllowUnsafe>
             <DebugInformation>true</DebugInformation>
+            <WarningsAsErrors>true</WarningsAsErrors>
             <WarningLevel>4</WarningLevel>
           </Options>
         </Configuration>

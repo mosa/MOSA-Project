@@ -11,8 +11,16 @@ using Mosa.DeviceDrivers;
 
 namespace Mosa.FileSystem
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public interface IFileSystemDevice
 	{
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="partition"></param>
+        /// <returns></returns>
 		GenericFileSystem Create(IPartitionDevice partition);
 	}
 }

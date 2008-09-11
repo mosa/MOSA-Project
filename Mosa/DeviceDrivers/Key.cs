@@ -16,11 +16,29 @@ namespace Mosa.DeviceDrivers
 	/// </summary>
 	public class Key
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		protected KeyType keyType;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected char character;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool control;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool alt;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool shift;
 
 		/// <summary>

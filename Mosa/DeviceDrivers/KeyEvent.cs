@@ -16,14 +16,35 @@ namespace Mosa.DeviceDrivers
 	/// </summary>
 	public class KeyEvent
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public enum Press
 		{
+            /// <summary>
+            /// 
+            /// </summary>
 			Make,
+
+            /// <summary>
+            /// 
+            /// </summary>
 			Break
 		};
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected KeyType keyType;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected Press press;
+
+        /// <summary>
+        /// 
+        /// </summary>
 		protected char character;
 
 		/// <summary>

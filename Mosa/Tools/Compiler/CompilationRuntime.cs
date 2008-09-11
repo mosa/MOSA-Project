@@ -69,21 +69,33 @@ namespace Mosa.Tools.Compiler
 
         #region RuntimeBase Overrides
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override IMemoryPageManager MemoryManager
         {
             get { return _memoryManager; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override ITypeSystem TypeLoader
         {
             get { return _typeLoader; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override IAssemblyLoader AssemblyLoader
         {
             get { return _assemblyLoader; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override Mosa.Runtime.IJitService JitService
         {
             get { return _jitService; }
