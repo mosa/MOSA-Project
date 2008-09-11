@@ -13,23 +13,73 @@ using System.IO;
 
 namespace Test.Mosa.Runtime.CompilerFramework
 {
+    /// <summary>
+    /// Interfaceclass for MbUnit3 to run our testcases.
+    /// </summary>
     public abstract class MosaCompilerTestRunner : IDisposable
     {
+        /// <summary>
+        /// 
+        /// </summary>
         static Dictionary<string, CodeDomProvider> providerCache = new Dictionary<string, CodeDomProvider>();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        TempFileCollection temps = new TempFileCollection();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        bool _needCompile = true;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        string _language;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        string _codeFilename;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        string _codeSource;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        string[] _references;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        CompilerResults compileResults;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        TestRuntime runtime;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        IMetadataModule module;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public MosaCompilerTestRunner()
         {
             Language = "C#";
             References = new string[0];
         }
 
-        TempFileCollection temps = new TempFileCollection();
-        bool _needCompile = true;
-        string _language;
-        string _codeFilename;
-        string _codeSource;
-        string[] _references;
-
+        /// <summary>
+        /// 
+        /// </summary>
         public string Language
         {
             get { return _language; }
@@ -42,6 +92,10 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string CodeFilename
         {
             get { return _codeFilename; }
@@ -54,6 +108,10 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string CodeSource
         {
             get { return _codeSource; }
@@ -66,6 +124,10 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string[] References
         {
             get { return _references; }
@@ -79,10 +141,9 @@ namespace Test.Mosa.Runtime.CompilerFramework
             }
         }
 
-        CompilerResults compileResults;
-        TestRuntime runtime;
-        IMetadataModule module;
-
+        /// <summary>
+        /// 
+        /// </summary>
         [FixtureSetUp]
         public void Begin()
         {
@@ -90,6 +151,15 @@ namespace Test.Mosa.Runtime.CompilerFramework
             runtime = new TestRuntime();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TDelegate"></typeparam>
+        /// <param name="ns"></param>
+        /// <param name="type"></param>
+        /// <param name="method"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public object Run<TDelegate>(string ns, string type, string method, params object[] parameters)
         {
             if (_needCompile)
@@ -114,9 +184,16 @@ namespace Test.Mosa.Runtime.CompilerFramework
             return fn.DynamicInvoke(parameters);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="MissingMethodException"></exception>
+        /// <param name="ns"></param>
+        /// <param name="type"></param>
+        /// <param name="method"></param>
+        /// <returns></returns>
         private RuntimeMethod FindMethod(string ns, string type, string method)
         {
-            RuntimeMethod runtimeMethod;
             foreach (RuntimeType t in runtime.TypeLoader.GetTypesFromModule(module))
             {
                 if (t.Namespace != ns || t.Name != type)
@@ -132,12 +209,21 @@ namespace Test.Mosa.Runtime.CompilerFramework
             throw new MissingMethodException();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [FixtureTearDown]
         public void End()
         {
             runtime.Dispose();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="Exception"></exception>
+        /// <returns></returns>
         private CompilerResults CompileCode()
         {
             CodeDomProvider provider;
@@ -187,6 +273,11 @@ namespace Test.Mosa.Runtime.CompilerFramework
             return compileResults;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         private IMetadataModule CompileAssembly(string filename)
         {
             IMetadataModule module = RuntimeBase.Instance.AssemblyLoader.Load(
@@ -196,6 +287,9 @@ namespace Test.Mosa.Runtime.CompilerFramework
             return module;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         void IDisposable.Dispose()
         {
             this.End();

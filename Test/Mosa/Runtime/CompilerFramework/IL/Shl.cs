@@ -15,10 +15,25 @@ using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [TestFixture]
     public class Shl : MosaCompilerTestRunner
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         delegate bool I4_I1_I1(int expect, sbyte a, byte b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         [Row(1, 2)]
         [Row(23, 21)]
         // And reverse
@@ -54,7 +69,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "ShlI1", a << b, a, b));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         delegate bool I4_I2_I2(int expect, short a, byte b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         [Row(1, 2)]
         [Row(23, 21)]
         // And reverse
@@ -90,7 +117,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "ShlI2", (a << b), a, b));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         delegate bool I4_I4_I4(int expect, int a, byte b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         [Row(1, 2)]
         [Row(23, 21)]
         // And reverse
@@ -126,7 +165,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "ShlI4", (a << b), a, b));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         delegate bool I8_I8_I8(long expect, long a, byte b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         [Row(1, 1)]
         [Row(1, 0)]
         [Row(0, 1)]

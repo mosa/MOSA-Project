@@ -43,6 +43,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// <summary>
         /// Initializes a new <see cref="VirtualMemoryStream"/> and allocates the requested amount of virtual memory to back it.
         /// </summary>
+        /// <param name="pageManager"></param>
         /// <param name="allocationSize">The number of bytes to allocate from virtual memory.</param>
         public unsafe VirtualMemoryStream(IMemoryPageManager pageManager, uint allocationSize)
         {

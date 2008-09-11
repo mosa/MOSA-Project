@@ -7,8 +7,19 @@ using Mosa.Runtime.Vm;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class TestAssemblyLinker : AssemblyLinkerStageBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="linkType"></param>
+        /// <param name="method"></param>
+        /// <param name="methodOffset"></param>
+        /// <param name="methodRelativeBase"></param>
+        /// <param name="targetAddress"></param>
         protected unsafe override void ApplyPatch(LinkType linkType, RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress)
         {
             long value;

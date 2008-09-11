@@ -15,10 +15,19 @@ using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [TestFixture]
     public class Call : MosaCompilerTestRunner
     {
+        /// <summary>
+        /// 
+        /// </summary>
         delegate void V();
+        /// <summary>
+        /// 
+        /// </summary>
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void CallEmpty()
         {
@@ -30,7 +39,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Run<V>("", "Test", "CallEmpty");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         delegate bool B__I1(sbyte arg);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
         [Row(0)]
         [Row(1)]
         [Row(2)]
@@ -58,7 +76,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<B__I1>("", "Test", "CallI1", value));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         delegate bool B__I2(short arg);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
         [Row(0)]
         [Row(1)]
         [Row(2)]
@@ -86,7 +113,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<B__I2>("", "Test", "CallI2", value));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         delegate bool B__I4(int arg);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
         [Row(0)]
         [Row(1)]
         [Row(2)]
@@ -114,7 +150,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<B__I4>("", "Test", "CallI4", value));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         delegate bool B__I8(int arg);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
         [Row(0)]
         [Row(1)]
         [Row(2)]

@@ -15,11 +15,25 @@ using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [TestFixture]
     public class Sub : MosaCompilerTestRunner
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         delegate bool I4_I1_I1(int expect, sbyte a, sbyte b);
-        // Normal Testcases - (0, 0)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         [Row(1, 2)]
         [Row(23, 21)]
         [Row(1, -2)]
@@ -77,8 +91,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "SubI1", a - b, a, b));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         delegate bool I4_I2_I2(int expect, short a, short b);
-        // Normal Testcases - (0, 0)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         [Row(1, 2)]
         [Row(23, 21)]
         [Row(1, -2)]
@@ -136,8 +161,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "SubI2", (a - b), a, b));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         delegate bool I4_I4_I4(int expect, int a, int b);
-        // Normal Testcases - (0, 0)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         [Row(1, 2)]
         [Row(23, 21)]
         [Row(1, -2)]
@@ -195,8 +231,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "SubI4", (a - b), a, b));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         delegate bool R4_R4_R4(float expect, float a, float b);
-        // Normal Testcases - (0, 0)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         [Row(1.2f, 2.1f)]
         [Row(23.0f, 21.2578f)]
         [Row(1.0f, -2.198f)]
@@ -254,8 +301,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<R4_R4_R4>("", "Test", "SubR4", (a - b), a, b));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         delegate bool R8_R8_R8(double expect, double a, double b);
-        // Normal Testcases - (0, 0)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         [Row(1.2, 2.1)]
         [Row(23.0, 21.2578)]
         [Row(1.0, -2.198)]

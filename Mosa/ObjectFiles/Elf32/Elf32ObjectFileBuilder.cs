@@ -19,25 +19,61 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.ObjectFiles.Elf32
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Elf32ObjectFileBuilder : ObjectFileBuilderBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
         Semaphore _assemblySync = new Semaphore(1, 1);
+
+        /// <summary>
+        /// 
+        /// </summary>
         Semaphore _methodSync = new Semaphore(1, 1);
+
+        /// <summary>
+        /// 
+        /// </summary>
         Elf32MachineKind _machineKind;
+
+        /// <summary>
+        /// 
+        /// </summary>
         string _currentFilename;
+
+        /// <summary>
+        /// 
+        /// </summary>
         Elf32File _currentFile;
 
+        /// <summary>
+        /// 
+        /// </summary>
         static Elf32ObjectFileBuilder()
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="machineType"></param>
         public Elf32ObjectFileBuilder(Elf32MachineKind machineType)
         {
             _machineKind = machineType;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override string Name { get { return "Elf32 Object File Writer"; } }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="compiler"></param>
         public override void OnAssemblyCompileBegin(AssemblyCompiler compiler)
         {
             _assemblySync.WaitOne();
@@ -46,6 +82,10 @@ namespace Mosa.ObjectFiles.Elf32
             _currentFile.SymbolTable.OnCreateSymbol += new CreateSymbolHandler(SymbolTable_OnCreateSymbol);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="compiler"></param>
         public override void OnAssemblyCompileEnd(AssemblyCompiler compiler)
         {
             ApplyLinks();
@@ -57,6 +97,10 @@ namespace Mosa.ObjectFiles.Elf32
             _assemblySync.Release();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="symbol"></param>
         void SymbolTable_OnCreateSymbol(Elf32Symbol symbol)
         {
             if (symbol.Tag is RuntimeMethod)
@@ -72,6 +116,10 @@ namespace Mosa.ObjectFiles.Elf32
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="compiler"></param>
         public override void OnMethodCompileBegin(MethodCompilerBase compiler)
         {
             _methodSync.WaitOne();
@@ -79,6 +127,10 @@ namespace Mosa.ObjectFiles.Elf32
             _currentFile.Code.BeginSymbol(sym);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="compiler"></param>
         public override void OnMethodCompileEnd(MethodCompilerBase compiler)
         {
             MemoryStream codeStream = compiler.RequestCodeStream() as MemoryStream;
@@ -96,8 +148,20 @@ namespace Mosa.ObjectFiles.Elf32
             _methodSync.Release();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         List<LinkRequest> linkRequests = new List<LinkRequest>();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="linkType"></param>
+        /// <param name="method"></param>
+        /// <param name="methodOffset"></param>
+        /// <param name="methodRelativeBase"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
         public override long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
             LinkRequest link = new LinkRequest(
@@ -119,6 +183,10 @@ namespace Mosa.ObjectFiles.Elf32
                 return 0;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         private void ApplyLinks()
         {
             for (int i = 0; i < linkRequests.Count; i++)
@@ -152,6 +220,13 @@ namespace Mosa.ObjectFiles.Elf32
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="link"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         private bool TryResolveLink(LinkRequest link, out long value)
         {
             Elf32Symbol methodSym = _currentFile.SymbolTable.GetSymbol(link.Method);
@@ -184,6 +259,12 @@ namespace Mosa.ObjectFiles.Elf32
                 return false;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="link"></param>
+        /// <param name="value"></param>
         private void ApplyPatch(LinkRequest link, long value)
         {
             Elf32Symbol methodSym = _currentFile.SymbolTable.GetSymbol(link.Method);

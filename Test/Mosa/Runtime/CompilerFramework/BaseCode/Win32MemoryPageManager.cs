@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
     /// <summary>
-    /// Provides implementation of <see cref="Mosa.Kernel.Memory.IMemoryPageManager"/> based on Win32 virtual memory.
+    /// Provides implementation of Mosa.Kernel.Memory.IMemoryPageManager based on Win32 virtual memory.
     /// </summary>
     sealed class Win32MemoryPageManager : IMemoryPageManager
     {

@@ -333,6 +333,7 @@
               <OptimizeCode>false</OptimizeCode>
               <AllowUnsafe>true</AllowUnsafe>
               <DebugInformation>true</DebugInformation>
+              <WarningsAsErrors>true</WarningsAsErrors>
               <WarningLevel>4</WarningLevel>
             </Options>
           </Configuration>
@@ -373,6 +374,7 @@
               <OptimizeCode>false</OptimizeCode>
               <AllowUnsafe>true</AllowUnsafe>
               <DebugInformation>true</DebugInformation>
+              <WarningsAsErrors>true</WarningsAsErrors>
               <WarningLevel>4</WarningLevel>
             </Options>
           </Configuration>

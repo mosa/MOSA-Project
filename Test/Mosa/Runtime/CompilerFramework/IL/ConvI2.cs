@@ -16,10 +16,23 @@ using System.Reflection.Emit;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [TestFixture]
     public class ConvI2 : MosaCompilerTestRunner
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool Native_ConvI2_I1(short expect, sbyte a);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
         [Column(0, 1, 2, sbyte.MinValue, sbyte.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI2_I1(sbyte a)
@@ -28,7 +41,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<Native_ConvI2_I1>("", "Test", "ConvI2_I1", ((short)a), a));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool Native_ConvI2_I2(short expect, short a);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
         [Column(0, 1, 2, short.MinValue, short.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI2_I2(short a)
@@ -37,7 +60,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<Native_ConvI2_I2>("", "Test", "ConvI2_I2", ((short)a), a));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool Native_ConvI2_I4(short expect, int a);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
         [Column(0, 1, 2, short.MinValue, short.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI2_I4(int a)
@@ -46,7 +79,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<Native_ConvI2_I4>("", "Test", "ConvI2_I4", ((short)a), a));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool Native_ConvI2_I8(short expect, long a);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
         [Column(0, 1, 2, short.MinValue, short.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI2_I8(long a)
@@ -55,7 +98,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<Native_ConvI2_I4>("", "Test", "ConvI2_I8", ((short)a), a));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool Native_ConvI2_R4(short expect, float a);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
         [Column(0, 1, 2, short.MinValue, short.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI2_R4(float a)
@@ -64,7 +117,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<Native_ConvI2_R4>("", "Test", "ConvI1_R4", ((sbyte)a), a));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool Native_ConvI2_R8(short expect, double a);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
         [Column(0, 1, 2, short.MinValue, short.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI2_R8(double a)

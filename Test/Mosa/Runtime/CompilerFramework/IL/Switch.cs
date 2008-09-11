@@ -15,11 +15,23 @@ using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [TestFixture]
     public class Switch : MosaCompilerTestRunner
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool I1_I1(sbyte expect, sbyte a);
-        // Normal Testcases + (0, 0)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
         [Row(1)]
         //[Row(23)]
         //[Row(-1)]
