@@ -16,9 +16,9 @@ namespace Mosa.DeviceDrivers.ScanCodeMap
 	/// </summary>
 	public class US : IScanCodeMap
 	{
-		protected enum KeyState { Normal, Escaped, Espaced2, EscapeBreak };
+		private enum KeyState { Normal, Escaped, Espaced2, EscapeBreak };
 
-		protected KeyState keyState;
+		private KeyState keyState;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="US"/> class.

@@ -12,26 +12,19 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.PCI
 {
-	public enum AddressRegion : byte
-	{
-		IO,
-		Memory,
-		Unimplemented
-	}
-
 	public class PCIBaseAddress
 	{
 		protected uint address;
 		protected uint size;
-		protected AddressRegion region;
+		protected PCIAddressRegion region;
 		protected bool prefetchable;
 
 		public uint Address { get { return address; } }
 		public uint Size { get { return size; } }
-		public AddressRegion Region { get { return region; } }
+		public PCIAddressRegion Region { get { return region; } }
 		public bool Prefetchable { get { return prefetchable; } }
 
-		public PCIBaseAddress(AddressRegion region, uint address, uint size, bool prefetchable)
+		public PCIBaseAddress(PCIAddressRegion region, uint address, uint size, bool prefetchable)
 		{
 			this.region = region;
 			this.address = address;
@@ -41,10 +34,10 @@ namespace Mosa.DeviceDrivers.PCI
 
 		public override string ToString()
 		{
-			if (region == AddressRegion.Unimplemented)
+			if (region == PCIAddressRegion.Undefined)
 				return string.Empty;
 
-			if (region == AddressRegion.IO)
+			if (region == PCIAddressRegion.IO)
 				return "I/O Port at 0x" + address.ToString("X") + " [size=" + size.ToString() + "]";
 
 			if (prefetchable)

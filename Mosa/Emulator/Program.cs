@@ -92,7 +92,7 @@ namespace Mosa.Emulator
 						if (address.Address != 0) {
 							screen.Write("    ");
 
-							if (address.Region == AddressRegion.IO)
+							if (address.Region == PCIAddressRegion.IO)
 								screen.Write("I/O Port at 0x");
 							else
 								screen.Write("Memory at 0x");

@@ -97,11 +97,11 @@ namespace Mosa.DeviceDrivers.PCI
 					HAL.EnableAllInterrupts();
 
 					if (baseAddress % 2 == 1) {
-						pciBaseAddresses[i] = new PCIBaseAddress(AddressRegion.IO, baseAddress & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
+						pciBaseAddresses[i] = new PCIBaseAddress(PCIAddressRegion.IO, baseAddress & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
 						ioPortRegionCount++;
 					}
 					else {
-						pciBaseAddresses[i] = new PCIBaseAddress(AddressRegion.Memory, baseAddress & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((baseAddress & 0x08) == 1));
+						pciBaseAddresses[i] = new PCIBaseAddress(PCIAddressRegion.Memory, baseAddress & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((baseAddress & 0x08) == 1));
 						memoryRegionCount++;
 					}
 				}
@@ -118,8 +118,8 @@ namespace Mosa.DeviceDrivers.PCI
 
 			foreach (PCIBaseAddress pciBaseAddress in pciBaseAddresses)
 				switch (pciBaseAddress.Region) {
-					case AddressRegion.IO: ioPortRegions[ioRegions++] = new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size); break;
-					case AddressRegion.Memory: memoryRegion[memoryRegions++] = new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size); break;
+					case PCIAddressRegion.IO: ioPortRegions[ioRegions++] = new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size); break;
+					case PCIAddressRegion.Memory: memoryRegion[memoryRegions++] = new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size); break;
 					default: break;
 				}
 
