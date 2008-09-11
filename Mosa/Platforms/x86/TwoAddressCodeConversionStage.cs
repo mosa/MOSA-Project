@@ -622,7 +622,7 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.SseDiv(SseDivInstruction instruction, int arg)
         {
-            HandleArith(instruction);
+            HandleSseDiv(instruction);
         }
 
         void IX86InstructionVisitor<int>.Shift(ShiftInstruction instruction, int arg)
@@ -730,7 +730,7 @@ namespace Mosa.Platforms.x86
             }
         }
 
-        private void HandleDiv(DivInstruction instruction)
+        private void HandleDiv(Instruction instruction)
         {
             Operand result = instruction.Results[0];
             Operand[] ops = instruction.Operands;
@@ -782,6 +782,46 @@ namespace Mosa.Platforms.x86
                 _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(eax, ops[1]));
                 instruction.Results[0] = eax;
                 _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(result, eax));
+            }
+        }
+
+        private void HandleSseDiv(Instruction instruction)
+        {
+            Operand result = instruction.Results[0];
+            Operand[] ops = instruction.Operands;
+            Operand t = ops[0];
+            ops[0] = ops[1];
+            ops[1] = t;
+
+            /*
+             * NOTE:
+             * 
+             * The operands are mixed up in DivInstruction, to be diagnosed
+             * at appropriate time. The current fix is to move them to the right
+             * place here.
+             * 
+             * 
+             */
+
+            // If destination is a register...
+            RegisterOperand rop = result as RegisterOperand;
+            if (null != rop)
+            {
+                if (ops[0] is LabelOperand || ops[0] is MemoryOperand)
+                {
+                    RegisterOperand xmm0 = new RegisterOperand(ops[0].Type, SSE2Register.XMM0);
+                    _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(xmm0, ops[0]));
+                    instruction.SetOperand(0, xmm0);
+                }
+            }
+            // x86 can't do memory += memory instructions
+            else if (false == result.IsRegister)
+            {
+                // i = x / y style
+                RegisterOperand xmm0 = new RegisterOperand(new SigType(CilElementType.I), SSE2Register.XMM0);
+                _currentBlock.Instructions.Insert(_instructionIdx++, new MoveInstruction(xmm0, ops[1]));
+                instruction.Results[0] = xmm0;
+                _currentBlock.Instructions.Insert(++_instructionIdx, new MoveInstruction(result, xmm0));
             }
         }
 

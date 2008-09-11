@@ -505,11 +505,13 @@ namespace Mosa.Platforms.x86
                     break;
 
                 case Mosa.Runtime.Metadata.CilElementType.R4:
-                    result = ((float)data).ToString(System.Globalization.NumberFormatInfo.InvariantInfo);
+                    //result = ((float)data).ToString(System.Globalization.NumberFormatInfo.InvariantInfo);
+                    result = data.ToString();
                     break;
 
                 case Mosa.Runtime.Metadata.CilElementType.R8:
-                    result = ((double)data).ToString(System.Globalization.NumberFormatInfo.InvariantInfo);
+                    //result = ((double)data).ToString(System.Globalization.NumberFormatInfo.InvariantInfo);
+                    result = data.ToString();
                     break;
 
                 default:

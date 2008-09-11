@@ -761,10 +761,10 @@ namespace Mosa.Platforms.x86
         /// Section: SSE
         /// </summary>
         private static readonly CodeDef[] cd_comisd = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x66, 0x0F, 0x2E }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x66, 0x0F, 0x2E }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0x66, 0x0F, 0x2E }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x66, 0x0F, 0x2E }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x66, 0x0F, 0x2F }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x66, 0x0F, 0x2F }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0x66, 0x0F, 0x2F }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x66, 0x0F, 0x2F }, null),
         };
 
         /// <summary>

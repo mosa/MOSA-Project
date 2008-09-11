@@ -275,7 +275,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             CodeSource = "static class Test { static bool DivR4(float expect, float a, float b) { return expect == (a / b); } }";
             Assert.IsTrue((bool)Run<R4_R4_R4>("", "Test", "DivR4", (a / b), a, b));
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
