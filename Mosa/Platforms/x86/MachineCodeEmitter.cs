@@ -502,7 +502,8 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Div(Operand dest, Operand src)
         {
             // Write the opcode byte
-            Emit(null, null, cd_cwd);
+            byte[] code = { 0x99 };
+            Emit(code, null, null, null);
             Emit(src, null, cd_idiv);
         }
         
@@ -885,8 +886,10 @@ namespace Mosa.Platforms.x86
         /// Section: Standard x86
         /// </summary>
         private static readonly CodeDef[] cd_idiv = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    null,                       new byte[] { 0xF7 }, 7),
-            new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0xF7 }, 7),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF7 }, 7),
+            new CodeDef(typeof(MemoryOperand),      typeof(MemoryOperand),      new byte[] { 0xF7 }, 7),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF7 }, 7),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xF7 }, 7),
         };
 
         /// <summary>
