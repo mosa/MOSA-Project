@@ -16,9 +16,9 @@ namespace Mosa.DeviceDrivers.PCI
 {
 	public class PCIDevice : Device, IDevice
 	{
-		protected uint bus;
-		protected uint slot;
-		protected uint function;
+		protected byte bus;
+		protected byte slot;
+		protected byte function;
 		protected ushort vendorID;
 		protected ushort deviceID;
 		protected byte revisionID;
@@ -34,9 +34,9 @@ namespace Mosa.DeviceDrivers.PCI
 
 		protected IPCIController pciController;
 
-		public uint Bus { get { return bus; } }
-		public uint Slot { get { return slot; } }
-		public uint Function { get { return function; } }
+		public byte Bus { get { return bus; } }
+		public byte Slot { get { return slot; } }
+		public byte Function { get { return function; } }
 		public ushort VendorID { get { return vendorID; } }
 		public ushort DeviceID { get { return deviceID; } }
 		public byte RevisionID { get { return revisionID; } }
@@ -52,7 +52,7 @@ namespace Mosa.DeviceDrivers.PCI
 		/// <summary>
 		/// Create a new PCIDevice instance at the selected PCI address
 		/// </summary>
-		public PCIDevice(IPCIController pciController, uint bus, uint slot, uint fun)
+		public PCIDevice(IPCIController pciController, byte bus, byte slot, byte fun)
 		{
 			base.parent = pciController as Device;
 			base.name = base.parent.Name + "/" + bus.ToString() + "/" + slot.ToString() + "/" + fun.ToString();
@@ -84,15 +84,15 @@ namespace Mosa.DeviceDrivers.PCI
 			if ((data & 0xFF00) != 0)
 				this.irq = (byte)(data & 0xFF);
 
-			for (uint i = 0; i < 6; i++) {
-				uint baseAddress = pciController.ReadConfig(bus, slot, fun, 16 + (i * 4));
+			for (byte i = 0; i < 6; i++) {
+				uint baseAddress = pciController.ReadConfig(bus, slot, fun, (byte)(16 + (i * 4)));
 
 				if (baseAddress != 0) {
 					HAL.DisableAllInterrupts();
 
-					pciController.WriteConfig(bus, slot, fun, 16 + (i * 4), 0xFFFFFFFF);
-					uint mask = pciController.ReadConfig(bus, slot, fun, 16 + (i * 4));
-					pciController.WriteConfig(bus, slot, fun, 16 + (i * 4), baseAddress);
+					pciController.WriteConfig(bus, slot, fun, (byte)(16 + (i * 4)), 0xFFFFFFFF);
+					uint mask = pciController.ReadConfig(bus, slot, fun, (byte)(16 + (i * 4)));
+					pciController.WriteConfig(bus, slot, fun, (byte)(16 + (i * 4)), baseAddress);
 
 					HAL.EnableAllInterrupts();
 

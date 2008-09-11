@@ -20,18 +20,18 @@ namespace Mosa.DeviceDrivers.ISA
 	[ISADeviceSignature(AutoLoad = false, BasePort = 0x02E8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class SerialDriver : ISAHardwareDevice, IDevice, IHardwareDevice, ISerialDevice
 	{
-		protected IReadOnlyIOPort RBRBase; // Receive Buffer Register (read only)		
-		protected IWriteOnlyIOPort THRBase; // Transmitter Holding Register (write only)		
-		protected IReadWriteIOPort IERBase; // Interrupt Enable Register		
-		protected IReadWriteIOPort DLLBase; // Divisor Latch (LSB and MSB)
-		protected IReadWriteIOPort DLMBase;
-		protected IReadOnlyIOPort IIRBase; // Interrupt Identification Register (read only)		
-		protected IWriteOnlyIOPort FCRBase; // FIFO Control Register (write only, 16550+ only)		
-		protected IReadWriteIOPort LCRBase; // Line Control Register		
-		protected IReadWriteIOPort MCRBase; // Modem Control Register		
-		protected IReadWriteIOPort LSRBase; // Line Status Register		
-		protected IReadWriteIOPort MSRBase; // Modem Status Register		
-		protected IReadWriteIOPort SCRBase; // Scratch Register (16450+ and some 8250s, special use with some boards)
+		protected IReadOnlyIOPort rbrBase; // Receive Buffer Register (read only)		
+		protected IWriteOnlyIOPort thrBase; // Transmitter Holding Register (write only)		
+		protected IReadWriteIOPort ierBase; // Interrupt Enable Register		
+		protected IReadWriteIOPort dllBase; // Divisor Latch (LSB and MSB)
+		protected IReadWriteIOPort dlmBase;
+		protected IReadOnlyIOPort iirBase; // Interrupt Identification Register (read only)		
+		protected IWriteOnlyIOPort fcrBase; // FIFO Control Register (write only, 16550+ only)		
+		protected IReadWriteIOPort lcrBase; // Line Control Register		
+		protected IReadWriteIOPort mcrBase; // Modem Control Register		
+		protected IReadWriteIOPort lsrBase; // Line Status Register		
+		protected IReadWriteIOPort msrBase; // Modem Status Register		
+		protected IReadWriteIOPort scrBase; // Scratch Register (16450+ and some 8250s, special use with some boards)
 
 		protected SpinLock spinLock;
 
@@ -130,18 +130,18 @@ namespace Mosa.DeviceDrivers.ISA
 		{
 			base.name = "COM_0x" + base.busResources.GetIOPort(0,0).Address.ToString("X");
 
-			RBRBase = base.busResources.GetIOPort(0,0); // Receive Buffer Register (read only)
-			THRBase = base.busResources.GetIOPort(0,0); // Transmitter Holding Register (write only)
-			IERBase = base.busResources.GetIOPort(0,1); // Interrupt Enable Register
-			DLLBase = base.busResources.GetIOPort(0,0); // Divisor Latch (LSB and MSB)
-			DLMBase = base.busResources.GetIOPort(0,1);
-			IIRBase = base.busResources.GetIOPort(0,2); // Interrupt Identification Register (read only)
-			FCRBase = base.busResources.GetIOPort(0,2); // FIFO Control Register (write only, 16550+ only)
-			LCRBase = base.busResources.GetIOPort(0,3); // Line Control Register
-			MCRBase = base.busResources.GetIOPort(0,4); // Modem Control Register
-			LSRBase = base.busResources.GetIOPort(0,5); // Line Status Register
-			MSRBase = base.busResources.GetIOPort(0,6); // Modem Status Register
-			SCRBase = base.busResources.GetIOPort(0,7); // Scratch Register (16450+ and some 8250s, special use with some boards)
+			rbrBase = base.busResources.GetIOPort(0,0); // Receive Buffer Register (read only)
+			thrBase = base.busResources.GetIOPort(0,0); // Transmitter Holding Register (write only)
+			ierBase = base.busResources.GetIOPort(0,1); // Interrupt Enable Register
+			dllBase = base.busResources.GetIOPort(0,0); // Divisor Latch (LSB and MSB)
+			dlmBase = base.busResources.GetIOPort(0,1);
+			iirBase = base.busResources.GetIOPort(0,2); // Interrupt Identification Register (read only)
+			fcrBase = base.busResources.GetIOPort(0,2); // FIFO Control Register (write only, 16550+ only)
+			lcrBase = base.busResources.GetIOPort(0,3); // Line Control Register
+			mcrBase = base.busResources.GetIOPort(0,4); // Modem Control Register
+			lsrBase = base.busResources.GetIOPort(0,5); // Line Status Register
+			msrBase = base.busResources.GetIOPort(0,6); // Modem Status Register
+			scrBase = base.busResources.GetIOPort(0,7); // Scratch Register (16450+ and some 8250s, special use with some boards)
 
 			this.fifoBuffer = new byte[fifoSize];
 			this.fifoStart = 0;
@@ -158,28 +158,28 @@ namespace Mosa.DeviceDrivers.ISA
 			///TODO: could use BIOS to help w/ detection; 0x0400-x0403 supply base address for COM1-4
 
 			// Disable all UART interrupts
-			IERBase.Write8(0x00);
+			ierBase.Write8(0x00);
 
 			// Enable DLAB (set baud rate divisor)
-			LCRBase.Write8((byte)LCR.DLAB);
+			lcrBase.Write8((byte)LCR.DLAB);
 
 			// Set Baud rate
 			int baudRate = 115200;
 			int divisor = 115200 / baudRate;
-			DLLBase.Write8((byte)(divisor & 0xFF));
-			DLMBase.Write8((byte)(divisor >> 8 & 0xFF));
+			dllBase.Write8((byte)(divisor & 0xFF));
+			dlmBase.Write8((byte)(divisor >> 8 & 0xFF));
 
 			// Reset DLAB, Set 8 bits, no parity, one stop bit
-			LCRBase.Write8((byte)(LCR.CS8 | LCR.ST1 | LCR.PNO));
+			lcrBase.Write8((byte)(LCR.CS8 | LCR.ST1 | LCR.PNO));
 
 			// Enable FIFO, clear them, with 14-byte threshold
-			FCRBase.Write8((byte)(FCR.Enabled | FCR.CLR_RCVR | FCR.CLR_XMIT | FCR.TL14));
+			fcrBase.Write8((byte)(FCR.Enabled | FCR.CLR_RCVR | FCR.CLR_XMIT | FCR.TL14));
 
 			// IRQs enabled, RTS/DSR set
-			MCRBase.Write8((byte)(MCR.DTR | MCR.RTS | MCR.OUT2));
+			mcrBase.Write8((byte)(MCR.DTR | MCR.RTS | MCR.OUT2));
 
 			// Interrupt when data received
-			IERBase.Write8((byte)IER.DR);
+			ierBase.Write8((byte)IER.DR);
 
 			return true;
 		}
@@ -236,7 +236,7 @@ namespace Mosa.DeviceDrivers.ISA
 
 		protected bool CanTransmit()
 		{
-			return ((LSRBase.Read8() & (byte)LSR.THRE) != 0);
+			return ((lsrBase.Read8() & (byte)LSR.THRE) != 0);
 		}
 
 		public void Write(byte ch)
@@ -247,7 +247,7 @@ namespace Mosa.DeviceDrivers.ISA
 				while (!CanTransmit())
 					;
 
-				THRBase.Write8(ch);
+				thrBase.Write8(ch);
 			}
 			finally {
 				spinLock.Exit();
@@ -256,7 +256,7 @@ namespace Mosa.DeviceDrivers.ISA
 
 		protected bool CanRead()
 		{
-			return ((LSRBase.Read8()) & (byte)LSR.DR) != 0;
+			return ((lsrBase.Read8()) & (byte)LSR.DR) != 0;
 		}
 
 		protected void ReadSerial()
@@ -266,7 +266,7 @@ namespace Mosa.DeviceDrivers.ISA
 
 				if (!IsFIFOFull())
 					while (CanRead())
-						AddToFIFO(RBRBase.Read8());
+						AddToFIFO(rbrBase.Read8());
 			}
 			finally {
 				spinLock.Exit();
@@ -275,16 +275,16 @@ namespace Mosa.DeviceDrivers.ISA
 
 		public void DisableDataReceivedInterrupt()
 		{
-			IER ier = (IER)(IERBase.Read8());
+			IER ier = (IER)(ierBase.Read8());
 			ier &= ~IER.DR;
-			IERBase.Write8((byte)ier);
+			ierBase.Write8((byte)ier);
 		}
 
 		public void EnableDataReceivedInterrupt()
 		{
-			byte ier = IERBase.Read8();
+			byte ier = ierBase.Read8();
 			ier |= (byte)IER.DR;
-			IERBase.Write8(ier);
+			ierBase.Write8(ier);
 		}
 
 		public int ReadByte()

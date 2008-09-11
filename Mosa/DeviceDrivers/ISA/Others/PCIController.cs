@@ -26,26 +26,26 @@ namespace Mosa.DeviceDrivers.ISA
 
 		protected SpinLock spinLock;
 
-		protected IReadWriteIOPort ConfigAddress;
-		protected IReadWriteIOPort ConfigData;
+		protected IReadWriteIOPort configAddress;
+		protected IReadWriteIOPort configData;
 
 		public PCIController() { }
 
 		public override bool Setup()
 		{
-			base.name = "PCI_0x" + base.busResources.GetIOPort(0,0).Address.ToString("X");
+			base.name = "PCI_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");
 
-			ConfigAddress = base.busResources.GetIOPort(0,0);
-			ConfigData = base.busResources.GetIOPort(0,4);
+			configAddress = base.busResources.GetIOPort(0, 0);
+			configData = base.busResources.GetIOPort(0, 4);
 
 			return true;
 		}
 
 		public override bool Probe()
 		{
-			ConfigAddress.Write32(BaseValue);
+			configAddress.Write32(BaseValue);
 
-			if (ConfigAddress.Read32() != BaseValue)
+			if (configAddress.Read32() != BaseValue)
 				return false;
 
 			return true;
@@ -57,9 +57,9 @@ namespace Mosa.DeviceDrivers.ISA
 		{
 			LinkedList<IDevice> devices = new LinkedList<IDevice>();
 
-			for (uint bus = 0; bus < 256; bus++) {
-				for (uint slot = 0; slot < 16; slot++) {
-					for (uint fun = 0; fun < 7; fun++) {
+			for (byte bus = 0; bus < 256; bus++) {
+				for (byte slot = 0; slot < 16; slot++) {
+					for (byte fun = 0; fun < 7; fun++) {
 						if (ProbeDevice(bus, slot, fun)) {
 							devices.Add(new PCIDevice(this, bus, slot, fun));
 						}
@@ -72,30 +72,29 @@ namespace Mosa.DeviceDrivers.ISA
 
 		public override bool OnInterrupt() { return false; }
 
-		public uint ReadConfig(uint bus, uint slot, uint function, uint register)
+		public uint ReadConfig(byte bus, byte slot, byte function, byte register)
 		{
-			ConfigAddress.Write32(BaseValue
+			configAddress.Write32((uint)(BaseValue
 					   | ((bus & 0xFF) << 16)
 					   | ((slot & 0x0F) << 11)
 					   | ((function & 0x07) << 8)
-					   | (register & 0xFC));
+					   | (register & 0xFC)));
 
-			return ConfigData.Read32();
+			return configData.Read32();
 		}
 
-		public void WriteConfig(uint bus, uint slot, uint function, uint register, uint value)
+		public void WriteConfig(byte bus, byte slot, byte function, byte register, uint value)
 		{
-
-			ConfigAddress.Write32(BaseValue
+			configAddress.Write32((uint)(BaseValue
 					   | ((bus & 0xFF) << 16)
 					   | ((slot & 0x0F) << 11)
 					   | ((function & 0x07) << 8)
-					   | (register & 0xFC));
+					   | (register & 0xFC)));
 
-			ConfigData.Write32(value);
+			configData.Write32(value);
 		}
 
-		public bool ProbeDevice(uint bus, uint slot, uint fun)
+		public bool ProbeDevice(byte bus, byte slot, byte fun)
 		{
 			return (ReadConfig(bus, slot, fun, 0) != 0xFFFFFFFF);
 		}

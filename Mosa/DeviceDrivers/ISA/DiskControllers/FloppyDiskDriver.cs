@@ -124,10 +124,10 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 		protected TrackCache[] trackCache;
 		protected LastSeek[] lastSeek;
 
-		protected IReadWriteIOPort ControllerCommands;
-		protected IReadWriteIOPort DataPort;
-		protected IReadWriteIOPort ConfigPort;
-		protected IReadWriteIOPort StatusPort;
+		protected IReadWriteIOPort commandPort;
+		protected IReadWriteIOPort dataPort;
+		protected IReadWriteIOPort configPort;
+		protected IReadWriteIOPort statusPort;
 
 		protected IDMAChannel floppyDMA;
 
@@ -163,10 +163,10 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			base.parent = null; // no parent
 			base.deviceStatus = DeviceStatus.Initializing;
 
-			ControllerCommands = base.busResources.GetIOPort(0, 2);
-			StatusPort = base.busResources.GetIOPort(0, 4);
-			DataPort = base.busResources.GetIOPort(0, 5);
-			ConfigPort = base.busResources.GetIOPort(0, 7);
+			commandPort = base.busResources.GetIOPort(0, 2);
+			statusPort = base.busResources.GetIOPort(0, 4);
+			dataPort = base.busResources.GetIOPort(0, 5);
+			configPort = base.busResources.GetIOPort(0, 7);
 
 			//			floppyDMA = base.CreateDMAChannel(2);
 			//			floppyIRQ = base.CreateIRQHandler(6);
@@ -201,13 +201,13 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 
 			ResetController();
 
-			ControllerCommands.Write8(DORFlags.EnableController | DORFlags.EnableDMA);
+			commandPort.Write8(DORFlags.EnableController | DORFlags.EnableDMA);
 
 			SendByte(FIFOCommand.SenseInterrupt);
 			GetByte();
 			GetByte();
 
-			ConfigPort.Write8(0x00); // 500 Kb/s (MFM)			
+			configPort.Write8(0x00); // 500 Kb/s (MFM)			
 
 			// Set step rate to 3ms & head unload time to 240ms 
 			SendByte(FIFOCommand.Specify);
@@ -343,7 +343,7 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 		{
 			// wait for RQM data register to be ready
 			while (true) {
-				uint status = StatusPort.Read8();
+				uint status = statusPort.Read8();
 
 				if ((status & 0x80) == 0x80)
 					return true;
@@ -357,13 +357,13 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 		protected void SendByte(byte command)
 		{
 			WaitForReqisterReady();
-			DataPort.Write8(command);
+			dataPort.Write8(command);
 		}
 
 		protected byte GetByte()
 		{
 			WaitForReqisterReady();
-			return DataPort.Read8();
+			return dataPort.Read8();
 		}
 
 		protected void ClearInterrupt()
@@ -382,11 +382,11 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 		{
 			ClearInterrupt();
 
-			ControllerCommands.Write8(DORFlags.ResetController);
+			commandPort.Write8(DORFlags.ResetController);
 
 			HAL.Sleep(200);
 
-			ControllerCommands.Write8(DORFlags.EnableController);
+			commandPort.Write8(DORFlags.EnableController);
 
 			WaitForInterrupt(3000);
 		}
@@ -431,16 +431,16 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 
 		protected void TurnOffMotor(uint drive)
 		{
-			ControllerCommands.Write8((byte)(DORFlags.EnableDMA | DORFlags.EnableController | drive));
+			commandPort.Write8((byte)(DORFlags.EnableDMA | DORFlags.EnableController | drive));
 		}
 
 		protected void TurnOnMotor(uint drive)
 		{
-			byte reg = ControllerCommands.Read8();
+			byte reg = commandPort.Read8();
 			byte bits = (byte)(DORFlags.MotorShift << (byte)drive | DORFlags.EnableDMA | DORFlags.EnableController | (byte)drive);
 
 			if (reg != bits) {
-				ControllerCommands.Write8(bits);
+				commandPort.Write8(bits);
 				HAL.Sleep(500); // 500 msec
 			}
 		}
