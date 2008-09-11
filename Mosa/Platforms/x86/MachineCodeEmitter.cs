@@ -309,7 +309,7 @@ namespace Mosa.Platforms.x86
 
         void ICodeEmitter.Not(Operand dest)
         {
-            Emit(dest, dest, cd_not);
+            Emit(dest, null, cd_not);
         }
 
         void ICodeEmitter.Or(Operand dest, Operand src)
@@ -886,10 +886,8 @@ namespace Mosa.Platforms.x86
         /// Section: Standard x86
         /// </summary>
         private static readonly CodeDef[] cd_idiv = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF7 }, 7),
-            new CodeDef(typeof(MemoryOperand),      typeof(MemoryOperand),      new byte[] { 0xF7 }, 7),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF7 }, 7),
-            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xF7 }, 7),
+            new CodeDef(typeof(RegisterOperand),    null,    new byte[] { 0xF7 }, 7),
+            new CodeDef(typeof(MemoryOperand),      null,    new byte[] { 0xF7 }, 7),
         };
 
         /// <summary>

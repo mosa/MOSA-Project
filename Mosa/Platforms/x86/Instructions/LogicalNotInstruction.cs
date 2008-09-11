@@ -37,14 +37,14 @@ namespace Mosa.Platforms.x86
         {
             // Three -> Two conversion
             IArchitecture arch = methodCompiler.Architecture;
-            RegisterOperand eax = new RegisterOperand(this.Destination.Type, GeneralPurposeRegister.EAX);
+            RegisterOperand eax = new RegisterOperand(this.Operand0.Type, GeneralPurposeRegister.EAX);
             Operand op1 = this.Operand1;
             this.Operand1 = eax;
 
             return new Instruction[] {
                 arch.CreateInstruction(typeof(IR.MoveInstruction), eax, op1),
                 this,
-                arch.CreateInstruction(typeof(IR.MoveInstruction), this.Destination, eax)
+                arch.CreateInstruction(typeof(IR.MoveInstruction), this.Operand0, eax)
             };
         }
 

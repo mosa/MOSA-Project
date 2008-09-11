@@ -13,45 +13,28 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
-    public class LogicalNotInstruction : Instruction
+    public class LogicalNotInstruction : TwoOperandInstruction
     {
         #region Construction
 
-        public LogicalNotInstruction() :
-            base(1, 1)
+        /// <summary>
+        /// Initializes a new instance of <see cref="LogicalNotInstruction"/>.
+        /// </summary>
+        public LogicalNotInstruction()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="LogicalNotInstruction"/>.
+        /// </summary>
+        /// <param name="result">The operand, which receives the negated value of <paramref name="op1"/>.</param>
+        /// <param name="op1">The operand, which represents the value to negate.</param>
         public LogicalNotInstruction(Operand result, Operand op1) :
-            base(1, 1)
+            base(result, op1)
         {
-            SetResult(0, result);
-            SetOperand(0, op1);
         }
 
         #endregion // Construction
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the destination operand of the move instruction.
-        /// </summary>
-        public Operand Destination
-        {
-            get { return this.Results[0]; }
-            set { this.SetResult(0, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the source operand of the move instruction.
-        /// </summary>
-        public Operand Operand1
-        {
-            get { return this.Operands[0]; }
-            set { this.SetOperand(0, value); }
-        }
-
-        #endregion // Properties
 
         #region Instruction Overrides
 
@@ -61,7 +44,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <returns>A string representation of the move instruction.</returns>
         public override string ToString()
         {
-            return String.Format(@"IR or {0} <- ~{1}", this.Destination, this.Operand1);
+            return String.Format(@"IR not {0} <- ~{1}", this.Operand0, this.Operand1);
         }
 
         /// <summary>
@@ -70,13 +53,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
         /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
-        public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
+        protected override void Visit<ArgType>(IIRVisitor<ArgType> visitor, ArgType arg)
         {
-            IIRVisitor<ArgType> irv = visitor as IIRVisitor<ArgType>;
-            if (null == irv)
-                throw new ArgumentException(@"Must implement IIRVisitor!", @"visitor");
-
-            irv.Visit(this, arg);
+            visitor.Visit(this, arg);
         }
 
         #endregion // Instruction Overrides

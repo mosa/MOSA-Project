@@ -890,7 +890,7 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<int>.Visit(IR.LogicalNotInstruction instruction, int arg)
         {
-            _emitter.Not(instruction.Destination);
+            _emitter.Not(instruction.Operand0);
         }
 
         void IR.IIRVisitor<int>.Visit(IR.MoveInstruction instruction, int arg)
