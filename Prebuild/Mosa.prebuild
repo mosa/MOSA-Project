@@ -36,6 +36,7 @@
             <AllowUnsafe>true</AllowUnsafe>
             <DebugInformation>true</DebugInformation>
             <WarningLevel>4</WarningLevel>
+              <WarningsAsErrors>true</WarningsAsErrors>
           </Options>
         </Configuration>
         <Configuration name="Release">
