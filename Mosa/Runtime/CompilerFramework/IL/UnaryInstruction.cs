@@ -33,6 +33,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// Initializes a new instance of <see cref="UnaryInstruction"/>.
         /// </summary>
         /// <param name="code">The opcode of the unary instruction.</param>
+        /// <param name="resultCount">Number of result operands</param>
         protected UnaryInstruction(OpCode code, int resultCount)
             : base(code, 1, resultCount)
         {

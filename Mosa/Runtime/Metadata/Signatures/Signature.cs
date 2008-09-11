@@ -14,6 +14,9 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class Signature
     {
 		public void LoadSignature(IMetadataProvider provider, TokenTypes token)

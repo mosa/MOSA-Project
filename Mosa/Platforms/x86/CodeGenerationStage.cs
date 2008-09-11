@@ -788,6 +788,24 @@ namespace Mosa.Platforms.x86
             throw new NotSupportedException(@"Instruction can not be emitted and requires appropriate expansion and runtime support.");
         }
 
+        /// <summary>
+        /// Used to multiply two 64 bit values. This is not directly supported on 32 bit x86 CPUs.
+        /// So we use a little "trick".
+        /// We split dest and src in 2 halfs, namely:
+        ///    dest = high_dest, low_dest
+        ///    src  = high_src,  low_src
+        ///    
+        /// and then computing:
+        /// 
+        ///    low_dest * low_src
+        ///  + low_dest * high_src
+        ///  + low_src  * high_dest
+        /// 
+        /// After that, packing high_dest and low_dest together we get dest = dest * src
+        /// 
+        /// </summary>
+        /// <param name="dest">First operand and the location to store the result in</param>
+        /// <param name="src">Second operand</param>
         private void MulI8(Operand dest, Operand src)
         {
             RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX);

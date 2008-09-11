@@ -63,7 +63,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             }";
             Assert.IsTrue((bool)Run<I1_I1>("", "Test", "SwitchI1", a, a));
         }
-        /*
+        
         delegate bool I2_I2(short expect, short a);
         // Normal Testcases + (0, 0)
         [Row(1)]

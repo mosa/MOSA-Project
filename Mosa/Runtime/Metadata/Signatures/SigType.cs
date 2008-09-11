@@ -14,6 +14,9 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
+    /// <summary>
+    /// Represents a type signature
+    /// </summary>
     public class SigType
     {
         /// <summary>
