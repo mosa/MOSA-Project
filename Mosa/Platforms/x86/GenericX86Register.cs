@@ -34,6 +34,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Initializes a new instance of <see cref="GenericX86Register"/>.
         /// </summary>
+        /// <param name="index"></param>
         /// <param name="callerSaved">True if this register is caller saved, otherwise false.</param>
         protected GenericX86Register(int index, bool callerSaved) :
             base(index)

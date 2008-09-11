@@ -25,6 +25,9 @@ namespace Mosa.Platforms.x86
     {
         #region Construction
 
+        /// <summary>
+        /// 
+        /// </summary>
         public CliInstruction()
         {
         }

@@ -306,6 +306,10 @@ namespace Mosa.Platforms.x86
         /// <param name="src">The source operand of the instruction.</param>
         void Xor(Operand dest, Operand src);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
         void Setcc(Mosa.Runtime.CompilerFramework.IL.OpCode code);
 
         #endregion // x86 instructions

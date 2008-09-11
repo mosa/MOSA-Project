@@ -129,6 +129,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Initializes a new instance of <see cref="GeneralPurposeRegister"/>.
         /// </summary>
+        /// <param name="index"></param>
         /// <param name="gpr">The general purpose register index.</param>
         private GeneralPurposeRegister(int index, GPR gpr) :
             base(index, gpr == GPR.EAX)

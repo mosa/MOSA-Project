@@ -125,6 +125,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Initializes a new instance of <see cref="MachineCodeEmitter"/>.
         /// </summary>
+        /// <param name="compiler"></param>
         /// <param name="codeStream">The stream the machine code is written to.</param>
         /// <param name="linker">The linker used to resolve external addresses.</param>
         public MachineCodeEmitter(MethodCompilerBase compiler, Stream codeStream, IAssemblyLinker linker)
@@ -251,7 +252,7 @@ namespace Mosa.Platforms.x86
             // Save the current position
             long currentPosition = _codeStream.Position;
             // Relative branch offset
-            int relOffset;
+            //int relOffset;
             // Flag, if we should really emit the literal (only if the literal is used!)
             bool emit = false;
             // Byte representation of the literal
@@ -358,7 +359,7 @@ namespace Mosa.Platforms.x86
             // Check if we have to compare floatingpoint values
             if (op1.StackType == StackTypeCode.F || op2.StackType == StackTypeCode.F)
             {
-                RegisterOperand rop;
+                //RegisterOperand rop;
                 // Check for single precision and cast if necessary
                 if (op1.Type.Type == CilElementType.R4)
                 {

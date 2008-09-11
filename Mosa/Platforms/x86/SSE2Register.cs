@@ -84,6 +84,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Initializes a new SSE2Register.
         /// </summary>
+        /// <param name="index"></param>
         /// <param name="registerCode">The SSE2 register index of this instance.</param>
         private SSE2Register(int index, int registerCode) :
             base(index, false)

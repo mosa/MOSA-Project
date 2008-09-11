@@ -14,6 +14,9 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.Constraints
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class SseSubConstraint : IRegisterConstraint
     {
         /// <summary>

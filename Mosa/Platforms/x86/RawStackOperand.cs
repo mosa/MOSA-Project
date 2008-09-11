@@ -16,13 +16,26 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Platforms.x86
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class RawStackOperand : StackOperand
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="register"></param>
+        /// <param name="offset"></param>
         public RawStackOperand(SigType type, Register register, int offset)
             : base(type, register, offset)
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override object Clone()
         {
             throw new NotImplementedException();

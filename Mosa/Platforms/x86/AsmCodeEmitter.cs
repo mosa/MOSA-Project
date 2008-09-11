@@ -85,7 +85,10 @@ namespace Mosa.Platforms.x86
         #endregion // Properties
 
         #region ICodeEmitter Members
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="comment"></param>
         public void Comment(string comment)
         {
             foreach (string line in comment.Split('\n', '\r'))
@@ -93,16 +96,31 @@ namespace Mosa.Platforms.x86
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="label"></param>
         public void Label(int label)
         {
             _textWriter.WriteLine("L_{0:x}:", label);    
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="label"></param>
+        /// <param name="type"></param>
+        /// <param name="data"></param>
         public void Literal(int label, SigType type, object data)
         {
             _textWriter.WriteLine("C_{0:x}:\n\t\tdq\t{1}", label, WriteLiteral(type, data));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
         public void And(Operand dest, Operand src)
         {
             if (dest is ConstantOperand)
@@ -111,6 +129,11 @@ namespace Mosa.Platforms.x86
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         public void Add(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -119,6 +142,11 @@ namespace Mosa.Platforms.x86
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         public void Adc(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -127,92 +155,160 @@ namespace Mosa.Platforms.x86
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="method"></param>
         public void Call(RuntimeMethod method)
         {
             // HACK: method.DeclaringType is not setup right now, just emit the method name.
             _textWriter.WriteLine(String.Format("\t\tcall\t{0}", method.Name));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="label"></param>
         public void Call(int label)
         {
             // HACK: method.DeclaringType is not setup right now, just emit the method name.
             _textWriter.WriteLine(String.Format("\t\tcall\tL_{0:x}", label));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Cli()
         {
             _textWriter.WriteLine("\t\tcli");
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         public void Cmp(Operand op1, Operand op2)
         {
             _textWriter.WriteLine("\t\tcmp\t{0}, {1}", WriteOperand(op2), WriteOperand(op1));
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Int3()
         {
             _textWriter.WriteLine("\t\tint\t3");
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
         public void Ja(int dest)
         {
             _textWriter.WriteLine("\t\tja\tL_{0:x}", dest);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
         public void Jae(int dest)
         {
             _textWriter.WriteLine("\t\tjae\tL_{0:x}", dest);  
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
         public void Jb(int dest)
         {
             _textWriter.WriteLine("\t\tjb\tL_{0:x}", dest);            
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
         public void Jbe(int dest)
         {
             _textWriter.WriteLine("\t\tjbe\tL_{0:x}", dest);
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
         public void Je(int dest)
         {
             _textWriter.WriteLine("\t\tje\tL_{0:x}", dest);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
         public void Jg(int dest)
         {
             _textWriter.WriteLine("\t\tjg\tL_{0:x}", dest);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
         public void Jge(int dest)
         {
             _textWriter.WriteLine("\t\tjge\tL_{0:x}", dest);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
         public void Jl(int dest)
         {
             _textWriter.WriteLine("\t\tjl\tL_{0:x}", dest);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
         public void Jle(int dest)
         {
             _textWriter.WriteLine("\t\tjle\tL_{0:x}", dest);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
         public void Jne(int dest)
         {
             _textWriter.WriteLine("\t\tjne\tL_{0:x}", dest);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
         public void Jmp(int dest)
         {
             _textWriter.WriteLine("\t\tjmp\tL_{0:x}", dest);
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         public void Mul(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -221,6 +317,11 @@ namespace Mosa.Platforms.x86
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         public void SseAdd(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -229,6 +330,11 @@ namespace Mosa.Platforms.x86
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         public void SseSub(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -237,6 +343,11 @@ namespace Mosa.Platforms.x86
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         public void SseMul(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -245,6 +356,11 @@ namespace Mosa.Platforms.x86
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         public void SseDiv(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -253,6 +369,11 @@ namespace Mosa.Platforms.x86
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         public void Shl(Operand op1, Operand op2)
         {
             if (!(op1 is RegisterOperand))
@@ -262,6 +383,11 @@ namespace Mosa.Platforms.x86
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         public void Shr(Operand op1, Operand op2)
         {
             if (!(op1 is RegisterOperand))
@@ -271,6 +397,11 @@ namespace Mosa.Platforms.x86
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         public void Div(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -279,6 +410,11 @@ namespace Mosa.Platforms.x86
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
         public void Mov(Operand dest, Operand src)
         {
             if (dest is ConstantOperand && !(src is ConstantOperand))
@@ -316,6 +452,11 @@ namespace Mosa.Platforms.x86
                 _textWriter.WriteLine("\t\tmov\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
         public void Movsx(Operand dest, Operand src)
         {
             if (!(dest is RegisterOperand))
@@ -326,6 +467,11 @@ namespace Mosa.Platforms.x86
             _textWriter.WriteLine("\t\tmovsx\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
         public void Movzx(Operand dest, Operand src)
         {
             if (!(dest is RegisterOperand))
@@ -336,12 +482,19 @@ namespace Mosa.Platforms.x86
             _textWriter.WriteLine("\t\tmovzx\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Nop()
         {
             _textWriter.WriteLine("\t\tnop");
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
         public void Not(Operand dest)
         {
             if (dest is ConstantOperand)
@@ -350,6 +503,11 @@ namespace Mosa.Platforms.x86
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
         public void Or(Operand dest, Operand src)
         {
             if (dest is ConstantOperand)
@@ -358,30 +516,49 @@ namespace Mosa.Platforms.x86
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operand"></param>
         public void Pop(Operand operand)
         {
             _textWriter.WriteLine("\t\tpop\t{0}", WriteOperand(operand));
           
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operand"></param>
         public void Push(Operand operand)
         {
             _textWriter.WriteLine("\t\tpush\t{0}", WriteOperand(operand));
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Ret()
         {
             _textWriter.WriteLine("\t\tret");
             _textWriter.Flush();   
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Sti()
         {
             _textWriter.WriteLine("\t\tsti");
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
         public void Sub(Operand dest, Operand src)
         {
             if (dest is ConstantOperand)
@@ -390,6 +567,11 @@ namespace Mosa.Platforms.x86
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
         public void In(Operand dest, Operand src)
         {
             if (!(dest is RegisterOperand))
@@ -402,6 +584,11 @@ namespace Mosa.Platforms.x86
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
         public void Out(Operand dest, Operand src)
         {
             // Copies the value from the second operand (source operand) to the I/O port 
@@ -417,6 +604,11 @@ namespace Mosa.Platforms.x86
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
         public void Xor(Operand dest, Operand src)
         {
             if (dest is ConstantOperand)
@@ -425,6 +617,10 @@ namespace Mosa.Platforms.x86
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
         public void Setcc(Mosa.Runtime.CompilerFramework.IL.OpCode code)
         {
             _textWriter.WriteLine("\t\tseteq\teax");

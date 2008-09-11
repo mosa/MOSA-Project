@@ -40,6 +40,11 @@ namespace Mosa.Platforms.x86
 
         #region EpilogueInstruction Overrides
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="methodCompiler"></param>
+        /// <returns></returns>
         public override object Expand(MethodCompilerBase methodCompiler)
         {
             IArchitecture architecture = methodCompiler.Architecture;

@@ -79,6 +79,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Initializes a new instance of the MMX register.
         /// </summary>
+        /// <param name="index"></param>
         /// <param name="registerCode">The MMX register index.</param>
         private MMXRegister(int index, int registerCode) :
             base(index, false)

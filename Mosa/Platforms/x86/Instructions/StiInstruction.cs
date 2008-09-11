@@ -23,7 +23,9 @@ namespace Mosa.Platforms.x86
     public sealed class StiInstruction : Instruction
     {
         #region Construction
-
+        /// <summary>
+        /// 
+        /// </summary>
         public StiInstruction()
         {
         }

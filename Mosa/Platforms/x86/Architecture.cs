@@ -99,6 +99,10 @@ namespace Mosa.Platforms.x86
 
         #region Construction
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="features"></param>
         protected Architecture(ArchitectureFeatureFlags features)
         {
             _features = features;
@@ -243,6 +247,10 @@ namespace Mosa.Platforms.x86
             return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override ObjectFileBuilderBase[] GetObjectFileBuilders()
         {
             return new ObjectFileBuilderBase[] {
