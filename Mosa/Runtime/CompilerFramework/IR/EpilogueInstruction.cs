@@ -77,9 +77,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
         public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
         {
-            IIrVisitor<ArgType> irv = visitor as IIrVisitor<ArgType>;
+            IIRVisitor<ArgType> irv = visitor as IIRVisitor<ArgType>;
             if (null == irv)
-                throw new ArgumentException(@"Must implement IIrVisitor interface!", @"visitor");
+                throw new ArgumentException(@"Must implement IIRVisitor interface!", @"visitor");
 
             irv.Visit(this, arg);
         }

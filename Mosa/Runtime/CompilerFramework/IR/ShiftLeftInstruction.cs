@@ -61,7 +61,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
         /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
-        protected override void Visit<ArgType>(IIrVisitor<ArgType> visitor, ArgType arg)
+        protected override void Visit<ArgType>(IIRVisitor<ArgType> visitor, ArgType arg)
         {
             visitor.Visit(this, arg);
         }

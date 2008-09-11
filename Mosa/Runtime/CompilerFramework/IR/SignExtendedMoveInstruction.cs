@@ -106,13 +106,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <summary>
         /// Implementation of the visitor pattern.
         /// </summary>
-        /// <param name="visitor">The visitor requesting visitation. The object must implement <see cref="IIrVisitor"/>.</param>
+        /// <param name="visitor">The visitor requesting visitation. The object must implement <see cref="IIRVisitor"/>.</param>
         /// <param name="arg">Generic context information to pass to the visitor.</param>
         public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
         {
-            IIrVisitor<ArgType> irv = visitor as IIrVisitor<ArgType>;
+            IIRVisitor<ArgType> irv = visitor as IIRVisitor<ArgType>;
             if (null == irv)
-                throw new ArgumentException(@"Must implement IIrVisitor!", @"visitor");
+                throw new ArgumentException(@"Must implement IIRVisitor!", @"visitor");
 
             irv.Visit(this, arg);
         }

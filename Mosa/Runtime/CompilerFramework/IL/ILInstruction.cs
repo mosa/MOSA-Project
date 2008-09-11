@@ -140,6 +140,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
             Debug.Assert(null != ilv);
             if (null != ilv)
                 Visit(ilv, arg);
+            else
+                base.Visit(visitor, arg);
         }
 
         /// <summary>

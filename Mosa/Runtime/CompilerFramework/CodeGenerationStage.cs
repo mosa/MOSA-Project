@@ -17,6 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Base class for code generation stages.
     /// </summary>
+    /// <typeparam name="ContextType">Specifies the context type used by the code generation stage for its visitors.</typeparam>
     public abstract class CodeGenerationStage<ContextType> : IMethodCompilerStage, IInstructionVisitor<ContextType>
     {
         #region Data members
@@ -142,5 +143,15 @@ namespace Mosa.Runtime.CompilerFramework
         protected abstract void EndGenerate();
 
         #endregion // Methods
+
+        #region IInstructionVisitor<ContextType> Members
+
+        void IInstructionVisitor<ContextType>.Visit(Instruction instruction, ContextType arg)
+        {
+            Trace.WriteLine(String.Format(@"Unknown instruction {0} has visited CodeGenerationStage<ContextType>.", instruction.GetType().FullName));
+            throw new NotSupportedException();
+        }
+
+        #endregion // IInstructionVisitor<ContextType> Members
     }
 }

@@ -50,14 +50,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
         public abstract override string ToString();
 
         /// <summary>
-        /// Determines if the visitor supports IIrVisitor and dispatches visitation appropriately.
+        /// Determines if the visitor supports IIRVisitor and dispatches visitation appropriately.
         /// </summary>
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
         /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
         public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
         {
-            IIrVisitor<ArgType> irv = visitor as IIrVisitor<ArgType>;
+            IIRVisitor<ArgType> irv = visitor as IIRVisitor<ArgType>;
             if (null != irv)
                 Visit(irv, arg);
             else
@@ -70,7 +70,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
         /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
-        protected abstract void Visit<ArgType>(IIrVisitor<ArgType> visitor, ArgType arg);
+        protected abstract void Visit<ArgType>(IIRVisitor<ArgType> visitor, ArgType arg);
 
         #endregion // Methods
     }

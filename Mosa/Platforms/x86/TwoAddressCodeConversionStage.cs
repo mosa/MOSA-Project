@@ -48,12 +48,19 @@ namespace Mosa.Platforms.x86
         IMethodCompilerStage,
         IInstructionVisitor<int>,
         IL.IILVisitor<int>,
-        IR.IIrVisitor<int>,
+        IR.IIRVisitor<int>,
         IX86InstructionVisitor<int>
     {
+        #region Construction
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="TwoAddressCodeConversionStage"/>.
+        /// </summary>
         public TwoAddressCodeConversionStage()
         {
         }
+
+        #endregion // Construction
 
         #region IMethodCompilerStage Members
 
@@ -96,6 +103,16 @@ namespace Mosa.Platforms.x86
         }
 
         #endregion // IMethodCompilerStage Members
+
+        #region IInstructionVisitor<int> Members
+
+        void IInstructionVisitor<int>.Visit(Instruction instruction, int arg)
+        {
+            Trace.WriteLine(String.Format(@"Unknown instruction {0} has visited TwoAddressConversionStage.", instruction.GetType().FullName));
+            throw new NotSupportedException();
+        }
+
+        #endregion // IInstructionVisitor<int> Members
 
         #region IILVisitor Members
 
@@ -456,65 +473,77 @@ namespace Mosa.Platforms.x86
 
         #endregion // IILVisitor Members
 
-        #region IIrVisitor Members
+        #region IIRVisitor Members
 
-        void IR.IIrVisitor<int>.Visit(IR.EpilogueInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.ArithmeticShiftRightInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.LiteralInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.EpilogueInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.LogicalAndInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.LiteralInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.LogicalOrInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.LogicalAndInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.LogicalXorInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.LogicalOrInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.LogicalNotInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.LogicalXorInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.MoveInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.LogicalNotInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.PhiInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.MoveInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.PopInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.PhiInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.PrologueInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.PopInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.PushInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.PrologueInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.ReturnInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.PushInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.SignExtendedMoveInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.ReturnInstruction instruction, int arg)
         {
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.ZeroExtendedMoveInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.ShiftLeftInstruction instruction, int arg)
         {
         }
 
-        #endregion // IIrVisitor Members
+        void IR.IIRVisitor<int>.Visit(IR.ShiftRightInstruction instruction, int arg)
+        {
+        }
+
+        void IR.IIRVisitor<int>.Visit(IR.SignExtendedMoveInstruction instruction, int arg)
+        {
+        }
+
+        void IR.IIRVisitor<int>.Visit(IR.ZeroExtendedMoveInstruction instruction, int arg)
+        {
+        }
+
+        #endregion // IIRVisitor Members
 
         #region IX86InstructionVisitor Members
 

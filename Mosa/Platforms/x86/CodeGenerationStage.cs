@@ -35,7 +35,7 @@ namespace Mosa.Platforms.x86
     /// register usage though. This should clearly be done after the results of this approach
     /// have been validated.
     /// </remarks>
-    sealed class CodeGenerator : CodeGenerationStage<int>, IX86InstructionVisitor<int>, IL.IILVisitor<int>, IR.IIrVisitor<int>
+    sealed class CodeGenerator : CodeGenerationStage<int>, IX86InstructionVisitor<int>, IL.IILVisitor<int>, IR.IIRVisitor<int>
     {
         #region Data members
 
@@ -856,40 +856,44 @@ namespace Mosa.Platforms.x86
 
         #endregion // Internal Helpers
 
-        #region IIrVisitor Members
+        #region IIRVisitor Members
 
-        void IR.IIrVisitor<int>.Visit(IR.EpilogueInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.ArithmeticShiftRightInstruction instruction, int arg)
+        {
+        }
+
+        void IR.IIRVisitor<int>.Visit(IR.EpilogueInstruction instruction, int arg)
         {
             // Epilogue instruction should have been expanded in a stage before ours.
             throw new NotSupportedException();
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.LiteralInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.LiteralInstruction instruction, int arg)
         {
             _emitter.Literal(instruction.Label, instruction.Type, instruction.Data);
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.LogicalAndInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.LogicalAndInstruction instruction, int arg)
         {
             _emitter.And(instruction.Destination, instruction.Operand2);
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.LogicalOrInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.LogicalOrInstruction instruction, int arg)
         {
             _emitter.Or(instruction.Destination, instruction.Operand2);
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.LogicalXorInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.LogicalXorInstruction instruction, int arg)
         {
             _emitter.Xor(instruction.Destination, instruction.Operand2);
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.LogicalNotInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.LogicalNotInstruction instruction, int arg)
         {
             _emitter.Not(instruction.Destination);
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.MoveInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.MoveInstruction instruction, int arg)
         {
             Operand dst = instruction.Results[0], src = instruction.Operands[0];
 
@@ -926,33 +930,41 @@ namespace Mosa.Platforms.x86
             }
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.PhiInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.PhiInstruction instruction, int arg)
         {
             throw new NotSupportedException(@"PHI functions should've been removed by the LeaveSSA stage.");
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.PopInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.PopInstruction instruction, int arg)
         {
             _emitter.Pop(instruction.Destination);
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.PrologueInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.PrologueInstruction instruction, int arg)
         {
             // Prologue instruction should have been expanded in a stage before ours.
             throw new NotSupportedException();
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.PushInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.PushInstruction instruction, int arg)
         {
             _emitter.Push(instruction.Source);
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.ReturnInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.ReturnInstruction instruction, int arg)
         {
             _emitter.Ret();
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.SignExtendedMoveInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.ShiftLeftInstruction instruction, int arg)
+        {
+        }
+
+        void IR.IIRVisitor<int>.Visit(IR.ShiftRightInstruction instruction, int arg)
+        {
+        }
+
+        void IR.IIRVisitor<int>.Visit(IR.SignExtendedMoveInstruction instruction, int arg)
         {
             switch (instruction.Destination.Type.Type)
             {
@@ -977,7 +989,7 @@ namespace Mosa.Platforms.x86
             }
         }
 
-        void IR.IIrVisitor<int>.Visit(IR.ZeroExtendedMoveInstruction instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.ZeroExtendedMoveInstruction instruction, int arg)
         {
             switch (instruction.Destination.Type.Type)
             {
@@ -997,6 +1009,6 @@ namespace Mosa.Platforms.x86
             }
         }
 
-        #endregion // IIrVisitor Members
+        #endregion // IIRVisitor Members
     }
 }

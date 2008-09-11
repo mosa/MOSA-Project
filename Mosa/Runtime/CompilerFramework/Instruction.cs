@@ -386,7 +386,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
         /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
-        public abstract void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg);
+        public virtual void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
+        {
+            visitor.Visit(this, arg);
+        }
 
         #endregion // Methods
     }

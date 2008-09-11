@@ -14,8 +14,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <summary>
     /// Visitor interface for instructions of the intermediate representation.
     /// </summary>
-    public interface IIrVisitor<ArgType>
+    public interface IIRVisitor<ArgType>
     {
+        /// <summary>
+        /// Visitation function for <see cref="ArithmeticShiftRightInstruction"/> instructions.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        /// <param name="arg">A visitation context argument.</param>
+        void Visit(ArithmeticShiftRightInstruction instruction, ArgType arg);
+
         /// <summary>
         /// Visitation function for <see cref="EpilogueInstruction"/> instructions.
         /// </summary>
@@ -87,6 +94,20 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// </summary>
         /// <param name="instruction">The visiting instruction.</param>
         void Visit(ReturnInstruction instruction, ArgType arg);
+
+        /// <summary>
+        /// Visitation function for <see cref="ShiftLeftInstruction"/> instructions.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        /// <param name="arg">A visitation context argument.</param>
+        void Visit(ShiftLeftInstruction instruction, ArgType arg);
+
+        /// <summary>
+        /// Visitation function for <see cref="ShiftRightInstruction"/> instructions.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        /// <param name="arg">A visitation context argument.</param>
+        void Visit(ShiftRightInstruction instruction, ArgType arg);
 
         /// <summary>
         /// Visitation function for <see cref="SignExtendedMoveInstruction"/> instructions.
