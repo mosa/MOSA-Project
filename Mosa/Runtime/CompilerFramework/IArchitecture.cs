@@ -95,7 +95,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// Factory method for result operands of instructions.
         /// </summary>
         /// <param name="type">The datatype held in the result operand.</param>
-        /// <returns>The operand, which holds the instruction result.</returns>
+        /// <param name="label">The label.</param>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// The operand, which holds the instruction result.
+        /// </returns>
         Operand CreateResultOperand(SigType type, int label, int index);
 
         /// <summary>

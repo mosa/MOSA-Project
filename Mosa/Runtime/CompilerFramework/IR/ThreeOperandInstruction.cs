@@ -28,6 +28,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ThreeOperandInstruction"/> class.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <param name="op1">The op1.</param>
+        /// <param name="op2">The op2.</param>
         public ThreeOperandInstruction(Operand result, Operand op1, Operand op2) :
             base(2, 1)
         {

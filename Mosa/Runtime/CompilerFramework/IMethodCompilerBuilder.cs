@@ -13,8 +13,15 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IMethodCompilerBuilder
     {
+        /// <summary>
+        /// Gets the scheduled.
+        /// </summary>
+        /// <value>The scheduled.</value>
         IEnumerable<MethodCompilerBase> Scheduled { get; }
     }
 }

@@ -13,16 +13,34 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MethodSpecSignature : Signature
     {
+        /// <summary>
+        /// 
+        /// </summary>
         SigType[] _types;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MethodSpecSignature"/> class.
+        /// </summary>
         public MethodSpecSignature()
         {
         }
 
+        /// <summary>
+        /// Gets the types.
+        /// </summary>
+        /// <value>The types.</value>
         public SigType[] Types { get { return _types; } }
 
+        /// <summary>
+        /// Parses the signature.
+        /// </summary>
+        /// <param name="buffer">The buffer.</param>
+        /// <param name="index">The index.</param>
         protected override void ParseSignature(byte[] buffer, ref int index)
         {
             if (0x0A != buffer[index])

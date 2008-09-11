@@ -10,7 +10,10 @@
 using Mosa.DeviceDrivers;
 
 namespace Mosa.DeviceDrivers
-{	
+{
+    /// <summary>
+    /// 
+    /// </summary>
 	public interface IScanCodeMap
 	{
 		/// <summary>

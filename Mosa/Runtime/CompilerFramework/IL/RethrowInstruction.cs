@@ -35,6 +35,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Properties
 
+        /// <summary>
+        /// Determines flow behavior of this instruction.
+        /// </summary>
+        /// <value></value>
+        /// <remarks>
+        /// Knowledge of control flow is required for correct basic block
+        /// building. Any instruction that alters the control flow must override
+        /// this property and correctly identify its control flow modifications.
+        /// </remarks>
         public override FlowControl FlowControl
         {
             get { return FlowControl.Throw; }

@@ -13,10 +13,17 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class AddInstruction : ArithmeticInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the arithmetic instruction to create.</param>
         public AddInstruction(OpCode code) :
             base(code)
         {
@@ -24,6 +31,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 throw new ArgumentException(@"Opcode not supported.", @"code");
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="source">The source.</param>
         public AddInstruction(OpCode code, Operand destination, Operand source) :
             base(code, destination, source)
         {
@@ -35,6 +48,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region ArithmeticInstruction Overrides
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             Operand[] ops = this.Operands;

@@ -55,12 +55,33 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Called by the intermediate to machine intermediate representation transformation
+        /// to expand compound instructions into their basic instructions.
+        /// </summary>
+        /// <param name="methodCompiler">The executing method compiler.</param>
+        /// <returns>
+        /// The default expansion keeps the original instruction by
+        /// returning the instruction itself. A derived class may return an
+        /// IEnumerable&lt;Instruction&gt; to replace the instruction with a set of other
+        /// instructions or null to remove the instruction itself from the stream.
+        /// </returns>
+        /// <remarks>
+        /// If a derived class returns <see cref="Instruction.Empty"/> from this method, the
+        /// instruction is essentially removed from the instruction stream.
+        /// </remarks>
         public override object Expand(MethodCompilerBase methodCompiler)
         {
             IArchitecture arch = methodCompiler.Architecture;
             return arch.CreateInstruction(typeof(IR.LogicalNotInstruction), this.Results[0], this.Operands[0]);            
         }
 
+        /// <summary>
+        /// Validates the current set of stack operands.
+        /// </summary>
+        /// <param name="compiler"></param>
+        /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
+        /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
         public override void Validate(MethodCompilerBase compiler)
         {
  	        base.Validate(compiler);

@@ -11,20 +11,36 @@ using Mosa.DeviceDrivers.Kernel;
 
 namespace Mosa.DeviceDrivers
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public class IOPortResources
 	{
 		// This array represents a bit map of IO ports which should not be
 		// used by Plug-and-Play (PnP) systems, such as for ISA and PCI
+        /// <summary>
+        /// 
+        /// </summary>
 		public byte[] reservedForLegacyISADevices;
 
 		// All legacy ISA cards occupy the IO region from 0x0100 through 0x3FF
+        /// <summary>
+        /// 
+        /// </summary>
 		public const ushort StartLegacyISAPort = 0x0100;
+        /// <summary>
+        /// 
+        /// </summary>
 		public const ushort EndLegacyISAPort = 0x3FF;
+        /// <summary>
+        /// 
+        /// </summary>
 		public const ushort Size = 768; // EndLegacyISAPort - StartLegacyISAPort
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PortIOSpace"/> class.
-		/// </summary>
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IOPortResources"/> class.
+        /// </summary>
 		public IOPortResources()
 		{
 			reservedForLegacyISADevices = new byte[Size / 8];
@@ -88,11 +104,20 @@ namespace Mosa.DeviceDrivers
 			return (value & (byte)(1 << (port % 8))) != 0;
 		}
 
+        /// <summary>
+        /// Gets the IO port.
+        /// </summary>
+        /// <param name="port">The port.</param>
+        /// <param name="offset">The offset.</param>
+        /// <returns></returns>
 		public IReadWriteIOPort GetIOPort(ushort port, ushort offset)
 		{
 			return HAL.RequestIOPort((ushort)(port + offset));
 		}
 
+        /// <summary>
+        /// Reserves the default legacy ISA device ports.
+        /// </summary>
 		protected void ReserveDefaultLegacyISADevicePorts()
 		{
 			// A list of IO ports to avoid for PnP purposes

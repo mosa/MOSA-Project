@@ -17,6 +17,9 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LdfldInstruction : UnaryInstruction
     {
         #region Data members
@@ -30,9 +33,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LdfldInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the unary instruction.</param>
         public LdfldInstruction(OpCode code)
             : base(code, 1)
         {
+            _field = Field;
         }
 
         #endregion // Construction
@@ -48,6 +56,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             // Decode the base class, it loads the object ref

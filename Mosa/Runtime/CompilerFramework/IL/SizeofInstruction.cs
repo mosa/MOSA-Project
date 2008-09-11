@@ -15,10 +15,17 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class SizeofInstruction : ILInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SizeofInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
         public SizeofInstruction(OpCode code)
             : base(code, 0, 1)
         {
@@ -31,6 +38,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             // Decode base first
@@ -52,9 +67,9 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
         /// </summary>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
-        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
         public sealed override void Visit<ArgType>(IILVisitor<ArgType> visitor, ArgType arg)
         {
             visitor.Sizeof(this, arg);

@@ -13,16 +13,26 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class NoPrefixInstruction : PrefixInstruction
     {
         #region Data members
 
+        /// <summary>
+        /// 
+        /// </summary>
         private byte _noCheck;
 
         #endregion // Data members
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NoPrefixInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
         public NoPrefixInstruction(OpCode code)
             : base(code)
         {
@@ -32,6 +42,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Properties
 
+        /// <summary>
+        /// Gets the no check.
+        /// </summary>
+        /// <value>The no check.</value>
         public byte NoCheck
         {
             get { return _noCheck; }
@@ -41,6 +55,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             // Decode base class

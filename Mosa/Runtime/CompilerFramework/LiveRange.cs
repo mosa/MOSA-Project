@@ -13,6 +13,9 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class LiveRange
     {
     }

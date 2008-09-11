@@ -19,13 +19,16 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.Vm
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class RuntimeMethod : RuntimeMember, IEquatable<RuntimeMethod>
     {
         #region Constants
 
-        /// <summary>
-        /// Static instance of RuntimeMethod array used for types without methods.
-        /// </summary>
+        // <summary>
+        // Static instance of RuntimeMethod array used for types without methods.
+        // </summary>
         //public static readonly RuntimeMethod[] None = new RuntimeMethod[0];
 
         #endregion // Constants
@@ -76,6 +79,13 @@ namespace Mosa.Runtime.Vm
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuntimeMethod"/> class.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="module">The module.</param>
+        /// <param name="method">The method.</param>
+        /// <param name="maxParam">The max param.</param>
         public RuntimeMethod(int token, IMetadataModule module, ref MethodDefRow method, TokenTypes maxParam) :
             base(token, module, null, null)
         {
@@ -104,6 +114,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Retrieves the method attributes.
         /// </summary>
+        /// <value>The attributes.</value>
         public MethodAttributes Attributes
         {
             get { return _attributes; }
@@ -112,6 +123,9 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Determines if the method is a generic method.
         /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is generic; otherwise, <c>false</c>.
+        /// </value>
         public bool IsGeneric
         {
             // FIXME:
@@ -121,6 +135,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Gets the method implementation attributes.
         /// </summary>
+        /// <value>The impl attributes.</value>
         public MethodImplAttributes ImplAttributes
         {
             get { return _implFlags; }
@@ -129,6 +144,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Retrieves the name of the method.
         /// </summary>
+        /// <value>The name.</value>
         public override string Name
         {
             get
@@ -144,6 +160,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Returns the parameter definitions of this method.
         /// </summary>
+        /// <value>The parameters.</value>
         public IList<RuntimeParameter> Parameters
         {
             get { return _parameters; }
@@ -152,6 +169,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Retrieves the signature of the method.
         /// </summary>
+        /// <value>The signature.</value>
         public MethodSignature Signature
         {
             get 
@@ -167,6 +185,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Holds the RVA of the method in the binary.
         /// </summary>
+        /// <value>The rva.</value>
         public uint Rva
         {
             get { return _rva; }
@@ -189,6 +208,13 @@ namespace Mosa.Runtime.Vm
 
         #region IEquatable<RuntimeMethod> Members
 
+        /// <summary>
+        /// Gibt an, ob das aktuelle Objekt gleich einem anderen Objekt des gleichen Typs ist.
+        /// </summary>
+        /// <param name="other">Ein Objekt, das mit diesem Objekt verglichen werden soll.</param>
+        /// <returns>
+        /// true, wenn das aktuelle Objekt gleich dem <paramref name="other"/>-Parameter ist, andernfalls false.
+        /// </returns>
         public bool Equals(RuntimeMethod other)
         {
             return (Module == other.Module && _nameStringIdx == other._nameStringIdx && _signatureBlobIdx == other._signatureBlobIdx);
@@ -198,6 +224,12 @@ namespace Mosa.Runtime.Vm
 
         #region Object Overrides
 
+        /// <summary>
+        /// Gibt einen <see cref="T:System.String"/> zurück, der den aktuellen <see cref="T:System.Object"/> darstellt.
+        /// </summary>
+        /// <returns>
+        /// Ein <see cref="T:System.String"/>, der den aktuellen <see cref="T:System.Object"/> darstellt.
+        /// </returns>
         public override string ToString()
         {
             StringBuilder result = new StringBuilder();

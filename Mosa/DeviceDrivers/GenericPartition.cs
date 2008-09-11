@@ -11,27 +11,72 @@ namespace Mosa.DeviceDrivers
 {
 	#region PartitionTypes
 
+    /// <summary>
+    /// 
+    /// </summary>
 	public struct PartitionTypes
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public const byte GPT = 0xEE;
+        /// <summary>
+        /// 
+        /// </summary>
 		public const byte Empty = 0x00;
+        /// <summary>
+        /// 
+        /// </summary>
 		public const byte ExtendedPartition = 0x0F;
+        /// <summary>
+        /// 
+        /// </summary>
 		public const byte OldExtendedPartition = 0x05; // limited to disks under 8.4Gb
+        /// <summary>
+        /// 
+        /// </summary>
 		public const byte Fat12 = 0x01;
+        /// <summary>
+        /// 
+        /// </summary>
 		public const byte Fat16 = 0x04;
+        /// <summary>
+        /// 
+        /// </summary>
 		public const byte Fat32 = 0x0B;
 	}
 
 	#endregion
 
+    /// <summary>
+    /// 
+    /// </summary>
 	public class GenericPartition
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		private bool bootable;
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint startLBA;
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint totalBlocks;
+        /// <summary>
+        /// 
+        /// </summary>
 		private byte type;
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint index;
-		private uint[] guid;	// for Guid Partition Table (GPT)
+        /// <summary>
+        /// for Guid Partition Table (GPT)
+        /// </summary>
+		private uint[] guid;	
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GenericPartition"/> class.

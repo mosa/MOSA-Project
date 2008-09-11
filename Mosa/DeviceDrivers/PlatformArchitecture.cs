@@ -11,14 +11,29 @@ using System;
 
 namespace Mosa.DeviceDrivers
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	[Flags]
 	public enum PlatformArchitecture
 	{
-		None = 0,	
+        /// <summary>
+        /// 
+        /// </summary>
+		None = 0,
 
+        /// <summary>
+        /// 
+        /// </summary>
 		x86 = 1,
+        /// <summary>
+        /// 
+        /// </summary>
 		x64 = 2,
-		
+
+        /// <summary>
+        /// 
+        /// </summary>
 		Both_x86_and_x64 = PlatformArchitecture.x86 | PlatformArchitecture.x64,
 	}
 }

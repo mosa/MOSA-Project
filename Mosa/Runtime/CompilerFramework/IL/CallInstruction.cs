@@ -26,6 +26,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CallInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the invoke instruction.</param>
         public CallInstruction(OpCode code)
             : base(code)
         {
@@ -36,6 +40,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Properties
 
+        /// <summary>
+        /// Gets the supported immediate metadata tokens in the instruction.
+        /// </summary>
+        /// <value></value>
         protected override InvokeInstruction.InvokeSupportFlags InvokeSupport
         {
             get { return InvokeSupportFlags.MemberRef | InvokeSupportFlags.MethodDef | InvokeSupportFlags.MethodSpec; }

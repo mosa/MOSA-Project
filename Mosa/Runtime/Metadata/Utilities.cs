@@ -15,8 +15,17 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.Metadata
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Utilities
     {
+        /// <summary>
+        /// Reads the compressed int32.
+        /// </summary>
+        /// <param name="buffer">The buffer.</param>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
         public static int ReadCompressedInt32(byte[] buffer, ref int index)
         {
             if (null == buffer)
@@ -52,8 +61,10 @@ namespace Mosa.Runtime.Metadata
         /// <summary>
         /// Reads an (optional) custom modifier
         /// </summary>
+        /// <param name="provider">The provider.</param>
         /// <param name="buffer">The buffer to read the modifier from.</param>
         /// <param name="index">The start index, where the modifier is expected.</param>
+        /// <returns></returns>
         public static bool ReadCustomMod(IMetadataProvider provider, byte[] buffer, ref int index)
         {
             bool result = (buffer[index] == (byte)CilElementType.Required || buffer[index] == (byte)CilElementType.Optional);
@@ -66,8 +77,18 @@ namespace Mosa.Runtime.Metadata
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private static readonly TokenTypes[] _typeDefOrRefEncodedTables = new TokenTypes[] { TokenTypes.TypeDef, TokenTypes.TypeRef, TokenTypes.TypeSpec };
 
+        /// <summary>
+        /// Reads the type def or ref encoded.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="buffer">The buffer.</param>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
         public static TokenTypes ReadTypeDefOrRefEncoded(IMetadataProvider provider, byte[] buffer, ref int index)
         {
             int value = Utilities.ReadCompressedInt32(buffer, ref index);

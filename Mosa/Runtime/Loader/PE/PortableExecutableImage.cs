@@ -18,10 +18,16 @@ using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Runtime.Loader.PE
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class PortableExecutableImage : IMetadataModule, IDisposable
     {
         #region Constants
 
+        /// <summary>
+        /// 
+        /// </summary>
         private const int CLI_HEADER_DATA_DIRECTORY = 0x0e;
 
         #endregion // Constants
@@ -69,6 +75,11 @@ namespace Mosa.Runtime.Loader.PE
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PortableExecutableImage"/> class.
+        /// </summary>
+        /// <param name="loadOrder">The load order.</param>
+        /// <param name="stream">The stream.</param>
         private PortableExecutableImage(int loadOrder, Stream stream)
         {
             _assemblyStream = stream;
@@ -109,11 +120,19 @@ namespace Mosa.Runtime.Loader.PE
 
         #region Properties
 
+        /// <summary>
+        /// Retrieves the load order index of the module.
+        /// </summary>
+        /// <value></value>
         public int LoadOrder
         {
             get { return _loadOrder; }
         }
 
+        /// <summary>
+        /// Retrieves the name of the module.
+        /// </summary>
+        /// <value></value>
         public string Name
         {
             get
@@ -126,6 +145,10 @@ namespace Mosa.Runtime.Loader.PE
             }
         }
 
+        /// <summary>
+        /// Provides access to the provider contained in the assembly.
+        /// </summary>
+        /// <value></value>
         public IMetadataProvider Metadata
         {
             get
@@ -148,6 +171,12 @@ namespace Mosa.Runtime.Loader.PE
             return new InstructionStream(_assemblyStream, ResolveVirtualAddress(rva));
         }
 
+        /// <summary>
+        /// Loads the specified load order.
+        /// </summary>
+        /// <param name="loadOrder">The load order.</param>
+        /// <param name="stream">The stream.</param>
+        /// <returns></returns>
         public static PortableExecutableImage Load(int loadOrder, Stream stream)
         {
             // Check preconditions
@@ -158,6 +187,11 @@ namespace Mosa.Runtime.Loader.PE
             return new PortableExecutableImage(loadOrder, stream);
         }
 
+        /// <summary>
+        /// Resolves the virtual address.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <returns></returns>
         internal long ResolveVirtualAddress(long address)
         {
             if (null == _sections)
@@ -182,6 +216,9 @@ namespace Mosa.Runtime.Loader.PE
 
         #region IDisposable Members
 
+        /// <summary>
+        /// Führt anwendungsspezifische Aufgaben durch, die mit der Freigabe, der Zurückgabe oder dem Zurücksetzen von nicht verwalteten Ressourcen zusammenhängen.
+        /// </summary>
         void IDisposable.Dispose()
         {
             if (null != _assemblyReader)

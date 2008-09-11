@@ -34,7 +34,7 @@ namespace Mosa.Runtime.CompilerFramework
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of <see cref="AssemblyLinkerStage"/>.
+        /// Initializes a new instance of <see cref="AssemblyLinkerStageBase"/>.
         /// </summary>
         protected AssemblyLinkerStageBase()
         {
@@ -45,11 +45,19 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IAssemblyCompilerStage Members
 
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value></value>
         string IAssemblyCompilerStage.Name
         {
             get { return @"Linker"; }
         }
 
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        /// <param name="compiler">The compiler context to perform processing in.</param>
         void IAssemblyCompilerStage.Run(AssemblyCompiler compiler)
         {
             long address;
@@ -73,10 +81,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// A request to patch already emitted code by storing the calculated address value.
         /// </summary>
-        /// <param name="linkType"></param>
+        /// <param name="linkType">Type of the link.</param>
         /// <param name="method">The method whose code is being patched.</param>
-        /// <param name="targetAddress">The position in code, where it should be patched.</param>
         /// <param name="methodOffset">The value to store at the position in code.</param>
+        /// <param name="methodRelativeBase">The method relative base.</param>
+        /// <param name="targetAddress">The position in code, where it should be patched.</param>
         protected abstract void ApplyPatch(LinkType linkType, RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress);
 
         #endregion // Methods
@@ -88,7 +97,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="member">The runtime member to determine resolution of.</param>
         /// <param name="address">Receives the determined address of the runtime member.</param>
-        /// <returns>The method returns true, when it was successfully resolved.</returns>
+        /// <returns>
+        /// The method returns true, when it was successfully resolved.
+        /// </returns>
         protected virtual bool IsResolved(RuntimeMember member, out long address)
         {
             // Init out params
@@ -118,7 +129,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// Checks that <paramref name="member"/> is a member, which can be linked.
         /// </summary>
         /// <param name="member">The member to check.</param>
-        /// <returns>True, if the member is valid for linking.</returns>
+        /// <returns>
+        /// True, if the member is valid for linking.
+        /// </returns>
         protected bool IsValid(RuntimeMember member)
         {
             return (member is RuntimeMethod || (member is RuntimeField && FieldAttributes.Static == (FieldAttributes.Static & ((RuntimeField)member).Attributes)));
@@ -148,6 +161,19 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IAssemblyLinker Members
 
+        /// <summary>
+        /// Issues a linker request for the given runtime method.
+        /// </summary>
+        /// <param name="linkType">The type of link required.</param>
+        /// <param name="method">The method the patched code belongs to.</param>
+        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
+        /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
+        /// <param name="target">The method or static field to link against.</param>
+        /// <returns>
+        /// The return value is the preliminary address to place in the generated machine
+        /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
+        /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
+        /// </returns>
         public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
             Debug.Assert(null != target, @"A RuntimeMember must be passed to IAssemblyLinker.Link");

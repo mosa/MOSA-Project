@@ -64,6 +64,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Properties
 
+        /// <summary>
+        /// Gets the supported immediate metadata tokens in the instruction.
+        /// </summary>
+        /// <value></value>
         protected override InvokeInstruction.InvokeSupportFlags InvokeSupport
         {
             get
@@ -76,6 +80,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             /*
@@ -93,10 +105,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             // Set the return value, even though constructors return void
             throw new NotImplementedException();
-            SetResult(0, null);
+            //SetResult(0, null);
                 //CreateResultOperand(_invokeTarget.DeclaringType)
         }
 
+        /// <summary>
+        /// Convert the call to a string.
+        /// </summary>
+        /// <returns>The string of the call expression.</returns>
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
@@ -127,6 +143,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Validates the current set of stack operands.
+        /// </summary>
+        /// <param name="compiler"></param>
+        /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
+        /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
         public override void Validate(MethodCompilerBase compiler)
         {
             if (null == compiler)

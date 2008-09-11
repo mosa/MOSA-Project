@@ -52,11 +52,28 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region UnaryInstruction overrides
 
+        /// <summary>
+        /// Determines flow behavior of this instruction.
+        /// </summary>
+        /// <value></value>
+        /// <remarks>
+        /// Knowledge of control flow is required for correct basic block
+        /// building. Any instruction that alters the control flow must override
+        /// this property and correctly identify its control flow modifications.
+        /// </remarks>
         public override FlowControl FlowControl
         {
             get { return FlowControl.Return; }
         }
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             MethodSignature sig = decoder.Method.Signature;
@@ -69,6 +86,21 @@ namespace Mosa.Runtime.CompilerFramework.IL
             base.Decode(decoder);
         }
 
+        /// <summary>
+        /// Called by the intermediate to machine intermediate representation transformation
+        /// to expand compound instructions into their basic instructions.
+        /// </summary>
+        /// <param name="methodCompiler">The executing method compiler.</param>
+        /// <returns>
+        /// The default expansion keeps the original instruction by
+        /// returning the instruction itself. A derived class may return an
+        /// IEnumerable&lt;Instruction&gt; to replace the instruction with a set of other
+        /// instructions or null to remove the instruction itself from the stream.
+        /// </returns>
+        /// <remarks>
+        /// If a derived class returns <see cref="Instruction.Empty"/> from this method, the
+        /// instruction is essentially removed from the instruction stream.
+        /// </remarks>
         public override object Expand(MethodCompilerBase methodCompiler)
         {
             IArchitecture arch = methodCompiler.Architecture;

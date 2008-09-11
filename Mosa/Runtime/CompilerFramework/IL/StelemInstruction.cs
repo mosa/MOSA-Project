@@ -16,16 +16,26 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class StelemInstruction : NaryInstruction, IStoreInstruction
     {
         #region Data members
 
+        /// <summary>
+        /// 
+        /// </summary>
         private SigType _typeRef;
 
         #endregion // Data members
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StelemInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
         public StelemInstruction(OpCode code)
             : base(code, 3)
         {
@@ -64,6 +74,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             // Do we have a type?
@@ -88,6 +106,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
             visitor.Stelem(this, arg);
         }
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             Operand[] ops = this.Operands;

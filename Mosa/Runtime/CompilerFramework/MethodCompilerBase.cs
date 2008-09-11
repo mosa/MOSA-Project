@@ -72,6 +72,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Initializes a new instance of <see cref="MethodCompilerBase"/>.
         /// </summary>
+        /// <param name="linker">The linker.</param>
         /// <param name="architecture">The target compilation architecture.</param>
         /// <param name="module">The metadata module, that contains the type.</param>
         /// <param name="type">The type, which owns the method to compile.</param>
@@ -193,6 +194,9 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IDisposable Members
 
+        /// <summary>
+        /// Führt anwendungsspezifische Aufgaben durch, die mit der Freigabe, der Zurückgabe oder dem Zurücksetzen von nicht verwalteten Ressourcen zusammenhängen.
+        /// </summary>
         public void Dispose()
         {
             if (null == _pipeline)

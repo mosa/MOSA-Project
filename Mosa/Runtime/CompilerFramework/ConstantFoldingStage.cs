@@ -247,6 +247,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="first">First constant to fold</param>
         /// <param name="second">Second constant to fold</param>
         /// <param name="type">Stacktype for the result</param>
+        /// <returns></returns>
         private Operand Or(ConstantOperand first, ConstantOperand second, StackTypeCode type)
         {
             switch (type)
@@ -256,7 +257,7 @@ namespace Mosa.Runtime.CompilerFramework
                 case StackTypeCode.Int32:
                     return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), Convert.ToInt32(first.Value) | Convert.ToInt32(second.Value));
                 case StackTypeCode.Int64:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), Convert.ToInt64(first.Value) | Convert.ToInt32(second.Value));
+                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), Convert.ToInt64(first.Value) | Convert.ToInt64(second.Value));
                 default:
                     throw new NotSupportedException();
             }

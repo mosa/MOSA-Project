@@ -14,6 +14,9 @@ using Mosa.Runtime.Loader;
 
 namespace Mosa.Runtime.Vm
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class RuntimeMember : RuntimeObject, IRuntimeAttributable
     {
         #region Data members
@@ -41,6 +44,7 @@ namespace Mosa.Runtime.Vm
         /// Initializes a new instance of <see cref="RuntimeMember"/>.
         /// </summary>
         /// <param name="token">Holds the token of this runtime metadata.</param>
+        /// <param name="module">The module.</param>
         /// <param name="declaringType">The declaring type of the member.</param>
         /// <param name="attributes">Holds the attributes of the member.</param>
         protected RuntimeMember(int token, IMetadataModule module, RuntimeType declaringType, RuntimeAttribute[] attributes) :
@@ -63,10 +67,21 @@ namespace Mosa.Runtime.Vm
             get { return _declaringType; }
         }
 
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
         public abstract string Name { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         IntPtr _address;
 
+        /// <summary>
+        /// Gets or sets the address.
+        /// </summary>
+        /// <value>The address.</value>
         public IntPtr Address { 
             get { return _address; } 
             set { _address = value; }
@@ -84,6 +99,10 @@ namespace Mosa.Runtime.Vm
 
         #region IRuntimeAttributable Members
 
+        /// <summary>
+        /// Gets the custom attributes.
+        /// </summary>
+        /// <value>The custom attributes.</value>
         public RuntimeAttribute[] CustomAttributes
         {
             get

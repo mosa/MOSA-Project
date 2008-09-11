@@ -14,10 +14,17 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class NopInstruction : ILInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NopInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
         public NopInstruction(OpCode code)
             : base(code)
         {

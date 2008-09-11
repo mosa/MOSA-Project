@@ -15,6 +15,9 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.CompilerFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IMetadataContext
     {
         #region Properties

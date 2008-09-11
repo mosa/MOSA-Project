@@ -21,6 +21,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ThrowInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the unary instruction.</param>
         public ThrowInstruction(OpCode code)
             : base(code)
         {
@@ -31,6 +35,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Properties
 
+        /// <summary>
+        /// Determines flow behavior of this instruction.
+        /// </summary>
+        /// <value></value>
+        /// <remarks>
+        /// Knowledge of control flow is required for correct basic block
+        /// building. Any instruction that alters the control flow must override
+        /// this property and correctly identify its control flow modifications.
+        /// </remarks>
         public sealed override FlowControl FlowControl
         {
             get { return FlowControl.Throw; }

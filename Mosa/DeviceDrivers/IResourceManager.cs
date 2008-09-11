@@ -11,10 +11,25 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public interface IResourceManager
 	{
+        /// <summary>
+        /// Gets the IO port resources.
+        /// </summary>
+        /// <value>The IO port resources.</value>
 		IOPortResources IOPortResources { get; }
+        /// <summary>
+        /// Gets the memory resources.
+        /// </summary>
+        /// <value>The memory resources.</value>
 		MemoryResources MemoryResources { get; }
+        /// <summary>
+        /// Gets the interrupt manager.
+        /// </summary>
+        /// <value>The interrupt manager.</value>
 		InterruptManager InterruptManager { get; }
 	}
 }

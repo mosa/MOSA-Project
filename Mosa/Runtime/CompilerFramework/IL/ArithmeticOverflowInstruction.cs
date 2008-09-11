@@ -14,6 +14,9 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ArithmeticOverflowInstruction : BinaryInstruction
     {
         #region Static data members

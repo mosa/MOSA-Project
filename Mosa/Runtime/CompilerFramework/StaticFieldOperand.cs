@@ -15,6 +15,9 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class StaticFieldOperand : MemoryOperand
     {
         #region Data members
@@ -23,6 +26,10 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StaticFieldOperand"/> class.
+        /// </summary>
+        /// <param name="field">The field.</param>
         public StaticFieldOperand(RuntimeField field) :
             base(field.Type, null, field.Address)
         {
@@ -32,6 +39,10 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region MemoryOperand Overrides
 
+        /// <summary>
+        /// Returns a string representation of <see cref="Operand"/>.
+        /// </summary>
+        /// <returns>A string representation of the operand.</returns>
         public override string ToString()
         {
             return base.ToString();

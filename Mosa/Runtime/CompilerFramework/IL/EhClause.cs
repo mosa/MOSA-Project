@@ -14,6 +14,9 @@ using System.IO;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public enum EhClauseType : byte
     {
         /// <summary>
@@ -37,16 +40,45 @@ namespace Mosa.Runtime.CompilerFramework.IL
         Fault = 4
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public struct EhClause
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public EhClauseType Kind;
+        /// <summary>
+        /// 
+        /// </summary>
         public int TryOffset;
+        /// <summary>
+        /// 
+        /// </summary>
         public int TryLength;
+        /// <summary>
+        /// 
+        /// </summary>
         public int HandlerOffset;
+        /// <summary>
+        /// 
+        /// </summary>
         public int HandlerLength;
+        /// <summary>
+        /// 
+        /// </summary>
         public int ClassToken;
+        /// <summary>
+        /// 
+        /// </summary>
         public int FilterOffset;
 
+        /// <summary>
+        /// Reads the specified reader.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="isFat">if set to <c>true</c> [is fat].</param>
         public void Read(BinaryReader reader, bool isFat)
         {
             if (false == isFat)

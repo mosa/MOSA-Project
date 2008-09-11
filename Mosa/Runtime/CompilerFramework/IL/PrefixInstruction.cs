@@ -13,21 +13,49 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Flags]
     public enum PrefixFlags
     {
+        /// <summary>
+        /// 
+        /// </summary>
         Unaligned   = 0x01,
+        /// <summary>
+        /// 
+        /// </summary>
         Volatile    = 0x02,
+        /// <summary>
+        /// 
+        /// </summary>
         Tail        = 0x04,
+        /// <summary>
+        /// 
+        /// </summary>
         Constrained = 0x08,
+        /// <summary>
+        /// 
+        /// </summary>
         No          = 0x10,
+        /// <summary>
+        /// 
+        /// </summary>
         ReadOnly    = 0x20
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class PrefixInstruction : ILInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PrefixInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
         protected PrefixInstruction(OpCode code) 
             : base(code)
         {
@@ -64,8 +92,17 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Data members
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly PrefixInstruction Volatile = new PrefixInstruction(OpCode.PreVolatile);
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly PrefixInstruction Tail = new PrefixInstruction(OpCode.PreTail);
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly PrefixInstruction ReadOnly = new PrefixInstruction(OpCode.PreReadOnly);
 
         #endregion // Data members

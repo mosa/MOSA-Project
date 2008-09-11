@@ -14,15 +14,26 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public struct MethodHeader
     {
-        // Header flags
+        /// <summary>
+        /// Header flags 
+        /// </summary>
         public MethodFlags flags;
-        // Maximum stack size
+        /// <summary>
+        /// Maximum stack size 
+        /// </summary>
         public ushort maxStack;
-        // Size of the code in bytes
+        /// <summary>
+        /// Size of the code in bytes 
+        /// </summary>
         public uint codeSize;
-        // Local variable signature token
+        /// <summary>
+        /// Local variable signature token 
+        /// </summary>
         public TokenTypes localsSignature;
     }
 }

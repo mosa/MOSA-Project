@@ -16,6 +16,9 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LdvirtftnInstruction : UnaryInstruction
     {
         #region Data members
@@ -25,13 +28,27 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         private RuntimeMethod _function;
 
+        /// <summary>
+        /// Gets or sets the function.
+        /// </summary>
+        /// <value>The function.</value>
+        public RuntimeMethod Function
+        {
+            get { return _function; }
+        }
+
         #endregion // Data members
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LdvirtftnInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the unary instruction.</param>
         public LdvirtftnInstruction(OpCode code)
             : base(code, 1)
         {
+            _function = Function;
             Debug.Assert(OpCode.Ldvirtftn == code);
             if (OpCode.Ldvirtftn != code)
                 throw new ArgumentException(@"Invalid opcode.", @"code");
@@ -41,6 +58,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             // Decode the base class

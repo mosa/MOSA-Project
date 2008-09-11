@@ -4,15 +4,27 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LogicalAndInstruction : Instruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogicalAndInstruction"/> class.
+        /// </summary>
         public LogicalAndInstruction() :
             base(2, 1)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogicalAndInstruction"/> class.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <param name="op1">The op1.</param>
+        /// <param name="op2">The op2.</param>
         public LogicalAndInstruction(Operand result, Operand op1, Operand op2) :
             base(2, 1)
         {
@@ -28,6 +40,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <summary>
         /// Gets or sets the destination operand of the move instruction.
         /// </summary>
+        /// <value>The destination.</value>
         public Operand Destination
         {
             get { return this.Results[0]; }
@@ -37,6 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <summary>
         /// Gets or sets the source operand of the move instruction.
         /// </summary>
+        /// <value>The operand1.</value>
         public Operand Operand1
         {
             get { return this.Operands[0]; }
@@ -46,6 +60,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <summary>
         /// Gets or sets the source operand of the move instruction.
         /// </summary>
+        /// <value>The operand2.</value>
         public Operand Operand2
         {
             get { return this.Operands[1]; }

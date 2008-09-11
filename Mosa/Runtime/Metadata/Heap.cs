@@ -143,15 +143,16 @@ namespace Mosa.Runtime.Metadata {
 
 		#region Static methods
 
-		/// <summary>
-		/// Creates an instance of a specific heap type.
-		/// </summary>
-		/// <param name="type">The type of the heap to create.</param>
-		/// <param name="provider">The provider buffer, which contains the heap.</param>
-		/// <param name="offset">The offset into the buffer, where the heap starts.</param>
-		/// <param name="size">The size of the heap in bytes.</param>
-		/// <returns>An instance of the requested heap type.</returns>
-		/// <exception cref="System.ArgumentException">An invalid heap type was requested.</exception>
+        /// <summary>
+        /// Creates an instance of a specific heap type.
+        /// </summary>
+        /// <param name="provider">The provider buffer, which contains the heap.</param>
+        /// <param name="type">The type of the heap to create.</param>
+        /// <param name="metadata">The metadata.</param>
+        /// <param name="offset">The offset into the buffer, where the heap starts.</param>
+        /// <param name="size">The size of the heap in bytes.</param>
+        /// <returns>An instance of the requested heap type.</returns>
+        /// <exception cref="System.ArgumentException">An invalid heap type was requested.</exception>
 		public static Heap CreateHeap(IMetadataProvider provider, HeapType type, byte[] metadata, int offset, int size)
 		{
 			switch (type)

@@ -40,10 +40,25 @@ namespace Mosa.Runtime.CompilerFramework.IL
         [Flags]
         protected enum InvokeSupportFlags
         {
+            /// <summary>
+            /// 
+            /// </summary>
             MemberRef = 1,
+            /// <summary>
+            /// 
+            /// </summary>
             MethodDef = 2,
+            /// <summary>
+            /// 
+            /// </summary>
             MethodSpec = 4,
+            /// <summary>
+            /// 
+            /// </summary>
             CallSite = 8,
+            /// <summary>
+            /// 
+            /// </summary>
             All = MemberRef|MethodDef|MethodSpec|CallSite
         }
 
@@ -73,6 +88,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Properties
 
+        /// <summary>
+        /// Determines flow behavior of this instruction.
+        /// </summary>
+        /// <value></value>
+        /// <remarks>
+        /// Knowledge of control flow is required for correct basic block
+        /// building. Any instruction that alters the control flow must override
+        /// this property and correctly identify its control flow modifications.
+        /// </remarks>
         public sealed override FlowControl FlowControl
         {
             get { return FlowControl.Call; }
@@ -163,6 +187,21 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
         }
 
+        /// <summary>
+        /// Called by the intermediate to machine intermediate representation transformation
+        /// to expand compound instructions into their basic instructions.
+        /// </summary>
+        /// <param name="methodCompiler">The executing method compiler.</param>
+        /// <returns>
+        /// The default expansion keeps the original instruction by
+        /// returning the instruction itself. A derived class may return an
+        /// IEnumerable&lt;Instruction&gt; to replace the instruction with a set of other
+        /// instructions or null to remove the instruction itself from the stream.
+        /// </returns>
+        /// <remarks>
+        /// If a derived class returns <see cref="Instruction.Empty"/> from this method, the
+        /// instruction is essentially removed from the instruction stream.
+        /// </remarks>
         public override object Expand(MethodCompilerBase methodCompiler)
         {
             IArchitecture architecture = methodCompiler.Architecture;
@@ -171,6 +210,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
             return cc.Expand(architecture, this);
         }
 
+        /// <summary>
+        /// Determines whether [is call target supported] [the specified target type].
+        /// </summary>
+        /// <param name="targetType">Type of the target.</param>
+        /// <param name="flags">The flags.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is call target supported] [the specified target type]; otherwise, <c>false</c>.
+        /// </returns>
         private bool IsCallTargetSupported(TokenTypes targetType, InvokeSupportFlags flags)
         {
             bool result = false;
@@ -185,6 +232,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
             return result;
         }
 
+        /// <summary>
+        /// Finds the invoke overload.
+        /// </summary>
+        /// <param name="metadata">The metadata.</param>
+        /// <param name="ownerType">Type of the owner.</param>
+        /// <param name="nameIdx">The name idx.</param>
+        /// <param name="signatureIdx">The signature idx.</param>
+        /// <returns></returns>
         private object FindInvokeOverload(IMetadataProvider metadata, SigType ownerType, TokenTypes nameIdx, TokenTypes signatureIdx)
         {
             throw new NotImplementedException();
@@ -222,6 +277,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
  */
         }
 
+        /// <summary>
+        /// Determines whether [is same signature] [the specified metadata].
+        /// </summary>
+        /// <param name="metadata">The metadata.</param>
+        /// <param name="sig1">The sig1.</param>
+        /// <param name="sig2">The sig2.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is same signature] [the specified metadata]; otherwise, <c>false</c>.
+        /// </returns>
         private bool IsSameSignature(IMetadataProvider metadata, TokenTypes sig1, TokenTypes sig2)
         {
             byte[] src, dst;
@@ -303,6 +367,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     throw new InvalidOperationException();
                 }
         */
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             // Decode the jump target
@@ -335,6 +407,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Validates the current set of stack operands.
+        /// </summary>
+        /// <param name="compiler"></param>
+        /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
+        /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
         public override void Validate(MethodCompilerBase compiler)
         {
             // Validate the base class first.

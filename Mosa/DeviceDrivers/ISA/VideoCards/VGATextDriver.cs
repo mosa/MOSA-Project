@@ -14,6 +14,9 @@ using Mosa.DeviceDrivers.Kernel;
 
 namespace Mosa.DeviceDrivers.ISA.VideoCards
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	[ISADeviceSignature(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class VGATextDriver : ISAHardwareDevice, IDevice, ITextDevice
 	{
@@ -44,27 +47,75 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 
 		#endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort miscellaneousOutput;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort crtControllerIndex;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort crtControllerData;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort crtControllerIndexColor;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort crtControllerDataColor;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IMemory memory;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort activeControllerIndex;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort activeControllerData;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool colorMode = false;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint offset = 0x8000;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte width = 80;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte height = 25;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte bytePerChar = 2;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected TextColor defaultBackground = TextColor.White;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VGATextDriver"/> class.
+        /// </summary>
 		public VGATextDriver() { }
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override bool Setup()
 		{
 			base.name = "VGA";
@@ -82,6 +133,9 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 			return true;
 		}
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override bool Start()
 		{
 			colorMode = ((miscellaneousOutput.Read8() & 1) == 1);
@@ -110,16 +164,35 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 			return true;
 		}
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override bool Probe() { return true; }
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override LinkedList<IDevice> CreateSubDevices() { return null; }
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override bool OnInterrupt() { return true; }
 
+        /// <summary>
+        /// Sends the command.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="value">The value.</param>
 		protected void SendCommand(byte command, byte value)
 		{
 			activeControllerIndex.Write8(command);
 			activeControllerData.Write8(value);
 		}
 
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <returns></returns>
 		protected byte GetValue(byte command)
 		{
 			activeControllerIndex.Write8(command);
@@ -201,6 +274,9 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 					memory[(uint)(index + i)] = 0;
 		}
 
+        /// <summary>
+        /// Scrolls up.
+        /// </summary>
 		public void ScrollUp()
 		{
 			uint index = offset;

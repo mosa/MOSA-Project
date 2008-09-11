@@ -14,50 +14,103 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MethodSignature : Signature
     {
+        /// <summary>
+        /// 
+        /// </summary>
 		private CallingConvention _callingConvention;
-		
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private int _genericParameterCount;
-		
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private bool _hasExplicitThis;
-		
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private bool _hasThis;
-				
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private SigType[] _parameters;
-		
+
+        /// <summary>
+        /// 
+        /// </summary>
 		private SigType _returnType;
-		
+
+        /// <summary>
+        /// Gets the calling convention.
+        /// </summary>
+        /// <value>The calling convention.</value>
 		public CallingConvention CallingConvention
 		{
 			get { return _callingConvention; }
 		}
-		
+
+        /// <summary>
+        /// Gets the generic parameter count.
+        /// </summary>
+        /// <value>The generic parameter count.</value>
 		public int GenericParameterCount
 		{
 			get { return _genericParameterCount; }
 		}
-		
+
+        /// <summary>
+        /// Gets a value indicating whether this instance has explicit this.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance has explicit this; otherwise, <c>false</c>.
+        /// </value>
 		public bool HasExplicitThis
 		{
 			get { return _hasExplicitThis; }
 		}
-		
+
+        /// <summary>
+        /// Gets a value indicating whether this instance has this.
+        /// </summary>
+        /// <value><c>true</c> if this instance has this; otherwise, <c>false</c>.</value>
 		public bool HasThis
 		{
 			get { return _hasThis; }
 		}
-		
+
+        /// <summary>
+        /// Gets the parameters.
+        /// </summary>
+        /// <value>The parameters.</value>
 		public SigType[] Parameters
 		{
 			get { return _parameters; }
 		}
-		
+
+        /// <summary>
+        /// Gets the type of the return.
+        /// </summary>
+        /// <value>The type of the return.</value>
 		public SigType ReturnType
 		{
 			get { return _returnType; }
 		}
 
+        /// <summary>
+        /// Parses the specified provider.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
         public static MethodSignature Parse(IMetadataProvider provider, TokenTypes token)
         {
             byte[] buffer;
@@ -68,7 +121,12 @@ namespace Mosa.Runtime.Metadata.Signatures
             Debug.Assert(index == buffer.Length, @"Signature parser didn't complete.");
             return msig;
         }
-	
+
+        /// <summary>
+        /// Parses the signature.
+        /// </summary>
+        /// <param name="buffer">The buffer.</param>
+        /// <param name="index">The index.</param>
 		protected sealed override void ParseSignature(byte[] buffer, ref int index)
 		{
             // Check for instance signature
@@ -106,12 +164,32 @@ namespace Mosa.Runtime.Metadata.Signatures
                 _parameters[i] = SigType.ParseTypeSignature(buffer, ref index);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
         private const byte DEFAULT = 0x00;
+        /// <summary>
+        /// 
+        /// </summary>
         private const byte VARARG = 0x05;
+        /// <summary>
+        /// 
+        /// </summary>
         private const byte GENERIC = 0x10;
+        /// <summary>
+        /// 
+        /// </summary>
         private const byte HAS_THIS = 0x20;
+        /// <summary>
+        /// 
+        /// </summary>
         private const byte HAS_EXPLICIT_THIS = 0x40;
 
+        /// <summary>
+        /// Matcheses the specified other.
+        /// </summary>
+        /// <param name="other">The other.</param>
+        /// <returns></returns>
         public bool Matches(MethodSignature other)
         {
             if (object.ReferenceEquals(this, other))

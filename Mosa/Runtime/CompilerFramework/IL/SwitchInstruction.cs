@@ -35,6 +35,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
 		#region Methods
 
+        /// <summary>
+        /// Branches can not be folded.
+        /// </summary>
+        /// <param name="decoder"></param>
         public override void Decode(IInstructionDecoder decoder)
 		{
 			// Decode base classes first
@@ -54,6 +58,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 			}
         }
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             // FIXME:

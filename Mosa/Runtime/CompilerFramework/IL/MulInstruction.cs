@@ -13,10 +13,17 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MulInstruction : ArithmeticInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MulInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the arithmetic instruction to create.</param>
         public MulInstruction(OpCode code) :
             base(code)
         {
@@ -28,6 +35,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region ArithmeticInstruction Overrides
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             Operand[] ops = this.Operands;

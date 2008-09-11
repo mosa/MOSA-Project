@@ -18,6 +18,9 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.Vm
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class RuntimeField : RuntimeMember, IEquatable<RuntimeField>
     {
         #region Static constants
@@ -51,8 +54,14 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         private int _sig;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private uint _offset;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private uint _rva;
 
         #endregion // Data members
@@ -69,6 +78,8 @@ namespace Mosa.Runtime.Vm
         public RuntimeField(IMetadataModule module, ref FieldRow field, uint offset, uint rva) :
             base(0, module, null, null)
         {
+            _sig = 0;
+            _name = Name;
             _attributes = field.Flags;
             _nameIdx = field.NameStringIdx;
             _offset = offset;
@@ -84,11 +95,16 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Gets the attributes of the field.
         /// </summary>
+        /// <value>The attributes.</value>
         public FieldAttributes Attributes
         {
             get { return _attributes; }
         }
 
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
         public override string Name
         {
             get
@@ -102,6 +118,10 @@ namespace Mosa.Runtime.Vm
             }
         }
 
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        /// <value>The type.</value>
         public SigType Type
         {
             get { throw new NotImplementedException(); }
@@ -112,6 +132,13 @@ namespace Mosa.Runtime.Vm
 
         #region IEquatable<RuntimeField> Members
 
+        /// <summary>
+        /// Gibt an, ob das aktuelle Objekt gleich einem anderen Objekt des gleichen Typs ist.
+        /// </summary>
+        /// <param name="other">Ein Objekt, das mit diesem Objekt verglichen werden soll.</param>
+        /// <returns>
+        /// true, wenn das aktuelle Objekt gleich dem <paramref name="other"/>-Parameter ist, andernfalls false.
+        /// </returns>
         public bool Equals(RuntimeField other)
         {
             return (Module == other.Module && _attributes == other._attributes && _nameIdx == other._nameIdx && _sig == other._sig);

@@ -158,7 +158,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// Performs a stack layout of all local variables in the list.
         /// </summary>
         /// <param name="locals">The enumerable holding all locals.</param>
+        /// <param name="cc">The cc.</param>
         /// <param name="offsetOfFirst">Specifies the offset of the first stack operand in the list.</param>
+        /// <param name="direction">The direction.</param>
+        /// <returns></returns>
         private static int LayoutVariables(IEnumerable<StackOperand> locals, ICallingConvention cc, int offsetOfFirst, int direction)
         {
             int offset = offsetOfFirst;

@@ -114,6 +114,8 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="resultCount">The number of results pushed by the instruction.</param>
         protected Instruction(int operandCount, int resultCount)
         {
+            // To avoid errors caused by warnings
+            int x = _vregs;
             _ignore = false;
             _offset = 0;
             _operands = new Operand[operandCount];

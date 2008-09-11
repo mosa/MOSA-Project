@@ -36,6 +36,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             base.Decode(decoder);
@@ -44,6 +52,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
             SetResult(0, decoder.Compiler.CreateResultOperand(new SigType(CilElementType.I4)));
         }
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             string result, op;

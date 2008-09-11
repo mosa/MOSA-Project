@@ -48,6 +48,8 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="instructionType">The type of the IR instruction, which generates appropriate native code.</param>
         public IntrinsicAttribute(Type architecture, Type instructionType)
         {
+            _architecture = architecture;
+            _instructionType = instructionType;
         }
 
         #endregion // Construction

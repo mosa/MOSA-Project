@@ -17,6 +17,9 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class ParameterOperand : StackOperand
     {
 		#region Data members
@@ -58,11 +61,19 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Object overrides
 
+        /// <summary>
+        /// Clones the stack operand.
+        /// </summary>
+        /// <returns></returns>
         public override object Clone()
         {
             return new ParameterOperand(base.Base, _parameter, _type);
         }
 
+        /// <summary>
+        /// Returns a string representation of <see cref="Operand"/>.
+        /// </summary>
+        /// <returns>A string representation of the operand.</returns>
         public override string ToString()
         {
             return String.Format("{0} [{1}]", _parameter.Name, _type);

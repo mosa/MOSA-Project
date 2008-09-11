@@ -61,6 +61,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
         }
 
+        /// <summary>
+        /// Gets the supported immediate metadata tokens in the instruction.
+        /// </summary>
+        /// <value></value>
         protected override InvokeInstruction.InvokeSupportFlags InvokeSupport
         {
             get { return InvokeSupportFlags.CallSite; }

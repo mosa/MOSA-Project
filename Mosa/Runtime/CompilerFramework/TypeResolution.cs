@@ -20,6 +20,9 @@ using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Runtime.CompilerFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class TypeResolution
     {
         #region Data members
@@ -30,6 +33,9 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypeResolution"/> class.
+        /// </summary>
         public TypeResolution()
         {
         }

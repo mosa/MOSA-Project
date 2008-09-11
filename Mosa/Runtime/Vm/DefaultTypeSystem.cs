@@ -72,26 +72,46 @@ namespace Mosa.Runtime.Vm
 
 		#region ITypeSystem Members
 
+        /// <summary>
+        /// Returns an array of all fields loaded in the type system.
+        /// </summary>
+        /// <value></value>
         RuntimeField[] ITypeSystem.Fields
         {
             get { return _fields; }
         }
 
+        /// <summary>
+        /// Returns an array of all methods in the type system.
+        /// </summary>
+        /// <value></value>
         RuntimeMethod[] ITypeSystem.Methods
         {
             get { return _methods; }
         }
 
+        /// <summary>
+        /// Returns an array of all parameters in the type system.
+        /// </summary>
+        /// <value></value>
         RuntimeParameter[] ITypeSystem.Parameters
         {
             get { return _parameters; }
         }
 
+        /// <summary>
+        /// Returns an array of all types in the type system.
+        /// </summary>
+        /// <value></value>
         RuntimeType[] ITypeSystem.Types
         {
             get { return _types; }
         }
 
+        /// <summary>
+        /// Notifies the type system that a CIL module was loaded.
+        /// </summary>
+        /// <param name="module">The loaded module.</param>
         void ITypeSystem.AssemblyLoaded(IMetadataModule module)
         {
             Debug.Assert(null != module && ((null == _moduleOffsets && 0 == module.LoadOrder) || _moduleOffsets.Length == module.LoadOrder));
@@ -128,6 +148,11 @@ namespace Mosa.Runtime.Vm
             LoadCustomAttributes(module, modOffset);
         }
 
+        /// <summary>
+        /// Gets the types from module.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <returns></returns>
         ReadOnlyRuntimeTypeListView ITypeSystem.GetTypesFromModule(IMetadataModule module)
         {
             if (null == module)
@@ -144,12 +169,23 @@ namespace Mosa.Runtime.Vm
             return new ReadOnlyRuntimeTypeListView(offsets.TypeOffset, count);
         }
 
+        /// <summary>
+        /// Gets the module offset.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <returns></returns>
         public ModuleOffsets GetModuleOffset(IMetadataModule module)
         {
             // FIXME: Make sure the IMetadataModule is really loaded in this app domain
             return _moduleOffsets[module.LoadOrder];
         }
 
+        /// <summary>
+        /// Finds the type index from token.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
         public int FindTypeIndexFromToken(IMetadataModule module, TokenTypes token)
         {
             // FIXME: Calculate the index of the sought token:
@@ -246,7 +282,7 @@ namespace Mosa.Runtime.Vm
             ModuleOffsets offsets = GetModuleOffset(scope);
 
             throw new NotImplementedException();
-            return null;
+            //return null;
         }
 
         RuntimeMethod ITypeSystem.GetMethod(IMetadataModule scope, TokenTypes token)
@@ -569,7 +605,6 @@ namespace Mosa.Runtime.Vm
             TokenTypes token, owner = 0, maxAttrs = metadata.GetMaxTokenValue(TokenTypes.CustomAttribute);
             CustomAttributeRow car;
             List<CustomAttributeRow> attributes = new List<CustomAttributeRow>();
-            byte[] caBlob;
 
             for (token = TokenTypes.CustomAttribute + 1; token <= maxAttrs; token++)
             {
@@ -600,6 +635,12 @@ namespace Mosa.Runtime.Vm
             }
         }
 
+        /// <summary>
+        /// Sets the attributes.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="attributes">The attributes.</param>
         private void SetAttributes(IMetadataModule module, TokenTypes owner, List<CustomAttributeRow> attributes)
         {
             // Convert the custom attribute rows to RuntimeAttribute instances
@@ -655,6 +696,12 @@ namespace Mosa.Runtime.Vm
             }
         }
 
+        /// <summary>
+        /// Resolves the type ref.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <param name="tokenTypes">The token types.</param>
+        /// <returns></returns>
         private RuntimeType ResolveTypeRef(IMetadataModule module, TokenTypes tokenTypes)
         {
             // MR, 2008-08-26, patch by Alex Lyman (thanks!)

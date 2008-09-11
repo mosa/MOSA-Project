@@ -14,10 +14,17 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class DupInstruction : UnaryInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DupInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the unary instruction.</param>
         public DupInstruction(OpCode code)
             : base(code, 2)
         {
@@ -30,6 +37,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Validates the current set of stack operands.
+        /// </summary>
+        /// <param name="compiler"></param>
+        /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
+        /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
         public override void Validate(MethodCompilerBase compiler)
         {
             base.Validate(compiler);

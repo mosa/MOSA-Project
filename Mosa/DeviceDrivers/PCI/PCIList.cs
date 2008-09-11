@@ -9,8 +9,16 @@
 
 namespace Mosa.DeviceDrivers.PCI
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public static class PCIList
 	{
+        /// <summary>
+        /// Lookups the specified vendor ID.
+        /// </summary>
+        /// <param name="VendorID">The vendor ID.</param>
+        /// <returns></returns>
 		public static string Lookup(ushort VendorID)
 		{
 			switch (VendorID) {
@@ -1985,6 +1993,12 @@ namespace Mosa.DeviceDrivers.PCI
 				default: return string.Empty;
 			}
 		}
+        /// <summary>
+        /// Lookups the specified vendor ID.
+        /// </summary>
+        /// <param name="VendorID">The vendor ID.</param>
+        /// <param name="DeviceID">The device ID.</param>
+        /// <returns></returns>
 		public static string Lookup(ushort VendorID, ushort DeviceID)
 		{
 			switch ((uint)((VendorID << 16) | DeviceID)) {

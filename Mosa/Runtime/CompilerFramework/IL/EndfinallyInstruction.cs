@@ -14,10 +14,17 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class EndfinallyInstruction : ILInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EndfinallyInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
         public EndfinallyInstruction(OpCode code)
             : base(code)
         {

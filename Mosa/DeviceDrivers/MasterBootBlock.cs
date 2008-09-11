@@ -40,26 +40,59 @@ namespace Mosa.DeviceDrivers
 
 	#endregion
 
+    /// <summary>
+    /// 
+    /// </summary>
 	public class MasterBootBlock
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public const uint MaxMBRPartitions = 4;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		private IDiskDevice diskDevice;
+        /// <summary>
+        /// 
+        /// </summary>
 		private GenericPartition[] partitions;
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint diskSignature;
+        /// <summary>
+        /// 
+        /// </summary>
 		private bool valid;
+        /// <summary>
+        /// 
+        /// </summary>
 		private byte[] code;
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="MasterBootBlock"/> is valid.
+        /// </summary>
+        /// <value><c>true</c> if valid; otherwise, <c>false</c>.</value>
 		public bool Valid
 		{
 			get { return valid; }
 		}
 
+        /// <summary>
+        /// Gets the disk signature.
+        /// </summary>
+        /// <value>The disk signature.</value>
 		public uint DiskSignature
 		{
 			get { return diskSignature; }
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MasterBootBlock"/> class.
+        /// </summary>
+        /// <param name="diskDevice">The disk device.</param>
 		public MasterBootBlock(IDiskDevice diskDevice)
 		{
 			this.diskDevice = diskDevice;
@@ -69,6 +102,10 @@ namespace Mosa.DeviceDrivers
 			ReadMasterBootBlock();
 		}
 
+        /// <summary>
+        /// Reads the master boot block.
+        /// </summary>
+        /// <returns></returns>
 		private bool ReadMasterBootBlock()
 		{
 			valid = false;
@@ -105,6 +142,10 @@ namespace Mosa.DeviceDrivers
 			return valid;
 		}
 
+        /// <summary>
+        /// Gets the <see cref="Mosa.DeviceDrivers.GenericPartition"/> with the specified partition NBR.
+        /// </summary>
+        /// <value></value>
 		public GenericPartition this[uint partitionNbr]
 		{
 			get
@@ -115,6 +156,10 @@ namespace Mosa.DeviceDrivers
 			}
 		}
 
+        /// <summary>
+        /// Formats this instance.
+        /// </summary>
+        /// <returns></returns>
 		public bool Format()
 		{
 			if (!diskDevice.CanWrite) { return false; }

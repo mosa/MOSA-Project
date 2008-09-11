@@ -59,6 +59,10 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Operand Overrides
 
+        /// <summary>
+        /// Returns a string representation of <see cref="Operand"/>.
+        /// </summary>
+        /// <returns>A string representation of the operand.</returns>
         public override string ToString()
         {
             string tmp = base.ToString();

@@ -13,10 +13,17 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class RemInstruction : ArithmeticInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RemInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the arithmetic instruction to create.</param>
         public RemInstruction(OpCode code) :
             base(code)
         {
@@ -28,6 +35,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region ArithmeticInstruction Overrides
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             Operand[] ops = this.Operands;
@@ -37,9 +48,9 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
         /// </summary>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
-        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
         public sealed override void Visit<ArgType>(IILVisitor<ArgType> visitor, ArgType arg)
         {
             visitor.Rem(this, arg);

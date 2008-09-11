@@ -51,6 +51,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <summary>
         /// Retrieves the result operand of the phi instruction.
         /// </summary>
+        /// <value>The result.</value>
         public StackOperand Result
         {
             get { return (StackOperand)this.Results[0]; }
@@ -59,6 +60,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <summary>
         /// Removes the list of blocks, that corresponds to incoming edges of the operands.
         /// </summary>
+        /// <value>The blocks.</value>
         public List<BasicBlock> Blocks
         {
             get { return _blocks; }
@@ -95,6 +97,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
         #region Instruction Overrides
 
+        /// <summary>
+        /// Gibt einen <see cref="T:System.String"/> zurück, der den aktuellen <see cref="T:System.Object"/> darstellt.
+        /// </summary>
+        /// <returns>
+        /// Ein <see cref="T:System.String"/>, der den aktuellen <see cref="T:System.Object"/> darstellt.
+        /// </returns>
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();

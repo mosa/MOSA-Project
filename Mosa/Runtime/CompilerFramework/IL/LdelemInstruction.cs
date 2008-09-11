@@ -15,6 +15,9 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LdelemInstruction : BinaryInstruction
     {
         #region Data members
@@ -28,6 +31,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LdelemInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the binary instruction.</param>
         public LdelemInstruction(OpCode code)
             : base(code)
         {
@@ -75,6 +82,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public sealed override void Decode(IInstructionDecoder decoder)
         {
             // Decode base first

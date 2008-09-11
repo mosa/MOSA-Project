@@ -41,23 +41,48 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
 		#region Properties
 
+        /// <summary>
+        /// Returns the branch targets instruction index.
+        /// </summary>
+        /// <value></value>
         public int[] BranchTargets
         {
             get { return _targets; }
             set { _targets = value; }
         }
 
+        /// <summary>
+        /// Determines flow behavior of this instruction.
+        /// </summary>
+        /// <value></value>
+        /// <remarks>
+        /// Knowledge of control flow is required for correct basic block
+        /// building. Any instruction that alters the control flow must override
+        /// this property and correctly identify its control flow modifications.
+        /// </remarks>
         public override FlowControl FlowControl
         {
             get { return FlowControl.ConditionalBranch; }
         }
 
+        /// <summary>
+        /// Determines if the branch is conditional.
+        /// </summary>
+        /// <value></value>
         public bool IsConditional { get { return true; } }
 
 		#endregion // Properties
 
 		#region BinaryInstruction Overrides
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
 		{
 			// Decode base classes first
@@ -89,6 +114,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
 		}
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             string op, format;

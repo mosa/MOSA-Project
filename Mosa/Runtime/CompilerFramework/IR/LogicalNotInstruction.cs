@@ -13,6 +13,9 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LogicalNotInstruction : TwoOperandInstruction
     {
         #region Construction

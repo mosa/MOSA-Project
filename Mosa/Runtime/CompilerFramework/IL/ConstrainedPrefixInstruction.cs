@@ -16,6 +16,9 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ConstrainedPrefixInstruction : PrefixInstruction
     {
         #region Data members
@@ -29,9 +32,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConstrainedPrefixInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
         public ConstrainedPrefixInstruction(OpCode code)
             : base(code)
         {
+            _constraint = null;
+            _constraint = Constraint;
             Debug.Assert(OpCode.PreConstrained == code);
             if (OpCode.PreConstrained != code)
                 throw new ArgumentException(@"code");
@@ -53,6 +62,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             // Allow the base class to decode

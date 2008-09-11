@@ -14,6 +14,9 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LabelOperand : MemoryOperand
     {
         #region Data members
@@ -47,6 +50,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Gets the label of the operand.
         /// </summary>
+        /// <value>The label.</value>
         public int Label
         {
             get { return _label; }
@@ -56,6 +60,10 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Object Overrides
 
+        /// <summary>
+        /// Returns a string representation of <see cref="Operand"/>.
+        /// </summary>
+        /// <returns>A string representation of the operand.</returns>
         public override string ToString()
         {
             return base.ToString().Replace("[", String.Format("[L_{0}, ", _label));

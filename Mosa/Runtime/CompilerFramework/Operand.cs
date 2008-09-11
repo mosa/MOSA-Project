@@ -143,6 +143,11 @@ namespace Mosa.Runtime.CompilerFramework
             return result;
         }
 
+        /// <summary>
+        /// Sigs the type of the type from stack.
+        /// </summary>
+        /// <param name="typeCode">The type code.</param>
+        /// <returns></returns>
         public static SigType SigTypeFromStackType(StackTypeCode typeCode)
         {
             SigType result = null;

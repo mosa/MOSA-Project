@@ -14,6 +14,9 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.Vm
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class ReadOnlyRuntimeParameterListView :
         ReadOnlyRuntimeListView<RuntimeParameter>
     {
@@ -28,6 +31,9 @@ namespace Mosa.Runtime.Vm
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReadOnlyRuntimeParameterListView"/> class.
+        /// </summary>
         private ReadOnlyRuntimeParameterListView()
         {
         }

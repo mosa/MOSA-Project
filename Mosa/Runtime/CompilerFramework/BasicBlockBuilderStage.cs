@@ -33,6 +33,9 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasicBlockBuilderStage"/> class.
+        /// </summary>
         public BasicBlockBuilderStage()
         {
             _basicBlocks = new List<BasicBlock>();
@@ -42,11 +45,19 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IMethodCompilerStage members
 
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value></value>
         string IMethodCompilerStage.Name
         {
             get { return @"Basic Block Builder"; }
         }
 
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        /// <param name="compiler">The compiler context to perform processing in.</param>
         void IMethodCompilerStage.Run(MethodCompilerBase compiler)
         {
             // Epilogue and current basic block
@@ -170,6 +181,12 @@ namespace Mosa.Runtime.CompilerFramework
                 block.Index = idx++;
         }
 
+        /// <summary>
+        /// Finds the or create block.
+        /// </summary>
+        /// <param name="caller">The caller.</param>
+        /// <param name="label">The label.</param>
+        /// <returns></returns>
         private BasicBlock FindOrCreateBlock(BasicBlock caller, int label)
         {
             // Return value
@@ -220,6 +237,11 @@ namespace Mosa.Runtime.CompilerFramework
             return result;
         }
 
+        /// <summary>
+        /// Links the blocks.
+        /// </summary>
+        /// <param name="caller">The caller.</param>
+        /// <param name="callee">The callee.</param>
         private void LinkBlocks(BasicBlock caller, BasicBlock callee)
         {
             // Chain the blocks together
@@ -231,16 +253,32 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IBasicBlockProvider members
 
+        /// <summary>
+        /// Returns the number of basic blocks found.
+        /// </summary>
+        /// <value></value>
         public int Count
         {
             get { return _basicBlocks.Count; }
         }
 
+        /// <summary>
+        /// Retrieves a specific basic block.
+        /// </summary>
+        /// <value></value>
+        /// <returns>The basic block to retrieve.</returns>
         public BasicBlock this[int index]
         {
             get { return _basicBlocks[index]; }
         }
 
+        /// <summary>
+        /// Retrieves a basic block from its label.
+        /// </summary>
+        /// <param name="label">The label of the basic block.</param>
+        /// <returns>
+        /// The basic block with the given label or null.
+        /// </returns>
         public BasicBlock FromLabel(int label)
         {
             return _basicBlocks.Find(delegate(BasicBlock block)
@@ -249,11 +287,23 @@ namespace Mosa.Runtime.CompilerFramework
             });
         }
 
+        /// <summary>
+        /// Gibt einen Enumerator zurück, der die Auflistung durchläuft.
+        /// </summary>
+        /// <returns>
+        /// Ein <see cref="T:System.Collections.Generic.IEnumerator`1"/>, der zum Durchlaufen der Auflistung verwendet werden kann.
+        /// </returns>
         public IEnumerator<BasicBlock> GetEnumerator()
         {
             return _basicBlocks.GetEnumerator();
         }
 
+        /// <summary>
+        /// Gibt einen Enumerator zurück, der eine Auflistung durchläuft.
+        /// </summary>
+        /// <returns>
+        /// Ein <see cref="T:System.Collections.IEnumerator"/>-Objekt, das zum Durchlaufen der Auflistung verwendet werden kann.
+        /// </returns>
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return _basicBlocks.GetEnumerator();

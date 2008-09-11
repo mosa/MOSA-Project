@@ -33,6 +33,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// Initializes a new instance of <see cref="BinaryInstruction"/>.
         /// </summary>
         /// <param name="code">The opcode of the binary instruction.</param>
+        /// <param name="resultCount">The result count.</param>
         protected BinaryInstruction(OpCode code, int resultCount)
             : base(code, 2, resultCount)
         {

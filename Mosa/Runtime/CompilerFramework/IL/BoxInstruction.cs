@@ -14,10 +14,17 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class BoxInstruction : BoxingInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BoxInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the box instruction, which must be OpCode.Box.</param>
         public BoxInstruction(OpCode code)
             : base(code)
         {
@@ -30,6 +37,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             return String.Format(@"{2} ; {0} = box({1})", this.Results[0], this.Operands[0], base.ToString());

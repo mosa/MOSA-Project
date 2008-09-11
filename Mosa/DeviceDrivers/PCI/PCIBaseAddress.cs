@@ -12,18 +12,56 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.PCI
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public class PCIBaseAddress
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint address;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint size;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected PCIAddressRegion region;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected bool prefetchable;
 
+        /// <summary>
+        /// Gets the address.
+        /// </summary>
+        /// <value>The address.</value>
 		public uint Address { get { return address; } }
+        /// <summary>
+        /// Gets the size.
+        /// </summary>
+        /// <value>The size.</value>
 		public uint Size { get { return size; } }
+        /// <summary>
+        /// Gets the region.
+        /// </summary>
+        /// <value>The region.</value>
 		public PCIAddressRegion Region { get { return region; } }
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="PCIBaseAddress"/> is prefetchable.
+        /// </summary>
+        /// <value><c>true</c> if prefetchable; otherwise, <c>false</c>.</value>
 		public bool Prefetchable { get { return prefetchable; } }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PCIBaseAddress"/> class.
+        /// </summary>
+        /// <param name="region">The region.</param>
+        /// <param name="address">The address.</param>
+        /// <param name="size">The size.</param>
+        /// <param name="prefetchable">if set to <c>true</c> [prefetchable].</param>
 		public PCIBaseAddress(PCIAddressRegion region, uint address, uint size, bool prefetchable)
 		{
 			this.region = region;
@@ -32,6 +70,12 @@ namespace Mosa.DeviceDrivers.PCI
 			this.prefetchable = prefetchable;
 		}
 
+        /// <summary>
+        /// Gibt einen <see cref="T:System.String"/> zurück, der den aktuellen <see cref="T:System.Object"/> darstellt.
+        /// </summary>
+        /// <returns>
+        /// Ein <see cref="T:System.String"/>, der den aktuellen <see cref="T:System.Object"/> darstellt.
+        /// </returns>
 		public override string ToString()
 		{
 			if (region == PCIAddressRegion.Undefined)

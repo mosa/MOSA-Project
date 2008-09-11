@@ -99,26 +99,29 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#region Properties
 
-		/// <summary>
-		/// Gets/Sets the index of the basic block.
-		/// </summary>
+        /// <summary>
+        /// Gets/Sets the index of the basic block.
+        /// </summary>
+        /// <value>The index.</value>
 		public int Index
 		{
 			get { return _index; }
 			set { _index = value; }
 		}
 
-		/// <summary>
-		/// Retrieves the instruction list, which belongs to the block.
-		/// </summary>
+        /// <summary>
+        /// Retrieves the instruction list, which belongs to the block.
+        /// </summary>
+        /// <value>The instructions.</value>
 		public List<Instruction> Instructions
 		{
 			get { return _instructions; }
 		}
 
-		/// <summary>
-		/// Retrieves the label, which uniquely identifies this block.
-		/// </summary>
+        /// <summary>
+        /// Retrieves the label, which uniquely identifies this block.
+        /// </summary>
+        /// <value>The label.</value>
 		public int Label
 		{
 			get { return _label; }
@@ -197,8 +200,17 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#region Block order fields
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public BlockOrderFlags Flags;
+        /// <summary>
+        /// 
+        /// </summary>
 		public int LoopIndex;
+        /// <summary>
+        /// 
+        /// </summary>
 		public int LoopDepth;
 
 		#endregion // Block ordering fields

@@ -13,6 +13,9 @@ using System.Text;
 
 namespace Mosa.Runtime.Vm
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class ReadOnlyRuntimeFieldListView :
         ReadOnlyRuntimeListView<RuntimeField>
     {

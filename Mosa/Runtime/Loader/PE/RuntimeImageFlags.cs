@@ -10,11 +10,26 @@
 using System;
 
 namespace Mosa.Runtime.Loader.PE {
+    /// <summary>
+    /// 
+    /// </summary>
 	[Flags]
 	public enum RuntimeImageFlags : uint {
+        /// <summary>
+        /// 
+        /// </summary>
 		ILOnly = 0x0000001,
+        /// <summary>
+        /// 
+        /// </summary>
 		F32BitsRequired = 0x0000002,
+        /// <summary>
+        /// 
+        /// </summary>
 		StrongNameSigned = 0x0000008,
+        /// <summary>
+        /// 
+        /// </summary>
 		TrackDebugData = 0x00010000
 	}
 }

@@ -24,6 +24,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// Initializes a new instance of <see cref="NaryInstruction"/>.
         /// </summary>
         /// <param name="code">The opcode of the instruction.</param>
+        /// <param name="operandCount">The operand count.</param>
         protected NaryInstruction(OpCode code, int operandCount)
             : base(code, operandCount)
         {
@@ -33,6 +34,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// Initializes a new instance of <see cref="NaryInstruction"/>.
         /// </summary>
         /// <param name="code">The opcode of the instruction.</param>
+        /// <param name="operandCount">The operand count.</param>
+        /// <param name="resultCount">The result count.</param>
         protected NaryInstruction(OpCode code, int operandCount, int resultCount)
             : base(code, operandCount, resultCount)
         {
@@ -42,6 +45,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();

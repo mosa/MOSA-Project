@@ -20,8 +20,8 @@ namespace Mosa.Runtime.CompilerFramework
     /// A temporary stack local operand used to capture results from CIL operations.
     /// </summary>
     /// <remarks>
-    /// Temporaries have a stack slot assigned to them however these, <see cref="VariableOperand"/> and
-    /// <see cref="ParameterOperand"/> can be optimized by a register allocator and move to registers.
+    /// Temporaries have a stack slot assigned to them however these, see VariableOperand and
+    /// ParameterOperand can be optimized by a register allocator and move to registers.
     /// </remarks>
     public sealed class TemporaryOperand : StackOperand
     {
@@ -42,7 +42,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="label">The virtual register number.</param>
         /// <param name="typeRef">The type reference of the virtual register.</param>
         /// <param name="register">The stack base register.</param>
-        /// <pparam name="offset">The stack offset.</pparam>
+        /// <param name="offset">The offset.</param>
         public TemporaryOperand(int label, SigType typeRef, Register register, int offset)
             : base(typeRef, register, offset)
         {
@@ -62,6 +62,10 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Methods
 
+        /// <summary>
+        /// Returns a string representation of <see cref="Operand"/>.
+        /// </summary>
+        /// <returns>A string representation of the operand.</returns>
         public override string ToString()
         {
             return String.Format("L_{0} {1}", _label, base.ToString());

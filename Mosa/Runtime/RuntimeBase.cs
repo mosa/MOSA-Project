@@ -31,6 +31,9 @@ namespace Mosa.Runtime {
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuntimeBase"/> class.
+        /// </summary>
         protected RuntimeBase()
         {
             s_instance = this;
@@ -43,6 +46,7 @@ namespace Mosa.Runtime {
         /// <summary>
         /// Retrieves the memory manager.
         /// </summary>
+        /// <value>The memory manager.</value>
         public abstract IMemoryPageManager MemoryManager
         {
             get;
@@ -51,21 +55,34 @@ namespace Mosa.Runtime {
         /// <summary>
         /// Retrieves the type loader of the runtime.
         /// </summary>
+        /// <value>The type loader.</value>
         public abstract ITypeSystem TypeLoader
         {
             get;
         }
 
+        /// <summary>
+        /// Gets the assembly loader.
+        /// </summary>
+        /// <value>The assembly loader.</value>
         public abstract IAssemblyLoader AssemblyLoader
         {
             get;
         }
 
+        /// <summary>
+        /// Gets the JIT service.
+        /// </summary>
+        /// <value>The JIT service.</value>
         public abstract IJitService JitService
         {
             get;
         }
 
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <value>The instance.</value>
         public static RuntimeBase Instance
         {
             get
@@ -82,11 +99,13 @@ namespace Mosa.Runtime {
         #region OpCode Support Functions
 
         /// <summary>
-		/// This function performs the cast operation and type checking.
-		/// </summary>
-		/// <param name="obj">The object to cast.</param>
-		/// <param name="typeHandle">Handle to the type to cast to.</param>
-		/// <returns>The cast object if type checks were successful.</returns>
+        /// This function performs the cast operation and type checking.
+        /// </summary>
+        /// <param name="obj">The object to cast.</param>
+        /// <param name="typeHandle">Handle to the type to cast to.</param>
+        /// <returns>
+        /// The cast object if type checks were successful.
+        /// </returns>
         [RuntimeSupport(CompilerFramework.IL.OpCode.Castclass)]
 		public static object CastObjectToType(object obj, UIntPtr typeHandle)
 		{
@@ -97,12 +116,14 @@ namespace Mosa.Runtime {
 			return result;
 		}
 
-		/// <summary>
-		/// This function performs the isinst operation and type checking.
-		/// </summary>
-		/// <param name="obj">The object to cast.</param>
-		/// <param name="typeHandle">Handle to the type to cast to.</param>
-		/// <returns>The cast object if type checks were successful. Otherwise null.</returns>
+        /// <summary>
+        /// This function performs the isinst operation and type checking.
+        /// </summary>
+        /// <param name="obj">The object to cast.</param>
+        /// <param name="typeHandle">Handle to the type to cast to.</param>
+        /// <returns>
+        /// The cast object if type checks were successful. Otherwise null.
+        /// </returns>
         [RuntimeSupport(CompilerFramework.IL.OpCode.Isinst)]
 		public static object IsInstanceOf(object obj, UIntPtr typeHandle)
 		{
@@ -110,12 +131,12 @@ namespace Mosa.Runtime {
 			return null;
 		}
 
-		/// <summary>
-		/// This function requests allocation of a specific runtime type.
-		/// </summary>
-		/// <param name="type">The type of object to allocate.</param>
-		/// <param name="elements">The number of elements to allocate.</param>
-		/// <returns></returns>
+        /// <summary>
+        /// This function requests allocation of a specific runtime type.
+        /// </summary>
+        /// <param name="type">The type of object to allocate.</param>
+        /// <param name="elements">The number of elements to allocate.</param>
+        /// <returns></returns>
         /// <remarks>
         /// The allocated object is not constructed, e.g. the caller must invoke
         /// the appropriate constructor in order to obtain a real object.
@@ -133,6 +154,9 @@ namespace Mosa.Runtime {
 
         #region IDisposable Members
 
+        /// <summary>
+        /// Führt anwendungsspezifische Aufgaben durch, die mit der Freigabe, der Zurückgabe oder dem Zurücksetzen von nicht verwalteten Ressourcen zusammenhängen.
+        /// </summary>
         public void Dispose()
         {
             IAssemblyLoader al = this.AssemblyLoader;

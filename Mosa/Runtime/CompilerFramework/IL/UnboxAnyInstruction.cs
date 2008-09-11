@@ -13,10 +13,17 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class UnboxAnyInstruction : BoxingInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnboxAnyInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the box instruction, which must be OpCode.Box.</param>
         public UnboxAnyInstruction(OpCode code)
             : base(code)
         {
@@ -26,6 +33,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             return String.Format(@"{2} ; {0} = unbox.any({1})", this.Results[0], this.Operands[0], base.ToString());

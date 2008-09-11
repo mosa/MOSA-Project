@@ -31,6 +31,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StobjInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the binary instruction.</param>
         public StobjInstruction(OpCode code)
             : base(code)
         {
@@ -65,6 +69,11 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StobjInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="typeRef">The type ref.</param>
         public StobjInstruction(OpCode code, SigType typeRef)
             : base(code)
         {
@@ -75,6 +84,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             // Decode base class first
@@ -104,6 +121,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
             visitor.Stobj(this, arg);
         }
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             Operand[] ops = this.Operands;

@@ -23,9 +23,21 @@ namespace Mosa.Runtime.CompilerFramework
 	{
 		#region Data members
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected BasicBlock firstBlock;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IArchitecture arch;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected BitArray workArray;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected Stack<BasicBlock> workList;
 
 		#endregion // Data members
@@ -36,6 +48,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#region IMethodCompilerStage Members
 
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value></value>
 		string IMethodCompilerStage.Name
 		{
 			get { return @"Basic Block Reduction"; }
@@ -139,10 +155,11 @@ namespace Mosa.Runtime.CompilerFramework
 				MarkBlockForReview(block);
 		}
 
-		/// <summary>
-		/// Marks the related blocks for review.
-		/// </summary>
-		/// <param name="block">The block.</param>
+        /// <summary>
+        /// Marks the related blocks for review.
+        /// </summary>
+        /// <param name="block">The block.</param>
+        /// <param name="self">if set to <c>true</c> [self].</param>
 		protected void MarkRelatedBlocksForReview(BasicBlock block, bool self)
 		{
 			foreach (BasicBlock previousBlock in block.PreviousBlocks)

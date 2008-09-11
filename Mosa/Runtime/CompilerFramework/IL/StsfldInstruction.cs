@@ -17,24 +17,49 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class StsfldInstruction : UnaryInstruction, IStoreInstruction
     {
         #region Data members
 
+        /// <summary>
+        /// 
+        /// </summary>
         private RuntimeField _field;
+
+        /// <summary>
+        /// Gets the field.
+        /// </summary>
+        /// <value>The field.</value>
+        public RuntimeField Field
+        {
+            get { return _field; }
+        }
 
         #endregion // Data members
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StsfldInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the unary instruction.</param>
         public StsfldInstruction(OpCode code)
             : base(code)
         {
+            _field = Field;
             Debug.Assert(OpCode.Stsfld == code);
             if (OpCode.Stsfld != code)
                 throw new ArgumentException(@"Invalid opcode.", @"code");
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StsfldInstruction"/> class.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <param name="value">The value.</param>
         public StsfldInstruction(Operand target, Operand value) :
             base(OpCode.Stsfld, 1)
         {
@@ -46,6 +71,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             // Decode the base class
@@ -64,6 +97,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
  */
         }
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             return String.Format("{0} = {1}", this.Results[0], this.Operands[0]);

@@ -16,6 +16,9 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MkrefanyInstruction : UnaryInstruction
     {
         #region Data members
@@ -25,13 +28,27 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         private SigType _typeRef;
 
+        /// <summary>
+        /// Gets or sets the type ref.
+        /// </summary>
+        /// <value>The type ref.</value>
+        public SigType TypeRef
+        {
+            get { return _typeRef; }
+        }
+
         #endregion // Data members
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MkrefanyInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the unary instruction.</param>
         public MkrefanyInstruction(OpCode code)
             : base(code, 1)
         {
+            _typeRef = TypeRef;
             Debug.Assert(OpCode.Mkrefany == code);
             if (OpCode.Mkrefany != code)
                 throw new ArgumentException(@"Invalid opcode.", @"code");
@@ -41,6 +58,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Properties
 
+        /// <summary>
+        /// Gets the type.
+        /// </summary>
+        /// <value>The type.</value>
         public SigType Type
         {
             get { return _typeRef; }
@@ -50,6 +71,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             // Decode the base class

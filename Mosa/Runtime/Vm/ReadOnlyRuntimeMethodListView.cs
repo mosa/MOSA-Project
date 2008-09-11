@@ -13,6 +13,9 @@ using System.Text;
 
 namespace Mosa.Runtime.Vm
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class ReadOnlyRuntimeMethodListView :
         ReadOnlyRuntimeListView<RuntimeMethod>
     {
@@ -48,6 +51,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Returns the methods array, which is viewed by this collection.
         /// </summary>
+        /// <value></value>
         protected override RuntimeMethod[] Items
         {
             get { return RuntimeBase.Instance.TypeLoader.Methods; }

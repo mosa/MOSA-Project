@@ -69,6 +69,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <summary>
         /// Gets or sets the size of the conversion result.
         /// </summary>
+        /// <value>The size.</value>
         public int Size
         {
             get { return _size; }
@@ -84,6 +85,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <summary>
         /// Gets or sets the source operand.
         /// </summary>
+        /// <value>The source.</value>
         public Operand Source
         {
             get { return this.Operands[0]; }
@@ -106,7 +108,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <summary>
         /// Implementation of the visitor pattern.
         /// </summary>
-        /// <param name="visitor">The visitor requesting visitation. The object must implement <see cref="IIRVisitor"/>.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        /// <param name="visitor">The visitor requesting visitation. The object must implement see IIRVisitor.</param>
         /// <param name="arg">Generic context information to pass to the visitor.</param>
         public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
         {

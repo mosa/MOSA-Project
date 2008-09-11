@@ -23,7 +23,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// Initializes a new instance of <see cref="IRInstruction"/>.
         /// </summary>
         /// <param name="operandCount">Specifies the number of operands of the instruction.</param>
-        /// <param name="resultCount">Specifies the number of results of the instruction.</param>
         protected IRInstruction(int operandCount) :
             base(operandCount)
         {

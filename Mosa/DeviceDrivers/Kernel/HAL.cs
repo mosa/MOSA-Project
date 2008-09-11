@@ -9,14 +9,35 @@
 
 namespace Mosa.DeviceDrivers.Kernel
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public static class HAL
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public delegate IReadWriteIOPort CreateIOPort(ushort port);
+        /// <summary>
+        /// 
+        /// </summary>
 		public delegate IMemory CreateMemory(uint address, uint size);
+        /// <summary>
+        /// 
+        /// </summary>
 		public delegate void HandleInterrupt(byte irq);
 
+        /// <summary>
+        /// 
+        /// </summary>
 		static private CreateIOPort createIOPort;
+        /// <summary>
+        /// 
+        /// </summary>
 		static private CreateMemory createMemory;
+        /// <summary>
+        /// 
+        /// </summary>
 		static private HandleInterrupt handleInterrupt;
 
 		/// <summary>

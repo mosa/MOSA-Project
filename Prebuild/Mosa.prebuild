@@ -121,6 +121,7 @@
               <AllowUnsafe>false</AllowUnsafe>
               <NoStdLib>false</NoStdLib>
               <CompilerDefines></CompilerDefines>
+              <WarningsAsErrors>true</WarningsAsErrors>
             </Options>
           </Configuration>
           <Configuration name="Release">
@@ -203,6 +204,7 @@
             <AllowUnsafe>true</AllowUnsafe>
             <DebugInformation>true</DebugInformation>
             <WarningLevel>4</WarningLevel>
+              <WarningsAsErrors>true</WarningsAsErrors>
           </Options>
         </Configuration>
         <Configuration name="Release">

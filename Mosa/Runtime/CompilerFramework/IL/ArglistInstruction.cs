@@ -15,10 +15,17 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ArglistInstruction : ILInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ArglistInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
         public ArglistInstruction(OpCode code)
             : base(code, 0, 1)
         {
@@ -30,6 +37,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public sealed override void Decode(IInstructionDecoder decoder)
         {
             // Decode the base class first
@@ -37,7 +52,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             // Setup the result operand
             throw new NotImplementedException();
-            SetResult(0, null);
+            //SetResult(0, null);
                 //CreateResultOperand(MetadataTypeReference.FromName(decoder.Metadata, @"System", @"RuntimeArgumentHandle")) 
         }
 

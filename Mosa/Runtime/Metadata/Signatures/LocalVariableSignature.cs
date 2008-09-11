@@ -15,15 +15,30 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LocalVariableSignature : Signature
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private SigType[] _types;
 
+        /// <summary>
+        /// Gets the types.
+        /// </summary>
+        /// <value>The types.</value>
         public SigType[] Types
         {
             get { return _types; }
         }
 
+        /// <summary>
+        /// Parses the signature.
+        /// </summary>
+        /// <param name="buffer">The buffer.</param>
+        /// <param name="index">The index.</param>
         protected override void ParseSignature(byte[] buffer, ref int index)
         {
             // Check signature identifier
@@ -42,6 +57,12 @@ namespace Mosa.Runtime.Metadata.Signatures
             }
         }
 
+        /// <summary>
+        /// Parses the specified provider.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
         public static LocalVariableSignature Parse(IMetadataProvider provider, TokenTypes token)
         {
             byte[] buffer;

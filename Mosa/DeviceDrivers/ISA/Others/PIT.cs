@@ -17,23 +17,50 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.ISA
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0040, PortRange = 4, IRQ = 0, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class PIT : ISAHardwareDevice, IDevice, IHardwareDevice
 	{
 		#region Definitions
 
+        /// <summary>
+        /// 
+        /// </summary>
 		private const byte SquareWave = 0x36;
+        /// <summary>
+        /// 
+        /// </summary>
 		private const uint Frequency = 1193182;
+        /// <summary>
+        /// 
+        /// </summary>
 		private const ushort Hz = 100;
 
 		#endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort modeControlPort;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort counter0Divisor;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint tickCount;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PIT"/> class.
+        /// </summary>
 		public PIT() { }
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override bool Setup()
 		{
 			base.name = "PIT_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");
@@ -44,8 +71,14 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override bool Probe() { return true; }
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override bool Start()
 		{
 			ushort timerCount = (ushort)(Frequency / Hz);
@@ -60,14 +93,24 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override LinkedList<IDevice> CreateSubDevices() { return null; }
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override bool OnInterrupt()
 		{
 			tickCount++;
 			return true;
 		}
 
+        /// <summary>
+        /// Gets the tick count.
+        /// </summary>
+        /// <returns></returns>
 		public uint GetTickCount()
 		{
 			return tickCount;

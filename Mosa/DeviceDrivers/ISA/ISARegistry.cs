@@ -13,29 +13,54 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.ISA
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public class ISARegistry
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		protected PlatformArchitecture platformArchitecture;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected LinkedList<Pair<ISADeviceSignatureAttribute, Type>> drivers;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ISARegistry"/> class.
+        /// </summary>
+        /// <param name="platformArchitecture">The platform architecture.</param>
 		public ISARegistry(PlatformArchitecture platformArchitecture)
 		{
 			this.platformArchitecture = platformArchitecture;
 			drivers = new LinkedList<Pair<ISADeviceSignatureAttribute, Type>>();
 		}
 
+        /// <summary>
+        /// Adds the device driver.
+        /// </summary>
+        /// <param name="deviceDriverSignature">The device driver signature.</param>
+        /// <param name="type">The type.</param>
 		public void AddDeviceDriver(ISADeviceSignatureAttribute deviceDriverSignature, Type type)
 		{
 			drivers.Add(new Pair<ISADeviceSignatureAttribute, Type>(deviceDriverSignature, type));
 		}
 
+        /// <summary>
+        /// Registers the build in device drivers.
+        /// </summary>
 		public void RegisterBuildInDeviceDrivers()
 		{
 			Assembly assemblyInfo = typeof(ISARegistry).Module.Assembly;
 			RegisterDeviceDrivers(assemblyInfo);
 		}
 
+        /// <summary>
+        /// Registers the device drivers.
+        /// </summary>
+        /// <param name="assemblyInfo">The assembly info.</param>
 		public void RegisterDeviceDrivers(Assembly assemblyInfo)
 		{
 			Type[] types = assemblyInfo.GetTypes();
@@ -49,6 +74,11 @@ namespace Mosa.DeviceDrivers.ISA
 			}
 		}
 
+        /// <summary>
+        /// Starts the drivers.
+        /// </summary>
+        /// <param name="deviceManager">The device manager.</param>
+        /// <param name="resourceManager">The resource manager.</param>
 		public void StartDrivers(IDeviceManager deviceManager, IResourceManager resourceManager)
 		{
 			foreach (Pair<ISADeviceSignatureAttribute, Type> entry in drivers) {

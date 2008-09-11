@@ -13,9 +13,21 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Mosa.Runtime.Metadata {
+    /// <summary>
+    /// 
+    /// </summary>
 	public enum CallingConvention {
+        /// <summary>
+        /// 
+        /// </summary>
 		Default = 0x00,
+        /// <summary>
+        /// 
+        /// </summary>
 		Vararg = 0x05,
+        /// <summary>
+        /// 
+        /// </summary>
 		Generic = 0x10
 	}
 }

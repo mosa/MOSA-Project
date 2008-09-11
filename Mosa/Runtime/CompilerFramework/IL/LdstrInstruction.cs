@@ -16,6 +16,9 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LdstrInstruction : LoadInstruction
     {
         #region Data members
@@ -29,6 +32,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LdstrInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
         public LdstrInstruction(OpCode code)
             : base(code)
         {
@@ -61,6 +68,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
             SetResult(0, decoder.Compiler.CreateResultOperand(new SigType(CilElementType.String)));
         }
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             return String.Format("{0} = \"{1}\"", this.Results[0], _value);

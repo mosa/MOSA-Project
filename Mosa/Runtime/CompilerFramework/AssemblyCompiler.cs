@@ -80,16 +80,28 @@ namespace Mosa.Runtime.CompilerFramework
             get { return _architecture; }
         }
 
+        /// <summary>
+        /// Gets the assembly.
+        /// </summary>
+        /// <value>The assembly.</value>
         public IMetadataModule Assembly
         {
             get { return _assembly; }
         }
 
+        /// <summary>
+        /// Gets the metadata.
+        /// </summary>
+        /// <value>The metadata.</value>
         public virtual IMetadataProvider Metadata
         {
             get { return _assembly.Metadata; }
         }
 
+        /// <summary>
+        /// Gets the pipeline.
+        /// </summary>
+        /// <value>The pipeline.</value>
         public CompilerPipeline<IAssemblyCompilerStage> Pipeline
         {
             get { return _pipeline; }
@@ -100,8 +112,9 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Methods
 
         /// <summary>
-        /// Creates a method compiler 
+        /// Creates a method compiler
         /// </summary>
+        /// <param name="type">The type.</param>
         /// <param name="method">The method to compile.</param>
         /// <returns></returns>
         public abstract MethodCompilerBase CreateMethodCompiler(RuntimeType type, RuntimeMethod method);

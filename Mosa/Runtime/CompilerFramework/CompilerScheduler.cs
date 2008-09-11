@@ -15,6 +15,9 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class CompilerScheduler
     {
         #region Data members
@@ -43,6 +46,9 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Methods
 
+        /// <summary>
+        /// Compilations the thread proc.
+        /// </summary>
         private static void CompilationThreadProc()
         {
             MethodCompilerBase compiler = null;
@@ -66,6 +72,10 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
+        /// <summary>
+        /// Schedules the specified compiler.
+        /// </summary>
+        /// <param name="compiler">The compiler.</param>
         public static void Schedule(MethodCompilerBase compiler)
         {
             if (null == compiler)
@@ -80,6 +90,10 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
+        /// <summary>
+        /// Setups the specified threads.
+        /// </summary>
+        /// <param name="threads">The threads.</param>
         public static void Setup(int threads)
         {
             lock (_syncObject)
@@ -95,6 +109,9 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
+        /// <summary>
+        /// Waits this instance.
+        /// </summary>
         public static void Wait()
         {
             while (0 != _compilerQueue.Count)

@@ -14,6 +14,9 @@ using System.IO;
 
 namespace Mosa.Runtime.Metadata.Tables
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public struct ParamRow 
     {
 		#region Data members
@@ -37,6 +40,12 @@ namespace Mosa.Runtime.Metadata.Tables
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParamRow"/> struct.
+        /// </summary>
+        /// <param name="flags">The flags.</param>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="nameIdx">The name idx.</param>
         public ParamRow(ParameterAttributes flags, short sequence, TokenTypes nameIdx)
         {
             _nameIdx = nameIdx;
@@ -51,6 +60,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <summary>
         /// Returns the attributes of this parameter.
         /// </summary>
+        /// <value>The flags.</value>
         public ParameterAttributes Flags
         {
             get { return _flags; }
@@ -59,6 +69,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <summary>
         /// Retrieves the token of the parameter name.
         /// </summary>
+        /// <value>The name idx.</value>
         public TokenTypes NameIdx
         {
             get
@@ -70,6 +81,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <summary>
         /// Retrieves the parameter sequence number.
         /// </summary>
+        /// <value>The sequence.</value>
         public int Sequence
         {
             get { return _sequence; }

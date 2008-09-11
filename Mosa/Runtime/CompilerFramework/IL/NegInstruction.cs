@@ -60,6 +60,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the result.
+        /// </summary>
+        /// <value>The result.</value>
         public Operand Result
         {
             get
@@ -114,6 +118,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
             return new Constant(_result.Type, result);
         }
 */
+        /// <summary>
+        /// Validates the current set of stack operands.
+        /// </summary>
+        /// <param name="compiler"></param>
+        /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
+        /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
         public override void Validate(MethodCompilerBase compiler)
         {
             base.Validate(compiler);

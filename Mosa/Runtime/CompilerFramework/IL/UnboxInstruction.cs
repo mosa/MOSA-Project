@@ -14,10 +14,17 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class UnboxInstruction : BoxingInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnboxInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the box instruction, which must be OpCode.Box.</param>
         public UnboxInstruction(OpCode code)
             : base(code)
         {
@@ -41,6 +48,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
             visitor.Unbox(this, arg);
         }
 
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
             return String.Format(@"{0} = unbox({1})", this.Results[0], this.Operands[0]);

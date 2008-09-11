@@ -14,9 +14,18 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public enum FileAttributes
     {
+        /// <summary>
+        /// 
+        /// </summary>
         ContainsMetaData = 0x0000,
+        /// <summary>
+        /// 
+        /// </summary>
         ContainsNoMetaData = 0x0001
     }
 }

@@ -18,6 +18,19 @@ namespace Mosa.Runtime.Vm
     /// </remarks>
     public abstract class Object
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private MethodTable _methodTable;
+
+        /// <summary>
+        /// Gets or sets the method table.
+        /// </summary>
+        /// <value>The method table.</value>
+        internal MethodTable MethodTable
+        {
+            get { return _methodTable; }
+            set { _methodTable = value; }
+        }
     }
 }

@@ -50,10 +50,11 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#region Construction
 
-		/// <summary>
-		/// Initializes a new instance of <see cref="Constant"/>.
-		/// </summary>
-		/// <param name="value">The value of the contant.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConstantOperand"/> class.
+        /// </summary>
+        /// <param name="typeRef">The type ref.</param>
+        /// <param name="value">The value of the contant.</param>
 		public ConstantOperand(SigType typeRef, object value) 
 			: base(typeRef)
 		{

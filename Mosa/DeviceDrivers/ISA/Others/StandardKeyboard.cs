@@ -20,14 +20,35 @@ namespace Mosa.DeviceDrivers.ISA
 	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0060, PortRange = 1, AltBasePort = 0x0064, AltPortRange = 1, IRQ = 1, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class StandardKeyboard : ISAHardwareDevice, IDevice, IHardwareDevice, IKeyboardDevice
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort commandPort;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort dataPort;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected const ushort fifoSize = 256;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte[] fifoBuffer;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint fifoStart;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected uint fifoEnd;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected SpinLock spinLock;
 
 		/// <summary>

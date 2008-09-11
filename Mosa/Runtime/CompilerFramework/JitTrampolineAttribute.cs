@@ -24,9 +24,9 @@ namespace Mosa.Runtime.CompilerFramework {
 	/// </remarks>
 	[ AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=false)]
 	public sealed class JitTrampolineAttribute : Attribute {
-		/// <summary>
-		/// Initializes a new instance of <see cref="Mosa.SharpOS.Runtime.Jit.CustomAttributes.JitTrampoline"/>.
-		/// </summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JitTrampolineAttribute"/> class.
+        /// </summary>
 		public JitTrampolineAttribute()
 		{
 		}

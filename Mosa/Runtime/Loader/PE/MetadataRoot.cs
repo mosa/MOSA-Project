@@ -67,6 +67,10 @@ namespace Mosa.Runtime.Loader.PE {
 
 		#endregion // Data members
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetadataRoot"/> class.
+        /// </summary>
+        /// <param name="assemblyImage">The assembly image.</param>
         public MetadataRoot(IMetadataModule assemblyImage)
         {
             _assemblyImage = assemblyImage;

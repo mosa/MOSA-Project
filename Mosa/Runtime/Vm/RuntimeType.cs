@@ -17,8 +17,14 @@ using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Runtime.Vm
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public enum RuntimeTypeFlags {
 
+        /// <summary>
+        /// 
+        /// </summary>
 		Loaded = 0x01,
 
 		/// <summary>
@@ -32,6 +38,9 @@ namespace Mosa.Runtime.Vm
 		HasGenericArgs = 0x80
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class RuntimeType : IEquatable<RuntimeType>
     {
         #region Data members
@@ -80,12 +89,15 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         private uint _nativeSize;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		private uint _packing;
 
-        /// <summary>
-        /// Holds generic parameters or types.
-        /// </summary>
-        private object[] _generics;
+        // <summary>
+        // Holds generic parameters or types.
+        // </summary>
+        //private object[] _generics;
 
         /// <summary>
         /// Methods of the type.
@@ -104,16 +116,34 @@ namespace Mosa.Runtime.Vm
 
         #endregion // Data members
 
+        /// <summary>
+        /// 
+        /// </summary>
         public RuntimeTypeFlags Flags;
+        /// <summary>
+        /// 
+        /// </summary>
 		public TypeDefRow _typeDef;
+        /// <summary>
+        /// 
+        /// </summary>
         public GenericArgument[] _arguments;
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuntimeType"/> class.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <param name="typeDefRow">The type def row.</param>
+        /// <param name="maxField">The max field.</param>
+        /// <param name="maxMethod">The max method.</param>
+        /// <param name="packing">The packing.</param>
+        /// <param name="size">The size.</param>
         public RuntimeType(IMetadataModule module, ref TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, uint packing, uint size)
         {
             int members;
-
+            _token = 0;
             _module = module;
             _extends = RuntimeBase.Instance.TypeLoader.FindTypeIndexFromToken(module, typeDefRow.Extends);
             _flags = typeDefRow.Flags;
@@ -154,14 +184,18 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Determines if the type has generic arguments.
         /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is generic; otherwise, <c>false</c>.
+        /// </value>
         public bool IsGeneric
         {
             get { return (null != _arguments && 0 != _arguments.Length); }
         }
 
         /// <summary>
-		/// Retrieves the base class of the represented type.
-		/// </summary>
+        /// Retrieves the base class of the represented type.
+        /// </summary>
+        /// <value>The extends.</value>
 		public int Extends 
         {
 			get { return (_extends - 1); }
@@ -176,6 +210,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Returns the fields of the type.
         /// </summary>
+        /// <value>The fields.</value>
         public IList<RuntimeField> Fields
         {
             get { return _fields; }
@@ -184,6 +219,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Returns the methods of the type.
         /// </summary>
+        /// <value>The methods.</value>
         public IList<RuntimeMethod> Methods
         {
             get { return _methods; }
@@ -192,6 +228,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Retrieves the name of the represented type.
         /// </summary>
+        /// <value>The name.</value>
         public string Name
         {
             get
@@ -206,6 +243,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Retrieves the namespace of the represented type.
         /// </summary>
+        /// <value>The namespace.</value>
         public string Namespace
         {
             get
@@ -217,6 +255,10 @@ namespace Mosa.Runtime.Vm
             }
         }
 
+        /// <summary>
+        /// Gets the token.
+        /// </summary>
+        /// <value>The token.</value>
         public TokenTypes Token
         {
             get { return _token; }
@@ -240,6 +282,13 @@ namespace Mosa.Runtime.Vm
 
         #region IEquatable<RuntimeType> Members
 
+        /// <summary>
+        /// Gibt an, ob das aktuelle Objekt gleich einem anderen Objekt des gleichen Typs ist.
+        /// </summary>
+        /// <param name="other">Ein Objekt, das mit diesem Objekt verglichen werden soll.</param>
+        /// <returns>
+        /// true, wenn das aktuelle Objekt gleich dem <paramref name="other"/>-Parameter ist, andernfalls false.
+        /// </returns>
         public bool Equals(RuntimeType other)
         {
             return (_module == other._module && _nameIdx == other._nameIdx && _namespaceIdx == other._namespaceIdx && _extends == other._extends);
@@ -249,6 +298,12 @@ namespace Mosa.Runtime.Vm
 
         #region Object Overrides
 
+        /// <summary>
+        /// Gibt einen <see cref="T:System.String"/> zurück, der den aktuellen <see cref="T:System.Object"/> darstellt.
+        /// </summary>
+        /// <returns>
+        /// Ein <see cref="T:System.String"/>, der den aktuellen <see cref="T:System.Object"/> darstellt.
+        /// </returns>
         public override string ToString()
         {
             return String.Format("{0}.{1}", this.Namespace, this.Name);

@@ -41,6 +41,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Properties
 
+        /// <summary>
+        /// Gets the supported immediate metadata tokens in the instruction.
+        /// </summary>
+        /// <value></value>
         protected override InvokeInstruction.InvokeSupportFlags InvokeSupport
         {
             get { return InvokeSupportFlags.MemberRef | InvokeSupportFlags.MethodDef; }
@@ -50,6 +54,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Processes the stack.
+        /// </summary>
+        /// <param name="decoder">The decoder.</param>
         protected void ProcessStack(IInstructionDecoder decoder)
         {
             // ISO/IEC 23271:2006(E), Partition III, §3.37:

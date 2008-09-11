@@ -11,40 +11,164 @@ using System;
 
 namespace Mosa.DeviceDrivers.PCI
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	[AttributeUsage(AttributeTargets.All | AttributeTargets.Property, AllowMultiple = true)]
 	public class PCIDeviceSignatureAttribute : System.Attribute
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public PlatformArchitecture Platforms = PlatformArchitecture.None;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		[Flags]
-		protected enum Field : byte { DeviceID = 1, VendorID = 2, SubVendorID = 4, SubDeviceID = 8, RevisionID = 16, ProgIF = 32, ClassCode = 64, SubClassCode = 128 };
+		protected enum Field : byte 
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            DeviceID = 1,
+            /// <summary>
+            /// 
+            /// </summary>
+            VendorID = 2,
+            /// <summary>
+            /// 
+            /// </summary>
+            SubVendorID = 4,
+            /// <summary>
+            /// 
+            /// </summary>
+            SubDeviceID = 8,
+            /// <summary>
+            /// 
+            /// </summary>
+            RevisionID = 16,
+            /// <summary>
+            /// 
+            /// </summary>
+            ProgIF = 32,
+            /// <summary>
+            /// 
+            /// </summary>
+            ClassCode = 64,
+            /// <summary>
+            /// 
+            /// </summary>
+            SubClassCode = 128 
+        };
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected Field fields;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort deviceID;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort vendorID;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort subVendorID;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort subDeviceID;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte revisionID;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte progIF;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort classCode;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte subClassCode;
 
+        /// <summary>
+        /// Gets or sets the device ID.
+        /// </summary>
+        /// <value>The device ID.</value>
 		public ushort DeviceID { get { return deviceID; } set { deviceID = value; fields = fields | Field.DeviceID; } }
+        /// <summary>
+        /// Gets or sets the vendor ID.
+        /// </summary>
+        /// <value>The vendor ID.</value>
 		public ushort VendorID { get { return vendorID; } set { vendorID = value; fields = fields | Field.VendorID; } }
+        /// <summary>
+        /// Gets or sets the sub vendor ID.
+        /// </summary>
+        /// <value>The sub vendor ID.</value>
 		public ushort SubVendorID { get { return subVendorID; } set { subVendorID = value; fields = fields | Field.SubVendorID; } }
+        /// <summary>
+        /// Gets or sets the sub device ID.
+        /// </summary>
+        /// <value>The sub device ID.</value>
 		public ushort SubDeviceID { get { return subDeviceID; } set { subDeviceID = value; fields = fields | Field.SubDeviceID; } }
+        /// <summary>
+        /// Gets or sets the revision ID.
+        /// </summary>
+        /// <value>The revision ID.</value>
 		public byte RevisionID { get { return revisionID; } set { revisionID = value; fields = fields | Field.RevisionID; } }
+        /// <summary>
+        /// Gets or sets the prog IF.
+        /// </summary>
+        /// <value>The prog IF.</value>
 		public byte ProgIF { get { return progIF; } set { progIF = value; fields = fields | Field.ProgIF; } }
+        /// <summary>
+        /// Gets or sets the class code.
+        /// </summary>
+        /// <value>The class code.</value>
 		public ushort ClassCode { get { return classCode; } set { classCode = value; fields = fields | Field.ClassCode; } }
+        /// <summary>
+        /// Gets or sets the sub class code.
+        /// </summary>
+        /// <value>The sub class code.</value>
 		public byte SubClassCode { get { return subClassCode; } set { subClassCode = value; fields = fields | Field.SubClassCode; } }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected const Field Priority1 = Field.VendorID | Field.DeviceID | Field.SubVendorID | Field.SubDeviceID | Field.RevisionID;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected const Field Priority2 = Field.VendorID | Field.DeviceID | Field.SubVendorID | Field.SubDeviceID;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected const Field Priority3 = Field.VendorID | Field.DeviceID | Field.RevisionID;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected const Field Priority4 = Field.VendorID | Field.DeviceID;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected const Field Priority5 = Field.ClassCode | Field.SubClassCode | Field.ProgIF;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected const Field Priority6 = Field.ClassCode | Field.SubClassCode;
 
+        /// <summary>
+        /// Gets the priority.
+        /// </summary>
+        /// <value>The priority.</value>
 		public int Priority
 		{
 			get
@@ -67,8 +191,16 @@ namespace Mosa.DeviceDrivers.PCI
 			}
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PCIDeviceSignatureAttribute"/> class.
+        /// </summary>
 		public PCIDeviceSignatureAttribute() { fields = 0; }
 
+        /// <summary>
+        /// Compares to.
+        /// </summary>
+        /// <param name="pciDevice">The pci device.</param>
+        /// <returns></returns>
 		public bool CompareTo(PCIDevice pciDevice)
 		{
 			if (fields == 0)

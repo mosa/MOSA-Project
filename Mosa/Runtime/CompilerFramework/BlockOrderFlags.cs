@@ -13,10 +13,19 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Flags]
     public enum BlockOrderFlags
     {
+        /// <summary>
+        /// 
+        /// </summary>
         Active = 0x01,
+        /// <summary>
+        /// 
+        /// </summary>
         Visited = 0x02,
     }
 }

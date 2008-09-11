@@ -14,10 +14,17 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class BreakInstruction : ILInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BreakInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
         public BreakInstruction(OpCode code) :
             base(code)
         {

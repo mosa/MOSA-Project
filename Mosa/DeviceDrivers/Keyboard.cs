@@ -71,10 +71,11 @@ namespace Mosa.DeviceDrivers
         /// </summary>
 		protected bool rightShift;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Keyboard"/> class.
-		/// </summary>
-		/// <param name="keyboardDevice">The keyboard device.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Keyboard"/> class.
+        /// </summary>
+        /// <param name="keyboardDevice">The keyboard device.</param>
+        /// <param name="scanCodeMap">The scan code map.</param>
 		public Keyboard(IKeyboardDevice keyboardDevice, IScanCodeMap scanCodeMap)
 		{
 			this.keyboardDevice = keyboardDevice;

@@ -320,9 +320,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Properties
 
-        /// <summary>
-        /// Returns the binary reader to access the code stream.
-        /// </summary>
+        // <summary>
+        // Returns the binary reader to access the code stream.
+        // </summary>
+        // <value></value>
         //public BinaryReader CodeReader
         //{
         //    get { return _codeReader; }
@@ -332,11 +333,18 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region IMethodCompilerStage Members
 
+        /// <summary>
+        /// 
+        /// </summary>
         string IMethodCompilerStage.Name
         {
             get { return @"CIL decoder"; }
         }
 
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        /// <param name="compiler">The compiler context to perform processing in.</param>
         void IMethodCompilerStage.Run(MethodCompilerBase compiler)
         {
             // The size of the code in bytes
@@ -625,16 +633,32 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region IInstructionsProvider members
 
+        /// <summary>
+        /// Gets a list of instructions in intermediate representation.
+        /// </summary>
+        /// <value></value>
         List<Instruction> IInstructionsProvider.Instructions
         {
             get { return _instructions; }
         }
 
+        /// <summary>
+        /// Gibt einen Enumerator zurück, der die Auflistung durchläuft.
+        /// </summary>
+        /// <returns>
+        /// Ein <see cref="T:System.Collections.Generic.IEnumerator`1"/>, der zum Durchlaufen der Auflistung verwendet werden kann.
+        /// </returns>
         public IEnumerator<Instruction> GetEnumerator()
         {
             return _instructions.GetEnumerator();
         }
 
+        /// <summary>
+        /// Gibt einen Enumerator zurück, der eine Auflistung durchläuft.
+        /// </summary>
+        /// <returns>
+        /// Ein <see cref="T:System.Collections.IEnumerator"/>-Objekt, das zum Durchlaufen der Auflistung verwendet werden kann.
+        /// </returns>
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return _instructions.GetEnumerator();
@@ -644,16 +668,30 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region IInstructionDecoder Members
 
+        /// <summary>
+        /// Gets the compiler, that is currently executing.
+        /// </summary>
+        /// <value></value>
         MethodCompilerBase IInstructionDecoder.Compiler
         {
             get { return _compiler; }
         }
 
+        /// <summary>
+        /// Gets the RuntimeMethod being compiled.
+        /// </summary>
+        /// <value></value>
         RuntimeMethod IInstructionDecoder.Method
         {
             get { return _method; }
         }
 
+        /// <summary>
+        /// Retrieves the local stack operand at the specified <paramref name="index"/>.
+        /// </summary>
+        /// <param name="idx">The index of the stack operand to retrieve.</param>
+        /// <returns>The operand at the specified index.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
         Operand IInstructionDecoder.GetLocalOperand(int idx)
         {
             // HACK: Returning a new instance here breaks object identity. We should reuse operands,
@@ -678,6 +716,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
             return local;
         }
 
+        /// <summary>
+        /// Retrieves the parameter operand at the specified <paramref name="index"/>.
+        /// </summary>
+        /// <param name="idx">The index of the parameter operand to retrieve.</param>
+        /// <returns>The operand at the specified index.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
         Operand IInstructionDecoder.GetParameterOperand(int idx)
         {
             // HACK: Returning a new instance here breaks object identity. We should reuse operands,
@@ -719,51 +763,91 @@ namespace Mosa.Runtime.CompilerFramework.IL
             return param;
         }
 
+        /// <summary>
+        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// </summary>
+        /// <param name="value">Receives the decoded value from the instruction stream.</param>
         void IInstructionDecoder.Decode(out byte value)
         {
             value = _codeReader.ReadByte();
         }
 
+        /// <summary>
+        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// </summary>
+        /// <param name="value">Receives the decoded value from the instruction stream.</param>
         void IInstructionDecoder.Decode(out sbyte value)
         {
             value = _codeReader.ReadSByte();
         }
 
+        /// <summary>
+        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// </summary>
+        /// <param name="value">Receives the decoded value from the instruction stream.</param>
         void IInstructionDecoder.Decode(out short value)
         {
             value = _codeReader.ReadInt16();
         }
 
+        /// <summary>
+        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// </summary>
+        /// <param name="value">Receives the decoded value from the instruction stream.</param>
         void IInstructionDecoder.Decode(out ushort value)
         {
             value = _codeReader.ReadUInt16();
         }
 
+        /// <summary>
+        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// </summary>
+        /// <param name="value">Receives the decoded value from the instruction stream.</param>
         void IInstructionDecoder.Decode(out int value)
         {
             value = _codeReader.ReadInt32();
         }
 
+        /// <summary>
+        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// </summary>
+        /// <param name="value">Receives the decoded value from the instruction stream.</param>
         void IInstructionDecoder.Decode(out uint value)
         {
             value = _codeReader.ReadUInt32();
         }
 
+        /// <summary>
+        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// </summary>
+        /// <param name="value">Receives the decoded value from the instruction stream.</param>
         void IInstructionDecoder.Decode(out long value)
         {
             value = _codeReader.ReadInt64();
         }
 
+        /// <summary>
+        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// </summary>
+        /// <param name="value">Receives the decoded value from the instruction stream.</param>
         void IInstructionDecoder.Decode(out float value)
         {
             value = _codeReader.ReadSingle();
         }
 
+        /// <summary>
+        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// </summary>
+        /// <param name="value">Receives the decoded value from the instruction stream.</param>
         void IInstructionDecoder.Decode(out double value)
         {
             value = _codeReader.ReadDouble();
         }
 
+        /// <summary>
+        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// </summary>
+        /// <param name="value">Receives the decoded value from the instruction stream.</param>
         void IInstructionDecoder.Decode(out TokenTypes value)
         {
              value = (TokenTypes)_codeReader.ReadInt32();

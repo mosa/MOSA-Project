@@ -11,9 +11,20 @@ using Mosa.DeviceDrivers.Kernel;
 
 namespace Mosa.DeviceDrivers
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public interface IIOPortRegion
 	{
+        /// <summary>
+        /// Gets the base IO port.
+        /// </summary>
+        /// <value>The base IO port.</value>
 		ushort BaseIOPort { get ; }
+        /// <summary>
+        /// Gets the size.
+        /// </summary>
+        /// <value>The size.</value>
 		ushort Size { get ;  }
 	}
 

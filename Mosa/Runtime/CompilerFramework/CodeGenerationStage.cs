@@ -32,9 +32,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         protected MethodCompilerBase _compiler;
 
-        /// <summary>
-        /// Maps label targets as instruction offsets.
-        /// </summary>
+        // <summary>
+        // Maps label targets as instruction offsets.
+        // </summary>
         //private Dictionary<int, int> _labels;
 
         #endregion // Data members
@@ -42,7 +42,7 @@ namespace Mosa.Runtime.CompilerFramework
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of <see cref="CodeGenerationStage"/>.
+        /// Initializes a new instance of the <see cref="CodeGenerationStage&lt;ContextType&gt;"/> class.
         /// </summary>
         protected CodeGenerationStage()
         {
@@ -52,11 +52,19 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IMethodCompilerStage members
 
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value></value>
         string IMethodCompilerStage.Name
         {
             get { return @"CodeGeneration"; }
         }
 
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        /// <param name="compiler">The compiler context to perform processing in.</param>
 		void IMethodCompilerStage.Run(MethodCompilerBase compiler)
 		{
             // Check preconditions
@@ -146,6 +154,11 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IInstructionVisitor<ContextType> Members
 
+        /// <summary>
+        /// Visitation method for instructions not caught by more specific visitation methods.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        /// <param name="arg">A visitation context argument.</param>
         void IInstructionVisitor<ContextType>.Visit(Instruction instruction, ContextType arg)
         {
             Trace.WriteLine(String.Format(@"Unknown instruction {0} has visited CodeGenerationStage<ContextType>.", instruction.GetType().FullName));

@@ -16,19 +16,26 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class RefanyvalInstruction : UnaryInstruction
     {
         #region Data members
 
-        /// <summary>
-        /// The type to ensure.
-        /// </summary>
-        private SigType _typeRef;
+        // <summary>
+        // The type to ensure.
+        // </summary>
+        //private SigType _typeRef;
 
         #endregion // Data members
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RefanyvalInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The opcode of the unary instruction.</param>
         public RefanyvalInstruction(OpCode code)
             : base(code, 1)
         {
@@ -41,6 +48,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+        /// <summary>
+        /// Allows the instruction to decode any immediate operands.
+        /// </summary>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        /// <remarks>
+        /// This method is used by instructions to retrieve immediate operands
+        /// from the instruction stream.
+        /// </remarks>
         public sealed override void Decode(IInstructionDecoder decoder)
         {
             // Decode base class first
@@ -54,6 +69,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
             //_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
         }
 
+        /// <summary>
+        /// Validates the current set of stack operands.
+        /// </summary>
+        /// <param name="compiler"></param>
+        /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
+        /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
         public sealed override void Validate(MethodCompilerBase compiler)
         {
             base.Validate(compiler);

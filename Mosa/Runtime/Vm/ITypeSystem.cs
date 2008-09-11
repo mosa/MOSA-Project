@@ -56,10 +56,26 @@ namespace Mosa.Runtime.Vm
         /// <param name="module">The loaded module.</param>
         void AssemblyLoaded(IMetadataModule module);
 
+        /// <summary>
+        /// Gets the types from module.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <returns></returns>
         ReadOnlyRuntimeTypeListView GetTypesFromModule(IMetadataModule module);
 
+        /// <summary>
+        /// Gets the module offset.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <returns></returns>
         ModuleOffsets GetModuleOffset(IMetadataModule module);
 
+        /// <summary>
+        /// Finds the type index from token.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
         int FindTypeIndexFromToken(IMetadataModule module, TokenTypes token);
 
         /// <summary>

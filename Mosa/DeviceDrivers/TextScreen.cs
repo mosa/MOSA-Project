@@ -17,12 +17,33 @@ namespace Mosa.DeviceDrivers
 	/// </summary>
 	public class TextScreen : ITextScreen
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ITextDevice textDevice;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort cursorX;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort cursorY;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected TextColor foreground;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected TextColor background;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort width;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected ushort height;
 
 		/// <summary>

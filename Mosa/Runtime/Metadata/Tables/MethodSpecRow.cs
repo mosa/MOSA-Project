@@ -14,6 +14,9 @@ using System.IO;
 
 namespace Mosa.Runtime.Metadata.Tables
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public struct MethodSpecRow {
 		#region Data members
 
@@ -46,11 +49,19 @@ namespace Mosa.Runtime.Metadata.Tables
 
         #region Properties
 
+        /// <summary>
+        /// Gets the method table idx.
+        /// </summary>
+        /// <value>The method table idx.</value>
         public TokenTypes MethodTableIdx
         {
             get { return _methodTableIdx; }
         }
 
+        /// <summary>
+        /// Gets the instantiation BLOB idx.
+        /// </summary>
+        /// <value>The instantiation BLOB idx.</value>
         public TokenTypes InstantiationBlobIdx
         {
             get { return _instantiationBlobIdx; }

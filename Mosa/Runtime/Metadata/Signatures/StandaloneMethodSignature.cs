@@ -13,6 +13,9 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class StandaloneMethodSignature : MethodReferenceSignature
     {
     }

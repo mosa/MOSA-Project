@@ -36,6 +36,11 @@ namespace Mosa.Runtime.Metadata {
 
         #region Methods
 
+        /// <summary>
+        /// Reads the string.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
         public string ReadString(TokenTypes token)
         {
             Debug.Assert((TokenTypes.TableMask & token) == TokenTypes.String);

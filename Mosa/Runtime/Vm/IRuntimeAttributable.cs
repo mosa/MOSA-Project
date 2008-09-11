@@ -13,8 +13,15 @@ using System.Text;
 
 namespace Mosa.Runtime.Vm
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IRuntimeAttributable
     {
+        /// <summary>
+        /// Gets the custom attributes.
+        /// </summary>
+        /// <value>The custom attributes.</value>
         RuntimeAttribute[] CustomAttributes
         {
             get;

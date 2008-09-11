@@ -15,6 +15,9 @@ using System.IO;
 
 namespace Mosa.Runtime.CompilerFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public struct LinkRequest
     {
         #region Data members
@@ -51,9 +54,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Initializes a new instance of LinkRequest.
         /// </summary>
+        /// <param name="linkType">Type of the link.</param>
         /// <param name="method">The method whose code is being patched.</param>
-        /// <param name="address">The address to patch for this request.</param>
-        /// <param name="relativeBase">The base address for relative patching, otherwise zero.</param>
+        /// <param name="methodOffset">The method offset.</param>
+        /// <param name="methodRelativeBase">The method relative base.</param>
+        /// <param name="target">The target.</param>
         public LinkRequest(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
             _method = method;

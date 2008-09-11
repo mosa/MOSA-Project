@@ -20,30 +20,69 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.ISA
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0020, PortRange = 2, AltBasePort = 0x00A0, AltPortRange = 2, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class PIC : ISAHardwareDevice, IDevice, IHardwareDevice
 	{
 		#region Definitions
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected const byte IRQBaseSize = 0x08;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected const byte MasterIRQBase = 0x20;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected const byte SlaveIRQBase = MasterIRQBase + IRQBaseSize;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected const byte EOI = 0x20;
 
 		#endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort masterCommandPort;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort masterDataPort;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort slaveCommandPort;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected IReadWriteIOPort slaveDataPort;
 
 		// Interrupt masks must be tracked via the driver
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte masterInterruptMask;
+        /// <summary>
+        /// 
+        /// </summary>
 		protected byte slaveInterruptMask;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PIC"/> class.
+        /// </summary>
 		public PIC() { }
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override bool Setup()
 		{
 			base.name = "PIC_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");
@@ -57,8 +96,14 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override bool Probe() { return true; }
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override bool Start()
 		{
 			byte masterMask;
@@ -95,10 +140,20 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override LinkedList<IDevice> CreateSubDevices() { return null; }
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
 		public override bool OnInterrupt() { return false; }
 
+        /// <summary>
+        /// Sends the end of interrupt.
+        /// </summary>
+        /// <param name="irq">The irq.</param>
 		public void SendEndOfInterrupt(byte irq)
 		{
 			if (irq >= 8)
@@ -107,6 +162,9 @@ namespace Mosa.DeviceDrivers.ISA
 			masterCommandPort.Write8(EOI);
 		}
 
+        /// <summary>
+        /// Disables the IR qs.
+        /// </summary>
 		public void DisableIRQs()
 		{
 			masterInterruptMask = 0xFF;
@@ -117,6 +175,10 @@ namespace Mosa.DeviceDrivers.ISA
 			slaveDataPort.Write8(slaveInterruptMask);
 		}
 
+        /// <summary>
+        /// Enables the master IRQ.
+        /// </summary>
+        /// <param name="value">The value.</param>
 		protected void EnableMasterIRQ(byte value)
 		{
 			// Mask out all but the last three bits
@@ -131,6 +193,10 @@ namespace Mosa.DeviceDrivers.ISA
 			masterDataPort.Write8(masterInterruptMask);
 		}
 
+        /// <summary>
+        /// Enables the slave IRQ.
+        /// </summary>
+        /// <param name="value">The value.</param>
 		protected void EnableSlaveIRQ(byte value)
 		{
 			// Mask out all but the last three bits
@@ -141,6 +207,10 @@ namespace Mosa.DeviceDrivers.ISA
 			slaveDataPort.Write8(masterInterruptMask);
 		}
 
+        /// <summary>
+        /// Enables the IRQ.
+        /// </summary>
+        /// <param name="value">The value.</param>
 		public void EnableIRQ(byte value)
 		{
 			if ((value >= MasterIRQBase) && (value < SlaveIRQBase + IRQBaseSize)) {
@@ -151,6 +221,10 @@ namespace Mosa.DeviceDrivers.ISA
 			}
 		}
 
+        /// <summary>
+        /// Disables the master IRQ.
+        /// </summary>
+        /// <param name="value">The value.</param>
 		protected void DisableMasterIRQ(byte value)
 		{
 			// Mask out all but the last three bits
@@ -165,6 +239,10 @@ namespace Mosa.DeviceDrivers.ISA
 			masterDataPort.Write8(masterInterruptMask);
 		}
 
+        /// <summary>
+        /// Disables the slave IRQ.
+        /// </summary>
+        /// <param name="value">The value.</param>
 		protected void DisableSlaveIRQ(byte value)
 		{
 			// Mask out all but the last three bits
@@ -176,6 +254,10 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 
+        /// <summary>
+        /// Disables the IRQ.
+        /// </summary>
+        /// <param name="value">The value.</param>
 		public void DisableIRQ(byte value)
 		{
 			if ((value >= MasterIRQBase) && (value < SlaveIRQBase + IRQBaseSize)) {

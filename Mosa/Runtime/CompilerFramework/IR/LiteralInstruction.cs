@@ -66,6 +66,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <summary>
         /// Gets an object, that represents the data to embed in the instruction stream.
         /// </summary>
+        /// <value>The data.</value>
         public object Data
         {
             get { return _data; }
@@ -74,6 +75,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <summary>
         /// Gets the label to apply to the data.
         /// </summary>
+        /// <value>The label.</value>
         public int Label
         {
             get { return _label; }
@@ -82,6 +84,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <summary>
         /// Gets the signature type of the data to embed.
         /// </summary>
+        /// <value>The type.</value>
         public SigType Type
         {
             get { return _type; }
@@ -101,6 +104,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
         #region Instruction Overrides
 
+        /// <summary>
+        /// Gibt einen <see cref="T:System.String"/> zurück, der den aktuellen <see cref="T:System.Object"/> darstellt.
+        /// </summary>
+        /// <returns>
+        /// Ein <see cref="T:System.String"/>, der den aktuellen <see cref="T:System.Object"/> darstellt.
+        /// </returns>
         public override string ToString()
         {
             return String.Format("IR literal {0} {1} ; L_{2}", _type, _data, _label);

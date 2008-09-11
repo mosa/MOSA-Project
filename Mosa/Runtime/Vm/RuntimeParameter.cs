@@ -49,9 +49,9 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         private TokenTypes _token;
 
-        /// <summary>
-        /// Holds the type of the parameter.
-        /// </summary>
+        // <summary>
+        // Holds the type of the parameter.
+        // </summary>
         //private TokenTypes _type;
 
         /// <summary>
@@ -63,6 +63,13 @@ namespace Mosa.Runtime.Vm
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuntimeParameter"/> class.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="position">The position.</param>
+        /// <param name="attributes">The attributes.</param>
         public RuntimeParameter(IMetadataModule module, string name, int position, ParameterAttributes attributes)
         {
             _module = module;
@@ -73,6 +80,11 @@ namespace Mosa.Runtime.Vm
             _position = position;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuntimeParameter"/> class.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <param name="param">The param.</param>
         public RuntimeParameter(IMetadataModule module, ParamRow param)
         {
             _module = module;
@@ -149,6 +161,13 @@ namespace Mosa.Runtime.Vm
 
         #region IEquatable<RuntimeParameter> Members
 
+        /// <summary>
+        /// Gibt an, ob das aktuelle Objekt gleich einem anderen Objekt des gleichen Typs ist.
+        /// </summary>
+        /// <param name="other">Ein Objekt, das mit diesem Objekt verglichen werden soll.</param>
+        /// <returns>
+        /// true, wenn das aktuelle Objekt gleich dem <paramref name="other"/>-Parameter ist, andernfalls false.
+        /// </returns>
         public bool Equals(RuntimeParameter other)
         {
             return (_module == other._module && _nameIdx == other._nameIdx && _position == other._position);

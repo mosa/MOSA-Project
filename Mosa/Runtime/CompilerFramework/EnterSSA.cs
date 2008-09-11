@@ -79,6 +79,9 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EnterSSA"/> class.
+        /// </summary>
         public EnterSSA()
         {
         }

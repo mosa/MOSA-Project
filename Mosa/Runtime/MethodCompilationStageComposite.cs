@@ -33,6 +33,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// List-Accessor
         /// </summary>
+        /// <value>The stages.</value>
         public List<IMethodCompilerStage> Stages
         {
             get { return stages; }
@@ -58,6 +59,10 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value></value>
         public string Name
         {
             get
@@ -75,6 +80,10 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        /// <param name="compiler">The compiler context to perform processing in.</param>
         public void Run(MethodCompilerBase compiler)
         {
             // Call Run on every stage

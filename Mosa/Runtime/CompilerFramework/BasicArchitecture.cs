@@ -95,23 +95,59 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="assemblyPipeline">The pipeline to extend.</param>
         public abstract void ExtendAssemblyCompilerPipeline(CompilerPipeline<IAssemblyCompilerStage> assemblyPipeline);
+        /// <summary>
+        /// Requests the architecture to add architecture specific compilation stages to the pipeline. These
+        /// may depend upon the current state of the pipeline.
+        /// </summary>
+        /// <param name="methodPipeline">The pipeline of the method compiler to add architecture specific compilation stages to.</param>
         public abstract void ExtendMethodCompilerPipeline(CompilerPipeline<IMethodCompilerStage> methodPipeline);
 
+        /// <summary>
+        /// Factory method for instruction object instances.
+        /// </summary>
+        /// <param name="instructionType">The type of the instruction to create.</param>
+        /// <param name="args">Array of arguments to pass to the instruction type.</param>
+        /// <returns>
+        /// An instance of Instruction or a derived class to represent the requested opcode.
+        /// </returns>
         public virtual Instruction CreateInstruction(Type instructionType, params object[] args)
         {
             Debug.Assert(typeof(Instruction).IsAssignableFrom(instructionType));
             return (Instruction)Activator.CreateInstance(instructionType, args, new object[0]);
         }
 
+        /// <summary>
+        /// Factory method for result operands of instructions.
+        /// </summary>
+        /// <param name="type">The datatype held in the result operand.</param>
+        /// <param name="label">The label.</param>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// The operand, which holds the instruction result.
+        /// </returns>
         public virtual Operand CreateResultOperand(SigType type, int label, int index)
         {
             return new TemporaryOperand(label, type, this.StackFrameRegister, index);
         }
 
+        /// <summary>
+        /// Retrieves an object, that is able to translate the CIL calling convention into appropriate native code.
+        /// </summary>
+        /// <param name="cc">The CIL calling convention to translate.</param>
+        /// <returns>A calling convention implementation.</returns>
         public abstract ICallingConvention GetCallingConvention(CallingConvention cc);
 
+        /// <summary>
+        /// Retrieves a register constraint description object.
+        /// </summary>
+        /// <param name="instruction">The instruction to retrieve the register constraint description for.</param>
+        /// <returns>A register constraint descriptor.</returns>
         public abstract IRegisterConstraint GetRegisterConstraint(Instruction instruction);
-        
+
+        /// <summary>
+        /// Gets object file builders for this architecture
+        /// </summary>
+        /// <returns>A list of ObjectFileBuilders</returns>
         public abstract ObjectFileBuilderBase[] GetObjectFileBuilders();
 
         #endregion // IArchitecture Members

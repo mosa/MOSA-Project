@@ -60,12 +60,23 @@ namespace Mosa.Runtime.CompilerFramework.IL
 			_code = op;
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ILInstruction"/> class.
+        /// </summary>
+        /// <param name="op">The op.</param>
+        /// <param name="operandCount">The operand count.</param>
         protected ILInstruction(OpCode op, int operandCount) : 
             base(operandCount)
         {
             _code = op;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ILInstruction"/> class.
+        /// </summary>
+        /// <param name="op">The op.</param>
+        /// <param name="operandCount">The operand count.</param>
+        /// <param name="resultCount">The result count.</param>
         protected ILInstruction(OpCode op, int operandCount, int resultCount) :
             base(operandCount, resultCount)
         {

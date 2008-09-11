@@ -9,10 +9,22 @@
 
 namespace Mosa.DeviceDrivers
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public class MemoryResources
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MemoryResources"/> class.
+        /// </summary>
 		public MemoryResources() { }
 
+        /// <summary>
+        /// Gets the memory.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <param name="size">The size.</param>
+        /// <returns></returns>
 		public IMemory GetMemory(uint address, uint size)
 		{
 			return Kernel.HAL.RequestMemory(address, size);

@@ -60,7 +60,7 @@ namespace Mosa.Runtime.CompilerFramework
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of <see cref="PseudoRegisterAllocator"/>.
+        /// Initializes a new instance of <see cref="LinearRegisterAllocator"/>.
         /// </summary>
         public LinearRegisterAllocator()
         {
@@ -70,11 +70,19 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IMethodCompilerStage Members
 
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value></value>
         public string Name
         {
             get { return @"PseudoRegisterAllocator"; }
         }
 
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        /// <param name="compiler">The compiler context to perform processing in.</param>
         public void Run(MethodCompilerBase compiler)
         {
             // Retrieve the architecture
