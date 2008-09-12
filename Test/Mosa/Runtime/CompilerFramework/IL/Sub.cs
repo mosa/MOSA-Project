@@ -230,7 +230,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             CodeSource = "static class Test { static bool SubI4(int expect, int a, int b) { return expect == (a - b); } }";
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "SubI4", (a - b), a, b));
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -249,7 +249,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(1.0f, -2.198f)]
         [Row(-1.2f, 2.11f)]
         [Row(0.0f, 0.0f)]
-        [Row(-17.1f, -2.3f)]
         // (MinValue, X) Cases
         [Row(float.MinValue, 0.0f)]
         [Row(float.MinValue, 1.2f)]
@@ -287,7 +286,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-17.0002501f, float.MaxValue)]
         [Row(-123.023f, float.MaxValue)]
         // Extremvaluecases
-        [Row(float.MinValue, float.MaxValue)]
         [Row(1.0f, float.NaN)]
         [Row(float.NaN, 1.0f)]
         [Row(1.0f, float.PositiveInfinity)]
@@ -300,7 +298,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             CodeSource = "static class Test { static bool SubR4(float expect, float a, float b) { return expect == (a - b); } }";
             Assert.IsTrue((bool)Run<R4_R4_R4>("", "Test", "SubR4", (a - b), a, b));
         }
-
+        
         /// <summary>
         /// 
         /// </summary>

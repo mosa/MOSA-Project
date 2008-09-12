@@ -612,6 +612,10 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.SseSub(SseSubInstruction instruction, int arg)
         {
+            Operand tmp = instruction.Operands[0];
+            instruction.Operands[0] = instruction.Operands[1];
+            instruction.Operands[1] = tmp;
+
             HandleArith(instruction);
         }
 
@@ -622,7 +626,11 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.SseDiv(SseDivInstruction instruction, int arg)
         {
-            HandleSseDiv(instruction);
+            Operand tmp = instruction.Operands[0];
+            instruction.Operands[0] = instruction.Operands[1];
+            instruction.Operands[1] = tmp;
+
+            HandleArith(instruction);
         }
 
         void IX86InstructionVisitor<int>.Shift(ShiftInstruction instruction, int arg)

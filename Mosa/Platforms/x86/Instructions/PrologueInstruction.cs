@@ -40,6 +40,21 @@ namespace Mosa.Platforms.x86
 
         #region IR.PrologueInstruction Overrides
 
+        /// <summary>
+        /// Called by the intermediate to machine intermediate representation transformation
+        /// to expand compound instructions into their basic instructions.
+        /// </summary>
+        /// <param name="methodCompiler">The executing method compiler.</param>
+        /// <returns>
+        /// The default expansion keeps the original instruction by
+        /// returning the instruction itself. A derived class may return an
+        /// IEnumerable&lt;Instruction&gt; to replace the instruction with a set of other
+        /// instructions or null to remove the instruction itself from the stream.
+        /// </returns>
+        /// <remarks>
+        /// If a derived class returns <see cref="Instruction.Empty"/> from this method, the
+        /// instruction is essentially removed from the instruction stream.
+        /// </remarks>
         public override object Expand(MethodCompilerBase methodCompiler)
         {
             IArchitecture architecture = methodCompiler.Architecture;

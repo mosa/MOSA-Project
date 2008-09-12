@@ -44,6 +44,9 @@ namespace Mosa.Platforms.x86
                 this.position = position;
             }
 
+            /// <summary>
+            /// 
+            /// </summary>
             public int label;
             /// <summary>
             /// The patch's position in the stream
@@ -73,9 +76,21 @@ namespace Mosa.Platforms.x86
                 this.regField = regField;
             }
 
+            /// <summary>
+            /// 
+            /// </summary>
             public Type dest;
+            /// <summary>
+            /// 
+            /// </summary>
             public Type src;
+            /// <summary>
+            /// 
+            /// </summary>
             public byte[] code;
+            /// <summary>
+            /// 
+            /// </summary>
             public byte? regField;
         }
 
@@ -164,6 +179,10 @@ namespace Mosa.Platforms.x86
 
         #region ICodeEmitter Members
 
+        /// <summary>
+        /// Emits a comment into the code stream.
+        /// </summary>
+        /// <param name="comment">The comment to emit.</param>
         void ICodeEmitter.Comment(string comment)
         {
             /*
@@ -172,6 +191,10 @@ namespace Mosa.Platforms.x86
              */
         }
 
+        /// <summary>
+        /// Emits a label into the code stream.
+        /// </summary>
+        /// <param name="label">The label name to emit.</param>
         void ICodeEmitter.Label(int label)
         {
             /*
@@ -247,6 +270,12 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        /// <summary>
+        /// Emits a literal constant into the code stream.
+        /// </summary>
+        /// <param name="label">The label to apply to the data.</param>
+        /// <param name="type">The type of the literal.</param>
+        /// <param name="data">The data to emit.</param>
         void ICodeEmitter.Literal(int label, SigType type, object data)
         {
             // Save the current position
@@ -303,31 +332,59 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        /// <summary>
+        /// Emits an AND instruction.
+        /// </summary>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
         void ICodeEmitter.And(Operand dest, Operand src)
         {
             Emit(dest, src, cd_and);
         }
 
+        /// <summary>
+        /// Emits an NOT instruction.
+        /// </summary>
+        /// <param name="dest">The destination operand of the instruction.</param>
         void ICodeEmitter.Not(Operand dest)
         {
             Emit(dest, null, cd_not);
         }
 
+        /// <summary>
+        /// Emits an OR instruction.
+        /// </summary>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
         void ICodeEmitter.Or(Operand dest, Operand src)
         {
             Emit(dest, src, cd_or);
         }
 
+        /// <summary>
+        /// Adds the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
         void ICodeEmitter.Add(Operand dest, Operand src)
         {
             Emit(dest, src, cd_add);
         }
 
+        /// <summary>
+        /// Adcs the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
         void ICodeEmitter.Adc(Operand dest, Operand src)
         {
             Emit(dest, src, cd_adc);
         }
 
+        /// <summary>
+        /// Calls the specified target.
+        /// </summary>
+        /// <param name="target">The target.</param>
         void ICodeEmitter.Call(RuntimeMethod target)
         {
             _codeStream.WriteByte(0xE8);
@@ -343,12 +400,23 @@ namespace Mosa.Platforms.x86
             _codeStream.Write(relOffset, 0, relOffset.Length);
         }
 
+        /// <summary>
+        /// Emits a CALL instruction to the given label.
+        /// </summary>
+        /// <param name="label">The label to be called.</param>
+        /// <remarks>
+        /// This only invokes the platform call, it does not push arguments, spill and
+        /// save registers or handle the return value.
+        /// </remarks>
         void ICodeEmitter.Call(int label)
         {
             _codeStream.WriteByte(0xE8);
             EmitRelativeBranchTarget(label);
         }
 
+        /// <summary>
+        /// Emits a disable interrupts instruction.
+        /// </summary>
         void ICodeEmitter.Cli()
         {
             _codeStream.WriteByte(0xFA);
@@ -541,6 +609,11 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        /// <summary>
+        /// Emits a mov sign extend instruction.
+        /// </summary>
+        /// <param name="dest">The destination register.</param>
+        /// <param name="src">The source register.</param>
         void ICodeEmitter.Movsx(Operand dest, Operand src)
         {
             if (!(dest is RegisterOperand))
@@ -566,6 +639,11 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        /// <summary>
+        /// Emits a mov zero extend instruction.
+        /// </summary>
+        /// <param name="dest">The destination register.</param>
+        /// <param name="src">The source register.</param>
         void ICodeEmitter.Movzx(Operand dest, Operand src)
         {
             if (!(dest is RegisterOperand))
@@ -591,6 +669,10 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        /// <summary>
+        /// Pushes the given operand on the stack.
+        /// </summary>
+        /// <param name="operand">The operand to push.</param>
         void ICodeEmitter.Pop(Operand operand)
         {
             if (operand is RegisterOperand)
@@ -604,6 +686,10 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        /// <summary>
+        /// Pops the top-most value from the stack into the given operand.
+        /// </summary>
+        /// <param name="operand">The operand to pop.</param>
         void ICodeEmitter.Push(Operand operand)
         {
             if (operand is ConstantOperand)
@@ -622,22 +708,38 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        /// <summary>
+        /// Emits a return instruction.
+        /// </summary>
         /// <seealso cref="ICodeEmitter.Ret()"/>
         void ICodeEmitter.Ret()
         {
             _codeStream.WriteByte(0xC3);
         }
 
+        /// <summary>
+        /// Emits a enable interrupts instruction.
+        /// </summary>
         void ICodeEmitter.Sti()
         {
             _codeStream.WriteByte(0xFB);
         }
 
+        /// <summary>
+        /// Subtracts src from dest and stores the result in dest. (dest -= src)
+        /// </summary>
+        /// <param name="dest">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
         void ICodeEmitter.Sub(Operand dest, Operand src)
         {
             Emit(dest, src, cd_sub);
         }
 
+        /// <summary>
+        /// Emits an Xor instruction.
+        /// </summary>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
         void ICodeEmitter.Xor(Operand dest, Operand src)
         {
             Emit(dest, src, cd_xor);
@@ -916,16 +1018,25 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0xBE }, null),
         };
 
+        /// <summary>
+        /// 
+        /// </summary>
         private static readonly CodeDef[] cd_movsx16 = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xBF }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0xBF }, null),
         };
 
+        /// <summary>
+        /// 
+        /// </summary>
         private static readonly CodeDef[] cd_movzx8 = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xB6 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0xB6 }, null),
         };
 
+        /// <summary>
+        /// 
+        /// </summary>
         private static readonly CodeDef[] cd_movzx16 = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xB7 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0xB7 }, null),
@@ -1057,6 +1168,10 @@ namespace Mosa.Platforms.x86
                 EmitImmediate(src);
         }
 
+        /// <summary>
+        /// Emits the relative branch target.
+        /// </summary>
+        /// <param name="label">The label.</param>
         private void EmitRelativeBranchTarget(int label)
         {
             // The relative offset of the label
@@ -1239,6 +1354,9 @@ namespace Mosa.Platforms.x86
             return modRM;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="code"></param>
         void ICodeEmitter.Setcc(Mosa.Runtime.CompilerFramework.IL.OpCode code)
         {
             switch (code)
