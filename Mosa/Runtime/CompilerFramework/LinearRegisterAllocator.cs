@@ -18,8 +18,18 @@ namespace Mosa.Runtime.CompilerFramework
     {
         #region Types
 
+        /// <summary>
+        /// 
+        /// </summary>
         private class LiveRange
         {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="LiveRange"/> class.
+            /// </summary>
+            /// <param name="block">The block.</param>
+            /// <param name="op">The op.</param>
+            /// <param name="start">The start.</param>
+            /// <param name="end">The end.</param>
             public LiveRange(BasicBlock block, Operand op, int start, int end)
             {
                 this.Block = block;
@@ -29,10 +39,25 @@ namespace Mosa.Runtime.CompilerFramework
                 this.End = end;
             }
 
+            /// <summary>
+            /// 
+            /// </summary>
             public BasicBlock Block;
+            /// <summary>
+            /// 
+            /// </summary>
             public Operand Op;
+            /// <summary>
+            /// 
+            /// </summary>
             public Register Reg;
+            /// <summary>
+            /// 
+            /// </summary>
             public int Start;
+            /// <summary>
+            /// 
+            /// </summary>
             public int End;
         }
 
@@ -103,6 +128,9 @@ namespace Mosa.Runtime.CompilerFramework
             AssignRegisters();
         }
 
+        /// <summary>
+        /// Assigns the registers.
+        /// </summary>
         private void AssignRegisters()
         {
             List<LiveRange> active = new List<LiveRange>();
@@ -132,6 +160,11 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
+        /// <summary>
+        /// Replaces the operand.
+        /// </summary>
+        /// <param name="lr">The lr.</param>
+        /// <param name="replacement">The replacement.</param>
         private void ReplaceOperand(LiveRange lr, RegisterOperand replacement)
         {
             int opIdx;
@@ -181,6 +214,12 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
+        /// <summary>
+        /// Spills the register.
+        /// </summary>
+        /// <param name="active">The active.</param>
+        /// <param name="current">The current.</param>
+        /// <returns></returns>
         private Register SpillRegister(List<LiveRange> active, LiveRange current)
         {
             foreach (LiveRange lr in active)
@@ -213,6 +252,11 @@ namespace Mosa.Runtime.CompilerFramework
             throw new InvalidOperationException(@"Failed to spill a register.");
         }
 
+        /// <summary>
+        /// Allocates the register.
+        /// </summary>
+        /// <param name="operand">The operand.</param>
+        /// <returns></returns>
         private Register AllocateRegister(Operand operand)
         {
             foreach (Register r in _registers)
@@ -227,6 +271,11 @@ namespace Mosa.Runtime.CompilerFramework
             return null;
         }
 
+        /// <summary>
+        /// Expires the old ranges.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <param name="active">The active.</param>
         private void ExpireOldRanges(int position, List<LiveRange> active)
         {
             for (int i = 0; i < active.Count; i++)
@@ -243,6 +292,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 
 
+        /// <summary>
+        /// Reinserts the spilled range.
+        /// </summary>
+        /// <param name="lr">The lr.</param>
         private void ReinsertSpilledRange(LiveRange lr)
         {
             int index = 0;
@@ -258,11 +311,20 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
+        /// <summary>
+        /// Fills the register list.
+        /// </summary>
+        /// <returns></returns>
         private List<Register> FillRegisterList()
         {
             return new List<Register>(_architecture.RegisterSet);
         }
 
+        /// <summary>
+        /// Captures the live ranges.
+        /// </summary>
+        /// <param name="compiler">The compiler.</param>
+        /// <param name="blockProvider">The block provider.</param>
         private void CaptureLiveRanges(MethodCompilerBase compiler, IBasicBlockProvider blockProvider)
         {
             // Start live ranges for the parameters of the method
@@ -309,6 +371,12 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
+        /// <summary>
+        /// Picks the last use for def.
+        /// </summary>
+        /// <param name="op">The op.</param>
+        /// <param name="defLine">The def line.</param>
+        /// <returns></returns>
         private int PickLastUseForDef(Operand op, int defLine)
         {
             int result = -1;
@@ -338,6 +406,13 @@ namespace Mosa.Runtime.CompilerFramework
             return result;
         }
 
+        /// <summary>
+        /// Picks the next use.
+        /// </summary>
+        /// <param name="op">The op.</param>
+        /// <param name="line">The line.</param>
+        /// <param name="end">The end.</param>
+        /// <returns></returns>
         private int PickNextUse(Operand op, int line, int end)
         {
             int result = -1;
@@ -354,6 +429,10 @@ namespace Mosa.Runtime.CompilerFramework
             return result;
         }
 
+        /// <summary>
+        /// Sorts the specified list.
+        /// </summary>
+        /// <param name="list">The list.</param>
         private void Sort(List<Instruction> list)
         {
             list.Sort(delegate(Instruction a, Instruction b)

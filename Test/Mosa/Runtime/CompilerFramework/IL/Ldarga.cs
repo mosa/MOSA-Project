@@ -37,7 +37,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void LdargaI1_CheckValue(sbyte a)
         {
-            CodeSource = "static class Test { static bool LdargaI1_CheckValue(sbyte expect, ref sbyte a) { return expect == a; } }";
+            CodeSource = @"
+                static class Test
+                { 
+                    static bool LdargaI1_CheckValue(sbyte expect, sbyte a) 
+                    {
+                        return CheckValue(expect, ref a);
+                    }
+
+                    static bool CheckValue(sbyte expect, ref sbyte a)
+                    {
+                        return expect == a;
+                    }
+                }";
             Assert.IsTrue((bool)Run<I1_I1>("", "Test", "LdargaI1_CheckValue", a, a));
         }
 
@@ -56,10 +68,22 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void LdargaI2_CheckValue(short a)
         {
-            CodeSource = "static class Test { static bool LdargaI2_CheckValue(short expect, ref short a) { return expect == a; } }";
+            CodeSource = @"
+                static class Test
+                { 
+                    static bool LdargaI2_CheckValue(short expect, short a) 
+                    {
+                        return CheckValue(expect, ref a);
+                    }
+
+                    static bool CheckValue(short expect, ref short a)
+                    {
+                        return expect == a;
+                    }
+                }";
             Assert.IsTrue((bool)Run<I2_I2>("", "Test", "LdargaI2_CheckValue", a, a));
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -75,7 +99,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void LdargaI4_CheckValue(int a)
         {
-            CodeSource = "static class Test { static bool LdargaI4_CheckValue(int expect, ref int a) { return expect == a; } }";
+            CodeSource = @"
+                static class Test
+                { 
+                    static bool LdargaI4_CheckValue(int expect, int a) 
+                    {
+                        return CheckValue(expect, ref a);
+                    }
+
+                    static bool CheckValue(int expect, ref int a)
+                    {
+                        return expect == a;
+                    }
+                }";
             Assert.IsTrue((bool)Run<I4_I4>("", "Test", "LdargaI4_CheckValue", a, a));
         }
 
@@ -94,10 +130,22 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void LdargaI8_CheckValue(long a)
         {
-            CodeSource = "static class Test { static bool LdargaI8_CheckValue(long expect, ref long a) { return expect == a; } }";
+            CodeSource = @"
+                static class Test
+                { 
+                    static bool LdargaI8_CheckValue(long expect, long a) 
+                    {
+                        return CheckValue(expect, ref a);
+                    }
+
+                    static bool CheckValue(long expect, ref long a)
+                    {
+                        return expect == a;
+                    }
+                }";
             Assert.IsTrue((bool)Run<I8_I8>("", "Test", "LdargaI8_CheckValue", a, a));
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -113,7 +161,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void LdargaR4_CheckValue(float a)
         {
-            CodeSource = "static class Test { static bool LdargaR4_CheckValue(float expect, ref float a) { return expect == a; } }";
+            CodeSource = @"
+                static class Test
+                { 
+                    static bool LdargaR4_CheckValue(float expect, float a) 
+                    {
+                        return CheckValue(expect, ref a);
+                    }
+
+                    static bool CheckValue(float expect, ref float a)
+                    {
+                        return expect == a;
+                    }
+                }";
             Assert.IsTrue((bool)Run<R4_R4>("", "Test", "LdargaR4_CheckValue", a, a));
         }
 
@@ -132,14 +192,27 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void LdargaR8_CheckValue(double a)
         {
-            CodeSource = "static class Test { static bool LdargaR8_CheckValue(double expect, ref double a) { return expect == a; } }";
+            CodeSource = @"
+                static class Test
+                { 
+                    static bool LdargaR8_CheckValue(double expect, double a) 
+                    {
+                        return CheckValue(expect, ref a);
+                    }
+
+                    static bool CheckValue(double expect, ref double a)
+                    {
+                        return expect == a;
+                    }
+                }";
             Assert.IsTrue((bool)Run<R8_R8>("", "Test", "LdargaR8_CheckValue", a, a));
         }
+        
 
         #endregion
 
         #region ChangeValue
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -155,13 +228,24 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void LdargaI1_ChangeValue(sbyte newValue, sbyte oldValue)
         {
-            CodeSource = "static class Test { static void LdargaI1_ChangeValue(sbyte value, ref sbyte a) { a = value; } }";
-            object[] args = new object[] { newValue, oldValue };
-            Run<V_I1_I1>("", "Test", "LdargaI1_ChangeValue", args);
-            Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);
-            Assert.AreEqual(newValue, args[1]);
-        }
+            CodeSource = @"
+                static class Test
+                { 
+                    static bool LdargaI1_ChangeValue(sbyte expect, sbyte a) 
+                    {
+                        ChangeValue(expect, ref a);
+                        return expect == a;
+                    }
 
+                    static void ChangeValue(sbyte expect, ref sbyte a)
+                    {
+                        a = expect;
+                    }
+                }";
+            object[] args = new object[] { newValue, oldValue };
+            Assert.IsTrue((bool)Run<V_I1_I1>("", "Test", "LdargaI1_ChangeValue", args[0], args[1]));
+        }
+        
         /// <summary>
         /// 
         /// </summary>
