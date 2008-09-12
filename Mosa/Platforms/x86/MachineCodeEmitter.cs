@@ -687,6 +687,14 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Pops the stack's top values into the general purpose registers
+        /// </summary>
+        void ICodeEmitter.Popad()
+        {
+            Emit(new byte[] { 0x61 }, 0, null, null);
+        }
+
+        /// <summary>
         /// Pops the top-most value from the stack into the given operand.
         /// </summary>
         /// <param name="operand">The operand to pop.</param>
@@ -706,6 +714,14 @@ namespace Mosa.Platforms.x86
             {
                 Emit(new byte[] { 0xFF }, 6, operand, null);
             }
+        }
+
+        /// <summary>
+        /// Pops the top-most value from the stack into the given operand.
+        /// </summary>
+        void ICodeEmitter.Pushad()
+        {
+            Emit(new byte[] { 0x60 }, 0, null, null);
         }
 
         /// <summary>
@@ -1133,6 +1149,9 @@ namespace Mosa.Platforms.x86
 
             // Write the opcode
             _codeStream.Write(code, 0, code.Length);
+
+            if (null == dest && null == src)
+                return;
 
             // Write the mod R/M byte
             modRM = CalculateModRM(regField, dest, src, out sib, out displacement);

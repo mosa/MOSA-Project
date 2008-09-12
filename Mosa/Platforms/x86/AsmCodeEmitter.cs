@@ -86,9 +86,9 @@ namespace Mosa.Platforms.x86
 
         #region ICodeEmitter Members
         /// <summary>
-        /// 
+        /// Emits a comment into the code stream.
         /// </summary>
-        /// <param name="comment"></param>
+        /// <param name="comment">The comment to emit.</param>
         public void Comment(string comment)
         {
             foreach (string line in comment.Split('\n', '\r'))
@@ -97,30 +97,30 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a label into the code stream.
         /// </summary>
-        /// <param name="label"></param>
+        /// <param name="label">The label name to emit.</param>
         public void Label(int label)
         {
             _textWriter.WriteLine("L_{0:x}:", label);    
         }
 
         /// <summary>
-        /// 
+        /// Emits a literal constant into the code stream.
         /// </summary>
-        /// <param name="label"></param>
-        /// <param name="type"></param>
-        /// <param name="data"></param>
+        /// <param name="label">The label to apply to the data.</param>
+        /// <param name="type">The type of the literal.</param>
+        /// <param name="data">The data to emit.</param>
         public void Literal(int label, SigType type, object data)
         {
             _textWriter.WriteLine("C_{0:x}:\n\t\tdq\t{1}", label, WriteLiteral(type, data));
         }
 
         /// <summary>
-        /// 
+        /// Emits an AND instruction.
         /// </summary>
-        /// <param name="dest"></param>
-        /// <param name="src"></param>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
         public void And(Operand dest, Operand src)
         {
             if (dest is ConstantOperand)
@@ -130,10 +130,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits an Add instruction.
         /// </summary>
-        /// <param name="op1"></param>
-        /// <param name="op2"></param>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
         public void Add(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -143,10 +143,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits an Adc instruction.
         /// </summary>
-        /// <param name="op1"></param>
-        /// <param name="op2"></param>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
         public void Adc(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -156,9 +156,13 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a Call instruction
         /// </summary>
-        /// <param name="method"></param>
+        /// <param name="method">The method to be called.</param>
+        /// <remarks>
+        /// This only invokes the platform call, it does not push arguments, spill and
+        /// save registers or handle the return value.
+        /// </remarks>
         public void Call(RuntimeMethod method)
         {
             // HACK: method.DeclaringType is not setup right now, just emit the method name.
@@ -166,9 +170,13 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a CALL instruction to the given label.
         /// </summary>
-        /// <param name="label"></param>
+        /// <param name="label">The label to be called.</param>
+        /// <remarks>
+        /// This only invokes the platform call, it does not push arguments, spill and
+        /// save registers or handle the return value.
+        /// </remarks>
         public void Call(int label)
         {
             // HACK: method.DeclaringType is not setup right now, just emit the method name.
@@ -176,7 +184,7 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a disable interrupts instruction.
         /// </summary>
         public void Cli()
         {
@@ -185,7 +193,7 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a comparison instruction.
         /// </summary>
         /// <param name="op1"></param>
         /// <param name="op2"></param>
@@ -196,7 +204,7 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a breakpoint instruction.
         /// </summary>
         public void Int3()
         {
@@ -205,99 +213,99 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a conditional jump above.
         /// </summary>
-        /// <param name="dest"></param>
+        /// <param name="dest">The target label of the jump.</param>
         public void Ja(int dest)
         {
             _textWriter.WriteLine("\t\tja\tL_{0:x}", dest);
         }
 
         /// <summary>
-        /// 
+        /// Emits a conditional jump above or equal.
         /// </summary>
-        /// <param name="dest"></param>
+        /// <param name="dest">The target label of the jump.</param>
         public void Jae(int dest)
         {
             _textWriter.WriteLine("\t\tjae\tL_{0:x}", dest);  
         }
 
         /// <summary>
-        /// 
+        /// Emits a conditional jump below.
         /// </summary>
-        /// <param name="dest"></param>
+        /// <param name="dest">The target label of the jump.</param>
         public void Jb(int dest)
         {
             _textWriter.WriteLine("\t\tjb\tL_{0:x}", dest);            
         }
 
         /// <summary>
-        /// 
+        /// Emits a conditional jump below or equal.
         /// </summary>
-        /// <param name="dest"></param>
+        /// <param name="dest">The target label of the jump.</param>
         public void Jbe(int dest)
         {
             _textWriter.WriteLine("\t\tjbe\tL_{0:x}", dest);
         }
-        
+
         /// <summary>
-        /// 
+        /// Emits a conditional jump equal.
         /// </summary>
-        /// <param name="dest"></param>
+        /// <param name="dest">The target label of the jump.</param>
         public void Je(int dest)
         {
             _textWriter.WriteLine("\t\tje\tL_{0:x}", dest);
         }
 
         /// <summary>
-        /// 
+        /// Emits a conditional jump greater than.
         /// </summary>
-        /// <param name="dest"></param>
+        /// <param name="dest">The target label of the jump.</param>
         public void Jg(int dest)
         {
             _textWriter.WriteLine("\t\tjg\tL_{0:x}", dest);
         }
 
         /// <summary>
-        /// 
+        /// Emits a conditional jump greater than or equal.
         /// </summary>
-        /// <param name="dest"></param>
+        /// <param name="dest">The target label of the jump.</param>
         public void Jge(int dest)
         {
             _textWriter.WriteLine("\t\tjge\tL_{0:x}", dest);
         }
 
         /// <summary>
-        /// 
+        /// Emits a conditional jump less than.
         /// </summary>
-        /// <param name="dest"></param>
+        /// <param name="dest">The target label of the jump.</param>
         public void Jl(int dest)
         {
             _textWriter.WriteLine("\t\tjl\tL_{0:x}", dest);
         }
 
         /// <summary>
-        /// 
+        /// Emits a conditional jump less than or equal.
         /// </summary>
-        /// <param name="dest"></param>
+        /// <param name="dest">The target label of the jump.</param>
         public void Jle(int dest)
         {
             _textWriter.WriteLine("\t\tjle\tL_{0:x}", dest);
         }
 
         /// <summary>
-        /// 
+        /// Emits a conditional jump not equal.
         /// </summary>
-        /// <param name="dest"></param>
+        /// <param name="dest">The target label of the jump.</param>
         public void Jne(int dest)
         {
             _textWriter.WriteLine("\t\tjne\tL_{0:x}", dest);
         }
 
         /// <summary>
-        /// 
+        /// Emits a jump instruction.
         /// </summary>
-        /// <param name="dest"></param>
+        /// <param name="dest">The target label of the jump.</param>
         public void Jmp(int dest)
         {
             _textWriter.WriteLine("\t\tjmp\tL_{0:x}", dest);
@@ -305,10 +313,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a mul instruction.
         /// </summary>
-        /// <param name="op1"></param>
-        /// <param name="op2"></param>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
         public void Mul(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -318,10 +326,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a addsd instruction.
         /// </summary>
-        /// <param name="op1"></param>
-        /// <param name="op2"></param>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
         public void SseAdd(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -331,10 +339,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a subsd instruction.
         /// </summary>
-        /// <param name="op1"></param>
-        /// <param name="op2"></param>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
         public void SseSub(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -344,10 +352,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a mulsd instruction.
         /// </summary>
-        /// <param name="op1"></param>
-        /// <param name="op2"></param>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
         public void SseMul(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -357,10 +365,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a divsd instruction.
         /// </summary>
-        /// <param name="op1"></param>
-        /// <param name="op2"></param>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
         public void SseDiv(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -370,10 +378,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Shifts the value in register op1 by op2 bits to the left
         /// </summary>
-        /// <param name="op1"></param>
-        /// <param name="op2"></param>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
         public void Shl(Operand op1, Operand op2)
         {
             if (!(op1 is RegisterOperand))
@@ -384,10 +392,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Shifts the value in register op1 by op2 bits to the right
         /// </summary>
-        /// <param name="op1"></param>
-        /// <param name="op2"></param>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
         public void Shr(Operand op1, Operand op2)
         {
             if (!(op1 is RegisterOperand))
@@ -398,10 +406,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a div instruction.
         /// </summary>
-        /// <param name="op1"></param>
-        /// <param name="op2"></param>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
         public void Div(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
@@ -411,10 +419,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a mov instruction.
         /// </summary>
-        /// <param name="dest"></param>
-        /// <param name="src"></param>
+        /// <param name="dest">The destination of the move.</param>
+        /// <param name="src">The source of the move.</param>
         public void Mov(Operand dest, Operand src)
         {
             if (dest is ConstantOperand && !(src is ConstantOperand))
@@ -453,10 +461,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a mov sign extend instruction.
         /// </summary>
-        /// <param name="dest"></param>
-        /// <param name="src"></param>
+        /// <param name="dest">The destination register.</param>
+        /// <param name="src">The source register.</param>
         public void Movsx(Operand dest, Operand src)
         {
             if (!(dest is RegisterOperand))
@@ -468,10 +476,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a mov zero extend instruction.
         /// </summary>
-        /// <param name="dest"></param>
-        /// <param name="src"></param>
+        /// <param name="dest">The destination register.</param>
+        /// <param name="src">The source register.</param>
         public void Movzx(Operand dest, Operand src)
         {
             if (!(dest is RegisterOperand))
@@ -483,7 +491,7 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a nop instructions.
         /// </summary>
         public void Nop()
         {
@@ -492,9 +500,9 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits an NOT instruction.
         /// </summary>
-        /// <param name="dest"></param>
+        /// <param name="dest">The destination operand of the instruction.</param>
         public void Not(Operand dest)
         {
             if (dest is ConstantOperand)
@@ -504,10 +512,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits an OR instruction.
         /// </summary>
-        /// <param name="dest"></param>
-        /// <param name="src"></param>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
         public void Or(Operand dest, Operand src)
         {
             if (dest is ConstantOperand)
@@ -517,19 +525,26 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Pushes the given operand on the stack.
         /// </summary>
-        /// <param name="operand"></param>
+        /// <param name="operand">The operand to push.</param>
         public void Pop(Operand operand)
         {
             _textWriter.WriteLine("\t\tpop\t{0}", WriteOperand(operand));
-          
         }
 
         /// <summary>
-        /// 
+        /// Pops the stack's top values into the general purpose registers
         /// </summary>
-        /// <param name="operand"></param>
+        public void Popad()
+        {
+            _textWriter.WriteLine("\t\tpopad");
+        }
+
+        /// <summary>
+        /// Pops the top-most value from the stack into the given operand.
+        /// </summary>
+        /// <param name="operand">The operand to pop.</param>
         public void Push(Operand operand)
         {
             _textWriter.WriteLine("\t\tpush\t{0}", WriteOperand(operand));
@@ -537,7 +552,16 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Pushes all general purpose registers
+        /// </summary>
+        public void Pushad()
+        {
+            _textWriter.WriteLine("\t\tpushad");
+
+        }
+
+        /// <summary>
+        /// Emits a return instruction.
         /// </summary>
         public void Ret()
         {
@@ -546,7 +570,7 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits a enable interrupts instruction.
         /// </summary>
         public void Sti()
         {
@@ -555,10 +579,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Subtracts src from dest and stores the result in dest. (dest -= src)
         /// </summary>
-        /// <param name="dest"></param>
-        /// <param name="src"></param>
+        /// <param name="dest">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
         public void Sub(Operand dest, Operand src)
         {
             if (dest is ConstantOperand)
@@ -568,10 +592,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Ins the specified dest.
         /// </summary>
-        /// <param name="dest"></param>
-        /// <param name="src"></param>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
         public void In(Operand dest, Operand src)
         {
             if (!(dest is RegisterOperand))
@@ -585,10 +609,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Outs the specified dest.
         /// </summary>
-        /// <param name="dest"></param>
-        /// <param name="src"></param>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
         public void Out(Operand dest, Operand src)
         {
             // Copies the value from the second operand (source operand) to the I/O port 
@@ -605,10 +629,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
+        /// Emits an Xor instruction.
         /// </summary>
-        /// <param name="dest"></param>
-        /// <param name="src"></param>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
         public void Xor(Operand dest, Operand src)
         {
             if (dest is ConstantOperand)
@@ -618,7 +642,6 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="code"></param>
         public void Setcc(Mosa.Runtime.CompilerFramework.IL.OpCode code)

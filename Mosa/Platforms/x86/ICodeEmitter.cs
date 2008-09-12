@@ -271,16 +271,26 @@ namespace Mosa.Platforms.x86
         void Nop();
 
         /// <summary>
-        /// Pushes the given operand on the stack.
+        /// Pops the stack's top value into the given operand
         /// </summary>
-        /// <param name="operand">The operand to push.</param>
+        /// <param name="operand">The operand to pop into.</param>
         void Pop(Operand operand);
+
+        /// <summary>
+        /// Pops the stack's top values into the general purpose registers
+        /// </summary>
+        void Popad();
 
         /// <summary>
         /// Pops the top-most value from the stack into the given operand.
         /// </summary>
         /// <param name="operand">The operand to pop.</param>
         void Push(Operand operand);
+
+        /// <summary>
+        /// Pushes all general purpose registers
+        /// </summary>
+        void Pushad();
 
         /// <summary>
         /// Emits a return instruction.
@@ -305,6 +315,8 @@ namespace Mosa.Platforms.x86
         /// <param name="dest">The destination operand of the instruction.</param>
         /// <param name="src">The source operand of the instruction.</param>
         void Xor(Operand dest, Operand src);
+
+
 
         /// <summary>
         /// 
