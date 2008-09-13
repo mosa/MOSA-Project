@@ -252,6 +252,17 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Halts the machine
+        /// </summary>
+        public void Hlt()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Hlt();
+            });
+        }
+
+        /// <summary>
         /// Reads in from the port at src and stores into dest
         /// </summary>
         /// <param name="dest">The destination operand</param>

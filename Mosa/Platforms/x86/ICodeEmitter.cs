@@ -117,6 +117,11 @@ namespace Mosa.Platforms.x86
         void CmpXchg(Operand op1, Operand op2);
 
         /// <summary>
+        /// Halts the machine
+        /// </summary>
+        void Hlt();
+
+        /// <summary>
         /// Reads in from the port at src and stores into dest
         /// </summary>
         /// <param name="dest">The destination operand</param>

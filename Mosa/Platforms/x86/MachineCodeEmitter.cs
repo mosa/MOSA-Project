@@ -494,6 +494,14 @@ namespace Mosa.Platforms.x86
             Emit(op1, op2, cd_cmpxchg);
         }
 
+        /// <summary>
+        /// Halts the machine
+        /// </summary>
+        void ICodeEmitter.Hlt()
+        {
+            _codeStream.WriteByte(0xF4);
+        }
+
         void ICodeEmitter.In(Operand dest, Operand src)
         {
             if (src is RegisterOperand)
