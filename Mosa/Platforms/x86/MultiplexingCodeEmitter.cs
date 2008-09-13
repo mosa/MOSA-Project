@@ -191,6 +191,17 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Clears DF flag and EFLAGS
+        /// </summary>
+        public void Cld()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Cld();
+            });
+        }
+
+        /// <summary>
         /// Emits a disable interrupts instruction.
         /// </summary>
         public void Cli()
@@ -215,6 +226,19 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Compares and exchanges both values
+        /// </summary>
+        /// <param name="op1">First operand</param>
+        /// <param name="op2">Second operand</param>
+        public void CmpXchg(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.CmpXchg(op1, op2);
+            });
+        }
+
+        /// <summary>
         /// Emits a div instruction.
         /// </summary>
         /// <param name="op1">The first operand and destination of the instruction.</param>
@@ -228,6 +252,19 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Reads in from the port at src and stores into dest
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        /// <param name="src">The source operand</param>
+        public void In(Operand dest, Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.In(dest, src);
+            });
+        }
+
+        /// <summary>
         /// Emits a breakpoint instruction.
         /// </summary>
         public void Int3()
@@ -235,6 +272,17 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Int3();
+            });
+        }
+
+        /// <summary>
+        /// Returns from an interrupt
+        /// </summary>
+        public void Iretd()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Iretd();
             });
         }
 
@@ -367,6 +415,42 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Jmp(dest);
+            });
+        }
+
+        /// <summary>
+        /// Loads the global descriptor table register
+        /// </summary>
+        /// <param name="src">Source to load from</param>
+        public void Lgdt(Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Lgdt(src);
+            });
+        }
+
+        /// <summary>
+        /// Loads the global interrupt table register
+        /// </summary>
+        /// <param name="src">Source to load from</param>
+        public void Lidt(Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Lidt(src);
+            });
+        }
+
+        /// <summary>
+        /// Asserts LOCK# signal for duration of
+        /// the accompanying instruction.
+        /// </summary>
+        public void Lock()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Lock();
             });
         }
 
@@ -537,6 +621,19 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Outputs the value in src to the port in b
+        /// </summary>
+        /// <param name="dest">The destination port.</param>
+        /// <param name="src">The value.</param>
+        public void Out(Operand dest, Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Out(dest, src);
+            });
+        }
+
+        /// <summary>
         /// Pops the stack's top value into the given operand
         /// </summary>
         /// <param name="operand">The operand to push.</param>
@@ -556,6 +653,17 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Popad();
+            });
+        }
+
+        /// <summary>
+        /// Pop Stack into EFLAGS Register
+        /// </summary>
+        public void Popfd()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Popfd();
             });
         }
 
@@ -583,6 +691,17 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Push EFLAGS Register onto the Stack
+        /// </summary>
+        public void Pushfd()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Pushfd();
+            });
+        }
+
+        /// <summary>
         /// Emits a return instruction.
         /// </summary>
         public void Ret()
@@ -605,6 +724,18 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Stores a string
+        /// </summary>
+        /// <param name="dest">The destination operand.</param>
+        public void Stos(Operand dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Stos(dest);
+            });
+        }
+
+        /// <summary>
         /// Subtracts src from dest and stores the result in dest. (dest -= src)
         /// </summary>
         /// <param name="dest">The destination operand.</param>
@@ -614,6 +745,19 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Sub(dest, src);
+            });
+        }
+
+        /// <summary>
+        /// Exchange Register/Memory with a register
+        /// </summary>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
+        public void Xchg(Operand dest, Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Xchg(dest, src);
             });
         }
 

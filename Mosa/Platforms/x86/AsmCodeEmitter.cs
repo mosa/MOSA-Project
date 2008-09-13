@@ -184,6 +184,14 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Clears DF flag and EFLAGS
+        /// </summary>
+        public void Cld()
+        {
+            _textWriter.WriteLine("\t\tcld");
+        }
+
+        /// <summary>
         /// Emits a disable interrupts instruction.
         /// </summary>
         public void Cli()
@@ -204,12 +212,32 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Compares and exchanges both values
+        /// </summary>
+        /// <param name="op1">First operand</param>
+        /// <param name="op2">Second operand</param>
+        public void CmpXchg(Operand op1, Operand op2)
+        {
+            _textWriter.WriteLine("\t\tcmpxchg\t{0}, {1}", WriteOperand(op2), WriteOperand(op1));
+
+        }
+
+        /// <summary>
         /// Emits a breakpoint instruction.
         /// </summary>
         public void Int3()
         {
             _textWriter.WriteLine("\t\tint\t3");
             
+        }
+
+        /// <summary>
+        /// Returns from an interrupt
+        /// </summary>
+        public void Iretd()
+        {
+            _textWriter.WriteLine("\t\tiretd");
+
         }
 
         /// <summary>
@@ -310,6 +338,37 @@ namespace Mosa.Platforms.x86
         {
             _textWriter.WriteLine("\t\tjmp\tL_{0:x}", dest);
             
+        }
+
+        /// <summary>
+        /// Loads the global descriptor table register
+        /// </summary>
+        /// <param name="src">Source to load from</param>
+        public void Lgdt(Operand src)
+        {
+            if (!(src is MemoryOperand))
+                throw new NotSupportedException(@"Constants or registers are not allowed as source.");
+            _textWriter.WriteLine("\t\tlgdt\t{0}", WriteOperand(src));
+        }
+
+        /// <summary>
+        /// Loads the global interrupt table register
+        /// </summary>
+        /// <param name="src">Source to load from</param>
+        public void Lidt(Operand src)
+        {
+            if (!(src is MemoryOperand))
+                throw new NotSupportedException(@"Constants or registers are not allowed as source.");
+            _textWriter.WriteLine("\t\tlidt\t{0}", WriteOperand(src));
+        }
+
+        /// <summary>
+        /// Asserts LOCK# signal for duration of
+        /// the accompanying instruction.
+        /// </summary>
+        public void Lock()
+        {
+            _textWriter.WriteLine("\t\tlock");
         }
 
         /// <summary>
@@ -542,6 +601,14 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Pop Stack into EFLAGS Register
+        /// </summary>
+        public void Popfd()
+        {
+            _textWriter.WriteLine("\t\tpopfd");
+        }
+
+        /// <summary>
         /// Pops the top-most value from the stack into the given operand.
         /// </summary>
         /// <param name="operand">The operand to pop.</param>
@@ -561,6 +628,15 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Push EFLAGS Register onto the Stack
+        /// </summary>
+        public void Pushfd()
+        {
+            _textWriter.WriteLine("\t\tpushfd");
+
+        }
+
+        /// <summary>
         /// Emits a return instruction.
         /// </summary>
         public void Ret()
@@ -575,7 +651,15 @@ namespace Mosa.Platforms.x86
         public void Sti()
         {
             _textWriter.WriteLine("\t\tsti");
-            
+        }
+
+        /// <summary>
+        /// Stores a string
+        /// </summary>
+        /// <param name="dest">The destination operand.</param>
+        public void Stos(Operand dest)
+        {
+            _textWriter.WriteLine("\t\tstos");
         }
 
         /// <summary>
@@ -592,10 +676,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// Ins the specified dest.
+        /// Reads in from the port at src and stores into dest
         /// </summary>
-        /// <param name="dest">The dest.</param>
-        /// <param name="src">The SRC.</param>
+        /// <param name="dest">The destination operand</param>
+        /// <param name="src">The source operand</param>
         public void In(Operand dest, Operand src)
         {
             if (!(dest is RegisterOperand))
@@ -609,10 +693,10 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// Outs the specified dest.
+        /// Outputs the value in src to the port in b
         /// </summary>
-        /// <param name="dest">The dest.</param>
-        /// <param name="src">The SRC.</param>
+        /// <param name="dest">The destination port.</param>
+        /// <param name="src">The value.</param>
         public void Out(Operand dest, Operand src)
         {
             // Copies the value from the second operand (source operand) to the I/O port 
@@ -626,6 +710,18 @@ namespace Mosa.Platforms.x86
 
             _textWriter.WriteLine("\t\tout\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
             
+        }
+
+        /// <summary>
+        /// Exchange Register/Memory with a register
+        /// </summary>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
+        public void Xchg(Operand dest, Operand src)
+        {
+            if (!(dest is MemoryOperand) || (dest is RegisterOperand))
+                throw new NotSupportedException(@"Destination has to be register or memory.");
+            _textWriter.WriteLine("\t\txchg\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
         }
 
         /// <summary>

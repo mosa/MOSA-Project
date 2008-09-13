@@ -362,12 +362,25 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Outputs the value in src to the port in dest
+        /// </summary>
+        /// <param name="dest">The destination port.</param>
+        /// <param name="src">The value.</param>
+        void ICodeEmitter.Out(Operand dest, Operand src)
+        {
+            Emit(dest, src, cd_out);
+        }
+
+        /// <summary>
         /// Adds the specified dest.
         /// </summary>
         /// <param name="dest">The dest.</param>
         /// <param name="src">The SRC.</param>
         void ICodeEmitter.Add(Operand dest, Operand src)
         {
+            if (src is RegisterOperand)
+                if ((src as RegisterOperand) != (new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX)))
+                    throw new NotSupportedException("Register has to be EAX");
             Emit(dest, src, cd_add);
         }
 
@@ -415,6 +428,14 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Clears DF flag and EFLAGS
+        /// </summary>
+        void ICodeEmitter.Cld()
+        {
+            _codeStream.WriteByte(0xFC);
+        }
+
+        /// <summary>
         /// Emits a disable interrupts instruction.
         /// </summary>
         void ICodeEmitter.Cli()
@@ -422,6 +443,11 @@ namespace Mosa.Platforms.x86
             _codeStream.WriteByte(0xFA);
         }
 
+        /// <summary>
+        /// Emits a comparison instruction.
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         void ICodeEmitter.Cmp(Operand op1, Operand op2)
         {
             // Check if we have to compare floatingpoint values
@@ -458,21 +484,63 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        /// <summary>
+        /// Compares and exchanges both values
+        /// </summary>
+        /// <param name="op1">First operand</param>
+        /// <param name="op2">Second operand</param>
+        void ICodeEmitter.CmpXchg(Operand op1, Operand op2)
+        {
+            Emit(op1, op2, cd_cmpxchg);
+        }
+
+        void ICodeEmitter.In(Operand dest, Operand src)
+        {
+            if (src is RegisterOperand)
+                if ((src as RegisterOperand) != (new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX)))
+                    throw new NotSupportedException("Register has to be EDX");
+
+            Emit(dest, src, cd_in);
+        }
+
+        /// <summary>
+        /// Emits a breakpoint instruction.
+        /// </summary>
         void ICodeEmitter.Int3()
         {
             _codeStream.WriteByte(0xCC);
         }
 
+        /// <summary>
+        /// Returns from an interrupt
+        /// </summary>
+        void ICodeEmitter.Iretd()
+        {
+            _codeStream.WriteByte(0xCF);
+        }
+
+        /// <summary>
+        /// Emits a conditional jump above.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
         void ICodeEmitter.Ja(int dest)
         {
             EmitBranch(new byte[] { 0x0F, 0x87 }, dest);
         }
 
+        /// <summary>
+        /// Emits a conditional jump above or equal.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
         void ICodeEmitter.Jae(int dest)
         {
             EmitBranch(new byte[] { 0x0F, 0x83 }, dest);
         }
 
+        /// <summary>
+        /// Emits a conditional jump below.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
         void ICodeEmitter.Jb(int dest)
         {
             EmitBranch(new byte[] { 0x0F, 0x82 }, dest);
@@ -483,46 +551,105 @@ namespace Mosa.Platforms.x86
             EmitBranch(new byte[] { 0x0F, 0x86 }, dest);
         }
 
+        /// <summary>
+        /// Emits a conditional jump equal.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
         void ICodeEmitter.Je(int dest)
         {
             EmitBranch(new byte[] { 0x0F, 0x84 }, dest);
         }
 
+        /// <summary>
+        /// Emits a conditional jump greater than.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
         void ICodeEmitter.Jg(int dest)
         {
             EmitBranch(new byte[] { 0x0F, 0x8F }, dest);
         }
 
+        /// <summary>
+        /// Emits a conditional jump greater than or equal.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
         void ICodeEmitter.Jge(int dest)
         {
             EmitBranch(new byte[] { 0x0F, 0x8D }, dest);
         }
 
+        /// <summary>
+        /// Emits a conditional jump less than.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
         void ICodeEmitter.Jl(int dest)
         {
             EmitBranch(new byte[] { 0x0F, 0x8C }, dest);
         }
 
+        /// <summary>
+        /// Emits a conditional jump less than or equal.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
         void ICodeEmitter.Jle(int dest)
         {
             EmitBranch(new byte[] { 0x0F, 0x8E }, dest);
         }
 
+        /// <summary>
+        /// Emits a conditional jump not equal.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
         void ICodeEmitter.Jne(int dest)
         {
             EmitBranch(new byte[] { 0x0F, 0x85 }, dest);
         }
 
+        /// <summary>
+        /// Emits a jump instruction.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
         void ICodeEmitter.Jmp(int dest)
         {
             EmitBranch(new byte[] { 0xE9 }, dest);
         }
 
+        /// <summary>
+        /// Emits a nop instructions.
+        /// </summary>
         void ICodeEmitter.Nop()
         {
             _codeStream.WriteByte(0x90);
         }
 
+        /// <summary>
+        /// Loads the global descriptor table register
+        /// </summary>
+        /// <param name="dest">Destination to load into</param>
+        void ICodeEmitter.Lgdt(Operand dest)
+        {
+            Emit(dest, null, cd_lgdt);
+        }
+
+        /// <summary>
+        /// Loads the global interrupt table register
+        /// </summary>
+        /// <param name="dest">Destination to load into</param>
+        void ICodeEmitter.Lidt(Operand dest)
+        {
+            Emit(dest, null, cd_lidt);
+        }
+
+        void ICodeEmitter.Lock()
+        {
+            _codeStream.WriteByte(0xF0);
+        }
+
+        /// <summary>
+        /// Muls the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
         void ICodeEmitter.Mul(Operand dest, Operand src)
         {
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
@@ -541,12 +668,22 @@ namespace Mosa.Platforms.x86
             Emit(dest, src, cd_subsd);
         }
 
+        /// <summary>
+        /// Sses the mul.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
         void ICodeEmitter.SseMul(Operand dest, Operand src)
         {
             CheckAndConvertR4(ref src);
             Emit(dest, src, cd_mulsd);
         }
 
+        /// <summary>
+        /// Sses the div.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
         void ICodeEmitter.SseDiv(Operand dest, Operand src)
         {
             CheckAndConvertR4(ref src);
@@ -695,6 +832,14 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Pop Stack into EFLAGS Register
+        /// </summary>
+        void ICodeEmitter.Popfd()
+        {
+            Emit(new byte[] { 0x9D }, 0, null, null);
+        }
+
+        /// <summary>
         /// Pops the top-most value from the stack into the given operand.
         /// </summary>
         /// <param name="operand">The operand to pop.</param>
@@ -725,6 +870,14 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Push EFLAGS Register onto the Stack
+        /// </summary>
+        void ICodeEmitter.Pushfd()
+        {
+            Emit(new byte[] { 0x9C }, 0, null, null);
+        }
+
+        /// <summary>
         /// Emits a return instruction.
         /// </summary>
         /// <seealso cref="ICodeEmitter.Ret()"/>
@@ -742,6 +895,18 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Stores a string
+        /// </summary>
+        /// <param name="dest">The destination operand.</param>
+        void ICodeEmitter.Stos(Operand dest)
+        {
+            if (dest.Type.Type == CilElementType.I1)
+                _codeStream.WriteByte(0xAA);
+            else
+                _codeStream.WriteByte(0xAB);
+        }
+
+        /// <summary>
         /// Subtracts src from dest and stores the result in dest. (dest -= src)
         /// </summary>
         /// <param name="dest">The destination operand.</param>
@@ -749,6 +914,11 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Sub(Operand dest, Operand src)
         {
             Emit(dest, src, cd_sub);
+        }
+
+        void ICodeEmitter.Xchg(Operand dest, Operand src)
+        {
+            Emit(dest, src, cd_xchg);
         }
 
         /// <summary>
@@ -834,6 +1004,26 @@ namespace Mosa.Platforms.x86
         };
 
         /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_out = new CodeDef[] {
+            new CodeDef(typeof(ConstantOperand),    typeof(RegisterOperand),    new byte[] { 0xE7 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xEF }, null),
+        };
+
+        /// <summary>
+        /// Asmcode: XOR
+        /// Exchange of memory/register and a register
+        /// 
+        /// Section: Standard x86
+        /// </summary>
+        private static readonly CodeDef[] cd_xchg = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x87 }, null),
+            new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0x87 }, null),
+            new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x87 }, null),
+        };
+
+        /// <summary>
         /// Asmcode: XOR
         /// Bitwise XOR on given values
         /// 
@@ -898,6 +1088,14 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x3B }, null),
             new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0x81 }, 7),
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x81 }, 7),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_cmpxchg = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xB1 }, null),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x0F, 0xB1 }, null),
         };
 
         /// <summary>
@@ -1010,6 +1208,34 @@ namespace Mosa.Platforms.x86
         private static readonly CodeDef[] cd_idiv = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    null,    new byte[] { 0xF7 }, 7),
             new CodeDef(typeof(MemoryOperand),      null,    new byte[] { 0xF7 }, 7),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_in = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xE5 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xED }, null),
+        };
+
+        /// <summary>
+        /// Asmcode: LGDT
+        /// Loads the global descriptor table
+        /// 
+        /// Section: Standard x86
+        /// </summary>
+        private static readonly CodeDef[] cd_lgdt = new CodeDef[] {
+            new CodeDef(typeof(MemoryOperand),      null,    new byte[] { 0x0F, 0x01 }, 2),
+        };
+
+        /// <summary>
+        /// Asmcode: LGDT
+        /// Loads the global descriptor table
+        /// 
+        /// Section: Standard x86
+        /// </summary>
+        private static readonly CodeDef[] cd_lidt = new CodeDef[] {
+            new CodeDef(typeof(MemoryOperand),      null,    new byte[] { 0x0F, 0x01 }, 3),
         };
 
         /// <summary>

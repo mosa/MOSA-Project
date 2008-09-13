@@ -93,6 +93,11 @@ namespace Mosa.Platforms.x86
         void Call(int label);
 
         /// <summary>
+        /// Clears DF flag and EFLAGS
+        /// </summary>
+        void Cld();
+
+        /// <summary>
         /// Emits a disable interrupts instruction.
         /// </summary>
         void Cli();
@@ -105,9 +110,28 @@ namespace Mosa.Platforms.x86
         void Cmp(Operand op1, Operand op2);
 
         /// <summary>
+        /// Compares and exchanges both values
+        /// </summary>
+        /// <param name="op1">First operand</param>
+        /// <param name="op2">Second operand</param>
+        void CmpXchg(Operand op1, Operand op2);
+
+        /// <summary>
+        /// Reads in from the port at src and stores into dest
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        /// <param name="src">The source operand</param>
+        void In(Operand dest, Operand src);
+
+        /// <summary>
         /// Emits a breakpoint instruction.
         /// </summary>
         void Int3();
+
+        /// <summary>
+        /// Returns from an interrupt
+        /// </summary>
+        void Iretd();
 
         /// <summary>
         /// Emits a jump instruction.
@@ -176,6 +200,24 @@ namespace Mosa.Platforms.x86
         void Jne(int dest);
 
         /// <summary>
+        /// Loads the global descriptor table register
+        /// </summary>
+        /// <param name="src">Source to load from</param>
+        void Lgdt(Operand src);
+
+        /// <summary>
+        /// Loads the global interrupt table register
+        /// </summary>
+        /// <param name="src">Source to load from</param>
+        void Lidt(Operand src);
+
+        /// <summary>
+        /// Asserts LOCK# signal for duration of 
+        /// the accompanying instruction.
+        /// </summary>
+        void Lock();
+
+        /// <summary>
         /// Emits a mul instruction.
         /// </summary>
         /// <param name="op1">The first operand and destination of the instruction.</param>
@@ -194,6 +236,13 @@ namespace Mosa.Platforms.x86
         /// <param name="dest">The destination operand of the instruction.</param>
         /// <param name="src">The source operand of the instruction.</param>
         void Or(Operand dest, Operand src);
+
+        /// <summary>
+        /// Outputs the value in src to the port in b
+        /// </summary>
+        /// <param name="dest">The destination port.</param>
+        /// <param name="src">The value.</param>
+        void Out(Operand dest, Operand src);
 
         /// <summary>
         /// Emits a addsd instruction.
@@ -282,6 +331,11 @@ namespace Mosa.Platforms.x86
         void Popad();
 
         /// <summary>
+        /// Pop Stack into EFLAGS Register
+        /// </summary>
+        void Popfd();
+
+        /// <summary>
         /// Pops the top-most value from the stack into the given operand.
         /// </summary>
         /// <param name="operand">The operand to pop.</param>
@@ -291,6 +345,11 @@ namespace Mosa.Platforms.x86
         /// Pushes all general purpose registers
         /// </summary>
         void Pushad();
+
+        /// <summary>
+        /// Push EFLAGS Register onto the Stack
+        /// </summary>
+        void Pushfd();
 
         /// <summary>
         /// Emits a return instruction.
@@ -303,11 +362,24 @@ namespace Mosa.Platforms.x86
         void Sti();
 
         /// <summary>
+        /// Stores a string
+        /// </summary>
+        /// <param name="dest">The destination operand.</param>
+        void Stos(Operand dest);
+
+        /// <summary>
         /// Subtracts src from dest and stores the result in dest. (dest -= src)
         /// </summary>
         /// <param name="dest">The destination operand.</param>
         /// <param name="src">The source operand.</param>
         void Sub(Operand dest, Operand src);
+
+        /// <summary>
+        /// Exchange Register/Memory with a register
+        /// </summary>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
+        void Xchg(Operand dest, Operand src);
 
         /// <summary>
         /// Emits an Xor instruction.
