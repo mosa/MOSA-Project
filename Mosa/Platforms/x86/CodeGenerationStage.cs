@@ -164,9 +164,16 @@ namespace Mosa.Platforms.x86
             _emitter.Shr(instruction.Operand0, instruction.Operand1);
         }
 
+        #region Intrinsics
+
+        void IX86InstructionVisitor<int>.In(InInstruction instruction, int arg)
+        {
+            _emitter.In(instruction.Operand0, instruction.Operand1);
+        }
+
         void IX86InstructionVisitor<int>.Lidt(LditInstruction instruction, int arg)
         {
-            throw new NotImplementedException();
+            _emitter.Lidt(instruction.Operand0);
         }
 
         void IX86InstructionVisitor<int>.Lgdt(LgdtInstruction instruction, int arg)
@@ -179,10 +186,17 @@ namespace Mosa.Platforms.x86
             _emitter.Cli();
         }
 
+        void IX86InstructionVisitor<int>.Out(OutInstruction instruction, int arg)
+        {
+            _emitter.Out(instruction.Operand0, instruction.Operand1);
+        }
+
         void IX86InstructionVisitor<int>.Sti(StiInstruction instruction, int arg)
         {
             _emitter.Sti();
         }
+
+        #endregion
 
         void IX86InstructionVisitor<int>.Int(IntInstruction instruction, int arg)
         {

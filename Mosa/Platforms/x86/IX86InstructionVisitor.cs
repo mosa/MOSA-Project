@@ -39,11 +39,13 @@ namespace Mosa.Platforms.x86
         void Call(CallInstruction instruction, ArgType arg);
 
         #region Intrinsics
-        void Lidt(LditInstruction instruction, ArgType arg);
         void Cli(CliInstruction instruction, ArgType arg);
-        void Sti(StiInstruction instruction, ArgType arg);
+        void In(InInstruction instruction, ArgType arg);
         void Int(IntInstruction instruction, ArgType arg);
         void Lgdt(LgdtInstruction instruction, ArgType arg);
+        void Lidt(LditInstruction instruction, ArgType arg);
+        void Out(OutInstruction instruction, ArgType arg);
+        void Sti(StiInstruction instruction, ArgType arg);
         #endregion
     }
 }
