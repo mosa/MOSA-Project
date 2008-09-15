@@ -15,7 +15,7 @@ using Mosa.Runtime.CompilerFramework;
 using IL = Mosa.Runtime.CompilerFramework.IL;
 using System.Diagnostics;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platforms.x86.Instructions
 {
     sealed class AdcInstruction : Instruction
     {

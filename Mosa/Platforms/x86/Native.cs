@@ -24,19 +24,19 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 ldit instruction to load the interrupt descriptor table.
         /// </summary>
         /// <param name="idt">A pointer to the interrupt descriptor table.</param>
-        [Intrinsic(typeof(Architecture), typeof(LditInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(Instructions.LditInstruction))]
         public static void Ldit(IntPtr idt) { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 cli instruction to disable interrupts
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(CliInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(Instructions.CliInstruction))]
         public static void Cli() { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 sti instruction to enable interrupts
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(StiInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(Instructions.StiInstruction))]
         public static void Sti() { ThrowPlatformNotSupported(); }
 
         /// <summary>

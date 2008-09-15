@@ -16,7 +16,7 @@ using System.Diagnostics;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Vm;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platforms.x86.Instructions
 {
     class CallInstruction : Instruction
     {

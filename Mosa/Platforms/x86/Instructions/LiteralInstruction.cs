@@ -15,7 +15,7 @@ using Mosa.Runtime.CompilerFramework;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platforms.x86.Instructions
 {
     sealed class LiteralInstruction : IR.LiteralInstruction
     {

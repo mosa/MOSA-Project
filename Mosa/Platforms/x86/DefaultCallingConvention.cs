@@ -61,8 +61,8 @@ namespace Mosa.Platforms.x86
             int stackSize = CalculateStackSizeForParameters(instruction, moveThis);
             if (0 != stackSize)
             {
-                instructions.Add(architecture.CreateInstruction(typeof(x86.SubInstruction), esp, new ConstantOperand(I, stackSize)));
-                instructions.Add(architecture.CreateInstruction(typeof(x86.MoveInstruction), new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp));
+                instructions.Add(architecture.CreateInstruction(typeof(x86.Instructions.SubInstruction), esp, new ConstantOperand(I, stackSize)));
+                instructions.Add(architecture.CreateInstruction(typeof(x86.Instructions.MoveInstruction), new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp));
 
                 Stack<Operand> ops = new Stack<Operand>(instruction.Operands.Length);
                 int thisArg = 1;
@@ -89,12 +89,12 @@ namespace Mosa.Platforms.x86
             if (true == moveThis)
             {
                 RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
-                instructions.Add(architecture.CreateInstruction(typeof(MoveInstruction), ecx, instruction.Operands[0]));
+                instructions.Add(architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, instruction.Operands[0]));
             }
-            instructions.Add(architecture.CreateInstruction(typeof(x86.CallInstruction), instruction.InvokeTarget));
+            instructions.Add(architecture.CreateInstruction(typeof(x86.Instructions.CallInstruction), instruction.InvokeTarget));
             if (0 != stackSize)
             {
-                instructions.Add(architecture.CreateInstruction(typeof(x86.AddInstruction), esp, new ConstantOperand(I, stackSize)));
+                instructions.Add(architecture.CreateInstruction(typeof(x86.Instructions.AddInstruction), esp, new ConstantOperand(I, stackSize)));
             }
 
             return instructions;
@@ -130,7 +130,7 @@ namespace Mosa.Platforms.x86
             }
 
             //instructions.Add(arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IR.PushInstruction), op));
-            instructions.Add(arch.CreateInstruction(typeof(x86.MoveInstruction), new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op));
+            instructions.Add(arch.CreateInstruction(typeof(x86.Instructions.MoveInstruction), new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op));
         }
 
         private int CalculateStackSizeForParameters(IL.InvokeInstruction instruction, bool hasThis)
@@ -154,11 +154,11 @@ namespace Mosa.Platforms.x86
             // FIXME: Do not issue a move, if the operand is already the destination register
             if (4 == size)
             {
-                return new Instruction[] { architecture.CreateInstruction(typeof(MoveInstruction), new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand) };
+                return new Instruction[] { architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand) };
             }
             else if (8 == size && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
             {
-                return new Instruction[] { architecture.CreateInstruction(typeof(MoveInstruction), new RegisterOperand(operand.Type, SSE2Register.XMM0), operand) };
+                return new Instruction[] { architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, SSE2Register.XMM0), operand) };
             }
             else
             {

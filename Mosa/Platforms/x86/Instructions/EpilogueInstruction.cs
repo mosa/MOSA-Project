@@ -18,7 +18,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platforms.x86.Instructions
 {
     /// <summary>
     /// x86 specific specialization of the <see cref="IR.EpilogueInstruction"/>.

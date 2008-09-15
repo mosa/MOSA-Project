@@ -14,7 +14,7 @@ using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platforms.x86.Instructions
 {
     /// <summary>
     /// X86 specific representation of the NOT instruction.

@@ -131,7 +131,7 @@ namespace Mosa.Platforms.x86
                     {
                         // Move the constant out of the code stream and place it right after
                         // the code.
-                        LiteralInstruction literal = (LiteralInstruction)architecture.CreateInstruction(typeof(LiteralInstruction), instruction.Offset, co.Type, co.Value);
+                        Instructions.LiteralInstruction literal = (Instructions.LiteralInstruction)architecture.CreateInstruction(typeof(Instructions.LiteralInstruction), instruction.Offset, co.Type, co.Value);
                         co.Replace(literal.CreateOperand());
                         literals.Add(literal);
                     }

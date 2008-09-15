@@ -16,7 +16,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platforms.x86.Instructions
 {
     /// <summary>
     /// Intrinsic instruction implementation for the x86 sti instruction.

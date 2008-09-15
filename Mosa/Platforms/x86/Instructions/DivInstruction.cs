@@ -16,7 +16,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata;
 using System.Diagnostics;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platforms.x86.Instructions
 {
     class DivInstruction : IR.TwoOperandInstruction
     {

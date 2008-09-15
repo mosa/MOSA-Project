@@ -20,6 +20,8 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
+using Mosa.Platforms.x86.Instructions;
+using Mosa.Platforms.x86.Instructions.Intrinsics;
 
 namespace Mosa.Platforms.x86
 {
@@ -165,6 +167,11 @@ namespace Mosa.Platforms.x86
         void IX86InstructionVisitor<int>.Ldit(LditInstruction instruction, int arg)
         {
             throw new NotImplementedException();
+        }
+
+        void IX86InstructionVisitor<int>.Lgdt(LgdtInstruction instruction, int arg)
+        {
+            _emitter.Lgdt(instruction.Operand0);
         }
 
         void IX86InstructionVisitor<int>.Cli(CliInstruction instruction, int arg)

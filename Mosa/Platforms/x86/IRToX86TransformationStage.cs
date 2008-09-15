@@ -403,40 +403,40 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<Context>.Add(IL.AddInstruction instruction, Context ctx)
         {
-            Type replType = typeof(x86.AddInstruction);
+            Type replType = typeof(x86.Instructions.AddInstruction);
             if (instruction.First.StackType == StackTypeCode.F || instruction.Second.StackType == StackTypeCode.F)
             {
-                replType = typeof(x86.SseAddInstruction);
+                replType = typeof(x86.Instructions.SseAddInstruction);
             }
             HandleCommutativeOperation(ctx, instruction, replType);
         }
 
         void IL.IILVisitor<Context>.Sub(IL.SubInstruction instruction, Context ctx)
         {
-            Type replType = typeof(x86.SubInstruction);
+            Type replType = typeof(x86.Instructions.SubInstruction);
             if (instruction.First.StackType == StackTypeCode.F || instruction.Second.StackType == StackTypeCode.F)
             {
-                replType = typeof(x86.SseSubInstruction);
+                replType = typeof(x86.Instructions.SseSubInstruction);
             }
             ThreeTwoAddressConversion(ctx, instruction, replType);
         }
 
         void IL.IILVisitor<Context>.Mul(IL.MulInstruction instruction, Context ctx)
         {
-            Type replType = typeof(x86.MulInstruction);
+            Type replType = typeof(x86.Instructions.MulInstruction);
             if (instruction.First.StackType == StackTypeCode.F)
             {
-                replType = typeof(x86.SseMulInstruction);
+                replType = typeof(x86.Instructions.SseMulInstruction);
             }
             HandleCommutativeOperation(ctx, instruction, replType);
         }
 
         void IL.IILVisitor<Context>.Div(IL.DivInstruction instruction, Context ctx)
         {
-            Type replType = typeof(x86.DivInstruction);
+            Type replType = typeof(x86.Instructions.DivInstruction);
             if (instruction.First.StackType == StackTypeCode.F || instruction.Second.StackType == StackTypeCode.F)
             {
-                replType = typeof(x86.SseDivInstruction);
+                replType = typeof(x86.Instructions.SseDivInstruction);
             }
             ThreeTwoAddressConversion(ctx, instruction, replType);
         }
@@ -458,13 +458,13 @@ namespace Mosa.Platforms.x86
 
             Replace(ctx, new Instruction[] {
                 instruction,
-                new x86.MoveInstruction(opRes, eax)
+                new x86.Instructions.MoveInstruction(opRes, eax)
             });
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.ArithmeticShiftRightInstruction instruction, Context ctx)
         {
-            HandleShiftOperation(ctx, instruction, typeof(x86.SarInstruction));
+            HandleShiftOperation(ctx, instruction, typeof(x86.Instructions.SarInstruction));
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.EpilogueInstruction instruction, Context ctx)
@@ -477,7 +477,7 @@ namespace Mosa.Platforms.x86
                 // pop edx
                 _architecture.CreateInstruction(typeof(IR.PopInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)),
                 // add esp, -localsSize
-                _architecture.CreateInstruction(typeof(AddInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
+                _architecture.CreateInstruction(typeof(Instructions.AddInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
                 // pop ebp
                 _architecture.CreateInstruction(typeof(IR.PopInstruction), ebp),
                 // ret
@@ -501,34 +501,34 @@ namespace Mosa.Platforms.x86
         {
             RegisterOperand eax = new RegisterOperand(_architecture.NativeType, GeneralPurposeRegister.EAX);
             Replace(ctx, new Instruction[] {
-                new x86.MoveInstruction(eax, instruction.Operands[0]),
-                new x86.MoveInstruction(eax, new MemoryOperand(instruction.Results[0].Type, GeneralPurposeRegister.EAX, IntPtr.Zero)),
-                new x86.MoveInstruction(instruction.Results[0], eax)
+                new x86.Instructions.MoveInstruction(eax, instruction.Operands[0]),
+                new x86.Instructions.MoveInstruction(eax, new MemoryOperand(instruction.Results[0].Type, GeneralPurposeRegister.EAX, IntPtr.Zero)),
+                new x86.Instructions.MoveInstruction(instruction.Results[0], eax)
             });
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.LogicalAndInstruction instruction, Context ctx)
         {
             // Three -> Two conversion
-            ThreeTwoAddressConversion(ctx, instruction, typeof(x86.LogicalAndInstruction));
+            ThreeTwoAddressConversion(ctx, instruction, typeof(x86.Instructions.LogicalAndInstruction));
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.LogicalOrInstruction instruction, Context ctx)
         {
             // Three -> Two conversion
-            ThreeTwoAddressConversion(ctx, instruction, typeof(x86.LogicalOrInstruction));
+            ThreeTwoAddressConversion(ctx, instruction, typeof(x86.Instructions.LogicalOrInstruction));
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.LogicalXorInstruction instruction, Context ctx)
         {
             // Three -> Two conversion
-            ThreeTwoAddressConversion(ctx, instruction, typeof(x86.LogicalXorInstruction));
+            ThreeTwoAddressConversion(ctx, instruction, typeof(x86.Instructions.LogicalXorInstruction));
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.LogicalNotInstruction instruction, Context ctx)
         {
             // Two -> One conversion
-            TwoOneAddressConversion(ctx, instruction, typeof(x86.LogicalNotInstruction));
+            TwoOneAddressConversion(ctx, instruction, typeof(x86.Instructions.LogicalNotInstruction));
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.MoveInstruction instruction, Context ctx)
@@ -553,8 +553,8 @@ namespace Mosa.Platforms.x86
                 }
 
                 Replace(ctx, new Instruction[] {
-                    new MoveInstruction(rop, src),
-                    new MoveInstruction(dst, rop)
+                    new Instructions.MoveInstruction(rop, src),
+                    new Instructions.MoveInstruction(dst, rop)
                 });
             }
         }
@@ -587,7 +587,7 @@ namespace Mosa.Platforms.x86
                 // mov ebp, esp
                 _architecture.CreateInstruction(typeof(IR.MoveInstruction), ebp, esp),
                 // sub esp, localsSize
-                _architecture.CreateInstruction(typeof(SubInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
+                _architecture.CreateInstruction(typeof(Instructions.SubInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
                 // push edx
                 _architecture.CreateInstruction(typeof(IR.PushInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)),
 
@@ -611,12 +611,12 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.ShiftLeftInstruction instruction, Context ctx)
         {
-            HandleShiftOperation(ctx, instruction, typeof(ShlInstruction));
+            HandleShiftOperation(ctx, instruction, typeof(Instructions.ShlInstruction));
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.ShiftRightInstruction instruction, Context ctx)
         {
-            HandleShiftOperation(ctx, instruction, typeof(ShrInstruction));
+            HandleShiftOperation(ctx, instruction, typeof(Instructions.ShrInstruction));
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.SignExtendedMoveInstruction instruction, Context ctx)
@@ -628,9 +628,9 @@ namespace Mosa.Platforms.x86
             RegisterOperand eax = new RegisterOperand(instruction.Results[0].Type, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(instruction.Operands[0].Type, GeneralPurposeRegister.EDX);
             Replace(ctx, new Instruction[] {
-                new x86.MoveInstruction(eax, instruction.Results[0]),
-                new x86.MoveInstruction(edx, instruction.Operands[0]),
-                new x86.MoveInstruction(new MemoryOperand(instruction.Operands[0].Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx)
+                new x86.Instructions.MoveInstruction(eax, instruction.Results[0]),
+                new x86.Instructions.MoveInstruction(edx, instruction.Operands[0]),
+                new x86.Instructions.MoveInstruction(new MemoryOperand(instruction.Operands[0].Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx)
             });
         }
 
@@ -780,7 +780,7 @@ namespace Mosa.Platforms.x86
             if (ops[1] is ConstantOperand)
             {
                 Replace(ctx, new Instruction[] {
-                    _architecture.CreateInstruction(typeof(MoveInstruction), opRes, ops[0]),
+                    _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
                     _architecture.CreateInstruction(replacementType, opRes, ops[1])
                 });
             }
@@ -788,8 +788,8 @@ namespace Mosa.Platforms.x86
             {
                 RegisterOperand ecx = new RegisterOperand(_architecture.NativeType, GeneralPurposeRegister.ECX);
                 Replace(ctx, new Instruction[] {
-                    _architecture.CreateInstruction(typeof(MoveInstruction), ecx, ops[1]),
-                    _architecture.CreateInstruction(typeof(MoveInstruction), opRes, ops[0]),
+                    _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
+                    _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
                     _architecture.CreateInstruction(replacementType, opRes, ecx)
                 });
             }

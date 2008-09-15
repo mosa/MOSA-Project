@@ -10,7 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using Mosa.Platforms.x86.Instructions;
+using Mosa.Platforms.x86.Instructions.Intrinsics;
 using Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
@@ -20,9 +21,9 @@ namespace Mosa.Platforms.x86
         void Add(AddInstruction addInstruction, ArgType arg);
         void Adc(AdcInstruction adcInstruction, ArgType arg);
         
-        void And(LogicalAndInstruction andInstruction, ArgType arg);
-        void Or(LogicalOrInstruction orInstruction, ArgType arg);
-        void Xor(LogicalXorInstruction xorInstruction, ArgType arg);
+        void And(Instructions.LogicalAndInstruction andInstruction, ArgType arg);
+        void Or(Instructions.LogicalOrInstruction orInstruction, ArgType arg);
+        void Xor(Instructions.LogicalXorInstruction xorInstruction, ArgType arg);
 
         void Sub(SubInstruction subInstruction, ArgType arg);
         void Mul(MulInstruction mulInstruction, ArgType arg);
@@ -41,5 +42,9 @@ namespace Mosa.Platforms.x86
         void Int(IntInstruction instruction, ArgType arg);
 
         void Call(CallInstruction instruction, ArgType arg);
+
+        #region Intrinsics
+        void Lgdt(LgdtInstruction instruction, ArgType arg);
+        #endregion
     }
 }

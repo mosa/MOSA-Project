@@ -16,7 +16,7 @@ using Mosa.Runtime.CompilerFramework;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platforms.x86.Instructions
 {
     class MulInstruction : IR.TwoOperandInstruction
     {
