@@ -574,7 +574,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         private static readonly Type[][] s_convTable = new Type[][] {
             /* Unknown */ new Type[] { null, null, null, null, null, null, null },
-            /* Int32 */   new Type[] { null, null, null, null, typeof(IR.FloatingPointToIntegerConversionInstruction), null, null },
+            /* Int32 */   new Type[] { null, typeof(IR.LogicalAndInstruction), null, null, typeof(IR.FloatingPointToIntegerConversionInstruction), null, null },
             /* Int64 */   new Type[] { null, null, null, null, null, null, null },
             /* Native  */ new Type[] { null, null, null, null, null, null, null },
             /* F */       new Type[] { null, typeof(IR.IntegerToFloatingPointConversionInstruction), null, null, null, null, null },
@@ -591,12 +591,61 @@ namespace Mosa.Runtime.CompilerFramework.IL
         {
             Operand dest = instruction.Results[0];
             Operand src = instruction.Operands[0];
+            int mask = 0;
 
             Type type = s_convTable[(int)dest.StackType][(int)src.StackType];
             if (null == type)
                 throw new NotSupportedException();
 
-            Replace(ctx, _architecture.CreateInstruction(type, instruction.Results[0], instruction.Operands[0]));
+            switch (dest.Type.Type)
+            {
+                case CilElementType.I1:
+                    mask = 0xFF;
+                    break;
+
+                case CilElementType.I2:
+                    mask = 0xFFFF;
+                    break;
+
+                case CilElementType.I4:
+                    type = typeof(MoveInstruction);
+                    break;
+
+                case CilElementType.U1:
+                    mask = 0xFF;
+                    break;
+
+                case CilElementType.U2:
+                    mask = 0xFFFF;
+                    break;
+                
+                case CilElementType.U4:
+                    type = typeof(MoveInstruction);
+                    break;
+
+                case CilElementType.R4:
+                    break;
+
+                case CilElementType.R8:
+                    break;
+
+                default:
+                    Debug.Assert(false);
+                    throw new NotSupportedException();
+            }
+
+            if (0 != mask)
+            {
+                // We need to AND the result after conversion
+                Replace(ctx, new Instruction[] {
+                    _architecture.CreateInstruction(type, instruction.Results[0], instruction.Operands[0]),
+                    _architecture.CreateInstruction(typeof(LogicalAndInstruction), instruction.Results[0], instruction.Results[0], new ConstantOperand(new SigType(CilElementType.I4), mask))
+                });
+            }
+            else
+            {
+                Replace(ctx, _architecture.CreateInstruction(type, instruction.Results[0], instruction.Operands[0]));
+            }
         }
 
         /// <summary>
@@ -717,11 +766,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="ctx">The transformation context.</param>
         /// <param name="instructions">The instructions to replace with.</param>
-        private void Replace(Context ctx, List<Instruction> instructions)
+        private void Replace(Context ctx, IEnumerable<Instruction> instructions)
         {
             Remove(ctx);
+            int count = ctx.Block.Instructions.Count;
             ctx.Block.Instructions.InsertRange(++ctx.Index, instructions);
-            ctx.Index += instructions.Count;
+            ctx.Index += (ctx.Block.Instructions.Count - count);
         }
 
         #endregion // Internals

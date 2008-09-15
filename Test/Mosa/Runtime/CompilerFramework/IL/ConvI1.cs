@@ -38,7 +38,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void ConvI1_I1(sbyte a)
         {
             CodeSource = "static class Test { static bool ConvI1_I1(sbyte expect, sbyte a) { return expect == (sbyte)a; } }";
-            Assert.IsTrue((bool)Run<Native_ConvI1_I1>("", "Test", "ConvI1_I1", ((sbyte)a), a));
+            Assert.IsTrue((bool)Run<Native_ConvI1_I1>("", "Test", "ConvI1_I1", a, a));
         }
 
         /// <summary>

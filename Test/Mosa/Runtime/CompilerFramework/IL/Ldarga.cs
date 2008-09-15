@@ -218,7 +218,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="value"></param>
         /// <param name="a"></param>
-        delegate void V_I1_I1(sbyte value, ref sbyte a);
+        delegate bool B_I1_I1(sbyte value, ref sbyte a);
+
         /// <summary>
         /// 
         /// </summary>
@@ -242,8 +243,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                         a = expect;
                     }
                 }";
-            object[] args = new object[] { newValue, oldValue };
-            Assert.IsTrue((bool)Run<V_I1_I1>("", "Test", "LdargaI1_ChangeValue", args[0], args[1]));
+            Assert.IsTrue((bool)Run<B_I1_I1>("", "Test", "LdargaI1_ChangeValue", newValue, oldValue));
         }
         
         /// <summary>
