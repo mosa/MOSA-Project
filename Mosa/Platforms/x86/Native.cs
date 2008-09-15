@@ -45,7 +45,7 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 lgdt instruction to load global descriptor table
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.LgdtInstruction))]
-        public static void Lgdt() { ThrowPlatformNotSupported(); }
+        public static void Lgdt(IntPtr gdt) { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 pop instruction to pop a value from the stack
@@ -54,10 +54,22 @@ namespace Mosa.Platforms.x86
         public static void Pop() { ThrowPlatformNotSupported(); }
 
         /// <summary>
+        /// Wraps the x86 popad instruction to pop all GPR from the stack
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PopadInstruction))]
+        public static void Popad() { ThrowPlatformNotSupported(); }
+
+        /// <summary>
         /// Wraps the x86 push instruction to push a value on the stack
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PushInstruction))]
         public static void Push() { ThrowPlatformNotSupported(); }
+
+        /// <summary>
+        /// Wraps the x86 pushad instruction to push all GPR to the stack
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PushadInstruction))]
+        public static void Pushad() { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 sti instruction to enable interrupts
@@ -74,7 +86,6 @@ namespace Mosa.Platforms.x86
         /// routines above in order to throw the <see cref="System.PlatformNotSupportedException"/> 
         /// in non-x86 compilation scenarios.
         /// </remarks>
-        [Intrinsic(typeof(Architecture), typeof(IL.NopInstruction))]
         private static void ThrowPlatformNotSupported()
         {
             throw new PlatformNotSupportedException(@"This operation requires compilation for the x86 architecture.");

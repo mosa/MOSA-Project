@@ -16,6 +16,10 @@ using Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="ArgType">The type of the rg type.</typeparam>
     interface IX86InstructionVisitor<ArgType> : IIRVisitor<ArgType>
     {
         void Add(AddInstruction addInstruction, ArgType arg);
@@ -39,17 +43,101 @@ namespace Mosa.Platforms.x86
         void Call(CallInstruction instruction, ArgType arg);
 
         #region Intrinsics
+        /// <summary>
+        /// Disable interrupts
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void Cli(CliInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Clear Direction Flag
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Cld(CldInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Compare and exchange register - memory
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void CmpXchg(CmpXchgInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Read in from port
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void In(InInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Call interrupt
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void Int(IntInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Return from interrupt
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Iretd(IretdInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Load global descriptor table
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void Lgdt(LgdtInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Load interrupt descriptor table
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void Lidt(LditInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Locks
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void Lock(LockIntruction instruction, ArgType arg);
+        /// <summary>
+        /// Output to port
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void Out(OutInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Pop from the stack
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void Pop(Instructions.Intrinsics.PopInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Pops All General-Purpose Registers
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Popad(PopadInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Push on the stack
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void Push(Instructions.Intrinsics.PushInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Push All General-Purpose Registers
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Pushad(PushadInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Enable interrupts
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void Sti(StiInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Exchanges register/memory
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void Xchg(XchgInstruction instruction, ArgType arg);
         #endregion
     }

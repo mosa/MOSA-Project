@@ -166,56 +166,151 @@ namespace Mosa.Platforms.x86
 
         #region Intrinsics
 
+        /// <summary>
+        /// Read in from port
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.In(InInstruction instruction, int arg)
         {
             _emitter.In(instruction.Operand0, instruction.Operand1);
         }
 
+        /// <summary>
+        /// Return from interrupt
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void IX86InstructionVisitor<int>.Iretd(IretdInstruction instruction, int arg)
+        {
+            _emitter.Iretd();
+        }
+
+        /// <summary>
+        /// Load interrupt descriptor table
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Lidt(LditInstruction instruction, int arg)
         {
             _emitter.Lidt(instruction.Operand0);
         }
 
+        /// <summary>
+        /// Load global descriptor table
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Lgdt(LgdtInstruction instruction, int arg)
         {
             _emitter.Lgdt(instruction.Operand0);
         }
 
+        /// <summary>
+        /// Disable interrupts
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Cli(CliInstruction instruction, int arg)
         {
             _emitter.Cli();
         }
 
+        /// <summary>
+        /// Clear Direction Flag
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void IX86InstructionVisitor<int>.Cld(CldInstruction instruction, int arg)
+        {
+            _emitter.Cld();
+        }
+
+        /// <summary>
+        /// Compare and exchange register - memory
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.CmpXchg(CmpXchgInstruction instruction, int arg)
         {
             _emitter.CmpXchg(instruction.Operand0, instruction.Operand1);
-        } 
+        }
 
+        /// <summary>
+        /// Locks
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Lock(LockIntruction instruction, int arg)
         {
             _emitter.Lock();
         }
 
+        /// <summary>
+        /// Output to port
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Out(OutInstruction instruction, int arg)
         {
             _emitter.Out(instruction.Operand0, instruction.Operand1);
         }
 
+        /// <summary>
+        /// Pop from the stack
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Pop(Instructions.Intrinsics.PopInstruction instruction, int arg)
         {
             _emitter.Pop(instruction.Operand0);
         }
 
+        /// <summary>
+        /// Pop All General-Purpose Registers
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void IX86InstructionVisitor<int>.Popad(PopadInstruction instruction, int arg)
+        {
+            _emitter.Popad();
+        }
+
+        /// <summary>
+        /// Push on the stack
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Push(Instructions.Intrinsics.PushInstruction instruction, int arg)
         {
             _emitter.Push(instruction.Operand0);
         }
 
+        /// <summary>
+        /// Push All General-Purpose Registers
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void IX86InstructionVisitor<int>.Pushad(PushadInstruction instruction, int arg)
+        {
+            _emitter.Pushad();
+        }
+
+        /// <summary>
+        /// Enable interrupts
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Sti(StiInstruction instruction, int arg)
         {
             _emitter.Sti();
         }
 
+        /// <summary>
+        /// Exchanges register/memory
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Xchg(XchgInstruction instruction, int arg)
         {
             _emitter.Xchg(instruction.Operand0, instruction.Operand1);
