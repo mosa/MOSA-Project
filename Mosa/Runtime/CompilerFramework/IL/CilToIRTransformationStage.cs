@@ -344,29 +344,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Conversion(ConversionInstruction instruction, Context ctx)
         {
-            Type type;
-            switch (instruction.Code)
-            {
-                case OpCode.Conv_i1:
-                    type = typeof(IR.SignExtendedMoveInstruction);
-                    break;
-
-                case OpCode.Conv_i2:
-                    type = typeof(IR.SignExtendedMoveInstruction);
-                    break;
-
-                case OpCode.Conv_i4:
-                    type = typeof(IR.SignExtendedMoveInstruction);
-                    break;
-
-                case OpCode.Conv_i8:
-                    type = typeof(IR.SignExtendedMoveInstruction);
-                    break;
-
-                default:
-                    throw new NotSupportedException();
-            }
-            Replace(ctx, _architecture.CreateInstruction(type, instruction.Results[0], instruction.Operands[0]));
+            ProcessConversionInstruction(instruction, ctx);
         }
 
         void IILVisitor<Context>.Callvirt(CallvirtInstruction instruction, Context ctx)
@@ -592,6 +570,33 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
 
             return result;
+        }
+
+        private static readonly Type[][] s_convTable = new Type[][] {
+            /* Unknown */ new Type[] { null, null, null, null, null, null, null },
+            /* Int32 */   new Type[] { null, null, null, null, typeof(IR.FloatingPointToIntegerConversion), null, null },
+            /* Int64 */   new Type[] { null, null, null, null, null, null, null },
+            /* Native  */ new Type[] { null, null, null, null, null, null, null },
+            /* F */       new Type[] { null, null, null, null, null, null, null },
+            /* Ptr */     new Type[] { null, null, null, null, null, null, null },
+            /* Object */  new Type[] { null, null, null, null, null, null, null },
+        };
+
+        /// <summary>
+        /// Selects the appropriate IR conversion instruction.
+        /// </summary>
+        /// <param name="instruction">The IL conversion instruction.</param>
+        /// <param name="ctx">The transformation context.</param>
+        private void ProcessConversionInstruction(ConversionInstruction instruction, Context ctx)
+        {
+            Operand dest = instruction.Results[0];
+            Operand src = instruction.Operands[0];
+
+            Type type = s_convTable[(int)dest.StackType][(int)src.StackType];
+            if (null == type)
+                throw new NotSupportedException();
+
+            Replace(ctx, _architecture.CreateInstruction(type, instruction.Results[0], instruction.Operands[0]));
         }
 
         /// <summary>

@@ -109,12 +109,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, 2, int.MinValue, int.MaxValue)]
+        [Column(0.0f, 1.0f, 2.0f, Single.MinValue, Single.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI4_R4(float a)
         {
             CodeSource = "static class Test { static bool ConvI1_R4(int expect, float a) { return expect == ((int)a); } }";
-            Assert.IsTrue((bool)Run<Native_ConvI4_I4>("", "Test", "ConvI1_R4", ((int)a), a));
+            Assert.IsTrue((bool)Run<Native_ConvI4_R4>("", "Test", "ConvI1_R4", ((int)a), a));
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, 2, int.MinValue, int.MaxValue)]
+        [Column(0.0f, 1.0f, 2.0f, Double.MinValue, Double.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI4_R8(double a)
         {

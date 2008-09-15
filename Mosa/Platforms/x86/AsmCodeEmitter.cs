@@ -222,6 +222,16 @@ namespace Mosa.Platforms.x86
 
         }
 
+        void ICodeEmitter.Cvttsd2si(Operand op1, Operand op2)
+        {
+            _textWriter.WriteLine("\t\tcvttsd2si\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
+        }
+
+        void ICodeEmitter.Cvttss2si(Operand op1, Operand op2)
+        {
+            _textWriter.WriteLine("\t\tcvttss2si\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
+        }
+
         /// <summary>
         /// Emits an interrupt instruction.
         /// </summary>
@@ -834,7 +844,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         public void Wbinvd()
         {
-            _textWriter.WriteLine("\t\wbinvd");
+            _textWriter.WriteLine("\t\twbinvd");
         }
 
         /// <summary>

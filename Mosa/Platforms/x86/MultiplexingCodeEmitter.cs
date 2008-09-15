@@ -81,6 +81,7 @@ namespace Mosa.Platforms.x86
         #endregion // Properties
 
         #region ICodeEmitter Members
+
         /// <summary>
         /// Emits a comment into the code stream.
         /// </summary>
@@ -248,6 +249,22 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Div(op1, op2);
+            });
+        }
+
+        void ICodeEmitter.Cvttsd2si(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Cvttsd2si(op1, op2);
+            });
+        }
+
+        void ICodeEmitter.Cvttss2si(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Cvttss2si(op1, op2);
             });
         }
 

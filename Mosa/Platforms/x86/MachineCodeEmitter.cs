@@ -494,6 +494,16 @@ namespace Mosa.Platforms.x86
             Emit(op1, op2, cd_cmpxchg);
         }
 
+        void ICodeEmitter.Cvttsd2si(Operand op1, Operand op2)
+        {
+            Emit(op1, op2, cd_cvttsd2si);
+        }
+
+        void ICodeEmitter.Cvttss2si(Operand op1, Operand op2)
+        {
+            Emit(op1, op2, cd_cvttss2si);
+        }
+
         /// <summary>
         /// Halts the machine
         /// </summary>
@@ -1507,6 +1517,28 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x10 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x10 }, null),
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x11 }, null),
+        };
+
+        /// <summary>
+        /// Asmcode: CVTTSD2SI
+        /// Converts a double precision value into a signed integer value
+        /// 
+        /// Section: SSE
+        /// </summary>
+        private static readonly CodeDef[] cd_cvttsd2si = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x2C }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x2C }, null),
+        };
+
+        /// <summary>
+        /// Asmcode: CVTTSD2SI
+        /// Converts a double precision value into a signed integer value
+        /// 
+        /// Section: SSE
+        /// </summary>
+        private static readonly CodeDef[] cd_cvttss2si = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0x2C }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF3, 0x0F, 0x2C }, null),
         };
 
         /// <summary>

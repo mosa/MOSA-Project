@@ -117,6 +117,20 @@ namespace Mosa.Platforms.x86
         void CmpXchg(Operand op1, Operand op2);
 
         /// <summary>
+        /// Converts the double precision floating point value in <paramref name="source"/> to a signed integer and stores it in <paramref name="destination"/>.
+        /// </summary>
+        /// <param name="destination">The destination operand, which receives the converted signed integer.</param>
+        /// <param name="operand">The source operand, which holds the floating point value.</param>
+        void Cvttsd2si(Operand destination, Operand operand);
+
+        /// <summary>
+        /// Converts the single precision floating point value in <paramref name="source"/> to a signed integer and stores it in <paramref name="destination"/>.
+        /// </summary>
+        /// <param name="destination">The destination operand, which receives the converted signed integer.</param>
+        /// <param name="operand">The source operand, which holds the floating point value.</param>
+        void Cvttss2si(Operand destination, Operand operand);
+
+        /// <summary>
         /// Halts the machine
         /// </summary>
         void Hlt();

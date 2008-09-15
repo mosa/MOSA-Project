@@ -923,6 +923,40 @@ namespace Mosa.Platforms.x86
             throw new NotSupportedException();
         }
 
+        void IR.IIRVisitor<int>.Visit(IR.FloatingPointToIntegerConversion instruction, int arg)
+        {
+            Operand source = instruction.Operand1;
+            Operand destination = instruction.Operand0;
+            switch (destination.Type.Type)
+            {
+                case CilElementType.I1: goto case CilElementType.I4;
+                case CilElementType.I2: goto case CilElementType.I4;
+                case CilElementType.I4:
+                    if (source.Type.Type == CilElementType.R8)
+                        _emitter.Cvttsd2si(destination, source);
+                    else
+                        _emitter.Cvttss2si(destination, source);
+                    break;
+
+                case CilElementType.I8:
+                    throw new NotSupportedException();
+
+                case CilElementType.U1: goto case CilElementType.U4;
+                case CilElementType.U2: goto case CilElementType.U4;
+                case CilElementType.U4:
+                    break;
+
+                case CilElementType.U8:
+                    throw new NotSupportedException();
+
+                case CilElementType.I:
+                    goto case CilElementType.I4;
+
+                case CilElementType.U:
+                    goto case CilElementType.U4;
+            }
+        }
+
         void IR.IIRVisitor<int>.Visit(IR.LiteralInstruction instruction, int arg)
         {
             _emitter.Literal(instruction.Label, instruction.Type, instruction.Data);
