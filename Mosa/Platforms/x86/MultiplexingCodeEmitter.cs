@@ -679,6 +679,17 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Pauses the machine.
+        /// </summary>
+        public void Pause()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Pause();
+            });
+        }
+
+        /// <summary>
         /// Pops the stack's top value into the given operand
         /// </summary>
         /// <param name="operand">The operand to push.</param>
@@ -747,6 +758,40 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Read MSR specified by ECX into
+        /// EDX:EAX. (MSR: Model sepcific register)
+        /// </summary>
+        public void Rdmsr()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Rdmsr();
+            });
+        }
+
+        /// <summary>
+        /// Reads performance monitor counter
+        /// </summary>
+        public void Rdpmc()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Rdpmc();
+            });
+        }
+
+        /// <summary>
+        /// Reads the timestamp counter
+        /// </summary>
+        public void Rdtsc()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Rdtsc();
+            });
+        }
+
+        /// <summary>
         /// Emits a return instruction.
         /// </summary>
         public void Ret()
@@ -758,6 +803,65 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Store fence
+        /// </summary>
+        public void Sfence()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Sfence();
+            });
+        }
+
+        /// <summary>
+        /// Store global descriptor table to dest
+        /// </summary>
+        /// <param name="dest">Destination to save to</param>
+        public void Sgdt(Operand dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Sgdt(dest);
+            });
+        }
+
+        /// <summary>
+        /// Store interrupt descriptor table to dest
+        /// </summary>
+        /// <param name="dest">Destination to save to</param>
+        public void Sidt(Operand dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Sgdt(dest);
+            });
+        }
+
+        /// <summary>
+        /// Store Local Descriptor Table Register
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        public void Sldt(Operand dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Sldt(dest);
+            });
+        }
+
+        /// <summary>
+        /// Store Machine Status Word
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        public void Smsw(Operand dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Smsw(dest);
+            });
+        }
+
+        /// <summary>
         /// Emits a enable interrupts instruction.
         /// </summary>
         public void Sti()
@@ -765,6 +869,18 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Sti();
+            });
+        }
+
+        /// <summary>
+        /// Store MXCSR Register State
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        public void StmXcsr(Operand dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.StmXcsr(dest);
             });
         }
 
@@ -790,6 +906,17 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Sub(dest, src);
+            });
+        }
+
+        /// <summary>
+        /// Write Back and Invalidate Cache
+        /// </summary>
+        public void Wbinvd()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Wbinvd();
             });
         }
 

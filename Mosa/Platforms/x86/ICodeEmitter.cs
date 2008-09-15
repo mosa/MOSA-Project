@@ -350,6 +350,11 @@ namespace Mosa.Platforms.x86
         void Nop();
 
         /// <summary>
+        /// Pauses the machine.
+        /// </summary>
+        void Pause();
+
+        /// <summary>
         /// Pops the stack's top value into the given operand
         /// </summary>
         /// <param name="operand">The operand to pop into.</param>
@@ -382,14 +387,65 @@ namespace Mosa.Platforms.x86
         void Pushfd();
 
         /// <summary>
+        /// Read MSR specified by ECX into 
+        /// EDX:EAX. (MSR: Model sepcific register)
+        /// </summary>
+        void Rdmsr();
+
+        /// <summary>
+        /// Reads performance monitor counter
+        /// </summary>
+        void Rdpmc();
+
+        /// <summary>
+        /// Reads the timestamp counter
+        /// </summary>
+        void Rdtsc();
+
+        /// <summary>
         /// Emits a return instruction.
         /// </summary>
         void Ret();
 
         /// <summary>
+        /// Store fence
+        /// </summary>
+        void Sfence();
+
+        /// <summary>
+        /// Store global descriptor table to dest
+        /// </summary>
+        /// <param name="dest">Destination to save to</param>
+        void Sgdt(Operand dest);
+
+        /// <summary>
+        /// Store interrupt descriptor table to dest
+        /// </summary>
+        /// <param name="dest">Destination to save to</param>
+        void Sidt(Operand dest);
+
+        /// <summary>
+        /// Store Local Descriptor Table Register
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        void Sldt(Operand dest);
+
+        /// <summary>
+        /// Store Machine Status Word
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        void Smsw(Operand dest);
+
+        /// <summary>
         /// Emits a enable interrupts instruction.
         /// </summary>
         void Sti();
+
+        /// <summary>
+        /// Store MXCSR Register State
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        void StmXcsr(Operand dest);
 
         /// <summary>
         /// Stores a string
@@ -403,6 +459,11 @@ namespace Mosa.Platforms.x86
         /// <param name="dest">The destination operand.</param>
         /// <param name="src">The source operand.</param>
         void Sub(Operand dest, Operand src);
+
+        /// <summary>
+        /// Write Back and Invalidate Cache
+        /// </summary>
+        void Wbinvd();
 
         /// <summary>
         /// Exchange Register/Memory with a register

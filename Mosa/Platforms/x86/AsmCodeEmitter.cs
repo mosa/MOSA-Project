@@ -607,6 +607,14 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Pauses the machine.
+        /// </summary>
+        public void Pause()
+        {
+            _textWriter.WriteLine("\t\tpause");
+        }
+
+        /// <summary>
         /// Pushes the given operand on the stack.
         /// </summary>
         /// <param name="operand">The operand to push.</param>
@@ -660,6 +668,31 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Read MSR specified by ECX into
+        /// EDX:EAX. (MSR: Model sepcific register)
+        /// </summary>
+        public void Rdmsr()
+        {
+            _textWriter.WriteLine("\t\trdmsr");
+        }
+
+        /// <summary>
+        /// Reads performance monitor counter
+        /// </summary>
+        public void Rdpmc()
+        {
+            _textWriter.WriteLine("\t\trdpmc");
+        }
+
+        /// <summary>
+        /// Reads the timestamp counter
+        /// </summary>
+        public void Rdtsc()
+        {
+            _textWriter.WriteLine("\t\trdtsc");
+        }
+
+        /// <summary>
         /// Emits a return instruction.
         /// </summary>
         public void Ret()
@@ -669,11 +702,64 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Store fence
+        /// </summary>
+        public void Sfence()
+        {
+            _textWriter.WriteLine("\t\tsfence");
+        }
+
+        /// <summary>
+        /// Store global descriptor table to dest
+        /// </summary>
+        /// <param name="dest">Destination to save to</param>
+        public void Sgdt(Operand dest)
+        {
+            _textWriter.WriteLine("\t\tsgdt {0}", WriteOperand(dest));
+        }
+
+        /// <summary>
+        /// Store interrupt descriptor table to dest
+        /// </summary>
+        /// <param name="dest">Destination to save to</param>
+        public void Sidt(Operand dest)
+        {
+            _textWriter.WriteLine("\t\tsidt {0}", WriteOperand(dest));
+        }
+
+        /// <summary>
+        /// Store Local Descriptor Table Register
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        public void Sldt(Operand dest)
+        {
+            _textWriter.WriteLine("\t\tsldt {0}", WriteOperand(dest));
+        }
+
+        /// <summary>
+        /// Store Machine Status Word
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        public void Smsw(Operand dest)
+        {
+            _textWriter.WriteLine("\t\tsmsw {0}", WriteOperand(dest));
+        }
+
+        /// <summary>
         /// Emits a enable interrupts instruction.
         /// </summary>
         public void Sti()
         {
             _textWriter.WriteLine("\t\tsti");
+        }
+
+        /// <summary>
+        /// Store MXCSR Register State
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        public void StmXcsr(Operand dest)
+        {
+            _textWriter.WriteLine("\t\tstmxcsr {0}", WriteOperand(dest));
         }
 
         /// <summary>
@@ -741,6 +827,14 @@ namespace Mosa.Platforms.x86
 
             _textWriter.WriteLine("\t\tout\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
             
+        }
+
+        /// <summary>
+        /// Write Back and Invalidate Cache
+        /// </summary>
+        public void Wbinvd()
+        {
+            _textWriter.WriteLine("\t\wbinvd");
         }
 
         /// <summary>

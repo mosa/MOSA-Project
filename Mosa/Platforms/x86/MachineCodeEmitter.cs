@@ -502,6 +502,11 @@ namespace Mosa.Platforms.x86
             _codeStream.WriteByte(0xF4);
         }
 
+        /// <summary>
+        /// Reads in from the port at src and stores into dest
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        /// <param name="src">The source operand</param>
         void ICodeEmitter.In(Operand dest, Operand src)
         {
             if (src is RegisterOperand)
@@ -853,6 +858,15 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Pauses the machine.
+        /// </summary>
+        void ICodeEmitter.Pause()
+        {
+            _codeStream.WriteByte(0xF3);
+            _codeStream.WriteByte(0x90);
+        }
+
+        /// <summary>
         /// Pushes the given operand on the stack.
         /// </summary>
         /// <param name="operand">The operand to push.</param>
@@ -924,6 +938,34 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Read MSR specified by ECX into
+        /// EDX:EAX. (MSR: Model sepcific register)
+        /// </summary>
+        void ICodeEmitter.Rdmsr()
+        {
+            _codeStream.WriteByte(0x0F);
+            _codeStream.WriteByte(0x32);
+        }
+
+        /// <summary>
+        /// Reads performance monitor counter
+        /// </summary>
+        void ICodeEmitter.Rdpmc()
+        {
+            _codeStream.WriteByte(0x0F);
+            _codeStream.WriteByte(0x33);
+        }
+
+        /// <summary>
+        /// Reads the timestamp counter
+        /// </summary>
+        void ICodeEmitter.Rdtsc()
+        {
+            _codeStream.WriteByte(0x0F);
+            _codeStream.WriteByte(0x31);
+        }
+
+        /// <summary>
         /// Emits a return instruction.
         /// </summary>
         /// <seealso cref="ICodeEmitter.Ret()"/>
@@ -933,11 +975,64 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Store fence
+        /// </summary>
+        void ICodeEmitter.Sfence()
+        {
+            Emit(null, null, cd_sfence);
+        }
+
+        /// <summary>
+        /// Store global descriptor table to dest
+        /// </summary>
+        /// <param name="dest">Destination to save to</param>
+        void ICodeEmitter.Sgdt(Operand dest)
+        {
+            Emit(dest, null, cd_sgdt);
+        }
+
+        /// <summary>
+        /// Store interrupt descriptor table to dest
+        /// </summary>
+        /// <param name="dest">Destination to save to</param>
+        void ICodeEmitter.Sidt(Operand dest)
+        {
+            Emit(dest, null, cd_sidt);
+        }
+
+        /// <summary>
+        /// Store Local Descriptor Table Register
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        void ICodeEmitter.Sldt(Operand dest)
+        {
+            Emit(dest, null, cd_sidt);
+        }
+
+        /// <summary>
+        /// Store Machine Status Word
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        void ICodeEmitter.Smsw(Operand dest)
+        {
+            Emit(dest, null, cd_smsw);
+        }
+
+        /// <summary>
         /// Emits a enable interrupts instruction.
         /// </summary>
         void ICodeEmitter.Sti()
         {
             _codeStream.WriteByte(0xFB);
+        }
+
+        /// <summary>
+        /// Store MXCSR Register State
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        void ICodeEmitter.StmXcsr(Operand dest)
+        {
+            Emit(dest, null, cd_stmxcsr);
         }
 
         /// <summary>
@@ -960,6 +1055,15 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Sub(Operand dest, Operand src)
         {
             Emit(dest, src, cd_sub);
+        }
+
+        /// <summary>
+        /// Write Back and Invalidate Cache
+        /// </summary>
+        void ICodeEmitter.Wbinvd()
+        {
+            _codeStream.WriteByte(0x0F);
+            _codeStream.WriteByte(0x09);
         }
 
         void ICodeEmitter.Xchg(Operand dest, Operand src)
@@ -1217,6 +1321,49 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xD3 }, 7),
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC1 }, 7),
             new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC1 }, 7),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_sfence = new CodeDef[] {
+            new CodeDef(null,                       null,                       new byte[] { 0x0F, 0xAE }, 7),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_sgdt = new CodeDef[] {
+            new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0x0F, 0x01 }, 0),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_sidt = new CodeDef[] {
+            new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0x0F, 0x01 }, 1),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_sldt = new CodeDef[] {
+            new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0x0F, 0x00 }, 0),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_smsw = new CodeDef[] {
+            new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0x0F, 0x01 }, 4),
+            new CodeDef(typeof(RegisterOperand),    null,                       new byte[] { 0x0F, 0x01 }, 4),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_stmxcsr = new CodeDef[] {
+            new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0x0F, 0xAE }, 3),
         };
 
         /// <summary>
