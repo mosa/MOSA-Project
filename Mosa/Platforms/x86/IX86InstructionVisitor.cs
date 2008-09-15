@@ -44,6 +44,7 @@ namespace Mosa.Platforms.x86
         void Int(IntInstruction instruction, ArgType arg);
         void Lgdt(LgdtInstruction instruction, ArgType arg);
         void Lidt(LditInstruction instruction, ArgType arg);
+        void Lock(LockIntruction instruction, ArgType arg);
         void Out(OutInstruction instruction, ArgType arg);
         void Sti(StiInstruction instruction, ArgType arg);
         #endregion

@@ -186,6 +186,11 @@ namespace Mosa.Platforms.x86
             _emitter.Cli();
         }
 
+        void IX86InstructionVisitor<int>.Lock(LockIntruction instruction, int arg)
+        {
+            _emitter.Lock();
+        }
+
         void IX86InstructionVisitor<int>.Out(OutInstruction instruction, int arg)
         {
             _emitter.Out(instruction.Operand0, instruction.Operand1);
