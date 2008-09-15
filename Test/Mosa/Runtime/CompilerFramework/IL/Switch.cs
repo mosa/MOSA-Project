@@ -33,44 +33,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         [Row(1)]
-        //[Row(23)]
-        //[Row(-1)]
-        //[Row(0)]
+        [Row(23)]
+        [Row(-1)]
+        [Row(0)]
         // And reverse
-        //[Row(2)]
-        //[Row(-2)]       
+        [Row(2)]
+        [Row(-2)]       
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SwitchI1(sbyte a)
         {
             CodeSource = @"static class Test { 
-                static bool SwitchI1(sbyte expect, sbyte a)
+                static bool SwitchI1(sbyte expect, sbyte a) { return expect == Switch_Target(a); } 
+                static sbyte Switch_Target(sbyte a)
                 {
-                    sbyte x = sbyte.MinValue;
                     switch(a)
                     {
                         case 0:
-                            x =  0;
+                            return 0;
                             break;
                         case 1:
-                            x =  1;
+                            return 1;
                             break;
                         case -1:
-                            x =  -1;
+                            return -1;
                             break;
                         case 2:
-                            x =  2;
+                            return 2;
                             break;
                         case -2:
-                            x =  -2;
+                            return -2;
                             break;
                         case 23:
-                            x =  23;
+                            return 23;
+                            break;
+                        case sbyte.MinValue:
+                            return sbyte.MinValue;
+                            break;
+                        case sbyte.MaxValue:
+                            return sbyte.MaxValue;
                             break;
                         default:
-                            x =  42;
+                            return 42;
                             break;
                     }
-                    return expect == x;
                 }
             }";
             Assert.IsTrue((bool)Run<I1_I1>("", "Test", "SwitchI1", a, a));
@@ -151,17 +156,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        //[Row(1)]
+        [Row(1)]
         [Row(23)]
-        //[Row(-1)]
-        //[Row(0)]
+        [Row(-1)]
+        [Row(0)]
         // And reverse
-        //[Row(2)]
-        //[Row(-2)]
+        [Row(2)]
+        [Row(-2)]
         // (MinValue, X) Cases
-        //[Row(int.MinValue)]
+        [Row(int.MinValue)]
         // (MaxValue, X) Cases
-        //[Row(int.MaxValue)]
+        [Row(int.MaxValue)]
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SwitchI4(int a)
         {
