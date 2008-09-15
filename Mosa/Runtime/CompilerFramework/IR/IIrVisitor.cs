@@ -38,18 +38,18 @@ namespace Mosa.Runtime.CompilerFramework.IR
         void Visit(EpilogueInstruction instruction, ArgType arg);
 
         /// <summary>
-        /// Visitation function for <see cref="FloatingPointToIntegerConversion"/> instructions.
+        /// Visitation function for <see cref="FloatingPointToIntegerConversionInstruction"/> instructions.
         /// </summary>
         /// <param name="instruction">The visiting instruction.</param>
         /// <param name="arg">The arg.</param>
-        void Visit(FloatingPointToIntegerConversion instruction, ArgType arg);
+        void Visit(FloatingPointToIntegerConversionInstruction instruction, ArgType arg);
 
         /// <summary>
-        /// Visitation function for <see cref="IntegerToFloatingPointConversion"/> instruction.
+        /// Visitation function for <see cref="IntegerToFloatingPointConversionInstruction"/> instruction.
         /// </summary>
         /// <param name="instruction">The visiting instruction.</param>
         /// <param name="arg">The arg.</param>
-        void Visit(IntegerToFloatingPointConversion instruction, ArgType arg);
+        void Visit(IntegerToFloatingPointConversionInstruction instruction, ArgType arg);
 
         /// <summary>
         /// Visitation function for <see cref="LiteralInstruction"/> instructions.

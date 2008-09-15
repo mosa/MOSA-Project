@@ -923,7 +923,7 @@ namespace Mosa.Platforms.x86
             throw new NotSupportedException();
         }
 
-        void IR.IIRVisitor<int>.Visit(IR.FloatingPointToIntegerConversion instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.FloatingPointToIntegerConversionInstruction instruction, int arg)
         {
             Operand source = instruction.Operand1;
             Operand destination = instruction.Operand0;
@@ -957,7 +957,7 @@ namespace Mosa.Platforms.x86
             }
         }
 
-        void IR.IIRVisitor<int>.Visit(IR.IntegerToFloatingPointConversion instruction, int arg)
+        void IR.IIRVisitor<int>.Visit(IR.IntegerToFloatingPointConversionInstruction instruction, int arg)
         {
             Operand source = instruction.Operand1;
             Operand destination = instruction.Operand0;

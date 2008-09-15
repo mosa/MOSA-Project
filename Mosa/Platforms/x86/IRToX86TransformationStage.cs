@@ -485,11 +485,11 @@ namespace Mosa.Platforms.x86
             });
         }
 
-        void IR.IIRVisitor<Context>.Visit(IR.FloatingPointToIntegerConversion instruction, Context ctx)
+        void IR.IIRVisitor<Context>.Visit(IR.FloatingPointToIntegerConversionInstruction instruction, Context ctx)
         {
         }
 
-        void IR.IIRVisitor<Context>.Visit(IR.IntegerToFloatingPointConversion instruction, Context ctx)
+        void IR.IIRVisitor<Context>.Visit(IR.IntegerToFloatingPointConversionInstruction instruction, Context ctx)
         {
         }
 
