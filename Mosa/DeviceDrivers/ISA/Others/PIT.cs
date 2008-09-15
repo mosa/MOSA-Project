@@ -18,7 +18,7 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceDrivers.ISA
 {
     /// <summary>
-    /// 
+	/// Programmable Interval Timer (PIT) Device Driver
     /// </summary>
 	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0040, PortRange = 4, IRQ = 0, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class PIT : ISAHardwareDevice, IDevice, IHardwareDevice
@@ -58,9 +58,10 @@ namespace Mosa.DeviceDrivers.ISA
         /// </summary>
 		public PIT() { }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Setups this hardware device driver
+		/// </summary>
+		/// <returns></returns>
 		public override bool Setup()
 		{
 			base.name = "PIT_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");
@@ -71,14 +72,16 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Probes for this device.
+		/// </summary>
+		/// <returns></returns>
 		public override bool Probe() { return true; }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Starts this hardware device.
+		/// </summary>
+		/// <returns></returns>
 		public override bool Start()
 		{
 			ushort timerCount = (ushort)(Frequency / Hz);
@@ -93,14 +96,16 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates the sub devices.
+		/// </summary>
+		/// <returns></returns>
 		public override LinkedList<IDevice> CreateSubDevices() { return null; }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Called when an interrupt is received.
+		/// </summary>
+		/// <returns></returns>
 		public override bool OnInterrupt()
 		{
 			tickCount++;

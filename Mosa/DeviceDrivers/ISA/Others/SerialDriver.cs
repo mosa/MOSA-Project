@@ -15,7 +15,7 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceDrivers.ISA
 {
     /// <summary>
-    /// 
+    /// Serial Device Driver
     /// </summary>
 	[ISADeviceSignature(AutoLoad = true, BasePort = 0x03F8, PortRange = 8, IRQ = 4, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	[ISADeviceSignature(AutoLoad = false, BasePort = 0x02F8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.Both_x86_and_x64)]
@@ -336,9 +336,10 @@ namespace Mosa.DeviceDrivers.ISA
         /// </summary>
 		public SerialDriver() { }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Setups this hardware device driver
+		/// </summary>
+		/// <returns></returns>
 		public override bool Setup()
 		{
 			base.name = "COM_0x" + base.busResources.GetIOPort(0,0).Address.ToString("X");
@@ -363,14 +364,16 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Probes for this device.
+		/// </summary>
+		/// <returns></returns>
 		public override bool Probe() { return true; }   // not implemented 
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Starts this hardware device.
+		/// </summary>
+		/// <returns></returns>
 		public override bool Start()
 		{
 			//TODO: auto detect - otherwise just assume one is there
@@ -403,14 +406,16 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates the sub devices.
+		/// </summary>
+		/// <returns></returns>
 		public override LinkedList<IDevice> CreateSubDevices() { return null; }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Called when an interrupt is received.
+		/// </summary>
+		/// <returns></returns>
 		public override bool OnInterrupt()
 		{
 			ReadSerial();

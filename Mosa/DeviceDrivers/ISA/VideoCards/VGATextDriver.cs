@@ -14,9 +14,9 @@ using Mosa.DeviceDrivers.Kernel;
 
 namespace Mosa.DeviceDrivers.ISA.VideoCards
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// VGA Text Device Driver
+	/// </summary>
 	[ISADeviceSignature(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class VGATextDriver : ISAHardwareDevice, IDevice, ITextDevice
 	{
@@ -113,9 +113,10 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
         /// </summary>
 		public VGATextDriver() { }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Setups this hardware device driver
+		/// </summary>
+		/// <returns></returns>
 		public override bool Setup()
 		{
 			base.name = "VGA";
@@ -133,9 +134,10 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 			return true;
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Starts this hardware device.
+		/// </summary>
+		/// <returns></returns>
 		public override bool Start()
 		{
 			colorMode = ((miscellaneousOutput.Read8() & 1) == 1);
@@ -164,17 +166,22 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 			return true;
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Probes for this device.
+		/// </summary>
+		/// <returns></returns>
 		public override bool Probe() { return true; }
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		
+		/// <summary>
+		/// Creates the sub devices.
+		/// </summary>
+		/// <returns></returns>		
 		public override LinkedList<IDevice> CreateSubDevices() { return null; }
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+
+		/// <summary>
+		/// Called when an interrupt is received.
+		/// </summary>
+		/// <returns></returns>
 		public override bool OnInterrupt() { return true; }
 
         /// <summary>

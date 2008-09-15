@@ -15,7 +15,7 @@ using Mosa.DeviceDrivers.Kernel;
 namespace Mosa.DeviceDrivers.ISA
 {
     /// <summary>
-    /// 
+    /// CMOS Device Driver
     /// </summary>
     [ISADeviceSignature(AutoLoad = true, BasePort = 0x0070, PortRange = 2, Platforms = PlatformArchitecture.x86)]
     public class CMOSDriver : ISAHardwareDevice, IDevice, IHardwareDevice
@@ -40,10 +40,10 @@ namespace Mosa.DeviceDrivers.ISA
         /// </summary>
         public CMOSDriver() { }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Setups this hardware device driver
+		/// </summary>
+		/// <returns></returns>
         public override bool Setup()
         {
             base.name = "CMOS";
@@ -54,47 +54,47 @@ namespace Mosa.DeviceDrivers.ISA
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Starts this hardware device.
+		/// </summary>
+		/// <returns></returns>
         public override bool Start()
         {
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Probes for this device.
+		/// </summary>
+		/// <returns></returns>
         public override bool Probe()
         {
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates the sub devices.
+		/// </summary>
+		/// <returns></returns>
         public override LinkedList<IDevice> CreateSubDevices()
         {
             return null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Called when an interrupt is received.
+		/// </summary>
+		/// <returns></returns>
         public override bool OnInterrupt()
         {
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="address"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads the specified address.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
         public byte Read(byte address)
         {
             spinLock.Enter();

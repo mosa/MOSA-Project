@@ -12,7 +12,7 @@ using Mosa.DeviceDrivers;
 namespace Mosa.DeviceDrivers
 {
     /// <summary>
-    /// 
+    /// Interface to bus resources
     /// </summary>
 	public interface IBusResources
 	{

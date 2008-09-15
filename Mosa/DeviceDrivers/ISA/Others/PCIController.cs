@@ -42,15 +42,15 @@ namespace Mosa.DeviceDrivers.ISA
         /// </summary>
 		protected IReadWriteIOPort configData;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PCIController"/> class.
+		/// </summary>
 		public PCIController() { }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Setups this hardware device driver
+		/// </summary>
+		/// <returns></returns>
 		public override bool Setup()
 		{
 			base.name = "PCI_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");
@@ -61,10 +61,10 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Probes for this device.
+		/// </summary>
+		/// <returns></returns>
 		public override bool Probe()
 		{
 			configAddress.Write32(BaseValue);
@@ -75,16 +75,16 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Starts this hardware device.
+		/// </summary>
+		/// <returns></returns>
 		public override bool Start() { return true; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates the sub devices.
+		/// </summary>
+		/// <returns></returns>
 		public override LinkedList<IDevice> CreateSubDevices()
 		{
 			LinkedList<IDevice> devices = new LinkedList<IDevice>();
@@ -102,20 +102,20 @@ namespace Mosa.DeviceDrivers.ISA
 			return devices;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Called when an interrupt is received.
+		/// </summary>
+		/// <returns></returns>
 		public override bool OnInterrupt() { return false; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bus"></param>
-        /// <param name="slot"></param>
-        /// <param name="function"></param>
-        /// <param name="register"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads from configuraton space
+		/// </summary>
+		/// <param name="bus">The bus.</param>
+		/// <param name="slot">The slot.</param>
+		/// <param name="function">The function.</param>
+		/// <param name="register">The register.</param>
+		/// <returns></returns>
 		public uint ReadConfig(byte bus, byte slot, byte function, byte register)
 		{
 			configAddress.Write32((uint)(BaseValue
@@ -127,14 +127,14 @@ namespace Mosa.DeviceDrivers.ISA
 			return configData.Read32();
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bus"></param>
-        /// <param name="slot"></param>
-        /// <param name="function"></param>
-        /// <param name="register"></param>
-        /// <param name="value"></param>
+		/// <summary>
+		/// Writes to configuraton space
+		/// </summary>
+		/// <param name="bus">The bus.</param>
+		/// <param name="slot">The slot.</param>
+		/// <param name="function">The function.</param>
+		/// <param name="register">The register.</param>
+		/// <param name="value">The value.</param>
 		public void WriteConfig(byte bus, byte slot, byte function, byte register, uint value)
 		{
 			configAddress.Write32((uint)(BaseValue
@@ -146,13 +146,13 @@ namespace Mosa.DeviceDrivers.ISA
 			configData.Write32(value);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bus"></param>
-        /// <param name="slot"></param>
-        /// <param name="fun"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Probes the device.
+		/// </summary>
+		/// <param name="bus">The bus.</param>
+		/// <param name="slot">The slot.</param>
+		/// <param name="fun">The fun.</param>
+		/// <returns></returns>
 		public bool ProbeDevice(byte bus, byte slot, byte fun)
 		{
 			return (ReadConfig(bus, slot, fun, 0) != 0xFFFFFFFF);

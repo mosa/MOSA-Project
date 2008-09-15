@@ -11,62 +11,62 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// Abstract class for hardware devices
+	/// </summary>
 	public abstract class HardwareDevice : Device, IHardwareDevice
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IBusResources busResources;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HardwareDevice"/> class.
+		/// </summary>
 		public HardwareDevice() { base.deviceStatus = DeviceStatus.Initializing; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Setups this hardware device driver
+		/// </summary>
+		/// <returns></returns>
 		public abstract bool Setup();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Probes for this device.
+		/// </summary>
+		/// <returns></returns>
 		public abstract bool Probe();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Starts this hardware device.
+		/// </summary>
+		/// <returns></returns>
 		public abstract bool Start();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates the sub devices.
+		/// </summary>
+		/// <returns></returns>
 		public abstract LinkedList<IDevice> CreateSubDevices();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Called when an interrupt is received.
+		/// </summary>
+		/// <returns></returns>
 		public abstract bool OnInterrupt();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Stops this hardware device.
+		/// </summary>
+		/// <returns></returns>
 		public bool Stop() { return false; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="deviceManager"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Activates the device driver
+		/// </summary>
+		/// <param name="deviceManager">The device manager.</param>
+		/// <returns></returns>
 		public bool Activate(IDeviceManager deviceManager)
 		{
 			base.deviceStatus = DeviceStatus.Initializing;
@@ -99,10 +99,10 @@ namespace Mosa.DeviceDrivers
 			return true;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="busResources"></param>
+		/// <summary>
+		/// Assigns the bus resources to this driver
+		/// </summary>
+		/// <param name="busResources">The bus resources.</param>
 		public void AssignBusResources(IBusResources busResources)
 		{
 			this.busResources = busResources;

@@ -24,7 +24,7 @@ using Mosa.DeviceDrivers.Kernel;
 namespace Mosa.DeviceDrivers.ISA.DiskControllers
 {
     /// <summary>
-    /// 
+    /// Floppy Disk Controller (FDC) Device Driver
     /// </summary>
 	[ISADeviceSignature(AutoLoad = true, BasePort = 0x03F0, PortRange = 8, IRQ = 6, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	[ISADeviceSignature(AutoLoad = false, BasePort = 0x0370, PortRange = 8, IRQ = 5, ForceOption = "fdc2", Platforms = PlatformArchitecture.Both_x86_and_x64)]
@@ -271,9 +271,10 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 				trackCache[drive].buffer = new byte[FDC.MaxBytesPerTrack];
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Setups this hardware device driver
+		/// </summary>
+		/// <returns></returns>
 		public override bool Setup()
 		{
 			base.name = "FDC_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");
@@ -291,9 +292,10 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			return true;
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Probes for this device.
+		/// </summary>
+		/// <returns></returns>
 		public override bool Probe()
 		{
 			// TODO
@@ -305,9 +307,10 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			//return true;
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Starts this hardware device.
+		/// </summary>
+		/// <returns></returns>
 		public override bool Start()
 		{
 			for (int drive = 0; drive < DrivesPerController; drive++) {
@@ -351,9 +354,10 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			return true;
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates the sub devices.
+		/// </summary>
+		/// <returns></returns>
 		public override LinkedList<IDevice> CreateSubDevices()
 		{
 			LinkedList<IDevice> devices = new LinkedList<IDevice>();
@@ -376,25 +380,26 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 			return devices;
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Called when an interrupt is received.
+		/// </summary>
+		/// <returns></returns>
 		public override bool OnInterrupt()
 		{
 			interruptSet = true;
 			return true;
 		}
 
-        /// <summary>
-        /// Opens the specified drive NBR.
-        /// </summary>
-        /// <param name="driveNbr">The drive NBR.</param>
-        /// <returns></returns>
-		public bool Open(uint driveNbr)
+		/// <summary>
+		/// Opens the specified drive.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <returns></returns>
+		public bool Open(uint drive)
 		{
 			// clear it
-			floppyMedia[driveNbr].TotalTracks = 0;
-			floppyMedia[driveNbr].SectorsPerTrack = 0;
+			floppyMedia[drive].TotalTracks = 0;
+			floppyMedia[drive].SectorsPerTrack = 0;
 
 			byte[] temp = new byte[FDC.BytesPerSector];
 			spinLock.Enter();
@@ -403,44 +408,44 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 				//TODO: check drive type first
 
 				// attempt to read 2.88MB/2880KB
-				floppyMedia[driveNbr].SectorsPerTrack = 36;
-				floppyMedia[driveNbr].TotalTracks = 80;
-				floppyMedia[driveNbr].Gap1Length = 0x1B;
-				floppyMedia[driveNbr].Gap2Length = 0x54;
+				floppyMedia[drive].SectorsPerTrack = 36;
+				floppyMedia[drive].TotalTracks = 80;
+				floppyMedia[drive].Gap1Length = 0x1B;
+				floppyMedia[drive].Gap2Length = 0x54;
 
-				if (ReadBlock(driveNbr, CHSToLBA(driveNbr, floppyMedia[driveNbr].TotalTracks - 1, 0, floppyMedia[driveNbr].SectorsPerTrack - 1), 1, temp))
+				if (ReadBlock(drive, CHSToLBA(drive, floppyMedia[drive].TotalTracks - 1, 0, floppyMedia[drive].SectorsPerTrack - 1), 1, temp))
 					return true;
 
 				// attempt to read 1.64MB/1680KB (DMF)
-				floppyMedia[driveNbr].SectorsPerTrack = 21;
-				floppyMedia[driveNbr].TotalTracks = 80;
-				floppyMedia[driveNbr].Gap1Length = 0x0C;
-				floppyMedia[driveNbr].Gap2Length = 0x1C;
+				floppyMedia[drive].SectorsPerTrack = 21;
+				floppyMedia[drive].TotalTracks = 80;
+				floppyMedia[drive].Gap1Length = 0x0C;
+				floppyMedia[drive].Gap2Length = 0x1C;
 
-				if (ReadBlock(driveNbr, CHSToLBA(driveNbr, floppyMedia[driveNbr].TotalTracks - 1, 0, floppyMedia[driveNbr].SectorsPerTrack - 1), 1, temp))
+				if (ReadBlock(drive, CHSToLBA(drive, floppyMedia[drive].TotalTracks - 1, 0, floppyMedia[drive].SectorsPerTrack - 1), 1, temp))
 					return true;
 
 				// attempt to read 1.44MB
-				floppyMedia[driveNbr].TotalTracks = 80;
-				floppyMedia[driveNbr].SectorsPerTrack = 18;
-				floppyMedia[driveNbr].Gap1Length = 0x1B;
-				floppyMedia[driveNbr].Gap2Length = 0x54;
+				floppyMedia[drive].TotalTracks = 80;
+				floppyMedia[drive].SectorsPerTrack = 18;
+				floppyMedia[drive].Gap1Length = 0x1B;
+				floppyMedia[drive].Gap2Length = 0x54;
 
-				if (ReadBlock(driveNbr, CHSToLBA(driveNbr, floppyMedia[driveNbr].TotalTracks - 1, 0, floppyMedia[driveNbr].SectorsPerTrack - 1), 1, temp))
+				if (ReadBlock(drive, CHSToLBA(drive, floppyMedia[drive].TotalTracks - 1, 0, floppyMedia[drive].SectorsPerTrack - 1), 1, temp))
 					return true;
 
 				// attempt to read 720Kb
-				floppyMedia[driveNbr].TotalTracks = 80;
-				floppyMedia[driveNbr].SectorsPerTrack = 9;
-				floppyMedia[driveNbr].Gap1Length = 0x1B;
-				floppyMedia[driveNbr].Gap2Length = 0x54;
+				floppyMedia[drive].TotalTracks = 80;
+				floppyMedia[drive].SectorsPerTrack = 9;
+				floppyMedia[drive].Gap1Length = 0x1B;
+				floppyMedia[drive].Gap2Length = 0x54;
 
-				if (ReadBlock(driveNbr, CHSToLBA(driveNbr, floppyMedia[driveNbr].TotalTracks - 1, 0, floppyMedia[driveNbr].SectorsPerTrack - 1), 1, temp))
+				if (ReadBlock(drive, CHSToLBA(drive, floppyMedia[drive].TotalTracks - 1, 0, floppyMedia[drive].SectorsPerTrack - 1), 1, temp))
 					return true;
 
 				// unable to read floppy media 
-				floppyMedia[driveNbr].TotalTracks = 0;
-				floppyMedia[driveNbr].SectorsPerTrack = 0;
+				floppyMedia[drive].TotalTracks = 0;
+				floppyMedia[drive].SectorsPerTrack = 0;
 
 				return false;
 			}
@@ -450,46 +455,46 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 
 		}
 
-        /// <summary>
-        /// Releases the specified drive NBR.
-        /// </summary>
-        /// <param name="driveNbr">The drive NBR.</param>
-        /// <returns></returns>
-		public bool Release(uint driveNbr)
+		/// <summary>
+		/// Releases the specified drive.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <returns></returns>
+		public bool Release(uint drive)
 		{
 			return true;
 		}
 
-        /// <summary>
-        /// Gets the size of the sector.
-        /// </summary>
-        /// <param name="driveNbr">The drive NBR.</param>
-        /// <returns></returns>
-		public uint GetSectorSize(uint driveNbr)
+		/// <summary>
+		/// Gets the size of the sector.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <returns></returns>
+		public uint GetSectorSize(uint drive)
 		{
 			return 512;
 		}
 
-        /// <summary>
-        /// Gets the total sectors.
-        /// </summary>
-        /// <param name="driveNbr">The drive NBR.</param>
-        /// <returns></returns>
-		public uint GetTotalSectors(uint driveNbr)
+		/// <summary>
+		/// Gets the total sectors.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <returns></returns>
+		public uint GetTotalSectors(uint drive)
 		{
-			return floppyMedia[driveNbr].SectorsPerTrack * floppyMedia[driveNbr].TotalTracks * 2;
+			return floppyMedia[drive].SectorsPerTrack * floppyMedia[drive].TotalTracks * 2;
 		}
 
-        /// <summary>
-        /// Determines whether this instance can write the specified drive NBR.
-        /// </summary>
-        /// <param name="driveNbr">The drive NBR.</param>
-        /// <returns>
-        /// 	<c>true</c> if this instance can write the specified drive NBR; otherwise, <c>false</c>.
-        /// </returns>
-		public bool CanWrite(uint driveNbr)
+		/// <summary>
+		/// Determines whether this instance can write the specified drive NBR.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <returns>
+		/// 	<c>true</c> if this instance can write the specified drive NBR; otherwise, <c>false</c>.
+		/// </returns>
+		public bool CanWrite(uint drive)
 		{
-			if (floppyMedia[driveNbr].SectorsPerTrack == 0)
+			if (floppyMedia[drive].SectorsPerTrack == 0)
 				return false;
 
 			return true;

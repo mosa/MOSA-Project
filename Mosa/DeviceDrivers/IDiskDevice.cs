@@ -16,58 +16,61 @@ namespace Mosa.DeviceDrivers
     /// </summary>
 	public interface IDiskDevice
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets a value indicating whether this instance can write.
+		/// </summary>
+		/// <value><c>true</c> if this instance can write; otherwise, <c>false</c>.</value>
 		bool CanWrite { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the total blocks.
+		/// </summary>
+		/// <value>The total blocks.</value>
 		uint TotalBlocks { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the size of the block.
+		/// </summary>
+		/// <value>The size of the block.</value>
 		uint BlockSize { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads the block.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="count">The count.</param>
+		/// <returns></returns>
 		byte[] ReadBlock(uint block, uint count);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="count"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads the block.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="count">The count.</param>
+		/// <param name="data">The data.</param>
+		/// <returns></returns>
 		bool ReadBlock(uint block, uint count, byte[] data);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="count"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Writes the block.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="count">The count.</param>
+		/// <param name="data">The data.</param>
+		/// <returns></returns>
 		bool WriteBlock(uint block, uint count, byte[] data);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="partitionNbr"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the <see cref="Mosa.DeviceDrivers.GenericPartition"/> with the specified partition NBR.
+		/// </summary>
+		/// <value></value>
+		/// <returns></returns>
 		GenericPartition this[uint partitionNbr] { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates the partition devices.
+		/// </summary>
+		/// <returns></returns>
 		LinkedList<IDevice> CreatePartitionDevices();
 	}
 }
