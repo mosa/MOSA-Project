@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Phil Garcia (<mailto:phil@thinkedge.com>)
+ *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
 */
 
 using System;
@@ -24,7 +25,7 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 ldit instruction to load the interrupt descriptor table.
         /// </summary>
         /// <param name="idt">A pointer to the interrupt descriptor table.</param>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.LditInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.LditInstruction))]
         public static void Ldit(IntPtr idt) { ThrowPlatformNotSupported(); }
 
         /// <summary>
