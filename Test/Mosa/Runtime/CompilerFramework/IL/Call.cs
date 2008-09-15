@@ -186,5 +186,27 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                 }";
             Assert.IsTrue((bool)Run<B__I8>("", "Test", "CallI8", value));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private delegate bool B_I4_I4_I4_I4(int a, int b, int c, int d);
+
+        /// <summary>
+        /// Checks the method call parameter order.
+        /// </summary>
+        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        public void CallOrder()
+        {
+            CodeSource = @"
+                static class Test {
+                    static bool CallOrder(int a, int b, int c, int d) {
+                        return (a == 1 && b == 2 && c == 3 && d == 4);
+                    }
+                }
+            ";
+
+            Assert.IsTrue((bool)Run<B_I4_I4_I4_I4>(@"", @"Test", @"CallOrder", 1, 2, 3, 4));
+        }
     }
 }
