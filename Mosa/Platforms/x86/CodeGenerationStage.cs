@@ -164,7 +164,7 @@ namespace Mosa.Platforms.x86
             _emitter.Shr(instruction.Operand0, instruction.Operand1);
         }
 
-        void IX86InstructionVisitor<int>.Ldit(LditInstruction instruction, int arg)
+        void IX86InstructionVisitor<int>.Lidt(LditInstruction instruction, int arg)
         {
             throw new NotImplementedException();
         }

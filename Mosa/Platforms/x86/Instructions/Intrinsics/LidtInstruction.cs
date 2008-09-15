@@ -46,7 +46,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
             IX86InstructionVisitor<ArgType> x86visitor = visitor as IX86InstructionVisitor<ArgType>;
             Debug.Assert(null != x86visitor);
             if (null != x86visitor)
-                x86visitor.Ldit(this, arg);
+                x86visitor.Lidt(this, arg);
         }
 
         /// <summary>

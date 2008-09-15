@@ -35,15 +35,14 @@ namespace Mosa.Platforms.x86
         void Sar(SarInstruction shiftInstruction, ArgType arg);
         void Shl(ShlInstruction shiftInstruction, ArgType arg);
         void Shr(ShrInstruction shiftInstruction, ArgType arg);
-        void Ldit(LditInstruction instruction, ArgType arg);
-
-        void Cli(CliInstruction instruction, ArgType arg);
-        void Sti(StiInstruction instruction, ArgType arg);
-        void Int(IntInstruction instruction, ArgType arg);
 
         void Call(CallInstruction instruction, ArgType arg);
 
         #region Intrinsics
+        void Lidt(LditInstruction instruction, ArgType arg);
+        void Cli(CliInstruction instruction, ArgType arg);
+        void Sti(StiInstruction instruction, ArgType arg);
+        void Int(IntInstruction instruction, ArgType arg);
         void Lgdt(LgdtInstruction instruction, ArgType arg);
         #endregion
     }
