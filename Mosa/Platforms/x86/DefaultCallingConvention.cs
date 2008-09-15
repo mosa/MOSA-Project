@@ -45,6 +45,14 @@ namespace Mosa.Platforms.x86
 
         #region ICallingConvention Members
 
+        /// <summary>
+        /// Expands the given invoke instruction to perform the method call.
+        /// </summary>
+        /// <param name="architecture">The architecture supplying instructions.</param>
+        /// <param name="instruction">The invoke instruction to expand.</param>
+        /// <returns>
+        /// A single instruction or an array of instructions, which appropriately represent the method call.
+        /// </returns>
         object ICallingConvention.Expand(IArchitecture architecture, IL.InvokeInstruction instruction)
         {
             /*
@@ -100,6 +108,13 @@ namespace Mosa.Platforms.x86
             return instructions;
         }
 
+        /// <summary>
+        /// Pushes the specified instructions.
+        /// </summary>
+        /// <param name="instructions">The instructions.</param>
+        /// <param name="arch">The arch.</param>
+        /// <param name="op">The op.</param>
+        /// <param name="stackSize">Size of the stack.</param>
         private void Push(List<Instruction> instructions, IArchitecture arch, Operand op, int stackSize)
         {
             if (op is MemoryOperand)
@@ -133,6 +148,12 @@ namespace Mosa.Platforms.x86
             instructions.Add(arch.CreateInstruction(typeof(x86.Instructions.MoveInstruction), new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op));
         }
 
+        /// <summary>
+        /// Calculates the stack size for parameters.
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="hasThis">if set to <c>true</c> [has this].</param>
+        /// <returns></returns>
         private int CalculateStackSizeForParameters(IL.InvokeInstruction instruction, bool hasThis)
         {
             int result = (true == hasThis ? -4 : 0);
@@ -146,6 +167,15 @@ namespace Mosa.Platforms.x86
             return result;
         }
 
+        /// <summary>
+        /// Requests the calling convention to create an appropriate move instruction to populate the return
+        /// value of a method.
+        /// </summary>
+        /// <param name="architecture">The architecture to emit the instruction for.</param>
+        /// <param name="operand">The operand, that's holding the return value.</param>
+        /// <returns>
+        /// An instruction, which represents the appropriate move.
+        /// </returns>
         Instruction[] ICallingConvention.MoveReturnValue(IArchitecture architecture, Operand operand)
         {
             int size, alignment;

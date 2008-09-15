@@ -30,13 +30,19 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Wraps the x86 cli instruction to disable interrupts
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.CliInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CliInstruction))]
         public static void Cli() { ThrowPlatformNotSupported(); }
+
+        /// <summary>
+        /// Wraps the x86 lgdt instruction to load global descriptor table
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.LgdtInstruction))]
+        public static void Lgdt() { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 sti instruction to enable interrupts
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.StiInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.StiInstruction))]
         public static void Sti() { ThrowPlatformNotSupported(); }
 
         /// <summary>
