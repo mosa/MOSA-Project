@@ -40,13 +40,17 @@ namespace Mosa.Platforms.x86
 
         #region Intrinsics
         void Cli(CliInstruction instruction, ArgType arg);
+        void CmpXchg(CmpXchgInstruction instruction, ArgType arg);
         void In(InInstruction instruction, ArgType arg);
         void Int(IntInstruction instruction, ArgType arg);
         void Lgdt(LgdtInstruction instruction, ArgType arg);
         void Lidt(LditInstruction instruction, ArgType arg);
         void Lock(LockIntruction instruction, ArgType arg);
         void Out(OutInstruction instruction, ArgType arg);
+        void Pop(Instructions.Intrinsics.PopInstruction instruction, ArgType arg);
+        void Push(Instructions.Intrinsics.PushInstruction instruction, ArgType arg);
         void Sti(StiInstruction instruction, ArgType arg);
+        void Xchg(XchgInstruction instruction, ArgType arg);
         #endregion
     }
 }

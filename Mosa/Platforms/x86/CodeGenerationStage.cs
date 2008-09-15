@@ -186,6 +186,11 @@ namespace Mosa.Platforms.x86
             _emitter.Cli();
         }
 
+        void IX86InstructionVisitor<int>.CmpXchg(CmpXchgInstruction instruction, int arg)
+        {
+            _emitter.CmpXchg(instruction.Operand0, instruction.Operand1);
+        } 
+
         void IX86InstructionVisitor<int>.Lock(LockIntruction instruction, int arg)
         {
             _emitter.Lock();
@@ -196,10 +201,25 @@ namespace Mosa.Platforms.x86
             _emitter.Out(instruction.Operand0, instruction.Operand1);
         }
 
+        void IX86InstructionVisitor<int>.Pop(Instructions.Intrinsics.PopInstruction instruction, int arg)
+        {
+            _emitter.Pop(instruction.Operand0);
+        }
+
+        void IX86InstructionVisitor<int>.Push(Instructions.Intrinsics.PushInstruction instruction, int arg)
+        {
+            _emitter.Push(instruction.Operand0);
+        }
+
         void IX86InstructionVisitor<int>.Sti(StiInstruction instruction, int arg)
         {
             _emitter.Sti();
         }
+
+        void IX86InstructionVisitor<int>.Xchg(XchgInstruction instruction, int arg)
+        {
+            _emitter.Xchg(instruction.Operand0, instruction.Operand1);
+        } 
 
         #endregion
 

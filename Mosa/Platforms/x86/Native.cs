@@ -21,6 +21,7 @@ namespace Mosa.Platforms.x86
     /// </summary>
     public static class Native
     {
+        #region Instrinsics
         /// <summary>
         /// Wraps the x86 ldit instruction to load the interrupt descriptor table.
         /// </summary>
@@ -35,16 +36,35 @@ namespace Mosa.Platforms.x86
         public static void Cli() { ThrowPlatformNotSupported(); }
 
         /// <summary>
+        /// Wraps the x86 cmpxchg instruction to disable interrupts
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CmpXchgInstruction))]
+        public static void CmpXchg() { ThrowPlatformNotSupported(); }
+
+        /// <summary>
         /// Wraps the x86 lgdt instruction to load global descriptor table
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.LgdtInstruction))]
         public static void Lgdt() { ThrowPlatformNotSupported(); }
 
         /// <summary>
+        /// Wraps the x86 pop instruction to pop a value from the stack
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PopInstruction))]
+        public static void Pop() { ThrowPlatformNotSupported(); }
+
+        /// <summary>
+        /// Wraps the x86 push instruction to push a value on the stack
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PushInstruction))]
+        public static void Push() { ThrowPlatformNotSupported(); }
+
+        /// <summary>
         /// Wraps the x86 sti instruction to enable interrupts
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.StiInstruction))]
         public static void Sti() { ThrowPlatformNotSupported(); }
+        #endregion
 
         /// <summary>
         /// Throws a <see cref="System.PlatformNotSupportedException"/>.
