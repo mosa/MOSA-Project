@@ -398,7 +398,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         public void Lfence()
         {
-            _textWriter("\t\tlfence");
+            _textWriter.WriteLine("\t\tlfence");
         }
 
         /// <summary>

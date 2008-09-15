@@ -742,7 +742,7 @@ namespace Mosa.Platforms.x86
         /// <param name="src">Source to load from</param>
         void ICodeEmitter.Lmsw(Operand src)
         {
-            Emit(dest, null, cd_lmsw);
+            Emit(src, null, cd_lmsw);
         }
 
         /// <summary>
