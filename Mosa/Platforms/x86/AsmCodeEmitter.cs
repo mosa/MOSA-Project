@@ -250,14 +250,28 @@ namespace Mosa.Platforms.x86
             _textWriter.WriteLine("\t\tint\t{0}", interrupt);
         }
 
+        /// <summary>
+        /// Emits a breakpoint instruction.
+        /// </summary>
         void ICodeEmitter.Int3()
         {
             _textWriter.WriteLine("\t\tint\t3");    
         }
 
+        /// <summary>
+        /// Emits an overflow interrupt instruction.
+        /// </summary>
         void ICodeEmitter.IntO()
         {
             _textWriter.WriteLine("\t\tinto");
+        }
+
+        /// <summary>
+        /// Invalidate Internal Caches
+        /// </summary>
+        void ICodeEmitter.Invd()
+        {
+            _textWriter.WriteLine("\t\tinvd");
         }
 
         /// <summary>
@@ -380,6 +394,14 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Load Fence
+        /// </summary>
+        public void Lfence()
+        {
+            _textWriter("\t\tlfence");
+        }
+
+        /// <summary>
         /// Loads the global descriptor table register
         /// </summary>
         /// <param name="src">Source to load from</param>
@@ -402,12 +424,38 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Load Local Descriptor Table Register
+        /// </summary>
+        /// <param name="src">Source to load from</param>
+        public void Lldt(Operand src)
+        {
+            _textWriter.WriteLine("\t\tlldt\t{0}", WriteOperand(src));
+        }
+
+        /// <summary>
+        /// Load Machine Status Word
+        /// </summary>
+        /// <param name="src">Source to load from</param>
+        public void Lmsw(Operand src)
+        {
+            _textWriter.WriteLine("\t\tlmsw\t{0}", WriteOperand(src));
+        }
+
+        /// <summary>
         /// Asserts LOCK# signal for duration of
         /// the accompanying instruction.
         /// </summary>
         public void Lock()
         {
             _textWriter.WriteLine("\t\tlock");
+        }
+
+        /// <summary>
+        /// Memory Fence
+        /// </summary>
+        public void Mfence()
+        {
+            _textWriter.WriteLine("\t\tmfence");
         }
 
         /// <summary>
@@ -421,6 +469,14 @@ namespace Mosa.Platforms.x86
                 throw new NotSupportedException(@"Constants are not allowed as destination.");
             _textWriter.WriteLine("\t\timul\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
             
+        }
+
+        /// <summary>
+        /// Monitor Wait
+        /// </summary>
+        public void Mwait()
+        {
+            _textWriter.WriteLine("\t\tmwait");
         }
 
         /// <summary>
@@ -858,6 +914,13 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Write to Model Specific Register
+        /// </summary>
+        public void Wrmsr()
+        {
+            _textWriter.WriteLine("\t\twrmsr");
+        }
+        /// <summary>
         /// Exchange Register/Memory with a register
         /// </summary>
         /// <param name="dest">The destination operand of the instruction.</param>
@@ -867,6 +930,14 @@ namespace Mosa.Platforms.x86
             if (!(dest is MemoryOperand) || (dest is RegisterOperand))
                 throw new NotSupportedException(@"Destination has to be register or memory.");
             _textWriter.WriteLine("\t\txchg\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
+        }
+
+        /// <summary>
+        /// Get Value of Extended Control Register
+        /// </summary>
+        public void Xgetbv()
+        {
+            _textWriter.WriteLine("\t\txgetbv");
         }
 
         /// <summary>
@@ -880,6 +951,23 @@ namespace Mosa.Platforms.x86
                 throw new NotSupportedException(@"Constants are not allowed as destination.");
             _textWriter.WriteLine("\t\txor\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
 
+        }
+
+        /// <summary>
+        /// Save Processor Extended States
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        public void Xsave(Operand dest)
+        {
+            _textWriter.WriteLine("\t\txsave {0}", WriteOperand(dest));
+        }
+
+        /// <summary>
+        /// Set Extended Control Register
+        /// </summary>
+        public void Xsetbv()
+        {
+            _textWriter.WriteLine("\t\txsetbv");
         }
 
         /// <summary>

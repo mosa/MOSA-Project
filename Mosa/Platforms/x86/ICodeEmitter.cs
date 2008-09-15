@@ -173,6 +173,11 @@ namespace Mosa.Platforms.x86
         void IntO();
 
         /// <summary>
+        /// Invalidate Internal Caches
+        /// </summary>
+        void Invd();
+
+        /// <summary>
         /// Returns from an interrupt.
         /// </summary>
         void Iretd();
@@ -251,6 +256,11 @@ namespace Mosa.Platforms.x86
         void Lea(Operand dest, Operand op);
 
         /// <summary>
+        /// Load Fence
+        /// </summary>
+        void Lfence();
+
+        /// <summary>
         /// Loads the global descriptor table.
         /// </summary>
         /// <param name="src">Source to load from</param>
@@ -263,10 +273,27 @@ namespace Mosa.Platforms.x86
         void Lidt(Operand src);
 
         /// <summary>
+        /// Load Local Descriptor Table Register
+        /// </summary>
+        /// <param name="src">The source operand.</param>
+        void Lldt(Operand src);
+
+        /// <summary>
+        /// Load Machine Status Word
+        /// </summary>
+        /// <param name="src">Source to load from</param>
+        void Lmsw(Operand src);
+        
+        /// <summary>
         /// Asserts LOCK# signal for duration of 
         /// the accompanying instruction.
         /// </summary>
         void Lock();
+
+        /// <summary>
+        /// Memory Fence
+        /// </summary>
+        void Mfence();
 
         /// <summary>
         /// Emits a mul instruction.
@@ -274,6 +301,11 @@ namespace Mosa.Platforms.x86
         /// <param name="op1">The first operand and destination of the instruction.</param>
         /// <param name="op2">The second operand.</param>
         void Mul(Operand op1, Operand op2);
+
+        /// <summary>
+        /// Monitor Wait
+        /// </summary>
+        void Mwait();
 
         /// <summary>
         /// Emits an NOT instruction.
@@ -494,6 +526,11 @@ namespace Mosa.Platforms.x86
         void Wbinvd();
 
         /// <summary>
+        /// Write to Model Specific Register
+        /// </summary>
+        void Wrmsr();
+
+        /// <summary>
         /// Exchange Register/Memory with a register
         /// </summary>
         /// <param name="dest">The destination operand of the instruction.</param>
@@ -501,11 +538,27 @@ namespace Mosa.Platforms.x86
         void Xchg(Operand dest, Operand src);
 
         /// <summary>
+        /// Get Value of Extended Control Register
+        /// </summary>
+        void Xgetbv();
+
+        /// <summary>
         /// Emits an Xor instruction.
         /// </summary>
         /// <param name="dest">The destination operand of the instruction.</param>
         /// <param name="src">The source operand of the instruction.</param>
         void Xor(Operand dest, Operand src);
+
+        /// <summary>
+        /// Save Processor Extended States
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        void Xsave(Operand dest);
+
+        /// <summary>
+        /// Set Extended Control Register
+        /// </summary>
+        void Xsetbv();
 
         /// <summary>
         /// 

@@ -308,6 +308,10 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        /// <summary>
+        /// Emits a raise interrupt instruction.
+        /// </summary>
+        /// <param name="interrupt">Contains the interrupt to execute.</param>
         void ICodeEmitter.Int(byte interrupt)
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)
@@ -316,6 +320,9 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        /// <summary>
+        /// Emits a breakpoint instruction.
+        /// </summary>
         void ICodeEmitter.Int3()
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)
@@ -324,11 +331,25 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        /// <summary>
+        /// Emits an overflow interrupt instruction.
+        /// </summary>
         void ICodeEmitter.IntO()
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.IntO();
+            });
+        }
+
+        /// <summary>
+        /// Invalidate Internal Caches
+        /// </summary>
+        void ICodeEmitter.Invd()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Invd();
             });
         }
 
@@ -484,6 +505,17 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Load Fence
+        /// </summary>
+        public void Lfence()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Lfence();
+            });
+        }
+
+        /// <summary>
         /// Loads the global descriptor table register
         /// </summary>
         /// <param name="src">Source to load from</param>
@@ -508,6 +540,30 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Load Local Descriptor Table Register
+        /// </summary>
+        /// <param name="src">The source operand.</param>
+        public void Lldt(Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Lldt(src);
+            });
+        }
+
+        /// <summary>
+        /// Load Machine Status Word
+        /// </summary>
+        /// <param name="src">Source to load from</param>
+        public void Lmsw(Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Lmsw(src);
+            });
+        }
+
+        /// <summary>
         /// Asserts LOCK# signal for duration of
         /// the accompanying instruction.
         /// </summary>
@@ -516,6 +572,17 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Lock();
+            });
+        }
+
+        /// <summary>
+        /// Memory Fence
+        /// </summary>
+        public void Mfence()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Mfence();
             });
         }
 
@@ -529,6 +596,17 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Mul(op1, op2);
+            });
+        }
+
+        /// <summary>
+        /// Monitor Wait
+        /// </summary>
+        public void Mwait()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Mwait();
             });
         }
 
@@ -954,6 +1032,17 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Write to Model Specific Register
+        /// </summary>
+        public void Wrmsr()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Wrmsr();
+            });
+        }
+
+        /// <summary>
         /// Exchange Register/Memory with a register
         /// </summary>
         /// <param name="dest">The destination operand of the instruction.</param>
@@ -967,6 +1056,17 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Get Value of Extended Control Register
+        /// </summary>
+        public void Xgetbv()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Xgetbv();
+            });
+        }
+
+        /// <summary>
         /// Emits an Xor instruction.
         /// </summary>
         /// <param name="dest">The destination operand of the instruction.</param>
@@ -976,6 +1076,29 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Xor(dest, src);
+            });
+        }
+
+        /// <summary>
+        /// Save Processor Extended States
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        public void Xsave(Operand dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Xsave(dest);
+            });
+        }
+
+        /// <summary>
+        /// Set Extended Control Register
+        /// </summary>
+        public void Xsetbv()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Xsetbv();
             });
         }
 

@@ -552,11 +552,25 @@ namespace Mosa.Platforms.x86
             _codeStream.WriteByte(0xCC);
         }
 
+        /// <summary>
+        /// Emits an overflow interrupt instruction.
+        /// </summary>
         void ICodeEmitter.IntO()
         {
             _codeStream.WriteByte(0xCE);
         }
 
+        /// <summary>
+        /// Invalidate Internal Caches
+        /// </summary>
+        void ICodeEmitter.Invd()
+        {
+            Emit(new byte[] { 0x0F, 0x08 }, null, null, null);  
+        }
+
+        /// <summary>
+        /// Returns from an interrupt.
+        /// </summary>
         void ICodeEmitter.Iretd()
         {
             _codeStream.WriteByte(0xCF);
@@ -688,6 +702,14 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Load Fence
+        /// </summary>
+        void ICodeEmitter.Lfence()
+        {
+            Emit(new byte[] { 0x0F, 0xAE }, 5, null, null);
+        }
+
+        /// <summary>
         /// Loads the global descriptor table register
         /// </summary>
         /// <param name="dest">Destination to load into</param>
@@ -705,9 +727,39 @@ namespace Mosa.Platforms.x86
             Emit(dest, null, cd_lidt);
         }
 
+        /// <summary>
+        /// LLDTs the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        void ICodeEmitter.Lldt(Operand dest)
+        {
+            Emit(dest, null, cd_lldt);
+        }
+
+        /// <summary>
+        /// Load Machine Status Word
+        /// </summary>
+        /// <param name="src">Source to load from</param>
+        void ICodeEmitter.Lmsw(Operand src)
+        {
+            Emit(dest, null, cd_lmsw);
+        }
+
+        /// <summary>
+        /// Asserts LOCK# signal for duration of
+        /// the accompanying instruction.
+        /// </summary>
         void ICodeEmitter.Lock()
         {
             _codeStream.WriteByte(0xF0);
+        }
+
+        /// <summary>
+        /// Memory Fence
+        /// </summary>
+        void ICodeEmitter.Mfence()
+        {
+            Emit(new byte[] { 0x0F, 0xAE }, 6, null, null);
         }
 
         /// <summary>
@@ -719,6 +771,14 @@ namespace Mosa.Platforms.x86
         {
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
             Emit(dest, src, cd_mul);
+        }
+
+        /// <summary>
+        /// Monitor Wait
+        /// </summary>
+        void ICodeEmitter.Mwait()
+        {
+            Emit(new byte[] { 0x0F, 0x01, 0xC9 }, null, null, null);
         }
 
         void ICodeEmitter.SseAdd(Operand dest, Operand src)
@@ -1086,9 +1146,41 @@ namespace Mosa.Platforms.x86
             _codeStream.WriteByte(0x09);
         }
 
+        /// <summary>
+        /// Write to Model Specific Register
+        /// </summary>
+        void ICodeEmitter.Wrmsr()
+        {
+            _codeStream.WriteByte(0x0F);
+            _codeStream.WriteByte(0x30);
+        }
+
+        /// <summary>
+        /// Exchange Register/Memory with a register
+        /// </summary>
+        /// <param name="dest">The destination operand of the instruction.</param>
+        /// <param name="src">The source operand of the instruction.</param>
         void ICodeEmitter.Xchg(Operand dest, Operand src)
         {
             Emit(dest, src, cd_xchg);
+        }
+
+        /// <summary>
+        /// Get Value of Extended Control Register
+        /// </summary>
+        void ICodeEmitter.Xgetbv()
+        {
+            byte[] code = { 0x0F, 0x01, 0xD0 };
+            Emit(code, null, null, null);
+        }
+
+        /// <summary>
+        /// Save Processor Extended States
+        /// </summary>
+        /// <param name="dest">The destination operand</param>
+        void ICodeEmitter.Xsave(Operand dest)
+        {
+            Emit(dest, null, cd_xsave);
         }
 
         /// <summary>
@@ -1099,6 +1191,15 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Xor(Operand dest, Operand src)
         {
             Emit(dest, src, cd_xor);
+        }
+
+        /// <summary>
+        /// Set Extended Control Register
+        /// </summary>
+        void ICodeEmitter.Xsetbv()
+        {
+            byte[] code = { 0x0F, 0x01, 0xD1 };
+            Emit(code, null, null, null);
         }
 
         #endregion // ICodeEmitter Members
@@ -1204,6 +1305,13 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x33 }, null),
             new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0x33 }, null),
             new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x31 }, null),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_xsave = new CodeDef[] {
+            new CodeDef(typeof(MemoryOperand),   null,                          new byte[] { 0x0F, 0xAE }, 4),
         };
 
         /// <summary>
@@ -1468,6 +1576,22 @@ namespace Mosa.Platforms.x86
         /// </summary>
         private static readonly CodeDef[] cd_lidt = new CodeDef[] {
             new CodeDef(typeof(MemoryOperand),      null,    new byte[] { 0x0F, 0x01 }, 3),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_lldt = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    null,    new byte[] { 0x0F, 0x00 }, 2),
+            new CodeDef(typeof(MemoryOperand),      null,    new byte[] { 0x0F, 0x00 }, 2),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_lmsw = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    null,    new byte[] { 0x0F, 0x01 }, 6),
+            new CodeDef(typeof(MemoryOperand),      null,    new byte[] { 0x0F, 0x01 }, 6),
         };
 
         /// <summary>
