@@ -489,6 +489,10 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IR.IIRVisitor<Context>.Visit(IR.IntegerToFloatingPointConversion instruction, Context ctx)
+        {
+        }
+
         void IR.IIRVisitor<Context>.Visit(IR.LiteralInstruction instruction, Context ctx)
         {
         }

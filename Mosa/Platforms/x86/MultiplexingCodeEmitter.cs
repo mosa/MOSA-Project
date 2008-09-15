@@ -239,16 +239,19 @@ namespace Mosa.Platforms.x86
             });
         }
 
-        /// <summary>
-        /// Emits a div instruction.
-        /// </summary>
-        /// <param name="op1">The first operand and destination of the instruction.</param>
-        /// <param name="op2">The second operand.</param>
-        public void Div(Operand op1, Operand op2)
+        void ICodeEmitter.Cvtsi2sd(Operand op1, Operand op2)
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
-                emitter.Div(op1, op2);
+                emitter.Cvtsi2sd(op1, op2);
+            });
+        }
+
+        void ICodeEmitter.Cvtsi2ss(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Cvtsi2ss(op1, op2);
             });
         }
 
@@ -265,6 +268,19 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Cvttss2si(op1, op2);
+            });
+        }
+
+        /// <summary>
+        /// Emits a div instruction.
+        /// </summary>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
+        public void Div(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Div(op1, op2);
             });
         }
 

@@ -222,6 +222,16 @@ namespace Mosa.Platforms.x86
 
         }
 
+        void ICodeEmitter.Cvtsi2sd(Operand op1, Operand op2)
+        {
+            _textWriter.WriteLine("\t\tcvtsi2sd\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
+        }
+
+        void ICodeEmitter.Cvtsi2ss(Operand op1, Operand op2)
+        {
+            _textWriter.WriteLine("\t\tcvtsi2ss\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
+        }
+
         void ICodeEmitter.Cvttsd2si(Operand op1, Operand op2)
         {
             _textWriter.WriteLine("\t\tcvttsd2si\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));

@@ -944,7 +944,41 @@ namespace Mosa.Platforms.x86
                 case CilElementType.U1: goto case CilElementType.U4;
                 case CilElementType.U2: goto case CilElementType.U4;
                 case CilElementType.U4:
+                    throw new NotSupportedException();
+
+                case CilElementType.U8:
+                    throw new NotSupportedException();
+
+                case CilElementType.I:
+                    goto case CilElementType.I4;
+
+                case CilElementType.U:
+                    goto case CilElementType.U4;
+            }
+        }
+
+        void IR.IIRVisitor<int>.Visit(IR.IntegerToFloatingPointConversion instruction, int arg)
+        {
+            Operand source = instruction.Operand1;
+            Operand destination = instruction.Operand0;
+            switch (source.Type.Type)
+            {
+                case CilElementType.I1: goto case CilElementType.I4;
+                case CilElementType.I2: goto case CilElementType.I4;
+                case CilElementType.I4:
+                    if (destination.Type.Type == CilElementType.R8)
+                        _emitter.Cvtsi2sd(destination, source);
+                    else
+                        _emitter.Cvtsi2ss(destination, source);
                     break;
+
+                case CilElementType.I8:
+                    throw new NotSupportedException();
+
+                case CilElementType.U1: goto case CilElementType.U4;
+                case CilElementType.U2: goto case CilElementType.U4;
+                case CilElementType.U4:
+                    throw new NotSupportedException();
 
                 case CilElementType.U8:
                     throw new NotSupportedException();
