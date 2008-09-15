@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Mosa.Runtime.Vm;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -54,6 +55,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// The architecture to create the PhiInstructions.
         /// </summary>
         private IArchitecture _architecture;
+
+        /// <summary>
+        /// Holds the currently running method compiler.
+        /// </summary>
+        private MethodCompilerBase _compiler;
 
         /// <summary>
         /// Holds the dominance frontier blocks of the stage.
@@ -106,11 +112,15 @@ namespace Mosa.Runtime.CompilerFramework
             if (null == _dominanceProvider)
                 throw new InvalidOperationException(@"SSA Conversion requires a dominance provider.");
             _architecture = compiler.Architecture;
+            _compiler = compiler;
 
             // Allocate space for live outs
             _liveness = new IDictionary<StackOperand,StackOperand>[blockProvider.Count];
             // Retrieve the dominance frontier blocks
             _dominanceFrontierBlocks = _dominanceProvider.GetDominanceFrontier();
+
+            // Add ref/out parameters to the epilogue block to have uses there...
+            AddPhiFunctionsForOutParameters(compiler, blockProvider);
 
             // Transformation worklist 
             Queue<WorkItem> workList = new Queue<WorkItem>();
@@ -154,6 +164,44 @@ namespace Mosa.Runtime.CompilerFramework
                 }
             }
 
+        }
+
+        /// <summary>
+        /// Adds PHI functions for all ref/out parameters of the method being compiled.
+        /// </summary>
+        /// <param name="compiler">The method compiler.</param>
+        /// <param name="blockProvider">The block provider.</param>
+        private void AddPhiFunctionsForOutParameters(MethodCompilerBase compiler, IBasicBlockProvider blockProvider)
+        {
+            IInstructionDecoder id = (IInstructionDecoder)compiler.GetPreviousStage(typeof(IInstructionDecoder));
+            Debug.Assert(null != id, @"EnterSSA requires IInstructionDecoder");
+            Dictionary<StackOperand, StackOperand> liveIn = null;
+
+            // Retrieve the well known epilogue block
+            BasicBlock epilogue = blockProvider.FromLabel(Int32.MaxValue);
+            Debug.Assert(null != epilogue, @"Method doesn't have epilogue block?");
+
+            // Iterate all parameter definitions
+            foreach (RuntimeParameter rp in compiler.Method.Parameters)
+            {
+                // Retrieve the stack operand for the parameter
+                StackOperand paramOp = (StackOperand)id.GetParameterOperand(rp.Position-1);
+
+                // Only add a PHI if the runtime parameter is out or ref...
+                if (true == rp.IsOut || (paramOp.Type is RefSigType || paramOp.Type is PtrSigType))
+                {
+                    epilogue.Instructions.Insert(0, new IR.PhiInstruction(paramOp));
+
+                    if (null == liveIn)
+                        liveIn = new Dictionary<StackOperand, StackOperand>();
+
+                    liveIn.Add(paramOp, paramOp);
+                }
+            }
+
+            // Save the in versions to force a merge later
+            if (null != liveIn)
+                _liveness[epilogue.Index] = liveIn;
         }
 
         private bool TransformToSsaForm(BasicBlock block, BasicBlock caller, IDictionary<StackOperand, StackOperand> liveIn, out IDictionary<StackOperand, StackOperand> liveOut)

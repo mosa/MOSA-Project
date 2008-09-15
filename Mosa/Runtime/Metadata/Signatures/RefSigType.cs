@@ -14,29 +14,64 @@ using System.Text;
 namespace Mosa.Runtime.Metadata.Signatures
 {
     /// <summary>
-    /// 
+    /// Reference signature type.
     /// </summary>
-    public class RefSigType : SigType
+    public sealed class RefSigType : SigType
     {
+        #region Data members
+
         /// <summary>
-        /// 
+        /// The type referenced by this signature type.
         /// </summary>
-        private SigType _type;
+        private SigType _elementType;
+
+        #endregion // Data members
+
+        #region Construction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RefSigType"/> class.
         /// </summary>
-        /// <param name="type">The type.</param>
-        public RefSigType(SigType type)
-            : base(CilElementType.ByRef)
+        /// <param name="type">The referenced type.</param>
+        public RefSigType(SigType type) : 
+            base(CilElementType.ByRef)
         {
-            _type = type;
+            if (null == type)
+                throw new ArgumentNullException(@"type");
+
+            _elementType = type;
         }
 
+        #endregion // Construction
+
+        #region Properties
+
         /// <summary>
-        /// Gets the type of the element.
+        /// Gets the type referenced by this signature type.
         /// </summary>
-        /// <value>The type of the element.</value>
-        public SigType ElementType { get { return _type; } }
+        /// <value>The referenced type.</value>
+        public SigType ElementType { get { return _elementType; } }
+
+        #endregion // Properties
+
+        #region SigType Overrides
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public override bool Equals(SigType other)
+        {
+            RefSigType rst = other as RefSigType;
+            if (null == rst)
+                return false;
+
+            return (true == base.Equals(other) && _elementType == rst._elementType);
+        }
+
+        #endregion // SigType Overrides
     }
 }

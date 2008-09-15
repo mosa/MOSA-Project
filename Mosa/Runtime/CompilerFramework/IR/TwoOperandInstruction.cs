@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -36,6 +45,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
         public TwoOperandInstruction(Operand result, Operand op1) :
             base(1, 1)
         {
+            if (null == result)
+                throw new ArgumentNullException(@"result");
+            if (null == op1)
+                throw new ArgumentNullException(@"op1");
+
             SetResult(0, result);
             SetOperand(0, op1);
         }

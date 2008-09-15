@@ -512,6 +512,14 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Emits an interrupt instruction.
+        /// </summary>
+        void ICodeEmitter.Int(byte interrupt)
+        {
+            _codeStream.Write(new byte[] { 0xCD, interrupt }, 0, 2);
+        }
+
+        /// <summary>
         /// Emits a breakpoint instruction.
         /// </summary>
         void ICodeEmitter.Int3()
@@ -519,16 +527,18 @@ namespace Mosa.Platforms.x86
             _codeStream.WriteByte(0xCC);
         }
 
-        /// <summary>
-        /// Returns from an interrupt
-        /// </summary>
+        void ICodeEmitter.IntO()
+        {
+            _codeStream.WriteByte(0xCE);
+        }
+
         void ICodeEmitter.Iretd()
         {
             _codeStream.WriteByte(0xCF);
         }
 
         /// <summary>
-        /// Emits a conditional jump above.
+        /// Emits a conditional jump above or equal.
         /// </summary>
         /// <param name="dest">The target label of the jump.</param>
         void ICodeEmitter.Ja(int dest)
@@ -622,6 +632,28 @@ namespace Mosa.Platforms.x86
             EmitBranch(new byte[] { 0xE9 }, dest);
         }
 
+        void ICodeEmitter.Lea(Operand dest, Operand op)
+        {
+            // This really emits lea, as I haven't figured out how to emit MOV dst, src+x (e.g. not dereferncing src+x!)
+            RegisterOperand rop = (RegisterOperand)dest;
+            MemoryOperand mop = (MemoryOperand)op;
+            byte[] code;
+
+            if (null != mop.Base)
+            {
+                code = new byte[] { 0x8D, 0x84, (4<<3) };
+                code[1] |= (byte)((rop.Register.RegisterCode & 0x07));
+                code[2] |= (byte)((mop.Base.RegisterCode & 0x07));
+            }
+            else
+            {
+                code = new byte[] { 0xB8 };
+            }
+
+            _codeStream.Write(code, 0, code.Length);
+            EmitImmediate(mop);
+        }
+
         /// <summary>
         /// Emits a nop instructions.
         /// </summary>
@@ -696,6 +728,12 @@ namespace Mosa.Platforms.x86
         {
             CheckAndConvertR4(ref src);
             Emit(dest, src, cd_divsd);
+        }
+
+        void ICodeEmitter.Sar(Operand dest, Operand src)
+        {
+            // FIXME: Make sure the constant is emitted as a single-byte opcode
+            Emit(dest, null, cd_sar);
         }
 
         void ICodeEmitter.Shl(Operand dest, Operand src)
@@ -1167,6 +1205,21 @@ namespace Mosa.Platforms.x86
         };
 
         /// <summary>
+        /// Asmcode: SAR
+        /// Shifts first parameter a given amount of times to the right maintaining the sign.
+        /// 
+        /// Note: Non-circular
+        /// 
+        /// Section: Standard x86
+        /// </summary>
+        private static readonly CodeDef[] cd_sar = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xD3 }, 7),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xD3 }, 7),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC1 }, 7),
+            new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC1 }, 7),
+        };
+
+        /// <summary>
         /// Asmcode: SHL
         /// Shifts first parameter a given amount of times to the left
         /// 
@@ -1176,12 +1229,14 @@ namespace Mosa.Platforms.x86
         /// </summary>
         private static readonly CodeDef[] cd_shl = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xD3 }, 4),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xD3 }, 4),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC1 }, 4),
             new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC1 }, 4),
         };
 
         /// <summary>
         /// Asmcode: SHR
-        /// Shifts first parameter a given amount of times to the right
+        /// Shifts first parameter a given amount of times to the right, filling with zero.
         /// 
         /// Note: Non-circular
         /// 
@@ -1189,6 +1244,8 @@ namespace Mosa.Platforms.x86
         /// </summary>
         private static readonly CodeDef[] cd_shr = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xD3 }, 5),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xD3 }, 5),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC1 }, 5),
             new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC1 }, 5),
         };
 
@@ -1355,7 +1412,7 @@ namespace Mosa.Platforms.x86
             // If this is reached, the operand combination could not be emitted as it is
             // not specified in the code definition table
             Debug.Assert(false, @"Failed to find an opcode for the instruction.");
-            throw new NotSupportedException();
+            throw new NotSupportedException(@"Unsupported operand combination for the instruction.");
         }
 
         /// <summary>

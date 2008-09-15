@@ -14,8 +14,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <summary>
     /// Visitor interface for instructions of the intermediate representation.
     /// </summary>
-    public interface IIRVisitor<ArgType>
+    public interface IIRVisitor<ArgType> : IInstructionVisitor<ArgType>
     {
+        /// <summary>
+        /// Visitation function for <see cref="AddressOfInstruction"/>.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        /// <param name="arg">The visitation context argument.</param>
+        void Visit(AddressOfInstruction instruction, ArgType arg);
+
         /// <summary>
         /// Visitation function for <see cref="ArithmeticShiftRightInstruction"/> instructions.
         /// </summary>
@@ -36,6 +43,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <param name="instruction">The visiting instruction.</param>
         /// <param name="arg">The arg.</param>
         void Visit(LiteralInstruction instruction, ArgType arg);
+
+        /// <summary>
+        /// Visitation function for <see cref="LoadInstruction"/> instructions.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        /// <param name="arg">The arg.</param>
+        void Visit(LoadInstruction instruction, ArgType arg);
 
         /// <summary>
         /// Visitation function for <see cref="LogicalAndInstruction"/> instructions.
@@ -127,6 +141,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <param name="instruction">The visiting instruction.</param>
         /// <param name="arg">The arg.</param>
         void Visit(SignExtendedMoveInstruction instruction, ArgType arg);
+
+        /// <summary>
+        /// Visitation function for <see cref="StoreInstruction"/> instructions.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        /// <param name="arg">The arg.</param>
+        void Visit(StoreInstruction instruction, ArgType arg);
 
         /// <summary>
         /// Visitation function for <see cref="ZeroExtendedMoveInstruction"/> instructions.

@@ -21,6 +21,19 @@ namespace Mosa.Runtime.CompilerFramework
         IMethodCompilerStage,
         IStackLayoutProvider
     {
+        #region Tracing
+
+        /// <summary>
+        /// Controls the tracing of the <see cref="StackLayoutStage"/>.
+        /// </summary>
+        /// <remarks>
+        /// The stack layout tracing is done with the TraceLevel.Info. Set the TraceSwitch to this value
+        /// to receive full stack layout tracing.
+        /// </remarks>
+        private static readonly TraceSwitch TRACING = new TraceSwitch(@"Mosa.Runtime.CompilerFramework.StackLayoutStage", @"Controls tracing of the Mosa.Runtime.CompilerFramework.StackLayoutStage method compiler stage.");
+
+        #endregion // Tracing
+
         #region Data members
 
         /// <summary>
@@ -96,27 +109,19 @@ namespace Mosa.Runtime.CompilerFramework
 
             // Now we assign increasing stack offsets to each variable
             _localsSize = LayoutVariables(locals, cc, cc.OffsetOfFirstLocal, 1);
+            if (TRACING.TraceInfo == true)
+            {
+                Trace.WriteLine(String.Format(@"Stack layout for method {0}", methodCompiler.Method));
+                LogOperands(locals);
+            }
 
             // Layout parameters
             LayoutParameters(methodCompiler, cc);
-
 
             // Create a prologue instruction
             prologueBlock.Insert(0, arch.CreateInstruction(typeof(IR.PrologueInstruction), _localsSize));
             // Create an epilogue instruction
             epilogueBlock.Add(arch.CreateInstruction(typeof(IR.EpilogueInstruction), _localsSize));
-        }
-
-        private void LayoutParameters(MethodCompilerBase compiler, ICallingConvention cc)
-        {
-            IInstructionDecoder decoder = (IInstructionDecoder)compiler.GetPreviousStage(typeof(IInstructionDecoder));
-            List<StackOperand> paramOps = new List<StackOperand>();
-            for (int i = 0; i < compiler.Method.Parameters.Count; i++)
-            {
-                paramOps.Add((StackOperand)decoder.GetParameterOperand(i));
-            }
-
-            LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter, -1);
         }
 
         #endregion // IMethodCompilerStage Members
@@ -155,6 +160,27 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
+        /// Lays out all parameters of the method.
+        /// </summary>
+        /// <param name="compiler">The method compiler providing the parameters.</param>
+        /// <param name="cc">The calling convention used to invoke the method, which controls parameter layout.</param>
+        private void LayoutParameters(MethodCompilerBase compiler, ICallingConvention cc)
+        {
+            IInstructionDecoder decoder = (IInstructionDecoder)compiler.GetPreviousStage(typeof(IInstructionDecoder));
+            List<StackOperand> paramOps = new List<StackOperand>();
+            for (int i = 0; i < compiler.Method.Parameters.Count; i++)
+            {
+                paramOps.Add((StackOperand)decoder.GetParameterOperand(i));
+            }
+
+            LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter, -1);
+            if (TRACING.TraceInfo == true)
+            {
+                LogOperands(paramOps);
+            }
+        }
+
+        /// <summary>
         /// Performs a stack layout of all local variables in the list.
         /// </summary>
         /// <param name="locals">The enumerable holding all locals.</param>
@@ -164,7 +190,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns></returns>
         private static int LayoutVariables(IEnumerable<StackOperand> locals, ICallingConvention cc, int offsetOfFirst, int direction)
         {
-            int offset = offsetOfFirst;
+            int offset = offsetOfFirst, thisOffset;
             int size, alignment, padding;
             foreach (StackOperand lvo in locals)
             {
@@ -174,6 +200,7 @@ namespace Mosa.Runtime.CompilerFramework
                 {
                     padding = (offset % alignment);
                     offset -= (padding + size);
+                    thisOffset = offset;
                 }
                 else
                 {
@@ -181,13 +208,26 @@ namespace Mosa.Runtime.CompilerFramework
                     if (0 != padding)
                         padding = alignment - padding;
 
+                    thisOffset = offset;
                     offset += (padding + size);
                 }
-                lvo.Offset = new IntPtr(offset);
-                //offset += size;
+                
+                lvo.Offset = new IntPtr(thisOffset);
             }
 
             return offset;
+        }
+
+        /// <summary>
+        /// Logs all operands in <paramref name="locals"/>.
+        /// </summary>
+        /// <param name="locals">The operands to log.</param>
+        private void LogOperands(List<StackOperand> locals)
+        {
+            foreach (StackOperand local in locals)
+            {
+                Trace.WriteLine(String.Format(@"\t{0} at {1}", local, local.Offset));
+            }
         }
 
         /// <summary>

@@ -41,23 +41,23 @@ namespace Mosa.Runtime.CompilerFramework.IL
         protected enum InvokeSupportFlags
         {
             /// <summary>
-            /// 
+            /// Specifies that the invoke instruction supports member references.
             /// </summary>
             MemberRef = 1,
             /// <summary>
-            /// 
+            /// Specifies that the invoke instruction supports member definitions.
             /// </summary>
             MethodDef = 2,
             /// <summary>
-            /// 
+            /// Specifies that the invoke instruction supports member specifications.
             /// </summary>
             MethodSpec = 4,
             /// <summary>
-            /// 
+            /// Specifies that the invoke instruction supports call site invocations.
             /// </summary>
             CallSite = 8,
             /// <summary>
-            /// 
+            /// Specifies support for all method invocation targets.
             /// </summary>
             All = MemberRef|MethodDef|MethodSpec|CallSite
         }
@@ -185,29 +185,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
             {
                 SetResult(0, decoder.Compiler.CreateResultOperand(signature.ReturnType));
             }
-        }
-
-        /// <summary>
-        /// Called by the intermediate to machine intermediate representation transformation
-        /// to expand compound instructions into their basic instructions.
-        /// </summary>
-        /// <param name="methodCompiler">The executing method compiler.</param>
-        /// <returns>
-        /// The default expansion keeps the original instruction by
-        /// returning the instruction itself. A derived class may return an
-        /// IEnumerable&lt;Instruction&gt; to replace the instruction with a set of other
-        /// instructions or null to remove the instruction itself from the stream.
-        /// </returns>
-        /// <remarks>
-        /// If a derived class returns <see cref="Instruction.Empty"/> from this method, the
-        /// instruction is essentially removed from the instruction stream.
-        /// </remarks>
-        public override object Expand(MethodCompilerBase methodCompiler)
-        {
-            IArchitecture architecture = methodCompiler.Architecture;
-            ICallingConvention cc = architecture.GetCallingConvention(_invokeTarget.Signature.CallingConvention);
-            Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
-            return cc.Expand(architecture, this);
         }
 
         /// <summary>

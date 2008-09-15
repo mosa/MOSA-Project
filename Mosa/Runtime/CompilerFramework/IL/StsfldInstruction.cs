@@ -18,14 +18,14 @@ using Mosa.Runtime.Vm;
 namespace Mosa.Runtime.CompilerFramework.IL
 {
     /// <summary>
-    /// 
+    /// Intermediate representation of the CIL stsfld operation.
     /// </summary>
-    public class StsfldInstruction : UnaryInstruction, IStoreInstruction
+    public class StsfldInstruction : UnaryInstruction
     {
         #region Data members
 
         /// <summary>
-        /// 
+        /// Contains the VM representation of the static field to store to.
         /// </summary>
         private RuntimeField _field;
 

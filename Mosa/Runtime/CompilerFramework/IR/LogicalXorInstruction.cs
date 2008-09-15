@@ -14,7 +14,7 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.IR
 {
     /// <summary>
-    /// 
+    /// Intermediate representation of the exclusive-or operation.
     /// </summary>
     public class LogicalXorInstruction : Instruction
     {

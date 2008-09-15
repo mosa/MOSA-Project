@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// building. Any instruction that alters the control flow must override
         /// this property and correctly identify its control flow modifications.
         /// </remarks>
-        public sealed override FlowControl FlowControl
+        public override FlowControl FlowControl
         {
             get { return FlowControl.ConditionalBranch; }
         }

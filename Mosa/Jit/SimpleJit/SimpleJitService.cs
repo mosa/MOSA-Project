@@ -15,6 +15,7 @@ using System.Text;
 using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
+using System.IO;
 
 namespace Mosa.Jit.SimpleJit
 {
@@ -33,25 +34,7 @@ namespace Mosa.Jit.SimpleJit
         /// <summary>
         /// Number of bytes remaining in the trampoline pool.
         /// </summary>
-        private RawMemoryStream _stream;
-
-        /// <summary>
-        /// Gets the trampoline storage.
-        /// </summary>
-        /// <value>The trampoline storage.</value>
-        internal IntPtr TrampolineStorage
-        {
-            get { return _trampolineStorage; }
-        }
-
-        /// <summary>
-        /// Gets or sets the stream.
-        /// </summary>
-        /// <value>The stream.</value>
-        internal RawMemoryStream Stream
-        {
-            get { return _stream; }
-        }
+        private Stream _stream;
 
         #endregion // Data members
 
@@ -62,8 +45,8 @@ namespace Mosa.Jit.SimpleJit
         /// </summary>
         public SimpleJitService()
         {
-            _trampolineStorage = TrampolineStorage;
-            _stream = Stream;
+            _trampolineStorage = IntPtr.Zero;
+            _stream = RawMemoryStream.Null;
         }
 
         #endregion // Construction

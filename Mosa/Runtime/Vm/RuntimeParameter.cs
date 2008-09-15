@@ -52,7 +52,7 @@ namespace Mosa.Runtime.Vm
         // <summary>
         // Holds the type of the parameter.
         // </summary>
-        //private TokenTypes _type;
+        //private TokenTypes _elementType;
 
         /// <summary>
         /// Holds the parameter index.
@@ -114,6 +114,14 @@ namespace Mosa.Runtime.Vm
         }
 
         /// <summary>
+        /// Determines if this is an output parameter.
+        /// </summary>
+        public bool IsOut
+        {
+            get { return (ParameterAttributes.Out == (ParameterAttributes.Out & _attributes)); }
+        }
+
+        /// <summary>
         /// Retrieves the name of the parameter.
         /// </summary>
         public string Name
@@ -142,7 +150,7 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         public TokenTypes ParameterType
         {
-            get { return _type; }
+            get { return _elementType; }
         }
 */
         /// <summary>

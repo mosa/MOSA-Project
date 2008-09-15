@@ -80,5 +80,19 @@ namespace Mosa.Runtime.CompilerFramework.IL
         }
 
         #endregion // Methods
+
+        #region IStoreInstruction Members
+
+        Operand IStoreInstruction.Source
+        {
+            get { return this.Operands[0]; }
+        }
+
+        Operand IStoreInstruction.Destination
+        {
+            get { return this.Results[0]; }
+        }
+
+        #endregion
     }
 }

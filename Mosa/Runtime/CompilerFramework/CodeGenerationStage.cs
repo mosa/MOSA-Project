@@ -123,7 +123,10 @@ namespace Mosa.Runtime.CompilerFramework
                 BlockStart(block);
                 foreach (Instruction instruction in block.Instructions)
                 {
-                    instruction.Visit<ContextType>(this, ct);
+                    if (false == instruction.Ignore)
+                    {
+                        instruction.Visit<ContextType>(this, ct);
+                    }
                 }
                 BlockEnd(block);
             }

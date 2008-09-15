@@ -14,7 +14,7 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.IL
 {
     /// <summary>
-    /// 
+    /// Initializes a new instance of <see cref="StlocInstruction"/>.
     /// </summary>
     public class StlocInstruction : UnaryInstruction, IStoreInstruction
     {
@@ -107,27 +107,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         }
 
         /// <summary>
-        /// Called by the intermediate to machine intermediate representation transformation
-        /// to expand compound instructions into their basic instructions.
-        /// </summary>
-        /// <param name="methodCompiler">The executing method compiler.</param>
-        /// <returns>
-        /// The default expansion keeps the original instruction by
-        /// returning the instruction itself. A derived class may return an
-        /// IEnumerable&lt;Instruction&gt; to replace the instruction with a set of other
-        /// instructions or null to remove the instruction itself from the stream.
-        /// </returns>
-        /// <remarks>
-        /// If a derived class returns <see cref="Instruction.Empty"/> from this method, the
-        /// instruction is essentially removed from the instruction stream.
-        /// </remarks>
-        public override object Expand(MethodCompilerBase methodCompiler)
-        {
-            IArchitecture arch = methodCompiler.Architecture;
-            return arch.CreateInstruction(typeof(IR.MoveInstruction), this.Results[0], this.Operands[0]);
-        }
-
-        /// <summary>
         /// Allows visitor based dispatch for this instruction object.
         /// </summary>
         /// <param name="visitor">The visitor object.</param>
@@ -148,5 +127,19 @@ namespace Mosa.Runtime.CompilerFramework.IL
         }
 
         #endregion // UnaryInstruction Overrides
+
+        #region IStoreInstruction Members
+
+        Operand IStoreInstruction.Source
+        {
+            get { return this.Operands[0]; }
+        }
+
+        Operand IStoreInstruction.Destination
+        {
+            get { return this.Results[0]; }
+        }
+
+        #endregion
     }
 }

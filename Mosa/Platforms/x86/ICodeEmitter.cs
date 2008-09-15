@@ -110,7 +110,7 @@ namespace Mosa.Platforms.x86
         void Cmp(Operand op1, Operand op2);
 
         /// <summary>
-        /// Compares and exchanges both values
+        /// Emits an interrupt instruction.
         /// </summary>
         /// <param name="op1">First operand</param>
         /// <param name="op2">Second operand</param>
@@ -129,12 +129,23 @@ namespace Mosa.Platforms.x86
         void In(Operand dest, Operand src);
 
         /// <summary>
+        /// Emits a raise interrupt instruction.
+        /// </summary>
+        /// <param name="interrupt">Contains the interrupt to execute.</param>
+        void Int(byte interrupt);
+
+        /// <summary>
         /// Emits a breakpoint instruction.
         /// </summary>
         void Int3();
 
         /// <summary>
-        /// Returns from an interrupt
+        /// Emits an overflow interrupt instruction.
+        /// </summary>
+        void IntO();
+
+        /// <summary>
+        /// Returns from an interrupt.
         /// </summary>
         void Iretd();
 
@@ -205,7 +216,14 @@ namespace Mosa.Platforms.x86
         void Jne(int dest);
 
         /// <summary>
-        /// Loads the global descriptor table register
+        /// Emits a lea instruction.
+        /// </summary>
+        /// <param name="dest">The destination of the instruction.</param>
+        /// <param name="op">The operand to retrieve the address of.</param>
+        void Lea(Operand dest, Operand op);
+
+        /// <summary>
+        /// Loads the global descriptor table.
         /// </summary>
         /// <param name="src">Source to load from</param>
         void Lgdt(Operand src);
@@ -250,6 +268,27 @@ namespace Mosa.Platforms.x86
         void Out(Operand dest, Operand src);
 
         /// <summary>
+        /// Shifts the value in the register op1 by op2 bits to the right, keeping the sign of the original value.
+        /// </summary>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
+        void Sar(Operand op1, Operand op2);
+
+        /// <summary>
+        /// Shifts the value in register op1 by op2 bits to the left
+        /// </summary>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
+        void Shl(Operand op1, Operand op2);
+
+        /// <summary>
+        /// Shifts the value in register op1 by op2 bits to the right
+        /// </summary>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
+        void Shr(Operand op1, Operand op2);
+
+        /// <summary>
         /// Emits a addsd instruction.
         /// </summary>
         /// <param name="op1">The first operand and destination of the instruction.</param>
@@ -276,20 +315,6 @@ namespace Mosa.Platforms.x86
         /// <param name="op1">The first operand and destination of the instruction.</param>
         /// <param name="op2">The second operand.</param>
         void SseDiv(Operand op1, Operand op2);
-
-        /// <summary>
-        /// Shifts the value in register op1 by op2 bits to the left
-        /// </summary>
-        /// <param name="op1">The first operand and destination of the instruction.</param>
-        /// <param name="op2">The second operand.</param>
-        void Shl(Operand op1, Operand op2);
-
-        /// <summary>
-        /// Shifts the value in register op1 by op2 bits to the right
-        /// </summary>
-        /// <param name="op1">The first operand and destination of the instruction.</param>
-        /// <param name="op2">The second operand.</param>
-        void Shr(Operand op1, Operand op2);
 
         /// <summary>
         /// Emits a div instruction.
@@ -393,8 +418,6 @@ namespace Mosa.Platforms.x86
         /// <param name="src">The source operand of the instruction.</param>
         void Xor(Operand dest, Operand src);
 
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -404,3 +427,4 @@ namespace Mosa.Platforms.x86
         #endregion // x86 instructions
     }
 }
+

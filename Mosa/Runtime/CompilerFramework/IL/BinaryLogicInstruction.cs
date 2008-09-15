@@ -22,7 +22,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         #region Operand Table
 
         /// <summary>
-        /// Operand table according to ISO/IEC 23271:2006 (E), Partition III, §1.5, Table 5.
+        /// Operand table according to ISO/IEC 23271:2006 (E), Partition III, 1.5, Table 5.
         /// </summary>
         private static readonly StackTypeCode[][] _opTable = new StackTypeCode[][] {
             new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
@@ -54,37 +54,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         #endregion // Construction
 
         #region Methods
-
-        /// <summary>
-        /// Called by the intermediate to machine intermediate representation transformation
-        /// to expand compound instructions into their basic instructions.
-        /// </summary>
-        /// <param name="methodCompiler">The executing method compiler.</param>
-        /// <returns>
-        /// The default expansion keeps the original instruction by
-        /// returning the instruction itself. A derived class may return an
-        /// IEnumerable&lt;Instruction&gt; to replace the instruction with a set of other
-        /// instructions or null to remove the instruction itself from the stream.
-        /// </returns>
-        /// <remarks>
-        /// If a derived class returns <see cref="Instruction.Empty"/> from this method, the
-        /// instruction is essentially removed from the instruction stream.
-        /// </remarks>
-        public override object Expand(MethodCompilerBase methodCompiler)
-        {
-            IArchitecture arch = methodCompiler.Architecture;
-            switch (this.Code)
-            {
-                case OpCode.And:
-                    return arch.CreateInstruction(typeof(IR.LogicalAndInstruction), this.Results[0], this.First, this.Second);
-                case OpCode.Or:
-                    return arch.CreateInstruction(typeof(IR.LogicalOrInstruction), this.Results[0], this.First, this.Second);
-                case OpCode.Xor:
-                    return arch.CreateInstruction(typeof(IR.LogicalXorInstruction), this.Results[0], this.First, this.Second);
-                default:
-                    throw new NotImplementedException();
-            }
-        }
 
         /// <summary>
         /// Validates the current set of stack operands.

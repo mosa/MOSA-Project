@@ -11,26 +11,30 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.CompilerFramework;
-using IL = Mosa.Runtime.CompilerFramework.IL;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 using System.Diagnostics;
 
 namespace Mosa.Platforms.x86
 {
-    sealed class SubInstruction : IL.SubInstruction
+    sealed class SubInstruction : IR.TwoOperandInstruction
     {
         #region Construction
 
-        public SubInstruction(IL.OpCode code) :
-            base(code)
+        public SubInstruction()
         {
         }
 
-        public SubInstruction(IL.OpCode code, Operand destination, Operand source) :
-            base(code, destination, source)
+        public SubInstruction(Operand destination, Operand source) :
+            base(destination, source)
         {
         }
 
         #endregion // Construction
+
+        public override string ToString()
+        {
+            return String.Format(@"x86 sub {0}, {1} ; {0} -= {1}", this.Operand0, this.Operand1);
+        }
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -38,21 +42,14 @@ namespace Mosa.Platforms.x86
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
         /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
-        public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
+        protected override void Visit<ArgType>(IR.IIRVisitor<ArgType> visitor, ArgType arg)
         {
             IX86InstructionVisitor<ArgType> x86 = visitor as IX86InstructionVisitor<ArgType>;
             Debug.Assert(null != x86);
             if (null != x86)
                 x86.Sub(this, arg);
             else
-                base.Visit(visitor, arg);
-        }
-
-        public override object Expand(MethodCompilerBase methodCompiler)
-        {
-            if (First.StackType == StackTypeCode.F || Second.StackType == StackTypeCode.F)
-                return methodCompiler.Architecture.CreateInstruction(typeof(x86.SseSubInstruction), IL.OpCode.Sub, new Operand[] { First, Second, Results[0] });
-            return this;
+                base.Visit((IInstructionVisitor<ArgType>)visitor, arg);
         }
     }
 }

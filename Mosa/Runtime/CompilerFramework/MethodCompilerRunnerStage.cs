@@ -31,7 +31,14 @@ namespace Mosa.Runtime.CompilerFramework
             Debug.Assert(null != mcb, @"Failed to find a method compiler builder stage.");
             foreach (MethodCompilerBase mc in mcb.Scheduled)
             {
-                mc.Compile();
+                try
+                {
+                    mc.Compile();
+                }
+                finally
+                {
+                    mc.Dispose();
+                }
             }
         }
 

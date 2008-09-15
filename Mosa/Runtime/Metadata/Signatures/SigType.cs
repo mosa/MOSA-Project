@@ -15,14 +15,20 @@ using System.Diagnostics;
 namespace Mosa.Runtime.Metadata.Signatures
 {
     /// <summary>
-    /// Represents a type signature
+    /// Base class of a type signature.
     /// </summary>
-    public class SigType
+    public class SigType : IEquatable<SigType>
     {
+        #region Data members
+
         /// <summary>
         /// Holds the CIL element type of the signature type.
         /// </summary>
         private CilElementType _type;
+
+        #endregion // Data members
+
+        #region Construction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SigType"/> class.
@@ -33,21 +39,101 @@ namespace Mosa.Runtime.Metadata.Signatures
             _type = type;
         }
 
+        #endregion // Construction
+
+        #region Properties
+
         /// <summary>
         /// Gets the type.
         /// </summary>
         /// <value>The type.</value>
         public CilElementType Type { get { return _type; } }
 
+        #endregion // Properties
+
+        #region Object Overrides
+
         /// <summary>
-        /// Gibt einen <see cref="T:System.String"/> zurück, der den aktuellen <see cref="T:System.Object"/> darstellt.
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>
         /// <returns>
-        /// Ein <see cref="T:System.String"/>, der den aktuellen <see cref="T:System.Object"/> darstellt.
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </returns>
         public override string ToString()
         {
             return _type.ToString();
+        }
+
+        #endregion // Object Overrides
+
+        #region Methods
+
+        /// <summary>
+        /// Matches the specified other.
+        /// </summary>
+        /// <param name="other">The other signature type.</param>
+        /// <returns>True, if the signature type matches.</returns>
+        public virtual bool Matches(SigType other)
+        {
+            if (object.ReferenceEquals(this, other))
+                return true;
+            // TODO: Check to make sure a SigType matches
+            if (other.Type != this.Type)
+                return false;
+            switch (this.Type)
+            {
+                case CilElementType.Void:
+                case CilElementType.Boolean:
+                case CilElementType.Char:
+                case CilElementType.I1:
+                case CilElementType.U1:
+                case CilElementType.I2:
+                case CilElementType.U2:
+                case CilElementType.I4:
+                case CilElementType.U4:
+                case CilElementType.I8:
+                case CilElementType.U8:
+                case CilElementType.R4:
+                case CilElementType.R8:
+                case CilElementType.String:
+                case CilElementType.I:
+                case CilElementType.U:
+                case CilElementType.Object:
+                    return true;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        #endregion // Methods
+
+        #region Static methods
+
+        /// <summary>
+        /// Compares both arrays of signature types for equality.
+        /// </summary>
+        /// <param name="first">The first array to compare.</param>
+        /// <param name="second">The second array to compare.</param>
+        /// <returns>True, if the signature types in both arrays are equal.</returns>
+        public static bool Equals(SigType[] first, SigType[] second)
+        {
+            if (null == first)
+                throw new ArgumentNullException(@"first");
+            if (null == second)
+                throw new ArgumentNullException(@"second");
+
+            if (first == second)
+                return true;
+            if (first.Length != second.Length)
+                return false;
+
+            bool result = true;
+            for (int idx = 0; result == true && idx < first.Length; idx++)
+            {
+                result = (first[idx].Equals(second[idx]));
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -305,41 +391,22 @@ namespace Mosa.Runtime.Metadata.Signatures
             return token;
         }
 
+        #endregion // Static methods
+
+        #region IEquatable<SigType> Members
+
         /// <summary>
-        /// Matcheses the specified other.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="other">The other.</param>
-        /// <returns></returns>
-        public virtual bool Matches(SigType other)
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public virtual bool Equals(SigType other)
         {
-            if (object.ReferenceEquals(this, other))
-                return true;
-            // TODO: Check to make sure a SigType matches
-            if (other.Type != this.Type)
-                return false;
-            switch (this.Type)
-            {
-                case CilElementType.Void:
-                case CilElementType.Boolean:
-                case CilElementType.Char:
-                case CilElementType.I1:
-                case CilElementType.U1:
-                case CilElementType.I2:
-                case CilElementType.U2:
-                case CilElementType.I4:
-                case CilElementType.U4:
-                case CilElementType.I8:
-                case CilElementType.U8:
-                case CilElementType.R4:
-                case CilElementType.R8:
-                case CilElementType.String:
-                case CilElementType.I:
-                case CilElementType.U:
-                case CilElementType.Object:
-                    return true;
-                default:
-                    throw new NotImplementedException();
-            }
+            return (_type == other._type);
         }
+
+        #endregion // IEquatable<SigType> Members
     }
 }

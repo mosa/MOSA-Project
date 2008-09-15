@@ -18,6 +18,11 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Properties
 
         /// <summary>
+        /// Retrieves the instruction offset.
+        /// </summary>
+        int Offset { get; }
+
+        /// <summary>
         /// Determines if the branch is conditional.
         /// </summary>
         bool IsConditional { get; }

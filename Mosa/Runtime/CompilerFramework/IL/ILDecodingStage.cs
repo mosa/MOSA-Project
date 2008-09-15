@@ -520,9 +520,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 // Assign the operands of the instruction from the IL stack
                 //ops = instruction.Operands;
                 opCount = instruction.Operands.Length;
-                for (i = 0; i < opCount; i++)
+                while (0 != opCount--)
                 {
-                    instruction.SetOperand(i, ilStack.Pop());
+                    if (null == instruction.Operands[opCount])
+                    {
+                        instruction.SetOperand(opCount, ilStack.Pop());
+                    }
                 }
 
                 // Validate the instruction
@@ -593,38 +596,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 if (true == _instructions[index].Ignore)
                 {
                     _instructions.RemoveAt(index--);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Removes short lived virtual registers from the instruction stream.
-        /// </summary>
-        /// <remarks>
-        /// The purpose of this function is it to make later register allocation easier. We also
-        /// change the semantics of certain IL instructions, that usually place their result on the
-        /// operand stack. In the case that their result is directly followed by a store instruction,
-        /// we remove the store instruction in favor of a direct store by the previous instruction.
-        /// </remarks>
-        private void RemoveTemporaries()
-        {
-            Instruction prevInst;
-            IStoreInstruction store;
-
-            // Iterate all blocks
-            for (int index = _instructions.Count - 1; 0 < index; index--)
-            {
-                store = _instructions[index] as IStoreInstruction;
-                if (null != store && store.Operands[0] is TemporaryOperand)
-                {
-                    // Check if the previous statement creates the virtual register...
-                    prevInst = _instructions[index - 1];
-                    if (null != prevInst && true == System.Object.ReferenceEquals(prevInst.Results[0], store.Operands[0]))
-                    {
-                        prevInst.Results[0] = store.Results[0];
-                        store.Ignore = true;
-                        index--;
-                    }
                 }
             }
         }

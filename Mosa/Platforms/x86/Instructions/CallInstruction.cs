@@ -57,10 +57,8 @@ namespace Mosa.Platforms.x86
         public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
         {
             IX86InstructionVisitor<ArgType> x86v = visitor as IX86InstructionVisitor<ArgType>;
-            if (null == x86v)
-                throw new ArgumentException(@"Visitor doesn't implement IX86InstructionVisitor.");
-
-            x86v.Call(this, arg);
+            if (null != x86v)
+                x86v.Call(this, arg);
         }
     }
 }

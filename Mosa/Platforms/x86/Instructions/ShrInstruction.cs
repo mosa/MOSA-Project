@@ -14,23 +14,20 @@ using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
 using IR = Mosa.Runtime.CompilerFramework.IR;
+using Mosa.Runtime.Metadata;
 
 namespace Mosa.Platforms.x86
 {
-    class SseMulInstruction : IR.TwoOperandInstruction
+    class ShrInstruction : IR.TwoOperandInstruction
     {
-        public SseMulInstruction()
-        {
-        }
-
-        public SseMulInstruction(Operand destination, Operand source) :
+        public ShrInstruction(Operand destination, Operand source) :
             base(destination, source)
         {
         }
 
         public override string ToString()
         {
-            return String.Format(@"x86 mulsd {0}, {1} ; {0} *= {1}", this.Operand0, this.Operand1);
+            return String.Format(@"x86 shr {0}, {1} ;  {0} >>= {1}", this.Operand0, this.Operand1);
         }
 
         /// <summary>
@@ -42,11 +39,14 @@ namespace Mosa.Platforms.x86
         protected override void Visit<ArgType>(IR.IIRVisitor<ArgType> visitor, ArgType arg)
         {
             IX86InstructionVisitor<ArgType> x86 = visitor as IX86InstructionVisitor<ArgType>;
-            Debug.Assert(null != x86);
             if (null != x86)
-                x86.SseMul(this, arg);
+            {
+                x86.Shr(this, arg);
+            }
             else
+            {
                 base.Visit((IInstructionVisitor<ArgType>)visitor, arg);
+            }
         }
     }
 }

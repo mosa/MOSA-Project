@@ -275,14 +275,27 @@ namespace Mosa.Platforms.x86
             });
         }
 
-        /// <summary>
-        /// Emits a breakpoint instruction.
-        /// </summary>
-        public void Int3()
+        void ICodeEmitter.Int(byte interrupt)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Int(interrupt);
+            });
+        }
+
+        void ICodeEmitter.Int3()
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Int3();
+            });
+        }
+
+        void ICodeEmitter.IntO()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.IntO();
             });
         }
 
@@ -429,6 +442,14 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        void ICodeEmitter.Lea(Operand dest, Operand op)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Lea(dest, op);
+            });
+        }
+
         /// <summary>
         /// Loads the global descriptor table register
         /// </summary>
@@ -535,6 +556,19 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="op1">The first operand and destination of the instruction.</param>
         /// <param name="op2">The second operand.</param>
+        public void Sar(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Sar(op1, op2);
+            });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op1"></param>
+        /// <param name="op2"></param>
         public void Shl(Operand op1, Operand op2)
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)

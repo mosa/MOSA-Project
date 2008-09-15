@@ -14,7 +14,7 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.IR
 {
     /// <summary>
-    /// 
+    /// Intermediate representation of the or instruction.
     /// </summary>
     public class LogicalOrInstruction : Instruction
     {

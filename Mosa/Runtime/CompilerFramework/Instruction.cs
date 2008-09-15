@@ -272,15 +272,11 @@ namespace Mosa.Runtime.CompilerFramework
             Debug.Assert(index < _operands.Length, @"Invalid operand index.");
             if (index >= _operands.Length)
                 throw new ArgumentOutOfRangeException(@"index", @"Invalid operand index.");
-            Debug.Assert(null != operand);
-            if (null == operand)
-                throw new ArgumentNullException("operand");
 
             Operand old = _operands[index];
-
             _operands[index] = operand;
-            operand.Uses.Add(this);
-
+            if (null != operand)
+                operand.Uses.Add(this);
             if (null != old)
                 old.Uses.Remove(this);
         }
@@ -295,41 +291,13 @@ namespace Mosa.Runtime.CompilerFramework
             Debug.Assert(index < _results.Length, @"Invalid result index.");
             if (index >= _results.Length)
                 throw new ArgumentOutOfRangeException(@"index", @"Invalid result index.");
-            Debug.Assert(null != operand);
-            if (null == operand)
-                throw new ArgumentNullException("operand");
 
-            Operand old = _results[index];
-            
+            Operand old = _results[index];            
             _results[index] = operand;
-            operand.Definitions.Add(this);
-
+            if (null != operand)
+                operand.Definitions.Add(this);
             if (null != old)
                 old.Definitions.Remove(this);
-        }
-
-        /// <summary>
-        /// Called by the intermediate to machine intermediate representation transformation
-        /// to expand compound instructions into their basic instructions.
-        /// </summary>
-        /// <param name="methodCompiler">The executing method compiler.</param>
-        /// <returns>
-        /// The default expansion keeps the original instruction by 
-        /// returning the instruction itself. A derived class may return an 
-        /// IEnumerable&lt;Instruction&gt; to replace the instruction with a set of other
-        /// instructions or null to remove the instruction itself from the stream.
-        /// </returns>
-        /// <remarks>
-        /// If a derived class returns <see cref="Instruction.Empty"/> from this method, the 
-        /// instruction is essentially removed from the instruction stream.
-        /// </remarks>
-        public virtual object Expand(MethodCompilerBase methodCompiler)
-        {
-            object result = null;
-            if (false == this.Ignore)
-                result = this;
-
-            return result;
         }
 
         /// <summary>

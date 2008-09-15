@@ -166,6 +166,16 @@ namespace Mosa.Runtime.CompilerFramework
         protected virtual void EndCompile() { }
 
         /// <summary>
+        /// Creates a new temporary local variable operand.
+        /// </summary>
+        /// <param name="type">The signature type of the temporary.</param>
+        /// <returns>An operand, which represents the temporary.</returns>
+        public Operand CreateTemporary(SigType type)
+        {
+            return new LocalVariableOperand(_architecture.StackFrameRegister, @"T_{0}", _nextStackSlot++, type);
+        }
+
+        /// <summary>
         /// Creates a result operand for an instruction.
         /// </summary>
         /// <param name="type">The signature type of the operand to be created.</param>

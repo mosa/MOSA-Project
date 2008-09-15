@@ -29,6 +29,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         private List<BasicBlock> _basicBlocks;
 
+        /// <summary>
+        /// List of scheduled blocks.
+        /// </summary>
+        private List<BasicBlock> _scheduledBlocks;
+
         #endregion // Data members
 
         #region Construction
@@ -39,6 +44,7 @@ namespace Mosa.Runtime.CompilerFramework
         public BasicBlockBuilderStage()
         {
             _basicBlocks = new List<BasicBlock>();
+            _scheduledBlocks = new List<BasicBlock>();
         }
 
         #endregion // Construction
@@ -66,8 +72,6 @@ namespace Mosa.Runtime.CompilerFramework
             IInstructionsProvider ip = (IInstructionsProvider)compiler.GetPreviousStage(typeof(IInstructionsProvider));
             // Architecture
             IArchitecture arch = compiler.Architecture;
-            // List of scheduled blocks
-            List<BasicBlock> scheduledBlocks = new List<BasicBlock>();
 
             // Add the epilogue block
             epilogue = new BasicBlock(Int32.MaxValue);
@@ -78,13 +82,16 @@ namespace Mosa.Runtime.CompilerFramework
             _basicBlocks.Add(currentBlock);
             // Add a jump instruction to the first block from the prologue
             ip.Instructions.Insert(0, arch.CreateInstruction(typeof(IL.BranchInstruction), OpCode.Br, new int[] { 0 }));
-            foreach (Instruction i in ip.Instructions)
+            for (int idx = 0; idx < ip.Instructions.Count; idx++)
             {
+                // Retrieve the instruction
+                Instruction instruction = ip.Instructions[idx];
+
                 // Is this the next scheduled block?
-                if (0 != scheduledBlocks.Count && i.Offset == scheduledBlocks[0].Label)
+                if (0 != _scheduledBlocks.Count && instruction.Offset == _scheduledBlocks[0].Label)
                 {
-                    BasicBlock nextBlock = scheduledBlocks[0];
-                    scheduledBlocks.RemoveAt(0);
+                    BasicBlock nextBlock = _scheduledBlocks[0];
+                    _scheduledBlocks.RemoveAt(0);
 
                     // Add an unconditional branch to the next block to the current block
                     if (null != currentBlock)
@@ -102,64 +109,45 @@ namespace Mosa.Runtime.CompilerFramework
 
                 // Create a new block, if we need it.
                 if (null == currentBlock)
-                    currentBlock = FindOrCreateBlock(null, i.Offset);
+                    currentBlock = FindOrCreateBlock(null, instruction.Offset);
                 Debug.Assert(null != currentBlock);
 
                 // Does this instruction end a block?
-                switch (i.FlowControl)
+                switch (instruction.FlowControl)
                 {
-                    case FlowControl.Phi: goto case FlowControl.Next;
                     case FlowControl.Break: goto case FlowControl.Next;
                     case FlowControl.Call: goto case FlowControl.Next;
-                    case FlowControl.Meta: goto case FlowControl.Next;
                     case FlowControl.Next:
                         // Add the instruction to the current block
-                        currentBlock.Instructions.Add(i);
+                        currentBlock.Instructions.Add(instruction);
                         break;
 
                     case FlowControl.Return:
                         // Replace this one by a jump to the method epilogue
                         //BranchInstruction jmp = (BranchInstruction)arch.CreateInstruction(typeof(BranchInstruction), new object[] { OpCode.Br, Int32.MaxValue } );
                         //jmp.BranchTargets = new int[] { Int32.MaxValue };
-                        //jmp.Offset = i.Offset;
-                        epilogue.PreviousBlocks.Add(currentBlock);
-                        currentBlock.Instructions.Add(i);
+                        //jmp.Offset = instruction.Offset;
+                        LinkBlocks(currentBlock, epilogue);
+                        currentBlock.Instructions.Add(instruction);
                         currentBlock = null;
                         break;
 
-                    case FlowControl.Branch: goto case FlowControl.ConditionalBranch;
-                    case FlowControl.ConditionalBranch: 
-                        IBranchInstruction branch = (IBranchInstruction)i;
-                        int[] targets = branch.BranchTargets;
-                        //Array.Sort<int>(targets);
-                        foreach (int target in targets)
-                        {
-                            BasicBlock newBlock = FindOrCreateBlock(currentBlock, target);
-                            if (target > i.Offset)
-                            {
-                                // Check for a forward branch, schedule the block
-                                bool blockExists = false;
-                                int index = scheduledBlocks.FindIndex((Predicate<BasicBlock>)delegate(BasicBlock match)
-                                {
-                                    blockExists = (match.Label == target);
-                                    return (match.Label > target);
-                                });
+                    case FlowControl.Switch:
+                        // Switch may fall through
+                        int fallThrough = -1;
+                        if (idx + 1 < ip.Instructions.Count)
+                            fallThrough = ip.Instructions[idx + 1].Offset;
+                        ScheduleBranchTargets(currentBlock, (IBranchInstruction)instruction, fallThrough);
+                        goto case FlowControl.Throw;
 
-                                // Schedule a new block...
-                                if (false == blockExists)
-                                {
-                                    if (-1 == index)
-                                        scheduledBlocks.Add(newBlock);
-                                    else
-                                        scheduledBlocks.Insert(index, newBlock);
-                                }
-                            }
-                        }
+                    case FlowControl.Branch: goto case FlowControl.ConditionalBranch;
+                    case FlowControl.ConditionalBranch:
+                        ScheduleBranchTargets(currentBlock, (IBranchInstruction)instruction, -1);
                         goto case FlowControl.Throw;
 
                     case FlowControl.Throw:
                         // End the block, start a new one on the next statement
-                        currentBlock.Instructions.Add(i);
+                        currentBlock.Instructions.Add(instruction);
                         currentBlock = null;
                         break;
 
@@ -176,9 +164,46 @@ namespace Mosa.Runtime.CompilerFramework
             });
 
             // Number the blocks
-            int idx = 0;
+            int blockIdx = 0;
             foreach (BasicBlock block in _basicBlocks)
-                block.Index = idx++;
+                block.Index = blockIdx++;
+        }
+
+        /// <summary>
+        /// Schedules the branch targets of the branch instruction.
+        /// </summary>
+        /// <param name="currentBlock">The currently processed basic block.</param>
+        /// <param name="branch">The branch instruction, whose targets need to be scheduled.</param>
+        /// <param name="fallThrough">Specifies the next instruction offset, if the branch falls through - otherwise -1.</param>
+        private void ScheduleBranchTargets(BasicBlock currentBlock, IBranchInstruction branch, int fallThrough)
+        {
+            List<int> targets = new List<int>(branch.BranchTargets);
+            if (-1 != fallThrough)
+                targets.Add(fallThrough);
+
+            foreach (int target in targets)
+            {
+                BasicBlock newBlock = FindOrCreateBlock(currentBlock, target);
+                if (target > branch.Offset)
+                {
+                    // Check for a forward branch, schedule the block
+                    bool blockExists = false;
+                    int index = _scheduledBlocks.FindIndex((Predicate<BasicBlock>)delegate(BasicBlock match)
+                    {
+                        blockExists = (match.Label == target);
+                        return (match.Label > target);
+                    });
+
+                    // Schedule a new block...
+                    if (false == blockExists)
+                    {
+                        if (-1 == index)
+                            _scheduledBlocks.Add(newBlock);
+                        else
+                            _scheduledBlocks.Insert(index, newBlock);
+                    }
+                }
+            }
         }
 
         /// <summary>

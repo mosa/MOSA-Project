@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
     /// <summary>
     /// Intermediate representation for stobj and stind.* IL instructions.
     /// </summary>
-    public class StobjInstruction : BinaryInstruction, IStoreInstruction
+    public class StobjInstruction : BinaryInstruction
     {
         #region Data members
 

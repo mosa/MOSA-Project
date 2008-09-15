@@ -215,7 +215,11 @@ namespace Test.Mosa.Runtime.CompilerFramework
         [FixtureTearDown]
         public void End()
         {
-            runtime.Dispose();
+            if (null != runtime)
+            {
+                runtime.Dispose();
+                runtime = null;
+            }
         }
 
         /// <summary>

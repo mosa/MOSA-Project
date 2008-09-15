@@ -61,7 +61,10 @@ namespace Mosa.Platforms.x86
             int stackSize = CalculateStackSizeForParameters(instruction, moveThis);
             if (0 != stackSize)
             {
-                Queue<Operand> ops = new Queue<Operand>(instruction.Operands.Length);
+                instructions.Add(architecture.CreateInstruction(typeof(x86.SubInstruction), esp, new ConstantOperand(I, stackSize)));
+                instructions.Add(architecture.CreateInstruction(typeof(x86.MoveInstruction), new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp));
+
+                Stack<Operand> ops = new Stack<Operand>(instruction.Operands.Length);
                 int thisArg = 1;
                 foreach (Operand op in instruction.Operands)
                 {
@@ -70,13 +73,16 @@ namespace Mosa.Platforms.x86
                         thisArg = 0;
                         continue;
                     }
-                    ops.Enqueue(op);
+                    ops.Push(op);
                 }
 
+                int space = stackSize, size, alignment;
                 while (0 != ops.Count)
                 {
-                    Operand op = ops.Dequeue();
-                    Push(instructions, architecture, op);
+                    Operand op = ops.Pop();
+                    GetStackRequirements(op.Type, out size, out alignment);
+                    space -= size;
+                    Push(instructions, architecture, op, space);
                 }
             }
 
@@ -88,13 +94,13 @@ namespace Mosa.Platforms.x86
             instructions.Add(architecture.CreateInstruction(typeof(x86.CallInstruction), instruction.InvokeTarget));
             if (0 != stackSize)
             {
-                instructions.Add(architecture.CreateInstruction(typeof(x86.AddInstruction), IL.OpCode.Add, esp, new ConstantOperand(I, stackSize)));
+                instructions.Add(architecture.CreateInstruction(typeof(x86.AddInstruction), esp, new ConstantOperand(I, stackSize)));
             }
 
             return instructions;
         }
 
-        private void Push(List<Instruction> instructions, IArchitecture arch, Operand op)
+        private void Push(List<Instruction> instructions, IArchitecture arch, Operand op, int stackSize)
         {
             if (op is MemoryOperand)
             {
@@ -123,7 +129,8 @@ namespace Mosa.Platforms.x86
                 op = rop;
             }
 
-            instructions.Add(arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IR.PushInstruction), op));
+            //instructions.Add(arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IR.PushInstruction), op));
+            instructions.Add(arch.CreateInstruction(typeof(x86.MoveInstruction), new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op));
         }
 
         private int CalculateStackSizeForParameters(IL.InvokeInstruction instruction, bool hasThis)
@@ -222,11 +229,13 @@ namespace Mosa.Platforms.x86
             { 
                 /*
                  * The first parameter is offset by 8 bytes from the start of
-                 * the stack frame. [EBP+08h]. [EBP+04h] holds the return address,
-                 * which was pushed by the call instruction.
+                 * the stack frame. [EBP+08h].
+                 * 
+                 * - [EBP+04h] holds the EDX register, which was pushed by the prologue instruction.
+                 * - [EBP+08h] holds the return address, which was pushed by the call instruction.
                  * 
                  */
-                return 4; 
+                return 8; 
             }
         }
         

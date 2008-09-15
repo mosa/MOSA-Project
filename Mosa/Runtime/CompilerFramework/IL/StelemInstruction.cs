@@ -17,9 +17,9 @@ using Mosa.Runtime.Metadata.Signatures;
 namespace Mosa.Runtime.CompilerFramework.IL
 {
     /// <summary>
-    /// 
+    /// Intermediate representation of the CIL stelem opcode family.
     /// </summary>
-    public class StelemInstruction : NaryInstruction, IStoreInstruction
+    public class StelemInstruction : NaryInstruction
     {
         #region Data members
 

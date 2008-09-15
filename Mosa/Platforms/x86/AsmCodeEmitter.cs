@@ -223,12 +223,21 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// Emits a breakpoint instruction.
+        /// Emits an interrupt instruction.
         /// </summary>
-        public void Int3()
+        void ICodeEmitter.Int(byte interrupt)
         {
-            _textWriter.WriteLine("\t\tint\t3");
-            
+            _textWriter.WriteLine("\t\tint\t{0}", interrupt);
+        }
+
+        void ICodeEmitter.Int3()
+        {
+            _textWriter.WriteLine("\t\tint\t3");    
+        }
+
+        void ICodeEmitter.IntO()
+        {
+            _textWriter.WriteLine("\t\tinto");
         }
 
         /// <summary>
@@ -340,6 +349,16 @@ namespace Mosa.Platforms.x86
             
         }
 
+        void ICodeEmitter.Lea(Operand dest, Operand op)
+        {
+            MemoryOperand mop = (MemoryOperand)op;
+            
+            Register baseReg = mop.Base;
+            IntPtr offset = mop.Offset;
+
+            _textWriter.WriteLine("\t\tlea\t{0}, [{1}+{2}]", WriteOperand(dest), baseReg, offset);
+        }
+
         /// <summary>
         /// Loads the global descriptor table register
         /// </summary>
@@ -436,6 +455,11 @@ namespace Mosa.Platforms.x86
 
         }
 
+        void ICodeEmitter.Sar(Operand op1, Operand op2)
+        {
+            _textWriter.WriteLine("\t\tsar\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
+        }
+
         /// <summary>
         /// Shifts the value in register op1 by op2 bits to the left
         /// </summary>
@@ -447,7 +471,6 @@ namespace Mosa.Platforms.x86
                 throw new NotSupportedException(@"Only registers allowed as destination.");
 
             _textWriter.WriteLine("\t\tshl\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
-
         }
 
         /// <summary>

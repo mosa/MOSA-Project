@@ -28,7 +28,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        delegate bool I4_I1_I1(int expect, sbyte a, byte b);
+        delegate bool I4_I1_I1(int expect, sbyte a, sbyte b);
         /// <summary>
         /// 
         /// </summary>
@@ -63,7 +63,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(sbyte.MinValue, sbyte.MaxValue)]
         [Row(sbyte.MaxValue, sbyte.MinValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void ShlI1(sbyte a, byte b)
+        public void ShlI1(sbyte a, sbyte b)
         {
             CodeSource = "static class Test { static bool ShlI1(int expect, sbyte a, byte b) { return expect == (a << b); } }";
             Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "ShlI1", a << b, a, b));
@@ -76,7 +76,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        delegate bool I4_I2_I2(int expect, short a, byte b);
+        delegate bool I4_I2_I2(int expect, short a, short b);
         /// <summary>
         /// 
         /// </summary>
@@ -111,7 +111,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(short.MinValue, short.MaxValue)]
         [Row(short.MaxValue, short.MinValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void ShlI2(short a, byte b)
+        public void ShlI2(short a, short b)
         {
             CodeSource = "static class Test { static bool ShlI2(int expect, short a, byte b) { return expect == (a << b); } }";
             Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "ShlI2", (a << b), a, b));
@@ -124,7 +124,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        delegate bool I4_I4_I4(int expect, int a, byte b);
+        delegate bool I4_I4_I4(int expect, int a, int b);
         /// <summary>
         /// 
         /// </summary>
@@ -159,7 +159,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(int.MinValue, int.MaxValue)]
         [Row(int.MaxValue, int.MinValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void ShlI4(int a, byte b)
+        public void ShlI4(int a, int b)
         {
             CodeSource = "static class Test { static bool ShlI4(int expect, int a, byte b) { return expect == (a << b); } }";
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "ShlI4", (a << b), a, b));
@@ -172,7 +172,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        delegate bool I8_I8_I8(long expect, long a, byte b);
+        delegate bool I8_I8_I8(long expect, long a, long b);
         /// <summary>
         /// 
         /// </summary>
@@ -183,7 +183,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 1)]
         [Row(unchecked((long)0x8000000000000000), 64)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void ShlI8(long a, byte b)
+        public void ShlI8(long a, int b)
         {
             CodeSource = "static class Test { static bool ShlI8(long expect, long a, byte b) { return expect == (a << b); } }";
             Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "ShlI8", (a << b), a, b));

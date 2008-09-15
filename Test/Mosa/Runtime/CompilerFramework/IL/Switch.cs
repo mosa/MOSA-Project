@@ -151,17 +151,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(1)]
+        //[Row(1)]
         [Row(23)]
-        [Row(-1)]
-        [Row(0)]
+        //[Row(-1)]
+        //[Row(0)]
         // And reverse
-        [Row(2)]
-        [Row(-2)]
+        //[Row(2)]
+        //[Row(-2)]
         // (MinValue, X) Cases
-        [Row(int.MinValue)]
+        //[Row(int.MinValue)]
         // (MaxValue, X) Cases
-        [Row(int.MaxValue)]
+        //[Row(int.MaxValue)]
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void SwitchI4(int a)
         {

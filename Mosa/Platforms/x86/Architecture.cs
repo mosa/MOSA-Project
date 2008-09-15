@@ -35,6 +35,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         private static Dictionary<Type, Type> s_irTypes = new Dictionary<Type, Type>
         {
+/*
             { typeof(IL.AddInstruction), typeof(x86.AddInstruction) },
             { typeof(IL.SubInstruction), typeof(x86.SubInstruction) },
             { typeof(IL.MulInstruction), typeof(x86.MulInstruction) },
@@ -49,6 +50,7 @@ namespace Mosa.Platforms.x86
             { typeof(IR.LogicalNotInstruction), typeof(x86.LogicalNotInstruction) },
             { typeof(IR.MoveInstruction), typeof(x86.MoveInstruction) },
             { typeof(IR.PrologueInstruction), typeof(x86.PrologueInstruction) },
+ */
         };
 
         /// <summary>
@@ -196,10 +198,9 @@ namespace Mosa.Platforms.x86
             // FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
             // and packed operations available with MMX/SSE extensions
             methodPipeline.AddRange(new IMethodCompilerStage[] {
-                new ConstantRemovalStage(),
+                //InstructionLogger.Instance,
+                new IRToX86TransformationStage(),
                 InstructionLogger.Instance,
-                new TwoAddressCodeConversionStage(),
-                new ConstantFoldingStage(),
                 new CodeGenerator()
             });
         }

@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -57,7 +66,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <returns>A string representation of the shr instruction.</returns>
         public override string ToString()
         {
-            return String.Format(@"IR ashr {0} <- {1} & {2}", this.Operand0, this.Operand1, this.Operand2);
+            return String.Format(@"IR ashr {0} <- {1} >> {2}", this.Operand0, this.Operand1, this.Operand2);
         }
 
         /// <summary>

@@ -37,32 +37,5 @@ namespace Mosa.Platforms.x86
         }
 
         #endregion // Construction
-
-        #region EpilogueInstruction Overrides
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="methodCompiler"></param>
-        /// <returns></returns>
-        public override object Expand(MethodCompilerBase methodCompiler)
-        {
-            IArchitecture architecture = methodCompiler.Architecture;
-
-            SigType I = new SigType(CilElementType.I);
-            RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
-            RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
-
-            return new Instruction[] {
-                // add esp, -localsSize
-                architecture.CreateInstruction(typeof(IL.AddInstruction), IL.OpCode.Add, esp, new ConstantOperand(I, -this.StackSize)),
-                // pop ebp
-                architecture.CreateInstruction(typeof(IR.PopInstruction), ebp),
-                // ret
-                architecture.CreateInstruction(typeof(IR.ReturnInstruction))
-            };
-        }
-
-        #endregion // EpilogueInstruction Overrides
     }
 }

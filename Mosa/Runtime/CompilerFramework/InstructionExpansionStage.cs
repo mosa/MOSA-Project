@@ -7,6 +7,8 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
+#if OLD
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -104,3 +106,5 @@ namespace Mosa.Runtime.CompilerFramework
         #endregion // Internals
     }
 }
+
+#endif // #if OLD

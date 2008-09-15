@@ -13,25 +13,24 @@ using System.Diagnostics;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using IL = Mosa.Runtime.CompilerFramework.IL;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
-    class SseAddInstruction : IL.AddInstruction
+    class SseAddInstruction : IR.TwoOperandInstruction
     {
-        public SseAddInstruction(IL.OpCode code) :
-            base(code)
+        public SseAddInstruction()
         {
         }
 
-        public SseAddInstruction(IL.OpCode code, Operand[] ops) :
-            base(code)
+        public SseAddInstruction(Operand dest, Operand source) :
+            base(dest, source)
         {
-            if (ops.Length != 3)
-                throw new NotSupportedException(@"Wrong number of operands. Should be 3.");
-            First = ops[0];
-            Second = ops[1];
-            Results[0] = ops[2];
+        }
+
+        public override string ToString()
+        {
+            return String.Format(@"x86 addsd {0}, {1} ; {0} += {1}", this.Operand0, this.Operand1);
         }
 
         /// <summary>
@@ -40,23 +39,14 @@ namespace Mosa.Platforms.x86
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
         /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
-        public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
+        protected override void Visit<ArgType>(IR.IIRVisitor<ArgType> visitor, ArgType arg)
         {
             IX86InstructionVisitor<ArgType> x86 = visitor as IX86InstructionVisitor<ArgType>;
             Debug.Assert(null != x86);
             if (null != x86)
                 x86.SseAdd(this, arg);
             else
-                base.Visit(visitor, arg);
+                base.Visit((IInstructionVisitor<ArgType>)visitor, arg);
         }
-
-        #region IRegisterConstraint Members
-
-        public override object Expand(MethodCompilerBase methodCompiler)
-        {
-            return this;
-        }
-
-        #endregion // IRegisterConstraint Members
     }
 }

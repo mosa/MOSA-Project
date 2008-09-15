@@ -14,24 +14,23 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.IL
 {
     /// <summary>
-    /// 
+    /// Interface used to tag instructions, which store a value.
     /// </summary>
+    /// <remarks>
+    /// This interface is used by <see cref="CilToIrTransformationStage"/> to drop 
+    /// store instructions from the instruction stream. It uses the interface to determine
+    /// the appropriate operands to replace/remove.
+    /// </remarks>
     public interface IStoreInstruction
     {
         /// <summary>
-        /// Gets the operands.
+        /// Gets the operand to store.
         /// </summary>
-        /// <value>The operands.</value>
-        Operand[] Operands { get; }
+        Operand Source { get; }
+
         /// <summary>
-        /// Gets the results.
+        /// Gets the store destination operand.
         /// </summary>
-        /// <value>The results.</value>
-        Operand[] Results { get; }
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="IStoreInstruction"/> is ignore.
-        /// </summary>
-        /// <value><c>true</c> if ignore; otherwise, <c>false</c>.</value>
-        bool Ignore { get; set; }
+        Operand Destination { get; }
     }
 }

@@ -1,16 +1,24 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
     /// <summary>
-    /// Abstract base class for IR instructions with two operands.
+    /// Abstract base class for IR instructions with one operand.
     /// </summary>
     /// <remarks>
-    /// The <see cref="TwoOperandInstruction"/> is the base class for
-    /// IR instructions using two operands. It provides properties to
-    /// easily access the individual operands.
+    /// The <see cref="OneOperandInstruction"/> is the base class for
+    /// IR instructions using one operand.
     /// </remarks>
     public abstract class OneOperandInstruction : IRInstruction
     {

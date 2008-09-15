@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         #region Operand Table
 
         /// <summary>
-        /// Operand table according to ISO/IEC 23271:2006 (E), Partition III, §1.5, Table 5.
+        /// Operand table according to ISO/IEC 23271:2006 (E), Partition III, 1.5, Table 5.
         /// </summary>
         private static readonly StackTypeCode[] _opTable = new StackTypeCode[] {
             StackTypeCode.Unknown,
@@ -56,27 +56,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         #region Methods
 
         /// <summary>
-        /// Called by the intermediate to machine intermediate representation transformation
-        /// to expand compound instructions into their basic instructions.
-        /// </summary>
-        /// <param name="methodCompiler">The executing method compiler.</param>
-        /// <returns>
-        /// The default expansion keeps the original instruction by
-        /// returning the instruction itself. A derived class may return an
-        /// IEnumerable&lt;Instruction&gt; to replace the instruction with a set of other
-        /// instructions or null to remove the instruction itself from the stream.
-        /// </returns>
-        /// <remarks>
-        /// If a derived class returns <see cref="Instruction.Empty"/> from this method, the
-        /// instruction is essentially removed from the instruction stream.
-        /// </remarks>
-        public override object Expand(MethodCompilerBase methodCompiler)
-        {
-            IArchitecture arch = methodCompiler.Architecture;
-            return arch.CreateInstruction(typeof(IR.LogicalNotInstruction), this.Results[0], this.Operands[0]);            
-        }
-
-        /// <summary>
         /// Validates the current set of stack operands.
         /// </summary>
         /// <param name="compiler"></param>
@@ -95,35 +74,18 @@ namespace Mosa.Runtime.CompilerFramework.IL
             SetResult(0, compiler.CreateResultOperand(ops[0].Type));
         }
 
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="arg">A visitor specific context argument.</param>
+        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
+        public override void Visit<ArgType>(IILVisitor<ArgType> visitor, ArgType arg)
+        {
+            visitor.Not(this, arg);
+        }
+
         #endregion // Methods
     }
 }
 
-/*
-        public override Operand Fold()
-        {
-            Constant op = (Constant)_unary;
-            object result;
-            switch (op.StackType)
-            {
-                case StackTypeCode.Int32:
-                    int i = (int)op.Value;
-                    result = ~i;
-                    break;
-
-                case StackTypeCode.Int64:
-                    long l = (long)op.Value;
-                    result = ~l;
-                    break;
-
-                case StackTypeCode.N:
-                    int n = (int)op.Value;
-                    result = ~n;
-                    break;
-
-                default:
-                    throw new InvalidOperationException(@"Negation not supported for unary argument type.");
-            }
-            return new Constant(_result.Type, result);
-        }
-*/

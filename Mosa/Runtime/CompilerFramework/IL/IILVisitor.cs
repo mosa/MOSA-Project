@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
     /// 
     /// </summary>
     /// <typeparam name="ArgType">The type of the rg type.</typeparam>
-    public interface IILVisitor<ArgType>
+    public interface IILVisitor<ArgType> : IInstructionVisitor<ArgType>
     {
         /// <summary>
         /// Nops the specified instruction.

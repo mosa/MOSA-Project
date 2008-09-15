@@ -52,28 +52,50 @@ namespace Mosa.Runtime.CompilerFramework
 
 		void IMethodCompilerStage.Run(MethodCompilerBase compiler)
 		{
-            // Block provider
-            IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
             // Previous stage
             IMethodCompilerStage prevStage = compiler.GetPreviousStage(typeof(IMethodCompilerStage));
             // Line number
             int line = 0, index = 1;
+            StringBuilder text = new StringBuilder();
 
             Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", compiler.Method, prevStage.Name));
 
-            foreach (BasicBlock block in blockProvider)
+            // Block provider
+            IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
+            if (null != blockProvider)
             {
-                Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
-                Debug.Indent();
-                line = block.Label;
-                foreach (Instruction inst in block.Instructions)
+                foreach (BasicBlock block in blockProvider)
                 {
-                    Debug.WriteLine(String.Format("L_{0:X4}: {1}", inst.Offset, inst));
+                    Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
+                    Debug.Indent();
+                    line = block.Label;
+                    LogInstructions(block.Instructions);
+                    Debug.Unindent();
+                    index++;
                 }
-                Debug.Unindent();
-                index++;
+            }
+            else
+            {
+                IInstructionsProvider id = (IInstructionsProvider)compiler.GetPreviousStage(typeof(IInstructionsProvider));
+                if (null != id)
+                {
+                    LogInstructions(id.Instructions);
+                }
             }
 		}
+
+        private void LogInstructions(IEnumerable<Instruction> instructions)
+        {
+            StringBuilder text = new StringBuilder();
+            foreach (Instruction inst in instructions)
+            {
+                text.Length = 0;
+                if (true == inst.Ignore)
+                    text.Append("; ");
+                text.AppendFormat("L_{0:X4}: {1}", inst.Offset, inst);
+                Debug.WriteLine(text.ToString());
+            }
+        }
 
 		#endregion // IMethodCompilerStage Members
 	}

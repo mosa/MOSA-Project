@@ -35,7 +35,7 @@ namespace Mosa.Platforms.x86
     /// register usage though. This should clearly be done after the results of this approach
     /// have been validated.
     /// </remarks>
-    sealed class CodeGenerator : CodeGenerationStage<int>, IX86InstructionVisitor<int>, IL.IILVisitor<int>, IR.IIRVisitor<int>
+    sealed class CodeGenerator : CodeGenerationStage<int>, IX86InstructionVisitor<int>, IL.IILVisitor<int>
     {
         #region Data members
 
@@ -86,7 +86,7 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.Add(AddInstruction instruction, int arg)
         {
-            _emitter.Add(instruction.Results[0], instruction.Operands[1]);
+            _emitter.Add(instruction.Operand0, instruction.Operand1);
         }
 
         void IX86InstructionVisitor<int>.Adc(AdcInstruction instruction, int arg)
@@ -94,50 +94,72 @@ namespace Mosa.Platforms.x86
             _emitter.Adc(instruction.Results[0], instruction.Operands[1]);
         }
 
+        void IX86InstructionVisitor<int>.And(LogicalAndInstruction instruction, int arg)
+        {
+            _emitter.And(instruction.Operand0, instruction.Operand1);
+        }
+
+        void IX86InstructionVisitor<int>.Or(LogicalOrInstruction instruction, int arg)
+        {
+            _emitter.Or(instruction.Operand0, instruction.Operand1);
+        }
+
+        void IX86InstructionVisitor<int>.Xor(LogicalXorInstruction instruction, int arg)
+        {
+            _emitter.Xor(instruction.Operand0, instruction.Operand1);
+        }
+
         void IX86InstructionVisitor<int>.Sub(SubInstruction instruction, int arg)
         {
-            _emitter.Sub(instruction.Results[0], instruction.Operands[1]);
+            _emitter.Sub(instruction.Operand0, instruction.Operand1);
         }
 
         void IX86InstructionVisitor<int>.Mul(MulInstruction instruction, int arg)
         {
-            if (instruction.Results[0].StackType == StackTypeCode.Int64 || instruction.Operands[1].StackType == StackTypeCode.Int64)
-                MulI8(instruction.Results[0], instruction.Operands[1]);
+            if (instruction.Operand0.StackType == StackTypeCode.Int64 || instruction.Operand1.StackType == StackTypeCode.Int64)
+                MulI8(instruction.Operand0, instruction.Operand1);
             else
-                _emitter.Mul(instruction.Results[0], instruction.Operands[1]);
+                _emitter.Mul(instruction.Operand0, instruction.Operand1);
         }
 
         void IX86InstructionVisitor<int>.Div(DivInstruction instruction, int arg)
         {
-            _emitter.Div(instruction.Results[0], instruction.Operands[0]);
+            _emitter.Div(instruction.Operand0, instruction.Operand1);
         }
 
         void IX86InstructionVisitor<int>.SseAdd(SseAddInstruction instruction, int arg)
         {
-            _emitter.SseAdd(instruction.Results[0], instruction.Operands[1]);
+            _emitter.SseAdd(instruction.Operand0, instruction.Operand1);
         }
 
         void IX86InstructionVisitor<int>.SseSub(SseSubInstruction instruction, int arg)
         {
-            _emitter.SseSub(instruction.Results[0], instruction.Operands[1]);
+            _emitter.SseSub(instruction.Operand0, instruction.Operand1);
         }
 
         void IX86InstructionVisitor<int>.SseMul(SseMulInstruction instruction, int arg)
         {
-            _emitter.SseMul(instruction.Results[0], instruction.Operands[1]);
+            _emitter.SseMul(instruction.Operand0, instruction.Operand1);
         }
 
         void IX86InstructionVisitor<int>.SseDiv(SseDivInstruction instruction, int arg)
         {
-            _emitter.SseDiv(instruction.Results[0], instruction.Operands[1]);
+            _emitter.SseDiv(instruction.Operand0, instruction.Operand1);
         }
 
-        void IX86InstructionVisitor<int>.Shift(x86.ShiftInstruction instruction, int arg)
+        void IX86InstructionVisitor<int>.Sar(SarInstruction instruction, int arg)
         {
-            if (instruction.Code == IL.OpCode.Shl)
-                _emitter.Shl(instruction.Results[0], instruction.Operands[1]);
-            else
-                _emitter.Shr(instruction.Results[0], instruction.Operands[1]);
+            _emitter.Sar(instruction.Operand0, instruction.Operand1);
+        }
+
+        void IX86InstructionVisitor<int>.Shl(ShlInstruction instruction, int arg)
+        {
+            _emitter.Shl(instruction.Operand0, instruction.Operand1);
+        }
+
+        void IX86InstructionVisitor<int>.Shr(ShrInstruction instruction, int arg)
+        {
+            _emitter.Shr(instruction.Operand0, instruction.Operand1);
         }
 
         void IX86InstructionVisitor<int>.Ldit(LditInstruction instruction, int arg)
@@ -153,6 +175,22 @@ namespace Mosa.Platforms.x86
         void IX86InstructionVisitor<int>.Sti(StiInstruction instruction, int arg)
         {
             _emitter.Sti();
+        }
+
+        void IX86InstructionVisitor<int>.Int(IntInstruction instruction, int arg)
+        {
+            ConstantOperand co = instruction.Operand0 as ConstantOperand;
+            Debug.Assert(null != co, @"Int operand not constant!");
+            if (null == co)
+                throw new InvalidOperationException(@"Int operand not constant.");
+
+            byte value = Convert.ToByte(co.Value);
+            switch (value)
+            {
+                case 3: _emitter.Int3(); break;
+                case 4: _emitter.IntO(); break;
+                default: _emitter.Int(value); break;
+            }
         }
 
         void IX86InstructionVisitor<int>.Call(CallInstruction instruction, int arg)
@@ -446,25 +484,27 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<int>.Add(IL.AddInstruction instruction, int arg)
         {
-            _emitter.Add(instruction.Results[0], instruction.Operands[1]);
+            ThrowThreeAddressCodeNotSupportedException();
         }
 
         void IL.IILVisitor<int>.Div(IL.DivInstruction instruction, int arg)
         {
-            _emitter.Div(instruction.Results[0], instruction.Operands[1]);
+            ThrowThreeAddressCodeNotSupportedException();
         }
 
         void IL.IILVisitor<int>.Mul(IL.MulInstruction instruction, int arg)
         {
-            _emitter.Mul(instruction.Results[0], instruction.Operands[1]);
+            ThrowThreeAddressCodeNotSupportedException();
         }
 
         void IL.IILVisitor<int>.Rem(IL.RemInstruction instruction, int arg)
         {
+            ThrowThreeAddressCodeNotSupportedException();
         }
 
         void IL.IILVisitor<int>.Sub(IL.SubInstruction instruction, int arg)
         {
+            ThrowThreeAddressCodeNotSupportedException();
         }
 
         void IL.IILVisitor<int>.BinaryLogic(IL.BinaryLogicInstruction instruction, int arg)
@@ -474,17 +514,17 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<int>.Shift(IL.ShiftInstruction instruction, int arg)
         {
-            throw new NotImplementedException();
+            ThrowThreeAddressCodeNotSupportedException();
         }
 
         void IL.IILVisitor<int>.Neg(IL.NegInstruction instruction, int arg)
         {
-            throw new NotImplementedException();
+            ThrowThreeAddressCodeNotSupportedException();
         }
 
         void IL.IILVisitor<int>.Not(IL.NotInstruction instruction, int arg)
         {
-            _emitter.Not(instruction.Operands[0]);
+            ThrowThreeAddressCodeNotSupportedException();
         }
 
         void IL.IILVisitor<int>.Conversion(IL.ConversionInstruction instruction, int arg)
@@ -854,9 +894,24 @@ namespace Mosa.Platforms.x86
             _emitter.Pop(eax);
         }
 
+        /// <summary>
+        /// Throws an exception, which notifies the user that a three-address code instruction is not supported.
+        /// </summary>
+        private void ThrowThreeAddressCodeNotSupportedException()
+        {
+            throw new NotSupportedException(@"x86 doesn't support this three-address code instruction - did you miss IRToX86TransformationStage?");
+        }
+
         #endregion // Internal Helpers
 
         #region IIRVisitor Members
+
+        void IR.IIRVisitor<int>.Visit(IR.AddressOfInstruction instruction, int arg)
+        {
+            Debug.Assert(instruction.Operand0 is RegisterOperand);
+            Debug.Assert(instruction.Operand1 is MemoryOperand);
+            _emitter.Lea(instruction.Operand0, instruction.Operand1);
+        }
 
         void IR.IIRVisitor<int>.Visit(IR.ArithmeticShiftRightInstruction instruction, int arg)
         {
@@ -871,6 +926,10 @@ namespace Mosa.Platforms.x86
         void IR.IIRVisitor<int>.Visit(IR.LiteralInstruction instruction, int arg)
         {
             _emitter.Literal(instruction.Label, instruction.Type, instruction.Data);
+        }
+
+        void IR.IIRVisitor<int>.Visit(IR.LoadInstruction instruction, int arg)
+        {
         }
 
         void IR.IIRVisitor<int>.Visit(IR.LogicalAndInstruction instruction, int arg)
@@ -987,6 +1046,10 @@ namespace Mosa.Platforms.x86
                 default:
                     throw new NotSupportedException();
             }
+        }
+
+        void IR.IIRVisitor<int>.Visit(IR.StoreInstruction instruction, int arg)
+        {
         }
 
         void IR.IIRVisitor<int>.Visit(IR.ZeroExtendedMoveInstruction instruction, int arg)

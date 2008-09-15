@@ -16,7 +16,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
-    sealed class LogicalOrInstruction : IR.LogicalOrInstruction
+    sealed class LogicalOrInstruction : IR.TwoOperandInstruction
     {
         #region Construction
 
@@ -24,30 +24,29 @@ namespace Mosa.Platforms.x86
         {
         }
 
-        public LogicalOrInstruction(Operand result, Operand op1, Operand op2) :
-            base(result, op1, op2)
+        public LogicalOrInstruction(Operand result, Operand op1) :
+            base(result, op1)
         {
         }
 
         #endregion // Construction
 
-        #region IR.LogicalOrInstruction Overrides
+        #region TwoOperandInstruction Overrides
 
-        public override object Expand(MethodCompilerBase methodCompiler)
+        public override string ToString()
         {
-            // Three -> Two conversion
-            IArchitecture arch = methodCompiler.Architecture;
-            RegisterOperand eax = new RegisterOperand(this.Destination.Type, GeneralPurposeRegister.EAX);
-            Operand op1 = this.Operand1;
-            this.Operand1 = eax;
-
-            return new Instruction[] {
-                arch.CreateInstruction(typeof(IR.MoveInstruction), eax, op1),
-                this,
-                arch.CreateInstruction(typeof(IR.MoveInstruction), this.Destination, eax)
-            };
+            return String.Format(@"x86 or {0}, {1} ; {0} |= {1}", this.Operand0, this.Operand1);
         }
 
-        #endregion // IR.LogicalAndInstruction Overrides
+        protected override void Visit<ArgType>(IR.IIRVisitor<ArgType> visitor, ArgType arg)
+        {
+            IX86InstructionVisitor<ArgType> x86v = visitor as IX86InstructionVisitor<ArgType>;
+            if (null != x86v)
+                x86v.Or(this, arg);
+            else
+                base.Visit((IInstructionVisitor<ArgType>)visitor, arg);
+        }
+
+        #endregion // TwoOperandInstruction Overrides
     }
 }

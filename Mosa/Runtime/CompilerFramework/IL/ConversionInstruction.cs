@@ -44,43 +44,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
 		#region Methods
 
         /// <summary>
-        /// Called by the intermediate to machine intermediate representation transformation
-        /// to expand compound instructions into their basic instructions.
-        /// </summary>
-        /// <param name="methodCompiler">The executing method compiler.</param>
-        /// <returns>
-        /// The default expansion keeps the original instruction by
-        /// returning the instruction itself. A derived class may return an
-        /// IEnumerable&lt;Instruction&gt; to replace the instruction with a set of other
-        /// instructions or null to remove the instruction itself from the stream.
-        /// </returns>
-        /// <remarks>
-        /// If a derived class returns <see cref="Instruction.Empty"/> from this method, the
-        /// instruction is essentially removed from the instruction stream.
-        /// </remarks>
-        public override object Expand(MethodCompilerBase methodCompiler)
-        {
-            IArchitecture arch = methodCompiler.Architecture;
-            switch (this.Code)
-            {
-                case OpCode.Conv_i1:
-                    return arch.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), this.Results[0], this.Operands[0]);
-
-                case OpCode.Conv_i2:
-                    return arch.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), this.Results[0], this.Operands[0]);
-
-                case OpCode.Conv_i4:
-                    return arch.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), this.Results[0], this.Operands[0]);
-
-                case OpCode.Conv_i8:
-                    return arch.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), this.Results[0], this.Operands[0]);
-
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        /// <summary>
         /// Validates the current set of stack operands.
         /// </summary>
         /// <param name="compiler"></param>

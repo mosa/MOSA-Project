@@ -54,9 +54,8 @@ namespace Mosa.Tools.Compiler
             Pipeline.AddRange(new IMethodCompilerStage[] {
                 new ILDecodingStage(),
                 new BasicBlockBuilderStage(),
+                new CilToIrTransformationStage(),
                 //InstructionLogger.Instance,
-                new InstructionExpansionStage(),
-                InstructionLogger.Instance,
                 //new StackResolutionStage(),
                 //InstructionLogger.Instance,
                 //new FunctionCallInliningProcessor(),

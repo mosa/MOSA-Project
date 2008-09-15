@@ -37,58 +37,5 @@ namespace Mosa.Platforms.x86
         }
 
         #endregion // Construction
-
-        #region IR.PrologueInstruction Overrides
-
-        /// <summary>
-        /// Called by the intermediate to machine intermediate representation transformation
-        /// to expand compound instructions into their basic instructions.
-        /// </summary>
-        /// <param name="methodCompiler">The executing method compiler.</param>
-        /// <returns>
-        /// The default expansion keeps the original instruction by
-        /// returning the instruction itself. A derived class may return an
-        /// IEnumerable&lt;Instruction&gt; to replace the instruction with a set of other
-        /// instructions or null to remove the instruction itself from the stream.
-        /// </returns>
-        /// <remarks>
-        /// If a derived class returns <see cref="Instruction.Empty"/> from this method, the
-        /// instruction is essentially removed from the instruction stream.
-        /// </remarks>
-        public override object Expand(MethodCompilerBase methodCompiler)
-        {
-            IArchitecture architecture = methodCompiler.Architecture;
-
-            SigType I = new SigType(CilElementType.I);
-            RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
-            RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
-
-            return new Instruction[] {
-                /* If you want to stop at the header of an emitted function, just uncomment
-                 * the following line. It will issue a breakpoint instruction. Note that if
-                 * you debug using visual studio you must enable unmanaged code debugging, 
-                 * otherwise the function will never return and the breakpoint will never
-                 * appear.
-                 */
-                // int 3
-                //architecture.CreateInstruction(typeof(IL.BreakInstruction), IL.OpCode.Break),
-                // push ebp
-                architecture.CreateInstruction(typeof(IR.PushInstruction), ebp),
-                // mov ebp, esp
-                architecture.CreateInstruction(typeof(IR.MoveInstruction), ebp, esp),
-                // sub esp, localsSize
-                architecture.CreateInstruction(typeof(IL.SubInstruction), IL.OpCode.Sub, esp, new ConstantOperand(I, -this.StackSize)),
-
-                /*
-                 * This move adds the runtime method identification token onto the stack. This
-                 * allows us to perform call stack identification and gives the garbage collector 
-                 * the possibility to identify roots into the managed heap. 
-                 */
-                // mov [ebp-4], token
-                architecture.CreateInstruction(typeof(IR.MoveInstruction), new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, methodCompiler.Method.Token))
-            };
-        }
-
-        #endregion // IR.PrologueInstruction Overrides
     }
 }

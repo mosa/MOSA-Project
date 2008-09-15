@@ -19,9 +19,9 @@ using Mosa.Runtime.Vm;
 namespace Mosa.Runtime.CompilerFramework.IL
 {
     /// <summary>
-    /// 
+    /// Intermediate representation for the CIL stfld opcode.
     /// </summary>
-    public class StfldInstruction : BinaryInstruction, IStoreInstruction
+    public class StfldInstruction : BinaryInstruction
     {
         #region Data members
 

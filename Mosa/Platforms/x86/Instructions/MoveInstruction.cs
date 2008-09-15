@@ -35,42 +35,5 @@ namespace Mosa.Platforms.x86
         }
 
         #endregion // Construction
-
-        #region MoveInstruction Overrides
-
-        public override object Expand(MethodCompilerBase methodCompiler)
-        {
-            // We need to replace ourselves in case of a Memory -> Memory transfer
-            Operand dst = this.Destination;
-            Operand src = this.Source;
-
-            if (dst is MemoryOperand && src is MemoryOperand)
-            {
-                RegisterOperand rop;
-                if (dst.StackType == StackTypeCode.F || src.StackType == StackTypeCode.F)
-                {
-                    rop = new RegisterOperand(dst.Type, SSE2Register.XMM0);
-                }
-                else if (dst.StackType == StackTypeCode.Int64)
-                {
-                    rop = new RegisterOperand(dst.Type, SSE2Register.XMM0);
-                }
-                else
-                {
-                    rop = new RegisterOperand(dst.Type, GeneralPurposeRegister.EAX);
-                }
-
-                return new Instruction[] {
-                    new MoveInstruction(rop, src),
-                    new MoveInstruction(dst, rop)
-                };
-            }
-            else
-            {
-                return base.Expand(methodCompiler);
-            }
-        }
-
-        #endregion // MoveInstruction Overrides
     }
 }

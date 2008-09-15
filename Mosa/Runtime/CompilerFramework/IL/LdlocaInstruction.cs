@@ -28,7 +28,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="code">The code.</param>
         public LdlocaInstruction(OpCode code)
-            : base(code)
+            : base(code, 1)
         {
             Debug.Assert(OpCode.Ldloca == code || OpCode.Ldloca_s == code);
             if (OpCode.Ldloca != code && OpCode.Ldloca_s != code)
@@ -63,9 +63,11 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 decoder.Decode(out locIdx);
             }
 
-            // Create a new operand based on the given one...
-            // FIXME: Operand looses memory location information!!
-            SetResult(0, decoder.Compiler.CreateResultOperand(new RefSigType(decoder.GetLocalOperand(locIdx).Type)));
+            Operand paramOp = decoder.GetLocalOperand(locIdx);
+            SetOperand(0, paramOp);
+
+            Operand result = decoder.Compiler.CreateTemporary(new RefSigType(paramOp.Type));
+            SetResult(0, result);
         }
 
         /// <summary>
