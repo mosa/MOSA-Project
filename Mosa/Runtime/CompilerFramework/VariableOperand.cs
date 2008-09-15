@@ -53,19 +53,16 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Construction
 
-		#region Properties
-
-		/// <summary>
-		/// Returns the name of the variable if it is available.
-		/// </summary>
-		public string Name
-		{
-			get { return _name; }
-		}
-
-		#endregion // Properties
 
 		#region StackOperand overrides
+
+        /// <summary>
+        /// Returns the name of the variable if it is available.
+        /// </summary>
+        public override string Name
+        {
+            get { return _name; }
+        }
 
         /// <summary>
         /// Clones the stack operand.
@@ -74,15 +71,6 @@ namespace Mosa.Runtime.CompilerFramework
         public override object Clone()
         {
             return new LocalVariableOperand(this.Base, _name, -(base.Offset.ToInt32()/4), this.Type);
-        }
-
-        /// <summary>
-        /// Returns a string representation of <see cref="Operand"/>.
-        /// </summary>
-        /// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-        {
-            return String.Format("{0} {1}", _name, base.ToString());
         }
 
         #endregion // StackOperand overrides

@@ -336,11 +336,21 @@ namespace Mosa.Runtime.CompilerFramework
 
         private static readonly IEqualityComparer<StackOperand> s_comparer = new StackOperandComparer();
 
+        /// <summary>
+        /// Redefines a <see cref="StackOperand"/> with a new SSA version.
+        /// </summary>
+        /// <param name="cur">The StackOperand to redefine.</param>
+        /// <returns>A new StackOperand.</returns>
         private StackOperand RedefineOperand(StackOperand cur)
         {
-            StackOperand result = (StackOperand)cur.Clone();
-            result.Version = ++_ssaVersion;
-            return result;
+            // HACK: This needs to be done differently
+            int idx = -(cur.Offset.ToInt32() / 4);
+            string name = cur.Name;
+            if (0 == cur.Version)
+                name = String.Format(@"T_{0}", name);
+            StackOperand op = new LocalVariableOperand(cur.Base, name, idx, cur.Type);
+            op.Version = ++_ssaVersion;
+            return op;
         }
 
         #endregion // IMethodCompilerStage Members

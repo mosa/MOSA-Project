@@ -59,7 +59,16 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Properties
 
-        #region Object overrides
+        #region StackOperand overrides
+
+        /// <summary>
+        /// Retrieves the name of the stack operand.
+        /// </summary>
+        /// <value>The name of the stack operand.</value>
+        public override string Name
+        {
+            get { return _parameter.Name; }
+        }
 
         /// <summary>
         /// Clones the stack operand.
@@ -69,16 +78,7 @@ namespace Mosa.Runtime.CompilerFramework
         {
             return new ParameterOperand(base.Base, _parameter, _type);
         }
-
-        /// <summary>
-        /// Returns a string representation of <see cref="Operand"/>.
-        /// </summary>
-        /// <returns>A string representation of the operand.</returns>
-        public override string ToString()
-        {
-            return String.Format(@"{0} {1}", _parameter.Name, base.ToString());
-        }
-
-        #endregion // Object overrides
+        
+        #endregion // StackOperand overrides
     }
 }

@@ -47,8 +47,15 @@ namespace Mosa.Runtime.CompilerFramework
         #region Properties
 
         /// <summary>
+        /// Retrieves the name of the stack operand.
+        /// </summary>
+        /// <value>The name of the stack operand.</value>
+        public abstract string Name { get; }
+
+        /// <summary>
         /// Gets or sets the SSA version of the operand.
         /// </summary>
+        /// <value>The version of the stack operand.</value>
         public int Version
         {
             get { return _ssaVersion; }
@@ -74,10 +81,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// Returns a string representation of <see cref="Operand"/>.
         /// </summary>
         /// <returns>A string representation of the operand.</returns>
-        public override string ToString()
+        public sealed override string ToString()
         {
             string tmp = base.ToString();
-            return tmp.Insert(tmp.Length-1, String.Format(", SSA Version: {0}", _ssaVersion));
+            return String.Format(@"{0} {1}", this.Name, tmp.Insert(tmp.Length-1, String.Format(", SSA Version: {0}", _ssaVersion)));
         }
 
         #endregion // Operand Overrides

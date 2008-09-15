@@ -60,18 +60,18 @@ namespace Mosa.Runtime.CompilerFramework
 
         #endregion // Properties
 
-        #region Methods
+        #region StackOperand Overrides
 
         /// <summary>
-        /// Returns a string representation of <see cref="Operand"/>.
+        /// Retrieves the name of the stack operand.
         /// </summary>
-        /// <returns>A string representation of the operand.</returns>
-        public override string ToString()
+        /// <value>The name of the stack operand.</value>
+        public override string Name
         {
-            return String.Format("L_{0} {1}", _label, base.ToString());
+            get { return _label.ToString(); }
         }
 
-        #endregion // Methods
+        #endregion // StackOperand Overrides
 
         #region ICloneable Members
 
