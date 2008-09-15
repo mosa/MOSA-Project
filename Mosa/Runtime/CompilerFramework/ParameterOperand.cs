@@ -18,7 +18,7 @@ using Mosa.Runtime.Vm;
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// 
+    /// An operand, which represents a parameter of a method.
     /// </summary>
     public sealed class ParameterOperand : StackOperand
     {
@@ -76,7 +76,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>A string representation of the operand.</returns>
         public override string ToString()
         {
-            return String.Format("{0} [{1}]", _parameter.Name, _type);
+            return String.Format(@"{0} {1}", _parameter.Name, base.ToString());
         }
 
         #endregion // Object overrides

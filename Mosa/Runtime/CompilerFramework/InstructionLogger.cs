@@ -17,7 +17,6 @@ using Mosa.Runtime.CompilerFramework.Ir;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-
 	/// <summary>
 	/// Logs all incoming instructions and forwards them to the next compiler stage.
 	/// </summary>
@@ -84,6 +83,14 @@ namespace Mosa.Runtime.CompilerFramework
             }
 		}
 
+		#endregion // IMethodCompilerStage Members
+
+        #region Internals
+
+        /// <summary>
+        /// Logs the instructions in the given enumerable to the trace.
+        /// </summary>
+        /// <param name="instructions">The enumerable container of instructions.</param>
         private void LogInstructions(IEnumerable<Instruction> instructions)
         {
             StringBuilder text = new StringBuilder();
@@ -97,6 +104,6 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
-		#endregion // IMethodCompilerStage Members
-	}
+        #endregion // Internals
+    }
 }

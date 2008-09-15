@@ -33,11 +33,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             // Populate the pipeline
             this.Pipeline.AddRange(new IMethodCompilerStage[] {
                 new ILDecodingStage(),
-                InstructionLogger.Instance,
+                //InstructionLogger.Instance,
                 new BasicBlockBuilderStage(),
-                InstructionLogger.Instance,
+                //InstructionLogger.Instance,
                 new CilToIrTransformationStage(),
-                InstructionLogger.Instance,
+                //InstructionLogger.Instance,
 
                 new DominanceCalculationStage(),
                 //InstructionLogger.Instance,
@@ -53,12 +53,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 //InstructionLogger.Instance,
                 new StackLayoutStage(),
                 //InstructionLogger.Instance,
-
-                //new FunctionCallInliningProcessor(),
-                //InstructionLogger.Instance,
-                //new ScheduleBasicBlocks(),
-                //new LeaveSSA(),
-                //new LinearScanRegisterAllocator(),
             });
         }
 

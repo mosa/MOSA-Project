@@ -125,15 +125,14 @@ namespace Mosa.Runtime.CompilerFramework
             // Transformation worklist 
             Queue<WorkItem> workList = new Queue<WorkItem>();
 
-            /* FIXME: Move parameter operands into the dictionary as version 0,
+            /* Move parameter operands into the dictionary as version 0,
              * because they are live at entry and maybe referenced. Anyways, an
              * assignment to a parameter is also SSA related.
              */
             IDictionary<StackOperand, StackOperand> liveIn = new Dictionary<StackOperand, StackOperand>(s_comparer);
-            IInstructionDecoder decoder = (IInstructionDecoder)compiler.GetPreviousStage(typeof(IInstructionDecoder));
             for (int i = 0; i < compiler.Method.Parameters.Count; i++)
             {
-                StackOperand param = (StackOperand)decoder.GetParameterOperand(i);
+                StackOperand param = (StackOperand)compiler.GetParameterOperand(i);
                 liveIn.Add(param, param);
             }
             
@@ -163,7 +162,6 @@ namespace Mosa.Runtime.CompilerFramework
                     }
                 }
             }
-
         }
 
         /// <summary>
@@ -173,8 +171,6 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="blockProvider">The block provider.</param>
         private void AddPhiFunctionsForOutParameters(MethodCompilerBase compiler, IBasicBlockProvider blockProvider)
         {
-            IInstructionDecoder id = (IInstructionDecoder)compiler.GetPreviousStage(typeof(IInstructionDecoder));
-            Debug.Assert(null != id, @"EnterSSA requires IInstructionDecoder");
             Dictionary<StackOperand, StackOperand> liveIn = null;
 
             // Retrieve the well known epilogue block
@@ -185,7 +181,7 @@ namespace Mosa.Runtime.CompilerFramework
             foreach (RuntimeParameter rp in compiler.Method.Parameters)
             {
                 // Retrieve the stack operand for the parameter
-                StackOperand paramOp = (StackOperand)id.GetParameterOperand(rp.Position-1);
+                StackOperand paramOp = (StackOperand)compiler.GetParameterOperand(rp.Position-1);
 
                 // Only add a PHI if the runtime parameter is out or ref...
                 if (true == rp.IsOut || (paramOp.Type is RefSigType || paramOp.Type is PtrSigType))

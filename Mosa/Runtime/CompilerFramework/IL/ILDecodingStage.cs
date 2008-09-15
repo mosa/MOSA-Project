@@ -281,11 +281,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         private MethodCompilerBase _compiler;
 
         /// <summary>
-        /// Optional signature of stack local variables.
-        /// </summary>
-        private LocalVariableSignature _localsSig;
-
-        /// <summary>
         /// The method implementation of the currently compiled method.
         /// </summary>
         private RuntimeMethod _method;
@@ -294,16 +289,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// List of instructions decoded by the decoder.
         /// </summary>
         private List<Instruction> _instructions = new List<Instruction>();
-
-        /// <summary>
-        /// Holds a list of operands, which represent method parameters.
-        /// </summary>
-        private List<Operand> _parameters;
-
-        /// <summary>
-        /// Holds a list of operands, which represent local variables.
-        /// </summary>
-        private List<Operand> _locals;
 
         #endregion // Data members
 
@@ -362,7 +347,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 _compiler = compiler;
                 _method = compiler.Method;
                 _codeReader = reader;
-                _parameters = new List<Operand>(new Operand[_method.Parameters.Count]);
 
                 ReadMethodHeader(reader, ref header);
                 //Debug.WriteLine("Decoding " + compiler.Method.ToString());
@@ -372,8 +356,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     StandAloneSigRow row;
                     IMetadataProvider md = _method.Module.Metadata;
                     md.Read(header.localsSignature, out row);
-                    _localsSig = LocalVariableSignature.Parse(md, row.SignatureBlobIdx);
-                    _locals = new List<Operand>(new Operand[_localsSig.Types.Length]);
+                    compiler.SetLocalVariableSignature(LocalVariableSignature.Parse(md, row.SignatureBlobIdx));
                 }
 
                 /* Decode the instructions */
@@ -655,83 +638,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         RuntimeMethod IInstructionDecoder.Method
         {
             get { return _method; }
-        }
-
-        /// <summary>
-        /// Retrieves the local stack operand at the specified <paramref name="index"/>.
-        /// </summary>
-        /// <param name="idx">The index of the stack operand to retrieve.</param>
-        /// <returns>The operand at the specified index.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
-        Operand IInstructionDecoder.GetLocalOperand(int idx)
-        {
-            // HACK: Returning a new instance here breaks object identity. We should reuse operands,
-            // which represent the same memory location. If we need to move a variable in an optimization
-            // stage to a different memory location, it should actually be a new one so sharing object
-            // only saves runtime space/perf.
-            Debug.Assert(null != _localsSig, @"Method doesn't have locals.");
-            Debug.Assert(idx <= _localsSig.Types.Length, @"Invalid local index requested.");
-            if (null == _localsSig || _localsSig.Types.Length <= idx)
-                throw new ArgumentOutOfRangeException(@"index", idx, @"Invalid parameter index");
-
-            Operand local = null;
-            if (_locals.Count > idx)
-                local = _locals[idx];
-
-            if (null == local)
-            {
-                local = new LocalVariableOperand(_compiler.Architecture.StackFrameRegister, String.Format("L_{0}", idx), idx, _localsSig.Types[idx]);
-                _locals[idx] = local;
-            }
-
-            return local;
-        }
-
-        /// <summary>
-        /// Retrieves the parameter operand at the specified <paramref name="index"/>.
-        /// </summary>
-        /// <param name="idx">The index of the parameter operand to retrieve.</param>
-        /// <returns>The operand at the specified index.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
-        Operand IInstructionDecoder.GetParameterOperand(int idx)
-        {
-            // HACK: Returning a new instance here breaks object identity. We should reuse operands,
-            // which represent the same memory location. If we need to move a variable in an optimization
-            // stage to a different memory location, it should actually be a new one so sharing object
-            // only saves runtime space/perf.
-
-            MethodSignature sig = _method.Signature;
-            if (true == sig.HasThis || true == sig.HasExplicitThis)
-            {
-                if (0 == idx)
-                {
-                    return new ParameterOperand(_compiler.Architecture.StackFrameRegister, new RuntimeParameter(_method.Module, @"this", 0, ParameterAttributes.In), new ClassSigType(_compiler.Type.Token));
-                }
-                else
-                {
-                    // Decrement the index, as the caller actually wants a real parameter
-                    idx--;
-                }
-            }
-
-            // A normal argument, decode it...
-            IList<RuntimeParameter> parameters = _method.Parameters;
-            Debug.Assert(null != parameters, @"Method doesn't have arguments.");
-            Debug.Assert(idx < parameters.Count, @"Invalid argument index requested.");
-            if (null == parameters || parameters.Count <= idx)
-                throw new ArgumentOutOfRangeException(@"index", idx, @"Invalid parameter index");
-
-            Operand param = null;
-            if (_parameters.Count > idx)
-                param = _parameters[idx];
-
-            if (null == param)
-            {
-                param = new ParameterOperand(_compiler.Architecture.StackFrameRegister, parameters[idx], sig.Parameters[idx]);
-                _parameters[idx] = param;
-            }
-
-            return param;
         }
 
         /// <summary>

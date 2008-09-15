@@ -33,22 +33,6 @@ namespace Mosa.Runtime.CompilerFramework
         RuntimeMethod Method { get; }
 
         /// <summary>
-        /// Retrieves the local stack operand at the specified <paramref name="index"/>.
-        /// </summary>
-        /// <param name="idx">The index of the stack operand to retrieve.</param>
-        /// <returns>The operand at the specified index.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
-        Operand GetLocalOperand(int idx);
-
-        /// <summary>
-        /// Retrieves the parameter operand at the specified <paramref name="index"/>.
-        /// </summary>
-        /// <param name="idx">The index of the parameter operand to retrieve.</param>
-        /// <returns>The operand at the specified index.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
-        Operand GetParameterOperand(int idx);
-
-        /// <summary>
         /// Decodes <paramref name="value"/> from the instruction stream.
         /// </summary>
         /// <param name="value">Receives the decoded value from the instruction stream.</param>

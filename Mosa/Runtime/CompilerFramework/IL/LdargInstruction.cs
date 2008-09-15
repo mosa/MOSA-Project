@@ -84,7 +84,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
 
             // Push the loaded value onto the evaluation stack
-            SetResult(0, decoder.GetParameterOperand(argIdx));
+            SetResult(0, decoder.Compiler.GetParameterOperand(argIdx));
         }
 
         /// <summary>

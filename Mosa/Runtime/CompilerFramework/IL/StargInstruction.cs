@@ -61,7 +61,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
 
             // The argument is the result
-            this.SetResult(0, decoder.GetParameterOperand(argIdx));
+            this.SetResult(0, decoder.Compiler.GetParameterOperand(argIdx));
 
             // FIXME: Do some type compatibility checks
             // See verification for this instruction and

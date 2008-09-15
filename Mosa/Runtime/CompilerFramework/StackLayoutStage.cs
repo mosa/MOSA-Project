@@ -166,11 +166,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="cc">The calling convention used to invoke the method, which controls parameter layout.</param>
         private void LayoutParameters(MethodCompilerBase compiler, ICallingConvention cc)
         {
-            IInstructionDecoder decoder = (IInstructionDecoder)compiler.GetPreviousStage(typeof(IInstructionDecoder));
             List<StackOperand> paramOps = new List<StackOperand>();
             for (int i = 0; i < compiler.Method.Parameters.Count; i++)
             {
-                paramOps.Add((StackOperand)decoder.GetParameterOperand(i));
+                paramOps.Add((StackOperand)compiler.GetParameterOperand(i));
             }
 
             LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter, -1);

@@ -103,7 +103,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     throw new NotImplementedException();
             }
 
-            SetResult(0, decoder.GetLocalOperand(locIdx));
+            SetResult(0, decoder.Compiler.GetLocalOperand(locIdx));
         }
 
         /// <summary>

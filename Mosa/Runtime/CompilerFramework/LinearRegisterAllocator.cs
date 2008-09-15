@@ -328,11 +328,10 @@ namespace Mosa.Runtime.CompilerFramework
         private void CaptureLiveRanges(MethodCompilerBase compiler, IBasicBlockProvider blockProvider)
         {
             // Start live ranges for the parameters of the method
-            IInstructionDecoder decoder = (IInstructionDecoder)compiler.GetPreviousStage(typeof(IInstructionDecoder));
             int paramIdx = 0;
             foreach (RuntimeParameter rp in compiler.Method.Parameters)
             {
-                Operand paramOp = decoder.GetParameterOperand(paramIdx++);
+                Operand paramOp = compiler.GetParameterOperand(paramIdx++);
                 if (0 != paramOp.Uses.Count)
                 {
                     Sort(paramOp.Definitions);

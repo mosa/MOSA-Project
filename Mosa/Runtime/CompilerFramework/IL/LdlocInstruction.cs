@@ -87,7 +87,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
 
             // Push the loaded value onto the evaluation stack
-            SetResult(0, decoder.GetLocalOperand(locIdx));
+            SetResult(0, decoder.Compiler.GetLocalOperand(locIdx));
         }
 
         /// <summary>

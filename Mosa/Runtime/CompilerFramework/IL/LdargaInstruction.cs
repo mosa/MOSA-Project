@@ -63,7 +63,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 decoder.Decode(out argIdx);
             }
 
-            Operand paramOp = decoder.GetParameterOperand(argIdx);
+            Operand paramOp = decoder.Compiler.GetParameterOperand(argIdx);
             SetOperand(0, paramOp);
 
             Operand result = decoder.Compiler.CreateTemporary(new RefSigType(paramOp.Type));
