@@ -25,11 +25,17 @@ namespace Mosa.Runtime.CompilerFramework
     /// </remarks>
     public sealed class EnterSSA : IMethodCompilerStage
     {
-        #region Constants
+        #region Tracing
 
-        private const string c_ssaConverted = @"EnterSSA.Converted";
+        /// <summary>
+        /// Controls the tracing of the <see cref="EnterSSA"/> method compiler stage.
+        /// </summary>
+        /// <remarks>
+        /// The trace output happens at the TraceLevel.Info level.
+        /// </remarks>
+        public static readonly TraceSwitch TRACING = new TraceSwitch(@"Mosa.Runtime.CompilerFramework.EnterSSA", @"Controls tracing of the Mosa.Runtime.CompilerFramework.EnterSSA compilation stage.");
 
-        #endregion // Constants
+        #endregion // Tracing
 
         #region Types
 
@@ -280,15 +286,15 @@ namespace Mosa.Runtime.CompilerFramework
                 StackOperand op = ops[opIdx] as StackOperand, ssa = null;
                 if (null != op)
                 {
-                    Debug.Write("\tStore to " + ops[opIdx].ToString());
                     if (false == liveOut.TryGetValue(op, out ssa))
                         ssa = op;
 
                     ssa = RedefineOperand(ssa);
                     liveOut[op] = ssa;
-
                     instruction.SetResult(opIdx, ssa);
-                    Debug.WriteLine(" redefined as " + ssa.ToString());
+
+                    if (true == TRACING.TraceInfo)
+                        Trace.WriteLine(String.Format("\tStore to {0} redefined as {1}", op, ssa));
                 }
             }
         }
@@ -302,15 +308,15 @@ namespace Mosa.Runtime.CompilerFramework
                 StackOperand op = ops[opIdx] as StackOperand, ssa = null;
                 if (null != op)
                 {
-                    Debug.Write("Using " + ops[opIdx].ToString());
-
                     // Determine the most recent version
                     Debug.Assert(true == liveOut.TryGetValue(op, out ssa), @"Stack operand not in live variable list.");
                     ssa = liveOut[op];
 
                     // Replace the use with the most recent version
-                    Debug.WriteLine(" has been replaced by " + ssa.ToString());
                     instruction.SetOperand(opIdx, ssa);
+
+                    if (TRACING.TraceInfo == true)
+                        Trace.WriteLine(String.Format(@"\tUse {0} has been replaced with {1}", op, ssa));
                 }
             }
         }
