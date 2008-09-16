@@ -263,6 +263,16 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Pause
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void IX86InstructionVisitor<int>.Pause(PauseInstruction instruction, int arg)
+        {
+            _emitter.Pause();
+        }
+
+        /// <summary>
         /// Pop from the stack
         /// </summary>
         /// <param name="instruction">The instruction.</param>

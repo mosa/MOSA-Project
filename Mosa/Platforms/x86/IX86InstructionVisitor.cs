@@ -111,6 +111,12 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void Out(OutInstruction instruction, ArgType arg);
         /// <summary>
+        /// Pause
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Pause(PauseInstruction instruction, ArgType arg);
+        /// <summary>
         /// Pop from the stack
         /// </summary>
         /// <param name="instruction">The instruction.</param>
