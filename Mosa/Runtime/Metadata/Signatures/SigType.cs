@@ -96,10 +96,13 @@ namespace Mosa.Runtime.Metadata.Signatures
                 case CilElementType.R4:
                 case CilElementType.R8:
                 case CilElementType.String:
+                case CilElementType.Type:
                 case CilElementType.I:
                 case CilElementType.U:
                 case CilElementType.Object:
+                case CilElementType.Class:
                     return true;
+
                 default:
                     throw new NotImplementedException();
             }

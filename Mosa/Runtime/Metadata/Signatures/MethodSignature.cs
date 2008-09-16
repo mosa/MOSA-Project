@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
@@ -194,6 +195,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         {
             if (object.ReferenceEquals(this, other))
                 return true;
+
             // TODO: Check this to make sure it is correct
             if (other.GenericParameterCount != this.GenericParameterCount)
                 return false;
@@ -207,11 +209,15 @@ namespace Mosa.Runtime.Metadata.Signatures
                 return false;
             if (!this.ReturnType.Matches(other.ReturnType))
                 return false;
-            for (int i = 0; i < this.Parameters.Length; i++)
+
+            SigType[] thisParameters = this.Parameters;
+            SigType[] otherParameters = other.Parameters;
+            for (int i = 0; i < thisParameters.Length; i++)
             {
-                if (!this.Parameters[i].Matches(other.Parameters[i]))
+                if (!thisParameters[i].Matches(otherParameters[i]))
                     return false;
             }
+
             return true;
         }
     }
