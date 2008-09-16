@@ -644,13 +644,25 @@ namespace Mosa.Runtime.CompilerFramework.IL
             {
                 // We need to AND the result after conversion
                 List<Instruction> instructions = new List<Instruction>();
-                instructions.AddRange(new Instruction[] {
-                    _architecture.CreateInstruction(type, instruction.Results[0], instruction.Operands[0]),
-                    _architecture.CreateInstruction(typeof(LogicalAndInstruction), instruction.Results[0], instruction.Results[0], new ConstantOperand(new SigType(CilElementType.I4), mask))
-                });
+                if (dest.Type != src.Type)
+                {
+                    // Mixed type conversion, e.g. R4 -> I2
+                    instructions.AddRange(new Instruction[] {
+                        _architecture.CreateInstruction(type, dest, src),
+                        _architecture.CreateInstruction(typeof(LogicalAndInstruction), dest, dest, new ConstantOperand(new SigType(CilElementType.I4), mask))
+                    });
+                }
+                else
+                {
+                    // Single type truncation/extension, e.g. I4->I2 or alike
+                    instructions.Add(_architecture.CreateInstruction(typeof(LogicalAndInstruction), dest, src, new ConstantOperand(new SigType(CilElementType.I4), mask)));
+                }
 
+                // Do we have to extend/truncate the result?
                 if (null != extension)
-                    instructions.Add(_architecture.CreateInstruction(extension, instruction.Results[0], instruction.Results[0]));
+                {
+                    instructions.Add(_architecture.CreateInstruction(extension, dest, src));
+                }
 
                 Replace(ctx, instructions);
             }
@@ -847,7 +859,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             Remove(ctx);
             int count = ctx.Block.Instructions.Count;
             ctx.Block.Instructions.InsertRange(++ctx.Index, instructions);
-            ctx.Index += (ctx.Block.Instructions.Count - count);
+            ctx.Index += (ctx.Block.Instructions.Count - count) - 1;
         }
 
         #endregion // Internals

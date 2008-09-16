@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.CompilerFramework;
@@ -536,10 +536,10 @@ namespace Mosa.Platforms.x86
             // We need to replace ourselves in case of a Memory -> Memory transfer
             Operand dst = instruction.Destination;
             Operand src = instruction.Source;
-            List<Instruction> replacements = new List<Instruction>();
 
             if (dst is MemoryOperand && src is MemoryOperand)
             {
+                List<Instruction> replacements = new List<Instruction>();
                 RegisterOperand rop;
                 if (dst.StackType == StackTypeCode.F)
                 {
@@ -558,9 +558,9 @@ namespace Mosa.Platforms.x86
                     new Instructions.MoveInstruction(rop, src),
                     new Instructions.MoveInstruction(dst, rop)
                 });
-            }
 
-            Replace(ctx, replacements.ToArray());
+                Replace(ctx, replacements.ToArray());
+            }
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.PhiInstruction instruction, Context ctx)
