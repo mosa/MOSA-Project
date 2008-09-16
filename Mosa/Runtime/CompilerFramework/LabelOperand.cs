@@ -15,7 +15,7 @@ using Mosa.Runtime.Metadata.Signatures;
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// 
+    /// An operand, which represents a label in the program data.
     /// </summary>
     public class LabelOperand : MemoryOperand
     {

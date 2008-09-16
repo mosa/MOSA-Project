@@ -16,7 +16,7 @@ using System.IO;
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// 
+    /// Represents a linking request to the assembly linker.
     /// </summary>
     public struct LinkRequest
     {

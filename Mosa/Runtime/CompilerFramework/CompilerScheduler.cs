@@ -16,8 +16,12 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// 
+    /// Scheduler for jit compilation of methods.
     /// </summary>
+    /// <remarks>
+    /// FIXME: Refactor this out of the compiler framework and make this
+    /// an interface for v0.0.2
+    /// </remarks>
     public static class CompilerScheduler
     {
         #region Data members

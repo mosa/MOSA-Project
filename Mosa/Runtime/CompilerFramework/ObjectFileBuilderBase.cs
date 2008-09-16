@@ -6,7 +6,7 @@ using Mosa.Runtime.Vm;
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// 
+    /// Base class for object file builders.
     /// </summary>
     public abstract class ObjectFileBuilderBase : IAssemblyLinker
     {

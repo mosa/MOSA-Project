@@ -12,8 +12,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-using Mosa.Runtime.CompilerFramework.Ir;
-
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>

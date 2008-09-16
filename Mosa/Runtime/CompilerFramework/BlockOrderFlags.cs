@@ -23,6 +23,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// 
         /// </summary>
         Active = 0x01,
+
         /// <summary>
         /// 
         /// </summary>

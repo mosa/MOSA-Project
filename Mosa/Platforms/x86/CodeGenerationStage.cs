@@ -928,10 +928,10 @@ namespace Mosa.Platforms.x86
             List<byte> byteStream = new List<byte>();
 
             #region Prefixes
-            if ((prefixes & PrefixFlags.LOCK) == PrefixFlags.LOCK) { byteStream.Add(0xF0); }
+            if ((prefixes & Prefix.LOCK) == Prefix.LOCK) { byteStream.Add(0xF0); }
 
-            if ((prefixes & PrefixFlags.REP_REPZ) == PrefixFlags.REP_REPZ) { byteStream.Add(0xF3); }
-            else if ((prefixes & PrefixFlags.REPNE_REPNZ) == PrefixFlags.REPNE_REPNZ) { byteStream.Add(0xF2); }
+            if ((prefixes & Prefix.REP_REPZ) == Prefix.REP_REPZ) { byteStream.Add(0xF3); }
+            else if ((prefixes & Prefix.REPNE_REPNZ) == Prefix.REPNE_REPNZ) { byteStream.Add(0xF2); }
 
             if ((operand1 != null && (operand1 is Memory16Bit || operand1 is Register16Bit)) ||
                 (immediateData != null && (immediateData is short || immediateData is ushort)) ||
@@ -1007,7 +1007,7 @@ namespace Mosa.Platforms.x86
                 ValueType data = immediateData;
 
                 #region IP-relative address calculation
-                if ((prefixes & PrefixFlags.RELATIVE_ADDRESS) == PrefixFlags.RELATIVE_ADDRESS)
+                if ((prefixes & Prefix.RELATIVE_ADDRESS) == Prefix.RELATIVE_ADDRESS)
                 {
                     if (data is byte) { data = (byte)data - (IpPosition + byteStream.Count + 1); }
                     else if (data is short) { data = (short)data - (IpPosition + byteStream.Count + 2); }

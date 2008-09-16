@@ -13,7 +13,6 @@ using System.Text;
 using System.Diagnostics;
 
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.CompilerFramework.Ir;
 
 namespace Mosa.Runtime.CompilerFramework
 {

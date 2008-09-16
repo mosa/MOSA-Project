@@ -16,19 +16,18 @@ using Mosa.Runtime.Vm;
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// 
+    /// An operand used to reference object data fields.
     /// </summary>
     public class ObjectFieldOperand : MemoryOperand
     {
         #region Construction
 
-        // FIXME
         /// <summary>
         /// Initializes a new instance of the <see cref="ObjectFieldOperand"/> class.
         /// </summary>
-        /// <param name="addressBase">The address base.</param>
-        /// <param name="field">The field.</param>
-        public ObjectFieldOperand(Operand addressBase, RuntimeField field) :
+        /// <param name="objectInstance">The operand, representing the object instance.</param>
+        /// <param name="field">The referenced field.</param>
+        public ObjectFieldOperand(Operand objectInstance, RuntimeField field) :
             base(field.Type, null, IntPtr.Zero)
         {
         }

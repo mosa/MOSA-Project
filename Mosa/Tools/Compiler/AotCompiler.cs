@@ -15,7 +15,6 @@ using System.Text;
 using Mosa.Platforms.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Ir;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;

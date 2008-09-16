@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Mosa.Runtime.CompilerFramework.Ir;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 
