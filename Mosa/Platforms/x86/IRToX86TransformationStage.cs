@@ -536,6 +536,8 @@ namespace Mosa.Platforms.x86
             // We need to replace ourselves in case of a Memory -> Memory transfer
             Operand dst = instruction.Destination;
             Operand src = instruction.Source;
+            List<Instruction> replacements = new List<Instruction>();
+
             if (dst is MemoryOperand && src is MemoryOperand)
             {
                 RegisterOperand rop;
@@ -552,11 +554,13 @@ namespace Mosa.Platforms.x86
                     rop = new RegisterOperand(dst.Type, GeneralPurposeRegister.EAX);
                 }
 
-                Replace(ctx, new Instruction[] {
+                replacements.AddRange(new Instruction[] {
                     new Instructions.MoveInstruction(rop, src),
                     new Instructions.MoveInstruction(dst, rop)
                 });
             }
+
+            Replace(ctx, replacements.ToArray());
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.PhiInstruction instruction, Context ctx)

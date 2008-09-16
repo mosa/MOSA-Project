@@ -237,6 +237,16 @@ namespace Mosa.Platforms.x86
             _emitter.CmpXchg(instruction.Operand0, instruction.Operand1);
         }
 
+        void IX86InstructionVisitor<int>.Cvtsi2sd(Cvtsi2sdInstruction instruction, int arg)
+        {
+            _emitter.Cvtsi2sd(instruction.Operand0, instruction.Operand1);
+        }
+
+        void IX86InstructionVisitor<int>.Cvtsi2ss(Cvtsi2ssInstruction instruction, int arg)
+        {
+            _emitter.Cvtsi2ss(instruction.Operand0, instruction.Operand1);
+        }
+
         void IX86InstructionVisitor<int>.Hlt(HltInstruction instruction, int arg)
         {
             _emitter.Hlt();

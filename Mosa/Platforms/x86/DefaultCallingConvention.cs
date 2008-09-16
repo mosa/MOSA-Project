@@ -134,8 +134,7 @@ namespace Mosa.Platforms.x86
                         break;
 
                     case StackTypeCode.Int64:
-                        rop = new RegisterOperand(op.Type, MMXRegister.MM0);
-                        break;
+                        throw new NotSupportedException(@"Calling methods with Int64 args is not supported right now.");
                         
                     default:
                         throw new NotSupportedException();
@@ -144,7 +143,6 @@ namespace Mosa.Platforms.x86
                 op = rop;
             }
 
-            //instructions.Add(arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IR.PushInstruction), op));
             instructions.Add(arch.CreateInstruction(typeof(x86.Instructions.MoveInstruction), new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op));
         }
 

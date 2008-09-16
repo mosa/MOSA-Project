@@ -43,6 +43,9 @@ namespace Mosa.Platforms.x86
 
         void Call(CallInstruction instruction, ArgType arg);
 
+        void Cvtsi2ss(Cvtsi2ssInstruction instruction, ArgType arg);
+        void Cvtsi2sd(Cvtsi2sdInstruction instruction, ArgType arg);
+
         #region Intrinsics
         /// <summary>
         /// Disable interrupts

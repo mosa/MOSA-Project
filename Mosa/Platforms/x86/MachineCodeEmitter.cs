@@ -846,18 +846,8 @@ namespace Mosa.Platforms.x86
         
         void ICodeEmitter.Mov(Operand dest, Operand src)
         {
-            // If something like 
-            // MOV 3, EAX
-            // is encountered, then it|s highly possible that
-            // MOV EAX, 3
-            // was meant.
-            // So we swap both operands.
-            if (dest is ConstantOperand && !(src is ConstantOperand))
-            {
-                Operand tmp = dest;
-                dest = src;
-                src = tmp;
-            }
+            if (dest is ConstantOperand)
+                throw new ArgumentException(@"Destination can't be constant.", @"dest");
 
             // Check that we're not dealing with floatingpoint values
             if (dest.StackType != StackTypeCode.F && src.StackType != StackTypeCode.F)
@@ -867,11 +857,8 @@ namespace Mosa.Platforms.x86
             // We are dealing with floatingpoint values
             else
             {
-                // Check if we have to convert from single to double precision
-                // This also saves us the move operation.
                 if (src.Type.Type == CilElementType.R4)
-                    Emit(dest, src, cd_cvtss2sd);
-                // Nope, going double precision
+                    Emit(dest, src, cd_movss);
                 else
                     Emit(dest, src, cd_movsd);
             }
@@ -1653,6 +1640,19 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x11 }, null),
         };
 
+        /// <summary>
+        /// Asmcode: MOVSS
+        /// Moves second into first parameter. Floatingpoint
+        /// 
+        /// Section: SSE
+        /// </summary>
+        private static readonly CodeDef[] cd_movss = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0xF3, 0x0F, 0x10 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF3, 0x0F, 0x10 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0x10 }, null),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0x11 }, null),
+        };
+        
         /// <summary>
         /// Asmcode: CVTSI2SD
         /// Converts a signed integer into a double precision value.
