@@ -14,6 +14,8 @@ using System.Text;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
+using System.Diagnostics;
+using Mosa.Runtime.Metadata.Blobs;
 
 namespace Mosa.Runtime.Vm 
 {
@@ -27,55 +29,98 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// The instantiated attribute.
 		/// </summary>
-		private Attribute _attribute;
+		private object _attribute;
 
-		/// <summary>
+        /// <summary>
+        /// Specifies the blob, which contains the attribute initialization.
+        /// </summary>
+        private TokenTypes _attributeBlob;
+
+        /// <summary>
 		/// Holds the ctor of the attribute type to invoke.
 		/// </summary>
 		private TokenTypes _ctor;
 
-		/// <summary>
-		/// Specifies the blob, which contains the attribute initialization.
-		/// </summary>
-		private TokenTypes _attributeBlob;
+        /// <summary>
+        /// Holds the ctor method of the attribute type.
+        /// </summary>
+        private RuntimeMethod _ctorMethod;
+
+        /// <summary>
+        /// Holds the metadata module defining the attribute instance.
+        /// </summary>
+        private IMetadataModule _module;
 
 		#endregion // Data members
 
-		#region Methods
+        #region Construction
 
-		/// <summary>
+        /// <summary>
+        /// Populates the <see cref="RuntimeAttribute"/> with the values in <paramref name="car"/>.
+        /// </summary>
+        /// <param name="module">The metadata module, which defines the attribute.</param>
+        /// <param name="car">The custom attribute row from metadata.</param>
+        public RuntimeAttribute(IMetadataModule module, CustomAttributeRow car)
+        {
+            _attribute = null;
+            _attributeBlob = car.ValueBlobIdx;
+            _ctor = car.TypeIdx;
+            _module = module;
+        }
+
+        #endregion // Construction
+
+        #region Methods
+
+        /// <summary>
 		/// Retrieves the attribute.
 		/// </summary>
-		/// <param name="module">The module, which defined the attribute.</param>
 		/// <returns>An instance of the attribute.</returns>
-		public Attribute GetAttribute(IMetadataModule module)
+		public object GetAttribute()
 		{
 			// Skip over attribute initialization, if we already initialized the attribute
 			if (null != _attribute)
 				return _attribute;
 
-			//
-			// FIXME: Initialize the attribute:
-			// - Find the type from the method
-			// - Invoke the runtimes newobj handler with the type
-			// - Invoke the constructor with parameters from the value blob
-			// - Set named parameters via the appropriate property setters
-			//
+            // Retrieve the attribute type
+            _attribute = CustomAttributeParser.Parse(_module, _attributeBlob, _ctorMethod);
+            Debug.Assert(null != _attribute, @"Failed to load the attribute.");
 
 			return _attribute;
 		}
 
-		/// <summary>
-		/// Populates the <see cref="RuntimeAttribute"/> with the values in <paramref name="car"/>.
-		/// </summary>
-		/// <param name="car">The custom attribute row from metadata.</param>
-		public RuntimeAttribute(CustomAttributeRow car)
-		{
-			_attribute = null;
-			_ctor = car.TypeIdx;
-			_attributeBlob = car.ValueBlobIdx;
-		}
-
 		#endregion // Methods
-	}
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the attribute type.
+        /// </summary>
+        /// <value>The attribute type.</value>
+        public RuntimeType Type
+        {
+            get 
+            {
+                if (null == _ctorMethod)
+                    LocateAttributeCtorMethod();
+
+                return _ctorMethod.DeclaringType; 
+            }
+        }
+
+        #endregion // Properties
+
+        #region Internals
+
+        /// <summary>
+        /// Locates the attribute ctor method.
+        /// </summary>
+        private void LocateAttributeCtorMethod()
+        {
+            _ctorMethod = RuntimeBase.Instance.TypeLoader.GetMethod(_module, _ctor);
+            Debug.Assert(null != _ctorMethod);
+        }
+
+        #endregion // Internals
+    }
 }

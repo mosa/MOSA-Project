@@ -208,5 +208,37 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 
             Assert.IsTrue((bool)Run<B_I4_I4_I4_I4>(@"", @"Test", @"CallOrder", 1, 2, 3, 4));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private delegate bool B_I4(int arg);
+
+        /// <summary>
+        /// Tests intrinsic compiler calls.
+        /// </summary>
+        [Column(1, 2, Int32.MaxValue, Int32.MinValue)]
+        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        public void CallIntrinsic(int arg)
+        {
+            CodeSource = @"
+                static class Test {
+                    static bool CallIntrinsic(int arg) {
+                        return (arg == CallMov(arg));
+                    }
+
+                    [Mosa.Runtime.CompilerFramework.IntrinsicAttribute(typeof(Mosa.Platforms.x86.Architecture), typeof(Mosa.Runtime.CompilerFramework.IR.MoveInstruction))]
+                    static int CallMov(int arg) {
+                        return 0;
+                    }
+                }
+            ";
+
+            this.References = new string[] {
+                @"Mosa.Runtime.dll",
+                @"Mosa.Platforms.x86.dll"
+            };
+            Assert.IsTrue((bool)Run<B_I4>(@"", @"Test", @"CallIntrinsic", arg));
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
@@ -236,7 +237,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Call(CallInstruction instruction, Context ctx)
         {
-            ProcessInvokeInstruction(instruction, ctx);
+            ProcessRedirectableInvokeInstruction(instruction, ctx);
         }
 
         void IILVisitor<Context>.Calli(CalliInstruction instruction, Context ctx)
@@ -645,6 +646,47 @@ namespace Mosa.Runtime.CompilerFramework.IL
             else
             {
                 Replace(ctx, _architecture.CreateInstruction(type, instruction.Results[0], instruction.Operands[0]));
+            }
+        }
+
+        /// <summary>
+        /// Processes redirectable method call instructions.
+        /// </summary>
+        /// <param name="instruction">The call instruction.</param>
+        /// <param name="ctx">The transformation context.</param>
+        /// <remarks>
+        /// This method checks if the call target has an Intrinsic-Attribute applied with
+        /// the current architecture. If it has, the method call is replaced by the specified
+        /// native instruction.
+        /// </remarks>
+        private void ProcessRedirectableInvokeInstruction(CallInstruction instruction, Context ctx)
+        {
+            // Retrieve the invocation target
+            RuntimeMethod rm = instruction.InvokeTarget;
+            Debug.Assert(null != rm, @"Call doesn't have a target.");
+            // Retrieve the runtime type
+            RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
+            // The replacement instruction
+            Instruction replacement = null;
+
+            if (true == rm.IsDefined(rt))
+            {
+                foreach (RuntimeAttribute ra in rm.CustomAttributes)
+                {
+                    if (ra.Type == rt)
+                    {
+
+                    }
+                }
+            }
+
+            if (null == replacement)
+            {
+                ProcessInvokeInstruction(instruction, ctx);
+            }
+            else
+            {
+                Replace(ctx, replacement);
             }
         }
 

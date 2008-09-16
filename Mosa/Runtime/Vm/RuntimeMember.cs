@@ -111,6 +111,42 @@ namespace Mosa.Runtime.Vm
             }
         }
 
+        /// <summary>
+        /// Determines if the given attribute type is applied.
+        /// </summary>
+        /// <param name="attributeType">The type of the attribute to check.</param>
+        /// <returns>
+        /// The return value is true, if the attribute is applied. Otherwise false.
+        /// </returns>
+        public bool IsDefined(RuntimeType attributeType)
+        {
+            bool result = false;
+            if (null != _attributes)
+            {
+                foreach (RuntimeAttribute attribute in _attributes)
+                {
+                    if (attribute.Type == attributeType)
+                    {
+                        result = true;
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Sets the attributes of this member.
+        /// </summary>
+        /// <param name="attributes">The attributes.</param>
+        internal void SetAttributes(RuntimeAttribute[] attributes)
+        {
+            if (null != _attributes)
+                throw new InvalidOperationException(@"Can't set attributes twice.");
+
+            _attributes = attributes;
+        }
+
         #endregion // IRuntimeAttributable Members
     }
 }

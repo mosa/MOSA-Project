@@ -264,6 +264,66 @@ namespace Mosa.Runtime.Vm
             return _types[typeIdx];
         }
 
+        RuntimeType ITypeSystem.GetType(string typeName)
+        {
+            RuntimeType result = null;
+            string[] names = typeName.Split(',');
+            typeName = names[0];
+            int lastDot = typeName.LastIndexOf('.');
+            string ns, name;
+            if (-1 == lastDot)
+            {
+                ns = String.Empty;
+                name = typeName;
+            }
+            else
+            {
+                ns = typeName.Substring(0, lastDot);
+                name = typeName.Substring(lastDot + 1);
+            }
+
+            /* FIXME: Typename could be a fully formatted type name, make sure
+             * we support this one day, so we could use the assembly information
+             * to reduce the lookup times.
+             */
+            result = FindType(ns, name, _types);
+            if (2 <= names.Length && null == result)
+            {
+                try
+                {
+                    IMetadataModule module = RuntimeBase.Instance.AssemblyLoader.Load(names[1].Trim() + ".dll");
+                    ITypeSystem ts = (ITypeSystem)this;
+                    result = FindType(ns, name, ts.GetTypesFromModule(module));
+                }
+                catch
+                {
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds the type.
+        /// </summary>
+        /// <param name="ns">The namespace of the type.</param>
+        /// <param name="name">The name of the type.</param>
+        /// <param name="types">The collection of types to scan.</param>
+        /// <returns>The <see cref="RuntimeType"/> or null.</returns>
+        private static RuntimeType FindType(string ns, string name, IEnumerable<RuntimeType> types)
+        {
+            RuntimeType result = null;
+            foreach (RuntimeType type in types)
+            {
+                if (null != type && ns.Length == type.Namespace.Length && name.Length == type.Name.Length && name == type.Name && ns == type.Namespace)
+                {
+                    result = type;
+                    break;
+                }
+            }
+            return result;
+        }
+
         RuntimeField ITypeSystem.GetField(IMetadataModule scope, TokenTypes token)
         {
             if (null == scope)
@@ -611,7 +671,7 @@ namespace Mosa.Runtime.Vm
                 metadata.Read(token, out car);
 
                 // Do we need to commit generic parameters?
-                if (owner < car.ParentTableIdx)
+                if (owner != car.ParentTableIdx)
                 {
                     // Yes, commit them to the last type
                     if (0 != owner && 0 != attributes.Count)
@@ -622,16 +682,15 @@ namespace Mosa.Runtime.Vm
 
                     owner = car.ParentTableIdx;
                 }
-                else
-                {
-                    attributes.Add(car);
-                }
 
-                // Set the generic parameters of the last type, if we have them
-                if (0 != attributes.Count)
-                {
-                    SetAttributes(module, owner, attributes);
-                }
+                // Save this attribute
+                attributes.Add(car);
+            }
+
+            // Set the generic parameters of the last type, if we have them
+            if (0 != attributes.Count)
+            {
+                SetAttributes(module, owner, attributes);
             }
         }
 
@@ -643,10 +702,12 @@ namespace Mosa.Runtime.Vm
         /// <param name="attributes">The attributes.</param>
         private void SetAttributes(IMetadataModule module, TokenTypes owner, List<CustomAttributeRow> attributes)
         {
+            ITypeSystem ts = (ITypeSystem)this;
+
             // Convert the custom attribute rows to RuntimeAttribute instances
             RuntimeAttribute[] ra = new RuntimeAttribute[attributes.Count];
             for (int i = 0; i < attributes.Count; i++)
-                ra[i] = new RuntimeAttribute(attributes[i]);
+                ra[i] = new RuntimeAttribute(module, attributes[i]);
 
             // The following switch matches the AttributeTargets enumeration against
             // metadata tables, which make valid targets for an attribute.
@@ -667,6 +728,8 @@ namespace Mosa.Runtime.Vm
                 case TokenTypes.MethodDef:
                     // AttributeTargets.Constructor
                     // AttributeTargets.Method
+                    RuntimeMethod method = ts.GetMethod(module, owner);
+                    method.SetAttributes(ra);
                     break;
 
                 case TokenTypes.Event:

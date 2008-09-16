@@ -26,5 +26,12 @@ namespace Mosa.Runtime.Vm
         {
             get;
         }
+
+        /// <summary>
+        /// Determines if the given attribute type is applied.
+        /// </summary>
+        /// <param name="attributeType">The type of the attribute to check.</param>
+        /// <returns>The return value is true, if the attribute is applied. Otherwise false.</returns>
+        bool IsDefined(RuntimeType attributeType);
     }
 }

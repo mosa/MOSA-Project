@@ -87,6 +87,13 @@ namespace Mosa.Runtime.Vm
         RuntimeType GetType(IMetadataModule module, TokenTypes token);
 
         /// <summary>
+        /// Retrieves the runtime type for a given type name.
+        /// </summary>
+        /// <param name="typeName">The name of the type to locate.</param>
+        /// <returns>The located <see cref="RuntimeType"/> or null.</returns>
+        RuntimeType GetType(string typeName);
+
+        /// <summary>
         /// Retrieves the _stackFrameIndex definition identified by the given token in the scope.
         /// </summary>
         /// <param name="scope">The scope of the token definition.</param>
