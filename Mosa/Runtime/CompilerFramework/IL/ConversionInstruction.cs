@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
@@ -52,7 +53,59 @@ namespace Mosa.Runtime.CompilerFramework.IL
         public sealed override void Validate(MethodCompilerBase compiler)
         {
 			// Validate the typecode & determine the resulting stack type
-            SetResult(0, compiler.CreateResultOperand(Operand.SigTypeFromStackType(GetResultStackType())));
+            SigType resultType;
+            switch (this.Code)
+            {
+                case OpCode.Conv_u: goto case OpCode.Conv_i;
+                case OpCode.Conv_i:
+                    resultType = compiler.Architecture.NativeType;
+                    break;
+
+                case OpCode.Conv_i1:
+                    resultType = new SigType(CilElementType.I1);
+                    break;
+
+                case OpCode.Conv_i2:
+                    resultType = new SigType(CilElementType.I2);
+                    break;
+
+                case OpCode.Conv_i4:
+                    resultType = new SigType(CilElementType.I4);
+                    break;
+
+                case OpCode.Conv_i8:
+                    resultType = new SigType(CilElementType.I8);
+                    break;
+
+                case OpCode.Conv_r4:
+                    resultType = new SigType(CilElementType.R4);
+                    break;
+
+                case OpCode.Conv_r8:
+                    resultType = new SigType(CilElementType.R8);
+                    break;
+
+                case OpCode.Conv_u1:
+                    resultType = new SigType(CilElementType.U1);
+                    break;
+
+                case OpCode.Conv_u2:
+                    resultType = new SigType(CilElementType.U2);
+                    break;
+
+                case OpCode.Conv_u4:
+                    resultType = new SigType(CilElementType.U4);
+                    break;
+
+                case OpCode.Conv_u8:
+                    resultType = new SigType(CilElementType.U8);
+                    break;
+
+                default:
+                    throw new NotSupportedException(@"Overflow checking conversions not supported.");
+            }
+
+            SetResult(0, compiler.CreateResultOperand(resultType));
 		}
 
         /// <summary>

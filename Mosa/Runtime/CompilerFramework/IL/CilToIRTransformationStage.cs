@@ -594,6 +594,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             Operand src = instruction.Operands[0];
             int mask = 0;
 
+            Type extension = null;
             Type type = s_convTable[(int)dest.StackType][(int)src.StackType];
             if (null == type)
                 throw new NotSupportedException();
@@ -602,10 +603,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
             {
                 case CilElementType.I1:
                     mask = 0xFF;
+                    extension = typeof(IR.SignExtendedMoveInstruction);
                     break;
 
                 case CilElementType.I2:
                     mask = 0xFFFF;
+                    extension = typeof(IR.SignExtendedMoveInstruction);
                     break;
 
                 case CilElementType.I4:
@@ -614,10 +617,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
                 case CilElementType.U1:
                     mask = 0xFF;
+                    extension = typeof(IR.ZeroExtendedMoveInstruction);
                     break;
 
                 case CilElementType.U2:
                     mask = 0xFFFF;
+                    extension = typeof(IR.ZeroExtendedMoveInstruction);
                     break;
                 
                 case CilElementType.U4:
@@ -638,10 +643,16 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (0 != mask)
             {
                 // We need to AND the result after conversion
-                Replace(ctx, new Instruction[] {
+                List<Instruction> instructions = new List<Instruction>();
+                instructions.AddRange(new Instruction[] {
                     _architecture.CreateInstruction(type, instruction.Results[0], instruction.Operands[0]),
                     _architecture.CreateInstruction(typeof(LogicalAndInstruction), instruction.Results[0], instruction.Results[0], new ConstantOperand(new SigType(CilElementType.I4), mask))
                 });
+
+                if (null != extension)
+                    instructions.Add(_architecture.CreateInstruction(extension, instruction.Results[0], instruction.Results[0]));
+
+                Replace(ctx, instructions);
             }
             else
             {
