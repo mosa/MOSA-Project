@@ -75,8 +75,9 @@ namespace Mosa.Runtime.Vm
         /// <param name="field">The field metadata row.</param>
         /// <param name="offset">Holds the offset of the _stackFrameIndex in the owner type.</param>
         /// <param name="rva">The RVA of the initialization data</param>
-        public RuntimeField(IMetadataModule module, ref FieldRow field, uint offset, uint rva) :
-            base(0, module, null, null)
+        /// <param name="declaringType">Specifies the type, which contains this field.</param>
+        public RuntimeField(IMetadataModule module, ref FieldRow field, uint offset, uint rva, RuntimeType declaringType) :
+            base(0, module, declaringType, null)
         {
             _sig = 0;
             _name = Name;
@@ -85,7 +86,7 @@ namespace Mosa.Runtime.Vm
             _offset = offset;
             _rva = rva;
 
-            // FIXME: Load the signature of the _stackFrameIndex
+            // FIXME: Load the signature of the field
         }
 
         #endregion // Construction

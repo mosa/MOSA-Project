@@ -139,11 +139,11 @@ namespace Mosa.Runtime.Vm
             AdjustMetadataSpace(md, TokenTypes.TypeSpec, ref _types);
 
             // Load all types from the assembly into the type array
-            LoadTypes(module, modOffset.TypeOffset);
+            LoadTypes(module, modOffset);
             // LoadTypeSpecs(module, modOffset.TypeOffset);
-            LoadMethods(module, modOffset.MethodOffset);
+            // LoadMethods(module, modOffset.MethodOffset);
             LoadGenerics(module, modOffset.TypeOffset, modOffset.MethodOffset);
-            LoadFields(module, modOffset.FieldOffset);
+            //LoadFields(module, modOffset.FieldOffset);
             LoadParameters(module, modOffset.ParameterOffset);
             LoadCustomAttributes(module, modOffset);
         }
@@ -162,8 +162,7 @@ namespace Mosa.Runtime.Vm
             ModuleOffsets offsets = GetModuleOffset(module);
 
             // Calculate the number of types defined in this module
-            int count = ((int)(TokenTypes.RowIndexMask & module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef)) - 1 +
-                         0);
+            int count = ((int)(TokenTypes.RowIndexMask & module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef)) - 1 + 0);
             // FIXME: (int)(TokenTypes.RowIndexMask & module.Metadata.GetMaxTokenValue(TokenTypes.TypeSpec)));
 
             return new ReadOnlyRuntimeTypeListView(offsets.TypeOffset, count);
@@ -404,7 +403,7 @@ namespace Mosa.Runtime.Vm
             int rows = (int)(TokenTypes.RowIndexMask & md.GetMaxTokenValue(tokenType));
             if (rows > 0)
             {
-                rows += (length + 1);
+                rows += length;
                 Array.Resize<T>(ref items, rows);
             }
 
@@ -415,14 +414,18 @@ namespace Mosa.Runtime.Vm
         /// Loads all types from the given metadata module.
         /// </summary>
         /// <param name="module">The metadata module to load the types from.</param>
-        /// <param name="offset">The offset into the type array, where we start loading.</param>
-        private void LoadTypes(IMetadataModule module, int offset)
+        /// <param name="moduleOffsets">The offsets into the metadata arrays, of the current module.</param>
+        private void LoadTypes(IMetadataModule module, ModuleOffsets moduleOffsets)
         {
             TokenTypes maxTypeDef, maxField, maxMethod, maxLayout, tokenLayout = TokenTypes.ClassLayout + 1;
             TypeDefRow typeDefRow, nextTypeDefRow = new TypeDefRow();
             ClassLayoutRow layoutRow = new ClassLayoutRow();
             IMetadataProvider md = module.Metadata;
             uint size = 0xFFFFFFFF, packing = 0xFFFFFFFF;
+            int typeOffset = moduleOffsets.TypeOffset;
+            int methodOffset = moduleOffsets.MethodOffset;
+            int fieldOffset = moduleOffsets.FieldOffset;
+            RuntimeType rt;
 
             maxTypeDef = md.GetMaxTokenValue(TokenTypes.TypeDef);
             maxLayout = md.GetMaxTokenValue(TokenTypes.ClassLayout);
@@ -430,8 +433,8 @@ namespace Mosa.Runtime.Vm
             if (TokenTypes.ClassLayout < maxLayout)
                 md.Read(tokenLayout, out layoutRow);
 
-            TokenTypes token = TokenTypes.TypeDef + 2;
-            md.Read(token++, out typeDefRow);
+            TokenTypes token = TokenTypes.TypeDef+2;
+            md.Read(token, out typeDefRow);
             do
             {
                 /*
@@ -439,16 +442,16 @@ namespace Mosa.Runtime.Vm
                               md.Read(typeDefRow.TypeNameIdx, out name);
                               Debug.WriteLine(name);
                  */
-                if (token <= maxTypeDef)
+                if (token < maxTypeDef)
                 {
-                    md.Read(token, out nextTypeDefRow);
+                    md.Read(token+1, out nextTypeDefRow);
                     maxField = nextTypeDefRow.FieldList;
                     maxMethod = nextTypeDefRow.MethodList;
                 }
                 else
                 {
-                    maxMethod = md.GetMaxTokenValue(TokenTypes.MethodDef);
-                    maxField = md.GetMaxTokenValue(TokenTypes.Field);
+                    maxMethod = md.GetMaxTokenValue(TokenTypes.MethodDef) + 1;
+                    maxField = md.GetMaxTokenValue(TokenTypes.Field) + 1;
                 }
 
                 // Is this our layout info?
@@ -462,11 +465,16 @@ namespace Mosa.Runtime.Vm
                         md.Read(tokenLayout, out layoutRow);
                 }
 
-                _types[offset++] = new RuntimeType(module, ref typeDefRow, maxField, maxMethod, packing, size);
+                // Create and populate the runtime type
+                rt = new RuntimeType(module, ref typeDefRow, maxField, maxMethod, packing, size);
+                LoadMethods(module, rt, typeDefRow.MethodList, maxMethod, ref methodOffset);
+                LoadFields(module, rt, typeDefRow.FieldList, maxField, ref fieldOffset);
+                _types[typeOffset++] = rt;
+
                 packing = size = 0xFFFFFFFF;
                 typeDefRow = nextTypeDefRow;
             }
-            while (token++ <= maxTypeDef);
+            while (token++ < maxTypeDef);
 
         }
 
@@ -474,31 +482,36 @@ namespace Mosa.Runtime.Vm
         /// Loads all methods from the given metadata module.
         /// </summary>
         /// <param name="module">The metadata module to load methods from.</param>
+        /// <param name="declaringType">The type, which declared the method.</param>
+        /// <param name="first">The first method token to load.</param>
+        /// <param name="last">The last method token to load (non-inclusive.)</param>
         /// <param name="offset">The offset into the method table to start loading methods from.</param>
-        private void LoadMethods(IMetadataModule module, int offset)
+        private void LoadMethods(IMetadataModule module, RuntimeType declaringType, TokenTypes first, TokenTypes last, ref int offset)
         {
             IMetadataProvider md = module.Metadata;
-            TokenTypes token, maxMethod = md.GetMaxTokenValue(TokenTypes.MethodDef), maxParam;
             MethodDefRow methodDef, nextMethodDef = new MethodDefRow();
+            TokenTypes maxParam, maxMethod = md.GetMaxTokenValue(TokenTypes.MethodDef);
 
-            token = TokenTypes.MethodDef + 1;
-            md.Read(token++, out methodDef);
-            do
+            if (first < last)
             {
-                if (token <= maxMethod)
+                md.Read(first, out methodDef);
+                for (TokenTypes token = first; token < last; token++)
                 {
-                    md.Read(token, out nextMethodDef);
-                    maxParam = nextMethodDef.ParamList;
-                }
-                else
-                {
-                    maxParam = md.GetMaxTokenValue(TokenTypes.Param) + 1;
-                }
+                    if (token < maxMethod)
+                    {
+                        md.Read(token + 1, out nextMethodDef);
+                        maxParam = nextMethodDef.ParamList;
+                    }
+                    else
+                    {
+                        maxParam = md.GetMaxTokenValue(TokenTypes.Param) + 1;
+                    }
 
-                _methods[offset++] = new RuntimeMethod(offset, module, ref methodDef, maxParam);
-                methodDef = nextMethodDef;
+                    Debug.Assert(offset < _methods.Length, @"Invalid method index.");
+                    _methods[offset++] = new RuntimeMethod(offset, module, ref methodDef, maxParam, declaringType);
+                    methodDef = nextMethodDef;
+                }
             }
-            while (token++ <= maxMethod);
         }
 
         /// <summary>
@@ -524,12 +537,14 @@ namespace Mosa.Runtime.Vm
         /// Loads all fields defined in the module.
         /// </summary>
         /// <param name="module">The metadata module to load fields form.</param>
-        /// <param name="offset">The _stackFrameIndex offset in the _stackFrameIndex table.</param>
-        private void LoadFields(IMetadataModule module, int offset)
+        /// <param name="declaringType">The type, which declared the method.</param>
+        /// <param name="first">The first field token to load.</param>
+        /// <param name="last">The last field token to load (non-inclusive.)</param>
+        /// <param name="offset">The offset in the fields array.</param>
+        private void LoadFields(IMetadataModule module, RuntimeType declaringType, TokenTypes first, TokenTypes last, ref int offset)
         {
             IMetadataProvider md = module.Metadata;
-            TokenTypes maxField = md.GetMaxTokenValue(TokenTypes.Field),
-                       maxRVA = md.GetMaxTokenValue(TokenTypes.FieldRVA),
+            TokenTypes maxRVA = md.GetMaxTokenValue(TokenTypes.FieldRVA),
                        maxLayout = md.GetMaxTokenValue(TokenTypes.FieldLayout),
                        tokenRva = TokenTypes.FieldRVA + 1,
                        tokenLayout = TokenTypes.FieldLayout + 1;
@@ -543,13 +558,16 @@ namespace Mosa.Runtime.Vm
             if (TokenTypes.FieldLayout < maxLayout)
                 md.Read(tokenLayout, out fieldLayout);
 
-            for (TokenTypes token = TokenTypes.Field + 1; token <= maxField; token++)
+            for (TokenTypes token = first; token < last; token++)
             {
-
                 // Read the _stackFrameIndex
                 md.Read(token, out field);
 
-                // Does this _stackFrameIndex have an RVA?
+                // Move to the RVA of this field
+                while (fieldRVA.FieldTableIdx < token && tokenRva <= maxRVA)
+                    md.Read(tokenRva++, out fieldRVA);
+
+                // Does this field have an RVA?
                 if (token == fieldRVA.FieldTableIdx && tokenRva <= maxRVA)
                 {
                     rva = fieldRVA.Rva;
@@ -560,7 +578,11 @@ namespace Mosa.Runtime.Vm
                     }
                 }
 
-                // Does this _stackFrameIndex have layout?
+                // Move to the layout of this field
+                while (fieldLayout.Field < token && tokenLayout <= maxLayout)
+                    md.Read(tokenLayout++, out fieldLayout);
+
+                // Does this field have layout?
                 if (token == fieldLayout.Field && tokenLayout <= maxLayout)
                 {
                     layout = fieldLayout.Offset;
@@ -571,8 +593,8 @@ namespace Mosa.Runtime.Vm
                     }
                 }
 
-                // Load the _stackFrameIndex metadata
-                _fields[offset++] = new RuntimeField(module, ref field, layout, rva);
+                // Load the field metadata
+                _fields[offset++] = new RuntimeField(module, ref field, layout, rva, declaringType);
                 layout = rva = 0xFFFFFFFF;
             }
 

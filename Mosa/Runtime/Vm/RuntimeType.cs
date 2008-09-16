@@ -165,7 +165,7 @@ namespace Mosa.Runtime.Vm
             }
 
             // Load all methods of the type
-            members = maxMethod - typeDefRow.MethodList + 1;
+            members = maxMethod - typeDefRow.MethodList;
             if (0 < members)
             {
                 int i = (int)(typeDefRow.MethodList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset(module).MethodOffset;

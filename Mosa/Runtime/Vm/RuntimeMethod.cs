@@ -86,8 +86,9 @@ namespace Mosa.Runtime.Vm
         /// <param name="module">The module.</param>
         /// <param name="method">The method.</param>
         /// <param name="maxParam">The max param.</param>
-        public RuntimeMethod(int token, IMetadataModule module, ref MethodDefRow method, TokenTypes maxParam) :
-            base(token, module, null, null)
+        /// <param name="declaringType">The type, which declared this method.</param>
+        public RuntimeMethod(int token, IMetadataModule module, ref MethodDefRow method, TokenTypes maxParam, RuntimeType declaringType) :
+            base(token, module, declaringType, null)
         {
             _implFlags = method.ImplFlags;
             _attributes = method.Flags;
