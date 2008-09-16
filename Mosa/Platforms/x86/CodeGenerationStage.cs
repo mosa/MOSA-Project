@@ -237,7 +237,7 @@ namespace Mosa.Platforms.x86
             _emitter.CmpXchg(instruction.Operand0, instruction.Operand1);
         }
 
-        void IX86InstructionVisitor<int>.Hlt(HltIntruction instruction, int arg)
+        void IX86InstructionVisitor<int>.Hlt(HltInstruction instruction, int arg)
         {
             _emitter.Hlt();
         }
