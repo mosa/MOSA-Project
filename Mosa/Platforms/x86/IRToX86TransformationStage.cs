@@ -581,7 +581,7 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
                 // int 3
-                //_architecture.CreateInstruction(typeof(IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
+                //_architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
                 // push ebp
                 _architecture.CreateInstruction(typeof(IR.PushInstruction), ebp),
                 // mov ebp, esp
