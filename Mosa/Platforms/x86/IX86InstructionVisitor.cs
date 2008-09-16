@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  */
 
 using System;
@@ -62,6 +63,12 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void CmpXchg(CmpXchgInstruction instruction, ArgType arg);
         /// <summary>
+        /// Halts the machine
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Hlt(HltInstruction instruction, ArgType arg);
+        /// <summary>
         /// Read in from port
         /// </summary>
         /// <param name="instruction">The instruction.</param>
@@ -116,6 +123,12 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void Popad(PopadInstruction instruction, ArgType arg);
         /// <summary>
+        /// Pop Stack into EFLAGS Register
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Popfd(PopfdInstruction instruction, ArgType arg);
+        /// <summary>
         /// Push on the stack
         /// </summary>
         /// <param name="instruction">The instruction.</param>
@@ -128,11 +141,35 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void Pushad(PushadInstruction instruction, ArgType arg);
         /// <summary>
+        /// Push EFLAGS Register onto the Stack
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Pushfd(PushfdInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Repeat String Operation Prefix
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Rep(RepInstruction instruction, ArgType arg);
+        /// <summary>
         /// Enable interrupts
         /// </summary>
         /// <param name="instruction">The instruction.</param>
         /// <param name="arg">The arguments</param>
         void Sti(StiInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Store String
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Stosb(StosbInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Store String
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Stosd(StosdInstruction instruction, ArgType arg);
         /// <summary>
         /// Exchanges register/memory
         /// </summary>

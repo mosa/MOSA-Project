@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Phil Garcia (<mailto:phil@thinkedge.com>)
+ *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  */
 
 using System;
@@ -236,6 +237,11 @@ namespace Mosa.Platforms.x86
             _emitter.CmpXchg(instruction.Operand0, instruction.Operand1);
         }
 
+        void IX86InstructionVisitor<int>.Hlt(HltIntruction instruction, int arg)
+        {
+            _emitter.Hlt();
+        }
+
         /// <summary>
         /// Locks
         /// </summary>
@@ -277,6 +283,16 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Pop Stack into EFLAGS Register
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void IX86InstructionVisitor<int>.Popfd(PopfdInstruction instruction, int arg)
+        {
+            _emitter.Popfd();
+        }
+
+        /// <summary>
         /// Push on the stack
         /// </summary>
         /// <param name="instruction">The instruction.</param>
@@ -297,6 +313,26 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Push EFLAGS Register onto the Stack
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void IX86InstructionVisitor<int>.Pushfd(PushfdInstruction instruction, int arg)
+        {
+            _emitter.Pushfd();
+        }
+
+        /// <summary>
+        /// Repeat String Operation Prefix
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void IX86InstructionVisitor<int>.Rep(RepInstruction instruction, int arg)
+        {
+            //_emitter.Rep(instruction.Operand0, instruction.Operand1);
+        }
+
+        /// <summary>
         /// Enable interrupts
         /// </summary>
         /// <param name="instruction">The instruction.</param>
@@ -304,6 +340,26 @@ namespace Mosa.Platforms.x86
         void IX86InstructionVisitor<int>.Sti(StiInstruction instruction, int arg)
         {
             _emitter.Sti();
+        }
+
+        /// <summary>
+        /// Store String
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void IX86InstructionVisitor<int>.Stosb(StosbInstruction instruction, int arg)
+        {
+            _emitter.Stos(instruction.Operand0);
+        }
+
+        /// <summary>
+        /// Store String
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void IX86InstructionVisitor<int>.Stosd(StosdInstruction instruction, int arg)
+        {
+            _emitter.Stos(instruction.Operand0);
         }
 
         /// <summary>

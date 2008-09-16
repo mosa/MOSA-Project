@@ -19,16 +19,16 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// Intrinsic instruction implementation for the x86 cli instruction.
+    /// Intrinsic instruction implementation for the x86 pushfd instruction.
     /// </summary>
-    public sealed class PopadInstruction : IR.IRInstruction
+    public sealed class PushfdInstruction : IR.IRInstruction
     {
         #region Construction
 
         /// <summary>
         /// 
         /// </summary>
-        public PopadInstruction()
+        public PushfdInstruction()
         {
         }
 
@@ -47,7 +47,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
             IX86InstructionVisitor<ArgType> x86visitor = visitor as IX86InstructionVisitor<ArgType>;
             Debug.Assert(null != x86visitor);
             if (null != x86visitor)
-                x86visitor.Popad(this, arg);
+                x86visitor.Pushfd(this, arg);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         /// </returns>
         public override string ToString()
         {
-            return String.Format(@"x86 popad");
+            return String.Format(@"x86 pushfd");
         }
 
         #endregion // CliInstruction Overrides

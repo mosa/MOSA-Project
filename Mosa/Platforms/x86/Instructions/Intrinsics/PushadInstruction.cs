@@ -4,8 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (<mailto:phil@thinkedge.com>)
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  */
 
 using System;
