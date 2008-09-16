@@ -75,19 +75,20 @@ namespace Mosa.Runtime.Metadata.Blobs
                             throw new ArgumentException(@"Invalid custom attribute blob.", "attributeBlob");
 
                         // Fixed argument list of the ctor
+                        SigType[] paramSig = attributeCtor.Signature.Parameters;
                         IList<RuntimeParameter> parameters = attributeCtor.Parameters;
                         object[] args = new object[parameters.Count];
                         for (int idx = 0; idx < parameters.Count; idx++)
                         {
-                            args[idx] = ParseFixedArg(reader, attributeCtor.Signature.Parameters[idx]);
+                            args[idx] = ParseFixedArg(reader, paramSig[idx]);
                         }
 
                         // Create the attribute instance
                         result = CreateAttribute(attributeCtor, args);
 
                         // Are there any named args?
-                        int numNamed = reader.ReadInt32();
-                        for (int idx = 0; idx < numNamed; idx++)
+                        ushort numNamed = reader.ReadUInt16();
+                        for (ushort idx = 0; idx < numNamed; idx++)
                         {
                             // FIXME: Process the named arguments
                             Trace.WriteLine(@"Skipping named argument of an attribute.");
@@ -244,6 +245,13 @@ namespace Mosa.Runtime.Metadata.Blobs
                     break;
 
                 case CilElementType.Type:
+                    {
+                        string typeName = ParseSerString(reader);
+                        result = Type.GetType(typeName);
+                    }
+                    break;
+
+                case CilElementType.Class:
                     {
                         string typeName = ParseSerString(reader);
                         result = Type.GetType(typeName);

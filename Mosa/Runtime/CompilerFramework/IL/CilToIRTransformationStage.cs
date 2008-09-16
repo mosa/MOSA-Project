@@ -671,11 +671,34 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             if (true == rm.IsDefined(rt))
             {
+                // FIXME: Change this to a GetCustomAttributes call, once we can do that :)
                 foreach (RuntimeAttribute ra in rm.CustomAttributes)
                 {
                     if (ra.Type == rt)
                     {
+                        // Get the intrinsic attribute
+                        IntrinsicAttribute ia = (IntrinsicAttribute)ra.GetAttribute();
+                        if (true == ia.Architecture.IsInstanceOfType(_architecture))
+                        {
+                            // Found a replacement for the call...
+                            try
+                            {
+                                Operand[] args = new Operand[instruction.Results.Length + instruction.Operands.Length];
+                                int idx = 0;
+                                foreach (Operand op in instruction.Results)
+                                    args[idx++] = op;
+                                foreach (Operand op in instruction.Operands)
+                                    args[idx++] = op;
 
+                                replacement = (Instruction)Activator.CreateInstance(ia.InstructionType, args, null);
+                                break;
+                            }
+                            catch (Exception e)
+                            {
+                                Trace.WriteLine("Failed to replace intrinsic call with its instruction:");
+                                Trace.WriteLine(e);
+                            }
+                        }
                     }
                 }
             }
