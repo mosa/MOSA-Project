@@ -60,10 +60,17 @@ namespace Mosa.Platforms.x86.Constraints
         /// <param name="opIdx">The operand index to check.</param>
         public Register[] GetRegistersForOperand(int opIdx)
         {
-            Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EBX, 
-                                 x86.GeneralPurposeRegister.ECX, x86.GeneralPurposeRegister.EDX,
-                                 x86.GeneralPurposeRegister.EBP, x86.GeneralPurposeRegister.EDI,
-                                 x86.GeneralPurposeRegister.ESI, x86.GeneralPurposeRegister.ESP };
+            Register[] valid = { 
+                x86.GeneralPurposeRegister.EAX, 
+                x86.GeneralPurposeRegister.EBX, 
+                x86.GeneralPurposeRegister.ECX, 
+                x86.GeneralPurposeRegister.EDX,
+                x86.GeneralPurposeRegister.EBP, 
+                x86.GeneralPurposeRegister.EDI,
+                x86.GeneralPurposeRegister.ESI, 
+                x86.GeneralPurposeRegister.ESP 
+            };
+
             return valid;
         }
 

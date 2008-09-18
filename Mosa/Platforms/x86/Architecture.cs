@@ -19,6 +19,7 @@ using Mosa.Runtime.CompilerFramework;
 using IL = Mosa.Runtime.CompilerFramework.IL;
 using Mosa.ObjectFiles.Elf32;
 using Mosa.ObjectFiles.Elf32.Format;
+using Mosa.Platforms.x86.Constraints;
 
 namespace Mosa.Platforms.x86
 {
@@ -29,6 +30,23 @@ namespace Mosa.Platforms.x86
     public class Architecture : BasicArchitecture
     {
         #region Data members
+
+        private static Dictionary<Type, Type> s_constraints = new Dictionary<Type, Type>()
+        {
+            //{ typeof(x86.Instructions.IntInstruction), typeof(IntConstraint) },
+            { typeof(x86.Instructions.AddInstruction), typeof(GPRConstraint) },
+            { typeof(x86.Instructions.AdcInstruction), typeof(GPRConstraint) },
+            { typeof(x86.Instructions.DivInstruction), typeof(DivConstraint) },
+            { typeof(x86.Instructions.LogicalAndInstruction), typeof(LogicalAndConstraint) },
+            { typeof(x86.Instructions.LogicalOrInstruction), typeof(LogicalOrConstraint) },
+            { typeof(x86.Instructions.LogicalXorInstruction), typeof(LogicalXorConstraint) },
+            { typeof(IR.MoveInstruction), typeof(MoveConstraint) },
+            { typeof(x86.Instructions.MulInstruction), typeof(MulConstraint) },
+            { typeof(x86.Instructions.SarInstruction), typeof(ShiftConstraint) },
+            { typeof(x86.Instructions.ShlInstruction), typeof(ShiftConstraint) },
+            { typeof(x86.Instructions.ShrInstruction), typeof(ShiftConstraint) },
+            { typeof(x86.Instructions.SubInstruction), typeof(GPRConstraint) },
+        };
 
         /// <summary>
         /// Remaps specific IL intermediate representation types to more x86 specific ones.
@@ -199,7 +217,9 @@ namespace Mosa.Platforms.x86
             // and packed operations available with MMX/SSE extensions
             methodPipeline.AddRange(new IMethodCompilerStage[] {
                 new IRToX86TransformationStage(),
-                //InstructionLogger.Instance,
+                InstructionLogger.Instance,
+                new SimpleRegisterAllocator(),
+                InstructionLogger.Instance,
                 new CodeGenerator()
             });
         }
@@ -241,8 +261,11 @@ namespace Mosa.Platforms.x86
         /// <returns>An object specifying the register constraints or null, if there are no constraints.</returns>
         public override IRegisterConstraint GetRegisterConstraint(Instruction instruction)
         {
-            if (instruction is Instructions.AddInstruction)
-                return new Constraints.AddConstraint();
+            Type constraintType = null;
+            if (s_constraints.TryGetValue(instruction.GetType(), out constraintType) == true)
+            {
+                return (IRegisterConstraint)Activator.CreateInstance(constraintType);
+            }
 
             return null;
         }
