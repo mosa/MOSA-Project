@@ -1,12 +1,21 @@
-﻿    using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
+
 using Mosa.Runtime.CompilerFramework;
-using IL = Mosa.Runtime.CompilerFramework.IL;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using System.Diagnostics;
+using IL = Mosa.Runtime.CompilerFramework.IL;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {

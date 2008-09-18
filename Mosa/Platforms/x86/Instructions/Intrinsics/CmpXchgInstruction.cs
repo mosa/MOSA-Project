@@ -8,44 +8,45 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
-using IL = Mosa.Runtime.CompilerFramework.IL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// 
+    /// Intermediate representation of the x86 compare-exchange instruction.
     /// </summary>
-    sealed class CmpXchgInstruction : IR.TwoOperandInstruction
+    /// <remarks>
+    /// This instruction compares the value of Operand0 and Operand1. If they are
+    /// equal, Operand0 is set to the value of Operand2.
+    /// </remarks>
+    public sealed class CmpXchgInstruction : IR.ThreeOperandInstruction
     {
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InInstruction"/> class.
+        /// Initializes a new instance of the <see cref="CmpXchgInstruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
-        public CmpXchgInstruction(IL.OpCode code) :
-            base()
+        public CmpXchgInstruction()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InInstruction"/> class.
+        /// Initializes a new instance of the <see cref="CmpXchgInstruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
-        /// <param name="destination">The destination.</param>
-        /// <param name="source">The source.</param>
-        public CmpXchgInstruction(IL.OpCode code, Operand destination, Operand source) :
-            base(destination, source)
+        /// <param name="destination">The destination operand.</param>
+        /// <param name="comparator">The comparator value.</param>
+        /// <param name="value">The value to store in <paramref name="destination"/>, if destination equals <paramref name="comparator"/>.</param>
+        public CmpXchgInstruction(Operand destination, Operand comparator, Operand value) :
+            base(destination, comparator, value)
         {
         }
 
         #endregion // Construction
+
+        #region ThreeOperandInstruction Overrides
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -69,7 +70,9 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         /// </returns>
         public override string ToString()
         {
-            return String.Format(@"x86 cmpxchg {0}, {1} ", this.Operand0, this.Operand1);
+            return String.Format(@"x86 cmpxchg {0}, {1}, {2} ; if ({0} == {1}) {0} = {2} ", this.Operand0, this.Operand1, this.Operand2);
         }
+
+        #endregion // ThreeOperandInstruction Overrides
     }
 }

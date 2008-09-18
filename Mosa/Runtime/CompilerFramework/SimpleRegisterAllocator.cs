@@ -20,6 +20,15 @@ namespace Mosa.Runtime.CompilerFramework
     /// </remarks>
     public sealed class SimpleRegisterAllocator : IMethodCompilerStage
     {
+        #region Tracing Switch
+
+        /// <summary>
+        /// Controls tracing of the <see cref="SimpleRegisterAllocator"/>.
+        /// </summary>
+        public static readonly TraceSwitch TRACING = new TraceSwitch(@"Mosa.Runtime.CompilerFramework.SimpleRegisterAllocator", @"Controls traces of the simple register allocator.", "Info");
+
+        #endregion // Tracing Switch
+
         #region Data members
 
         /// <summary>
@@ -120,13 +129,24 @@ namespace Mosa.Runtime.CompilerFramework
             Instruction instr = block.Instructions[idx];
             // Retrieve the register constraints for the instruction
             IRegisterConstraint rc = _architecture.GetRegisterConstraint(instr);
-            //Debug.Assert(null != rc, @"Failed to get register constraints for the instruction.");
             // Operand index
             int opIdx;
+
+            if (null == rc && TRACING.TraceWarning == true)
+                Trace.WriteLine(String.Format(@"Failed to get register constraints for instruction {0}!", instr));
+
 
             // Only process the instruction, if we have constraints...
             if (null != rc)
             {
+                /* FIXME: Spill used registers, if they are in use :(
+                 * It is not as simple as it sounds, as the register may be used by the instruction itself,
+                 * but dirty afterwards anyways. So we need to decide this at some later point depending on
+                 * the arg list. If the register is also a result reg, and they represent the same operand,
+                 * we may get away without spilling... Oo?
+                 */
+                //Register[] used = rc.GetRegistersUsed();
+
                 opIdx = 0;
                 foreach (Operand op in instr.Operands)
                 {

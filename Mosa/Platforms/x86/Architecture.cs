@@ -218,8 +218,8 @@ namespace Mosa.Platforms.x86
             methodPipeline.AddRange(new IMethodCompilerStage[] {
                 new IRToX86TransformationStage(),
                 InstructionLogger.Instance,
-                new SimpleRegisterAllocator(),
-                InstructionLogger.Instance,
+                //new SimpleRegisterAllocator(),
+                //InstructionLogger.Instance,
                 new CodeGenerator()
             });
         }

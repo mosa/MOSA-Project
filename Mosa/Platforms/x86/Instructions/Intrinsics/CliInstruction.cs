@@ -27,7 +27,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         #region Construction
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="CliInstruction"/> class.
         /// </summary>
         public CliInstruction()
         {

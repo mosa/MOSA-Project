@@ -15,9 +15,9 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.Constraints
 {
     /// <summary>
-    /// 
+    /// Provides register constraints for the x86 idiv and div instructions.
     /// </summary>
-    public class DivConstraint : IRegisterConstraint
+    public sealed class DivConstraint : GPRConstraint
     {
         /// <summary>
         /// Determines if this is a valid operand of the instruction.
@@ -25,16 +25,9 @@ namespace Mosa.Platforms.x86.Constraints
         /// <param name="opIdx">The operand index to check.</param>
         /// <param name="op">The operand in use.</param>
         /// <returns>True if the used operand is valid or false, if it is not valid.</returns>
-        public bool IsValidOperand(int opIdx, Operand op)
+        public override bool IsValidOperand(int opIdx, Operand op)
         {
-            if (!(op.StackType == StackTypeCode.Int32 || op.StackType == StackTypeCode.Int64 || op.StackType == StackTypeCode.N
-                || op.StackType == StackTypeCode.Ptr))
-                return false;
-
-            if (opIdx == 0)
-                return (op is MemoryOperand || op is RegisterOperand);
-
-            return false;
+            return (true == base.IsValidOperand(opIdx, op) && !(op is ConstantOperand));
         }
 
         /// <summary>
@@ -43,34 +36,19 @@ namespace Mosa.Platforms.x86.Constraints
         /// <param name="resIdx">The result operand index to check.</param>
         /// <param name="op">The operand in use.</param>
         /// <returns>True if the used operand is valid or false, if it is not valid.</returns>
-        public bool IsValidResult(int resIdx, Operand op)
+        public override bool IsValidResult(int resIdx, Operand op)
         {
-            if (!(op.StackType == StackTypeCode.Int32 || op.StackType == StackTypeCode.Int64 || op.StackType == StackTypeCode.N
-                || op.StackType == StackTypeCode.Ptr))
-                return false;
-
-            return (op is RegisterOperand);
-        }
-
-        /// <summary>
-        /// Returns an array of registers, that are valid for the specified operand of the instruction.
-        /// </summary>
-        /// <param name="opIdx">The operand index to check.</param>
-        public Register[] GetRegistersForOperand(int opIdx)
-        {
-            Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EBX, 
-                                 x86.GeneralPurposeRegister.ECX, x86.GeneralPurposeRegister.EDX };
-            return valid;
+            RegisterOperand rop = op as RegisterOperand;
+            return (true == base.IsValidResult(resIdx, op) && null != rop && rop.Register == GeneralPurposeRegister.EAX);
         }
 
         /// <summary>
         /// Returns an array of registers, that are valid for the specified result operand of the instruction.
         /// </summary>
         /// <param name="resIdx">The result operand index to check.</param>
-        public Register[] GetRegistersForResult(int resIdx)
+        public override Register[] GetRegistersForResult(int resIdx)
         {
-            Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EDX };
-            return valid;
+            return new Register[] { x86.GeneralPurposeRegister.EAX };
         }
 
         /// <summary>
@@ -80,10 +58,9 @@ namespace Mosa.Platforms.x86.Constraints
         /// hosts a variable.
         /// </summary>
         /// <returns>An array of registers used by the instruction.</returns>
-        public Register[] GetRegistersUsed()
+        public override Register[] GetRegistersUsed()
         {
-            Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EDX };
-            return valid;
+            return new Register[] { x86.GeneralPurposeRegister.EDX };
         }
     }
 }

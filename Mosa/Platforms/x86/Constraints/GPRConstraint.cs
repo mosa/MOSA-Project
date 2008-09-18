@@ -1,8 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Mosa.Runtime.CompilerFramework;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System;
 using System.Diagnostics;
+
+using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.Constraints
 {
@@ -33,7 +41,7 @@ namespace Mosa.Platforms.x86.Constraints
         /// <returns>
         /// True if the used operand is valid or false, if it is not valid.
         /// </returns>
-        public bool IsValidOperand(int opIdx, Operand op)
+        public virtual bool IsValidOperand(int opIdx, Operand op)
         {
             /*
              * We support memory, register and constant operands as the source
@@ -44,6 +52,9 @@ namespace Mosa.Platforms.x86.Constraints
             Debug.Assert(opIdx == 0, @"More than one operand is not supported.");
             if (opIdx > 0)
                 throw new ArgumentOutOfRangeException(@"opIdx", opIdx, @"More than one operand is not supported.");
+
+            if (op.StackType == StackTypeCode.F || op.StackType == StackTypeCode.Int64)
+                return false;
 
             return (op is MemoryOperand || op is RegisterOperand || op is ConstantOperand);
         }
@@ -56,7 +67,7 @@ namespace Mosa.Platforms.x86.Constraints
         /// <returns>
         /// True if the used operand is valid or false, if it is not valid.
         /// </returns>
-        public bool IsValidResult(int resIdx, Operand op)
+        public virtual bool IsValidResult(int resIdx, Operand op)
         {
             /*
              * The scheme employed by this class forces register allocators to defer
@@ -69,6 +80,9 @@ namespace Mosa.Platforms.x86.Constraints
             if (resIdx > 0)
                 throw new ArgumentOutOfRangeException(@"resIdx", resIdx, @"More than one result operand is not supported.");
 
+            if (op.StackType == StackTypeCode.F || op.StackType == StackTypeCode.Int64)
+                return false;
+
             return (op is RegisterOperand);
         }
 
@@ -77,7 +91,7 @@ namespace Mosa.Platforms.x86.Constraints
         /// </summary>
         /// <param name="opIdx">The operand index to check.</param>
         /// <returns></returns>
-        public Register[] GetRegistersForOperand(int opIdx)
+        public virtual Register[] GetRegistersForOperand(int opIdx)
         {
             Debug.Assert(opIdx == 0, @"More than one operand is not supported.");
             if (opIdx > 0)
@@ -122,7 +136,7 @@ namespace Mosa.Platforms.x86.Constraints
         /// Gets the general purpose registers.
         /// </summary>
         /// <returns>An array holding all general purpose registers.</returns>
-        private Register[] GetGeneralPurposeRegisters()
+        protected Register[] GetGeneralPurposeRegisters()
         {
             return new Register[] {
                 x86.GeneralPurposeRegister.ESI,

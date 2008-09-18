@@ -220,6 +220,18 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 runtime.Dispose();
                 runtime = null;
             }
+
+            // Try to delete the compiled assembly...
+            if (null != compileResults.PathToAssembly)
+            {
+                try
+                {
+                    File.Delete(compileResults.PathToAssembly);
+                }
+                catch
+                {
+                }
+            }
         }
 
         /// <summary>
