@@ -343,6 +343,26 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Read time stamp counter
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void IX86InstructionVisitor<int>.Rdtsc(RdtscInstruction instruction, int arg)
+        {
+            _emitter.Rdtsc();
+        }
+
+        /// <summary>
+        /// Rdpmc
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void IX86InstructionVisitor<int>.Rdpmc(RdpmcInstruction instruction, int arg)
+        {
+            _emitter.Rdpmc();
+        }
+
+        /// <summary>
         /// Repeat String Operation Prefix
         /// </summary>
         /// <param name="instruction">The instruction.</param>

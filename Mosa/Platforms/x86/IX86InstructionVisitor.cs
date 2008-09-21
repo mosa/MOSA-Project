@@ -156,6 +156,18 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void Pushfd(PushfdInstruction instruction, ArgType arg);
         /// <summary>
+        /// Rdpmc
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Rdpmc(RdpmcInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Read time stamp counter
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Rdtsc(RdtscInstruction instruction, ArgType arg);
+        /// <summary>
         /// Repeat String Operation Prefix
         /// </summary>
         /// <param name="instruction">The instruction.</param>
