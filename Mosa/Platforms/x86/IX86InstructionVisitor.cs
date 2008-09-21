@@ -100,7 +100,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="instruction">The instruction.</param>
         /// <param name="arg">The arguments</param>
-        void Lidt(LditInstruction instruction, ArgType arg);
+        void Lidt(LidtInstruction instruction, ArgType arg);
         /// <summary>
         /// Locks
         /// </summary>

@@ -192,7 +192,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="instruction">The instruction.</param>
         /// <param name="arg">The arguments</param>
-        void IX86InstructionVisitor<int>.Lidt(LditInstruction instruction, int arg)
+        void IX86InstructionVisitor<int>.Lidt(LidtInstruction instruction, int arg)
         {
             _emitter.Lidt(instruction.Operand0);
         }
