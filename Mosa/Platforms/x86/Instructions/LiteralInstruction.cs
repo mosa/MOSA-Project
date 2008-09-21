@@ -17,6 +17,9 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Platforms.x86.Instructions
 {
+    /// <summary>
+    /// Intermediate representation of the literal instruction.
+    /// </summary>
     sealed class LiteralInstruction : IR.LiteralInstruction
     {
         #region Construction

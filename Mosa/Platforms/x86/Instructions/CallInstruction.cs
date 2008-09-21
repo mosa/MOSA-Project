@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using IL = Mosa.Runtime.CompilerFramework.IL;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
@@ -18,16 +18,26 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86.Instructions
 {
-    class CallInstruction : Instruction
+    /// <summary>
+    /// x86 specific intermediate representation of the call instruction.
+    /// </summary>
+    class CallInstruction : IR.IRInstruction
     {
         #region Data members
 
+        /// <summary>
+        /// Holds the invocation target.
+        /// </summary>
         private RuntimeMethod _invokeTarget;
 
         #endregion // Data members
 
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CallInstruction"/> class.
+        /// </summary>
+        /// <param name="method">The method to call.</param>
         public CallInstruction(RuntimeMethod method) :
             base(0, 0)
         {
@@ -41,12 +51,18 @@ namespace Mosa.Platforms.x86.Instructions
 
         #region Properties
 
+        /// <summary>
+        /// Gets the invoke target.
+        /// </summary>
+        /// <value>The invoke target.</value>
         public RuntimeMethod InvokeTarget
         {
             get { return _invokeTarget; }
         }
 
         #endregion // Properties
+
+        #region Methods
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -60,5 +76,7 @@ namespace Mosa.Platforms.x86.Instructions
             if (null != x86v)
                 x86v.Call(this, arg);
         }
+
+        #endregion // Methods
     }
 }

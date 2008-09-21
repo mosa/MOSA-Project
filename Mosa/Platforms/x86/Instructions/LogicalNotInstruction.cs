@@ -17,7 +17,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 namespace Mosa.Platforms.x86.Instructions
 {
     /// <summary>
-    /// X86 specific representation of the NOT instruction.
+    /// Intermediate representation of the X86 NOT instruction.
     /// </summary>
     sealed class LogicalNotInstruction : IR.LogicalNotInstruction
     {
@@ -33,10 +33,10 @@ namespace Mosa.Platforms.x86.Instructions
         /// <summary>
         /// Initializes a new instance of the <see cref="LogicalNotInstruction"/> class.
         /// </summary>
-        /// <param name="result">The result.</param>
-        /// <param name="op1">The op1.</param>
-        public LogicalNotInstruction(Operand result, Operand op1) :
-            base(result, op1)
+        /// <param name="destination">The destination operand.</param>
+        /// <param name="source">The source operand.</param>
+        public LogicalNotInstruction(Operand destination, Operand source) :
+            base(destination, source)
         {
         }
 

@@ -12,26 +12,49 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using IL = Mosa.Runtime.CompilerFramework.IL;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.Instructions
 {
-    sealed class AdcInstruction : Instruction
+    /// <summary>
+    /// Intermediate representation of the x86 adc instruction.
+    /// </summary>
+    sealed class AdcInstruction : IR.TwoOperandInstruction
     {
         #region Construction
-        
-        public AdcInstruction(IL.OpCode code) :
-            base(2, 1)
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdcInstruction"/> class.
+        /// </summary>
+        public AdcInstruction()
         {
         }
 
-        public AdcInstruction(IL.OpCode code, Operand destination, Operand source) :
-            base(2, 1)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdcInstruction"/> class.
+        /// </summary>
+        /// <param name="destination">The destination operand.</param>
+        /// <param name="source">The source operand.</param>
+        public AdcInstruction(Operand destination, Operand source) :
+            base(destination, source)
         {
         }
 
         #endregion // Construction
+
+        #region TwoOperandInstruction Overrides
+
+        /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format("x86 adc {0}, {1} ; {0} = {0} + {1} + carry-flag", this.Operand0, this.Operand1);
+        }
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -46,5 +69,7 @@ namespace Mosa.Platforms.x86.Instructions
             if (null != x86)
                 x86.Adc(this, arg);
         }
+
+        #endregion // TwoOperandInstruction Overrides
     }
 }

@@ -20,14 +20,14 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// Intrinsic instruction implementation for the x86 cli instruction.
+    /// Intermediate representation of the x86 iretd instruction.
     /// </summary>
     public sealed class IretdInstruction : IR.IRInstruction
     {
         #region Construction
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="IretdInstruction"/> class.
         /// </summary>
         public IretdInstruction()
         {
@@ -35,7 +35,18 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
 
         #endregion // Construction
 
-        #region CliInstruction Overrides
+        #region IRInstruction Overrides
+
+        /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 iretd");
+        }
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -51,17 +62,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
                 x86visitor.Iretd(this, arg);
         }
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(@"x86 iretd");
-        }
-
-        #endregion // CliInstruction Overrides
+        #endregion // IRInstruction Overrides
     }
 }

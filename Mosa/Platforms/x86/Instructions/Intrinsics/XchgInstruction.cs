@@ -19,33 +19,44 @@ using System.Diagnostics;
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// 
+    /// Intermediate representation of the x86 xchg instruction.
     /// </summary>
     sealed class XchgInstruction : IR.TwoOperandInstruction
     {
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InInstruction"/> class.
+        /// Initializes a new instance of the <see cref="XchgInstruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
-        public XchgInstruction(IL.OpCode code) :
+        public XchgInstruction() :
             base()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InInstruction"/> class.
+        /// Initializes a new instance of the <see cref="XchgInstruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
-        /// <param name="destination">The destination.</param>
-        /// <param name="source">The source.</param>
-        public XchgInstruction(IL.OpCode code, Operand destination, Operand source) :
+        /// <param name="destination">The destination operand.</param>
+        /// <param name="source">The source operand.</param>
+        public XchgInstruction(Operand destination, Operand source) :
             base(destination, source)
         {
         }
 
         #endregion // Construction
+
+        #region TwoOperandInstruction Overrides
+
+        /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 xchg {0}, {1} ", this.Operand0, this.Operand1);
+        }
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -61,15 +72,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
                 x86.Xchg(this, arg);
         }
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(@"x86 xchg {0}, {1} ", this.Operand0, this.Operand1);
-        }
+        #endregion // TwoOperandInstruction Overrides
     }
 }

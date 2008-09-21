@@ -19,13 +19,14 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// Intrinsic instruction implementation for the x86 sti instruction.
+    /// Intermediate representation of the x86 sti instruction.
     /// </summary>
     public sealed class StiInstruction : IR.IRInstruction
     {
         #region Construction
+
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="StiInstruction"/> class.
         /// </summary>
         public StiInstruction()
         {
@@ -33,7 +34,18 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
 
         #endregion // Construction
 
-        #region StiInstruction Overrides
+        #region IRInstruction Overrides
+
+        /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 sti");
+        }
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -49,17 +61,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
                 x86visitor.Sti(this, arg);
         }
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(@"x86 sti");
-        }
-
-        #endregion // StiInstruction Overrides
+        #endregion // IRInstruction Overrides
     }
 }

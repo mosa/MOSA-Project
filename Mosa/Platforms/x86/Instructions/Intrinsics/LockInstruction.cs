@@ -19,22 +19,34 @@ using System.Diagnostics;
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// 
+    /// Intermediate representation of the x86 lock instruction.
     /// </summary>
     sealed class LockIntruction : IR.IRInstruction
     {
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InInstruction"/> class.
+        /// Initializes a new instance of the <see cref="LockIntruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
-        public LockIntruction(IL.OpCode code) :
+        public LockIntruction() :
             base()
         {
         }
 
         #endregion // Construction
+
+        #region IRInstruction Overrides
+
+        /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 lock");
+        }
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -50,15 +62,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
                 x86.Lock(this, arg);
         }
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(@"x86 lock");
-        }
+        #endregion // IRInstruction Overrides
     }
 }

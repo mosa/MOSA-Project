@@ -19,7 +19,7 @@ using System.Diagnostics;
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// 
+    /// Intermediate representation of the x86 lgdt instruction.
     /// </summary>
     sealed class LgdtInstruction : IR.OneOperandInstruction
     {
@@ -28,8 +28,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         /// <summary>
         /// Initializes a new instance of the <see cref="LgdtInstruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
-        public LgdtInstruction(IL.OpCode code) :
+        public LgdtInstruction() :
             base()
         {
         }
@@ -37,14 +36,26 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         /// <summary>
         /// Initializes a new instance of the <see cref="LgdtInstruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
-        /// <param name="destination">The destination.</param>
-        public LgdtInstruction(IL.OpCode code, Operand destination) :
-            base(destination)
+        /// <param name="source">The source operand.</param>
+        public LgdtInstruction(Operand source) :
+            base(source)
         {
         }
 
         #endregion // Construction
+
+        #region OneOperandInstruction Overrides
+
+        /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 lgdt {0} ", this.Operand0);
+        }
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -60,15 +71,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
                 x86.Lgdt(this, arg);
         }
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(@"x86 lgdt {0} ", this.Operand0);
-        }
+        #endregion // OneOperandInstruction Overrides
     }
 }

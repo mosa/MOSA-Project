@@ -19,14 +19,14 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// Intrinsic instruction implementation for the x86 cli instruction.
+    /// Intermediate representation of the x86 pause instruction.
     /// </summary>
     public sealed class PauseInstruction : IR.IRInstruction
     {
         #region Construction
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="PauseInstruction"/> class.
         /// </summary>
         public PauseInstruction()
         {
@@ -34,7 +34,18 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
 
         #endregion // Construction
 
-        #region CliInstruction Overrides
+        #region IRInstruction Overrides
+
+        /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 pause");
+        }
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -50,17 +61,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
                 x86visitor.Pause(this, arg);
         }
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(@"x86 pause");
-        }
-
-        #endregion // CliInstruction Overrides
+        #endregion // IRInstruction Overrides
     }
 }

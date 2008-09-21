@@ -16,14 +16,25 @@ using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.Instructions
 {
+    /// <summary>
+    /// Intermediate representation of the sub instruction.
+    /// </summary>
     sealed class SubInstruction : IR.TwoOperandInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubInstruction"/> class.
+        /// </summary>
         public SubInstruction()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubInstruction"/> class.
+        /// </summary>
+        /// <param name="destination">The destination operand.</param>
+        /// <param name="source">The source operand.</param>
         public SubInstruction(Operand destination, Operand source) :
             base(destination, source)
         {
@@ -31,6 +42,14 @@ namespace Mosa.Platforms.x86.Instructions
 
         #endregion // Construction
 
+        #region TwoOperandInstruction Overrides
+
+        /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
         public override string ToString()
         {
             return String.Format(@"x86 sub {0}, {1} ; {0} -= {1}", this.Operand0, this.Operand1);
@@ -51,5 +70,7 @@ namespace Mosa.Platforms.x86.Instructions
             else
                 base.Visit((IInstructionVisitor<ArgType>)visitor, arg);
         }
+
+        #endregion // TwoOperandInstruction Overrides
     }
 }

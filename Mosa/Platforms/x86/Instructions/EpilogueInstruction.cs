@@ -21,7 +21,7 @@ using Mosa.Runtime.Metadata.Signatures;
 namespace Mosa.Platforms.x86.Instructions
 {
     /// <summary>
-    /// x86 specific specialization of the <see cref="IR.EpilogueInstruction"/>.
+    /// x86 specific intermediate representation of the <see cref="IR.EpilogueInstruction"/>.
     /// </summary>
     public sealed class EpilogueInstruction : IR.EpilogueInstruction
     {

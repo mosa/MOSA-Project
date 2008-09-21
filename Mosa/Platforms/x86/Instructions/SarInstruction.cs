@@ -19,19 +19,25 @@ using Mosa.Runtime.Metadata;
 namespace Mosa.Platforms.x86.Instructions
 {
     /// <summary>
-    /// 
+    /// Intermediate representation of the arithmetic shift right instruction.
     /// </summary>
     class SarInstruction : IR.TwoOperandInstruction
     {
+        #region Construction
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SarInstruction"/> class.
         /// </summary>
-        /// <param name="destination">The destination.</param>
-        /// <param name="source">The source.</param>
+        /// <param name="destination">The destination operand.</param>
+        /// <param name="source">The source operand.</param>
         public SarInstruction(Operand destination, Operand source) :
             base(destination, source)
         {
         }
+
+        #endregion // Construction
+
+        #region TwoOperandInstruction Overrides
 
         /// <summary>
         /// Returns a string representation of the instruction.
@@ -62,5 +68,7 @@ namespace Mosa.Platforms.x86.Instructions
                 base.Visit((IInstructionVisitor<ArgType>)visitor, arg);
             }
         }
+
+        #endregion // TwoOperandInstruction Overrides
     }
 }

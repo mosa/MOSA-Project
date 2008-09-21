@@ -21,7 +21,7 @@ using Mosa.Runtime.Metadata.Signatures;
 namespace Mosa.Platforms.x86.Instructions
 {
     /// <summary>
-    /// x86 specific implementation of the prologue instruction.
+    /// Intermediate representation of the x86 specific prologue instruction.
     /// </summary>
     sealed class PrologueInstruction : IR.PrologueInstruction
     {

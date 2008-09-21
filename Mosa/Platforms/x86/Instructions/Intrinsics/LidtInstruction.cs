@@ -18,22 +18,22 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// Intrinsic instruction implementation for the x86 ldit instruction.
+    /// Intermediate representation of the x86 lidt instruction.
     /// </summary>
-    public sealed class LditInstruction : IR.OneOperandInstruction
+    public sealed class LidtInstruction : IR.OneOperandInstruction
     {
         #region Construction
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="LidtInstruction"/> class.
         /// </summary>
-        public LditInstruction()
+        public LidtInstruction()
         {
         }
 
         #endregion // Construction
 
-        #region IRInstruction Overrides
+        #region OneOperandInstruction Overrides
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -60,6 +60,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
             return String.Format(@"x86 lidt {0} ", this.Operand0);
         }
 
-        #endregion // ILInstruction Overrides
+        #endregion // OneOperandInstruction Overrides
     }
 }

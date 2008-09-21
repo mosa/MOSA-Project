@@ -16,10 +16,16 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.Instructions
 {
+    /// <summary>
+    /// Intermediate representation of the x86 move instruction.
+    /// </summary>
     sealed class MoveInstruction : IR.MoveInstruction
     {
         #region Construction
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MoveInstruction"/> class.
+        /// </summary>
         public MoveInstruction()
         {
         }

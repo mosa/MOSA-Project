@@ -19,32 +19,43 @@ using System.Diagnostics;
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// 
+    /// Intermediate representation of the x86 stosb instruction.
     /// </summary>
     sealed class StosbInstruction : IR.OneOperandInstruction
     {
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LgdtInstruction"/> class.
+        /// Initializes a new instance of the <see cref="StosbInstruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
-        public StosbInstruction(IL.OpCode code) :
+        public StosbInstruction() :
             base()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LgdtInstruction"/> class.
+        /// Initializes a new instance of the <see cref="StosbInstruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
         /// <param name="destination">The destination.</param>
-        public StosbInstruction(IL.OpCode code, Operand destination) :
+        public StosbInstruction(Operand destination) :
             base(destination)
         {
         }
 
         #endregion // Construction
+
+        #region OneOperandInstruction Overrides
+
+        /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 stosb {0} ", this.Operand0);
+        }
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -60,15 +71,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
                 x86.Stosb(this, arg);
         }
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(@"x86 stosb {0} ", this.Operand0);
-        }
+        #endregion // OneOperandInstruction Overrides
     }
 }

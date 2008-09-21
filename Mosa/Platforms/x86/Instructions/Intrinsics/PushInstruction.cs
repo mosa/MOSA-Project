@@ -19,32 +19,43 @@ using System.Diagnostics;
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// 
+    /// Intermediate representation of the x86 push instruction.
     /// </summary>
     sealed class PushInstruction : IR.OneOperandInstruction
     {
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LgdtInstruction"/> class.
+        /// Initializes a new instance of the <see cref="PushInstruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
-        public PushInstruction(IL.OpCode code) :
+        public PushInstruction() :
             base()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LgdtInstruction"/> class.
+        /// Initializes a new instance of the <see cref="PushInstruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
-        /// <param name="destination">The destination.</param>
-        public PushInstruction(IL.OpCode code, Operand destination) :
-            base(destination)
+        /// <param name="operand">The operand to push.</param>
+        public PushInstruction(Operand operand) :
+            base(operand)
         {
         }
 
         #endregion // Construction
+
+        #region OneOperandInstruction Overrides
+
+        /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 push {0} ", this.Operand0);
+        }
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -60,15 +71,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
                 x86.Push(this, arg);
         }
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(@"x86 push {0} ", this.Operand0);
-        }
+        #endregion // OneOperandInstruction Overrides
     }
 }

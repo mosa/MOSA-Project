@@ -18,7 +18,7 @@ using Mosa.Runtime.Metadata;
 namespace Mosa.Platforms.x86.Instructions
 {
     /// <summary>
-    /// Converts a signed integer to a float value.
+    /// Intermediate representation of the x86 cvtsi2sd instruction.
     /// </summary>
     public sealed class Cvtsi2sdInstruction : TwoOperandInstruction
     {

@@ -19,32 +19,43 @@ using System.Diagnostics;
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// 
+    /// Intermediate representation of the x86 pop instruction.
     /// </summary>
     sealed class PopInstruction : IR.OneOperandInstruction
     {
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LgdtInstruction"/> class.
+        /// Initializes a new instance of the <see cref="PopInstruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
-        public PopInstruction(IL.OpCode code) :
+        public PopInstruction() :
             base()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LgdtInstruction"/> class.
+        /// Initializes a new instance of the <see cref="PopInstruction"/> class.
         /// </summary>
-        /// <param name="code">The code.</param>
         /// <param name="destination">The destination.</param>
-        public PopInstruction(IL.OpCode code, Operand destination) :
+        public PopInstruction(Operand destination) :
             base(destination)
         {
         }
 
         #endregion // Construction
+
+        #region OneOperandInstruction Overrides
+
+        /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 pop {0} ", this.Operand0);
+        }
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -60,15 +71,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
                 x86.Pop(this, arg);
         }
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(@"x86 pop {0} ", this.Operand0);
-        }
+        #endregion // OneOperandInstruction Overrides
     }
 }

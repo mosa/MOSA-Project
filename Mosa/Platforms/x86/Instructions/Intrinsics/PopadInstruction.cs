@@ -19,14 +19,14 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.Instructions.Intrinsics
 {
     /// <summary>
-    /// Intrinsic instruction implementation for the x86 cli instruction.
+    /// Intermediate representation of the x86 cli instruction.
     /// </summary>
     public sealed class PopadInstruction : IR.IRInstruction
     {
         #region Construction
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="PopadInstruction"/> class.
         /// </summary>
         public PopadInstruction()
         {
@@ -34,7 +34,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
 
         #endregion // Construction
 
-        #region CliInstruction Overrides
+        #region PopadInstruction Overrides
 
         /// <summary>
         /// Allows visitor based dispatch for this instruction object.
@@ -61,6 +61,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
             return String.Format(@"x86 popad");
         }
 
-        #endregion // CliInstruction Overrides
+        #endregion // PopadInstruction Overrides
     }
 }
