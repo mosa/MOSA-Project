@@ -61,13 +61,13 @@ namespace Mosa.Platforms.x86.Instructions
         /// <typeparam name="ArgType">The type of the rg type.</typeparam>
         /// <param name="visitor">The visitor.</param>
         /// <param name="arg">The arg.</param>
-        protected override void Visit<ArgType>(Mosa.Runtime.CompilerFramework.IR.IIRVisitor<ArgType> visitor, ArgType arg)
+        protected override void Visit<ArgType>(IR.IIRVisitor<ArgType> visitor, ArgType arg)
         {
             IX86InstructionVisitor<ArgType> x86v = visitor as IX86InstructionVisitor<ArgType>;
             if (null != x86v)
                 x86v.And(this, arg);
             else
-                base.Visit((IInstructionVisitor<ArgType>)visitor, arg);
+                visitor.Visit(this, arg);
         }
 
         #endregion // TwoOperandInstruction Overrides

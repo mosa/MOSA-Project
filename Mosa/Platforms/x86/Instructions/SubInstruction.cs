@@ -68,7 +68,7 @@ namespace Mosa.Platforms.x86.Instructions
             if (null != x86)
                 x86.Sub(this, arg);
             else
-                base.Visit((IInstructionVisitor<ArgType>)visitor, arg);
+                visitor.Visit(this, arg);
         }
 
         #endregion // TwoOperandInstruction Overrides

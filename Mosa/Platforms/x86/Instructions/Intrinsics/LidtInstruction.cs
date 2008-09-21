@@ -36,6 +36,17 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         #region OneOperandInstruction Overrides
 
         /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 lidt {0} ", this.Operand0);
+        }
+
+        /// <summary>
         /// Allows visitor based dispatch for this instruction object.
         /// </summary>
         /// <param name="visitor">The visitor object.</param>
@@ -47,17 +58,8 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
             Debug.Assert(null != x86visitor);
             if (null != x86visitor)
                 x86visitor.Lidt(this, arg);
-        }
-
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(@"x86 lidt {0} ", this.Operand0);
+            else
+                visitor.Visit(this, arg);
         }
 
         #endregion // OneOperandInstruction Overrides

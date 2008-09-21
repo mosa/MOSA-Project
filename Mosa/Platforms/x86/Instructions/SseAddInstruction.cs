@@ -37,7 +37,7 @@ namespace Mosa.Platforms.x86.Instructions
         /// <param name="destination">The destination operand.</param>
         /// <param name="source">The source operand.</param>
         public SseAddInstruction(Operand destination, Operand source) :
-            base(dest, source)
+            base(destination, source)
         {
         }
 
@@ -69,7 +69,7 @@ namespace Mosa.Platforms.x86.Instructions
             if (null != x86)
                 x86.SseAdd(this, arg);
             else
-                base.Visit((IInstructionVisitor<ArgType>)visitor, arg);
+                visitor.Visit(this, arg);
         }
 
         #endregion // TwoOperandInstruction Overrides

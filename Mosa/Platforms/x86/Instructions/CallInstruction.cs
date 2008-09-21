@@ -65,16 +65,29 @@ namespace Mosa.Platforms.x86.Instructions
         #region Methods
 
         /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 call {0}", this._invokeTarget);
+        }
+
+        /// <summary>
         /// Allows visitor based dispatch for this instruction object.
         /// </summary>
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
         /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
-        public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
+        protected override void Visit<ArgType>(IR.IIRVisitor<ArgType> visitor, ArgType arg)
         {
             IX86InstructionVisitor<ArgType> x86v = visitor as IX86InstructionVisitor<ArgType>;
             if (null != x86v)
                 x86v.Call(this, arg);
+            else
+                visitor.Visit(this, arg);
         }
 
         #endregion // Methods

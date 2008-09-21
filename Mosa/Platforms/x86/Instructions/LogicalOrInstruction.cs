@@ -33,10 +33,10 @@ namespace Mosa.Platforms.x86.Instructions
         /// <summary>
         /// Initializes a new instance of the <see cref="LogicalOrInstruction"/> class.
         /// </summary>
-        /// <param name="result">The destination operand.</param>
-        /// <param name="op1">The source operand.</param>
+        /// <param name="destination">The destination operand.</param>
+        /// <param name="source">The source operand.</param>
         public LogicalOrInstruction(Operand destination, Operand source) :
-            base(result, op1)
+            base(destination, source)
         {
         }
 
@@ -67,7 +67,7 @@ namespace Mosa.Platforms.x86.Instructions
             if (null != x86v)
                 x86v.Or(this, arg);
             else
-                base.Visit((IInstructionVisitor<ArgType>)visitor, arg);
+                visitor.Visit(this, arg);
         }
 
         #endregion // TwoOperandInstruction Overrides

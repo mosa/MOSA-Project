@@ -37,6 +37,17 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         #region PopadInstruction Overrides
 
         /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 popad");
+        }
+
+        /// <summary>
         /// Allows visitor based dispatch for this instruction object.
         /// </summary>
         /// <param name="visitor">The visitor object.</param>
@@ -48,17 +59,8 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
             Debug.Assert(null != x86visitor);
             if (null != x86visitor)
                 x86visitor.Popad(this, arg);
-        }
-
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(@"x86 popad");
+            else
+                visitor.Visit(this, arg);
         }
 
         #endregion // PopadInstruction Overrides

@@ -65,7 +65,7 @@ namespace Mosa.Platforms.x86.Instructions
             }
             else
             {
-                base.Visit((IInstructionVisitor<ArgType>)visitor, arg);
+                visitor.Visit(this, arg);
             }
         }
 

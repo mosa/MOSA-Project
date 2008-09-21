@@ -62,12 +62,14 @@ namespace Mosa.Platforms.x86.Instructions
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
         /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
-        public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
+        protected override void Visit<ArgType>(IR.IIRVisitor<ArgType> visitor, ArgType arg)
         {
             IX86InstructionVisitor<ArgType> x86 = visitor as IX86InstructionVisitor<ArgType>;
             Debug.Assert(null != x86);
             if (null != x86)
                 x86.Adc(this, arg);
+            else
+                visitor.Visit(this, arg);
         }
 
         #endregion // TwoOperandInstruction Overrides

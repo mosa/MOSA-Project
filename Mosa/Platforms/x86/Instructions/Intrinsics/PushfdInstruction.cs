@@ -59,6 +59,8 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
             Debug.Assert(null != x86visitor);
             if (null != x86visitor)
                 x86visitor.Pushfd(this, arg);
+            else
+                visitor.Visit(this, arg);
         }
 
         #endregion // IRInstruction Overrides

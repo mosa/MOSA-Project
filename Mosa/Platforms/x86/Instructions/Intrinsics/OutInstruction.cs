@@ -69,6 +69,8 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
             Debug.Assert(null != x86);
             if (null != x86)
                 x86.Out(this, arg);
+            else
+                visitor.Visit(this, arg);
         }
 
         #endregion // TwoOperandInstruction Overrides

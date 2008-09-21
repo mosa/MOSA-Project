@@ -49,6 +49,17 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         #region ThreeOperandInstruction Overrides
 
         /// <summary>
+        /// Returns a string representation of the instruction.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the instruction in intermediate form.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(@"x86 cmpxchg {0}, {1}, {2} ; if ({0} == {1}) {0} = {2} ", this.Operand0, this.Operand1, this.Operand2);
+        }
+
+        /// <summary>
         /// Allows visitor based dispatch for this instruction object.
         /// </summary>
         /// <param name="visitor">The visitor object.</param>
@@ -60,17 +71,8 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
             Debug.Assert(null != x86);
             if (null != x86)
                 x86.CmpXchg(this, arg);
-        }
-
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(@"x86 cmpxchg {0}, {1}, {2} ; if ({0} == {1}) {0} = {2} ", this.Operand0, this.Operand1, this.Operand2);
+            else
+                visitor.Visit(this, arg);
         }
 
         #endregion // ThreeOperandInstruction Overrides
