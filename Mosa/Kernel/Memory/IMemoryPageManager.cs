@@ -7,6 +7,8 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
+// NOTE: This interface is being replaced with IVirtualMemoryManager...
+
 using System;
 using System.Collections.Generic;
 using System.Text;
