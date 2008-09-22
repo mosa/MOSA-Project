@@ -156,7 +156,13 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void Pushfd(PushfdInstruction instruction, ArgType arg);
         /// <summary>
-        /// Rdpmc
+        /// Read time stamp counter
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Rdmsr(RdmsrInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Read from model specific register
         /// </summary>
         /// <param name="instruction">The instruction.</param>
         /// <param name="arg">The arguments</param>
