@@ -8,7 +8,6 @@
  */
 
 using Mosa.DeviceDrivers;
-using Mosa.DeviceDrivers.Kernel;
 using Mosa.DeviceDrivers.PCI;
 using Mosa.ClassLib;
 

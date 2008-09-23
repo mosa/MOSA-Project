@@ -7,10 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-using Mosa.DeviceDrivers;
-using Mosa.DeviceDrivers.Kernel;
 using Mosa.ClassLib;
+using Mosa.DeviceDrivers;
 
 namespace Mosa.DeviceDrivers.PCI
 {

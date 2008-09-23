@@ -27,7 +27,7 @@ namespace Mosa.DeviceDrivers
         /// <returns></returns>
 		public IMemory GetMemory(uint address, uint size)
 		{
-			return Kernel.HAL.RequestMemory(address, size);
+			return HAL.RequestMemory(address, size);
 		}
 	}
 }

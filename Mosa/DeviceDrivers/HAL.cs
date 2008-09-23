@@ -7,55 +7,32 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.DeviceDrivers.Kernel
+namespace Mosa.DeviceDrivers
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public static class HAL
 	{
-        /// <summary>
-        /// 
-        /// </summary>
-		public delegate IReadWriteIOPort CreateIOPort(ushort port);
-        /// <summary>
-        /// 
-        /// </summary>
-		public delegate IMemory CreateMemory(uint address, uint size);
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
+		static private IHardwareAbstraction hardwareAbstraction;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public delegate void HandleInterrupt(byte irq);
 
-        /// <summary>
-        /// 
-        /// </summary>
-		static private CreateIOPort createIOPort;
-        /// <summary>
-        /// 
-        /// </summary>
-		static private CreateMemory createMemory;
-        /// <summary>
-        /// 
-        /// </summary>
 		static private HandleInterrupt handleInterrupt;
 
 		/// <summary>
-		/// Sets the create IO port factory.
+		/// Sets the hardware abstraction.
 		/// </summary>
-		/// <param name="createIOPort">The create IO port factory method.</param>
-		public static void SetIOPortFactory(CreateIOPort createIOPort)
+		/// <param name="hardwareAbstraction">The hardware abstraction.</param>
+		public static void SetHardwareAbstraction(IHardwareAbstraction hardwareAbstraction)
 		{
-			HAL.createIOPort = createIOPort;
-		}
-
-		/// <summary>
-		/// Sets the create memory factory.
-		/// </summary>
-		/// <param name="createMemory">The memory factory method.</param>
-		public static void SetMemoryFactory(CreateMemory createMemory)
-		{
-			HAL.createMemory = createMemory;
+			HAL.hardwareAbstraction = hardwareAbstraction;
 		}
 
 		/// <summary>
@@ -73,6 +50,7 @@ namespace Mosa.DeviceDrivers.Kernel
 		/// <param name="irq">The irq.</param>
 		public static void ProcessInterrupt(byte irq)
 		{
+			//DeviceDrivers.Setup.ResourceManager.InterruptManager.ProcessInterrupt(irq);
 			HAL.handleInterrupt(irq);
 		}
 
@@ -83,7 +61,7 @@ namespace Mosa.DeviceDrivers.Kernel
 		/// <returns></returns>
 		internal static IReadWriteIOPort RequestIOPort(ushort port)
 		{
-			return HAL.createIOPort(port);
+			return hardwareAbstraction.RequestIOPort(port);
 		}
 
 		/// <summary>
@@ -94,7 +72,7 @@ namespace Mosa.DeviceDrivers.Kernel
 		/// <returns></returns>
 		internal static IMemory RequestMemory(uint address, uint size)
 		{
-			return HAL.createMemory(address, size);
+			return hardwareAbstraction.RequestMemory(address, size);
 		}
 
 		/// <summary>
@@ -102,7 +80,7 @@ namespace Mosa.DeviceDrivers.Kernel
 		/// </summary>
 		internal static void DisableAllInterrupts()
 		{
-			// TODO
+			hardwareAbstraction.DisableAllInterrupts();
 		}
 
 		/// <summary>
@@ -110,7 +88,7 @@ namespace Mosa.DeviceDrivers.Kernel
 		/// </summary>
 		internal static void EnableAllInterrupts()
 		{
-			// TODO
+			hardwareAbstraction.EnableAllInterrupts();
 		}
 
 		/// <summary>
@@ -119,19 +97,9 @@ namespace Mosa.DeviceDrivers.Kernel
 		/// <param name="milliseconds">The milliseconds.</param>
 		internal static void Sleep(uint milliseconds)
 		{
-			// TODO
+			hardwareAbstraction.Sleep(milliseconds);
 		}
 
-		/// <summary>
-		/// Delays for port IO.
-		/// </summary>
-		internal static void DelayForPortIO()
-		{
-			// Must delay for at least 4 ISA bus clocks
-			// Common approaches are to read and write to port 0x80, or 0xED 
-			// More advanced approaches check DMI (blacklist) to determine if port 0x80 is unsafe, and to use port 0xED instead
-			// Port 0x80 might not be safe on some HP laptops
-		}
 	}
 }
 

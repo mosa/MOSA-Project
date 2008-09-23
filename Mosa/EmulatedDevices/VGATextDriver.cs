@@ -11,7 +11,7 @@ using System;
 using System.IO;
 using Mosa.ClassLib;
 using Mosa.DeviceDrivers;
-using Mosa.EmulatedDevices.Utils;
+using Mosa.EmulatedKernel;
 
 namespace Mosa.EmulatedDevices
 {
@@ -45,7 +45,7 @@ namespace Mosa.EmulatedDevices
 	/// <summary>
 	/// Represents an emulated vga text device
 	/// </summary>
-	public class VGATextDriver : IDisposable
+	public class VGATextDriver 
 	{
         /// <summary>
         /// 

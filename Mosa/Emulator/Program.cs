@@ -8,9 +8,9 @@
  */
 
 using System;
+using Mosa.ClassLib;
 using Mosa.DeviceDrivers;
 using Mosa.DeviceDrivers.PCI;
-using Mosa.ClassLib;
 
 namespace Mosa.Emulator
 {
@@ -25,9 +25,10 @@ namespace Mosa.Emulator
 		/// <param name="args">The args.</param>
 		public static void Main(string[] args)
 		{
+			IHardwareAbstraction hardwareAbstraction = new Mosa.EmulatedKernel.HardwareAbstraction();
+
 			// Set Device Driver system to the emulator port and memory methods
-			DeviceDrivers.Kernel.HAL.SetIOPortFactory(Mosa.EmulatedDevices.IOPortDispatch.RegisterIOPort);
-			DeviceDrivers.Kernel.HAL.SetMemoryFactory(Mosa.EmulatedDevices.MemoryDispatch.RegisterMemory);
+			DeviceDrivers.HAL.SetHardwareAbstraction(hardwareAbstraction);
 
 			// Start the emulated devices
 			EmulatedDevices.Setup.Initialize();
@@ -36,7 +37,7 @@ namespace Mosa.Emulator
 			DeviceDrivers.Setup.Initialize();
 
 			// Set the interrupt handler
-			DeviceDrivers.Kernel.HAL.SetInterruptHandler(DeviceDrivers.Setup.ResourceManager.InterruptManager.ProcessInterrupt);
+			DeviceDrivers.HAL.SetInterruptHandler(DeviceDrivers.Setup.ResourceManager.InterruptManager.ProcessInterrupt);
 
 			// Create Emulated Keyboard device
 			Mosa.EmulatedDevices.Keyboard keyboard = new Mosa.EmulatedDevices.Keyboard();

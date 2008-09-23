@@ -16,10 +16,9 @@
 // http://www.osdev.org/phpBB2/viewtopic.php?t=13538
 
 
-using Mosa.DeviceDrivers;
 using Mosa.ClassLib;
+using Mosa.DeviceDrivers;
 using Mosa.DeviceDrivers.ISA;
-using Mosa.DeviceDrivers.Kernel; 
 
 namespace Mosa.DeviceDrivers.ISA.DiskControllers
 {

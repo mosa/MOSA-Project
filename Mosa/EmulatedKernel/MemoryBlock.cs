@@ -9,7 +9,7 @@
 
 using Mosa.DeviceDrivers;
 
-namespace Mosa.EmulatedDevices.Kernel
+namespace Mosa.EmulatedKernel
 {
     /// <summary>
     /// 

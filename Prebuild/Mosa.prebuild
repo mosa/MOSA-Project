@@ -79,6 +79,34 @@
           <Reference name="System" version="2.0.0.0" />
           <Reference name="Mosa.ClassLib" localCopy="true" />
           <Reference name="Mosa.DeviceDrivers" localCopy="true" />
+          <Reference name="Mosa.EmulatedKernel" localCopy="true" />
+          <Files>
+            <Match pattern="*.cs" path="." recurse="true"/>
+          </Files>
+        </Project>
+	<Project name="Mosa.EmulatedKernel" type="Library" path="..\Mosa\EmulatedKernel" language="C#" runtime="Microsoft" rootNamespace="Mosa.EmulatedKernel" assemblyName="Mosa.EmulatedKernel">
+          <Configuration name="Debug">
+            <Options>
+              <OutputPath>../build/debug</OutputPath>
+              <XmlDocFile>../build/Mosa.EmulatedKernel.xml</XmlDocFile>
+              <AllowUnsafe>false</AllowUnsafe>
+              <NoStdLib>false</NoStdLib>
+              <CompilerDefines></CompilerDefines>
+              <WarningsAsErrors>true</WarningsAsErrors>
+            </Options>
+          </Configuration>
+          <Configuration name="Release">
+            <Options>
+              <OutputPath>../build/release</OutputPath>
+              <XmlDocFile>../build/Mosa.EmulatedKernel.xml</XmlDocFile>
+              <AllowUnsafe>false</AllowUnsafe>
+              <NoStdLib>false</NoStdLib>
+              <CompilerDefines></CompilerDefines>
+            </Options>
+          </Configuration>
+          <Reference name="System" version="2.0.0.0" />
+          <Reference name="Mosa.ClassLib" localCopy="true" />
+          <Reference name="Mosa.DeviceDrivers" localCopy="true" />
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
           </Files>
@@ -107,6 +135,7 @@
           <Reference name="Mosa.EmulatedDevices" localCopy="true" />
           <Reference name="Mosa.ClassLib" localCopy="true" />
           <Reference name="Mosa.DeviceDrivers" localCopy="true" />
+          <Reference name="Mosa.EmulatedKernel" localCopy="true" />
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
           </Files>

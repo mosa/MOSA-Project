@@ -9,12 +9,12 @@
 
 using Mosa.DeviceDrivers;
 
-namespace Mosa.EmulatedDevices.Kernel
+namespace Mosa.EmulatedKernel
 {
     /// <summary>
     /// 
     /// </summary>
-	public class IOPort : IReadWriteIOPort
+	public class EmulatedIOPort : IReadWriteIOPort
 	{
         /// <summary>
         /// 
@@ -25,7 +25,7 @@ namespace Mosa.EmulatedDevices.Kernel
         /// 
         /// </summary>
         /// <param name="port"></param>
-		public IOPort(ushort port) { this.port = port; }
+		public EmulatedIOPort(ushort port) { this.port = port; }
 
         /// <summary>
         /// 

@@ -9,10 +9,9 @@
 
 using Mosa.DeviceDrivers;
 using System.Collections.Generic;
-using Mosa.EmulatedDevices.Utils;
-using Mosa.EmulatedDevices.Kernel;
+using Mosa.EmulatedKernel;
 
-namespace Mosa.EmulatedDevices
+namespace Mosa.EmulatedKernel
 {
     /// <summary>
     /// 

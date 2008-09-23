@@ -8,10 +8,9 @@
  */
 
 using Mosa.DeviceDrivers;
-using Mosa.EmulatedDevices.Kernel;
-using Mosa.EmulatedDevices.Utils;
+using Mosa.EmulatedKernel;
 
-namespace Mosa.EmulatedDevices
+namespace Mosa.EmulatedKernel
 {
     /// <summary>
     /// 
@@ -175,7 +174,7 @@ namespace Mosa.EmulatedDevices
         /// <returns></returns>
 		public static IReadWriteIOPort RegisterIOPort(ushort port)
 		{
-			return new IOPort(port);
+			return new EmulatedIOPort(port);
 		}
 
 		/// <summary>

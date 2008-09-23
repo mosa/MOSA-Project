@@ -10,14 +10,14 @@
 using System;
 using System.IO;
 using Mosa.ClassLib;
-using Mosa.EmulatedDevices.Utils;
+using Mosa.EmulatedKernel;
 
 namespace Mosa.EmulatedDevices
 {
 	/// <summary>
 	/// Represents an emulated CMOS chip
 	/// </summary>
-	public class CMOS : IDisposable
+	public class CMOS
 	{
         /// <summary>
         /// 

@@ -12,10 +12,9 @@
 // http://www.osdever.net/tutorials/lba.php
 // http://www.nondot.org/sabre/os/files/Disk/IDE-tech.html
 
-using Mosa.DeviceDrivers;
 using Mosa.ClassLib;
+using Mosa.DeviceDrivers;
 using Mosa.DeviceDrivers.ISA;
-using Mosa.DeviceDrivers.Kernel;    // for IIPort
 
 namespace Mosa.DeviceDrivers.ISA.DiskControllers
 {

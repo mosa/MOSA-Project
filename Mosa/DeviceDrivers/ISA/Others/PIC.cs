@@ -13,10 +13,9 @@
 // 8259A Programmable Interrupt Controller:
 // http://pdos.csail.mit.edu/6.828/2005/readings/hardware/8259A.pdf
 
-using Mosa.DeviceDrivers;
-using Mosa.DeviceDrivers.Kernel;
-using Mosa.DeviceDrivers.PCI;
 using Mosa.ClassLib;
+using Mosa.DeviceDrivers;
+using Mosa.DeviceDrivers.PCI;
 
 namespace Mosa.DeviceDrivers.ISA
 {

@@ -8,9 +8,8 @@
  */
 
 using System;
-using Mosa.DeviceDrivers;
-using Mosa.DeviceDrivers.Kernel;
 using Mosa.ClassLib;
+using Mosa.DeviceDrivers;
 
 namespace Mosa.DeviceDrivers.ISA
 {

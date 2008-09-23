@@ -11,14 +11,14 @@ using System;
 using System.IO;
 using Mosa.ClassLib;
 using Mosa.DeviceDrivers;
-using Mosa.EmulatedDevices.Utils;
+using Mosa.EmulatedKernel;
 
 namespace Mosa.EmulatedDevices
 {
 	/// <summary>
 	/// Represents an emulated a simple IDE controller
 	/// </summary>
-	public class IDEDiskDevice : IDisposable
+	public class IDEDiskDevice
 	{
         /// <summary>
         /// 
