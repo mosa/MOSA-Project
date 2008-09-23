@@ -21,7 +21,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
     /// <summary>
     /// Intermediate representation of the x86 pause instruction.
     /// </summary>
-    public sealed class RdpmcInstruction : IR.IRInstruction
+    public sealed class RdpmcInstruction : IR.TwoOperandInstruction
     {
         #region Construction
 
