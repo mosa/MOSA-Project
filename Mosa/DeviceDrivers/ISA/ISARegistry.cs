@@ -26,7 +26,7 @@ namespace Mosa.DeviceDrivers.ISA
         /// <summary>
         /// 
         /// </summary>
-		protected LinkedList<Pair<ISADeviceSignatureAttribute, Type>> drivers;
+		protected LinkedList<ISADriverEntry> drivers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ISARegistry"/> class.
@@ -35,7 +35,7 @@ namespace Mosa.DeviceDrivers.ISA
 		public ISARegistry(PlatformArchitecture platformArchitecture)
 		{
 			this.platformArchitecture = platformArchitecture;
-			drivers = new LinkedList<Pair<ISADeviceSignatureAttribute, Type>>();
+			drivers = new LinkedList<ISADriverEntry>();
 		}
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Mosa.DeviceDrivers.ISA
         /// <param name="type">The type.</param>
 		public void AddDeviceDriver(ISADeviceSignatureAttribute deviceDriverSignature, Type type)
 		{
-			drivers.Add(new Pair<ISADeviceSignatureAttribute, Type>(deviceDriverSignature, type));
+			drivers.Add(new ISADriverEntry(deviceDriverSignature, type));
 		}
 
         /// <summary>
@@ -81,35 +81,35 @@ namespace Mosa.DeviceDrivers.ISA
         /// <param name="resourceManager">The resource manager.</param>
 		public void StartDrivers(IDeviceManager deviceManager, IResourceManager resourceManager)
 		{
-			foreach (Pair<ISADeviceSignatureAttribute, Type> entry in drivers) {
-				if (entry.First.AutoLoad) {
+			foreach (ISADriverEntry entry in drivers) {
+				if (entry.SignatureAttribute.AutoLoad) {
 					IIOPortRegion[] ioPortRegions;
 					IMemoryRegion[] memoryRegion;
 
-					if (entry.First.BasePort != 0x0) {
-						if (entry.First.AltBasePort != 0x0) {
+					if (entry.SignatureAttribute.BasePort != 0x0) {
+						if (entry.SignatureAttribute.AltBasePort != 0x0) {
 							ioPortRegions = new IOPortRegion[2];
-							ioPortRegions[1] = new IOPortRegion(entry.First.AltBasePort, entry.First.AltPortRange);
+							ioPortRegions[1] = new IOPortRegion(entry.SignatureAttribute.AltBasePort, entry.SignatureAttribute.AltPortRange);
 						}
 						else {
 							ioPortRegions = new IOPortRegion[1];
 						}
-						ioPortRegions[0] = new IOPortRegion(entry.First.BasePort, entry.First.PortRange);
+						ioPortRegions[0] = new IOPortRegion(entry.SignatureAttribute.BasePort, entry.SignatureAttribute.PortRange);
 					}
 					else {
 						ioPortRegions = new IOPortRegion[0];
 					}
 
-					if (entry.First.BaseAddress != 0x0) {
+					if (entry.SignatureAttribute.BaseAddress != 0x0) {
 						memoryRegion = new MemoryRegion[1];
-						memoryRegion[0] = new MemoryRegion(entry.First.BaseAddress, entry.First.AddressRange);
+						memoryRegion[0] = new MemoryRegion(entry.SignatureAttribute.BaseAddress, entry.SignatureAttribute.AddressRange);
 					}
 					else {
 						memoryRegion = new MemoryRegion[0];
 					}
 
-					ISAHardwareDevice isaHardwareDevice = Activator.CreateInstance(entry.Second) as ISAHardwareDevice;
-					IBusResources busResources = new BusResources(resourceManager, ioPortRegions, memoryRegion, new InterruptHandler(resourceManager.InterruptManager, entry.First.IRQ, isaHardwareDevice));
+					ISAHardwareDevice isaHardwareDevice = Activator.CreateInstance(entry.DriverType) as ISAHardwareDevice;
+					IBusResources busResources = new BusResources(resourceManager, ioPortRegions, memoryRegion, new InterruptHandler(resourceManager.InterruptManager, entry.SignatureAttribute.IRQ, isaHardwareDevice));
 
 					isaHardwareDevice.AssignBusResources(busResources);
 

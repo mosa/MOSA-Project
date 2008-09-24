@@ -26,7 +26,7 @@ namespace Mosa.DeviceDrivers.PCI
         /// <summary>
         /// 
         /// </summary>
-		protected LinkedList<Pair<PCIDeviceSignatureAttribute, Type>> drivers;
+		protected LinkedList<PCIDriverEntry> drivers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PCIRegistry"/> class.
@@ -35,7 +35,7 @@ namespace Mosa.DeviceDrivers.PCI
 		public PCIRegistry(PlatformArchitecture platformArchitecture)
 		{
 			this.platformArchitecture = platformArchitecture;
-			drivers = new LinkedList<Pair<PCIDeviceSignatureAttribute, Type>>();
+			drivers = new LinkedList<PCIDriverEntry>();
 		}
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Mosa.DeviceDrivers.PCI
         /// <param name="type">The type.</param>
 		public void AddDeviceDriver(PCIDeviceSignatureAttribute deviceDriverSignature, Type type)
 		{
-			drivers.Add(new Pair<PCIDeviceSignatureAttribute, Type>(deviceDriverSignature, type));
+			drivers.Add(new PCIDriverEntry(deviceDriverSignature, type));
 		}
 
         /// <summary>
@@ -73,11 +73,11 @@ namespace Mosa.DeviceDrivers.PCI
 			Type deviceType = null;
 			int bestPriority = Int32.MaxValue;
 
-			foreach (Pair<PCIDeviceSignatureAttribute, Type> entry in drivers) {
-				if ((entry.First.Priority != 0) && (entry.First.Priority < bestPriority)) {
-					if (entry.First.CompareTo(pciDevice)) {
-						deviceType = entry.Second;
-						bestPriority = entry.First.Priority;
+			foreach (PCIDriverEntry entry in drivers) {
+				if ((entry.SignatureAttribute.Priority != 0) && (entry.SignatureAttribute.Priority < bestPriority)) {
+					if (entry.SignatureAttribute.CompareTo(pciDevice)) {
+						deviceType = entry.DriverType;
+						bestPriority = entry.SignatureAttribute.Priority;
 					}
 				}
 			}
