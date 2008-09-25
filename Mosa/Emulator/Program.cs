@@ -23,6 +23,7 @@ namespace Mosa.Emulator
 		/// Main
 		/// </summary>
 		/// <param name="args">The args.</param>
+		[STAThread]
 		public static void Main(string[] args)
 		{
 			IHardwareAbstraction hardwareAbstraction = new Mosa.EmulatedKernel.HardwareAbstraction();
@@ -45,8 +46,14 @@ namespace Mosa.Emulator
 			// Added the emulated keyboard device to the device drivers
 			DeviceDrivers.Setup.DeviceManager.Add(keyboard);
 
+			// Create Emulated Graphic Pixel device
+			Mosa.EmulatedDevices.PixelGraphicDevice pixelGraphicDevice = new Mosa.EmulatedDevices.PixelGraphicDevice(640, 480);
+
+			// Added the emulated keyboard device to the device drivers
+			DeviceDrivers.Setup.DeviceManager.Add(pixelGraphicDevice);
+
 			// Get the Text VGA device
-			LinkedList<IDevice> devices = DeviceDrivers.Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGA"));
+			LinkedList<IDevice> devices = DeviceDrivers.Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText"));
 
 			// Create a screen interface to the Text VGA device
 			ITextScreen screen = new TextScreen((ITextDevice)devices.First.value);
@@ -135,5 +142,7 @@ namespace Mosa.Emulator
 
 			return;
 		}
+
+
 	}
 }

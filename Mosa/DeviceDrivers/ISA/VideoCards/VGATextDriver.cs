@@ -118,7 +118,7 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		/// <returns></returns>
 		public override bool Setup()
 		{
-			base.name = "VGA";
+			base.name = "VGAText";
 
 			miscellaneousOutput = base.busResources.GetIOPort(0,(byte)(0x3CC - 0x3B0));
 
