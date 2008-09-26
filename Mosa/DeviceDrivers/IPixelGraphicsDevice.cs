@@ -40,12 +40,12 @@ namespace Mosa.DeviceDrivers
 		/// Gets the width.
 		/// </summary>
 		/// <returns></returns>
-		ushort GetWidth();
+		ushort Width { get; }
 
 		/// <summary>
 		/// Gets the height.
 		/// </summary>
 		/// <returns></returns>
-		ushort GetHeight();
+		ushort Height { get; }
 	}
 }

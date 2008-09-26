@@ -96,12 +96,12 @@ namespace Mosa.EmulatedDevices
 		/// Gets the width.
 		/// </summary>
 		/// <returns></returns>
-		public ushort GetWidth() { return width; }
+		public ushort Width { get { return width; } }
 
 		/// <summary>
 		/// Gets the height.
 		/// </summary>
 		/// <returns></returns>
-		public ushort GetHeight() { return height; }
+		public ushort Height { get { return height; } }
 	}
 }
