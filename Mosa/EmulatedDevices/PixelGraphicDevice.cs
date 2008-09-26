@@ -52,7 +52,7 @@ namespace Mosa.EmulatedDevices
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			dislayForm = new DisplayForm();
+			dislayForm = new DisplayForm(bitmap);
 			Application.Run(dislayForm);
 		}
 
@@ -64,7 +64,10 @@ namespace Mosa.EmulatedDevices
 		/// <param name="y">The y.</param>
 		public void WritePixel(Color color, ushort x, ushort y)
 		{
-			bitmap.SetPixel(x, y, System.Drawing.Color.FromArgb(color.Red, color.Green, color.Blue));
+			lock (bitmap) {
+				bitmap.SetPixel(x, y, System.Drawing.Color.FromArgb(color.Red, color.Green, color.Blue));
+			}
+			dislayForm.Changed = true;
 		}
 
 		/// <summary>

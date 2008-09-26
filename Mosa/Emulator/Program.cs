@@ -138,6 +138,18 @@ namespace Mosa.Emulator
 				}
 			}
 
+			//DateTime end = DateTime.Now.AddMinutes(1);
+			//Random random = new Random();
+			//while (DateTime.Now <= end) {
+			//    Color color = new Color((byte)(random.Next() % 255), (byte)(random.Next() % 255), (byte)(random.Next() % 255));
+			//    for (ushort x = 0; x < 400; x++)
+			//        pixelGraphicDevice.WritePixel(color, (ushort)(400 - x), x);
+			//}
+
+			for (ushort x = 0; x < 400; x++) {
+				pixelGraphicDevice.WritePixel(new Color(255, 0, 0), x, x);
+			}
+
 			Key key = keyboard.GetKeyPressed();
 
 			return;
