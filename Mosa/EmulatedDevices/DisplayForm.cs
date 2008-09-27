@@ -31,7 +31,8 @@ namespace Mosa.EmulatedDevices
 			timer.Interval = 1000;
 			timer.Start();
 			timer.Tick += new EventHandler(Timer_Tick);
-		}
+            this.DoubleBuffered = true;
+        }
 
 		private void Timer_Tick(object sender, EventArgs eArgs)
 		{
