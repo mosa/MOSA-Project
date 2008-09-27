@@ -77,6 +77,8 @@
             </Options>
           </Configuration>
           <Reference name="System" version="2.0.0.0" />
+          <Reference name="System.Drawing" version="2.0.0.0" />
+          <Reference name="System.Windows.Forms" version="2.0.0.0" />
           <Reference name="Mosa.ClassLib" localCopy="true" />
           <Reference name="Mosa.DeviceDrivers" localCopy="true" />
           <Reference name="Mosa.EmulatedKernel" localCopy="true" />
