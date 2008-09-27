@@ -53,6 +53,8 @@ namespace Mosa.EmulatedDevices
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			dislayForm = new DisplayForm(bitmap);
+            dislayForm.Width = Width;
+            dislayForm.Height = Height;
 			Application.Run(dislayForm);
 		}
 
@@ -103,5 +105,13 @@ namespace Mosa.EmulatedDevices
 		/// </summary>
 		/// <returns></returns>
 		public ushort Height { get { return height; } }
+
+        /// <summary>
+        /// Updates this instance.
+        /// </summary>
+        public void Update()
+        {
+            dislayForm.Invalidate();
+        }
 	}
 }
