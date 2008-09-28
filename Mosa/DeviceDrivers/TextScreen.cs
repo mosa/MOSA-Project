@@ -53,8 +53,8 @@ namespace Mosa.DeviceDrivers
 		public TextScreen(ITextDevice textDevice)
 		{
 			this.textDevice = textDevice;
-			width = textDevice.GetWidth();
-			height = textDevice.GetHeight();
+			width = textDevice.Width;
+			height = textDevice.Height;
 			foreground = TextColor.Black;
 			background = TextColor.White;
 			ClearScreen();

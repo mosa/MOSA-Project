@@ -46,70 +46,70 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 
 		#endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort miscellaneousOutput;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort crtControllerIndex;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort crtControllerData;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort crtControllerIndexColor;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort crtControllerDataColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IMemory memory;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort activeControllerIndex;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort activeControllerData;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool colorMode = false;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected uint offset = 0x8000;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte width = 80;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte height = 25;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte bytePerChar = 2;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected TextColor defaultBackground = TextColor.White;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VGATextDriver"/> class.
-        /// </summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VGATextDriver"/> class.
+		/// </summary>
 		public VGATextDriver() { }
 
 		/// <summary>
@@ -120,13 +120,13 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		{
 			base.name = "VGAText";
 
-			miscellaneousOutput = base.busResources.GetIOPort(0,(byte)(0x3CC - 0x3B0));
+			miscellaneousOutput = base.busResources.GetIOPort(0, (byte)(0x3CC - 0x3B0));
 
-			crtControllerIndex = base.busResources.GetIOPort(0,(byte)(0x3B4 - 0x3B0));
-			crtControllerData = base.busResources.GetIOPort(0,(byte)(0x3B5 - 0x3B0));
+			crtControllerIndex = base.busResources.GetIOPort(0, (byte)(0x3B4 - 0x3B0));
+			crtControllerData = base.busResources.GetIOPort(0, (byte)(0x3B5 - 0x3B0));
 
-			crtControllerIndexColor = base.busResources.GetIOPort(0,(byte)(0x3D4 - 0x3B0));
-			crtControllerDataColor = base.busResources.GetIOPort(0,(byte)(0x3D5 - 0x3B0));
+			crtControllerIndexColor = base.busResources.GetIOPort(0, (byte)(0x3D4 - 0x3B0));
+			crtControllerDataColor = base.busResources.GetIOPort(0, (byte)(0x3D5 - 0x3B0));
 
 			memory = base.busResources.GetMemory(0);
 
@@ -170,7 +170,7 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		/// </summary>
 		/// <returns></returns>
 		public override bool Probe() { return true; }
-		
+
 		/// <summary>
 		/// Creates the sub devices.
 		/// </summary>
@@ -183,22 +183,22 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		/// <returns></returns>
 		public override bool OnInterrupt() { return true; }
 
-        /// <summary>
-        /// Sends the command.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="value">The value.</param>
+		/// <summary>
+		/// Sends the command.
+		/// </summary>
+		/// <param name="command">The command.</param>
+		/// <param name="value">The value.</param>
 		protected void SendCommand(byte command, byte value)
 		{
 			activeControllerIndex.Write8(command);
 			activeControllerData.Write8(value);
 		}
 
-        /// <summary>
-        /// Gets the value.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the value.
+		/// </summary>
+		/// <param name="command">The command.</param>
+		/// <returns></returns>
 		protected byte GetValue(byte command)
 		{
 			activeControllerIndex.Write8(command);
@@ -219,14 +219,16 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 		/// <summary>
 		/// Gets the width.
 		/// </summary>
+		/// <value></value>
 		/// <returns></returns>
-		public byte GetWidth() { return width; }
+		public byte Width { get { return width; } }
 
 		/// <summary>
 		/// Gets the height.
 		/// </summary>
+		/// <value></value>
 		/// <returns></returns>
-		public byte GetHeight() { return height; }
+		public byte Height { get { return height; } }
 
 		/// <summary>
 		/// Writes the char at the position indicated.
@@ -280,9 +282,9 @@ namespace Mosa.DeviceDrivers.ISA.VideoCards
 					memory[(uint)(index + i)] = 0;
 		}
 
-        /// <summary>
-        /// Scrolls up.
-        /// </summary>
+		/// <summary>
+		/// Scrolls up.
+		/// </summary>
 		public void ScrollUp()
 		{
 			uint index = offset;

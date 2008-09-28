@@ -44,14 +44,14 @@ namespace Mosa.DeviceDrivers
 		/// <summary>
 		/// Gets the width.
 		/// </summary>
-		/// <returns></returns>
-		byte GetWidth();
+		/// <value>The width.</value>
+		byte Width { get; }
 
 		/// <summary>
 		/// Gets the height.
 		/// </summary>
-		/// <returns></returns>
-		byte GetHeight();
+		/// <value>The height.</value>
+		byte Height { get; } 
 	}
 
 	/// <summary>

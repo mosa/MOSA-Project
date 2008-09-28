@@ -32,6 +32,11 @@ namespace Mosa.DeviceDrivers
 		public byte Alpha;
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public static Color Transparent = new Color(0, 0, 0, 0);
+		
+		/// <summary>
 		/// Initializes a new instance of the <see cref="Color"/> struct.
 		/// </summary>
 		/// <param name="red">The red.</param>
@@ -42,7 +47,7 @@ namespace Mosa.DeviceDrivers
 			Red = red;
 			Green = green;
 			Blue = blue;
-			Alpha = 0;
+			Alpha = 255;
 		}
 
 		/// <summary>
@@ -60,5 +65,16 @@ namespace Mosa.DeviceDrivers
 			Alpha = alpha;
 		}
 
+		/// <summary>
+		/// Determines whether the specified color is equal.
+		/// </summary>
+		/// <param name="color">The color.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified color is equal; otherwise, <c>false</c>.
+		/// </returns>
+		public bool IsEqual(Color color)
+		{
+			return ((color.Red == this.Red) && (color.Green == this.Green) && (color.Blue == this.Blue));
+		}
 	}
 }
