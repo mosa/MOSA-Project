@@ -26,6 +26,7 @@ namespace Mosa.EmulatedDevices
 		private ushort height;
 		private System.Drawing.Bitmap bitmap;
 		private DisplayForm dislayForm;
+        private System.Drawing.Imaging.BitmapData bitmapData;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PixelGraphicDevice"/> class.
@@ -71,6 +72,40 @@ namespace Mosa.EmulatedDevices
 			}
 			dislayForm.Changed = true;
 		}
+
+        /// <summary>
+        /// Writes the pixel fast.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        public void WritePixelFast(Color color, ushort x, ushort y)
+        {
+            unsafe
+            {
+                byte* row = (byte*)bitmapData.Scan0 + (y * bitmapData.Stride);
+                row[x * 3 + 2] = color.Red;
+                row[x * 3 + 1] = color.Green;
+                row[x * 3 + 0] = color.Blue;
+            }
+        }
+
+        /// <summary>
+        /// Locks this instance.
+        /// </summary>
+        public void Lock()
+        {
+            bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+        }
+
+        /// <summary>
+        /// Unlocks this instance.
+        /// </summary>
+        public void Unlock()
+        {
+            bitmap.UnlockBits(bitmapData);
+            //dislayForm.Changed = true;
+        }
 
 		/// <summary>
 		/// Reads the pixel.

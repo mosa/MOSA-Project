@@ -352,7 +352,7 @@ namespace Pictor.Objects.Splines
             double d = _am[_max + (_num - 1)] - _am[_max + (_num - 2)];
             return (d * _am[_num - 2] / 6 + (_am[_max * 2 + _num - 1] - _am[_max * 2 + _num - 2]) / d) *
                    (x - _am[_max + (_num - 1)]) +
-                   _y[_num - 1];
+                   _am[_max * 2 + (_num - 1)];
         }
 
         /// <summary>

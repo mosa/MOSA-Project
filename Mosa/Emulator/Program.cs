@@ -181,25 +181,8 @@ namespace Mosa.Emulator
             double rx = pixelGraphicDevice.Width / 3.5;
             double ry = pixelGraphicDevice.Height / 3.5;
 
-            renderer.Ren.Buffer.Clear(240);
-            for (int i = 0; i < 5000; ++i)
-            {
-                double z = rnd.NextDouble();
-                double x = System.Math.Cos(z * 2.0 * System.Math.PI) * rx;
-                double y = System.Math.Sin(z * 2.0 * System.Math.PI) * ry;
-                double angle = rnd.NextDouble() * System.Math.PI * 2.0;
-                double dist = rnd.NextDouble() * (rx / 2.0);
-
-                RgbColor<byte> color = new RgbColor<byte>();
-                color.r = (byte)((_splineRed.Get(z) * 0.8) * 255);
-                color.g = (byte)((_splineGreen.Get(z) * 0.8) * 255);
-                color.b = (byte)((_splineBlue.Get(z) * 0.8) * 255);
-
-                renderer.CopyPixel((int)(pixelGraphicDevice.Width / 2.0 + x + System.Math.Cos(angle) * dist), (int)(pixelGraphicDevice.Height / 2.0 + y + System.Math.Sin(angle) * dist), color);
-            }
-
             double alpha = 1.0;
-            double step = 0.1;
+            double step = 0.35;
             while (true)
             {
                 buffer = new byte[pixelGraphicDevice.Width * pixelGraphicDevice.Height * 3];
@@ -229,16 +212,18 @@ namespace Mosa.Emulator
                     renderer.CopyPixel((int)(pixelGraphicDevice.Width / 2.0 + x + System.Math.Cos(angle) * dist), (int)(pixelGraphicDevice.Height / 2.0 + y + System.Math.Sin(angle) * dist), color);
                 }
 
+                pixelGraphicDevice.Lock();
                 for (ushort x = 0; x < pixelGraphicDevice.Width; ++x)
                 {
                     for (ushort y = 0; y < pixelGraphicDevice.Height; ++y)
                     {
                         System.ArraySegment<byte> color = renderer.Ren.Buffer.GetPartialRow(x, y, 1);
-                        pixelGraphicDevice.WritePixel(new Color(color.Array[0 + color.Offset], color.Array[1 + color.Offset], color.Array[2 + color.Offset]), x, y);
+                        pixelGraphicDevice.WritePixelFast(new Color(color.Array[0 + color.Offset], color.Array[1 + color.Offset], color.Array[2 + color.Offset]), x, y);
                     }
                 }
+                pixelGraphicDevice.Unlock();
                 alpha = (alpha + step);
-                if (alpha > 2.0)
+                if (alpha >= 6.0)
                     step = -step;
                 else if (alpha <= 0.0)
                     step = -step;
