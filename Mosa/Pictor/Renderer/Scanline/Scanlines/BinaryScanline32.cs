@@ -6,7 +6,7 @@ namespace Pictor.Renderer.Scanline.Scanlines
     /// <summary>
     /// 
     /// </summary>
-    public class BinaryScanline32 : IScanline
+    public class BinaryScanline32
     {
         /// <summary>
         /// 
@@ -20,7 +20,7 @@ namespace Pictor.Renderer.Scanline.Scanlines
         /// 
         /// </summary>
         private int _y;
-        struct Span
+        class Span : ISpan<int>
         {
             /// <summary>
             /// Initializes a new instance of the <see cref="Span"/> struct.
@@ -32,15 +32,6 @@ namespace Pictor.Renderer.Scanline.Scanlines
                 this.x = x;
                 this.length = length;
             }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            public int x;
-            /// <summary>
-            /// 
-            /// </summary>
-            public int length;
         };
         /// <summary>
         /// Resets the scanline

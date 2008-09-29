@@ -28,16 +28,11 @@
         /// </summary>
         private int _y = 0;
 
-        struct Span
+        /// <summary>
+        /// 
+        /// </summary>
+        public class Span : ISpan<short>
         {
-            /// <summary>
-            /// 
-            /// </summary>
-            public short x;
-            /// <summary>
-            /// 
-            /// </summary>
-            public short length;
         }
 
         /// <summary>
@@ -150,6 +145,17 @@
             _lastX = 0x7FFFFFF0;
             _currentSpanIndex = 0;
             _currentSpan = (Span)_spans[(int)_currentSpanIndex];
+        }
+
+        /// <summary>
+        /// Gets the span.
+        /// </summary>
+        /// <typeparam name="BaseType"></typeparam>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
+        public ISpan<BaseType> GetSpan<BaseType>(int index)
+        {
+            return (ISpan<BaseType>)_spans[index];
         }
     }
 }

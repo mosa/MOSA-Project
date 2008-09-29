@@ -6,6 +6,22 @@ namespace Pictor.Renderer.Scanline.Scanlines
     /// <summary>
     /// 
     /// </summary>
+    /// <typeparam name="BaseType">The type of the ase type.</typeparam>
+    public class ISpan<BaseType>
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public BaseType x;
+        /// <summary>
+        /// 
+        /// </summary>
+        public BaseType length;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IScanline
     {
         /// <summary>
@@ -61,6 +77,11 @@ namespace Pictor.Renderer.Scanline.Scanlines
             get;
         }
 
-
+        /// <summary>
+        /// Gets the span.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
+        ISpan<BaseType> GetSpan<BaseType>(int index);
     }
 }
