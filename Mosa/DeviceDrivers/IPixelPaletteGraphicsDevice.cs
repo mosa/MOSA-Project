@@ -44,6 +44,13 @@ namespace Mosa.DeviceDrivers
 		void SetPalette(byte colorIndex, Color color);
 
 		/// <summary>
+		/// Gets the palette.
+		/// </summary>
+		/// <param name="colorIndex">Index of the color.</param>
+		/// <returns></returns>
+		Color GetPalette(byte colorIndex);
+
+		/// <summary>
 		/// Gets the size of the palette.
 		/// </summary>
 		/// <value>The size of the palette.</value>

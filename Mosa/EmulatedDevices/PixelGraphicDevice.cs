@@ -33,7 +33,7 @@ namespace Mosa.EmulatedDevices
 		/// </summary>
 		public PixelGraphicDevice(ushort width, ushort height)
 		{
-			base.name = "PixelGraphicDevice";
+			base.name = "EmulatedPixelGraphicDevice";
 			base.parent = null;
 			base.deviceStatus = DeviceStatus.Online;
 
