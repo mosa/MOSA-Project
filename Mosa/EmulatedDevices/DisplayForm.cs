@@ -30,7 +30,7 @@ namespace Mosa.EmulatedDevices
 			InitializeComponent();
 			timer.Interval = 1000;
 			timer.Start();
-			timer.Tick += new EventHandler(Timer_Tick);
+			//timer.Tick += new EventHandler(Timer_Tick);
             this.DoubleBuffered = true;
         }
 
@@ -50,6 +50,15 @@ namespace Mosa.EmulatedDevices
 				Changed = false;
 			}
 		}
+
+        /// <summary>
+        /// Zeichnet den Hintergrund des Steuerelements.
+        /// </summary>
+        /// <param name="e"><see cref="T:System.Windows.Forms.PaintEventArgs"/> mit den Ereignisdaten.</param>
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            //base.OnPaintBackground(e);
+        }
 
 		private void DisplayForm_Load(object sender, EventArgs e)
 		{

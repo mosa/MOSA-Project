@@ -202,6 +202,16 @@ namespace Mosa.Emulator
             double step = 0.1;
             while (true)
             {
+                buffer = new byte[pixelGraphicDevice.Width * pixelGraphicDevice.Height * 3];
+                renderbuffer = new RenderingBuffer<byte>(buffer, (uint)pixelGraphicDevice.Width, (uint)pixelGraphicDevice.Height, 3);
+
+                pixfmt = new RgbPixelFormat<byte>(pixelGraphicDevice.Width, pixelGraphicDevice.Height, renderbuffer);
+                pixfmt.Width = pixelGraphicDevice.Width;
+                pixfmt.Height = pixelGraphicDevice.Height;
+
+                renderer = new BaseRenderer<RgbPixelFormat<byte>, RgbColor<byte>>();
+                renderer.Attach(pixfmt);
+
                 renderer.Ren.Buffer.Clear(240);
                 for (int i = 0; i < 50000; ++i)
                 {
