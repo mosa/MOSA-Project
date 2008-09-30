@@ -17,6 +17,10 @@ namespace Pictor.Renderer.Scanline.Scanlines
         /// 
         /// </summary>
         public BaseType length;
+        /// <summary>
+        /// 
+        /// </summary>
+        public byte cover;
     }
 
     /// <summary>

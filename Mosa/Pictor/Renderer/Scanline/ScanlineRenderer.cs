@@ -60,18 +60,16 @@ namespace Pictor.Renderer.Scanline
             {
                 Scanlines.ISpan<uint> span = scanline.GetSpan<uint>(i);
                 int x = (int)span.x;
-                if (span.length > 0)
+                /*if (span.length > 0)
                 {
                     /*BlendSolidHSpan(x, y, (uint)span.length,
                                         color,
-                                        span->covers);*/
+                                        span.cover);*
                 }
                 else
-                {
-                    /*BlendHLine(x, y, (uint)(x - span->length - 1),
-                                color,
-                                *(span->covers));*/
-                }
+                {*/
+                    BlendHLine(x, y, (int)(x - span.length - 1), color, span.cover);
+                //}
                 if (--num_spans == 0) 
                     break;
             }

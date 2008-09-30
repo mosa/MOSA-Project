@@ -86,7 +86,7 @@ namespace Pictor.Renderer.PixelFormats
         /// <param name="len">The len.</param>
         /// <param name="c">The c.</param>
         /// <param name="cover">The cover.</param>
-        public void BlendHLine(int x, int y,
+        public override void BlendHLine(int x, int y,
                                uint len, 
                                ColorTypes.RgbColor<BaseType> c,
                                byte cover)

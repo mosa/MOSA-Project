@@ -78,5 +78,15 @@ namespace Pictor.Renderer.PixelFormats
         /// <param name="len">The len.</param>
         /// <param name="c">The c.</param>
         public abstract void CopyHLine(int x, int y, uint len, ColorType c);
+
+        /// <summary>
+        /// Blends the H line.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <param name="len">The len.</param>
+        /// <param name="c">The c.</param>
+        /// <param name="cover">The cover.</param>
+        public abstract void BlendHLine(int x, int y, uint len, ColorType c, byte cover);
     }
 }

@@ -175,5 +175,39 @@ namespace Pictor.Renderer
             if (InBox(x, y))
                 Ren.CopyPixel(x, y, c);
         }
+
+        /// <summary>
+        /// Blend_hlines the specified x1.
+        /// </summary>
+        /// <param name="x1">The x1.</param>
+        /// <param name="y">The y.</param>
+        /// <param name="x2">The x2.</param>
+        /// <param name="c">The c.</param>
+        /// <param name="cover">The cover.</param>
+        public void BlendHLine(int x1, int y, int x2, 
+                                ColorType c, byte cover)
+        {
+            if (x1 > x2) 
+            { 
+                int t = x2; 
+                x2 = x1; 
+                x1 = t; 
+            }
+            if (y  > yMax) 
+                return;
+            if (y  < yMin) 
+                return;
+            if (x1 > xMax) 
+                return;
+            if (x2 < xMin) 
+                return;
+
+            if (x1 < xMin) 
+                x1 = xMin;
+            if (x2 > xMax) 
+                x2 = xMax;
+
+            Ren.BlendHLine(x1, y, (uint)(x2 - x1 + 1), c, cover);
+        }
     }
 }
