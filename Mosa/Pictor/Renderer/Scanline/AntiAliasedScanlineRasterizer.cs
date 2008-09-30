@@ -210,13 +210,13 @@ namespace Pictor.Renderer.Scanline
         {
             if (AutoClose)
                 ClosePolygon();
-            //_outline.sort_cells();
-            /*if (m_outline.total_cells() == 0 || 
-               y < m_outline.min_y() || 
-               y > m_outline.max_y()) 
+            _outline.SortCells();
+            if (_outline.TotalCells == 0 || 
+               y < _outline.MinY || 
+               y > _outline.MaxY) 
             {
                 return false;
-            }*/
+            }
             _scanY = y;
             return true;
         }
