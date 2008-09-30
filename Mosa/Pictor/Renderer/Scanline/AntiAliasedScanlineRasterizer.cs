@@ -220,5 +220,20 @@ namespace Pictor.Renderer.Scanline
             _scanY = y;
             return true;
         }
+
+        /// <summary>
+        /// Hits the test.
+        /// </summary>
+        /// <param name="tx">The tx.</param>
+        /// <param name="ty">The ty.</param>
+        /// <returns></returns>
+        public bool HitTest(int tx, int ty)
+        {
+            if (!NavigateScanline(ty))
+                return false;
+            ScanlineHitTest sl = new ScanlineHitTest(tx);
+            SweepScanline(sl);
+            return sl.Hit();
+        }
     }
 }
