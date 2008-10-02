@@ -31,10 +31,11 @@ namespace Mosa.Runtime.CompilerFramework
 	/// must be implemented.
 	/// </remarks>
 	public interface IMethodCompilerStage {
-		/// <summary>
+        /// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
-		string Name { get; }
+        /// <value>The name of the compilation stage.</value>
+        string Name { get; }
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.

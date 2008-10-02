@@ -287,6 +287,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-1, long.MaxValue)]
         [Row(-17, long.MaxValue)]
         [Row(-123, long.MaxValue)]
+        [Row(0x0000000100000000L, 0x0000000100000000L)]
         // Extremvaluecases
         [Row(long.MinValue, long.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]

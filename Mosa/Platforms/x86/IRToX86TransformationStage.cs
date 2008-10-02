@@ -26,63 +26,11 @@ namespace Mosa.Platforms.x86
     /// This transformation stage transforms CIL instructions into their equivalent IR sequences.
     /// </remarks>
     public sealed class IRToX86TransformationStage : 
-        IMethodCompilerStage,
+        CodeTransformationStage,
         // HACK: Remove this once we can ensure that no CIL instructions reach this.
-        IL.IILVisitor<IRToX86TransformationStage.Context>,
-        IR.IIRVisitor<IRToX86TransformationStage.Context>
+        IL.IILVisitor<CodeTransformationStage.Context>,
+        IR.IIRVisitor<CodeTransformationStage.Context>
     {
-        #region Types
-
-        /// <summary>
-        /// Provides context to the visitor functions.
-        /// </summary>
-        class Context
-        {
-            /// <summary>
-            /// Holds the block being operated on.
-            /// </summary>
-            private BasicBlock _block;
-
-            /// <summary>
-            /// Holds the instruction index operated on.
-            /// </summary>
-            private int _index;
-
-            /// <summary>
-            /// Gets or sets the basic block currently processed.
-            /// </summary>
-            public BasicBlock Block
-            {
-                get { return _block; }
-                set { _block = value; }
-            }
-
-            /// <summary>
-            /// Gets or sets the instruction index currently processed.
-            /// </summary>
-            public int Index
-            {
-                get { return _index; }
-                set { _index = value; }
-            }
-        };
-
-        #endregion // Types
-
-        #region Data members
-
-        /// <summary>
-        /// The architecture of the compilation process.
-        /// </summary>
-        private IArchitecture _architecture;
-
-        /// <summary>
-        /// Holds the executing method compiler.
-        /// </summary>
-        private MethodCompilerBase _compiler;
-
-        #endregion // Data members
-
         #region Construction
 
         /// <summary>
@@ -96,45 +44,16 @@ namespace Mosa.Platforms.x86
 
         #region IMethodCompilerStage Members
 
-        string IMethodCompilerStage.Name
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+        public sealed override string Name
         {
             get { return @"IRToX86TransformationStage"; }
         }
 
-        void IMethodCompilerStage.Run(MethodCompilerBase compiler)
-        {
-            if (null == compiler)
-                throw new ArgumentNullException(@"compiler");
-            IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-            if (null == blockProvider)
-                throw new InvalidOperationException(@"Instruction stream must have been split to basic blocks.");
-
-            // Save the architecture & compiler
-            _architecture = compiler.Architecture;
-            _compiler = compiler;
-
-            Context ctx = new Context();
-            foreach (BasicBlock block in blockProvider)
-            {
-                ctx.Block = block;
-                for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++)
-                {
-                    block.Instructions[ctx.Index].Visit(this, ctx);
-                }
-            }
-        }
-
         #endregion // IMethodCompilerStage Members
-
-        #region IInstructionVisitor<Context> Members
-
-        void IInstructionVisitor<Context>.Visit(Instruction instruction, Context arg)
-        {
-            Trace.WriteLine(String.Format(@"Unknown instruction {0} has visited IRToX86TransformationStage.", instruction.GetType().FullName));
-            throw new NotSupportedException();
-        }
-
-        #endregion // IInstructionVisitor<Context> Members
 
         #region IILVisitor<Context> Members
 
@@ -412,12 +331,18 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<Context>.Add(IL.AddInstruction instruction, Context ctx)
         {
-            Type replType = typeof(x86.Instructions.AddInstruction);
             if (instruction.First.StackType == StackTypeCode.F || instruction.Second.StackType == StackTypeCode.F)
             {
-                replType = typeof(x86.Instructions.SseAddInstruction);
+                HandleCommutativeOperation(ctx, instruction, typeof(x86.Instructions.SseAddInstruction));
             }
-            HandleCommutativeOperation(ctx, instruction, replType);
+            else if (instruction.First.StackType == StackTypeCode.Int64 || instruction.Second.StackType == StackTypeCode.Int64)
+            {
+                Handle64BitAdd(ctx, instruction);
+            }
+            else
+            {
+                HandleCommutativeOperation(ctx, instruction, typeof(x86.Instructions.AddInstruction));
+            }
         }
 
         void IL.IILVisitor<Context>.Sub(IL.SubInstruction instruction, Context ctx)
@@ -834,13 +759,13 @@ namespace Mosa.Platforms.x86
         private void HandleComparisonInstruction(Context ctx, Instruction instruction)
         {
             IL.ILInstruction inst = (IL.ILInstruction)instruction;
+            Operand op1 = inst.Operands[0];
+            Operand op2 = inst.Operands[1];
             if (inst.Code == IL.OpCode.Ceq)
             {
                 // HACK: Makes the R8 tests pass
 
                 // Swap operands to be EAX, Memory :)
-                Operand op1 = instruction.Operands[0];
-                Operand op2 = instruction.Operands[1];
                 if (op1 is MemoryOperand && op2 is RegisterOperand)
                 {
                     inst.SetOperand(0, op2);
@@ -848,7 +773,14 @@ namespace Mosa.Platforms.x86
                 }
                 else if (op1 is MemoryOperand && op2 is MemoryOperand)
                 {
-                    Debug.Assert(false);
+                    RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+                    Instruction[] results = new Instruction[] {
+                        new Instructions.MoveInstruction(eax, op1),
+                        inst
+                    };
+                    inst.SetOperand(0, eax);
+                    Replace(ctx, results);
+                    return;
                 }
             }
 
@@ -903,28 +835,48 @@ namespace Mosa.Platforms.x86
             });
         }
 
-        /// <summary>
-        /// Replaces the currently processed instruction with another instruction.
-        /// </summary>
-        /// <param name="arg">The transformation context.</param>
-        /// <param name="instruction">The instruction to replace with.</param>
-        private void Replace(Context arg, Instruction instruction)
-        {
-            arg.Block.Instructions[arg.Index] = instruction;
-        }
-
-        /// <summary>
-        /// Replaces the currently processed instruction with a set of instruction.
-        /// </summary>
-        /// <param name="arg">The transformation context.</param>
-        /// <param name="instructions">The instructions to replace with.</param>
-        private void Replace(Context arg, Instruction[] instructions)
-        {
-            arg.Block.Instructions.RemoveAt(arg.Index);
-            arg.Block.Instructions.InsertRange(arg.Index, instructions);
-            arg.Index += instructions.Length - 1;
-        }
-
         #endregion // Internals
+
+        #region 64-Bit Arithmetic Support
+
+        /// <summary>
+        /// Transforms an Add instruction with 64-bit operands to appropriate x86 sequences.
+        /// </summary>
+        /// <param name="ctx">The transformation context.</param>
+        /// <param name="addInstruction">The add instruction to transform.</param>
+        private void Handle64BitAdd(Context ctx, IL.AddInstruction addInstruction)
+        {
+            /* This function transforms the ADD into the following sequence of x86 instructions:
+             * 
+             * mov eax, [op1]       ; Move lower 32-bits of the first operand into eax
+             * add eax, [op2]       ; Add lower 32-bits of second operand to eax
+             * mov [result], eax    ; Save the result into the lower 32-bits of the result operand
+             * mov eax, [op1+4]     ; Move upper 32-bits of the first operand into eax
+             * adc eax, [op2+4]     ; Add upper 32-bits of the second operand to eax
+             * mov [result+4], eax  ; Save the result into the upper 32-bits of the result operand
+             * 
+             */
+
+            // This only works for memory operands (can't store I8/U8 in a register.)
+            // This fails for constant operands right now, which need to be extracted into memory
+            // with a literal/literal operand first - TODO
+            RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+            Debug.Assert(addInstruction.First is MemoryOperand && addInstruction.Second is MemoryOperand && addInstruction.Results[0] is MemoryOperand);
+            MemoryOperand op1 = (MemoryOperand)addInstruction.First;
+            MemoryOperand op2 = (MemoryOperand)addInstruction.Second;
+            MemoryOperand res = (MemoryOperand)addInstruction.Results[0];
+
+            Instruction[] result = new Instruction[] {
+                new Instructions.MoveInstruction(eax, op1),
+                new Instructions.AddInstruction(eax, op2),
+                new Instructions.MoveInstruction(res, eax),
+                new Instructions.MoveInstruction(eax, new MemoryOperand(op1.Type, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4))),
+                new Instructions.AdcInstruction(eax, new MemoryOperand(op2.Type, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4))),
+                new Instructions.MoveInstruction(new MemoryOperand(res.Type, res.Base, new IntPtr(res.Offset.ToInt64() + 4)), eax),
+            };
+            Replace(ctx, result);
+        }
+
+        #endregion // 64-Bit Arithmetic Support
     }
 }

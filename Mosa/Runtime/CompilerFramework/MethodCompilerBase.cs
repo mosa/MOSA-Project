@@ -195,7 +195,14 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>A new temporary result operand.</returns>
         public Operand CreateResultOperand(SigType type)
         {
-            return _architecture.CreateResultOperand(type, _nextStackSlot, _nextStackSlot++);
+            if (type.Type != CilElementType.I8 && type.Type != CilElementType.U8)
+            {
+                return _architecture.CreateResultOperand(type, _nextStackSlot, _nextStackSlot++);
+            }
+            else
+            {
+                return CreateTemporary(type);
+            }
         }
 
         /// <summary>

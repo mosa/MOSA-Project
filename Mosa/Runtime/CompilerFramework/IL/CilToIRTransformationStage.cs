@@ -16,62 +16,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
     /// This transformation stage transforms CIL instructions into their equivalent IR sequences.
     /// </remarks>
     public sealed class CilToIrTransformationStage : 
-        IMethodCompilerStage,
-        IInstructionVisitor<CilToIrTransformationStage.Context>,
-        IILVisitor<CilToIrTransformationStage.Context>
+        CodeTransformationStage,
+        IInstructionVisitor<CodeTransformationStage.Context>,
+        IILVisitor<CodeTransformationStage.Context>
     {
-        #region Types
-
-        /// <summary>
-        /// Provides context to the visitor functions.
-        /// </summary>
-        class Context
-        {
-            /// <summary>
-            /// Holds the block being operated on.
-            /// </summary>
-            private BasicBlock _block;
-
-            /// <summary>
-            /// Holds the instruction index operated on.
-            /// </summary>
-            private int _index;
-
-            /// <summary>
-            /// Gets or sets the basic block currently processed.
-            /// </summary>
-            public BasicBlock Block
-            {
-                get { return _block; }
-                set { _block = value; }
-            }
-
-            /// <summary>
-            /// Gets or sets the instruction index currently processed.
-            /// </summary>
-            public int Index
-            {
-                get { return _index; }
-                set { _index = value; }
-            }
-        };
-
-        #endregion // Types
-
-        #region Data members
-
-        /// <summary>
-        /// The architecture of the compilation process.
-        /// </summary>
-        private IArchitecture _architecture;
-
-        /// <summary>
-        /// Holds the executing method compiler.
-        /// </summary>
-        private MethodCompilerBase _compiler;
-
-        #endregion // Data members
-
         #region Construction
 
         /// <summary>
@@ -85,45 +33,16 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region IMethodCompilerStage Members
 
-        string IMethodCompilerStage.Name
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+        public sealed override string Name
         {
             get { return @"CilToIrTransformationStage"; }
         }
 
-        void IMethodCompilerStage.Run(MethodCompilerBase compiler)
-        {
-            if (null == compiler)
-                throw new ArgumentNullException(@"compiler");
-            IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-            if (null == blockProvider)
-                throw new InvalidOperationException(@"Instruction stream must have been split to basic blocks.");
-
-            // Save the architecture & compiler
-            _architecture = compiler.Architecture;
-            _compiler = compiler;
-
-            Context ctx = new Context();
-            foreach (BasicBlock block in blockProvider)
-            {
-                ctx.Block = block;
-                for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++)
-                {
-                    Instruction inst = block.Instructions[ctx.Index];
-                    inst.Visit(this, ctx);
-                }
-            }
-        }
-
         #endregion // IMethodCompilerStage Members
-
-        #region IInstructionVisitor<Context> Members
-
-        void IInstructionVisitor<Context>.Visit(Instruction instruction, Context arg)
-        {
-            Trace.WriteLine(String.Format(@"Unknown instruction {0} in CilToIRTransformationStage.", instruction.GetType().FullName));
-        }
-
-        #endregion // IInstructionVisitor<Context> Members
 
         #region IILVisitor<Context> Members
 
@@ -812,54 +731,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
 
             Replace(ctx, _architecture.CreateInstruction(typeof(IR.MoveInstruction), store.Destination, store.Source));
-        }
-
-        /// <summary>
-        /// Removes the current instruction from the instruction stream.
-        /// </summary>
-        /// <param name="ctx">The context of the instruction to remove.</param>
-        private void Remove(Context ctx)
-        {
-            Remove(ctx.Block.Instructions[ctx.Index]);
-            ctx.Block.Instructions.RemoveAt(ctx.Index--);
-        }
-
-        /// <summary>
-        /// Removes the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction to remove.</param>
-        private void Remove(Instruction instruction)
-        {
-            // FIXME: Remove this sequence, once we have a smart instruction collection which does this.
-            for (int i = 0; i < instruction.Operands.Length; i++)
-                instruction.SetOperand(i, null);
-            for (int i = 0; i < instruction.Results.Length; i++)
-                instruction.SetResult(i, null);
-        }
-
-        /// <summary>
-        /// Replaces the currently processed instruction with another instruction.
-        /// </summary>
-        /// <param name="ctx">The transformation context.</param>
-        /// <param name="instruction">The instruction to replace with.</param>
-        private void Replace(Context ctx, Instruction instruction)
-        {
-            Instruction old = ctx.Block.Instructions[ctx.Index];
-            ctx.Block.Instructions[ctx.Index] = instruction;
-            Remove(old);
-        }
-
-        /// <summary>
-        /// Replaces the currently processed instruction with a set of instruction.
-        /// </summary>
-        /// <param name="ctx">The transformation context.</param>
-        /// <param name="instructions">The instructions to replace with.</param>
-        private void Replace(Context ctx, IEnumerable<Instruction> instructions)
-        {
-            Remove(ctx);
-            int count = ctx.Block.Instructions.Count;
-            ctx.Block.Instructions.InsertRange(++ctx.Index, instructions);
-            ctx.Index += (ctx.Block.Instructions.Count - count) - 1;
         }
 
         #endregion // Internals
