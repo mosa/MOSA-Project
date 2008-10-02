@@ -216,6 +216,7 @@ namespace Mosa.Platforms.x86
             // FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
             // and packed operations available with MMX/SSE extensions
             methodPipeline.AddRange(new IMethodCompilerStage[] {
+                new LongOperandTransformationStage(),
                 new IRToX86TransformationStage(),
                 InstructionLogger.Instance,
                 //new SimpleRegisterAllocator(),
