@@ -17,6 +17,9 @@ using IL = Mosa.Runtime.CompilerFramework.IL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Platforms.x86.Instructions;
 using Mosa.Platforms.x86.Instructions.Intrinsics;
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Metadata;
+using System.Diagnostics;
 
 
 namespace Mosa.Platforms.x86
@@ -66,7 +69,36 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandAdd(Context ctx, IL.AddInstruction instruction)
         {
-            throw new NotSupportedException();
+            /* This function transforms the ADD into the following sequence of x86 instructions:
+             * 
+             * mov eax, [op1]       ; Move lower 32-bits of the first operand into eax
+             * add eax, [op2]       ; Add lower 32-bits of second operand to eax
+             * mov [result], eax    ; Save the result into the lower 32-bits of the result operand
+             * mov eax, [op1+4]     ; Move upper 32-bits of the first operand into eax
+             * adc eax, [op2+4]     ; Add upper 32-bits of the second operand to eax
+             * mov [result+4], eax  ; Save the result into the upper 32-bits of the result operand
+             * 
+             */
+
+            // This only works for memory operands (can't store I8/U8 in a register.)
+            // This fails for constant operands right now, which need to be extracted into memory
+            // with a literal/literal operand first - TODO
+            RegisterOperand eaxH = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+            RegisterOperand eaxL = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
+            Debug.Assert(instruction.First is MemoryOperand && instruction.Second is MemoryOperand && instruction.Results[0] is MemoryOperand);
+            MemoryOperand op1 = (MemoryOperand)instruction.First;
+            MemoryOperand op2 = (MemoryOperand)instruction.Second;
+            MemoryOperand res = (MemoryOperand)instruction.Results[0];
+
+            Instruction[] result = new Instruction[] {
+                new Instructions.MoveInstruction(eaxH, op1),
+                new Instructions.AddInstruction(eaxH, op2),
+                new Instructions.MoveInstruction(res, eaxH),
+                new Instructions.MoveInstruction(eaxL, new MemoryOperand(op1.Type, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4))),
+                new Instructions.AdcInstruction(eaxL, new MemoryOperand(op2.Type, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4))),
+                new Instructions.MoveInstruction(new MemoryOperand(res.Type, res.Base, new IntPtr(res.Offset.ToInt64() + 4)), eaxL),
+            };
+            Replace(ctx, result);
         }
 
         /// <summary>
@@ -274,9 +306,9 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="ctx">The context.</param>
         /// <param name="instruction">The instruction.</param>
-        private void ExpandBinaryComparison(Context ctx, IL.BinaryComparisonInstruction instruction)
+        private void ExpandComparison(Context ctx, IR.IntegerCompareInstruction instruction)
         {
-            throw new NotSupportedException();
+
         }
 
         #endregion // Utility Methods
@@ -295,6 +327,17 @@ namespace Mosa.Platforms.x86
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.EpilogueInstruction instruction, Context arg)
+        {
+        }
+
+        void IR.IIRVisitor<Context>.Visit(IR.IntegerCompareInstruction instruction, Context arg)
+        {
+            Operand op0 = instruction.Operands[0];
+            if (op0.StackType == StackTypeCode.Int64)
+                ExpandComparison(arg, instruction);
+        }
+
+        void IR.IIRVisitor<Context>.Visit(IR.FloatingPointCompareInstruction instruction, Context arg)
         {
         }
 
@@ -656,9 +699,6 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<Context>.BinaryComparison(IL.BinaryComparisonInstruction instruction, Context arg)
         {
-            Operand op0 = instruction.Operands[0];
-            if (op0.StackType == StackTypeCode.Int64)
-                ExpandBinaryComparison(arg, instruction);
         }
 
         void IL.IILVisitor<Context>.Localalloc(IL.LocalallocInstruction instruction, Context arg)

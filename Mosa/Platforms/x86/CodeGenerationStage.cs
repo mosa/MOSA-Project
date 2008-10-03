@@ -155,6 +155,11 @@ namespace Mosa.Platforms.x86
             _emitter.Sar(instruction.Operand0, instruction.Operand1);
         }
 
+        void IX86InstructionVisitor<int>.Setcc(SetccInstruction instruction, int arg)
+        {
+            _emitter.Setcc(instruction.Operand0, instruction.ConditionCode);
+        }
+
         void IX86InstructionVisitor<int>.Shl(ShlInstruction instruction, int arg)
         {
             _emitter.Shl(instruction.Operand0, instruction.Operand1);
@@ -886,8 +891,11 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<int>.BinaryComparison(IL.BinaryComparisonInstruction instruction, int arg)
         {
+            throw new NotSupportedException();
+/*
             _emitter.Cmp(instruction.First, instruction.Second);
-            _emitter.Setcc(instruction.Code);
+            _emitter.Setcc(instruction.Results[0], instruction.Code);
+ */
         }
 
         void IL.IILVisitor<int>.Localalloc(IL.LocalallocInstruction instruction, int arg)
@@ -1170,6 +1178,64 @@ namespace Mosa.Platforms.x86
             throw new NotSupportedException();
         }
 
+        void IR.IIRVisitor<int>.Visit(IR.FloatingPointCompareInstruction instruction, int arg)
+        {
+            Operand source = instruction.Operand1;
+            Operand destination = instruction.Operand2;
+
+            if (source.Type.Type == CilElementType.R4)
+            {
+                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0);
+                _emitter.Cvtss2sd(rop, source);
+                source = rop;
+            }
+            if (destination.Type.Type == CilElementType.R4)
+            {
+                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
+                _emitter.Cvtss2sd(rop, destination);
+                destination = rop;
+            }
+
+            /* FIXME: If we do R4 pure arithmetic, use this: 
+            if (source.Type.Type == CilElementType.R4)
+            {
+                switch (instruction.ConditionCode)
+                {
+                    case IR.ConditionCode.Equal: _emitter.Ucomiss(source, destination); break;
+                    case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedGreaterThan: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
+
+                    case IR.ConditionCode.GreaterOrEqual: _emitter.Comiss(source, destination); break;
+                    case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
+                    case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
+                    case IR.ConditionCode.LessThan: goto case IR.ConditionCode.GreaterOrEqual;
+                }
+            }
+            else
+            {
+             */
+                switch (instruction.ConditionCode)
+                {
+                    case IR.ConditionCode.Equal: _emitter.Ucomisd(source, destination); break;
+                    case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedGreaterThan: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
+
+                    case IR.ConditionCode.GreaterOrEqual: _emitter.Comisd(source, destination); break;
+                    case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
+                    case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
+                    case IR.ConditionCode.LessThan: goto case IR.ConditionCode.GreaterOrEqual;
+                }
+            //}
+
+            _emitter.Setcc(instruction.Operand0, instruction.ConditionCode);
+        }
+
         void IR.IIRVisitor<int>.Visit(IR.FloatingPointToIntegerConversionInstruction instruction, int arg)
         {
             Operand source = instruction.Operand1;
@@ -1202,6 +1268,12 @@ namespace Mosa.Platforms.x86
                 case CilElementType.U:
                     goto case CilElementType.U4;
             }
+        }
+
+        void IR.IIRVisitor<int>.Visit(IR.IntegerCompareInstruction instruction, int arg)
+        {
+            _emitter.Cmp(instruction.Operand1, instruction.Operand2);
+            _emitter.Setcc(instruction.Operand0, instruction.ConditionCode);
         }
 
         void IR.IIRVisitor<int>.Visit(IR.IntegerToFloatingPointConversionInstruction instruction, int arg)
@@ -1297,6 +1369,10 @@ namespace Mosa.Platforms.x86
                     case CilElementType.Object:
                         throw new NotImplementedException();
                 }
+            }
+            else if (src.Type.Type == CilElementType.R4 && dst.Type.Type == CilElementType.R8)
+            {
+                _emitter.Cvtss2sd(dst, src);
             }
             else
             {

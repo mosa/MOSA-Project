@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -354,6 +364,16 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.BinaryComparison(BinaryComparisonInstruction instruction, Context ctx)
         {
+            ConditionCode code = GetConditionCode(instruction.Code);
+            Operand op1 = instruction.Operands[0];
+            if (op1.StackType == StackTypeCode.F)
+            {
+                Replace(ctx, new FloatingPointCompareInstruction(instruction.Results[0], op1, code, instruction.Operands[1]));
+            }
+            else
+            {
+                Replace(ctx, new IntegerCompareInstruction(instruction.Results[0], op1, code, instruction.Operands[1]));
+            }
         }
 
         void IILVisitor<Context>.Localalloc(LocalallocInstruction instruction, Context ctx)
@@ -731,6 +751,29 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
 
             Replace(ctx, _architecture.CreateInstruction(typeof(IR.MoveInstruction), store.Destination, store.Source));
+        }
+
+
+        /// <summary>
+        /// Gets the condition code for an opcode.
+        /// </summary>
+        /// <param name="opCode">The op code.</param>
+        /// <returns>The IR condition code.</returns>
+        private ConditionCode GetConditionCode(OpCode opCode)
+        {
+            ConditionCode result;
+            switch (opCode)
+            {
+                case OpCode.Ceq: result = ConditionCode.Equal; break;
+                case OpCode.Cgt: result = ConditionCode.GreaterThan; break;
+                case OpCode.Cgt_un: result = ConditionCode.UnsignedGreaterThan; break;
+                case OpCode.Clt: result = ConditionCode.LessThan; break;
+                case OpCode.Clt_un: result = ConditionCode.UnsignedLessThan; break;
+
+                default:
+                    throw new NotSupportedException();
+            }
+            return result;
         }
 
         #endregion // Internals

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 
@@ -255,6 +256,14 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        void ICodeEmitter.Cvtss2sd(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Cvtss2sd(op1, op2);
+            });
+        }
+        
         void ICodeEmitter.Cvttsd2si(Operand op1, Operand op2)
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)
@@ -1102,14 +1111,43 @@ namespace Mosa.Platforms.x86
             });
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="code"></param>
-        public void Setcc(Mosa.Runtime.CompilerFramework.IL.OpCode code)
+        void ICodeEmitter.Setcc(Operand destination, IR.ConditionCode code)
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
-                emitter.Setcc(code);
+                emitter.Setcc(destination, code);
+            });
+        }
+
+        void ICodeEmitter.Comisd(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Comisd(op1, op2);
+            });
+        }
+
+        void ICodeEmitter.Ucomisd(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Ucomisd(op1, op2);
+            });
+        }
+
+        void ICodeEmitter.Comiss(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Comiss(op1, op2);
+            });
+        }
+
+        void ICodeEmitter.Ucomiss(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Ucomiss(op1, op2);
             });
         }
 

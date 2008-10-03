@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 
@@ -117,6 +118,34 @@ namespace Mosa.Platforms.x86
         void CmpXchg(Operand op1, Operand op2);
 
         /// <summary>
+        /// Performs an ordered comparison of two single-precision floating point operands.
+        /// </summary>
+        /// <param name="op1">The first fp operand.</param>
+        /// <param name="op2">The second fp operand.</param>
+        void Comiss(Operand op1, Operand op2);
+
+        /// <summary>
+        /// Performs an ordered comparison of two floating point operands.
+        /// </summary>
+        /// <param name="op1">The first fp operand.</param>
+        /// <param name="op2">The second fp operand.</param>
+        void Comisd(Operand op1, Operand op2);
+
+        /// <summary>
+        /// Performs an unordered comparison of two single-precision floating point operands.
+        /// </summary>
+        /// <param name="op1">The first fp operand.</param>
+        /// <param name="op2">The second fp operand.</param>
+        void Ucomiss(Operand op1, Operand op2);
+
+        /// <summary>
+        /// Performs an unordered comparison of two floating point operands.
+        /// </summary>
+        /// <param name="op1">The first fp operand.</param>
+        /// <param name="op2">The second fp operand.</param>
+        void Ucomisd(Operand op1, Operand op2);
+
+        /// <summary>
         /// Converts the signed integer to a double precision floating point value.
         /// </summary>
         /// <param name="destination">The destination operand, which receives the converted double precision floating point value.</param>
@@ -129,6 +158,13 @@ namespace Mosa.Platforms.x86
         /// <param name="destination">The destination operand, which receives the converted single precision floating point value.</param>
         /// <param name="operand">The source operand, which holds the signed integer value.</param>
         void Cvtsi2ss(Operand destination, Operand operand);
+
+        /// <summary>
+        /// Converts the float to a double precision floating point value.
+        /// </summary>
+        /// <param name="destination">The destination operand, which receives the converted double precision floating point value.</param>
+        /// <param name="operand">The source operand, which holds the floating point value.</param>
+        void Cvtss2sd(Operand destination, Operand operand);
 
         /// <summary>
         /// Converts the double precision floating point value in <paramref name="source"/> to a signed integer and stores it in <paramref name="destination"/>.
@@ -561,10 +597,11 @@ namespace Mosa.Platforms.x86
         void Xsetbv();
 
         /// <summary>
-        /// 
+        /// Set the destination operand (memory or register) to 0 or 1 depending on the condition outcome.
         /// </summary>
-        /// <param name="code"></param>
-        void Setcc(Mosa.Runtime.CompilerFramework.IL.OpCode code);
+        /// <param name="destination">The destination of the comparison result.</param>
+        /// <param name="code">The condition code to test.</param>
+        void Setcc(Operand destination, IR.ConditionCode code);
 
         #endregion // x86 instructions
     }

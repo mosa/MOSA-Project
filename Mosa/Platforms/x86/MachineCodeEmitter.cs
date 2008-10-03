@@ -15,6 +15,7 @@ using System.Text;
 using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
@@ -497,6 +498,11 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Cvtsi2sd(Operand op1, Operand op2)
         {
             Emit(op1, op2, cd_cvtsi2sd);
+        }
+
+        void ICodeEmitter.Cvtss2sd(Operand op1, Operand op2)
+        {
+            Emit(op1, op2, cd_cvtss2sd);
         }
 
         void ICodeEmitter.Cvtsi2ss(Operand op1, Operand op2)
@@ -1342,6 +1348,45 @@ namespace Mosa.Platforms.x86
         };
 
         /// <summary>
+        /// Asmcode: COMISS
+        /// Compares 2 floatingpoint values and sets E-Flags
+        /// 
+        /// Section: SSE
+        /// </summary>
+        private static readonly CodeDef[] cd_comiss = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0x2F }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0x2F }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0x0F, 0x2F }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x0F, 0x2F }, null),
+        };
+
+        /// <summary>
+        /// Asmcode: UCOMISD
+        /// Compares 2 unordered floatingpoint values and sets E-Flags
+        /// 
+        /// Section: SSE
+        /// </summary>
+        private static readonly CodeDef[] cd_ucomisd = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x66, 0x0F, 0x2E }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x66, 0x0F, 0x2E }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0x66, 0x0F, 0x2E }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x66, 0x0F, 0x2E }, null),
+        };
+
+        /// <summary>
+        /// Asmcode: UCOMISS
+        /// Compares 2 floatingpoint values and sets E-Flags
+        /// 
+        /// Section: SSE
+        /// </summary>
+        private static readonly CodeDef[] cd_ucomiss = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0x2E }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0x2E }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(LabelOperand),       new byte[] { 0x0F, 0x2E }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x0F, 0x2E }, null),
+        };
+
+        /// <summary>
         /// Asmcode: CMP
         /// Compares 2 given values and sets E-Flags
         /// 
@@ -1999,23 +2044,76 @@ namespace Mosa.Platforms.x86
             return modRM;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="code"></param>
-        void ICodeEmitter.Setcc(Mosa.Runtime.CompilerFramework.IL.OpCode code)
+        void ICodeEmitter.Setcc(Operand destination, IR.ConditionCode code)
         {
+            byte[] byte_code;
+
             switch (code)
             {
-                case Mosa.Runtime.CompilerFramework.IL.OpCode.Ceq:
-                    byte[] byte_code = { 0x0F, 0x94 };
-                    Emit(byte_code, null, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX), null);
-                    Emit(new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX), new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX), cd_mov);
+                case IR.ConditionCode.Equal:
+                    byte_code = new byte[] { 0x0F, 0x94 };
                     break;
-                case Mosa.Runtime.CompilerFramework.IL.OpCode.Clt:
-                    byte_code = new byte[]{ 0x0F, 0x9C };
-                    Emit(byte_code, null, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX), null);
+
+                case IR.ConditionCode.LessThan:
+                    byte_code = new byte[] { 0x0F, 0x9C };
                     break;
+
+                case IR.ConditionCode.LessOrEqual:
+                    byte_code = new byte[] { 0x0F, 0x9E };
+                    break;
+
+                case IR.ConditionCode.GreaterOrEqual:
+                    byte_code = new byte[] { 0x0F, 0x9D };
+                    break;
+
+                case IR.ConditionCode.GreaterThan:
+                    byte_code = new byte[] { 0x0F, 0x9F };
+                    break;
+
+                case IR.ConditionCode.NotEqual:
+                    byte_code = new byte[] { 0x0F, 0x95 };
+                    break;
+
+                case IR.ConditionCode.UnsignedGreaterOrEqual:
+                    byte_code = new byte[] { 0x0F, 0x93 };
+                    break;
+
+                case IR.ConditionCode.UnsignedGreaterThan:
+                    byte_code = new byte[] { 0x0F, 0x97 };
+                    break;
+
+                case IR.ConditionCode.UnsignedLessOrEqual:
+                    byte_code = new byte[] { 0x0F, 0x96 };
+                    break;
+
+                case IR.ConditionCode.UnsignedLessThan:
+                    byte_code = new byte[] { 0x0F, 0x92 };
+                    break;
+
+                default:
+                    throw new NotSupportedException();
             }
+            Emit(byte_code, null, destination, null);
+        }
+
+        void ICodeEmitter.Comisd(Operand op1, Operand op2)
+        {
+            Emit(op1, op2, cd_comisd);
+        }
+
+        void ICodeEmitter.Comiss(Operand op1, Operand op2)
+        {
+            Emit(op1, op2, cd_comiss);
+        }
+
+        void ICodeEmitter.Ucomisd(Operand op1, Operand op2)
+        {
+            Emit(op1, op2, cd_ucomisd);
+        }
+
+        void ICodeEmitter.Ucomiss(Operand op1, Operand op2)
+        {
+            Emit(op1, op2, cd_ucomiss);
         }
 
         /// <summary>

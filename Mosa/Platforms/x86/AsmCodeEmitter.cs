@@ -14,6 +14,7 @@ using System.IO;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 
@@ -230,6 +231,11 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Cvtsi2ss(Operand op1, Operand op2)
         {
             _textWriter.WriteLine("\t\tcvtsi2ss\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
+        }
+
+        void ICodeEmitter.Cvtss2sd(Operand op1, Operand op2)
+        {
+            _textWriter.WriteLine("\t\tcvtss2sd\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
         }
 
         void ICodeEmitter.Cvttsd2si(Operand op1, Operand op2)
@@ -970,12 +976,29 @@ namespace Mosa.Platforms.x86
             _textWriter.WriteLine("\t\txsetbv");
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="code"></param>
-        public void Setcc(Mosa.Runtime.CompilerFramework.IL.OpCode code)
+        void ICodeEmitter.Setcc(Operand dest, IR.ConditionCode code)
         {
-            _textWriter.WriteLine("\t\tseteq\teax");
+            _textWriter.WriteLine("\t\tset{0}\t{1}", Instructions.SetccInstruction.GetConditionString(code), WriteOperand(dest));
+        }
+
+        void ICodeEmitter.Comisd(Operand op1, Operand op2)
+        {
+            _textWriter.WriteLine("\t\tcomisd\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
+        }
+
+        void ICodeEmitter.Ucomisd(Operand op1, Operand op2)
+        {
+            _textWriter.WriteLine("\t\tucomisd\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
+        }
+
+        void ICodeEmitter.Comiss(Operand op1, Operand op2)
+        {
+            _textWriter.WriteLine("\t\tcomiss\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
+        }
+
+        void ICodeEmitter.Ucomiss(Operand op1, Operand op2)
+        {
+            _textWriter.WriteLine("\t\tucomiss\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
         }
 
         #endregion // ICodeEmitter Members

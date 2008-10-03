@@ -290,7 +290,8 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<Context>.BinaryComparison(IL.BinaryComparisonInstruction instruction, Context ctx)
         {
-            HandleComparisonInstruction(ctx, instruction);
+            throw new NotSupportedException();
+            //HandleComparisonInstruction(ctx, instruction);
         }
 
         void IL.IILVisitor<Context>.Localalloc(IL.LocalallocInstruction instruction, Context ctx)
@@ -334,10 +335,6 @@ namespace Mosa.Platforms.x86
             if (instruction.First.StackType == StackTypeCode.F || instruction.Second.StackType == StackTypeCode.F)
             {
                 HandleCommutativeOperation(ctx, instruction, typeof(x86.Instructions.SseAddInstruction));
-            }
-            else if (instruction.First.StackType == StackTypeCode.Int64 || instruction.Second.StackType == StackTypeCode.Int64)
-            {
-                Handle64BitAdd(ctx, instruction);
             }
             else
             {
@@ -419,8 +416,18 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        void IR.IIRVisitor<Context>.Visit(IR.FloatingPointCompareInstruction instruction, Context ctx)
+        {
+            HandleComparisonInstruction(ctx, instruction);
+        }
+
         void IR.IIRVisitor<Context>.Visit(IR.FloatingPointToIntegerConversionInstruction instruction, Context ctx)
         {
+        }
+
+        void IR.IIRVisitor<Context>.Visit(IR.IntegerCompareInstruction instruction, Context ctx)
+        {
+            HandleComparisonInstruction(ctx, instruction);
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.IntegerToFloatingPointConversionInstruction instruction, Context ctx)
@@ -756,35 +763,79 @@ namespace Mosa.Platforms.x86
             }
         }
 
-        private void HandleComparisonInstruction(Context ctx, Instruction instruction)
+        private void HandleComparisonInstruction<InstType>(Context ctx, InstType instruction) where InstType: Instruction, IR.IConditionalInstruction
         {
-            IL.ILInstruction inst = (IL.ILInstruction)instruction;
-            Operand op1 = inst.Operands[0];
-            Operand op2 = inst.Operands[1];
-            if (inst.Code == IL.OpCode.Ceq)
-            {
-                // HACK: Makes the R8 tests pass
+            //IL.ILInstruction inst = (IL.ILInstruction)instruction;
+            Operand op1 = instruction.Operands[0];
+            Operand op2 = instruction.Operands[1];
 
-                // Swap operands to be EAX, Memory :)
-                if (op1 is MemoryOperand && op2 is RegisterOperand)
-                {
-                    inst.SetOperand(0, op2);
-                    inst.SetOperand(1, op1);
-                }
-                else if (op1 is MemoryOperand && op2 is MemoryOperand)
-                {
-                    RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-                    Instruction[] results = new Instruction[] {
-                        new Instructions.MoveInstruction(eax, op1),
-                        inst
-                    };
-                    inst.SetOperand(0, eax);
-                    Replace(ctx, results);
-                    return;
-                }
+            if (op1 is MemoryOperand && op2 is RegisterOperand)
+            {
+                // Swap operands & optionally negate condition...
+                SwapComparisonOperands(instruction, op1, op2);
+            }
+            else if (op1 is MemoryOperand && op2 is MemoryOperand)
+            {
+                // Load op1 into EAX and then do the comparison...
+                RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+                Instruction[] results = new Instruction[] {
+                                new Instructions.MoveInstruction(eax, op1),
+                                instruction
+                            };
+                instruction.SetOperand(0, eax);
+                Replace(ctx, results);
             }
 
             ThreeTwoAddressConversion(ctx, instruction, null);
+        }
+
+        private void SwapComparisonOperands<InstType>(InstType instruction, Operand op1, Operand op2) where InstType: Instruction, IR.IConditionalInstruction
+        {
+            // Swap the operands
+            instruction.SetOperand(0, op2);
+            instruction.SetOperand(1, op1);
+
+            // Negate the condition code if necessary...
+            switch (instruction.ConditionCode)
+            {
+                case IR.ConditionCode.Equal: 
+                    break;
+
+                case IR.ConditionCode.GreaterOrEqual: 
+                    instruction.ConditionCode = IR.ConditionCode.LessThan; 
+                    break;
+
+                case IR.ConditionCode.GreaterThan:
+                    instruction.ConditionCode = IR.ConditionCode.LessOrEqual;
+                    break;
+
+                case IR.ConditionCode.LessOrEqual:
+                    instruction.ConditionCode = IR.ConditionCode.GreaterThan;
+                    break;
+
+                case IR.ConditionCode.LessThan:
+                    instruction.ConditionCode = IR.ConditionCode.GreaterOrEqual;
+                    break;
+
+                case IR.ConditionCode.NotEqual: 
+                    break;
+
+                case IR.ConditionCode.UnsignedGreaterOrEqual:
+                    instruction.ConditionCode = IR.ConditionCode.UnsignedLessThan;
+                    break;
+
+                case IR.ConditionCode.UnsignedGreaterThan:
+                    instruction.ConditionCode = IR.ConditionCode.UnsignedLessOrEqual;
+                    break;
+
+                case IR.ConditionCode.UnsignedLessOrEqual:
+                    instruction.ConditionCode = IR.ConditionCode.UnsignedGreaterThan;
+                    break;
+
+                case IR.ConditionCode.UnsignedLessThan:
+                    instruction.ConditionCode = IR.ConditionCode.UnsignedGreaterOrEqual;
+                    break;
+            }
         }
 
         /// <summary>
@@ -836,47 +887,5 @@ namespace Mosa.Platforms.x86
         }
 
         #endregion // Internals
-
-        #region 64-Bit Arithmetic Support
-
-        /// <summary>
-        /// Transforms an Add instruction with 64-bit operands to appropriate x86 sequences.
-        /// </summary>
-        /// <param name="ctx">The transformation context.</param>
-        /// <param name="addInstruction">The add instruction to transform.</param>
-        private void Handle64BitAdd(Context ctx, IL.AddInstruction addInstruction)
-        {
-            /* This function transforms the ADD into the following sequence of x86 instructions:
-             * 
-             * mov eax, [op1]       ; Move lower 32-bits of the first operand into eax
-             * add eax, [op2]       ; Add lower 32-bits of second operand to eax
-             * mov [result], eax    ; Save the result into the lower 32-bits of the result operand
-             * mov eax, [op1+4]     ; Move upper 32-bits of the first operand into eax
-             * adc eax, [op2+4]     ; Add upper 32-bits of the second operand to eax
-             * mov [result+4], eax  ; Save the result into the upper 32-bits of the result operand
-             * 
-             */
-
-            // This only works for memory operands (can't store I8/U8 in a register.)
-            // This fails for constant operands right now, which need to be extracted into memory
-            // with a literal/literal operand first - TODO
-            RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-            Debug.Assert(addInstruction.First is MemoryOperand && addInstruction.Second is MemoryOperand && addInstruction.Results[0] is MemoryOperand);
-            MemoryOperand op1 = (MemoryOperand)addInstruction.First;
-            MemoryOperand op2 = (MemoryOperand)addInstruction.Second;
-            MemoryOperand res = (MemoryOperand)addInstruction.Results[0];
-
-            Instruction[] result = new Instruction[] {
-                new Instructions.MoveInstruction(eax, op1),
-                new Instructions.AddInstruction(eax, op2),
-                new Instructions.MoveInstruction(res, eax),
-                new Instructions.MoveInstruction(eax, new MemoryOperand(op1.Type, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4))),
-                new Instructions.AdcInstruction(eax, new MemoryOperand(op2.Type, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4))),
-                new Instructions.MoveInstruction(new MemoryOperand(res.Type, res.Base, new IntPtr(res.Offset.ToInt64() + 4)), eax),
-            };
-            Replace(ctx, result);
-        }
-
-        #endregion // 64-Bit Arithmetic Support
     }
 }
