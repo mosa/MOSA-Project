@@ -101,6 +101,26 @@ namespace Mosa.Runtime.CompilerFramework.IL
             SetOperand(1, source);
         }
 
+        /// <summary>
+        /// Initializes a new instance <see cref="ArithmeticInstruction"/>.
+        /// </summary>
+        /// <param name="code">The opcode of the arithmetic instruction to create.</param>
+        /// <param name="destination">The result operand.</param>
+        /// <param name="op1">The first source operand.</param>
+        /// <param name="op2">The second source operand.</param>
+        public ArithmeticInstruction(OpCode code, Operand destination, Operand op1, Operand op2)
+            : base(code, 1)
+        {
+            // Make sure the opcode is valid
+            if (OpCode.Add != code && OpCode.Div != code && OpCode.Mul != code && OpCode.Rem != code && OpCode.Sub != code)
+                throw new ArgumentException(@"Opcode not supported.", @"code");
+
+            // destination = destination op source
+            SetResult(0, destination);
+            SetOperand(0, op1);
+            SetOperand(1, op2);
+        }
+
         #endregion // Construction
 
         #region Methods

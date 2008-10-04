@@ -379,9 +379,9 @@ namespace Mosa.Platforms.x86
         /// <param name="src">The SRC.</param>
         void ICodeEmitter.Add(Operand dest, Operand src)
         {
-            if (src is RegisterOperand)
-                if ((src as RegisterOperand) != (new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX)))
-                    throw new NotSupportedException("Register has to be EAX");
+            //if (src is RegisterOperand)
+            //    if ((src as RegisterOperand) != (new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX)))
+            //        throw new NotSupportedException("Register has to be EAX");
             Emit(dest, src, cd_add);
         }
 
@@ -1237,7 +1237,8 @@ namespace Mosa.Platforms.x86
         private static readonly CodeDef[] cd_add = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x81 }, 0),
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x03 }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x03 }, null)
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x03 }, null),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x01 }, null)
         };
 
         /// <summary>

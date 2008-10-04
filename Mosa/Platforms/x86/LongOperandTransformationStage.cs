@@ -119,7 +119,28 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandMul(Context ctx, IL.MulInstruction instruction)
         {
-            throw new NotSupportedException();
+            MemoryOperand op0 = instruction.Results[0] as MemoryOperand;
+            MemoryOperand op1 = instruction.Operands[0] as MemoryOperand;
+            MemoryOperand op2 = instruction.Operands[1] as MemoryOperand;
+            Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to LogicalNotInstruction are not MemoryOperand.");
+
+            SigType I4 = new SigType(CilElementType.I4);
+            MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
+            MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
+            MemoryOperand op2L = new MemoryOperand(I4, op2.Base, op2.Offset);
+            MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            MemoryOperand op2H = new MemoryOperand(I4, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
+
+            // op0 = EDX:EAX, op1 = A, op2 = B
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+            Replace(ctx, new Instruction[] {
+                new IL.MulInstruction(IL.OpCode.Mul, op0H, op1H, op2L),
+                new IL.MulInstruction(IL.OpCode.Mul, op0L, op1L, op2H),
+                new IL.AddInstruction(IL.OpCode.Add, op0H, op0H, op0L),
+                new IL.MulInstruction(IL.OpCode.Mul, op0L, op1L, op2L),
+                new AddInstruction(op0H, edx)
+            });            
         }
 
         /// <summary>

@@ -44,6 +44,20 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 throw new ArgumentException(@"Opcode not supported.", @"code");
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="op1">The first source operand.</param>
+        /// <param name="op2">The second source operand</param>
+        public AddInstruction(OpCode code, Operand destination, Operand op1, Operand op2) :
+            base(code, destination, op1, op2)
+        {
+            if (OpCode.Add != code)
+                throw new ArgumentException(@"Opcode not supported.", @"code");
+        }
+
         #endregion // Construction
 
         #region ArithmeticInstruction Overrides

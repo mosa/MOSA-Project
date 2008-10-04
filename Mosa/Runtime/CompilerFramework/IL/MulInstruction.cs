@@ -31,6 +31,18 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 throw new ArgumentException(@"Opcode not supported.", @"code");
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MulInstruction"/> class.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="op1">The first operand.</param>
+        /// <param name="op2">The second operand.</param>
+        public MulInstruction(OpCode code, Operand destination, Operand op1, Operand op2) :
+            base(code, destination, op1, op2)
+        {
+        }
+
         #endregion // Construction
 
         #region ArithmeticInstruction Overrides
