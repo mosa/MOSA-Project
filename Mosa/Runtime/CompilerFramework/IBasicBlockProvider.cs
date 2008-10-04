@@ -20,16 +20,10 @@ namespace Mosa.Runtime.CompilerFramework
     public interface IBasicBlockProvider : IEnumerable<BasicBlock>
     {
         /// <summary>
-        /// Returns the number of basic blocks found.
+        /// Gets the basic blocks.
         /// </summary>
-        int Count { get; }
-
-        /// <summary>
-        /// Retrieves a specific basic block.
-        /// </summary>
-        /// <param name="index">The index of the basic block to retrieve.</param>
-        /// <returns>The basic block to retrieve.</returns>
-        BasicBlock this[int index] { get; }
+        /// <value>The basic blocks.</value>
+        List<BasicBlock> Blocks { get; }
 
         /// <summary>
         /// Retrieves a basic block from its label.

@@ -495,6 +495,11 @@ namespace Mosa.Platforms.x86
             Emit(op1, op2, cd_cmpxchg);
         }
 
+        void ICodeEmitter.Cvtsd2ss(Operand op1, Operand op2)
+        {
+            Emit(op1, op2, cd_cvtsd2ss);
+        }
+
         void ICodeEmitter.Cvtsi2sd(Operand op1, Operand op2)
         {
             Emit(op1, op2, cd_cvtsi2sd);
@@ -868,6 +873,14 @@ namespace Mosa.Platforms.x86
                 else
                     Emit(dest, src, cd_movsd);
             }
+        }
+
+        void ICodeEmitter.Movss(Operand dest, Operand src)
+        {
+            if (dest is ConstantOperand)
+                throw new ArgumentException(@"Destination can't be constant.", @"dest");
+
+            Emit(dest, src, cd_movss);
         }
 
         /// <summary>
@@ -1697,7 +1710,18 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0x10 }, null),
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xF3, 0x0F, 0x11 }, null),
         };
-        
+
+        /// <summary>
+        /// Asmcode: CVTSD2SS
+        /// Converts a double-precision fp value into a single precision value.
+        /// 
+        /// Section: SSE
+        /// </summary>
+        private static readonly CodeDef[] cd_cvtsd2ss = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xF2, 0x0F, 0x5A }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0xF2, 0x0F, 0x5A }, null),
+        };
+
         /// <summary>
         /// Asmcode: CVTSI2SD
         /// Converts a signed integer into a double precision value.

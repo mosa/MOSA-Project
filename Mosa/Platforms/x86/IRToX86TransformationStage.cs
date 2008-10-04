@@ -29,7 +29,8 @@ namespace Mosa.Platforms.x86
         CodeTransformationStage,
         // HACK: Remove this once we can ensure that no CIL instructions reach this.
         IL.IILVisitor<CodeTransformationStage.Context>,
-        IR.IIRVisitor<CodeTransformationStage.Context>
+        IR.IIRVisitor<CodeTransformationStage.Context>,
+        IX86InstructionVisitor<CodeTransformationStage.Context>
     {
         #region Construction
 
@@ -398,6 +399,10 @@ namespace Mosa.Platforms.x86
             HandleShiftOperation(ctx, instruction, typeof(x86.Instructions.SarInstruction));
         }
 
+        void IR.IIRVisitor<Context>.Visit(IR.BranchInstruction instruction, Context ctx)
+        {
+        }
+
         void IR.IIRVisitor<Context>.Visit(IR.EpilogueInstruction instruction, Context ctx)
         {
             SigType I = new SigType(CilElementType.I);
@@ -586,21 +591,54 @@ namespace Mosa.Platforms.x86
         #endregion // IIRVisitor<Context> Members
 
         #region IX86InstructionVisitor<Context> Members
+
+        void IX86InstructionVisitor<Context>.Adc(Instructions.AdcInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Add(Instructions.AddInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cld(Instructions.Intrinsics.CldInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cmp(Instructions.CmpInstruction instruction, Context ctx)
+        {
+            Operand op0 = instruction.Operand0;
+            Operand op1 = instruction.Operand1;
+
+            if (op0 is MemoryOperand && op1 is MemoryOperand)
+            {
+                RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
+                Replace(ctx, new Instruction[] {
+                    new IR.MoveInstruction(eax, op0),
+                    instruction
+                });
+                instruction.SetResult(0, eax);
+            }
+        }
+
+        void IX86InstructionVisitor<Context>.CmpXchg(Instructions.Intrinsics.CmpXchgInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cvtsi2sd(Instructions.Cvtsi2sdInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cvtsi2ss(Instructions.Cvtsi2ssInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Sub(Instructions.SubInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Mul(Instructions.MulInstruction instruction, Context ctx)
+        {
 /*
-        void IX86InstructionVisitor<Context>.Adc(AdcInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Add(AddInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Sub(SubInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Mul(MulInstruction instruction, Context ctx)
-        {
             if (instruction.First.StackType == StackTypeCode.F || instruction.Second.StackType == StackTypeCode.F)
             {
                 Replace(ctx, _architecture.CreateInstruction(typeof(x86.SseMulInstruction), IL.OpCode.Mul, new Operand[] { instruction.First, instruction.Second, instruction.Results[0] }));
@@ -617,65 +655,156 @@ namespace Mosa.Platforms.x86
                     Replace(ctx, _architecture.CreateInstruction(typeof(x86.ShiftInstruction), IL.OpCode.Shl, new Operand[] { instruction.First, shift }));
                 }
             }
-        }
-
-        void IX86InstructionVisitor<Context>.Div(DivInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.SseAdd(SseAddInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.SseSub(SseSubInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.SseMul(SseMulInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.SseDiv(SseDivInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Shift(ShiftInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Cli(CliInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Ldit(LditInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Sti(StiInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Call(CallInstruction instruction, Context ctx)
-        {
-        }
-
-/*
-        void IX86InstructionVisitor<Context>.And(x86.LogicalAndInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Not(x86.LogicalNotInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Or(x86.LogicalOrInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Xor(x86.LogicalXorInstruction instruction, Context ctx)
-        {
-        }
  */
+        }
+
+        void IX86InstructionVisitor<Context>.Div(Instructions.DivInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Hlt(Instructions.Intrinsics.HltInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.In(Instructions.Intrinsics.InInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Int(Instructions.IntInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Iretd(Instructions.Intrinsics.IretdInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Lgdt(Instructions.Intrinsics.LgdtInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Lock(Instructions.Intrinsics.LockIntruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Out(Instructions.Intrinsics.OutInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Pause(Instructions.Intrinsics.PauseInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Pop(Instructions.Intrinsics.PopInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Popad(Instructions.Intrinsics.PopadInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Popfd(Instructions.Intrinsics.PopfdInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Push(Instructions.Intrinsics.PushInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Pushad(Instructions.Intrinsics.PushadInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Pushfd(Instructions.Intrinsics.PushfdInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Rdmsr(Instructions.Intrinsics.RdmsrInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Rdpmc(Instructions.Intrinsics.RdpmcInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Rdtsc(Instructions.Intrinsics.RdtscInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Rep(Instructions.Intrinsics.RepInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.SseAdd(Instructions.SseAddInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.SseSub(Instructions.SseSubInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.SseMul(Instructions.SseMulInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.SseDiv(Instructions.SseDivInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Stosb(Instructions.Intrinsics.StosbInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Stosd(Instructions.Intrinsics.StosdInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Xchg(Instructions.Intrinsics.XchgInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cli(Instructions.Intrinsics.CliInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Lidt(Instructions.Intrinsics.LidtInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Sar(Instructions.SarInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Setcc(Instructions.SetccInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Shl(Instructions.ShlInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Shr(Instructions.ShrInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Sti(Instructions.Intrinsics.StiInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Call(Instructions.CallInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.And(Instructions.LogicalAndInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Or(Instructions.LogicalOrInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Xor(Instructions.LogicalXorInstruction instruction, Context ctx)
+        {
+        }
 
         #endregion // IX86InstructionVisitor<Context> Members
 
@@ -789,6 +918,13 @@ namespace Mosa.Platforms.x86
             ThreeTwoAddressConversion(ctx, instruction, null);
         }
 
+        /// <summary>
+        /// Swaps the comparison operands.
+        /// </summary>
+        /// <typeparam name="InstType">Instruction type to swap operands on.</typeparam>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="op1">The op1.</param>
+        /// <param name="op2">The op2.</param>
         private void SwapComparisonOperands<InstType>(InstType instruction, Operand op1, Operand op2) where InstType: Instruction, IR.IConditionalInstruction
         {
             // Swap the operands

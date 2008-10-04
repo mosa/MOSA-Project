@@ -120,8 +120,10 @@ namespace Mosa.Runtime.CompilerFramework
             _architecture = compiler.Architecture;
             _compiler = compiler;
 
+            List<BasicBlock> blocks = blockProvider.Blocks;
+
             // Allocate space for live outs
-            _liveness = new IDictionary<StackOperand,StackOperand>[blockProvider.Count];
+            _liveness = new IDictionary<StackOperand,StackOperand>[blocks.Count];
             // Retrieve the dominance frontier blocks
             _dominanceFrontierBlocks = _dominanceProvider.GetDominanceFrontier();
 
@@ -143,7 +145,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
             
             // Start with the very first block
-            workList.Enqueue(new WorkItem(blockProvider[0], null, liveIn));
+            workList.Enqueue(new WorkItem(blocks[0], null, liveIn));
 
             // Iterate until the worklist is empty
             while (0 != workList.Count)

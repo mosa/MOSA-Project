@@ -340,7 +340,7 @@ namespace Mosa.Runtime.CompilerFramework
                     int lastUse = PickLastUseForDef(paramOp, 0);
                     if (-1 != lastUse)
                     {
-                        LiveRange lr = new LiveRange(blockProvider[0], paramOp, 0, lastUse);
+                        LiveRange lr = new LiveRange(blockProvider.Blocks[0], paramOp, 0, lastUse);
                         _liveRanges.Add(lr);
                     }
                 }

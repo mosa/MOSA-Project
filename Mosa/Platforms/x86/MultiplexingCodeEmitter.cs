@@ -240,6 +240,14 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        void ICodeEmitter.Cvtsd2ss(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Cvtsd2ss(op1, op2);
+            });
+        }
+
         void ICodeEmitter.Cvtsi2sd(Operand op1, Operand op2)
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)
@@ -720,6 +728,14 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Mov(dest, src);
+            });
+        }
+
+        void ICodeEmitter.Movss(Operand dest, Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Movss(dest, src);
             });
         }
 

@@ -64,6 +64,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			// Retrieve the basic block provider
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
+            List<BasicBlock> blocks = blockProvider.Blocks;
 
 			// Retreive the first block
 			firstBlock = blockProvider.FromLabel(-1);
@@ -72,13 +73,13 @@ namespace Mosa.Runtime.CompilerFramework
 			arch = compiler.Architecture;
 
 			// Contains a lsit of blocks which need to be review during the second pass
-			workArray = new BitArray(blockProvider.Count);
+			workArray = new BitArray(blocks.Count);
 			workList = new Stack<BasicBlock>();
 
 			// Iterate all blocks, remove and/or combine blocks
 			// Loop backwards to improve performance and reduce looping
-			for (int i = blockProvider.Count - 1; i >= 0; i--) {
-				BasicBlock block = blockProvider[i];
+			for (int i = blocks.Count - 1; i >= 0; i--) {
+				BasicBlock block = blocks[i];
 
 				while (ProcessBlock(block)) ;
 

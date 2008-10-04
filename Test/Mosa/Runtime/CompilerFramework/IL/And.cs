@@ -301,7 +301,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void AndI8(long a, long b)
         {
-            CodeSource = "static class Test { static bool AndI8(int expect, sbyte a, sbyte b) { return (a & b) == expect; } }";
+            CodeSource = "static class Test { static bool AndI8(long expect, long a, long b) { return (a & b) == expect; } }";
             Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "AndI8", (a & b), a, b));
         }
     }

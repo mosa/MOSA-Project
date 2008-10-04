@@ -604,6 +604,20 @@ namespace Mosa.Platforms.x86
         void Setcc(Operand destination, IR.ConditionCode code);
 
         #endregion // x86 instructions
+
+        /// <summary>
+        /// Converts the double-precision fp value to a single-precision fp value.
+        /// </summary>
+        /// <param name="dst">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
+        void Cvtsd2ss(Operand dst, Operand src);
+
+        /// <summary>
+        /// Moves a single precision fp value from src to dst.
+        /// </summary>
+        /// <param name="dst">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
+        void Movss(Operand dst, Operand src);
     }
 }
 

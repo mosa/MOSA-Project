@@ -31,6 +31,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
         void Visit(ArithmeticShiftRightInstruction instruction, ArgType arg);
 
         /// <summary>
+        /// Visitation function for <see cref="BranchInstruction"/> instructions.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        /// <param name="arg">A visitation context argument.</param>
+        void Visit(BranchInstruction instruction, ArgType arg);
+
+        /// <summary>
         /// Visitation function for <see cref="EpilogueInstruction"/> instructions.
         /// </summary>
         /// <param name="instruction">The visiting instruction.</param>

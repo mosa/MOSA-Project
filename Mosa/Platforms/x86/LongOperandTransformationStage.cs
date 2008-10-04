@@ -34,7 +34,8 @@ namespace Mosa.Platforms.x86
     public sealed class LongOperandTransformationStage : 
         CodeTransformationStage,
         IR.IIRVisitor<CodeTransformationStage.Context>,
-        IL.IILVisitor<CodeTransformationStage.Context>
+        IL.IILVisitor<CodeTransformationStage.Context>,
+        IX86InstructionVisitor<CodeTransformationStage.Context>
     {
         #region Construction
 
@@ -188,7 +189,19 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandNot(Context ctx, IR.LogicalNotInstruction instruction)
         {
-            throw new NotSupportedException();
+            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
+            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
+            Debug.Assert(op0 != null && op1 != null, @"Operands to LogicalNotInstruction are not MemoryOperand.");
+
+            MemoryOperand op0H = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, op0.Offset);
+            MemoryOperand op1H = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, op1.Offset);
+            MemoryOperand op0L = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            MemoryOperand op1L = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+
+            Replace(ctx, new Instruction[] {
+                new IR.LogicalNotInstruction(op0H, op1H),
+                new IR.LogicalNotInstruction(op0L, op1L),
+            });
         }
 
         /// <summary>
@@ -198,7 +211,22 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandAnd(Context ctx, IR.LogicalAndInstruction instruction)
         {
-            throw new NotSupportedException();
+            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
+            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
+            MemoryOperand op2 = instruction.Operand2 as MemoryOperand;
+            Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to LogicalNotInstruction are not MemoryOperand.");
+
+            MemoryOperand op0H = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, op0.Offset);
+            MemoryOperand op1H = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, op1.Offset);
+            MemoryOperand op2H = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, op2.Offset);
+            MemoryOperand op0L = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            MemoryOperand op1L = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            MemoryOperand op2L = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
+
+            Replace(ctx, new Instruction[] {
+                new IR.LogicalAndInstruction(op0H, op1H, op2H),
+                new IR.LogicalAndInstruction(op0L, op1L, op2L),
+            });
         }
 
         /// <summary>
@@ -208,7 +236,22 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandOr(Context ctx, IR.LogicalOrInstruction instruction)
         {
-            throw new NotSupportedException();
+            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
+            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
+            MemoryOperand op2 = instruction.Operand2 as MemoryOperand;
+            Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to LogicalNotInstruction are not MemoryOperand.");
+
+            MemoryOperand op0H = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, op0.Offset);
+            MemoryOperand op1H = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, op1.Offset);
+            MemoryOperand op2H = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, op2.Offset);
+            MemoryOperand op0L = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            MemoryOperand op1L = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            MemoryOperand op2L = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
+
+            Replace(ctx, new Instruction[] {
+                new IR.LogicalOrInstruction(op0H, op1H, op2H),
+                new IR.LogicalOrInstruction(op0L, op1L, op2L),
+            });
         }
 
         /// <summary>
@@ -218,11 +261,26 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandXor(Context ctx, IR.LogicalXorInstruction instruction)
         {
-            throw new NotSupportedException();
+            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
+            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
+            MemoryOperand op2 = instruction.Operand2 as MemoryOperand;
+            Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to LogicalNotInstruction are not MemoryOperand.");
+
+            MemoryOperand op0H = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, op0.Offset);
+            MemoryOperand op1H = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, op1.Offset);
+            MemoryOperand op2H = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, op2.Offset);
+            MemoryOperand op0L = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            MemoryOperand op1L = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            MemoryOperand op2L = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
+
+            Replace(ctx, new Instruction[] {
+                new IR.LogicalXorInstruction(op0H, op1H, op2H),
+                new IR.LogicalXorInstruction(op0L, op1L, op2L),
+            });
         }
 
         /// <summary>
-        /// Expands the neg instruction for 64-bits.
+        /// Expands the move instruction for 64-bits.
         /// </summary>
         /// <param name="ctx">The context.</param>
         /// <param name="instruction">The instruction.</param>
@@ -232,7 +290,7 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// Expands the neg instruction for 64-bits.
+        /// Expands the unsigned move instruction for 64-bits.
         /// </summary>
         /// <param name="ctx">The context.</param>
         /// <param name="instruction">The instruction.</param>
@@ -242,7 +300,7 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// Expands the neg instruction for 64-bits.
+        /// Expands the signed move instruction for 64-bits.
         /// </summary>
         /// <param name="ctx">The context.</param>
         /// <param name="instruction">The instruction.</param>
@@ -308,7 +366,111 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandComparison(Context ctx, IR.IntegerCompareInstruction instruction)
         {
+            Operand op0 = instruction.Operand0;
+            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
+            MemoryOperand op2 = instruction.Operand2 as MemoryOperand;
 
+            Debug.Assert(op1 != null && op2 != null, @"IntegerCompareInstruction operand not memory!");
+            Debug.Assert(op0 is MemoryOperand || op0 is RegisterOperand, @"IntegerCompareInstruction result not memory and not register!");
+
+            MemoryOperand op1L = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            MemoryOperand op2L = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
+
+            BasicBlock blockNext = SplitBlockAfter(ctx, instruction);
+            IR.BranchInstruction branch = CreateOppositeBranch(instruction.ConditionCode, blockNext.Label);
+
+            // I8 is stored HI-LO in x86 LE
+            Instruction[] instructions = new Instruction[] {
+                // Compare high dwords
+                new Instructions.CmpInstruction(op1, op2),
+                // Branch if condition already failed
+                branch,
+                // FIXME: This cmp should go into its own block...
+                // Compare low dwords
+                new Instructions.CmpInstruction(op1L, op2L),
+            };
+            Replace(ctx, instructions);
+            
+            instructions = new Instruction[] {
+                // Set condition result...
+                new SetccInstruction(op0, instruction.ConditionCode),
+            };
+            blockNext.Instructions.InsertRange(0, instructions);
+        }
+
+        /// <summary>
+        /// Creates the opposite branch for a comparison instruction.
+        /// </summary>
+        /// <param name="conditionCode">The comparison condition code.</param>
+        /// <param name="label">The label.</param>
+        /// <returns>A branch for the opposite condition</returns>
+        private IR.BranchInstruction CreateOppositeBranch(IR.ConditionCode conditionCode, int label)
+        {
+            IR.ConditionCode cc;
+            switch (conditionCode)
+            {
+                case IR.ConditionCode.Equal: cc = IR.ConditionCode.NotEqual; break;
+                case IR.ConditionCode.NotEqual: cc = IR.ConditionCode.Equal; break;
+                case IR.ConditionCode.GreaterOrEqual: cc = IR.ConditionCode.LessThan; break;
+                case IR.ConditionCode.GreaterThan: cc = IR.ConditionCode.LessOrEqual; break;
+                case IR.ConditionCode.LessOrEqual: cc = IR.ConditionCode.GreaterThan; break;
+                case IR.ConditionCode.LessThan: cc = IR.ConditionCode.GreaterOrEqual; break;
+                case IR.ConditionCode.UnsignedGreaterOrEqual: cc = IR.ConditionCode.UnsignedLessThan; break;
+                case IR.ConditionCode.UnsignedGreaterThan: cc = IR.ConditionCode.UnsignedLessOrEqual; break;
+                case IR.ConditionCode.UnsignedLessOrEqual: cc = IR.ConditionCode.UnsignedGreaterThan; break;
+                case IR.ConditionCode.UnsignedLessThan: cc = IR.ConditionCode.UnsignedGreaterOrEqual; break;
+                default:
+                    throw new NotSupportedException();
+            }
+            return new IR.BranchInstruction(cc, label);
+        }
+
+        /// <summary>
+        /// Splits the block after the given instruction.
+        /// </summary>
+        /// <param name="ctx">The transformation context.</param>
+        /// <param name="instruction">The instruction.</param>
+        /// <returns></returns>
+        private BasicBlock SplitBlockAfter(Context ctx, IR.IntegerCompareInstruction instruction)
+        {
+            BasicBlock result;
+            int label = 0x1000000 + _blocks.Count;
+
+            // Is there a statement after the comparison?
+            if (ctx.Index + 1 < ctx.Block.Instructions.Count)
+            {
+                // Yes, split the block
+                result = ctx.Block.Split(ctx.Index + 1, label);
+            }
+            else
+            {
+                // No, create a new dummy block to insert (this block apparently falls through to it.)
+                result = new BasicBlock(_blocks.Count + 0x1000000);
+            }
+
+            Debug.Assert(null != result, @"Huh? Failed to create basic block?");
+            MoveBlockLinks(ctx.Block, result);
+            _blocks.Insert(_currentBlock + 1, result);
+            return result;
+        }
+
+        /// <summary>
+        /// Moves the block links from <paramref name="source"/> to <paramref name="dest"/> and links source to dest.
+        /// </summary>
+        /// <param name="source">The source block.</param>
+        /// <param name="dest">The destination block.</param>
+        private void MoveBlockLinks(BasicBlock source, BasicBlock dest)
+        {
+            dest.NextBlocks.AddRange(source.NextBlocks);
+            foreach (BasicBlock next in source.NextBlocks)
+            {
+                next.PreviousBlocks.Remove(source);
+                next.PreviousBlocks.Add(dest);
+            }
+
+            dest.PreviousBlocks.Add(source);
+            source.NextBlocks.Clear();
+            source.NextBlocks.Add(dest);
         }
 
         #endregion // Utility Methods
@@ -324,6 +486,10 @@ namespace Mosa.Platforms.x86
             Operand op0 = instruction.Operands[0];
             if (op0.StackType == StackTypeCode.Int64)
                 ExpandArithmeticShiftRight(arg, instruction);
+        }
+
+        void IR.IIRVisitor<Context>.Visit(IR.BranchInstruction instruction, Context arg)
+        {
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.EpilogueInstruction instruction, Context arg)
@@ -783,5 +949,193 @@ namespace Mosa.Platforms.x86
         }
 
         #endregion // IILVisitor<Context> Members
+
+        #region IX86InstructionVisitor<Context> Members
+
+        void IX86InstructionVisitor<Context>.Add(AddInstruction addInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Adc(AdcInstruction adcInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.And(LogicalAndInstruction andInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Or(LogicalOrInstruction orInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Xor(LogicalXorInstruction xorInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Sub(SubInstruction subInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Mul(MulInstruction mulInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Div(DivInstruction divInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.SseAdd(SseAddInstruction addInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.SseSub(SseSubInstruction subInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.SseMul(SseMulInstruction mulInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.SseDiv(SseDivInstruction mulInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Sar(SarInstruction shiftInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Shl(ShlInstruction shiftInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Shr(ShrInstruction shiftInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Call(CallInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cvtsi2ss(Cvtsi2ssInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cvtsi2sd(Cvtsi2sdInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cmp(CmpInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Setcc(SetccInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cli(CliInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cld(CldInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.CmpXchg(CmpXchgInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Hlt(HltInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.In(InInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Int(IntInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Iretd(IretdInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Lgdt(LgdtInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Lidt(LidtInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Lock(LockIntruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Out(OutInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Pause(PauseInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Pop(PopInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Popad(PopadInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Popfd(PopfdInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Push(PushInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Pushad(PushadInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Pushfd(PushfdInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Rdmsr(RdmsrInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Rdpmc(RdpmcInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Rdtsc(RdtscInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Rep(RepInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Sti(StiInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Stosb(StosbInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Stosd(StosdInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Xchg(XchgInstruction instruction, Context arg)
+        {
+        }
+
+        #endregion // IX86InstructionVisitor<Context> Members
     }
 }

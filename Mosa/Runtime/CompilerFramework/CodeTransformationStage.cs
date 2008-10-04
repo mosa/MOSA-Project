@@ -70,9 +70,19 @@ namespace Mosa.Runtime.CompilerFramework
         protected IArchitecture _architecture;
 
         /// <summary>
+        /// Holds the list of basic blocks.
+        /// </summary>
+        protected List<BasicBlock> _blocks;
+
+        /// <summary>
         /// Holds the executing method compiler.
         /// </summary>
         protected MethodCompilerBase _compiler;
+
+        /// <summary>
+        /// Holds the current block.
+        /// </summary>
+        protected int _currentBlock;
 
         #endregion // Data members
 
@@ -110,10 +120,12 @@ namespace Mosa.Runtime.CompilerFramework
             // Save the architecture & compiler
             _architecture = compiler.Architecture;
             _compiler = compiler;
+            _blocks = blockProvider.Blocks;
 
             Context ctx = new Context();
-            foreach (BasicBlock block in blockProvider)
+            for (_currentBlock = 0; _currentBlock < _blocks.Count; _currentBlock++)
             {
+                BasicBlock block = _blocks[_currentBlock];
                 ctx.Block = block;
                 for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++)
                 {

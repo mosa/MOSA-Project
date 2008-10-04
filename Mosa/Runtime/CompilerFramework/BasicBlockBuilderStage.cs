@@ -251,7 +251,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
             else if (-1 != split)
             {
-                result = result.Split(split);
+                result = result.Split(split, label);
                 _basicBlocks.Add(result);
             }
 
@@ -279,22 +279,12 @@ namespace Mosa.Runtime.CompilerFramework
         #region IBasicBlockProvider members
 
         /// <summary>
-        /// Returns the number of basic blocks found.
+        /// Gets the basic blocks.
         /// </summary>
-        /// <value></value>
-        public int Count
+        /// <value>The basic blocks.</value>
+        public List<BasicBlock> Blocks
         {
-            get { return _basicBlocks.Count; }
-        }
-
-        /// <summary>
-        /// Retrieves a specific basic block.
-        /// </summary>
-        /// <value></value>
-        /// <returns>The basic block to retrieve.</returns>
-        public BasicBlock this[int index]
-        {
-            get { return _basicBlocks[index]; }
+            get { return _basicBlocks; }
         }
 
         /// <summary>

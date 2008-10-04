@@ -74,8 +74,9 @@ namespace Mosa.Runtime.CompilerFramework
             if (null == blockProvider)
                 throw new InvalidOperationException(@"Dominance calculation requires basic blocks.");
 
+            List<BasicBlock> blocks = blockProvider.Blocks;
             CalculateDominance(blockProvider);
-            CalculateDominanceFrontier(blockProvider);
+            CalculateDominanceFrontier(blocks);
         }
 
         /// <summary>
@@ -86,12 +87,14 @@ namespace Mosa.Runtime.CompilerFramework
         {
             // Changed flag
             bool changed = true;
+            // Get the block list
+            List<BasicBlock> blocks = blockProvider.Blocks;
             // Blocks in reverse post order topology
-            BasicBlock[] revPostOrder = ReversePostorder(blockProvider);
+            BasicBlock[] revPostOrder = ReversePostorder(blockProvider, blocks);
 
             // Allocate a dominance array
-            _doms = new BasicBlock[blockProvider.Count];
-            _doms[0] = blockProvider[0];
+            _doms = new BasicBlock[blocks.Count];
+            _doms[0] = blocks[0];
 
             // Calculate the dominance
             while (true == changed)
@@ -122,14 +125,14 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Calculates the dominance frontier of all blocks in the block provider.
+        /// Calculates the dominance frontier of all blocks in the block list.
         /// </summary>
-        /// <param name="blockProvider">The block provider to calculate with.</param>
-        private void CalculateDominanceFrontier(IBasicBlockProvider blockProvider)
+        /// <param name="blocks">The list of basic blocks.</param>
+        private void CalculateDominanceFrontier(List<BasicBlock> blocks)
         {
             List<BasicBlock> domFrontier = new List<BasicBlock>();
-            List<BasicBlock>[] domFrontiers = new List<BasicBlock>[blockProvider.Count];
-            foreach (BasicBlock b in blockProvider)
+            List<BasicBlock>[] domFrontiers = new List<BasicBlock>[blocks.Count];
+            foreach (BasicBlock b in blocks)
             {
                 if (b.PreviousBlocks.Count > 1)
                 {
@@ -153,7 +156,7 @@ namespace Mosa.Runtime.CompilerFramework
 
             Debug.WriteLine(@"Computed dominance frontiers");
             int idx = 0;
-            _domFrontierOfBlock = new BasicBlock[blockProvider.Count][];
+            _domFrontierOfBlock = new BasicBlock[blocks.Count][];
             foreach (List<BasicBlock> frontier in domFrontiers)
             {
                 if (null != frontier)
@@ -246,14 +249,14 @@ namespace Mosa.Runtime.CompilerFramework
             return f1;
         }
 
-        private BasicBlock[] ReversePostorder(IBasicBlockProvider blockProvider)
+        private BasicBlock[] ReversePostorder(IBasicBlockProvider blockProvider, List<BasicBlock> blocks)
         {
-            BasicBlock[] result = new BasicBlock[blockProvider.Count - 1];
+            BasicBlock[] result = new BasicBlock[blocks.Count - 1];
             int idx = 0;
-            Queue<BasicBlock> workList = new Queue<BasicBlock>(blockProvider.Count);
+            Queue<BasicBlock> workList = new Queue<BasicBlock>(blocks.Count);
 
             // Add next blocks
-            foreach (BasicBlock next in NextBlocks(blockProvider, blockProvider[0]))
+            foreach (BasicBlock next in NextBlocks(blockProvider, blocks[0]))
                 workList.Enqueue(next);
 
             while (0 != workList.Count)
@@ -295,13 +298,10 @@ namespace Mosa.Runtime.CompilerFramework
 
         private BasicBlock FindLabelledBlock(IBasicBlockProvider blockProvider, int target)
         {
-            foreach (BasicBlock block in blockProvider)
-            {
-                if (block.Label == target)
-                    return block;
-            }
-
-            throw new InvalidOperationException(@"Failed to resolve jump target.");
+            BasicBlock result = blockProvider.FromLabel(target);
+            if (null == result)
+                throw new InvalidOperationException(@"Failed to resolve jump target.");
+            return result;
         }
 
         #endregion // Internals

@@ -94,7 +94,7 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.Adc(AdcInstruction instruction, int arg)
         {
-            _emitter.Adc(instruction.Results[0], instruction.Operands[1]);
+            _emitter.Adc(instruction.Operand0, instruction.Operand1);
         }
 
         void IX86InstructionVisitor<int>.And(LogicalAndInstruction instruction, int arg)
@@ -155,9 +155,22 @@ namespace Mosa.Platforms.x86
             _emitter.Sar(instruction.Operand0, instruction.Operand1);
         }
 
+        void IX86InstructionVisitor<int>.Cmp(CmpInstruction instruction, int arg)
+        {
+            _emitter.Cmp(instruction.Operand0, instruction.Operand1);
+        }
+
         void IX86InstructionVisitor<int>.Setcc(SetccInstruction instruction, int arg)
         {
-            _emitter.Setcc(instruction.Operand0, instruction.ConditionCode);
+            Operand op0 = instruction.Operand0;
+            _emitter.Setcc(op0, instruction.ConditionCode);
+
+            // Extend the result to 32-bits
+            if (op0 is RegisterOperand)
+            {
+                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)op0).Register);
+                _emitter.Movzx(rop, rop);
+            }
         }
 
         void IX86InstructionVisitor<int>.Shl(ShlInstruction instruction, int arg)
@@ -1172,6 +1185,55 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IR.IIRVisitor<int>.Visit(IR.BranchInstruction instruction, int arg)
+        {
+            switch (instruction.ConditionCode)
+            {
+                case IR.ConditionCode.Equal:
+                    _emitter.Je(instruction.Label);
+                    break;
+
+                case IR.ConditionCode.GreaterOrEqual:
+                    _emitter.Jge(instruction.Label);
+                    break;
+
+                case IR.ConditionCode.GreaterThan:
+                    _emitter.Jg(instruction.Label);
+                    break;
+
+                case IR.ConditionCode.LessOrEqual:
+                    _emitter.Jle(instruction.Label);
+                    break;
+
+                case IR.ConditionCode.LessThan:
+                    _emitter.Jl(instruction.Label);
+                    break;
+
+                case IR.ConditionCode.NotEqual:
+                    _emitter.Jne(instruction.Label);
+                    break;
+
+                case IR.ConditionCode.UnsignedGreaterOrEqual:
+                    _emitter.Jae(instruction.Label);
+                    break;
+
+                case IR.ConditionCode.UnsignedGreaterThan:
+                    _emitter.Ja(instruction.Label);
+                    break;
+
+                case IR.ConditionCode.UnsignedLessOrEqual:
+                    _emitter.Jbe(instruction.Label);
+                    break;
+
+                case IR.ConditionCode.UnsignedLessThan:
+                    _emitter.Jb(instruction.Label);
+                    break;
+
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         void IR.IIRVisitor<int>.Visit(IR.EpilogueInstruction instruction, int arg)
         {
             // Epilogue instruction should have been expanded in a stage before ours.
@@ -1180,6 +1242,7 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<int>.Visit(IR.FloatingPointCompareInstruction instruction, int arg)
         {
+            Operand op0 = instruction.Operand0;
             Operand source = instruction.Operand1;
             Operand destination = instruction.Operand2;
 
@@ -1233,7 +1296,13 @@ namespace Mosa.Platforms.x86
                 }
             //}
 
-            _emitter.Setcc(instruction.Operand0, instruction.ConditionCode);
+            _emitter.Setcc(op0, instruction.ConditionCode);
+            // Extend the result to 32-bits
+            if (op0 is RegisterOperand)
+            {
+                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)op0).Register);
+                _emitter.Movzx(rop, rop);
+            }
         }
 
         void IR.IIRVisitor<int>.Visit(IR.FloatingPointToIntegerConversionInstruction instruction, int arg)
@@ -1272,8 +1341,16 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<int>.Visit(IR.IntegerCompareInstruction instruction, int arg)
         {
+            Operand op0 = instruction.Operand0;
             _emitter.Cmp(instruction.Operand1, instruction.Operand2);
-            _emitter.Setcc(instruction.Operand0, instruction.ConditionCode);
+            _emitter.Setcc(op0, instruction.ConditionCode);
+
+            // Extend the result to 32-bits
+            if (op0 is RegisterOperand)
+            {
+                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)op0).Register);
+                _emitter.Movzx(rop, rop);
+            }
         }
 
         void IR.IIRVisitor<int>.Visit(IR.IntegerToFloatingPointConversionInstruction instruction, int arg)
@@ -1321,17 +1398,17 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<int>.Visit(IR.LogicalAndInstruction instruction, int arg)
         {
-            _emitter.And(instruction.Destination, instruction.Operand2);
+            _emitter.And(instruction.Operand0, instruction.Operand2);
         }
 
         void IR.IIRVisitor<int>.Visit(IR.LogicalOrInstruction instruction, int arg)
         {
-            _emitter.Or(instruction.Destination, instruction.Operand2);
+            _emitter.Or(instruction.Operand0, instruction.Operand2);
         }
 
         void IR.IIRVisitor<int>.Visit(IR.LogicalXorInstruction instruction, int arg)
         {
-            _emitter.Xor(instruction.Destination, instruction.Operand2);
+            _emitter.Xor(instruction.Operand0, instruction.Operand2);
         }
 
         void IR.IIRVisitor<int>.Visit(IR.LogicalNotInstruction instruction, int arg)
@@ -1370,9 +1447,16 @@ namespace Mosa.Platforms.x86
                         throw new NotImplementedException();
                 }
             }
-            else if (src.Type.Type == CilElementType.R4 && dst.Type.Type == CilElementType.R8)
+            else if ((src.Type.Type == CilElementType.R4 && dst.Type.Type == CilElementType.R8) ||
+                     (src.Type.Type == CilElementType.R4 && true == dst.IsRegister))
             {
                 _emitter.Cvtss2sd(dst, src);
+            }
+            else if ((dst.Type.Type == CilElementType.R4 && src.Type.Type == CilElementType.R8) ||
+                     (dst.Type.Type == CilElementType.R4 && true == src.IsRegister))
+            {
+                _emitter.Cvtsd2ss(src, src);
+                _emitter.Movss(dst, src);
             }
             else
             {

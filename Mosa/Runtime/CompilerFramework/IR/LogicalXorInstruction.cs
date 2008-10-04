@@ -16,15 +16,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <summary>
     /// Intermediate representation of the exclusive-or operation.
     /// </summary>
-    public class LogicalXorInstruction : Instruction
+    public class LogicalXorInstruction : ThreeOperandInstruction
     {
         #region Construction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogicalXorInstruction"/> class.
         /// </summary>
-        public LogicalXorInstruction() :
-            base(2, 1)
+        public LogicalXorInstruction()
         {
         }
 
@@ -35,50 +34,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <param name="op1">The op1.</param>
         /// <param name="op2">The op2.</param>
         public LogicalXorInstruction(Operand result, Operand op1, Operand op2) :
-            base(2, 1)
+            base(result, op1, op2)
         {
-            SetResult(0, result);
-            SetOperand(0, op1);
-            SetOperand(1, op2);
         }
 
         #endregion // Construction
 
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the destination operand of the move instruction.
-        /// </summary>
-        /// <value>The destination.</value>
-        public Operand Destination
-        {
-            get { return this.Results[0]; }
-            set { this.SetResult(0, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the source operand of the move instruction.
-        /// </summary>
-        /// <value>The operand1.</value>
-        public Operand Operand1
-        {
-            get { return this.Operands[0]; }
-            set { this.SetOperand(0, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the source operand of the move instruction.
-        /// </summary>
-        /// <value>The operand2.</value>
-        public Operand Operand2
-        {
-            get { return this.Operands[1]; }
-            set { this.SetOperand(1, value); }
-        }
-
-        #endregion // Properties
-
-        #region Instruction Overrides
+        #region ThreeOperandInstruction Overrides
 
         /// <summary>
         /// Returns a string representation of the <see cref="MoveInstruction"/>.
@@ -86,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <returns>A string representation of the move instruction.</returns>
         public override string ToString()
         {
-            return String.Format(@"IR or {0} <- {1} ^ {2}", this.Destination, this.Operand1, this.Operand2);
+            return String.Format(@"IR or {0} <- {1} ^ {2}", this.Operand0, this.Operand1, this.Operand2);
         }
 
         /// <summary>
@@ -95,15 +57,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
         /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
-        public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
+        protected override void Visit<ArgType>(IIRVisitor<ArgType> visitor, ArgType arg)
         {
-            IIRVisitor<ArgType> irv = visitor as IIRVisitor<ArgType>;
-            if (null == irv)
-                throw new ArgumentException(@"Must implement IIRVisitor!", @"visitor");
-
-            irv.Visit(this, arg);
+            visitor.Visit(this, arg);
         }
 
-        #endregion // Instruction Overrides
+        #endregion // ThreeOperandInstruction Overrides
     }
 }

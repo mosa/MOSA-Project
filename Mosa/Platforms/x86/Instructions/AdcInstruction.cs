@@ -65,7 +65,6 @@ namespace Mosa.Platforms.x86.Instructions
         protected override void Visit<ArgType>(IR.IIRVisitor<ArgType> visitor, ArgType arg)
         {
             IX86InstructionVisitor<ArgType> x86 = visitor as IX86InstructionVisitor<ArgType>;
-            Debug.Assert(null != x86);
             if (null != x86)
                 x86.Adc(this, arg);
             else

@@ -46,6 +46,7 @@ namespace Mosa.Platforms.x86
         void Cvtsi2ss(Cvtsi2ssInstruction instruction, ArgType arg);
         void Cvtsi2sd(Cvtsi2sdInstruction instruction, ArgType arg);
 
+        void Cmp(CmpInstruction instruction, ArgType arg);
         void Setcc(SetccInstruction instruction, ArgType arg);
 
         #region Intrinsics

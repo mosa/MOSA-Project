@@ -86,11 +86,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Initializes a new instance of <see cref="BasicBlock"/>.
 		/// </summary>
 		/// <param name="instructions">The instructions of the basic block.</param>
-		private BasicBlock(List<Instruction> instructions) :
+        /// <param name="label">The label of the newly created block.</param>
+		private BasicBlock(List<Instruction> instructions, int label) :
 			this()
 		{
 			_instructions = instructions;
-			_label = instructions[0].Offset;
+			_label = label;
 		}
 
 		#endregion // Construction
@@ -180,13 +181,14 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Splits the basic block at the given instruction index.
 		/// </summary>
 		/// <param name="index">The index of the first instruction of the block to create.</param>
+        /// <param name="label">The label of the new block.</param>
 		/// <returns>The new block with instructions starting at index.</returns>
-		public BasicBlock Split(int index)
+		public BasicBlock Split(int index, int label)
 		{
 			// Calculate the length of the instruction range
 			int length = _instructions.Count - index;
 			// Create a new basic block
-			BasicBlock result = new BasicBlock(_instructions.GetRange(index, length));
+			BasicBlock result = new BasicBlock(_instructions.GetRange(index, length), label);
 
 			// Remove the range of instructions from this block
 			_instructions.RemoveRange(index, length);
