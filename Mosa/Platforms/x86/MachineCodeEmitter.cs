@@ -1939,10 +1939,7 @@ namespace Mosa.Platforms.x86
             {
                 // Add the displacement
                 MemoryOperand mo = (MemoryOperand)op;
-                if (op.StackType == StackTypeCode.Int64)
-                    imm = BitConverter.GetBytes(mo.Offset.ToInt64());
-                else
-                    imm = BitConverter.GetBytes(mo.Offset.ToInt32());
+                imm = BitConverter.GetBytes(mo.Offset.ToInt32());
             }
             else if (op is ConstantOperand)
             {

@@ -468,7 +468,21 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandStore(Context ctx, IR.StoreInstruction instruction)
         {
-            throw new NotSupportedException();
+            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
+            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
+            Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
+
+            SigType I4 = new SigType(CilElementType.I4);
+            MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
+            MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+
+            Replace(ctx, new Instruction[] {
+                new x86.Instructions.MoveInstruction(eax, op1L),
+                new x86.Instructions.MoveInstruction(new MemoryOperand(I4, op0.Base, op0.Offset), eax),
+                new x86.Instructions.MoveInstruction(eax, op1H),
+                new x86.Instructions.MoveInstruction(new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4)), eax),
+            });
         }
 
         /// <summary>
