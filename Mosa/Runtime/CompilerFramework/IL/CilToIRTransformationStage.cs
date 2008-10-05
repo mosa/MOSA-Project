@@ -513,9 +513,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
         }
 
         private static readonly Type[][] s_convTable = new Type[][] {
+            /*                          U    I4    I8    N     F     P     O */
             /* Unknown */ new Type[] { null, null, null, null, null, null, null },
             /* Int32 */   new Type[] { null, typeof(IR.MoveInstruction), null, null, typeof(IR.FloatingPointToIntegerConversionInstruction), null, null },
-            /* Int64 */   new Type[] { null, null, null, null, null, null, null },
+            /* Int64 */   new Type[] { null, typeof(IR.SignExtendedMoveInstruction), typeof(IR.MoveInstruction), null, null, null, null },
             /* Native  */ new Type[] { null, null, null, null, null, null, null },
             /* F */       new Type[] { null, typeof(IR.IntegerToFloatingPointConversionInstruction), null, null, typeof(MoveInstruction), null, null },
             /* Ptr */     new Type[] { null, null, null, null, null, null, null },
@@ -552,6 +553,9 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
                 case CilElementType.I4:
                     //type = typeof(MoveInstruction);
+                    break;
+
+                case CilElementType.I8:
                     break;
 
                 case CilElementType.U1:

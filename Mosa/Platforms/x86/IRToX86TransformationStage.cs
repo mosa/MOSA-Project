@@ -480,8 +480,8 @@ namespace Mosa.Platforms.x86
         void IR.IIRVisitor<Context>.Visit(IR.MoveInstruction instruction, Context ctx)
         {
             // We need to replace ourselves in case of a Memory -> Memory transfer
-            Operand dst = instruction.Destination;
-            Operand src = instruction.Source;
+            Operand dst = instruction.Operand0;
+            Operand src = instruction.Operand1;
 
             if (dst is MemoryOperand && src is MemoryOperand)
             {
@@ -601,6 +601,10 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Cld(Instructions.Intrinsics.CldInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cdq(Instructions.CdqInstruction instruction, Context ctx)
         {
         }
 

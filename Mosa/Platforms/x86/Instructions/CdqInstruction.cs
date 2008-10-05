@@ -10,36 +10,28 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Mosa.Runtime.CompilerFramework.IR;
-using Mosa.Runtime.CompilerFramework;
-using System.Diagnostics;
-using Mosa.Runtime.Metadata;
+
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.Instructions
 {
     /// <summary>
-    /// Intermediate representation of the x86 cvtsi2sd instruction.
+    /// Intermediate representation of the x86 cdq instruction.
     /// </summary>
-    public sealed class Cvtsi2sdInstruction : TwoOperandInstruction
+    public sealed class CdqInstruction : IR.IRInstruction
     {
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of <see cref="Cvtsi2ssInstruction"/>.
+        /// Initializes a new instance of the <see cref="CdqInstruction"/> class.
         /// </summary>
-        /// <param name="destination">The destination operand.</param>
-        /// <param name="source">The source operand.</param>
-        public Cvtsi2sdInstruction(Operand destination, Operand source) :
-            base(destination, source)
+        public CdqInstruction()
         {
-            Debug.Assert(destination.Type.Type == CilElementType.R8, @"Destination not R8");
-            if (destination.Type.Type != CilElementType.R8)
-                throw new ArgumentException(@"Destination not R8", @"destination");
         }
 
         #endregion // Construction
 
-        #region TwoOperandInstruction Overrides
+        #region IRInstruction Overrides
 
         /// <summary>
         /// Returns a string representation of the instruction.
@@ -49,7 +41,7 @@ namespace Mosa.Platforms.x86.Instructions
         /// </returns>
         public override string ToString()
         {
-            return String.Format(@"x86 cvtsi2sd {0}, {1} ; {0} = (float64){1}", this.Operand0, this.Operand1);
+            return @"x86 cdq";
         }
 
         /// <summary>
@@ -58,15 +50,15 @@ namespace Mosa.Platforms.x86.Instructions
         /// <typeparam name="ArgType">The type of the rg type.</typeparam>
         /// <param name="visitor">The visitor.</param>
         /// <param name="arg">The arg.</param>
-        protected override void Visit<ArgType>(IIRVisitor<ArgType> visitor, ArgType arg)
+        protected override void Visit<ArgType>(Mosa.Runtime.CompilerFramework.IR.IIRVisitor<ArgType> visitor, ArgType arg)
         {
             IX86InstructionVisitor<ArgType> x86v = visitor as IX86InstructionVisitor<ArgType>;
             if (null != x86v)
-                x86v.Cvtsi2sd(this, arg);
+                x86v.Cdq(this, arg);
             else
-                visitor.Visit(this, arg);
+                visitor.Visit(this, arg);            
         }
 
-        #endregion // TwoOperandInstruction Overrides
+        #endregion //  IRInstruction Overrides
     }
 }

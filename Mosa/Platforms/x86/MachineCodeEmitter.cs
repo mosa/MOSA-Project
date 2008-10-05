@@ -343,6 +343,11 @@ namespace Mosa.Platforms.x86
             Emit(dest, src, cd_and);
         }
 
+        void ICodeEmitter.Cdq()
+        {
+            _codeStream.WriteByte(0x99);
+        }
+
         /// <summary>
         /// Emits an NOT instruction.
         /// </summary>

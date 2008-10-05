@@ -181,6 +181,28 @@ namespace Mosa.Platforms.x86
         private void ExpandShiftLeft(Context ctx, IR.ShiftLeftInstruction instruction)
         {
             throw new NotSupportedException();
+
+            // cmp count, 64
+            // jae clear
+            // cmp count, 32
+            // jae mov_shift
+            // shld
+            // shl
+            // jmp done
+
+            // mov_shift:
+            // mov opH, opL
+            // xor opL, opL
+            // and count, 0x1F
+            // shl opH, count
+            // jmp done
+
+            // clear:
+            // mov opH, 0
+            // mov opL, 0
+
+            // done:
+            // ; remaining code from current basic block
         }
 
         /// <summary>
@@ -327,7 +349,77 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandSignedMove(Context ctx, IR.SignExtendedMoveInstruction instruction)
         {
-            throw new NotSupportedException();
+            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
+            Operand op1 = instruction.Operand1;
+            Debug.Assert(op0 != null, @"I8 not in a memory operand!");
+            Instruction[] instructions = null;
+            SigType I4 = new SigType(CilElementType.I4);
+            MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
+            MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+
+            switch (op1.Type.Type)
+            {
+                case CilElementType.Boolean:
+                    instructions = new Instruction[] {
+                        new IR.ZeroExtendedMoveInstruction(op0L, op1),
+                        new IR.LogicalXorInstruction(op0H, op0H, op0H)
+                    };
+                    break;
+
+                case CilElementType.I1:
+                    instructions = new Instruction[] {
+                        new IR.SignExtendedMoveInstruction(eax, op1),
+                        new CdqInstruction(),
+                        new MoveInstruction(op0L, eax),
+                        new MoveInstruction(op0H, edx)
+                    };                    
+                    break;
+
+                case CilElementType.I2: goto case CilElementType.I1;
+                
+                case CilElementType.I4:
+                    instructions = new Instruction[] {
+                        new IR.MoveInstruction(eax, op1),
+                        new CdqInstruction(),
+                        new MoveInstruction(op0L, eax),
+                        new MoveInstruction(op0H, edx)
+                    };
+                    break;
+
+                case CilElementType.I8:
+                    Replace(ctx, new MoveInstruction(op0, op1));
+                    break;
+
+                case CilElementType.U1:
+                    instructions = new Instruction[] {
+                        new IR.ZeroExtendedMoveInstruction(eax, op1),
+                        new CdqInstruction(),
+                        new MoveInstruction(op0L, eax),
+                        new IR.LogicalXorInstruction(op0H, op0H, op0H)
+                    };
+                    break;
+
+                case CilElementType.U2: goto case CilElementType.U1;
+
+                case CilElementType.U4:
+                    throw new NotSupportedException();
+
+                case CilElementType.U8:
+                    throw new NotSupportedException();
+
+                case CilElementType.R4:
+                    throw new NotSupportedException();
+
+                case CilElementType.R8:
+                    throw new NotSupportedException();
+
+                default:
+                    throw new NotSupportedException();
+            }
+
+            Replace(ctx, instructions);
         }
 
         /// <summary>
@@ -494,6 +586,23 @@ namespace Mosa.Platforms.x86
             source.NextBlocks.Add(dest);
         }
 
+
+
+        /// <summary>
+        /// Clears the int64 to zero.
+        /// </summary>
+        /// <param name="block">The basic block to add the clear instructions to.</param>
+        /// <param name="opL">The 64-bit memory operand for the lower dword.</param>
+        /// <param name="opH">The 64-bit memory operand for the higher dword.</param>
+        private void ClearInt64(BasicBlock block, MemoryOperand opL, MemoryOperand opH)
+        {
+            ConstantOperand zero = new ConstantOperand(new SigType(CilElementType.I4), 0);
+            block.Instructions.AddRange(new Instruction[] {
+                new MoveInstruction(opL, zero),
+                new MoveInstruction(opH, zero)
+            });
+        }
+
         #endregion // Utility Methods
 
         #region IIRVisitor<Context> Members
@@ -621,7 +730,7 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.SignExtendedMoveInstruction instruction, Context arg)
         {
-            Operand op0 = instruction.Operands[0];
+            Operand op0 = instruction.Operand0;
             if (op0.StackType == StackTypeCode.Int64)
                 ExpandSignedMove(arg, instruction);
         }
@@ -635,7 +744,7 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.ZeroExtendedMoveInstruction instruction, Context arg)
         {
-            Operand op0 = instruction.Operands[0];
+            Operand op0 = instruction.Operand0;
             if (op0.StackType == StackTypeCode.Int64)
                 ExpandUnsignedMove(arg, instruction);
         }
@@ -1058,6 +1167,10 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Cld(CldInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cdq(CdqInstruction instruction, Context arg)
         {
         }
 

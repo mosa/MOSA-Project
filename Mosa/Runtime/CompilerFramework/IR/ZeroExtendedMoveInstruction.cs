@@ -19,26 +19,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <remarks>
     /// This instruction takes the source operand and converts to the request size maintaining its sign.
     /// </remarks>
-    public class ZeroExtendedMoveInstruction : Instruction
+    public class ZeroExtendedMoveInstruction : TwoOperandInstruction
     {
-        #region Data members
-
-        /// <summary>
-        /// Holds the destination size of the conversion.
-        /// </summary>
-        private int _size;
-
-        #endregion // Data members
-
         #region Construction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ZeroExtendedMoveInstruction"/>.
         /// </summary>
-        public ZeroExtendedMoveInstruction() :
-            base(1, 1)
+        public ZeroExtendedMoveInstruction()
         {
-            _size = 4;
         }
 
         /// <summary>
@@ -47,52 +36,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <param name="destination">The destination operand for the conversion.</param>
         /// <param name="source">The source operand for the conversion.</param>
         public ZeroExtendedMoveInstruction(Operand destination, Operand source) :
-            base(1, 1)
+            base(destination, source)
         {
-            SetOperand(0, source);
-            SetResult(0, destination);
         }
 
         #endregion // Construction
 
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the destination operand.
-        /// </summary>
-        public Operand Destination
-        {
-            get { return this.Results[0]; }
-            set { this.SetResult(0, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the size of the conversion result.
-        /// </summary>
-        public int Size
-        {
-            get { return _size; }
-            set
-            {
-                if (value != 1 && value != 2 && value != 4 && value != 8)
-                    throw new ArgumentOutOfRangeException(@"value");
-
-                _size = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the source operand.
-        /// </summary>
-        public Operand Source
-        {
-            get { return this.Operands[0]; }
-            set { this.SetOperand(0, value); }
-        }
-
-        #endregion // Properties
-
-        #region Instruction Overrides
+        #region TwoOperandInstruction Overrides
 
         /// <summary>
         /// Returns a string representation of <see cref="SignExtendedMoveInstruction"/>.
@@ -100,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <returns>A string representation of the instruction.</returns>
         public override string ToString()
         {
-            return String.Format(@"IR zconv {0} <- {1}", this.Destination, this.Source);
+            return String.Format(@"IR zconv {0} <- {1}", this.Operand0, this.Operand1);
         }
 
         /// <summary>
@@ -109,15 +59,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
         /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
-        public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
+        protected override void Visit<ArgType>(IIRVisitor<ArgType> visitor, ArgType arg)
         {
-            IIRVisitor<ArgType> irv = visitor as IIRVisitor<ArgType>;
-            if (null == irv)
-                throw new ArgumentException(@"Must implement IIRVisitor!", @"visitor");
-
-            irv.Visit(this, arg);
+            visitor.Visit(this, arg);
         }
 
-        #endregion // Instruction Overrides
+        #endregion // TwoOperandInstruction Overrides
     }
 }

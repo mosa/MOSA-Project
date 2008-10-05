@@ -90,12 +90,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, 2, int.MinValue, int.MaxValue)]
+        [Column(0, 1, 2, long.MinValue, long.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI8_I8(long a)
         {
             CodeSource = "static class Test { static bool ConvI8_I8(long expect, long a) { return expect == ((long)a); } }";
-            Assert.IsTrue((bool)Run<Native_ConvI8_I4>("", "Test", "ConvI8_I8", ((long)a), a));
+            Assert.IsTrue((bool)Run<Native_ConvI8_I8>("", "Test", "ConvI8_I8", ((long)a), a));
         }
 
         /// <summary>

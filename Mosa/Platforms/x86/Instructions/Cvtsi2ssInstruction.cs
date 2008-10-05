@@ -61,7 +61,7 @@ namespace Mosa.Platforms.x86.Instructions
         protected override void Visit<ArgType>(IIRVisitor<ArgType> visitor, ArgType arg)
         {
             IX86InstructionVisitor<ArgType> x86v = visitor as IX86InstructionVisitor<ArgType>;
-            if (null == x86v)
+            if (null != x86v)
                 x86v.Cvtsi2ss(this, arg);
             else
                 visitor.Visit(this, arg);

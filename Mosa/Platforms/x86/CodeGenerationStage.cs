@@ -155,6 +155,11 @@ namespace Mosa.Platforms.x86
             _emitter.Sar(instruction.Operand0, instruction.Operand1);
         }
 
+        void IX86InstructionVisitor<int>.Cdq(CdqInstruction instruction, int arg)
+        {
+            _emitter.Cdq();
+        }
+
         void IX86InstructionVisitor<int>.Cmp(CmpInstruction instruction, int arg)
         {
             _emitter.Cmp(instruction.Operand0, instruction.Operand1);
@@ -1500,10 +1505,10 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<int>.Visit(IR.SignExtendedMoveInstruction instruction, int arg)
         {
-            switch (instruction.Destination.Type.Type)
+            switch (instruction.Operand0.Type.Type)
             {
                 case CilElementType.I1:
-                    _emitter.Movsx(instruction.Destination, instruction.Source);
+                    _emitter.Movsx(instruction.Operand0, instruction.Operand1);
                     break;
 
                 case CilElementType.I2: goto case CilElementType.I1;
@@ -1511,11 +1516,11 @@ namespace Mosa.Platforms.x86
                 case CilElementType.I4: goto case CilElementType.I1;
 
                 case CilElementType.I8:
-                    _emitter.Mov(instruction.Destination, instruction.Source);
+                    _emitter.Mov(instruction.Operand0, instruction.Operand1);
                     break;
 
                 case CilElementType.R4:
-                    _emitter.Mov(instruction.Destination, instruction.Source);
+                    _emitter.Mov(instruction.Operand0, instruction.Operand1);
                     break;
 
                 default:
@@ -1529,10 +1534,10 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<int>.Visit(IR.ZeroExtendedMoveInstruction instruction, int arg)
         {
-            switch (instruction.Destination.Type.Type)
+            switch (instruction.Operand0.Type.Type)
             {
                 case CilElementType.I1:
-                    _emitter.Movzx(instruction.Destination, instruction.Source);
+                    _emitter.Movzx(instruction.Operand0, instruction.Operand1);
                     break;
 
                 case CilElementType.I2: goto case CilElementType.I1;
@@ -1540,7 +1545,7 @@ namespace Mosa.Platforms.x86
                 case CilElementType.I4: goto case CilElementType.I1;
 
                 case CilElementType.I8:
-                    throw new NotImplementedException();
+                    throw new NotSupportedException();
 
                 default:
                     throw new NotSupportedException();

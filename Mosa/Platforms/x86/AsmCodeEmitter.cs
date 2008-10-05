@@ -156,6 +156,11 @@ namespace Mosa.Platforms.x86
 
         }
 
+        void ICodeEmitter.Cdq()
+        {
+            _textWriter.WriteLine("\t\tcdq");
+        }
+
         /// <summary>
         /// Emits a Call instruction
         /// </summary>

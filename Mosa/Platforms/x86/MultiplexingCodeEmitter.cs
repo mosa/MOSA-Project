@@ -160,6 +160,14 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        void ICodeEmitter.Cdq()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Cdq();
+            });
+        }
+
         /// <summary>
         /// Emits a Call instruction
         /// </summary>

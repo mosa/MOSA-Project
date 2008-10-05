@@ -48,6 +48,7 @@ namespace Mosa.Platforms.x86
 
         void Cmp(CmpInstruction instruction, ArgType arg);
         void Setcc(SetccInstruction instruction, ArgType arg);
+        void Cdq(CdqInstruction instruction, ArgType arg);
 
         #region Intrinsics
         /// <summary>

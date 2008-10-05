@@ -74,6 +74,11 @@ namespace Mosa.Platforms.x86
         void Adc(Operand op1, Operand op2);
 
         /// <summary>
+        /// Emits a cdq instruction.
+        /// </summary>
+        void Cdq();
+
+        /// <summary>
         /// Emits a Call instruction
         /// </summary>
         /// <param name="method">The method to be called.</param>
