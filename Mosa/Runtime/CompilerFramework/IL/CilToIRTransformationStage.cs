@@ -515,7 +515,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         private static readonly Type[][] s_convTable = new Type[][] {
             /*                          U    I4    I8    N     F     P     O */
             /* Unknown */ new Type[] { null, null, null, null, null, null, null },
-            /* Int32 */   new Type[] { null, typeof(IR.MoveInstruction), null, null, typeof(IR.FloatingPointToIntegerConversionInstruction), null, null },
+            /* Int32 */   new Type[] { null, typeof(IR.MoveInstruction), typeof(IR.MoveInstruction), null, typeof(IR.FloatingPointToIntegerConversionInstruction), null, null },
             /* Int64 */   new Type[] { null, typeof(IR.SignExtendedMoveInstruction), typeof(IR.MoveInstruction), null, null, null, null },
             /* Native  */ new Type[] { null, null, null, null, null, null, null },
             /* F */       new Type[] { null, typeof(IR.IntegerToFloatingPointConversionInstruction), null, null, typeof(MoveInstruction), null, null },
@@ -553,6 +553,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
                 case CilElementType.I4:
                     //type = typeof(MoveInstruction);
+                    src = TruncateI8(src);
                     break;
 
                 case CilElementType.I8:
@@ -585,6 +586,9 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             if (0 != mask)
             {
+                // If source type is I8, we're always only working on the lower half
+                src = TruncateI8(src);
+
                 // We need to AND the result after conversion
                 List<Instruction> instructions = new List<Instruction>();
                 if (dest.Type != src.Type)
@@ -602,17 +606,44 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 }
 
                 // Do we have to extend/truncate the result?
-                if (null != extension)
+                if (null != extension && dest is RegisterOperand)
                 {
-                    instructions.Add(_architecture.CreateInstruction(extension, dest, src));
+                    RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.I4), ((RegisterOperand)dest).Register);
+                    instructions.Add(_architecture.CreateInstruction(extension, rop, dest));
                 }
 
                 Replace(ctx, instructions);
             }
             else
             {
-                Replace(ctx, _architecture.CreateInstruction(type, instruction.Results[0], instruction.Operands[0]));
+                Replace(ctx, _architecture.CreateInstruction(type, dest, src));
             }
+        }
+
+        /// <summary>
+        /// Truncates I8 operands to I4 operands, as a conversion down to smaller types is always truncating.
+        /// </summary>
+        /// <param name="op">The operand to truncate.</param>
+        /// <returns>The truncated operand.</returns>
+        private Operand TruncateI8(Operand op)
+        {
+            if (op.Type.Type == CilElementType.I8 || op.Type.Type == CilElementType.U8)
+            {
+                if (op is RegisterOperand)
+                {
+                    op = new RegisterOperand(new SigType(CilElementType.I4), ((RegisterOperand)op).Register);
+                }
+                else if (op is MemoryOperand)
+                {
+                    MemoryOperand mop = ((MemoryOperand)op);
+                    op = new MemoryOperand(new SigType(CilElementType.I4), mop.Base, mop.Offset);
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
+            }
+            return op;
         }
 
         /// <summary>

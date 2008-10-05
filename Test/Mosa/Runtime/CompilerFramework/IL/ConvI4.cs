@@ -95,7 +95,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void ConvI4_I8(long a)
         {
             CodeSource = "static class Test { static bool ConvI4_I8(int expect, long a) { return expect == ((int)a); } }";
-            Assert.IsTrue((bool)Run<Native_ConvI4_I4>("", "Test", "ConvI4_I8", ((int)a), a));
+            Assert.IsTrue((bool)Run<Native_ConvI4_I8>("", "Test", "ConvI4_I8", ((int)a), a));
         }
 
         /// <summary>

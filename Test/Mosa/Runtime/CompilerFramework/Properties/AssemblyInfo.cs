@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TestProject1")]
+[assembly: AssemblyTitle("Test.Mosa.Runtime.CompilerFramework")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Liquid Fission")]
-[assembly: AssemblyProduct("TestProject1")]
-[assembly: AssemblyCopyright("Copyright © Liquid Fission 2008")]
+[assembly: AssemblyCompany("MOSA Project")]
+[assembly: AssemblyProduct("MOSA Runtime")]
+[assembly: AssemblyCopyright("Copyright © MOSA Project 2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

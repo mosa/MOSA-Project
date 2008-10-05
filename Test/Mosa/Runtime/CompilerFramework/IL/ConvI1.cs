@@ -83,7 +83,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, 2, sbyte.MinValue, sbyte.MaxValue, int.MinValue, int.MaxValue)]
+        [Column(/*0, 1, 2, sbyte.MinValue, sbyte.MaxValue, */int.MinValue, int.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI1_I4(int a)
         {
@@ -119,7 +119,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                         return expect == (sbyte)a; 
                     } 
                 }";
-            Assert.IsTrue((bool)Run<Native_ConvI1_I4>("", "Test", "ConvI1_I8", ((sbyte)a), a));
+            Assert.IsTrue((bool)Run<Native_ConvI1_I8>("", "Test", "ConvI1_I8", ((sbyte)a), a));
         }
 
         /// <summary>
