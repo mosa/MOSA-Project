@@ -118,6 +118,29 @@ namespace Mosa.Runtime.CompilerFramework.IL
         }
 
         /// <summary>
+        /// Validates the current set of stack operands.
+        /// </summary>
+        /// <param name="compiler"></param>
+        /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
+        /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
+        public override void Validate(MethodCompilerBase compiler)
+        {
+            // If we're ldind.i8, fix an IL deficiency that the result may be U8
+            if (this.Code == OpCode.Ldind_i8 && _typeRef.Type == CilElementType.I8)
+            {
+                SigType opType = this.Operands[0].Type;
+                RefSigType rst = opType as RefSigType;
+                PtrSigType ptr = opType as PtrSigType;
+
+                if (rst != null && rst.ElementType.Type == CilElementType.U8 ||
+                    ptr != null && ptr.ElementType.Type == CilElementType.U8)
+                {
+                    SetResult(0, compiler.CreateResultOperand(new SigType(CilElementType.U8)));
+                }
+            }
+        }
+
+        /// <summary>
         /// Allows visitor based dispatch for this instruction object.
         /// </summary>
         /// <param name="visitor">The visitor object.</param>

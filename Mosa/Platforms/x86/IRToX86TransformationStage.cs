@@ -409,16 +409,31 @@ namespace Mosa.Platforms.x86
             RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
             RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 
-            Replace(ctx, new Instruction[] {
-                // pop edx
-                _architecture.CreateInstruction(typeof(IR.PopInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)),
-                // add esp, -localsSize
-                _architecture.CreateInstruction(typeof(Instructions.AddInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
-                // pop ebp
-                _architecture.CreateInstruction(typeof(IR.PopInstruction), ebp),
-                // ret
-                _architecture.CreateInstruction(typeof(IR.ReturnInstruction))
-            });
+            if (_compiler.Method.Signature.ReturnType.Type == CilElementType.I8 ||
+                _compiler.Method.Signature.ReturnType.Type == CilElementType.U8)
+            {
+                Replace(ctx, new Instruction[] {
+                    // add esp, -localsSize
+                    _architecture.CreateInstruction(typeof(Instructions.AddInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
+                    // pop ebp
+                    _architecture.CreateInstruction(typeof(IR.PopInstruction), ebp),
+                    // ret
+                    _architecture.CreateInstruction(typeof(IR.ReturnInstruction))
+                });
+            }
+            else
+            {
+                Replace(ctx, new Instruction[] {
+                    // pop edx
+                    _architecture.CreateInstruction(typeof(IR.PopInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)),
+                    // add esp, -localsSize
+                    _architecture.CreateInstruction(typeof(Instructions.AddInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
+                    // pop ebp
+                    _architecture.CreateInstruction(typeof(IR.PopInstruction), ebp),
+                    // ret
+                    _architecture.CreateInstruction(typeof(IR.ReturnInstruction))
+                });
+            }
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.FloatingPointCompareInstruction instruction, Context ctx)
@@ -523,7 +538,7 @@ namespace Mosa.Platforms.x86
             RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
             RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 
-            Replace(ctx, new Instruction[] {
+            List<Instruction> prologue = new List<Instruction>(new Instruction[] {
                 /* If you want to stop at the header of an emitted function, just uncomment
                  * the following line. It will issue a breakpoint instruction. Note that if
                  * you debug using visual studio you must enable unmanaged code debugging, 
@@ -538,9 +553,6 @@ namespace Mosa.Platforms.x86
                 _architecture.CreateInstruction(typeof(IR.MoveInstruction), ebp, esp),
                 // sub esp, localsSize
                 _architecture.CreateInstruction(typeof(Instructions.SubInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
-                // push edx
-                _architecture.CreateInstruction(typeof(IR.PushInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)),
-
                 /*
                  * This move adds the runtime method identification token onto the stack. This
                  * allows us to perform call stack identification and gives the garbage collector 
@@ -549,6 +561,16 @@ namespace Mosa.Platforms.x86
                 // mov [ebp-4], token
                 _architecture.CreateInstruction(typeof(IR.MoveInstruction), new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, _compiler.Method.Token))
             });
+
+            // Do not save EDX for int64 return values
+            if (_compiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
+                _compiler.Method.Signature.ReturnType.Type != CilElementType.U8)
+            {
+                // push edx
+                prologue.Insert(4, _architecture.CreateInstruction(typeof(IR.PushInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)));
+            }
+
+            Replace(ctx, prologue);
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.PushInstruction instruction, Context ctx)
@@ -557,6 +579,21 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.ReturnInstruction instruction, Context ctx)
         {
+            ICallingConvention cc = _architecture.GetCallingConvention(_compiler.Method.Signature.CallingConvention);
+            IL.BranchInstruction br = (IL.BranchInstruction)_architecture.CreateInstruction(typeof(IL.BranchInstruction), IL.OpCode.Br, new int[] { Int32.MaxValue });
+            if (null != instruction.Operand0)
+            {
+                List<Instruction> instructions = new List<Instruction>();
+                Instruction[] resmove = cc.MoveReturnValue(_architecture, instruction.Operand0);
+                if (null != resmove)
+                    instructions.AddRange(resmove);
+                instructions.Add(br);
+                Replace(ctx, instructions);
+            }
+            else
+            {
+                Replace(ctx, br);
+            }
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.ShiftLeftInstruction instruction, Context ctx)

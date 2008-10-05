@@ -155,7 +155,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        delegate bool B__I8(int arg);
+        delegate bool B__I8(long arg);
         /// <summary>
         /// 
         /// </summary>

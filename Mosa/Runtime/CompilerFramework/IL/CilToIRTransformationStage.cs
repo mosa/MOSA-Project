@@ -176,25 +176,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Ret(ReturnInstruction instruction, Context ctx)
         {
-            // Do we have an operand to return?
-            if (0 != instruction.Operands.Length)
-            {
-                Debug.Assert(1 == instruction.Operands.Length, @"Can't return more than one operand.");
-                ICallingConvention cc = _architecture.GetCallingConvention(_compiler.Method.Signature.CallingConvention);
-                List<Instruction> instructions = new List<Instruction>();
-                Instruction[] resmove = cc.MoveReturnValue(_architecture, instruction.Operands[0]);
-                if (null != resmove)
-                    instructions.AddRange(resmove);
-                instructions.Add(_architecture.CreateInstruction(typeof(BranchInstruction), OpCode.Br, new int[] { Int32.MaxValue }));
-                Replace(ctx, instructions);
-            }
+            if (1 == instruction.Operands.Length)
+                Replace(ctx, new IR.ReturnInstruction(instruction.Operands[0]));
             else
-            {
-                // HACK: Should really use the calling convention here
-                // A ret jumps to the epilogue to leave
-                Instruction result = _architecture.CreateInstruction(typeof(BranchInstruction), OpCode.Br, new int[] { Int32.MaxValue });
-                Replace(ctx, result);
-            }
+                Replace(ctx, new IR.ReturnInstruction());
         }
 
         void IILVisitor<Context>.Branch(BranchInstruction instruction, Context ctx)

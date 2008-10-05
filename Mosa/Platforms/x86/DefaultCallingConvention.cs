@@ -107,6 +107,22 @@ namespace Mosa.Platforms.x86
                 instructions.Add(architecture.CreateInstruction(typeof(x86.Instructions.AddInstruction), esp, new ConstantOperand(I, stackSize)));
             }
 
+            if (instruction.Results.Length > 0 && instruction.Results[0].StackType == StackTypeCode.Int64)
+            {
+                MemoryOperand mop = instruction.Results[0] as MemoryOperand;
+                SigType I4 = new SigType(CilElementType.I4);
+                MemoryOperand opL = new MemoryOperand(I4, mop.Base, mop.Offset);
+                MemoryOperand opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
+                RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+                RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+
+                // Move the return value to the memory operand destined for it
+                instructions.AddRange(new Instruction[] {
+                    new Instructions.MoveInstruction(opL, eax),
+                    new Instructions.MoveInstruction(opH, edx)
+                });
+            }
+
             return instructions;
         }
 
@@ -204,6 +220,21 @@ namespace Mosa.Platforms.x86
             else if (8 == size && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
             {
                 return new Instruction[] { architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, SSE2Register.XMM0), operand) };
+            }
+            else if (8 == size && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
+            {
+                MemoryOperand op = operand as MemoryOperand;
+                Debug.Assert(op != null, @"Int64 return value not MemoryOperand.");
+
+                SigType I4 = new SigType(CilElementType.I4);
+                MemoryOperand opL = new MemoryOperand(I4, op.Base, op.Offset);
+                MemoryOperand opH = new MemoryOperand(I4, op.Base, new IntPtr(op.Offset.ToInt64() + 4));
+
+                // Like Win32: EDX:EAX
+                return new Instruction[] { 
+                    new Instructions.MoveInstruction(new RegisterOperand(I4, GeneralPurposeRegister.EAX), opL),
+                    new Instructions.MoveInstruction(new RegisterOperand(I4, GeneralPurposeRegister.EDX), opH),
+                };
             }
             else
             {

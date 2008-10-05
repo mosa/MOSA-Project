@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <summary>
     /// Intermediate representation of a branch instruction.
     /// </summary>
-    public sealed class BranchInstruction : OneOperandInstruction
+    public sealed class BranchInstruction : OneOperandInstruction, IBranchInstruction
     {
         #region Data members
 
@@ -121,5 +121,33 @@ namespace Mosa.Runtime.CompilerFramework.IR
         }
 
         #endregion // OneOperandInstruction Overrides
+
+        #region IBranchInstruction Members
+
+        int IBranchInstruction.Offset
+        {
+            get { return base.Offset; }
+        }
+
+        bool IBranchInstruction.IsConditional
+        {
+            get { return true; }
+        }
+
+        int[] IBranchInstruction.BranchTargets
+        {
+            get { return new int[] { _label }; }
+            set 
+            {
+                if (null == value)
+                    throw new ArgumentNullException(@"value");
+                if (value.Length == 0 || value.Length > 1)
+                    throw new ArgumentException(@"Invalid array length.", @"value");
+
+                _label = value[0];
+            }
+        }
+
+        #endregion // IBranchInstruction Members
     }
 }
