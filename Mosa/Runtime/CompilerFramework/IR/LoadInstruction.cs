@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
                     throw new ArgumentException(@"Source pointer incompatible with destination type.", @"destinationPtr");
             }
             else
-                throw new ArgumentException(@"Destination not a pointer or reference type.", @"destinationPtr");
+                throw new ArgumentException(@"Source not a pointer or reference type.", @"destinationPtr");
         }
 
         #endregion // Construction

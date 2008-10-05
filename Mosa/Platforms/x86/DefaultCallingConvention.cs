@@ -15,6 +15,8 @@ using Mosa.Runtime.CompilerFramework;
 using IL = Mosa.Runtime.CompilerFramework.IL;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.CompilerFramework.IR;
+using System.Diagnostics;
 
 namespace Mosa.Platforms.x86
 {
@@ -134,7 +136,22 @@ namespace Mosa.Platforms.x86
                         break;
 
                     case StackTypeCode.Int64:
-                        throw new NotSupportedException(@"Calling methods with Int64 args is not supported right now.");
+                        {
+                            SigType I4 = new SigType(CilElementType.I4);
+                            MemoryOperand mop = op as MemoryOperand;
+                            Debug.Assert(null != mop, @"I8/U8 arg is not in a memory operand.");
+                            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+                            MemoryOperand opL = new MemoryOperand(I4, mop.Base, mop.Offset);
+                            MemoryOperand opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
+
+                            instructions.AddRange(new Instruction[] {
+                                new x86.Instructions.MoveInstruction(eax, opL),
+                                new x86.Instructions.MoveInstruction(new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax),
+                                new x86.Instructions.MoveInstruction(eax, opH),
+                                new x86.Instructions.MoveInstruction(new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize+4)), eax),
+                            });
+                        }
+                        return;
                         
                     default:
                         throw new NotSupportedException();

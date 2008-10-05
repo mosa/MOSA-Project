@@ -329,7 +329,20 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandMove(Context ctx, IR.MoveInstruction instruction)
         {
-            throw new NotSupportedException();
+            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
+            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
+            Debug.Assert(op0 != null && op1 != null, @"Operands to I8 MoveInstruction are not MemoryOperand.");
+
+            SigType I4 = new SigType(CilElementType.I4);
+            MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
+            MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
+            MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+
+            Replace(ctx, new Instruction[] {
+                new IR.MoveInstruction(op0L, op1L),
+                new IR.MoveInstruction(op0H, op1H)
+            });
         }
 
         /// <summary>
@@ -423,7 +436,33 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// Expands the neg instruction for 64-bits.
+        /// Expands the load instruction for 64-bits.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        /// <param name="instruction">The instruction.</param>
+        private void ExpandLoad(Context ctx, IR.LoadInstruction instruction)
+        {
+            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
+            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
+            Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
+
+            SigType I4 = new SigType(CilElementType.I4);
+            MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
+            MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+
+            Replace(ctx, new Instruction[] {
+                new x86.Instructions.MoveInstruction(eax, op1),
+                new x86.Instructions.MoveInstruction(edx, new MemoryOperand(instruction.Results[0].Type, GeneralPurposeRegister.EAX, IntPtr.Zero)),
+                new x86.Instructions.MoveInstruction(op0L, edx),
+                new x86.Instructions.MoveInstruction(edx, new MemoryOperand(instruction.Results[0].Type, GeneralPurposeRegister.EAX, new IntPtr(4))),
+                new x86.Instructions.MoveInstruction(op0H, edx)
+            });
+        }
+
+        /// <summary>
+        /// Expands the store instruction for 64-bits.
         /// </summary>
         /// <param name="ctx">The context.</param>
         /// <param name="instruction">The instruction.</param>
@@ -651,6 +690,9 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.LoadInstruction instruction, Context arg)
         {
+            Operand op0 = instruction.Operand0;
+            if (op0.StackType == StackTypeCode.Int64)
+                ExpandLoad(arg, instruction);
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.LogicalAndInstruction instruction, Context arg)
