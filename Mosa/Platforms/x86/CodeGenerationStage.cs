@@ -1251,20 +1251,20 @@ namespace Mosa.Platforms.x86
             Operand source = instruction.Operand1;
             Operand destination = instruction.Operand2;
 
-            if (source.Type.Type == CilElementType.R4)
+            // Compare using the smallest precision
+            if (source.Type.Type == CilElementType.R4 && destination.Type.Type == CilElementType.R8)
             {
-                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0);
-                _emitter.Cvtss2sd(rop, source);
-                source = rop;
+                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM1);
+                _emitter.Cvtsd2ss(rop, destination);
+                destination = rop;
             }
             if (destination.Type.Type == CilElementType.R4)
             {
-                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
-                _emitter.Cvtss2sd(rop, destination);
-                destination = rop;
+                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM0);
+                _emitter.Cvtsd2ss(rop, source);
+                source = rop;
             }
 
-            /* FIXME: If we do R4 pure arithmetic, use this: 
             if (source.Type.Type == CilElementType.R4)
             {
                 switch (instruction.ConditionCode)
@@ -1284,7 +1284,6 @@ namespace Mosa.Platforms.x86
             }
             else
             {
-             */
                 switch (instruction.ConditionCode)
                 {
                     case IR.ConditionCode.Equal: _emitter.Ucomisd(source, destination); break;
@@ -1299,7 +1298,7 @@ namespace Mosa.Platforms.x86
                     case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
                     case IR.ConditionCode.LessThan: goto case IR.ConditionCode.GreaterOrEqual;
                 }
-            //}
+            }
 
             _emitter.Setcc(op0, instruction.ConditionCode);
             // Extend the result to 32-bits
