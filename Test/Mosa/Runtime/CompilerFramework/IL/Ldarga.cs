@@ -351,7 +351,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         {
             CodeSource = "static class Test { static void LdargaR8_ChangeValue(double value, ref double a) { a = value; } }";
             object[] args = new object[] { newValue, oldValue };
-            //Run<V_R8_R8>("", "Test", "LdargaR8_ChangeValue", args);
+            Run<V_R8_R8>("", "Test", "LdargaR8_ChangeValue", args);
             Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);
             Assert.AreEqual(newValue, args[1]);
         }
