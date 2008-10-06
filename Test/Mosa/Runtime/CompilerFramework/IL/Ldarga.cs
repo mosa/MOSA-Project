@@ -307,7 +307,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         {
             CodeSource = "static class Test { static void LdargaI8_ChangeValue(long value, ref long a) { a = value; } }";
             object[] args = new object[] { newValue, oldValue };
-            //Run<V_I8_I8>("", "Test", "LdargaI8_ChangeValue", args);
+            Run<V_I8_I8>("", "Test", "LdargaI8_ChangeValue", args);
             Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);
             Assert.AreEqual(newValue, args[1]);
         }

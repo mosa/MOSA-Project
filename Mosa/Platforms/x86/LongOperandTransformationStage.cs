@@ -476,12 +476,14 @@ namespace Mosa.Platforms.x86
             MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
             MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
             Replace(ctx, new Instruction[] {
+                new x86.Instructions.MoveInstruction(edx, op0),
                 new x86.Instructions.MoveInstruction(eax, op1L),
-                new x86.Instructions.MoveInstruction(new MemoryOperand(I4, op0.Base, op0.Offset), eax),
+                new x86.Instructions.MoveInstruction(new MemoryOperand(I4, GeneralPurposeRegister.EDX, IntPtr.Zero), eax),
                 new x86.Instructions.MoveInstruction(eax, op1H),
-                new x86.Instructions.MoveInstruction(new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4)), eax),
+                new x86.Instructions.MoveInstruction(new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(4)), eax),
             });
         }
 
