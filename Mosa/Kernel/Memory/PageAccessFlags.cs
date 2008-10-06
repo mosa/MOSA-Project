@@ -7,16 +7,12 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Mosa.Kernel.Memory
 {
     /// <summary>
     /// Specifies memory protection flags.
     /// </summary>
-    [Flags]
+	[System.Flags]
     public enum PageProtectionFlags
     {
         /// <summary>

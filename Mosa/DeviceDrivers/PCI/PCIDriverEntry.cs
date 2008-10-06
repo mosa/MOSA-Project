@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Reflection;
 using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.PCI
@@ -19,7 +17,7 @@ namespace Mosa.DeviceDrivers.PCI
 	public class PCIDriverEntry
 	{
 		private PCIDeviceSignatureAttribute pciDeviceSignatureAttribute;
-		private Type driverType;
+		private System.Type driverType;
 
 		/// <summary>
 		/// Gets the signature attribute.
@@ -31,14 +29,14 @@ namespace Mosa.DeviceDrivers.PCI
 		/// Gets the type of the driver.
 		/// </summary>
 		/// <value>The type of the driver.</value>
-		public Type DriverType { get { return driverType; } }
+		public System.Type DriverType { get { return driverType; } }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PCIDriverEntry"/> class.
 		/// </summary>
 		/// <param name="pciDeviceSignatureAttribute">The pci device signature attribute.</param>
 		/// <param name="driverType">Type of the driver.</param>
-		public PCIDriverEntry(PCIDeviceSignatureAttribute pciDeviceSignatureAttribute, Type driverType)
+		public PCIDriverEntry(PCIDeviceSignatureAttribute pciDeviceSignatureAttribute, System.Type driverType)
 		{
 			this.pciDeviceSignatureAttribute = pciDeviceSignatureAttribute;
 			this.driverType = driverType;

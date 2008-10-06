@@ -8,8 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 namespace Mosa.FileSystem
 {
 	/// <summary>
@@ -54,7 +52,7 @@ namespace Mosa.FileSystem
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException(@"value");
+					throw new System.ArgumentNullException(@"value");
 
 				label = value;
 			}

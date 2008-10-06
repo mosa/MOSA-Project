@@ -7,18 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Collections;
-
 namespace Mosa.ClassLib
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="K"></typeparam>
-    /// <typeparam name="T"></typeparam>
-	public class RedBlackTree<K, T> where K : IComparable
+	/// <summary>
+	/// Implements a Red Black Tree list
+	/// </summary>
+	/// <typeparam name="K"></typeparam>
+	/// <typeparam name="T"></typeparam>
+	public class RedBlackTree<K, T> where K : System.IComparable
 	{
         /// <summary>
         /// 
@@ -36,12 +32,12 @@ namespace Mosa.ClassLib
             Black = 0 
         };
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="NK"></typeparam>
-        /// <typeparam name="NT"></typeparam>
-		protected class RedBlackTreeNode<NK, NT> where NK : IComparable
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="NK">The type of the K.</typeparam>
+		/// <typeparam name="NT">The type of the T.</typeparam>
+		protected class RedBlackTreeNode<NK, NT> where NK : System.IComparable
 		{
             /// <summary>
             /// 
@@ -58,17 +54,17 @@ namespace Mosa.ClassLib
             /// </summary>
 			public NK key;
 
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public RedBlackTreeNode<NK, NT> parent, left, right;
 
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="key"></param>
-            /// <param name="data"></param>
-            /// <param name="color"></param>
+			/// <summary>
+			/// Initializes a new instance of the <see cref="RedBlackTree&lt;K, T&gt;.RedBlackTreeNode&lt;NK, NT&gt;"/> class.
+			/// </summary>
+			/// <param name="key">The key.</param>
+			/// <param name="data">The data.</param>
+			/// <param name="color">The color.</param>
 			public RedBlackTreeNode(NK key, NT data, Color color)
 			{
 				this.key = key;
@@ -76,15 +72,11 @@ namespace Mosa.ClassLib
 				this.data = data;
 			}
 
-			//public override string ToString()   // for debugging
-			//{
-			//    return key.ToString() + " - " + data.ToString() + " : " + (color == Color.Red ? "Red" : "Black");
-			//}
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected RedBlackTreeNode<K, T> root;
 
         /// <summary>
@@ -92,25 +84,28 @@ namespace Mosa.ClassLib
         /// </summary>
 		protected uint size = 0;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the size.
+		/// </summary>
+		/// <value>The size.</value>
 		public uint Size { get { return size; } }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Clears this instance.
+		/// </summary>
 		public void Clear()
 		{
 			root = null;
 			size = 0;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Determines whether [contains] [the specified key].
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns>
+		/// 	<c>true</c> if [contains] [the specified key]; otherwise, <c>false</c>.
+		/// </returns>
 		protected bool Contains(K key)
 		{
 			RedBlackTreeNode<K, T> cur = root;
@@ -131,11 +126,11 @@ namespace Mosa.ClassLib
 			return false;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="data"></param>
+		/// <summary>
+		/// Inserts the specified key.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <param name="data">The data.</param>
 		public void Insert(K key, T data)
 		{
 			RedBlackTreeNode<K, T> newnode = new RedBlackTree<K, T>.RedBlackTreeNode<K, T>(key, data, Color.Red);
@@ -150,10 +145,10 @@ namespace Mosa.ClassLib
 			size++;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
+		/// <summary>
+		/// Deletes the specified key.
+		/// </summary>
+		/// <param name="key">The key.</param>
 		public void Delete(K key)
 		{
 			RedBlackTreeNode<K, T> deletenode = Find(key);
@@ -169,11 +164,11 @@ namespace Mosa.ClassLib
 			size--;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Finds the specified key.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns></returns>
 		protected RedBlackTreeNode<K, T> Find(K key)
 		{
 			RedBlackTreeNode<K, T> cur = root;
@@ -193,11 +188,11 @@ namespace Mosa.ClassLib
 			return null;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="newnode"></param>
+		/// <summary>
+		/// Inserts the specified parent.
+		/// </summary>
+		/// <param name="parent">The parent.</param>
+		/// <param name="newnode">The newnode.</param>
 		protected void Insert(RedBlackTreeNode<K, T> parent, RedBlackTreeNode<K, T> newnode)
 		{
 			int cmp = newnode.key.CompareTo(parent.key);
@@ -219,11 +214,11 @@ namespace Mosa.ClassLib
 					Insert(parent.right, newnode);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the grandparent.
+		/// </summary>
+		/// <param name="n">The n.</param>
+		/// <returns></returns>
 		protected RedBlackTreeNode<K, T> GetGrandparent(RedBlackTreeNode<K, T> n)
 		{
 			if ((n != null) && (n.parent != null))
@@ -232,11 +227,11 @@ namespace Mosa.ClassLib
 				return null;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the uncle.
+		/// </summary>
+		/// <param name="n">The n.</param>
+		/// <returns></returns>
 		protected RedBlackTreeNode<K, T> GetUncle(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> g = GetGrandparent(n);
@@ -248,10 +243,10 @@ namespace Mosa.ClassLib
 				return g.left;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="q"></param>
+		/// <summary>
+		/// Rotates the right.
+		/// </summary>
+		/// <param name="q">The q.</param>
 		protected void RotateRight(RedBlackTreeNode<K, T> q)
 		{
 			RedBlackTreeNode<K, T> r = q.parent;
@@ -274,10 +269,10 @@ namespace Mosa.ClassLib
 				b.parent = q;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p"></param>
+		/// <summary>
+		/// Rotates the left.
+		/// </summary>
+		/// <param name="p">The p.</param>
 		protected void RotateLeft(RedBlackTreeNode<K, T> p)
 		{
 			RedBlackTreeNode<K, T> r = p.parent;
@@ -300,21 +295,23 @@ namespace Mosa.ClassLib
 				b.parent = p;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Determines whether the specified n is leaf.
+		/// </summary>
+		/// <param name="n">The n.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified n is leaf; otherwise, <c>false</c>.
+		/// </returns>
 		protected bool IsLeaf(RedBlackTreeNode<K, T> n)
 		{
 			return ((n.left == null) && (n.right == null));
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
-        /// <param name="c"></param>
+		/// <summary>
+		/// Replaces the node.
+		/// </summary>
+		/// <param name="n">The n.</param>
+		/// <param name="c">The c.</param>
 		protected void ReplaceNode(RedBlackTreeNode<K, T> n, RedBlackTreeNode<K, T> c)
 		{
 			if (n.parent.left == n)
@@ -325,10 +322,10 @@ namespace Mosa.ClassLib
 			c.parent = n.parent;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
+		/// <summary>
+		/// Inserts the case1.
+		/// </summary>
+		/// <param name="n">The n.</param>
 		protected void InsertCase1(RedBlackTreeNode<K, T> n)
 		{
 			if (n.parent == null)
@@ -337,10 +334,10 @@ namespace Mosa.ClassLib
 				InsertCase2(n);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
+		/// <summary>
+		/// Inserts the case2.
+		/// </summary>
+		/// <param name="n">The n.</param>
 		protected void InsertCase2(RedBlackTreeNode<K, T> n)
 		{
 			if (n.parent.color == Color.Black)
@@ -349,10 +346,10 @@ namespace Mosa.ClassLib
 				InsertCase3(n);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
+		/// <summary>
+		/// Inserts the case3.
+		/// </summary>
+		/// <param name="n">The n.</param>
 		protected void InsertCase3(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> u = GetUncle(n);
@@ -370,10 +367,10 @@ namespace Mosa.ClassLib
 			}
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
+		/// <summary>
+		/// Inserts the case4.
+		/// </summary>
+		/// <param name="n">The n.</param>
 		protected void InsertCase4(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> g = GetGrandparent(n);
@@ -389,10 +386,10 @@ namespace Mosa.ClassLib
 			InsertCase5(n);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
+		/// <summary>
+		/// Inserts the case5.
+		/// </summary>
+		/// <param name="n">The n.</param>
 		protected void InsertCase5(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> g = GetGrandparent(n);
@@ -407,11 +404,11 @@ namespace Mosa.ClassLib
 			}
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the sibling.
+		/// </summary>
+		/// <param name="n">The n.</param>
+		/// <returns></returns>
 		protected RedBlackTreeNode<K, T> GetSibling(RedBlackTreeNode<K, T> n)
 		{
 			if (n == n.parent.left)
@@ -420,10 +417,10 @@ namespace Mosa.ClassLib
 				return n.parent.left;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
+		/// <summary>
+		/// Deletes the one child.
+		/// </summary>
+		/// <param name="n">The n.</param>
 		protected void DeleteOneChild(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> child = IsLeaf(n.right) ? n.left : n.right;
@@ -437,20 +434,20 @@ namespace Mosa.ClassLib
 			}
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
+		/// <summary>
+		/// Deletes the case1.
+		/// </summary>
+		/// <param name="n">The n.</param>
 		protected void DeleteCase1(RedBlackTreeNode<K, T> n)
 		{
 			if (n.parent != null)
 				DeleteCase2(n);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
+		/// <summary>
+		/// Deletes the case2.
+		/// </summary>
+		/// <param name="n">The n.</param>
 		protected void DeleteCase2(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> s = GetSibling(n);
@@ -466,10 +463,10 @@ namespace Mosa.ClassLib
 			DeleteCase3(n);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
+		/// <summary>
+		/// Deletes the case3.
+		/// </summary>
+		/// <param name="n">The n.</param>
 		protected void DeleteCase3(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> s = GetSibling(n);
@@ -484,11 +481,11 @@ namespace Mosa.ClassLib
 			else
 				DeleteCase4(n);
 		}
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
+
+		/// <summary>
+		/// Deletes the case4.
+		/// </summary>
+		/// <param name="n">The n.</param>
 		protected void DeleteCase4(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> s = GetSibling(n);
@@ -504,10 +501,10 @@ namespace Mosa.ClassLib
 				DeleteCase5(n);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
+		/// <summary>
+		/// Deletes the case5.
+		/// </summary>
+		/// <param name="n">The n.</param>
 		protected void DeleteCase5(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> s = GetSibling(n);
@@ -531,10 +528,10 @@ namespace Mosa.ClassLib
 			DeleteCase6(n);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
+		/// <summary>
+		/// Deletes the case6.
+		/// </summary>
+		/// <param name="n">The n.</param>
 		protected void DeleteCase6(RedBlackTreeNode<K, T> n)
 		{
 			RedBlackTreeNode<K, T> s = GetSibling(n);
@@ -550,12 +547,12 @@ namespace Mosa.ClassLib
 				RotateRight(n.parent);
 			}
 		}
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
+
+		/// <summary>
+		/// Finds the min.
+		/// </summary>
+		/// <param name="s">The s.</param>
+		/// <returns></returns>
 		protected RedBlackTreeNode<K, T> FindMin(RedBlackTreeNode<K, T> s)
 		{
 			if (s == null)
@@ -569,11 +566,11 @@ namespace Mosa.ClassLib
 			return cur;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Finds the max.
+		/// </summary>
+		/// <param name="s">The s.</param>
+		/// <returns></returns>
 		protected RedBlackTreeNode<K, T> FindMax(RedBlackTreeNode<K, T> s)
 		{
 			if (s == null)

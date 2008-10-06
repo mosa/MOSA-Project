@@ -8,11 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections;
-using System.IO;
-
-
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
@@ -30,7 +25,7 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// Holds all nodes added to the root vfs node.
 		/// </summary>
-		private ArrayList nodes;
+		private System.Collections.ArrayList nodes;
 
 		#endregion // Data members
 
@@ -43,55 +38,60 @@ namespace Mosa.FileSystem.VFS
 		public DirectoryNode(IFileSystem fs)
 			: base(fs, VfsNodeType.Directory)
 		{
-			nodes = new ArrayList();
+			nodes = new System.Collections.ArrayList();
 		}
 
 		#endregion // Construction
 
 		#region IVfsNode members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="nodeType"></param>
-        /// <param name="settings"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates the specified name.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="nodeType">Type of the node.</param>
+		/// <param name="settings">The settings.</param>
+		/// <returns></returns>
 		public override IVfsNode Create(string name, VfsNodeType nodeType, object settings)
 		{
 			// FIXME: throw new NotImplementedException();
 			return null;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		public override IVfsNode Lookup(string name)
 		{
 			// FIXME: Lookup the node in the members
 			return null;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="access"></param>
-        /// <param name="sharing"></param>
-        /// <returns></returns>
-		public override object Open(FileAccess access, FileShare sharing)
+		/// <summary>
+		/// Opens the specified access.
+		/// </summary>
+		/// <param name="access">The access.</param>
+		/// <param name="sharing">The sharing.</param>
+		/// <returns></returns>
+		public override object Open(System.IO.FileAccess access, System.IO.FileShare sharing)
 		{
 			// FIXME: return something like: new System.IO.DirectoryInfo(VirtualFileSystem.GetPath(this));
 			//throw new NotImplementedException();
 			return null;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="child"></param>
-        /// <param name="dentry"></param>
+		/// <summary>
+		/// Called to delete a child from a directory.
+		/// </summary>
+		/// <param name="child">The IVfsNode interface of the child.</param>
+		/// <param name="dentry">The DirectoryEntry of the child.</param>
+		/// <remarks>
+		/// This function deletes a child IVfsNode from a directory. If child is a directory, it will be empty
+		/// before this call is executed. It is recommended to include a debug sanity check though. If the file
+		/// system needs to know the name of the child to delete, it can retrieve it from <see cref="DirectoryEntry.Name"/>.
+		/// </remarks>
+		/// <exception cref="System.NotSupportedException">The object does not support removal this way. There's most likely an object specific API to remove this IVfsNode.</exception>
 		public override void Delete(IVfsNode child, DirectoryEntry dentry)
 		{
 			// FIXME: throw new NotImplementedException();

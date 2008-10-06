@@ -8,9 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-using System;
-using System.IO;
 using Mosa.FileSystem;
 
 namespace Mosa.FileSystem.VFS
@@ -105,11 +102,11 @@ namespace Mosa.FileSystem.VFS
 		/// <returns>The created filesystem object.</returns>
 		/// <remarks>
 		/// This function creates new nodes in the virtual filesystem. In contrast to *nix this call
-		/// creates all node types, e.g. files, directories, devices and more. Specific types may 
+		/// creates all node types, e.g. files, directories, devices and more. Specific types may
 		/// require additional settings, which are specified in a settings object passed as the third
 		/// parameter.
 		/// </remarks>
-		public static object Create(string path, VfsNodeType type, object settings, FileAccess access, FileShare share)
+		public static object Create(string path, VfsNodeType type, object settings, System.IO.FileAccess access, System.IO.FileShare share)
 		{
 			// Retrieve the parent directory
 			DirectoryEntry parent = PathResolver.Resolve(rootNode, ref path, PathResolutionFlags.RetrieveParent);
@@ -180,7 +177,7 @@ namespace Mosa.FileSystem.VFS
         /// <param name="access"></param>
         /// <param name="share"></param>
         /// <returns></returns>
-		public static object Open(string path, FileAccess access, FileShare share)
+		public static object Open(string path, System.IO.FileAccess access, System.IO.FileShare share)
 		{
 			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path);
 
@@ -204,13 +201,13 @@ namespace Mosa.FileSystem.VFS
 			// FIXME: Perform access checks on the DirectoryEntry/IVfsNode.
 			AccessMode modeFlags = AccessMode.Exists;
 			switch (access) {
-				case FileAccess.Read:
+				case System.IO.FileAccess.Read:
 					modeFlags = AccessMode.Read;
 					break;
-				case FileAccess.Write:
+				case System.IO.FileAccess.Write:
 					modeFlags = AccessMode.Write;
 					break;
-				case FileAccess.ReadWrite:
+				case System.IO.FileAccess.ReadWrite:
 					modeFlags = AccessMode.Read | AccessMode.Write;
 					break;
 			}
@@ -228,7 +225,7 @@ namespace Mosa.FileSystem.VFS
 		public static void Rename(string old, string newname)
 		{
 			// FIXME: 
-			throw new NotImplementedException();
+			throw new System.NotImplementedException();
 		}
 
 		// <summary>
@@ -281,7 +278,7 @@ namespace Mosa.FileSystem.VFS
 		public static void Unmount(string path)
 		{
 			// FIXME: 
-			throw new NotImplementedException();
+			throw new System.NotImplementedException();
 		}
 
 		#endregion // Methods
@@ -310,7 +307,7 @@ namespace Mosa.FileSystem.VFS
 		bool IFileSystemService.Format(SettingsBase settings)
 		{
 			// We do not support formatting.
-			throw new NotSupportedException();
+			throw new System.NotSupportedException();
 		}
 
 		#endregion // IFileSystemService Members

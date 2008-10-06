@@ -7,14 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 namespace Mosa.DeviceDrivers.ISA
 {
     /// <summary>
     /// 
     /// </summary>
-	[AttributeUsage(AttributeTargets.All | AttributeTargets.Property, AllowMultiple = true)]
+	[System.AttributeUsage(System.AttributeTargets.All | System.AttributeTargets.Property, AllowMultiple = true)]
 	public class ISADeviceSignatureAttribute : System.Attribute
 	{
         /// <summary>

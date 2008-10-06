@@ -7,45 +7,41 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Collections;
-
 namespace Mosa.ClassLib
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-	public class LinkedList<T> : IEnumerable<T>, ICollection<T>
+	/// <summary>
+	/// Implements a linked list
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public class LinkedList<T> : System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.ICollection<T>
 	{
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="U"></typeparam>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="U"></typeparam>
 		public class LinkedListNode<U>
 		{
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public U value;
 
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public LinkedListNode<U> next;
 
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public LinkedListNode<U> previous;
 
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="value"></param>
-            /// <param name="previous"></param>
-            /// <param name="next"></param>
+			/// <summary>
+			/// Initializes a new instance of the <see cref="LinkedList&lt;T&gt;.LinkedListNode&lt;U&gt;"/> class.
+			/// </summary>
+			/// <param name="value">The value.</param>
+			/// <param name="previous">The previous.</param>
+			/// <param name="next">The next.</param>
 			public LinkedListNode(U value, LinkedListNode<U> previous, LinkedListNode<U> next)
 			{
 				this.value = value;
@@ -55,29 +51,36 @@ namespace Mosa.ClassLib
 
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected LinkedListNode<T> first;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected int count;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+		/// </summary>
+		/// <value></value>
+		/// <returns>true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
+		/// </returns>
 		public bool IsReadOnly { get { return false; } }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+		/// </summary>
+		/// <value></value>
+		/// <returns>
+		/// The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+		/// </returns>
 		public int Count { get { return count; } }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public LinkedListNode<T> First
 		{
 			get
@@ -86,14 +89,15 @@ namespace Mosa.ClassLib
 			}
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected LinkedListNode<T> last;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the last.
+		/// </summary>
+		/// <value>The last.</value>
 		public LinkedListNode<T> Last
 		{
 			get
@@ -102,27 +106,30 @@ namespace Mosa.ClassLib
 			}
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LinkedList&lt;T&gt;"/> class.
+		/// </summary>
 		public LinkedList()
 		{
 			first = last = null;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+		/// </summary>
+		/// <exception cref="T:System.NotSupportedException">
+		/// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+		/// </exception>
 		public void Clear()
 		{
 			first = last = null;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Finds the specified value.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
 		public LinkedListNode<T> Find(T value)
 		{
 			LinkedListNode<T> cur = first;
@@ -135,21 +142,23 @@ namespace Mosa.ClassLib
 			return null;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Determines whether [contains] [the specified value].
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns>
+		/// 	<c>true</c> if [contains] [the specified value]; otherwise, <c>false</c>.
+		/// </returns>
 		public bool Contains(T value)
 		{
 			return (Find(value) != null);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Finds the last.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
 		public LinkedListNode<T> FindLast(T value)
 		{
 			LinkedListNode<T> found = null;
@@ -163,31 +172,31 @@ namespace Mosa.ClassLib
 			return found;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
+		/// <summary>
+		/// Adds the specified value.
+		/// </summary>
+		/// <param name="value">The value.</param>
 		public void Add(T value)
 		{
 			AddLast(value);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Adds the last.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
 		public LinkedListNode<T> AddLast(T value)
 		{
 			LinkedListNode<T> node = new LinkedListNode<T>(value, last, null);
 			return AddLast(node);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Adds the last.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <returns></returns>
 		public LinkedListNode<T> AddLast(LinkedListNode<T> node)
 		{
 			if (first == null) {
@@ -203,22 +212,22 @@ namespace Mosa.ClassLib
 			return node;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Adds the first.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
 		public LinkedListNode<T> AddFirst(T value)
 		{
 			LinkedListNode<T> node = new LinkedListNode<T>(value, null, first);
 			return AddFirst(node);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Adds the first.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <returns></returns>
 		public LinkedListNode<T> AddFirst(LinkedListNode<T> node)
 		{
 			if (first != null)
@@ -230,16 +239,16 @@ namespace Mosa.ClassLib
 			return node;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Adds the after.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
 		public LinkedListNode<T> AddAfter(LinkedListNode<T> node, T value)
 		{
 			if (node == null)
-				throw new ArgumentNullException();
+				throw new System.ArgumentNullException();
 
 			LinkedListNode<T> cur = new LinkedListNode<T>(value, node, node.next);
 
@@ -254,16 +263,16 @@ namespace Mosa.ClassLib
 			return cur;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Adds the before.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
 		public LinkedListNode<T> AddBefore(LinkedListNode<T> node, T value)
 		{
 			if (node == null)
-				throw new ArgumentNullException();
+				throw new System.ArgumentNullException();
 
 			LinkedListNode<T> cur = new LinkedListNode<T>(value, node.previous, node);
 
@@ -278,11 +287,11 @@ namespace Mosa.ClassLib
 			return cur;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Removes the specified value.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
 		public bool Remove(T value)
 		{
 			LinkedListNode<T> node = Find(value);
@@ -294,14 +303,14 @@ namespace Mosa.ClassLib
 			return true;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="node"></param>
+		/// <summary>
+		/// Removes the specified node.
+		/// </summary>
+		/// <param name="node">The node.</param>
 		public void Remove(LinkedListNode<T> node)
 		{
 			if (node == null)
-				throw new InvalidOperationException();
+				throw new System.InvalidOperationException();
 
 			if (node.previous != null)
 				node.previous.next = node.next;
@@ -318,13 +327,13 @@ namespace Mosa.ClassLib
 			count--;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Removes the first.
+		/// </summary>
 		public void RemoveFirst()
 		{
 			if (first == null)
-				throw new InvalidOperationException();
+				throw new System.InvalidOperationException();
 
 			first = first.next;
 			first.previous = null;
@@ -335,29 +344,44 @@ namespace Mosa.ClassLib
 			count--;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Removes the last.
+		/// </summary>
 		public void RemoveLast()
 		{
 			if (last == null)
-				throw new InvalidOperationException();
+				throw new System.InvalidOperationException();
 
 			last.previous = null;
 			count--;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="arrayIndex"></param>
+		/// <summary>
+		/// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+		/// </summary>
+		/// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param>
+		/// <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
+		/// <exception cref="T:System.ArgumentNullException">
+		/// 	<paramref name="array"/> is null.
+		/// </exception>
+		/// <exception cref="T:System.ArgumentOutOfRangeException">
+		/// 	<paramref name="arrayIndex"/> is less than 0.
+		/// </exception>
+		/// <exception cref="T:System.ArgumentException">
+		/// 	<paramref name="array"/> is multidimensional.
+		/// -or-
+		/// <paramref name="arrayIndex"/> is equal to or greater than the length of <paramref name="array"/>.
+		/// -or-
+		/// The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.
+		/// -or-
+		/// Type <paramref name="T"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.
+		/// </exception>
 		public void CopyTo(T[] array, int arrayIndex)
 		{
 			if (array == null)
-				throw new ArgumentNullException();
+				throw new System.ArgumentNullException();
 			if (arrayIndex < 0)
-				throw new ArgumentOutOfRangeException();
+				throw new System.ArgumentOutOfRangeException();
 
 			//if (array.Rank != 1)
 			//    throw new ArgumentException();
@@ -374,21 +398,25 @@ namespace Mosa.ClassLib
 			}
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-		public IEnumerator<T> GetEnumerator()
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+		/// </returns>
+		public System.Collections.Generic.IEnumerator<T> GetEnumerator()
 		{
 			for (LinkedListNode<T> cur = first; cur != null; cur = cur.next)
 				yield return cur.value;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-		IEnumerator IEnumerable.GetEnumerator()
+		/// <summary>
+		/// Returns an enumerator that iterates through a collection.
+		/// </summary>
+		/// <returns>
+		/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+		/// </returns>
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
 			for (LinkedListNode<T> cur = first; cur != null; cur = cur.next)
 				yield return cur.value;

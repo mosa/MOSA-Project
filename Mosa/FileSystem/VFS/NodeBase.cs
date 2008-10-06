@@ -8,9 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.IO;
-
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
@@ -36,11 +33,11 @@ namespace Mosa.FileSystem.VFS
 		#endregion // Data members
 
 		#region Construction
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="fs"></param>
-        /// <param name="type"></param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NodeBase"/> class.
+		/// </summary>
+		/// <param name="fs">The fs.</param>
+		/// <param name="type">The type.</param>
 		protected NodeBase(IFileSystem fs, VfsNodeType type)
 		{
 			this.fs = fs;
@@ -50,48 +47,62 @@ namespace Mosa.FileSystem.VFS
 		#endregion // Construction
 
 		#region IVfsNode members
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the file system.
+		/// </summary>
+		/// <value>The file system.</value>
 		public IFileSystem FileSystem { get { return fs; } }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Returns the type of the node.
+		/// </summary>
+		/// <value></value>
 		public VfsNodeType NodeType { get { return type; } }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="type"></param>
-        /// <param name="settings"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new filesystem entry of the given name and type.
+		/// </summary>
+		/// <param name="name">The name of the filesystem entry to create.</param>
+		/// <param name="type">The type of the filesystem entry. See remarks.</param>
+		/// <param name="settings">Potential settings for the file systeme entry.</param>
+		/// <returns>
+		/// The created file system node for the requested object.
+		/// </returns>
+		/// <exception cref="System.NotSupportedException">The specified nodetype is not supported in the filesystem owning the node. See remarks about this.</exception>
+		/// <remarks>
+		/// In theory every filesystem should support any VfsNodeType. Standard objects, such as directories and files are obvious. For other objects however, the
+		/// file system is encouraged to store the passed settings in a specially marked file and treat these files as the appropriate node type. Instances of these
+		/// objects can be retrieved using VfsObjectFactory.Create(settings).
+		/// <para/>
+		/// Access rights do not need to be checked by the node implementation. They have been already been checked by the VirtualFileSystem itself.
+		/// </remarks>
 		public abstract IVfsNode Create(string name, VfsNodeType type, object settings);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Requests the IVfsNode to perform a lookup on its children.
+		/// </summary>
+		/// <param name="name">The name of the item to find.</param>
+		/// <returns>
+		/// The vfs node, which represents the item. If there's no node with the specified name, the return value is null.
+		/// </returns>
 		public virtual IVfsNode Lookup(string name)
 		{
 			return null;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="access"></param>
-        /// <param name="sharing"></param>
-        /// <returns></returns>
-		public abstract object Open(FileAccess access, FileShare sharing);
+		/// <summary>
+		/// Opens the specified access.
+		/// </summary>
+		/// <param name="access">The access.</param>
+		/// <param name="sharing">The sharing.</param>
+		/// <returns></returns>
+		public abstract object Open(System.IO.FileAccess access, System.IO.FileShare sharing);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="child"></param>
-        /// <param name="entry"></param>
+		/// <summary>
+		/// Deletes the specified child.
+		/// </summary>
+		/// <param name="child">The child.</param>
+		/// <param name="entry">The entry.</param>
 		public abstract void Delete(IVfsNode child, DirectoryEntry entry);
 
 		#endregion // IVfsNode members

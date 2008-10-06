@@ -8,15 +8,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 namespace Mosa.FileSystem.VFS
 {
 
 	/// <summary>
 	/// Flags, which control the operation of the Mosa.Filesystem.VFS.PathResolver.
 	/// </summary>
-	[Flags]
+	[System.Flags]
 	public enum PathResolutionFlags
 	{
 		/// <summary>

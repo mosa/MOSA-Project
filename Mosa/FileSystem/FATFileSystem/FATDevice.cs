@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.DeviceDrivers;
 using Mosa.FileSystem;
 using Mosa.FileSystem.VFS;
@@ -19,9 +18,9 @@ namespace Mosa.FileSystem.FATFileSystem
     /// </summary>
 	public class FATDevice : Device, IDevice, IFileSystemDevice
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FATDevice"/> class.
+		/// </summary>
 		public FATDevice()
 		{
 			base.name = "FAT";
@@ -29,11 +28,10 @@ namespace Mosa.FileSystem.FATFileSystem
 			base.deviceStatus = DeviceStatus.Available;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="partition"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// </summary>
+		/// <param name="partition"></param>
+		/// <returns></returns>
 		public GenericFileSystem Create(IPartitionDevice partition)
 		{
 			return new FAT(partition);

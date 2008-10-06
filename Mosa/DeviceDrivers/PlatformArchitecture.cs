@@ -7,14 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 namespace Mosa.DeviceDrivers
 {
     /// <summary>
     /// 
     /// </summary>
-	[Flags]
+	[System.Flags]
 	public enum PlatformArchitecture
 	{
         /// <summary>

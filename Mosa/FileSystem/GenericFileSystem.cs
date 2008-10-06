@@ -7,20 +7,19 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.DeviceDrivers;
 using Mosa.FileSystem.VFS;
 
 namespace Mosa.FileSystem
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public abstract class GenericFileSystem
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IPartitionDevice partition;
 
         /// <summary>
@@ -43,10 +42,10 @@ namespace Mosa.FileSystem
         /// </summary>
 		protected byte[] serialNbr;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="partition"></param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GenericFileSystem"/> class.
+		/// </summary>
+		/// <param name="partition">The partition.</param>
 		public GenericFileSystem(IPartitionDevice partition)
 		{
 			this.partition = partition;
@@ -56,31 +55,34 @@ namespace Mosa.FileSystem
 			this.serialNbr = new byte[0];
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates the VFS mount.
+		/// </summary>
+		/// <returns></returns>
 		public abstract IFileSystem CreateVFSMount();
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="GenericFileSystem"/> is valid.
+		/// </summary>
+		/// <value><c>true</c> if valid; otherwise, <c>false</c>.</value>
 		public bool Valid 
         { 
             get { return valid; } 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the volume label.
+		/// </summary>
+		/// <value>The volume label.</value>
 		public string VolumeLabel 
         { 
             get { return volumeLabel; } 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the serial NBR.
+		/// </summary>
+		/// <value>The serial NBR.</value>
 		public byte[] SerialNbr 
         { 
             get { return serialNbr; } 

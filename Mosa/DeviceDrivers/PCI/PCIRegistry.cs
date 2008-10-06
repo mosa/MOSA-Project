@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Reflection;
 using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.PCI
@@ -43,7 +41,7 @@ namespace Mosa.DeviceDrivers.PCI
         /// </summary>
         /// <param name="deviceDriverSignature">The device driver signature.</param>
         /// <param name="type">The type.</param>
-		public void AddDeviceDriver(PCIDeviceSignatureAttribute deviceDriverSignature, Type type)
+		public void AddDeviceDriver(PCIDeviceSignatureAttribute deviceDriverSignature, System.Type type)
 		{
 			drivers.Add(new PCIDriverEntry(deviceDriverSignature, type));
 		}
@@ -55,12 +53,12 @@ namespace Mosa.DeviceDrivers.PCI
         /// <returns></returns>
 		public PCIHardwareDevice CreateDevice(PCIDevice pciDevice)
 		{
-			Type deviceType = FindDriver(pciDevice);
+			System.Type deviceType = FindDriver(pciDevice);
 
 			if (deviceType == null)
 				return null;
 
-			return Activator.CreateInstance(deviceType, pciDevice) as PCIHardwareDevice;
+			return System.Activator.CreateInstance(deviceType, pciDevice) as PCIHardwareDevice;
 		}
 
         /// <summary>
@@ -68,10 +66,10 @@ namespace Mosa.DeviceDrivers.PCI
         /// </summary>
         /// <param name="pciDevice">The pci device.</param>
         /// <returns></returns>
-		public Type FindDriver(PCIDevice pciDevice)
+		public System.Type FindDriver(PCIDevice pciDevice)
 		{
-			Type deviceType = null;
-			int bestPriority = Int32.MaxValue;
+			System.Type deviceType = null;
+			int bestPriority = System.Int32.MaxValue;
 
 			foreach (PCIDriverEntry entry in drivers) {
 				if ((entry.SignatureAttribute.Priority != 0) && (entry.SignatureAttribute.Priority < bestPriority)) {
@@ -90,7 +88,7 @@ namespace Mosa.DeviceDrivers.PCI
         /// </summary>
 		public void RegisterBuildInDeviceDrivers()
 		{
-			Assembly assemblyInfo = typeof(PCIRegistry).Module.Assembly;
+			System.Reflection.Assembly assemblyInfo = typeof(PCIRegistry).Module.Assembly;
 			RegisterDeviceDrivers(assemblyInfo);
 		}
 
@@ -98,11 +96,11 @@ namespace Mosa.DeviceDrivers.PCI
         /// Registers the device drivers.
         /// </summary>
         /// <param name="assemblyInfo">The assembly info.</param>
-		public void RegisterDeviceDrivers(Assembly assemblyInfo)
+		public void RegisterDeviceDrivers(System.Reflection.Assembly assemblyInfo)
 		{
-			Type[] types = assemblyInfo.GetTypes();
+			System.Type[] types = assemblyInfo.GetTypes();
 
-			foreach (Type type in types) {
+			foreach (System.Type type in types) {
 				object[] attributes = type.GetCustomAttributes(typeof(PCIDeviceSignatureAttribute), false);
 
 				foreach (object attribute in attributes)

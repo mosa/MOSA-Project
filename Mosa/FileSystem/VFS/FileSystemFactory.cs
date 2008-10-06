@@ -8,8 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.IO;
-
 namespace Mosa.FileSystem.VFS
 {
     /// <summary>

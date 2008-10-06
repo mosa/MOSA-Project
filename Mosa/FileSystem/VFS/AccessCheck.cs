@@ -8,16 +8,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
 	/// Flags for the Mosa.FileSystem.VFS.VirtualFileSystem.AccessCheck function.
 	/// </summary>
-	[Flags]
+	[System.Flags]
 	public enum AccessCheckFlags
 	{
 		/// <summary>

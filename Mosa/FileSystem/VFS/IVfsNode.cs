@@ -8,9 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.IO;
-
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
@@ -71,7 +68,7 @@ namespace Mosa.FileSystem.VFS
 		/// as System.Threading.EventWaitHandle, System.Threading.Mutex, System.Threading.Thread, System.Diagnostics.Process etc. Note: The object
 		/// retrieved can be closed by the respective methods on the returned object. There's no close functionality on the IVfsNode itself.
 		/// </remarks>
-		object Open(FileAccess access, FileShare share);
+		object Open(System.IO.FileAccess access, System.IO.FileShare share);
 
 		/// <summary>
 		/// Called to delete a child from a directory.

@@ -9,10 +9,6 @@
 
 // NOTE: This interface is being replaced with IVirtualMemoryManager...
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Mosa.Kernel.Memory
 {
     /// <summary>
@@ -31,14 +27,14 @@ namespace Mosa.Kernel.Memory
         /// <param name="size">The number of bytes to reserve.</param>
         /// <param name="protectionFlags">One or more flag that controls the protection of the retrieved pages.</param>
         /// <returns>An IntPtr to the allocated memory.</returns>
-        IntPtr Allocate(IntPtr address, ulong size, PageProtectionFlags protectionFlags);
+		System.IntPtr Allocate(System.IntPtr address, ulong size, PageProtectionFlags protectionFlags);
 
         /// <summary>
         /// Releases or decommits a range of pages.
         /// </summary>
         /// <param name="address">The starting address, where pages are freed.</param>
         /// <param name="size">The number of bytes to free.</param>
-        void Free(IntPtr address, ulong size);
+		void Free(System.IntPtr address, ulong size);
 
         /// <summary>
         /// Changes the protection bits of the pages associated with the given range of memory.
@@ -47,7 +43,7 @@ namespace Mosa.Kernel.Memory
         /// <param name="size">The number of bytes.</param>
         /// <param name="protectionFlags">The new set of protection flags.</param>
         /// <returns>The old protection flags of the first page in the range of memory. </returns>
-        PageProtectionFlags Protect(IntPtr address, ulong size, PageProtectionFlags protectionFlags);
+		PageProtectionFlags Protect(System.IntPtr address, ulong size, PageProtectionFlags protectionFlags);
 
         /// <summary>
         /// Retrieves the size of a single memory page.

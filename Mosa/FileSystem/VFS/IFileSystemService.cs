@@ -8,7 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.FileSystem;
 
 namespace Mosa.FileSystem.VFS

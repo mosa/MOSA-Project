@@ -8,10 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-using System;
-using System.IO;
-
 namespace Mosa.FileSystem.VFS
 {
     /// <summary>
@@ -78,7 +74,7 @@ namespace Mosa.FileSystem.VFS
         /// <param name="access"></param>
         /// <param name="sharing"></param>
         /// <returns></returns>
-		public override object Open(FileAccess access, FileShare sharing)
+		public override object Open(System.IO.FileAccess access, System.IO.FileShare sharing)
 		{
 			// FIXME:
 			// - Pass this request to the link target node?
@@ -95,7 +91,7 @@ namespace Mosa.FileSystem.VFS
 		public override void Delete(IVfsNode child, DirectoryEntry dentry)
 		{
 			// FIXME: Delete the symbolic link from the filesystem, after all names have been dropped.
-			throw new NotSupportedException();
+			throw new System.NotSupportedException();
 		}
 
 		#endregion // IVfsNode Members

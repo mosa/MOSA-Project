@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 namespace Mosa.FileSystem.FATFileSystem
 {
     /// <summary>
@@ -16,9 +14,9 @@ namespace Mosa.FileSystem.FATFileSystem
     /// </summary>
 	public class FATSettings : SettingsBase
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public FATType FatType;
 
         /// <summary>
@@ -26,14 +24,14 @@ namespace Mosa.FileSystem.FATFileSystem
         /// </summary>
 		public string VolumeLabel;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public byte[] SerialID;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FATSettings"/> class.
+		/// </summary>
 		public FATSettings()
 		{
 			this.FatType = FATType.FAT16;	// default

@@ -8,14 +8,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
 	/// The access mode enumeration is used to determine accessibility of the file by the immediate caller. See Mosa.VFS.VirtualFileSystem.Access(System.String,Mosa.VFS.AccessMode) for more information.
 	/// </summary>
-	[Flags]
+	[System.Flags]
 	public enum AccessMode
 	{
 

@@ -8,7 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.FileSystem.VFS
@@ -160,7 +159,7 @@ namespace Mosa.FileSystem.VFS
         /// <param name="node"></param>
 		private void Setup(DirectoryEntry parent, string name, IVfsNode node)
 		{
-			if (!Object.ReferenceEquals(this, parent))
+			if (!System.Object.ReferenceEquals(this, parent))
 				parent.InsertChild(this);
 
 			this.parent = parent;
@@ -179,7 +178,7 @@ namespace Mosa.FileSystem.VFS
 		{
 			// FIXME: Remove the entry from the parent and release it to the
 			// entry cache in the vfs service.
-			if (!Object.ReferenceEquals(this, Parent))
+			if (!System.Object.ReferenceEquals(this, Parent))
 				parent.RemoveChild(this);
 
 			inode = null;
@@ -237,12 +236,12 @@ namespace Mosa.FileSystem.VFS
 		private void RemoveChild(DirectoryEntry child)
 		{
 			// FIXME: Thread safety
-			if (Object.ReferenceEquals(this.child, child)) {
+			if (System.Object.ReferenceEquals(this.child, child)) {
 				this.child = child.next;
 			}
 			else {
 				DirectoryEntry e = this.child;
-				while (!Object.ReferenceEquals(e.next, child))
+				while (!System.Object.ReferenceEquals(e.next, child))
 					e = e.next;
 				e.next = child.next;
 			}
@@ -297,16 +296,16 @@ namespace Mosa.FileSystem.VFS
 		{
 			//#if VFS_NO_EXCEPTIONS
 			if (parent == null)
-				throw new ArgumentNullException(@"parent");
+				throw new System.ArgumentNullException(@"parent");
 
 			if (name == null)
-				throw new ArgumentNullException(@"name");
+				throw new System.ArgumentNullException(@"name");
 
 			if (node == null)
-				throw new ArgumentNullException(@"node");
+				throw new System.ArgumentNullException(@"node");
 
 			if (name.Length == 0)
-				throw new ArgumentException(@"Invalid directory entry name."); // , @"name"
+				throw new System.ArgumentException(@"Invalid directory entry name."); // , @"name"
 			// FIXME: Add precondition check for invalid characters
 			// FIXME: Localize exception messages
 			//#endif // #if VFS_NO_EXCEPTIONS
@@ -339,7 +338,7 @@ namespace Mosa.FileSystem.VFS
 				throw new ArgumentNullException(@"node");
 #endif // #if VFS_NO_EXCEPTIONS
 			DirectoryEntry result = new DirectoryEntry();
-			result.Setup(result, String.Empty, node);
+			result.Setup(result, System.String.Empty, node);
 			return result;
 		}
 

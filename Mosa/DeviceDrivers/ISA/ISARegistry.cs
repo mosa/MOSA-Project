@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Reflection;
 using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.ISA
@@ -43,7 +41,7 @@ namespace Mosa.DeviceDrivers.ISA
         /// </summary>
         /// <param name="deviceDriverSignature">The device driver signature.</param>
         /// <param name="type">The type.</param>
-		public void AddDeviceDriver(ISADeviceSignatureAttribute deviceDriverSignature, Type type)
+		public void AddDeviceDriver(ISADeviceSignatureAttribute deviceDriverSignature, System.Type type)
 		{
 			drivers.Add(new ISADriverEntry(deviceDriverSignature, type));
 		}
@@ -53,7 +51,7 @@ namespace Mosa.DeviceDrivers.ISA
         /// </summary>
 		public void RegisterBuildInDeviceDrivers()
 		{
-			Assembly assemblyInfo = typeof(ISARegistry).Module.Assembly;
+			System.Reflection.Assembly assemblyInfo = typeof(ISARegistry).Module.Assembly;
 			RegisterDeviceDrivers(assemblyInfo);
 		}
 
@@ -61,11 +59,11 @@ namespace Mosa.DeviceDrivers.ISA
         /// Registers the device drivers.
         /// </summary>
         /// <param name="assemblyInfo">The assembly info.</param>
-		public void RegisterDeviceDrivers(Assembly assemblyInfo)
+		public void RegisterDeviceDrivers(System.Reflection.Assembly assemblyInfo)
 		{
-			Type[] types = assemblyInfo.GetTypes();
+			System.Type[] types = assemblyInfo.GetTypes();
 
-			foreach (Type type in types) {
+			foreach (System.Type type in types) {
 				object[] attributes = type.GetCustomAttributes(typeof(ISADeviceSignatureAttribute), false);
 
 				foreach (object attribute in attributes)
@@ -108,7 +106,7 @@ namespace Mosa.DeviceDrivers.ISA
 						memoryRegion = new MemoryRegion[0];
 					}
 
-					ISAHardwareDevice isaHardwareDevice = Activator.CreateInstance(entry.DriverType) as ISAHardwareDevice;
+					ISAHardwareDevice isaHardwareDevice = System.Activator.CreateInstance(entry.DriverType) as ISAHardwareDevice;
 					IBusResources busResources = new BusResources(resourceManager, ioPortRegions, memoryRegion, new InterruptHandler(resourceManager.InterruptManager, entry.SignatureAttribute.IRQ, isaHardwareDevice));
 
 					isaHardwareDevice.AssignBusResources(busResources);

@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.IO;
 using Mosa.ClassLib;
 using Mosa.DeviceDrivers;
 using Mosa.FileSystem.VFS;
@@ -106,7 +104,7 @@ namespace Mosa.FileSystem.FATFileSystem
     /// <summary>
     /// 
     /// </summary>
-	[Flags]
+	[System.Flags]
 	public enum FileAttributes : byte
 	{
         /// <summary>
