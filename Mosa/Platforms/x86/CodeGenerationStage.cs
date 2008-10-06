@@ -1250,6 +1250,7 @@ namespace Mosa.Platforms.x86
             Operand op0 = instruction.Operand0;
             Operand source = instruction.Operand1;
             Operand destination = instruction.Operand2;
+            IR.ConditionCode setcc = IR.ConditionCode.Equal;
 
             // Compare using the smallest precision
             if (source.Type.Type == CilElementType.R4 && destination.Type.Type == CilElementType.R8)
@@ -1300,7 +1301,22 @@ namespace Mosa.Platforms.x86
                 }
             }
 
-            _emitter.Setcc(op0, instruction.ConditionCode);
+            // x86 is messed up :(
+            switch (instruction.ConditionCode)
+            {
+                case IR.ConditionCode.Equal: break;
+                case IR.ConditionCode.NotEqual: break;
+                case IR.ConditionCode.UnsignedGreaterOrEqual: setcc = IR.ConditionCode.GreaterOrEqual; break;
+                case IR.ConditionCode.UnsignedGreaterThan: setcc = IR.ConditionCode.GreaterThan; break;
+                case IR.ConditionCode.UnsignedLessOrEqual: setcc = IR.ConditionCode.LessOrEqual; break;
+                case IR.ConditionCode.UnsignedLessThan: setcc = IR.ConditionCode.LessThan; break;
+
+                case IR.ConditionCode.GreaterOrEqual: setcc = IR.ConditionCode.UnsignedGreaterOrEqual; break;
+                case IR.ConditionCode.GreaterThan: setcc = IR.ConditionCode.UnsignedGreaterThan; break;
+                case IR.ConditionCode.LessOrEqual: setcc = IR.ConditionCode.UnsignedLessOrEqual; break;
+                case IR.ConditionCode.LessThan: setcc = IR.ConditionCode.UnsignedLessThan; break;
+            }
+            _emitter.Setcc(op0, setcc);
             // Extend the result to 32-bits
             if (op0 is RegisterOperand)
             {

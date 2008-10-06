@@ -42,242 +42,232 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I1 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(false, 0, 0)]
-        [Row(false, 1, 1)]
-        [Row(true, 1, 2)]
-        [Row(true, SByte.MinValue, SByte.MinValue + 10)]
-        [Row(false, SByte.MaxValue, SByte.MaxValue)]
-        [Row(false, 0, SByte.MinValue)]
-        [Row(true, 0, SByte.MaxValue)]
-        [Row(true, 0, 1)]
-        [Row(true, SByte.MinValue, 0)]
-        [Row(false, SByte.MaxValue, 0)]
-        [Row(false, 1, 0)]
+        [Row(0, 0)]
+        [Row(1, 1)]
+        [Row(1, 2)]
+        [Row(SByte.MinValue, SByte.MinValue + 10)]
+        [Row(SByte.MaxValue, SByte.MaxValue)]
+        [Row(0, SByte.MinValue)]
+        [Row(0, SByte.MaxValue)]
+        [Row(0, 1)]
+        [Row(SByte.MinValue, 0)]
+        [Row(SByte.MaxValue, 0)]
+        [Row(1, 0)]
         [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
-        public void CltI1(bool result, sbyte a, sbyte b)
+        public void CltI1(sbyte a, sbyte b)
         {
             this.CodeSource = s_testCode.Replace("t1", "sbyte").Replace("t2", "sbyte");
             bool res = (bool)Run<B_I1_I1>(@"", @"Test", @"Clt", a, b);
-            Assert.IsTrue(result == res);
+            Assert.IsTrue((a < b) == res);
         }
 
         /// <summary>
         /// Tests support for the ceq IL operation for I4 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(false, 0, 0)]
-        [Row(false, 1, 1)]
-        [Row(true, Int16.MinValue, Int16.MinValue + 10)]
-        [Row(false, Int16.MaxValue, Int16.MaxValue)]
-        [Row(false, 0, Int16.MinValue)]
-        [Row(true, 0, Int16.MaxValue)]
-        [Row(true, 0, 1)]
-        [Row(true, Int16.MinValue, 0)]
-        [Row(false, Int16.MaxValue, 0)]
-        [Row(false, 1, 0)]
+        [Row(0, 0)]
+        [Row(1, 1)]
+        [Row(Int16.MinValue, Int16.MinValue + 10)]
+        [Row(Int16.MaxValue, Int16.MaxValue)]
+        [Row(0, Int16.MinValue)]
+        [Row(0, Int16.MaxValue)]
+        [Row(0, 1)]
+        [Row(Int16.MinValue, 0)]
+        [Row(Int16.MaxValue, 0)]
+        [Row(1, 0)]
         [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
-        public void CltI2(bool result, short a, short b)
+        public void CltI2(short a, short b)
         {
             this.CodeSource = s_testCode.Replace("t1", "short").Replace("t2", "short");
             bool res = (bool)Run<B_I2_I2>(@"", @"Test", @"Clt", a, b);
-            Assert.IsTrue(result == res);
+            Assert.IsTrue((a < b) == res);
         }
 
         /// <summary>
         /// Tests support for the ceq IL operation for I4 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(false, 0, 0)]
-        [Row(false, 1, 1)]
-        [Row(true, Int32.MinValue, Int32.MinValue  + 10)]
-        [Row(false, Int32.MaxValue, Int32.MaxValue)]
-        [Row(false, 0, Int32.MinValue)]
-        [Row(true, 0, Int32.MaxValue)]
-        [Row(true, 0, 1)]
-        [Row(true, Int32.MinValue, 0)]
-        [Row(false, Int32.MaxValue, 0)]
-        [Row(false, 1, 0)]
+        [Row(0, 0)]
+        [Row(1, 1)]
+        [Row(Int32.MinValue, Int32.MinValue  + 10)]
+        [Row(Int32.MaxValue, Int32.MaxValue)]
+        [Row(0, Int32.MinValue)]
+        [Row(0, Int32.MaxValue)]
+        [Row(0, 1)]
+        [Row(Int32.MinValue, 0)]
+        [Row(Int32.MaxValue, 0)]
+        [Row(1, 0)]
         [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
-        public void CltI4(bool result, int a, int b)
+        public void CltI4(int a, int b)
         {
             this.CodeSource = s_testCode.Replace("t1", "int").Replace("t2", "int");
             bool res = (bool)Run<B_I4_I4>(@"", @"Test", @"Clt", a, b);
-            Assert.IsTrue(result == res);
+            Assert.IsTrue((a < b) == res);
         }
 
         /// <summary>
         /// Tests support for the ceq IL operation for I8 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(false, 0L, 0L)]
-        [Row(false, 1L, 1L)]
-        [Row(false, Int64.MinValue, Int64.MinValue + 10)]
-        [Row(false, Int64.MaxValue, Int64.MaxValue)]
-        [Row(false, 0L, Int64.MinValue)]
-        [Row(true, 0L, Int64.MaxValue)]
-        [Row(true, 0L, 1L)]
-        [Row(true, Int64.MinValue, 0L)]
-        [Row(false, Int64.MaxValue, 0L)]
-        [Row(false, 1L, 0L)]
+        [Row(0L, 0L)]
+        [Row(1L, 1L)]
+        [Row(Int64.MinValue, Int64.MinValue + 10)]
+        [Row(Int64.MaxValue, Int64.MaxValue)]
+        [Row(0L, Int64.MinValue)]
+        [Row(0L, Int64.MaxValue)]
+        [Row(0L, 1L)]
+        [Row(Int64.MinValue, 0L)]
+        [Row(Int64.MaxValue, 0L)]
+        [Row(1L, 0L)]
         [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
-        public void CltI8(bool result, long a, long b)
+        public void CltI8(long a, long b)
         {
             this.CodeSource = s_testCode.Replace("t1", "long").Replace("t2", "long");
             bool res = (bool)Run<B_I8_I8>(@"", @"Test", @"Clt", a, b);
-            Assert.IsTrue(result == res);
+            Assert.IsTrue((a < b) == res);
         }
 
         /// <summary>
         /// Tests support for the ceq IL operation for U1 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(false, 0, 0)]
-        [Row(false, 1, 1)]
-        [Row(true, Byte.MinValue, Byte.MinValue + 10)]
-        [Row(false, Byte.MaxValue, Byte.MaxValue)]
-        [Row(false, 1, Byte.MinValue)]
-        [Row(true, 0, Byte.MaxValue)]
-        [Row(true, 0, 1)]
-        [Row(true, Byte.MinValue, 1)]
-        [Row(false, Byte.MaxValue, 0)]
-        [Row(false, 1, 0)]
+        [Row(0, 0)]
+        [Row(1, 1)]
+        [Row(Byte.MinValue, Byte.MinValue + 10)]
+        [Row(Byte.MaxValue, Byte.MaxValue)]
+        [Row(1, Byte.MinValue)]
+        [Row(0, Byte.MaxValue)]
+        [Row(0, 1)]
+        [Row(Byte.MinValue, 1)]
+        [Row(Byte.MaxValue, 0)]
+        [Row(1, 0)]
         [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
-        public void CltU1(bool result, byte a, byte b)
+        public void CltU1(byte a, byte b)
         {
             this.CodeSource = s_testCode.Replace("t1", "byte").Replace("t2", "byte");
             bool res = (bool)Run<B_U1_U1>(@"", @"Test", @"Clt", a, b);
-            Assert.IsTrue(result == res);
+            Assert.IsTrue((a < b) == res);
         }
 
         /// <summary>
         /// Tests support for the ceq IL operation for U2 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(false, 0, 0)]
-        [Row(false, 1, 1)]
-        [Row(true, UInt16.MinValue, UInt16.MinValue + 10)]
-        [Row(false, UInt16.MaxValue, UInt16.MaxValue)]
-        [Row(false, 1, UInt16.MinValue)]
-        [Row(true, 0, UInt16.MaxValue)]
-        [Row(true, 0, 1)]
-        [Row(true, UInt16.MinValue, 2)]
-        [Row(false, UInt16.MaxValue, 0)]
-        [Row(false, 1, 0)]
+        [Row(0, 0)]
+        [Row(1, 1)]
+        [Row(UInt16.MinValue, UInt16.MinValue + 10)]
+        [Row(UInt16.MaxValue, UInt16.MaxValue)]
+        [Row(1, UInt16.MinValue)]
+        [Row(0, UInt16.MaxValue)]
+        [Row(0, 1)]
+        [Row(UInt16.MinValue, 2)]
+        [Row(UInt16.MaxValue, 0)]
+        [Row(1, 0)]
         [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
-        public void CltU2(bool result, ushort a, ushort b)
+        public void CltU2(ushort a, ushort b)
         {
             this.CodeSource = s_testCode.Replace("t1", "ushort").Replace("t2", "ushort");
             bool res = (bool)Run<B_U2_U2>(@"", @"Test", @"Clt", a, b);
-            Assert.IsTrue(result == res);
+            Assert.IsTrue((a < b) == res);
         }
 
         /// <summary>
         /// Tests support for the ceq IL operation for U4 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(false, 0, 0)]
-        [Row(false, 1, 1)]
-        [Row(true, UInt32.MinValue, UInt32.MinValue + 10)]
-        [Row(false, UInt32.MaxValue, UInt32.MaxValue)]
-        [Row(false, 1, UInt32.MinValue)]
-        [Row(true, 0, UInt32.MaxValue)]
-        [Row(true, 0, 1)]
-        [Row(true, UInt32.MinValue, 1)]
-        [Row(false, UInt32.MaxValue, 0)]
-        [Row(false, 1, 0)]
+        [Row(0, 0)]
+        [Row(1, 1)]
+        [Row(UInt32.MinValue, UInt32.MinValue + 10)]
+        [Row(UInt32.MaxValue, UInt32.MaxValue)]
+        [Row(1, UInt32.MinValue)]
+        [Row(0, UInt32.MaxValue)]
+        [Row(0, 1)]
+        [Row(UInt32.MinValue, 1)]
+        [Row(UInt32.MaxValue, 0)]
+        [Row(1, 0)]
         [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
-        public void CltU4(bool result, uint a, uint b)
+        public void CltU4(uint a, uint b)
         {
             this.CodeSource = s_testCode.Replace("t1", "uint").Replace("t2", "uint");
             bool res = (bool)Run<B_U4_U4>(@"", @"Test", @"Clt", a, b);
-            Assert.IsTrue(result == res);
+            Assert.IsTrue((a < b) == res);
         }
 
         /// <summary>
         /// Tests support for the ceq IL operation for U4 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(false, 0, 0)]
-        [Row(false, 1, 1)]
-        [Row(true, UInt64.MinValue, UInt64.MinValue + 10)]
-        [Row(false, UInt64.MaxValue, UInt64.MaxValue)]
-        [Row(false, 1, UInt64.MinValue)]
-        [Row(true, 0, UInt64.MaxValue)]
-        [Row(true, 0, 1)]
-        [Row(true, UInt64.MinValue, 1)]
-        [Row(false, UInt64.MaxValue, 0)]
-        [Row(false, 1, 0)]
+        [Row(0, 0)]
+        [Row(1, 1)]
+        [Row(UInt64.MinValue, UInt64.MinValue + 10)]
+        [Row(UInt64.MaxValue, UInt64.MaxValue)]
+        [Row(1, UInt64.MinValue)]
+        [Row(0, UInt64.MaxValue)]
+        [Row(0, 1)]
+        [Row(UInt64.MinValue, 1)]
+        [Row(UInt64.MaxValue, 0)]
+        [Row(1, 0)]
         [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
-        public void CltU8(bool result, ulong a, ulong b)
+        public void CltU8(ulong a, ulong b)
         {
             this.CodeSource = s_testCode.Replace("t1", "ulong").Replace("t2", "ulong");
             bool res = (bool)Run<B_U8_U8>(@"", @"Test", @"Clt", a, b);
-            Assert.IsTrue(result == res);
+            Assert.IsTrue((a < b) == res);
         }
 
         /// <summary>
         /// Tests support for the ceq IL operation for R4 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(false, 0.0f, 0.0f)]
-        [Row(false, 1.0f, 1.0f)]
-        [Row(true, Single.MinValue, Single.MinValue + 10)]
-        [Row(false, Single.MaxValue, Single.MaxValue)]
-        [Row(false, 0.0f, Single.MinValue)]
-        [Row(true, 0.0f, Single.MaxValue)]
-        [Row(true, 0.0f, 1.0f)]
-        [Row(true, Single.MinValue, 0.0f)]
-        [Row(false, Single.MaxValue, 0.0f)]
-        [Row(false, 1.0f, 0.0f)]
+        [Row(0.0f, 0.0f)]
+        [Row(1.0f, 1.0f)]
+        [Row(Single.MinValue, Single.MinValue + 10)]
+        [Row(Single.MaxValue, Single.MaxValue)]
+        [Row(0.0f, Single.MinValue)]
+        [Row(0.0f, Single.MaxValue)]
+        [Row(0.0f, 1.0f)]
+        [Row(Single.MinValue, 0.0f)]
+        [Row(Single.MaxValue, 0.0f)]
+        [Row(1.0f, 0.0f)]
         [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
-        public void CltR4(bool result, float a, float b)
+        public void CltR4(float a, float b)
         {
             this.CodeSource = s_testCode.Replace("t1", "float").Replace("t2", "float");
             bool res = (bool)Run<B_R4_R4>(@"", @"Test", @"Clt", a, b);
-            Assert.IsTrue(result == res);
+            Assert.IsTrue((a < b) == res);
         }
 
         /// <summary>
         /// Tests support for the ceq IL operation for R8 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0.0, 0.5)]
-        [Row(true, 1.0, 2.0)]
-        [Row(true, Double.MinValue, Double.MinValue + 1)]
-        [Row(true, Double.MaxValue - 1, Double.MaxValue)]
-        [Row(false, 0.0, Double.MinValue)]
-        [Row(true, 0.0, Double.MaxValue)]
-        [Row(true, 0.0, 1.0)]
-        [Row(true, Double.MinValue, 0.0)]
-        [Row(false, Double.MaxValue, 0.0)]
-        [Row(false, 1.0, 0.0)]
+        [Row(0.0, 0.5)]
+        [Row(1.0, 2.0)]
+        [Row(Double.MinValue, Double.MinValue + 1)]
+        [Row(Double.MaxValue - 1, Double.MaxValue)]
+        [Row(0.0, Double.MinValue)]
+        [Row(0.0, Double.MaxValue)]
+        [Row(0.0, 1.0)]
+        [Row(Double.MinValue, 0.0)]
+        [Row(Double.MaxValue, 0.0)]
+        [Row(1.0, 0.0)]
         [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
-        public void CltR8(bool result, double a, double b)
+        public void CltR8(double a, double b)
         {
             this.CodeSource = s_testCode.Replace("t1", "double").Replace("t2", "double");
             bool res = (bool)Run<B_R8_R8>(@"", @"Test", @"Clt", a, b);
-            Assert.IsTrue(result == res);
+            Assert.IsTrue((a < b) == res);
         }
     }
 }
