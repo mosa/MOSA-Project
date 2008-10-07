@@ -350,6 +350,7 @@
         <Reference name="Mosa.Kernel" localCopy="true" />
         <Reference name="Mosa.Platforms.x86" localCopy="true" />
         <Reference name="Mosa.Runtime" localCopy="true" />
+        <Reference name="CommandLine/CommandLine.dll" />
 
         <Files>
           <Match pattern="*.cs" path="." recurse="true"/>
