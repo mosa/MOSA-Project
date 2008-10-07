@@ -496,5 +496,34 @@
         </Files>
       </Project>
     </EmbeddedSolution>
+    <EmbeddedSolution name="System">
+      <Project name="Mosa.System" type="Library" path="..\Mosa\System" language="C#" runtime="Microsoft" rootNamespace="System" assemblyName="mscorlib">
+        <Configuration name="Debug">
+          <Options>
+            <OutputPath>../../build/debug</OutputPath>
+            <XmlDocFile>../../build/System.xml</XmlDocFile>
+            <AllowUnsafe>false</AllowUnsafe>
+            <NoStdLib>true</NoStdLib>
+            <WarningsAsErrors>false</WarningsAsErrors>
+            <CompilerDefines>NET_2_0</CompilerDefines>
+            <WarningLevel>0</WarningLevel>
+          </Options>
+        </Configuration>
+        <Configuration name="Release">
+          <Options>
+            <OutputPath>../../build/release</OutputPath>
+            <XmlDocFile>../../build/Mosa.System.xml</XmlDocFile>
+            <AllowUnsafe>false</AllowUnsafe>
+            <NoStdLib>true</NoStdLib>
+            <WarningsAsErrors>false</WarningsAsErrors>
+            <CompilerDefines>NET_2_0</CompilerDefines>
+            <WarningLevel>0</WarningLevel>
+          </Options>
+        </Configuration>
+        <Files>
+          <Match pattern="*.cs" path="." recurse="true"/>
+        </Files>
+      </Project>
+    </EmbeddedSolution>
   </Solution>
 </Prebuild>
