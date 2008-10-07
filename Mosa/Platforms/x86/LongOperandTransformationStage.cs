@@ -21,7 +21,6 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
 using System.Diagnostics;
 
-
 namespace Mosa.Platforms.x86
 {
     /// <summary>
@@ -541,29 +540,52 @@ namespace Mosa.Platforms.x86
             Debug.Assert(op1 != null && op2 != null, @"IntegerCompareInstruction operand not memory!");
             Debug.Assert(op0 is MemoryOperand || op0 is RegisterOperand, @"IntegerCompareInstruction result not memory and not register!");
 
-            MemoryOperand op1L = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
-            MemoryOperand op2L = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
+            SigType I4 = new SigType(CilElementType.I4), U4 = new SigType(CilElementType.U4);
+            MemoryOperand op1L = new MemoryOperand(U4, op1.Base, op1.Offset);
+            MemoryOperand op2L = new MemoryOperand(U4, op2.Base, op2.Offset);
+            MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            MemoryOperand op2H = new MemoryOperand(I4, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
 
             BasicBlock blockNext = SplitBlockAfter(ctx, instruction);
-            IR.BranchInstruction branch = CreateOppositeBranch(instruction.ConditionCode, blockNext.Label);
+            IR.BranchInstruction branch = new IR.BranchInstruction(IR.ConditionCode.NotEqual, blockNext.Label);
+            //IR.BranchInstruction branch = CreateOppositeBranch(instruction.ConditionCode, blockNext.Label);
 
-            // I8 is stored HI-LO in x86 LE
+            // I8 is stored LO-HI in x86 LE
             Instruction[] instructions = new Instruction[] {
                 // Compare high dwords
-                new Instructions.CmpInstruction(op1, op2),
-                // Branch if condition already failed
+                new Instructions.CmpInstruction(op1H, op2H),
+                // Set the condition code
+                new SetccInstruction(op0, instruction.ConditionCode),
+                // Branch if check already gave results
                 branch,
                 // FIXME: This cmp should go into its own block...
                 // Compare low dwords
                 new Instructions.CmpInstruction(op1L, op2L),
+                // Set the unsigned result...
+                new SetccInstruction(op0, GetUnsignedConditionCode(instruction.ConditionCode))
             };
             Replace(ctx, instructions);
-            
-            instructions = new Instruction[] {
-                // Set condition result...
-                new SetccInstruction(op0, instruction.ConditionCode),
-            };
-            blockNext.Instructions.InsertRange(0, instructions);
+        }
+
+        private IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
+        {
+            IR.ConditionCode cc = conditionCode;
+            switch (conditionCode)
+            {
+                case IR.ConditionCode.Equal: break;
+                case IR.ConditionCode.NotEqual: break;
+                case IR.ConditionCode.GreaterOrEqual: cc = IR.ConditionCode.UnsignedGreaterOrEqual; break;
+                case IR.ConditionCode.GreaterThan: cc = IR.ConditionCode.UnsignedGreaterThan; break;
+                case IR.ConditionCode.LessOrEqual: cc = IR.ConditionCode.UnsignedLessOrEqual; break;
+                case IR.ConditionCode.LessThan: cc = IR.ConditionCode.UnsignedLessThan; break;
+                case IR.ConditionCode.UnsignedGreaterOrEqual: break;
+                case IR.ConditionCode.UnsignedGreaterThan: break;
+                case IR.ConditionCode.UnsignedLessOrEqual: break;
+                case IR.ConditionCode.UnsignedLessThan: break;
+                default:
+                    throw new NotSupportedException();
+            }
+            return cc;
         }
 
         /// <summary>

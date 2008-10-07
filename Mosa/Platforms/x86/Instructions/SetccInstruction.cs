@@ -37,6 +37,7 @@ namespace Mosa.Platforms.x86.Instructions
         /// </summary>
         public SetccInstruction()
         {
+            _code = IR.ConditionCode.Equal;
         }
 
         /// <summary>
@@ -47,6 +48,7 @@ namespace Mosa.Platforms.x86.Instructions
         public SetccInstruction(Operand destination, IR.ConditionCode code) :
             base(destination)
         {
+            _code = code;
         }
 
         #endregion // Construction

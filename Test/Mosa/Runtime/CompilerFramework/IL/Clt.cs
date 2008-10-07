@@ -124,6 +124,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(Int64.MinValue, 0L)]
         [Row(Int64.MaxValue, 0L)]
         [Row(1L, 0L)]
+        [Row(-1L, -2L)]
+        [Row(-2L, -1L)]
         [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
         public void CltI8(long a, long b)
         {
