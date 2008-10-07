@@ -50,6 +50,9 @@ namespace Mosa.Platforms.x86
         void Setcc(SetccInstruction instruction, ArgType arg);
         void Cdq(CdqInstruction instruction, ArgType arg);
 
+        void Shld(ShldInstruction instruction, ArgType arg);
+        void Shrd(ShrdInstruction instruction, ArgType arg);
+
         #region Intrinsics
         /// <summary>
         /// Disable interrupts

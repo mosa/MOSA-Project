@@ -222,7 +222,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
             }
 
             // Try to delete the compiled assembly...
-            if (null != compileResults.PathToAssembly)
+            if (null != compileResults && null != compileResults.PathToAssembly)
             {
                 try
                 {

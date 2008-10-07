@@ -383,11 +383,27 @@ namespace Mosa.Platforms.x86
         void Shl(Operand op1, Operand op2);
 
         /// <summary>
+        /// Shifts the value in register op1 by op2 bits to the left
+        /// </summary>
+        /// <param name="dst">The first operand and destination of the instruction.</param>
+        /// <param name="src">The second operand.</param>
+        /// <param name="count">The count operand.</param>
+        void Shld(Operand dst, Operand src, Operand count);
+
+        /// <summary>
         /// Shifts the value in register op1 by op2 bits to the right
         /// </summary>
         /// <param name="op1">The first operand and destination of the instruction.</param>
         /// <param name="op2">The second operand.</param>
         void Shr(Operand op1, Operand op2);
+
+        /// <summary>
+        /// Shifts the value in register op1 by op2 bits to the right
+        /// </summary>
+        /// <param name="dst">The first operand and destination of the instruction.</param>
+        /// <param name="src">The second operand.</param>
+        /// <param name="count">The count operand.</param>
+        void Shrd(Operand dst, Operand src, Operand count);
 
         /// <summary>
         /// Emits a addsd instruction.

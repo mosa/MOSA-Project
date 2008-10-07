@@ -565,6 +565,11 @@ namespace Mosa.Platforms.x86
             _textWriter.WriteLine("\t\tshl\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
         }
 
+        void ICodeEmitter.Shld(Operand dst, Operand src, Operand count)
+        {
+            _textWriter.WriteLine("\t\tshld\t{0}, {1}, {2}", WriteOperand(dst), WriteOperand(src), WriteOperand(count));
+        }
+
         /// <summary>
         /// Shifts the value in register op1 by op2 bits to the right
         /// </summary>
@@ -577,6 +582,11 @@ namespace Mosa.Platforms.x86
 
             _textWriter.WriteLine("\t\tshr\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
 
+        }
+
+        void ICodeEmitter.Shrd(Operand dst, Operand src, Operand count)
+        {
+            _textWriter.WriteLine("\t\tshrd\t{0}, {1}, {2}", WriteOperand(dst), WriteOperand(src), WriteOperand(count));
         }
 
         /// <summary>

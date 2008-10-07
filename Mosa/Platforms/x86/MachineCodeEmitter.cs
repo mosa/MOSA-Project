@@ -73,6 +73,24 @@ namespace Mosa.Platforms.x86
             {
                 this.dest = dest;
                 this.src = src;
+                this.op3 = null;
+                this.code = code;
+                this.regField = regField;
+            }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="dest">The destination Operand</param>
+            /// <param name="src">The source Operand</param>
+            /// <param name="op3">The 3rd operand.</param>
+            /// <param name="code">The corresponding opcodes</param>
+            /// <param name="regField">Additonal parameterfield</param>
+            public CodeDef(Type dest, Type src, Type op3, byte[] code, byte? regField)
+            {
+                this.dest = dest;
+                this.src = src;
+                this.op3 = op3;
                 this.code = code;
                 this.regField = regField;
             }
@@ -85,6 +103,9 @@ namespace Mosa.Platforms.x86
             /// 
             /// </summary>
             public Type src;
+
+            public Type op3;
+
             /// <summary>
             /// 
             /// </summary>
@@ -845,11 +866,21 @@ namespace Mosa.Platforms.x86
             Emit(dest, null, cd_shl);
         }
 
+        void ICodeEmitter.Shld(Operand dst, Operand src, Operand count)
+        {
+            Emit(dst, src, count, cd_shld);
+        }
+
         void ICodeEmitter.Shr(Operand dest, Operand src)
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand);
             Emit(dest, null, cd_shr);
+        }
+
+        void ICodeEmitter.Shrd(Operand dst, Operand src, Operand count)
+        {
+            Emit(dst, src, count, cd_shrd);
         }
 
         void ICodeEmitter.Div(Operand dest, Operand src)
@@ -1561,6 +1592,21 @@ namespace Mosa.Platforms.x86
         };
 
         /// <summary>
+        /// Asmcode: SHLD
+        /// Shifts first parameter a given amount of times to the left, moving bits from the second parameter.
+        /// 
+        /// Note: Non-circular
+        /// 
+        /// Section: Standard x86
+        /// </summary>
+        private static readonly CodeDef[] cd_shld = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    typeof(ConstantOperand), new byte[] { 0x0F, 0xA4 }, 4),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    typeof(ConstantOperand), new byte[] { 0x0F, 0xA4 }, 4),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    typeof(RegisterOperand), new byte[] { 0x0F, 0xA5 }, 4),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    typeof(RegisterOperand), new byte[] { 0x0F, 0xA5 }, 4),
+        };
+
+        /// <summary>
         /// Asmcode: SHR
         /// Shifts first parameter a given amount of times to the right, filling with zero.
         /// 
@@ -1574,6 +1620,22 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC1 }, 5),
             new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC1 }, 5),
         };
+
+        /// <summary>
+        /// Asmcode: SHrD
+        /// Shifts first parameter a given amount of times to the right, moving bits from the second parameter.
+        /// 
+        /// Note: Non-circular
+        /// 
+        /// Section: Standard x86
+        /// </summary>
+        private static readonly CodeDef[] cd_shrd = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    typeof(ConstantOperand), new byte[] { 0x0F, 0xAC }, 4),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    typeof(ConstantOperand), new byte[] { 0x0F, 0xAC }, 4),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    typeof(RegisterOperand), new byte[] { 0x0F, 0xAD }, 4),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    typeof(RegisterOperand), new byte[] { 0x0F, 0xAD }, 4),
+        };
+
 
         /// <summary>
         /// Asmcode: DIV
@@ -1826,6 +1888,30 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Walks the code definition array for a matching combination and emits the corresponding code.
+        /// </summary>
+        /// <param name="dest">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
+        /// <param name="op3">An additional register or constant operand.</param>
+        /// <param name="codeDef">The code definition array.</param>
+        private void Emit(Operand dest, Operand src, Operand op3, CodeDef[] codeDef)
+        {
+            foreach (CodeDef cd in codeDef)
+            {
+                if (true == cd.dest.IsInstanceOfType(dest) && (null == src || true == cd.src.IsInstanceOfType(src)) && (null == op3 || true == cd.op3.IsInstanceOfType(op3)))
+                {
+                    Emit(cd.code, cd.regField, dest, src, op3);
+                    return;
+                }
+            }
+
+            // If this is reached, the operand combination could not be emitted as it is
+            // not specified in the code definition table
+            Debug.Assert(false, @"Failed to find an opcode for the instruction.");
+            throw new NotSupportedException(@"Unsupported operand combination for the instruction.");
+        }
+
+        /// <summary>
         /// Emits relative branch code.
         /// </summary>
         /// <param name="code">The branch instruction code.</param>
@@ -1886,6 +1972,57 @@ namespace Mosa.Platforms.x86
                 EmitImmediate(dest);
             if (src is ConstantOperand)
                 EmitImmediate(src);
+        }
+
+        /// <summary>
+        /// Emits the given code.
+        /// </summary>
+        /// <param name="code">The opcode bytes.</param>
+        /// <param name="regField">The modR/M regfield.</param>
+        /// <param name="dest">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
+        /// <param name="op3">The third operand.</param>
+        private void Emit(byte[] code, byte? regField, Operand dest, Operand src, Operand op3)
+        {
+            byte? sib = null, modRM = null;
+            IntPtr? displacement = null;
+
+            // Write the opcode
+            _codeStream.Write(code, 0, code.Length);
+
+            if (null == dest && null == src)
+                return;
+
+            // Write the mod R/M byte
+            modRM = CalculateModRM(regField, dest, src, out sib, out displacement);
+            if (null != modRM)
+            {
+                _codeStream.WriteByte(modRM.Value);
+                if (true == sib.HasValue)
+                {
+                    _codeStream.WriteByte(sib.Value);
+                }
+            }
+
+            // Add displacement to the code
+            if (null != displacement)
+            {
+                LabelOperand label = src as LabelOperand;
+                if (null != label)
+                {
+                    // HACK: PIC and FP won't work for now, have to really fix this for moveable 
+                    // jitted code though
+                    displacement = IntPtr.Zero;
+                    _literals.Add(new Patch(label.Label, _codeStream.Position));
+                }
+
+                byte[] disp = BitConverter.GetBytes(displacement.Value.ToInt32());
+                _codeStream.Write(disp, 0, disp.Length);
+            }
+
+            // Add immediate bytes
+            if (op3 is ConstantOperand)
+                EmitImmediate(dest);
         }
 
         /// <summary>

@@ -713,6 +713,14 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        void ICodeEmitter.Shld(Operand dst, Operand src, Operand count)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Shld(dst, src, count);
+            });
+        }
+
         /// <summary>
         /// Shifts the value in register op1 by op2 bits to the right
         /// </summary>
@@ -723,6 +731,14 @@ namespace Mosa.Platforms.x86
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
                 emitter.Shr(op1, op2);
+            });
+        }
+
+        void ICodeEmitter.Shrd(Operand dst, Operand src, Operand count)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Shrd(dst, src, count);
             });
         }
 

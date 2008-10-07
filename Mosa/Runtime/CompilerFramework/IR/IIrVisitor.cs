@@ -73,6 +73,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
         void Visit(IntegerToFloatingPointConversionInstruction instruction, ArgType arg);
 
         /// <summary>
+        /// Visitation function for <see cref="JmpInstruction"/> instruction.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        /// <param name="arg">The arg.</param>
+        void Visit(JmpInstruction instruction, ArgType arg);
+
+        /// <summary>
         /// Visitation function for <see cref="LiteralInstruction"/> instructions.
         /// </summary>
         /// <param name="instruction">The visiting instruction.</param>

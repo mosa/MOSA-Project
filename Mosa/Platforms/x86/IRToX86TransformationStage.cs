@@ -454,6 +454,10 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IR.IIRVisitor<Context>.Visit(IR.JmpInstruction instruction, Context ctx)
+        {
+        }
+
         void IR.IIRVisitor<Context>.Visit(IR.LiteralInstruction instruction, Context ctx)
         {
         }
@@ -823,7 +827,15 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IX86InstructionVisitor<Context>.Shld(Instructions.ShldInstruction instruction, Context ctx)
+        {
+        }
+
         void IX86InstructionVisitor<Context>.Shr(Instructions.ShrInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Shrd(Instructions.ShrdInstruction instruction, Context ctx)
         {
         }
 

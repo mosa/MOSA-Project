@@ -169,7 +169,81 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandArithmeticShiftRight(Context ctx, IR.ArithmeticShiftRightInstruction instruction)
         {
-            throw new NotSupportedException();
+            BasicBlock nextBlock;
+            BasicBlock[] blocks = CreateBlocks(ctx, instruction, 3, out nextBlock);
+            SigType I4 = new SigType(CilElementType.I4);
+            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
+            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
+            Operand count = instruction.Operand2;
+            Debug.Assert(op0 != null && op1 != null, @"Shl Int64 operands not in memory.");
+
+            MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
+            MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
+            MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+
+            // ; existing code from the block
+            // cmp count, 64
+            // jae sign
+            Replace(ctx, new Instruction[] {
+                new Instructions.MoveInstruction(edx, op1H),
+                new Instructions.MoveInstruction(eax, op1L),
+                new Instructions.CmpInstruction(count, new ConstantOperand(I4, 64)),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label)
+            });
+
+            // small_shift:
+            // cmp count, 32
+            // jae large_shift
+            // shrd eax,edx,cl
+            // sar edx,cl
+            // jmp done
+            blocks[0].Instructions.AddRange(new Instruction[] {
+                new Instructions.CmpInstruction(count, new ConstantOperand(I4, 32)),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[1].Label),
+                new Instructions.ShrdInstruction(eax, edx, count),
+                new Instructions.SarInstruction(edx, count),
+                new IR.JmpInstruction(nextBlock.Label)
+            });
+
+            // large_shift:
+            // mov     eax,edx
+            // sar     edx,31
+            // and     count,31
+            // sar eax,count
+            // jmp done
+            blocks[1].Instructions.AddRange(new Instruction[] {
+                new Instructions.MoveInstruction(eax, edx),
+                new Instructions.SarInstruction(edx, new ConstantOperand(I4, 0x1F)),
+                new Instructions.LogicalAndInstruction(count, new ConstantOperand(I4, 0x1F)),
+                new Instructions.SarInstruction(eax, count),
+                new IR.JmpInstruction(nextBlock.Label)
+            });
+
+            // clear:
+            // mov opH, 0
+            // mov opL, 0
+            blocks[2].Instructions.AddRange(new Instruction[] {
+                new Instructions.SarInstruction(edx, new ConstantOperand(I4, 31)),
+                new Instructions.MoveInstruction(eax, edx),
+            });
+
+            // done:
+            // ; remaining code from current basic block
+            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+                new Instructions.MoveInstruction(op0H, edx),
+                new Instructions.MoveInstruction(op0L, eax),
+            });
+
+            // Link the created blocks together
+            LinkBlocks(ctx.Block, blocks[0]);
+            LinkBlocks(ctx.Block, blocks[2]);
+            LinkBlocks(blocks[0], blocks[1]);
+            LinkBlocks(blocks[0], nextBlock);
+            LinkBlocks(blocks[1], nextBlock);
+            LinkBlocks(blocks[2], nextBlock);
         }
 
         /// <summary>
@@ -179,15 +253,44 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandShiftLeft(Context ctx, IR.ShiftLeftInstruction instruction)
         {
-            throw new NotSupportedException();
+            BasicBlock nextBlock;
+            BasicBlock[] blocks = CreateBlocks(ctx, instruction, 3, out nextBlock);
+            SigType I4 = new SigType(CilElementType.I4);
+            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
+            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
+            Operand count = instruction.Operand2;
+            Debug.Assert(op0 != null && op1 != null, @"Shl Int64 operands not in memory.");
 
+            MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
+            MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
+            MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+
+            // ; existing code from the block
             // cmp count, 64
             // jae clear
+            Replace(ctx, new Instruction[] {
+                new Instructions.MoveInstruction(edx, op1H),
+                new Instructions.MoveInstruction(eax, op1L),
+                new Instructions.CmpInstruction(count, new ConstantOperand(I4, 64)),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label)
+            });
+
+            // small_shift:
             // cmp count, 32
             // jae mov_shift
             // shld
             // shl
             // jmp done
+            blocks[0].Instructions.AddRange(new Instruction[] {
+                new Instructions.CmpInstruction(count, new ConstantOperand(I4, 32)),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[1].Label),
+                new Instructions.ShldInstruction(edx, eax, count),
+                new Instructions.ShlInstruction(eax, count),
+                new IR.JmpInstruction(nextBlock.Label)
+            });
 
             // mov_shift:
             // mov opH, opL
@@ -195,13 +298,36 @@ namespace Mosa.Platforms.x86
             // and count, 0x1F
             // shl opH, count
             // jmp done
+            blocks[1].Instructions.AddRange(new Instruction[] {
+                new Instructions.MoveInstruction(edx, eax),
+                new Instructions.LogicalXorInstruction(eax, eax),
+                new Instructions.LogicalAndInstruction(count, new ConstantOperand(I4, 0x1F)),
+                new Instructions.ShlInstruction(edx, count),
+                new IR.JmpInstruction(nextBlock.Label)
+            });
 
             // clear:
             // mov opH, 0
             // mov opL, 0
+            blocks[2].Instructions.AddRange(new Instruction[] {
+                new Instructions.LogicalXorInstruction(edx, edx),
+                new Instructions.LogicalXorInstruction(eax, eax),
+            });
 
             // done:
             // ; remaining code from current basic block
+            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+                new Instructions.MoveInstruction(op0H, edx),
+                new Instructions.MoveInstruction(op0L, eax),
+            });
+            
+            // Link the created blocks together
+            LinkBlocks(ctx.Block, blocks[0]);
+            LinkBlocks(ctx.Block, blocks[2]);
+            LinkBlocks(blocks[0], blocks[1]);
+            LinkBlocks(blocks[0], nextBlock);
+            LinkBlocks(blocks[1], nextBlock);
+            LinkBlocks(blocks[2], nextBlock);
         }
 
         /// <summary>
@@ -211,7 +337,81 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandShiftRight(Context ctx, IR.ShiftRightInstruction instruction)
         {
-            throw new NotSupportedException();
+            BasicBlock nextBlock;
+            BasicBlock[] blocks = CreateBlocks(ctx, instruction, 3, out nextBlock);
+            SigType I4 = new SigType(CilElementType.I4);
+            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
+            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
+            Operand count = instruction.Operand2;
+            Debug.Assert(op0 != null && op1 != null, @"Shl Int64 operands not in memory.");
+
+            MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
+            MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
+            MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+
+            // ; existing code from the block
+            // cmp count, 64
+            // jae clear
+            Replace(ctx, new Instruction[] {
+                new Instructions.MoveInstruction(edx, op1H),
+                new Instructions.MoveInstruction(eax, op1L),
+                new Instructions.CmpInstruction(count, new ConstantOperand(I4, 64)),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label)
+            });
+
+            // small_shift:
+            // cmp count, 32
+            // jae large_shift
+            // shrd eax,edx,cl
+            // sar edx,cl
+            // jmp done
+            blocks[0].Instructions.AddRange(new Instruction[] {
+                new Instructions.CmpInstruction(count, new ConstantOperand(I4, 32)),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[1].Label),
+                new Instructions.ShrdInstruction(eax, edx, count),
+                new Instructions.ShrInstruction(edx, count),
+                new IR.JmpInstruction(nextBlock.Label)
+            });
+
+            // large_shift:
+            // mov     eax,edx
+            // sar     edx,31
+            // and     count,31
+            // sar eax,count
+            // jmp done
+            blocks[1].Instructions.AddRange(new Instruction[] {
+                new Instructions.MoveInstruction(eax, edx),
+                new Instructions.LogicalXorInstruction(edx, edx),
+                new Instructions.LogicalAndInstruction(count, new ConstantOperand(I4, 0x1F)),
+                new Instructions.ShrInstruction(eax, count),
+                new IR.JmpInstruction(nextBlock.Label)
+            });
+
+            // clear:
+            // mov opH, 0
+            // mov opL, 0
+            blocks[2].Instructions.AddRange(new Instruction[] {
+                new Instructions.LogicalXorInstruction(edx, edx),
+                new Instructions.LogicalXorInstruction(eax, eax),
+            });
+
+            // done:
+            // ; remaining code from current basic block
+            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+                new Instructions.MoveInstruction(op0H, edx),
+                new Instructions.MoveInstruction(op0L, eax),
+            });
+
+            // Link the created blocks together
+            LinkBlocks(ctx.Block, blocks[0]);
+            LinkBlocks(ctx.Block, blocks[2]);
+            LinkBlocks(blocks[0], blocks[1]);
+            LinkBlocks(blocks[0], nextBlock);
+            LinkBlocks(blocks[1], nextBlock);
+            LinkBlocks(blocks[2], nextBlock);
         }
 
         /// <summary>
@@ -546,9 +746,11 @@ namespace Mosa.Platforms.x86
             MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
             MemoryOperand op2H = new MemoryOperand(I4, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
 
-            BasicBlock blockNext = SplitBlockAfter(ctx, instruction);
-            IR.BranchInstruction branch = new IR.BranchInstruction(IR.ConditionCode.NotEqual, blockNext.Label);
-            //IR.BranchInstruction branch = CreateOppositeBranch(instruction.ConditionCode, blockNext.Label);
+            // Create an additional block to split the comparison
+            BasicBlock nextBlock;
+            BasicBlock[] blocks = CreateBlocks(ctx, instruction, 1, out nextBlock);
+            Debug.Assert(nextBlock != null, @"No follower block?");
+            IR.BranchInstruction branch = new IR.BranchInstruction(IR.ConditionCode.NotEqual, nextBlock.Label);
 
             // I8 is stored LO-HI in x86 LE
             Instruction[] instructions = new Instruction[] {
@@ -558,15 +760,26 @@ namespace Mosa.Platforms.x86
                 new SetccInstruction(op0, instruction.ConditionCode),
                 // Branch if check already gave results
                 branch,
-                // FIXME: This cmp should go into its own block...
+            };
+            Replace(ctx, instructions);
+
+            blocks[0].Instructions.AddRange(new Instruction[] {
                 // Compare low dwords
                 new Instructions.CmpInstruction(op1L, op2L),
                 // Set the unsigned result...
                 new SetccInstruction(op0, GetUnsignedConditionCode(instruction.ConditionCode))
-            };
-            Replace(ctx, instructions);
+            });
+
+            LinkBlocks(ctx.Block, nextBlock);
+            LinkBlocks(ctx.Block, blocks[0]);
+            LinkBlocks(blocks[0], nextBlock);
         }
 
+        /// <summary>
+        /// Gets the unsigned condition code.
+        /// </summary>
+        /// <param name="conditionCode">The condition code to get an unsigned form from.</param>
+        /// <returns>The unsigned form of the given condition code.</returns>
         private IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
         {
             IR.ConditionCode cc = conditionCode;
@@ -589,81 +802,69 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// Creates the opposite branch for a comparison instruction.
-        /// </summary>
-        /// <param name="conditionCode">The comparison condition code.</param>
-        /// <param name="label">The label.</param>
-        /// <returns>A branch for the opposite condition</returns>
-        private IR.BranchInstruction CreateOppositeBranch(IR.ConditionCode conditionCode, int label)
-        {
-            IR.ConditionCode cc;
-            switch (conditionCode)
-            {
-                case IR.ConditionCode.Equal: cc = IR.ConditionCode.NotEqual; break;
-                case IR.ConditionCode.NotEqual: cc = IR.ConditionCode.Equal; break;
-                case IR.ConditionCode.GreaterOrEqual: cc = IR.ConditionCode.LessThan; break;
-                case IR.ConditionCode.GreaterThan: cc = IR.ConditionCode.LessOrEqual; break;
-                case IR.ConditionCode.LessOrEqual: cc = IR.ConditionCode.GreaterThan; break;
-                case IR.ConditionCode.LessThan: cc = IR.ConditionCode.GreaterOrEqual; break;
-                case IR.ConditionCode.UnsignedGreaterOrEqual: cc = IR.ConditionCode.UnsignedLessThan; break;
-                case IR.ConditionCode.UnsignedGreaterThan: cc = IR.ConditionCode.UnsignedLessOrEqual; break;
-                case IR.ConditionCode.UnsignedLessOrEqual: cc = IR.ConditionCode.UnsignedGreaterThan; break;
-                case IR.ConditionCode.UnsignedLessThan: cc = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-                default:
-                    throw new NotSupportedException();
-            }
-            return new IR.BranchInstruction(cc, label);
-        }
-
-        /// <summary>
-        /// Splits the block after the given instruction.
+        /// Creates an additional number of basic blocks required to expand an operation.
         /// </summary>
         /// <param name="ctx">The transformation context.</param>
-        /// <param name="instruction">The instruction.</param>
-        /// <returns></returns>
-        private BasicBlock SplitBlockAfter(Context ctx, IR.IntegerCompareInstruction instruction)
+        /// <param name="instruction">The instruction being expanded.</param>
+        /// <param name="blocks">The number of basic blocks needed.</param>
+        /// <param name="nextBlock">The block, which follows the current block.</param>
+        /// <returns>An array of basic blocks.</returns>
+        private BasicBlock[] CreateBlocks(Context ctx, Instruction instruction, int blocks, out BasicBlock nextBlock)
         {
-            BasicBlock result;
-            int label = 0x1000000 + _blocks.Count;
+            BasicBlock[] result;
+            int label = _blocks.Count + 0x10000000;
 
-            // Is there a statement after the comparison?
+            // Is there a statement after the instruction?
             if (ctx.Index + 1 < ctx.Block.Instructions.Count)
             {
-                // Yes, split the block
-                result = ctx.Block.Split(ctx.Index + 1, label);
+                nextBlock = ctx.Block.Split(ctx.Index + 1, label++);
+            }
+            else if (0 != ctx.Block.NextBlocks.Count)
+            {
+                nextBlock = ctx.Block.NextBlocks[0];
+                UnlinkBlocks(ctx.Block, nextBlock);
             }
             else
             {
-                // No, create a new dummy block to insert (this block apparently falls through to it.)
-                result = new BasicBlock(_blocks.Count + 0x1000000);
+                nextBlock = null;
             }
 
-            Debug.Assert(null != result, @"Huh? Failed to create basic block?");
-            MoveBlockLinks(ctx.Block, result);
-            _blocks.Insert(_currentBlock + 1, result);
+            // Allocate the block array
+            result = new BasicBlock[blocks];
+            for (int index = 0; index < blocks; index++)
+                result[index] = new BasicBlock(label++);
+            _blocks.InsertRange(_currentBlock + 1, result);
+            if (null != nextBlock)
+                _blocks.Insert(_currentBlock + blocks + 1, nextBlock);
+
             return result;
         }
 
         /// <summary>
-        /// Moves the block links from <paramref name="source"/> to <paramref name="dest"/> and links source to dest.
+        /// Links the blocks.
         /// </summary>
-        /// <param name="source">The source block.</param>
-        /// <param name="dest">The destination block.</param>
-        private void MoveBlockLinks(BasicBlock source, BasicBlock dest)
+        /// <param name="from">The block issuing the jump.</param>
+        /// <param name="to">The block, where from is jumping to.</param>
+        private void LinkBlocks(BasicBlock from, BasicBlock to)
         {
-            dest.NextBlocks.AddRange(source.NextBlocks);
-            foreach (BasicBlock next in source.NextBlocks)
-            {
-                next.PreviousBlocks.Remove(source);
-                next.PreviousBlocks.Add(dest);
-            }
-
-            dest.PreviousBlocks.Add(source);
-            source.NextBlocks.Clear();
-            source.NextBlocks.Add(dest);
+            Debug.Assert(false == from.NextBlocks.Contains(to), @"A link already exists?");
+            Debug.Assert(false == to.PreviousBlocks.Contains(from), @"A link already exists?");
+            from.NextBlocks.Add(to);
+            to.PreviousBlocks.Add(from);
         }
 
-
+        /// <summary>
+        /// Unlinks the blocks.
+        /// </summary>
+        /// <param name="from">The block, who used to issue the jump.</param>
+        /// <param name="to">The block, where the jump was going to.</param>
+        private void UnlinkBlocks(BasicBlock from, BasicBlock to)
+        {
+            Debug.Assert(true == from.NextBlocks.Contains(to), @"Link doesn't exist?");
+            Debug.Assert(true == to.PreviousBlocks.Contains(from), @"Link doesn't exist?");
+            from.NextBlocks.Remove(to);
+            to.PreviousBlocks.Remove(from);
+        }
 
         /// <summary>
         /// Clears the int64 to zero.
@@ -719,6 +920,10 @@ namespace Mosa.Platforms.x86
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.IntegerToFloatingPointConversionInstruction instruction, Context arg)
+        {
+        }
+
+        void IR.IIRVisitor<Context>.Visit(IR.JmpInstruction instruction, Context arg)
         {
         }
 
@@ -1218,7 +1423,15 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IX86InstructionVisitor<Context>.Shld(ShldInstruction shiftInstruction, Context arg)
+        {
+        }
+
         void IX86InstructionVisitor<Context>.Shr(ShrInstruction shiftInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Shrd(ShrdInstruction shiftInstruction, Context arg)
         {
         }
 

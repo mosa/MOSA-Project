@@ -183,9 +183,19 @@ namespace Mosa.Platforms.x86
             _emitter.Shl(instruction.Operand0, instruction.Operand1);
         }
 
+        void IX86InstructionVisitor<int>.Shld(ShldInstruction instruction, int arg)
+        {
+            _emitter.Shld(instruction.Operand0, instruction.Operand1, instruction.Operand2);
+        }
+
         void IX86InstructionVisitor<int>.Shr(ShrInstruction instruction, int arg)
         {
             _emitter.Shr(instruction.Operand0, instruction.Operand1);
+        }
+
+        void IX86InstructionVisitor<int>.Shrd(ShrdInstruction instruction, int arg)
+        {
+            _emitter.Shrd(instruction.Operand0, instruction.Operand1, instruction.Operand2);
         }
 
         #region Intrinsics
@@ -1405,6 +1415,11 @@ namespace Mosa.Platforms.x86
                 case CilElementType.U:
                     goto case CilElementType.U4;
             }
+        }
+
+        void IR.IIRVisitor<int>.Visit(IR.JmpInstruction instruction, int arg)
+        {
+            _emitter.Jmp(instruction.Label);
         }
 
         void IR.IIRVisitor<int>.Visit(IR.LiteralInstruction instruction, int arg)
