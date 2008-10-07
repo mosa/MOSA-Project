@@ -117,6 +117,11 @@ namespace Mosa.Platforms.x86
             _emitter.Sub(instruction.Operand0, instruction.Operand1);
         }
 
+        void IX86InstructionVisitor<int>.Sbb(SbbInstruction instruction, int arg)
+        {
+            _emitter.Sbb(instruction.Operand0, instruction.Operand1);
+        }
+
         void IX86InstructionVisitor<int>.Mul(MulInstruction instruction, int arg)
         {
             if (instruction.Operand0.StackType == StackTypeCode.Int64 || instruction.Operand1.StackType == StackTypeCode.Int64)

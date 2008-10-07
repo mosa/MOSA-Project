@@ -230,6 +230,76 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             CodeSource = "static class Test { static bool SubI4(int expect, int a, int b) { return expect == (a - b); } }";
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "SubI4", (a - b), a, b));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool I8_I8_I8(long expect, long a, long b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(1, 2)]
+        [Row(23, 21)]
+        [Row(1, -2)]
+        [Row(-1, 2)]
+        [Row(0, 0)]
+        [Row(-17, -2)]
+        // And reverse
+        [Row(2, 1)]
+        [Row(21, 23)]
+        [Row(-2, 1)]
+        [Row(2, -1)]
+        [Row(-2, -17)]
+        // (MinValue, X) Cases
+        [Row(long.MinValue, 0)]
+        [Row(long.MinValue, 1)]
+        [Row(long.MinValue, 17)]
+        [Row(long.MinValue, 123)]
+        [Row(long.MinValue, -0)]
+        [Row(long.MinValue, -1)]
+        [Row(long.MinValue, -17)]
+        [Row(long.MinValue, -123)]
+        // (MaxValue, X) Cases
+        [Row(long.MaxValue, 0)]
+        [Row(long.MaxValue, 1)]
+        [Row(long.MaxValue, 17)]
+        [Row(long.MaxValue, 123)]
+        [Row(long.MaxValue, -0)]
+        [Row(long.MaxValue, -1)]
+        [Row(long.MaxValue, -17)]
+        [Row(long.MaxValue, -123)]
+        // (X, MinValue) Cases
+        [Row(0, long.MinValue)]
+        [Row(1, long.MinValue)]
+        [Row(17, long.MinValue)]
+        [Row(123, long.MinValue)]
+        [Row(-0, long.MinValue)]
+        [Row(-1, long.MinValue)]
+        [Row(-17, long.MinValue)]
+        [Row(-123, long.MinValue)]
+        // (X, MaxValue) Cases
+        [Row(0, long.MaxValue)]
+        [Row(1, long.MaxValue)]
+        [Row(17, long.MaxValue)]
+        [Row(123, long.MaxValue)]
+        [Row(-0, long.MaxValue)]
+        [Row(-1, long.MaxValue)]
+        [Row(-17, long.MaxValue)]
+        [Row(-123, long.MaxValue)]
+        // Extremvaluecases
+        [Row(long.MinValue, long.MaxValue)]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        public void SubI8(long a, long b)
+        {
+            CodeSource = "static class Test { static bool SubI8(long expect, long a, long b) { return expect == (a - b); } }";
+            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "SubI8", (a - b), a, b));
+        }
         
         /// <summary>
         /// 

@@ -108,7 +108,7 @@ namespace System.IO
 
 		public static Stream Synchronized (Stream stream)
 		{
-			throw new System.NotImplementedException ();
+            throw new System.NotSupportedException();
 		}
 
 

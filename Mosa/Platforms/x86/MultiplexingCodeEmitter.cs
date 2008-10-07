@@ -963,6 +963,19 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Subtracts src from dest and stores the result in dest. (dest -= src)
+        /// </summary>
+        /// <param name="dest">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
+        public void Sbb(Operand dest, Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Sbb(dest, src);
+            });
+        }
+
+        /// <summary>
         /// Store fence
         /// </summary>
         public void Sfence()

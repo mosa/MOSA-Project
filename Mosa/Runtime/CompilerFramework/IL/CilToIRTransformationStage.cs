@@ -558,6 +558,9 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     //type = typeof(MoveInstruction);
                     break;
 
+                case CilElementType.U8:
+                    break;
+
                 case CilElementType.R4:
                     break;
 

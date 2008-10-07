@@ -525,6 +525,13 @@ namespace Mosa.Platforms.x86
         void Ret();
 
         /// <summary>
+        /// Subtracts src from dest and stores the result in dest. (dest -= src)
+        /// </summary>
+        /// <param name="dest">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
+        void Sbb(Operand dest, Operand src);
+
+        /// <summary>
         /// Store fence
         /// </summary>
         void Sfence();

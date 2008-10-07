@@ -31,6 +31,7 @@ namespace Mosa.Platforms.x86
         void Xor(Instructions.LogicalXorInstruction xorInstruction, ArgType arg);
 
         void Sub(SubInstruction subInstruction, ArgType arg);
+        void Sbb(SbbInstruction sbbInstruction, ArgType arg);
         void Mul(MulInstruction mulInstruction, ArgType arg);
         void Div(DivInstruction divInstruction, ArgType arg);
         void SseAdd(SseAddInstruction addInstruction, ArgType arg);

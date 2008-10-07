@@ -1180,6 +1180,16 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Subtracts src from dest and stores the result in dest. (dest -= src)
+        /// </summary>
+        /// <param name="dest">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
+        void ICodeEmitter.Sbb(Operand dest, Operand src)
+        {
+            Emit(dest, src, cd_sbb);
+        }
+
+        /// <summary>
         /// Write Back and Invalidate Cache
         /// </summary>
         void ICodeEmitter.Wbinvd()
@@ -1858,6 +1868,14 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(Operand),            typeof(ConstantOperand),    new byte[] { 0x81 }, 5),
             new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0x2B }, 0),
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x29 }, 0),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_sbb = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x1B }, 0),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x1B }, 0),
         };
 
         #endregion // Code Definition Tables

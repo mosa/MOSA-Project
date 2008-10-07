@@ -681,6 +681,10 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IX86InstructionVisitor<Context>.Sbb(Instructions.SbbInstruction instruction, Context ctx)
+        {
+        }
+
         void IX86InstructionVisitor<Context>.Mul(Instructions.MulInstruction instruction, Context ctx)
         {
 /*

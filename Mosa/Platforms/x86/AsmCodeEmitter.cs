@@ -892,6 +892,19 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Subtracts src from dest and stores the result in dest. (dest -= src)
+        /// </summary>
+        /// <param name="dest">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
+        public void Sbb(Operand dest, Operand src)
+        {
+            if (dest is ConstantOperand)
+                throw new NotSupportedException(@"Constants are not allowed as destination.");
+            _textWriter.WriteLine("\t\tsbb\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
+
+        }
+
+        /// <summary>
         /// Halts the machine
         /// </summary>
         public void Hlt()
