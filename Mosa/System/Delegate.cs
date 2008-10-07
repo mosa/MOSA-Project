@@ -9,6 +9,9 @@
 
 namespace System
 {
+	/// <summary>
+	/// Implementation of the "System.Delegate" class.
+	/// </summary>
 	public class Delegate
 	{
 	}

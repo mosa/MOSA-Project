@@ -9,6 +9,9 @@
 
 namespace System
 {
+	/// <summary>
+	/// 
+	/// </summary>
     public struct UInt16
     {
     }

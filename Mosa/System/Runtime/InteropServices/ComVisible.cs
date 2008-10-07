@@ -9,24 +9,30 @@
 
 using System;
 
-namespace System.Runtime.InteropServices {
+namespace System.Runtime.InteropServices
+{
 
+	/// <summary>
+	/// Implementation of the "System.Runtime.InteropServices.ComVisibleAttribute" class
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class
 		| AttributeTargets.Struct | AttributeTargets.Enum |
 		AttributeTargets.Method | AttributeTargets.Property |
 		AttributeTargets.Field | AttributeTargets.Interface |
-		AttributeTargets.Delegate, Inherited=false)]
-	[ComVisible (true)]
-	public sealed class ComVisibleAttribute : Attribute {
+		AttributeTargets.Delegate, Inherited = false)]
+	[ComVisible(true)]
+	public sealed class ComVisibleAttribute : Attribute
+	{
 
 		private bool Visible = false;
 
-		public ComVisibleAttribute (bool visibility)
+		public ComVisibleAttribute(bool visibility)
 		{
 			Visible = visibility;
 		}
 
-		public bool Value {
+		public bool Value
+		{
 			get { return Visible; }
 		}
 	}

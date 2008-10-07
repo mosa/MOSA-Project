@@ -10,7 +10,7 @@
 namespace System
 {
 	/// <summary>
-	/// Implement of the"System.Attribute" class
+	/// Implementation of the "System.Attribute" class.
 	/// </summary>
 	public class Attribute
 	{

@@ -12,6 +12,9 @@ using System.Collections.Generic;
 
 namespace System.Collections
 {
+	/// <summary>
+	/// 
+	/// </summary>
     public interface ICollection : IEnumerable
     {
 		/// <summary>

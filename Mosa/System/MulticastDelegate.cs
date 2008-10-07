@@ -9,6 +9,9 @@
 
 namespace System
 {
+	/// <summary>
+	/// Implementation of the "System.MulticastDelegate" class.
+	/// </summary>
     public class MulticastDelegate : Delegate
     {
     }

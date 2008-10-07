@@ -11,24 +11,13 @@ using System;
 
 namespace System.IO
 {
-	public class AsyncResult
-	{
-	}
-
-	public class IAsyncResult
-	{
-	}
-	
-	public class AsyncCallback
-	{
-	}
-
+	/// Abstract implementation of the "IO.Stream" class
 	[Serializable]
 	public abstract class Stream : IDisposable // MarshalByRefObject, 
 	{
-//		public static readonly Stream Null = new NullStream ();
+		//public static readonly Stream Null = new NullStream ();
 
-		protected Stream ()
+		protected Stream()
 		{
 		}
 
@@ -66,19 +55,19 @@ namespace System.IO
 			set;
 		}
 
-		public abstract void Flush ();
+		public abstract void Flush();
 
-		public abstract int Read (byte[] buffer, int offset, int count);
+		public abstract int Read(byte[] buffer, int offset, int count);
 
-		public abstract int ReadByte ();
+		public abstract int ReadByte();
 
-		public abstract long Seek (long offset, SeekOrigin origin);
+		public abstract long Seek(long offset, SeekOrigin origin);
 
-		public abstract void SetLength (long value);
+		public abstract void SetLength(long value);
 
-		public abstract void Write (byte[] buffer, int offset, int count);
+		public abstract void Write(byte[] buffer, int offset, int count);
 
-		public abstract void WriteByte (byte value);
+		public abstract void WriteByte(byte value);
 
 		//		delegate void WriteDelegate (byte[] buffer, int offset, int count);
 
@@ -86,11 +75,11 @@ namespace System.IO
 		{
 			get
 			{
-				throw new System.InvalidOperationException ("Timeouts are not supported on this stream.");
+				throw new InvalidOperationException("Timeouts are not supported on this stream.");
 			}
 			set
 			{
-				throw new System.InvalidOperationException ("Timeouts are not supported on this stream.");
+				throw new InvalidOperationException("Timeouts are not supported on this stream.");
 			}
 		}
 
@@ -98,58 +87,69 @@ namespace System.IO
 		{
 			get
 			{
-				throw new System.InvalidOperationException ("Timeouts are not supported on this stream.");
+				throw new InvalidOperationException("Timeouts are not supported on this stream.");
 			}
 			set
 			{
-				throw new System.InvalidOperationException ("Timeouts are not supported on this stream.");
+				throw new InvalidOperationException("Timeouts are not supported on this stream.");
 			}
 		}
 
-		public static Stream Synchronized (Stream stream)
+		public static Stream Synchronized(Stream stream)
 		{
-            throw new System.NotSupportedException();
+			throw new NotSupportedException();
 		}
 
 
-		public virtual IAsyncResult BeginRead (byte[] buffer, int offset, int count, AsyncCallback cback, object state)
+		public virtual IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback cback, object state)
 		{
-			throw new System.NotSupportedException ("This stream does not support async");
+			throw new NotSupportedException("This stream does not support async");
 		}
 
-		public virtual IAsyncResult BeginWrite (byte[] buffer, int offset, int count, AsyncCallback cback, object state)
+		public virtual IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback cback, object state)
 		{
-			throw new System.NotSupportedException ("This stream does not support async");
+			throw new NotSupportedException("This stream does not support async");
 		}
 
-		public virtual int EndRead (IAsyncResult async_result)
+		public virtual int EndRead(IAsyncResult async_result)
 		{
-			throw new System.NotSupportedException ("This stream does not support async");
+			throw new NotSupportedException("This stream does not support async");
 		}
 
-		public virtual void EndWrite (IAsyncResult async_result)
+		public virtual void EndWrite(IAsyncResult async_result)
 		{
-			throw new System.NotSupportedException ("This stream does not support async");
+			throw new NotSupportedException("This stream does not support async");
 		}
 
-
-		public void Dispose ()
+		public void Dispose()
 		{
-			Close ();
+			Close();
 		}
 
-		protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose(bool disposing)
 		{
 		}
 
-		public virtual void Close ()
+		public virtual void Close()
 		{
-			Dispose (true);
+			Dispose(true);
 		}
 
-		void IDisposable.Dispose ()
+		void IDisposable.Dispose()
 		{
-			Close ();
+			Close();
 		}
+	}
+
+	public class AsyncResult
+	{
+	}
+
+	public class IAsyncResult
+	{
+	}
+
+	public class AsyncCallback
+	{
 	}
 }

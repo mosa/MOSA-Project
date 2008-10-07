@@ -9,6 +9,9 @@
 
 namespace System
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class Array
 	{
 		public void SetValue(object value, int index)

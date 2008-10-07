@@ -9,6 +9,9 @@
 
 namespace System.Runtime.InteropServices
 {
+	/// <summary>
+	/// Implementation of the "System.Runtime.InteropServices.OutAttribute" class
+	/// </summary>
 	public class OutAttribute : Attribute
 	{
 	}

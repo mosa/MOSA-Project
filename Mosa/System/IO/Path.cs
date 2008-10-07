@@ -9,9 +9,20 @@
 
 namespace System.IO
 {
+	/// <summary>
+	/// Implementation of the "System.IO.Path" class
+	/// </summary>
 	public static class Path
 	{
-		public static readonly char AltDirectorySeparatorChar = '\\';
+		/// <summary>
+		/// Directory Seperator
+		/// </summary>
 		public static readonly char DirectorySeparatorChar = '/';
+
+		/// <summary>
+		/// Alterative Directory Seperator
+		/// </summary>
+		public static readonly char AltDirectorySeparatorChar = '\\';
+
 	}
 }

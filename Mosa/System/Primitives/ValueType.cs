@@ -9,6 +9,9 @@
 
 namespace System
 {
+	/// <summary>
+	/// 
+	/// </summary>
     public class ValueType : Object
     {
     }

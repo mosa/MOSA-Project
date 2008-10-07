@@ -9,6 +9,9 @@
 
 namespace System
 {
+	/// <summary>
+	/// Implementation of the "System.ParamArrayAttribute" class.
+	/// /// </summary>
     public class ParamArrayAttribute : Attribute
     {
     }

@@ -9,14 +9,14 @@
 
 namespace Mosa.EmulatedDevices
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public static class Setup
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Initializes this instance.
+		/// </summary>
 		public static void Initialize()
 		{
 			new CMOS(CMOS.StandardIOBase);

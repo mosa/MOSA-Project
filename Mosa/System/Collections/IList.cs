@@ -12,7 +12,9 @@ using System.Runtime.InteropServices;
 
 namespace System.Collections
 {
-
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IList : ICollection, IEnumerable
 	{
 		/// <summary>

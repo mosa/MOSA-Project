@@ -10,7 +10,7 @@
 namespace System
 {
 	/// <summary>
-	/// Implement of the"System.Type" class
+	/// Implementation of the "System.Type" class.
 	/// </summary>
     public class Type
     {

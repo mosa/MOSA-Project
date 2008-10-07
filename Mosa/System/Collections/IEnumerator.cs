@@ -9,7 +9,9 @@
 
 namespace System.Collections
 {
-
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IEnumerator
 	{
 		/// <summary>
