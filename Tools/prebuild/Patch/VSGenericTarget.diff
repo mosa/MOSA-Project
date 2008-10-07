@@ -1,0 +1,22 @@
+Index: VSGenericTarget.cs
+===================================================================
+--- VSGenericTarget.cs	(revision 277)
++++ VSGenericTarget.cs	(working copy)
+@@ -270,6 +270,7 @@
+ 					ps.WriteLine("    <RemoveIntegerChecks>{0}</RemoveIntegerChecks>", conf.Options["RemoveIntegerChecks"]);
+ 					ps.WriteLine("    <TreatWarningsAsErrors>{0}</TreatWarningsAsErrors>", conf.Options["WarningsAsErrors"]);
+ 					ps.WriteLine("    <WarningLevel>{0}</WarningLevel>", conf.Options["WarningLevel"]);
++					ps.WriteLine("    <NoStdLib>{0}</NoStdLib>", conf.Options["NoStdLib"]); 
+ 					ps.WriteLine("    <NoWarn>{0}</NoWarn>", conf.Options["SuppressWarnings"]);
+ 					ps.WriteLine("  </PropertyGroup>");
+ 				}
+@@ -680,7 +681,8 @@
+ 
+ 		private void WriteProject(SolutionNode solution, StreamWriter ss, DatabaseProjectNode dbProject)
+ 		{
+-			WriteProject(ss, solution, "Database", dbProject.Guid, dbProject.Name, dbProject.FullPath);
++			if (null != solution.Files && solution.Files.Count > 0)
++				WriteProject(ss, solution, "Database", dbProject.Guid, dbProject.Name, dbProject.FullPath);
+ 		}
+ 
+ 		const string ProjectDeclarationBeginFormat = "Project(\"{0}\") = \"{1}\", \"{2}\", \"{3}\"";
