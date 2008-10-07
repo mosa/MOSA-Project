@@ -25,6 +25,9 @@ namespace Mosa.Runtime {
     {
         #region Static data members
 
+        /// <summary>
+        /// Holds the static instance of the runtime.
+        /// </summary>
         private static RuntimeBase s_instance = null;        
 
         #endregion // Static data members
@@ -80,7 +83,7 @@ namespace Mosa.Runtime {
         }
 
         /// <summary>
-        /// Gets the instance.
+        /// Gets the instance of the runtime.
         /// </summary>
         /// <value>The instance.</value>
         public static RuntimeBase Instance
@@ -155,7 +158,7 @@ namespace Mosa.Runtime {
         #region IDisposable Members
 
         /// <summary>
-        /// Führt anwendungsspezifische Aufgaben durch, die mit der Freigabe, der Zurückgabe oder dem Zurücksetzen von nicht verwalteten Ressourcen zusammenhängen.
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
         {
