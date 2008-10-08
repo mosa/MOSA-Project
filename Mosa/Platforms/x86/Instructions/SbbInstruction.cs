@@ -18,21 +18,21 @@ using System.Diagnostics;
 namespace Mosa.Platforms.x86.Instructions
 {
     /// <summary>
-    /// Intermediate representation of the x86 adc instruction.
+    /// Intermediate representation of the x86 sbb instruction.
     /// </summary>
     sealed class SbbInstruction : IR.TwoOperandInstruction
     {
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdcInstruction"/> class.
+        /// Initializes a new instance of the <see cref="SbbInstruction"/> class.
         /// </summary>
         public SbbInstruction()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdcInstruction"/> class.
+        /// Initializes a new instance of the <see cref="SbbInstruction"/> class.
         /// </summary>
         /// <param name="destination">The destination operand.</param>
         /// <param name="source">The source operand.</param>
