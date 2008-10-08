@@ -21,7 +21,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
     /// <summary>
     /// Intermediate representation of the x86 rep instruction.
     /// </summary>
-    sealed class RepInstruction : IR.TwoOperandInstruction
+    sealed class RepInstruction : IR.IRInstruction
     {
         #region Construction
 
@@ -33,19 +33,9 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepInstruction"/> class.
-        /// </summary>
-        /// <param name="destination">The destination operand.</param>
-        /// <param name="source">The source operand.</param>
-        public RepInstruction(Operand destination, Operand source) :
-            base(destination, source)
-        {
-        }
-
         #endregion // Construction
 
-        #region TwoOperandInstruction Overrides
+        #region IRInstruction Overrides
 
         /// <summary>
         /// Returns a string representation of the instruction.
@@ -55,7 +45,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         /// </returns>
         public override string ToString()
         {
-            return String.Format(@"x86 rep {0}, {1} ", this.Operand0, this.Operand1);
+            return String.Format(@"x86 rep");
         }
         
         /// <summary>
@@ -74,6 +64,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
                 visitor.Visit(this, arg);
         }
 
-        #endregion // TwoOperandInstruction Overrides
+        #endregion // IRInstruction Overrides
     }
 }

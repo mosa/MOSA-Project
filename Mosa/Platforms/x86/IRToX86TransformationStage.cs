@@ -539,8 +539,12 @@ namespace Mosa.Platforms.x86
         void IR.IIRVisitor<Context>.Visit(IR.PrologueInstruction instruction, Context ctx)
         {
             SigType I = new SigType(CilElementType.I);
+            RegisterOperand eax = new RegisterOperand(I, GeneralPurposeRegister.EAX);
+            RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
             RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
             RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
+            RegisterOperand edi = new RegisterOperand(I, GeneralPurposeRegister.EDI);
+            Debug.Assert((instruction.StackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 
             List<Instruction> prologue = new List<Instruction>(new Instruction[] {
                 /* If you want to stop at the header of an emitted function, just uncomment
@@ -557,13 +561,24 @@ namespace Mosa.Platforms.x86
                 _architecture.CreateInstruction(typeof(IR.MoveInstruction), ebp, esp),
                 // sub esp, localsSize
                 _architecture.CreateInstruction(typeof(Instructions.SubInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
+                // Initialize all locals to zero
+                new IR.PushInstruction(edi),
+                new IR.MoveInstruction(edi, esp),
+                new IR.PushInstruction(ecx),
+                new Instructions.AddInstruction(edi, new ConstantOperand(I, 4)),
+                new IR.MoveInstruction(ecx, new ConstantOperand(I, (-instruction.StackSize)/4)),
+                new Instructions.LogicalXorInstruction(eax, eax),
+                new Instructions.Intrinsics.RepInstruction(),
+                new Instructions.Intrinsics.StosdInstruction(),
+                new IR.PopInstruction(ecx),
+                new IR.PopInstruction(edi),
                 /*
                  * This move adds the runtime method identification token onto the stack. This
                  * allows us to perform call stack identification and gives the garbage collector 
                  * the possibility to identify roots into the managed heap. 
                  */
                 // mov [ebp-4], token
-                _architecture.CreateInstruction(typeof(IR.MoveInstruction), new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, _compiler.Method.Token))
+                _architecture.CreateInstruction(typeof(IR.MoveInstruction), new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, _compiler.Method.Token)),
             });
 
             // Do not save EDX for int64 return values
@@ -571,7 +586,7 @@ namespace Mosa.Platforms.x86
                 _compiler.Method.Signature.ReturnType.Type != CilElementType.U8)
             {
                 // push edx
-                prologue.Insert(4, _architecture.CreateInstruction(typeof(IR.PushInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)));
+                prologue.Add(_architecture.CreateInstruction(typeof(IR.PushInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)));
             }
 
             Replace(ctx, prologue);

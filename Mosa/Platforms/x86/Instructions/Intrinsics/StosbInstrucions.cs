@@ -21,7 +21,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
     /// <summary>
     /// Intermediate representation of the x86 stosb instruction.
     /// </summary>
-    sealed class StosbInstruction : IR.OneOperandInstruction
+    sealed class StosbInstruction : IR.IRInstruction
     {
         #region Construction
 
@@ -30,15 +30,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         /// </summary>
         public StosbInstruction() :
             base()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StosbInstruction"/> class.
-        /// </summary>
-        /// <param name="destination">The destination.</param>
-        public StosbInstruction(Operand destination) :
-            base(destination)
         {
         }
 
@@ -54,7 +45,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         /// </returns>
         public override string ToString()
         {
-            return String.Format(@"x86 stosb {0} ", this.Operand0);
+            return @"x86 stosb";
         }
 
         /// <summary>

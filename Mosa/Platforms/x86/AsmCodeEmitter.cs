@@ -799,6 +799,11 @@ namespace Mosa.Platforms.x86
             _textWriter.WriteLine("\t\trdtsc");
         }
 
+        void ICodeEmitter.Rep()
+        {
+            _textWriter.WriteLine("\t\trep");
+        }
+
         /// <summary>
         /// Emits a return instruction.
         /// </summary>
@@ -872,10 +877,17 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Stores a string
         /// </summary>
-        /// <param name="dest">The destination operand.</param>
-        public void Stos(Operand dest)
+        public void Stosb()
         {
-            _textWriter.WriteLine("\t\tstos");
+            _textWriter.WriteLine("\t\tstosb");
+        }
+
+        /// <summary>
+        /// Stores a string
+        /// </summary>
+        public void Stosd()
+        {
+            _textWriter.WriteLine("\t\tstosd");
         }
 
         /// <summary>

@@ -1087,6 +1087,11 @@ namespace Mosa.Platforms.x86
             _codeStream.WriteByte(0x31);
         }
 
+        void ICodeEmitter.Rep()
+        {
+            _codeStream.WriteByte(0xF3);
+        }
+
         /// <summary>
         /// Emits a return instruction.
         /// </summary>
@@ -1157,16 +1162,14 @@ namespace Mosa.Platforms.x86
             Emit(dest, null, cd_stmxcsr);
         }
 
-        /// <summary>
-        /// Stores a string
-        /// </summary>
-        /// <param name="dest">The destination operand.</param>
-        void ICodeEmitter.Stos(Operand dest)
+        void ICodeEmitter.Stosb()
         {
-            if (dest.Type.Type == CilElementType.I1)
-                _codeStream.WriteByte(0xAA);
-            else
-                _codeStream.WriteByte(0xAB);
+            _codeStream.WriteByte(0xAA);
+        }
+
+        void ICodeEmitter.Stosd()
+        {
+            _codeStream.WriteByte(0xAB);
         }
 
         /// <summary>

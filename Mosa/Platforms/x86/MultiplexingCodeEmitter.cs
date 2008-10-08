@@ -951,6 +951,14 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        void ICodeEmitter.Rep()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Rep();
+            });
+        }
+
         /// <summary>
         /// Emits a return instruction.
         /// </summary>
@@ -1057,15 +1065,19 @@ namespace Mosa.Platforms.x86
             });
         }
 
-        /// <summary>
-        /// Stores a string
-        /// </summary>
-        /// <param name="dest">The destination operand.</param>
-        public void Stos(Operand dest)
+        void ICodeEmitter.Stosb()
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
-                emitter.Stos(dest);
+                emitter.Stosb();
+            });
+        }
+
+        void ICodeEmitter.Stosd()
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Stosd();
             });
         }
 

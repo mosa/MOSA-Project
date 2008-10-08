@@ -21,7 +21,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
     /// <summary>
     /// Intermediate represenation of the x86 stosd instruction.
     /// </summary>
-    sealed class StosdInstruction : IR.OneOperandInstruction
+    sealed class StosdInstruction : IR.IRInstruction
     {
         #region Construction
 
@@ -33,18 +33,9 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StosdInstruction"/> class.
-        /// </summary>
-        /// <param name="destination">The destination.</param>
-        public StosdInstruction(Operand destination) :
-            base(destination)
-        {
-        }
-
         #endregion // Construction
 
-        #region OneOperandInstruction Overrides
+        #region IRInstruction Overrides
 
         /// <summary>
         /// Returns a string representation of the instruction.
@@ -54,7 +45,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         /// </returns>
         public override string ToString()
         {
-            return String.Format(@"x86 stosd {0}", this.Operand0);
+            return @"x86 stosd";
         }
 
         /// <summary>
@@ -73,6 +64,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
                 visitor.Visit(this, arg);
         }
 
-        #endregion // OneOperandInstruction Overrides
+        #endregion // IRInstruction Overrides
     }
 }

@@ -417,7 +417,7 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Rep(RepInstruction instruction, int arg)
         {
-            //_emitter.Rep(instruction.Operand0, instruction.Operand1);
+            _emitter.Rep();
         }
 
         /// <summary>
@@ -437,7 +437,7 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Stosb(StosbInstruction instruction, int arg)
         {
-            _emitter.Stos(instruction.Operand0);
+            _emitter.Stosb();
         }
 
         /// <summary>
@@ -447,7 +447,7 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Stosd(StosdInstruction instruction, int arg)
         {
-            _emitter.Stos(instruction.Operand0);
+            _emitter.Stosd();
         }
 
         /// <summary>

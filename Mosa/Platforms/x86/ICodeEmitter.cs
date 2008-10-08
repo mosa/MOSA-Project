@@ -520,6 +520,11 @@ namespace Mosa.Platforms.x86
         void Rdtsc();
 
         /// <summary>
+        /// Emits a repeat prefix.
+        /// </summary>
+        void Rep();
+
+        /// <summary>
         /// Emits a return instruction.
         /// </summary>
         void Ret();
@@ -572,10 +577,14 @@ namespace Mosa.Platforms.x86
         void StmXcsr(Operand dest);
 
         /// <summary>
-        /// Stores a string
+        /// Stores a byte string
         /// </summary>
-        /// <param name="dest">The destination operand.</param>
-        void Stos(Operand dest);
+        void Stosb();
+
+        /// <summary>
+        /// Stores a dword string
+        /// </summary>
+        void Stosd();
 
         /// <summary>
         /// Subtracts src from dest and stores the result in dest. (dest -= src)
