@@ -168,6 +168,53 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
+        delegate bool U4_U2_U2(uint expect, ushort a, ushort b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(1, 2)]
+        [Row(23, 21)]
+        // And reverse
+        [Row(2, 1)]
+        [Row(21, 23)]
+        // (MinValue, X) Cases
+        [Row(ushort.MinValue, 0)]
+        [Row(ushort.MinValue, 1)]
+        [Row(ushort.MinValue, 17)]
+        [Row(ushort.MinValue, 123)]
+        // (MaxValue, X) Cases
+        [Row(ushort.MaxValue, 0)]
+        [Row(ushort.MaxValue, 1)]
+        [Row(ushort.MaxValue, 17)]
+        [Row(ushort.MaxValue, 123)]
+        // (X, MinValue) Cases
+        [Row(0, ushort.MinValue)]
+        [Row(1, ushort.MinValue)]
+        [Row(17, ushort.MinValue)]
+        [Row(123, ushort.MinValue)]
+        // (X, MaxValue) Cases
+        [Row(0, ushort.MaxValue)]
+        [Row(1, ushort.MaxValue)]
+        [Row(17, ushort.MaxValue)]
+        [Row(123, ushort.MaxValue)]
+        // Extremvaluecases
+        [Row(ushort.MinValue, ushort.MaxValue)]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        public void SubU2(ushort a, ushort b)
+        {
+            CodeSource = "static class Test { static bool SubU2(uint expect, ushort a, ushort b) { return expect == (a - b); } }";
+            Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "SubU2", (a - b), a, b));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         delegate bool I4_I4_I4(int expect, int a, int b);
         /// <summary>
         /// 
