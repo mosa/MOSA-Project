@@ -8,8 +8,8 @@
  */
 
 using Mosa.ClassLib;
-using Mosa.DeviceDrivers;
-using Mosa.DeviceDrivers.PCI;
+using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.ISA;
 
 namespace Mosa.DeviceDrivers.ISA.VideoCards
 {

@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.DeviceDrivers;
+using Mosa.DeviceSystem;
 
 namespace Mosa.EmulatedKernel
 {

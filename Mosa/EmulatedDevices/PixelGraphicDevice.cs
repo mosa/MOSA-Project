@@ -11,7 +11,7 @@ using System;
 using System.Threading;
 using System.Windows.Forms;
 using Mosa.ClassLib;
-using Mosa.DeviceDrivers;
+using Mosa.DeviceSystem;
 using Mosa.EmulatedKernel;
 
 namespace Mosa.EmulatedDevices
@@ -117,7 +117,7 @@ namespace Mosa.EmulatedDevices
 		{
 			System.Drawing.Color color = bitmap.GetPixel(x, y);
 
-			return new Mosa.DeviceDrivers.Color(color.R, color.G, color.B);
+			return new Mosa.DeviceSystem.Color(color.R, color.G, color.B);
 		}
 
 		/// <summary>

@@ -8,7 +8,7 @@
  */
 
 using System;
-using Mosa.DeviceDrivers;
+using Mosa.DeviceSystem;
 
 namespace Mosa.EmulatedDevices
 {

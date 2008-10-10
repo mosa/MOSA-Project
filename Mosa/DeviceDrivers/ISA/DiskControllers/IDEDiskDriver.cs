@@ -13,8 +13,8 @@
 // http://www.nondot.org/sabre/os/files/Disk/IDE-tech.html
 
 using Mosa.ClassLib;
-using Mosa.DeviceDrivers;
-using Mosa.DeviceDrivers.ISA;
+using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.ISA;
 
 namespace Mosa.DeviceDrivers.ISA.DiskControllers
 {

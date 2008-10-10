@@ -9,8 +9,8 @@
 
 using System;
 using Mosa.ClassLib;
-using Mosa.DeviceDrivers;
-using Mosa.DeviceDrivers.PCI;
+using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.PCI;
 
 using Pictor;
 using Pictor.Renderer;
@@ -34,37 +34,43 @@ namespace Mosa.Emulator
 			IHardwareAbstraction hardwareAbstraction = new Mosa.EmulatedKernel.HardwareAbstraction();
 
 			// Set Device Driver system to the emulator port and memory methods
-			DeviceDrivers.HAL.SetHardwareAbstraction(hardwareAbstraction);
+			DeviceSystem.HAL.SetHardwareAbstraction(hardwareAbstraction);
 
 			// Start the emulated devices
 			EmulatedDevices.Setup.Initialize();
 
-			// Start driver system
-			DeviceDrivers.Setup.Initialize();
+			// Initialize the driver system
+			DeviceSystem.Setup.Initialize();
+
+			// Start the driver system
+			DeviceSystem.Setup.AddDriverAssembly(typeof(Mosa.DeviceDrivers.ISA.CMOS).Module.Assembly);
+
+			// Start the driver system
+			DeviceSystem.Setup.Start();
 
 			// Set the interrupt handler
-			DeviceDrivers.HAL.SetInterruptHandler(DeviceDrivers.Setup.ResourceManager.InterruptManager.ProcessInterrupt);
+			DeviceSystem.HAL.SetInterruptHandler(DeviceSystem.Setup.ResourceManager.InterruptManager.ProcessInterrupt);
 
 			// Create Emulated Keyboard device
 			Mosa.EmulatedDevices.Keyboard keyboard = new Mosa.EmulatedDevices.Keyboard();
 
 			// Added the emulated keyboard device to the device drivers
-			DeviceDrivers.Setup.DeviceManager.Add(keyboard);
+			DeviceSystem.Setup.DeviceManager.Add(keyboard);
 
 			// Create Emulated Graphic Pixel device
 			Mosa.EmulatedDevices.PixelGraphicDevice pixelGraphicDevice = new Mosa.EmulatedDevices.PixelGraphicDevice(500, 500);
 
 			// Added the emulated keyboard device to the device drivers
-			DeviceDrivers.Setup.DeviceManager.Add(pixelGraphicDevice);
+			DeviceSystem.Setup.DeviceManager.Add(pixelGraphicDevice);
 
 			// Get the Text VGA device
-			LinkedList<IDevice> devices = DeviceDrivers.Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText"));
+			LinkedList<IDevice> devices = DeviceSystem.Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText"));
 
 			// Create a screen interface to the Text VGA device
 			ITextScreen screen = new TextScreen((ITextDevice)devices.First.value);
 
 			// Get a list of all devices
-			devices = DeviceDrivers.Setup.DeviceManager.GetAllDevices();
+			devices = DeviceSystem.Setup.DeviceManager.GetAllDevices();
 
 			// Print them 
 			screen.WriteLine("Devices: ");

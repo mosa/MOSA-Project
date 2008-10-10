@@ -8,7 +8,7 @@
  */
 
 using Mosa.ClassLib;
-using Mosa.DeviceDrivers;
+using Mosa.DeviceSystem;
 using Mosa.FileSystem.VFS;
 
 namespace Mosa.FileSystem.FATFileSystem
