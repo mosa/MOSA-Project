@@ -59,6 +59,37 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="expect"></param>
         /// <param name="a"></param>
         /// <returns></returns>
+        delegate bool U1_U1(byte expect, byte a);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        [Column(0, 1, byte.MinValue, byte.MaxValue)]
+        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        public void LdargaU1_CheckValue(byte a)
+        {
+            CodeSource = @"
+                static class Test
+                { 
+                    static bool LdargaU1_CheckValue(byte expect, byte a) 
+                    {
+                        return CheckValue(expect, ref a);
+                    }
+
+                    static bool CheckValue(byte expect, ref byte a)
+                    {
+                        return expect == a;
+                    }
+                }";
+            Assert.IsTrue((bool)Run<U1_U1>("", "Test", "LdargaU1_CheckValue", a, a));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool I2_I2(short expect, short a);
         /// <summary>
         /// 
@@ -82,6 +113,37 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     }
                 }";
             Assert.IsTrue((bool)Run<I2_I2>("", "Test", "LdargaI2_CheckValue", a, a));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        delegate bool U2_U2(ushort expect, ushort a);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        [Column(0, 1, ushort.MinValue, ushort.MaxValue)]
+        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        public void LdargaU2_CheckValue(ushort a)
+        {
+            CodeSource = @"
+                static class Test
+                { 
+                    static bool LdargaU2_CheckValue(ushort expect, ushort a) 
+                    {
+                        return CheckValue(expect, ref a);
+                    }
+
+                    static bool CheckValue(ushort expect, ref ushort a)
+                    {
+                        return expect == a;
+                    }
+                }";
+            Assert.IsTrue((bool)Run<U2_U2>("", "Test", "LdargaU2_CheckValue", a, a));
         }
         
         /// <summary>
@@ -121,6 +183,37 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="expect"></param>
         /// <param name="a"></param>
         /// <returns></returns>
+        delegate bool U4_U4(uint expect, uint a);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        [Column(0, 1, uint.MinValue, uint.MaxValue)]
+        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        public void LdargaU4_CheckValue(uint a)
+        {
+            CodeSource = @"
+                static class Test
+                { 
+                    static bool LdargaU4_CheckValue(uint expect, uint a) 
+                    {
+                        return CheckValue(expect, ref a);
+                    }
+
+                    static bool CheckValue(uint expect, ref uint a)
+                    {
+                        return expect == a;
+                    }
+                }";
+            Assert.IsTrue((bool)Run<U4_U4>("", "Test", "LdargaU4_CheckValue", a, a));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool I8_I8(long expect, long a);
         /// <summary>
         /// 
@@ -144,6 +237,37 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     }
                 }";
             Assert.IsTrue((bool)Run<I8_I8>("", "Test", "LdargaI8_CheckValue", a, a));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        delegate bool U8_U8(ulong expect, ulong a);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        [Column(0, 1, ulong.MinValue, ulong.MaxValue)]
+        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        public void LdargaU8_CheckValue(ulong a)
+        {
+            CodeSource = @"
+                static class Test
+                { 
+                    static bool LdargaU8_CheckValue(ulong expect, ulong a) 
+                    {
+                        return CheckValue(expect, ref a);
+                    }
+
+                    static bool CheckValue(ulong expect, ref ulong a)
+                    {
+                        return expect == a;
+                    }
+                }";
+            Assert.IsTrue((bool)Run<U8_U8>("", "Test", "LdargaU8_CheckValue", a, a));
         }
         
         /// <summary>
