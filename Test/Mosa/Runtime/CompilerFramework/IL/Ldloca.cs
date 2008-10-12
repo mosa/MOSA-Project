@@ -1,4 +1,16 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
+ *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using MbUnit.Framework;
@@ -9,7 +21,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     /// Tests the compiler for proper support of the ldloca, call and stind opcodes.
     /// </summary>
     [TestFixture]
-    public class Ldloca : MosaCompilerTestRunner
+    public class Ldloca : CodeDomTestRunner
     {
         #region CheckValue
 

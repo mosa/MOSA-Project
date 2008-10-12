@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  
  */
 
 using System;
@@ -18,7 +19,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     /// Tests support for the IL ceq operation with various operands.
     /// </summary>
     [TestFixture]
-    public class Ceq : MosaCompilerTestRunner
+    public class Ceq : CodeDomTestRunner
     {
         private static string s_testCode = @"
             static class Test {

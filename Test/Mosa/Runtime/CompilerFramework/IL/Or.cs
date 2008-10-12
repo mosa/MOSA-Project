@@ -6,6 +6,8 @@
  * Authors:
  *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
  *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  
  */
 
 using System;
@@ -19,7 +21,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     /// 
     /// </summary>
     [TestFixture]
-    public class Or : MosaCompilerTestRunner
+    public class Or : CodeDomTestRunner
     {
         /// <summary>
         /// 

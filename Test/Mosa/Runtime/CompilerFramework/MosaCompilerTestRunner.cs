@@ -1,7 +1,17 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
-using System.CodeDom.Compiler;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime;
 using Mosa.Runtime.Vm;
@@ -18,131 +28,82 @@ namespace Test.Mosa.Runtime.CompilerFramework
     /// </summary>
     public abstract class MosaCompilerTestRunner : IDisposable
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        static Dictionary<string, CodeDomProvider> providerCache = new Dictionary<string, CodeDomProvider>();
+        #region Data members
 
         /// <summary>
-        /// 
+        /// The filename of the assembly, which contains the test case.
         /// </summary>
-        TempFileCollection temps = new TempFileCollection();
+        string assembly = null;
 
         /// <summary>
-        /// 
+        /// Flag, which determines if the compiler needs to run.
         /// </summary>
-        bool _needCompile = true;
+        bool needCompile = true;
 
         /// <summary>
-        /// 
+        /// An array of assembly references to include in the compilation.
         /// </summary>
-        string _language;
+        string[] references;
 
         /// <summary>
-        /// 
-        /// </summary>
-        string _codeFilename;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        string _codeSource;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        string[] _references;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        CompilerResults compileResults;
-
-        /// <summary>
-        /// 
+        /// The test runtime.
         /// </summary>
         TestRuntime runtime;
 
         /// <summary>
-        /// 
+        /// The metadata module of the test case.
         /// </summary>
         IMetadataModule module;
 
+        #endregion // Data members
+
+        #region Construction
+
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="MosaCompilerTestRunner"/> class.
         /// </summary>
         public MosaCompilerTestRunner()
         {
-            Language = "C#";
-            References = new string[0];
+            this.references = new string[0];
         }
 
+        #endregion // Construction
+
+        #region Properties
+
         /// <summary>
-        /// 
+        /// Gets or sets a value indicating whether the test needs to be compiled.
         /// </summary>
-        public string Language
+        /// <value><c>true</c> if a compilation is needed; otherwise, <c>false</c>.</value>
+        protected bool NeedCompile
         {
-            get { return _language; }
-            set
-            {
-                if (_language != value)
-                {
-                    _language = value;
-                    _needCompile = true;
-                }
-            }
+            get { return this.needCompile; }
+            set { this.needCompile = value; }
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets the references.
         /// </summary>
-        public string CodeFilename
-        {
-            get { return _codeFilename; }
-            set
-            {
-                if (_codeFilename != value)
-                {
-                    _codeFilename = value;
-                    _needCompile = true;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string CodeSource
-        {
-            get { return _codeSource; }
-            set
-            {
-                if (_codeSource != value)
-                {
-                    _codeSource = value;
-                    _needCompile = true;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <value>The references.</value>
         public string[] References
         {
-            get { return _references; }
+            get { return this.references; }
             set
             {
-                if (_references != value)
+                if (this.references != value)
                 {
-                    _references = value;
-                    _needCompile = true;
+                    this.references = value;
+                    this.needCompile = true;
                 }
             }
         }
 
+        #endregion // Properties
+
+        #region Methods
+
         /// <summary>
-        /// 
+        /// Builds the test runtime used to execute tests.
         /// </summary>
         [FixtureSetUp]
         public void Begin()
@@ -152,46 +113,79 @@ namespace Test.Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// 
+        /// Disposes the test runtime and deletes the compiled assembly.
         /// </summary>
-        /// <typeparam name="TDelegate"></typeparam>
-        /// <param name="ns"></param>
-        /// <param name="type"></param>
-        /// <param name="method"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
+        [FixtureTearDown]
+        public void End()
+        {
+            // Dispose the test runtime.
+            if (null != this.runtime)
+            {
+                this.runtime.Dispose();
+                this.runtime = null;
+            }
+
+            // Try to delete the compiled assembly...
+            if (null != this.assembly)
+            {
+                try
+                {
+                    File.Delete(this.assembly);
+                }
+                catch
+                {
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Runs a test case.
+        /// </summary>
+        /// <typeparam name="TDelegate">The delegate used to run the test case.</typeparam>
+        /// <param name="ns">The namespace of the test.</param>
+        /// <param name="type">The type, which contains the test.</param>
+        /// <param name="method">The name of the method of the test.</param>
+        /// <param name="parameters">The parameters to pass to the test.</param>
+        /// <returns>The result of the test.</returns>
         public object Run<TDelegate>(string ns, string type, string method, params object[] parameters)
         {
-            if (_needCompile)
+            // Do we need to compile the code?
+            if (this.needCompile == true)
             {
                 if (module != null)
                     RuntimeBase.Instance.AssemblyLoader.Unload(module);
-                Console.WriteLine("Executing {0} compiler...", _language);
-                compileResults = CompileCode();
+                this.assembly = this.CompileTestCode();
                 Console.WriteLine("Executing MOSA compiler...");
-                module = CompileAssembly(compileResults.PathToAssembly);
-                _needCompile = false;
+                module = RunMosaCompiler(this.assembly);
+                this.needCompile = false;
             }
+
+            // Find the test method to execute
             RuntimeMethod runtimeMethod = FindMethod(
                 ns,
                 type,
                 method
             );
+
+            // Create a delegate for the test method
             Delegate fn = Marshal.GetDelegateForFunctionPointer(
                 runtimeMethod.Address,
                 typeof(TDelegate)
             );
+
+            // Execute the test method
             return fn.DynamicInvoke(parameters);
         }
 
         /// <summary>
-        /// 
+        /// Finds a runtime method, which represents the requested method.
         /// </summary>
-        /// <exception cref="MissingMethodException"></exception>
-        /// <param name="ns"></param>
-        /// <param name="type"></param>
-        /// <param name="method"></param>
-        /// <returns></returns>
+        /// <exception cref="MissingMethodException">The sought method is not found.</exception>
+        /// <param name="ns">The namespace of the sought method.</param>
+        /// <param name="type">The type, which contains the sought method.</param>
+        /// <param name="method">The method to find.</param>
+        /// <returns>An instance of <see cref="RuntimeMethod"/>.</returns>
         private RuntimeMethod FindMethod(string ns, string type, string method)
         {
             foreach (RuntimeType t in runtime.TypeLoader.GetTypesFromModule(module))
@@ -210,105 +204,39 @@ namespace Test.Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// 
+        /// Compiles the test code.
         /// </summary>
-        [FixtureTearDown]
-        public void End()
-        {
-            if (null != runtime)
-            {
-                runtime.Dispose();
-                runtime = null;
-            }
-
-            // Try to delete the compiled assembly...
-            if (null != compileResults && null != compileResults.PathToAssembly)
-            {
-                try
-                {
-                    File.Delete(compileResults.PathToAssembly);
-                }
-                catch
-                {
-                }
-            }
-        }
+        /// <exception cref="NotSupportedException">Compilation is not supported.</exception>
+        /// <exception cref="Exception">A generic exception during compilation.</exception>
+        /// <returns>The name of the compiled assembly file.</returns>
+        protected abstract string CompileTestCode();
 
         /// <summary>
-        /// 
+        /// Loads the specified assembly into the mosa runtime and executes the mosa compiler.
         /// </summary>
-        /// <exception cref="NotSupportedException"></exception>
-        /// <exception cref="Exception"></exception>
-        /// <returns></returns>
-        private CompilerResults CompileCode()
-        {
-            CodeDomProvider provider;
-            if (!providerCache.TryGetValue(_language, out provider))
-                provider = CodeDomProvider.CreateProvider(Language);
-            if (null == provider)
-                throw new NotSupportedException("The language '" + Language + "' is not supported on this machine.");
-            CompilerResults compileResults;
-            CompilerParameters parameters = new CompilerParameters(
-                    References ?? new string[0],
-                    Path.GetTempFileName()
-                )
-                {
-                    GenerateInMemory = false
-                };
-            if (CodeSource != null)
-            {
-                Console.Write("From Source: ");
-                Console.WriteLine(new string('-', 40 - 13));
-                Console.WriteLine(_codeSource);
-                Console.WriteLine(new string('-', 40));
-                compileResults = provider.CompileAssemblyFromSource(
-                    parameters,
-                    _codeSource
-                );
-            }
-            else if (CodeFilename != null)
-            {
-                Console.WriteLine("From File: {0}", _codeFilename);
-                compileResults = provider.CompileAssemblyFromFile(
-                    parameters,
-                    _codeFilename
-                );
-            }
-            else
-                throw new NotSupportedException();
-            if (compileResults.Errors.HasErrors)
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine("Code compile errors:");
-                foreach (CompilerError error in compileResults.Errors)
-                {
-                    sb.AppendLine(error.ToString());
-                }
-                throw new Exception(sb.ToString());
-            }
-            return compileResults;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <returns></returns>
-        private IMetadataModule CompileAssembly(string filename)
+        /// <param name="assemblyFile">The assembly file name.</param>
+        /// <returns>The metadata module, which represents the loaded assembly.</returns>
+        private IMetadataModule RunMosaCompiler(string assemblyFile)
         {
             IMetadataModule module = RuntimeBase.Instance.AssemblyLoader.Load(
-                compileResults.PathToAssembly
+                assemblyFile
             );
             TestCaseAssemblyCompiler.Compile(module);
             return module;
         }
 
+        #endregion // Methods
+
+        #region IDisposable Members
+
         /// <summary>
-        /// 
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         void IDisposable.Dispose()
         {
             this.End();
         }
+
+        #endregion // IDisposable Members
     }
 }

@@ -1,11 +1,13 @@
 ﻿/*
-* (c) 2008 MOSA - The Managed Operating System Alliance
-*
-* Licensed under the terms of the New BSD License.
-*
-* Authors:
-*  Michael Ruck (<mailto:sharpos@michaelruck.de>)
-*/
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  
+ */
 
 using System;
 using System.Collections.Generic;
@@ -18,7 +20,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     /// Tests support for the IL ceq operation with various operands.
     /// </summary>
     [TestFixture]
-    public class Cgt : MosaCompilerTestRunner
+    public class Cgt : CodeDomTestRunner
     {
         private static string s_testCode = @"
             static class Test {
