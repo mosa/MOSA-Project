@@ -123,10 +123,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(byte.MaxValue, 17)]
         [Row(byte.MaxValue, 123)]
         // (X, MinValue) Cases
-        [Row(0, byte.MinValue)]
-        [Row(1, byte.MinValue)]
-        [Row(17, byte.MinValue)]
-        [Row(123, byte.MinValue)]
+        [Row(0, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(1, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(17, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(123, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
         // (X, MaxValue) Cases
         [Row(0, byte.MaxValue)]
         [Row(1, byte.MaxValue)]
@@ -134,7 +134,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(123, byte.MaxValue)]
         // Extremvaluecases
         [Row(byte.MinValue, byte.MaxValue)]
-        [Row(byte.MaxValue, byte.MinValue)]
+        [Row(byte.MaxValue, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
         [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void DivU1(byte a, byte b)
@@ -245,10 +245,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(ushort.MaxValue, 17)]
         [Row(ushort.MaxValue, 123)]
         // (X, MinValue) Cases
-        [Row(0, ushort.MinValue)]
-        [Row(1, ushort.MinValue)]
-        [Row(17, ushort.MinValue)]
-        [Row(123, ushort.MinValue)]
+        [Row(0, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(1, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(17, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(123, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
         // (X, MaxValue) Cases
         [Row(0, ushort.MaxValue)]
         [Row(1, ushort.MaxValue)]
@@ -256,7 +256,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(123, ushort.MaxValue)]
         // Extremvaluecases
         [Row(ushort.MinValue, ushort.MaxValue)]
-        [Row(ushort.MaxValue, ushort.MinValue)]
+        [Row(ushort.MaxValue, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
         [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void DivU2(ushort a, ushort b)
@@ -367,10 +367,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(uint.MaxValue, 17)]
         [Row(uint.MaxValue, 123)]
         // (X, MinValue) Cases
-        [Row(0, uint.MinValue)]
-        [Row(1, uint.MinValue)]
-        [Row(17, uint.MinValue)]
-        [Row(123, uint.MinValue)]
+        [Row(0, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(1, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(17, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(123, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
         // (X, MaxValue) Cases
         [Row(0, uint.MaxValue)]
         [Row(1, uint.MaxValue)]
@@ -378,7 +378,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(123, uint.MaxValue)]
         // Extremvaluecases
         [Row(uint.MinValue, uint.MaxValue)]
-        [Row(uint.MaxValue, uint.MinValue)]
+        [Row(uint.MaxValue, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
         [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void DivI4(uint a, uint b)

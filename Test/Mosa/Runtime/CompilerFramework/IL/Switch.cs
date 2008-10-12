@@ -118,9 +118,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                         case 23:
                             return 23;
                             break;
-                        case byte.MinValue:
-                            return byte.MinValue;
-                            break;
                         case byte.MaxValue:
                             return byte.MaxValue;
                             break;
@@ -237,9 +234,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                             break;
                         case 23:
                             return 23;
-                            break;
-                        case ushort.MinValue:
-                            return ushort.MinValue;
                             break;
                         case ushort.MaxValue:
                             return ushort.MaxValue;
@@ -358,9 +352,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                         case 23:
                             return 23;
                             break;
-                        case uint.MinValue:
-                            return uint.MinValue;
-                            break;
                         case uint.MaxValue:
                             return uint.MaxValue;
                             break;
@@ -477,9 +468,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                             break;
                         case 23:
                             return 23;
-                            break;
-                        case ulong.MinValue:
-                            return ulong.MinValue;
                             break;
                         case ulong.MaxValue:
                             return ulong.MaxValue;
