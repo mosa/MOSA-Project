@@ -854,8 +854,13 @@ namespace Mosa.Platforms.x86
 
         void ICodeEmitter.Sar(Operand dest, Operand src)
         {
-            // FIXME: Make sure the constant is emitted as a single-byte opcode
-            Emit(dest, null, cd_sar);
+            Debug.Assert(src is RegisterOperand || src is ConstantOperand, @"Wrong second operand for sar.");
+            if (src is RegisterOperand)
+            {
+                Debug.Assert(((RegisterOperand)src).Register == GeneralPurposeRegister.ECX, @"Wrong source register for sar.");
+                src = null;
+            }
+            Emit(dest, src, cd_sar);
         }
 
         void ICodeEmitter.Shl(Operand dest, Operand src)
@@ -868,7 +873,10 @@ namespace Mosa.Platforms.x86
 
         void ICodeEmitter.Shld(Operand dst, Operand src, Operand count)
         {
-            Emit(dst, src, count, cd_shld);
+            // HACK: For some reason shld isn't emitted properly if we do
+            // Emit(dst, src, count, cd_shld). It is emitted backwards, if
+            // we turn this around the following way - it works.
+            Emit(src, dst, count, cd_shld);
         }
 
         void ICodeEmitter.Shr(Operand dest, Operand src)
@@ -880,7 +888,10 @@ namespace Mosa.Platforms.x86
 
         void ICodeEmitter.Shrd(Operand dst, Operand src, Operand count)
         {
-            Emit(dst, src, count, cd_shrd);
+            // HACK: For some reason shrd isn't emitted properly if we do
+            // Emit(dst, src, count, cd_shrd). It is emitted backwards, if
+            // we turn this around the following way - it works.
+            Emit(src, dst, count, cd_shrd);
         }
 
         void ICodeEmitter.Div(Operand dest, Operand src)
@@ -2111,7 +2122,10 @@ namespace Mosa.Platforms.x86
                         imm = BitConverter.GetBytes(Convert.ToInt32(co.Value));
                         break;
 
-                    case CilElementType.I1: goto case CilElementType.I;
+                    case CilElementType.I1:
+                        imm = new byte[] { (byte)Convert.ToSByte(co.Value) };
+                        break;
+
                     case CilElementType.I2: goto case CilElementType.I;
                     case CilElementType.I4: goto case CilElementType.I;
 

@@ -176,7 +176,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        delegate bool I8_I8_I8(long expect, long a, long b);
+        delegate bool I8_I8_I4(long expect, long a, int b);
         /// <summary>
         /// 
         /// </summary>
@@ -214,8 +214,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ShrI8(long a, int b)
         {
-            CodeSource = "static class Test { static bool ShrI8(long expect, long a, byte b) { return expect == (a >> b); } }";
-            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "ShrI8", (a >> b), a, b));
+            CodeSource = "static class Test { static bool ShrI8(long expect, long a, int b) { return expect == (a >> b); } }";
+            Assert.IsTrue((bool)Run<I8_I8_I4>("", "Test", "ShrI8", (a >> b), a, b));
         }
     }
 }

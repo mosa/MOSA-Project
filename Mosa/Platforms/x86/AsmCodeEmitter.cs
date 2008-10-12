@@ -1130,9 +1130,8 @@ namespace Mosa.Platforms.x86
                     result = data.ToString();
                     break;
 
-                case Mosa.Runtime.Metadata.CilElementType.I2:
-                    result = data.ToString();
-                    break;
+                case Mosa.Runtime.Metadata.CilElementType.I2: goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                case Mosa.Runtime.Metadata.CilElementType.I1: goto case Mosa.Runtime.Metadata.CilElementType.I4;
 
                 case Mosa.Runtime.Metadata.CilElementType.I8:
                     result = ((long)data).ToString();

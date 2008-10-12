@@ -232,14 +232,17 @@ namespace Mosa.Platforms.x86
             MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 
             // ; existing code from the block
             // cmp count, 64
             // jae sign
             Replace(ctx, new Instruction[] {
+                new IR.PushInstruction(ecx),
+                new Instructions.MoveInstruction(ecx, count),
                 new Instructions.MoveInstruction(edx, op1H),
                 new Instructions.MoveInstruction(eax, op1L),
-                new Instructions.CmpInstruction(count, new ConstantOperand(I4, 64)),
+                new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 64)),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label)
             });
 
@@ -250,10 +253,10 @@ namespace Mosa.Platforms.x86
             // sar edx,cl
             // jmp done
             blocks[0].Instructions.AddRange(new Instruction[] {
-                new Instructions.CmpInstruction(count, new ConstantOperand(I4, 32)),
+                new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 32)),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[1].Label),
-                new Instructions.ShrdInstruction(eax, edx, count),
-                new Instructions.SarInstruction(edx, count),
+                new Instructions.ShrdInstruction(eax, edx, ecx),
+                new Instructions.SarInstruction(edx, ecx),
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
@@ -265,9 +268,9 @@ namespace Mosa.Platforms.x86
             // jmp done
             blocks[1].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(eax, edx),
-                new Instructions.SarInstruction(edx, new ConstantOperand(I4, 0x1F)),
-                new Instructions.LogicalAndInstruction(count, new ConstantOperand(I4, 0x1F)),
-                new Instructions.SarInstruction(eax, count),
+                new Instructions.SarInstruction(edx, new ConstantOperand(new SigType(CilElementType.I1), 0x1F)),
+                new Instructions.LogicalAndInstruction(ecx, new ConstantOperand(I4, 0x1F)),
+                new Instructions.SarInstruction(eax, ecx),
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
@@ -275,7 +278,7 @@ namespace Mosa.Platforms.x86
             // mov opH, 0
             // mov opL, 0
             blocks[2].Instructions.AddRange(new Instruction[] {
-                new Instructions.SarInstruction(edx, new ConstantOperand(I4, 31)),
+                new Instructions.SarInstruction(edx, new ConstantOperand(new SigType(CilElementType.I1), 31)),
                 new Instructions.MoveInstruction(eax, edx),
             });
 
@@ -284,6 +287,7 @@ namespace Mosa.Platforms.x86
             nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 new Instructions.MoveInstruction(op0H, edx),
                 new Instructions.MoveInstruction(op0L, eax),
+                new IR.PopInstruction(ecx)
             });
 
             // Link the created blocks together
@@ -316,14 +320,17 @@ namespace Mosa.Platforms.x86
             MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 
             // ; existing code from the block
             // cmp count, 64
             // jae clear
             Replace(ctx, new Instruction[] {
+                new IR.PushInstruction(ecx),
+                new Instructions.MoveInstruction(ecx, count),
                 new Instructions.MoveInstruction(edx, op1H),
                 new Instructions.MoveInstruction(eax, op1L),
-                new Instructions.CmpInstruction(count, new ConstantOperand(I4, 64)),
+                new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 64)),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label)
             });
 
@@ -334,10 +341,10 @@ namespace Mosa.Platforms.x86
             // shl
             // jmp done
             blocks[0].Instructions.AddRange(new Instruction[] {
-                new Instructions.CmpInstruction(count, new ConstantOperand(I4, 32)),
+                new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 32)),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[1].Label),
-                new Instructions.ShldInstruction(edx, eax, count),
-                new Instructions.ShlInstruction(eax, count),
+                new Instructions.ShldInstruction(edx, eax, ecx),
+                new Instructions.ShlInstruction(eax, ecx),
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
@@ -350,8 +357,8 @@ namespace Mosa.Platforms.x86
             blocks[1].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(edx, eax),
                 new Instructions.LogicalXorInstruction(eax, eax),
-                new Instructions.LogicalAndInstruction(count, new ConstantOperand(I4, 0x1F)),
-                new Instructions.ShlInstruction(edx, count),
+                new Instructions.LogicalAndInstruction(ecx, new ConstantOperand(I4, 0x1F)),
+                new Instructions.ShlInstruction(edx, ecx),
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
@@ -368,6 +375,7 @@ namespace Mosa.Platforms.x86
             nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 new Instructions.MoveInstruction(op0H, edx),
                 new Instructions.MoveInstruction(op0L, eax),
+                new IR.PopInstruction(ecx)
             });
             
             // Link the created blocks together
@@ -400,14 +408,17 @@ namespace Mosa.Platforms.x86
             MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 
             // ; existing code from the block
             // cmp count, 64
             // jae clear
             Replace(ctx, new Instruction[] {
+                new IR.PushInstruction(ecx),
+                new Instructions.MoveInstruction(ecx, count),
                 new Instructions.MoveInstruction(edx, op1H),
                 new Instructions.MoveInstruction(eax, op1L),
-                new Instructions.CmpInstruction(count, new ConstantOperand(I4, 64)),
+                new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 64)),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label)
             });
 
@@ -418,10 +429,10 @@ namespace Mosa.Platforms.x86
             // sar edx,cl
             // jmp done
             blocks[0].Instructions.AddRange(new Instruction[] {
-                new Instructions.CmpInstruction(count, new ConstantOperand(I4, 32)),
+                new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 32)),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[1].Label),
-                new Instructions.ShrdInstruction(eax, edx, count),
-                new Instructions.ShrInstruction(edx, count),
+                new Instructions.ShrdInstruction(eax, edx, ecx),
+                new Instructions.ShrInstruction(edx, ecx),
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
@@ -434,8 +445,8 @@ namespace Mosa.Platforms.x86
             blocks[1].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(eax, edx),
                 new Instructions.LogicalXorInstruction(edx, edx),
-                new Instructions.LogicalAndInstruction(count, new ConstantOperand(I4, 0x1F)),
-                new Instructions.ShrInstruction(eax, count),
+                new Instructions.LogicalAndInstruction(ecx, new ConstantOperand(I4, 0x1F)),
+                new Instructions.ShrInstruction(eax, ecx),
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
@@ -452,6 +463,7 @@ namespace Mosa.Platforms.x86
             nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 new Instructions.MoveInstruction(op0H, edx),
                 new Instructions.MoveInstruction(op0L, eax),
+                new IR.PopInstruction(ecx)
             });
 
             // Link the created blocks together
@@ -1081,7 +1093,7 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.PopInstruction instruction, Context arg)
         {
-            Operand op0 = instruction.Operands[0];
+            Operand op0 = instruction.Results[0];
             if (op0.StackType == StackTypeCode.Int64)
                 ExpandPop(arg, instruction);
         }
