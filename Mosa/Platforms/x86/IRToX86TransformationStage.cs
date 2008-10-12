@@ -640,6 +640,21 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        void IR.IIRVisitor<Context>.Visit(IR.UDivInstruction instruction, Context ctx)
+        {
+            Type replType = typeof(x86.Instructions.UDivInstruction);
+            ThreeTwoAddressConversion(ctx, instruction, replType);
+        }
+
+        void IR.IIRVisitor<Context>.Visit(IR.URemInstruction instruction, Context ctx)
+        {
+            throw new NotImplementedException();
+/*
+            Type replType = typeof(x86.Instructions.URemInstruction);
+            ThreeTwoAddressConversion(ctx, instruction, replType);
+  */
+        }
+
         void IR.IIRVisitor<Context>.Visit(IR.ZeroExtendedMoveInstruction instruction, Context ctx)
         {
         }
@@ -875,6 +890,10 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Xor(Instructions.LogicalXorInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.UDiv(Instructions.UDivInstruction divInstruction, Context arg)
         {
         }
 

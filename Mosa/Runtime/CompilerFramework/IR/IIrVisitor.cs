@@ -192,6 +192,20 @@ namespace Mosa.Runtime.CompilerFramework.IR
         void Visit(StoreInstruction instruction, ArgType arg);
 
         /// <summary>
+        /// Visitation function for <see cref="UDivInstruction"/> instructions.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        /// <param name="arg">The arg.</param>
+        void Visit(UDivInstruction instruction, ArgType arg);
+
+        /// <summary>
+        /// Visitation function for <see cref="URemInstruction"/> instructions.
+        /// </summary>
+        /// <param name="instruction">The visiting instruction.</param>
+        /// <param name="arg">The arg.</param>
+        void Visit(URemInstruction instruction, ArgType arg);
+
+        /// <summary>
         /// Visitation function for <see cref="ZeroExtendedMoveInstruction"/> instructions.
         /// </summary>
         /// <param name="instruction">The visiting instruction.</param>

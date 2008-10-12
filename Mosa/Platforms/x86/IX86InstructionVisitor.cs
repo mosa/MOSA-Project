@@ -34,6 +34,7 @@ namespace Mosa.Platforms.x86
         void Sbb(SbbInstruction sbbInstruction, ArgType arg);
         void Mul(MulInstruction mulInstruction, ArgType arg);
         void Div(DivInstruction divInstruction, ArgType arg);
+        void UDiv(Instructions.UDivInstruction divInstruction, ArgType arg);
         void SseAdd(SseAddInstruction addInstruction, ArgType arg);
         void SseSub(SseSubInstruction subInstruction, ArgType arg);
         void SseMul(SseMulInstruction mulInstruction, ArgType arg);

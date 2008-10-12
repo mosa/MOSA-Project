@@ -885,9 +885,11 @@ namespace Mosa.Platforms.x86
 
         void ICodeEmitter.Div(Operand dest, Operand src)
         {
-            // Write the opcode byte
-            byte[] code = { 0x99 };
-            Emit(code, null, null, null);
+            Emit(src, null, cd_div);
+        }
+
+        void ICodeEmitter.IDiv(Operand dest, Operand src)
+        {
             Emit(src, null, cd_idiv);
         }
         

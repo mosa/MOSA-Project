@@ -19,9 +19,9 @@ using System.Diagnostics;
 namespace Mosa.Platforms.x86.Instructions
 {
     /// <summary>
-    /// Intermediate representation of the div instruction.
+    /// Intermediate representation of the x86 unsigned div instruction.
     /// </summary>
-    class DivInstruction : IR.TwoOperandInstruction
+    class UDivInstruction : IR.TwoOperandInstruction
     {
         #region Construction
 
@@ -30,7 +30,7 @@ namespace Mosa.Platforms.x86.Instructions
         /// </summary>
         /// <param name="destination">The destination operand.</param>
         /// <param name="source">The source operand.</param>
-        public DivInstruction(Operand destination, Operand source) :
+        public UDivInstruction(Operand destination, Operand source) :
             base(destination, source)
         {
         }
@@ -47,7 +47,7 @@ namespace Mosa.Platforms.x86.Instructions
         /// </returns>
         public override string ToString()
         {
-            return String.Format(@"x86 idiv {0}, {1} ; {0} /= {1}", this.Operand0, this.Operand1);
+            return String.Format(@"x86 div {0}, {1} ; {0} /= {1}", this.Operand0, this.Operand1);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Mosa.Platforms.x86.Instructions
         {
             IX86InstructionVisitor<ArgType> x86 = visitor as IX86InstructionVisitor<ArgType>;
             if (null != x86)
-                x86.Div(this, arg);
+                x86.UDiv(this, arg);
             else
                 visitor.Visit(this, arg);
         }

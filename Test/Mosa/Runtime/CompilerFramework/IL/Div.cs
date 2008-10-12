@@ -381,10 +381,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(uint.MaxValue, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
         [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void DivI4(uint a, uint b)
+        public void DivU4(uint a, uint b)
         {
             CodeSource = "static class Test { static bool DivU4(uint expect, uint a, uint b) { return expect == (a / b); } }";
-            Assert.IsTrue((bool)Run<U4_U4_U4>("", "Test", "DivU4", (a / b), a, b));
+            Assert.IsTrue((bool)Run<U4_U4_U4>("", "Test", "DivU4", (uint)(a / b), a, b));
         }
 
         /// <summary>

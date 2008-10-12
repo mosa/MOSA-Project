@@ -192,6 +192,26 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Expands the udiv instruction.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        /// <param name="instruction">The instruction.</param>
+        private void ExpandUDiv(Context ctx, IR.UDivInstruction instruction)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Expands the urem instruction.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        /// <param name="instruction">The instruction.</param>
+        private void ExpandURem(Context ctx, IR.URemInstruction instruction)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
         /// Expands the arithmetic shift right instruction for 64-bits.
         /// </summary>
         /// <param name="ctx">The context.</param>
@@ -1109,6 +1129,20 @@ namespace Mosa.Platforms.x86
                 ExpandStore(arg, instruction);
         }
 
+        void IR.IIRVisitor<Context>.Visit(IR.UDivInstruction instruction, Context arg)
+        {
+            Operand op0 = instruction.Operands[0];
+            if (op0.StackType == StackTypeCode.Int64)
+                ExpandUDiv(arg, instruction);
+        }
+
+        void IR.IIRVisitor<Context>.Visit(IR.URemInstruction instruction, Context arg)
+        {
+            Operand op0 = instruction.Operands[0];
+            if (op0.StackType == StackTypeCode.Int64)
+                ExpandURem(arg, instruction);
+        }
+
         void IR.IIRVisitor<Context>.Visit(IR.ZeroExtendedMoveInstruction instruction, Context arg)
         {
             Operand op0 = instruction.Operand0;
@@ -1642,6 +1676,10 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Stosd(StosdInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.UDiv(UDivInstruction divInstruction, Context arg)
         {
         }
 

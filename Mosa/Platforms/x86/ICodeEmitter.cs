@@ -434,11 +434,18 @@ namespace Mosa.Platforms.x86
         void SseDiv(Operand op1, Operand op2);
 
         /// <summary>
-        /// Emits a div instruction.
+        /// Emits a unsigned div instruction.
         /// </summary>
         /// <param name="op1">The first operand and destination of the instruction.</param>
         /// <param name="op2">The second operand.</param>
         void Div(Operand op1, Operand op2);
+
+        /// <summary>
+        /// Emits a signed div instruction.
+        /// </summary>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
+        void IDiv(Operand op1, Operand op2);
 
         /// <summary>
         /// Emits a mov instruction.

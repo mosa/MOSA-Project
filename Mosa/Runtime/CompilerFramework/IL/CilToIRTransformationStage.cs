@@ -215,6 +215,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     type = typeof(IR.LogicalXorInstruction);
                     break;
 
+                case OpCode.Div_un:
+                    type = typeof(IR.UDivInstruction);
+                    break;
+
+                case OpCode.Rem_un:
+                    type = typeof(IR.URemInstruction);
+                    break;
+
                 default:
                     throw new NotSupportedException();
             }

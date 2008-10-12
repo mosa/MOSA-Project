@@ -590,11 +590,24 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// Emits a div instruction.
+        /// Emits a unsigned div instruction.
         /// </summary>
         /// <param name="op1">The first operand and destination of the instruction.</param>
         /// <param name="op2">The second operand.</param>
         public void Div(Operand op1, Operand op2)
+        {
+            if (op1 is ConstantOperand)
+                throw new NotSupportedException(@"Constants are not allowed as destination.");
+            _textWriter.WriteLine("\t\tdiv\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
+
+        }
+
+        /// <summary>
+        /// Emits a signed div instruction.
+        /// </summary>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
+        public void IDiv(Operand op1, Operand op2)
         {
             if (op1 is ConstantOperand)
                 throw new NotSupportedException(@"Constants are not allowed as destination.");
