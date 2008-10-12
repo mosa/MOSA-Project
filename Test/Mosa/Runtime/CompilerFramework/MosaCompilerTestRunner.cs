@@ -155,7 +155,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
             {
                 if (module != null)
                     RuntimeBase.Instance.AssemblyLoader.Unload(module);
-                this.assembly = this.CompileTestCode();
+                this.assembly = this.CompileTestCode<TDelegate>(ns, type, method);
                 Console.WriteLine("Executing MOSA compiler...");
                 module = RunMosaCompiler(this.assembly);
                 this.needCompile = false;
@@ -206,10 +206,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Compiles the test code.
         /// </summary>
+        /// <param name="ns">The namespace of the test.</param>
+        /// <param name="type">The type, which contains the test.</param>
+        /// <param name="method">The name of the method of the test.</param>
         /// <exception cref="NotSupportedException">Compilation is not supported.</exception>
         /// <exception cref="Exception">A generic exception during compilation.</exception>
         /// <returns>The name of the compiled assembly file.</returns>
-        protected abstract string CompileTestCode();
+        protected abstract string CompileTestCode<TDelegate>(string ns, string type, string method);
 
         /// <summary>
         /// Loads the specified assembly into the mosa runtime and executes the mosa compiler.

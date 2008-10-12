@@ -123,8 +123,11 @@ namespace Test.Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Compiles the test code.
         /// </summary>
+        /// <param name="ns">The namespace of the test.</param>
+        /// <param name="type">The type, which contains the test.</param>
+        /// <param name="method">The name of the method of the test.</param>
         /// <returns>The name of the assembly file.</returns>
-        protected override string CompileTestCode()
+        protected override string CompileTestCode<TDelegate>(string ns, string type, string method)
         {
             CodeDomProvider provider;
             Console.WriteLine("Executing {0} compiler...", this.Language);
