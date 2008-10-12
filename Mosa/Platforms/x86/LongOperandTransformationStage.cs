@@ -580,7 +580,60 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandUnsignedMove(Context ctx, IR.ZeroExtendedMoveInstruction instruction)
         {
-            throw new NotSupportedException();
+            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
+            Operand op1 = instruction.Operand1;
+            Debug.Assert(op0 != null, @"I8 not in a memory operand!");
+            Instruction[] instructions = null;
+            SigType U4 = new SigType(CilElementType.U4);
+            MemoryOperand op0L = new MemoryOperand(U4, op0.Base, op0.Offset);
+            MemoryOperand op0H = new MemoryOperand(U4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
+            RegisterOperand edx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
+
+            switch (op1.Type.Type)
+            {
+                case CilElementType.Boolean:
+                    instructions = new Instruction[] {
+                        new IR.ZeroExtendedMoveInstruction(op0L, op1),
+                        new IR.LogicalXorInstruction(op0H, op0H, op0H)
+                    };
+                    break;
+
+                case CilElementType.U1:
+                    instructions = new Instruction[] {
+                        new IR.ZeroExtendedMoveInstruction(eax, op1),
+                        new CdqInstruction(),
+                        new MoveInstruction(op0L, eax),
+                        new IR.LogicalXorInstruction(op0H, op0H, op0H)
+                    };
+                    break;
+
+                case CilElementType.U2: goto case CilElementType.U1;
+
+                case CilElementType.U4:
+                    instructions = new Instruction[] {
+                        new IR.MoveInstruction(eax, op1),
+                        new CdqInstruction(),
+                        new MoveInstruction(op0L, eax),
+                        new MoveInstruction(op0H, edx)
+                    };
+                    break;
+
+                case CilElementType.U8:
+                    Replace(ctx, new MoveInstruction(op0, op1));
+                    break;
+
+                case CilElementType.R4:
+                    throw new NotSupportedException();
+
+                case CilElementType.R8:
+                    throw new NotSupportedException();
+
+                default:
+                    throw new NotSupportedException();
+            }
+
+            Replace(ctx, instructions);
         }
 
         /// <summary>

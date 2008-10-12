@@ -205,7 +205,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void SubU2(ushort a, ushort b)
         {
             CodeSource = "static class Test { static bool SubU2(uint expect, ushort a, ushort b) { return expect == (a - b); } }";
-            Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "SubU2", (a - b), a, b));
+            Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "SubU2", (uint)(a - b), a, b));
         }
 
         /// <summary>

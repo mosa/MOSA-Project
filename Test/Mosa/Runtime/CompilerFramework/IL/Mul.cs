@@ -138,7 +138,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void MulU1(byte a, byte b)
         {
             CodeSource = "static class Test { static bool MulU1(uint expect, byte a, byte b) { return expect == (a * b); } }";
-            Assert.IsTrue((bool)Run<U4_U1_U1>("", "Test", "MulU1", a * b, a, b));
+            Assert.IsTrue((bool)Run<U4_U1_U1>("", "Test", "MulU1", (uint)(a * b), a, b));
         }
 
         /// <summary>
@@ -258,7 +258,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void MulU2(ushort a, ushort b)
         {
             CodeSource = "static class Test { static bool MulU2(uint expect, ushort a, ushort b) { return expect == (a * b); } }";
-            Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "MulU2", (a * b), a, b));
+            Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "MulU2", (uint)(a * b), a, b));
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void MulU4(uint a, uint b)
         {
             CodeSource = "static class Test { static bool MulU4(uint expect, uint a, uint b) { return expect == (a * b); } }";
-            Assert.IsTrue((bool)Run<U4_U4_U4>("", "Test", "MulU4", (a * b), a, b));
+            Assert.IsTrue((bool)Run<U4_U4_U4>("", "Test", "MulU4", (uint)(a * b), a, b));
         }
          
         /// <summary>
@@ -492,7 +492,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void MulU8(ulong a, ulong b)
         {
             CodeSource = "static class Test { static bool MulU8(ulong expect, ulong a, ulong b) { return expect == (a * b); } }";
-            Assert.IsTrue((bool)Run<U8_U8_U8>("", "Test", "MulU8", (a * b), a, b));
+            Assert.IsTrue((bool)Run<U8_U8_U8>("", "Test", "MulU8", (ulong)(a * b), a, b));
         }
         
         /// <summary>

@@ -1554,10 +1554,6 @@ namespace Mosa.Platforms.x86
                     _emitter.Mov(instruction.Operand0, instruction.Operand1);
                     break;
 
-                case CilElementType.R4:
-                    _emitter.Mov(instruction.Operand0, instruction.Operand1);
-                    break;
-
                 default:
                     throw new NotSupportedException();
             }

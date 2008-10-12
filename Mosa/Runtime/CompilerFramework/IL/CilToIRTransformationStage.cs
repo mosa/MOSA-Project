@@ -497,15 +497,248 @@ namespace Mosa.Runtime.CompilerFramework.IL
             return result;
         }
 
-        private static readonly Type[][] s_convTable = new Type[][] {
-            /*                          U     I4                                                      I8                          N     F                                                       P     O */
-            /* Unknown */ new Type[] { null, null,                                                   null,                       null, null,                                                   null, null },
-            /* Int32 */   new Type[] { null, typeof(IR.MoveInstruction),                             typeof(IR.MoveInstruction), null, typeof(IR.FloatingPointToIntegerConversionInstruction), null, null },
-            /* Int64 */   new Type[] { null, typeof(IR.SignExtendedMoveInstruction),                 typeof(IR.MoveInstruction), null, null,                                                   null, null },
-            /* Native  */ new Type[] { null, null,                                                   null,                       null, null,                                                   null, null },
-            /* F */       new Type[] { null, typeof(IR.IntegerToFloatingPointConversionInstruction), null,                       null, typeof(MoveInstruction),                                null, null },
-            /* Ptr */     new Type[] { null, null,                                                   null,                       null, null,                                                   null, null },
-            /* Object */  new Type[] { null, null,                                                   null,                       null, null,                                                   null, null },
+        private enum ConvType
+        {
+            I1 = 0,
+            I2 = 1,
+            I4 = 2,
+            I8 = 3,
+            U1 = 4,
+            U2 = 5,
+            U4 = 6,
+            U8 = 7,
+            R4 = 8,
+            R8 = 9,
+            I = 10,
+            U = 11,
+            Ptr = 12
+        }
+
+        /// <summary>
+        /// Converts a <see cref="CilElementType"/> to <see cref="ConvType"/>.
+        /// </summary>
+        /// <param name="cet">The CilElementType to convert.</param>
+        /// <returns>The equivalent ConvType.</returns>
+        /// <exception cref="T:System.NotSupportedException"><paramref name="cet"/> can't be converted.</exception>
+        private ConvType ConvTypeFromCilType(CilElementType cet)
+        {
+            switch (cet)
+            {
+                case CilElementType.I1: return ConvType.I1;
+                case CilElementType.I2: return ConvType.I2;
+                case CilElementType.I4: return ConvType.I4;
+                case CilElementType.I8: return ConvType.I8;
+                case CilElementType.U1: return ConvType.U1;
+                case CilElementType.U2: return ConvType.U2;
+                case CilElementType.U4: return ConvType.U4;
+                case CilElementType.U8: return ConvType.U8;
+                case CilElementType.R4: return ConvType.R4;
+                case CilElementType.R8: return ConvType.R8;
+                case CilElementType.I: return ConvType.I;
+                case CilElementType.U: return ConvType.U;
+                case CilElementType.Ptr: return ConvType.Ptr;
+            }
+
+            // Requested CilElementType is not supported
+            throw new NotSupportedException();
+        }
+
+        private static readonly Type[][] s_convTable = new Type[13][] {
+            /* I1 */ new Type[13] { 
+                /* I1 */ typeof(IR.MoveInstruction),
+                /* I2 */ typeof(IR.LogicalAndInstruction),
+                /* I4 */ typeof(IR.LogicalAndInstruction),
+                /* I8 */ typeof(IR.LogicalAndInstruction),
+                /* U1 */ typeof(IR.MoveInstruction),
+                /* U2 */ typeof(IR.LogicalAndInstruction),
+                /* U4 */ typeof(IR.LogicalAndInstruction),
+                /* U8 */ typeof(IR.LogicalAndInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
+            },
+            /* I2 */ new Type[13] { 
+                /* I1 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I2 */ typeof(IR.MoveInstruction),
+                /* I4 */ typeof(IR.LogicalAndInstruction),
+                /* I8 */ typeof(IR.LogicalAndInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.MoveInstruction),
+                /* U4 */ typeof(IR.LogicalAndInstruction),
+                /* U8 */ typeof(IR.LogicalAndInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
+            },
+            /* I4 */ new Type[13] { 
+                /* I1 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I2 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I4 */ typeof(IR.MoveInstruction),
+                /* I8 */ typeof(IR.LogicalAndInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.MoveInstruction),
+                /* U8 */ typeof(IR.LogicalAndInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
+            },
+            /* I8 */ new Type[13] {
+                /* I1 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I2 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I4 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I8 */ typeof(IR.MoveInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U8 */ typeof(IR.MoveInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
+            },
+            /* U1 */ new Type[13] {
+                /* I1 */ typeof(IR.MoveInstruction),
+                /* I2 */ typeof(IR.LogicalAndInstruction),
+                /* I4 */ typeof(IR.LogicalAndInstruction),
+                /* I8 */ typeof(IR.LogicalAndInstruction),
+                /* U1 */ typeof(IR.MoveInstruction),
+                /* U2 */ typeof(IR.LogicalAndInstruction),
+                /* U4 */ typeof(IR.LogicalAndInstruction),
+                /* U8 */ typeof(IR.LogicalAndInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
+            },
+            /* U2 */ new Type[13] {
+                /* I1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I2 */ typeof(IR.MoveInstruction),
+                /* I4 */ typeof(IR.LogicalAndInstruction),
+                /* I8 */ typeof(IR.LogicalAndInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.MoveInstruction),
+                /* U4 */ typeof(IR.LogicalAndInstruction),
+                /* U8 */ typeof(IR.LogicalAndInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
+            },
+            /* U4 */ new Type[13] {
+                /* I1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I4 */ typeof(IR.MoveInstruction),
+                /* I8 */ typeof(IR.LogicalAndInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.MoveInstruction),
+                /* U8 */ typeof(IR.LogicalAndInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
+            },
+            /* U8 */ new Type[13] {
+                /* I1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I8 */ typeof(IR.MoveInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U8 */ typeof(IR.MoveInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
+            },
+            /* R4 */ new Type[13] {
+                /* I1 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* I2 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* I4 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* I8 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U1 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U2 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U4 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U8 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* R4 */ typeof(IR.MoveInstruction),
+                /* R8 */ typeof(IR.MoveInstruction),
+                /* I  */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U  */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* Ptr*/ null,
+            },
+            /* R8 */ new Type[13] {
+                /* I1 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* I2 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* I4 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* I8 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U1 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U2 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U4 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U8 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* R4 */ typeof(IR.MoveInstruction),
+                /* R8 */ typeof(IR.MoveInstruction),
+                /* I  */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U  */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* Ptr*/ null,
+            },
+            /* I  */ new Type[13] {
+                /* I1 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I2 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I4 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I8 */ typeof(IR.SignExtendedMoveInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U8 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.MoveInstruction),
+                /* U  */ typeof(IR.MoveInstruction),
+                /* Ptr*/ typeof(IR.MoveInstruction),
+            },
+            /* U  */ new Type[13] {
+                /* I1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I8 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U8 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.MoveInstruction),
+                /* U  */ typeof(IR.MoveInstruction),
+                /* Ptr*/ typeof(IR.MoveInstruction),
+            },
+            /* Ptr*/ new Type[13] {
+                /* I1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I8 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U8 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* R4 */ null,
+                /* R8 */ null,
+                /* I  */ typeof(IR.MoveInstruction),
+                /* U  */ typeof(IR.MoveInstruction),
+                /* Ptr*/ typeof(IR.MoveInstruction),
+            },
         };
 
         /// <summary>
@@ -517,54 +750,65 @@ namespace Mosa.Runtime.CompilerFramework.IL
         {
             Operand dest = instruction.Results[0];
             Operand src = instruction.Operands[0];
+            ConvType ctDest = ConvTypeFromCilType(dest.Type.Type);
+            ConvType ctSrc = ConvTypeFromCilType(src.Type.Type);
             int mask = 0;
 
             Type extension = null;
-            Type type = s_convTable[(int)dest.StackType][(int)src.StackType];
+            Type type = s_convTable[(int)ctDest][(int)ctSrc];
             if (null == type)
                 throw new NotSupportedException();
 
-            switch (dest.Type.Type)
+            switch (ctDest)
             {
-                case CilElementType.I1:
+                case ConvType.I1:
                     mask = 0xFF;
                     extension = typeof(IR.SignExtendedMoveInstruction);
                     break;
 
-                case CilElementType.I2:
+                case ConvType.I2:
                     mask = 0xFFFF;
                     extension = typeof(IR.SignExtendedMoveInstruction);
                     break;
 
-                case CilElementType.I4:
-                    //type = typeof(MoveInstruction);
+                case ConvType.I4:
+                    mask = -1;
                     src = TruncateI8(src);
                     break;
 
-                case CilElementType.I8:
+                case ConvType.I8:
                     break;
 
-                case CilElementType.U1:
+                case ConvType.U1:
                     mask = 0xFF;
                     extension = typeof(IR.ZeroExtendedMoveInstruction);
                     break;
 
-                case CilElementType.U2:
+                case ConvType.U2:
                     mask = 0xFFFF;
                     extension = typeof(IR.ZeroExtendedMoveInstruction);
                     break;
-                
-                case CilElementType.U4:
-                    //type = typeof(MoveInstruction);
+
+                case ConvType.U4:
+                    mask = -1;
                     break;
 
-                case CilElementType.U8:
+                case ConvType.U8:
                     break;
 
-                case CilElementType.R4:
+                case ConvType.R4:
                     break;
 
-                case CilElementType.R8:
+                case ConvType.R8:
+                    break;
+
+                case ConvType.I:
+                    break;
+
+                case ConvType.U:
+                    break;
+
+                case ConvType.Ptr:
                     break;
 
                 default:
@@ -572,14 +816,16 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     throw new NotSupportedException();
             }
 
-            if (0 != mask)
+            if (type == typeof(IR.LogicalAndInstruction) || 0 != mask)
             {
+                Debug.Assert(0 != mask, @"Conversion is an AND, but no mask given.");
+
                 // If source type is I8, we're always only working on the lower half
                 src = TruncateI8(src);
 
-                // We need to AND the result after conversion
+                // Mixed type conversion + truncation...
                 List<Instruction> instructions = new List<Instruction>();
-                if (dest.Type != src.Type)
+                if (type != typeof(IR.LogicalAndInstruction))
                 {
                     // Mixed type conversion, e.g. R4 -> I2
                     instructions.AddRange(new Instruction[] {
@@ -590,7 +836,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 else
                 {
                     // Single type truncation/extension, e.g. I4->I2 or alike
-                    instructions.Add(_architecture.CreateInstruction(typeof(LogicalAndInstruction), dest, src, new ConstantOperand(new SigType(CilElementType.I4), mask)));
+                    instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.I4), mask)));
                 }
 
                 // Do we have to extend/truncate the result?

@@ -331,12 +331,12 @@ namespace Mosa.Runtime.CompilerFramework
 
             bool IEqualityComparer<StackOperand>.Equals(StackOperand x, StackOperand y)
             {
-                return (Math.Abs(x.Offset.ToInt32()) == Math.Abs(y.Offset.ToInt32()));
+                return (x.Offset.ToInt32() == y.Offset.ToInt32());
             }
 
             int IEqualityComparer<StackOperand>.GetHashCode(StackOperand obj)
             {
-                return Math.Abs(obj.Offset.ToInt32());
+                return obj.Offset.ToInt32();
             }
 
             #endregion // IEqualityComparer<StackOperand> Members

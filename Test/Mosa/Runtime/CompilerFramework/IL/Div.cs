@@ -140,7 +140,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void DivU1(byte a, byte b)
         {
             CodeSource = "static class Test { static bool DivU1(uint expect, byte a, byte b) { return expect == (a / b); } }";
-            Assert.IsTrue((bool)Run<U4_U1_U1>("", "Test", "DivU1", a / b, a, b));
+            Assert.IsTrue((bool)Run<U4_U1_U1>("", "Test", "DivU1", (uint)(a / b), a, b));
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void DivU2(ushort a, ushort b)
         {
             CodeSource = "static class Test { static bool DivU2(uint expect, ushort a, ushort b) { return expect == (a / b); } }";
-            Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "DivU2", a / b, a, b));
+            Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "DivU2", (uint)(a / b), a, b));
         }
         
         /// <summary>
