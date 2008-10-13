@@ -22,19 +22,19 @@
         // <summary>
         // 
         // </summary>
-        //private Cell[] _cells;
+        private Cell[] _cells = null;
         // <summary>
         // 
         // </summary>
-        //private System.Collections.Generic.List<Cell> _sortedCells;
+        private System.Collections.Generic.List<Cell> _sortedCells = new System.Collections.Generic.List<Cell>();
         // <summary>
         // 
         // </summary>
-        //private System.Collections.Generic.List<SortedY> _sortedY;
+        private System.Collections.Generic.List<SortedY> _sortedY = new System.Collections.Generic.List<SortedY>();
         // <summary>
         // 
         // </summary>
-        //private Cell _currentCell;
+        private Cell _currentCell = default(Cell);
         // <summary>
         // 
         // </summary>
@@ -52,11 +52,11 @@
         // <summary>
         // 
         // </summary>
-        //private uint _numberOfCells;
+        private uint _numberOfCells = 0;
         // <summary>
         // 
         // </summary>
-        //private bool _sorted;
+        private bool _sorted = false;
         /// <summary>
         /// 
         /// </summary>
@@ -115,7 +115,7 @@
         {
             get
             {
-                return 0;
+                return _numberOfCells;
             }
         }
 
@@ -161,11 +161,129 @@
             }*/
         }
 
+        private void QsortCells(uint start, uint num)
+        {/*
+        Cell**  stack[80];
+        Cell*** top; 
+        Cell**  limit;
+        Cell**  base;
+
+        limit = start + num;
+        base  = start;
+        top   = stack;
+
+        for (;;)
+        {
+            int len = int(limit - base);
+
+            Cell** i;
+            Cell** j;
+            Cell** pivot;
+
+            if(len > qsort_threshold)
+            {
+                // we use base + len/2 as the pivot
+                pivot = base + len / 2;
+                swap_cells(base, pivot);
+
+                i = base + 1;
+                j = limit - 1;
+
+                // now ensure that *i <= *base <= *j 
+                if((*j)->x < (*i)->x)
+                {
+                    swap_cells(i, j);
+                }
+
+                if((*base)->x < (*i)->x)
+                {
+                    swap_cells(base, i);
+                }
+
+                if((*j)->x < (*base)->x)
+                {
+                    swap_cells(base, j);
+                }
+
+                for(;;)
+                {
+                    int x = (*base)->x;
+                    do i++; while( (*i)->x < x );
+                    do j--; while( x < (*j)->x );
+
+                    if(i > j)
+                    {
+                        break;
+                    }
+
+                    swap_cells(i, j);
+                }
+
+                swap_cells(base, j);
+
+                // now, push the largest sub-array
+                if(j - base > limit - i)
+                {
+                    top[0] = base;
+                    top[1] = j;
+                    base   = i;
+                }
+                else
+                {
+                    top[0] = i;
+                    top[1] = limit;
+                    limit  = j;
+                }
+                top += 2;
+            }
+            else
+            {
+                // the sub-array is small, perform insertion sort
+                j = base;
+                i = j + 1;
+
+                for(; i < limit; j = i, i++)
+                {
+                    for(; j[1]->x < (*j)->x; j--)
+                    {
+                        swap_cells(j + 1, j);
+                        if (j == base)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                if(top > stack)
+                {
+                    top  -= 2;
+                    base  = top[0];
+                    limit = top[1];
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }*/
+        }
+
+        /// <summary>
+        /// Scanlines the cells.
+        /// </summary>
+        /// <param name="y">The y.</param>
+        /// <returns></returns>
+        public Cell[] ScanlineCells(uint y)
+        {
+            // FIX
+            return _sortedCells.ToArray();
+        }
+
         /// <summary>
         /// Sorts the cells.
         /// </summary>
         public void SortCells()
-        {/*
+        {
             if (_sorted)
                 return; //Perform sort only the first time.
 
@@ -255,10 +373,11 @@
                 SortedY curr_y = _sortedY[(int)i];
                 if (curr_y.Num != 0)
                 {
+                    QsortCells(curr_y.Start, curr_y.Num);
                     //QSortCells(_sortedCells.Data + curr_y.Start, curr_y.Num);
                 }
             }
-            _sorted = true;*/
+            _sorted = true;
         }
     }
 }
