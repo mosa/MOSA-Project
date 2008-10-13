@@ -295,7 +295,7 @@ namespace Mosa.Runtime.Metadata {
         private TokenTypes ReadIndexValue(BinaryReader reader, IndexType index)
 		{
 			int width = GetIndexSize(index);
-            TokenTypes value = (TokenTypes)(2 == width ? reader.ReadInt16() : reader.ReadInt32());
+            TokenTypes value = (TokenTypes)(2 == width ? (0x0000FFFF & (int)reader.ReadInt16()) : reader.ReadInt32());
 			
 			// Do we need to decode a coded index?
             if (index < IndexType.CodedIndexCount)

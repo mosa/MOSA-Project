@@ -63,15 +63,21 @@ namespace Mosa.Runtime.CompilerFramework
             long address;
 
             // Check if we have unresolved requests and try to link them
-            foreach (KeyValuePair<RuntimeMember, List<LinkRequest>> request in _linkRequests)
+            List<RuntimeMember> members = new List<RuntimeMember>(_linkRequests.Keys);
+            foreach (RuntimeMember member in members)
             {
                 // Is the runtime member resolved?
-                if (true == IsResolved(request.Key, out address))
+                if (true == IsResolved(member, out address))
                 {
                     // Yes, patch up the method
-                    PatchRequests(address, request.Value);
+                    List<LinkRequest> link = _linkRequests[member];
+                    PatchRequests(address, link);
+                    _linkRequests.Remove(member);
                 }
             }
+            Debug.Assert(0 == _linkRequests.Count, @"AssemblyLinker has found unresolved symbols.");
+            if (0 != _linkRequests.Count)
+                throw new Exception(@"Unresolved symbols.");
         }
 
         #endregion // IAssemblyCompilerStage Members

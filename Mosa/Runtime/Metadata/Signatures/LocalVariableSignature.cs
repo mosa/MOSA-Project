@@ -20,10 +20,32 @@ namespace Mosa.Runtime.Metadata.Signatures
     /// </summary>
     public class LocalVariableSignature : Signature
     {
+        #region Data members
+
         /// <summary>
-        /// 
+        /// Holds the signature types of all local variables in order of definition.
         /// </summary>
         private SigType[] _types;
+
+        /// <summary>
+        /// A shared empty array for those signatures, who do not have local variables.
+        /// </summary>
+        private static SigType[] Empty = new SigType[0];
+
+        #endregion // Data members
+
+        #region Construction
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
+        /// </summary>
+        public LocalVariableSignature()
+        {
+            _types = LocalVariableSignature.Empty;
+        }
+
+        #endregion // Construction
+
 
         /// <summary>
         /// Gets the types.

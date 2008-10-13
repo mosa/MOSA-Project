@@ -383,6 +383,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Cpblk(CpblkInstruction instruction, Context ctx)
         {
+            ReplaceWithInternalCall(ctx, instruction, InternalCallTarget.Memcpy);
         }
 
         void IILVisitor<Context>.Initblk(InitblkInstruction instruction, Context ctx)
@@ -1051,6 +1052,51 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     throw new NotSupportedException();
             }
             return result;
+        }
+
+        /// <summary>
+        /// Replaces the instruction with an internal call.
+        /// </summary>
+        /// <param name="ctx">The transformation context.</param>
+        /// <param name="instruction">The instruction to replace.</param>
+        /// <param name="internalCallTarget">The internal call target.</param>
+        private void ReplaceWithInternalCall(Context ctx, Instruction instruction, InternalCallTarget internalCallTarget)
+        {
+            RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
+            RuntimeMethod callTarget = FindMethod(rt, internalCallTarget.ToString());
+
+            // Transform the opcode with an internal call
+            IL.CallInstruction call = new CallInstruction(OpCode.Call);
+            call.SetInvokeTarget(_compiler, callTarget);
+
+            int i = 0;
+            foreach (Operand op in instruction.Operands)
+                call.SetOperand(i++, op);
+            i = 0;
+            foreach (Operand op in instruction.Results)
+                call.SetResult(i++, op);
+
+            Replace(ctx, call);
+        }
+
+        /// <summary>
+        /// Finds the method.
+        /// </summary>
+        /// <param name="rt">The rt.</param>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        private RuntimeMethod FindMethod(RuntimeType rt, string name)
+        {
+            //name[0] = Char.ToUpper(name[0]);
+            foreach (RuntimeMethod method in rt.Methods)
+            {
+                if (name == method.Name)
+                {
+                    return method;
+                }
+            }
+
+            throw new MissingMethodException(rt.Name, name);
         }
 
         #endregion // Internals

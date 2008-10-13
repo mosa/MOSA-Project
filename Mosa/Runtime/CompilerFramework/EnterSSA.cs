@@ -138,9 +138,16 @@ namespace Mosa.Runtime.CompilerFramework
              * assignment to a parameter is also SSA related.
              */
             IDictionary<StackOperand, StackOperand> liveIn = new Dictionary<StackOperand, StackOperand>(s_comparer);
-            for (int i = 0; i < compiler.Method.Parameters.Count; i++)
+            int i = 0;
+            if (true == compiler.Method.Signature.HasThis)
             {
-                StackOperand param = (StackOperand)compiler.GetParameterOperand(i);
+                StackOperand param = (StackOperand)compiler.GetParameterOperand(0);
+                liveIn.Add(param, param);
+                i++;
+            }
+            for (int j = 0; j < compiler.Method.Parameters.Count; j++)
+            {
+                StackOperand param = (StackOperand)compiler.GetParameterOperand(i+j);
                 liveIn.Add(param, param);
             }
             

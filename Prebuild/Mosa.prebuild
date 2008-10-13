@@ -113,12 +113,14 @@
             <Options>
               <OutputPath>..\bin</OutputPath>
               <XmlDocFile>Mosa.Runtime.xml</XmlDocFile>
+              <AllowUnsafe>true</AllowUnsafe>
             </Options>
           </Configuration>
           <Configuration name="Release">
             <Options>
               <OutputPath>..\bin</OutputPath>
               <XmlDocFile>Mosa.Runtime.xml</XmlDocFile>
+              <AllowUnsafe>true</AllowUnsafe>
             </Options>
           </Configuration>
           <Reference name="Mosa.Kernel" />

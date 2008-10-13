@@ -99,7 +99,7 @@ namespace Mosa.Runtime {
 
         #endregion // Properties
 
-        #region OpCode Support Functions
+        #region Compiler Support Functions
 
         /// <summary>
         /// This function performs the cast operation and type checking.
@@ -153,7 +153,33 @@ namespace Mosa.Runtime {
 			throw new NotImplementedException();
         }
 
-        #endregion // OpCode Support Functions
+        /// <summary>
+        /// Fills the destination with <paramref name="value"/>.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="count">The number of bytes to fill.</param>
+        [InternalCall(InternalCallTarget.Memset)]
+        public unsafe static void Memset(byte* destination, byte value, int count)
+        {
+            while (0 != count--)
+                *destination++ = value;
+        }
+
+        /// <summary>
+        /// Copies bytes from the source to destination.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="source">The source.</param>
+        /// <param name="count">The number of bytes to copy.</param>
+        [InternalCall(InternalCallTarget.Memcpy)]
+        public unsafe static void Memcpy(byte* destination, byte* source, int count)
+        {
+            while (0 != count--)
+                *destination++ = *source++;
+        }
+
+        #endregion // Compiler Support Functions
 
         #region IDisposable Members
 

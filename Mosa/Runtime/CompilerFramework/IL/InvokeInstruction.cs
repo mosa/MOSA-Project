@@ -139,10 +139,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
         {
             // Holds the token of the call target
             TokenTypes callTarget, targetType;
-            // Signature of the call target
-            MethodSignature signature;
-            // Number of parameters required for the call
-            int paramCount = 0;
+            // Method
+            RuntimeMethod method = null;
 
             // Retrieve the immediate argument - it contains the token
             // of the methoddef, methodref, methodspec or callsite to call.
@@ -154,11 +152,11 @@ namespace Mosa.Runtime.CompilerFramework.IL
             switch (targetType)
             {
                 case TokenTypes.MethodDef:
-                    _invokeTarget = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method.Module, callTarget);
+                    method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method.Module, callTarget);
                     break;
 
                 case TokenTypes.MemberRef:
-                    _invokeTarget = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method.Module, callTarget);
+                    method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method.Module, callTarget);
                     break;
 
                 case TokenTypes.MethodSpec:
@@ -168,6 +166,26 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     Debug.Assert(false, @"Should never reach this!");
                     break;
             }
+
+            SetInvokeTarget(decoder.Compiler, method);
+        }
+
+        /// <summary>
+        /// Sets the invoke target.
+        /// </summary>
+        /// <param name="compiler">The compiler.</param>
+        /// <param name="method">The method.</param>
+        public void SetInvokeTarget(MethodCompilerBase compiler, RuntimeMethod method)
+        {
+            if (null == method)
+                throw new ArgumentNullException(@"method");
+
+            // Signature of the call target
+            MethodSignature signature;
+            // Number of parameters required for the call
+            int paramCount = 0;
+
+            _invokeTarget = method;
 
             // Retrieve the target signature
             signature = _invokeTarget.Signature;
@@ -183,7 +201,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Is the function returning void?
             if (signature.ReturnType.Type != CilElementType.Void)
             {
-                SetResult(0, decoder.Compiler.CreateResultOperand(signature.ReturnType));
+                SetResult(0, compiler.CreateResultOperand(signature.ReturnType));
             }
         }
 

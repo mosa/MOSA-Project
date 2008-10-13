@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.Metadata;
 using System.Diagnostics;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
