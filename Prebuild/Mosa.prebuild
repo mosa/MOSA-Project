@@ -70,7 +70,7 @@
             <CompilerDefines></CompilerDefines>
           </Options>
         </Configuration>
-        
+
         <Reference name="System" version="2.0.0.0" />
         <Files>
           <Match pattern="*.cs" path="." recurse="true"/>
@@ -498,7 +498,7 @@
           <Project name="Test.Mosa.Runtime.CompilerFramework" type="Library" path="..\Test\Mosa\Runtime\CompilerFramework" language="C#" runtime="Microsoft" rootNamespace="Test.Mosa.Runtime.CompilerFramework" assemblyName="Test.Mosa.Runtime.CompilerFramework">
             <Configuration name="Debug">
               <Options>
-                <OutputPath>..\..\bin</OutputPath>
+                <OutputPath>..\..\..\..\Mosa\bin</OutputPath>
                 <XmlDocFile>Test.Mosa.Runtime.CompilerFramework.xml</XmlDocFile>
                 <IncrementalBuild>true</IncrementalBuild>
                 <CompilerDefines>DEBUG;TRACE</CompilerDefines>
@@ -511,7 +511,7 @@
             </Configuration>
             <Configuration name="Release">
               <Options>
-                <OutputPath>..\..\bin</OutputPath>
+                <OutputPath>..\..\..\..\Mosa\bin</OutputPath>
                 <XmlDocFile>Test.Mosa.Runtime.CompilerFramework.xml</XmlDocFile>
                 <CompilerDefines>TRACE</CompilerDefines>
                 <OptimizeCode>true</OptimizeCode>
@@ -520,8 +520,8 @@
                 <WarningLevel>2</WarningLevel>
               </Options>
             </Configuration>
-            <ReferencePath>CommandLine</ReferencePath>
-            <ReferencePath>..\..\bin</ReferencePath>
+            <ReferencePath>..\..\..\..\Mosa\bin</ReferencePath>
+            <ReferencePath>..\..\..\..\Mosa\Tools\Compiler\CommandLine</ReferencePath>
             <Reference name="Mosa.Kernel" />
             <Reference name="Mosa.Platforms.x86" />
             <Reference name="Mosa.Runtime" />

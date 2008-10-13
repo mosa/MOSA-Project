@@ -1,3 +1,3 @@
 @echo off
-CALL Prebuild.cmd vs2008
+CALL Prebuild.cmd VS2008
 pause
