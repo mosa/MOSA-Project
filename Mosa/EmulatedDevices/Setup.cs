@@ -23,7 +23,7 @@ namespace Mosa.EmulatedDevices
 			new VGATextDriver(VGATextDriver.StandardAddressBase);
 
 			string[] files = new string[1];
-			files[0] = @"..\..\..\Data\HardDriveImage\hd.img";
+			files[0] = @"..\..\Data\HardDriveImage\hd.img";
 
 			new IDEDiskDevice(IDEDiskDevice.PrimaryIOBase, files);
 		}
