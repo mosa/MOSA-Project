@@ -14,7 +14,10 @@ namespace System
     /// </summary>
     public class ArgumentException : Exception
     {
-        protected string paramName;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected string paramName;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArgumentException"/> class.

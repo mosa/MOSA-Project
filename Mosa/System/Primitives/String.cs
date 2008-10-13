@@ -10,10 +10,13 @@
 namespace System
 {
 	/// <summary>
-	/// 
+	/// Implementation of the "System.String" class
 	/// </summary>
     public class String
     {
-        public int Length; 
+		/// <summary>
+		/// Length
+		/// </summary>
+		public int Length; 
     }
 }

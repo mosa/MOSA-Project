@@ -22,6 +22,6 @@ namespace System.Collections.Generic
 		/// Gets the current.
 		/// </summary>
 		/// <value>The current.</value>
-		T Current { get; }
+		new T Current { get; }
     }
 }

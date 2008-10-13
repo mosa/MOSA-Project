@@ -54,9 +54,15 @@ namespace System.Collections.Generic
         /// false.
         /// </returns>
         bool Contains(T item);
-        
-        void CopyTo(T[] array, int arrayIndex);
-        
-        bool Remove(T item);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void CopyTo(T[] array, int arrayIndex);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		bool Remove(T item);
     }
 }

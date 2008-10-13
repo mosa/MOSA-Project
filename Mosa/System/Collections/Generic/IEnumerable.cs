@@ -22,6 +22,6 @@ namespace System.Collections.Generic
 		/// Gets the enumerator.
 		/// </summary>
 		/// <returns></returns>
-        IEnumerator<T> GetEnumerator();
+        new IEnumerator<T> GetEnumerator();
     }
 }

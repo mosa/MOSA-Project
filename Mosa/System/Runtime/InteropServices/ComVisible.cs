@@ -26,11 +26,17 @@ namespace System.Runtime.InteropServices
 
 		private bool Visible = false;
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public ComVisibleAttribute(bool visibility)
 		{
 			Visible = visibility;
 		}
 
+		/// <summary>
+		/// Value
+		/// </summary>
 		public bool Value
 		{
 			get { return Visible; }

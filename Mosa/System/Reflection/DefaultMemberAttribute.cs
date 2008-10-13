@@ -16,11 +16,17 @@ namespace System.Reflection
 	{
 		private readonly string member;
 
+		/// <summary>
+		/// Member
+		/// </summary>
 		public string Member
 		{
 			get { return member; }
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public DefaultMemberAttribute(string member) { this.member = member; }
 	}
 }
