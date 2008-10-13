@@ -21,36 +21,36 @@ namespace System.Collections.Generic
     public interface ICollection<T> : IEnumerable<T>, IEnumerable
     {
         /// <summary>
-        /// Gets the number of elements contained in the System.Collections.Generic.ICollection<T>.
+        /// Gets the number of elements contained in the System.Collections.Generic.ICollection&lt;T&gt;.
         /// </summary>
         int Count { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the System.Collections.Generic.ICollection<T>
+        /// Gets a value indicating whether the System.Collections.Generic.ICollection&lt;T&gt;
         /// is read-only.
         /// </summary>
         bool IsReadOnly { get; }
 
         /// <summary>
-        /// Adds an item to the System.Collections.Generic.ICollection<T>.
+        /// Adds an item to the System.Collections.Generic.ICollection&lt;T&gt;.
         /// </summary>
         /// <param name="item">
-        /// The object to add to the System.Collections.Generic.ICollection<T>.
+        /// The object to add to the System.Collections.Generic.ICollection&lt;T&gt;.
         /// </param>
         void Add(T item);
 
         /// <summary>
-        /// Removes all items from the System.Collections.Generic.ICollection<T>.
+        /// Removes all items from the System.Collections.Generic.ICollection&lt;T&gt;.
         /// </summary>
         void Clear();
    
         /// <summary>
-        /// Determines whether the System.Collections.Generic.ICollection<T> contains
+        /// Determines whether the System.Collections.Generic.ICollection&lt;T&gt; contains
         /// a specific value.
         /// </summary>
-        /// <param name="item">The object to locate in the System.Collections.Generic.ICollection<T>.</param>
+        /// <param name="item">The object to locate in the System.Collections.Generic.ICollection&lt;T&gt;.</param>
         /// <returns>
-        /// true if item is found in the System.Collections.Generic.ICollection<T>; otherwise,
+        /// true if item is found in the System.Collections.Generic.ICollection&lt;T&gt; otherwise,
         /// false.
         /// </returns>
         bool Contains(T item);

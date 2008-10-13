@@ -39,7 +39,7 @@ namespace System.Collections.Generic
 		void RemoveAt (int index);
 
 		/// <summary>
-		/// Gets or sets the <see cref="T"/> at the specified index.
+		/// Gets or sets the T at the specified index.
 		/// </summary>
 		/// <value></value>
 		T this [int index] {
