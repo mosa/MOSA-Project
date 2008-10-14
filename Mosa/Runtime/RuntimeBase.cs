@@ -100,40 +100,7 @@ namespace Mosa.Runtime {
 
         #endregion // Properties
 
-        #region Compiler Support Functions
-
-        /// <summary>
-        /// This function performs the cast operation and type checking.
-        /// </summary>
-        /// <param name="obj">The object to cast.</param>
-        /// <param name="typeHandle">Handle to the type to cast to.</param>
-        /// <returns>
-        /// The cast object if type checks were successful.
-        /// </returns>
-        [RuntimeSupport(CompilerFramework.IL.OpCode.Castclass)]
-		public static object CastObjectToType(object obj, UIntPtr typeHandle)
-		{
-			object result = IsInstanceOf(obj, typeHandle);
-			if (null == result)
-				throw new InvalidCastException();
-
-			return result;
-		}
-
-        /// <summary>
-        /// This function performs the isinst operation and type checking.
-        /// </summary>
-        /// <param name="obj">The object to cast.</param>
-        /// <param name="typeHandle">Handle to the type to cast to.</param>
-        /// <returns>
-        /// The cast object if type checks were successful. Otherwise null.
-        /// </returns>
-        [RuntimeSupport(CompilerFramework.IL.OpCode.Isinst)]
-		public static object IsInstanceOf(object obj, UIntPtr typeHandle)
-		{
-			// FIXME: Perform the type check
-			return null;
-		}
+        #region Internal Call Prototypes
 
         /// <summary>
         /// This function requests allocation of a specific runtime type.
@@ -145,24 +112,42 @@ namespace Mosa.Runtime {
         /// The allocated object is not constructed, e.g. the caller must invoke
         /// the appropriate constructor in order to obtain a real object.
         /// </remarks>
-        [
-            RuntimeSupport(CompilerFramework.IL.OpCode.Newobj),
-            RuntimeSupport(CompilerFramework.IL.OpCode.Newarr)
-        ]
-		public static object Allocate(RuntimeType type, int elements)
-		{
-			throw new NotImplementedException();
-        }
+        [VmCall(VmCall.Allocate)]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static IntPtr Allocate(RuntimeType type, int elements);
 
         /// <summary>
-        /// Fills the destination with <paramref name="value"/>.
+        /// Boxes the specified value type.
         /// </summary>
-        /// <param name="destination">The destination.</param>
-        /// <param name="value">The value.</param>
-        /// <param name="count">The number of bytes to fill.</param>
-        [CompilerSupport(CompilerSupportFunction.Memset)]
+        /// <param name="valueType">Type of the value.</param>
+        /// <returns>The boxed value type.</returns>
+        [VmCall(VmCall.Box)]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern unsafe static void Memset(byte* destination, byte value, int count);
+        public extern static object Box(System.ValueType valueType);
+
+        /// <summary>
+        /// This function performs the cast operation and type checking.
+        /// </summary>
+        /// <param name="obj">The object to cast.</param>
+        /// <param name="typeHandle">Handle to the type to cast to.</param>
+        /// <returns>
+        /// The cast object if type checks were successful.
+        /// </returns>
+        [VmCall(VmCall.Castclass)]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static object Castclass(object obj, UIntPtr typeHandle);
+
+        /// <summary>
+        /// This function performs the isinst operation and type checking.
+        /// </summary>
+        /// <param name="obj">The object to cast.</param>
+        /// <param name="typeHandle">Handle to the type to cast to.</param>
+        /// <returns>
+        /// The cast object if type checks were successful. Otherwise null.
+        /// </returns>
+        [VmCall(VmCall.IsInstanceOfType)]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static bool IsInstanceOfType(object obj, UIntPtr typeHandle);
 
         /// <summary>
         /// Copies bytes from the source to destination.
@@ -170,11 +155,45 @@ namespace Mosa.Runtime {
         /// <param name="destination">The destination.</param>
         /// <param name="source">The source.</param>
         /// <param name="count">The number of bytes to copy.</param>
-        [CompilerSupport(CompilerSupportFunction.Memcpy)]
+        [VmCall(VmCall.Memcpy)]
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern unsafe static void Memcpy(byte* destination, byte* source, int count);
 
-        #endregion // Compiler Support Functions
+        /// <summary>
+        /// Fills the destination with <paramref name="value"/>.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="count">The number of bytes to fill.</param>
+        [VmCall(VmCall.Memset)]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern unsafe static void Memset(byte* destination, byte value, int count);
+
+        /// <summary>
+        /// Rethrows the current exception.
+        /// </summary>
+        [VmCall(VmCall.Rethrow)]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static void Rethrow();
+
+        /// <summary>
+        /// Throws the specified exception.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        [VmCall(VmCall.Throw)]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static void Throw(object exception);
+
+        /// <summary>
+        /// Unboxes the specified object.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="valueType">The value type to unbox.</param>
+        [VmCall(VmCall.Unbox)]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static void Unbox(object obj, System.ValueType valueType);
+
+        #endregion // Internal Call Prototypes
 
         #region IDisposable Members
 

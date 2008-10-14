@@ -118,14 +118,17 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Ldftn(LdftnInstruction instruction, Context ctx)
         {
+            ReplaceWithInternalCall(ctx, instruction, VmCall.GetFunctionPtr);
         }
 
         void IILVisitor<Context>.Ldvirtftn(LdvirtftnInstruction instruction, Context ctx)
         {
+            ReplaceWithInternalCall(ctx, instruction, VmCall.GetVirtualFunctionPtr);
         }
 
         void IILVisitor<Context>.Ldtoken(LdtokenInstruction instruction, Context ctx)
         {
+            ReplaceWithInternalCall(ctx, instruction, VmCall.GetHandleForToken);
         }
 
         void IILVisitor<Context>.Stloc(StlocInstruction instruction, Context ctx)
@@ -281,34 +284,58 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Newobj(NewobjInstruction instruction, Context ctx)
         {
+            /* FIXME:
+             * 
+             * - Newobj is actually three things at once:
+             *   - Find the type from the token
+             *   - Allocate memory for the found type
+             *   - Invoke the ctor with the arguments
+             * - We're rewriting it exactly as specified above, e.g. first we find
+             *   the type handle (similar to ldtoken), we pass that to an internal
+             *   call to allocate the memory and finally we call the ctor on the
+             *   allocated object.
+             * - We don't have to check the allocation result, if it fails, the 
+             *   allocator will happily throw the OutOfMemoryException.
+             * - We do need to find the right ctor to invoke though.
+             * 
+             */
         }
 
         void IILVisitor<Context>.Castclass(CastclassInstruction instruction, Context ctx)
         {
+            // We don't need to check the result, if the icall fails, it'll happily throw
+            // the InvalidCastException.
+            ReplaceWithInternalCall(ctx, instruction, VmCall.Castclass);
         }
 
         void IILVisitor<Context>.Isinst(IsInstInstruction instruction, Context ctx)
         {
+            ReplaceWithInternalCall(ctx, instruction, VmCall.IsInstanceOfType);
         }
 
         void IILVisitor<Context>.Unbox(UnboxInstruction instruction, Context ctx)
         {
+            ReplaceWithInternalCall(ctx, instruction, VmCall.Unbox);
         }
 
         void IILVisitor<Context>.Throw(ThrowInstruction instruction, Context ctx)
         {
+            ReplaceWithInternalCall(ctx, instruction, VmCall.Throw);
         }
 
         void IILVisitor<Context>.Box(BoxInstruction instruction, Context ctx)
         {
+            ReplaceWithInternalCall(ctx, instruction, VmCall.Box);
         }
 
         void IILVisitor<Context>.Newarr(NewarrInstruction instruction, Context ctx)
         {
+            ReplaceWithInternalCall(ctx, instruction, VmCall.Allocate);
         }
 
         void IILVisitor<Context>.Ldlen(LdlenInstruction instruction, Context ctx)
         {
+            // FIXME
         }
 
         void IILVisitor<Context>.Ldelema(LdelemaInstruction instruction, Context ctx)
@@ -383,11 +410,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Cpblk(CpblkInstruction instruction, Context ctx)
         {
-            ReplaceWithInternalCall(ctx, instruction, CompilerSupportFunction.Memcpy);
+            ReplaceWithInternalCall(ctx, instruction, VmCall.Memcpy);
         }
 
         void IILVisitor<Context>.Initblk(InitblkInstruction instruction, Context ctx)
         {
+            ReplaceWithInternalCall(ctx, instruction, VmCall.Memset);
         }
 
         void IILVisitor<Context>.Prefix(PrefixInstruction instruction, Context ctx)
@@ -396,6 +424,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Rethrow(RethrowInstruction instruction, Context ctx)
         {
+            ReplaceWithInternalCall(ctx, instruction, VmCall.Rethrow);
         }
 
         void IILVisitor<Context>.Sizeof(SizeofInstruction instruction, Context ctx)
@@ -1060,7 +1089,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="ctx">The transformation context.</param>
         /// <param name="instruction">The instruction to replace.</param>
         /// <param name="internalCallTarget">The internal call target.</param>
-        private void ReplaceWithInternalCall(Context ctx, Instruction instruction, CompilerSupportFunction internalCallTarget)
+        private void ReplaceWithInternalCall(Context ctx, Instruction instruction, object internalCallTarget)
         {
             RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
             RuntimeMethod callTarget = FindMethod(rt, internalCallTarget.ToString());

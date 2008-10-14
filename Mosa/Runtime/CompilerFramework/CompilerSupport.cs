@@ -32,7 +32,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="destination">The destination.</param>
         /// <param name="value">The value.</param>
         /// <param name="count">The number of bytes to fill.</param>
-        [CompilerSupport(CompilerSupportFunction.Memset)]
+        [VmCall(VmCall.Memset)]
         public unsafe static void Memset(byte* destination, byte value, int count)
         {
         }
@@ -43,7 +43,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="destination">The destination.</param>
         /// <param name="source">The source.</param>
         /// <param name="count">The number of bytes to copy.</param>
-        [CompilerSupport(CompilerSupportFunction.Memcpy)]
+        [VmCall(VmCall.Memset)]
         public unsafe static void Memcpy(byte* destination, byte* source, int count)
         {
         }
