@@ -63,6 +63,33 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="expect"></param>
         /// <param name="a"></param>
         /// <returns></returns>
+        delegate bool U1_U1(byte expect, byte a);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        [Row(0)]
+        [Row(1)]
+        [Row(2)]
+        [Row(5)]
+        [Row(10)]
+        [Row(11)]
+        [Row(100)]
+        [Row(byte.MinValue)]
+        [Row(byte.MaxValue)]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        public void NotU1(byte a)
+        {
+            CodeSource = "static class Test { static bool NotU1(uint expect, byte a) { return expect == (~a); } }";
+            Assert.IsTrue((bool)Run<U1_U1>("", "Test", "NotU1", (byte)~(byte)a, a));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         delegate bool I4_I2(short expect, short a);
         /// <summary>
         /// 
