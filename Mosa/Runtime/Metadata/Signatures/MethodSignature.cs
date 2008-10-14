@@ -107,6 +107,29 @@ namespace Mosa.Runtime.Metadata.Signatures
 		}
 
         /// <summary>
+        /// Holds the token.
+        /// </summary>
+        TokenTypes token;
+
+        /// <summary>
+        /// Gets the token.
+        /// </summary>
+        /// <value>The token.</value>
+        public TokenTypes Token
+        {
+            get { return this.token; }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MethodSignature"/> class.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        public MethodSignature(TokenTypes token)
+        {
+            this.token = token;
+        }
+
+        /// <summary>
         /// Parses the specified provider.
         /// </summary>
         /// <param name="provider">The provider.</param>
@@ -117,7 +140,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             byte[] buffer;
             int index = 0;
             provider.Read(token, out buffer);
-            MethodSignature msig = new MethodSignature();
+            MethodSignature msig = new MethodSignature(token);
             msig.ParseSignature(buffer, ref index);
             Debug.Assert(index == buffer.Length, @"Signature parser didn't complete.");
             return msig;

@@ -14,6 +14,7 @@ using System.Text;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
+using System.Diagnostics;
 
 namespace Mosa.Runtime.Vm
 {
@@ -39,9 +40,9 @@ namespace Mosa.Runtime.Vm
 	}
 
     /// <summary>
-    /// 
+    /// Internal runtime representation of a type.
     /// </summary>
-    public class RuntimeType : IEquatable<RuntimeType>
+    public class RuntimeType : RuntimeMember, IEquatable<RuntimeType>
     {
         #region Data members
 
@@ -109,11 +110,6 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         private ReadOnlyRuntimeFieldListView _fields;
 
-        /// <summary>
-        /// Holds the token of the type.
-        /// </summary>
-        private TokenTypes _token;
-
         #endregion // Data members
 
         /// <summary>
@@ -134,23 +130,24 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Initializes a new instance of the <see cref="RuntimeType"/> class.
         /// </summary>
+        /// <param name="token">The token of the type.</param>
         /// <param name="module">The module.</param>
         /// <param name="typeDefRow">The type def row.</param>
         /// <param name="maxField">The max field.</param>
         /// <param name="maxMethod">The max method.</param>
         /// <param name="packing">The packing.</param>
         /// <param name="size">The size.</param>
-        public RuntimeType(IMetadataModule module, ref TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, uint packing, uint size)
+        public RuntimeType(int token, IMetadataModule module, ref TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, uint packing, uint size) :
+            base(token, module, null, null)
         {
             int members;
-            _token = 0;
             _module = module;
-            _extends = RuntimeBase.Instance.TypeLoader.FindTypeIndexFromToken(module, typeDefRow.Extends);
             _flags = typeDefRow.Flags;
             _nameIdx = typeDefRow.TypeNameIdx;
             _namespaceIdx = typeDefRow.TypeNamespaceIdx;
             _nativeSize = size;
             _packing = packing;
+            _extends = RuntimeBase.Instance.TypeLoader.FindTypeIndexFromToken(module, typeDefRow.Extends);
 
             // Load all fields of the type
             members = maxField - typeDefRow.FieldList + 1;
@@ -198,12 +195,12 @@ namespace Mosa.Runtime.Vm
         /// <value>The extends.</value>
 		public int Extends 
         {
-			get { return (_extends - 1); }
+			get { return (_extends); }
 			set {
 				if (value < 0)
 					throw new ArgumentException(@"Invalid index.");
 
-				_extends = value + 1;
+				_extends = value;
 			}
         }
 
@@ -229,7 +226,7 @@ namespace Mosa.Runtime.Vm
         /// Retrieves the name of the represented type.
         /// </summary>
         /// <value>The name.</value>
-        public string Name
+        public override string Name
         {
             get
             {
@@ -255,18 +252,56 @@ namespace Mosa.Runtime.Vm
             }
         }
 
-        /// <summary>
-        /// Gets the token.
-        /// </summary>
-        /// <value>The token.</value>
-        public TokenTypes Token
-        {
-            get { return _token; }
-        }
-
         #endregion // Properties
 
         #region Methods
+
+        /// <summary>
+        /// Determines whether instances of <paramref name="type"/> can be assigned to variables of this type.
+        /// </summary>
+        /// <param name="type">The type to check assignment for.</param>
+        /// <returns>
+        /// 	<c>true</c> if <paramref name="type "/> is assignable to this type; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsAssignableFrom(RuntimeType type)
+        {
+            if (type == null)
+                throw new ArgumentNullException(@"type");
+
+            // FIXME: We're not checking interfaces yet
+            // FIXME: Only works for classes
+            Debug.Assert(TypeAttributes.Class == (this._flags & TypeAttributes.Class), @"Only works for classes!");
+
+            return (this.Equals(type) == true || type.IsSubclassOf(this) == true);
+        }
+
+        /// <summary>
+        /// Determines whether the class represented by this RuntimeType is a subclass of the type represented by c.
+        /// </summary>
+        /// <param name="c">The type to compare with the current type.</param>
+        /// <returns>
+        /// <c>true</c> if the Type represented by the c parameter and the current Type represent classes, and the 
+        /// class represented by the current Type derives from the class represented by c; otherwise, <c>false</c>. 
+        /// This method also returns <c>false</c> if c and the current Type represent the same class.
+        /// </returns>
+        public bool IsSubclassOf(RuntimeType c)
+        {
+            RuntimeType[] types = RuntimeBase.Instance.TypeLoader.Types;
+            int extends = _extends;
+            while (0 < extends && extends < types.Length)
+            {
+                RuntimeType baseType = types[extends];
+                Debug.Assert(baseType != null, @"baseType can't be null.");
+                if (true == baseType.Equals(c))
+                    return true;
+
+                if (extends == baseType._extends)
+                    break;
+                extends = baseType._extends;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Sets generic parameters on this method.

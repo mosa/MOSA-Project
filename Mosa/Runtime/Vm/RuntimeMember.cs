@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.Loader;
+using System.Diagnostics;
 
 namespace Mosa.Runtime.Vm
 {
@@ -125,7 +126,8 @@ namespace Mosa.Runtime.Vm
             {
                 foreach (RuntimeAttribute attribute in _attributes)
                 {
-                    if (attribute.Type == attributeType)
+                    if (attribute.Type.Equals(attributeType) == true || 
+                        attribute.Type.IsSubclassOf(attributeType) == true)
                     {
                         result = true;
                         break;
@@ -133,6 +135,26 @@ namespace Mosa.Runtime.Vm
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Returns an array of custom attributes identified by RuntimeType.
+        /// </summary>
+        /// <param name="attributeType">Type of attribute to search for. Only attributes that are assignable to this type are returned.</param>
+        /// <returns>An array of custom attributes applied to this member, or an array with zero (0) elements if no matching attributes have been applied.</returns>
+        public object[] GetCustomAttributes(RuntimeType attributeType)
+        {
+            List<object> result = new List<object>();
+            if (_attributes != null)
+            {
+                foreach (RuntimeAttribute attribute in _attributes)
+                {
+                    if (true == attributeType.IsAssignableFrom(attribute.Type))
+                        result.Add(attribute.GetAttribute());
+                }
+            }
+
+            return result.ToArray();
         }
 
         /// <summary>

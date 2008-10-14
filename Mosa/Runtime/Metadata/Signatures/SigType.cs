@@ -101,6 +101,7 @@ namespace Mosa.Runtime.Metadata.Signatures
                 case CilElementType.U:
                 case CilElementType.Object:
                 case CilElementType.Class:
+                case CilElementType.ValueType:
                     return true;
 
                 default:

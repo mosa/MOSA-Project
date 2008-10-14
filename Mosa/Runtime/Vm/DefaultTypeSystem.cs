@@ -17,6 +17,7 @@ using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime.Vm
 {
@@ -191,11 +192,13 @@ namespace Mosa.Runtime.Vm
             // - If it is a typedef, return the module offset + row index.
             // - If it is a typeref, resolve it to the referenced typedef and return its type index
             // - If it is a typespec, resolve it to the referenced typespec
-            int result;
+            int result = 0;
+            int tokenRow = (int)(token & TokenTypes.RowIndexMask);
             switch (TokenTypes.TableMask & token)
             {
                 case TokenTypes.TypeDef:
-                    result = _moduleOffsets[module.LoadOrder].TypeOffset + (int)((token & TokenTypes.RowIndexMask) - 1);
+                    if (tokenRow != 0)
+                        result = _moduleOffsets[module.LoadOrder].TypeOffset + tokenRow - 2;
                     break;
 
                 case TokenTypes.TypeRef:
@@ -216,7 +219,7 @@ namespace Mosa.Runtime.Vm
 
                             case TokenTypes.AssemblyRef:
                                 // FIXME: Resolve the assembly and use it
-                                result = -3;
+                                result = ResolveAssemblyRef(module, ref typeRef);
                                 break;
 
                             case TokenTypes.TypeRef:
@@ -241,6 +244,29 @@ namespace Mosa.Runtime.Vm
             return result;
         }
 
+        private int ResolveAssemblyRef(IMetadataModule module, ref TypeRefRow typeRef)
+        {
+            AssemblyRefRow arr;
+            string ns, name;
+            module.Metadata.Read(typeRef.TypeNameIdx, out name);
+            module.Metadata.Read(typeRef.TypeNamespaceIdx, out ns);
+            module.Metadata.Read(typeRef.ResolutionScopeIdx, out arr);
+            IAssemblyLoader loader = RuntimeBase.Instance.AssemblyLoader;
+            IMetadataModule dependency = loader.Resolve(module.Metadata, arr);
+            ITypeSystem ts = (ITypeSystem)this;
+
+            for (int i = GetModuleOffset(dependency).TypeOffset; i < _types.Length; i++)
+            {
+                RuntimeType type = _types[i];
+                if (null != type && ns.Length == type.Namespace.Length && name.Length == type.Name.Length && name == type.Name && ns == type.Namespace)
+                {
+                    return i;
+                }
+            }
+
+            throw new TypeLoadException();
+        }
+
         RuntimeType ITypeSystem.GetType(IMetadataModule module, TokenTypes token)
         {
             int typeIdx = _moduleOffsets[module.LoadOrder].TypeOffset;
@@ -252,7 +278,7 @@ namespace Mosa.Runtime.Vm
                     return ResolveTypeRef(module, row);
 
                 case TokenTypes.TypeDef:
-                    typeIdx += (int)row;
+                    typeIdx += (int)row-2;
                     break;
 
                 case TokenTypes.TypeSpec:
@@ -387,6 +413,75 @@ namespace Mosa.Runtime.Vm
 
         #endregion // ITypeSystem Members
 
+        #region InternalCall Support
+
+        /// <summary>
+        /// Holds a map of internal call methods to their implementation.
+        /// </summary>
+        private Dictionary<RuntimeMethod, RuntimeMethod> internalCallTargets = new Dictionary<RuntimeMethod, RuntimeMethod>();
+
+        /// <summary>
+        /// A list of types, which realize internal calls.
+        /// </summary>
+        private List<RuntimeType> internalTypes = new List<RuntimeType>();
+
+        RuntimeMethod ITypeSystem.GetImplementationForInternalCall(RuntimeMethod internalCall)
+        {
+            Debug.Assert(internalCall != null, @"internalCall is null.");
+            if (null == internalCall)
+                throw new ArgumentNullException(@"internalCall");
+
+            // Return value
+            RuntimeMethod result = null;
+
+            // Shortcut: If the call was resolved previously, scan it there
+            if (true == this.internalCallTargets.TryGetValue(internalCall, out result))
+                return result;
+
+            /*
+             * FIXME:
+             * - The following sequence requires that mscorlib is available in the test runtime.
+             * - Maybe we should be smarter about its use though.
+             * - Commented out right now, as we don't load assembly dependencies yet.
+             */
+
+            ITypeSystem ts = (ITypeSystem)this;
+            // FIXME: Include this when we're loading mscorlib
+            //RuntimeType rtMia = ts.GetType(@"System.Runtime.CompilerServices.MethodImplAttribute");
+            //MethodImplAttribute mia = (MethodImplAttribute)internalCall.GetAttributes(rtMia, true);
+            //Debug.Assert(MethodImplOptions.InternalCall == (mia.Value & MethodImplOptions.InternalCall), @"Method is not InternalCall.");
+            //if (MethodImplOptions.InternalCall != (mia.Value & MethodImplOptions.InternalCall))
+            //    throw new ArgumentException(@"Method not marked as an InternalCall.", @"internalCall");
+
+            RuntimeType callImplType = ts.GetType("Mosa.Runtime.Vm.InternalCallImplAttribute");
+            object[] callDefAttrs = internalCall.GetCustomAttributes(callImplType);
+            Debug.Assert(0 != callDefAttrs.Length, @"No runtime call definition for icall!");
+            Debug.Assert(1 == callDefAttrs.Length, @"Only one call definition for icall supported! Additional ones ignored!");
+            InternalCallImplAttribute callDef = (InternalCallImplAttribute)callDefAttrs[0];
+
+            // Scan all known types for icalls
+            foreach (RuntimeType rType in internalTypes)
+            {
+                foreach (RuntimeMethod rMethod in rType.Methods)
+                {
+                    object[] callImpls = rMethod.GetCustomAttributes(callImplType);
+                    foreach (InternalCallImplAttribute callImpl in callImpls)
+                    {
+                        if (callDef.Matches(callImpl) == true)
+                        {
+                            // We found the sought icall, save it and return it
+                            this.internalCallTargets[internalCall] = rMethod;
+                            return rMethod;
+                        }
+                    }
+                }
+            }
+
+            throw new NotImplementedException(@"Requested InternalCall not loaded or not implemented.");
+        }
+
+        #endregion // InternalCall Support
+
         #region Internals
 
         /// <summary>
@@ -409,6 +504,8 @@ namespace Mosa.Runtime.Vm
 
             return length;
         }
+
+        private RuntimeType rtCallTypeAttribute = null;
 
         /// <summary>
         /// Loads all types from the given metadata module.
@@ -466,10 +563,20 @@ namespace Mosa.Runtime.Vm
                 }
 
                 // Create and populate the runtime type
-                rt = new RuntimeType(module, ref typeDefRow, maxField, maxMethod, packing, size);
+                rt = new RuntimeType((int)token, module, ref typeDefRow, maxField, maxMethod, packing, size);
                 LoadMethods(module, rt, typeDefRow.MethodList, maxMethod, ref methodOffset);
                 LoadFields(module, rt, typeDefRow.FieldList, maxField, ref fieldOffset);
                 _types[typeOffset++] = rt;
+
+                Debug.Assert(rt.Name != @"CompilerSupport");
+
+                if (rtCallTypeAttribute == null)
+                {
+                    if (rt.Name == "InternalCallTypeAttribute" && rt.Namespace == "Mosa.Runtime.Vm")
+                    {
+                        rtCallTypeAttribute = rt;
+                    }
+                }
 
                 packing = size = 0xFFFFFFFF;
                 typeDefRow = nextTypeDefRow;
@@ -745,6 +852,15 @@ namespace Mosa.Runtime.Vm
                     // AttributeTargets.Enum
                     // AttributeTargets.Interface
                     // AttributeTargets.Struct
+                    RuntimeType type = ts.GetType(module, owner);
+                    type.SetAttributes(ra);
+                    if (rtCallTypeAttribute != null)
+                    {
+                        if (type.IsDefined(rtCallTypeAttribute) == true)
+                        {
+                            this.internalTypes.Add(type);
+                        }
+                    }
                     break;
 
                 case TokenTypes.MethodDef:

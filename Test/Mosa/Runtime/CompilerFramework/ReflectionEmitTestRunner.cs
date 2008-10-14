@@ -98,6 +98,10 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 typeName = type;
 
             TypeBuilder typeBuilder = moduleBuilder.DefineType(typeName, TypeAttributes.Public | TypeAttributes.Class);
+            ConstructorBuilder ctorBuilder = typeBuilder.DefineConstructor(MethodAttributes.Public | MethodAttributes.RTSpecialName | MethodAttributes.SpecialName, CallingConventions.Standard, new Type[0]);
+            ILGenerator ctorIL = ctorBuilder.GetILGenerator(1);
+            ctorIL.Emit(OpCodes.Ret);
+
             MethodBuilder methodBuilder = typeBuilder.DefineMethod(method, MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig);
 
             MethodInfo invokeMethod = typeof(TDelegate).GetMethod("Invoke");

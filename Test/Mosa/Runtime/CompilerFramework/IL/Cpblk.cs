@@ -12,11 +12,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     [TestFixture]
     public class Cpblk : ReflectionEmitTestRunner
     {
-        private void GenerateCpblk(ILGenerator generator)
+        private static void GenerateCpblk(ILGenerator generator)
         {
-            generator.Emit(OpCodes.Ldc_I4_0);
-            generator.Emit(OpCodes.Ldc_I4_0);
-            generator.Emit(OpCodes.Ldc_I4_8);
+            generator.Emit(OpCodes.Ldc_I4_1);
+            generator.Emit(OpCodes.Ldc_I4_2);
+            generator.Emit(OpCodes.Ldc_I4_3);
             generator.Emit(OpCodes.Cpblk);
             generator.Emit(OpCodes.Ldc_I4_1);
             generator.Emit(OpCodes.Ret);
@@ -30,7 +30,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("grover", @"sharpos@michaelruck.de")]
         public void Test_Cpblk()
         {
-            this.Generator = new GenerateIL(GenerateCpblk);
+            this.Generator = new GenerateIL(Cpblk.GenerateCpblk);
             Run<I4_I4>(@"", @"Cpblk", @"TestCpblk", 0, 0);
         }
     }

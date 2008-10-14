@@ -383,7 +383,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Cpblk(CpblkInstruction instruction, Context ctx)
         {
-            ReplaceWithInternalCall(ctx, instruction, InternalCallTarget.Memcpy);
+            ReplaceWithInternalCall(ctx, instruction, CompilerSupportFunction.Memcpy);
         }
 
         void IILVisitor<Context>.Initblk(InitblkInstruction instruction, Context ctx)
@@ -1060,7 +1060,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="ctx">The transformation context.</param>
         /// <param name="instruction">The instruction to replace.</param>
         /// <param name="internalCallTarget">The internal call target.</param>
-        private void ReplaceWithInternalCall(Context ctx, Instruction instruction, InternalCallTarget internalCallTarget)
+        private void ReplaceWithInternalCall(Context ctx, Instruction instruction, CompilerSupportFunction internalCallTarget)
         {
             RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
             RuntimeMethod callTarget = FindMethod(rt, internalCallTarget.ToString());

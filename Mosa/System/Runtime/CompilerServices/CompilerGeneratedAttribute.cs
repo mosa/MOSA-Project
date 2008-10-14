@@ -1,4 +1,4 @@
-/*
+﻿/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -11,19 +11,17 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.Metadata.Signatures
+namespace System.Runtime.CompilerServices
 {
     /// <summary>
-    /// 
+    /// Distinguishes a compiler-generated element from a user-generated element. This class cannot be inherited.
     /// </summary>
-    public class MethodReferenceSignature : MethodSignature
+    public sealed class CompilerGeneratedAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MethodReferenceSignature"/> class.
+        /// Initializes a new instance of the <see cref="CompilerGeneratedAttribute"/> class.
         /// </summary>
-        /// <param name="token">The token.</param>
-        public MethodReferenceSignature(TokenTypes token) :
-            base(token)
+        public CompilerGeneratedAttribute()
         {
         }
     }

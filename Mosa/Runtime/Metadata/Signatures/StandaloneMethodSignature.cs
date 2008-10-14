@@ -18,5 +18,13 @@ namespace Mosa.Runtime.Metadata.Signatures
     /// </summary>
     public class StandaloneMethodSignature : MethodReferenceSignature
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StandaloneMethodSignature"/> class.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        public StandaloneMethodSignature(TokenTypes token) :
+            base(token)
+        {
+        }
     }
 }

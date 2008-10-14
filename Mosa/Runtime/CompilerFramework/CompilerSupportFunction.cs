@@ -12,7 +12,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// An enumeration of runtime/architecture provided call targets.
     /// </summary>
-    public enum InternalCallTarget
+    public enum CompilerSupportFunction
     {
         /// <summary>
         /// The method call represents a runtime defined memory set method.

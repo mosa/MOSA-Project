@@ -428,16 +428,14 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Call(RuntimeMethod target)
         {
             _codeStream.WriteByte(0xE8);
-            byte[] relOffset = BitConverter.GetBytes(
-                (int)_linker.Link(
-                    LinkType.RelativeOffset | LinkType.I4,
-                    _compiler.Method,
-                    (int)(_codeStream.Position - _codeStreamBasePosition),
-                    (int)(_codeStream.Position - _codeStreamBasePosition) + 4,
-                    target
-                )
+            _codeStream.Write(new byte[4], 0, 4);
+            long address = _linker.Link(
+                LinkType.RelativeOffset | LinkType.I4,
+                _compiler.Method,
+                (int)(_codeStream.Position - _codeStreamBasePosition) - 4,
+                (int)(_codeStream.Position - _codeStreamBasePosition),
+                target
             );
-            _codeStream.Write(relOffset, 0, relOffset.Length);
         }
 
         /// <summary>

@@ -261,7 +261,7 @@ namespace Mosa.Runtime.CompilerFramework
             {
                 if (0 == idx)
                 {
-                    return new ParameterOperand(_architecture.StackFrameRegister, new RuntimeParameter(_method.Module, @"this", 0, ParameterAttributes.In), new ClassSigType(_type.Token));
+                    return new ParameterOperand(_architecture.StackFrameRegister, new RuntimeParameter(_method.Module, @"this", 0, ParameterAttributes.In), new ClassSigType((TokenTypes)_type.Token));
                 }
                 else
                 {

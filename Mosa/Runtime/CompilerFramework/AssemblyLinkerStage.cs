@@ -115,8 +115,15 @@ namespace Mosa.Runtime.CompilerFramework
             RuntimeMethod method = member as RuntimeMethod;
             if (null != method)
             {
-                Debug.Assert(MethodAttributes.Abstract != (method.Attributes & MethodAttributes.Abstract), @"Can't link an abstract method.");
-                address = method.Address.ToInt64();
+                if (method.ImplAttributes == MethodImplAttributes.InternalCall)
+                {
+                    address = ResolveInternalCall(method);
+                }
+                else
+                {
+                    Debug.Assert(MethodAttributes.Abstract != (method.Attributes & MethodAttributes.Abstract), @"Can't link an abstract method.");
+                    address = method.Address.ToInt64();
+                }
             }
             else
             {
@@ -129,6 +136,21 @@ namespace Mosa.Runtime.CompilerFramework
             }
 
             return (0 != address);
+        }
+
+        /// <summary>
+        /// Special resolution for internal calls.
+        /// </summary>
+        /// <param name="method">The internal call method to resolve.</param>
+        /// <returns>The address </returns>
+        protected virtual long ResolveInternalCall(RuntimeMethod method)
+        {
+            long address = 0;
+            ITypeSystem ts = RuntimeBase.Instance.TypeLoader;
+            RuntimeMethod internalImpl = ts.GetImplementationForInternalCall(method);
+            if (null != internalImpl)
+                address = internalImpl.Address.ToInt64();
+            return address;
         }
 
         /// <summary>
@@ -175,11 +197,6 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
         /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
         /// <param name="target">The method or static field to link against.</param>
-        /// <returns>
-        /// The return value is the preliminary address to place in the generated machine
-        /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
-        /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
-        /// </returns>
         public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
             Debug.Assert(null != target, @"A RuntimeMember must be passed to IAssemblyLinker.Link");

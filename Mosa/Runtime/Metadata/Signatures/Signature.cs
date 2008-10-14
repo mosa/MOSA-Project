@@ -60,7 +60,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             }
             else
             {
-                result = new MethodSignature();
+                result = new MethodSignature(token);
                 result.ParseSignature(buffer, ref index);
             }
             Debug.Assert(index == buffer.Length, @"Not all signature bytes read.");

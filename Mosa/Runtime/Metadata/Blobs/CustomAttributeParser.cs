@@ -80,7 +80,7 @@ namespace Mosa.Runtime.Metadata.Blobs
                         object[] args = new object[parameters.Count];
                         for (int idx = 0; idx < parameters.Count; idx++)
                         {
-                            args[idx] = ParseFixedArg(reader, paramSig[idx]);
+                            args[idx] = ParseFixedArg(module, reader, paramSig[idx]);
                         }
 
                         // Create the attribute instance
@@ -122,16 +122,17 @@ namespace Mosa.Runtime.Metadata.Blobs
         {
             RuntimeType rt = attributeCtor.DeclaringType;
             Type attributeType = Type.GetType(String.Format("{0}.{1}", rt.Namespace, rt.Name));
-            return Activator.CreateInstance(attributeType, args);
+            return Activator.CreateInstance(attributeType, args, null);
         }
 
         /// <summary>
         /// Parses a fixed argument in an attribute blob definition.
         /// </summary>
+        /// <param name="module">The metadata module, which contains the attribute blob.</param>
         /// <param name="reader">The binary reader to read it from.</param>
         /// <param name="sigType">The signature type of the value to read.</param>
         /// <returns></returns>
-        private static object ParseFixedArg(BinaryReader reader, SigType sigType)
+        private static object ParseFixedArg(IMetadataModule module, BinaryReader reader, SigType sigType)
         {
             // Return value
             object result = null;
@@ -140,11 +141,11 @@ namespace Mosa.Runtime.Metadata.Blobs
             SZArraySigType arraySigType = sigType as SZArraySigType;
             if (null != arraySigType)
             {
-                result = ParseSZArrayArg(reader, arraySigType);
+                result = ParseSZArrayArg(module, reader, arraySigType);
             }
             else
             {
-                result = ParseElem(reader, sigType);
+                result = ParseElem(module, reader, sigType);
             }
 
             return result;
@@ -153,10 +154,11 @@ namespace Mosa.Runtime.Metadata.Blobs
         /// <summary>
         /// Parses an SZArray attribute value.
         /// </summary>
+        /// <param name="module">The metadata module, which contains the attribute blob.</param>
         /// <param name="reader">The binary reader used to read from the attribute blob.</param>
         /// <param name="sigType">Type of the SZArray.</param>
         /// <returns>An Array, which represents the SZArray definition.</returns>
-        private static object ParseSZArrayArg(BinaryReader reader, SZArraySigType sigType)
+        private static object ParseSZArrayArg(IMetadataModule module, BinaryReader reader, SZArraySigType sigType)
         {
             // Return value
             Array result;
@@ -172,7 +174,7 @@ namespace Mosa.Runtime.Metadata.Blobs
             result = Array.CreateInstance(elementType, numElements);
             for (int idx = 0; idx < numElements; idx++)
             {
-                object item = ParseElem(reader, sigType.ElementType);
+                object item = ParseElem(module, reader, sigType.ElementType);
                 result.SetValue(item, idx);
             }
 
@@ -182,11 +184,12 @@ namespace Mosa.Runtime.Metadata.Blobs
         /// <summary>
         /// Parses an elementary field, parameter or property definition.
         /// </summary>
+        /// <param name="module">The metadata module, which contains the attribute blob.</param>
         /// <param name="reader">The binary reader to read data from.</param>
         /// <param name="sigType">The signature type of the field, parameter or property to read.</param>
         /// <returns>An object, which represents the value read from the attribute blob.</returns>
         /// <exception cref="System.NotSupportedException"><paramref name="sigType"/> is not yet supported.</exception>
-        private static object ParseElem(BinaryReader reader, SigType sigType)
+        private static object ParseElem(IMetadataModule module, BinaryReader reader, SigType sigType)
         {
             object result;
 
@@ -255,6 +258,29 @@ namespace Mosa.Runtime.Metadata.Blobs
                     {
                         string typeName = ParseSerString(reader);
                         result = Type.GetType(typeName);
+                    }
+                    break;
+
+                case CilElementType.ValueType:
+                    {
+                        ValueTypeSigType vtSigType = sigType as ValueTypeSigType;
+                        ITypeSystem ts = RuntimeBase.Instance.TypeLoader;
+                        RuntimeType type = ts.GetType(module, vtSigType.Token);
+                        RuntimeType baseType = ts.Types[type.Extends];
+                        if (@"System" == baseType.Namespace && "Enum" == baseType.Name)
+                        {
+                            // Retrieve the value__ field to get the enums integer type
+                            Debug.Assert(type.Fields.Count == 1, @"More than one field in the enum.");
+                            RuntimeField value = type.Fields[0];
+                            Debug.Assert(value.Name == @"value__", @"First field of enum not named value__");
+                            result = ParseElem(module, reader, value.Type);
+                            Type enumType = Type.GetType(type.Namespace + "." + type.Name);
+                            result = Enum.ToObject(enumType, result);
+                        }
+                        else
+                        {
+                            throw new NotSupportedException();
+                        }
                     }
                     break;
 

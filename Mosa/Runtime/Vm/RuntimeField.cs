@@ -64,6 +64,11 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         private uint _rva;
 
+        /// <summary>
+        /// Holds the type of the field.
+        /// </summary>
+        private SigType _type;
+
         #endregion // Data members
 
         #region Construction
@@ -79,8 +84,8 @@ namespace Mosa.Runtime.Vm
         public RuntimeField(IMetadataModule module, ref FieldRow field, uint offset, uint rva, RuntimeType declaringType) :
             base(0, module, declaringType, null)
         {
-            _sig = 0;
-            _name = Name;
+            _sig = (int)field.SignatureBlobIdx;
+            _name = null;
             _attributes = field.Flags;
             _nameIdx = field.NameStringIdx;
             _offset = offset;
@@ -113,8 +118,7 @@ namespace Mosa.Runtime.Vm
                 if (null != _name)
                     return _name;
 
-                // FIXME: Load the name of the field
-
+                this.Module.Metadata.Read(_nameIdx, out _name);
                 return _name;
             }
         }
@@ -125,8 +129,16 @@ namespace Mosa.Runtime.Vm
         /// <value>The type.</value>
         public SigType Type
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get 
+            {
+                if (_type != null)
+                    return _type;
+
+                FieldSignature fsig = new FieldSignature();
+                fsig.LoadSignature(this.Module.Metadata, (TokenTypes)_sig);
+                _type = fsig.Type;
+                return _type;
+            }
         }
 
         #endregion // Properties

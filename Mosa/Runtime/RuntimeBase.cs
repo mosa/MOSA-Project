@@ -15,6 +15,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Vm;
 using Mosa.Kernel.Memory;
 using Mosa.Runtime.Loader;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime {
 	
@@ -159,12 +160,9 @@ namespace Mosa.Runtime {
         /// <param name="destination">The destination.</param>
         /// <param name="value">The value.</param>
         /// <param name="count">The number of bytes to fill.</param>
-        [InternalCall(InternalCallTarget.Memset)]
-        public unsafe static void Memset(byte* destination, byte value, int count)
-        {
-            while (0 != count--)
-                *destination++ = value;
-        }
+        [CompilerSupport(CompilerSupportFunction.Memset)]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern unsafe static void Memset(byte* destination, byte value, int count);
 
         /// <summary>
         /// Copies bytes from the source to destination.
@@ -172,12 +170,9 @@ namespace Mosa.Runtime {
         /// <param name="destination">The destination.</param>
         /// <param name="source">The source.</param>
         /// <param name="count">The number of bytes to copy.</param>
-        [InternalCall(InternalCallTarget.Memcpy)]
-        public unsafe static void Memcpy(byte* destination, byte* source, int count)
-        {
-            while (0 != count--)
-                *destination++ = *source++;
-        }
+        [CompilerSupport(CompilerSupportFunction.Memcpy)]
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern unsafe static void Memcpy(byte* destination, byte* source, int count);
 
         #endregion // Compiler Support Functions
 
