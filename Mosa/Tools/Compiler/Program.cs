@@ -24,18 +24,18 @@ using Mosa.Runtime.Metadata;
 namespace Mosa.Tools.Compiler
 {
     /// <summary>
-    /// 
+    /// Class containing the entry point of the program.
     /// </summary>
     public class Program
     {
         /// <summary>
-        /// Mains the specified args.
+        /// Main entry point for the compiler.
         /// </summary>
         /// <param name="args">The args.</param>
         public static void Main(string[] args)
         {
-            Console.WriteLine("MOSA Compiler, Version X.Y.Z");
-            Console.WriteLine("(C) 2008 by the MOSA Project, Licensed with the new BSD license.");
+            Console.WriteLine("MOSA Compiler, Version 0.0.1");
+            Console.WriteLine("(C) 2008 by the MOSA Project, Licensed under the new BSD license.");
             Console.WriteLine();
             
             if (args.Length == 0)
@@ -150,11 +150,7 @@ namespace Mosa.Tools.Compiler
         }
         
         static string usageString = "Usage: mosacl -o outputfile --arch=[x86,x64] --format=[elf,pe] --boot=[mb0.7] inputfiles";
-        
-        /// <summary>
-        /// Shows the specified error message.
-        /// </summary>
-        /// <param name="message">A string containing the message.</param>
+
         static void ShowError(string message)
         {
             Console.WriteLine(usageString);

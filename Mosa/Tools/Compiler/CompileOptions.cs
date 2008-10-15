@@ -18,6 +18,7 @@ using NDesk.Options;
 
 namespace Mosa.Tools.Compiler
 {
+    #region Enums
     /// <summary>
     /// Available architectures.
     /// </summary>
@@ -57,7 +58,8 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// The PE (Portable Executable) format.
         /// </summary>
-        PE }
+        PE
+    }
     
     /// <summary>
     /// Available boot formats. Use '_' instead of '.'.
@@ -74,70 +76,110 @@ namespace Mosa.Tools.Compiler
         /// </summary>
         mb0_7
     }
+    #endregion
     
     /// <summary>
     /// Class containing options for the compilation.
     /// </summary>
     public class CompileOptions
     {
-        List<string> inputFiles = null;
-        string outputFile;
+        #region Fields
+
         Architectures architecture;
         BinaryFormats binaryFormat;
         BootFormats bootFormat;
+        List<string> inputFiles = null;
         bool isExecutable;
-        
+        string outputFile;
+
+        #endregion Fields
+
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the CompileOptions class.
         /// </summary>
         public CompileOptions()
         {
         }
-        
+
+        #endregion Constructors
+
+        #region Properties
+
         /// <summary>
-        /// Sets the input files for the compiler.
+        /// Gets the architecture.
         /// </summary>
-        /// <param name="files">An enumeration of files.</param>
-        /// <returns>A string containing an error message or an empty string if successful.</returns>
-        public void SetInputFiles(IList<string> files)
+        public Architectures Architecture
         {
-            inputFiles = new List<string>(files);
-            
-            if (inputFiles.Count == 0)
+            get
             {
-                throw new OptionException("No input file(s) specified.", "");
-            }
-            
-            foreach (string file in inputFiles)
-            {
-                string extension = new FileInfo(file).Extension;
-                if (extension.ToLower() == ".exe")
-                {
-                    if (isExecutable)
-                    {
-                        // there are more than one exe files in the list
-                        throw new OptionException("Multiple executables aren't allowed.", "");
-                    }
-                    
-                    isExecutable = true;
-                }
+                return architecture;
             }
         }
-        
+
         /// <summary>
-        /// Sets the output file for the compilation.
+        /// Gets the binary format.
         /// </summary>
-        /// <param name="file">The file.</param>
-        public void SetOutputFile(string file)
+        public BinaryFormats BinaryFormat
         {
-            if (String.IsNullOrEmpty(file))
+            get
             {
-                throw new OptionException("No output file specified.", "o");
+                return binaryFormat;
             }
-            
-            outputFile = file;
         }
-        
+
+        /// <summary>
+        /// Gets the boot format.
+        /// </summary>
+        public BootFormats BootFormat
+        {
+            get
+            {
+                return bootFormat;
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of input files.
+        /// </summary>
+        public IList<string> InputFiles
+        {
+            get
+            {
+                return inputFiles;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the result of the
+        /// compilation will be an executable file or not.
+        /// </summary>
+        public bool IsExecutable
+        {
+            get
+            {
+                return isExecutable;
+            }
+        }
+
+        /// <summary>
+        /// Gets the output file.
+        /// </summary>
+        public string OutputFile
+        {
+            get
+            {
+                return outputFile;
+            }
+        }
+
+        #endregion Properties
+
+        #region Methods
+
+        #region Public Methods
+
         /// <summary>
         /// Sets the architecture to compile for.
         /// </summary>
@@ -153,12 +195,12 @@ namespace Mosa.Tools.Compiler
             {
                 architecture = EnumParse<Architectures>(arch);
             }
-            catch(ArgumentException)
+            catch (ArgumentException)
             {
                 throw new OptionException(String.Format("Unknown or unsupported architecture {0}.", arch), "arch");
             }
         }
-        
+
         /// <summary>
         /// Sets the binary format to compile to.
         /// </summary>
@@ -174,12 +216,12 @@ namespace Mosa.Tools.Compiler
             {
                 binaryFormat = EnumParse<BinaryFormats>(format);
             }
-            catch(ArgumentException)
+            catch (ArgumentException)
             {
                 throw new OptionException(String.Format("Unknown or unsupported binary format {0}.", format), "format");
             }
         }
-        
+
         /// <summary>
         /// Sets the boot format to compile for.
         /// </summary>
@@ -198,80 +240,56 @@ namespace Mosa.Tools.Compiler
                 {
                     bootFormat = EnumParse<BootFormats>(format.Replace('.', '_'));
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
                 }
             }
         }
-        
+
         /// <summary>
-        /// Gets a list of input files.
+        /// Sets the input files for the compiler.
         /// </summary>
-        public IList<string> InputFiles
+        /// <param name="files">An enumeration of files.</param>
+        public void SetInputFiles(IList<string> files)
         {
-            get
+            inputFiles = new List<string>(files);
+            
+            if (inputFiles.Count == 0)
             {
-                return inputFiles;
+                throw new OptionException("No input file(s) specified.", String.Empty);
+            }
+            
+            foreach (string file in inputFiles)
+            {
+                string extension = new FileInfo(file).Extension;
+                if (extension.ToLower() == ".exe")
+                {
+                    if (isExecutable)
+                    {
+                        // there are more than one exe files in the list
+                        throw new OptionException("Multiple executables aren't allowed.", String.Empty);
+                    }
+                    
+                    isExecutable = true;
+                }
             }
         }
-        
+
         /// <summary>
-        /// Gets the output file.
+        /// Sets the output file for the compilation.
         /// </summary>
-        public string OutputFile
+        /// <param name="file">The file.</param>
+        public void SetOutputFile(string file)
         {
-            get
+            if (String.IsNullOrEmpty(file))
             {
-                return outputFile;
+                throw new OptionException("No output file specified.", "o");
             }
+            
+            outputFile = file;
         }
-        
-        /// <summary>
-        /// Gets the architecture.
-        /// </summary>
-        public Architectures Architecture
-        {
-            get
-            {
-                return architecture;
-            }
-        }
-        
-        /// <summary>
-        /// Gets the binary format.
-        /// </summary>
-        public BinaryFormats BinaryFormat
-        {
-            get
-            {
-                return binaryFormat;
-            }
-        }
-        
-        /// <summary>
-        /// Gets the boot format.
-        /// </summary>
-        public BootFormats BootFormat
-        {
-            get
-            {
-                return bootFormat;
-            }
-        }
-        
-        /// <summary>
-        /// Gets a value indicating whether the result of the
-        /// compilation will be an executable file or not.
-        /// </summary>
-        public bool IsExecutable
-        {
-            get
-            {
-                return isExecutable;
-            }
-        }
-        
+
         /// <summary>
         /// Returns a string containing the current options.
         /// </summary>
@@ -287,7 +305,9 @@ namespace Mosa.Tools.Compiler
             sb.Append("Is executable: ").AppendLine(isExecutable.ToString());
             return sb.ToString();
         }
-        
+        #endregion Public Methods
+        #region Private Methods
+
         private T EnumParse<T>(string value)
         {
             T parsed = (T) Enum.Parse(typeof(T), value, true);
@@ -297,5 +317,8 @@ namespace Mosa.Tools.Compiler
             }
             return parsed;
         }
+        #endregion Private Methods
+
+        #endregion Methods
     }
 }
