@@ -23,10 +23,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Expands the given invoke instruction to perform the method call.
         /// </summary>
-        /// <param name="architecture">The architecture supplying instructions.</param>
         /// <param name="instruction">The invoke instruction to expand.</param>
         /// <returns>A single instruction or an array of instructions, which appropriately represent the method call.</returns>
-        object Expand(IArchitecture architecture, InvokeInstruction instruction);
+        object Expand(InvokeInstruction instruction);
 
         /// <summary>
         /// Retrieves the stack requirements of a stack operand.
@@ -44,10 +43,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// Requests the calling convention to create an appropriate move instruction to populate the return 
         /// value of a method.
         /// </summary>
-        /// <param name="architecture">The architecture to emit the instruction for.</param>
         /// <param name="operand">The operand, that's holding the return value.</param>
         /// <returns>An instruction, which represents the appropriate move.</returns>
-        Instruction[] MoveReturnValue(IArchitecture architecture, Operand operand);
+        Instruction[] MoveReturnValue(Operand operand);
 
         /// <summary>
         /// Retrieves the offset of the first local variable from the stack frame start.

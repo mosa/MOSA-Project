@@ -88,12 +88,12 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Holds the calculated native size of the type.
         /// </summary>
-        private uint _nativeSize;
+        private int _nativeSize;
 
         /// <summary>
-        /// 
+        /// Holds the field packing.
         /// </summary>
-		private uint _packing;
+		private int _packing;
 
         // <summary>
         // Holds generic parameters or types.
@@ -137,7 +137,7 @@ namespace Mosa.Runtime.Vm
         /// <param name="maxMethod">The max method.</param>
         /// <param name="packing">The packing.</param>
         /// <param name="size">The size.</param>
-        public RuntimeType(int token, IMetadataModule module, ref TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, uint packing, uint size) :
+        public RuntimeType(int token, IMetadataModule module, ref TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, int packing, int size) :
             base(token, module, null, null)
         {
             int members;
@@ -150,7 +150,7 @@ namespace Mosa.Runtime.Vm
             _extends = RuntimeBase.Instance.TypeLoader.FindTypeIndexFromToken(module, typeDefRow.Extends);
 
             // Load all fields of the type
-            members = maxField - typeDefRow.FieldList + 1;
+            members = maxField - typeDefRow.FieldList;
             if (0 < members)
             {
                 int i = (int)(typeDefRow.FieldList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset(module).FieldOffset;
@@ -252,6 +252,25 @@ namespace Mosa.Runtime.Vm
             }
         }
 
+        /// <summary>
+        /// Gets the packing of type fields.
+        /// </summary>
+        /// <value>The packing of type fields.</value>
+        public int Pack
+        {
+            get { return _packing; }
+        }
+
+        /// <summary>
+        /// Gets or sets the size of the type.
+        /// </summary>
+        /// <value>The size of the type.</value>
+        public int Size
+        {
+            get { return _nativeSize; }
+            set { _nativeSize = value; }
+        }
+        
         #endregion // Properties
 
         #region Methods

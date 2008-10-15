@@ -25,22 +25,27 @@ namespace Mosa.Platforms.x86
     /// </summary>
     sealed class DefaultCallingConvention : ICallingConvention
     {
-        #region Static data members
+        #region Data members
 
         /// <summary>
-        /// Holds the single instance of the default calling convention.
+        /// Holds the architecture of the calling convention.
         /// </summary>
-        public static readonly DefaultCallingConvention Instance = new DefaultCallingConvention();
+        private IArchitecture architecture;
 
-        #endregion // Static data members
+        #endregion // Data members
 
         #region Construction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultCallingConvention"/>.
         /// </summary>
-        private DefaultCallingConvention()
-        { 
+        /// <param name="architecture">The architecture of the calling convention.</param>
+        public DefaultCallingConvention(IArchitecture architecture)
+        {
+            if (null == architecture)
+                throw new ArgumentNullException(@"architecture");
+
+            this.architecture = architecture;
         }
 
         #endregion // Construction
@@ -50,12 +55,11 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Expands the given invoke instruction to perform the method call.
         /// </summary>
-        /// <param name="architecture">The architecture supplying instructions.</param>
         /// <param name="instruction">The invoke instruction to expand.</param>
         /// <returns>
         /// A single instruction or an array of instructions, which appropriately represent the method call.
         /// </returns>
-        object ICallingConvention.Expand(IArchitecture architecture, IL.InvokeInstruction instruction)
+        object ICallingConvention.Expand(IL.InvokeInstruction instruction)
         {
             /*
              * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
@@ -71,8 +75,8 @@ namespace Mosa.Platforms.x86
             int stackSize = CalculateStackSizeForParameters(instruction, moveThis);
             if (0 != stackSize)
             {
-                instructions.Add(architecture.CreateInstruction(typeof(x86.Instructions.SubInstruction), esp, new ConstantOperand(I, stackSize)));
-                instructions.Add(architecture.CreateInstruction(typeof(x86.Instructions.MoveInstruction), new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp));
+                instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.SubInstruction), esp, new ConstantOperand(I, stackSize)));
+                instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.MoveInstruction), new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp));
 
                 Stack<Operand> ops = new Stack<Operand>(instruction.Operands.Length);
                 int thisArg = 1;
@@ -90,21 +94,21 @@ namespace Mosa.Platforms.x86
                 while (0 != ops.Count)
                 {
                     Operand op = ops.Pop();
-                    GetStackRequirements(op.Type, out size, out alignment);
+                    this.architecture.GetTypeRequirements(op.Type, out size, out alignment);
                     space -= size;
-                    Push(instructions, architecture, op, space);
+                    Push(instructions, op, space);
                 }
             }
 
             if (true == moveThis)
             {
                 RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
-                instructions.Add(architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, instruction.Operands[0]));
+                instructions.Add(this.architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, instruction.Operands[0]));
             }
-            instructions.Add(architecture.CreateInstruction(typeof(x86.Instructions.CallInstruction), instruction.InvokeTarget));
+            instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.CallInstruction), instruction.InvokeTarget));
             if (0 != stackSize)
             {
-                instructions.Add(architecture.CreateInstruction(typeof(x86.Instructions.AddInstruction), esp, new ConstantOperand(I, stackSize)));
+                instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.AddInstruction), esp, new ConstantOperand(I, stackSize)));
             }
 
             if (instruction.Results.Length > 0 && instruction.Results[0].StackType == StackTypeCode.Int64)
@@ -130,10 +134,9 @@ namespace Mosa.Platforms.x86
         /// Pushes the specified instructions.
         /// </summary>
         /// <param name="instructions">The instructions.</param>
-        /// <param name="arch">The arch.</param>
         /// <param name="op">The op.</param>
         /// <param name="stackSize">Size of the stack.</param>
-        private void Push(List<Instruction> instructions, IArchitecture arch, Operand op, int stackSize)
+        private void Push(List<Instruction> instructions, Operand op, int stackSize)
         {
             if (op is MemoryOperand)
             {
@@ -172,11 +175,11 @@ namespace Mosa.Platforms.x86
                     default:
                         throw new NotSupportedException();
                 }
-                instructions.Add(arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IR.MoveInstruction), rop, op));
+                instructions.Add(this.architecture.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IR.MoveInstruction), rop, op));
                 op = rop;
             }
 
-            instructions.Add(arch.CreateInstruction(typeof(x86.Instructions.MoveInstruction), new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op));
+            instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.MoveInstruction), new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op));
         }
 
         /// <summary>
@@ -192,7 +195,7 @@ namespace Mosa.Platforms.x86
             // FIXME: This will not work for an instance method with the first arg being a fp value
             foreach (Operand op in instruction.Operands)
             {
-                GetStackRequirements(op.Type, out size, out alignment);
+                this.architecture.GetTypeRequirements(op.Type, out size, out alignment);
                 result += size;
             }
             return result;
@@ -202,24 +205,23 @@ namespace Mosa.Platforms.x86
         /// Requests the calling convention to create an appropriate move instruction to populate the return
         /// value of a method.
         /// </summary>
-        /// <param name="architecture">The architecture to emit the instruction for.</param>
         /// <param name="operand">The operand, that's holding the return value.</param>
         /// <returns>
         /// An instruction, which represents the appropriate move.
         /// </returns>
-        Instruction[] ICallingConvention.MoveReturnValue(IArchitecture architecture, Operand operand)
+        Instruction[] ICallingConvention.MoveReturnValue(Operand operand)
         {
             int size, alignment;
-            GetStackRequirements(operand.Type, out size, out alignment);
+            this.architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
             // FIXME: Do not issue a move, if the operand is already the destination register
             if (4 == size)
             {
-                return new Instruction[] { architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand) };
+                return new Instruction[] { this.architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand) };
             }
             else if (8 == size && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
             {
-                return new Instruction[] { architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, SSE2Register.XMM0), operand) };
+                return new Instruction[] { this.architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, SSE2Register.XMM0), operand) };
             }
             else if (8 == size && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
             {
@@ -247,34 +249,7 @@ namespace Mosa.Platforms.x86
         {
             // Special treatment for some stack types
             // FIXME: Handle the size and alignment requirements of value types
-            GetStackRequirements(stackOperand.Type, out size, out alignment);
-        }
-
-        private void GetStackRequirements(SigType sigType, out int size, out int alignment)
-        {
-            switch (sigType.Type)
-            {
-                    // TODO ROOTNODE
-                case CilElementType.R4:
-                    size = alignment = 4;
-                    break;
-                case CilElementType.R8:
-                    // Default alignment and size are 4
-                    size = alignment = 8;
-                    break;
-
-                case CilElementType.I8: goto case CilElementType.U8;
-                case CilElementType.U8:
-                    size = alignment = 8;
-                    break;
-
-                case CilElementType.ValueType:
-                    throw new NotSupportedException();
-
-                default:
-                    size = alignment = 4;
-                    break;
-            }
+            this.architecture.GetTypeRequirements(stackOperand.Type, out size, out alignment);
         }
 
         int ICallingConvention.OffsetOfFirstLocal

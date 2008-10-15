@@ -518,7 +518,7 @@ namespace Mosa.Runtime.Vm
             TypeDefRow typeDefRow, nextTypeDefRow = new TypeDefRow();
             ClassLayoutRow layoutRow = new ClassLayoutRow();
             IMetadataProvider md = module.Metadata;
-            uint size = 0xFFFFFFFF, packing = 0xFFFFFFFF;
+            int size = 0x0, packing = 0;
             int typeOffset = moduleOffsets.TypeOffset;
             int methodOffset = moduleOffsets.MethodOffset;
             int fieldOffset = moduleOffsets.FieldOffset;
@@ -578,7 +578,7 @@ namespace Mosa.Runtime.Vm
                     }
                 }
 
-                packing = size = 0xFFFFFFFF;
+                packing = size = 0;
                 typeDefRow = nextTypeDefRow;
             }
             while (token++ < maxTypeDef);

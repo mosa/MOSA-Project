@@ -643,8 +643,8 @@ namespace Mosa.Runtime.Metadata {
             using (BinaryReader reader = CreateReaderForToken(token))
             {
                 result = new ClassLayoutRow(
-			        reader.ReadUInt16(),
-			        reader.ReadUInt32(),
+			        reader.ReadInt16(),
+			        reader.ReadInt32(),
                     ReadIndexValue(reader, TokenTypes.TypeDef)
                 );
             }

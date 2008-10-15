@@ -150,6 +150,14 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>A list of ObjectFileBuilders</returns>
         public abstract ObjectFileBuilderBase[] GetObjectFileBuilders();
 
+        /// <summary>
+        /// Gets the type memory requirements.
+        /// </summary>
+        /// <param name="type">The signature type.</param>
+        /// <param name="size">Receives the memory size of the type.</param>
+        /// <param name="alignment">Receives alignment requirements of the type.</param>
+        public abstract void GetTypeRequirements(SigType type, out int size, out int alignment);
+
         #endregion // IArchitecture Members
     }
 }

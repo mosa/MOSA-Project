@@ -248,7 +248,7 @@ namespace Mosa.Platforms.x86
             switch (cc)
             {
                 case CallingConvention.Default:
-                    return DefaultCallingConvention.Instance;
+                    return new DefaultCallingConvention(this);
 
                 default:
                     throw new NotSupportedException();
@@ -282,6 +282,42 @@ namespace Mosa.Platforms.x86
                     Elf32MachineKind.I386
                 )
             };
+        }
+
+        /// <summary>
+        /// Gets the type memory requirements.
+        /// </summary>
+        /// <param name="type">The signature type.</param>
+        /// <param name="size">Receives the memory size of the type.</param>
+        /// <param name="alignment">Receives alignment requirements of the type.</param>
+        public override void GetTypeRequirements(SigType type, out int size, out int alignment)
+        {
+            if (null == type)
+                throw new ArgumentNullException(@"type");
+
+            switch (type.Type)
+            {
+                // TODO ROOTNODE
+                case CilElementType.R4:
+                    size = alignment = 4;
+                    break;
+                case CilElementType.R8:
+                    // Default alignment and size are 4
+                    size = alignment = 8;
+                    break;
+
+                case CilElementType.I8: goto case CilElementType.U8;
+                case CilElementType.U8:
+                    size = alignment = 8;
+                    break;
+
+                case CilElementType.ValueType:
+                    throw new NotSupportedException();
+
+                default:
+                    size = alignment = 4;
+                    break;
+            }
         }
 
         #endregion // IArchitecture Members

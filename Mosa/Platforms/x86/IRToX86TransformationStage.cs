@@ -603,7 +603,7 @@ namespace Mosa.Platforms.x86
             if (null != instruction.Operand0)
             {
                 List<Instruction> instructions = new List<Instruction>();
-                Instruction[] resmove = cc.MoveReturnValue(_architecture, instruction.Operand0);
+                Instruction[] resmove = cc.MoveReturnValue(instruction.Operand0);
                 if (null != resmove)
                     instructions.AddRange(resmove);
                 instructions.Add(br);
@@ -969,7 +969,7 @@ namespace Mosa.Platforms.x86
         {
             ICallingConvention cc = _architecture.GetCallingConvention(instruction.InvokeTarget.Signature.CallingConvention);
             Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
-            object result = cc.Expand(_architecture, instruction);
+            object result = cc.Expand(instruction);
             if (result is List<Instruction>)
             {
                 // Replace the single instruction with the set
