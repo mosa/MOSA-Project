@@ -365,7 +365,7 @@
           <Reference name="Mosa.Kernel" />
           <Reference name="Mosa.Platforms.x86" />
           <Reference name="Mosa.Runtime" />
-          <Reference name="CommandLine" />
+          <Reference name="System" version="2.0.0.0" />
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
           </Files>
