@@ -200,7 +200,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test]
         [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
         [Importance(Importance.Severe)]
-        public void StsfldR4(uint value)
+        public void StsfldR4(float value)
         {
             this.CodeSource = s_testCode.Replace("type", "float");
             bool res = (bool)Run<B_R4>(@"", @"Test", @"Stsfld", value);
@@ -215,7 +215,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test]
         [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
         [Importance(Importance.Severe)]
-        public void StsfldR8(ulong value)
+        public void StsfldR8(double value)
         {
             this.CodeSource = s_testCode.Replace("type", "double");
             bool res = (bool)Run<B_R8>(@"", @"Test", @"Stsfld", value);
