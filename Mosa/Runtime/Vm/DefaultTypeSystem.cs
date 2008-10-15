@@ -466,7 +466,7 @@ namespace Mosa.Runtime.Vm
                     object[] callImpls = rMethod.GetCustomAttributes(callImplType);
                     foreach (InternalCallImplAttribute callImpl in callImpls)
                     {
-                        if (callDef.Matches(callImpl) == true)
+                        if (callDef.Match(callImpl) == true)
                         {
                             // We found the sought icall, save it and return it
                             this.internalCallTargets[internalCall] = rMethod;

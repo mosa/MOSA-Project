@@ -61,7 +61,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>
         /// 	<c>true</c> if they match; otherwise <c>false</c>.
         /// </returns>
-        public override bool Matches(Vm.InternalCallImplAttribute call)
+        public sealed override bool Match(Vm.InternalCallImplAttribute call)
         {
             CompilerSupportAttribute csa = call as CompilerSupportAttribute;
             return (null != csa && csa.SupportFunction == this.supportFunction);

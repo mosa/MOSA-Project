@@ -62,7 +62,7 @@ namespace Mosa.Runtime.Vm
         /// <returns>
         /// 	<c>true</c> if they match; otherwise <c>false</c>.
         /// </returns>
-        public override bool Matches(InternalCallImplAttribute call)
+        public sealed override bool Match(InternalCallImplAttribute call)
         {
             VmCallAttribute vmCall = call as VmCallAttribute;
             return (vmCall != null && vmCall.RuntimeCall == this.RuntimeCall);
