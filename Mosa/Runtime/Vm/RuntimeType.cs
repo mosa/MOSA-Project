@@ -253,6 +253,22 @@ namespace Mosa.Runtime.Vm
         }
 
         /// <summary>
+        /// Gets the full name of the type.
+        /// </summary>
+        /// <value>The full name.</value>
+        public string FullName
+        {
+            get
+            {
+                string ns = this.Namespace, name = this.Name;
+                if (null == ns)
+                    return name;
+
+                return ns + "." + name;
+            }
+        }
+
+        /// <summary>
         /// Gets the packing of type fields.
         /// </summary>
         /// <value>The packing of type fields.</value>

@@ -85,16 +85,19 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Read the _stackFrameIndex from the code
             TokenTypes token;
             decoder.Decode(out token);
-            throw new NotImplementedException();
-/*
-            Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) ||
-                         TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
-            MemberDefinition memberDef = MetadataMemberReference.FromToken(decoder.Metadata, token).Resolve();
+            _field = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
 
-            _field = memberDef as FieldDefinition;
-            Debug.Assert((_field.CustomAttributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static _stackFrameIndex access on non-static _stackFrameIndex.");
-            _results[0] = CreateResultOperand(_field.Type);
- */
+            Debug.Assert((_field.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
+            SetResult(0, decoder.Compiler.CreateResultOperand(_field.Type));
+        }
+
+        /// <summary>
+        /// Returns a formatted representation of the opcode.
+        /// </summary>
+        /// <returns>The code as a string value.</returns>
+        public override string ToString()
+        {
+            return String.Format("IL ldsfld ; {0} = {1}.{2}", this.Results[0], _field.DeclaringType.FullName, _field.Name);
         }
 
         /// <summary>

@@ -87,14 +87,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Read the _stackFrameIndex from the code
             TokenTypes token;
             decoder.Decode(out token);
-            throw new NotImplementedException();
-/*
-            Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) ||
-                         TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
-            MemberDefinition memberDef = MetadataMemberReference.FromToken(decoder.Metadata, token).Resolve();
-
-            _field = memberDef as FieldDefinition;
- */
+            _field = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
+            Debug.Assert((_field.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
         }
 
         /// <summary>
@@ -103,7 +97,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
-            return String.Format("{0} = {1}", this.Results[0], this.Operands[0]);
+            return String.Format("IL stsfld ; {0}.{1} = {2}", _field.DeclaringType.FullName, _field.Name, this.Operands[0]);
         }
 
         /// <summary>

@@ -353,21 +353,20 @@ namespace Mosa.Runtime.Vm
         {
             if (null == scope)
                 throw new ArgumentNullException(@"scope");
-            if (TokenTypes.Field != (TokenTypes.TableMask & token) || TokenTypes.MemberRef != (TokenTypes.TableMask & token))
-                throw new ArgumentException(@"Invalid _stackFrameIndex token.");
+            if (TokenTypes.Field != (TokenTypes.TableMask & token) && TokenTypes.MemberRef != (TokenTypes.TableMask & token))
+                throw new ArgumentException(@"Invalid field token.");
 
-            if (TokenTypes.MemberRef != (TokenTypes.TableMask & token))
+            if (TokenTypes.MemberRef == (TokenTypes.TableMask & token))
             {
                 MemberRefRow row;
                 scope.Metadata.Read(token, out row);
-                throw new NotImplementedException();
-                // token = row
+                throw new NotImplementedException();  
             }
 
             ModuleOffsets offsets = GetModuleOffset(scope);
-
-            throw new NotImplementedException();
-            //return null;
+            int fieldIndex = (int)(token & TokenTypes.RowIndexMask) - 1;
+            RuntimeField result = _fields[offsets.FieldOffset + fieldIndex];
+            return result;
         }
 
         RuntimeMethod ITypeSystem.GetMethod(IMetadataModule scope, TokenTypes token)
