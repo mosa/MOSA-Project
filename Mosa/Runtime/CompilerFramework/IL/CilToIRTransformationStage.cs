@@ -109,6 +109,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Ldsfld(LdsfldInstruction instruction, Context ctx)
         {
+            RuntimeField field = instruction.Field;
+            Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new MemoryOperand(field.Type, null, field.Address)));
         }
 
         void IILVisitor<Context>.Ldsflda(LdsfldaInstruction instruction, Context ctx)
@@ -153,6 +155,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Stsfld(StsfldInstruction instruction, Context ctx)
         {
+            RuntimeField field = instruction.Field;
+            Replace(ctx, new IR.MoveInstruction(new MemoryOperand(field.Type, null, field.Address), instruction.Operands[0]));
         }
 
         void IILVisitor<Context>.Dup(DupInstruction instruction, Context ctx)

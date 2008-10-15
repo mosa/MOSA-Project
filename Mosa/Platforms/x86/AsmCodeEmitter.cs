@@ -1093,22 +1093,44 @@ namespace Mosa.Platforms.x86
             // Check if op is a MemoryOperand
             else if (op is MemoryOperand)
             {
-                if ((op as MemoryOperand).StackType == StackTypeCode.F)
+                MemoryOperand mop = op as MemoryOperand;
+                if (mop.StackType == StackTypeCode.F)
                 {
                     // Return the memorylocation in form of [register + offset]
-                    if ((op as MemoryOperand).Offset.ToInt32() >= 0)
-                        return ("[" + (op as MemoryOperand).Base.ToString() + " + " + (op as MemoryOperand).Offset.ToString() + "]");
+                    if (mop.Offset.ToInt32() >= 0)
+                    {
+                        if (mop.Base != null)
+                        {
+                            return ("[" + mop.Base.ToString() + " + " + mop.Offset.ToString() + "]");
+                        }
+                        else
+                        {
+                            return ("[" + mop.Offset.ToString() + "]");
+                        }
+                    }
                     else
-                        return ("[" + (op as MemoryOperand).Base.ToString() + (op as MemoryOperand).Offset.ToString() + "]");
+                    {
+                        return ("[" + mop.Base.ToString() + "]");
+                    }
                 }
                 else
                 {
                     // Return the memorylocation in form of [register + offset]
-                    if ((op as MemoryOperand).Offset.ToInt32() >= 0)
-                        return ("dword [" + (op as MemoryOperand).Base.ToString() + " + " + (op as MemoryOperand).Offset.ToString() + "]");
+                    if (mop.Offset.ToInt32() >= 0)
+                    {
+                        if (mop.Base != null)
+                        {
+                            return ("dword [" + (op as MemoryOperand).Base.ToString() + " + " + (op as MemoryOperand).Offset.ToString() + "]");
+                        }
+                        else
+                        {
+                            return ("dword [" + (op as MemoryOperand).Offset.ToString() + "]");
+                        }
+                    }
                     else
-                        return ("dword [" + (op as MemoryOperand).Base.ToString() + (op as MemoryOperand).Offset.ToString() + "]");
-
+                    {
+                        return ("dword [" + (op as MemoryOperand).Base.ToString() + "]");
+                    }
                 }
             }
             // Still here, so op is of an unknown or unsupported type.
