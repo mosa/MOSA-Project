@@ -31,15 +31,17 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Main entry point for the compiler.
         /// </summary>
-        /// <param name="args">The args.</param>
+        /// <param name="args">The command line arguments.</param>
         public static void Main(string[] args)
         {
-            Console.WriteLine("MOSA Compiler, Version 0.0.1");
+            // always print header with version information
+            Console.WriteLine("MOSA AOT Compiler, Version 0.1 'Wake'");
             Console.WriteLine("(C) 2008 by the MOSA Project, Licensed under the new BSD license.");
             Console.WriteLine();
             
             if (args.Length == 0)
             {
+                // no arguments are specified
                 ShowShortHelp();
                 return;
             }
@@ -56,7 +58,7 @@ namespace Mosa.Tools.Compiler
             OptionSet optionSet = new OptionSet();
             optionSet.Add(
                 "v|version",
-                "Specifies the MOSA version.",
+                "Display version information.",
                 delegate(string v)
                 {
                     showVersion = (v != null);
@@ -64,7 +66,7 @@ namespace Mosa.Tools.Compiler
             
             optionSet.Add(
                 "h|?|help",
-                "Displays the full set of available options.",
+                "Display the full set of available options.",
                 delegate(string v)
                 {
                     showHelp = (v != null);
@@ -80,7 +82,7 @@ namespace Mosa.Tools.Compiler
             
             optionSet.Add(
                 "a|arch=",
-                "Selects one of the MOSA architectures to compile for.",
+                "Select one of the MOSA architectures to compile for.",
                 delegate(string v)
                 {
                     arch = v;
@@ -88,7 +90,7 @@ namespace Mosa.Tools.Compiler
             
              optionSet.Add(
                 "f|format=",
-                "Selects the format of the binary file to create.",
+                "Select the format of the binary file to create.",
                 delegate(string v)
                 {
                     binaryFormat = v;
@@ -96,7 +98,7 @@ namespace Mosa.Tools.Compiler
             
             optionSet.Add(
                 "b|boot=",
-                "Specifies the bootable format of the produced binary.",
+                "Specify the bootable format of the produced binary.",
                 delegate(string v)
                 {
                     bootFormat = v;
@@ -114,10 +116,11 @@ namespace Mosa.Tools.Compiler
                 
                 if (showVersion)
                 {
-                    Console.WriteLine("****TODO****"); // TODO: version information
+                    // only show header and exit
                     return;
                 }
                 
+                // parse the options
                 options.SetInputFiles(inputFiles);
                 options.SetOutputFile(outputFile);
                 options.SetArchitecture(arch);
