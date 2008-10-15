@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.Vm;
+using System.IO;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -38,6 +39,19 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="compiler">The compiler</param>
         public virtual void OnMethodCompileEnd(MethodCompilerBase compiler) { }
+
+        /// <summary>
+        /// Allocates the specified member.
+        /// </summary>
+        /// <param name="member">The member.</param>
+        /// <param name="section">The section.</param>
+        /// <param name="size">The size.</param>
+        /// <param name="alignment">The alignment.</param>
+        /// <returns></returns>
+        public virtual Stream Allocate(RuntimeMember member, LinkerSection section, int size, int alignment)
+        {
+            return null;
+        }
 
         /// <summary>
         /// Issues a linker request for the given runtime method.

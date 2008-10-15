@@ -657,7 +657,7 @@ namespace Mosa.Runtime.Vm
             FieldRow field;
             FieldRVARow fieldRVA = new FieldRVARow();
             FieldLayoutRow fieldLayout = new FieldLayoutRow();
-            uint rva = 0xFFFFFFFF, layout = 0xFFFFFFFF;
+            IntPtr rva, layout;
 
             if (TokenTypes.FieldRVA < maxRVA)
                 md.Read(tokenRva, out fieldRVA);
@@ -668,40 +668,46 @@ namespace Mosa.Runtime.Vm
             {
                 // Read the _stackFrameIndex
                 md.Read(token, out field);
+                layout = rva = IntPtr.Zero;
 
                 // Move to the RVA of this field
                 while (fieldRVA.FieldTableIdx < token && tokenRva <= maxRVA)
                     md.Read(tokenRva++, out fieldRVA);
 
-                // Does this field have an RVA?
-                if (token == fieldRVA.FieldTableIdx && tokenRva <= maxRVA)
+                // Static fields have an optional RVA, non-static may have a layout assigned
+                if ((field.Flags & FieldAttributes.Static) == FieldAttributes.Static)
                 {
-                    rva = fieldRVA.Rva;
-                    tokenRva++;
-                    if (tokenRva < maxRVA)
+                    // Does this field have an RVA?
+                    if (token == fieldRVA.FieldTableIdx && tokenRva <= maxRVA)
                     {
-                        md.Read(tokenRva, out fieldRVA);
+                        rva = new IntPtr(fieldRVA.Rva);
+                        tokenRva++;
+                        if (tokenRva < maxRVA)
+                        {
+                            md.Read(tokenRva, out fieldRVA);
+                        }
                     }
                 }
-
-                // Move to the layout of this field
-                while (fieldLayout.Field < token && tokenLayout <= maxLayout)
-                    md.Read(tokenLayout++, out fieldLayout);
-
-                // Does this field have layout?
-                if (token == fieldLayout.Field && tokenLayout <= maxLayout)
+                else
                 {
-                    layout = fieldLayout.Offset;
-                    tokenLayout++;
-                    if (tokenLayout < maxLayout)
+                    // Move to the layout of this field
+                    while (fieldLayout.Field < token && tokenLayout <= maxLayout)
+                        md.Read(tokenLayout++, out fieldLayout);
+
+                    // Does this field have layout?
+                    if (token == fieldLayout.Field && tokenLayout <= maxLayout)
                     {
-                        md.Read(tokenLayout, out fieldLayout);
+                        layout = new IntPtr(fieldLayout.Offset);
+                        tokenLayout++;
+                        if (tokenLayout < maxLayout)
+                        {
+                            md.Read(tokenLayout, out fieldLayout);
+                        }
                     }
                 }
 
                 // Load the field metadata
                 _fields[offset++] = new RuntimeField(module, ref field, layout, rva, declaringType);
-                layout = rva = 0xFFFFFFFF;
             }
 
             /* FIXME:

@@ -179,6 +179,15 @@ namespace Mosa.Runtime.Vm
         #region Properties
 
         /// <summary>
+        /// Gets the attributes.
+        /// </summary>
+        /// <value>The attributes.</value>
+        public TypeAttributes Attributes
+        {
+            get { return this._flags; }
+        }
+
+        /// <summary>
         /// Determines if the type has generic arguments.
         /// </summary>
         /// <value>

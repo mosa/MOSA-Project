@@ -22,14 +22,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
     class TestCaseMethodCompiler : MethodCompilerBase
     {
-        private Stream _stream;
-
         public TestCaseMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method) :
             base(linker, architecture, module, type, method)
         {
-            // Request 64K of memory
-            _stream = new VirtualMemoryStream(RuntimeBase.Instance.MemoryManager, 16 * 4096);
-
             // Populate the pipeline
             this.Pipeline.AddRange(new IMethodCompilerStage[] {
                 new ILDecodingStage(),
@@ -59,7 +54,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
         public override Stream RequestCodeStream()
         {
-            return _stream;
+            return this.Linker.Allocate(this.Method, LinkerSection.Text, 0, 0);
         }
     }
 }

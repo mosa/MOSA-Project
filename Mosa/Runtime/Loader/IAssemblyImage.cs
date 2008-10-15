@@ -41,5 +41,12 @@ namespace Mosa.Runtime.Loader
         /// <param name="rva">The relative virtual address to retrieve a stream for.</param>
         /// <returns>A stream, which represents the relative virtual address.</returns>
         Stream GetInstructionStream(long rva);
+
+        /// <summary>
+        /// Gets a stream into the data section, beginning at the specified RVA.
+        /// </summary>
+        /// <param name="rva">The rva.</param>
+        /// <returns>A stream into the data section, pointed to the requested RVA.</returns>
+        Stream GetDataSection(long rva);
     }
 }

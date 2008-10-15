@@ -57,12 +57,12 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// 
         /// </summary>
-        private uint _offset;
+        private IntPtr _offset;
 
         /// <summary>
         /// 
         /// </summary>
-        private uint _rva;
+        private IntPtr _rva;
 
         /// <summary>
         /// Holds the type of the field.
@@ -78,10 +78,10 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         /// <param name="module">The module to load the _stackFrameIndex from.</param>
         /// <param name="field">The field metadata row.</param>
-        /// <param name="offset">Holds the offset of the _stackFrameIndex in the owner type.</param>
+        /// <param name="offset">Holds the offset of the field in the owner type.</param>
         /// <param name="rva">The RVA of the initialization data</param>
         /// <param name="declaringType">Specifies the type, which contains this field.</param>
-        public RuntimeField(IMetadataModule module, ref FieldRow field, uint offset, uint rva, RuntimeType declaringType) :
+        public RuntimeField(IMetadataModule module, ref FieldRow field, IntPtr offset, IntPtr rva, RuntimeType declaringType) :
             base(0, module, declaringType, null)
         {
             _sig = (int)field.SignatureBlobIdx;
@@ -121,6 +121,15 @@ namespace Mosa.Runtime.Vm
                 this.Module.Metadata.Read(_nameIdx, out _name);
                 return _name;
             }
+        }
+
+        /// <summary>
+        /// Gets the RVA of the initialization data.
+        /// </summary>
+        /// <value>The RVA of the initialization data.</value>
+        public IntPtr RVA
+        {
+            get { return _rva; }
         }
 
         /// <summary>

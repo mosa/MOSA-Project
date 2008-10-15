@@ -172,6 +172,18 @@ namespace Mosa.Runtime.Loader.PE
         }
 
         /// <summary>
+        /// Gets a stream into the data section, beginning at the specified RVA.
+        /// </summary>
+        /// <param name="rva">The rva.</param>
+        /// <returns>
+        /// A stream into the data section, pointed to the requested RVA.
+        /// </returns>
+        public Stream GetDataSection(long rva)
+        {
+            return new InstructionStream(_assemblyStream, ResolveVirtualAddress(rva));
+        }
+
+        /// <summary>
         /// Loads the specified load order.
         /// </summary>
         /// <param name="loadOrder">The load order.</param>

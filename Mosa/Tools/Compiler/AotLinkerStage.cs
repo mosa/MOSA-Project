@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Vm;
+using System.IO;
 
 namespace Mosa.Tools.Compiler
 {
@@ -46,6 +47,19 @@ namespace Mosa.Tools.Compiler
         public void Run(AssemblyCompiler compiler) { }
 
         #region IAssemblyLinker Members
+
+        /// <summary>
+        /// Allocates the specified member.
+        /// </summary>
+        /// <param name="member">The member.</param>
+        /// <param name="section">The section.</param>
+        /// <param name="size">The size.</param>
+        /// <param name="alignment">The alignment.</param>
+        /// <returns></returns>
+        public Stream Allocate(RuntimeMember member, LinkerSection section, int size, int alignment)
+        {
+            return _objectFileBuilder.Allocate(member, section, size, alignment);
+        }
 
         /// <summary>
         /// 

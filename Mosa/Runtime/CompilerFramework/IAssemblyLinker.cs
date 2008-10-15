@@ -42,5 +42,15 @@ namespace Mosa.Runtime.CompilerFramework
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
         long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target);
+
+        /// <summary>
+        /// Allocates memory in the specified section.
+        /// </summary>
+        /// <param name="symbol">The metadata member to allocate space for.</param>
+        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+        /// <returns>A stream, which can be used to populate the section.</returns>
+        Stream Allocate(RuntimeMember symbol, LinkerSection section, int size, int alignment);
     }
 }

@@ -17,6 +17,43 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
     /// </summary>
     public class TestAssemblyLinker : AssemblyLinkerStageBase
     {
+        private Stream[] _section;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TestAssemblyLinker"/> class.
+        /// </summary>
+        public TestAssemblyLinker()
+        {
+            _section = new Stream[(int)LinkerSection.Max];
+        }
+
+
+        /// <summary>
+        /// Allocates the specified member.
+        /// </summary>
+        /// <param name="member">The member.</param>
+        /// <param name="section">The section.</param>
+        /// <param name="size">The size.</param>
+        /// <param name="alignment">The alignment.</param>
+        /// <returns></returns>
+        public override Stream Allocate(RuntimeMember member, LinkerSection section, int size, int alignment)
+        {
+            // FIXME: Use a linker stream instead.
+            Stream stream = _section[(int)section];
+            if (null == stream || (size != 0 && size > (stream.Length - stream.Position)))
+            {
+                // Request 64K of memory
+                stream = new VirtualMemoryStream(RuntimeBase.Instance.MemoryManager, 16 * 4096);
+
+                // FIXME: Put the old stream into a list to dispose
+
+                // Save the stream for further references
+                _section[(int)section] = stream;
+            }
+
+            return stream;
+        }
+
         /// <summary>
         /// 
         /// </summary>

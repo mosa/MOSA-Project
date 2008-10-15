@@ -13,6 +13,7 @@ using System.Text;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata;
 using System.Diagnostics;
+using System.IO;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -188,6 +189,16 @@ namespace Mosa.Runtime.CompilerFramework
         #endregion // Internals
 
         #region IAssemblyLinker Members
+
+        /// <summary>
+        /// Allocates the specified member.
+        /// </summary>
+        /// <param name="member">The member.</param>
+        /// <param name="section">The section.</param>
+        /// <param name="size">The size.</param>
+        /// <param name="alignment">The alignment.</param>
+        /// <returns></returns>
+        public abstract Stream Allocate(RuntimeMember member, LinkerSection section, int size, int alignment);
 
         /// <summary>
         /// Issues a linker request for the given runtime method.
