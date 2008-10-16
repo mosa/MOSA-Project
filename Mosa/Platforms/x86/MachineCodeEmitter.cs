@@ -475,38 +475,14 @@ namespace Mosa.Platforms.x86
         /// <param name="op2"></param>
         void ICodeEmitter.Cmp(Operand op1, Operand op2)
         {
-            // Check if we have to compare floatingpoint values
-            if (op1.StackType == StackTypeCode.F || op2.StackType == StackTypeCode.F)
+            // Swap if needed
+            if (op1 is ConstantOperand && !(op2 is ConstantOperand))
             {
-                //RegisterOperand rop;
-                // Check for single precision and cast if necessary
-                if (op1.Type.Type == CilElementType.R4)
-                {
-                    Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0), op1, cd_cvtss2sd);
-                    op1 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM0);
-                }
-                // Check for single precision and cast if necessary
-                if (op2.Type.Type == CilElementType.R4)
-                {
-                    Emit(new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1), op2, cd_cvtss2sd);
-                    op2 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
-                }
-                if (op1 is MemoryOperand || op1 is LabelOperand)
-                    Emit(op1, op2, cd_comisd);
-                else
-                    Emit(op1, op2, cd_comisd);
+                Operand tmp = op1;
+                op1 = op2;
+                op2 = tmp;
             }
-            else
-            {
-                // Swap if needed
-                if (op1 is ConstantOperand && !(op2 is ConstantOperand))
-                {
-                    Operand tmp = op1;
-                    op1 = op2;
-                    op2 = tmp;
-                }
-                Emit(op1, op2, cd_cmp);
-            }
+            Emit(op1, op2, cd_cmp);
         }
 
         /// <summary>

@@ -531,6 +531,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     result = new SigType(CilElementType.U4);
                     break;
 
+                case CilElementType.Char: goto case CilElementType.U2;
+                case CilElementType.Boolean: goto case CilElementType.U2;
+
+
                 default:
                     result = sigType;
                     break;

@@ -60,6 +60,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the char type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
+        [Row(Char.MinValue)]
         [Row(Char.MaxValue)]
         [Row('a')]
         [Row('z')]
@@ -70,7 +71,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Importance(Importance.Severe)]
         public void StaticFieldInitC(char value)
         {
-            RunTestCode<B_C, char>(s_testCode.Replace("type", "char").Replace("s_value", "'" + value + "'"), value);
+            RunTestCode<B_C, char>(s_testCode.Replace("type", "char").Replace("s_value", "'\\u" + ((int)value).ToString("x4") + "'"), value);
         }
 
         /// <summary>
