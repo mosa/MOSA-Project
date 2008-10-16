@@ -1603,6 +1603,14 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IX86InstructionVisitor<Context>.Cvtsd2ss(Cvtsd2ssInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cvtss2sd(Cvtss2sdInstruction instruction, Context arg)
+        {
+        }
+
         void IX86InstructionVisitor<Context>.Cmp(CmpInstruction instruction, Context arg)
         {
         }
@@ -1720,6 +1728,22 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Xchg(XchgInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Comisd(ComisdInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Comiss(ComissInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Ucomisd(UcomisdInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Ucomiss(UcomissInstruction instruction, Context arg)
         {
         }
 

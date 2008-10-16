@@ -29,14 +29,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
 
         /// <summary>
-        /// Allocates the specified member.
+        /// Allocates a symbol of the given name in the specified section.
         /// </summary>
-        /// <param name="member">The member.</param>
-        /// <param name="section">The section.</param>
-        /// <param name="size">The size.</param>
-        /// <param name="alignment">The alignment.</param>
-        /// <returns></returns>
-        public override Stream Allocate(RuntimeMember member, LinkerSection section, int size, int alignment)
+        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+        /// <returns>
+        /// A stream, which can be used to populate the section.
+        /// </returns>
+        protected override Stream Allocate(LinkerSection section, int size, int alignment)
         {
             // FIXME: Use a linker stream instead.
             Stream stream = _section[(int)section];

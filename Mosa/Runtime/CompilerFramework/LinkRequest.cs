@@ -43,9 +43,9 @@ namespace Mosa.Runtime.CompilerFramework
         private LinkType _linkType;
 
         /// <summary>
-        /// The target of this link request
+        /// The symbolic target of this link request
         /// </summary>
-        private RuntimeMember _target;
+        private string symbol;
 
         #endregion // Data members
 
@@ -58,14 +58,14 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="method">The method whose code is being patched.</param>
         /// <param name="methodOffset">The method offset.</param>
         /// <param name="methodRelativeBase">The method relative base.</param>
-        /// <param name="target">The target.</param>
-        public LinkRequest(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
+        /// <param name="symbol">The symbol.</param>
+        public LinkRequest(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol)
         {
             _method = method;
             _methodOffset = methodOffset;
             _linkType = linkType;
             _methodRelativeBase = methodRelativeBase;
-            _target = target;
+            this.symbol = symbol;
         }
 
         #endregion // Construction
@@ -107,9 +107,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// The target of this link
         /// </summary>
-        public RuntimeMember Target
+        public string Symbol
         {
-            get { return _target; }
+            get { return this.symbol; }
         }
 
         #endregion // Properties

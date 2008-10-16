@@ -28,7 +28,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Holds all unresolved link requests.
         /// </summary>
-        private Dictionary<RuntimeMember, List<LinkRequest>> _linkRequests;
+        private Dictionary<string, List<LinkRequest>> _linkRequests;
+
+        private Dictionary<string, LinkerSymbol> symbols;
 
         #endregion // Data members
 
@@ -39,7 +41,8 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         protected AssemblyLinkerStageBase()
         {
-            _linkRequests = new Dictionary<RuntimeMember, List<LinkRequest>>();
+            _linkRequests = new Dictionary<string, List<LinkRequest>>();
+            this.symbols = new Dictionary<string, LinkerSymbol>();
         }
 
         #endregion // Construction
@@ -64,8 +67,8 @@ namespace Mosa.Runtime.CompilerFramework
             long address;
 
             // Check if we have unresolved requests and try to link them
-            List<RuntimeMember> members = new List<RuntimeMember>(_linkRequests.Keys);
-            foreach (RuntimeMember member in members)
+            List<string> members = new List<string>(_linkRequests.Keys);
+            foreach (string member in members)
             {
                 // Is the runtime member resolved?
                 if (true == IsResolved(member, out address))
@@ -98,6 +101,25 @@ namespace Mosa.Runtime.CompilerFramework
         #endregion // Methods
 
         #region Internals
+
+        /// <summary>
+        /// Determines whether the specified symbol is resolved.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="address">The address.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified symbol is resolved; otherwise, <c>false</c>.
+        /// </returns>
+        protected virtual bool IsResolved(string symbol, out long address)
+        {
+            address = 0;
+            LinkerSymbol linkerSymbol;
+            if (true == this.symbols.TryGetValue(symbol, out linkerSymbol))
+            {
+                address = linkerSymbol.Address.ToInt64();
+            }
+            return (0 != address);
+        }
 
         /// <summary>
         /// Determines if the given runtime member can be resolved immediately.
@@ -191,14 +213,46 @@ namespace Mosa.Runtime.CompilerFramework
         #region IAssemblyLinker Members
 
         /// <summary>
-        /// Allocates the specified member.
+        /// Allocates memory in the specified section.
         /// </summary>
-        /// <param name="member">The member.</param>
-        /// <param name="section">The section.</param>
-        /// <param name="size">The size.</param>
-        /// <param name="alignment">The alignment.</param>
-        /// <returns></returns>
-        public abstract Stream Allocate(RuntimeMember member, LinkerSection section, int size, int alignment);
+        /// <param name="symbol">The metadata member to allocate space for.</param>
+        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+        /// <returns>A stream, which can be used to populate the section.</returns>
+        public Stream Allocate(RuntimeMember symbol, LinkerSection section, int size, int alignment)
+        {
+            return Allocate(CreateSymbolName(symbol), section, size, alignment);
+        }
+
+        /// <summary>
+        /// Allocates a symbol of the given name in the specified section.
+        /// </summary>
+        /// <param name="name">The name of the symbol.</param>
+        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+        /// <returns>
+        /// A stream, which can be used to populate the section.
+        /// </returns>
+        public Stream Allocate(string name, LinkerSection section, int size, int alignment)
+        {
+            Stream result = Allocate(section, size, alignment);
+            LinkerSymbol symbol = new LinkerSymbol(name, new IntPtr(result.Position));
+            this.symbols.Add(symbol.Name, symbol);
+            return result;
+        }
+
+        /// <summary>
+        /// Allocates a symbol of the given name in the specified section.
+        /// </summary>
+        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+        /// <returns>
+        /// A stream, which can be used to populate the section.
+        /// </returns>
+        protected abstract Stream Allocate(LinkerSection section, int size, int alignment);
 
         /// <summary>
         /// Issues a linker request for the given runtime method.
@@ -208,24 +262,48 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
         /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
         /// <param name="target">The method or static field to link against.</param>
-        public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
+        public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
-            Debug.Assert(null != target, @"A RuntimeMember must be passed to IAssemblyLinker.Link");
-            if (null == target)
-                throw new ArgumentNullException(@"member");
             Debug.Assert(true == IsValid(target), @"Invalid RuntimeMember passed to IAssemblyLinker.Link");
             if (false == IsValid(target))
                 throw new ArgumentException(@"RuntimeMember is not a static field or method.", @"member");
 
+            long address;
+            if (false == IsResolved(target, out address))
+            {
+                address = Link(linkType, method, methodOffset, methodRelativeBase, CreateSymbolName(target));
+            }
+
+            return address;
+        }
+
+        /// <summary>
+        /// Issues a linker request for the given runtime method.
+        /// </summary>
+        /// <param name="linkType">The type of link required.</param>
+        /// <param name="method">The method the patched code belongs to.</param>
+        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
+        /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
+        /// <param name="symbol">The linker symbol to link against.</param>
+        /// <returns>
+        /// The return value is the preliminary address to place in the generated machine
+        /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
+        /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
+        /// </returns>
+        public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol)
+        {
+            Debug.Assert(null != symbol, @"Symbol can't be null.");
+            if (null == symbol)
+                throw new ArgumentNullException(@"symbol");
 
             long result = 0;
-            if (true == IsResolved(target, out result))
+            if (true == IsResolved(symbol, out result))
             {
                 List<LinkRequest> patchList;
-                if (false == _linkRequests.TryGetValue(target, out patchList))
+                if (false == _linkRequests.TryGetValue(symbol, out patchList))
                 {
                     patchList = new List<LinkRequest>(1);
-                    patchList.Add(new LinkRequest(linkType, method, methodOffset, methodRelativeBase, target));
+                    patchList.Add(new LinkRequest(linkType, method, methodOffset, methodRelativeBase, symbol));
                 }
 
                 PatchRequests(result, patchList);
@@ -234,18 +312,46 @@ namespace Mosa.Runtime.CompilerFramework
             {
                 // FIXME: Make this thread safe
                 List<LinkRequest> list;
-                if (false == _linkRequests.TryGetValue(target, out list))
+                if (false == _linkRequests.TryGetValue(symbol, out list))
                 {
                     list = new List<LinkRequest>();
-                    _linkRequests.Add(target, list);
+                    _linkRequests.Add(symbol, list);
                 }
 
-                list.Add(new LinkRequest(linkType, method, methodOffset, methodRelativeBase, target));
+                list.Add(new LinkRequest(linkType, method, methodOffset, methodRelativeBase, symbol));
             }
 
             return result;
         }
 
         #endregion // IAssemblyLinker Members
+
+        #region Internals
+
+        /// <summary>
+        /// Creates a symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol name.</param>
+        /// <returns>A string, which represents the symbol name.</returns>
+        private string CreateSymbolName(RuntimeMember symbol)
+        {
+            if (symbol == null)
+                throw new ArgumentNullException(@"symbol");
+
+            string name;
+            RuntimeType declaringType = symbol.DeclaringType;
+            if (declaringType != null)
+            {
+                name = String.Format("{0}.{1}", declaringType.FullName, symbol.Name);
+            }
+            else
+            {
+                name = symbol.Name;
+            }
+
+            return name;
+        }
+
+        #endregion // Internals
     }
 }

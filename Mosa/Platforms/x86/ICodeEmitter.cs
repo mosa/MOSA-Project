@@ -662,6 +662,13 @@ namespace Mosa.Platforms.x86
         /// <param name="dst">The destination operand.</param>
         /// <param name="src">The source operand.</param>
         void Movss(Operand dst, Operand src);
+
+        /// <summary>
+        /// Moves a double precision fp value from src to dst.
+        /// </summary>
+        /// <param name="dst">The destination operand.</param>
+        /// <param name="src">The source operand.</param>
+        void Movsd(Operand dst, Operand src);
     }
 }
 

@@ -295,6 +295,16 @@ namespace Mosa.Platforms.x86
             _emitter.Cvtsi2ss(instruction.Operand0, instruction.Operand1);
         }
 
+        void IX86InstructionVisitor<int>.Cvtss2sd(Cvtss2sdInstruction instruction, int arg)
+        {
+            _emitter.Cvtss2sd(instruction.Operand0, instruction.Operand1);
+        }
+
+        void IX86InstructionVisitor<int>.Cvtsd2ss(Cvtsd2ssInstruction instruction, int arg)
+        {
+            _emitter.Cvtsd2ss(instruction.Operand0, instruction.Operand1);
+        }
+
         void IX86InstructionVisitor<int>.Hlt(HltInstruction instruction, int arg)
         {
             _emitter.Hlt();
@@ -491,6 +501,26 @@ namespace Mosa.Platforms.x86
         void IX86InstructionVisitor<int>.Call(CallInstruction instruction, int arg)
         {
             _emitter.Call(instruction.InvokeTarget);
+        }
+
+        void IX86InstructionVisitor<int>.Comisd(ComisdInstruction instruction, int arg)
+        {
+            _emitter.Comisd(instruction.Operand0, instruction.Operand1);
+        }
+
+        void IX86InstructionVisitor<int>.Comiss(ComissInstruction instruction, int arg)
+        {
+            _emitter.Comiss(instruction.Operand0, instruction.Operand1);
+        }
+
+        void IX86InstructionVisitor<int>.Ucomisd(UcomisdInstruction instruction, int arg)
+        {
+            _emitter.Ucomisd(instruction.Operand0, instruction.Operand1);
+        }
+
+        void IX86InstructionVisitor<int>.Ucomiss(UcomissInstruction instruction, int arg)
+        {
+            _emitter.Ucomiss(instruction.Operand0, instruction.Operand1);
         }
 
         #endregion // IX86InstructionVisitor Members
@@ -1272,82 +1302,6 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<int>.Visit(IR.FloatingPointCompareInstruction instruction, int arg)
         {
-            Operand op0 = instruction.Operand0;
-            Operand source = instruction.Operand1;
-            Operand destination = instruction.Operand2;
-            IR.ConditionCode setcc = IR.ConditionCode.Equal;
-
-            // Compare using the smallest precision
-            if (source.Type.Type == CilElementType.R4 && destination.Type.Type == CilElementType.R8)
-            {
-                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM1);
-                _emitter.Cvtsd2ss(rop, destination);
-                destination = rop;
-            }
-            if (destination.Type.Type == CilElementType.R4)
-            {
-                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM0);
-                _emitter.Cvtsd2ss(rop, source);
-                source = rop;
-            }
-
-            if (source.Type.Type == CilElementType.R4)
-            {
-                switch (instruction.ConditionCode)
-                {
-                    case IR.ConditionCode.Equal: _emitter.Ucomiss(source, destination); break;
-                    case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
-                    case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
-                    case IR.ConditionCode.UnsignedGreaterThan: goto case IR.ConditionCode.Equal;
-                    case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
-                    case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
-
-                    case IR.ConditionCode.GreaterOrEqual: _emitter.Comiss(source, destination); break;
-                    case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
-                    case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
-                    case IR.ConditionCode.LessThan: goto case IR.ConditionCode.GreaterOrEqual;
-                }
-            }
-            else
-            {
-                switch (instruction.ConditionCode)
-                {
-                    case IR.ConditionCode.Equal: _emitter.Ucomisd(source, destination); break;
-                    case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
-                    case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
-                    case IR.ConditionCode.UnsignedGreaterThan: goto case IR.ConditionCode.Equal;
-                    case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
-                    case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
-
-                    case IR.ConditionCode.GreaterOrEqual: _emitter.Comisd(source, destination); break;
-                    case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
-                    case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
-                    case IR.ConditionCode.LessThan: goto case IR.ConditionCode.GreaterOrEqual;
-                }
-            }
-
-            // x86 is messed up :(
-            switch (instruction.ConditionCode)
-            {
-                case IR.ConditionCode.Equal: break;
-                case IR.ConditionCode.NotEqual: break;
-                case IR.ConditionCode.UnsignedGreaterOrEqual: setcc = IR.ConditionCode.GreaterOrEqual; break;
-                case IR.ConditionCode.UnsignedGreaterThan: setcc = IR.ConditionCode.GreaterThan; break;
-                case IR.ConditionCode.UnsignedLessOrEqual: setcc = IR.ConditionCode.LessOrEqual; break;
-                case IR.ConditionCode.UnsignedLessThan: setcc = IR.ConditionCode.LessThan; break;
-
-                case IR.ConditionCode.GreaterOrEqual: setcc = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-                case IR.ConditionCode.GreaterThan: setcc = IR.ConditionCode.UnsignedGreaterThan; break;
-                case IR.ConditionCode.LessOrEqual: setcc = IR.ConditionCode.UnsignedLessOrEqual; break;
-                case IR.ConditionCode.LessThan: setcc = IR.ConditionCode.UnsignedLessThan; break;
-            }
-            _emitter.Setcc(op0, setcc);
-            // Extend the result to 32-bits
-            if (op0 is RegisterOperand)
-            {
-                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)op0).Register);
-                _emitter.Movzx(rop, rop);
-            }
         }
 
         void IR.IIRVisitor<int>.Visit(IR.FloatingPointToIntegerConversionInstruction instruction, int arg)
@@ -1471,42 +1425,45 @@ namespace Mosa.Platforms.x86
             Operand dst = instruction.Results[0], src = instruction.Operands[0];
 
             // FIXME: This should actually be expanded somewhere else
-            if (src is LabelOperand)
+            if (src is LabelOperand && dst is MemoryOperand)
             {
                 switch (src.Type.Type)
                 {
                     case CilElementType.R4:
-                        goto case CilElementType.R8;
+                        {
+                            Operand tmp = new RegisterOperand(src.Type, SSE2Register.XMM0);
+                            _emitter.Movss(tmp, src);
+                            _emitter.Movss(dst, tmp);
+                        }
+                        break;
 
                     case CilElementType.R8:
-                        Operand tmp = new RegisterOperand(src.Type, SSE2Register.XMM0);
-                        _emitter.Mov(tmp, src);
-                        _emitter.Mov(dst, tmp);
+                        {
+                            Operand tmp = new RegisterOperand(src.Type, SSE2Register.XMM0);
+                            _emitter.Movsd(tmp, src);
+                            _emitter.Movsd(dst, tmp);
+                        }
                         break;
 
-                    case CilElementType.I8:
-                        tmp = new RegisterOperand(src.Type, MMXRegister.MM0);
-                        _emitter.Mov(tmp, src);
-                        _emitter.Mov(dst, tmp);
-                        break;
-
-                    case CilElementType.U8:
-                        throw new NotImplementedException();
-
-                    case CilElementType.Object:
-                        throw new NotImplementedException();
+                    default:
+                        throw new NotSupportedException();
                 }
             }
-            else if ((src.Type.Type == CilElementType.R4 && dst.Type.Type == CilElementType.R8) ||
-                     (src.Type.Type == CilElementType.R4 && true == dst.IsRegister))
+            else if (src.Type.Type == CilElementType.R4 && dst.Type.Type == CilElementType.R4)
+            {
+                _emitter.Movss(dst, src);
+            }
+            else if (src.Type.Type == CilElementType.R4 && dst.Type.Type == CilElementType.R8)
             {
                 _emitter.Cvtss2sd(dst, src);
             }
-            else if ((dst.Type.Type == CilElementType.R4 && src.Type.Type == CilElementType.R8) ||
-                     (dst.Type.Type == CilElementType.R4 && true == src.IsRegister))
+            else if (src.Type.Type == CilElementType.R8 && dst.Type.Type == CilElementType.R4)
             {
-                _emitter.Cvtsd2ss(src, src);
-                _emitter.Movss(dst, src);
+                _emitter.Cvtsd2ss(dst, src);
+            }
+            else if (dst.Type.Type == CilElementType.R8 && src.Type.Type == CilElementType.R8)
+            {
+                _emitter.Movsd(dst, src);
             }
             else
             {

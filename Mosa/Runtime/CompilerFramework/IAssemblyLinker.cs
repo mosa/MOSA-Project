@@ -44,6 +44,21 @@ namespace Mosa.Runtime.CompilerFramework
         long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target);
 
         /// <summary>
+        /// Issues a linker request for the given runtime method.
+        /// </summary>
+        /// <param name="linkType">The type of link required.</param>
+        /// <param name="method">The method the patched code belongs to.</param>
+        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
+        /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
+        /// <param name="symbol">The linker symbol to link against.</param>
+        /// <returns>
+        /// The return value is the preliminary address to place in the generated machine 
+        /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
+        /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
+        /// </returns>
+        long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol);
+
+        /// <summary>
         /// Allocates memory in the specified section.
         /// </summary>
         /// <param name="symbol">The metadata member to allocate space for.</param>
@@ -52,5 +67,15 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
         /// <returns>A stream, which can be used to populate the section.</returns>
         Stream Allocate(RuntimeMember symbol, LinkerSection section, int size, int alignment);
+
+        /// <summary>
+        /// Allocates a symbol of the given name in the specified section.
+        /// </summary>
+        /// <param name="name">The name of the symbol.</param>
+        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+        /// <returns>A stream, which can be used to populate the section.</returns>
+        Stream Allocate(string name, LinkerSection section, int size, int alignment);
     }
 }

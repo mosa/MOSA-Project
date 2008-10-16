@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// An operand, which represents a label in the program data.
     /// </summary>
-    public class LabelOperand : MemoryOperand
+    public sealed class LabelOperand : MemoryOperand
     {
         #region Data members
 
@@ -25,6 +25,8 @@ namespace Mosa.Runtime.CompilerFramework
         /// Holds the label.
         /// </summary>
         private int _label;
+
+        private string name;
 
         #endregion // Data members
 
@@ -43,6 +45,17 @@ namespace Mosa.Runtime.CompilerFramework
             _label = label;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LabelOperand"/> class.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        public LabelOperand(SigType type, string name) :
+            base(type, null, IntPtr.Zero)
+        {
+            this.name = name;
+        }
+
         #endregion // Construction
 
         #region Properties
@@ -54,6 +67,15 @@ namespace Mosa.Runtime.CompilerFramework
         public int Label
         {
             get { return _label; }
+        }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public string Name
+        {
+            get { return this.name; }
         }
 
         #endregion // Properties

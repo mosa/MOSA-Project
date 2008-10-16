@@ -16,6 +16,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using IL = Mosa.Runtime.CompilerFramework.IL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
+using System.IO;
 
 namespace Mosa.Platforms.x86
 {
@@ -438,7 +439,115 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.FloatingPointCompareInstruction instruction, Context ctx)
         {
-            HandleComparisonInstruction(ctx, instruction);
+            List<Instruction> insts = new List<Instruction>();
+            Operand op0 = instruction.Operand0;
+            Operand source = EmitConstant(instruction.Operand1);
+            Operand destination = EmitConstant(instruction.Operand2);
+            IR.ConditionCode setcc = IR.ConditionCode.Equal;
+
+            // Swap the operands if necessary...
+            if (source is MemoryOperand && destination is RegisterOperand)
+            {
+                SwapComparisonOperands(instruction, source, destination);
+                source = instruction.Operand0;
+                destination = instruction.Operand1;
+            }
+            else if (source is MemoryOperand && destination is MemoryOperand)
+            {
+                RegisterOperand xmm2 = new RegisterOperand(source.Type, SSE2Register.XMM2);
+                insts.Add(new Instructions.MoveInstruction(xmm2, source));
+                source = xmm2;
+            }
+
+            // x86 is messed up :(
+            switch (instruction.ConditionCode)
+            {
+                case IR.ConditionCode.Equal: break;
+                case IR.ConditionCode.NotEqual: break;
+                case IR.ConditionCode.UnsignedGreaterOrEqual: setcc = IR.ConditionCode.GreaterOrEqual; break;
+                case IR.ConditionCode.UnsignedGreaterThan: setcc = IR.ConditionCode.GreaterThan; break;
+                case IR.ConditionCode.UnsignedLessOrEqual: setcc = IR.ConditionCode.LessOrEqual; break;
+                case IR.ConditionCode.UnsignedLessThan: setcc = IR.ConditionCode.LessThan; break;
+
+                case IR.ConditionCode.GreaterOrEqual: setcc = IR.ConditionCode.UnsignedGreaterOrEqual; break;
+                case IR.ConditionCode.GreaterThan: setcc = IR.ConditionCode.UnsignedGreaterThan; break;
+                case IR.ConditionCode.LessOrEqual: setcc = IR.ConditionCode.UnsignedLessOrEqual; break;
+                case IR.ConditionCode.LessThan: setcc = IR.ConditionCode.UnsignedLessThan; break;
+            }
+
+            // Compare using the smallest precision
+            if (source.Type.Type == CilElementType.R4 && destination.Type.Type == CilElementType.R8)
+            {
+                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM1);
+                insts.Add(new Instructions.Cvtsd2ssInstruction(rop, destination));
+                destination = rop;
+            }
+            if (source.Type.Type == CilElementType.R8 && destination.Type.Type == CilElementType.R4)
+            {
+                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM0);
+                insts.Add(new Instructions.Cvtsd2ssInstruction(rop, source));
+                source = rop;
+            }
+
+            if (source.Type.Type == CilElementType.R4)
+            {
+                switch (instruction.ConditionCode)
+                {
+                    case IR.ConditionCode.Equal: 
+                        insts.Add(new Instructions.UcomissInstruction(source, destination));
+                        break;
+                    case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedGreaterThan: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
+
+                    case IR.ConditionCode.GreaterOrEqual: 
+                        insts.Add(new Instructions.ComissInstruction(source, destination));
+                        break;
+
+                    case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
+                    case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
+                    case IR.ConditionCode.LessThan: goto case IR.ConditionCode.GreaterOrEqual;
+                }
+            }
+            else
+            {
+                switch (instruction.ConditionCode)
+                {
+                    case IR.ConditionCode.Equal: 
+                        insts.Add(new Instructions.UcomisdInstruction(source, destination));
+                        break;
+
+                    case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedGreaterThan: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
+                    case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
+
+                    case IR.ConditionCode.GreaterOrEqual: 
+                        insts.Add(new Instructions.ComisdInstruction(source, destination)); 
+                        break;
+
+                    case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
+                    case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
+                    case IR.ConditionCode.LessThan: goto case IR.ConditionCode.GreaterOrEqual;
+                }
+            }
+
+            // Determine the result
+            insts.Add(new Instructions.SetccInstruction(op0, setcc));
+
+            // Extend this to the full register, if we're storing it in a register
+            if (op0 is RegisterOperand)
+            {
+                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)op0).Register);
+                insts.Add(new IR.ZeroExtendedMoveInstruction(op0, rop));
+            }
+
+            Replace(ctx, insts);
+
+//            HandleComparisonInstruction(ctx, instruction);
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.FloatingPointToIntegerConversionInstruction instruction, Context ctx)
@@ -499,29 +608,30 @@ namespace Mosa.Platforms.x86
         void IR.IIRVisitor<Context>.Visit(IR.MoveInstruction instruction, Context ctx)
         {
             // We need to replace ourselves in case of a Memory -> Memory transfer
-            Operand dst = instruction.Operand0;
-            Operand src = instruction.Operand1;
+            Operand op0 = instruction.Operand0;
+            Operand op1 = instruction.Operand1;
+            op1 = EmitConstant(op1);
 
-            if (dst is MemoryOperand && src is MemoryOperand)
+            if (op0 is MemoryOperand && op1 is MemoryOperand)
             {
                 List<Instruction> replacements = new List<Instruction>();
                 RegisterOperand rop;
-                if (dst.StackType == StackTypeCode.F)
+                if (op0.StackType == StackTypeCode.F)
                 {
-                    rop = new RegisterOperand(dst.Type, SSE2Register.XMM0);
+                    rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
                 }
-                else if (dst.StackType == StackTypeCode.Int64)
+                else if (op0.StackType == StackTypeCode.Int64)
                 {
-                    rop = new RegisterOperand(dst.Type, SSE2Register.XMM0);
+                    rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
                 }
                 else
                 {
-                    rop = new RegisterOperand(dst.Type, GeneralPurposeRegister.EAX);
+                    rop = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
                 }
 
                 replacements.AddRange(new Instruction[] {
-                    new Instructions.MoveInstruction(rop, src),
-                    new Instructions.MoveInstruction(dst, rop)
+                    new Instructions.MoveInstruction(rop, op1),
+                    new Instructions.MoveInstruction(op0, rop)
                 });
 
                 Replace(ctx, replacements.ToArray());
@@ -704,6 +814,14 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Cvtsi2ss(Instructions.Cvtsi2ssInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cvtss2sd(Instructions.Cvtss2sdInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Cvtsd2ss(Instructions.Cvtsd2ssInstruction instruction, Context ctx)
         {
         }
 
@@ -897,9 +1015,92 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IX86InstructionVisitor<Context>.Comisd(Instructions.ComisdInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Comiss(Instructions.ComissInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Ucomisd(Instructions.UcomisdInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Ucomiss(Instructions.UcomissInstruction instruction, Context arg)
+        {
+        }
+
         #endregion // IX86InstructionVisitor<Context> Members
 
         #region Internals
+
+        /// <summary>
+        /// Emits the constant operands.
+        /// </summary>
+        /// <param name="ops">The constant operands.</param>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="ops"/> is null</exception>
+        private void EmitConstants(Operand[] ops)
+        {
+            if (null == ops)
+                throw new ArgumentNullException(@"ops");
+
+            for (int i = 0; i < ops.Length; i++)
+            {
+                ops[i] = EmitConstant(ops[i]);
+            }
+        }
+
+        /// <summary>
+        /// This function emits a constant variable into the read-only data section.
+        /// </summary>
+        /// <param name="op">The operand to emit as a constant.</param>
+        /// <returns>An operand, which represents the reference to the read-only constant.</returns>
+        /// <remarks>
+        /// This function checks if the given operand needs to be moved into the read-only data
+        /// section of the executable. For x86 this concerns only floating point operands, as these
+        /// can't be specified in inline assembly.<para/>
+        /// This function checks if the given operand needs to be moved and rewires the operand, if
+        /// it must be moved.
+        /// </remarks>
+        private Operand EmitConstant(Operand op)
+        {
+            ConstantOperand cop = op as ConstantOperand;
+            if (cop != null && cop.StackType == StackTypeCode.F)
+            {
+                int size, alignment;
+                this._architecture.GetTypeRequirements(cop.Type, out size, out alignment);
+                
+                string name = String.Format("C_{0}", Guid.NewGuid());
+                using (Stream stream = this._compiler.Linker.Allocate(name, LinkerSection.ROData, size, alignment))
+                {
+                    byte[] buffer;
+
+                    switch (cop.Type.Type)
+                    {
+                        case CilElementType.R4:
+                            buffer = BitConverter.GetBytes((float)cop.Value);
+                            break;
+
+                        case CilElementType.R8:
+                            buffer = BitConverter.GetBytes((double)cop.Value);
+                            break;
+
+                        default:
+                            throw new NotSupportedException();
+                    }
+
+                    stream.Write(buffer, 0, buffer.Length);
+                }
+
+                // FIXME: Attach the label operand to the linker symbol
+                // FIXME: Rename the LabelOperand to SymbolOperand
+                // FIXME: Use the provided name to link
+                LabelOperand lop = new LabelOperand(cop.Type, name);
+                op = lop;
+            }
+            return op;
+        }
 
         /// <summary>
         /// Special handling for commutative operations.
@@ -916,6 +1117,7 @@ namespace Mosa.Platforms.x86
         {
             Operand result = instruction.Results[0];
             Operand[] ops = instruction.Operands;
+            EmitConstants(ops);
 
             // If the first operand is a constant, move it to the second operand
             if (ops[0] is ConstantOperand)
@@ -941,6 +1143,7 @@ namespace Mosa.Platforms.x86
         {
             Operand opRes = instruction.Results[0];
             Operand[] ops = instruction.Operands;
+            EmitConstants(ops);
 
             if (ops[1] is ConstantOperand)
             {
@@ -986,20 +1189,20 @@ namespace Mosa.Platforms.x86
         private void HandleComparisonInstruction<InstType>(Context ctx, InstType instruction) where InstType: Instruction, IR.IConditionalInstruction
         {
             //IL.ILInstruction inst = (IL.ILInstruction)instruction;
-            Operand op1 = instruction.Operands[0];
-            Operand op2 = instruction.Operands[1];
+            Operand[] ops = instruction.Operands;
+            EmitConstants(ops);
 
-            if (op1 is MemoryOperand && op2 is RegisterOperand)
+            if (ops[0] is MemoryOperand && ops[1] is RegisterOperand)
             {
                 // Swap operands & optionally negate condition...
-                SwapComparisonOperands(instruction, op1, op2);
+                SwapComparisonOperands(instruction, ops[0], ops[1]);
             }
-            else if (op1 is MemoryOperand && op2 is MemoryOperand)
+            else if (ops[0] is MemoryOperand && ops[1] is MemoryOperand)
             {
                 // Load op1 into EAX and then do the comparison...
                 RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
                 Instruction[] results = new Instruction[] {
-                                new Instructions.MoveInstruction(eax, op1),
+                                new Instructions.MoveInstruction(eax, ops[0]),
                                 instruction
                             };
                 instruction.SetOperand(0, eax);
@@ -1075,6 +1278,8 @@ namespace Mosa.Platforms.x86
         {
             Operand opRes = instruction.Results[0];
             RegisterOperand eax = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
+            instruction.Operands[0] = EmitConstant(instruction.Operands[0]);
+
             instruction.SetResult(0, eax);
             Replace(ctx, new Instruction[] {
                 _architecture.CreateInstruction(typeof(IR.MoveInstruction), eax, instruction.Operands[0]),

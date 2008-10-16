@@ -930,6 +930,14 @@ namespace Mosa.Platforms.x86
             Emit(dest, src, cd_movss);
         }
 
+        void ICodeEmitter.Movsd(Operand dest, Operand src)
+        {
+            if (dest is ConstantOperand)
+                throw new ArgumentException(@"Destination can't be constant.", @"dest");
+
+            Emit(dest, src, cd_movsd);
+        }
+
         /// <summary>
         /// Emits a mov sign extend instruction.
         /// </summary>
@@ -1989,10 +1997,8 @@ namespace Mosa.Platforms.x86
                 LabelOperand label = src as LabelOperand;
                 if (null != label)
                 {
-                    // HACK: PIC and FP won't work for now, have to really fix this for moveable 
-                    // jitted code though
-                    displacement = IntPtr.Zero;
-                    _literals.Add(new Patch(label.Label, _codeStream.Position));
+                    int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
+                    displacement = new IntPtr(_linker.Link(LinkType.AbsoluteAddress|LinkType.I4, _compiler.Method, pos, 0, label.Name));
                 }
 
                 byte[] disp = BitConverter.GetBytes(displacement.Value.ToInt32());

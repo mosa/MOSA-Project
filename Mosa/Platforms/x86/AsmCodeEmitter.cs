@@ -662,6 +662,11 @@ namespace Mosa.Platforms.x86
             _textWriter.WriteLine("\t\tmovss\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
         }
 
+        void ICodeEmitter.Movsd(Operand dest, Operand src)
+        {
+            _textWriter.WriteLine("\t\tmovsd\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
+        }
+
         /// <summary>
         /// Emits a mov sign extend instruction.
         /// </summary>

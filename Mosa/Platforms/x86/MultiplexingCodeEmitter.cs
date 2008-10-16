@@ -776,6 +776,14 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        void ICodeEmitter.Movsd(Operand dest, Operand src)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Movsd(dest, src);
+            });
+        }
+
         /// <summary>
         /// Emits a mov sign extend instruction.
         /// </summary>

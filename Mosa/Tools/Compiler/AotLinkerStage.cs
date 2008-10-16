@@ -19,7 +19,7 @@ namespace Mosa.Tools.Compiler
     /// <summary>
     /// 
     /// </summary>
-    public class AotLinkerStage : IAssemblyCompilerStage, IAssemblyLinker
+    public class AotLinkerStage : AssemblyLinkerStageBase
     {
         /// <summary>
         /// 
@@ -49,28 +49,29 @@ namespace Mosa.Tools.Compiler
         #region IAssemblyLinker Members
 
         /// <summary>
-        /// Allocates the specified member.
+        /// Allocates a symbol of the given name in the specified section.
         /// </summary>
-        /// <param name="member">The member.</param>
-        /// <param name="section">The section.</param>
-        /// <param name="size">The size.</param>
-        /// <param name="alignment">The alignment.</param>
-        /// <returns></returns>
-        public Stream Allocate(RuntimeMember member, LinkerSection section, int size, int alignment)
+        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+        /// <returns>
+        /// A stream, which can be used to populate the section.
+        /// </returns>
+        protected override Stream Allocate(LinkerSection section, int size, int alignment)
         {
-            return _objectFileBuilder.Allocate(member, section, size, alignment);
+            return _objectFileBuilder.Allocate((string)null, section, size, alignment);
         }
 
         /// <summary>
-        /// 
+        /// Issues a linker request for the given runtime method.
         /// </summary>
-        /// <param name="linkType"></param>
-        /// <param name="method"></param>
-        /// <param name="methodOffset"></param>
-        /// <param name="methodRelativeBase"></param>
-        /// <param name="target"></param>
+        /// <param name="linkType">The type of link required.</param>
+        /// <param name="method">The method the patched code belongs to.</param>
+        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
+        /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
+        /// <param name="target">The method or static field to link against.</param>
         /// <returns></returns>
-        public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
+        public override long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
             return _objectFileBuilder.Link(
                 linkType,
@@ -79,6 +80,18 @@ namespace Mosa.Tools.Compiler
                 methodRelativeBase,
                 target
             );
+        }
+
+        /// <summary>
+        /// A request to patch already emitted code by storing the calculated address value.
+        /// </summary>
+        /// <param name="linkType">Type of the link.</param>
+        /// <param name="method">The method whose code is being patched.</param>
+        /// <param name="methodOffset">The value to store at the position in code.</param>
+        /// <param name="methodRelativeBase">The method relative base.</param>
+        /// <param name="targetAddress">The position in code, where it should be patched.</param>
+        protected override void ApplyPatch(LinkType linkType, RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress)
+        {
         }
 
         #endregion
