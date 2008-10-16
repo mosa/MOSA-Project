@@ -670,13 +670,13 @@ namespace Mosa.Runtime.Vm
                 md.Read(token, out field);
                 layout = rva = IntPtr.Zero;
 
-                // Move to the RVA of this field
-                while (fieldRVA.FieldTableIdx < token && tokenRva <= maxRVA)
-                    md.Read(tokenRva++, out fieldRVA);
-
                 // Static fields have an optional RVA, non-static may have a layout assigned
-                if ((field.Flags & FieldAttributes.Static) == FieldAttributes.Static)
+                if ((field.Flags & FieldAttributes.HasFieldRVA) == FieldAttributes.HasFieldRVA)
                 {
+                    // Move to the RVA of this field
+                    while (fieldRVA.FieldTableIdx < token && tokenRva <= maxRVA)
+                        md.Read(tokenRva++, out fieldRVA);
+
                     // Does this field have an RVA?
                     if (token == fieldRVA.FieldTableIdx && tokenRva <= maxRVA)
                     {
@@ -688,7 +688,15 @@ namespace Mosa.Runtime.Vm
                         }
                     }
                 }
-                else
+
+                if ((field.Flags & FieldAttributes.HasDefault) == FieldAttributes.HasDefault)
+                {
+                    // FIXME: Has a default value.
+                    //Debug.Assert(false);
+                }
+
+                // Layout only exists for non-static fields
+                if ((field.Flags & FieldAttributes.Static) != FieldAttributes.Static)
                 {
                     // Move to the layout of this field
                     while (fieldLayout.Field < token && tokenLayout <= maxLayout)

@@ -63,6 +63,36 @@ namespace Mosa.Platforms.x86
         #region Utility Methods
 
         /// <summary>
+        /// Splits the long operand into its high and low parts.
+        /// </summary>
+        /// <param name="op">The operand to split.</param>
+        /// <param name="opL">The low operand.</param>
+        /// <param name="opH">The high operand.</param>
+        /// <exception cref="T:System.ArgumentException"><paramref name="op"/> is not a ConstantOperand and not a MemoryOperand.</exception>
+        private void SplitLongOperand(Operand op, out Operand opL, out Operand opH)
+        {
+            Debug.Assert(op is MemoryOperand || op is ConstantOperand, @"Long operand not memory or constant.");
+
+            SigType I4 = new SigType(CilElementType.I4);
+            MemoryOperand mop = op as MemoryOperand;
+            if (mop == null)
+            {
+                ConstantOperand cop = op as ConstantOperand;
+                if (null == cop)
+                    throw new ArgumentException(@"Invalid long operand.", @"op");
+
+                long value = (long)cop.Value;
+                opL = new ConstantOperand(I4, (int)(value & 0xFFFFFFFF));
+                opH = new ConstantOperand(I4, (int)((value >> 32) & 0xFFFFFFFF));
+            }
+            else
+            {
+                opL = new MemoryOperand(I4, mop.Base, mop.Offset);
+                opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
+            }
+        }
+
+        /// <summary>
         /// Expands the add instruction for 64-bit operands.
         /// </summary>
         /// <param name="ctx">The context.</param>
@@ -589,15 +619,9 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandMove(Context ctx, IR.MoveInstruction instruction)
         {
-            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
-            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
-            Debug.Assert(op0 != null && op1 != null, @"Operands to I8 MoveInstruction are not MemoryOperand.");
-
-            SigType I4 = new SigType(CilElementType.I4);
-            MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
-            MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
-            MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
-            MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            Operand op0L, op0H, op1L, op1H;
+            SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
 
             Replace(ctx, new Instruction[] {
                 new IR.MoveInstruction(op0L, op1L),

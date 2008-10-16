@@ -115,10 +115,6 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// 
         /// </summary>
-        public RuntimeTypeFlags Flags;
-        /// <summary>
-        /// 
-        /// </summary>
 		public TypeDefRow _typeDef;
         /// <summary>
         /// 
@@ -294,6 +290,30 @@ namespace Mosa.Runtime.Vm
         {
             get { return _nativeSize; }
             set { _nativeSize = value; }
+        }
+
+        /// <summary>
+        /// Gets the type initializer.
+        /// </summary>
+        /// <value>The type initializer.</value>
+        public RuntimeMethod TypeInitializer
+        {
+            get
+            {
+                RuntimeMethod result = null;
+                MethodAttributes attrs = MethodAttributes.SpecialName|MethodAttributes.RTSpecialName|MethodAttributes.Static;
+                foreach (RuntimeMethod method in this.Methods)
+                {
+                    if ((method.Attributes & attrs) == attrs && method.Name == ".cctor")
+                    {
+                        Debug.Assert(method.Parameters.Count == 0, @"Static initializer takes arguments??");
+                        Debug.Assert(method.Signature.ReturnType == null, @"Static initializer having a result??");
+                        result = method;
+                        break;
+                    }
+                }
+                return result;
+            }
         }
         
         #endregion // Properties

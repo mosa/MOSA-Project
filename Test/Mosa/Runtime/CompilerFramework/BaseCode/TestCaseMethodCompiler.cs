@@ -17,6 +17,8 @@ using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework.IL;
 using Mosa.Runtime;
 using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata;
+using System.Runtime.InteropServices;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
@@ -49,6 +51,21 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 new StackLayoutStage(),
                 //InstructionLogger.Instance,
             });
+        }
+
+        private delegate void CCtor();
+
+        protected override void EndCompile()
+        {
+            // If we're compiling a type initializer, run it immediately.
+            MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
+            if ((this.Method.Attributes & attrs) == attrs && this.Method.Name == ".cctor")
+            {
+                CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(this.Method.Address, typeof(CCtor));
+                cctor();
+            }
+
+            base.EndCompile();
         }
 
 
