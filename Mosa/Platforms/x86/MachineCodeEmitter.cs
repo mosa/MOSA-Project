@@ -376,6 +376,10 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Not(Operand dest)
         {
             Emit(dest, null, cd_not);
+            if (dest.Type.Type == CilElementType.U1)
+                Emit(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFF), cd_and);
+            else if (dest.Type.Type == CilElementType.U2)
+                Emit(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFFFF), cd_and);
         }
 
         /// <summary>

@@ -168,7 +168,7 @@ namespace Mosa.ObjectFiles.Elf32
                 method,
                 methodOffset,
                 methodRelativeBase,
-                target
+                target.Name
             );
 
             long value;
@@ -209,7 +209,7 @@ namespace Mosa.ObjectFiles.Elf32
                 foreach (LinkRequest link in linkRequests)
                 {
                     Elf32Symbol methodSym = _currentFile.SymbolTable.GetSymbol(link.Method);
-                    Elf32Symbol targetSym = _currentFile.SymbolTable.GetSymbol(link.Target);
+                    Elf32Symbol targetSym = _currentFile.SymbolTable.GetSymbol(link.Symbol);
                     codeRelocs.Add(
                         link.LinkType,
                         methodSym.Offset + link.MethodOffset,
@@ -229,7 +229,7 @@ namespace Mosa.ObjectFiles.Elf32
         private bool TryResolveLink(LinkRequest link, out long value)
         {
             Elf32Symbol methodSym = _currentFile.SymbolTable.GetSymbol(link.Method);
-            Elf32Symbol targetSym = _currentFile.SymbolTable.GetSymbol(link.Target);
+            Elf32Symbol targetSym = _currentFile.SymbolTable.GetSymbol(link.Symbol);
 
             if (methodSym.IsDefined && targetSym.IsDefined)
             {

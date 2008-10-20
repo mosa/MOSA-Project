@@ -117,7 +117,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             CodeSource = "static class Test { static bool NotI2(int expect, short a) { return expect == (~a); } }";
             Assert.IsTrue((bool)Run<I4_I2>("", "Test", "NotI2", (short)~a, (short)a));
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -142,9 +142,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void NotU2(ushort a)
         {
             CodeSource = "static class Test { static bool NotU2(ushort expect, ushort a) { return expect == (~a); } }";
-            Assert.IsTrue((bool)Run<U2_U2>("", "Test", "NotU2", ~(ushort)a, (ushort)a));
+            Assert.IsTrue((bool)Run<U2_U2>("", "Test", "NotU2", (ushort)~(ushort)a, (ushort)a));
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
