@@ -375,11 +375,12 @@ namespace Mosa.Platforms.x86
         /// <param name="dest">The destination operand of the instruction.</param>
         void ICodeEmitter.Not(Operand dest)
         {
-            Emit(dest, null, cd_not);
             if (dest.Type.Type == CilElementType.U1)
-                Emit(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFF), cd_and);
+                Emit(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFF), cd_xor);
             else if (dest.Type.Type == CilElementType.U2)
-                Emit(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFFFF), cd_and);
+                Emit(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFFFF), cd_xor);
+            else
+                Emit(dest, null, cd_not);
         }
 
         /// <summary>

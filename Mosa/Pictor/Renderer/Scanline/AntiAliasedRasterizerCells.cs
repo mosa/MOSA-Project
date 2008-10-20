@@ -303,6 +303,9 @@
             _sortedY.Capacity = _maxY - _minY + 1;
             _sortedY.Clear();
 
+            for (int c = 0; c < _maxY - _minY + 1; ++c )
+                _sortedY.Add(new AntiAliasedRasterizerCells<Cell>.SortedY(0, 0));
+
             // Create the Y-histogram (count the numbers of cells for each Y)
             int index = 0;
             int mainIndex = 0;
