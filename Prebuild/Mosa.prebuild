@@ -24,31 +24,6 @@
         <NoStdLib>false</NoStdLib>
       </Options>
     </Configuration>
-    <EmbeddedSolution name="System">
-      <Project name="Mosa.System" type="Library" path="..\Mosa\System" language="C#" runtime="Microsoft" rootNamespace="System" assemblyName="mscorlib">
-        <Configuration name="Debug">
-          <Options>
-            <OutputPath>..\bin</OutputPath>
-            <XmlDocFile>System.xml</XmlDocFile>
-            <AllowUnsafe>false</AllowUnsafe>
-            <NoStdLib>true</NoStdLib>
-            <CompilerDefines>NET_2_0</CompilerDefines>
-          </Options>
-        </Configuration>
-        <Configuration name="Release">
-          <Options>
-            <OutputPath>..\bin</OutputPath>
-            <XmlDocFile>Mosa.System.xml</XmlDocFile>
-            <AllowUnsafe>false</AllowUnsafe>
-            <NoStdLib>true</NoStdLib>
-            <CompilerDefines>NET_2_0</CompilerDefines>
-          </Options>
-        </Configuration>
-        <Files>
-          <Match pattern="*.cs" path="." recurse="true"/>
-        </Files>
-      </Project>
-    </EmbeddedSolution>
     <EmbeddedSolution name="Tools">
       <Project name="Mosa.Tools.CreatePCIList" type="Exe" path="..\Mosa\Tools\CreatePCIList" language="C#" runtime="Microsoft" rootNamespace="Mosa.Tools.CreatePCIList" assemblyName="Mosa.Tools.CreatePCIList">
         <Configuration name="Debug">
@@ -401,6 +376,31 @@
           </Project>
         </EmbeddedSolution>
       </EmbeddedSolution>
+    </EmbeddedSolution>
+    <EmbeddedSolution name="System">
+      <Project name="Mosa.System" type="Library" path="..\Mosa\System" language="C#" runtime="Microsoft" rootNamespace="System" assemblyName="mscorlib">
+        <Configuration name="Debug">
+          <Options>
+            <OutputPath>..\bin</OutputPath>
+            <XmlDocFile>System.xml</XmlDocFile>
+            <AllowUnsafe>false</AllowUnsafe>
+            <NoStdLib>true</NoStdLib>
+            <CompilerDefines>NET_2_0</CompilerDefines>
+          </Options>
+        </Configuration>
+        <Configuration name="Release">
+          <Options>
+            <OutputPath>..\bin</OutputPath>
+            <XmlDocFile>Mosa.System.xml</XmlDocFile>
+            <AllowUnsafe>false</AllowUnsafe>
+            <NoStdLib>true</NoStdLib>
+            <CompilerDefines>NET_2_0</CompilerDefines>
+          </Options>
+        </Configuration>
+        <Files>
+          <Match pattern="*.cs" path="." recurse="true"/>
+        </Files>
+      </Project>
     </EmbeddedSolution>
   </Solution>
 </Prebuild>
