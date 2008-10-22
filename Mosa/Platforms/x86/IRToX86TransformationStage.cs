@@ -376,6 +376,10 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<Context>.Rem(IL.RemInstruction instruction, Context ctx)
         {
+            Replace(ctx, new Instruction[] {
+                new x86.Instructions.DivInstruction(instruction.First, instruction.Second),
+                new x86.Instructions.MoveInstruction(new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX), new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EDX))
+            });
         }
 
         #endregion // IILVisitor<Context> Members
