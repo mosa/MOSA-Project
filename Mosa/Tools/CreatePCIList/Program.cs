@@ -10,7 +10,7 @@
 using System;
 using System.IO;
 
-namespace Mosa.Tools
+namespace Mosa.Tools.CreatePCIList
 {
 	class Program
 	{

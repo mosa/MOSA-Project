@@ -38,7 +38,25 @@
             <XmlDocFile>Mosa.Tools.CreatePCIList.xml</XmlDocFile>
           </Options>
         </Configuration>
-        <Reference name="System" version="2.0.0.0" />
+        <Reference name="System" version="2.0.0.0" localCopy="false" />
+        <Files>
+          <Match pattern="*.cs" path="." recurse="true"/>
+        </Files>
+      </Project>
+      <Project name="Mosa.Tools.ImgToVHD" type="Exe" path="..\Mosa\Tools\ImgToVHD" language="C#" runtime="Microsoft" rootNamespace="Mosa.Tools.ImgToVHD" assemblyName="Mosa.Tools.ImgToVHD">
+        <Configuration name="Debug">
+          <Options>
+            <OutputPath>..\..\bin</OutputPath>
+            <XmlDocFile>Mosa.Tools.ImgToVHD.xml</XmlDocFile>
+          </Options>
+        </Configuration>
+        <Configuration name="Release">
+          <Options>
+            <OutputPath>..\..\bin</OutputPath>
+            <XmlDocFile>Mosa.Tools.ImgToVHD.xml</XmlDocFile>
+          </Options>
+        </Configuration>
+        <Reference name="System" version="2.0.0.0" localCopy="false" />
         <Files>
           <Match pattern="*.cs" path="." recurse="true"/>
         </Files>
@@ -78,7 +96,7 @@
               <XmlDocFile>Mosa.ClassLib.xml</XmlDocFile>
             </Options>
           </Configuration>
-          <Reference name="System" version="2.0.0.0" />
+          <Reference name="System" version="2.0.0.0" localCopy="false" />
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
           </Files>
@@ -98,8 +116,8 @@
               <AllowUnsafe>true</AllowUnsafe>
             </Options>
           </Configuration>
-          <Reference name="Mosa.Kernel" />
-          <Reference name="System" version="2.0.0.0" />
+          <Reference name="Mosa.Kernel" localCopy="true" />
+          <Reference name="System" version="2.0.0.0" localCopy="false" />
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
           </Files>
@@ -119,8 +137,8 @@
               <AllowUnsafe>true</AllowUnsafe>
             </Options>
           </Configuration>
-          <Reference name="Mosa.Runtime" />
-          <Reference name="System" version="2.0.0.0" />
+          <Reference name="Mosa.Runtime" localCopy="true" />
+          <Reference name="System" version="2.0.0.0" localCopy="false" />
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
           </Files>
@@ -140,7 +158,7 @@
               <XmlDocFile>Mosa.DeviceSystem.xml</XmlDocFile>
             </Options>
           </Configuration>
-          <Reference name="Mosa.ClassLib" />
+          <Reference name="Mosa.ClassLib" localCopy="true" />
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
           </Files>
@@ -177,10 +195,10 @@
               <XmlDocFile>Mosa.FileSystem.xml</XmlDocFile>
             </Options>
           </Configuration>
-          <Reference name="System" version="2.0.0.0" />
-          <Reference name="Mosa.ClassLib" />
-          <Reference name="Mosa.DeviceSystem" />
-          <Reference name="Mosa.DeviceDrivers" />
+          <Reference name="System" version="2.0.0.0" localCopy="false" />
+          <Reference name="Mosa.ClassLib" localCopy="true" />
+          <Reference name="Mosa.DeviceSystem" localCopy="true" />
+          <Reference name="Mosa.DeviceDrivers" localCopy="true" />
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
           </Files>
@@ -201,7 +219,7 @@
             <XmlDocFile>Pictor.xml</XmlDocFile>
           </Options>
         </Configuration>
-        <Reference name="System" version="2.0.0.0" />
+        <Reference name="System" version="2.0.0.0" localCopy="false" />
         <Files>
           <Match pattern="*.cs" path="." recurse="true"/>
         </Files>
@@ -221,10 +239,10 @@
             <XmlDocFile>Mosa.EmulatedKernel.xml</XmlDocFile>
           </Options>
         </Configuration>
-        <Reference name="System" version="2.0.0.0" />
-        <Reference name="Mosa.ClassLib" />
-        <Reference name="Mosa.DeviceSystem" />
-        <Reference name="Mosa.DeviceDrivers" />
+        <Reference name="System" version="2.0.0.0" localCopy="false" />
+        <Reference name="Mosa.ClassLib" localCopy="true" />
+        <Reference name="Mosa.DeviceSystem" localCopy="true" />
+        <Reference name="Mosa.DeviceDrivers" localCopy="true" />
         <Files>
           <Match pattern="*.cs" path="." recurse="true"/>
         </Files>
@@ -244,13 +262,13 @@
             <AllowUnsafe>true</AllowUnsafe>
           </Options>
         </Configuration>
-        <Reference name="System" version="2.0.0.0" />
-        <Reference name="System.Drawing" version="2.0.0.0" />
-        <Reference name="System.Windows.Forms" version="2.0.0.0" />
-        <Reference name="Mosa.DeviceSystem" />
-        <Reference name="Mosa.ClassLib" />
-        <Reference name="Mosa.DeviceDrivers" />
-        <Reference name="Mosa.EmulatedKernel" />
+        <Reference name="System" version="2.0.0.0" localCopy="false" />
+        <Reference name="System.Drawing" version="2.0.0.0" localCopy="false" />
+        <Reference name="System.Windows.Forms" version="2.0.0.0" localCopy="false" />
+        <Reference name="Mosa.DeviceSystem" localCopy="true" />
+        <Reference name="Mosa.ClassLib" localCopy="true" />
+        <Reference name="Mosa.DeviceDrivers" localCopy="true" />
+        <Reference name="Mosa.EmulatedKernel" localCopy="true" />
         <Files>
           <Match pattern="*.cs" path="." recurse="true"/>
         </Files>
@@ -268,12 +286,12 @@
             <XmlDocFile>Mosa.Emulator.xml</XmlDocFile>
           </Options>
         </Configuration>
-        <Reference name="System" version="2.0.0.0" />
-        <Reference name="Mosa.EmulatedDevices" />
-        <Reference name="Mosa.ClassLib" />
-        <Reference name="Mosa.DeviceSystem" />
-        <Reference name="Mosa.DeviceDrivers" />
-        <Reference name="Mosa.EmulatedKernel" />
+        <Reference name="System" version="2.0.0.0" localCopy="false" />
+        <Reference name="Mosa.EmulatedDevices" localCopy="true" />
+        <Reference name="Mosa.ClassLib" localCopy="true" />
+        <Reference name="Mosa.DeviceSystem" localCopy="true" />
+        <Reference name="Mosa.DeviceDrivers" localCopy="true" />
+        <Reference name="Mosa.EmulatedKernel" localCopy="true" />
         <Reference name="Pictor" />
         <Files>
           <Match pattern="*.cs" path="." recurse="true"/>
@@ -295,8 +313,8 @@
               <XmlDocFile>Mosa.ObjectFiles.Elf32.xml</XmlDocFile>
             </Options>
           </Configuration>
-          <Reference name="Mosa.Runtime" />
-          <Reference name="System" version="2.0.0.0" />
+          <Reference name="System" version="2.0.0.0" localCopy="false" />
+          <Reference name="Mosa.Runtime" localCopy="true" />
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
           </Files>
@@ -316,9 +334,9 @@
               <XmlDocFile>Mosa.Platforms.x86.xml</XmlDocFile>
             </Options>
           </Configuration>
-          <Reference name="Mosa.ObjectFiles.Elf32" />
-          <Reference name="Mosa.Runtime" />
-          <Reference name="System" version="2.0.0.0" />
+          <Reference name="System" version="2.0.0.0" localCopy="false" />
+          <Reference name="Mosa.ObjectFiles.Elf32" localCopy="true" />
+          <Reference name="Mosa.Runtime"  localCopy="true" />
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
           </Files>
@@ -337,10 +355,10 @@
             </Options>
           </Configuration>
           <ReferencePath>..\..\..\3rdParty</ReferencePath>
-          <Reference name="Mosa.Kernel" />
-          <Reference name="Mosa.Platforms.x86" />
-          <Reference name="Mosa.Runtime" />
-          <Reference name="System" version="2.0.0.0" />
+          <Reference name="System" version="2.0.0.0" localCopy="false" />
+          <Reference name="Mosa.Kernel" localCopy="true" />
+          <Reference name="Mosa.Platforms.x86" localCopy="true" />
+          <Reference name="Mosa.Runtime" localCopy="true" />
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
           </Files>
@@ -362,14 +380,14 @@
               </Options>
             </Configuration>
             <ReferencePath>..\..\..\..\3rdParty</ReferencePath>
-            <Reference name="Mosa.Kernel" />
-            <Reference name="Mosa.Platforms.x86" />
-            <Reference name="Mosa.Runtime" />
-            <Reference name="Mosa.Jit.SimpleJit" />
-            <Reference name="System" version="2.0.0.0" />
-            <Reference name="System.Xml" version="2.0.0.0" />
-            <Reference name="MbUnit" version="3.0.0.179"/>
-            <Reference name="Gallio" version="3.0.0.179"/>
+            <Reference name="System" version="2.0.0.0" localCopy="false" />
+            <Reference name="System.Xml" version="2.0.0.0" localCopy="false" />
+            <Reference name="Mosa.Kernel" localCopy="true" />
+            <Reference name="Mosa.Platforms.x86" localCopy="true" />
+            <Reference name="Mosa.Runtime" localCopy="true" />
+            <Reference name="Mosa.Jit.SimpleJit" localCopy="true" />
+            <Reference name="MbUnit" localCopy="false" />
+            <Reference name="Gallio" localCopy="false" />
             <Files>
               <Match pattern="*.cs" path="." recurse="true"/>
             </Files>
