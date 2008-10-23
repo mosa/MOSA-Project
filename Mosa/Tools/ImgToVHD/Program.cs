@@ -14,6 +14,8 @@ namespace Mosa.Tools.ImgToVHD
 {
 	class Program
 	{
+
+
 		static int Main(string[] args)
 		{
 			if (args.Length < 2) {
@@ -25,9 +27,25 @@ namespace Mosa.Tools.ImgToVHD
 			try {
 				// Copy file - the first part of an IMG file is the same within the Fixed VHD file
 				File.Copy(args[0], args[1], true);
-				
-				// Added footer
 
+				// File Stream
+				FileStream fileStream = new FileStream(args[1], FileMode.Append, FileAccess.Write);
+
+				ulong size = (ulong)fileStream.Length;
+
+				fileStream.Seek(0, SeekOrigin.End);
+
+				// Pad to 512 byte block
+				for (uint index = VHD.GetAlignmentPadding(size); size > 0; index--)
+					fileStream.WriteByte(0);
+
+				// Create footer
+				byte[] footer = VHD.CreateFooter(size);
+
+				// Added footer
+				fileStream.Write(footer, 0, 512);
+
+				fileStream.Close();
 			}
 			catch (Exception e) {
 				Console.WriteLine("Error: " + e.ToString());
