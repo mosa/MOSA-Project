@@ -14,8 +14,6 @@ namespace Mosa.Tools.ImgToVHD
 {
 	class Program
 	{
-
-
 		static int Main(string[] args)
 		{
 			if (args.Length < 2) {

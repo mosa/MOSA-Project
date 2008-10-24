@@ -62,67 +62,67 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Black
 		/// </summary>
-		Black,
+		Black = 0,
 		/// <summary>
 		/// Blue
 		/// </summary>
-		Blue,
+		Blue = 1,
 		/// <summary>
 		/// Green
 		/// </summary>
-		Green,
+		Green = 2,
 		/// <summary>
 		/// Cyan
 		/// </summary>
-		Cyan,
+		Cyan = 3,
 		/// <summary>
 		/// Red
 		/// </summary>
-		Red,
+		Red = 4,
 		/// <summary>
 		/// Magenta
 		/// </summary>
-		Magenta,
+		Magenta = 5,
 		/// <summary>
 		/// Brown
 		/// </summary>
-		Brown,
+		Brown = 6,
 		/// <summary>
 		/// White
 		/// </summary>
-		White,
+		White = 7,
 		/// <summary>
 		/// DarkGray
 		/// </summary>
-		DarkGray,
+		DarkGray = 8,
 		/// <summary>
 		/// LightBlue
 		/// </summary>
-		LightBlue,
+		LightBlue = 9,
 		/// <summary>
 		/// LightGreen
 		/// </summary>
-		LightGreen,
+		LightGreen = 10,
 		/// <summary>
 		/// LightCyan
 		/// </summary>
-		LightCyan,
+		LightCyan = 11,
 		/// <summary>
 		/// LightRed
 		/// </summary>
-		LightRed,
+		LightRed = 12,
 		/// <summary>
 		/// LightMagenta
 		/// </summary>
-		LightMagenta,
+		LightMagenta = 13,
 		/// <summary>
 		/// Yellow
 		/// </summary>
-		Yellow,
+		Yellow = 14,
 		/// <summary>
 		/// BrightWhite
 		/// </summary>
-		BrightWhite
+		BrightWhite = 15
 	}
 
 }

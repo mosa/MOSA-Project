@@ -410,10 +410,33 @@
         <Configuration name="Release">
           <Options>
             <OutputPath>..\bin</OutputPath>
-            <XmlDocFile>Mosa.System.xml</XmlDocFile>
+            <XmlDocFile>System.xml</XmlDocFile>
             <AllowUnsafe>false</AllowUnsafe>
             <NoStdLib>true</NoStdLib>
             <CompilerDefines>NET_2_0</CompilerDefines>
+          </Options>
+        </Configuration>
+        <Files>
+          <Match pattern="*.cs" path="." recurse="true"/>
+        </Files>
+      </Project>
+    </EmbeddedSolution>
+    <EmbeddedSolution name="TestBoot">
+      <Project name="Mosa.HelloWorld" type="Library" path="..\Mosa\HelloWorld" language="C#" runtime="Microsoft" rootNamespace="Mosa.HelloWorld" assemblyName="Mosa.HelloWorld">
+        <Configuration name="Debug">
+          <Options>
+            <OutputPath>..\bin</OutputPath>
+            <XmlDocFile>Mosa.HelloWorld.xml</XmlDocFile>
+            <NoStdLib>true</NoStdLib>
+            <AllowUnsafe>true</AllowUnsafe>
+          </Options>
+        </Configuration>
+        <Configuration name="Release">
+          <Options>
+            <OutputPath>..\bin</OutputPath>
+            <XmlDocFile>Mosa.HelloWorld.xml</XmlDocFile>
+            <NoStdLib>true</NoStdLib>
+            <AllowUnsafe>true</AllowUnsafe>
           </Options>
         </Configuration>
         <Files>
