@@ -166,6 +166,19 @@ namespace Mosa.ClassLib
 		/// </summary>
 		/// <param name="offset"></param>
 		/// <param name="value"></param>
+		public void SetUIntReversed(uint offset, uint value)
+		{
+			data[offset++] = (byte)((value >> 24) & 0xFF);
+			data[offset++] = (byte)((value >> 16) & 0xFF);
+			data[offset++] = (byte)((value >> 8) & 0xFF);
+			data[offset++] = (byte)(value & 0xFF);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="offset"></param>
+		/// <param name="value"></param>
 		public void SetULong(uint offset, ulong value)
 		{
 			data[offset++] = (byte)(value & 0xFF);
@@ -175,9 +188,27 @@ namespace Mosa.ClassLib
 			data[offset++] = (byte)((value >> 32) & 0xFF);
 			data[offset++] = (byte)((value >> 40) & 0xFF);
 			data[offset++] = (byte)((value >> 48) & 0xFF);
+			data[offset++] = (byte)((value >> 56) & 0xFF);
 		}
 
-        /// <summary>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="offset"></param>
+		/// <param name="value"></param>
+		public void SetULongReversed(uint offset, ulong value)
+		{
+			data[offset++] = (byte)((value >> 56) & 0xFF); 
+			data[offset++] = (byte)((value >> 48) & 0xFF);
+			data[offset++] = (byte)((value >> 40) & 0xFF);
+			data[offset++] = (byte)((value >> 32) & 0xFF);
+			data[offset++] = (byte)((value >> 24) & 0xFF);			
+			data[offset++] = (byte)((value >> 16) & 0xFF);
+			data[offset++] = (byte)((value >> 8) & 0xFF);
+			data[offset++] = (byte)(value & 0xFF);
+		}
+		
+		/// <summary>
         /// 
         /// </summary>
         /// <param name="offset"></param>
@@ -199,6 +230,17 @@ namespace Mosa.ClassLib
 		{
 			data[offset++] = (byte)(value & 0xFF);
 			data[offset++] = (byte)((value >> 8) & 0xFF);
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="offset"></param>
+		/// <param name="value"></param>
+		public void SetUShortReversed(uint offset, ushort value)
+		{
+			data[offset++] = (byte)((value >> 8) & 0xFF);
+			data[offset++] = (byte)(value & 0xFF);
 		}
 
         /// <summary>

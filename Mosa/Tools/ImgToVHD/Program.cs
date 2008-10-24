@@ -36,7 +36,7 @@ namespace Mosa.Tools.ImgToVHD
 				fileStream.Seek(0, SeekOrigin.End);
 
 				// Pad to 512 byte block
-				for (uint index = VHD.GetAlignmentPadding(size); size > 0; index--)
+				for (int index = (int)VHD.GetAlignmentPadding(size); index >= 0; index--)
 					fileStream.WriteByte(0);
 
 				// Create footer
