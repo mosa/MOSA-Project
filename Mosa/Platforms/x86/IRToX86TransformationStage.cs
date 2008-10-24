@@ -377,8 +377,9 @@ namespace Mosa.Platforms.x86
         void IL.IILVisitor<Context>.Rem(IL.RemInstruction instruction, Context ctx)
         {
             Replace(ctx, new Instruction[] {
+                new x86.Instructions.MoveInstruction(new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX), instruction.First),
                 new x86.Instructions.DivInstruction(instruction.First, instruction.Second),
-                new x86.Instructions.MoveInstruction(new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX), new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EDX))
+                new x86.Instructions.MoveInstruction(instruction.Results[0], new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EDX))
             });
         }
 
@@ -668,7 +669,7 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
                 // int 3
-                //_architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
+                _architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
                 // push ebp
                 _architecture.CreateInstruction(typeof(IR.PushInstruction), ebp),
                 // mov ebp, esp
@@ -762,7 +763,12 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.URemInstruction instruction, Context ctx)
         {
-            throw new NotImplementedException();
+            Replace(ctx, new Instruction[] {
+                new x86.Instructions.MoveInstruction(new RegisterOperand(instruction.Operand1.Type, GeneralPurposeRegister.EAX), instruction.Operand1),
+                new x86.Instructions.DivInstruction(instruction.Operand1, instruction.Operand2),
+                new x86.Instructions.MoveInstruction(instruction.Operand0, new RegisterOperand(instruction.Operand0.Type, GeneralPurposeRegister.EDX))
+            });
+            //throw new NotImplementedException();
 /*
             Type replType = typeof(x86.Instructions.URemInstruction);
             ThreeTwoAddressConversion(ctx, instruction, replType);

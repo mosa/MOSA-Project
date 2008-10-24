@@ -822,7 +822,7 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
-        /// Emits an NOT instruction.
+        /// Emits a NOT instruction.
         /// </summary>
         /// <param name="dest">The destination operand of the instruction.</param>
         public void Not(Operand dest)
