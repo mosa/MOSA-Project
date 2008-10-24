@@ -190,6 +190,42 @@ namespace Mosa.ClassLib
         /// </summary>
         /// <param name="offset"></param>
         /// <returns></returns>
+        public ulong GetULong(uint offset)
+        {
+            ulong value = data[offset++];
+            value += (uint)(data[offset++] << 8);
+            value += (uint)(data[offset++] << 16);
+            value += (uint)(data[offset++] << 24);
+            value += (uint)(data[offset++] << 32);
+            value += (uint)(data[offset++] << 40);
+            value += (uint)(data[offset++] << 48);
+            value += (uint)(data[offset++] << 56);
+
+            return value;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="value"></param>
+        public void SetULong(ulong offset, ulong value)
+        {
+            data[offset++] = (byte)(value & 0xFF);
+            data[offset++] = (byte)((value >> 8) & 0xFF);
+            data[offset++] = (byte)((value >> 16) & 0xFF);
+            data[offset++] = (byte)((value >> 24) & 0xFF);
+            data[offset++] = (byte)((value >> 32) & 0xFF);
+            data[offset++] = (byte)((value >> 40) & 0xFF);
+            data[offset++] = (byte)((value >> 48) & 0xFF);
+            data[offset++] = (byte)((value >> 56) & 0xFF);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
 		public int GetInt(uint offset) { return (int)GetUInt(offset); }
 
         /// <summary>
