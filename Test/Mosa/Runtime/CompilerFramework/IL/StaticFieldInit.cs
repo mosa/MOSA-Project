@@ -41,7 +41,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             bool res = (bool)Run<DelegateType>(@"", @"Test", @"StaticFieldInit", value);
             Assert.IsTrue(res);
         }
-
+        
         /// <summary>
         /// Tests the StaticFieldInit for the boolean type.
         /// </summary>
@@ -55,7 +55,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         {
             RunTestCode<B_B, bool>(s_testCode.Replace("type", "bool").Replace("s_value", value.ToString().ToLower()), value);
         }
-
+        
         /// <summary>
         /// Tests the StaticFieldInit for the char type.
         /// </summary>
@@ -73,7 +73,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         {
             RunTestCode<B_C, char>(s_testCode.Replace("type", "char").Replace("s_value", "'\\u" + ((int)value).ToString("x4") + "'"), value);
         }
-
+        
         /// <summary>
         /// Tests the StaticFieldInit for the sbyte type.
         /// </summary>

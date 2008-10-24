@@ -669,7 +669,7 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
                 // int 3
-                _architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
+                //_architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
                 // push ebp
                 _architecture.CreateInstruction(typeof(IR.PushInstruction), ebp),
                 // mov ebp, esp
@@ -765,7 +765,7 @@ namespace Mosa.Platforms.x86
         {
             Replace(ctx, new Instruction[] {
                 new x86.Instructions.MoveInstruction(new RegisterOperand(instruction.Operand1.Type, GeneralPurposeRegister.EAX), instruction.Operand1),
-                new x86.Instructions.DivInstruction(instruction.Operand1, instruction.Operand2),
+                new x86.Instructions.UDivInstruction(instruction.Operand1, instruction.Operand2),
                 new x86.Instructions.MoveInstruction(instruction.Operand0, new RegisterOperand(instruction.Operand0.Type, GeneralPurposeRegister.EDX))
             });
             //throw new NotImplementedException();

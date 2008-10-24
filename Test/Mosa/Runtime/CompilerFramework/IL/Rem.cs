@@ -22,7 +22,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     /// </summary>
     [TestFixture]
     public class Rem : CodeDomTestRunner
-    {/*
+    {
         /// <summary>
         /// 
         /// </summary>
@@ -30,7 +30,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        delegate bool I4_I1_I1(int expect, sbyte a, sbyte b);
+        delegate bool I4_I1_I1(sbyte expect, sbyte a, sbyte b);
         /// <summary>
         /// 
         /// </summary>
@@ -91,10 +91,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void RemI1(sbyte a, sbyte b)
         {
-            CodeSource = "static class Test { static bool RemI1(int expect, sbyte a, sbyte b) { return expect == (a % b); } }";
-            Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "RemI1", a % b, a, b));
+            CodeSource = "static class Test { static bool RemI1(sbyte expect, sbyte a, sbyte b) { return expect == (a % b); } }";
+            Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "RemI1", (sbyte)(a % b), a, b));
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -102,7 +102,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        delegate bool U4_U1_U1(uint expect, byte a, byte b);
+        delegate bool U4_U1_U1(byte expect, byte a, byte b);
         /// <summary>
         /// 
         /// </summary>
@@ -141,10 +141,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void RemU1(byte a, byte b)
         {
-            CodeSource = "static class Test { static bool RemU1(uint expect, byte a, byte b) { return expect == (a % b); } }";
-            Assert.IsTrue((bool)Run<U4_U1_U1>("", "Test", "RemU1", (uint)(a % b), a, b));
+            CodeSource = "static class Test { static bool RemU1(byte expect, byte a, byte b) { return expect == (a % b); } }";
+            Assert.IsTrue((bool)Run<U4_U1_U1>("", "Test", "RemU1", (byte)(a % b), a, b));
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -152,7 +152,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        delegate bool I4_I2_I2(int expect, short a, short b);
+        delegate bool I4_I2_I2(short expect, short a, short b);
         /// <summary>
         /// 
         /// </summary>
@@ -213,8 +213,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void RemI2(short a, short b)
         {
-            CodeSource = "static class Test { static bool RemI2(int expect, short a, short b) { return expect == (a % b); } }";
-            Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "RemI2", a % b, a, b));
+            CodeSource = "static class Test { static bool RemI2(short expect, short a, short b) { return expect == (a % b); } }";
+            Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "RemI2", (short)(a % b), a, b));
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        delegate bool U4_U2_U2(uint expect, ushort a, ushort b);
+        delegate bool U4_U2_U2(ushort expect, ushort a, ushort b);
         /// <summary>
         /// 
         /// </summary>
@@ -263,8 +263,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void RemU2(ushort a, ushort b)
         {
-            CodeSource = "static class Test { static bool RemU2(uint expect, ushort a, ushort b) { return expect == (a % b); } }";
-            Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "RemU2", (uint)(a % b), a, b));
+            CodeSource = "static class Test { static bool RemU2(ushort expect, ushort a, ushort b) { return expect == (a % b); } }";
+            Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "RemU2", (ushort)(a % b), a, b));
         }
 
         /// <summary>
@@ -336,9 +336,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void RemI4(int a, int b)
         {
             CodeSource = "static class Test { static bool RemI4(int expect, int a, int b) { return expect == (a % b); } }";
-            Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "RemI4", (a % b), a, b));
+            Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "RemI4", (int)(a % b), a, b));
         }
-        */
+        
         /// <summary>
         /// 
         /// </summary>
@@ -352,7 +352,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        /*[Row(1, 2)]
+        [Row(1, 2)]
         [Row(23, 21)]
         [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
         // And reverse
@@ -364,7 +364,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(uint.MinValue, 17)]
         [Row(uint.MinValue, 123)]
         // (MaxValue, X) Cases
-        /*[Row(uint.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(uint.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
         [Row(uint.MaxValue, 1)]
         [Row(uint.MaxValue, 17)]
         [Row(uint.MaxValue, 123)]
@@ -375,57 +375,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(123, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
         // (X, MaxValue) Cases
         [Row(0, uint.MaxValue)]
-        [Row(1, uint.MaxValue)]*/
+        [Row(1, uint.MaxValue)]
         [Row(17, uint.MaxValue)]
         [Row(123, uint.MaxValue)]
         // Extremvaluecases
         [Row(uint.MinValue, uint.MaxValue)]
-        /*[Row(uint.MaxValue, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]*/
+        [Row(uint.MaxValue, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void RemU4(uint a, uint b)
         {
             CodeSource = "static class Test { static bool RemU4(uint expect, uint a, uint b) { return expect == (a % b); } }";
             Assert.IsTrue((bool)Run<U4_U4_U4>("", "Test", "RemU4", (uint)(a % b), a, b));
-        }
-        /*
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="expect"></param>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        delegate bool R4_R4_R4(float expect, float a, float b);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        [Row(1.0f, 2.0f)]
-        [Row(2.0f, 1.0f)]
-        [Row(1.0f, 2.5f)]
-        [Row(1.7f, 2.3f)]
-        [Row(2.0f, -1.0f)]
-        [Row(1.0f, -2.5f)]
-        [Row(1.7f, -2.3f)]
-        [Row(-2.0f, 1.0f)]
-        [Row(-1.0f, 2.5f)]
-        [Row(-1.7f, 2.3f)]
-        [Row(-2.0f, -1.0f)]
-        [Row(-1.0f, -2.5f)]
-        [Row(-1.7f, -2.3f)]
-        [Row(1.0f, float.NaN)]
-        [Row(float.NaN, 1.0f)]
-        [Row(1.0f, float.PositiveInfinity)]
-        [Row(float.PositiveInfinity, 1.0f)]
-        [Row(1.0f, float.NegativeInfinity)]
-        [Row(float.NegativeInfinity, 1.0f)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
-        public void RemR4(float a, float b)
-        {
-            CodeSource = "static class Test { static bool RemR4(float expect, float a, float b) { return expect == (a % b); } }";
-            Assert.IsTrue((bool)Run<R4_R4_R4>("", "Test", "RemR4", (a % b), a, b));
         }
 
         /// <summary>
@@ -435,37 +396,119 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        delegate bool R8_R8_R8(double expect, double a, double b);
+        delegate bool I8_I8_I8(long expect, long a, long b);
         /// <summary>
         /// 
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1.0, 2.0)]
-        [Row(2.0, 1.0)]
-        [Row(1.0, 2.5)]
-        [Row(1.7, 2.3)]
-        [Row(2.0, -1.0)]
-        [Row(1.0, -2.5)]
-        [Row(1.7, -2.3)]
-        [Row(-2.0, 1.0)]
-        [Row(-1.0, 2.5)]
-        [Row(-1.7, 2.3)]
-        [Row(-2.0, -1.0)]
-        [Row(-1.0, -2.5)]
-        [Row(-1.7, -2.3)]
-        [Row(1.0, double.NaN)]
-        [Row(double.NaN, 1.0)]
-        [Row(1.0, double.PositiveInfinity)]
-        [Row(double.PositiveInfinity, 1.0)]
-        [Row(1.0, double.NegativeInfinity)]
-        [Row(double.NegativeInfinity, 1.0)]
-        [Row(1.0, 0.0)]
+        [Row(1, 2)]
+        [Row(23, 21)]
+        [Row(1, -2)]
+        [Row(-1, 2)]
+        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(-17, -2)]
+        // And reverse
+        [Row(2, 1)]
+        [Row(21, 23)]
+        [Row(-2, 1)]
+        [Row(2, -1)]
+        [Row(-2, -17)]
+        // (MinValue, X) Cases
+        [Row(long.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(long.MinValue, 1)]
+        [Row(long.MinValue, 17)]
+        [Row(long.MinValue, 123)]
+        [Row(long.MinValue, -0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(long.MinValue, -1, ExpectedException = typeof(OverflowException))]
+        [Row(long.MinValue, -17)]
+        [Row(long.MinValue, -123)]
+        // (MaxValue, X) Cases
+        [Row(long.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(long.MaxValue, 1)]
+        [Row(long.MaxValue, 17)]
+        [Row(long.MaxValue, 123)]
+        [Row(long.MaxValue, -0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(long.MaxValue, -1)]
+        [Row(long.MaxValue, -17)]
+        [Row(long.MaxValue, -123)]
+        // (X, MinValue) Cases
+        [Row(0, long.MinValue)]
+        [Row(1, long.MinValue)]
+        [Row(17, long.MinValue)]
+        [Row(123, long.MinValue)]
+        [Row(-0, long.MinValue)]
+        [Row(-1, long.MinValue)]
+        [Row(-17, long.MinValue)]
+        [Row(-123, long.MinValue)]
+        // (X, MaxValue) Cases
+        [Row(0, long.MaxValue)]
+        [Row(1, long.MaxValue)]
+        [Row(17, long.MaxValue)]
+        [Row(123, long.MaxValue)]
+        [Row(-0, long.MaxValue)]
+        [Row(-1, long.MaxValue)]
+        [Row(-17, long.MaxValue)]
+        [Row(-123, long.MaxValue)]
+        // Extremvaluecases
+        [Row(long.MinValue, long.MaxValue)]
+        [Row(long.MaxValue, long.MinValue)]
+        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
-        public void RemR8(double a, double b)
+        public void RemI8(long a, long b)
         {
-            CodeSource = "static class Test { static bool RemR8(double expect, double a, double b) { return expect == (a % b); } }";
-            Assert.IsTrue((bool)Run<R8_R8_R8>("", "Test", "RemR8", (a % b), a, b));
-        }*/
+            CodeSource = "static class Test { static bool RemI8(long expect, long a, long b) { return expect == (a % b); } }";
+            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "RemI8", (long)(a % b), a, b));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool U8_U8_U8(ulong expect, ulong a, ulong b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(1, 2)]
+        [Row(23, 21)]
+        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        // And reverse
+        [Row(2, 1)]
+        [Row(21, 23)]
+        // (MinValue, X) Cases
+        [Row(ulong.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(ulong.MinValue, 1)]
+        [Row(ulong.MinValue, 17)]
+        [Row(ulong.MinValue, 123)]
+        // (MaxValue, X) Cases
+        [Row(ulong.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(ulong.MaxValue, 1)]
+        [Row(ulong.MaxValue, 17)]
+        [Row(ulong.MaxValue, 123)]
+        // (X, MinValue) Cases
+        [Row(0, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(1, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(17, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(123, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        // (X, MaxValue) Cases
+        [Row(0, ulong.MaxValue)]
+        [Row(1, ulong.MaxValue)]
+        [Row(17, ulong.MaxValue)]
+        [Row(123, ulong.MaxValue)]
+        // Extremvaluecases
+        [Row(ulong.MinValue, ulong.MaxValue)]
+        [Row(ulong.MaxValue, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        public void RemU8(ulong a, ulong b)
+        {
+            CodeSource = "static class Test { static bool RemU8(ulong expect, ulong a, ulong b) { return expect == (a % b); } }";
+            Assert.IsTrue((bool)Run<U8_U8_U8>("", "Test", "RemU8", (ulong)(a % b), a, b));
+        }
     }
 }
