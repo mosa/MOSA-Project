@@ -161,6 +161,22 @@ namespace Mosa.ClassLib
 			data[offset++] = (byte)((value >> 24) & 0xFF);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="offset"></param>
+		/// <param name="value"></param>
+		public void SetULong(uint offset, ulong value)
+		{
+			data[offset++] = (byte)(value & 0xFF);
+			data[offset++] = (byte)((value >> 8) & 0xFF);
+			data[offset++] = (byte)((value >> 16) & 0xFF);
+			data[offset++] = (byte)((value >> 24) & 0xFF);
+			data[offset++] = (byte)((value >> 32) & 0xFF);
+			data[offset++] = (byte)((value >> 40) & 0xFF);
+			data[offset++] = (byte)((value >> 48) & 0xFF);
+		}
+
         /// <summary>
         /// 
         /// </summary>
