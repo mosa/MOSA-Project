@@ -375,12 +375,7 @@ namespace Mosa.Platforms.x86
         /// <param name="dest">The destination operand of the instruction.</param>
         void ICodeEmitter.Not(Operand dest)
         {
-            if (dest.Type.Type == CilElementType.U1)
-                Emit(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFF), cd_xor);
-            else if (dest.Type.Type == CilElementType.U2)
-                Emit(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFFFF), cd_xor);
-            else
-                Emit(dest, null, cd_not);
+            Emit(dest, null, cd_not);
         }
 
         /// <summary>
@@ -400,7 +395,10 @@ namespace Mosa.Platforms.x86
         /// <param name="src">The value.</param>
         void ICodeEmitter.Out(Operand dest, Operand src)
         {
-            Emit(dest, src, cd_out);
+            if (src.Type.Type == CilElementType.I1 || src.Type.Type == CilElementType.U1)
+                Emit(dest, src, cd_out8);
+            else
+                Emit(dest, src, cd_out32);
         }
 
         /// <summary>
@@ -545,11 +543,10 @@ namespace Mosa.Platforms.x86
         /// <param name="src">The source operand</param>
         void ICodeEmitter.In(Operand dest, Operand src)
         {
-            if (src is RegisterOperand)
-                if ((src as RegisterOperand) != (new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX)))
-                    throw new NotSupportedException("Register has to be EDX");
-
-            Emit(dest, src, cd_in);
+            if (dest.Type.Type == CilElementType.I1 || dest.Type.Type == CilElementType.U1)
+                Emit(dest, src, cd_in8);
+            else
+                Emit(dest, src, cd_in32);
         }
 
         /// <summary>
@@ -1333,7 +1330,15 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// 
         /// </summary>
-        private static readonly CodeDef[] cd_out = new CodeDef[] {
+        private static readonly CodeDef[] cd_out8 = new CodeDef[] {
+            new CodeDef(typeof(ConstantOperand),    typeof(RegisterOperand),    new byte[] { 0xE6 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xEE }, null),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_out32 = new CodeDef[] {
             new CodeDef(typeof(ConstantOperand),    typeof(RegisterOperand),    new byte[] { 0xE7 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xEF }, null),
         };
@@ -1679,7 +1684,15 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// 
         /// </summary>
-        private static readonly CodeDef[] cd_in = new CodeDef[] {
+        private static readonly CodeDef[] cd_in8 = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xE4 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xEC }, null),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_in32 = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xE5 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xED }, null),
         };

@@ -2,9 +2,9 @@
 
 namespace Mosa.HelloWorld
 {
-	static class Boot
+	public static class Boot
 	{
-		static void Start()
+		public static void Main()
 		{
 			// Start the boot process
 

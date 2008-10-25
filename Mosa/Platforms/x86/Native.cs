@@ -78,19 +78,40 @@ namespace Mosa.Platforms.x86
         public static void Sti() { ThrowPlatformNotSupported(); }
 
         /// <summary>
-        /// Wraps the x86 in instruction to read from a port
+        /// Wraps the x86 in instruction to read from an 8-bit port.
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InInstruction))]
-        public static void In() 
-        {
-            new x86.Instructions.Intrinsics.InInstruction();
-        }
+        public static byte In8(byte address) { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
-        /// Wraps the x86 out instruction to write to a port
+        /// Wraps the x86 in instruction to read from a 16-bit port.
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InInstruction))]
+        public static ushort In16(byte address) { ThrowPlatformNotSupported(); return 0; }
+
+        /// <summary>
+        /// Wraps the x86 in instruction to read from a 32-bit port.
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InInstruction))]
+        public static uint In32(byte address) { ThrowPlatformNotSupported(); return 0; }
+
+        /// <summary>
+        /// Wraps the x86 out instruction to write to an 8-bit port.
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
-        public static void Out() { ThrowPlatformNotSupported(); }
+        public static void Out8(byte address, byte value) { ThrowPlatformNotSupported(); }
+
+        /// <summary>
+        /// Wraps the x86 out instruction to write to a 16-bit port.
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
+        public static void Out8(byte address, ushort value) { ThrowPlatformNotSupported(); }
+
+        /// <summary>
+        /// Wraps the x86 out instruction to write to a 32-bit port.
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
+        public static void Out32(byte address, uint value) { ThrowPlatformNotSupported(); }
 
         #endregion
 

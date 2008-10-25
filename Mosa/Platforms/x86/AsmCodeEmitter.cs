@@ -1153,6 +1153,13 @@ namespace Mosa.Platforms.x86
                 case Mosa.Runtime.Metadata.CilElementType.I:
                     goto case Mosa.Runtime.Metadata.CilElementType.I4;
 
+                case Mosa.Runtime.Metadata.CilElementType.U4:
+                    result = data.ToString();
+                    break;
+
+                case Mosa.Runtime.Metadata.CilElementType.U2: goto case Mosa.Runtime.Metadata.CilElementType.U4;
+                case Mosa.Runtime.Metadata.CilElementType.U1: goto case Mosa.Runtime.Metadata.CilElementType.U4;
+
                 case Mosa.Runtime.Metadata.CilElementType.I4:
                     result = data.ToString();
                     break;

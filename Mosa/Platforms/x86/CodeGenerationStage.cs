@@ -222,7 +222,19 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.In(InInstruction instruction, int arg)
         {
-            _emitter.In(instruction.Operand0, instruction.Operand1);
+            Operand src = instruction.Operand1;
+            RegisterOperand dst = instruction.Operand0 as RegisterOperand;
+
+            Debug.Assert(dst != null, @"Destination must be the EAX register.");
+            Debug.Assert(src is ConstantOperand || (src is RegisterOperand && ((RegisterOperand)src).Register == GeneralPurposeRegister.EDX), @"Source must be a constant or the EDX-register.");
+
+            if (dst == null || dst.Register != GeneralPurposeRegister.EAX)
+                throw new ArgumentException(@"Destination must be the EAX register.");
+            if (!(src is ConstantOperand || src is RegisterOperand) ||
+                 (src is RegisterOperand && ((RegisterOperand)src).Register != GeneralPurposeRegister.EDX))
+                throw new ArgumentException(@"Source must be constant or the EDX register.");
+
+            _emitter.In(dst, src);
         }
 
         /// <summary>
@@ -327,6 +339,18 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Out(OutInstruction instruction, int arg)
         {
+            RegisterOperand src = instruction.Operand1 as RegisterOperand;
+            Operand dst = instruction.Operand0;
+
+            Debug.Assert(src != null && src.Register == GeneralPurposeRegister.EAX, @"Source must be the EAX register.");
+            Debug.Assert(dst is ConstantOperand || (dst is RegisterOperand && ((RegisterOperand)dst).Register == GeneralPurposeRegister.EDX), @"Destination must be a constant or the EDX-register.");
+
+            if (src == null || src.Register != GeneralPurposeRegister.EAX)
+                throw new ArgumentException(@"Source must be the EAX register.");
+            if (!(dst is ConstantOperand || dst is RegisterOperand) ||
+                 (dst is RegisterOperand && ((RegisterOperand)dst).Register != GeneralPurposeRegister.EDX))
+                throw new ArgumentException(@"Destination must be constant or the EDX register.");
+
             _emitter.Out(instruction.Operand0, instruction.Operand1);
         }
 
@@ -1417,7 +1441,13 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<int>.Visit(IR.LogicalNotInstruction instruction, int arg)
         {
-            _emitter.Not(instruction.Operand0);
+            Operand dest = instruction.Operand0;
+            if (dest.Type.Type == CilElementType.U1)
+                _emitter.Xor(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFF));
+            else if (dest.Type.Type == CilElementType.U2)
+                _emitter.Xor(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFFFF));
+            else
+                _emitter.Not(instruction.Operand0);
         }
 
         void IR.IIRVisitor<int>.Visit(IR.MoveInstruction instruction, int arg)
