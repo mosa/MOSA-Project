@@ -33,13 +33,13 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 cli instruction to disable interrupts
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CliInstruction))]
-        public static void Cli() { ThrowPlatformNotSupported(); }
+        public static void Cli() { ThrowPlatformNotSupported(); return;  }
 
         /// <summary>
         /// Wraps the x86 cmpxchg instruction to disable interrupts
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CmpXchgInstruction))]
-        public static void CmpXchg() { ThrowPlatformNotSupported(); }
+        public static void CmpXchg() { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 lgdt instruction to load global descriptor table
@@ -57,7 +57,7 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 popad instruction to pop all GPR from the stack
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PopadInstruction))]
-        public static void Popad() { ThrowPlatformNotSupported(); }
+        public static void Popad() { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 push instruction to push a value on the stack
@@ -69,13 +69,13 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 pushad instruction to push all GPR to the stack
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PushadInstruction))]
-        public static void Pushad() { ThrowPlatformNotSupported(); }
+        public static void Pushad() { ThrowPlatformNotSupported(); return;  }
 
         /// <summary>
         /// Wraps the x86 sti instruction to enable interrupts
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.StiInstruction))]
-        public static void Sti() { ThrowPlatformNotSupported(); }
+        public static void Sti() { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 in instruction to read from an 8-bit port.
@@ -105,7 +105,7 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 out instruction to write to a 16-bit port.
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
-        public static void Out8(byte address, ushort value) { ThrowPlatformNotSupported(); }
+        public static void Out16(byte address, ushort value) { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 out instruction to write to a 32-bit port.
