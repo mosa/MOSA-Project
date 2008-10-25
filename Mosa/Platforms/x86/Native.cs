@@ -76,6 +76,22 @@ namespace Mosa.Platforms.x86
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.StiInstruction))]
         public static void Sti() { ThrowPlatformNotSupported(); }
+
+        /// <summary>
+        /// Wraps the x86 in instruction to read from a port
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InInstruction))]
+        public static void In() 
+        {
+            new x86.Instructions.Intrinsics.InInstruction();
+        }
+
+        /// <summary>
+        /// Wraps the x86 out instruction to write to a port
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
+        public static void Out() { ThrowPlatformNotSupported(); }
+
         #endregion
 
         /// <summary>
