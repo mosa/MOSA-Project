@@ -1,6 +1,12 @@
 /*
- * Created by Kai P. Reisert using SharpDevelop
- * Date: 26.10.2008 
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License
+ * with restrictions to the license beneath, concering
+ * the use of the CommandLine assembly.
+ *
+ * Authors:
+ *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
  */
 
 using System;
