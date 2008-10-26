@@ -22,7 +22,7 @@ namespace Mosa.Tools.Compiler
     /// <summary>
     /// Available architectures.
     /// </summary>
-    public enum Architectures
+    public enum TargetArchitecture
     {
         /// <summary>
         /// Architecture not defined.
@@ -43,7 +43,7 @@ namespace Mosa.Tools.Compiler
     /// <summary>
     /// Available binary formats
     /// </summary>
-    public enum BinaryFormats
+    public enum BinaryFormat
     {
         /// <summary>
         /// Binary format not defined.
@@ -62,9 +62,9 @@ namespace Mosa.Tools.Compiler
     }
     
     /// <summary>
-    /// Available boot formats. Use '_' instead of '.'.
+    /// Available boot formats.
     /// </summary>
-    public enum BootFormats
+    public enum BootFormat
     {
         /// <summary>
         /// Boot format not defined.
@@ -74,7 +74,7 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// The multiboot 0.7 format.
         /// </summary>
-        mb0_7
+        Multiboot0_7
     }
     #endregion
     
@@ -85,10 +85,10 @@ namespace Mosa.Tools.Compiler
     {
         #region Fields
 
-        Architectures architecture;
-        BinaryFormats binaryFormat;
-        BootFormats bootFormat;
-        List<string> inputFiles = null;
+        TargetArchitecture architecture;
+        BinaryFormat binaryFormat;
+        BootFormat bootFormat;
+        List<FileInfo> inputFiles = null;
         bool isExecutable;
         string outputFile;
 
@@ -101,6 +101,9 @@ namespace Mosa.Tools.Compiler
         /// </summary>
         public CompileOptions()
         {
+            architecture = TargetArchitecture.Undefined;
+            binaryFormat = BinaryFormat.Undefined;
+            bootFormat = BootFormat.Undefined;
         }
 
         #endregion Constructors
@@ -110,7 +113,7 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Gets the architecture.
         /// </summary>
-        public Architectures Architecture
+        public TargetArchitecture Architecture
         {
             get
             {
@@ -121,7 +124,7 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Gets the binary format.
         /// </summary>
-        public BinaryFormats BinaryFormat
+        public BinaryFormat BinaryFormat
         {
             get
             {
@@ -132,7 +135,7 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Gets the boot format.
         /// </summary>
-        public BootFormats BootFormat
+        public BootFormat BootFormat
         {
             get
             {
@@ -143,11 +146,25 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Gets a list of input files.
         /// </summary>
-        public IList<string> InputFiles
+        public IList<FileInfo> InputFiles
         {
             get
             {
                 return inputFiles;
+            }
+        }
+        
+        /// <summary>
+        /// Gets a list of input file names.
+        /// </summary>
+        public IEnumerable<string> InputFileNames
+        {
+            get
+            {
+                foreach (FileInfo file in inputFiles)
+                {
+                    yield return file.FullName;  
+                }
             }
         }
 
@@ -186,14 +203,9 @@ namespace Mosa.Tools.Compiler
         /// <param name="arch">The architecture as a string.</param>
         public void SetArchitecture(string arch)
         {
-            if (String.IsNullOrEmpty(arch))
-            {
-                throw new OptionException("No architecture specified.", "arch");
-            }
-            
             try
             {
-                architecture = EnumParse<Architectures>(arch);
+                architecture = EnumParse<TargetArchitecture>(arch);
             }
             catch (ArgumentException)
             {
@@ -207,14 +219,9 @@ namespace Mosa.Tools.Compiler
         /// <param name="format">The binary format as a string.</param>
         public void SetBinaryFormat(string format)
         {
-            if (String.IsNullOrEmpty(format))
-            {
-                throw new OptionException("No binary format specified.", "format");
-            }
-            
             try
             {
-                binaryFormat = EnumParse<BinaryFormats>(format);
+                binaryFormat = EnumParse<BinaryFormat>(format);
             }
             catch (ArgumentException)
             {
@@ -228,42 +235,37 @@ namespace Mosa.Tools.Compiler
         /// <param name="format">The boot format as a string.</param>
         public void SetBootFormat(string format)
         {
-            // boot format only matters if it's an executable
-            if (isExecutable)
+            switch (format.ToLower())
             {
-                if (String.IsNullOrEmpty(format))
-                {
-                    throw new OptionException("No boot format specified.", "boot");
-                }
-                
-                try
-                {
-                    bootFormat = EnumParse<BootFormats>(format.Replace('.', '_'));
-                }
-                catch (ArgumentException)
-                {
-                    throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
-                }
+                case "multiboot-0.7":
+                case "mb0.7":
+                    bootFormat = BootFormat.Multiboot0_7;
+                    break;
             }
         }
-
+        
         /// <summary>
-        /// Sets the input files for the compiler.
+        /// Finishs parsing the options and sets the list of input files.
         /// </summary>
-        /// <param name="files">An enumeration of files.</param>
-        public void SetInputFiles(IList<string> files)
-        {
-            inputFiles = new List<string>(files);
-            
-            if (inputFiles.Count == 0)
+        /// <param name="files"></param>
+        public void Finish(IList<string> files)
+        {            
+            if (files.Count == 0)
             {
                 throw new OptionException("No input file(s) specified.", String.Empty);
             }
             
-            foreach (string file in inputFiles)
+            inputFiles = new List<FileInfo>();
+            
+            for (int i = 0; i < files.Count; i++)
             {
-                string extension = new FileInfo(file).Extension;
-                if (extension.ToLower() == ".exe")
+                if (!File.Exists(files[i]))
+                {
+                    throw new OptionException(String.Format("Input file or option '{0}' doesn't exist.", files[i]), String.Empty);
+                }
+                
+                FileInfo file  = new FileInfo(files[i]);
+                if (file.Extension.ToLower() == ".exe")
                 {
                     if (isExecutable)
                     {
@@ -273,7 +275,42 @@ namespace Mosa.Tools.Compiler
                     
                     isExecutable = true;
                 }
+                
+                inputFiles.Add(file);
             }
+
+            // Process boot format:
+            // Boot format only matters if it's an executable
+            // Process this only now, because input files must be known
+            if (isExecutable)
+            {
+                if (bootFormat == BootFormat.Undefined)
+                {
+                    throw new OptionException("No boot format specified or boot format unknown or not supported.", "boot");
+                }
+            }
+            else if (bootFormat != BootFormat.Undefined)
+            {
+                Console.WriteLine("Warning: Ignoring boot format, because target is not an executable.");
+                Console.WriteLine();
+            }
+            
+            // Check for missing options
+            if (String.IsNullOrEmpty(outputFile))
+            {
+                throw new OptionException("No output file specified.", "o");
+            }
+            
+            if (binaryFormat == BinaryFormat.Undefined)
+            {
+                throw new OptionException("No binary format specified.", "format");
+            }
+            
+            if (architecture == TargetArchitecture.Undefined)
+            {
+                throw new OptionException("No architecture specified.", "arch");
+            }
+            
         }
 
         /// <summary>
@@ -282,11 +319,6 @@ namespace Mosa.Tools.Compiler
         /// <param name="file">The file.</param>
         public void SetOutputFile(string file)
         {
-            if (String.IsNullOrEmpty(file))
-            {
-                throw new OptionException("No output file specified.", "o");
-            }
-            
             outputFile = file;
         }
 
@@ -298,7 +330,7 @@ namespace Mosa.Tools.Compiler
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("Output file: ").AppendLine(outputFile);
-            sb.Append("Input file(s): ").AppendLine(String.Join(", ", inputFiles.ToArray()));
+            sb.Append("Input file(s): ").AppendLine(String.Join(", ", new List<string>(InputFileNames).ToArray()));
             sb.Append("Architecture: ").AppendLine(architecture.ToString());
             sb.Append("Binary format: ").AppendLine(binaryFormat.ToString());
             sb.Append("Boot format: ").AppendLine(bootFormat.ToString());

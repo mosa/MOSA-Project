@@ -45,23 +45,23 @@ namespace Mosa.Tools.Compiler
                 ShowShortHelp();
                 return;
             }
-            
-            List<string> inputFiles;
-            bool showVersion = false;
-            bool showHelp = false;
-            string outputFile = null;
-            string arch = null;
-            string binaryFormat = null;
-            string bootFormat = null;
+
             CompileOptions options = new CompileOptions();
             
             OptionSet optionSet = new OptionSet();
+            
+            #region Setup options
+            // General options
             optionSet.Add(
                 "v|version",
                 "Display version information.",
                 delegate(string v)
                 {
-                    showVersion = (v != null);
+                    if (v != null)
+                    {
+                        // only show header and exit
+                        Environment.Exit(0);
+                    }
                 });
             
             optionSet.Add(
@@ -69,63 +69,57 @@ namespace Mosa.Tools.Compiler
                 "Display the full set of available options.",
                 delegate(string v)
                 {
-                    showHelp = (v != null);
+                    if (v != null)
+                    {
+                        ShowHelp(optionSet);
+                        Environment.Exit(0);
+                    }
                 });
             
             optionSet.Add(
-                "o=",
-                "The name of the output file.",
-                delegate(string v)
-                {
-                    outputFile = v;
-                });
+                "o|out=",
+                "The name of the output {file}.",
+                options.SetOutputFile
+               );
             
             optionSet.Add(
                 "a|arch=",
-                "Select one of the MOSA architectures to compile for.",
-                delegate(string v)
-                {
-                    arch = v;
-                });
+                "Select one of the MOSA architectures to compile for [{x86|x64}].",
+                options.SetArchitecture
+               );
             
-             optionSet.Add(
+            optionSet.Add(
                 "f|format=",
-                "Select the format of the binary file to create.",
-                delegate(string v)
-                {
-                    binaryFormat = v;
-                });
+                "Select the format of the binary file to create [{ELF|PE}].",
+                options.SetBinaryFormat
+               );
             
             optionSet.Add(
                 "b|boot=",
-                "Specify the bootable format of the produced binary.",
-                delegate(string v)
-                {
-                    bootFormat = v;
-                });
+                "Specify the bootable format of the produced binary [{mb0.7}].",
+                options.SetBootFormat
+               );
+            
+                       
+//            // Additional options for multiboot
+//            optionSet.Add(
+//                "multiboot-video-mode=",
+//                "Specify the video mode for multiboot [{text|graphics}].",
+//                delegate(string v)
+//                {
+//                    // only process for multiboot 0.7
+//                    if (options.BootFormat == BootFormat.Multiboot0_7)
+//                    {
+//                        Console.WriteLine("Multiboot video mode: " + v);
+//                        Console.WriteLine();
+//                    }
+//                });
+            
+            #endregion
             
             try
             {
-                inputFiles = optionSet.Parse(args);
-                
-                if (showHelp)
-                {
-                    ShowHelp(optionSet);
-                    return;
-                }
-                
-                if (showVersion)
-                {
-                    // only show header and exit
-                    return;
-                }
-                
-                // parse the options
-                options.SetInputFiles(inputFiles);
-                options.SetOutputFile(outputFile);
-                options.SetArchitecture(arch);
-                options.SetBinaryFormat(binaryFormat);
-                options.SetBootFormat(bootFormat);
+                options.Finish(optionSet.Parse(args));
             }
             catch (OptionException e)
             {
@@ -138,7 +132,7 @@ namespace Mosa.Tools.Compiler
             
             //CompilerScheduler.Setup(2);
 
-            string assembly = options.InputFiles[0], path;
+            string assembly = options.InputFiles[0].FullName, path;
 
             IArchitecture architecture = Architecture.CreateArchitecture(ArchitectureFeatureFlags.AutoDetect);
             ObjectFileBuilderBase objfile = architecture.GetObjectFileBuilders()[0];
@@ -152,13 +146,13 @@ namespace Mosa.Tools.Compiler
             //CompilerScheduler.Wait();
         }
         
-        static string usageString = "Usage: mosacl -o outputfile --arch=[x86,x64] --format=[elf,pe] --boot=[mb0.7] inputfiles";
+        static string usageString = "Usage: mosacl -o outputfile --arch=[x86|x64] --format=[ELF|PE] --boot=[mb0.7] {additional options} inputfiles";
 
         static void ShowError(string message)
         {
             Console.WriteLine(usageString);
             Console.WriteLine();
-            Console.Write ("mosacl: ");
+            Console.Write ("Error: ");
             Console.WriteLine (message);
             Console.WriteLine();
             Console.WriteLine ("Run 'mosacl --help' for more information.");
