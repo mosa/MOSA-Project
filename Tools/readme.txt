@@ -1,6 +1,6 @@
 These tools are used by the MOSA project under their respective licenses.
 
-Prebuild
+Prebuild 
 - BSD License
 - http://sourceforge.net/projects/dnpb/
 
@@ -10,4 +10,9 @@ mkisofs
 	
 qemu
 - GPL License
-- www.qemu.org
+- http://www.qemu.org
+
+syslinux
+- GPL License
+- http://syslinux.zytor.com/wiki/index.php/The_Syslinux_Project
+
