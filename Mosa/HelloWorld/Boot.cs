@@ -1,14 +1,20 @@
-﻿using System;
-
+﻿
 namespace Mosa.HelloWorld
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public static class Boot
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public static void Main()
 		{
 			// Start the boot process
 
 			// Write HelloWorld to Screen
+            
 			unsafe {
 				byte* index = (byte*)(0xB8000);
 

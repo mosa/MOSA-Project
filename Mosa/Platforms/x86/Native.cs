@@ -51,7 +51,13 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 pop instruction to pop a value from the stack
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PopInstruction))]
-        public static void Pop() { ThrowPlatformNotSupported(); }
+        public static short Pop16() { ThrowPlatformNotSupported(); return 0; }
+
+        /// <summary>
+        /// Wraps the x86 pop instruction to pop a value from the stack
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PopInstruction))]
+        public static int Pop32() { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// Wraps the x86 popad instruction to pop all GPR from the stack
@@ -63,7 +69,13 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 push instruction to push a value on the stack
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PushInstruction))]
-        public static void Push() { ThrowPlatformNotSupported(); }
+        public static void Push16(short value) { ThrowPlatformNotSupported(); return; }
+
+        /// <summary>
+        /// Wraps the x86 push instruction to push a value on the stack
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PushInstruction))]
+        public static void Push32(int value) { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 pushad instruction to push all GPR to the stack
