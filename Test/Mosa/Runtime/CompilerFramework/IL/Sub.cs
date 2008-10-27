@@ -24,6 +24,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     [TestFixture]
     public class Sub : CodeDomTestRunner
     {
+        #region I1
         /// <summary>
         /// 
         /// </summary>
@@ -107,22 +108,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 0)]
         [Row(sbyte.MinValue, sbyte.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void SubConstantI1(sbyte a, sbyte b)
+        public void SubConstantI1Right(sbyte a, sbyte b)
         {
             // right side constant
             CodeSource = "static class Test { static bool SubConstantI1Right(int expect, sbyte a) { return expect == (a - (" + b.ToString() + ")); } }";
             Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "SubConstantI1Right", (a - b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-42, 48)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(sbyte.MinValue, sbyte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantI1Left(sbyte a, sbyte b)
+        {
             // left side constant
             CodeSource = "static class Test { static bool SubConstantI1Left(int expect, sbyte b) { return expect == ((" + a.ToString() + ") - b); } }";
             Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "SubConstantI1Left", (a - b), b));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-42, 48)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(sbyte.MinValue, sbyte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantI1Both(sbyte a, sbyte b)
+        {
             // both constant
             CodeSource = "static class Test { static bool SubConstantI1Both(int expect) { return expect == ((" + a.ToString() + ") - (" + b.ToString() + ")); } }";
             Assert.IsTrue((bool)Run<I4_Constant>("", "Test", "SubConstantI1Both", (a - b)));
         }
+        #endregion I1
         
-
+        #region I2
         /// <summary>
         /// 
         /// </summary>
@@ -205,21 +233,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 0)]
         [Row(short.MinValue, short.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void SubConstantI2(short a, short b)
+        public void SubConstantI2Right(short a, short b)
         {
             // right side constant
             CodeSource = "static class Test { static bool SubConstantI2Right(int expect, short a) { return expect == (a - (" + b.ToString() + ")); } }";
             Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "SubConstantI2Right", (a - b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(short.MinValue, short.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantI2Left(short a, short b)
+        {
             // left side constant
             CodeSource = "static class Test { static bool SubConstantI2Left(int expect, short b) { return expect == ((" + a.ToString() + ") - b); } }";
             Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "SubConstantI2Left", (a - b), b));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(short.MinValue, short.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantI2Both(short a, short b)
+        {
             // both constant
             CodeSource = "static class Test { static bool SubConstantI2Both(int expect) { return expect == ((" + a.ToString() + ") - (" + b.ToString() + ")); } }";
             Assert.IsTrue((bool)Run<I4_Constant>("", "Test", "SubConstantI2Both", (a - b)));
         }
+        #endregion
 
+        #region U2
         /// <summary>
         /// 
         /// </summary>
@@ -280,21 +336,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 0)]
         [Row(ushort.MinValue, ushort.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void SubConstantU2(ushort a, ushort b)
+        public void SubConstantU2Right(ushort a, ushort b)
         {
             // right side constant
             CodeSource = "static class Test { static bool SubConstantU2Right(uint expect, ushort a) { return expect == (a - " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<U4_Constant_U2>("", "Test", "SubConstantU2Right", (uint)(a - b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(ushort.MinValue, ushort.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantU2Left(ushort a, ushort b)
+        {
             // left side constant
             CodeSource = "static class Test { static bool SubConstantU2Left(uint expect, ushort b) { return expect == (" + a.ToString() + " - b); } }";
             Assert.IsTrue((bool)Run<U4_Constant_U2>("", "Test", "SubConstantU2Left", (uint)(a - b), b));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(ushort.MinValue, ushort.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantU2Both(ushort a, ushort b)
+        {
             // both constant
             CodeSource = "static class Test { static bool SubConstantU2Both(uint expect) { return expect == (" + a.ToString() + " - " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<U4_Constant>("", "Test", "SubConstantU2Both", (uint)(a - b)));
         }
+        #endregion
 
+        #region I4
         /// <summary>
         /// 
         /// </summary>
@@ -377,21 +461,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 0)]
         [Row(int.MinValue, int.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void SubConstantI4(int a, int b)
+        public void SubConstantI4Right(int a, int b)
         {
             // right side constant
             CodeSource = "static class Test { static bool SubConstantI4Right(int expect, int a) { return expect == (a - " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "SubConstantI4Right", (a - b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(int.MinValue, int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantI4Left(int a, int b)
+        {
             // left side constant
             CodeSource = "static class Test { static bool SubConstantI4Left(int expect, int b) { return expect == (" + a.ToString() + " - b); } }";
             Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "SubConstantI4Left", (a - b), b));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(int.MinValue, int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantI4Both(int a, int b)
+        {
             // both constant
             CodeSource = "static class Test { static bool SubConstantI4Both(int expect) { return expect == (" + a.ToString() + " - " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<I4_Constant>("", "Test", "SubConstantI4Both", (a - b)));
         }
+        #endregion
 
+        #region I8
         /// <summary>
         /// 
         /// </summary>
@@ -475,21 +587,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 0)]
         [Row(long.MinValue, long.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void SubConstantI8(long a, long b)
+        public void SubConstantI8Right(long a, long b)
         {
             // right side constant
             CodeSource = "static class Test { static bool SubConstantI8Right(long expect, long a) { return expect == (a - " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "SubConstantI8Right", (a - b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(long.MinValue, long.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantI8Left(long a, long b)
+        {
             // left side constant
             CodeSource = "static class Test { static bool SubConstantI8Left(long expect, long b) { return expect == (" + a.ToString() + " - b); } }";
             Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "SubConstantI8Left", (a - b), b));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(long.MinValue, long.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantI8Both(long a, long b)
+        {
             // both constant
             CodeSource = "static class Test { static bool SubConstantI8Both(long expect) { return expect == (" + a.ToString() + " - " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<I8_Constant>("", "Test", "SubConstantI8Both", (a - b)));
         }
+        #endregion
         
+        #region R4
         /// <summary>
         /// 
         /// </summary>
@@ -571,7 +711,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0f, 0f)]
         [Row(-17.0002501f, float.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void SubConstantR4(float a, float b)
+        public void SubConstantR4Right(float a, float b)
         {
             string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
             string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
@@ -579,16 +719,50 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             // right side constant
             CodeSource = "static class Test { static bool SubConstantR4Right(float expect, float a) { return expect == (a - " + y + "); } }";
             Assert.IsTrue((bool)Run<R4_Constant_R4>("", "Test", "SubConstantR4Right", (a - b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23f, 148.0016f)]
+        [Row(17.2f, 1f)]
+        [Row(0f, 0f)]
+        [Row(-17.0002501f, float.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantR4Left(float a, float b)
+        {
+            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
+            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
+
             // left side constant
             CodeSource = "static class Test { static bool SubConstantR4Left(float expect, float b) { return expect == (" + x + " - b); } }";
             Assert.IsTrue((bool)Run<R4_Constant_R4>("", "Test", "SubConstantR4Left", (a - b), b));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23f, 148.0016f)]
+        [Row(17.2f, 1f)]
+        [Row(0f, 0f)]
+        [Row(-17.0002501f, float.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantR4Both(float a, float b)
+        {
+            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
+            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
             
             // both constant
             CodeSource = "static class Test { static bool SubConstantR4Both(float expect) { return expect == (" + x + " - " + y + "); } }";
             Assert.IsTrue((bool)Run<R4_Constant>("", "Test", "SubConstantR4Both", (a - b)));
         }
+        #endregion
         
+        #region R8
         /// <summary>
         /// 
         /// </summary>
@@ -672,7 +846,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0.0, 0.0)]
         [Row(-1.79769313486231E+308, 1.79769313486231E+308)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void SubConstantR8(double a, double b)
+        public void SubConstantR8Right(double a, double b)
         {                
             string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture);
             string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture);
@@ -680,14 +854,47 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             // right side constant
             CodeSource = "static class Test { static bool SubConstantR8Right(double expect, double a) { return expect == (a - " + y + "); } }";
             Assert.IsTrue((bool)Run<R8_Constant_R8>("", "Test", "SubConstantR8Right", (a - b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148.0016)]
+        [Row(17.2, 1.0)]
+        [Row(0.0, 0.0)]
+        [Row(-1.79769313486231E+308, 1.79769313486231E+308)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantR8Left(double a, double b)
+        {                
+            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
             // left side constant
             CodeSource = "static class Test { static bool SubConstantR8Left(double expect, double b) { return expect == (" + x + " - b); } }";
             Assert.IsTrue((bool)Run<R8_Constant_R8>("", "Test", "SubConstantR8Left", (a - b), b));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148.0016)]
+        [Row(17.2, 1.0)]
+        [Row(0.0, 0.0)]
+        [Row(-1.79769313486231E+308, 1.79769313486231E+308)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void SubConstantR8Both(double a, double b)
+        {                
+            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture);
             
             // both constant
             CodeSource = "static class Test { static bool SubConstantR8Both(double expect) { return expect == (" + x + " - " + y + "); } }";
             Assert.IsTrue((bool)Run<R8_Constant>("", "Test", "SubConstantR8Both", (a - b)));
         }
+        #endregion
     }
 }

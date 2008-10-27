@@ -8,7 +8,7 @@
  *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
- *  
+ *
  */
 
 using System;
@@ -24,6 +24,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     [TestFixture]
     public class Add : CodeDomTestRunner
     {
+        #region I1
         /// <summary>
         /// 
         /// </summary>
@@ -95,7 +96,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "AddI1", a + b, a, b));
         }
         
-        delegate bool I4_Constant_I1(int expect, sbyte x); 
+        delegate bool I4_Constant_I1(int expect, sbyte x);
         delegate bool I4_Constant(int expect);
 
         /// <summary>
@@ -108,21 +109,46 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 0)]
         [Row(sbyte.MinValue, sbyte.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void AddConstantI1(sbyte a, sbyte b)
+        public void AddConstantI1Right(sbyte a, sbyte b)
         {
             // right side constant
             CodeSource = "static class Test { static bool AddConstantI1Right(int expect, sbyte a) { return expect == (a + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "AddConstantI1Right", (a + b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-42, 48)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(sbyte.MinValue, sbyte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantI1Left(sbyte a, sbyte b)
+        {
             // left side constant
             CodeSource = "static class Test { static bool AddConstantI1Left(int expect, sbyte b) { return expect == (" + a.ToString() + " + b); } }";
             Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "AddConstantI1Left", (a + b), b));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-42, 48)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(sbyte.MinValue, sbyte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantI1Both(sbyte a, sbyte b)
+        {
             // both constant
             CodeSource = "static class Test { static bool AddConstantI1Both(int expect) { return expect == (" + a.ToString() + " + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<I4_Constant>("", "Test", "AddConstantI1Both", (a + b)));
         }
-        
         
         /// <summary>
         /// 
@@ -142,7 +168,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             CodeSource = "static class Test { static bool AddConstantI1Right(int expect, sbyte a) { return expect == (a + 1); } }";
             Assert.IsTrue((bool)Run<I4_I1_C>("", "Test", "AddConstantI1Right", a + 1, a));
         }
+        #endregion
 
+        #region U1
         /// <summary>
         /// 
         /// </summary>
@@ -192,7 +220,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<U4_U1_U1>("", "Test", "AddU1", (uint)(a + b), a, b));
         }
         
-        delegate bool U4_Constant_U1(uint expect, byte x); 
+        delegate bool U4_Constant_U1(uint expect, byte x);
         delegate bool U4_Constant(uint expect);
 
         /// <summary>
@@ -205,21 +233,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 0)]
         [Row(byte.MinValue, byte.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void AddConstantU1(byte a, byte b)
+        public void AddConstantU1Right(byte a, byte b)
         {
             // right side constant
             CodeSource = "static class Test { static bool AddConstantU1Right(uint expect, byte a) { return expect == (a + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<U4_Constant_U1>("", "Test", "AddConstantU1Right", (uint)(a + b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(byte.MinValue, byte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantU1Left(byte a, byte b)
+        {
             // left side constant
             CodeSource = "static class Test { static bool AddConstantU1Left(uint expect, byte b) { return expect == (" + a.ToString() + " + b); } }";
             Assert.IsTrue((bool)Run<U4_Constant_U1>("", "Test", "AddConstantU1Left", (uint)(a + b), b));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(byte.MinValue, byte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantU1Both(byte a, byte b)
+        {
             // both constant
             CodeSource = "static class Test { static bool AddConstantU1Both(uint expect) { return expect == (" + a.ToString() + " + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<U4_Constant>("", "Test", "AddConstantU1Both", (uint)(a + b)));
         }
+        #endregion
         
+        #region I2
         delegate bool I4_I2_I2(int expect, short a, short b);
         /// <summary>
         /// 
@@ -283,7 +339,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "AddI2", (a + b), a, b));
         }
         
-        delegate bool I4_Constant_I2(int expect, short x); 
+        delegate bool I4_Constant_I2(int expect, short x);
 
         /// <summary>
         /// 
@@ -295,21 +351,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 0)]
         [Row(short.MinValue, short.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void AddConstantI2(short a, short b)
+        public void AddConstantI2Right(short a, short b)
         {
             // right side constant
             CodeSource = "static class Test { static bool AddConstantI2Right(int expect, short a) { return expect == (a + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "AddConstantI2Right", (a + b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(short.MinValue, short.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantI2Left(short a, short b)
+        {
             // left side constant
             CodeSource = "static class Test { static bool AddConstantI2Left(int expect, short b) { return expect == (" + a.ToString() + " + b); } }";
             Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "AddConstantI2Left", (a + b), b));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(short.MinValue, short.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantI2Both(short a, short b)
+        {
             // both constant
             CodeSource = "static class Test { static bool AddConstantI2Both(int expect) { return expect == (" + a.ToString() + " + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<I4_Constant>("", "Test", "AddConstantI2Both", (a + b)));
         }
+        #endregion
 
+        #region U2
         /// <summary>
         /// 
         /// </summary>
@@ -359,7 +443,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "AddU2", (uint)(a + b), a, b));
         }
         
-        delegate bool U4_Constant_U2(uint expect, ushort x); 
+        delegate bool U4_Constant_U2(uint expect, ushort x);
 
         /// <summary>
         /// 
@@ -371,21 +455,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 0)]
         [Row(ushort.MinValue, ushort.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void AddConstantU2(ushort a, ushort b)
+        public void AddConstantU2Right(ushort a, ushort b)
         {
             // right side constant
             CodeSource = "static class Test { static bool AddConstantU2Right(uint expect, ushort a) { return expect == (a + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<U4_Constant_U2>("", "Test", "AddConstantU2Right", (uint)(a + b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(ushort.MinValue, ushort.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantU2Left(ushort a, ushort b)
+        {
             // left side constant
             CodeSource = "static class Test { static bool AddConstantU2Left(uint expect, ushort b) { return expect == (" + a.ToString() + " + b); } }";
             Assert.IsTrue((bool)Run<U4_Constant_U2>("", "Test", "AddConstantU2Left", (uint)(a + b), b));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(ushort.MinValue, ushort.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantU2Both(ushort a, ushort b)
+        {
             // both constant
             CodeSource = "static class Test { static bool AddConstantU2Both(uint expect) { return expect == (" + a.ToString() + " + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<U4_Constant>("", "Test", "AddConstantU2Both", (uint)(a + b)));
         }
+        #endregion
 
+        #region I4
         /// <summary>
         /// 
         /// </summary>
@@ -457,7 +569,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "AddI4", (a + b), a, b));
         }
         
-        delegate bool I4_Constant_I4(int expect, int x); 
+        delegate bool I4_Constant_I4(int expect, int x);
 
         /// <summary>
         /// 
@@ -469,21 +581,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 0)]
         [Row(int.MinValue, int.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void AddConstantI4(int a, int b)
+        public void AddConstantI4Right(int a, int b)
         {
             // right side constant
             CodeSource = "static class Test { static bool AddConstantI4Right(int expect, int a) { return expect == (a + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "AddConstantI4Right", (a + b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(int.MinValue, int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantI4Left(int a, int b)
+        {
             // left side constant
             CodeSource = "static class Test { static bool AddConstantI4Left(int expect, int b) { return expect == (" + a.ToString() + " + b); } }";
             Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "AddConstantI4Left", (a + b), b));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(int.MinValue, int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantI4Both(int a, int b)
+        {
             // both constant
             CodeSource = "static class Test { static bool AddConstantI4Both(int expect) { return expect == (" + a.ToString() + " + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<I4_Constant>("", "Test", "AddConstantI4Both", (a + b)));
         }
+        #endregion
 
+        #region U4
         /// <summary>
         /// 
         /// </summary>
@@ -533,8 +673,42 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<U4_U4_U4>("", "Test", "AddU4", (uint)(a + b), a, b));
         }
         
-        delegate bool U4_Constant_U4(uint expect, uint x); 
+        delegate bool U4_Constant_U4(uint expect, uint x);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(uint.MinValue, uint.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantU4Right(uint a, uint b)
+        {
+            // right side constant
+            CodeSource = "static class Test { static bool AddConstantU4Right(uint expect, uint a) { return expect == (a + " + b.ToString() + "); } }";
+            Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "AddConstantU4Right", (uint)(a + b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(uint.MinValue, uint.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantU4Left(uint a, uint b)
+        {
+            // left side constant
+            CodeSource = "static class Test { static bool AddConstantU4Left(uint expect, uint b) { return expect == (" + a.ToString() + " + b); } }";
+            Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "AddConstantU4Left", (uint)(a + b), b));
+        }
+        
         /// <summary>
         /// 
         /// </summary>
@@ -547,19 +721,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void AddConstantU4(uint a, uint b)
         {
-            // right side constant
-            CodeSource = "static class Test { static bool AddConstantU4Right(uint expect, uint a) { return expect == (a + " + b.ToString() + "); } }";
-            Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "AddConstantU4Right", (uint)(a + b), a));
-            
-            // left side constant
-            CodeSource = "static class Test { static bool AddConstantU4Left(uint expect, uint b) { return expect == (" + a.ToString() + " + b); } }";
-            Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "AddConstantU4Left", (uint)(a + b), b));
-            
             // both constant
             CodeSource = "static class Test { static bool AddConstantU4Both(uint expect) { return expect == (" + a.ToString() + " + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<U4_Constant>("", "Test", "AddConstantU4Both", (uint)(a + b)));
         }
+        #endregion
 
+        #region I8
         /// <summary>
         /// 
         /// </summary>
@@ -644,21 +812,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 0)]
         [Row(long.MinValue, long.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void AddConstantI8(long a, long b)
+        public void AddConstantI8Right(long a, long b)
         {
             // right side constant
             CodeSource = "static class Test { static bool AddConstantI8Right(long expect, long a) { return expect == (a + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "AddConstantI8Right", (a + b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(long.MinValue, long.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantI8Left(long a, long b)
+        {
             // left side constant
             CodeSource = "static class Test { static bool AddConstantI8Left(long expect, long b) { return expect == (" + a.ToString() + " + b); } }";
             Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "AddConstantI8Left", (a + b), b));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(long.MinValue, long.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantI8Both(long a, long b)
+        {
             // both constant
             CodeSource = "static class Test { static bool AddConstantI8Both(long expect) { return expect == (" + a.ToString() + " + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<I8_Constant>("", "Test", "AddConstantI8Both", (a + b)));
         }
+        #endregion
 
+        #region U8
         /// <summary>
         /// 
         /// </summary>
@@ -721,21 +917,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0, 0)]
         [Row(ulong.MinValue, ulong.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void AddConstantU8(ulong a, ulong b)
+        public void AddConstantU8Right(ulong a, ulong b)
         {
             // right side constant
             CodeSource = "static class Test { static bool AddConstantU8Right(ulong expect, ulong a) { return expect == (a + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<U8_Constant_U8>("", "Test", "AddConstantU8Right", (ulong)(a + b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(ulong.MinValue, ulong.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantU8Left(ulong a, ulong b)
+        {
             // left side constant
             CodeSource = "static class Test { static bool AddConstantU8Left(ulong expect, ulong b) { return expect == (" + a.ToString() + " + b); } }";
             Assert.IsTrue((bool)Run<U8_Constant_U8>("", "Test", "AddConstantU8Left", (ulong)(a + b), b));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(ulong.MinValue, ulong.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantU8Both(ulong a, ulong b)
+        {
             // both constant
             CodeSource = "static class Test { static bool AddConstantU8Both(ulong expect) { return expect == (" + a.ToString() + " + " + b.ToString() + "); } }";
             Assert.IsTrue((bool)Run<U8_Constant>("", "Test", "AddConstantU8Both", (ulong)(a + b)));
         }
+        #endregion
         
+        #region R4
         /// <summary>
         /// 
         /// </summary>
@@ -817,24 +1041,57 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0f, 0f)]
         [Row(float.MinValue, float.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void AddConstantR4(float a, float b)
+        public void AddConstantR4Right(float a, float b)
         {
             string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
             string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
             
             // right side constant
             CodeSource = "static class Test { static bool AddConstantR4Right(float expect, float a) { return expect == (a + " + y + "); } }";
-            Assert.IsTrue((bool)Run<R4_Constant_R4>("", "Test", "AddConstantR4Right", (a + b), a));
-            
+            Assert.IsTrue((bool)Run<R4_Constant_R4>("", "Test", "AddConstantR4Right", (a + b), a));    Assert.IsTrue((bool)Run<R4_Constant>("", "Test", "AddConstantR4Both", (a + b)));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23f, 148.0016f)]
+        [Row(17.2f, 1f)]
+        [Row(0f, 0f)]
+        [Row(float.MinValue, float.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantR4Left(float a, float b)
+        {
+            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
+            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
             // left side constant
             CodeSource = "static class Test { static bool AddConstantR4Left(float expect, float b) { return expect == (" + x + " + b); } }";
             Assert.IsTrue((bool)Run<R4_Constant_R4>("", "Test", "AddConstantR4Left", (a + b), b));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23f, 148.0016f)]
+        [Row(17.2f, 1f)]
+        [Row(0f, 0f)]
+        [Row(float.MinValue, float.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantR4Both(float a, float b)
+        {
+            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
+            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
             
             // both constant
             CodeSource = "static class Test { static bool AddConstantR4Both(float expect) { return expect == (" + x + " + " + y + "); } }";
             Assert.IsTrue((bool)Run<R4_Constant>("", "Test", "AddConstantR4Both", (a + b)));
         }
+        #endregion
         
+        #region R8
         /// <summary>
         /// 
         /// </summary>
@@ -918,22 +1175,55 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0.0, 0.0)]
         [Row(-1.79769313486231E+308, 1.79769313486231E+308)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void AddConstantR8(double a, double b)
-        {                
+        public void AddConstantR8Right(double a, double b)
+        {
             string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture);
             string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture);
             
             // right side constant
             CodeSource = "static class Test { static bool AddConstantR8Right(double expect, double a) { return expect == (a + " + y + "); } }";
             Assert.IsTrue((bool)Run<R8_Constant_R8>("", "Test", "AddConstantR8Right", (a + b), a));
-            
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148.0016)]
+        [Row(17.2, 1.0)]
+        [Row(0.0, 0.0)]
+        [Row(-1.79769313486231E+308, 1.79769313486231E+308)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantR8Left(double a, double b)
+        {
+            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
             // left side constant
             CodeSource = "static class Test { static bool AddConstantR8Left(double expect, double b) { return expect == (" + x + " + b); } }";
             Assert.IsTrue((bool)Run<R8_Constant_R8>("", "Test", "AddConstantR8Left", (a + b), b));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148.0016)]
+        [Row(17.2, 1.0)]
+        [Row(0.0, 0.0)]
+        [Row(-1.79769313486231E+308, 1.79769313486231E+308)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantR8Both(double a, double b)
+        {
+            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture);
             
             // both constant
             CodeSource = "static class Test { static bool AddConstantR8Both(double expect) { return expect == (" + x + " + " + y + "); } }";
             Assert.IsTrue((bool)Run<R8_Constant>("", "Test", "AddConstantR8Both", (a + b)));
         }
+        #endregion
     }
 }
