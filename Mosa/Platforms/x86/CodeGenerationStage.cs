@@ -1583,6 +1583,11 @@ namespace Mosa.Platforms.x86
                 case CilElementType.I8:
                     throw new NotSupportedException();
 
+                case CilElementType.U1: break;
+                case CilElementType.U2: break;
+                case CilElementType.U4: break;
+                case CilElementType.U8: goto case CilElementType.I8;
+
                 default:
                     throw new NotSupportedException();
             }

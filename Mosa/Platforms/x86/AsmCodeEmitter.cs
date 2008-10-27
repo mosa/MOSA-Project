@@ -67,6 +67,7 @@ namespace Mosa.Platforms.x86
             _textWriter.Flush();
 
             // HACK: This is wrong, but only this allows us to do a clean compilation
+            _textWriter.Close();
             _textWriter.Dispose();
             _textWriter = null;
         }

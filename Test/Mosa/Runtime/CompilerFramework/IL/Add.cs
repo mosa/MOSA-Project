@@ -129,6 +129,25 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="expect"></param>
         /// <param name="a"></param>
+        /// <returns></returns>
+        delegate bool I4_I1_C(int expect, sbyte a);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        [Row(1)]
+        [Test, Author("rootnode")]
+        public void AddConstantI1Right(sbyte a)
+        {
+            CodeSource = "static class Test { static bool AddConstantI1Right(int expect, sbyte a) { return expect == (a + 1); } }";
+            Assert.IsTrue((bool)Run<I4_I1_C>("", "Test", "AddConstantI1Right", a + 1, a));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
         delegate bool U4_U1_U1(uint expect, byte a, byte b);

@@ -27,7 +27,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="idt">A pointer to the interrupt descriptor table.</param>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.LidtInstruction))]
-        public static void Ldit(IntPtr idt) { ThrowPlatformNotSupported(); }
+        public static void Ldit(IntPtr idt) { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 cli instruction to disable interrupts
@@ -39,13 +39,19 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 cmpxchg instruction to disable interrupts
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CmpXchgInstruction))]
-        public static void CmpXchg() { ThrowPlatformNotSupported(); return; }
+        public static void CmpXchg16(ref short first, short second) { ThrowPlatformNotSupported(); return; }
+
+        /// <summary>
+        /// Wraps the x86 cmpxchg instruction to disable interrupts
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CmpXchgInstruction))]
+        public static void CmpXchg32(ref int first, int second) { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 lgdt instruction to load global descriptor table
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.LgdtInstruction))]
-        public static void Lgdt(IntPtr gdt) { ThrowPlatformNotSupported(); }
+        public static void Lgdt(IntPtr gdt) { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 pop instruction to pop a value from the stack
