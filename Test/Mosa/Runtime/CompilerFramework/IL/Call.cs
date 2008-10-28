@@ -7,6 +7,7 @@
  *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
  *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
  *  
  */
 
@@ -16,13 +17,31 @@ using System.Text;
 using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
-{
+{  
     /// <summary>
     /// 
     /// </summary>
     [TestFixture]
     public class Call : CodeDomTestRunner
     {
+        private static string CreateTestCode(string name, string type)
+        {
+            return @"
+                static class Test {
+                    static bool " + name + "(" + type + " value) { return value == " + name + @"_Target(value); } 
+                    static " + type + " " + name + "_Target(" + type + @" value) { return value; }
+                }";
+        }
+        
+        private static string CreateConstantTestCode(string name, string type, string constant)
+        {
+            return @"
+                static class Test {
+                    static bool " + name + "(" + type + " value) { return value == " + name + "_Target(" + constant + @"); } 
+                    static " + type + " " + name + "_Target(" + type + @" value) { return value; }
+                }";
+        }
+    
         /// <summary>
         /// 
         /// </summary>
@@ -41,6 +60,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Run<V>("", "Test", "CallEmpty");
         }
 
+        #region I1
         /// <summary>
         /// 
         /// </summary>
@@ -70,14 +90,27 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void CallI1(sbyte value)
         {
-            CodeSource = @"
-                static class Test {
-                    static bool CallI1(sbyte value) { return value == CallI1_Target(value); } 
-                    static sbyte CallI1_Target(sbyte value) { return value; }
-                }";
+            CodeSource = CreateTestCode("CallI1", "sbyte");
             Assert.IsTrue((bool)Run<B__I1>("", "Test", "CallI1", value));
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        [Row(0)]
+        [Row(-48)]
+        [Row(sbyte.MinValue)]
+        [Row(sbyte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void CallConstantI1(sbyte value)
+        {
+            CodeSource = CreateConstantTestCode("CallConstantI1", "sbyte", value.ToString());
+            Assert.IsTrue((bool)Run<B__I1>("", "Test", "CallConstantI1", value));
+        }
+        #endregion
 
+        #region I2
         /// <summary>
         /// 
         /// </summary>
@@ -107,14 +140,27 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void CallI2(short value)
         {
-            CodeSource = @"
-                static class Test {
-                    static bool CallI2(short value) { return value == CallI2_Target(value); } 
-                    static short CallI2_Target(short value) { return value; }
-                }";
+            CodeSource = CreateTestCode("CallI2", "short");
             Assert.IsTrue((bool)Run<B__I2>("", "Test", "CallI2", value));
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        [Row(0)]
+        [Row(-48)]
+        [Row(short.MinValue)]
+        [Row(short.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void CallConstantI2(short value)
+        {
+            CodeSource = CreateConstantTestCode("CallConstantI2", "short", value.ToString());
+            Assert.IsTrue((bool)Run<B__I2>("", "Test", "CallConstantI2", value));
+        }
+        #endregion
 
+        #region I4
         /// <summary>
         /// 
         /// </summary>
@@ -144,14 +190,27 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void CallI4(int value)
         {
-            CodeSource = @"
-                static class Test {
-                    static bool CallI4(int value) { return value == CallI4_Target(value); } 
-                    static int CallI4_Target(int value) { return value; }
-                }";
+            CodeSource = CreateTestCode("CallI4", "int");
             Assert.IsTrue((bool)Run<B__I4>("", "Test", "CallI4", value));
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        [Row(0)]
+        [Row(-48)]
+        [Row(int.MinValue)]
+        [Row(int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void CallConstantI4(int value)
+        {
+            CodeSource = CreateConstantTestCode("CallConstantI4", "int", value.ToString());
+            Assert.IsTrue((bool)Run<B__I4>("", "Test", "CallConstantI4", value));
+        }
+        #endregion
 
+        #region I8
         /// <summary>
         /// 
         /// </summary>
@@ -181,13 +240,25 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void CallI8(long value)
         {
-            CodeSource = @"
-                static class Test {
-                    static bool CallI8(long value) { return value == CallI8_Target(value); } 
-                    static long CallI8_Target(long value) { return value; }
-                }";
+            CodeSource = CreateTestCode("CallI8", "long");
             Assert.IsTrue((bool)Run<B__I8>("", "Test", "CallI8", value));
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        [Row(0)]
+        [Row(-48)]
+        [Row(long.MinValue)]
+        [Row(long.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void CallConstantI8(long value)
+        {
+            CodeSource = CreateConstantTestCode("CallConstantI8", "long", value.ToString());
+            Assert.IsTrue((bool)Run<B__I8>("", "Test", "CallConstantI8", value));
+        }
+        #endregion
 
         /// <summary>
         /// 
