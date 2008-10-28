@@ -121,7 +121,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         }
         
         delegate bool I4_Constant_I1(int expect, sbyte x);
-        delegate bool I4_Constant(int expect);
 
         /// <summary>
         /// 
@@ -350,7 +349,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         }
         
         delegate bool I8_Constant_I8(long expect, long x);
-        delegate bool I8_Constant(long expect);
 
         /// <summary>
         /// 

@@ -23,6 +23,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     [TestFixture]
     public class Not : CodeDomTestRunner
     {
+        private static string CreateTestCode(string name, string typeIn, string typeOut)
+        {
+            return @"
+                static class Test
+                {
+                    static bool " + name + "(" + typeOut + " expect, " + typeIn + @" a)
+                    {
+                        return expect == (~a);
+                    }
+                }";
+        }
+        
+        #region I1
         /// <summary>
         /// 
         /// </summary>
@@ -53,10 +66,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void NotI1(sbyte a)
         {
-            CodeSource = "static class Test { static bool NotI1(int expect, sbyte a) { return expect == (~a); } }";
+            CodeSource = CreateTestCode("NotI1", "sbyte", "int");
             Assert.IsTrue((bool)Run<I4_I1>("", "Test", "NotI1", (sbyte)~a, (sbyte)a));
         }
+        #endregion
 
+        #region U1
         /// <summary>
         /// 
         /// </summary>
@@ -80,10 +95,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void NotU1(byte a)
         {
-            CodeSource = "static class Test { static bool NotU1(byte expect, byte a) { return expect == (~a); } }";
+            CodeSource = CreateTestCode("NotU1", "byte", "byte");
             Assert.IsTrue((bool)Run<U1_U1>("", "Test", "NotU1", (byte)~(byte)a, a));
         }
+        #endregion
 
+        #region I2
         /// <summary>
         /// 
         /// </summary>
@@ -114,10 +131,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void NotI2(short a)
         {
-            CodeSource = "static class Test { static bool NotI2(int expect, short a) { return expect == (~a); } }";
+            CodeSource = CreateTestCode("NotI2", "short", "int");
             Assert.IsTrue((bool)Run<I4_I2>("", "Test", "NotI2", (short)~a, (short)a));
         }
+        #endregion
         
+        #region U2
         /// <summary>
         /// 
         /// </summary>
@@ -141,10 +160,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void NotU2(ushort a)
         {
-            CodeSource = "static class Test { static bool NotU2(ushort expect, ushort a) { return expect == (~a); } }";
+            CodeSource = CreateTestCode("NotU2", "ushort", "ushort");
             Assert.IsTrue((bool)Run<U2_U2>("", "Test", "NotU2", (ushort)~(ushort)a, (ushort)a));
         }
+        #endregion
         
+        #region I4
         /// <summary>
         /// 
         /// </summary>
@@ -175,10 +196,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void NotI4(int a)
         {
-            CodeSource = "static class Test { static bool NotI4(int expect, int a) { return expect == (~a); } }";
+            CodeSource = CreateTestCode("NotI4", "int", "int");
             Assert.IsTrue((bool)Run<I4_I4>("", "Test", "NotI4", (int)~a, (int)a));
         }
+        #endregion
 
+        #region U4
         /// <summary>
         /// 
         /// </summary>
@@ -202,10 +225,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void NotU4(uint a)
         {
-            CodeSource = "static class Test { static bool NotU4(uint expect, uint a) { return expect == (~a); } }";
+            CodeSource = CreateTestCode("NotU4", "uint", "uint");
             Assert.IsTrue((bool)Run<U4_U4>("", "Test", "NotU4", ~(uint)a, a));
         }
+        #endregion
 
+        #region I8
         /// <summary>
         /// 
         /// </summary>
@@ -236,10 +261,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void NotI8(long a)
         {
-            CodeSource = "static class Test { static bool NotI8(long expect, long a) { return expect == (~a); } }";
+            CodeSource = CreateTestCode("NotI8", "long", "long");
             Assert.IsTrue((bool)Run<I8_I8>("", "Test", "NotI8", (long)~a, (long)a));
         }
+        #endregion
 
+        #region U8
         /// <summary>
         /// 
         /// </summary>
@@ -263,8 +290,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void NotU8(ulong a)
         {
-            CodeSource = "static class Test { static bool NotU8(ulong expect, ulong a) { return expect == (~a); } }";
+            CodeSource = CreateTestCode("NotU8", "ulong", "ulong");
             Assert.IsTrue((bool)Run<U8_U8>("", "Test", "NotU8", ~(ulong)a, a));
         }
+        #endregion
     }
 }

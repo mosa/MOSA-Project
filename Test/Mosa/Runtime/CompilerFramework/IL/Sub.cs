@@ -140,7 +140,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         }
         
         delegate bool I4_Constant_I1(int expect, sbyte x); 
-        delegate bool I4_Constant(int expect);
         
         /// <summary>
         /// 
@@ -333,7 +332,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         }
         
         delegate bool U4_Constant_U2(uint expect, ushort x);
-        delegate bool U4_Constant(uint expect); 
 
         /// <summary>
         /// 
@@ -546,7 +544,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         }
         
         delegate bool I8_Constant_I8(long expect, long x);
-        delegate bool I8_Constant(long expect);
 
         /// <summary>
         /// 
@@ -651,7 +648,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         }
         
         delegate bool R4_Constant_R4(float expect, float x);
-        delegate bool R4_Constant(float expect);
 
         /// <summary>
         /// 
@@ -758,7 +754,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         }
         
         delegate bool R8_Constant_R8(double expect, double x);
-        delegate bool R8_Constant(double expect);
 
         /// <summary>
         /// 
