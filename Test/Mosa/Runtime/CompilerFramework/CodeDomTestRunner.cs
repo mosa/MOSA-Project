@@ -17,6 +17,7 @@ using System.IO;
 
 namespace Test.Mosa.Runtime.CompilerFramework
 {
+
     /// <summary>
     /// A test runner base class for tests using the CodeDom compilers.
     /// </summary>

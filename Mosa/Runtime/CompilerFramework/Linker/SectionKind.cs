@@ -11,12 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.Linker
 {
     /// <summary>
     /// An enumeration identifying common linker sections.
     /// </summary>
-    public enum LinkerSection
+    public enum SectionKind
     {
         /// <summary>
         /// Identifies the program text section.

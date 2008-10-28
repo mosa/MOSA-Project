@@ -73,27 +73,23 @@ namespace Mosa.Runtime.CompilerFramework
             _compiler = compiler;
 
             // Retrieve a stream to place the code into
-            _codeStream = _compiler.RequestCodeStream();
-            Debug.Assert(null != _codeStream, @"Failed to retrieve code stream from the compiler.");
-            if (null == _codeStream)
-                throw new InvalidOperationException(@"Failed to receive the code stream from the method compiler.");
-            // HINT: We need seeking to resolve labels.
-            Debug.Assert(true == _codeStream.CanSeek, @"Can't seek code output stream.");
-            Debug.Assert(true == _codeStream.CanWrite, @"Can't write to code output stream.");
-            if (false == _codeStream.CanSeek || false == _codeStream.CanWrite)
-                throw new NotSupportedException(@"Code stream doesn't support seeking or writing.");
+            using (_codeStream = _compiler.RequestCodeStream())
+            {
+                // HINT: We need seeking to resolve labels.
+                Debug.Assert(true == _codeStream.CanSeek, @"Can't seek code output stream.");
+                Debug.Assert(true == _codeStream.CanWrite, @"Can't write to code output stream.");
+                if (false == _codeStream.CanSeek || false == _codeStream.CanWrite)
+                    throw new NotSupportedException(@"Code stream doesn't support seeking or writing.");
 
-            // Save the start address of the method
-            _compiler.Method.Address = new IntPtr(_codeStream.Position);
+                // Emit method prologue
+                BeginGenerate();
 
-            // Emit method prologue
-            BeginGenerate();
+                // Emit all instructions
+                EmitInstructions();
 
-            // Emit all instructions
-            EmitInstructions();
-
-            // Emit the method epilogue
-            EndGenerate();
+                // Emit the method epilogue
+                EndGenerate();
+            }
 		}
 
         #endregion // IMethodCompilerStage members

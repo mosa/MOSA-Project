@@ -13,7 +13,7 @@ using System.Text;
 using Mosa.Runtime.Vm;
 using System.IO;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.Linker
 {
     /// <summary>
     /// Represents a linking request to the assembly linker.

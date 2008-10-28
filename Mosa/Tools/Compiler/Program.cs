@@ -46,6 +46,7 @@ namespace Mosa.Tools.Compiler
                 return;
             }
 
+            string mapFile = null;
             CompileOptions options = new CompileOptions();
             
             OptionSet optionSet = new OptionSet();
@@ -99,6 +100,14 @@ namespace Mosa.Tools.Compiler
                 "Specify the bootable format of the produced binary [{mb0.7}].",
                 options.SetBootFormat
                );
+
+            optionSet.Add(
+                "m|map=",
+                "Generate a map file of the produced binary.",
+                delegate(string v)
+                {
+                    mapFile = v;
+                });
             
                        
 //            // Additional options for multiboot
@@ -120,6 +129,7 @@ namespace Mosa.Tools.Compiler
             try
             {
                 options.Finish(optionSet.Parse(args));
+                options.SetMapFile(mapFile);
             }
             catch (OptionException e)
             {

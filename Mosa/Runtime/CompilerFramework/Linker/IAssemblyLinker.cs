@@ -13,7 +13,7 @@ using System.Text;
 using Mosa.Runtime.Vm;
 using System.IO;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.Linker
 {
     /// <summary>
     /// Collects linker requests for processing in the AssemblyLinkerStage.
@@ -28,6 +28,42 @@ namespace Mosa.Runtime.CompilerFramework
     /// </remarks>
     public interface IAssemblyLinker
     {
+        #region Properties
+
+        /// <summary>
+        /// Gets the base address.
+        /// </summary>
+        /// <value>The base address.</value>
+        ulong BaseAddress { get; }
+
+        /// <summary>
+        /// Gets the entry point symbol.
+        /// </summary>
+        /// <value>The entry point symbol.</value>
+        LinkerSymbol EntryPoint { get; }
+
+        /// <summary>
+        /// Retrieves the collection of sections created during compilation.
+        /// </summary>
+        /// <value>The sections collection.</value>
+        ICollection<LinkerSection> Sections { get; }
+
+        /// <summary>
+        /// Retrieves the collection of symbols known by the linker.
+        /// </summary>
+        /// <value>The symbol collection.</value>
+        ICollection<LinkerSymbol> Symbols { get; }
+
+        /// <summary>
+        /// Gets the time stamp.
+        /// </summary>
+        /// <value>The time stamp.</value>
+        DateTime TimeStamp { get; }
+
+        #endregion // Properties
+
+        #region Methods
+
         /// <summary>
         /// Issues a linker request for the given runtime method.
         /// </summary>
@@ -66,7 +102,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
         /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
         /// <returns>A stream, which can be used to populate the section.</returns>
-        Stream Allocate(RuntimeMember symbol, LinkerSection section, int size, int alignment);
+        Stream Allocate(RuntimeMember symbol, SectionKind section, int size, int alignment);
 
         /// <summary>
         /// Allocates a symbol of the given name in the specified section.
@@ -76,6 +112,8 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
         /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
         /// <returns>A stream, which can be used to populate the section.</returns>
-        Stream Allocate(string name, LinkerSection section, int size, int alignment);
+        Stream Allocate(string name, SectionKind section, int size, int alignment);
+
+        #endregion // Methods
     }
 }

@@ -9,6 +9,8 @@ using System.Runtime.InteropServices;
 using Mosa.Runtime;
 using System.Reflection.Emit;
 using System.IO;
+using Mosa.Runtime.CompilerFramework.Linker;
+using System.Collections.ObjectModel;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
@@ -17,16 +19,40 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
     /// </summary>
     public class TestAssemblyLinker : AssemblyLinkerStageBase
     {
-        private Stream[] _section;
+        #region Data members
+
+        /// <summary>
+        /// Holds the linker sections of the assembly linker.
+        /// </summary>
+        private List<TestLinkerSection> _sections;
+
+        #endregion // Data members
+
+        #region Construction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestAssemblyLinker"/> class.
         /// </summary>
         public TestAssemblyLinker()
         {
-            _section = new Stream[(int)LinkerSection.Max];
+            int maxSections = (int)SectionKind.Max;
+            _sections = new List<TestLinkerSection>(maxSections);
+            for (int i = 0; i < maxSections; i++)
+                _sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, IntPtr.Zero));
         }
 
+        #endregion // Construction
+
+        #region AssemblyLinkerStageBase Overrides
+
+        /// <summary>
+        /// Retrieves the collection of sections created during compilation.
+        /// </summary>
+        /// <value>The sections collection.</value>
+        public override ICollection<LinkerSection> Sections
+        {
+            get { return (ICollection<LinkerSection>)_sections.AsReadOnly(); }
+        }
 
         /// <summary>
         /// Allocates a symbol of the given name in the specified section.
@@ -37,22 +63,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// <returns>
         /// A stream, which can be used to populate the section.
         /// </returns>
-        protected override Stream Allocate(LinkerSection section, int size, int alignment)
+        protected override Stream Allocate(SectionKind section, int size, int alignment)
         {
-            // FIXME: Use a linker stream instead.
-            Stream stream = _section[(int)section];
-            if (null == stream || (size != 0 && size > (stream.Length - stream.Position)))
-            {
-                // Request 64K of memory
-                stream = new VirtualMemoryStream(RuntimeBase.Instance.MemoryManager, 16 * 4096);
-
-                // FIXME: Put the old stream into a list to dispose
-
-                // Save the stream for further references
-                _section[(int)section] = stream;
-            }
-
-            return stream;
+            TestLinkerSection tle = _sections[(int)section];
+            return tle.Allocate(size, alignment);
         }
 
         /// <summary>
@@ -118,6 +132,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
             return Marshal.GetFunctionPointerForDelegate(methodDelegate).ToInt64();
         }
+
+        #endregion // AssemblyLinkerStageBase Overrides
 
         /// <summary>
         /// Builds the delegate for the given method info.

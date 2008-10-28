@@ -14,14 +14,15 @@ using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata;
 using System.Diagnostics;
 using System.IO;
+using System.Collections.ObjectModel;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.Linker
 {
     /// <summary>
     /// This compilation stage links all external labels together, which
     /// were previously registered.
     /// </summary>
-    public abstract class AssemblyLinkerStageBase : IAssemblyCompilerStage, IAssemblyLinker
+    public abstract class AssemblyLinkerStageBase : IAssemblyCompilerStage, Linker.IAssemblyLinker
     {
         #region Data members
 
@@ -30,6 +31,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         private Dictionary<string, List<LinkRequest>> _linkRequests;
 
+        /// <summary>
+        /// A dictionary containing all symbol seen in the assembly.
+        /// </summary>
         private Dictionary<string, LinkerSymbol> symbols;
 
         #endregion // Data members
@@ -213,6 +217,51 @@ namespace Mosa.Runtime.CompilerFramework
         #region IAssemblyLinker Members
 
         /// <summary>
+        /// Gets the base address.
+        /// </summary>
+        /// <value>The base address.</value>
+        public ulong BaseAddress
+        {
+            get { return 0UL; }
+        }
+
+        /// <summary>
+        /// Gets the entry point symbol.
+        /// </summary>
+        /// <value>The entry point symbol.</value>
+        public LinkerSymbol EntryPoint
+        {
+            get { return null; }
+        }
+
+        /// <summary>
+        /// Gets the linker time stamp.
+        /// </summary>
+        /// <value>The time stamp.</value>
+        public DateTime TimeStamp
+        {
+            get { return DateTime.Now; }
+        }
+
+        /// <summary>
+        /// Retrieves the collection of sections created during compilation.
+        /// </summary>
+        /// <value>The sections collection.</value>
+        public abstract ICollection<Linker.LinkerSection> Sections
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Retrieves the collection of symbols known by the linker.
+        /// </summary>
+        /// <value>The symbol collection.</value>
+        public ICollection<LinkerSymbol> Symbols
+        {
+            get { return this.symbols.Values; }
+        }
+
+        /// <summary>
         /// Allocates memory in the specified section.
         /// </summary>
         /// <param name="symbol">The metadata member to allocate space for.</param>
@@ -220,9 +269,25 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
         /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
         /// <returns>A stream, which can be used to populate the section.</returns>
-        public Stream Allocate(RuntimeMember symbol, LinkerSection section, int size, int alignment)
+        public Stream Allocate(RuntimeMember symbol, SectionKind section, int size, int alignment)
         {
-            return Allocate(CreateSymbolName(symbol), section, size, alignment);
+            // Create a canonical symbol name
+            string name = CreateSymbolName(symbol);
+            
+            // Create a stream
+            LinkerStream stream = Allocate(name, section, size, alignment) as LinkerStream;
+            try
+            {
+                // Save the symbol position
+                symbol.Address = new IntPtr(stream.BaseStream.Position);
+            }
+            catch
+            {
+                stream.Dispose();
+                throw;
+            }
+
+            return stream;
         }
 
         /// <summary>
@@ -235,12 +300,27 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>
         /// A stream, which can be used to populate the section.
         /// </returns>
-        public Stream Allocate(string name, LinkerSection section, int size, int alignment)
+        public Stream Allocate(string name, SectionKind section, int size, int alignment)
         {
-            Stream result = Allocate(section, size, alignment);
-            LinkerSymbol symbol = new LinkerSymbol(name, new IntPtr(result.Position));
-            this.symbols.Add(symbol.Name, symbol);
-            return result;
+            Stream stream = Allocate(section, size, alignment);
+
+            try
+            {
+                // Create a linker symbol for the name
+                LinkerSymbol symbol = new LinkerSymbol(name, new IntPtr(stream.Position));
+
+                // Save the symbol for later use
+                this.symbols.Add(symbol.Name, symbol);
+
+                // Wrap the stream to catch premature disposal
+                stream = new LinkerStream(symbol, stream, size);
+            }
+            catch (ArgumentException argx)
+            {
+                throw new LinkerException(String.Format(@"Symbol {0} defined multiple times.", name), argx);
+            }
+
+            return stream;
         }
 
         /// <summary>
@@ -252,7 +332,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>
         /// A stream, which can be used to populate the section.
         /// </returns>
-        protected abstract Stream Allocate(LinkerSection section, int size, int alignment);
+        protected abstract Stream Allocate(SectionKind section, int size, int alignment);
 
         /// <summary>
         /// Issues a linker request for the given runtime method.

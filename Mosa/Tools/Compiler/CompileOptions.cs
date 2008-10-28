@@ -19,6 +19,7 @@ using NDesk.Options;
 namespace Mosa.Tools.Compiler
 {
     #region Enums
+
     /// <summary>
     /// Available architectures.
     /// </summary>
@@ -76,8 +77,9 @@ namespace Mosa.Tools.Compiler
         /// </summary>
         Multiboot0_7
     }
-    #endregion
-    
+
+    #endregion // Enums
+
     /// <summary>
     /// Class containing options for the compilation.
     /// </summary>
@@ -85,12 +87,40 @@ namespace Mosa.Tools.Compiler
     {
         #region Fields
 
-        TargetArchitecture architecture;
-        BinaryFormat binaryFormat;
-        BootFormat bootFormat;
-        List<FileInfo> inputFiles = null;
-        bool isExecutable;
-        string outputFile;
+        /// <summary>
+        /// Determines the compilation architecture.
+        /// </summary>
+        private TargetArchitecture architecture;
+        
+        /// <summary>
+        /// Determines the output binary format.
+        /// </summary>
+        private BinaryFormat binaryFormat;
+
+        /// <summary>
+        /// Holds the boot format flag.
+        /// </summary>
+        private BootFormat bootFormat;
+
+        /// <summary>
+        /// Holds a list of input files.
+        /// </summary>
+        private List<FileInfo> inputFiles = null;
+        
+        /// <summary>
+        /// Determines if the file is executable.
+        /// </summary>
+        private bool isExecutable;
+
+        /// <summary>
+        /// Holds the name of the output file to generate.
+        /// </summary>
+        private string outputFile;
+
+        /// <summary>
+        /// Holds the name of the map file to generate.
+        /// </summary>
+        private string mapFile;
 
         #endregion Fields
 
@@ -192,8 +222,6 @@ namespace Mosa.Tools.Compiler
         }
 
         #endregion Properties
-
-        #region Methods
 
         #region Public Methods
 
@@ -323,6 +351,16 @@ namespace Mosa.Tools.Compiler
         }
 
         /// <summary>
+        /// Sets the map file to generate after linking.
+        /// </summary>
+        /// <param name="file">The map file.</param>
+        public void SetMapFile(string file)
+        {
+            // Optional!
+            mapFile = file;
+        }
+
+        /// <summary>
         /// Returns a string containing the current options.
         /// </summary>
         /// <returns>A string containing the options.</returns>
@@ -337,9 +375,18 @@ namespace Mosa.Tools.Compiler
             sb.Append("Is executable: ").AppendLine(isExecutable.ToString());
             return sb.ToString();
         }
+
         #endregion Public Methods
+
         #region Private Methods
 
+        /// <summary>
+        /// Parses the given string to an enumeration value.
+        /// </summary>
+        /// <typeparam name="T">The enumeration type.</typeparam>
+        /// <param name="value">The string to parse.</param>
+        /// <returns>The enumeration value.</returns>
+        /// <exception cref="T:System.ArgumentException"><paramref name="value"/> is not a member of the enumeration <typeparamref name="T"/></exception>
         private T EnumParse<T>(string value)
         {
             T parsed = (T) Enum.Parse(typeof(T), value, true);
@@ -349,8 +396,7 @@ namespace Mosa.Tools.Compiler
             }
             return parsed;
         }
-        #endregion Private Methods
 
-        #endregion Methods
+        #endregion Private Methods
     }
 }

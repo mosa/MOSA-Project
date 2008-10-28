@@ -12,6 +12,7 @@ namespace System.Reflection
 	/// <summary>
 	/// Implementation of the "System.Reflection.DefaultMemberAttribute" class
 	/// </summary>
+    [AttributeUsage(AttributeTargets.All)]
 	public class DefaultMemberAttribute : Attribute
 	{
 		private readonly string member;

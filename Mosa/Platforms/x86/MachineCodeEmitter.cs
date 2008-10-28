@@ -19,6 +19,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.CompilerFramework.Linker;
 
 namespace Mosa.Platforms.x86
 {

@@ -11,7 +11,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.Linker
 {
     /// <summary>
     /// Represents a single symbol for the linker.
@@ -24,6 +24,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// Holds the address of the symbol.
         /// </summary>
         private IntPtr address;
+
+        /// <summary>
+        /// Holds the length of the linker symbol in bytes.
+        /// </summary>
+        private long length;
 
         /// <summary>
         /// Holds the name of the linker symbol.
@@ -64,6 +69,16 @@ namespace Mosa.Runtime.CompilerFramework
         public IntPtr Address
         {
             get { return this.address; }
+        }
+
+        /// <summary>
+        /// Gets or sets the length of the linker symbol in bytes.
+        /// </summary>
+        /// <value>The length in bytes.</value>
+        public long Length
+        {
+            get { return this.length; }
+            internal set { this.length = value; }
         }
 
         /// <summary>

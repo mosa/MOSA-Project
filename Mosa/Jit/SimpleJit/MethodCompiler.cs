@@ -15,6 +15,7 @@ using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Loader;
+using Mosa.Runtime.CompilerFramework.Linker;
 
 namespace Mosa.Runtime.Jit.SimpleJit
 {

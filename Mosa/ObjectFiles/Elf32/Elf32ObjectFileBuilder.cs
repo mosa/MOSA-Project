@@ -15,6 +15,7 @@ using Mosa.ObjectFiles.Elf32.Format;
 using Mosa.ObjectFiles.Elf32.Format.Sections;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Vm;
+using Mosa.Runtime.CompilerFramework.Linker;
 
 namespace Mosa.ObjectFiles.Elf32
 {
@@ -159,16 +160,16 @@ namespace Mosa.ObjectFiles.Elf32
         /// <param name="method"></param>
         /// <param name="methodOffset"></param>
         /// <param name="methodRelativeBase"></param>
-        /// <param name="target"></param>
+        /// <param name="symbol"></param>
         /// <returns></returns>
-        public override long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
+        public override long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol)
         {
             LinkRequest link = new LinkRequest(
                 linkType,
                 method,
                 methodOffset,
                 methodRelativeBase,
-                target.Name
+                symbol
             );
 
             long value;

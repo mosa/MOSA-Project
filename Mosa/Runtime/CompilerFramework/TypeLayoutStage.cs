@@ -14,6 +14,7 @@ using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata;
 using System.Diagnostics;
 using System.IO;
+using Mosa.Runtime.CompilerFramework.Linker;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -173,23 +174,22 @@ namespace Mosa.Runtime.CompilerFramework
             // Retrieve the linker
             IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
             // The linker section to move this field into
-            LinkerSection section;
+            SectionKind section;
             // Does this field have an RVA?
             if (IntPtr.Zero != field.RVA)
             {
                 // FIXME: Move a static field into ROData, if it is read-only and can be initialized
                 // using static analysis
-                section = LinkerSection.Data;
+                section = SectionKind.Data;
             }
             else
             {
-                section = LinkerSection.BSS;
+                section = SectionKind.BSS;
             }
 
             // Allocate space in the respective section
             using (Stream stream = linker.Allocate(field, section, size, alignment))
             {
-                field.Address = new IntPtr(stream.Position);
                 if (IntPtr.Zero != field.RVA)
                 {
                     // Initialize the static value from the RVA

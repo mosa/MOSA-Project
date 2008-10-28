@@ -19,6 +19,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using System.Runtime.InteropServices;
+using Mosa.Runtime.CompilerFramework.Linker;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
@@ -71,7 +72,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
         public override Stream RequestCodeStream()
         {
-            return this.Linker.Allocate(this.Method, LinkerSection.Text, 0, 0);
+            return this.Linker.Allocate(this.Method, SectionKind.Text, 0, 0);
         }
     }
 }

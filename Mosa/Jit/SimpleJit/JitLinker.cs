@@ -4,50 +4,36 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Vm;
-using System.IO;
-using Mosa.Runtime.CompilerFramework.Linker;
 
-namespace Mosa.Tools.Compiler
+using Mosa.Runtime.CompilerFramework.Linker;
+using System.IO;
+using Mosa.Runtime.Vm;
+
+namespace Mosa.Jit.SimpleJit
 {
     /// <summary>
-    /// 
+    /// A fast runtime linker.
     /// </summary>
-    public class AotLinkerStage : AssemblyLinkerStageBase
+    public sealed class JitLinker : AssemblyLinkerStageBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        ObjectFileBuilderBase _objectFileBuilder;
+        #region Construction
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="JitLinker"/> class.
         /// </summary>
-        /// <param name="objectFileBuilder"></param>
-        public AotLinkerStage(ObjectFileBuilderBase objectFileBuilder)
+        public JitLinker()
         {
-            this._objectFileBuilder = objectFileBuilder;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Name { get { return "AOT Linker"; } }
+        #endregion // Construction
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="compiler"></param>
-        public void Run(AssemblyCompiler compiler) { }
-
-        #region IAssemblyLinker Members
+        #region AssemblyLinkerStageBase Overrides
 
         /// <summary>
         /// Retrieves the collection of sections created during compilation.
@@ -69,7 +55,33 @@ namespace Mosa.Tools.Compiler
         /// </returns>
         protected override Stream Allocate(SectionKind section, int size, int alignment)
         {
-            return _objectFileBuilder.Allocate((string)null, section, size, alignment);
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// A request to patch already emitted code by storing the calculated address value.
+        /// </summary>
+        /// <param name="linkType">Type of the link.</param>
+        /// <param name="method">The method whose code is being patched.</param>
+        /// <param name="methodOffset">The value to store at the position in code.</param>
+        /// <param name="methodRelativeBase">The method relative base.</param>
+        /// <param name="targetAddress">The position in code, where it should be patched.</param>
+        protected override void ApplyPatch(LinkType linkType, RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Determines if the given runtime member can be resolved immediately.
+        /// </summary>
+        /// <param name="member">The runtime member to determine resolution of.</param>
+        /// <param name="address">Receives the determined address of the runtime member.</param>
+        /// <returns>
+        /// The method returns true, when it was successfully resolved.
+        /// </returns>
+        protected override bool IsResolved(RuntimeMember member, out long address)
+        {
+            return base.IsResolved(member, out address);
         }
 
         /// <summary>
@@ -83,27 +95,9 @@ namespace Mosa.Tools.Compiler
         /// <returns></returns>
         public override long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
-            return _objectFileBuilder.Link(
-                linkType,
-                method,
-                methodOffset,
-                methodRelativeBase,
-                target
-            );
+            return base.Link(linkType, method, methodOffset, methodRelativeBase, target);
         }
 
-        /// <summary>
-        /// A request to patch already emitted code by storing the calculated address value.
-        /// </summary>
-        /// <param name="linkType">Type of the link.</param>
-        /// <param name="method">The method whose code is being patched.</param>
-        /// <param name="methodOffset">The value to store at the position in code.</param>
-        /// <param name="methodRelativeBase">The method relative base.</param>
-        /// <param name="targetAddress">The position in code, where it should be patched.</param>
-        protected override void ApplyPatch(LinkType linkType, RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress)
-        {
-        }
-
-        #endregion
+        #endregion // AssemblyLinkerStageBase Overrides
     }
 }

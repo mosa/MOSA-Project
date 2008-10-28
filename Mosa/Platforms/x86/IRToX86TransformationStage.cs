@@ -17,6 +17,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using IL = Mosa.Runtime.CompilerFramework.IL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using System.IO;
+using Mosa.Runtime.CompilerFramework.Linker;
 
 namespace Mosa.Platforms.x86
 {
@@ -1085,7 +1086,7 @@ namespace Mosa.Platforms.x86
                 this._architecture.GetTypeRequirements(cop.Type, out size, out alignment);
                 
                 string name = String.Format("C_{0}", Guid.NewGuid());
-                using (Stream stream = this._compiler.Linker.Allocate(name, LinkerSection.ROData, size, alignment))
+                using (Stream stream = this._compiler.Linker.Allocate(name, SectionKind.ROData, size, alignment))
                 {
                     byte[] buffer;
 

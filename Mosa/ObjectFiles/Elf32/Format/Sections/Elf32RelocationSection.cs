@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Linker;
 
 namespace Mosa.ObjectFiles.Elf32.Format.Sections
 {

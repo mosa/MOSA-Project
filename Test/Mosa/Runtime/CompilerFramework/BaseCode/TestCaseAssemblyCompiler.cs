@@ -15,6 +15,7 @@ using Mosa.Runtime.CompilerFramework;
 using x86 = Mosa.Platforms.x86;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;
+using Mosa.Runtime.CompilerFramework.Linker;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.Vm;
 using System.IO;
+using Mosa.Runtime.CompilerFramework.Linker;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -48,7 +49,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="size">The size.</param>
         /// <param name="alignment">The alignment.</param>
         /// <returns></returns>
-        public virtual Stream Allocate(RuntimeMember member, LinkerSection section, int size, int alignment)
+        public virtual Stream Allocate(RuntimeMember member, SectionKind section, int size, int alignment)
         {
             return null;
         }
@@ -63,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>
         /// A stream, which can be used to populate the section.
         /// </returns>
-        public virtual Stream Allocate(string name, LinkerSection section, int size, int alignment)
+        public virtual Stream Allocate(string name, SectionKind section, int size, int alignment)
         {
             return null;
         }
@@ -103,5 +104,35 @@ namespace Mosa.Runtime.CompilerFramework
         {
             return 0;
         }
+
+        /// <summary>
+        /// Retrieves the collection of sections created during compilation.
+        /// </summary>
+        /// <value>The sections collection.</value>
+        public ICollection<Linker.LinkerSection> Sections { get { throw new NotImplementedException(); } }
+
+        /// <summary>
+        /// Retrieves the collection of symbols known by the linker.
+        /// </summary>
+        /// <value>The symbol collection.</value>
+        public ICollection<LinkerSymbol> Symbols { get { throw new NotImplementedException(); } }
+
+        /// <summary>
+        /// Gets the base address.
+        /// </summary>
+        /// <value>The base address.</value>
+        public ulong BaseAddress { get { return 0UL; } }
+
+        /// <summary>
+        /// Gets the time stamp.
+        /// </summary>
+        /// <value>The time stamp.</value>
+        public DateTime TimeStamp { get { return DateTime.Now; } }
+
+        /// <summary>
+        /// Gets the entry point symbol.
+        /// </summary>
+        /// <value>The entry point symbol.</value>
+        public LinkerSymbol EntryPoint { get { return null; } }
     }
 }
