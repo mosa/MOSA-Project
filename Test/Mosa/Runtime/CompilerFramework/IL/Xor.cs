@@ -736,10 +736,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(long.MinValue, long.MaxValue)]
+        //[Row(-23, 148)]
+        //[Row(17, 1)]
+        //[Row(0, 0)]
+        //[Row(long.MinValue, long.MaxValue)]
+        [Row(4294977296, 42)] // Constant > int.Maxvalue but < long.Maxvalue
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void XorConstantI8Left(long a, long b)
         {

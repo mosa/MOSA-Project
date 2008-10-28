@@ -265,6 +265,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Neg(NegInstruction instruction, Context ctx)
         {
+            Replace(ctx, new Instruction[] { 
+                //_architecture.CreateInstruction(typeof(IR.MoveInstruction), instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, (byte)0)),
+                _architecture.CreateInstruction(typeof(IL.SubInstruction), OpCode.Sub, instruction.Results[0], instruction.Operands[0]) 
+            });
         }
 
         void IILVisitor<Context>.Not(NotInstruction instruction, Context ctx)

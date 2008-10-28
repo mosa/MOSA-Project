@@ -522,14 +522,9 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandNot(Context ctx, IR.LogicalNotInstruction instruction)
         {
-            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
-            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
-            Debug.Assert(op0 != null && op1 != null, @"Operands to LogicalNotInstruction are not MemoryOperand.");
-
-            MemoryOperand op0H = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, op0.Offset);
-            MemoryOperand op1H = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, op1.Offset);
-            MemoryOperand op0L = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
-            MemoryOperand op1L = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            Operand op0H, op1H, op0L, op1L;
+            SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
 
             Replace(ctx, new Instruction[] {
                 new IR.LogicalNotInstruction(op0H, op1H),
@@ -544,17 +539,10 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandAnd(Context ctx, IR.LogicalAndInstruction instruction)
         {
-            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
-            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
-            MemoryOperand op2 = instruction.Operand2 as MemoryOperand;
-            Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to LogicalNotInstruction are not MemoryOperand.");
-
-            MemoryOperand op0H = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, op0.Offset);
-            MemoryOperand op1H = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, op1.Offset);
-            MemoryOperand op2H = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, op2.Offset);
-            MemoryOperand op0L = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
-            MemoryOperand op1L = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
-            MemoryOperand op2L = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
+            Operand op0H, op1H, op2H, op0L, op1L, op2L;
+            SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+            SplitLongOperand(instruction.Operand2, out op2L, out op2H);
 
             Replace(ctx, new Instruction[] {
                 new IR.LogicalAndInstruction(op0H, op1H, op2H),
@@ -569,17 +557,10 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandOr(Context ctx, IR.LogicalOrInstruction instruction)
         {
-            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
-            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
-            MemoryOperand op2 = instruction.Operand2 as MemoryOperand;
-            Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to LogicalNotInstruction are not MemoryOperand.");
-
-            MemoryOperand op0H = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, op0.Offset);
-            MemoryOperand op1H = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, op1.Offset);
-            MemoryOperand op2H = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, op2.Offset);
-            MemoryOperand op0L = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
-            MemoryOperand op1L = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
-            MemoryOperand op2L = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
+            Operand op0H, op1H, op2H, op0L, op1L, op2L;
+            SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+            SplitLongOperand(instruction.Operand2, out op2L, out op2H);
 
             Replace(ctx, new Instruction[] {
                 new IR.LogicalOrInstruction(op0H, op1H, op2H),
@@ -594,17 +575,10 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandXor(Context ctx, IR.LogicalXorInstruction instruction)
         {
-            MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
-            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
-            MemoryOperand op2 = instruction.Operand2 as MemoryOperand;
-            Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to LogicalNotInstruction are not MemoryOperand.");
-
-            MemoryOperand op0H = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, op0.Offset);
-            MemoryOperand op1H = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, op1.Offset);
-            MemoryOperand op2H = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, op2.Offset);
-            MemoryOperand op0L = new MemoryOperand(new SigType(CilElementType.I4), op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
-            MemoryOperand op1L = new MemoryOperand(new SigType(CilElementType.I4), op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
-            MemoryOperand op2L = new MemoryOperand(new SigType(CilElementType.I4), op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
+            Operand op0H, op1H, op2H, op0L, op1L, op2L;
+            SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+            SplitLongOperand(instruction.Operand2, out op2L, out op2H);
 
             Replace(ctx, new Instruction[] {
                 new IR.LogicalXorInstruction(op0H, op1H, op2H),
