@@ -115,18 +115,30 @@ namespace Mosa.Platforms.x86
             // with a literal/literal operand first - TODO
             RegisterOperand eaxH = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
             RegisterOperand eaxL = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
-            Debug.Assert(instruction.First is MemoryOperand && instruction.Second is MemoryOperand && instruction.Results[0] is MemoryOperand);
-            MemoryOperand op1 = (MemoryOperand)instruction.First;
+            
+            Operand op1H, op1L, op2H, op2L, resH, resL;
+            SplitLongOperand(instruction.First, out op1L, out op1H);
+            SplitLongOperand(instruction.Second, out op2L, out op2H);
+            SplitLongOperand(instruction.Results[0], out resL, out resH);
+            /*MemoryOperand op1 = (MemoryOperand)instruction.First;
             MemoryOperand op2 = (MemoryOperand)instruction.Second;
-            MemoryOperand res = (MemoryOperand)instruction.Results[0];
+            MemoryOperand res = (MemoryOperand)instruction.Results[0];*/
 
-            Instruction[] result = new Instruction[] {
+            /*Instruction[] result = new Instruction[] {
                 new Instructions.MoveInstruction(eaxH, op1),
                 new Instructions.AddInstruction(eaxH, op2),
                 new Instructions.MoveInstruction(res, eaxH),
                 new Instructions.MoveInstruction(eaxL, new MemoryOperand(op1.Type, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4))),
                 new Instructions.AdcInstruction(eaxL, new MemoryOperand(op2.Type, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4))),
                 new Instructions.MoveInstruction(new MemoryOperand(res.Type, res.Base, new IntPtr(res.Offset.ToInt64() + 4)), eaxL),
+            };*/
+
+            Instruction[] result = new Instruction[] {
+                new Instructions.AddInstruction(eaxL, op2L),
+                new Instructions.MoveInstruction(resL, eaxL),
+                new Instructions.MoveInstruction(eaxH, op1H),
+                new Instructions.AdcInstruction(eaxH, op2H),
+                new Instructions.MoveInstruction(resH, eaxH),
             };
             Replace(ctx, result);
         }
