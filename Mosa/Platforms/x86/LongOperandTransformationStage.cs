@@ -256,10 +256,9 @@ namespace Mosa.Platforms.x86
             Operand count = instruction.Operand2;
             Debug.Assert(op0 != null && op1 != null, @"Shl Int64 operands not in memory.");
 
-            MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
-            MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
-            MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
-            MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            Operand op0H, op1H, op0L, op1L;
+            SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
             RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
@@ -344,10 +343,9 @@ namespace Mosa.Platforms.x86
             Operand count = instruction.Operand2;
             Debug.Assert(op0 != null && op1 != null, @"Shl Int64 operands not in memory.");
 
-            MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
-            MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
-            MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
-            MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            Operand op0H, op1H, op0L, op1L;
+            SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
             RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
@@ -432,10 +430,9 @@ namespace Mosa.Platforms.x86
             Operand count = instruction.Operand2;
             Debug.Assert(op0 != null && op1 != null, @"Shl Int64 operands not in memory.");
 
-            MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
-            MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
-            MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
-            MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            Operand op0H, op1H, op0L, op1L;
+            SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
             RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);

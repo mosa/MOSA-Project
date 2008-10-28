@@ -1156,6 +1156,9 @@ namespace Mosa.Platforms.x86
             Operand[] ops = instruction.Operands;
             EmitConstants(ops);
 
+            // FIXME
+            // Commented part causes an access violation!
+            /*
             if (ops[1] is ConstantOperand)
             {
                 Replace(ctx, new Instruction[] {
@@ -1164,14 +1167,14 @@ namespace Mosa.Platforms.x86
                 });
             }
             else
-            {
+            {*/
                 RegisterOperand ecx = new RegisterOperand(_architecture.NativeType, GeneralPurposeRegister.ECX);
                 Replace(ctx, new Instruction[] {
                     _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
                     _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
                     _architecture.CreateInstruction(replacementType, opRes, ecx)
                 });
-            }
+            //}
         }
 
         /// <summary>
