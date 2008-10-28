@@ -195,6 +195,9 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<Context>.Neg(IL.NegInstruction instruction, Context ctx)
         {
+            Replace(ctx, new Instruction[] {
+                new x86.Instructions.SubInstruction(instruction.Results[0], instruction.Operands[0])
+            });
         }
 
         void IL.IILVisitor<Context>.Not(IL.NotInstruction instruction, Context ctx)

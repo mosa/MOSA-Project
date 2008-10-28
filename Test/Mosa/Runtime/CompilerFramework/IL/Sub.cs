@@ -67,6 +67,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         }
         
         #region I1
+        
         /// <summary>
         /// 
         /// </summary>
@@ -80,6 +81,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
+        
         [Row(1, 2)]
         [Row(23, 21)]
         [Row(1, -2)]
@@ -139,7 +141,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         
         delegate bool I4_Constant_I1(int expect, sbyte x); 
         delegate bool I4_Constant(int expect);
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -148,6 +150,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-42, 48)]
         [Row(17, 1)]
         [Row(0, 0)]
+        [Row(0, 10)]
+        [Row(0, -10)]
+        [Row(10, 0)]
         [Row(sbyte.MinValue, sbyte.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void SubConstantI1Right(sbyte a, sbyte b)
@@ -787,5 +792,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<R8_Constant_R8>("", "Test", "SubConstantR8Left", (a - b), b));
         }
         #endregion
+        
     }
 }

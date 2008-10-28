@@ -35,11 +35,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
 			StackTypeCode.Unknown
 		};
 
-        /// <summary>
-        /// Operand, which represents the result of the operation.
-        /// </summary>
-        private Operand _result;
-
         #endregion // Data members
 
         #region Construction
@@ -57,31 +52,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         }
 
         #endregion // Construction
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the result.
-        /// </summary>
-        /// <value>The result.</value>
-        public Operand Result
-        {
-            get
-            {
-                return _result;
-            }
-            set
-            {
-                if (null == value)
-                    throw new ArgumentNullException(@"value");
-                if (value.Type != _result.Type)
-                    throw new ArgumentException(@"Operand type is not mutable.", @"value");
-
-                _result = value;
-            }
-        }
-
-        #endregion // Properties
 
         #region Methods
 
