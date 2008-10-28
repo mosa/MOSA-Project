@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
  */
 
 using System;
@@ -15,6 +16,8 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Linker;
 using System.IO;
 using System.Diagnostics;
+
+using NDesk.Options;
 
 namespace Mosa.Tools.Compiler.Boot
 {
@@ -38,7 +41,7 @@ namespace Mosa.Tools.Compiler.Boot
     /// the specification at 
     /// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.
     /// </remarks>
-    public sealed class Multiboot0695AssemblyStage : IAssemblyCompilerStage
+    public sealed class Multiboot0695AssemblyStage : IAssemblyCompilerStage, IHasOptions
     {
         #region Constants
 
@@ -213,5 +216,92 @@ namespace Mosa.Tools.Compiler.Boot
         }
 
         #endregion // Internals
+        
+        #region IHasOptions Members
+        /// <summary>
+        /// Adds the additional options for the parsing process to the given OptionSet.
+        /// </summary>
+        /// <param name="optionSet">A given OptionSet to add the options to.</param>
+        public void AddOptions(OptionSet optionSet)
+        {
+            optionSet.Add(
+                "multiboot-video-mode=",
+                "Specify the video mode for multiboot [{text|graphics}].",
+                delegate(string v)
+                {
+                    switch (v.ToLower())
+                    {
+                        case "text":
+                            videoMode = 1;
+                            break;
+                        case "graphics":
+                            videoMode = 0;
+                            break;
+                        default:
+                            throw new OptionException("Invalid value for multiboot video mode: " + v, "multiboot-video-mode");
+                    }
+                });
+            
+            optionSet.Add(
+                "multiboot-video-width=",
+                "Specify the {width} for video output, in pixels for graphics mode or in characters for text mode.",
+                delegate(string v)
+                {
+                    uint val;
+                    if (uint.TryParse(v, out val))
+                    {
+                        // TODO: this probably needs further validation
+                        videoWidth = val;
+                    }
+                    else
+                    {
+                        throw new OptionException("Invalid value for multiboot video width: " + v, "multiboot-video-width");
+                    }
+                });
+            
+            optionSet.Add(
+                "multiboot-video-height=",
+                "Specify the {height} for video output, in pixels for graphics mode or in characters for text mode.",
+                delegate(string v)
+                {
+                    uint val;
+                    if (uint.TryParse(v, out val))
+                    {
+                        // TODO: this probably needs further validation
+                        videoHeight = val;
+                    }
+                    else
+                    {
+                        throw new OptionException("Invalid value for multiboot video height: " + v, "multiboot-video-height");
+                    }
+                });
+            
+            optionSet.Add(
+                "multiboot-video-depth=",
+                "Specify the {depth} (number of bits per pixel) for graphics mode.",
+                delegate(string v)
+                {
+                    uint val;
+                    if (uint.TryParse(v, out val))
+                    {
+                        // TODO: this probably needs further validation
+                        videoDepth = val;
+                    }
+                    else
+                    {
+                        throw new OptionException("Invalid value for multiboot video depth: " + v, "multiboot-video-depth");
+                    }
+                });
+            
+            optionSet.Add(
+                "multiboot-module=",
+                "Adds a {0:module} to multiboot, to be loaded at a given {1:address} (can be used multiple times).",
+                delegate(string file, string address)
+                {
+                    // TODO: validate and add this to a list or something
+                    Console.WriteLine("Adding multiboot module " + file + " at address " + address);
+                });
+        }
+        #endregion
     }
 }

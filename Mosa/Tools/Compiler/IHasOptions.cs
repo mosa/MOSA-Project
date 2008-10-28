@@ -21,9 +21,9 @@ namespace Mosa.Tools.Compiler
     public interface IHasOptions
     {
         /// <summary>
-        /// Gets the additional options for the parsing process.
+        /// Adds the additional options for the parsing process to the given OptionSet.
         /// </summary>
-        /// <returns>An array of options.</returns>
-        IEnumerable<Option> GetOptions();
+        /// <param name="optionSet">A given OptionSet to add the options to.</param>
+        void AddOptions(OptionSet optionSet);
     }
 }
