@@ -7,6 +7,7 @@
  *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
  *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
  *  
  */
 
@@ -23,6 +24,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     [TestFixture]
     public class Or : CodeDomTestRunner
     {
+        private static string CreateTestCode(string name, string typeIn, string typeOut)
+        {
+            return @"
+                static class Test
+                {
+                    static bool " + name + "(" + typeOut + " expect, " + typeIn + " a, " + typeIn + @" b)
+                    {
+                        return expect == (a | b);
+                    }
+                }";
+        }
+        
+        private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
+        {
+            if (String.IsNullOrEmpty(constRight))
+            {
+                return @"
+                    static class Test
+                    {
+                        static bool " + name + "(" + typeOut + " expect, " + typeIn + @" x)
+                        {
+                            return expect == (" + constLeft + @" | x);
+                        }
+                    }";
+            }
+            else if (String.IsNullOrEmpty(constLeft))
+            {
+                return @"
+                    static class Test
+                    {
+                        static bool " + name + "(" + typeOut + " expect, " + typeIn + @" x)
+                        {
+                            return expect == (x | " + constRight + @");
+                        }
+                    }";
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
+        
+        #region I1
         /// <summary>
         /// 
         /// </summary>
@@ -57,7 +101,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(sbyte.MinValue, -1)]
         [Row(sbyte.MinValue, -17)]
         [Row(sbyte.MinValue, -123)]
-        // (MaxValue, X) Cases
+        // (MaxValueee, X) Cases
         [Row(sbyte.MaxValue, 0)]
         [Row(sbyte.MaxValue, 1)]
         [Row(sbyte.MaxValue, 17)]
@@ -90,10 +134,47 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void OrI1(sbyte a, sbyte b)
         {
-            CodeSource = "static class Test { static bool OrI1(int expect, sbyte a, sbyte b) { return expect == (a | b); } }";
+            CodeSource = CreateTestCode("OrI1", "sbyte", "int");
             Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "OrI1", a | b, a, b));
         }
+        
+        delegate bool I4_Constant_I1(int expect, sbyte x);
+        delegate bool I4_Constant(int expect);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-42, 48)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(sbyte.MinValue, sbyte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantI1Right(sbyte a, sbyte b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantI1Right", "sbyte", "int", null, b.ToString());
+            Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "OrConstantI1Right", (a | b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-42, 48)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(sbyte.MinValue, sbyte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantI1Left(sbyte a, sbyte b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantI1Left", "sbyte", "int", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "OrConstantI1Left", (a | b), b));
+        }
+        #endregion
+
+        #region U1
         /// <summary>
         /// 
         /// </summary>
@@ -138,10 +219,47 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void OrU1(byte a, byte b)
         {
-            CodeSource = "static class Test { static bool OrU1(uint expect, byte a, byte b) { return expect == (a | b); } }";
+            CodeSource = CreateTestCode("OrU1", "byte", "uint");
             Assert.IsTrue((bool)Run<U4_U1_U1>("", "Test", "OrU1", (uint)(a | b), a, b));
         }
+        
+        delegate bool U4_Constant_U1(uint expect, byte x);
+        delegate bool U4_Constant(uint expect);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(byte.MinValue, byte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantU1Right(byte a, byte b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantU1Right", "byte", "uint", null, b.ToString());
+            Assert.IsTrue((bool)Run<U4_Constant_U1>("", "Test", "OrConstantU1Right", (uint)(a | b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(byte.MinValue, byte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantU1Left(byte a, byte b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantU1Left", "byte", "uint", a.ToString(), null);
+            Assert.IsTrue((bool)Run<U4_Constant_U1>("", "Test", "OrConstantU1Left", (uint)(a | b), b));
+        }
+        #endregion
+
+        #region I2
         /// <summary>
         /// 
         /// </summary>
@@ -210,10 +328,46 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void OrI2(short a, short b)
         {
             short e = (short)(a | b);
-            CodeSource = "static class Test { static bool OrI2(int expect, short a, short b) { return expect == (a | b); } }";
+            CodeSource = CreateTestCode("OrI2", "short", "int");
             Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "OrI2", (a | b), a, b));
         }
+        
+        delegate bool I4_Constant_I2(int expect, short x);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(short.MinValue, short.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantI2Right(short a, short b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantI2Right", "short", "int", null, b.ToString());
+            Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "OrConstantI2Right", (a | b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(short.MinValue, short.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantI2Left(short a, short b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantI2Left", "short", "int", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "OrConstantI2Left", (a | b), b));
+        }
+        #endregion 
+
+        #region U2
         /// <summary>
         /// 
         /// </summary>
@@ -259,10 +413,46 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void OrU2(ushort a, ushort b)
         {
             ushort e = (ushort)(a | b);
-            CodeSource = "static class Test { static bool OrU2(uint expect, ushort a, ushort b) { return expect == (a | b); } }";
+            CodeSource = CreateTestCode("OrU2", "ushort", "uint");
             Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "OrU2", (uint)(a | b), a, b));
         }
+        
+        delegate bool U4_Constant_U2(uint expect, ushort x);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(ushort.MinValue, ushort.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantU2Right(ushort a, ushort b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantU2Right", "ushort", "uint", null, b.ToString());
+            Assert.IsTrue((bool)Run<U4_Constant_U2>("", "Test", "OrConstantU2Right", (uint)(a | b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(ushort.MinValue, ushort.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantU2Left(ushort a, ushort b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantU2Left", "ushort", "uint", a.ToString(), null);
+            Assert.IsTrue((bool)Run<U4_Constant_U2>("", "Test", "OrConstantU2Left", (uint)(a | b), b));
+        }
+        #endregion
+
+        #region I4
         /// <summary>
         /// 
         /// </summary>
@@ -330,10 +520,46 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void OrI4(int a, int b)
         {
-            CodeSource = "static class Test { static bool OrI4(int expect, int a, int b) { return expect == (a | b); } }";
+            CodeSource = CreateTestCode("OrI4", "int", "int");
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "OrI4", (a | b), a, b));
         }
+        
+        delegate bool I4_Constant_I4(int expect, int x);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(int.MinValue, int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantI4Right(int a, int b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantI4Right", "int", "int", null, b.ToString());
+            Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "OrConstantI4Right", (a | b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(int.MinValue, int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantI4Left(int a, int b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantI4Left", "int", "int", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "OrConstantI4Left", (a | b), b));
+        }
+        #endregion
+
+        #region U4
         /// <summary>
         /// 
         /// </summary>
@@ -378,10 +604,46 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void OrU4(uint a, uint b)
         {
-            CodeSource = "static class Test { static bool OrU4(uint expect, uint a, uint b) { return expect == (a | b); } }";
+            CodeSource = CreateTestCode("OrU4", "uint", "uint");
             Assert.IsTrue((bool)Run<U4_U4_U4>("", "Test", "OrU4", (uint)(a | b), a, b));
         }
+        
+        delegate bool U4_Constant_U4(uint expect, uint x);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(uint.MinValue, uint.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantU4Right(uint a, uint b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantU4Right", "uint", "uint", null, b.ToString());
+            Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "OrConstantU4Right", (uint)(a | b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(uint.MinValue, uint.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantU4Left(uint a, uint b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantU4Left", "uint", "uint", a.ToString(), null);
+            Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "OrConstantU4Left", (uint)(a | b), b));
+        }
+        #endregion
+
+        #region I8
         /// <summary>
         /// 
         /// </summary>
@@ -449,10 +711,47 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void OrI8(long a, long b)
         {
-            CodeSource = "static class Test { static bool OrI8(long expect, long a, long b) { return expect == (a | b); } }";
+            CodeSource = CreateTestCode("OrI8", "long", "long");
             Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "OrI8", (a | b), a, b));
         }
+        
+        delegate bool I8_Constant_I8(long expect, long x);
+        delegate bool I8_Constant(long expect);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(long.MinValue, long.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantI8Right(long a, long b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantI8Right", "long", "long", null, b.ToString());
+            Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "OrConstantI8Right", (a | b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(long.MinValue, long.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantI8Left(long a, long b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantI8Left", "long", "long", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "OrConstantI8Left", (a | b), b));
+        }
+        #endregion
+
+        #region U8
         /// <summary>
         /// 
         /// </summary>
@@ -497,8 +796,44 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void OrU8(ulong a, ulong b)
         {
-            CodeSource = "static class Test { static bool OrU8(ulong expect, ulong a, ulong b) { return expect == (a | b); } }";
+            CodeSource = CreateTestCode("OrU8", "ulong", "ulong");
             Assert.IsTrue((bool)Run<U8_U8_U8>("", "Test", "OrU8", (ulong)(a | b), a, b));
         }
+        
+        delegate bool U8_Constant_U8(ulong expect, ulong x);
+        delegate bool U8_Constant(ulong expect);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(ulong.MinValue, ulong.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantU8Right(ulong a, ulong b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantU8Right", "ulong", "ulong", null, b.ToString());
+            Assert.IsTrue((bool)Run<U8_Constant_U8>("", "Test", "OrConstantU8Right", (ulong)(a | b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(ulong.MinValue, ulong.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantU8Left(ulong a, ulong b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantU8Left", "ulong", "ulong", a.ToString(), null);
+            Assert.IsTrue((bool)Run<U8_Constant_U8>("", "Test", "OrConstantU8Left", (ulong)(a | b), b));
+        }
+        #endregion
     }
 }

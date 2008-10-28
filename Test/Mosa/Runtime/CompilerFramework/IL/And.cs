@@ -7,7 +7,8 @@
  *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
  *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
- *  
+ *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
+ * 
  */
 
 using System;
@@ -23,6 +24,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     [TestFixture]
     public class And : CodeDomTestRunner
     {
+        private static string CreateTestCode(string name, string typeIn, string typeOut)
+        {
+            return @"
+                static class Test
+                {
+                    static bool " + name + "(" + typeOut + " expect, " + typeIn + " a, " + typeIn + @" b)
+                    {
+                        return expect == (a & b);
+                    }
+                }";
+        }
+        
+        private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
+        {
+            if (String.IsNullOrEmpty(constRight))
+            {
+                return @"
+                    static class Test
+                    {
+                        static bool " + name + "(" + typeOut + " expect, " + typeIn + @" x)
+                        {
+                            return expect == (" + constLeft + @" & x);
+                        }
+                    }";
+            }
+            else if (String.IsNullOrEmpty(constLeft))
+            {
+                return @"
+                    static class Test
+                    {
+                        static bool " + name + "(" + typeOut + " expect, " + typeIn + @" x)
+                        {
+                            return expect == (x & " + constRight + @");
+                        }
+                    }";
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
+        
+        #region I1
         /// <summary>
         /// 
         /// </summary>
@@ -90,10 +134,47 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void AndI1(sbyte a, sbyte b)
         {
-            CodeSource = "static class Test { static bool AndI1(int expect, sbyte a, sbyte b) { return (a & b) == expect; } }";
+            CodeSource = CreateTestCode("AndI1", "sbyte", "int");
             Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "AndI1", (a & b), a, b));
         }
+        
+        delegate bool I4_Constant_I1(int expect, sbyte x);
+        delegate bool I4_Constant(int expect);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-42, 48)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(sbyte.MinValue, sbyte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndConstantI1Right(sbyte a, sbyte b)
+        {
+            CodeSource = CreateConstantTestCode("AndConstantI1Right", "sbyte", "int", null, b.ToString());
+            Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "AndConstantI1Right", (a & b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-42, 48)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(sbyte.MinValue, sbyte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndConstantI1Left(sbyte a, sbyte b)
+        {
+            CodeSource = CreateConstantTestCode("AndConstantI1Left", "sbyte", "int", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "AndConstantI1Left", (a & b), b));
+        }
+        #endregion
+
+        #region I2
         /// <summary>
         /// 
         /// </summary>
@@ -161,10 +242,46 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void AndI2(short a, short b)
         {
-            CodeSource = "static class Test { static bool AndI2(int expect, sbyte a, sbyte b) { return (a & b) == expect; } }";
+            CodeSource = CreateTestCode("AndI2", "short", "int");
             Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "AndI2", (a & b), a, b));
         }
+        
+        delegate bool I4_Constant_I2(int expect, short x);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(short.MinValue, short.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndConstantI2Right(short a, short b)
+        {
+            CodeSource = CreateConstantTestCode("AndConstantI2Right", "short", "int", null, b.ToString());
+            Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "AndConstantI2Right", (a & b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(short.MinValue, short.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndConstantI2Left(short a, short b)
+        {
+            CodeSource = CreateConstantTestCode("AndConstantI2Left", "short", "int", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "AndConstantI2Left", (a & b), b));
+        }
+        #endregion
+        
+        #region I4
         /// <summary>
         /// 
         /// </summary>
@@ -232,10 +349,46 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void AndI4(int a, int b)
         {
-            CodeSource = "static class Test { static bool AndI4(int expect, sbyte a, sbyte b) { return (a & b) == expect; } }";
+            CodeSource = CreateTestCode("AndI4", "int", "int");
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "AndI4", (a & b), a, b));
         }
+        
+        delegate bool I4_Constant_I4(int expect, int x);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(int.MinValue, int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndConstantI4Right(int a, int b)
+        {
+            CodeSource = CreateConstantTestCode("AndConstantI4Right", "int", "int", null, b.ToString());
+            Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "AndConstantI4Right", (a & b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(int.MinValue, int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndConstantI4Left(int a, int b)
+        {
+            CodeSource = CreateConstantTestCode("AndConstantI4Left", "int", "int", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "AndConstantI4Left", (a & b), b));
+        }
+        #endregion
+
+        #region I8
         /// <summary>
         /// 
         /// </summary>
@@ -303,8 +456,44 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void AndI8(long a, long b)
         {
-            CodeSource = "static class Test { static bool AndI8(long expect, long a, long b) { return (a & b) == expect; } }";
+            CodeSource = CreateTestCode("AndI8", "long", "long");
             Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "AndI8", (a & b), a, b));
         }
+        
+        delegate bool I8_Constant_I8(long expect, long x);
+        delegate bool I8_Constant(long expect);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(long.MinValue, long.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndConstantI8Right(long a, long b)
+        {
+            CodeSource = CreateConstantTestCode("AndConstantI8Right", "long", "long", null, b.ToString());
+            Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "AndConstantI8Right", (a & b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(long.MinValue, long.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndConstantI8Left(long a, long b)
+        {
+            CodeSource = CreateConstantTestCode("AndConstantI8Left", "long", "long", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "AndConstantI8Left", (a & b), b));
+        }
+        #endregion
     }
 }
