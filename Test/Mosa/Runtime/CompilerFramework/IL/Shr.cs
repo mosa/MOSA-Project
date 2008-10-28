@@ -23,6 +23,54 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     [TestFixture]
     public class Shr : CodeDomTestRunner
     {
+        private static string CreateTestCode(string name, string typeIn, string typeOut)
+        {
+            return CreateTestCode(name, typeIn, typeIn, typeOut);
+        }
+        
+        private static string CreateTestCode(string name, string typeInA, string typeInB, string typeOut)
+        {
+            return @"
+                static class Test
+                {
+                    static bool " + name + "(" + typeOut + " expect, " + typeInA + " a, " + typeInB + @" b)
+                    {
+                        return expect == (a >> b);
+                    }
+                }";
+        }
+        
+        private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
+        {
+            if (String.IsNullOrEmpty(constRight))
+            {
+                return @"
+                    static class Test
+                    {
+                        static bool " + name + "(" + typeOut + " expect, " + typeIn + @" x)
+                        {
+                            return expect == (" + constLeft + @" >> x);
+                        }
+                    }";
+            }
+            else if (String.IsNullOrEmpty(constLeft))
+            {
+                return @"
+                    static class Test
+                    {
+                        static bool " + name + "(" + typeOut + " expect, " + typeIn + @" x)
+                        {
+                            return expect == (x >> " + constRight + @");
+                        }
+                    }";
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
+        
+        #region I1
         /// <summary>
         /// 
         /// </summary>
@@ -68,10 +116,47 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ShrI1(sbyte a, sbyte b)
         {
-            CodeSource = "static class Test { static bool ShrI1(int expect, sbyte a, byte b) { return expect == (a >> b); } }";
+            CodeSource = CreateTestCode("ShrI1", "sbyte", "int");
             Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "ShrI1", a >> b, a, b));
         }
+        
+        delegate bool I4_Constant_I1(int expect, sbyte x);
+        delegate bool I4_Constant(int expect);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-42, 48)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(sbyte.MinValue, sbyte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void ShrConstantI1Right(sbyte a, sbyte b)
+        {
+            CodeSource = CreateConstantTestCode("ShrConstantI1Right", "sbyte", "int", null, b.ToString());
+            Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "ShrConstantI1Right", (a >> b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-42, 48)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(sbyte.MinValue, sbyte.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void ShrConstantI1Left(sbyte a, sbyte b)
+        {
+            CodeSource = CreateConstantTestCode("ShrConstantI1Left", "sbyte", "int", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "ShrConstantI1Left", (a >> b), b));
+        }
+        #endregion
+
+        #region I2
         /// <summary>
         /// 
         /// </summary>
@@ -117,11 +202,47 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ShrI2(short a, short b)
         {
-            CodeSource = "static class Test { static bool ShrI2(int expect, short a, byte b) { return expect == (a >> b); } }";
+            CodeSource = CreateTestCode("ShrI2", "short", "int");
             int v = (a >> b);
             Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "ShrI2", v, a, b));
         }
+        
+        delegate bool I4_Constant_I2(int expect, short x);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(short.MinValue, short.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void ShrConstantI2Right(short a, short b)
+        {
+            CodeSource = CreateConstantTestCode("ShrConstantI2Right", "short", "int", null, b.ToString());
+            Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "ShrConstantI2Right", (a >> b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(short.MinValue, short.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void ShrConstantI2Left(short a, short b)
+        {
+            CodeSource = CreateConstantTestCode("ShrConstantI2Left", "short", "int", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "ShrConstantI2Left", (a >> b), b));
+        }
+        #endregion
+
+        #region I4
         /// <summary>
         /// 
         /// </summary>
@@ -167,10 +288,46 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ShrI4(int a, int b)
         {
-            CodeSource = "static class Test { static bool ShrI4(int expect, int a, byte b) { return expect == (a >> b); } }";
+            CodeSource = CreateTestCode("ShrI4", "int", "int");
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "ShrI4", (a >> b), a, b));
         }
+        
+        delegate bool I4_Constant_I4(int expect, int x);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(int.MinValue, int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void ShrConstantI4Right(int a, int b)
+        {
+            CodeSource = CreateConstantTestCode("ShrConstantI4Right", "int", "int", null, b.ToString());
+            Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "ShrConstantI4Right", (a >> b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(int.MinValue, int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void ShrConstantI4Left(int a, int b)
+        {
+            CodeSource = CreateConstantTestCode("ShrConstantI4Left", "int", "int", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "ShrConstantI4Left", (a >> b), b));
+        }
+        #endregion
+
+        #region I8
         /// <summary>
         /// 
         /// </summary>
@@ -216,8 +373,44 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ShrI8(long a, int b)
         {
-            CodeSource = "static class Test { static bool ShrI8(long expect, long a, int b) { return expect == (a >> b); } }";
+            CodeSource = CreateTestCode("ShrI8", "long", "int", "long");
             Assert.IsTrue((bool)Run<I8_I8_I4>("", "Test", "ShrI8", (a >> b), a, b));
         }
+        
+        delegate bool I8_Constant_I8(long expect, long x);
+        delegate bool I8_Constant(long expect);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(long.MinValue, int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void ShrConstantI8Right(long a, int b)
+        {
+            CodeSource = CreateConstantTestCode("ShrConstantI8Right", "long", "long", null, b.ToString());
+            Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "ShrConstantI8Right", (a >> b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0)]
+        [Row(long.MinValue, int.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void ShrConstantI8Left(long a, int b)
+        {
+            CodeSource = CreateConstantTestCode("ShrConstantI8Left", "int", "long", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "ShrConstantI8Left", (a >> b), b));
+        }
+        #endregion
     }
 }
