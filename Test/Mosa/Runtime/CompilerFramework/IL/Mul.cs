@@ -24,6 +24,48 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     [TestFixture]
     public class Mul : CodeDomTestRunner
     {
+        private static string CreateTestCode(string name, string typeIn, string typeOut)
+        {
+            return @"
+                static class Test
+                {
+                    static bool " + name + "(" + typeOut + " expect, " + typeIn + " a, " + typeIn + @" b)
+                    {
+                        return expect == (a * b);
+                    }
+                }";
+        }
+        
+        private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
+        {
+            if (String.IsNullOrEmpty(constRight))
+            {
+                return @"
+                    static class Test
+                    {
+                        static bool " + name + "(" + typeOut + " expect, " + typeIn + @" x)
+                        {
+                            return expect == (" + constLeft + @" * x);
+                        }
+                    }";
+            }
+            else if (String.IsNullOrEmpty(constLeft))
+            {
+                return @"
+                    static class Test
+                    {
+                        static bool " + name + "(" + typeOut + " expect, " + typeIn + @" x)
+                        {
+                            return expect == (x * " + constRight + @");
+                        }
+                    }";
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
+        
         #region I1
         /// <summary>
         /// 
@@ -92,7 +134,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void MulI1(sbyte a, sbyte b)
         {
-            CodeSource = "static class Test { static bool MulI1(int expect, sbyte a, sbyte b) { return expect == (a * b); } }";
+            CodeSource = CreateTestCode("MulI1", "sbyte", "int");
             Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "MulI1", a * b, a, b));
         }
         
@@ -111,8 +153,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantI1Right(sbyte a, sbyte b)
         {
-            // right side constant
-            CodeSource = "static class Test { static bool MulConstantI1Right(int expect, sbyte a) { return expect == (a * " + b.ToString() + "); } }";
+            CodeSource = CreateConstantTestCode("MulConstantI1Right", "sbyte", "int", null, b.ToString());
             Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "MulConstantI1Right", (a * b), a));
         }
         
@@ -128,26 +169,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantI1Left(sbyte a, sbyte b)
         {
-            // left side constant
-            CodeSource = "static class Test { static bool MulConstantI1Left(int expect, sbyte b) { return expect == (" + a.ToString() + " * b); } }";
+            CodeSource = CreateConstantTestCode("MulConstantI1Left", "sbyte", "int", a.ToString(), null);
             Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "MulConstantI1Left", (a * b), b));
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(2, -17)]
-        [Row(0, 0)]
-        [Row(sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void MulConstantI1Both(sbyte a, sbyte b)
-        {
-            // both constant
-            CodeSource = "static class Test { static bool MulConstantI1Both(int expect) { return expect == (" + a.ToString() + " * " + b.ToString() + "); } }";
-            Assert.IsTrue((bool)Run<I4_Constant>("", "Test", "MulConstantI1Both", (a * b)));
         }
         #endregion
 
@@ -197,7 +220,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void MulU1(byte a, byte b)
         {
-            CodeSource = "static class Test { static bool MulU1(uint expect, byte a, byte b) { return expect == (a * b); } }";
+            CodeSource = CreateTestCode("MulU1", "byte", "uint");
             Assert.IsTrue((bool)Run<U4_U1_U1>("", "Test", "MulU1", (uint)(a * b), a, b));
         }
         
@@ -216,8 +239,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantU1Right(byte a, byte b)
         {
-            // right side constant
-            CodeSource = "static class Test { static bool MulConstantU1Right(uint expect, byte a) { return expect == (a * " + b.ToString() + "); } }";
+            CodeSource = CreateConstantTestCode("MulConstantU1Right", "byte", "uint", null, b.ToString());
             Assert.IsTrue((bool)Run<U4_Constant_U1>("", "Test", "MulConstantU1Right", (uint)(a * b), a));
         }
         
@@ -233,26 +255,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantU1Left(byte a, byte b)
         {
-            // left side constant
-            CodeSource = "static class Test { static bool MulConstantU1Left(uint expect, byte b) { return expect == (" + a.ToString() + " * b); } }";
+            CodeSource = CreateConstantTestCode("MulConstantU1Left", "byte", "uint", a.ToString(), null);
             Assert.IsTrue((bool)Run<U4_Constant_U1>("", "Test", "MulConstantU1Left", (uint)(a * b), b));
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(byte.MinValue, byte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void MulConstantU1Both(byte a, byte b)
-        {
-            // both constant
-            CodeSource = "static class Test { static bool MulConstantU1Both(uint expect) { return expect == (" + a.ToString() + " * " + b.ToString() + "); } }";
-            Assert.IsTrue((bool)Run<U4_Constant>("", "Test", "MulConstantU1Both", (uint)(a * b)));
         }
         #endregion
 
@@ -324,7 +328,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void MulI2(short a, short b)
         {
-            CodeSource = "static class Test { static bool MulI2(int expect, short a, short b) { return expect == (a * b); } }";
+            CodeSource = CreateTestCode("MulI2", "short", "int");
             Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "MulI2", (a * b), a, b));
         }
         
@@ -342,8 +346,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantI2Right(short a, short b)
         {
-            // right side constant
-            CodeSource = "static class Test { static bool MulConstantI2Right(int expect, short a) { return expect == (a * " + b.ToString() + "); } }";
+            CodeSource = CreateConstantTestCode("MulConstantI2Right", "short", "int", null, b.ToString());
             Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "MulConstantI2Right", (a * b), a));
         }
         
@@ -359,26 +362,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantI2Left(short a, short b)
         {
-            // left side constant
-            CodeSource = "static class Test { static bool MulConstantI2Left(int expect, short b) { return expect == (" + a.ToString() + " * b); } }";
+            CodeSource = CreateConstantTestCode("MulConstantI2Left", "short", "int", a.ToString(), null);
             Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "MulConstantI2Left", (a * b), b));
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        [Row(-23, 21)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(short.MinValue, short.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void MulConstantI2Both(short a, short b)
-        {
-            // both constant
-            CodeSource = "static class Test { static bool MulConstantI2Both(int expect) { return expect == (" + a.ToString() + " * " + b.ToString() + "); } }";
-            Assert.IsTrue((bool)Run<I4_Constant>("", "Test", "MulConstantI2Both", (a * b)));
         }
         #endregion
 
@@ -428,7 +413,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void MulU2(ushort a, ushort b)
         {
-            CodeSource = "static class Test { static bool MulU2(uint expect, ushort a, ushort b) { return expect == (a * b); } }";
+            CodeSource = CreateTestCode("MulU2", "ushort", "uint");
             Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "MulU2", (uint)(a * b), a, b));
         }
         
@@ -447,8 +432,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantU2Right(ushort a, ushort b)
         {
-            // right side constant
-            CodeSource = "static class Test { static bool MulConstantU2Right(uint expect, ushort a) { return expect == (a * " + b.ToString() + "); } }";
+            CodeSource = CreateConstantTestCode("MulConstantU2Right", "ushort", "uint", null, b.ToString());
             Assert.IsTrue((bool)Run<U4_Constant_U2>("", "Test", "MulConstantU2Right", (uint)(a * b), a));
         }
         
@@ -465,27 +449,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantU2Left(ushort a, ushort b)
         {
-            // left side constant
-            CodeSource = "static class Test { static bool MulConstantU2Left(uint expect, ushort b) { return expect == (" + a.ToString() + " * b); } }";
+            CodeSource = CreateConstantTestCode("MulConstantU2Left", "ushort", "uint", a.ToString(), null);
             Assert.IsTrue((bool)Run<U4_Constant_U2>("", "Test", "MulConstantU2Left", (uint)(a * b), b));
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        [Row(23, 21)]
-        //[Row(23, 148)] FIXME: Uncommenting this crashes the testrunner
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(ushort.MinValue, ushort.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void MulConstantU2Both(ushort a, ushort b)
-        {
-            // both constant
-            CodeSource = "static class Test { static bool MulConstantU2Both(uint expect) { return expect == (" + a.ToString() + " * " + b.ToString() + "); } }";
-            Assert.IsTrue((bool)Run<U4_Constant>("", "Test", "MulConstantU2Both", (uint)(a * b)));
         }
         #endregion
 
@@ -557,7 +522,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void MulI4(int a, int b)
         {
-            CodeSource = "static class Test { static bool MulI4(int expect, int a, int b) { return expect == (a * b); } }";
+            CodeSource = CreateTestCode("MulI4", "int", "int");
             Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "MulI4", (a * b), a, b));
         }
         
@@ -576,8 +541,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantI4Right(int a, int b)
         {
-            // right side constant
-            CodeSource = "static class Test { static bool MulConstantI4Right(int expect, int a) { return expect == (a * " + b.ToString() + "); } }";
+            CodeSource = CreateConstantTestCode("MulConstantI4Right", "int", "int", null, b.ToString());
             Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "MulConstantI4Right", (a * b), a));
         }
         
@@ -594,27 +558,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantI4Left(int a, int b)
         {
-            // left side constant
-            CodeSource = "static class Test { static bool MulConstantI4Left(int expect, int b) { return expect == (" + a.ToString() + " * b); } }";
+            CodeSource = CreateConstantTestCode("MulConstantI4Left", "int", "int", a.ToString(), null);
             Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "MulConstantI4Left", (a * b), b));
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        [Row(-23, 21)]
-        //[Row(-23, 148)] FIXME: Uncommenting this crashes the testrunner
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(0, int.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void MulConstantI4Both(int a, int b)
-        {
-            // both constant
-            CodeSource = "static class Test { static bool MulConstantI4Both(int expect) { return expect == (" + a.ToString() + " * " + b.ToString() + "); } }";
-            Assert.IsTrue((bool)Run<I4_Constant>("", "Test", "MulConstantI4Both", (a * b)));
         }
         #endregion
 
@@ -664,7 +609,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void MulU4(uint a, uint b)
         {
-            CodeSource = "static class Test { static bool MulU4(uint expect, uint a, uint b) { return expect == (a * b); } }";
+            CodeSource = CreateTestCode("MulU4", "uint", "uint");
             Assert.IsTrue((bool)Run<U4_U4_U4>("", "Test", "MulU4", (uint)(a * b), a, b));
         }
         
@@ -683,8 +628,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantU4Right(uint a, uint b)
         {
-            // right side constant
-            CodeSource = "static class Test { static bool MulConstantU4Right(uint expect, uint a) { return expect == (a * " + b.ToString() + "); } }";
+            CodeSource = CreateConstantTestCode("MulConstantU4Right", "uint", "uint", null, b.ToString());
             Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "MulConstantU4Right", (uint)(a * b), a));
         }
         
@@ -701,27 +645,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantU4Left(uint a, uint b)
         {
-            // left side constant
-            CodeSource = "static class Test { static bool MulConstantU4Left(uint expect, uint b) { return expect == (" + a.ToString() + " * b); } }";
+            CodeSource = CreateConstantTestCode("MulConstantU4Left", "uint", "uint", a.ToString(), null);
             Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "MulConstantU4Left", (uint)(a * b), b));
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        [Row(23, 21)]
-        //[Row(23, 148)] FIXME: Uncommenting this crashes the testrunner
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(uint.MinValue, uint.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void MulConstantU4Both(uint a, uint b)
-        {
-            // both constant
-            CodeSource = "static class Test { static bool MulConstantU4Both(uint expect) { return expect == (" + a.ToString() + " * " + b.ToString() + "); } }";
-            Assert.IsTrue((bool)Run<U4_Constant>("", "Test", "MulConstantU4Both", (uint)(a * b)));
         }
         #endregion
          
@@ -790,7 +715,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void MulI8(long a, long b)
         {
-            CodeSource = "static class Test { static bool MulI8(long expect, long a, long b) { return expect == (a * b); } }";
+            CodeSource = CreateTestCode("MulI8", "long", "long");
             Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "MulI8", (a * b), a, b));
         }
         
@@ -809,8 +734,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantI8Right(long a, long b)
         {
-            // right side constant
-            CodeSource = "static class Test { static bool MulConstantI8Right(long expect, long a) { return expect == (a * " + b.ToString() + "); } }";
+            CodeSource = CreateConstantTestCode("MulConstantI8Right", "long", "long", null, b.ToString());
             Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "MulConstantI8Right", (a * b), a));
         }
         
@@ -826,26 +750,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantI8Left(long a, long b)
         {
-            // left side constant
-            CodeSource = "static class Test { static bool MulConstantI8Left(long expect, long b) { return expect == (" + a.ToString() + " * b); } }";
+            CodeSource = CreateConstantTestCode("MulConstantI8Left", "long", "long", a.ToString(), null);
             Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "MulConstantI8Left", (a * b), b));
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(-1, long.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void MulConstantI8Both(long a, long b)
-        {
-            // both constant
-            CodeSource = "static class Test { static bool MulConstantI8Both(long expect) { return expect == (" + a.ToString() + " * " + b.ToString() + "); } }";
-            Assert.IsTrue((bool)Run<I8_Constant>("", "Test", "MulConstantI8Both", (a * b)));
         }
         #endregion
 
@@ -892,7 +798,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void MulU8(ulong a, ulong b)
         {
-            CodeSource = "static class Test { static bool MulU8(ulong expect, ulong a, ulong b) { return expect == (a * b); } }";
+            CodeSource = CreateTestCode("MulU8", "ulong", "ulong");
             Assert.IsTrue((bool)Run<U8_U8_U8>("", "Test", "MulU8", (ulong)(a * b), a, b));
         }
         
@@ -911,8 +817,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantU8Right(ulong a, ulong b)
         {
-            // right side constant
-            CodeSource = "static class Test { static bool MulConstantU8Right(ulong expect, ulong a) { return expect == (a * " + b.ToString() + "); } }";
+            CodeSource = CreateConstantTestCode("MulConstantU8Right", "ulong", "ulong", null, b.ToString());
             Assert.IsTrue((bool)Run<U8_Constant_U8>("", "Test", "MulConstantU8Right", (ulong)(a * b), a));
         }
         
@@ -928,26 +833,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantU8Left(ulong a, ulong b)
         {
+            CodeSource = CreateConstantTestCode("MulConstantU8Left", "ulong", "ulong", a.ToString(), null);
             // left side constant
             CodeSource = "static class Test { static bool MulConstantU8Left(ulong expect, ulong b) { return expect == (" + a.ToString() + " * b); } }";
             Assert.IsTrue((bool)Run<U8_Constant_U8>("", "Test", "MulConstantU8Left", (ulong)(a * b), b));
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        [Row(23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(1, ulong.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void MulConstantU8Both(ulong a, ulong b)
-        {
-            // both constant
-            CodeSource = "static class Test { static bool MulConstantU8Both(ulong expect) { return expect == (" + a.ToString() + " * " + b.ToString() + "); } }";
-            Assert.IsTrue((bool)Run<U8_Constant>("", "Test", "MulConstantU8Both", (ulong)(a * b)));
         }
         #endregion
         
@@ -976,7 +865,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void MulR4(float a, float b)
         {
-            CodeSource = "static class Test { static bool MulR4(float expect, float a, float b) { return expect == (a * b); } }";
+            CodeSource = CreateTestCode("MulR4", "float", "float");
             Assert.IsTrue((bool)Run<R4_R4_R4>("", "Test", "MulR4", (a * b), a, b));
         }
         
@@ -995,11 +884,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantR4Right(float a, float b)
         {
-            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
-            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
-            
-            // right side constant
-            CodeSource = "static class Test { static bool MulConstantR4Right(float expect, float a) { return expect == (a * " + y + "); } }";
+            CodeSource = CreateConstantTestCode("MulConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
             Assert.IsTrue((bool)Run<R4_Constant_R4>("", "Test", "MulConstantR4Right", (a * b), a));
         }
         
@@ -1015,32 +900,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantR4Left(float a, float b)
         {
-            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
-            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
-            
-            // left side constant
-            CodeSource = "static class Test { static bool MulConstantR4Left(float expect, float b) { return expect == (" + x + " * b); } }";
+            CodeSource = CreateConstantTestCode("MulConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
             Assert.IsTrue((bool)Run<R4_Constant_R4>("", "Test", "MulConstantR4Left", (a * b), b));
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        [Row(23f, 148.0016f)]
-        [Row(17.2f, 1f)]
-        [Row(0f, 0f)]
-        [Row(float.MinValue, float.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void MulConstantR4Both(float a, float b)
-        {
-            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
-            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f";
-
-            // both constant
-            CodeSource = "static class Test { static bool MulConstantR4Both(float expect) { return expect == (" + x + " * " + y + "); } }";
-            Assert.IsTrue((bool)Run<R4_Constant>("", "Test", "MulConstantR4Both", (a * b)));
         }
         #endregion
         
@@ -1069,7 +930,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void MulR8(double a, double b)
         {
-            CodeSource = "static class Test { static bool MulR8(double expect, double a, double b) { return expect == (a * b); } }";
+            CodeSource = CreateTestCode("MulR8", "double", "double");
             Assert.IsTrue((bool)Run<R8_R8_R8>("", "Test", "MulR8", (a * b), a, b));
         }
         
@@ -1087,12 +948,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-1.79769313486231E+308, 1.79769313486231E+308)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantR8Right(double a, double b)
-        {                
-            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            
-            // right side constant
-            CodeSource = "static class Test { static bool MulConstantR8Right(double expect, double a) { return expect == (a * " + y + "); } }";
+        {
+            CodeSource = CreateConstantTestCode("MulConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
             Assert.IsTrue((bool)Run<R8_Constant_R8>("", "Test", "MulConstantR8Right", (a * b), a));
         }
         
@@ -1107,33 +964,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(-1.79769313486231E+308, 1.79769313486231E+308)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void MulConstantR8Left(double a, double b)
-        {                
-            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture);
-
-            // left side constant
-            CodeSource = "static class Test { static bool MulConstantR8Left(double expect, double b) { return expect == (" + x + " * b); } }";
+        {
+            CodeSource = CreateConstantTestCode("MulConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
             Assert.IsTrue((bool)Run<R8_Constant_R8>("", "Test", "MulConstantR8Left", (a * b), b));
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        [Row(23, 148.0016)]
-        [Row(17.2, 1.0)]
-        [Row(0.0, 0.0)]
-        [Row(-1.79769313486231E+308, 1.79769313486231E+308)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-        public void MulConstantR8Both(double a, double b)
-        {                
-            string x = a.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            string y = b.ToString(System.Globalization.CultureInfo.InvariantCulture);
-
-            // both constant
-            CodeSource = "static class Test { static bool MulConstantR8Both(double expect) { return expect == (" + x + " * " + y + "); } }";
-            Assert.IsTrue((bool)Run<R8_Constant>("", "Test", "MulConstantR8Both", (a * b)));
         }
         #endregion
     }
