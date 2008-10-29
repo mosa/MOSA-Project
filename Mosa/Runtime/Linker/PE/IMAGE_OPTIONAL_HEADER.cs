@@ -14,12 +14,22 @@ using System.IO;
 
 namespace Mosa.Runtime.Linker.PE
 {
-	struct IMAGE_OPTIONAL_HEADER {
-		
+    /// <summary>
+    /// Structure of the optional header in a portable executable file.
+    /// </summary>
+	public struct IMAGE_OPTIONAL_HEADER 
+    {	
 		#region Constants
 
+        /// <summary>
+        /// The number of directory entries.
+        /// </summary>
 		private const int IMAGE_NUMBEROF_DIRECTORY_ENTRIES = 16;
-		private const ushort IMAGE_OPTIONAL_HEADER_MAGIC = 0x10b;
+
+        /// <summary>
+        /// The magic value at the start of the optional header.
+        /// </summary>
+        private const ushort IMAGE_OPTIONAL_HEADER_MAGIC = 0x10b;
 
 		#endregion // Constants
 
@@ -29,47 +39,173 @@ namespace Mosa.Runtime.Linker.PE
 		// Standard fields.
 		//
 
+        /// <summary>
+        /// Holds the magic value of the optional header.
+        /// </summary>
 		public ushort Magic;
+
+        /// <summary>
+        /// The major version number of the linker.
+        /// </summary>
 		public byte MajorLinkerVersion;
+
+        /// <summary>
+        /// The minor version number of the linker.
+        /// </summary>
 		public byte MinorLinkerVersion;
+
+        /// <summary>
+        /// The size of the code section in bytes.
+        /// </summary>
 		public uint SizeOfCode;
+
+        /// <summary>
+        /// The size of the initialized data section.
+        /// </summary>
 		public uint SizeOfInitializedData;
+
+        /// <summary>
+        /// The size of the uninitialized data section.
+        /// </summary>
 		public uint SizeOfUninitializedData;
+
+        /// <summary>
+        /// The address of the entry point relative to the load address.
+        /// </summary>
 		public uint AddressOfEntryPoint;
+
+        /// <summary>
+        /// The offset from the load address, where the code section starts.
+        /// </summary>
 		public uint BaseOfCode;
+
+        /// <summary>
+        /// The offset from the load address, where the data section starts.
+        /// </summary>
 		public uint BaseOfData;
 
 		//
 		// NT additional fields.
 		//
 
+        /// <summary>
+        /// The preferred address of the first byte of the image.
+        /// </summary>
 		public uint ImageBase;
-		public uint SectionAlignment;
+
+        /// <summary>
+        /// The alignment of the sections.
+        /// </summary>
+        public uint SectionAlignment;
+
+        /// <summary>
+        /// The file alignment.
+        /// </summary>
 		public uint FileAlignment;
+
+        /// <summary>
+        /// The major OS version.
+        /// </summary>
 		public ushort MajorOperatingSystemVersion;
+
+        /// <summary>
+        /// The minor OS version.
+        /// </summary>
 		public ushort MinorOperatingSystemVersion;
+
+        /// <summary>
+        /// The major image version.
+        /// </summary>
 		public ushort MajorImageVersion;
+
+        /// <summary>
+        /// The minor image version.
+        /// </summary>
 		public ushort MinorImageVersion;
+
+        /// <summary>
+        /// The major subsystem version.
+        /// </summary>
 		public ushort MajorSubsystemVersion;
+
+        /// <summary>
+        /// The minor subsystem version.
+        /// </summary>
 		public ushort MinorSubsystemVersion;
+
+        /// <summary>
+        /// Must be zero.
+        /// </summary>
 		public uint Win32VersionValue;
+
+        /// <summary>
+        /// The full size of the image.
+        /// </summary>
 		public uint SizeOfImage;
+
+        /// <summary>
+        /// The size of the headers.
+        /// </summary>
 		public uint SizeOfHeaders;
+
+        /// <summary>
+        /// The checksum of the image.
+        /// </summary>
 		public uint CheckSum;
+
+        /// <summary>
+        /// The subsystem to execute the image.
+        /// </summary>
 		public ushort Subsystem;
+
+        /// <summary>
+        /// Flags that control DLL characteristics.
+        /// </summary>
 		public ushort DllCharacteristics;
+
+        /// <summary>
+        /// The size of the stack reserve.
+        /// </summary>
 		public uint SizeOfStackReserve;
+
+        /// <summary>
+        /// The size of the commited stack.
+        /// </summary>
 		public uint SizeOfStackCommit;
+
+        /// <summary>
+        /// Size of the heap reserve.
+        /// </summary>
 		public uint SizeOfHeapReserve;
+
+        /// <summary>
+        /// Size of the committed heap.
+        /// </summary>
 		public uint SizeOfHeapCommit;
+
+        /// <summary>
+        /// Unused. Must be zero.
+        /// </summary>
 		public uint LoaderFlags;
+
+        /// <summary>
+        /// Number of data directories.
+        /// </summary>
 		public uint NumberOfRvaAndSizes;
+
+        /// <summary>
+        /// Array of data directories after the optional header.
+        /// </summary>
 		public IMAGE_DATA_DIRECTORY[] DataDirectory;
 
 		#endregion // Data members
 
 		#region Methods
 
+        /// <summary>
+        /// Loads the header from the reader.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
 		public void Load(BinaryReader reader)
 		{
 			Magic = reader.ReadUInt16();

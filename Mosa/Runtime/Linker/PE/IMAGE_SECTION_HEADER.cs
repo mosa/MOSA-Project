@@ -14,25 +14,71 @@ using System.IO;
 
 namespace Mosa.Runtime.Linker.PE
 {
-	struct IMAGE_SECTION_HEADER {
-
+    /// <summary>
+    /// The header of a section in a portable executable image.
+    /// </summary>
+	public struct IMAGE_SECTION_HEADER
+    {
 		#region Data members
 
+        /// <summary>
+        /// The name of the section.
+        /// </summary>
 		public string name;
-		public uint VirtualSize;
+
+        /// <summary>
+        /// The size of the section in virtual memory.
+        /// </summary>
+        public uint VirtualSize;
+
+        /// <summary>
+        /// The default address of the section in virtual memory.
+        /// </summary>
 		public uint VirtualAddress;
+
+        /// <summary>
+        /// Size of the raw data in the image file.
+        /// </summary>
 		public uint SizeOfRawData;
-		public uint PointerToRawData;
-		public uint PointerToRelocations;
+
+        /// <summary>
+        /// Offset of raw data in the image file.
+        /// </summary>
+        public uint PointerToRawData;
+
+        /// <summary>
+        /// Offset of relocations in the image file for this section.
+        /// </summary>
+        public uint PointerToRelocations;
+
+        /// <summary>
+        /// Offset of the line numbers.
+        /// </summary>
 		public uint PointerToLinenumbers;
-		public ushort NumberOfRelocations;
-		public ushort NumberOfLinenumbers;
-		public uint Characteristics;
+
+        /// <summary>
+        /// The number of relocations.
+        /// </summary>
+        public ushort NumberOfRelocations;
+
+        /// <summary>
+        /// The number of line numbers.
+        /// </summary>
+        public ushort NumberOfLinenumbers;
+
+        /// <summary>
+        /// Section characteristic flags.
+        /// </summary>
+        public uint Characteristics;
 
 		#endregion // Data members
 
 		#region Methods
 
+        /// <summary>
+        /// Loads IMAGE_SECTION_HEADER from the reader.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
 		public void Load(BinaryReader reader)
 		{
 			byte[] name = reader.ReadBytes(8);
@@ -51,6 +97,5 @@ namespace Mosa.Runtime.Linker.PE
 		}
 
 		#endregion // Methods
-
 	}
 }

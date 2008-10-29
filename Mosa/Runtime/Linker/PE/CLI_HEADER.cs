@@ -14,26 +14,76 @@ using System.IO;
 
 namespace Mosa.Runtime.Linker.PE
 {
-	struct CLI_HEADER {
-
+    /// <summary>
+    /// The CLI header embedded into a portable executable file.
+    /// </summary>
+	public struct CLI_HEADER 
+    {
 		#region Constants
 
 		#endregion // Constants
 
 		#region Data members
 
+        /// <summary>
+        /// The size of the CLI header in bytes.
+        /// </summary>
 		public uint Cb;
-		public ushort MajorRuntimeVersion;
+
+        /// <summary>
+        /// The major runtime version needed to execute the image.
+        /// </summary>
+        public ushort MajorRuntimeVersion;
+
+        /// <summary>
+        /// The minor runtime version needed to execute the image.
+        /// </summary>
 		public ushort MinorRuntimeVersion;
-		public IMAGE_DATA_DIRECTORY Metadata;
-		public RuntimeImageFlags Flags;
+
+        /// <summary>
+        /// The metadata data directory.
+        /// </summary>
+        public IMAGE_DATA_DIRECTORY Metadata;
+
+        /// <summary>
+        /// Flags for the entire image.
+        /// </summary>
+        public RuntimeImageFlags Flags;
+
+        /// <summary>
+        /// The token of the method, that represents the entry point.
+        /// </summary>
 		public uint EntryPointToken;
+
+        /// <summary>
+        /// Data directory of the resources.
+        /// </summary>
 		public IMAGE_DATA_DIRECTORY Resources;
-		public IMAGE_DATA_DIRECTORY StrongNameSignature;
-		public IMAGE_DATA_DIRECTORY CodeManagerTable;
+
+        /// <summary>
+        /// The data directory of the strong name signature.
+        /// </summary>
+        public IMAGE_DATA_DIRECTORY StrongNameSignature;
+
+        /// <summary>
+        /// The data directory of the code manager table.
+        /// </summary>
+        public IMAGE_DATA_DIRECTORY CodeManagerTable;
+
+        /// <summary>
+        /// The data directory of vtable fixups.
+        /// </summary>
 		public IMAGE_DATA_DIRECTORY VTableFixups;
-		public IMAGE_DATA_DIRECTORY ExportAddressTableJumps;
-		public IMAGE_DATA_DIRECTORY ManagedNativeHeader;
+
+        /// <summary>
+        /// The data directory of export addresses.
+        /// </summary>
+        public IMAGE_DATA_DIRECTORY ExportAddressTableJumps;
+
+        /// <summary>
+        /// The data directory of the managed native header.
+        /// </summary>
+        public IMAGE_DATA_DIRECTORY ManagedNativeHeader;
 
 		// FIXME: public byte[] ImageHash;
 
@@ -41,6 +91,10 @@ namespace Mosa.Runtime.Linker.PE
 
 		#region Methods
 
+        /// <summary>
+        /// Loads the CLI_HEADER from the reader.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
 		public void Load(BinaryReader reader)
 		{
 			this.Cb = reader.ReadUInt32();
@@ -58,6 +112,5 @@ namespace Mosa.Runtime.Linker.PE
 		}
 
 		#endregion // Methods
-
 	}
 }

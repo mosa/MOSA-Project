@@ -17,7 +17,8 @@ namespace Mosa.Runtime.Linker.PE
 	/// <summary>
 	/// The DOS header structure of a portable executable file.
 	/// </summary>
-	struct IMAGE_DOS_HEADER {
+	public struct IMAGE_DOS_HEADER
+    {
 		#region Constants
 
 		/// <summary>
@@ -103,9 +104,21 @@ namespace Mosa.Runtime.Linker.PE
 		/// Reserved words
 		/// </summary>
 		public ushort e_res00;
-		public ushort e_res01;
-		public ushort e_res02;
-		public ushort e_res03;
+
+        /// <summary>
+        /// Reserved words
+        /// </summary>
+        public ushort e_res01;
+
+        /// <summary>
+        /// Reserved words
+        /// </summary>
+        public ushort e_res02;
+
+        /// <summary>
+        /// Reserved words
+        /// </summary>
+        public ushort e_res03;
 
 		/// <summary>
 		/// OEM identifier (for e_oeminfo)
@@ -121,15 +134,51 @@ namespace Mosa.Runtime.Linker.PE
 		/// Reserved public words
 		/// </summary>
 		public ushort e_res20;
-		public ushort e_res21;
-		public ushort e_res22;
-		public ushort e_res23;
-		public ushort e_res24;
-		public ushort e_res25;
-		public ushort e_res26;
-		public ushort e_res27;
-		public ushort e_res28;
-		public ushort e_res29;
+
+        /// <summary>
+        /// Reserved public words
+        /// </summary>
+        public ushort e_res21;
+
+        /// <summary>
+        /// Reserved public words
+        /// </summary>
+        public ushort e_res22;
+
+        /// <summary>
+        /// Reserved public words
+        /// </summary>
+        public ushort e_res23;
+
+        /// <summary>
+        /// Reserved public words
+        /// </summary>
+        public ushort e_res24;
+
+        /// <summary>
+        /// Reserved public words
+        /// </summary>
+        public ushort e_res25;
+
+        /// <summary>
+        /// Reserved public words
+        /// </summary>
+        public ushort e_res26;
+
+        /// <summary>
+        /// Reserved public words
+        /// </summary>
+        public ushort e_res27;
+
+        /// <summary>
+        /// Reserved public words
+        /// </summary>
+        public ushort e_res28;
+
+        /// <summary>
+        /// Reserved public words
+        /// </summary>
+        public ushort e_res29;
 
 		/// <summary>
 		/// File address of new exe header
