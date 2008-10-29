@@ -134,6 +134,7 @@ namespace Mosa.Platforms.x86
             };*/
 
             Instruction[] result = new Instruction[] {
+                new Instructions.MoveInstruction(eaxL, op1L),
                 new Instructions.AddInstruction(eaxL, op2L),
                 new Instructions.MoveInstruction(resL, eaxL),
                 new Instructions.MoveInstruction(eaxH, op1H),

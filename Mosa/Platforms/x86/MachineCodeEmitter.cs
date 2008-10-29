@@ -1295,7 +1295,7 @@ namespace Mosa.Platforms.x86
         /// Section: Standard x86
         /// </summary>
         private static readonly CodeDef[] cd_adc = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x15 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x81 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x11 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x13 }, null),
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x11 }, null),
