@@ -66,6 +66,126 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             }
         }
         
+        #region B
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool B_B_B(bool expect, bool a, bool b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(true, true)]
+        [Row(true, false)]
+        [Row(false, false)]
+        [Row(false, true)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndB(bool a, bool b)
+        {
+            CodeSource = CreateTestCode("AndB", "bool", "bool");
+            Assert.IsTrue((bool)Run<B_B_B>("", "Test", "AndB", (a & b), a, b));
+        }
+        
+        delegate bool B_Constant_B(bool expect, bool x);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(true, true)]
+        [Row(true, false)]
+        [Row(false, false)]
+        [Row(false, true)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndConstantBRight(bool a, bool b)
+        {
+            CodeSource = CreateConstantTestCode("AndConstantBRight", "bool", "bool", null, b.ToString().ToLower());
+            Assert.IsTrue((bool)Run<B_Constant_B>("", "Test", "AndConstantBRight", (a & b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(true, true)]
+        [Row(true, false)]
+        [Row(false, false)]
+        [Row(false, true)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndConstantBLeft(bool a, bool b)
+        {
+            CodeSource = CreateConstantTestCode("AndConstantBLeft", "bool", "bool", a.ToString().ToLower(), null);
+            Assert.IsTrue((bool)Run<B_Constant_B>("", "Test", "AndConstantBLeft", (a & b), b));
+        }
+        #endregion
+        
+        #region C
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool C_C_C(char expect, char a, char b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 0)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndC(char a, char b)
+        {
+            CodeSource = CreateTestCode("AndC", "char", "char");
+            Assert.IsTrue((bool)Run<C_C_C>("", "Test", "AndC", (char)(a & b), a, b));
+        }
+        
+        delegate bool C_Constant_C(char expect, char x);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 1)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndConstantCRight(char a, char b)
+        {
+            CodeSource = CreateConstantTestCode("AndConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "AndConstantCRight", (char)(a & b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(1, 0)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(1, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AndConstantCLeft(char a, char b)
+        {
+            CodeSource = CreateConstantTestCode("AndConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "AndConstantCLeft", (char)(a & b), b));
+        }
+        #endregion
+        
         #region I1
         /// <summary>
         /// 

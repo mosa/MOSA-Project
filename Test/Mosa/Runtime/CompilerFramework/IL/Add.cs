@@ -66,6 +66,66 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             }
         }
         
+        #region C
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool C_C_C(char expect, char a, char b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 0)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddC(char a, char b)
+        {
+            CodeSource = CreateTestCode("AddC", "char", "char");
+            Assert.IsTrue((bool)Run<C_C_C>("", "Test", "AddC", (char)(a + b), a, b));
+        }
+        
+        delegate bool C_Constant_C(char expect, char x);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 1)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantCRight(char a, char b)
+        {
+            CodeSource = CreateConstantTestCode("AddConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "AddConstantCRight", (char)(a + b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(1, 0)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(1, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void AddConstantCLeft(char a, char b)
+        {
+            CodeSource = CreateConstantTestCode("AddConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "AddConstantCLeft", (char)(a + b), b));
+        }
+        #endregion
+        
         #region I1
         /// <summary>
         /// 

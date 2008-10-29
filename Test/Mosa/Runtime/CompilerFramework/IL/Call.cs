@@ -59,7 +59,44 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                 }";
             Run<V>("", "Test", "CallEmpty");
         }
+        
+        #region B
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        delegate bool B__B(bool arg);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        [Row(true)]
+        [Row(false)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void CallB(bool value)
+        {
+            CodeSource = CreateTestCode("CallB", "bool");
+            Assert.IsTrue((bool)Run<B__B>("", "Test", "CallB", value));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        [Row(true)]
+        [Row(false)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void CallConstantB(bool value)
+        {
+            CodeSource = CreateConstantTestCode("CallConstantB", "bool", value.ToString().ToLower());
+            Assert.IsTrue((bool)Run<B__B>("", "Test", "CallConstantB", value));
+        }
+        #endregion
 
+        #region C
+        #endregion
+        
         #region I1
         /// <summary>
         /// 
