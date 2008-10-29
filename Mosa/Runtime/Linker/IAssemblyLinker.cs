@@ -13,7 +13,7 @@ using System.Text;
 using Mosa.Runtime.Vm;
 using System.IO;
 
-namespace Mosa.Runtime.CompilerFramework.Linker
+namespace Mosa.Runtime.Linker
 {
     /// <summary>
     /// Collects linker requests for processing in the AssemblyLinkerStage.

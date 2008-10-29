@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.CompilerFramework.Linker
+namespace Mosa.Runtime.Linker
 {
     /// <summary>
     /// An enumeration identifying common linker sections.

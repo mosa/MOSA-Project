@@ -9,11 +9,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Vm;
 using System.IO;
-using Mosa.Runtime.CompilerFramework.Linker;
+
+using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Linker;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Tools.Compiler
 {
@@ -39,13 +39,16 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// 
         /// </summary>
-        public string Name { get { return "AOT Linker"; } }
+        public override string Name { get { return "AOT Linker"; } }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="compiler"></param>
-        public void Run(AssemblyCompiler compiler) { }
+        public override void Run(AssemblyCompiler compiler) 
+        {
+            base.Run(compiler);
+        }
 
         #region IAssemblyLinker Members
 

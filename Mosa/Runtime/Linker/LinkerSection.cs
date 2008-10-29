@@ -1,8 +1,17 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.CompilerFramework.Linker
+namespace Mosa.Runtime.Linker
 {
     /// <summary>
     /// Abstract class, that represents sections in an executable file provided by the linker.

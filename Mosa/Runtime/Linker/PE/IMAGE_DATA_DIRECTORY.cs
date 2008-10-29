@@ -10,7 +10,8 @@
 using System;
 using System.IO;
 
-namespace Mosa.Runtime.Loader.PE {
+namespace Mosa.Runtime.Linker.PE
+{
 	struct IMAGE_DATA_DIRECTORY {
 		#region Data members
 

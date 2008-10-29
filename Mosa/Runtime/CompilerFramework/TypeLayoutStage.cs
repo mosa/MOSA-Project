@@ -8,13 +8,12 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Mosa.Runtime.Vm;
-using Mosa.Runtime.Metadata;
 using System.Diagnostics;
 using System.IO;
-using Mosa.Runtime.CompilerFramework.Linker;
+
+using Mosa.Runtime.Linker;
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework
 {

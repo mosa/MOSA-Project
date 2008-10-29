@@ -10,7 +10,9 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Mosa.Runtime.CompilerFramework.Linker
+using Mosa.Runtime.CompilerFramework;
+
+namespace Mosa.Runtime.Linker
 {
     /// <summary>
     /// Indicates linker exceptions, such as unresolved symbols or duplicate symbols.

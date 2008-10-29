@@ -12,7 +12,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace Mosa.Runtime.Loader.PE {
+namespace Mosa.Runtime.Linker.PE
+{
 	/// <summary>
 	/// The DOS header structure of a portable executable file.
 	/// </summary>

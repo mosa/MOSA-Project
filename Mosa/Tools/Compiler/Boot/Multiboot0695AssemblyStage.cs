@@ -9,13 +9,12 @@
  */
 
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Linker;
-using System.IO;
-using System.Diagnostics;
+using Mosa.Runtime.Linker;
 
 using NDesk.Options;
 

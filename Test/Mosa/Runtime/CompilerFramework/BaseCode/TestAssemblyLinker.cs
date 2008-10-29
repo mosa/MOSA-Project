@@ -1,16 +1,23 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Text;
-using Mosa.Runtime.CompilerFramework;
 using System.Diagnostics;
-using Mosa.Runtime.Vm;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using Mosa.Runtime;
-using System.Reflection.Emit;
 using System.IO;
-using Mosa.Runtime.CompilerFramework.Linker;
-using System.Collections.ObjectModel;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices;
+
+using Mosa.Runtime;
+using Mosa.Runtime.Linker;
+using Mosa.Runtime.Vm;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
@@ -44,6 +51,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         #endregion // Construction
 
         #region AssemblyLinkerStageBase Overrides
+
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+        public override string Name
+        {
+            get { return @"Test Linker"; }
+        }
 
         /// <summary>
         /// Retrieves the collection of sections created during compilation.

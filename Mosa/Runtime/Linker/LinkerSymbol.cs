@@ -11,7 +11,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Mosa.Runtime.CompilerFramework.Linker
+namespace Mosa.Runtime.Linker
 {
     /// <summary>
     /// Represents a single symbol for the linker.

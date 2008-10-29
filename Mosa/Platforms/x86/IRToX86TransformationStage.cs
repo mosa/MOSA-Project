@@ -10,14 +10,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using IL = Mosa.Runtime.CompilerFramework.IL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
-using System.IO;
-using Mosa.Runtime.CompilerFramework.Linker;
 
 namespace Mosa.Platforms.x86
 {

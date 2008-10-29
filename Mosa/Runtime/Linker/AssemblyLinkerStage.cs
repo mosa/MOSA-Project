@@ -9,20 +9,20 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Mosa.Runtime.Vm;
-using Mosa.Runtime.Metadata;
 using System.Diagnostics;
 using System.IO;
-using System.Collections.ObjectModel;
 
-namespace Mosa.Runtime.CompilerFramework.Linker
+using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Vm;
+
+namespace Mosa.Runtime.Linker
 {
     /// <summary>
     /// This compilation stage links all external labels together, which
     /// were previously registered.
     /// </summary>
-    public abstract class AssemblyLinkerStageBase : IAssemblyCompilerStage, Linker.IAssemblyLinker
+    public abstract class AssemblyLinkerStageBase : IAssemblyCompilerStage, IAssemblyLinker
     {
         #region Data members
 
@@ -56,17 +56,14 @@ namespace Mosa.Runtime.CompilerFramework.Linker
         /// <summary>
         /// Retrieves the name of the compilation stage.
         /// </summary>
-        /// <value></value>
-        string IAssemblyCompilerStage.Name
-        {
-            get { return @"Linker"; }
-        }
+        /// <value>The name of the compilation stage.</value>
+        public abstract string Name { get; }
 
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>
-        void IAssemblyCompilerStage.Run(AssemblyCompiler compiler)
+        public virtual void Run(AssemblyCompiler compiler)
         {
             long address;
 

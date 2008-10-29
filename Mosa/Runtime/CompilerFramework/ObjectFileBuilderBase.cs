@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.Vm;
 using System.IO;
-using Mosa.Runtime.CompilerFramework.Linker;
+using Mosa.Runtime.Linker;
 
 namespace Mosa.Runtime.CompilerFramework
 {

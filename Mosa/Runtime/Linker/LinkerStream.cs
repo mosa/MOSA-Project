@@ -10,7 +10,7 @@
 using System;
 using System.IO;
 
-namespace Mosa.Runtime.CompilerFramework.Linker
+namespace Mosa.Runtime.Linker
 {
     /// <summary>
     /// A linker stream object used to control symbol sizes.

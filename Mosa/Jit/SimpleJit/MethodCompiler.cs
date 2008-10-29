@@ -8,14 +8,12 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.Linker;
 using Mosa.Runtime.Loader;
-using Mosa.Runtime.CompilerFramework.Linker;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.Jit.SimpleJit
 {

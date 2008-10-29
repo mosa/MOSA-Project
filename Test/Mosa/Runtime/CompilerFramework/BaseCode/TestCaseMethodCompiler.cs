@@ -7,19 +7,15 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Runtime.InteropServices;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework.IL;
-using Mosa.Runtime;
+using Mosa.Runtime.Linker;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
-using System.Runtime.InteropServices;
-using Mosa.Runtime.CompilerFramework.Linker;
+using Mosa.Runtime.Vm;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {

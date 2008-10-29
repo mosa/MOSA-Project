@@ -13,6 +13,7 @@ using System.Text;
 using System.IO;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Linker.PE;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 

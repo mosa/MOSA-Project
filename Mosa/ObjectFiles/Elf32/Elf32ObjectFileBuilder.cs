@@ -11,11 +11,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+
 using Mosa.ObjectFiles.Elf32.Format;
 using Mosa.ObjectFiles.Elf32.Format.Sections;
+
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Linker;
 using Mosa.Runtime.Vm;
-using Mosa.Runtime.CompilerFramework.Linker;
 
 namespace Mosa.ObjectFiles.Elf32
 {

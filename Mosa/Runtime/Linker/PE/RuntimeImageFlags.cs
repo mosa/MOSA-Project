@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Runtime.Loader.PE {
+namespace Mosa.Runtime.Linker.PE {
     /// <summary>
     /// 
     /// </summary>

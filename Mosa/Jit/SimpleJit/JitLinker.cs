@@ -9,10 +9,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-
-using Mosa.Runtime.CompilerFramework.Linker;
 using System.IO;
+
+using Mosa.Runtime.Linker;
 using Mosa.Runtime.Vm;
 
 namespace Mosa.Jit.SimpleJit
@@ -34,6 +33,15 @@ namespace Mosa.Jit.SimpleJit
         #endregion // Construction
 
         #region AssemblyLinkerStageBase Overrides
+
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+        public override string Name
+        {
+            get { return @"JIT Linker"; }
+        }
 
         /// <summary>
         /// Retrieves the collection of sections created during compilation.
