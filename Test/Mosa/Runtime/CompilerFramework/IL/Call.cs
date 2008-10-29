@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
@@ -93,7 +94,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<B__B>("", "Test", "CallConstantB", value));
         }
         #endregion
-        delegate bool B__C(char arg);
+        
+        #region C
+        delegate bool B__C([MarshalAs(UnmanagedType.U2)]char arg);
         /// <summary>
         /// 
         /// </summary>
@@ -123,8 +126,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             CodeSource = CreateConstantTestCode("CallConstantC", "char", "'" + value.ToString() + "'");
             Assert.IsTrue((bool)Run<B__C>("", "Test", "CallConstantC", value));
         }
-        #region C
-        
         #endregion
         
         #region I1

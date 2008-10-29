@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
@@ -73,7 +74,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        delegate bool C_C_C(char expect, char a, char b);
+        delegate bool C_C_C([MarshalAs(UnmanagedType.U2)]char expect, [MarshalAs(UnmanagedType.U2)]char a, [MarshalAs(UnmanagedType.U2)]char b);
         /// <summary>
         /// 
         /// </summary>
@@ -90,7 +91,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<C_C_C>("", "Test", "DivC", (char)(a / b), a, b));
         }
         
-        delegate bool C_Constant_C(char expect, char x);
+        delegate bool C_Constant_C([MarshalAs(UnmanagedType.U2)]char expect, char x);
 
         /// <summary>
         /// 

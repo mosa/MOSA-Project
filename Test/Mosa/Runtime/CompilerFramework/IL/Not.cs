@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
@@ -37,7 +38,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         
         #region C
         
-        delegate bool I4_C(int expect, char a);
+        delegate bool I4_C(int expect, [MarshalAs(UnmanagedType.U2)]char a);
         
         /// <summary>
         /// 

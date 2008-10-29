@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
@@ -59,7 +60,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             }
         }
 
-        delegate bool B_C_C(char a, char b);
+        delegate bool B_C_C([MarshalAs(UnmanagedType.U2)]char a, [MarshalAs(UnmanagedType.U2)]char b);
         delegate bool B_I1_I1(sbyte a, sbyte b);
         delegate bool B_I2_I2(short a, short b);
         delegate bool B_I4_I4(int a, int b);
@@ -71,7 +72,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         delegate bool B_R4_R4(float a, float b);
         delegate bool B_R8_R8(double a, double b);
         
-        delegate bool B_Constant_C(char x);
+        delegate bool B_Constant_C([MarshalAs(UnmanagedType.U2)]char x);
         delegate bool B_Constant_I1(sbyte x);
         delegate bool B_Constant_I2(short x);
         delegate bool B_Constant_I4(int x);
