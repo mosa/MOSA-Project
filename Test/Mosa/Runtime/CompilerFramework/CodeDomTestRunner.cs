@@ -26,12 +26,12 @@ namespace Test.Mosa.Runtime.CompilerFramework
         #region Data members
 
         /// <summary>
-        /// 
+        /// The filename of the test code to compile.
         /// </summary>
         string codeFilename;
 
         /// <summary>
-        /// 
+        /// The source text of the test code to compile.
         /// </summary>
         string codeSource;
 
@@ -49,6 +49,11 @@ namespace Test.Mosa.Runtime.CompilerFramework
         /// Holds the temporary files collection.
         /// </summary>
         private TempFileCollection temps = new TempFileCollection();
+
+        /// <summary>
+        /// Determines if unsafe code is allowed in the test.
+        /// </summary>
+        private bool unsafeCode;
 
         #endregion // Data members
 
@@ -117,6 +122,23 @@ namespace Test.Mosa.Runtime.CompilerFramework
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether unsafe code is used in the test.
+        /// </summary>
+        /// <value><c>true</c> if unsafe code is used in the test; otherwise, <c>false</c>.</value>
+        public bool UnsafeCode
+        {
+            get { return this.unsafeCode; }
+            set
+            {
+                if (this.unsafeCode != value)
+                {
+                    this.unsafeCode = value;
+                    this.NeedCompile = true;
+                }
+            }
+        }
+
         #endregion // Properties
 
         #region MosaCompilerTestRunner Overrides
@@ -138,6 +160,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 throw new NotSupportedException("The language '" + Language + "' is not supported on this machine.");
             CompilerResults compileResults;
             CompilerParameters parameters = new CompilerParameters(this.References, Path.GetTempFileName());
+            if (true == this.unsafeCode)
+            {
+                if (this.Language == "C#")
+                    parameters.CompilerOptions = "/unsafe+";
+                else
+                    throw new NotSupportedException();
+            }
             parameters.GenerateInMemory = false;
             if (CodeSource != null)
             {
