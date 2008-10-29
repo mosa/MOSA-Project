@@ -93,8 +93,38 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<B__B>("", "Test", "CallConstantB", value));
         }
         #endregion
-
+        delegate bool B__C(char arg);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        [Row(0)]
+        [Row('a')]
+        [Row('Z')]
+        [Row(char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void CallC(char value)
+        {
+            CodeSource = CreateTestCode("CallC", "char");
+            Assert.IsTrue((bool)Run<B__C>("", "Test", "CallC", value));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        [Row(1)]
+        [Row(17)]
+        [Row('a')]
+        [Row(char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void CallConstantC(char value)
+        {
+            CodeSource = CreateConstantTestCode("CallConstantC", "char", "'" + value.ToString() + "'");
+            Assert.IsTrue((bool)Run<B__C>("", "Test", "CallConstantC", value));
+        }
         #region C
+        
         #endregion
         
         #region I1

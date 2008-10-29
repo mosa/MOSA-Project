@@ -66,6 +66,66 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             }
         }
         
+        #region C
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool C_C_C(char expect, char a, char b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 0)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void MulC(char a, char b)
+        {
+            CodeSource = CreateTestCode("MulC", "char", "char");
+            Assert.IsTrue((bool)Run<C_C_C>("", "Test", "MulC", (char)(a * b), a, b));
+        }
+        
+        delegate bool C_Constant_C(char expect, char x);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 1)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void MulConstantCRight(char a, char b)
+        {
+            CodeSource = CreateConstantTestCode("MulConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "MulConstantCRight", (char)(a * b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(1, 0)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(1, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void MulConstantCLeft(char a, char b)
+        {
+            CodeSource = CreateConstantTestCode("MulConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "MulConstantCLeft", (char)(a * b), b));
+        }
+        #endregion
+        
         #region I1
         /// <summary>
         /// 

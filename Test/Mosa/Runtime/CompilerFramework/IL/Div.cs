@@ -65,6 +65,66 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             }
         }
         
+        #region C
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool C_C_C(char expect, char a, char b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void DivC(char a, char b)
+        {
+            CodeSource = CreateTestCode("DivC", "char", "char");
+            Assert.IsTrue((bool)Run<C_C_C>("", "Test", "DivC", (char)(a / b), a, b));
+        }
+        
+        delegate bool C_Constant_C(char expect, char x);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 1)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void DivConstantCRight(char a, char b)
+        {
+            CodeSource = CreateConstantTestCode("DivConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "DivConstantCRight", (char)(a / b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(1, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void DivConstantCLeft(char a, char b)
+        {
+            CodeSource = CreateConstantTestCode("DivConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "DivConstantCLeft", (char)(a / b), b));
+        }
+        #endregion
+        
         #region I1
         /// <summary>
         /// 

@@ -61,6 +61,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         }
 
         delegate bool B_B_B(bool a, bool b);
+        delegate bool B_C_C(char a, char b);
         delegate bool B_I1_I1(sbyte a, sbyte b);
         delegate bool B_I2_I2(short a, short b);
         delegate bool B_I4_I4(int a, int b);
@@ -73,6 +74,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         delegate bool B_R8_R8(double a, double b);
         
         delegate bool B_Constant_B(bool x);
+        delegate bool B_Constant_C(char x);
         delegate bool B_Constant_I1(sbyte x);
         delegate bool B_Constant_I2(short x);
         delegate bool B_Constant_I4(int x);
@@ -136,6 +138,62 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         {
             this.CodeSource = CreateConstantTestCode("bool", a.ToString().ToLower(), null);
             bool res = (bool)Run<B_Constant_B>(@"", @"Test", @"CeqConstant", b);
+            Assert.IsTrue(result == res);
+        }
+        #endregion
+        
+        #region C
+        /// <summary>
+        /// Tests support for the ceq IL operation for char operands.
+        /// </summary>
+        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="a">The first value to compare.</param>
+        /// <param name="b">The second value to compare.</param>
+        [Row(true, 0, 0)]
+        [Row(false, 'a', 'Z')]
+        [Row(true, 'a', 'a')]
+        [Row(false, 0, 128)]
+        [Test, Author("boddlnagg")]
+        public void CeqC(bool result, char a, char b)
+        {
+            this.CodeSource = s_testCode.Replace("t1", "char").Replace("t2", "char");
+            bool res = (bool)Run<B_C_C>(@"", @"Test", @"Ceq", a, b);
+            Assert.IsTrue(result == res);
+        }
+        
+        /// <summary>
+        /// Tests support for the ceq IL operation for char operands with right value constant.
+        /// </summary>
+        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="a">The first value to compare.</param>
+        /// <param name="b">The second value to compare.</param>
+        [Row(true, 1, 1)]
+        [Row(false, 'a', 'Z')]
+        [Row(true, 'a', 'a')]
+        [Row(false, 1, 128)]
+        [Test, Author("boddlnagg")]
+        public void CeqConstantCRight(bool result, char a, char b)
+        {
+            this.CodeSource = CreateConstantTestCode("char", null, "'" + b.ToString() + "'");
+            bool res = (bool)Run<B_Constant_C>(@"", @"Test", @"CeqConstant", a);
+            Assert.IsTrue(result == res);
+        }
+        
+        /// <summary>
+        /// Tests support for the ceq IL operation for char operands with left value constant.
+        /// </summary>
+        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="a">The first value to compare.</param>
+        /// <param name="b">The second value to compare.</param>
+        [Row(true, 1, 1)]
+        [Row(false, 'a', 'Z')]
+        [Row(true, 'a', 'a')]
+        [Row(false, 1, 128)]
+        [Test, Author("boddlnagg")]
+        public void CeqConstantCLeft(bool result, char a, char b)
+        {
+            this.CodeSource = CreateConstantTestCode("char", "'" + a.ToString() + "'", null);
+            bool res = (bool)Run<B_Constant_C>(@"", @"Test", @"CeqConstant", b);
             Assert.IsTrue(result == res);
         }
         #endregion

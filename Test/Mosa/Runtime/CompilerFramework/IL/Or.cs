@@ -66,6 +66,126 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             }
         }
         
+        #region B
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool B_B_B(bool expect, bool a, bool b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(true, true)]
+        [Row(true, false)]
+        [Row(false, false)]
+        [Row(false, true)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrB(bool a, bool b)
+        {
+            CodeSource = CreateTestCode("OrB", "bool", "bool");
+            Assert.IsTrue((bool)Run<B_B_B>("", "Test", "OrB", (a | b), a, b));
+        }
+        
+        delegate bool B_Constant_B(bool expect, bool x);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(true, true)]
+        [Row(true, false)]
+        [Row(false, false)]
+        [Row(false, true)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantBRight(bool a, bool b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantBRight", "bool", "bool", null, b.ToString().ToLower());
+            Assert.IsTrue((bool)Run<B_Constant_B>("", "Test", "OrConstantBRight", (a | b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(true, true)]
+        [Row(true, false)]
+        [Row(false, false)]
+        [Row(false, true)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantBLeft(bool a, bool b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantBLeft", "bool", "bool", a.ToString().ToLower(), null);
+            Assert.IsTrue((bool)Run<B_Constant_B>("", "Test", "OrConstantBLeft", (a | b), b));
+        }
+        #endregion
+        
+        #region C
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool C_C_C(char expect, char a, char b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 0)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrC(char a, char b)
+        {
+            CodeSource = CreateTestCode("OrC", "char", "char");
+            Assert.IsTrue((bool)Run<C_C_C>("", "Test", "OrC", (char)(a | b), a, b));
+        }
+        
+        delegate bool C_Constant_C(char expect, char x);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 1)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantCRight(char a, char b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "OrConstantCRight", (char)(a | b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(1, 0)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(1, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void OrConstantCLeft(char a, char b)
+        {
+            CodeSource = CreateConstantTestCode("OrConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "OrConstantCLeft", (char)(a | b), b));
+        }
+        #endregion
+        
         #region I1
         /// <summary>
         /// 

@@ -66,6 +66,126 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             }
         }
         
+        #region B
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool B_B_B(bool expect, bool a, bool b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(true, true)]
+        [Row(true, false)]
+        [Row(false, false)]
+        [Row(false, true)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void XorB(bool a, bool b)
+        {
+            CodeSource = CreateTestCode("XorB", "bool", "bool");
+            Assert.IsTrue((bool)Run<B_B_B>("", "Test", "XorB", (a ^ b), a, b));
+        }
+        
+        delegate bool B_Constant_B(bool expect, bool x);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(true, true)]
+        [Row(true, false)]
+        [Row(false, false)]
+        [Row(false, true)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void XorConstantBRight(bool a, bool b)
+        {
+            CodeSource = CreateConstantTestCode("XorConstantBRight", "bool", "bool", null, b.ToString().ToLower());
+            Assert.IsTrue((bool)Run<B_Constant_B>("", "Test", "XorConstantBRight", (a ^ b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(true, true)]
+        [Row(true, false)]
+        [Row(false, false)]
+        [Row(false, true)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void XorConstantBLeft(bool a, bool b)
+        {
+            CodeSource = CreateConstantTestCode("XorConstantBLeft", "bool", "bool", a.ToString().ToLower(), null);
+            Assert.IsTrue((bool)Run<B_Constant_B>("", "Test", "XorConstantBLeft", (a ^ b), b));
+        }
+        #endregion
+        
+        #region C
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool C_C_C(char expect, char a, char b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 0)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void XorC(char a, char b)
+        {
+            CodeSource = CreateTestCode("XorC", "char", "char");
+            Assert.IsTrue((bool)Run<C_C_C>("", "Test", "XorC", (char)(a ^ b), a, b));
+        }
+        
+        delegate bool C_Constant_C(char expect, char x);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 1)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void XorConstantCRight(char a, char b)
+        {
+            CodeSource = CreateConstantTestCode("XorConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "XorConstantCRight", (char)(a ^ b), a));
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(1, 0)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(1, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void XorConstantCLeft(char a, char b)
+        {
+            CodeSource = CreateConstantTestCode("XorConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "XorConstantCLeft", (char)(a ^ b), b));
+        }
+        #endregion
+        
         #region I1
         /// <summary>
         /// 

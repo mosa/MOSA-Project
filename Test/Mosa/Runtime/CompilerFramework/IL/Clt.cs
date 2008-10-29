@@ -59,6 +59,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             }
         }
 
+        delegate bool B_C_C(char a, char b);
         delegate bool B_I1_I1(sbyte a, sbyte b);
         delegate bool B_I2_I2(short a, short b);
         delegate bool B_I4_I4(int a, int b);
@@ -70,7 +71,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         delegate bool B_R4_R4(float a, float b);
         delegate bool B_R8_R8(double a, double b);
         
-        delegate bool B_Constant_B(bool x);
+        delegate bool B_Constant_C(char x);
         delegate bool B_Constant_I1(sbyte x);
         delegate bool B_Constant_I2(short x);
         delegate bool B_Constant_I4(int x);
@@ -82,6 +83,59 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         delegate bool B_Constant_R4(float x);
         delegate bool B_Constant_R8(double x);
 
+        #region C
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 0)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void CltC(char a, char b)
+        {
+            this.CodeSource = s_testCode.Replace("t1", "char").Replace("t2", "char");
+            bool res = (bool)Run<B_C_C>(@"", @"Test", @"Clt", a, b);
+            Assert.IsTrue((a < b) == res);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(0, 1)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(char.MinValue, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void CltConstantCRight(char a, char b)
+        {
+            this.CodeSource = CreateConstantTestCode("char", null, "'" + b.ToString() + "'");
+            bool res = (bool)Run<B_Constant_C>(@"", @"Test", @"CltConstant", a);
+            Assert.IsTrue((a < b) == res);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(1, 0)]
+        [Row(17, 128)]
+        [Row('a', 'Z')]
+        [Row(1, char.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void CltConstantCLeft(char a, char b)
+        {
+            this.CodeSource = CreateConstantTestCode("char", "'" + a.ToString() + "'", null);
+            bool res = (bool)Run<B_Constant_C>(@"", @"Test", @"CltConstant", b);
+            Assert.IsTrue((a < b) == res);
+        }
+        #endregion
+        
         #region I1
         /// <summary>
         /// Tests support for the clt IL operation for I1 operands.

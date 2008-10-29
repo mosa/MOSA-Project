@@ -35,6 +35,30 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                 }";
         }
         
+        #region C
+        
+        delegate bool I4_C(int expect, char a);
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        [Row(0)]
+        [Row(1)]
+        [Row(2)]
+        [Row(5)]
+        [Row('a')]
+        [Row('Z')]
+        [Row(100)]
+        [Row(char.MaxValue)]
+        [Test, Author("boddlnagg", "boddlnagg@googlemail.com")]
+        public void NotC(char a)
+        {
+            CodeSource = CreateTestCode("NotC", "char", "int");
+            Assert.IsTrue((bool)Run<I4_C>("", "Test", "NotC", (int)~a, a));
+        }
+        #endregion
+        
         #region I1
         /// <summary>
         /// 
