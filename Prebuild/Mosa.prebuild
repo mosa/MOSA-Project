@@ -43,25 +43,6 @@
           <Match pattern="*.cs" path="." recurse="true"/>
         </Files>
       </Project>
-      <Project name="Mosa.Tools.ImgToVHD" type="Exe" path="..\Mosa\Tools\ImgToVHD" language="C#" runtime="Microsoft" rootNamespace="Mosa.Tools.ImgToVHD" assemblyName="Mosa.Tools.ImgToVHD">
-        <Configuration name="Debug">
-          <Options>
-            <OutputPath>..\..\bin</OutputPath>
-            <XmlDocFile>Mosa.Tools.ImgToVHD.xml</XmlDocFile>
-          </Options>
-        </Configuration>
-        <Configuration name="Release">
-          <Options>
-            <OutputPath>..\..\bin</OutputPath>
-            <XmlDocFile>Mosa.Tools.ImgToVHD.xml</XmlDocFile>
-          </Options>
-        </Configuration>
-        <Reference name="System" version="2.0.0.0" localCopy="false" />
-        <Reference name="Mosa.ClassLib" localCopy="false" />
-        <Files>
-          <Match pattern="*.cs" path="." recurse="true"/>
-        </Files>
-      </Project>
     </EmbeddedSolution>
     <EmbeddedSolution name="OS">
       <Project name="Mosa.Kernel" type="Library" path="..\Mosa\Kernel" language="C#" runtime="Microsoft" rootNamespace="Mosa.Kernel" assemblyName="Mosa.Kernel">
@@ -439,6 +420,27 @@
             <AllowUnsafe>true</AllowUnsafe>
           </Options>
         </Configuration>
+        <Files>
+          <Match pattern="*.cs" path="." recurse="true"/>
+        </Files>
+      </Project>
+    </EmbeddedSolution>
+    <EmbeddedSolution name="Tools">
+      <Project name="Mosa.Tools.ImgToVHD" type="Exe" path="..\Mosa\Tools\ImgToVHD" language="C#" runtime="Microsoft" rootNamespace="Mosa.Tools.ImgToVHD" assemblyName="Mosa.Tools.ImgToVHD">
+        <Configuration name="Debug">
+          <Options>
+            <OutputPath>..\..\bin</OutputPath>
+            <XmlDocFile>Mosa.Tools.ImgToVHD.xml</XmlDocFile>
+          </Options>
+        </Configuration>
+        <Configuration name="Release">
+          <Options>
+            <OutputPath>..\..\bin</OutputPath>
+            <XmlDocFile>Mosa.Tools.ImgToVHD.xml</XmlDocFile>
+          </Options>
+        </Configuration>
+        <Reference name="System" version="2.0.0.0" localCopy="false" />
+        <Reference name="Mosa.ClassLib" localCopy="false" />
         <Files>
           <Match pattern="*.cs" path="." recurse="true"/>
         </Files>
