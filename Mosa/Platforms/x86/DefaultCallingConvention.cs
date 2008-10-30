@@ -105,7 +105,7 @@ namespace Mosa.Platforms.x86
                 RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
                 instructions.Add(this.architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, instruction.Operands[0]));
             }
-            instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.CallInstruction), instruction.InvokeTarget));
+            instructions.Add(this.architecture.CreateInstruction(typeof(CallInstruction), instruction.InvokeTarget));
             if (0 != stackSize)
             {
                 instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.AddInstruction), esp, new ConstantOperand(I, stackSize)));

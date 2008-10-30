@@ -67,6 +67,13 @@ namespace Mosa.Runtime.Linker
         {
             long address;
 
+            // Adjust the symbol addresses
+            foreach (LinkerSymbol symbol in this.Symbols)
+            {
+                LinkerSection ls = this.GetSection(symbol.Section);
+                symbol.Address = new IntPtr(ls.Address.ToInt64() + symbol.SectionAddress);
+            }
+
             // Check if we have unresolved requests and try to link them
             List<string> members = new List<string>(_linkRequests.Keys);
             foreach (string member in members)
@@ -82,7 +89,7 @@ namespace Mosa.Runtime.Linker
             }
             Debug.Assert(0 == _linkRequests.Count, @"AssemblyLinker has found unresolved symbols.");
             if (0 != _linkRequests.Count)
-                throw new Exception(@"Unresolved symbols.");
+                throw new LinkerException(@"Unresolved symbols.");
         }
 
         #endregion // IAssemblyCompilerStage Members
@@ -99,117 +106,14 @@ namespace Mosa.Runtime.Linker
         /// <param name="targetAddress">The position in code, where it should be patched.</param>
         protected abstract void ApplyPatch(LinkType linkType, RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress);
 
+        /// <summary>
+        /// Retrieves a linker section by its type.
+        /// </summary>
+        /// <param name="sectionKind">The type of the section to retrieve.</param>
+        /// <returns>The retrieved linker section.</returns>
+        protected abstract LinkerSection GetSection(SectionKind sectionKind);
+
         #endregion // Methods
-
-        #region Internals
-
-        /// <summary>
-        /// Determines whether the specified symbol is resolved.
-        /// </summary>
-        /// <param name="symbol">The symbol.</param>
-        /// <param name="address">The address.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified symbol is resolved; otherwise, <c>false</c>.
-        /// </returns>
-        protected virtual bool IsResolved(string symbol, out long address)
-        {
-            address = 0;
-            LinkerSymbol linkerSymbol;
-            if (true == this.symbols.TryGetValue(symbol, out linkerSymbol))
-            {
-                address = linkerSymbol.Address.ToInt64();
-            }
-            return (0 != address);
-        }
-
-        /// <summary>
-        /// Determines if the given runtime member can be resolved immediately.
-        /// </summary>
-        /// <param name="member">The runtime member to determine resolution of.</param>
-        /// <param name="address">Receives the determined address of the runtime member.</param>
-        /// <returns>
-        /// The method returns true, when it was successfully resolved.
-        /// </returns>
-        protected virtual bool IsResolved(RuntimeMember member, out long address)
-        {
-            // Init out params
-            address = 0;
-
-            // Is this a method?
-            RuntimeMethod method = member as RuntimeMethod;
-            if (null != method)
-            {
-                if (method.ImplAttributes == MethodImplAttributes.InternalCall)
-                {
-                    address = ResolveInternalCall(method);
-                }
-                else
-                {
-                    Debug.Assert(MethodAttributes.Abstract != (method.Attributes & MethodAttributes.Abstract), @"Can't link an abstract method.");
-                    address = method.Address.ToInt64();
-                }
-            }
-            else
-            {
-                RuntimeField field = member as RuntimeField;
-                if (null != field)
-                {
-                    Debug.Assert(FieldAttributes.Static == (field.Attributes & FieldAttributes.Static));
-                    address = field.Address.ToInt64();
-                }
-            }
-
-            return (0 != address);
-        }
-
-        /// <summary>
-        /// Special resolution for internal calls.
-        /// </summary>
-        /// <param name="method">The internal call method to resolve.</param>
-        /// <returns>The address </returns>
-        protected virtual long ResolveInternalCall(RuntimeMethod method)
-        {
-            long address = 0;
-            ITypeSystem ts = RuntimeBase.Instance.TypeLoader;
-            RuntimeMethod internalImpl = ts.GetImplementationForInternalCall(method);
-            if (null != internalImpl)
-                address = internalImpl.Address.ToInt64();
-            return address;
-        }
-
-        /// <summary>
-        /// Checks that <paramref name="member"/> is a member, which can be linked.
-        /// </summary>
-        /// <param name="member">The member to check.</param>
-        /// <returns>
-        /// True, if the member is valid for linking.
-        /// </returns>
-        protected bool IsValid(RuntimeMember member)
-        {
-            return (member is RuntimeMethod || (member is RuntimeField && FieldAttributes.Static == (FieldAttributes.Static & ((RuntimeField)member).Attributes)));
-        }
-
-        /// <summary>
-        /// Patches all requests in the given link request list.
-        /// </summary>
-        /// <param name="address">The address of the member.</param>
-        /// <param name="requests">A list of requests to patch.</param>
-        private void PatchRequests(long address, IEnumerable<LinkRequest> requests)
-        {
-            foreach (LinkRequest request in requests)
-            {
-                // Patch the code stream
-                ApplyPatch(
-                    request.LinkType,
-                    request.Method,
-                    request.MethodOffset,
-                    request.MethodRelativeBase,
-                    address
-                );
-            }
-        }
-
-        #endregion // Internals
 
         #region IAssemblyLinker Members
 
@@ -217,9 +121,9 @@ namespace Mosa.Runtime.Linker
         /// Gets the base address.
         /// </summary>
         /// <value>The base address.</value>
-        public ulong BaseAddress
+        public long BaseAddress
         {
-            get { return 0UL; }
+            get { return 0L; }
         }
 
         /// <summary>
@@ -304,7 +208,7 @@ namespace Mosa.Runtime.Linker
             try
             {
                 // Create a linker symbol for the name
-                LinkerSymbol symbol = new LinkerSymbol(name, new IntPtr(stream.Position));
+                LinkerSymbol symbol = new LinkerSymbol(name, section, stream.Position);
 
                 // Save the symbol for later use
                 this.symbols.Add(symbol.Name, symbol);
@@ -427,6 +331,93 @@ namespace Mosa.Runtime.Linker
             }
 
             return name;
+        }
+
+        /// <summary>
+        /// Determines whether the specified symbol is resolved.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="address">The address.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified symbol is resolved; otherwise, <c>false</c>.
+        /// </returns>
+        protected virtual bool IsResolved(string symbol, out long address)
+        {
+            address = 0;
+            LinkerSymbol linkerSymbol;
+            if (true == this.symbols.TryGetValue(symbol, out linkerSymbol))
+            {
+                address = linkerSymbol.Address.ToInt64();
+            }
+            return (0 != address);
+        }
+
+        /// <summary>
+        /// Determines if the given runtime member can be resolved immediately.
+        /// </summary>
+        /// <param name="member">The runtime member to determine resolution of.</param>
+        /// <param name="address">Receives the determined address of the runtime member.</param>
+        /// <returns>
+        /// The method returns true, when it was successfully resolved.
+        /// </returns>
+        protected bool IsResolved(RuntimeMember member, out long address)
+        {
+            // Is this a method?
+            RuntimeMethod method = member as RuntimeMethod;
+            if (null != method && method.ImplAttributes == MethodImplAttributes.InternalCall)
+            {
+                address = ResolveInternalCall(method);
+                return (0 != address);
+            }
+
+            return IsResolved(CreateSymbolName(member), out address);
+        }
+
+        /// <summary>
+        /// Checks that <paramref name="member"/> is a member, which can be linked.
+        /// </summary>
+        /// <param name="member">The member to check.</param>
+        /// <returns>
+        /// True, if the member is valid for linking.
+        /// </returns>
+        protected bool IsValid(RuntimeMember member)
+        {
+            return (member is RuntimeMethod || (member is RuntimeField && FieldAttributes.Static == (FieldAttributes.Static & ((RuntimeField)member).Attributes)));
+        }
+
+        /// <summary>
+        /// Special resolution for internal calls.
+        /// </summary>
+        /// <param name="method">The internal call method to resolve.</param>
+        /// <returns>The address </returns>
+        protected virtual long ResolveInternalCall(RuntimeMethod method)
+        {
+            long address = 0;
+            ITypeSystem ts = RuntimeBase.Instance.TypeLoader;
+            RuntimeMethod internalImpl = ts.GetImplementationForInternalCall(method);
+            if (null != internalImpl)
+                address = internalImpl.Address.ToInt64();
+            return address;
+        }
+
+        /// <summary>
+        /// Patches all requests in the given link request list.
+        /// </summary>
+        /// <param name="address">The address of the member.</param>
+        /// <param name="requests">A list of requests to patch.</param>
+        private void PatchRequests(long address, IEnumerable<LinkRequest> requests)
+        {
+            foreach (LinkRequest request in requests)
+            {
+                // Patch the code stream
+                ApplyPatch(
+                    request.LinkType,
+                    request.Method,
+                    request.MethodOffset,
+                    request.MethodRelativeBase,
+                    address
+                );
+            }
         }
 
         #endregion // Internals

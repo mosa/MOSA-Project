@@ -1233,6 +1233,10 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IR.IIRVisitor<Context>.Visit(IR.CallInstruction instruction, Context arg)
+        {
+        }
+
         void IR.IIRVisitor<Context>.Visit(IR.EpilogueInstruction instruction, Context arg)
         {
         }
@@ -1783,10 +1787,6 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Shrd(ShrdInstruction shiftInstruction, Context arg)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Call(CallInstruction instruction, Context arg)
         {
         }
 

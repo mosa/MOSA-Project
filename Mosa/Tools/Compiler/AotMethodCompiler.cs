@@ -8,47 +8,41 @@
  *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
  */
 
-using System.IO;
-
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.IL;
 using Mosa.Runtime.Linker;
-using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 
 namespace Mosa.Tools.Compiler
 {
     /// <summary>
-    /// 
+    /// Specializes <see cref="MethodCompilerBase"/> for AOT purposes.
     /// </summary>
     public sealed class AotMethodCompiler : MethodCompilerBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        MemoryStream stream = new MemoryStream();
+        #region Data Members
 
         /// <summary>
-        /// 
+        /// Holds the aot compiler, which started this method compiler.
         /// </summary>
-        ObjectFileBuilderBase _objectFileBuilder;
+        private AotCompiler aotCompiler;
+
+        #endregion // Data Members
 
         #region Construction
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
         /// </summary>
-        /// <param name="linker"></param>
-        /// <param name="architecture"></param>
-        /// <param name="module"></param>
-        /// <param name="type"></param>
-        /// <param name="method"></param>
-        /// <param name="objectFileBuilder"></param>
-        public AotMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method, ObjectFileBuilderBase objectFileBuilder)
-            : base(linker, architecture, module, type, method)
+        /// <param name="compiler">The AOT assembly compiler.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="method">The method.</param>
+        public AotMethodCompiler(AotCompiler compiler, RuntimeType type, RuntimeMethod method)
+            : base(compiler.Pipeline.Find<IAssemblyLinker>(), compiler.Architecture, compiler.Assembly, type, method)
         {
-            _objectFileBuilder = objectFileBuilder;
-            Pipeline.AddRange(new IMethodCompilerStage[] {
+            this.aotCompiler = compiler;
+            this.Pipeline.AddRange(new IMethodCompilerStage[] {
                 new ILDecodingStage(),
                 new BasicBlockBuilderStage(),
                 new CilToIrTransformationStage(),
@@ -67,35 +61,24 @@ namespace Mosa.Tools.Compiler
 
         #endregion // Construction
 
-        #region Methods
+        #region MethodCompilerBase Overrides
 
         /// <summary>
-        /// 
-        /// </summary>
-        protected override void BeginCompile()
-        {
-            _objectFileBuilder.OnMethodCompileBegin(this);
-        }
-
-        /// <summary>
-        /// 
+        /// Called after the method compiler has finished compiling the method.
         /// </summary>
         protected override void EndCompile()
         {
-            _objectFileBuilder.OnMethodCompileEnd(this);
+            // If we're compiling a type initializer, run it immediately.
+            MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
+            if ((this.Method.Attributes & attrs) == attrs && this.Method.Name == ".cctor")
+            {
+                TypeInitializers.TypeInitializerSchedulerStage tiss = this.aotCompiler.Pipeline.Find<TypeInitializers.TypeInitializerSchedulerStage>();
+                tiss.Schedule(this.Method);
+            }
+
+            base.EndCompile();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override Stream RequestCodeStream()
-        {
-            // FIXME: Request a stream from the AOT assembly compiler to place the method into, save the rva address 
-            // of the native code.
-            return stream;
-        }
-
-        #endregion // Methods
+        #endregion // MethodCompilerBase Overrides
     }
 }

@@ -121,7 +121,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// Gets the base address.
         /// </summary>
         /// <value>The base address.</value>
-        public ulong BaseAddress { get { return 0UL; } }
+        public long BaseAddress { get { return 0L; } }
 
         /// <summary>
         /// Gets the time stamp.

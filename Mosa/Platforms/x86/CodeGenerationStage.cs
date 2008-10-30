@@ -522,11 +522,6 @@ namespace Mosa.Platforms.x86
             }
         }
 
-        void IX86InstructionVisitor<int>.Call(CallInstruction instruction, int arg)
-        {
-            _emitter.Call(instruction.InvokeTarget);
-        }
-
         void IX86InstructionVisitor<int>.Comisd(ComisdInstruction instruction, int arg)
         {
             _emitter.Comisd(instruction.Operand0, instruction.Operand1);
@@ -1316,6 +1311,11 @@ namespace Mosa.Platforms.x86
                 default:
                     throw new NotSupportedException();
             }
+        }
+
+        void IR.IIRVisitor<int>.Visit(IR.CallInstruction instruction, int arg)
+        {
+            _emitter.Call(instruction.Method);
         }
 
         void IR.IIRVisitor<int>.Visit(IR.EpilogueInstruction instruction, int arg)

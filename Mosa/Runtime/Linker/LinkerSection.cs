@@ -63,13 +63,14 @@ namespace Mosa.Runtime.Linker
         public IntPtr Address
         {
             get { return this.address; }
+            internal set { this.address = value; }
         }
 
         /// <summary>
         /// Gets the length of the section in bytes.
         /// </summary>
         /// <value>The length of the section in bytes.</value>
-        public abstract ulong Length
+        public abstract long Length
         {
             get;
         }

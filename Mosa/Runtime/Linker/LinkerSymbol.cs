@@ -35,6 +35,16 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         private string name;
 
+        /// <summary>
+        /// Holds the section containing the linker symbol.
+        /// </summary>
+        private SectionKind section;
+
+        /// <summary>
+        /// The section start relative address.
+        /// </summary>
+        private long sectionAddress;
+
         #endregion // Data members
 
         #region Construction
@@ -43,10 +53,11 @@ namespace Mosa.Runtime.Linker
         /// Initializes a new instance of the <see cref="LinkerSymbol"/> class.
         /// </summary>
         /// <param name="name">The name of the symbol.</param>
+        /// <param name="section">The section holding the symbol.</param>
         /// <param name="address">Holds the address of the symbol.</param>
         /// <exception cref="T:System.ArgumentException"><paramref name="name"/> is empty.</exception>
         /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is null.</exception>
-        public LinkerSymbol(string name, IntPtr address)
+        public LinkerSymbol(string name, SectionKind section, long address)
         {
             Debug.Assert(false == String.IsNullOrEmpty(name), @"LinkerSymbol requires a proper name.");
             if (name == null)
@@ -55,7 +66,8 @@ namespace Mosa.Runtime.Linker
                 throw new ArgumentException(@"Name can't be empty.", @"name");
 
             this.name = name;
-            this.address = address;
+            this.section = section;
+            this.sectionAddress = address;
         }
 
         #endregion // Construction
@@ -69,6 +81,7 @@ namespace Mosa.Runtime.Linker
         public IntPtr Address
         {
             get { return this.address; }
+            internal set { this.address = value; }
         }
 
         /// <summary>
@@ -88,6 +101,24 @@ namespace Mosa.Runtime.Linker
         public string Name
         {
             get { return this.name; }
+        }
+
+        /// <summary>
+        /// Gets the section holding the symbol.
+        /// </summary>
+        /// <value>The section.</value>
+        public SectionKind Section
+        {
+            get { return this.section; }
+        }
+
+        /// <summary>
+        /// Gets the section start relative address of the symbol.
+        /// </summary>
+        /// <value>The section start relative address.</value>
+        public long SectionAddress
+        {
+            get { return this.sectionAddress; }
         }
 
         #endregion // Properties

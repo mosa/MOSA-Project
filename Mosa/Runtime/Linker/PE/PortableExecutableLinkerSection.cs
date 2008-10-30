@@ -57,7 +57,7 @@ namespace Mosa.Runtime.Linker.PE
         /// Gets the length of the section in bytes.
         /// </summary>
         /// <value>The length of the section in bytes.</value>
-        public override ulong Length
+        public override long Length
         {
             get { throw new NotImplementedException(); }
         }

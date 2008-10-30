@@ -31,28 +31,20 @@ namespace Mosa.Tools.Compiler
     public sealed class AotCompiler : AssemblyCompiler
     {
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="AotCompiler"/> class.
         /// </summary>
-        ObjectFileBuilderBase _objectFileBuilder;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="architecture"></param>
-        /// <param name="assembly"></param>
-        /// <param name="objectFileBuilder"></param>
-        public AotCompiler(IArchitecture architecture, IMetadataModule assembly, ObjectFileBuilderBase objectFileBuilder)
+        /// <param name="architecture">The target compilation architecture.</param>
+        /// <param name="assembly">The assembly to compile.</param>
+        public AotCompiler(IArchitecture architecture, IMetadataModule assembly)
             : base(architecture, assembly)
-        {
-            this._objectFileBuilder = objectFileBuilder;
-            // Build the assembly compiler pipeline
-            Pipeline.AddRange(new IAssemblyCompilerStage[] {
+        {           
+            // Build the default assembly compiler pipeline
+            this.Pipeline.AddRange(new IAssemblyCompilerStage[] {
                 new TypeLayoutStage(),
                 new MethodCompilerBuilderStage(),
                 new MethodCompilerRunnerStage(),
-                new AotLinkerStage(objectFileBuilder),
             });
-            architecture.ExtendAssemblyCompilerPipeline(Pipeline);
+            architecture.ExtendAssemblyCompilerPipeline(this.Pipeline);
         }
 
         /// <summary>
@@ -64,24 +56,8 @@ namespace Mosa.Tools.Compiler
         public static void Compile(IArchitecture architecture, string assemblyName, ObjectFileBuilderBase objectFileBuilder)
         {
             IMetadataModule assembly = RuntimeBase.Instance.AssemblyLoader.Load(assemblyName);
-            AotCompiler c = new AotCompiler(architecture, assembly, objectFileBuilder);
+            AotCompiler c = new AotCompiler(architecture, assembly);
             c.Compile();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        protected override void BeginCompile()
-        {
-            _objectFileBuilder.OnAssemblyCompileBegin(this);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        protected override void EndCompile()
-        {
-            _objectFileBuilder.OnAssemblyCompileEnd(this);
         }
 
         /// <summary>
@@ -94,12 +70,9 @@ namespace Mosa.Tools.Compiler
         {
             IArchitecture arch = this.Architecture;
             MethodCompilerBase mc = new AotMethodCompiler(
-                this.Pipeline.Find<IAssemblyLinker>(),
-                this.Architecture,
-                this.Assembly, 
+                this,
                 type,
-                method,
-                _objectFileBuilder
+                method
             );
             arch.ExtendMethodCompilerPipeline(mc.Pipeline);
             return mc;

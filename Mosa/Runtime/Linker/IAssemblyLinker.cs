@@ -34,7 +34,7 @@ namespace Mosa.Runtime.Linker
         /// Gets the base address.
         /// </summary>
         /// <value>The base address.</value>
-        ulong BaseAddress { get; }
+        long BaseAddress { get; }
 
         /// <summary>
         /// Gets the entry point symbol.

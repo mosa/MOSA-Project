@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using Mosa.Runtime;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Vm;
+using Mosa.Runtime.CompilerFramework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
@@ -51,6 +52,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         #endregion // Construction
 
         #region AssemblyLinkerStageBase Overrides
+
+        /// <summary>
+        /// Retrieves a linker section by its type.
+        /// </summary>
+        /// <param name="sectionKind">The type of the section to retrieve.</param>
+        /// <returns>The retrieved linker section.</returns>
+        protected override LinkerSection GetSection(SectionKind sectionKind)
+        {
+            return _sections[(int)sectionKind];
+        }
 
         /// <summary>
         /// Retrieves the name of the compilation stage.

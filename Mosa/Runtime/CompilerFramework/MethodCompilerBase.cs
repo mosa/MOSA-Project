@@ -16,6 +16,7 @@ using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Linker;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -30,7 +31,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// created by invoking CreateMethodCompiler on a specific compiler
     /// instance.
     /// </remarks>
-    public abstract class MethodCompilerBase : CompilerBase<IMethodCompilerStage>, IDisposable
+    public class MethodCompilerBase : CompilerBase<IMethodCompilerStage>, IDisposable
     {
         #region Data members
 
@@ -42,7 +43,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Holds the linker used to resolve external symbols.
         /// </summary>
-        private Linker.IAssemblyLinker _linker;
+        private IAssemblyLinker _linker;
 
         /// <summary>
         /// Optional signature of stack local variables.
@@ -91,7 +92,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="module">The metadata module, that contains the type.</param>
         /// <param name="type">The type, which owns the method to compile.</param>
         /// <param name="method">The method to compile by this instance.</param>
-        protected MethodCompilerBase(Linker.IAssemblyLinker linker, IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method)
+        protected MethodCompilerBase(IAssemblyLinker linker, IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method)
         {
             if (null == architecture)
                 throw new ArgumentNullException(@"architecture");
@@ -130,7 +131,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Retrieves the linker used to resolve external symbols.
         /// </summary>
-        public Linker.IAssemblyLinker Linker
+        public IAssemblyLinker Linker
         {
             get { return _linker; }
         }
@@ -169,12 +170,12 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Called when compilation begins
+        /// Called before the method compiler begins compiling the method.
         /// </summary>
         protected virtual void BeginCompile() { }
 
         /// <summary>
-        /// Called when compilation finishes
+        /// Called after the method compiler has finished compiling the method.
         /// </summary>
         protected virtual void EndCompile() { }
 
@@ -294,7 +295,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// Requests a stream to emit native instructions to.
         /// </summary>
         /// <returns>A stream object, which can be used to store emitted instructions.</returns>
-        public abstract Stream RequestCodeStream();
+        public Stream RequestCodeStream()
+        {
+            return _linker.Allocate(this._method, SectionKind.Text, 0, 0);
+        }
 
         /// <summary>
         /// Sets the signature of local variables in the method.

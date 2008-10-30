@@ -410,6 +410,10 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IR.IIRVisitor<Context>.Visit(IR.CallInstruction instruction, Context ctx)
+        {
+        }
+
         void IR.IIRVisitor<Context>.Visit(IR.EpilogueInstruction instruction, Context ctx)
         {
             SigType I = new SigType(CilElementType.I);
@@ -1003,10 +1007,6 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Sti(Instructions.Intrinsics.StiInstruction instruction, Context ctx)
-        {
-        }
-
-        void IX86InstructionVisitor<Context>.Call(Instructions.CallInstruction instruction, Context ctx)
         {
         }
 

@@ -35,6 +35,16 @@ namespace Mosa.Jit.SimpleJit
         #region AssemblyLinkerStageBase Overrides
 
         /// <summary>
+        /// Retrieves a linker section by its type.
+        /// </summary>
+        /// <param name="sectionKind">The type of the section to retrieve.</param>
+        /// <returns>The retrieved linker section.</returns>
+        protected override LinkerSection GetSection(SectionKind sectionKind)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Retrieves the name of the compilation stage.
         /// </summary>
         /// <value>The name of the compilation stage.</value>
@@ -77,19 +87,6 @@ namespace Mosa.Jit.SimpleJit
         protected override void ApplyPatch(LinkType linkType, RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Determines if the given runtime member can be resolved immediately.
-        /// </summary>
-        /// <param name="member">The runtime member to determine resolution of.</param>
-        /// <param name="address">Receives the determined address of the runtime member.</param>
-        /// <returns>
-        /// The method returns true, when it was successfully resolved.
-        /// </returns>
-        protected override bool IsResolved(RuntimeMember member, out long address)
-        {
-            return base.IsResolved(member, out address);
         }
 
         /// <summary>

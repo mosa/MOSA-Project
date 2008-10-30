@@ -46,11 +46,6 @@ namespace Mosa.Runtime.Jit.SimpleJit
 
         #region MethodCompilerBase Overrides
 
-        public override Stream RequestCodeStream()
-        {
-            return _codeStream;
-        }
-
         #endregion // MethodCompilerBase Overrides
     }
 }

@@ -52,6 +52,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
         private delegate void CCtor();
 
+        /// <summary>
+        /// Called after the method compiler has finished compiling the method.
+        /// </summary>
         protected override void EndCompile()
         {
             // If we're compiling a type initializer, run it immediately.
@@ -63,12 +66,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             }
 
             base.EndCompile();
-        }
-
-
-        public override Stream RequestCodeStream()
-        {
-            return this.Linker.Allocate(this.Method, SectionKind.Text, 0, 0);
         }
     }
 }

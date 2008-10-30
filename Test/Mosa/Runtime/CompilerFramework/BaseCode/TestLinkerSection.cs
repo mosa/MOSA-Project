@@ -77,7 +77,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// Gets the length of the section in bytes.
         /// </summary>
         /// <value>The length of the section in bytes.</value>
-        public override ulong Length
+        public override long Length
         {
             get { throw new NotImplementedException(); }
         }

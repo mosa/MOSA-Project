@@ -143,12 +143,12 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Called when compilation begins
+        /// Called when compilation is about to begin.
         /// </summary>
         protected virtual void BeginCompile() { }
 
         /// <summary>
-        /// Called when compilation finishes
+        /// Called when compilation has completed.
         /// </summary>
         protected virtual void EndCompile() { }
 
