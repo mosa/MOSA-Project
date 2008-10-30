@@ -1887,7 +1887,12 @@ namespace Mosa.Platforms.x86
         };
 
         /// <summary>
+        /// Asmcode: SBB
+        /// Substract with borrow
         /// 
+        /// Note: Signed
+        /// 
+        /// Section:  Standard x86
         /// </summary>
         private static readonly CodeDef[] cd_sbb = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),      new byte[] { 0x83 }, 3),

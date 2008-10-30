@@ -376,7 +376,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(eax, op2L),
                 new Instructions.MulInstruction(eax, esi),
                 new Instructions.AddInstruction(edx, ecx),
-                // jc
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[4].Label),
                 new Instructions.CmpInstruction(edx, op1H),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[4].Label),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[5].Label),
