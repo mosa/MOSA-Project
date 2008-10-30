@@ -116,10 +116,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row(1)]
-        [Row(17)]
         [Row('a')]
-        [Row(char.MaxValue)]
+        [Row('Z')]
+        [Row('-')]
+        [Row('.')]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void CallConstantC(char value)
         {

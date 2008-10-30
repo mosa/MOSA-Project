@@ -98,10 +98,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(0, 1)]
-        [Row(17, 128)]
+        [Row(0, 'a')]
+        [Row('-', '.')]
         [Row('a', 'Z')]
-        [Row(char.MinValue, char.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void DivConstantCRight(char a, char b)
         {
@@ -114,10 +113,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(17, 128)]
+        [Row('a', 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row('-', '.')]
         [Row('a', 'Z')]
-        [Row(1, char.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void DivConstantCLeft(char a, char b)
         {

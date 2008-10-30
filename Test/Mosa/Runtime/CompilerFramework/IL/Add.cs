@@ -36,7 +36,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     }
                 }";
         }
-        
+    
         private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
         {
             if (String.IsNullOrEmpty(constRight))
@@ -82,7 +82,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         [Row(0, 0)]
-        [Row(17, 128)]
+        [Row(0, 1)]
+        [Row('-', '.')]
         [Row('a', 'Z')]
         [Row(char.MinValue, char.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
@@ -99,10 +100,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(0, 1)]
-        [Row(17, 128)]
+        [Row(0, 'a')]
+        [Row('-', '.')]
         [Row('a', 'Z')]
-        [Row(char.MinValue, char.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void AddConstantCRight(char a, char b)
         {
@@ -115,10 +115,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 0)]
-        [Row(17, 128)]
+        [Row('a', 0)]
+        [Row('-', '.')]
         [Row('a', 'Z')]
-        [Row(1, char.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void AddConstantCLeft(char a, char b)
         {
@@ -484,7 +483,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void AddU2(ushort a, ushort b)
         {
             CodeSource = CreateTestCode("AddU2", "ushort", "uint");
-            CodeSource = "static class Test { static bool AddU2(uint expect, ushort a, ushort b) { return expect == (a + b); } }";
             Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "AddU2", (uint)(a + b), a, b));
         }
         

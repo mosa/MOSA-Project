@@ -168,10 +168,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value from the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 1, 1)]
-        [Row(false, 'a', 'Z')]
-        [Row(true, 'a', 'a')]
-        [Row(false, 1, 128)]
+        [Row(0, 'a')]
+        [Row('-', '.')]
+        [Row('a', 'Z')]
         [Test, Author("boddlnagg")]
         public void CeqConstantCRight(bool result, char a, char b)
         {
@@ -186,10 +185,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value from the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 1, 1)]
-        [Row(false, 'a', 'Z')]
-        [Row(true, 'a', 'a')]
-        [Row(false, 1, 128)]
+        [Row('a', 0)]
+        [Row('-', '.')]
+        [Row('a', 'Z')]
         [Test, Author("boddlnagg")]
         public void CeqConstantCLeft(bool result, char a, char b)
         {
