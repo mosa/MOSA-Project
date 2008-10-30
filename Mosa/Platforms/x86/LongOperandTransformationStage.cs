@@ -394,7 +394,6 @@ namespace Mosa.Platforms.x86
             blocks[5].Instructions.AddRange(new Instruction[] {
                 new Instructions.LogicalXorInstruction(edx, edx),
                 new Instructions.MoveInstruction(eax, esi),
-                new IR.JmpInstruction(blocks[6].Label),
             });
 
                        ;

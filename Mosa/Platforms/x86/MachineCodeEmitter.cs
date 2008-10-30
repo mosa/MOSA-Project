@@ -1890,8 +1890,10 @@ namespace Mosa.Platforms.x86
         /// 
         /// </summary>
         private static readonly CodeDef[] cd_sbb = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x1B }, 0),
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x1B }, 0),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),      new byte[] { 0x83 }, 3),
+            new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),      new byte[] { 0x83 }, 3),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),      new byte[] { 0x19 }, 0),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),      new byte[] { 0x19 }, 0),
         };
 
         #endregion // Code Definition Tables
