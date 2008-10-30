@@ -221,7 +221,219 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandDiv(Context ctx, IL.DivInstruction instruction)
         {
-            throw new NotSupportedException();
+            BasicBlock nextBlock;
+            BasicBlock[] blocks = CreateBlocks(ctx, instruction, 7, out nextBlock);
+            SigType I4 = new SigType(CilElementType.I4);
+
+            Operand op0H, op1H, op2H, op0L, op1L, op2L;
+            SplitLongOperand(instruction.Results[0], out op0L, out op0H);
+            SplitLongOperand(instruction.First, out op1L, out op1H);
+            SplitLongOperand(instruction.Second, out op2L, out op2H);
+            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+            RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
+            RegisterOperand edi = new RegisterOperand(I4, GeneralPurposeRegister.EDI);
+            RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
+
+            // ; Determine sign of the result (edi = 0 if result is positive, non-zero
+            // ; otherwise) and make operands positive.
+            // xor     edi,edi         ; result sign assumed positive
+            // mov     eax,HIWORD(DVND) ; hi word of a
+            // or      eax,eax         ; test to see if signed
+            // jge     short L1        ; skip rest if a is already positive
+            // inc     edi             ; complement result sign flag
+            // mov     edx,LOWORD(DVND) ; lo word of a
+            // neg     eax             ; make a positive
+            // neg     edx
+            // sbb     eax,0
+            // mov     HIWORD(DVND),eax ; save positive value
+            // mov     LOWORD(DVND),edx
+            Replace(ctx, new Instruction[] {
+                new Instructions.LogicalXorInstruction(edi, edi),
+                new Instructions.MoveInstruction(eax, op1H),
+                new Instructions.CmpInstruction(eax, new ConstantOperand(I4, 0)),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[0].Label),
+                new Instructions.AddInstruction(edi, new ConstantOperand(I4, (int)1)),
+                new Instructions.MoveInstruction(edx, op1L),
+                new Instructions.MulInstruction(eax, new ConstantOperand(I4, (int)-1)),
+                new Instructions.MulInstruction(edx, new ConstantOperand(I4, (int)-1)),
+                new Instructions.SbbInstruction(eax, new ConstantOperand(I4, (int)0)),
+                new Instructions.MoveInstruction(op1H, eax),
+                new Instructions.MoveInstruction(op1L, edx),
+            });
+
+            // L1:
+            //
+            // mov     eax,HIWORD(DVSR) ; hi word of b
+            // or      eax,eax         ; test to see if signed
+            // jge     short L2        ; skip rest if b is already positive
+            // inc     edi             ; complement the result sign flag
+            // mov     edx,LOWORD(DVSR) ; lo word of a
+            // neg     eax             ; make b positive
+            // neg     edx
+            // sbb     eax,0
+            // mov     HIWORD(DVSR),eax ; save positive value
+            // mov     LOWORD(DVSR),edx
+            blocks[0].Instructions.AddRange(new Instruction[] {
+                new Instructions.MoveInstruction(eax, op2H),
+                new Instructions.CmpInstruction(eax, new ConstantOperand(I4, 0)),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[1].Label),
+                new Instructions.AddInstruction(edi, new ConstantOperand(I4, (int)1)),
+                new Instructions.MoveInstruction(edx, op2L),
+                new Instructions.MulInstruction(eax, new ConstantOperand(I4, (int)-1)),
+                new Instructions.MulInstruction(edx, new ConstantOperand(I4, (int)-1)),
+                new Instructions.SbbInstruction(eax, new ConstantOperand(I4, (int)0)),
+                new Instructions.MoveInstruction(op2H, eax),
+                new Instructions.MoveInstruction(op2L, edx),
+            });
+
+            // L2:
+            //
+            // ;
+            // ; Now do the divide.  First look to see if the divisor is less than 4194304K.
+            // ; If so, then we can use a simple algorithm with word divides, otherwise
+            // ; things get a little more complex.
+            // ;
+            // ; NOTE - eax currently contains the high order word of DVSR
+            // ;
+            //
+            // or      eax,eax         ; check to see if divisor < 4194304K
+            // jnz     short L3        ; nope, gotta do this the hard way
+            // mov     ecx,LOWORD(DVSR) ; load divisor
+            // mov     eax,HIWORD(DVND) ; load high word of dividend
+            // xor     edx,edx
+            // div     ecx             ; eax <- high order bits of quotient
+            // mov     ebx,eax         ; save high bits of quotient
+            // mov     eax,LOWORD(DVND) ; edx:eax <- remainder:lo word of dividend
+            // div     ecx             ; eax <- low order bits of quotient
+            // mov     edx,ebx         ; edx:eax <- quotient
+            // jmp     short L4        ; set sign, restore stack and return
+            blocks[1].Instructions.AddRange(new Instruction[] {
+                new Instructions.CmpInstruction(eax, new ConstantOperand(I4, 0)),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[2].Label),
+                new Instructions.MoveInstruction(ecx, op2L),
+                new Instructions.MoveInstruction(edx, op1H),
+                new Instructions.DivInstruction(eax, ecx),
+                new Instructions.MoveInstruction(ebx, eax),
+                new Instructions.MoveInstruction(eax, op1L),
+                new Instructions.DivInstruction(eax, ecx),
+                new Instructions.MoveInstruction(edx, ebx),
+                new IR.JmpInstruction(blocks[6].Label)
+            });
+            ;
+            // Here we do it the hard way.  Remember, eax contains the high word of DVSR
+            //
+            // L3:
+            //        mov     ebx,eax         ; ebx:ecx <- divisor
+            //        mov     ecx,LOWORD(DVSR)
+            //        mov     edx,HIWORD(DVND) ; edx:eax <- dividend
+            //        mov     eax,LOWORD(DVND)
+            blocks[2].Instructions.AddRange(new Instruction[] {
+                new Instructions.MoveInstruction(ebx, eax),
+                new Instructions.MoveInstruction(ecx, op2L),
+                new Instructions.MoveInstruction(edx, op1H),
+                new Instructions.MoveInstruction(eax, op1L),
+            });
+
+            // L5:
+            //
+            // shr     ebx,1           ; shift divisor right one bit
+            // rcr     ecx,1
+            // shr     edx,1           ; shift dividend right one bit
+            // rcr     eax,1
+            // or      ebx,ebx
+            // jnz     short L5        ; loop until divisor < 4194304K
+            // div     ecx             ; now divide, ignore remainder
+            // mov     esi,eax         ; save quotient
+            //
+            //
+            
+            // ;
+            // ; We may be off by one, so to check, we will multiply the quotient
+            // ; by the divisor and check the result against the orignal dividend
+            // ; Note that we must also check for overflow, which can occur if the
+            // ; dividend is close to 2**64 and the quotient is off by 1.
+            // ;	
+
+            // mul     dword ptr HIWORD(DVSR) ; QUOT * HIWORD(DVSR)
+            // mov     ecx,eax
+            // mov     eax,LOWORD(DVSR)
+            // mul     esi             ; QUOT * LOWORD(DVSR)
+            // add     edx,ecx         ; EDX:EAX = QUOT * DVSR
+            // jc      short L6        ; carry means Quotient is off by 1
+            blocks[3].Instructions.AddRange(new Instruction[] {
+                new Instructions.ShrInstruction(ebx, new ConstantOperand(I4, (int)1)),
+                new Instructions.ShrInstruction(ecx, new ConstantOperand(I4, (int)1)), // RCR
+                new Instructions.ShrInstruction(edx, new ConstantOperand(I4, (int)1)),
+                new Instructions.ShrInstruction(eax, new ConstantOperand(I4, (int)1)), // RCR
+                new Instructions.CmpInstruction(ebx, new ConstantOperand(I4, 0)),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[3].Label),
+                new Instructions.DivInstruction(eax, ecx),
+                new Instructions.MoveInstruction(esi, eax),
+                new Instructions.MulInstruction(eax, op2H),
+                new Instructions.MoveInstruction(ecx, eax),
+                new Instructions.MoveInstruction(eax, op2L),
+                new Instructions.MulInstruction(eax, esi),
+                new Instructions.AddInstruction(edx, ecx),
+                // jc
+                new Instructions.CmpInstruction(edx, op1H),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[4].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[5].Label),
+                new Instructions.CmpInstruction(eax, op1L),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[5].Label),
+                new IR.JmpInstruction(blocks[5].Label),
+            });
+
+            // L6:
+            blocks[4].Instructions.AddRange(new Instruction[] {
+                new Instructions.SubInstruction(esi, new ConstantOperand(I4, (int)1)),
+            });
+
+            // L7:
+            blocks[5].Instructions.AddRange(new Instruction[] {
+                new Instructions.LogicalXorInstruction(edx, edx),
+                new Instructions.MoveInstruction(eax, esi),
+                new IR.JmpInstruction(blocks[6].Label),
+            });
+
+                       ;
+            // ; Just the cleanup left to do.  edx:eax contains the quotient.  Set the sign
+            // ; according to the save value, cleanup the stack, and return.
+            // ;
+            // L4:
+            //        dec     edi             ; check to see if result is negative
+            //        jnz     short L8        ; if EDI == 0, result should be negative
+            //        neg     edx             ; otherwise, negate the result
+            //        neg     eax
+            //        sbb     edx,0
+            blocks[6].Instructions.InsertRange(0, new Instruction[] {
+                new Instructions.SubInstruction(edi, new ConstantOperand(I4, 1)),
+                new Instructions.CmpInstruction(edi, new ConstantOperand(I4, 0)),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, nextBlock.Label),
+                new Instructions.MulInstruction(edx, new ConstantOperand(I4, -1)),
+                new Instructions.MulInstruction(eax, new ConstantOperand(I4, -1)),
+                new Instructions.SbbInstruction(edx, new ConstantOperand(I4, 0)),
+            });
+
+            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+                new IR.PopInstruction(ebx),
+                new IR.PopInstruction(esi),
+                new IR.PopInstruction(edi),
+            });
+
+            // Link the created blocks together
+            LinkBlocks(ctx.Block, blocks[0]);
+            LinkBlocks(blocks[0], blocks[1]);
+            LinkBlocks(blocks[1], blocks[6]);
+            LinkBlocks(blocks[1], blocks[2]);
+            LinkBlocks(blocks[2], blocks[3]);
+            LinkBlocks(blocks[3], blocks[3]);
+            LinkBlocks(blocks[3], blocks[4]);
+            LinkBlocks(blocks[3], blocks[5]);
+            LinkBlocks(blocks[4], blocks[5]);
+            LinkBlocks(blocks[5], blocks[6]);
+            LinkBlocks(blocks[6], nextBlock);
         }
 
         /// <summary>

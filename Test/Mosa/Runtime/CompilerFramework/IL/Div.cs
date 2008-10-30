@@ -711,6 +711,116 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "DivConstantU4Left", (uint)(a / b), b));
         }
         #endregion
+
+        #region I8
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool I8_I8_I8(long expect, long a, long b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(1, 2)]
+        [Row(23, 21)]
+        [Row(1, -2)]
+        [Row(-1, 2)]
+        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(-17, -2)]
+        // And reverse
+        [Row(2, 1)]
+        [Row(21, 23)]
+        [Row(-2, 1)]
+        [Row(2, -1)]
+        [Row(-2, -17)]
+        // (MinValue, X) Cases
+        [Row(long.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(long.MinValue, 1)]
+        [Row(long.MinValue, 17)]
+        [Row(long.MinValue, 123)]
+        [Row(long.MinValue, -0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(long.MinValue, -1, ExpectedException = typeof(OverflowException))]
+        [Row(long.MinValue, -17)]
+        [Row(long.MinValue, -123)]
+        // (MaxValue, X) Cases
+        [Row(long.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(long.MaxValue, 1)]
+        [Row(long.MaxValue, 17)]
+        [Row(long.MaxValue, 123)]
+        [Row(long.MaxValue, -0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(long.MaxValue, -1)]
+        [Row(long.MaxValue, -17)]
+        [Row(long.MaxValue, -123)]
+        // (X, MinValue) Cases
+        [Row(0, long.MinValue)]
+        [Row(1, long.MinValue)]
+        [Row(17, long.MinValue)]
+        [Row(123, long.MinValue)]
+        [Row(-0, long.MinValue)]
+        [Row(-1, long.MinValue)]
+        [Row(-17, long.MinValue)]
+        [Row(-123, long.MinValue)]
+        // (X, MaxValue) Cases
+        [Row(0, long.MaxValue)]
+        [Row(1, long.MaxValue)]
+        [Row(17, long.MaxValue)]
+        [Row(123, long.MaxValue)]
+        [Row(-0, long.MaxValue)]
+        [Row(-1, long.MaxValue)]
+        [Row(-17, long.MaxValue)]
+        [Row(-123, long.MaxValue)]
+        // Extremvaluecases
+        [Row(long.MinValue, long.MaxValue)]
+        [Row(long.MaxValue, long.MinValue)]
+        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        public void DivI8(long a, long b)
+        {
+            CodeSource = CreateTestCode("DivI8", "long", "long");
+            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "DivI8", (a / b), a, b));
+        }
+
+        delegate bool I8_Constant_I8(long expect, long x);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 21)]
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(long.MinValue, long.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void DivConstantI8Right(long a, long b)
+        {
+            CodeSource = CreateConstantTestCode("DivConstantI8Right", "long", "long", null, b.ToString());
+            Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "DivConstantI8Right", (a / b), a));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(-23, 21)]
+        [Row(-23, 148)]
+        [Row(17, 1)]
+        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(long.MinValue, long.MaxValue)]
+        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        public void DivConstantI8Left(long a, long b)
+        {
+            CodeSource = CreateConstantTestCode("DivConstantI8Left", "long", "long", a.ToString(), null);
+            Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "DivConstantI8Left", (a / b), b));
+        }
+        #endregion
         
         #region R4
         /// <summary>
