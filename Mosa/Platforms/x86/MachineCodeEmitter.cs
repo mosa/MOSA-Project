@@ -783,7 +783,7 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Mul(Operand dest, Operand src)
         {
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
-            Emit(dest, src, cd_mul);
+            Emit(src, null, cd_mul);
         }
 
         /// <summary>
@@ -1485,7 +1485,8 @@ namespace Mosa.Platforms.x86
         /// Section: Standard x86
         /// </summary>
         private static readonly CodeDef[] cd_mul = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0xF7 }, 4),
+            new CodeDef(typeof(RegisterOperand),    null,                       new byte[] { 0xF7 }, 4),
+            new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0xF7 }, 4),
         };
 
         /// <summary>
@@ -1882,8 +1883,8 @@ namespace Mosa.Platforms.x86
         /// </summary>
         private static readonly CodeDef[] cd_sub = new CodeDef[] {
             new CodeDef(typeof(Operand),            typeof(ConstantOperand),    new byte[] { 0x81 }, 5),
-            new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0x2B }, 0),
-            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x29 }, 0),
+            new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0x2B }, null),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x29 }, null),
         };
 
         /// <summary>
@@ -1895,10 +1896,10 @@ namespace Mosa.Platforms.x86
         /// Section:  Standard x86
         /// </summary>
         private static readonly CodeDef[] cd_sbb = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),      new byte[] { 0x83 }, 3),
-            new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),      new byte[] { 0x83 }, 3),
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),      new byte[] { 0x19 }, 0),
-            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),      new byte[] { 0x19 }, 0),
+            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),      new byte[] { 0x81 }, 3),
+            new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),      new byte[] { 0x81 }, 3),
+            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),      new byte[] { 0x19 }, null),
+            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),      new byte[] { 0x19 }, null),
         };
 
         #endregion // Code Definition Tables
