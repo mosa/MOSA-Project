@@ -1002,6 +1002,10 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IX86InstructionVisitor<Context>.Rcr(Instructions.RcrInstruction instruction, Context ctx)
+        {
+        }
+
         void IX86InstructionVisitor<Context>.Shrd(Instructions.ShrdInstruction instruction, Context ctx)
         {
         }
