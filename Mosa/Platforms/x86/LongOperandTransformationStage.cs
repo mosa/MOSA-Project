@@ -257,14 +257,13 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalOrInstruction(eax, eax),
                 new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[0].Label),
-                new Instructions.AddInstruction(edi, new ConstantOperand(I4, 1)),
+                new Instructions.IncInstruction(edi),
                 new Instructions.MoveInstruction(edx, op1L),
                 new Instructions.NegInstruction(eax),
                 new Instructions.NegInstruction(edx),
                 new Instructions.SbbInstruction(eax, new ConstantOperand(I4, (byte)0)),
                 new Instructions.MoveInstruction(op1H, eax),
                 new Instructions.MoveInstruction(op1L, edx),
-                new IR.JmpInstruction(blocks[0].Label),
             });
 
             // L1:
@@ -283,14 +282,13 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(eax, op2H),
                 new Instructions.LogicalOrInstruction(eax, eax),
                 new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[1].Label),
-                new Instructions.AddInstruction(edi, new ConstantOperand(I4, (int)1)),
+                new Instructions.IncInstruction(edi),
                 new Instructions.MoveInstruction(edx, op2L),
                 new Instructions.NegInstruction(eax),
                 new Instructions.NegInstruction(edx),
                 new Instructions.SbbInstruction(eax, new ConstantOperand(I4, (int)0)),
                 new Instructions.MoveInstruction(op2H, eax),
                 new Instructions.MoveInstruction(op2L, edx),
-                new IR.JmpInstruction(blocks[1].Label),
             });
 
             // L2:
@@ -340,7 +338,6 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(edx, op1H),
                 new Instructions.MoveInstruction(eax, op1L),
-                new IR.JmpInstruction(blocks[3].Label),
             });
 
             // L5:
@@ -370,10 +367,10 @@ namespace Mosa.Platforms.x86
             // add     edx,ecx         ; EDX:EAX = QUOT * DVSR
             // jc      short L6        ; carry means Quotient is off by 1
             blocks[3].Instructions.AddRange(new Instruction[] {
-                new Instructions.ShrInstruction(ebx, new ConstantOperand(I4, (int)1)),
-                new Instructions.RcrInstruction(ecx, new ConstantOperand(I4, (int)1)), // RCR
-                new Instructions.ShrInstruction(edx, new ConstantOperand(I4, (int)1)),
-                new Instructions.RcrInstruction(eax, new ConstantOperand(I4, (int)1)),
+                new Instructions.ShrInstruction(ebx, new ConstantOperand(I4, 1)),
+                new Instructions.RcrInstruction(ecx, new ConstantOperand(I4, 1)), // RCR
+                new Instructions.ShrInstruction(edx, new ConstantOperand(I4, 1)),
+                new Instructions.RcrInstruction(eax, new ConstantOperand(I4, 1)),
                 new Instructions.LogicalOrInstruction(ebx, ebx),
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[3].Label),
                 new Instructions.UDivInstruction(eax, ecx),
@@ -389,20 +386,17 @@ namespace Mosa.Platforms.x86
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[5].Label),
                 new Instructions.CmpInstruction(eax, op1L),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[5].Label),
-                new IR.JmpInstruction(blocks[5].Label),
             });
 
             // L6:
             blocks[4].Instructions.AddRange(new Instruction[] {
-                new Instructions.SubInstruction(esi, new ConstantOperand(I4, (int)1)),
-                new IR.JmpInstruction(blocks[5].Label),
+                new Instructions.DecInstruction(esi),
             });
 
             // L7:
             blocks[5].Instructions.AddRange(new Instruction[] {
                 new Instructions.LogicalXorInstruction(edx, edx),
                 new Instructions.MoveInstruction(eax, esi),
-                new IR.JmpInstruction(blocks[6].Label),
             });
 
                        ;
@@ -416,11 +410,10 @@ namespace Mosa.Platforms.x86
             //        neg     eax
             //        sbb     edx,0
             blocks[6].Instructions.InsertRange(0, new Instruction[] {
-                new Instructions.SubInstruction(edi, new ConstantOperand(I4, 1)),
-                new Instructions.CmpInstruction(edi, new ConstantOperand(I4, 0)),
+                new Instructions.DecInstruction(edi),
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, nextBlock.Label),
-                new Instructions.NegInstruction(eax),
                 new Instructions.NegInstruction(edx),
+                new Instructions.NegInstruction(eax),
                 new Instructions.SbbInstruction(edx, new ConstantOperand(I4, 0)),
             });
 
@@ -1868,6 +1861,14 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Lock(LockIntruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Dec(DecInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Inc(IncInstruction instruction, Context arg)
         {
         }
 

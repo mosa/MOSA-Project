@@ -93,6 +93,18 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void In(InInstruction instruction, ArgType arg);
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="instruction"></param>
+        /// <param name="arg"></param>
+        void Inc(IncInstruction instruction, ArgType arg);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="instruction"></param>
+        /// <param name="arg"></param>
+        void Dec(DecInstruction instruction, ArgType arg);
+        /// <summary>
         /// Call interrupt
         /// </summary>
         /// <param name="instruction">The instruction.</param>

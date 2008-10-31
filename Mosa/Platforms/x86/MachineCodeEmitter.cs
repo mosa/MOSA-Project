@@ -558,6 +558,24 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        void ICodeEmitter.Dec(Operand op)
+        {
+            Emit(op, null, cd_dec);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        void ICodeEmitter.Inc(Operand op)
+        {
+            Emit(op, null, cd_inc);
+        }
+
+        /// <summary>
         /// Emits an interrupt instruction.
         /// </summary>
         void ICodeEmitter.Int(byte interrupt)
@@ -879,7 +897,13 @@ namespace Mosa.Platforms.x86
         {
             // Write the opcode byte
             Debug.Assert(dest is RegisterOperand);
-            Emit(dest, null, cd_shr);
+
+            if (src is ConstantOperand && (int)(src as ConstantOperand).Value == (int)1)
+            {
+                Emit(dest, null, cd_shr_const);
+            }
+            else
+                Emit(dest, null, cd_shr);
         }
 
         void ICodeEmitter.Shrd(Operand dst, Operand src, Operand count)
@@ -1407,6 +1431,28 @@ namespace Mosa.Platforms.x86
         };
 
         /// <summary>
+        /// Asmcode: DEC
+        /// Decrement by 1 without touching CF flag
+        /// 
+        /// Section: Standard x86
+        /// </summary>
+        private static readonly CodeDef[] cd_dec = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand), null,                          new byte[] { 0xFF }, 1),
+            new CodeDef(typeof(MemoryOperand),   null,                          new byte[] { 0xFF }, 1),
+        };
+
+        /// <summary>
+        /// Asmcode: INC
+        /// Increment by 1 without touching CF flag
+        /// 
+        /// Section: Standard x86
+        /// </summary>
+        private static readonly CodeDef[] cd_inc = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand), null,                          new byte[] { 0xFF }, 0),
+            new CodeDef(typeof(MemoryOperand),   null,                          new byte[] { 0xFF }, 0),
+        };
+
+        /// <summary>
         /// Asmcode: NOT
         /// Bitwise negation
         /// 
@@ -1669,6 +1715,14 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xD3 }, 5),
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC1 }, 5),
             new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC1 }, 5),
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly CodeDef[] cd_shr_const = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    null,                       new byte[] { 0xD1 }, 5),
+            new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0xD1 }, 5),
         };
 
         /// <summary>

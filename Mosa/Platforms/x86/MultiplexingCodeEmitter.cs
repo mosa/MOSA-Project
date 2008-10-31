@@ -371,6 +371,30 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        void ICodeEmitter.Dec(Operand op)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Dec(op);
+            });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        void ICodeEmitter.Inc(Operand op)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Inc(op);
+            });
+        }
+
+        /// <summary>
         /// Emits a breakpoint instruction.
         /// </summary>
         void ICodeEmitter.Int3()

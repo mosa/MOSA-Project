@@ -355,6 +355,18 @@ namespace Mosa.Platforms.x86
         void Neg(Operand op);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        void Dec(Operand op);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        void Inc(Operand op);
+
+        /// <summary>
         /// Emits an NOT instruction.
         /// </summary>
         /// <param name="dest">The destination operand of the instruction.</param>

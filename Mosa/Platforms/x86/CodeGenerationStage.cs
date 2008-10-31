@@ -139,9 +139,6 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.UDiv(UDivInstruction instruction, int arg)
         {
-            // FIXME: Expand unsigned divisions to xor edx,edx /x86 div pairs in IRToX86TransformationStage
-            RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
-            _emitter.Xor(edx, edx);
             _emitter.Div(instruction.Operand0, instruction.Operand1);
         }
 
@@ -525,6 +522,16 @@ namespace Mosa.Platforms.x86
                 case 4: _emitter.IntO(); break;
                 default: _emitter.Int(value); break;
             }
+        }
+
+        void IX86InstructionVisitor<int>.Dec(DecInstruction instruction, int arg)
+        {
+            _emitter.Dec(instruction.Operand0);
+        }
+
+        void IX86InstructionVisitor<int>.Inc(IncInstruction instruction, int arg)
+        {
+            _emitter.Inc(instruction.Operand0);
         }
 
         void IX86InstructionVisitor<int>.Neg(NegInstruction instruction, int arg)
@@ -1572,6 +1579,9 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<int>.Visit(IR.UDivInstruction instruction, int arg)
         {
+            RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
+            _emitter.Xor(edx, edx);
+            _emitter.Div(instruction.Operand0, instruction.Operand1);
         }
 
         void IR.IIRVisitor<int>.Visit(IR.URemInstruction instruction, int arg)

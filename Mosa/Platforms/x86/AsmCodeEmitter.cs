@@ -448,6 +448,24 @@ namespace Mosa.Platforms.x86
         {
             _textWriter.WriteLine("\t\tneg\t{0}", WriteOperand(op));
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        public void Dec(Operand op)
+        {
+            _textWriter.WriteLine("\t\tndec\t{0}", WriteOperand(op));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        public void Inc(Operand op)
+        {
+            _textWriter.WriteLine("\t\tinc\t{0}", WriteOperand(op));
+        }
 
         /// <summary>
         /// Load Local Descriptor Table Register
