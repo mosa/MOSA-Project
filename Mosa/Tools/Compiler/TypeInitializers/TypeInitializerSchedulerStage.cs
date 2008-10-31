@@ -74,12 +74,24 @@ namespace Mosa.Tools.Compiler.TypeInitializers
         /// <param name="compiler">The compiler context to perform processing in.</param>
         public void Run(AssemblyCompiler compiler)
         {
-            // FIXME: Clean up the VM, provide a layer beneath .NET metadata types to allow
-            // us to add compiler generated methods - RuntimeMethod is too closely bound to .NET
-            // right now. We need this for multiboot and the assembly entry point too.
-            RuntimeMethod initMethod = null;
-            TypeInitializerMethodCompiler timc = new TypeInitializerMethodCompiler((AotCompiler)compiler, initMethod, this.source);
-            timc.Compile();
+            // Any initializers to run?
+            if (this.source.Instructions.Count > 0)
+            {
+                // FIXME: Add a call to the current entry point to the scheduler
+                //this.source.Schedule(compiler.Assembly.EntryPoint);
+
+                CompilerGeneratedType initType = new CompilerGeneratedType(compiler.Assembly, @"Mosa.Tools.Compiler", @"AssemblyInitializer");
+                CompilerGeneratedMethod initMethod = new CompilerGeneratedMethod(compiler.Assembly, @"AssemblyInit", initType);
+                initType.Methods.Add(initMethod);
+
+                // FIXME: Add the compiler generated type/method to the compilation assembly
+
+                // FIXME: Set the assembly initializer method as the entry point
+                //compiler.Assembly.EntryPoint = initMethod;
+
+                TypeInitializerMethodCompiler timc = new TypeInitializerMethodCompiler((AotCompiler)compiler, initMethod, this.source);
+                timc.Compile();
+            }
         }
 
         #endregion // IAssemblyCompilerStage Members
