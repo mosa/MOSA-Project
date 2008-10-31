@@ -552,6 +552,14 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Emits an interrupt instruction.
         /// </summary>
+        void ICodeEmitter.Neg(Operand op)
+        {
+            Emit(op, null, cd_neg);
+        }
+
+        /// <summary>
+        /// Emits an interrupt instruction.
+        /// </summary>
         void ICodeEmitter.Int(byte interrupt)
         {
             _codeStream.Write(new byte[] { 0xCD, interrupt }, 0, 2);
@@ -1385,6 +1393,17 @@ namespace Mosa.Platforms.x86
         /// </summary>
         private static readonly CodeDef[] cd_xsave = new CodeDef[] {
             new CodeDef(typeof(MemoryOperand),   null,                          new byte[] { 0x0F, 0xAE }, 4),
+        };
+
+        /// <summary>
+        /// Asmcode: NEG
+        /// Negation
+        /// 
+        /// Section: Standard x86
+        /// </summary>
+        private static readonly CodeDef[] cd_neg = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand), null,                          new byte[] { 0xF7 }, 3),
+            new CodeDef(typeof(MemoryOperand),   null,                          new byte[] { 0xF7 }, 3),
         };
 
         /// <summary>

@@ -674,7 +674,7 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
                 // int 3
-                //_architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
+                _architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
                 // push ebp
                 _architecture.CreateInstruction(typeof(IR.PushInstruction), ebp),
                 // mov ebp, esp
@@ -883,6 +883,10 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Int(Instructions.IntInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Neg(Instructions.NegInstruction instruction, Context ctx)
         {
         }
 

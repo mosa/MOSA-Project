@@ -123,6 +123,12 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void Lock(LockIntruction instruction, ArgType arg);
         /// <summary>
+        /// Negate with Two-Complement
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void Neg(NegInstruction instruction, ArgType arg);
+        /// <summary>
         /// Output to port
         /// </summary>
         /// <param name="instruction">The instruction.</param>

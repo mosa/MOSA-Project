@@ -441,6 +441,15 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        public void Neg(Operand op)
+        {
+            _textWriter.WriteLine("\t\tneg\t{0}", WriteOperand(op));
+        }
+
+        /// <summary>
         /// Load Local Descriptor Table Register
         /// </summary>
         /// <param name="src">Source to load from</param>

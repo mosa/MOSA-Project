@@ -349,6 +349,12 @@ namespace Mosa.Platforms.x86
         void Mwait();
 
         /// <summary>
+        /// Emits a neg instruction.
+        /// </summary>
+        /// <param name="op">Contains the operand to negate.</param>
+        void Neg(Operand op);
+
+        /// <summary>
         /// Emits an NOT instruction.
         /// </summary>
         /// <param name="dest">The destination operand of the instruction.</param>

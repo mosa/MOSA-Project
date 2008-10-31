@@ -527,6 +527,11 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        void IX86InstructionVisitor<int>.Neg(NegInstruction instruction, int arg)
+        {
+            _emitter.Neg(instruction.Operand0);
+        }
+
         void IX86InstructionVisitor<int>.Comisd(ComisdInstruction instruction, int arg)
         {
             _emitter.Comisd(instruction.Operand0, instruction.Operand1);
