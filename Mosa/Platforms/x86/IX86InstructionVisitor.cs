@@ -42,6 +42,7 @@ namespace Mosa.Platforms.x86
         void Sar(SarInstruction shiftInstruction, ArgType arg);
         void Shl(ShlInstruction shiftInstruction, ArgType arg);
         void Shr(ShrInstruction shiftInstruction, ArgType arg);
+        void Rcr(RcrInstruction rotateInstruction, ArgType arg);
 
         void Cvtsi2ss(Cvtsi2ssInstruction instruction, ArgType arg);
         void Cvtsi2sd(Cvtsi2sdInstruction instruction, ArgType arg);

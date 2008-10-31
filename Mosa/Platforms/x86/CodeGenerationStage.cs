@@ -208,6 +208,11 @@ namespace Mosa.Platforms.x86
             _emitter.Shr(instruction.Operand0, instruction.Operand1);
         }
 
+        void IX86InstructionVisitor<int>.Rcr(RcrInstruction instruction, int arg)
+        {
+            _emitter.Rcr(instruction.Operand0, instruction.Operand1);
+        }
+
         void IX86InstructionVisitor<int>.Shrd(ShrdInstruction instruction, int arg)
         {
             _emitter.Shrd(instruction.Operand0, instruction.Operand1, instruction.Operand2);

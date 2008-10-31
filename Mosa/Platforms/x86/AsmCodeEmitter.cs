@@ -497,6 +497,20 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Shifts the value in register op1 by op2 bits to the right
+        /// </summary>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
+        public void Rcr(Operand op1, Operand op2)
+        {
+            if (!(op1 is RegisterOperand))
+                throw new NotSupportedException(@"Only registers allowed as destination.");
+
+            _textWriter.WriteLine("\t\trcr\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
+
+        }
+
+        /// <summary>
         /// Emits a addsd instruction.
         /// </summary>
         /// <param name="op1">The first operand and destination of the instruction.</param>

@@ -43,7 +43,6 @@ namespace Mosa.HelloWorld
 				*(index++) = (byte)'!';
 				*(index++) = 1;
 			}
-
 		}
 	}
 }

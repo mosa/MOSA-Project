@@ -649,6 +649,19 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// Shifts the value in register op1 by op2 bits to the right
+        /// </summary>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
+        public void Rcr(Operand op1, Operand op2)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Rcr(op1, op2);
+            });
+        }
+
+        /// <summary>
         /// Emits a addsd instruction.
         /// </summary>
         /// <param name="op1">The first operand and destination of the instruction.</param>

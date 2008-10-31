@@ -794,6 +794,18 @@ namespace Mosa.Platforms.x86
             Emit(new byte[] { 0x0F, 0x01, 0xC9 }, null, null, null);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        void ICodeEmitter.Rcr(Operand dest, Operand src)
+        {
+            // Write the opcode byte
+            Debug.Assert(dest is RegisterOperand);
+            Emit(dest, null, cd_rcr);
+        }
+
         void ICodeEmitter.SseAdd(Operand dest, Operand src)
         {
             CheckAndConvertR4(ref src);
@@ -1638,6 +1650,19 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xD3 }, 5),
             new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC1 }, 5),
             new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC1 }, 5),
+        };
+
+        /// <summary>
+        /// Asmcode: RCR
+        /// Rotates first parameter a given amount of times to the right, filling with carryflag.
+        /// 
+        /// Note: Non-circular
+        /// 
+        /// Section: Standard x86
+        /// </summary>
+        private static readonly CodeDef[] cd_rcr = new CodeDef[] {
+            new CodeDef(typeof(RegisterOperand),    null,    new byte[] { 0xD1 }, 3),
+            new CodeDef(typeof(MemoryOperand),      null,    new byte[] { 0xD1 }, 3),
         };
 
         /// <summary>

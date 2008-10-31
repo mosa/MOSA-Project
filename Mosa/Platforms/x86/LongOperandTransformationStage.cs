@@ -378,9 +378,9 @@ namespace Mosa.Platforms.x86
             // jc      short L6        ; carry means Quotient is off by 1
             blocks[3].Instructions.AddRange(new Instruction[] {
                 new Instructions.ShrInstruction(ebx, new ConstantOperand(I4, (int)1)),
-                new Instructions.ShrInstruction(ecx, new ConstantOperand(I4, (int)1)), // RCR
+                new Instructions.RcrInstruction(ecx, new ConstantOperand(I4, (int)1)), // RCR
                 new Instructions.ShrInstruction(edx, new ConstantOperand(I4, (int)1)),
-                new Instructions.ShrInstruction(eax, new ConstantOperand(I4, (int)1)), // RCR
+                new Instructions.RcrInstruction(eax, new ConstantOperand(I4, (int)1)), // RCR
                 new Instructions.CmpInstruction(ebx, new ConstantOperand(I4, 0)),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[3].Label),
                 new Instructions.DivInstruction(eax, ecx),
@@ -1802,6 +1802,10 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Shr(ShrInstruction shiftInstruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Rcr(RcrInstruction rotateInstruction, Context arg)
         {
         }
 
