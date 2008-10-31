@@ -16,64 +16,41 @@ using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
+using System.Diagnostics;
 
 namespace Mosa.Runtime.Vm
 {
     /// <summary>
-    /// 
+    /// Base class for the runtime representation of methods.
     /// </summary>
-    public class RuntimeMethod : RuntimeMember, IEquatable<RuntimeMethod>
+    public abstract class RuntimeMethod : RuntimeMember, IEquatable<RuntimeMethod>
     {
-        #region Constants
-
-        // <summary>
-        // Static instance of RuntimeMethod array used for types without methods.
-        // </summary>
-        //public static readonly RuntimeMethod[] None = new RuntimeMethod[0];
-
-        #endregion // Constants
-
         #region Data members
 
         /// <summary>
         /// The implementation attributes of the method.
         /// </summary>
-        private MethodImplAttributes _implFlags;
+        private MethodImplAttributes implFlags;
 
         /// <summary>
         /// Generic attributes of the method.
         /// </summary>
-        private MethodAttributes _attributes;
-
-        /// <summary>
-        /// The name index of the method.
-        /// </summary>
-        private TokenTypes _nameStringIdx;
-
-        /// <summary>
-        /// The name of the method.
-        /// </summary>
-        private string _name;
+        private MethodAttributes attributes;
 
         /// <summary>
         /// Holds the signature of the method.
         /// </summary>
-        private MethodSignature _signature;
-
-        /// <summary>
-        /// Holds the method signature.
-        /// </summary>
-        private TokenTypes _signatureBlobIdx;
+        private MethodSignature signature;
 
         /// <summary>
         /// Holds the list of parameters of the method.
         /// </summary>
-        private ReadOnlyRuntimeParameterListView _parameters;
+        private IList<RuntimeParameter> parameters;
 
         /// <summary>
         /// Holds the rva of the MSIL of the method.
         /// </summary>
-        private uint _rva;
+        private uint rva;
 
         #endregion // Data members
 
@@ -84,28 +61,10 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         /// <param name="token">The token.</param>
         /// <param name="module">The module.</param>
-        /// <param name="method">The method.</param>
-        /// <param name="maxParam">The max param.</param>
         /// <param name="declaringType">The type, which declared this method.</param>
-        public RuntimeMethod(int token, IMetadataModule module, ref MethodDefRow method, TokenTypes maxParam, RuntimeType declaringType) :
+        public RuntimeMethod(int token, IMetadataModule module, RuntimeType declaringType) :
             base(token, module, declaringType, null)
         {
-            _implFlags = method.ImplFlags;
-            _attributes = method.Flags;
-            _nameStringIdx = method.NameStringIdx;
-            _signatureBlobIdx = method.SignatureBlobIdx;
-            _rva = method.Rva;
-
-            if (method.ParamList < maxParam)
-            {
-                int count = maxParam - method.ParamList;
-                int p = (int)(method.ParamList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset(module).ParameterOffset;
-                _parameters = new ReadOnlyRuntimeParameterListView(p, count);
-            }
-            else
-            {
-                _parameters = ReadOnlyRuntimeParameterListView.Empty;
-            }
         }
 
         #endregion // Construction
@@ -118,7 +77,8 @@ namespace Mosa.Runtime.Vm
         /// <value>The attributes.</value>
         public MethodAttributes Attributes
         {
-            get { return _attributes; }
+            get { return this.attributes; }
+            protected set { this.attributes = value; }
         }
 
         /// <summary>
@@ -139,23 +99,8 @@ namespace Mosa.Runtime.Vm
         /// <value>The impl attributes.</value>
         public MethodImplAttributes ImplAttributes
         {
-            get { return _implFlags; }
-        }
-
-        /// <summary>
-        /// Retrieves the name of the method.
-        /// </summary>
-        /// <value>The name.</value>
-        public override string Name
-        {
-            get
-            {
-                if (null != _name)
-                    return _name;
-
-                Module.Metadata.Read(_nameStringIdx, out _name);
-                return _name;
-            }
+            get { return this.implFlags; }
+            protected set { this.implFlags = value; }
         }
 
         /// <summary>
@@ -164,7 +109,8 @@ namespace Mosa.Runtime.Vm
         /// <value>The parameters.</value>
         public IList<RuntimeParameter> Parameters
         {
-            get { return _parameters; }
+            get { return this.parameters; }
+            protected set { this.parameters = value; }
         }
 
         /// <summary>
@@ -175,11 +121,13 @@ namespace Mosa.Runtime.Vm
         {
             get 
             {
-                if (null != _signature)
-                    return _signature;
+                if (this.signature == null)
+                {
+                    this.signature = GetMethodSignature();
+                    Debug.Assert(this.signature != null, @"GetMethodSignature() failed.");
+                }
 
-                _signature = MethodSignature.Parse(Module.Metadata, _signatureBlobIdx);
-                return _signature;
+                return this.signature;
             }
         }
 
@@ -189,12 +137,19 @@ namespace Mosa.Runtime.Vm
         /// <value>The rva.</value>
         public uint Rva
         {
-            get { return _rva; }
+            get { return this.rva; }
+            protected set { this.rva = value; }
         }
 
         #endregion // Properties
 
         #region Methods
+
+        /// <summary>
+        /// Gets the method signature.
+        /// </summary>
+        /// <returns>The method signature.</returns>
+        protected abstract MethodSignature GetMethodSignature();
 
         /// <summary>
         /// Sets generic parameters on this method.
@@ -210,15 +165,15 @@ namespace Mosa.Runtime.Vm
         #region IEquatable<RuntimeMethod> Members
 
         /// <summary>
-        /// Gibt an, ob das aktuelle Objekt gleich einem anderen Objekt des gleichen Typs ist.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="other">Ein Objekt, das mit diesem Objekt verglichen werden soll.</param>
+        /// <param name="other">An object to compare with this object.</param>
         /// <returns>
-        /// true, wenn das aktuelle Objekt gleich dem <paramref name="other"/>-Parameter ist, andernfalls false.
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
-        public bool Equals(RuntimeMethod other)
+        public virtual bool Equals(RuntimeMethod other)
         {
-            return (Module == other.Module && _nameStringIdx == other._nameStringIdx && _signatureBlobIdx == other._signatureBlobIdx);
+            return (base.Equals(other) == true && Module == other.Module);
         }
 
         #endregion // IEquatable<RuntimeMethod> Members

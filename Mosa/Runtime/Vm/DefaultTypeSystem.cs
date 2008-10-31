@@ -18,6 +18,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
 using System.Runtime.CompilerServices;
+using Mosa.Runtime.Metadata.Runtime;
 
 namespace Mosa.Runtime.Vm
 {
@@ -269,24 +270,33 @@ namespace Mosa.Runtime.Vm
 
         RuntimeType ITypeSystem.GetType(IMetadataModule module, TokenTypes token)
         {
-            int typeIdx = _moduleOffsets[module.LoadOrder].TypeOffset;
             TokenTypes table = (TokenTypes.TableMask & token);
-            TokenTypes row = (token & TokenTypes.RowIndexMask);
-            switch (table)
+            if (TokenTypes.TypeRef == table)
             {
-                case TokenTypes.TypeRef:
-                    return ResolveTypeRef(module, row);
-
-                case TokenTypes.TypeDef:
-                    typeIdx += (int)row-2;
-                    break;
-
-                case TokenTypes.TypeSpec:
-                    typeIdx += (int)(module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef) & TokenTypes.RowIndexMask) + (int)row;
-                    break;
+                return ResolveTypeRef(module, token);
             }
+            else
+            {
+                int typeIdx = _moduleOffsets[module.LoadOrder].TypeOffset;
+                int row = (int)(token & TokenTypes.RowIndexMask);
+                if (row == 0)
+                    return null;
 
-            return _types[typeIdx];
+                if (table == TokenTypes.TypeDef)
+                {
+                    typeIdx += row - 2;
+                }
+                else if (table == TokenTypes.TypeSpec)
+                {
+                    typeIdx += (int)(module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef) & TokenTypes.RowIndexMask) + row;
+                }
+                else
+                {
+                    throw new ArgumentException(@"Not a type token.", @"token");
+                }
+
+                return _types[typeIdx];
+            }
         }
 
         RuntimeType ITypeSystem.GetType(string typeName)
@@ -562,7 +572,7 @@ namespace Mosa.Runtime.Vm
                 }
 
                 // Create and populate the runtime type
-                rt = new RuntimeType((int)token, module, ref typeDefRow, maxField, maxMethod, packing, size);
+                rt = new CilRuntimeType(token, module, ref typeDefRow, maxField, maxMethod, packing, size);
                 LoadMethods(module, rt, typeDefRow.MethodList, maxMethod, ref methodOffset);
                 LoadFields(module, rt, typeDefRow.FieldList, maxField, ref fieldOffset);
                 _types[typeOffset++] = rt;
@@ -614,7 +624,7 @@ namespace Mosa.Runtime.Vm
                     }
 
                     Debug.Assert(offset < _methods.Length, @"Invalid method index.");
-                    _methods[offset++] = new RuntimeMethod(offset, module, ref methodDef, maxParam, declaringType);
+                    _methods[offset++] = new CilRuntimeMethod(offset, module, ref methodDef, maxParam, declaringType);
                     methodDef = nextMethodDef;
                 }
             }
@@ -715,7 +725,7 @@ namespace Mosa.Runtime.Vm
                 }
 
                 // Load the field metadata
-                _fields[offset++] = new RuntimeField(module, ref field, layout, rva, declaringType);
+                _fields[offset++] = new CilRuntimeField(module, ref field, layout, rva, declaringType);
             }
 
             /* FIXME:

@@ -101,9 +101,7 @@ namespace Mosa.Runtime.CompilerFramework
             // Instance size
             int typeSize = 0;
 
-            RuntimeType baseType = null;
-            if (0 != type.Extends)
-                baseType = this.typeSystem.Types[type.Extends];
+            RuntimeType baseType = type.BaseType;
             if (null != baseType)
                 typeSize = baseType.Size;
 

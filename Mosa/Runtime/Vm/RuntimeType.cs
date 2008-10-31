@@ -19,107 +19,53 @@ using System.Diagnostics;
 namespace Mosa.Runtime.Vm
 {
     /// <summary>
-    /// 
-    /// </summary>
-	public enum RuntimeTypeFlags {
-
-        /// <summary>
-        /// 
-        /// </summary>
-		Loaded = 0x01,
-
-		/// <summary>
-		/// Type is a generic type.
-		/// </summary>
-		HasGenericParams = 0x40,
-
-		/// <summary>
-		/// Type is a generic specialization.
-		/// </summary>
-		HasGenericArgs = 0x80
-	}
-
-    /// <summary>
     /// Internal runtime representation of a type.
     /// </summary>
-    public class RuntimeType : RuntimeMember, IEquatable<RuntimeType>
+    public abstract class RuntimeType : RuntimeMember, IEquatable<RuntimeType>
     {
         #region Data members
 
         /// <summary>
-		/// Holds the type index of the base class.
+        /// Holds the generic arguments of the type.
+        /// </summary>
+        private GenericArgument[] arguments;
+
+        /// <summary>
+		/// Holds the base type of this type.
 		/// </summary>
-		/// <remarks>
-		/// The value is incremented by one in order to differentiate uninitialized values from valid values. Invalid
-		/// values are zero and below.
-		/// </remarks>
-		private int _extends;
+		private RuntimeType baseType;
 
         /// <summary>
         /// Holds the type flag.
         /// </summary>
-        private TypeAttributes _flags;
-
-        /// <summary>
-        /// The metadata module, which owns this type.
-        /// </summary>
-        private IMetadataModule _module;
-
-        /// <summary>
-        /// Holds the (cached) name of the type.
-        /// </summary>
-        public string _name;
-
-        /// <summary>
-        /// The name index of the defined type.
-        /// </summary>
-        private TokenTypes _nameIdx;
+        private TypeAttributes flags;
 
         /// <summary>
         /// Holds the (cached) namespace of the type.
         /// </summary>
-        public string _namespace;
-
-        /// <summary>
-        /// The namespace index of the defined type.
-        /// </summary>
-        private TokenTypes _namespaceIdx;
+        private string @namespace;
 
         /// <summary>
         /// Holds the calculated native size of the type.
         /// </summary>
-        private int _nativeSize;
+        private int nativeSize;
 
         /// <summary>
         /// Holds the field packing.
         /// </summary>
-		private int _packing;
-
-        // <summary>
-        // Holds generic parameters or types.
-        // </summary>
-        //private object[] _generics;
+		private int packing;
 
         /// <summary>
         /// Methods of the type.
         /// </summary>
-        private ReadOnlyRuntimeMethodListView _methods;
+        private IList<RuntimeMethod> methods;
 
         /// <summary>
         /// Holds the fields of this type.
         /// </summary>
-        private ReadOnlyRuntimeFieldListView _fields;
+        private IList<RuntimeField> fields;
 
         #endregion // Data members
-
-        /// <summary>
-        /// 
-        /// </summary>
-		public TypeDefRow _typeDef;
-        /// <summary>
-        /// 
-        /// </summary>
-        public GenericArgument[] _arguments;
 
         #region Construction
 
@@ -128,46 +74,9 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         /// <param name="token">The token of the type.</param>
         /// <param name="module">The module.</param>
-        /// <param name="typeDefRow">The type def row.</param>
-        /// <param name="maxField">The max field.</param>
-        /// <param name="maxMethod">The max method.</param>
-        /// <param name="packing">The packing.</param>
-        /// <param name="size">The size.</param>
-        public RuntimeType(int token, IMetadataModule module, ref TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, int packing, int size) :
+        public RuntimeType(int token, IMetadataModule module) :
             base(token, module, null, null)
         {
-            int members;
-            _module = module;
-            _flags = typeDefRow.Flags;
-            _nameIdx = typeDefRow.TypeNameIdx;
-            _namespaceIdx = typeDefRow.TypeNamespaceIdx;
-            _nativeSize = size;
-            _packing = packing;
-            _extends = RuntimeBase.Instance.TypeLoader.FindTypeIndexFromToken(module, typeDefRow.Extends);
-
-            // Load all fields of the type
-            members = maxField - typeDefRow.FieldList;
-            if (0 < members)
-            {
-                int i = (int)(typeDefRow.FieldList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset(module).FieldOffset;
-                _fields = new ReadOnlyRuntimeFieldListView(i, members);
-            }
-            else
-            {
-                _fields = ReadOnlyRuntimeFieldListView.Empty;
-            }
-
-            // Load all methods of the type
-            members = maxMethod - typeDefRow.MethodList;
-            if (0 < members)
-            {
-                int i = (int)(typeDefRow.MethodList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset(module).MethodOffset;
-                _methods = new ReadOnlyRuntimeMethodListView(i, members);
-            }
-            else
-            {
-                _methods = ReadOnlyRuntimeMethodListView.Empty;
-            }
         }
 
         #endregion // Construction
@@ -180,7 +89,25 @@ namespace Mosa.Runtime.Vm
         /// <value>The attributes.</value>
         public TypeAttributes Attributes
         {
-            get { return this._flags; }
+            get { return this.flags; }
+            protected set { this.flags = value; }
+        }
+
+        /// <summary>
+        /// Retrieves the base class of the represented type.
+        /// </summary>
+        /// <value>The extends.</value>
+        public RuntimeType BaseType
+        {
+            get
+            {
+                if (this.baseType == null)
+                {
+                    this.baseType = GetBaseType();
+                }
+
+                return this.baseType;
+            }
         }
 
         /// <summary>
@@ -191,22 +118,7 @@ namespace Mosa.Runtime.Vm
         /// </value>
         public bool IsGeneric
         {
-            get { return (null != _arguments && 0 != _arguments.Length); }
-        }
-
-        /// <summary>
-        /// Retrieves the base class of the represented type.
-        /// </summary>
-        /// <value>The extends.</value>
-		public int Extends 
-        {
-			get { return (_extends); }
-			set {
-				if (value < 0)
-					throw new ArgumentException(@"Invalid index.");
-
-				_extends = value;
-			}
+            get { return (this.arguments != null && this.arguments.Length != 0); }
         }
 
         /// <summary>
@@ -215,7 +127,16 @@ namespace Mosa.Runtime.Vm
         /// <value>The fields.</value>
         public IList<RuntimeField> Fields
         {
-            get { return _fields; }
+            get { return this.fields; }
+            protected set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(@"value");
+                if (this.fields != null)
+                    throw new InvalidOperationException();
+
+                this.fields = value;
+            }
         }
 
         /// <summary>
@@ -224,21 +145,15 @@ namespace Mosa.Runtime.Vm
         /// <value>The methods.</value>
         public IList<RuntimeMethod> Methods
         {
-            get { return _methods; }
-        }
-
-        /// <summary>
-        /// Retrieves the name of the represented type.
-        /// </summary>
-        /// <value>The name.</value>
-        public override string Name
-        {
-            get
+            get { return this.methods; }
+            protected set
             {
-                if (null == _name)
-                    _module.Metadata.Read(_nameIdx, out _name);
+                if (value == null)
+                    throw new ArgumentNullException(@"value");
+                if (this.methods != null)
+                    throw new InvalidOperationException();
 
-                return _name;
+                this.methods = value;
             }
         }
 
@@ -250,10 +165,23 @@ namespace Mosa.Runtime.Vm
         {
             get
             {
-                if (null == _namespace)
-                    _module.Metadata.Read(_namespaceIdx, out _namespace);
+                if (this.@namespace == null)
+                {
+                    this.@namespace = GetNamespace();
+                    Debug.Assert(this.@namespace != null, @"GetNamespace() failed");
+                }
 
-                return _namespace;
+                return this.@namespace;
+            }
+
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(@"value");
+                if (this.@namespace != null)
+                    throw new InvalidOperationException();
+
+                this.@namespace = value;
             }
         }
 
@@ -266,7 +194,7 @@ namespace Mosa.Runtime.Vm
             get
             {
                 string ns = this.Namespace, name = this.Name;
-                if (null == ns)
+                if (ns == null)
                     return name;
 
                 return ns + "." + name;
@@ -279,7 +207,11 @@ namespace Mosa.Runtime.Vm
         /// <value>The packing of type fields.</value>
         public int Pack
         {
-            get { return _packing; }
+            get { return this.packing; }
+            protected set
+            {
+                this.packing = value;
+            }
         }
 
         /// <summary>
@@ -288,8 +220,8 @@ namespace Mosa.Runtime.Vm
         /// <value>The size of the type.</value>
         public int Size
         {
-            get { return _nativeSize; }
-            set { _nativeSize = value; }
+            get { return this.nativeSize; }
+            set { this.nativeSize = value; }
         }
 
         /// <summary>
@@ -321,6 +253,18 @@ namespace Mosa.Runtime.Vm
         #region Methods
 
         /// <summary>
+        /// Gets the base type.
+        /// </summary>
+        /// <returns>The base type.</returns>
+        protected abstract RuntimeType GetBaseType();
+
+        /// <summary>
+        /// Called to retrieve the namespace of the type.
+        /// </summary>
+        /// <returns>The namespace of the type.</returns>
+        protected abstract string GetNamespace();
+
+        /// <summary>
         /// Determines whether instances of <paramref name="type"/> can be assigned to variables of this type.
         /// </summary>
         /// <param name="type">The type to check assignment for.</param>
@@ -334,7 +278,7 @@ namespace Mosa.Runtime.Vm
 
             // FIXME: We're not checking interfaces yet
             // FIXME: Only works for classes
-            Debug.Assert(TypeAttributes.Class == (this._flags & TypeAttributes.Class), @"Only works for classes!");
+            Debug.Assert((this.flags & TypeAttributes.Class) == TypeAttributes.Class, @"Only works for classes!");
 
             return (this.Equals(type) == true || type.IsSubclassOf(this) == true);
         }
@@ -350,18 +294,21 @@ namespace Mosa.Runtime.Vm
         /// </returns>
         public bool IsSubclassOf(RuntimeType c)
         {
+            if (c == null)
+                throw new ArgumentNullException(@"c");
+
             RuntimeType[] types = RuntimeBase.Instance.TypeLoader.Types;
-            int extends = _extends;
-            while (0 < extends && extends < types.Length)
+            RuntimeType baseType = this.BaseType;
+            while (baseType != null)
             {
-                RuntimeType baseType = types[extends];
-                Debug.Assert(baseType != null, @"baseType can't be null.");
-                if (true == baseType.Equals(c))
+                if (baseType.Equals(c) == true)
                     return true;
 
-                if (extends == baseType._extends)
+                RuntimeType nextBaseType = baseType.BaseType;
+                if (baseType.Equals(nextBaseType) == true)
                     break;
-                extends = baseType._extends;
+
+                baseType = nextBaseType;
             }
 
             return false;
@@ -374,7 +321,7 @@ namespace Mosa.Runtime.Vm
         public void SetGenericParameter(List<GenericParamRow> gprs)
         {
             // TODO: Implement this method
-            _arguments = new GenericArgument[gprs.Count];
+            this.arguments = new GenericArgument[gprs.Count];
         }
 
         #endregion // Methods
@@ -382,15 +329,15 @@ namespace Mosa.Runtime.Vm
         #region IEquatable<RuntimeType> Members
 
         /// <summary>
-        /// Gibt an, ob das aktuelle Objekt gleich einem anderen Objekt des gleichen Typs ist.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="other">Ein Objekt, das mit diesem Objekt verglichen werden soll.</param>
+        /// <param name="other">An object to compare with this object.</param>
         /// <returns>
-        /// true, wenn das aktuelle Objekt gleich dem <paramref name="other"/>-Parameter ist, andernfalls false.
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
-        public bool Equals(RuntimeType other)
+        public virtual bool Equals(RuntimeType other)
         {
-            return (_module == other._module && _nameIdx == other._nameIdx && _namespaceIdx == other._namespaceIdx && _extends == other._extends);
+            return (this.flags == other.flags && this.nativeSize == other.nativeSize && this.packing == other.packing);
         }
 
         #endregion // IEquatable<RuntimeType> Members
@@ -405,7 +352,7 @@ namespace Mosa.Runtime.Vm
         /// </returns>
         public override string ToString()
         {
-            return String.Format("{0}.{1}", this.Namespace, this.Name);
+            return this.FullName;
         }
 
         #endregion // Object Overrides

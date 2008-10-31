@@ -25,17 +25,22 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Holds the attributes of the member.
         /// </summary>
-        private RuntimeAttribute[] _attributes;
+        private RuntimeAttribute[] attributes;
 
         /// <summary>
         /// Specifies the type, that declares the member.
         /// </summary>
-        private RuntimeType _declaringType;
+        private RuntimeType declaringType;
+
+        /// <summary>
+        /// Holds the (cached) name of the type.
+        /// </summary>
+        private string name;
 
         /// <summary>
         /// Holds the module, which owns the method.
         /// </summary>
-        private IMetadataModule _module;
+        private IMetadataModule module;
 
         #endregion // Data members
 
@@ -51,9 +56,9 @@ namespace Mosa.Runtime.Vm
         protected RuntimeMember(int token, IMetadataModule module, RuntimeType declaringType, RuntimeAttribute[] attributes) :
             base(token)
         {
-            _module = module;
-            _declaringType = declaringType;
-            _attributes = attributes;
+            this.module = module;
+            this.declaringType = declaringType;
+            this.attributes = attributes;
         }
 
         #endregion // Construction
@@ -65,14 +70,36 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         public RuntimeType DeclaringType
         {
-            get { return _declaringType; }
+            get { return this.declaringType; }
         }
 
         /// <summary>
         /// Gets the name.
         /// </summary>
         /// <value>The name.</value>
-        public abstract string Name { get; }
+        public string Name 
+        {
+            get
+            {
+                if (this.name == null)
+                {
+                    this.name = GetName();
+                    Debug.Assert(this.name != null, @"GetName() failed");
+                }
+
+                return this.name;
+            }
+
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(@"value");
+                if (this.name != null)
+                    throw new InvalidOperationException();
+
+                this.name = value;
+            }
+        }
 
         /// <summary>
         /// 
@@ -93,10 +120,20 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         public IMetadataModule Module
         {
-            get { return _module; }
+            get { return this.module; }
         }
 
         #endregion // Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Called to retrieve the name of the type.
+        /// </summary>
+        /// <returns>The name of the type.</returns>
+        protected abstract string GetName();
+
+        #endregion // Methods
 
         #region IRuntimeAttributable Members
 
@@ -108,7 +145,7 @@ namespace Mosa.Runtime.Vm
         {
             get
             {
-                return _attributes;
+                return this.attributes;
             }
         }
 
@@ -122,9 +159,9 @@ namespace Mosa.Runtime.Vm
         public bool IsDefined(RuntimeType attributeType)
         {
             bool result = false;
-            if (null != _attributes)
+            if (null != this.attributes)
             {
-                foreach (RuntimeAttribute attribute in _attributes)
+                foreach (RuntimeAttribute attribute in this.attributes)
                 {
                     if (attribute.Type.Equals(attributeType) == true || 
                         attribute.Type.IsSubclassOf(attributeType) == true)
@@ -145,9 +182,9 @@ namespace Mosa.Runtime.Vm
         public object[] GetCustomAttributes(RuntimeType attributeType)
         {
             List<object> result = new List<object>();
-            if (_attributes != null)
+            if (this.attributes != null)
             {
-                foreach (RuntimeAttribute attribute in _attributes)
+                foreach (RuntimeAttribute attribute in this.attributes)
                 {
                     if (true == attributeType.IsAssignableFrom(attribute.Type))
                         result.Add(attribute.GetAttribute());
@@ -163,10 +200,10 @@ namespace Mosa.Runtime.Vm
         /// <param name="attributes">The attributes.</param>
         internal void SetAttributes(RuntimeAttribute[] attributes)
         {
-            if (null != _attributes)
+            if (null != this.attributes)
                 throw new InvalidOperationException(@"Can't set attributes twice.");
 
-            _attributes = attributes;
+            this.attributes = attributes;
         }
 
         #endregion // IRuntimeAttributable Members

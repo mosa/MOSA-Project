@@ -19,79 +19,39 @@ using Mosa.Runtime.Metadata.Signatures;
 namespace Mosa.Runtime.Vm
 {
     /// <summary>
-    /// 
+    /// Base class for the runtime representation of fields.
     /// </summary>
-    public class RuntimeField : RuntimeMember, IEquatable<RuntimeField>
+    public abstract class RuntimeField : RuntimeMember, IEquatable<RuntimeField>
     {
-        #region Static constants
-
-        /// <summary>
-        /// Static array instance used for all types, which don't have fields.
-        /// </summary>
-        public static readonly RuntimeField[] None = new RuntimeField[0];
-
-        #endregion // Static constants
-
         #region Data members
 
         /// <summary>
         /// Holds the attributes of the RuntimeField.
         /// </summary>
-        private FieldAttributes _attributes;
+        private FieldAttributes attributes;
 
         /// <summary>
-        /// Holds the name of the field to return.
+        /// Holds the relative virtual address of the field.
         /// </summary>
-        private string _name;
-
-        /// <summary>
-        /// Holds the name index of the RuntimeField.
-        /// </summary>
-        private TokenTypes _nameIdx;
-
-        /// <summary>
-        /// Signature identifier of this RuntimeField.
-        /// </summary>
-        private int _sig;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private IntPtr _offset;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private IntPtr _rva;
+        private IntPtr rva;
 
         /// <summary>
         /// Holds the type of the field.
         /// </summary>
-        private SigType _type;
+        private SigType type;
 
         #endregion // Data members
 
         #region Construction
 
         /// <summary>
-        /// Loads a _stackFrameIndex definition from metadata.
+        /// Initializes a new instance of <see cref="RuntimeField"/>.
         /// </summary>
-        /// <param name="module">The module to load the _stackFrameIndex from.</param>
-        /// <param name="field">The field metadata row.</param>
-        /// <param name="offset">Holds the offset of the field in the owner type.</param>
-        /// <param name="rva">The RVA of the initialization data</param>
+        /// <param name="module">The module the field belongs to.</param>
         /// <param name="declaringType">Specifies the type, which contains this field.</param>
-        public RuntimeField(IMetadataModule module, ref FieldRow field, IntPtr offset, IntPtr rva, RuntimeType declaringType) :
+        public RuntimeField(IMetadataModule module, RuntimeType declaringType) :
             base(0, module, declaringType, null)
         {
-            _sig = (int)field.SignatureBlobIdx;
-            _name = null;
-            _attributes = field.Flags;
-            _nameIdx = field.NameStringIdx;
-            _offset = offset;
-            _rva = rva;
-
-            // FIXME: Load the signature of the field
         }
 
         #endregion // Construction
@@ -104,23 +64,8 @@ namespace Mosa.Runtime.Vm
         /// <value>The attributes.</value>
         public FieldAttributes Attributes
         {
-            get { return _attributes; }
-        }
-
-        /// <summary>
-        /// Gets the name.
-        /// </summary>
-        /// <value>The name.</value>
-        public override string Name
-        {
-            get
-            {
-                if (null != _name)
-                    return _name;
-
-                this.Module.Metadata.Read(_nameIdx, out _name);
-                return _name;
-            }
+            get { return this.attributes; }
+            protected set { this.attributes = value; }
         }
 
         /// <summary>
@@ -129,7 +74,8 @@ namespace Mosa.Runtime.Vm
         /// <value>The RVA of the initialization data.</value>
         public IntPtr RVA
         {
-            get { return _rva; }
+            get { return rva; }
+            protected set { this.rva = value; }
         }
 
         /// <summary>
@@ -140,30 +86,38 @@ namespace Mosa.Runtime.Vm
         {
             get 
             {
-                if (_type != null)
-                    return _type;
+                if (this.type != null)
+                    return this.type;
 
-                FieldSignature fsig = new FieldSignature();
-                fsig.LoadSignature(this.Module.Metadata, (TokenTypes)_sig);
-                _type = fsig.Type;
-                return _type;
+                this.type = this.GetFieldType();
+                return this.type;
             }
         }
 
         #endregion // Properties
 
+        #region Methods
+
+        /// <summary>
+        /// Gets the type of the field.
+        /// </summary>
+        /// <returns>The type of the field.</returns>
+        protected abstract SigType GetFieldType();
+
+        #endregion // Methods
+
         #region IEquatable<RuntimeField> Members
 
         /// <summary>
-        /// Gibt an, ob das aktuelle Objekt gleich einem anderen Objekt des gleichen Typs ist.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="other">Ein Objekt, das mit diesem Objekt verglichen werden soll.</param>
+        /// <param name="other">An object to compare with this object.</param>
         /// <returns>
-        /// true, wenn das aktuelle Objekt gleich dem <paramref name="other"/>-Parameter ist, andernfalls false.
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
-        public bool Equals(RuntimeField other)
+        public virtual bool Equals(RuntimeField other)
         {
-            return (Module == other.Module && _attributes == other._attributes && _nameIdx == other._nameIdx && _sig == other._sig);
+            return (Module == other.Module && this.attributes == other.attributes);
         }
 
         #endregion // IEquatable<RuntimeField> Members
