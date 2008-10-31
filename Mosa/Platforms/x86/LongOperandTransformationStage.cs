@@ -256,7 +256,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.LogicalXorInstruction(edi, edi),
                 new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalOrInstruction(eax, eax),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[0].Label),
+                new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[0].Label),
                 new Instructions.AddInstruction(edi, new ConstantOperand(I4, 1)),
                 new Instructions.MoveInstruction(edx, op1L),
                 new IR.PushInstruction(ecx),
@@ -287,7 +287,7 @@ namespace Mosa.Platforms.x86
             blocks[0].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(eax, op2H),
                 new Instructions.LogicalOrInstruction(eax, eax),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[1].Label),
+                new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[1].Label),
                 new Instructions.AddInstruction(edi, new ConstantOperand(I4, (int)1)),
                 new Instructions.MoveInstruction(edx, op2L),
                 new IR.PushInstruction(ecx),
@@ -300,6 +300,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.SbbInstruction(eax, new ConstantOperand(I4, (int)0)),
                 new Instructions.MoveInstruction(op2H, eax),
                 new Instructions.MoveInstruction(op2L, edx),
+                new IR.JmpInstruction(blocks[1].Label),
             });
 
             // L2:
@@ -324,10 +325,11 @@ namespace Mosa.Platforms.x86
             // mov     edx,ebx         ; edx:eax <- quotient
             // jmp     short L4        ; set sign, restore stack and return
             blocks[1].Instructions.AddRange(new Instruction[] {
-                new Instructions.LogicalOrInstruction(eax, eax),
+                new Instructions.CmpInstruction(eax, new ConstantOperand(I4, 0)),
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[2].Label),
                 new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(edx, op1H),
+                new Instructions.LogicalXorInstruction(edx, edx),
                 new Instructions.DivInstruction(eax, ecx),
                 new Instructions.MoveInstruction(ebx, eax),
                 new Instructions.MoveInstruction(eax, op1L),
@@ -348,6 +350,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(edx, op1H),
                 new Instructions.MoveInstruction(eax, op1L),
+                new IR.JmpInstruction(blocks[3].Label),
             });
 
             // L5:
@@ -380,9 +383,9 @@ namespace Mosa.Platforms.x86
                 new Instructions.ShrInstruction(ebx, new ConstantOperand(I4, (int)1)),
                 new Instructions.RcrInstruction(ecx, new ConstantOperand(I4, (int)1)), // RCR
                 new Instructions.ShrInstruction(edx, new ConstantOperand(I4, (int)1)),
-                new Instructions.RcrInstruction(eax, new ConstantOperand(I4, (int)1)), // RCR
+                new Instructions.RcrInstruction(eax, new ConstantOperand(I4, (int)1)),
                 new Instructions.CmpInstruction(ebx, new ConstantOperand(I4, 0)),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[3].Label),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[3].Label),
                 new Instructions.DivInstruction(eax, ecx),
                 new Instructions.MoveInstruction(esi, eax),
                 new IL.MulInstruction(IL.OpCode.Mul, eax, eax, op2H),
@@ -402,12 +405,14 @@ namespace Mosa.Platforms.x86
             // L6:
             blocks[4].Instructions.AddRange(new Instruction[] {
                 new Instructions.SubInstruction(esi, new ConstantOperand(I4, (int)1)),
+                new IR.JmpInstruction(blocks[5].Label),
             });
 
             // L7:
             blocks[5].Instructions.AddRange(new Instruction[] {
                 new Instructions.LogicalXorInstruction(edx, edx),
                 new Instructions.MoveInstruction(eax, esi),
+                new IR.JmpInstruction(blocks[6].Label),
             });
 
                        ;
