@@ -316,7 +316,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.LogicalOrInstruction(eax, eax),
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[2].Label),
                 new Instructions.MoveInstruction(ecx, op2L),
-                new Instructions.MoveInstruction(edx, op1H),
+                new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalXorInstruction(edx, edx),
                 new Instructions.UDivInstruction(eax, ecx),
                 new Instructions.MoveInstruction(ebx, eax),
@@ -418,6 +418,8 @@ namespace Mosa.Platforms.x86
             });
 
             nextBlock.Instructions.InsertRange(0, new Instruction[] {
+                new MoveInstruction(op0L, eax),
+                new MoveInstruction(op0H, edx),
                 new IR.PopInstruction(ebx),
                 new IR.PopInstruction(esi),
                 new IR.PopInstruction(edi),
