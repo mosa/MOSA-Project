@@ -12,7 +12,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class BitMap : IBitMap
+	public abstract class FrameBuffer : IFrameBuffer
 	{
 		/// <summary>
 		/// 

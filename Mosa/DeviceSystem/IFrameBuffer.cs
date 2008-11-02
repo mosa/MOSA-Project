@@ -12,7 +12,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// 
 	/// </summary>
-	public interface IBitMap
+	public interface IFrameBuffer
 	{
 		/// <summary>
 		/// Gets the width.

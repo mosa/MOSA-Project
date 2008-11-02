@@ -13,17 +13,17 @@ using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceDrivers.PCI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// PCI Test Driver
+	/// </summary>
 	[PCIDeviceSignature(VendorID = 0xABCD, DeviceID = 0x1000, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	[PCIDeviceSignature(VendorID = 0xABCD, DeviceID = 0x2000, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	[PCIDeviceSignature(ClassCode = 0xFFFF, SubClassCode = 0xFF, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class TestDriver : PCIHardwareDevice, IHardwareDevice
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort TestPort;
 
         /// <summary>
@@ -31,16 +31,16 @@ namespace Mosa.DeviceDrivers.PCI
         /// </summary>
 		protected SpinLock spinLock;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pciDevice"></param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TestDriver"/> class.
+		/// </summary>
+		/// <param name="pciDevice"></param>
 		public TestDriver(PCIDevice pciDevice) : base(pciDevice) { }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Setups this hardware device driver
+		/// </summary>
+		/// <returns></returns>
 		public override bool Setup()
 		{
 			base.name = "TEST_0x" + busResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
@@ -50,28 +50,28 @@ namespace Mosa.DeviceDrivers.PCI
 			return true;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Probes for this device.
+		/// </summary>
+		/// <returns></returns>
 		public override bool Probe() { return true; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Starts this hardware device.
+		/// </summary>
+		/// <returns></returns>
 		public override bool Start() { return true; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Called when an interrupt is received.
+		/// </summary>
+		/// <returns></returns>
 		public override bool OnInterrupt() { return false; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates the sub devices.
+		/// </summary>
+		/// <returns></returns>
 		public override LinkedList<IDevice> CreateSubDevices() { return null; }
 	}
 }

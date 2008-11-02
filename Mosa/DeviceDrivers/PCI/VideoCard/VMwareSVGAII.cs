@@ -22,51 +22,51 @@ using Mosa.DeviceSystem.PCI;
 namespace Mosa.DeviceDrivers.PCI.VideoCard
 {
 	/// <summary>
-	/// 
+	/// VMware SVGA II Device Driver
 	/// </summary>
 	[PCIDeviceSignature(VendorID = 0x15AD, DeviceID = 0x0405, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class VMware : PCIHardwareDevice, IHardwareDevice
+	public class VMwareSVGAII : PCIHardwareDevice, IHardwareDevice
 	{
 		#region Definitions
 
-		internal struct SVGARegisters
+		internal struct Register
 		{
 			internal const byte ID = 0;
-			internal const byte ENABLE = 1;
-			internal const byte WIDTH = 2;
-			internal const byte HEIGHT = 3;
-			internal const byte MAX_WIDTH = 4;
-			internal const byte MAX_HEIGHT = 5;
-			internal const byte DEPTH = 6;
-			internal const byte BITS_PER_PIXEL = 7; /* Current bpp in the guest */
-			internal const byte PSEUDOCOLOR = 8;
-			internal const byte RED_MASK = 9;
-			internal const byte GREEN_MASK = 10;
-			internal const byte BLUE_MASK = 11;
-			internal const byte BYTES_PER_LINE = 12;
-			internal const byte FB_START = 13;
-			internal const byte FB_OFFSET = 14;
-			internal const byte VRAM_SIZE = 15;
-			internal const byte FB_SIZE = 16;
+			internal const byte Enable = 1;
+			internal const byte Width = 2;
+			internal const byte Height = 3;
+			internal const byte MaxWidth = 4;
+			internal const byte MaxHeight = 5;
+			internal const byte Depth = 6;
+			internal const byte BitsPerPixel = 7; /* Current bpp in the guest */
+			internal const byte PseudoColor = 8;
+			internal const byte RedMask = 9;
+			internal const byte GreenMask = 10;
+			internal const byte BlueMask = 11;
+			internal const byte BytesPerLine = 12;
+			internal const byte FrameBufferStart = 13;
+			internal const byte FrameBufferOffset = 14;
+			internal const byte VRamSize = 15;
+			internal const byte FrameBufferSize = 16;
 
 			/* ID 0 implementation only had the above registers; then the palette */
 
-			internal const byte CAPABILITIES = 17;
-			internal const byte MEM_START = 18;		/* Memory for command FIFO and bitmaps */
-			internal const byte MEM_SIZE = 19;
-			internal const byte CONFIG_DONE = 20;  	/* Set when memory area configured */
-			internal const byte SYNC = 21; 			/* Write to force synchronization */
-			internal const byte BUSY = 22; 			/* Read to check if sync is done */
-			internal const byte GUEST_ID = 23; 		/* Set guest OS identifier */
-			internal const byte CURSOR_ID = 24;		/* ID of cursor */
-			internal const byte CURSOR_X = 25; 		/* Set cursor X position */
-			internal const byte CURSOR_Y = 26; 		/* Set cursor Y position */
-			internal const byte CURSOR_ON = 27;		/* Turn cursor on/off */
-			internal const byte HOST_BITS_PER_PIXEL = 28; /* Current bpp in the host */
-			internal const byte SCRATCH_SIZE = 29; 	/* Number of scratch registers */
-			internal const byte MEM_REGS = 30; 		/* Number of FIFO registers */
-			internal const byte NUM_DISPLAYS = 31; 	/* Number of guest displays */
-			internal const byte PITCHLOCK = 32;		/* Fixed pitch for all modes */
+			internal const byte Capabilities = 17;
+			internal const byte MemStart = 18;		/* Memory for command FIFO and bitmaps */
+			internal const byte MemSize = 19;
+			internal const byte ConfigDone = 20;  	/* Set when memory area configured */
+			internal const byte Sync = 21; 			/* Write to force synchronization */
+			internal const byte Busy = 22; 			/* Read to check if sync is done */
+			internal const byte GuestID = 23; 		/* Set guest OS identifier */
+			internal const byte CursorID = 24;		/* ID of cursor */
+			internal const byte CursorX = 25; 		/* Set cursor X position */
+			internal const byte CursorY = 26; 		/* Set cursor Y position */
+			internal const byte CursorOn = 27;		/* Turn cursor on/off */
+			internal const byte HostBitsPerPixel = 28; /* Current bpp in the host */
+			internal const byte ScratchSize = 29; 	/* Number of scratch registers */
+			internal const byte MemRegs = 30; 		/* Number of FIFO registers */
+			internal const byte NumDisplays = 31; 	/* Number of guest displays */
+			internal const byte PitchLock = 32;		/* Fixed pitch for all modes */
 		}
 
 		internal struct SVGAID
@@ -98,7 +98,12 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <summary>
 		/// 
 		/// </summary>
-		protected IBitMap bitMap;
+		protected IMemory fifo;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IFrameBuffer frameBuffer;
 
 		/// <summary>
 		/// 
@@ -173,13 +178,13 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		protected uint capabilities;
 
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="VMwareSVGAII"/> class.
 		/// </summary>
 		/// <param name="pciDevice"></param>
-		public VMware(PCIDevice pciDevice) : base(pciDevice) { }
+		public VMwareSVGAII(PCIDevice pciDevice) : base(pciDevice) { }
 
 		/// <summary>
-		/// 
+		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
 		public override bool Setup()
@@ -190,42 +195,43 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			valuePort = busResources.GetIOPort(0, 1);
 
 			memory = base.busResources.GetMemory(0);
+			fifo = base.busResources.GetMemory(1);
 
 			return true;
 		}
 
 		/// <summary>
-		/// 
+		/// Probes for this device.
 		/// </summary>
 		/// <returns></returns>
 		public override bool Probe() { return true; }
 
 		/// <summary>
-		/// 
+		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
 		public override bool Start()
 		{
-			capabilities = GetValue(SVGARegisters.CAPABILITIES);
-			videoRamSize = GetValue(SVGARegisters.VRAM_SIZE);
-			maxWidth = GetValue(SVGARegisters.MAX_WIDTH);
-			maxHeight = GetValue(SVGARegisters.MAX_HEIGHT);
-			bitsPerPixel = GetValue(SVGARegisters.BITS_PER_PIXEL);
-			bytesPerLine = GetValue(SVGARegisters.BYTES_PER_LINE);
-			redMask = GetValue(SVGARegisters.RED_MASK);
-			greenMask = GetValue(SVGARegisters.GREEN_MASK);
-			blueMask = GetValue(SVGARegisters.BLUE_MASK);
+			capabilities = GetValue(Register.Capabilities);
+			videoRamSize = GetValue(Register.VRamSize);
+			maxWidth = GetValue(Register.MaxWidth);
+			maxHeight = GetValue(Register.MaxHeight);
+			bitsPerPixel = GetValue(Register.BitsPerPixel);
+			bytesPerLine = GetValue(Register.BytesPerLine);
+			redMask = GetValue(Register.RedMask);
+			greenMask = GetValue(Register.GreenMask);
+			blueMask = GetValue(Register.BlueMask);
 			redMaskShift = GetMaskShift(redMask);
 			greenMaskShift = GetMaskShift(greenMask);
 			blueMaskShift = GetMaskShift(blueMask);
 			alphaMaskShift = GetMaskShift(alphaMask);
-			offset = GetValue(SVGARegisters.FB_OFFSET);
+			offset = GetValue(Register.FrameBufferOffset);
 
 			switch (bitsPerPixel) {
-				case 8: bitMap = new BitMap8bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				case 16: bitMap = new BitMap16bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				case 24: bitMap = new BitMap24bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				case 32: bitMap = new BitMap32bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
+				case 8: frameBuffer = new FrameBuffer8bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
+				case 16: frameBuffer = new FrameBuffer16bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
+				case 24: frameBuffer = new FrameBuffer24bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
+				case 32: frameBuffer = new FrameBuffer32bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
 				default: return false;
 			}
 
@@ -233,13 +239,13 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		}
 
 		/// <summary>
-		/// 
+		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
 		public override bool OnInterrupt() { return false; }
 
 		/// <summary>
-		/// 
+		/// Creates the sub devices.
 		/// </summary>
 		/// <returns></returns>
 		public override LinkedList<IDevice> CreateSubDevices() { return null; }
@@ -274,20 +280,20 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <returns></returns>
 		public bool SetMode(uint width, uint height)
 		{
-			SendCommand(SVGARegisters.WIDTH, width);
-			SendCommand(SVGARegisters.HEIGHT, height);
-			SendCommand(SVGARegisters.ENABLE, 1);
+			SendCommand(Register.Width, width);
+			SendCommand(Register.Height, height);
+			SendCommand(Register.Enable, 1);
 
-			offset = GetValue(SVGARegisters.FB_OFFSET);
+			offset = GetValue(Register.FrameBufferOffset);
 
-			SendCommand(SVGARegisters.GUEST_ID, 0x5010); // ??
-			bytesPerLine = GetValue(SVGARegisters.BYTES_PER_LINE);
+			SendCommand(Register.GuestID, 0x5010); // ??
+			bytesPerLine = GetValue(Register.BytesPerLine);
 
 			switch (bitsPerPixel) {
-				case 8: bitMap = new BitMap8bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				case 16: bitMap = new BitMap16bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				case 24: bitMap = new BitMap24bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				case 32: bitMap = new BitMap32bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
+				case 8: frameBuffer = new FrameBuffer8bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
+				case 16: frameBuffer = new FrameBuffer16bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
+				case 24: frameBuffer = new FrameBuffer24bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
+				case 32: frameBuffer = new FrameBuffer32bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
 				default: return false;
 			}
 
@@ -300,15 +306,15 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <returns></returns>
 		protected uint GetVersion()
 		{
-			SendCommand(SVGARegisters.ID, SVGAID.V2);
-			if (GetValue(SVGARegisters.ID) == SVGAID.V2)
+			SendCommand(Register.ID, SVGAID.V2);
+			if (GetValue(Register.ID) == SVGAID.V2)
 				return SVGAID.V2;
 
-			SendCommand(SVGARegisters.ID, SVGAID.V1);
-			if (GetValue(SVGARegisters.ID) == SVGAID.V1)
+			SendCommand(Register.ID, SVGAID.V1);
+			if (GetValue(Register.ID) == SVGAID.V1)
 				return SVGAID.V1;
 
-			if (GetValue(SVGARegisters.ID) == SVGAID.V0)
+			if (GetValue(Register.ID) == SVGAID.V0)
 				return SVGAID.V0;
 
 			return SVGAID.Invalid;
