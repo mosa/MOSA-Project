@@ -958,7 +958,8 @@ namespace Mosa.DeviceDrivers.ISA.DiskControllers
 
 					byte trk = GetByte();	// track (cylinder)
 					byte rhe = GetByte();	// head
-					byte sec = GetByte();	// sector number
+					//byte sec = GetByte();	// sector number
+					GetByte(); // sector number
 					byte bps = GetByte();	// bytes per sector
 
 					if ((st0 & 0xC0) != 0x0) {

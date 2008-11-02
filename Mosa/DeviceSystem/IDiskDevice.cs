@@ -64,7 +64,6 @@ namespace Mosa.DeviceSystem
 		/// Gets the <see cref="Mosa.DeviceSystem.GenericPartition"/> with the specified partition NBR.
 		/// </summary>
 		/// <value></value>
-		/// <returns></returns>
 		GenericPartition this[uint partitionNbr] { get; }
 
 		/// <summary>

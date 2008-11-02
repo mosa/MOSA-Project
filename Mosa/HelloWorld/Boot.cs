@@ -1,20 +1,20 @@
 ﻿
 namespace Mosa.HelloWorld
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public static class Boot
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public static void Main()
 		{
 			// Start the boot process
 
 			// Write HelloWorld to Screen
-            
+
 			unsafe {
 				byte* index = (byte*)(0xB8000);
 
@@ -42,6 +42,13 @@ namespace Mosa.HelloWorld
 				*(index++) = 1;
 				*(index++) = (byte)'!';
 				*(index++) = 1;
+				
+				*(index + 1) = 4;
+
+				while (true) {
+					*index = (byte)'-';
+					*index = (byte)'|';					
+				}
 			}
 		}
 	}
