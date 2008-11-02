@@ -13,28 +13,28 @@ using Mosa.EmulatedKernel;
 
 namespace Mosa.EmulatedKernel
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="address"></param>
-    /// <returns></returns>
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="address"></param>
+	/// <returns></returns>
 	public delegate byte MemoryRead8(uint address);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="address"></param>
-    /// <param name="value"></param>
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="address"></param>
+	/// <param name="value"></param>
 	public delegate void MemoryWrite8(uint address, byte value);
 
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public static class MemoryDispatch
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		private static List<MemoryRange> dispatches = new List<MemoryRange>();
 
 		/// <summary>
@@ -93,6 +93,75 @@ namespace Mosa.EmulatedKernel
 					return memoryRange.read8(address);
 
 			return 0;
+		}
+
+		/// <summary>
+		/// Writes a short to the specified address.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <param name="value">The value.</param>
+		public static void Write16(uint address, ushort value)
+		{
+			MemoryRange memoryRange = Find(address);
+
+			if (memoryRange != null)
+				if (memoryRange.write8 != null) {
+					memoryRange.write8(address, (byte)value);
+					memoryRange.write8(address + 1, (byte)(value >> 8));
+				}
+
+			return;
+		}
+
+		/// <summary>
+		/// Reads a short from the specified address.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		public static ushort Read16(uint address)
+		{
+			MemoryRange memoryRange = Find(address);
+
+			if (memoryRange != null)
+				if (memoryRange.read8 != null)
+					return (ushort)(memoryRange.read8(address) | (memoryRange.read8(address + 1) << 8));
+
+			return 0;
+		}
+
+		/// <summary>
+		/// Reads an integer from the specified address.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		public static ushort Read32(uint address)
+		{
+			MemoryRange memoryRange = Find(address);
+
+			if (memoryRange != null)
+				if (memoryRange.write8 != null)
+					return (ushort)(memoryRange.read8(address) | (memoryRange.read8(address + 1) << 8) | (memoryRange.read8(address + 2) << 16) | (memoryRange.read8(address + 3) << 24));
+
+			return 0;
+		}
+
+		/// <summary>
+		/// Writes an integer to the specified address.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <param name="value">The value.</param>
+		public static void Write32(uint address, uint value)
+		{
+			MemoryRange memoryRange = Find(address);
+
+			if (memoryRange != null)
+				if (memoryRange.write8 != null) {
+					memoryRange.write8(address, (byte)value);
+					memoryRange.write8(address + 1, (byte)(value >> 8));
+					memoryRange.write8(address + 2, (byte)(value >> 16));
+					memoryRange.write8(address + 3, (byte)(value >> 24));
+				}
+			return;
 		}
 
 		/// <summary>

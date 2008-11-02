@@ -33,23 +33,62 @@ namespace Mosa.DeviceSystem
 		byte this[uint index] { get; set; }
 
 		/// <summary>
-		/// Read8s the specified index.
+		/// Reads the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
 		byte Read8(uint index);
 
 		/// <summary>
-		/// Write8s the specified index.
+		/// Writes the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
 		void Write8(uint index, byte value);
 
-		// ushort Read16(uint index);
-		// void Write16(uint index, ushort value);
-		// uint Read32(uint index);
-		// void Write32(uint index, uint value);
+		/// <summary>
+		/// Reads the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		ushort Read16(uint index);
+		
+		/// <summary>
+		/// Writes the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="value">The value.</param>
+		void Write16(uint index, ushort value);
+		
+		/// <summary>
+		/// Reads the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		uint Read32(uint index);
+		
+		/// <summary>
+		/// Writes the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="value">The value.</param>
+		void Write32(uint index, uint value);
+
+		/// <summary>
+		/// Read32s the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="count">The count.</param>
+		/// <returns></returns>
+		uint Read32(uint index, byte count);
+
+		/// <summary>
+		/// Writes the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="count">The count.</param>
+		void Write32(uint index, uint value, byte count);
 	}
 
 }
