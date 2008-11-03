@@ -26,7 +26,7 @@ namespace Mosa.DeviceSystem.ISA
         /// <summary>
         /// 
         /// </summary>
-		public ushort PortRange = 0;
+		public ushort PortRange = 0x00;
         /// <summary>
         /// 
         /// </summary>
@@ -34,7 +34,7 @@ namespace Mosa.DeviceSystem.ISA
         /// <summary>
         /// 
         /// </summary>
-		public ushort AltPortRange = 0;
+		public ushort AltPortRange = 0x00;
         /// <summary>
         /// 
         /// </summary>

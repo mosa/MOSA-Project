@@ -69,7 +69,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			internal const byte PitchLock = 32;		/* Fixed pitch for all modes */
 		}
 
-		internal struct SVGAID
+		internal struct ID
 		{
 			internal const uint Magic = 0x900000;
 			internal const uint V0 = Magic << 8;
@@ -78,8 +78,24 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			internal const uint Invalid = 0xFFFFFFFF;
 		}
 
+		internal struct Fifo
+		{
+			internal const uint Min = 0x00;
+			internal const uint Max = 0x01;
+			internal const uint NextCmd = 0x02;
+			internal const uint Stop = 0x03;
+		}
+
 		#endregion
 
+		/// <summary>
+		/// 
+		/// </summary>
+		protected uint width;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected uint height;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -227,13 +243,9 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			alphaMaskShift = GetMaskShift(alphaMask);
 			offset = GetValue(Register.FrameBufferOffset);
 
-			switch (bitsPerPixel) {
-				case 8: frameBuffer = new FrameBuffer8bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				case 16: frameBuffer = new FrameBuffer16bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				case 24: frameBuffer = new FrameBuffer24bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				case 32: frameBuffer = new FrameBuffer32bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				default: return false;
-			}
+			SetMode(640, 480);
+
+			InitializeFifo();
 
 			return true;
 		}
@@ -280,6 +292,9 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <returns></returns>
 		public bool SetMode(uint width, uint height)
 		{
+			this.width = width;
+			this.height = height;
+
 			SendCommand(Register.Width, width);
 			SendCommand(Register.Height, height);
 			SendCommand(Register.Enable, 1);
@@ -290,12 +305,31 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			bytesPerLine = GetValue(Register.BytesPerLine);
 
 			switch (bitsPerPixel) {
-				case 8: frameBuffer = new FrameBuffer8bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				case 16: frameBuffer = new FrameBuffer16bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				case 24: frameBuffer = new FrameBuffer24bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
-				case 32: frameBuffer = new FrameBuffer32bpp(memory, maxWidth, maxHeight, offset, bytesPerLine); break;
+				case 8: frameBuffer = new FrameBuffer8bpp(memory, width, height, offset, bytesPerLine); break;
+				case 16: frameBuffer = new FrameBuffer16bpp(memory, width, height, offset, bytesPerLine); break;
+				case 24: frameBuffer = new FrameBuffer24bpp(memory, width, height, offset, bytesPerLine); break;
+				case 32: frameBuffer = new FrameBuffer32bpp(memory, width, height, offset, bytesPerLine); break;
 				default: return false;
 			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// Initializes the fifo.
+		/// </summary>
+		/// <returns></returns>
+		protected bool InitializeFifo()
+		{
+			uint start = GetValue(Register.MemStart);
+			uint size = GetValue(Register.MemSize);
+
+			fifo.Write32(Fifo.Min * 4, 16);
+			fifo.Write32(Fifo.Max * 4, size);
+			fifo.Write32(Fifo.NextCmd * 4, 16);
+			fifo.Write32(Fifo.Stop * 4, 16);
+
+			SendCommand(Register.ConfigDone, 1);
 
 			return true;
 		}
@@ -306,18 +340,18 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <returns></returns>
 		protected uint GetVersion()
 		{
-			SendCommand(Register.ID, SVGAID.V2);
-			if (GetValue(Register.ID) == SVGAID.V2)
-				return SVGAID.V2;
+			SendCommand(Register.ID, ID.V2);
+			if (GetValue(Register.ID) == ID.V2)
+				return ID.V2;
 
-			SendCommand(Register.ID, SVGAID.V1);
-			if (GetValue(Register.ID) == SVGAID.V1)
-				return SVGAID.V1;
+			SendCommand(Register.ID, ID.V1);
+			if (GetValue(Register.ID) == ID.V1)
+				return ID.V1;
 
-			if (GetValue(Register.ID) == SVGAID.V0)
-				return SVGAID.V0;
+			if (GetValue(Register.ID) == ID.V0)
+				return ID.V0;
 
-			return SVGAID.Invalid;
+			return ID.Invalid;
 		}
 
 		/// <summary>
