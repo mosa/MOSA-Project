@@ -1043,7 +1043,7 @@ namespace Mosa.Platforms.x86
         /// <param name="src">The source operand of the instruction.</param>
         public void Xchg(Operand dest, Operand src)
         {
-            if (!(dest is MemoryOperand) || (dest is RegisterOperand))
+            if (!((dest is MemoryOperand) || (dest is RegisterOperand)))
                 throw new NotSupportedException(@"Destination has to be register or memory.");
             _textWriter.WriteLine("\t\txchg\t{0}, {1}", WriteOperand(dest), WriteOperand(src));
         }
