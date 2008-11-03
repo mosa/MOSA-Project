@@ -22,6 +22,37 @@ namespace Mosa.Kernel
 		/// </summary>
 		public static uint Magic = 0x1BADB002;
 
+		/// <summary>
+		/// The starting location of the kernel
+		/// </summary>
+		protected static uint kernelStart;
+		/// <summary>
+		/// The ending location of the kernel
+		/// </summary>
+		protected static uint kernelEnd;
+
+		/// <summary>
+		/// Gets the kernel start.
+		/// </summary>
+		/// <value>The kernel start.</value>
+		public static uint KernelStart { get { return kernelStart; } }
+
+		/// <summary>
+		/// Gets the kernel end.
+		/// </summary>
+		/// <value>The kernel end.</value>
+		public static uint KernelEnd { get { return kernelEnd; } }
+
+		/// <summary>
+		/// Reads the multiboot info table.
+		/// </summary>
+		public static void ReadMultibootInfoTable()
+		{
+			// TODO
+			// Set kernel start
+			// Set kernel end
+		}
+
 	}
 
 }

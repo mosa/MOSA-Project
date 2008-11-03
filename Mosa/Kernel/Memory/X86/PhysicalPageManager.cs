@@ -91,7 +91,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <summary>
 		/// Retrieves the size of a single memory page.
 		/// </summary>
-		public ulong PageSize { get { return X86PageSize; } }
+		public static ulong PageSize { get { return X86PageSize; } }
 
 		/// <summary>
 		/// Retrieves the amount of total physical memory pages available in the system.

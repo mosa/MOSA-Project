@@ -420,6 +420,8 @@
             <AllowUnsafe>true</AllowUnsafe>
           </Options>
         </Configuration>
+        <ReferencePath>..\..\..\..\3rdParty</ReferencePath>
+        <Reference name="mscorlib" />
         <Files>
           <Match pattern="*.cs" path="." recurse="true"/>
         </Files>

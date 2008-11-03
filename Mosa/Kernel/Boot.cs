@@ -14,14 +14,16 @@ namespace Mosa.Kernel
 	/// </summary>
 	public static class Boot
 	{
+
 		/// <summary>
 		/// Entry point for the Kernel 
 		/// </summary>
 		public static void Main()
 		{
+			// Get Multiboot Information
 			// Setup Stack
-			// Setup GDTR
-			// Setup IDT
+			// Setup Global Descriptor Table (GDT)
+			// Setup Interrupt Descriptor Table (IDT)
 			// and much more...
 		}
 	}
