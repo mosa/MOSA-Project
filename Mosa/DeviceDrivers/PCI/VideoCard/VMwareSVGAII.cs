@@ -25,7 +25,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 	/// VMware SVGA II Device Driver
 	/// </summary>
 	[PCIDeviceSignature(VendorID = 0x15AD, DeviceID = 0x0405, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class VMwareSVGAII : PCIHardwareDevice, IHardwareDevice
+	public class VMwareSVGAII : PCIHardwareDevice, IHardwareDevice // , IPixelGraphicsDevice
 	{
 		#region Definitions
 
@@ -86,16 +86,42 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			internal const uint Stop = 0x03;
 		}
 
+		internal struct Command
+		{
+			internal const uint UPDATE = 1;
+			internal const uint RECT_FILL = 2;
+			internal const uint RECT_COPY = 3;
+			internal const uint DEFINE_BITMAP = 4;
+			internal const uint DEFINE_BITMAP_SCANLINE = 5;
+			internal const uint DEFINE_PIXMAP = 6;
+			internal const uint DEFINE_PIXMAP_SCANLINE = 7;
+			internal const uint RECT_BITMAP_FILL = 8;
+			internal const uint RECT_PIXMAP_FILL = 9;
+			internal const uint RECT_BITMAP_COPY = 10;
+			internal const uint RECT_PIXMAP_COPY = 11;
+			internal const uint FREE_OBJECT = 12;
+			internal const uint RECT_ROP_FILL = 13;
+			internal const uint RECT_ROP_COPY = 14;
+			internal const uint RECT_ROP_BITMAP_FILL = 15;
+			internal const uint RECT_ROP_PIXMAP_FILL = 16;
+			internal const uint RECT_ROP_BITMAP_COPY = 17;
+			internal const uint RECT_ROP_PIXMAP_COPY = 18;
+			internal const uint DEFINE_CURSOR = 19;
+			internal const uint DISPLAY_CURSOR = 20;
+			internal const uint MOVE_CURSOR = 21;
+			internal const uint DEFINE_ALPHA_CURSOR = 22;
+		}
+
 		#endregion
 
 		/// <summary>
 		/// 
 		/// </summary>
-		protected uint width;
+		protected ushort width;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected uint height;
+		protected ushort height;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -175,19 +201,19 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <summary>
 		/// 
 		/// </summary>
-		protected uint redMaskShift;
+		protected byte redMaskShift;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected uint greenMaskShift;
+		protected byte greenMaskShift;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected uint blueMaskShift;
+		protected byte blueMaskShift;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected uint alphaMaskShift;
+		protected byte alphaMaskShift;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -290,7 +316,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
 		/// <returns></returns>
-		public bool SetMode(uint width, uint height)
+		public bool SetMode(ushort width, ushort height)
 		{
 			this.width = width;
 			this.height = height;
@@ -335,6 +361,55 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		}
 
 		/// <summary>
+		/// Gets the fifo.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		protected uint GetFifo(uint index)
+		{
+			return fifo.Read32(index * 4);
+		}
+
+		/// <summary>
+		/// Sets the fifo.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="value">The value.</param>
+		protected void SetFifo(uint index, uint value)
+		{
+			fifo.Write32(index * 4, value);
+		}
+
+		/// <summary>
+		/// Waits for fifo.
+		/// </summary>
+		protected void WaitForFifo()
+		{
+			SendCommand(Register.Sync, 1);
+
+			while (GetValue(Register.Busy) != 0) {
+				HAL.Sleep(10);
+			}
+		}
+
+		/// <summary>
+		/// Writes to fifo.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		protected void WriteToFifo(uint value)
+		{
+			if (((GetFifo(Fifo.NextCmd) == GetFifo(Fifo.Max) - 4) && GetFifo(Fifo.Stop) == GetFifo(Fifo.Min)) ||
+				(GetFifo(Fifo.NextCmd) + 4 == GetFifo(Fifo.Stop)))
+				WaitForFifo();
+
+			SetFifo(GetFifo(Fifo.NextCmd) / 4, value);
+			SetFifo(Fifo.NextCmd, GetFifo(Fifo.NextCmd) + 4);
+
+			if (GetFifo(Fifo.NextCmd) == GetFifo(Fifo.Max))
+				SetFifo(Fifo.NextCmd, GetFifo(Fifo.Min));
+		}
+
+		/// <summary>
 		/// Gets the version.
 		/// </summary>
 		/// <returns></returns>
@@ -359,12 +434,12 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// </summary>
 		/// <param name="mask">The mask.</param>
 		/// <returns></returns>
-		protected uint GetMaskShift(uint mask)
+		protected byte GetMaskShift(uint mask)
 		{
 			if (mask == 0)
 				return 0;
 
-			uint count = 0;
+			byte count = 0;
 
 			while ((mask & 1) == 0) {
 				count++;
@@ -373,5 +448,94 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 
 			return count;
 		}
+
+		/// <summary>
+		/// Updates the frame.
+		/// </summary>
+		protected void UpdateFrame()
+		{
+			UpdateFrame(0, 0, width, height);
+		}
+
+		/// <summary>
+		/// Updates the frame.
+		/// </summary>
+		/// <param name="x">The x.</param>
+		/// <param name="y">The y.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		protected void UpdateFrame(ushort x, ushort y, ushort width, ushort height)
+		{
+			WriteToFifo(Command.UPDATE);
+			WriteToFifo(x);
+			WriteToFifo(y);
+			WriteToFifo(width);
+			WriteToFifo(height);
+		}
+
+		/// <summary>
+		/// Converts the color to the framebuffer color
+		/// </summary>
+		/// <param name="color">The color.</param>
+		/// <returns></returns>
+		protected uint ConvertColor(Color color)
+		{
+			return (uint)(
+				((color.Alpha << alphaMaskShift) & alphaMask) |
+				((color.Red << redMaskShift) & redMask) |
+				((color.Green << greenMaskShift) & greenMask) |
+				((color.Blue << blueMaskShift) & blueMask)
+			);
+		}
+
+		/// <summary>
+		/// Writes the pixel.
+		/// </summary>
+		/// <param name="color">The color.</param>
+		/// <param name="x">The x.</param>
+		/// <param name="y">The y.</param>
+		public void WritePixel(Color color, ushort x, ushort y)
+		{
+			frameBuffer.SetPixel(ConvertColor(color), x, y);
+			UpdateFrame(x, y, 1, 1);
+		}
+
+		/// <summary>
+		/// Reads the pixel.
+		/// </summary>
+		/// <param name="x">The x.</param>
+		/// <param name="y">The y.</param>
+		/// <returns></returns>
+		public Color ReadPixel(ushort x, ushort y)
+		{
+			uint color = frameBuffer.GetPixel(x, y);
+			return new Color(
+				(byte)((color & redMask) >> redMaskShift),
+				(byte)((color & greenMask) >> greenMaskShift),
+				(byte)((color & blueMask) >> blueMaskShift),
+				(byte)((color & alphaMask) >> alphaMaskShift)
+			);
+		}
+
+		/// <summary>
+		/// Clears the specified color.
+		/// </summary>
+		/// <param name="color">The color.</param>
+		public void Clear(Color color)
+		{
+			//TODO
+		}
+
+		/// <summary>
+		/// Gets the width.
+		/// </summary>
+		/// <returns></returns>
+		public ushort Width { get { return width; } }
+
+		/// <summary>
+		/// Gets the height.
+		/// </summary>
+		/// <returns></returns>
+		public ushort Height { get { return height; } }
 	}
 }
