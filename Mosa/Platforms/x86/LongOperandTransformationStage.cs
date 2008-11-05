@@ -461,8 +461,8 @@ namespace Mosa.Platforms.x86
             RegisterOperand edi = new RegisterOperand(I4, GeneralPurposeRegister.EDI);
             RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
 
-            // ; Determine sign of the result (edi = 0 if result is positive, non-zero
-            // ; otherwise) and make operands positive.
+            // Determine sign of the result (edi = 0 if result is positive, non-zero
+            // otherwise) and make operands positive.
             //    xor     edi,edi         ; result sign assumed positive
             //mov     eax,HIWORD(DVND) ; hi word of a
             //or      eax,eax         ; test to see if signed
@@ -516,13 +516,13 @@ namespace Mosa.Platforms.x86
 
             // L2:
             //
-            // ;
-            // ; Now do the divide.  First look to see if the divisor is less than 4194304K.
-            // ; If so, then we can use a simple algorithm with word divides, otherwise
-            // ; things get a little more complex.
-            // ;
-            // ; NOTE - eax currently contains the high order word of DVSR
-            // ;
+            // 
+            // Now do the divide.  First look to see if the divisor is less than 4194304K.
+            // If so, then we can use a simple algorithm with word divides, otherwise
+            // things get a little more complex.
+            // 
+            // NOTE - eax currently contains the high order word of DVSR
+            // 
             //
             // or      eax,eax         ; check to see if divisor < 4194304K
             // jnz     short L3        ; nope, gotta do this the hard way
@@ -566,31 +566,39 @@ namespace Mosa.Platforms.x86
 
             // L5:
             //
-            // shr     ebx,1           ; shift divisor right one bit
-            // rcr     ecx,1
-            // shr     edx,1           ; shift dividend right one bit
-            // rcr     eax,1
-            // or      ebx,ebx
-            // jnz     short L5        ; loop until divisor < 4194304K
-            // div     ecx             ; now divide, ignore remainder
+            //  shr     ebx,1           ; shift divisor right one bit
+            //  rcr     ecx,1
+            //  shr     edx,1           ; shift dividend right one bit
+            //  rcr     eax,1
+            //  or      ebx,ebx
+            //  jnz     short L5        ; loop until divisor < 4194304K
+            //  div     ecx             ; now divide, ignore remainder
+
             //
-            // ;
-            // ; We may be off by one, so to check, we will multiply the quotient
-            // ; by the divisor and check the result against the orignal dividend
-            // ; Note that we must also check for overflow, which can occur if the
-            // ; dividend is close to 2**64 and the quotient is off by 1.
-            // ;	
-            // mov     ecx,eax         ; save a copy of quotient in ECX
-            // mul     dword ptr HIWORD(DVSR)
-            // xchg    ecx,eax         ; save product, get quotient in EAX
-            // mul     dword ptr LOWORD(DVSR)
-            // add     edx,ecx         ; EDX:EAX = QUOT * DVSR
-            // jc      short L6        ; carry means Quotient is off by 1
-            // cmp     edx,HIWORD(DVND) ; compare hi words of result and original
-            // ja      short L6        ; if result > original, do subtract
-            // jb      short L7        ; if result < original, we are ok
-            // cmp     eax,LOWORD(DVND) ; hi words are equal, compare lo words
-            // jbe     short L7        ; if less or equal we are ok, else subtract
+            // We may be off by one, so to check, we will multiply the quotient
+            // by the divisor and check the result against the orignal dividend
+            // Note that we must also check for overflow, which can occur if the
+            // dividend is close to 2**64 and the quotient is off by 1.
+            //
+
+            //  mov     ecx,eax         ; save a copy of quotient in ECX
+            //  mul     dword ptr HIWORD(DVSR)
+            //  xchg    ecx,eax         ; save product, get quotient in EAX
+            //  mul     dword ptr LOWORD(DVSR)
+            //  add     edx,ecx         ; EDX:EAX = QUOT * DVSR
+            //  jc      short L6        ; carry means Quotient is off by 1
+
+            //
+            // do long compare here between original dividend and the result of the
+            // multiply in edx:eax.  If original is larger or equal, we are ok, otherwise
+            // subtract the original divisor from the result.
+            //
+
+            //  cmp     edx,HIWORD(DVND) ; compare hi words of result and original
+            //  ja      short L6        ; if result > original, do subtract
+            //  jb      short L7        ; if result < original, we are ok
+            //  cmp     eax,LOWORD(DVND) ; hi words are equal, compare lo words
+            //  jbe     short L7        ; if less or equal we are ok, else subtract
 
             blocks[3].Instructions.AddRange(new Instruction[] {
                 new Instructions.ShrInstruction(ebx, new ConstantOperand(I4, 1)),
@@ -622,6 +630,11 @@ namespace Mosa.Platforms.x86
             });
 
             // L7:
+            //
+            // Calculate remainder by subtracting the result from the original dividend.
+            // Since the result is already in a register, we will do the subtract in the
+            // opposite direction and negate the result if necessary.
+            //
             blocks[5].Instructions.AddRange(new Instruction[] {
                 new Instructions.SubInstruction(eax, op1L),
                 new Instructions.SbbInstruction(edx, op1H),
@@ -630,13 +643,7 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(blocks[6].Label),
             });
 
-            ;
-            // ; Just the cleanup left to do.  edx:eax contains the quotient.  Set the sign
-            // ; according to the save value, cleanup the stack, and return.
-            // ;
             // L4:
-            //        dec     edi             ; check to see if result is negative
-            //        jns     short L8        ; if EDI == 0, result should be negative
             //        neg     edx             ; otherwise, negate the result
             //        neg     eax
             //        sbb     edx,0
@@ -677,7 +684,99 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandUDiv(Context ctx, IR.UDivInstruction instruction)
         {
-            throw new NotSupportedException();
+            BasicBlock nextBlock;
+            BasicBlock[] blocks = CreateBlocks(ctx, instruction, 4, out nextBlock);
+            SigType I4 = new SigType(CilElementType.I4);
+
+            Operand op0H, op1H, op2H, op0L, op1L, op2L;
+            SplitLongOperand(instruction.Results[0], out op0L, out op0H);
+            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+            SplitLongOperand(instruction.Operand2, out op2L, out op2H);
+            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+            RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
+            RegisterOperand edi = new RegisterOperand(I4, GeneralPurposeRegister.EDI);
+            RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
+
+            Replace(ctx, new Instruction[] {
+                new IR.PushInstruction(edi),
+                new IR.PushInstruction(esi),
+                new IR.PushInstruction(ebx),
+                new Instructions.MoveInstruction(eax, op2H),
+                new Instructions.LogicalOrInstruction(eax, eax),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[0].Label),
+                new Instructions.MoveInstruction(ecx, op2L),
+                new Instructions.MoveInstruction(eax, op1H),
+                new Instructions.LogicalXorInstruction(edx, edx),
+                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.MoveInstruction(ebx, eax),
+                new Instructions.MoveInstruction(eax, op1L),
+                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.MoveInstruction(edx, ebx),
+                new IR.JmpInstruction(nextBlock.Label),
+            });
+
+            // L1
+            blocks[0].Instructions.AddRange(new Instruction[] {
+                new Instructions.MoveInstruction(ecx, eax),
+                new Instructions.MoveInstruction(ebx, op2L),
+                new Instructions.MoveInstruction(edx, op1H),
+                new Instructions.MoveInstruction(eax, op1L),
+            });
+
+            // L3
+            blocks[1].Instructions.AddRange(new Instruction[] {
+                new Instructions.ShrInstruction(ecx, new ConstantOperand(I4, 1)),
+                new Instructions.RcrInstruction(ebx, new ConstantOperand(I4, 1)), // RCR
+                new Instructions.ShrInstruction(edx, new ConstantOperand(I4, 1)),
+                new Instructions.RcrInstruction(eax, new ConstantOperand(I4, 1)),
+                new Instructions.LogicalOrInstruction(ecx, ecx),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[1].Label),
+                new Instructions.UDivInstruction(eax, ebx),
+                new Instructions.MoveInstruction(esi, eax),
+                new IL.MulInstruction(IL.OpCode.Mul, eax, eax, op2H),
+                new Instructions.MoveInstruction(ecx, eax),
+                new Instructions.MoveInstruction(eax, op2L),
+                new IL.MulInstruction(IL.OpCode.Mul, eax, eax, esi),
+                new Instructions.AddInstruction(edx, ecx),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[2].Label),
+                new Instructions.CmpInstruction(edx, op1H),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[2].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[3].Label),
+                new Instructions.CmpInstruction(eax, op1L),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[3].Label),
+            });
+
+            // L4:
+            blocks[2].Instructions.AddRange(new Instruction[] {
+                new Instructions.DecInstruction(esi),
+            });
+
+            // L5
+            blocks[3].Instructions.AddRange(new Instruction[] {
+                new Instructions.LogicalXorInstruction(edx, edx),
+                new Instructions.MoveInstruction(eax, esi),
+            });
+
+            // L2
+            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+                new MoveInstruction(op0L, eax),
+                new MoveInstruction(op0H, edx),
+                new IR.PopInstruction(ebx),
+                new IR.PopInstruction(esi),
+                new IR.PopInstruction(edi),
+            });
+
+            // Link the created blocks together
+            LinkBlocks(ctx.Block, blocks[0]);
+            LinkBlocks(ctx.Block, nextBlock);
+            LinkBlocks(blocks[0], blocks[1]);
+            LinkBlocks(blocks[1], blocks[1]);
+            LinkBlocks(blocks[1], blocks[2]);
+            LinkBlocks(blocks[1], blocks[3]);
+            LinkBlocks(blocks[2], blocks[3]);
+            LinkBlocks(blocks[3], nextBlock);
         }
 
         /// <summary>

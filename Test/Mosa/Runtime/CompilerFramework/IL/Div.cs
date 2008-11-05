@@ -712,6 +712,58 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         }
         #endregion
 
+        #region U8
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate bool U8_U8_U8(ulong expect, ulong a, ulong b);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        [Row(1, 2)]
+        [Row(23, 21)]
+        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        // And reverse
+        [Row(2, 1)]
+        [Row(21, 23)]
+        // (MinValue, X) Cases
+        [Row(ulong.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(ulong.MinValue, 1)]
+        [Row(ulong.MinValue, 17)]
+        [Row(ulong.MinValue, 123)]
+        // (MaxValue, X) Cases
+        [Row(ulong.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(ulong.MaxValue, 1)]
+        [Row(ulong.MaxValue, 17)]
+        [Row(ulong.MaxValue, 123)]
+        // (X, MinValue) Cases
+        [Row(0, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(1, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(17, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(123, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        // (X, MaxValue) Cases
+        [Row(0, ulong.MaxValue)]
+        [Row(1, ulong.MaxValue)]
+        [Row(17, ulong.MaxValue)]
+        [Row(123, ulong.MaxValue)]
+        // Extremvaluecases
+        [Row(ulong.MinValue, ulong.MaxValue)]
+        [Row(ulong.MaxValue, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        public void DivU8(ulong a, ulong b)
+        {
+            CodeSource = CreateTestCode("DivU8", "ulong", "ulong");
+            Assert.IsTrue((bool)Run<U8_U8_U8>("", "Test", "DivU8", (ulong)(a / b), a, b));
+        }
+        #endregion
+
         #region I8
         /// <summary>
         /// 
