@@ -546,9 +546,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(eax, edx),
                 new Instructions.LogicalXorInstruction(edx, edx),
                 new Instructions.DecInstruction(edi),
-                new Instructions.CmpInstruction(edx, new ConstantOperand(I4, 0)),
-                new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[6].Label),
-                // new IR.BranchInstruction(IR.ConditionCode.NotSigned, blocks[6].Label), // JNS!!!
+                new Instructions.JnsBranchInstruction(blocks[6].Label),
                 new IR.JmpInstruction(nextBlock.Label),
             });
             ;
@@ -609,6 +607,9 @@ namespace Mosa.Platforms.x86
                 new Instructions.AddInstruction(edx, ecx),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[4].Label),
                 new Instructions.CmpInstruction(edx, op1H),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[4].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[5].Label),
+                new Instructions.CmpInstruction(eax, op1L),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[5].Label),
                 new IR.JmpInstruction(blocks[4].Label),
             });
@@ -616,16 +617,17 @@ namespace Mosa.Platforms.x86
             // L6:
             blocks[4].Instructions.AddRange(new Instruction[] {
                 new Instructions.SubInstruction(eax, op2L),
-                new Instructions.SubInstruction(edx, op2H),
+                new Instructions.SbbInstruction(edx, op2H),
+                new IR.JmpInstruction(blocks[5].Label),
             });
 
             // L7:
             blocks[5].Instructions.AddRange(new Instruction[] {
                 new Instructions.SubInstruction(eax, op1L),
-                new Instructions.SubInstruction(edx, op1H),
+                new Instructions.SbbInstruction(edx, op1H),
                 new Instructions.DecInstruction(edi),
-                new Instructions.CmpInstruction(edx, new ConstantOperand(I4, 0)),
-                new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, nextBlock.Label),
+                new Instructions.JnsBranchInstruction(nextBlock.Label),
+                new IR.JmpInstruction(blocks[6].Label),
             });
 
             ;
@@ -642,6 +644,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.NegInstruction(edx),
                 new Instructions.NegInstruction(eax),
                 new Instructions.SbbInstruction(edx, new ConstantOperand(I4, 0)),
+                new IR.JmpInstruction(nextBlock.Label),
             });
 
             nextBlock.Instructions.InsertRange(0, new Instruction[] {
@@ -2065,6 +2068,10 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Int(IntInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Jns(JnsBranchInstruction instruction, Context arg)
         {
         }
 

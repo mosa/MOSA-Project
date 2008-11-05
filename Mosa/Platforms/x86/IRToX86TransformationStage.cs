@@ -886,6 +886,10 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IX86InstructionVisitor<Context>.Jns(Instructions.JnsBranchInstruction instruction, Context arg)
+        {
+        }
+
         void IX86InstructionVisitor<Context>.Dec(Instructions.DecInstruction instruction, Context ctx)
         {
         }

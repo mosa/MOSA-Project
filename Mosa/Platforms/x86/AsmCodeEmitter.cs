@@ -400,6 +400,16 @@ namespace Mosa.Platforms.x86
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        public void Jns(int dest)
+        {
+            _textWriter.WriteLine("\t\tjns\tL_{0:x}", dest);
+
+        }
+
         void ICodeEmitter.Lea(Operand dest, Operand op)
         {
             MemoryOperand mop = (MemoryOperand)op;

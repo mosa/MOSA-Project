@@ -570,6 +570,18 @@ namespace Mosa.Platforms.x86
             });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
+        public void Jns(int dest)
+        {
+            _emitters.ForEach(delegate(ICodeEmitter emitter)
+            {
+                emitter.Jns(dest);
+            });
+        }
+
         void ICodeEmitter.Lea(Operand dest, Operand op)
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)

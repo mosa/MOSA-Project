@@ -240,6 +240,16 @@ namespace Mosa.Platforms.x86
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="instruction"></param>
+        /// <param name="arg"></param>
+        void IX86InstructionVisitor<int>.Jns(JnsBranchInstruction instruction, int arg)
+        {
+            _emitter.Jns(instruction.Label);
+        }
+
+        /// <summary>
         /// Return from interrupt
         /// </summary>
         /// <param name="instruction">The instruction.</param>

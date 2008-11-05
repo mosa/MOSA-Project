@@ -230,6 +230,12 @@ namespace Mosa.Platforms.x86
         void Jmp(int dest);
 
         /// <summary>
+        /// Emits a jump instruction.
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
+        void Jns(int dest);
+
+        /// <summary>
         /// Emits a conditional jump above.
         /// </summary>
         /// <param name="dest">The target label of the jump.</param>

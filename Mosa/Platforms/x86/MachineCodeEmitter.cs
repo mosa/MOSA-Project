@@ -710,6 +710,15 @@ namespace Mosa.Platforms.x86
             EmitBranch(new byte[] { 0xE9 }, dest);
         }
 
+        /// <summary>
+        /// Emits a conditional jump not signed
+        /// </summary>
+        /// <param name="dest">The target label of the jump.</param>
+        void ICodeEmitter.Jns(int dest)
+        {
+            EmitBranch(new byte[] { 0x0f, 0x89 }, dest);
+        }
+
         void ICodeEmitter.Lea(Operand dest, Operand op)
         {
             // This really emits lea, as I haven't figured out how to emit MOV dst, src+x (e.g. not dereferncing src+x!)
@@ -1998,6 +2007,7 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),      new byte[] { 0x81 }, 3),
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),      new byte[] { 0x19 }, null),
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),      new byte[] { 0x19 }, null),
+            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),        new byte[] { 0x1B }, null),
         };
 
         #endregion // Code Definition Tables

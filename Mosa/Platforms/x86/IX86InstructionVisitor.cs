@@ -61,6 +61,8 @@ namespace Mosa.Platforms.x86
         void Ucomisd(UcomisdInstruction instruction, ArgType arg);
         void Ucomiss(UcomissInstruction instruction, ArgType arg);
 
+        void Jns(JnsBranchInstruction instruction, ArgType arg);
+
         #region Intrinsics
         /// <summary>
         /// Disable interrupts
