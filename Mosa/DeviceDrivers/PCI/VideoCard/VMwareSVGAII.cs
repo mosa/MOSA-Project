@@ -86,9 +86,9 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			internal const uint Stop = 0x03;
 		}
 
-		internal struct Command
+		internal struct FifoCommand
 		{
-			internal const uint UPDATE = 1;
+			internal const uint Update = 1;
 			internal const uint RECT_FILL = 2;
 			internal const uint RECT_COPY = 3;
 			internal const uint DEFINE_BITMAP = 4;
@@ -466,7 +466,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <param name="height">The height.</param>
 		protected void UpdateFrame(ushort x, ushort y, ushort width, ushort height)
 		{
-			WriteToFifo(Command.UPDATE);
+			WriteToFifo(FifoCommand.Update);
 			WriteToFifo(x);
 			WriteToFifo(y);
 			WriteToFifo(width);

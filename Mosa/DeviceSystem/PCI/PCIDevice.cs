@@ -7,147 +7,146 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceSystem.PCI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public class PCIDevice : Device, IDevice
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte bus;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte slot;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte function;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ushort vendorID;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ushort deviceID;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte revisionID;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ushort classCode;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte subClassCode;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ushort subVendorID;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ushort subDeviceID;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte progIF;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte irq;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected PCIBaseAddress[] pciBaseAddresses;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte memoryRegionCount;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte ioPortRegionCount;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IPCIController pciController;
 
-        /// <summary>
-        /// Gets the bus.
-        /// </summary>
-        /// <value>The bus.</value>
+		/// <summary>
+		/// Gets the bus.
+		/// </summary>
+		/// <value>The bus.</value>
 		public byte Bus { get { return bus; } }
-        /// <summary>
-        /// Gets the slot.
-        /// </summary>
-        /// <value>The slot.</value>
+		/// <summary>
+		/// Gets the slot.
+		/// </summary>
+		/// <value>The slot.</value>
 		public byte Slot { get { return slot; } }
-        /// <summary>
-        /// Gets the function.
-        /// </summary>
-        /// <value>The function.</value>
+		/// <summary>
+		/// Gets the function.
+		/// </summary>
+		/// <value>The function.</value>
 		public byte Function { get { return function; } }
-        /// <summary>
-        /// Gets the vendor ID.
-        /// </summary>
-        /// <value>The vendor ID.</value>
+		/// <summary>
+		/// Gets the vendor ID.
+		/// </summary>
+		/// <value>The vendor ID.</value>
 		public ushort VendorID { get { return vendorID; } }
-        /// <summary>
-        /// Gets the device ID.
-        /// </summary>
-        /// <value>The device ID.</value>
+		/// <summary>
+		/// Gets the device ID.
+		/// </summary>
+		/// <value>The device ID.</value>
 		public ushort DeviceID { get { return deviceID; } }
-        /// <summary>
-        /// Gets the revision ID.
-        /// </summary>
-        /// <value>The revision ID.</value>
+		/// <summary>
+		/// Gets the revision ID.
+		/// </summary>
+		/// <value>The revision ID.</value>
 		public byte RevisionID { get { return revisionID; } }
-        /// <summary>
-        /// Gets the class code.
-        /// </summary>
-        /// <value>The class code.</value>
+		/// <summary>
+		/// Gets the class code.
+		/// </summary>
+		/// <value>The class code.</value>
 		public ushort ClassCode { get { return classCode; } }
-        /// <summary>
-        /// Gets the prog IF.
-        /// </summary>
-        /// <value>The prog IF.</value>
+		/// <summary>
+		/// Gets the prog IF.
+		/// </summary>
+		/// <value>The prog IF.</value>
 		public byte ProgIF { get { return progIF; } }
-        /// <summary>
-        /// Gets the sub class code.
-        /// </summary>
-        /// <value>The sub class code.</value>
+		/// <summary>
+		/// Gets the sub class code.
+		/// </summary>
+		/// <value>The sub class code.</value>
 		public byte SubClassCode { get { return subClassCode; } }
-        /// <summary>
-        /// Gets the sub vendor ID.
-        /// </summary>
-        /// <value>The sub vendor ID.</value>
+		/// <summary>
+		/// Gets the sub vendor ID.
+		/// </summary>
+		/// <value>The sub vendor ID.</value>
 		public ushort SubVendorID { get { return subVendorID; } }
-        /// <summary>
-        /// Gets the sub device ID.
-        /// </summary>
-        /// <value>The sub device ID.</value>
+		/// <summary>
+		/// Gets the sub device ID.
+		/// </summary>
+		/// <value>The sub device ID.</value>
 		public ushort SubDeviceID { get { return subDeviceID; } }
-        /// <summary>
-        /// Gets the IRQ.
-        /// </summary>
-        /// <value>The IRQ.</value>
+		/// <summary>
+		/// Gets the IRQ.
+		/// </summary>
+		/// <value>The IRQ.</value>
 		public byte IRQ { get { return irq; } }
 
-        /// <summary>
-        /// Gets the base addresses.
-        /// </summary>
-        /// <value>The base addresses.</value>
+		/// <summary>
+		/// Gets the base addresses.
+		/// </summary>
+		/// <value>The base addresses.</value>
 		public PCIBaseAddress[] BaseAddresses { get { return pciBaseAddresses; } }
 
 		/// <summary>
@@ -164,7 +163,6 @@ namespace Mosa.DeviceSystem.PCI
 			this.slot = slot;
 			this.function = fun;
 
-			this.pciBaseAddresses = new PCIBaseAddress[6];
 
 			uint data = pciController.ReadConfig(bus, slot, fun, 0);
 			this.vendorID = (ushort)(data & 0xFFFF);
@@ -184,6 +182,8 @@ namespace Mosa.DeviceSystem.PCI
 
 			if ((data & 0xFF00) != 0)
 				this.irq = (byte)(data & 0xFF);
+
+			this.pciBaseAddresses = new PCIBaseAddress[8];
 
 			for (byte i = 0; i < 6; i++) {
 				uint baseAddress = pciController.ReadConfig(bus, slot, fun, (byte)(16 + (i * 4)));
@@ -207,15 +207,23 @@ namespace Mosa.DeviceSystem.PCI
 					}
 				}
 			}
+
+			if ((classCode == 0x03) || (subClassCode == 0x00) || (progIF == 0x00)) {
+				// Special case for generic VGA
+				pciBaseAddresses[6] = new PCIBaseAddress(PCIAddressRegion.Memory, 0xA0000, 0x1FFFF, false);
+				memoryRegionCount++;
+				pciBaseAddresses[7] = new PCIBaseAddress(PCIAddressRegion.IO, 0x3B0, 0x0F, false);
+				ioPortRegionCount++;
+			}
 		}
 
-        /// <summary>
-        /// Starts the specified device manager.
-        /// </summary>
-        /// <param name="deviceManager">The device manager.</param>
-        /// <param name="resourceManager">The resource manager.</param>
-        /// <param name="pciHardwareDevice">The pci hardware device.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Starts the specified device manager.
+		/// </summary>
+		/// <param name="deviceManager">The device manager.</param>
+		/// <param name="resourceManager">The resource manager.</param>
+		/// <param name="pciHardwareDevice">The pci hardware device.</param>
+		/// <returns></returns>
 		public bool Start(IDeviceManager deviceManager, IResourceManager resourceManager, PCIHardwareDevice pciHardwareDevice)
 		{
 			IIOPortRegion[] ioPortRegions = new IIOPortRegion[ioPortRegionCount];
@@ -242,9 +250,9 @@ namespace Mosa.DeviceSystem.PCI
 			return (base.deviceStatus == DeviceStatus.Online);
 		}
 
-        /// <summary>
-        /// Sets the no driver found.
-        /// </summary>
+		/// <summary>
+		/// Sets the no driver found.
+		/// </summary>
 		public void SetNoDriverFound()
 		{
 			base.deviceStatus = DeviceStatus.NotFound;

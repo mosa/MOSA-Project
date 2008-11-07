@@ -39,9 +39,9 @@ namespace Mosa.Tools.CreatePCIList
 					textWriter.WriteLine("\tpublic static class PCIList");
 					textWriter.WriteLine("\t{");
 
-					textWriter.WriteLine("\t\tpublic static string Lookup(ushort VendorID)");
+					textWriter.WriteLine("\t\tpublic static string Lookup(ushort vendorID)");
 					textWriter.WriteLine("\t\t{");
-					textWriter.WriteLine("\t\t\tswitch (VendorID) {");
+					textWriter.WriteLine("\t\t\tswitch (vendorID) {");
 
 					using (TextReader textReader = new StreamReader(args[0])) {
 						string line = null;
@@ -63,11 +63,11 @@ namespace Mosa.Tools.CreatePCIList
 					textWriter.WriteLine("\t\t\t\tdefault: return string.Empty;");
 					textWriter.WriteLine("\t\t\t}");
 					textWriter.WriteLine("\t\t}");
+					textWriter.WriteLine("");
 
-
-					textWriter.WriteLine("\t\tpublic static string Lookup(ushort VendorID, ushort DeviceID)");
+					textWriter.WriteLine("\t\tpublic static string Lookup(ushort vendorID, ushort deviceID)");
 					textWriter.WriteLine("\t\t{");
-					textWriter.WriteLine("\t\t\tswitch ((uint)((VendorID << 16) | DeviceID)) {");
+					textWriter.WriteLine("\t\t\tswitch ((uint)((vendorID << 16) | deviceID)) {");
 
 					using (TextReader textReader = new StreamReader(args[0])) {
 						string line = null;
@@ -90,9 +90,9 @@ namespace Mosa.Tools.CreatePCIList
 					textWriter.WriteLine("\t\t\t}");
 					textWriter.WriteLine("\t\t}");
 
-					textWriter.WriteLine("\t\tpublic static string Lookup(ushort VendorID, ushort DeviceID, ushort SubSystem, ushort SubVendor)");
+					textWriter.WriteLine("\t\tpublic static string Lookup(ushort vendorID, ushort deviceID, ushort subSystem, ushort subVendor)");
 					textWriter.WriteLine("\t\t{");
-					textWriter.WriteLine("\t\t\tswitch ((ulong)((VendorID << 48) | (DeviceID << 32) | (SubSystem << 16) | SubVendor)) {");
+					textWriter.WriteLine("\t\t\tswitch ((ulong)((vendorID << 48) | (deviceID << 32) | (subSystem << 16) | subVendor)) {");
 
 					using (TextReader textReader = new StreamReader(args[0])) {
 						string line = null;
