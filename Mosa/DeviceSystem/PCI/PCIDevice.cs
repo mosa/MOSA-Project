@@ -67,7 +67,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// <summary>
 		/// 
 		/// </summary>
-		protected PCIBaseAddress[] pciBaseAddresses;
+		protected BaseAddress[] pciBaseAddresses;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -147,7 +147,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the base addresses.
 		/// </summary>
 		/// <value>The base addresses.</value>
-		public PCIBaseAddress[] BaseAddresses { get { return pciBaseAddresses; } }
+		public BaseAddress[] BaseAddresses { get { return pciBaseAddresses; } }
 
 		/// <summary>
 		/// Create a new PCIDevice instance at the selected PCI address
@@ -183,7 +183,7 @@ namespace Mosa.DeviceSystem.PCI
 			if ((data & 0xFF00) != 0)
 				this.irq = (byte)(data & 0xFF);
 
-			this.pciBaseAddresses = new PCIBaseAddress[8];
+			this.pciBaseAddresses = new BaseAddress[8];
 
 			for (byte i = 0; i < 6; i++) {
 				uint baseAddress = pciController.ReadConfig(bus, slot, fun, (byte)(16 + (i * 4)));
@@ -198,11 +198,11 @@ namespace Mosa.DeviceSystem.PCI
 					HAL.EnableAllInterrupts();
 
 					if (baseAddress % 2 == 1) {
-						pciBaseAddresses[i] = new PCIBaseAddress(PCIAddressRegion.IO, baseAddress & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
+						pciBaseAddresses[i] = new BaseAddress(AddressRegion.IO, baseAddress & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
 						ioPortRegionCount++;
 					}
 					else {
-						pciBaseAddresses[i] = new PCIBaseAddress(PCIAddressRegion.Memory, baseAddress & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((baseAddress & 0x08) == 1));
+						pciBaseAddresses[i] = new BaseAddress(AddressRegion.Memory, baseAddress & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((baseAddress & 0x08) == 1));
 						memoryRegionCount++;
 					}
 				}
@@ -210,9 +210,9 @@ namespace Mosa.DeviceSystem.PCI
 
 			if ((classCode == 0x03) || (subClassCode == 0x00) || (progIF == 0x00)) {
 				// Special case for generic VGA
-				pciBaseAddresses[6] = new PCIBaseAddress(PCIAddressRegion.Memory, 0xA0000, 0x1FFFF, false);
+				pciBaseAddresses[6] = new BaseAddress(AddressRegion.Memory, 0xA0000, 0x1FFFF, false);
 				memoryRegionCount++;
-				pciBaseAddresses[7] = new PCIBaseAddress(PCIAddressRegion.IO, 0x3B0, 0x0F, false);
+				pciBaseAddresses[7] = new BaseAddress(AddressRegion.IO, 0x3B0, 0x0F, false);
 				ioPortRegionCount++;
 			}
 		}
@@ -232,10 +232,10 @@ namespace Mosa.DeviceSystem.PCI
 			int ioRegions = 0;
 			int memoryRegions = 0;
 
-			foreach (PCIBaseAddress pciBaseAddress in pciBaseAddresses)
+			foreach (BaseAddress pciBaseAddress in pciBaseAddresses)
 				switch (pciBaseAddress.Region) {
-					case PCIAddressRegion.IO: ioPortRegions[ioRegions++] = new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size); break;
-					case PCIAddressRegion.Memory: memoryRegion[memoryRegions++] = new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size); break;
+					case AddressRegion.IO: ioPortRegions[ioRegions++] = new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size); break;
+					case AddressRegion.Memory: memoryRegion[memoryRegions++] = new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size); break;
 					default: break;
 				}
 

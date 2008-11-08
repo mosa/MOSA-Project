@@ -107,11 +107,11 @@ namespace Mosa.Emulator
 					screen.Write(pciDevice.RevisionID.ToString("X"));
 					screen.WriteLine();
 
-					foreach (PCIBaseAddress address in pciDevice.BaseAddresses) {
+					foreach (BaseAddress address in pciDevice.BaseAddresses) {
 						if (address.Address != 0) {
 							screen.Write("    ");
 
-							if (address.Region == PCIAddressRegion.IO)
+							if (address.Region == AddressRegion.IO)
 								screen.Write("I/O Port at 0x");
 							else
 								screen.Write("Memory at 0x");

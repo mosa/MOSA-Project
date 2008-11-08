@@ -16,7 +16,7 @@ namespace Mosa.DeviceDrivers.ISA
 	/// <summary>
 	/// Direct Memory Access (DMA) Device Driver
 	/// </summary>
-	[ISADeviceSignature(AutoLoad = false, BasePort = 0x0000, PortRange = 32, AltBasePort = 0x0080, AltPortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[DeviceSignature(AutoLoad = false, BasePort = 0x0000, PortRange = 32, AltBasePort = 0x0080, AltPortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class DMA8Bit : ISAHardwareDevice, IDevice, IHardwareDevice
 	{
 		#region Definitions

@@ -20,7 +20,7 @@ namespace Mosa.DeviceDrivers.ISA
     /// <summary>
 	/// Programmable Interval Timer (PIT) Device Driver
     /// </summary>
-	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0040, PortRange = 4, IRQ = 0, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[DeviceSignature(AutoLoad = true, BasePort = 0x0040, PortRange = 4, IRQ = 0, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class PIT : ISAHardwareDevice, IDevice, IHardwareDevice
 	{
 		#region Definitions

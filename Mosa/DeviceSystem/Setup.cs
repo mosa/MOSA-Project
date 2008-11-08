@@ -31,8 +31,8 @@ namespace Mosa.DeviceSystem
 		/// <value>The resource manager.</value>
 		static public IResourceManager ResourceManager { get { return resourceManager; } }
 
-		static private ISA.ISARegistry isaDeviceDrivers;
-		static private PCI.PCIRegistry pciDeviceDrivers;
+		static private ISA.Registry isaDeviceDrivers;
+		static private PCI.Registry pciDeviceDrivers;
 
 		/// <summary>
 		/// Initializes the Device Driver System.
@@ -46,12 +46,12 @@ namespace Mosa.DeviceSystem
 			deviceManager = new DeviceManager();
 
 			// Setup ISA Driver Registry
-			isaDeviceDrivers = new Mosa.DeviceSystem.ISA.ISARegistry(PlatformArchitecture.x86);
+			isaDeviceDrivers = new Mosa.DeviceSystem.ISA.Registry(PlatformArchitecture.x86);
 			// Load registry with build-in drivers
 			isaDeviceDrivers.RegisterBuildInDeviceDrivers();
 
 			// Setup PCI Driver Registry
-			pciDeviceDrivers = new Mosa.DeviceSystem.PCI.PCIRegistry(PlatformArchitecture.x86);
+			pciDeviceDrivers = new Mosa.DeviceSystem.PCI.Registry(PlatformArchitecture.x86);
 			// Load registry with build-in drivers
 			pciDeviceDrivers.RegisterBuildInDeviceDrivers();
 		}

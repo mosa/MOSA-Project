@@ -22,7 +22,7 @@ namespace Mosa.DeviceDrivers.ISA
     /// <summary>
 	/// Programmable Interrupt Controller (PIC) Device Driver
     /// </summary>
-	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0020, PortRange = 2, AltBasePort = 0x00A0, AltPortRange = 2, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[DeviceSignature(AutoLoad = true, BasePort = 0x0020, PortRange = 2, AltBasePort = 0x00A0, AltPortRange = 2, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class PIC : ISAHardwareDevice, IDevice, IHardwareDevice
 	{
 		#region Definitions

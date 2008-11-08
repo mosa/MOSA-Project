@@ -9,7 +9,7 @@
 
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.ISA;
-using Mosa.DeviceSystem.PCI;
+using PCI = Mosa.DeviceSystem.PCI;
 using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.ISA
@@ -17,7 +17,7 @@ namespace Mosa.DeviceDrivers.ISA
     /// <summary>
     /// 
     /// </summary>
-	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[DeviceSignature(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class PCIController : ISAHardwareDevice, IDevice, IHardwareDevice, IPCIController
 	{
 
@@ -93,7 +93,7 @@ namespace Mosa.DeviceDrivers.ISA
 				for (byte slot = 0; slot < 16; slot++) {
 					for (byte fun = 0; fun < 7; fun++) {
 						if (ProbeDevice(bus, slot, fun)) {
-							devices.Add(new PCIDevice(this, bus, slot, fun));
+							devices.Add(new Mosa.DeviceSystem.PCI.PCIDevice(this, bus, slot, fun));
 						}
 					}
 				}

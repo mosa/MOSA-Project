@@ -16,7 +16,7 @@ namespace Mosa.DeviceDrivers.ISA
     /// <summary>
     /// CMOS Device Driver
     /// </summary>
-    [ISADeviceSignature(AutoLoad = true, BasePort = 0x0070, PortRange = 2, Platforms = PlatformArchitecture.x86)]
+    [DeviceSignature(AutoLoad = true, BasePort = 0x0070, PortRange = 2, Platforms = PlatformArchitecture.x86)]
     public class CMOS : ISAHardwareDevice, IDevice, IHardwareDevice
     {
         /// <summary>
