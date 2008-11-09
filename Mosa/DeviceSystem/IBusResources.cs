@@ -22,12 +22,25 @@ namespace Mosa.DeviceSystem
         /// <param name="index">The index.</param>
         /// <returns></returns>
 		IIOPortRegion GetIOPortRegion(byte index);
+
         /// <summary>
         /// Gets the memory region.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
 		IMemoryRegion GetMemoryRegion(byte index);
+
+		/// <summary>
+		/// Gets the IO point region count.
+		/// </summary>
+		/// <value>The IO point region count.</value>
+		byte IOPointRegionCount { get; }
+
+		/// <summary>
+		/// Gets the memory region count.
+		/// </summary>
+		/// <value>The memory region count.</value>
+		byte MemoryRegionCount { get; }
 
         /// <summary>
         /// Gets the memory.
@@ -48,11 +61,13 @@ namespace Mosa.DeviceSystem
         /// </summary>
         /// <value>The IRQ.</value>
 		byte IRQ { get; }
+
         /// <summary>
         /// Enables the IRQ.
         /// </summary>
 		void EnableIRQ();
-        /// <summary>
+        
+		/// <summary>
         /// Disables the IRQ.
         /// </summary>
 		void DisableIRQ();
