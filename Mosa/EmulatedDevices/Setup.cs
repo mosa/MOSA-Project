@@ -7,6 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.EmulatedKernel;
+using Mosa.EmulatedDevices.Emulated;
+
 namespace Mosa.EmulatedDevices
 {
 	/// <summary>
@@ -19,13 +22,13 @@ namespace Mosa.EmulatedDevices
 		/// </summary>
 		public static void Initialize()
 		{
-			new CMOS(CMOS.StandardIOBase);
-			new VGATextDriver(VGATextDriver.StandardAddressBase);
+			IOPortDispatch.RegisterDevice(new CMOS(CMOS.StandardIOBase));
+			IOPortDispatch.RegisterDevice(new VGATextDriver());
 
 			string[] files = new string[1];
 			files[0] = @"..\..\Data\HardDriveImage\hd.img";
 
-			new IDEDiskDevice(IDEDiskDevice.PrimaryIOBase, files);
+			IOPortDispatch.RegisterDevice(new IDEDiskDevice(IDEDiskDevice.PrimaryIOBase, files));
 		}
 	}
 }

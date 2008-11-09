@@ -24,24 +24,12 @@ namespace Mosa.DeviceDrivers.ISA.VideoCard
 		internal struct CRTCommands
 		{
 			internal const byte HorizontalTotal = 0x00;
-			internal const byte HorizontalDisplayed = 0x01;
-			internal const byte HorizontalSyncPosition = 0x02;
-			internal const byte HorizontalSyncPulseWidth = 0x03;
-			internal const byte VerticalTotal = 0x04;
-			internal const byte VerticalDisplayed = 0x05;
-			internal const byte VerticalSyncPosition = 0x06;
-			internal const byte VerticalSuncPulseWidth = 0x07;
-			internal const byte InterlaceMode = 0x08;
-			internal const byte MaximumScanLines = 0x09;
+			internal const byte HorizontalDisplayEnableEnd = 0x01;
 			internal const byte CursorStart = 0x0A;
 			internal const byte CursorEnd = 0x0B;
-			internal const byte StartAddress = 0x0C;
-			internal const byte StartAddressHigh = 0x0C;
-			internal const byte StartAddressLow = 0x0D;
 			internal const byte CursorLocationHigh = 0x0E;
 			internal const byte CursorLocationLow = 0x0F;
-			internal const byte LightPenHigh = 0x10;
-			internal const byte LightPenLow = 0x11;
+			internal const byte VerticalDisplayEnableEnd = 0x12;
 		}
 
 		#endregion
@@ -154,8 +142,8 @@ namespace Mosa.DeviceDrivers.ISA.VideoCard
 				activeControllerData = crtControllerData;
 			}
 
-			width = GetValue(CRTCommands.HorizontalDisplayed);
-			height = GetValue(CRTCommands.VerticalDisplayed);
+			width = GetValue(CRTCommands.HorizontalDisplayEnableEnd);
+			height = GetValue(CRTCommands.VerticalDisplayEnableEnd);
 
 			width++;
 			width = (byte)(width / bytePerChar);

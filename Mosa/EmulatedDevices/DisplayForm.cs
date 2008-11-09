@@ -51,15 +51,20 @@ namespace Mosa.EmulatedDevices
 			}
 		}
 
-        /// <summary>
-        /// Zeichnet den Hintergrund des Steuerelements.
-        /// </summary>
-        /// <param name="e"><see cref="T:System.Windows.Forms.PaintEventArgs"/> mit den Ereignisdaten.</param>
-        protected override void OnPaintBackground(PaintEventArgs e)
+		/// <summary>
+		/// Paints the background of the control.
+		/// </summary>
+		/// <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs"/> that contains the event data.</param>
+      protected override void OnPaintBackground(PaintEventArgs e)
         {
             //base.OnPaintBackground(e);
         }
 
+	  /// <summary>
+	  /// Handles the Load event of the DisplayForm control.
+	  /// </summary>
+	  /// <param name="sender">The source of the event.</param>
+	  /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void DisplayForm_Load(object sender, EventArgs e)
 		{
 

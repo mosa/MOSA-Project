@@ -10,7 +10,7 @@
 using System;
 using Mosa.DeviceSystem;
 
-namespace Mosa.EmulatedDevices
+namespace Mosa.EmulatedDevices.Synthetic
 {
 	/// <summary>
 	/// Implements an emulated keyboard

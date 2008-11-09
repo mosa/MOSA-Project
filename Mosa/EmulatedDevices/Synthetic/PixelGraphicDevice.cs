@@ -14,11 +14,11 @@ using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 using Mosa.EmulatedKernel;
 
-namespace Mosa.EmulatedDevices
+namespace Mosa.EmulatedDevices.Synthetic
 {
 
 	/// <summary>
-	/// Represents an emulated vga  device
+	/// Represents an emulated VGA Device
 	/// </summary>
 	public class PixelGraphicDevice : Device, IPixelGraphicsDevice
 	{

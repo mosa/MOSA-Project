@@ -11,6 +11,7 @@ using System;
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
+using Mosa.EmulatedDevices.Synthetic;
 
 using Pictor;
 using Pictor.Renderer;
@@ -52,13 +53,13 @@ namespace Mosa.Emulator
 			DeviceSystem.HAL.SetInterruptHandler(DeviceSystem.Setup.ResourceManager.InterruptManager.ProcessInterrupt);
 
 			// Create Emulated Keyboard device
-			Mosa.EmulatedDevices.Keyboard keyboard = new Mosa.EmulatedDevices.Keyboard();
+			Mosa.EmulatedDevices.Synthetic.Keyboard keyboard = new Mosa.EmulatedDevices.Synthetic.Keyboard();
 
 			// Added the emulated keyboard device to the device drivers
 			DeviceSystem.Setup.DeviceManager.Add(keyboard);
 
 			// Create Emulated Graphic Pixel device
-			Mosa.EmulatedDevices.PixelGraphicDevice pixelGraphicDevice = new Mosa.EmulatedDevices.PixelGraphicDevice(500, 500);
+			Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice pixelGraphicDevice = new Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice(500, 500);
 
 			// Added the emulated keyboard device to the device drivers
 			DeviceSystem.Setup.DeviceManager.Add(pixelGraphicDevice);
@@ -148,15 +149,6 @@ namespace Mosa.Emulator
 					}
 				}
 			}
-
-			//DateTime end = DateTime.Now.AddMinutes(1);
-			//Random random = new Random();
-			//while (DateTime.Now <= end) {
-			//    Color color = new Color((byte)(random.Next() % 255), (byte)(random.Next() % 255), (byte)(random.Next() % 255));
-			//    for (ushort x = 0; x < 400; x++)
-			//        pixelGraphicDevice.WritePixel(color, (ushort)(400 - x), x);
-			//}
-
 
             byte[] buffer = new byte[pixelGraphicDevice.Width * pixelGraphicDevice.Height * 3];
             RenderingBuffer<byte> renderbuffer = new RenderingBuffer<byte>(buffer, (uint)pixelGraphicDevice.Width, (uint)pixelGraphicDevice.Height, 3);
