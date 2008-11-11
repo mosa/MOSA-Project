@@ -163,7 +163,6 @@ namespace Mosa.DeviceSystem.PCI
 			this.slot = slot;
 			this.function = fun;
 
-
 			uint data = pciController.ReadConfig(bus, slot, fun, 0);
 			this.vendorID = (ushort)(data & 0xFFFF);
 			this.deviceID = (ushort)((data >> 16) & 0xFFFF);
@@ -174,7 +173,7 @@ namespace Mosa.DeviceSystem.PCI
 			this.classCode = (ushort)((data >> 16) & 0xFFFF);
 			this.subClassCode = (byte)((data >> 16) & 0xFF);
 
-			data = pciController.ReadConfig(bus, slot, fun, 0x0c);
+			data = pciController.ReadConfig(bus, slot, fun, 0x2c); 
 			this.subVendorID = (ushort)(data & 0xFFFF);
 			this.subDeviceID = (ushort)((data >> 16) & 0xFFFF);
 
@@ -208,7 +207,7 @@ namespace Mosa.DeviceSystem.PCI
 				}
 			}
 
-			if ((classCode == 0x03) || (subClassCode == 0x00) || (progIF == 0x00)) {
+			if ((classCode == 0x03) && (subClassCode == 0x00) && (progIF == 0x00)) {
 				// Special case for generic VGA
 				pciBaseAddresses[6] = new BaseAddress(AddressRegion.Memory, 0xA0000, 0x1FFFF, false);
 				memoryRegionCount++;

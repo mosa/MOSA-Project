@@ -1,4 +1,4 @@
-﻿namespace Mosa.EmulatedDevices
+﻿namespace Mosa.EmulatedDevices.Synthetic
 {
 	partial class DisplayForm
 	{

@@ -22,6 +22,11 @@ namespace Mosa.EmulatedDevices
 		/// </summary>
 		public static void Initialize()
 		{
+			PCIBus pciBus = new PCIBus();
+
+			pciBus.Add(new PCIController(PCIController.StandardIOBase, pciBus));
+			IOPortDispatch.RegisterDevice(pciBus.Get(0) as IIOPortDevice);
+
 			IOPortDispatch.RegisterDevice(new CMOS(CMOS.StandardIOBase));
 			IOPortDispatch.RegisterDevice(new VGATextDriver());
 

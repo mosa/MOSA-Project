@@ -89,7 +89,7 @@ namespace Mosa.DeviceDrivers.ISA
 		{
 			LinkedList<IDevice> devices = new LinkedList<IDevice>();
 
-			for (byte bus = 0; bus <= 255; bus++) {
+			for (byte bus = 0; bus < 255; bus++) {
 				for (byte slot = 0; slot < 16; slot++) {
 					for (byte fun = 0; fun < 7; fun++) {
 						if (ProbeDevice(bus, slot, fun)) {

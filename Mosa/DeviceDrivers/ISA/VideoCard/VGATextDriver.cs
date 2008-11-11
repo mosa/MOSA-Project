@@ -279,11 +279,11 @@ namespace Mosa.DeviceDrivers.ISA.VideoCard
 			uint size = (uint)(((height * width) - width) * bytePerChar);
 
 			for (uint i = index; i < (index + size); i++)
-				memory[i] = memory[i + width];
+				memory[i] = memory[(uint)(i + (width * bytePerChar))];
 
 			index = (uint)(index + ((height - 1) * width * bytePerChar));
 
-			for (int i = 0; i < size; i++)
+			for (int i = 0; i < width * 2; i++)
 				memory[(uint)(index + i)] = 0;
 		}
 	}

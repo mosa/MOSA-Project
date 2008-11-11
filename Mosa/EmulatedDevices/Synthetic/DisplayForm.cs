@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Mosa.EmulatedDevices
+namespace Mosa.EmulatedDevices.Synthetic
 {
 	/// <summary>
 	/// 
@@ -31,8 +31,8 @@ namespace Mosa.EmulatedDevices
 			timer.Interval = 1000;
 			timer.Start();
 			//timer.Tick += new EventHandler(Timer_Tick);
-            this.DoubleBuffered = true;
-        }
+			this.DoubleBuffered = true;
+		}
 
 		private void Timer_Tick(object sender, EventArgs eArgs)
 		{
@@ -55,16 +55,16 @@ namespace Mosa.EmulatedDevices
 		/// Paints the background of the control.
 		/// </summary>
 		/// <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs"/> that contains the event data.</param>
-      protected override void OnPaintBackground(PaintEventArgs e)
-        {
-            //base.OnPaintBackground(e);
-        }
+		protected override void OnPaintBackground(PaintEventArgs e)
+		{
+			//base.OnPaintBackground(e);
+		}
 
-	  /// <summary>
-	  /// Handles the Load event of the DisplayForm control.
-	  /// </summary>
-	  /// <param name="sender">The source of the event.</param>
-	  /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+		/// <summary>
+		/// Handles the Load event of the DisplayForm control.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void DisplayForm_Load(object sender, EventArgs e)
 		{
 
