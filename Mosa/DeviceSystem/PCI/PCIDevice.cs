@@ -43,7 +43,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// <summary>
 		/// 
 		/// </summary>
-		protected ushort classCode;
+		protected byte classCode;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -116,7 +116,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the class code.
 		/// </summary>
 		/// <value>The class code.</value>
-		public ushort ClassCode { get { return classCode; } }
+		public byte ClassCode { get { return classCode; } }
 		/// <summary>
 		/// Gets the prog IF.
 		/// </summary>
@@ -170,8 +170,8 @@ namespace Mosa.DeviceSystem.PCI
 			data = pciController.ReadConfig(bus, slot, fun, 0x08);
 			this.revisionID = (byte)(data & 0xFF);
 			this.progIF = (byte)((data >> 8) & 0xFF);
-			this.classCode = (ushort)((data >> 16) & 0xFFFF);
-			this.subClassCode = (byte)((data >> 16) & 0xFF);
+			this.classCode = (byte)((data >> 16) & 0xFF);
+			this.subClassCode = (byte)((data >> 24) & 0xFF);
 
 			data = pciController.ReadConfig(bus, slot, fun, 0x2c); 
 			this.subVendorID = (ushort)(data & 0xFFFF);

@@ -100,13 +100,32 @@ namespace Mosa.Emulator
 
 					screen.Write("  Vendor:0x");
 					screen.Write(pciDevice.VendorID.ToString("X"));
-					screen.Write(" Device:0x");
+					screen.Write(" [");
+					screen.Write(DeviceTable.Lookup(pciDevice.VendorID));
+					screen.WriteLine("]"); 
+
+					screen.Write("  Device:0x");
 					screen.Write(pciDevice.DeviceID.ToString("X"));
-					screen.Write(" Class:0x");
-					screen.Write(pciDevice.ClassCode.ToString("X"));
 					screen.Write(" Rev:0x");
 					screen.Write(pciDevice.RevisionID.ToString("X"));
-					screen.WriteLine();
+					screen.Write(" [");
+					screen.Write(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID));
+					screen.WriteLine("]"); 
+
+					screen.Write("  Class:0x");
+					screen.Write(pciDevice.ClassCode.ToString("X"));
+					screen.Write(" [");
+					screen.Write(ClassCodeTable.Lookup(pciDevice.ClassCode));
+					screen.WriteLine("]"); 
+
+					screen.Write("  SubClass:0x");
+					screen.Write(pciDevice.SubClassCode.ToString("X"));
+					screen.Write(" [");
+					screen.Write(SubClassCodeTable.Lookup(pciDevice.ClassCode, pciDevice.SubClassCode, pciDevice.ProgIF));
+					screen.WriteLine("]"); 
+
+//					screen.Write("  ");
+//					screen.WriteLine(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID, pciDevice.SubDeviceID, pciDevice.SubVendorID));
 
 					foreach (BaseAddress address in pciDevice.BaseAddresses) {
 						if (address == null)
