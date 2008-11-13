@@ -786,7 +786,114 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         private void ExpandURem(Context ctx, IR.URemInstruction instruction)
         {
-            throw new NotSupportedException();
+            BasicBlock nextBlock;
+            BasicBlock[] blocks = CreateBlocks(ctx, instruction, 4, out nextBlock);
+            SigType I4 = new SigType(CilElementType.I4);
+
+            Operand op0H, op1H, op2H, op0L, op1L, op2L;
+            SplitLongOperand(instruction.Results[0], out op0L, out op0H);
+            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+            SplitLongOperand(instruction.Operand2, out op2L, out op2H);
+            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+            RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
+            RegisterOperand edi = new RegisterOperand(I4, GeneralPurposeRegister.EDI);
+            RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
+
+            // Determine sign of the result (edi = 0 if result is positive, non-zero
+            // otherwise) and make operands positive.
+            //    xor     edi,edi         ; result sign assumed positive
+            //mov     eax,HIWORD(DVND) ; hi word of a
+            //or      eax,eax         ; test to see if signed
+            //jge     short L1        ; skip rest if a is already positive
+            //inc     edi             ; complement result sign flag bit
+            //mov     edx,LOWORD(DVND) ; lo word of a
+            //neg     eax             ; make a positive
+            //neg     edx
+            //sbb     eax,0
+            //mov     HIWORD(DVND),eax ; save positive value
+            //mov     LOWORD(DVND),edx
+            Replace(ctx, new Instruction[] {
+                new IR.PushInstruction(edi),
+                new IR.PushInstruction(esi),
+                new IR.PushInstruction(ebx),
+                new Instructions.MoveInstruction(eax, op2H),
+                new Instructions.LogicalOrInstruction(eax, eax),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[0].Label),
+                new Instructions.MoveInstruction(ecx, op2L),
+                new Instructions.MoveInstruction(eax, op1H),
+                new Instructions.LogicalXorInstruction(edx, edx),
+                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.MoveInstruction(eax, op1L),
+                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.MoveInstruction(eax, edx),
+                new Instructions.LogicalXorInstruction(edx, edx),
+                new IR.JmpInstruction(nextBlock.Label),
+            });
+
+            // L1:
+            blocks[0].Instructions.AddRange(new Instruction[] {
+                new Instructions.MoveInstruction(ecx, eax),
+                new Instructions.MoveInstruction(ebx, op2L),
+                new Instructions.MoveInstruction(edx, op1H),
+                new Instructions.MoveInstruction(eax, op1L),
+            });
+
+            // L3:
+            blocks[1].Instructions.AddRange(new Instruction[] {
+                new Instructions.ShrInstruction(ecx, new ConstantOperand(I4, 1)),
+                new Instructions.RcrInstruction(ebx, new ConstantOperand(I4, 1)), // RCR
+                new Instructions.ShrInstruction(edx, new ConstantOperand(I4, 1)),
+                new Instructions.RcrInstruction(eax, new ConstantOperand(I4, 1)),
+                new Instructions.LogicalOrInstruction(ecx, ecx),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[1].Label),
+                new Instructions.UDivInstruction(eax, ebx),
+                new Instructions.MoveInstruction(ecx, eax),
+                new Instructions.MulInstruction(eax, op2H),
+                new Instructions.Intrinsics.XchgInstruction(ecx, eax),
+                new Instructions.MulInstruction(eax, op2L),
+                new Instructions.AddInstruction(edx, ecx),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[2].Label),
+                new Instructions.CmpInstruction(edx, op1H),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[2].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[3].Label),
+                new Instructions.CmpInstruction(eax, op1L),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[3].Label),
+            });
+
+            // L4:
+            blocks[2].Instructions.AddRange(new Instruction[] {
+                new Instructions.SubInstruction(eax, op2L),
+                new Instructions.SbbInstruction(edx, op2H),
+            });
+
+            // L5:
+            blocks[3].Instructions.AddRange(new Instruction[] {
+                new Instructions.SubInstruction(eax, op1L),
+                new Instructions.SbbInstruction(edx, op1H),
+                new Instructions.NegInstruction(edx),
+                new Instructions.NegInstruction(eax),
+                new Instructions.SbbInstruction(edx, new ConstantOperand(I4, (int)0)),
+            });
+
+            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+                new MoveInstruction(op0L, eax),
+                new MoveInstruction(op0H, edx),
+                new IR.PopInstruction(ebx),
+                new IR.PopInstruction(esi),
+                new IR.PopInstruction(edi),
+            });
+
+            // Link the created blocks together
+            LinkBlocks(ctx.Block, blocks[0]);
+            LinkBlocks(ctx.Block, nextBlock);
+            LinkBlocks(blocks[0], blocks[1]);
+            LinkBlocks(blocks[1], blocks[1]);
+            LinkBlocks(blocks[1], blocks[2]);
+            LinkBlocks(blocks[1], blocks[3]);
+            LinkBlocks(blocks[2], blocks[3]);
+            LinkBlocks(blocks[3], nextBlock);
         }
 
         /// <summary>
