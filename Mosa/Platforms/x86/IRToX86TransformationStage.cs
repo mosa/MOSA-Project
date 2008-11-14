@@ -32,7 +32,8 @@ namespace Mosa.Platforms.x86
         // HACK: Remove this once we can ensure that no CIL instructions reach this.
         IL.IILVisitor<CodeTransformationStage.Context>,
         IR.IIRVisitor<CodeTransformationStage.Context>,
-        IX86InstructionVisitor<CodeTransformationStage.Context>
+        IX86InstructionVisitor<CodeTransformationStage.Context>,
+        Mosa.Runtime.CompilerFramework.IPlatformTransformationStage
     {
         #region Construction
 

@@ -46,6 +46,7 @@ namespace Mosa.Tools.Compiler
                 new ILDecodingStage(),
                 new BasicBlockBuilderStage(),
                 new CilToIrTransformationStage(),
+                InstructionStatisticsStage.Instance,
                 //InstructionLogger.Instance,
                 //new StackResolutionStage(),
                 //InstructionLogger.Instance,
@@ -77,6 +78,8 @@ namespace Mosa.Tools.Compiler
             }
 
             base.EndCompile();
+
+            InstructionStatisticsStage.Instance.PrintStatistics();
         }
 
         #endregion // MethodCompilerBase Overrides

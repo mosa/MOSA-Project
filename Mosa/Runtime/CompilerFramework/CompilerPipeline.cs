@@ -185,5 +185,44 @@ namespace Mosa.Runtime.CompilerFramework
 
             return result;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="StageType"></typeparam>
+        /// <param name="item"></param>
+        public bool InsertBefore<StageType>(T item) where StageType: class
+        {
+            bool result = false;
+            for (int i = 0; i < _pipeline.Count; ++i)
+            {
+                if (_pipeline[i].GetType() == typeof(StageType))
+                {
+                    _pipeline.Insert(i, item);
+                    result = true;
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="StageType"></typeparam>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public bool InsertAfter<StageType>(T item) where StageType : class
+        {
+            bool result = false;
+            for (int i = 0; i < _pipeline.Count; ++i)
+            {
+                if (_pipeline[i].GetType() == typeof(StageType))
+                {
+                    _pipeline.Insert(i + 1, item);
+                    result = true;
+                }
+            }
+            return result;
+        }
     }
 }
