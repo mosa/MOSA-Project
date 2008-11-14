@@ -170,6 +170,15 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+            pipeline.InsertBefore<CilToIrTransformationStage>(this);
+        }
+
+        /// <summary>
         /// Schedules the branch targets of the branch instruction.
         /// </summary>
         /// <param name="currentBlock">The currently processed basic block.</param>

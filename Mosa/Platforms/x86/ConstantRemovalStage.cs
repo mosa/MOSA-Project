@@ -102,6 +102,15 @@ namespace Mosa.Platforms.x86
             _constantRemoved = (0 != literals.Count);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+            pipeline.InsertAfter<EnterSSA>(this);
+        }
+
         #endregion // IMethodCompilerStage Members
 
         #region Internals

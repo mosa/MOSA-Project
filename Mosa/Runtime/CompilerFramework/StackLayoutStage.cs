@@ -124,6 +124,15 @@ namespace Mosa.Runtime.CompilerFramework
             epilogueBlock.Add(arch.CreateInstruction(typeof(IR.EpilogueInstruction), _localsSize));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+            pipeline.InsertAfter<LeaveSSA>(this);
+        }
+
         #endregion // IMethodCompilerStage Members
 
         #region IStackLayoutStage Members

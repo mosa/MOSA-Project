@@ -89,5 +89,15 @@ namespace Mosa.Runtime.CompilerFramework
             foreach (IMethodCompilerStage stage in Stages)
                 stage.Run(compiler);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+            foreach (IMethodCompilerStage stage in Stages)
+                stage.AddToPipeline(pipeline);
+        }
     }
 }

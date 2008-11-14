@@ -100,6 +100,15 @@ namespace Mosa.Runtime.CompilerFramework
 
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+            pipeline.InsertBefore<IL.CilToIrTransformationStage>(this);
+        }
+
 		/// <summary>
 		/// Processes the block.
 		/// </summary>

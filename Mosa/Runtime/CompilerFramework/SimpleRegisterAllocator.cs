@@ -99,6 +99,15 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+            pipeline.InsertBefore<ICodeGenerationStage>(this);
+        }
+
+        /// <summary>
         /// Spills all active operands at the end of a basic block.
         /// </summary>
         /// <param name="block">The basic block to spill in.</param>

@@ -180,6 +180,15 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+            pipeline.InsertAfter<DominanceCalculationStage>(this);
+        }
+
+        /// <summary>
         /// Adds PHI functions for all ref/out parameters of the method being compiled.
         /// </summary>
         /// <param name="compiler">The method compiler.</param>

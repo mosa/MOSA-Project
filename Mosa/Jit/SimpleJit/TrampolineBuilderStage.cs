@@ -58,6 +58,15 @@ namespace Mosa.Jit.SimpleJit
             // we need to compile so we don't have to do anything here.
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+            pipeline.Add(this);
+        }
+
         #endregion // IMethodCompilerStage Members
 
         #region IInstructionsProvider Members

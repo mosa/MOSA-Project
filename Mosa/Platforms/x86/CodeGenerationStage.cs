@@ -83,6 +83,11 @@ namespace Mosa.Platforms.x86
             _emitter.Label(block.Label);
         }
 
+        public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+            pipeline.Add(this);
+        }
+
         #endregion // Methods
 
         #region IX86InstructionVisitor Members

@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// Base class for code generation stages.
     /// </summary>
     /// <typeparam name="ContextType">Specifies the context type used by the code generation stage for its visitors.</typeparam>
-    public abstract class CodeGenerationStage<ContextType> : IMethodCompilerStage, IInstructionVisitor<ContextType>
+    public abstract class CodeGenerationStage<ContextType> : ICodeGenerationStage, IMethodCompilerStage, IInstructionVisitor<ContextType>
     {
         #region Data members
 
@@ -91,6 +91,12 @@ namespace Mosa.Runtime.CompilerFramework
                 EndGenerate();
             }
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public abstract void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline);
 
         #endregion // IMethodCompilerStage members
 

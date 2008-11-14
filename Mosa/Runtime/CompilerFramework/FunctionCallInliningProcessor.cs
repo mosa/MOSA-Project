@@ -45,6 +45,14 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+        }
+
 		#endregion
 	}
 }

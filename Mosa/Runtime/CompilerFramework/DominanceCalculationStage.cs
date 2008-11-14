@@ -80,6 +80,15 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+            pipeline.InsertAfter<IL.CilToIrTransformationStage>(this);
+        }
+
+        /// <summary>
         /// Calculates the immediate dominance of all blocks in the block provider.
         /// </summary>
         /// <param name="blockProvider">The block provider to calculate with.</param>

@@ -74,6 +74,15 @@ namespace Mosa.Tools.Compiler.TypeInitializers
             // Nothing to do
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+            pipeline.Add(this);
+        }
+
         #endregion // IMethodCompilerStage Members
 
         #region IInstructionsProvider Members
