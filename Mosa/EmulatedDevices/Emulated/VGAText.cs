@@ -19,7 +19,7 @@ namespace Mosa.EmulatedDevices.Emulated
 	/// <summary>
 	/// Represents an emulated VGA Text Device
 	/// </summary>
-	public class VGATextDriver : IHardwareDevice, IIOPortDevice
+	public class VGAText : IHardwareDevice, IIOPortDevice
 	{
 		#region Definitions
 
@@ -107,9 +107,9 @@ namespace Mosa.EmulatedDevices.Emulated
 		protected byte lastCommand;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VGATextDriver"/> class.
+		/// Initializes a new instance of the <see cref="VGAText"/> class.
 		/// </summary>
-		public VGATextDriver()
+		public VGAText()
 		{
 			ioBase = StandardIOBase;
 			baseAddress = StandardAddressBase;

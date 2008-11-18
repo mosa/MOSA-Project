@@ -15,15 +15,14 @@
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.ISA;
 
 namespace Mosa.DeviceDrivers.ISA
 {
     /// <summary>
 	/// Programmable Interrupt Controller (PIC) Device Driver
     /// </summary>
-	[DeviceSignature(AutoLoad = true, BasePort = 0x0020, PortRange = 2, AltBasePort = 0x00A0, AltPortRange = 2, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class PIC : ISAHardwareDevice, IDevice, IHardwareDevice
+	//[DeviceSignature(AutoLoad = true, BasePort = 0x20, PortRange = 2, AltBasePort = 0xA0, AltPortRange = 2, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	public class PIC : HardwareDevice, IDevice, IHardwareDevice
 	{
 		#region Definitions
 
@@ -79,31 +78,30 @@ namespace Mosa.DeviceDrivers.ISA
         /// </summary>
 		public PIC() { }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-		public override bool Setup()
+		/// <summary>
+		/// Setups this hardware device driver
+		/// </summary>
+		/// <param name="hardwareResources"></param>
+		/// <returns></returns>
+		public override bool Setup(IHardwareResources hardwareResources)
 		{
-			base.name = "PIC_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");
+			this.hardwareResources = hardwareResources;				
+			base.name = "PIC_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
-			masterCommandPort = base.busResources.GetIOPort(0, 0);
-			masterDataPort = base.busResources.GetIOPort(0, 1);
+			masterCommandPort = base.hardwareResources.GetIOPort(0, 0);
+			masterDataPort = base.hardwareResources.GetIOPort(0, 1);
 
-			slaveCommandPort = base.busResources.GetIOPort(1, 0);
-			slaveDataPort = base.busResources.GetIOPort(1, 1);
+			slaveCommandPort = base.hardwareResources.GetIOPort(1, 0);
+			slaveDataPort = base.hardwareResources.GetIOPort(1, 1);
 
 			return true;
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-		public override bool Probe() { return true; }
-
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-		public override bool Start()
+		/// <summary>
+		/// Starts this hardware device.
+		/// </summary>
+		/// <returns></returns>
+		public override DeviceDriverStartStatus Start()
 		{
 			byte masterMask;
 			byte slaveMask;
@@ -136,7 +134,8 @@ namespace Mosa.DeviceDrivers.ISA
 
 			DisableIRQs();
 
-			return true;
+			base.deviceStatus = DeviceStatus.Online;
+			return DeviceDriverStartStatus.Started;
 		}
 
         /// <summary>

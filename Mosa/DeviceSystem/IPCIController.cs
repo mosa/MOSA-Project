@@ -22,8 +22,26 @@ namespace Mosa.DeviceSystem
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		uint ReadConfig(byte bus, byte slot, byte function, byte register);
-		
+		uint ReadConfig32(byte bus, byte slot, byte function, byte register);
+		/// <summary>
+		/// Reads from configuraton space
+		/// </summary>
+		/// <param name="bus">The bus.</param>
+		/// <param name="slot">The slot.</param>
+		/// <param name="function">The function.</param>
+		/// <param name="register">The register.</param>
+		/// <returns></returns>
+		ushort ReadConfig16(byte bus, byte slot, byte function, byte register);
+		/// <summary>
+		/// Reads from configuraton space
+		/// </summary>
+		/// <param name="bus">The bus.</param>
+		/// <param name="slot">The slot.</param>
+		/// <param name="function">The function.</param>
+		/// <param name="register">The register.</param>
+		/// <returns></returns>
+		byte ReadConfig8(byte bus, byte slot, byte function, byte register);
+
 		/// <summary>
 		/// Writes to configuraton space
 		/// </summary>
@@ -32,6 +50,24 @@ namespace Mosa.DeviceSystem
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="value">The value.</param>
-		void WriteConfig(byte bus, byte slot, byte function, byte register, uint value);
+		void WriteConfig32(byte bus, byte slot, byte function, byte register, uint value);
+		/// <summary>
+		/// Writes to configuraton space
+		/// </summary>
+		/// <param name="bus">The bus.</param>
+		/// <param name="slot">The slot.</param>
+		/// <param name="function">The function.</param>
+		/// <param name="register">The register.</param>
+		/// <param name="value">The value.</param>
+		void WriteConfig16(byte bus, byte slot, byte function, byte register, ushort value);
+		/// <summary>
+		/// Writes to configuraton space
+		/// </summary>
+		/// <param name="bus">The bus.</param>
+		/// <param name="slot">The slot.</param>
+		/// <param name="function">The function.</param>
+		/// <param name="register">The register.</param>
+		/// <param name="value">The value.</param>
+		void WriteConfig8(byte bus, byte slot, byte function, byte register, byte value);
 	}
 }

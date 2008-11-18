@@ -83,7 +83,11 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <returns></returns>
 		public byte Read8(ushort port)
 		{
-			return 0xFF;
+			switch (port - ioBase) {
+				case 0: return 0xFF;
+				case 4: return ReadConfig8();
+				default: return 0xFF;
+			}
 		}
 
 		/// <summary>
@@ -93,7 +97,11 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <returns></returns>
 		public ushort Read16(ushort port)
 		{
-			return 0xFFFF;
+			switch (port - ioBase) {
+				case 0: return 0xFF;
+				case 4: return ReadConfig16();
+				default: return 0xFFFF;
+			}
 		}
 
 		/// <summary>
@@ -105,7 +113,7 @@ namespace Mosa.EmulatedDevices.Emulated
 		{
 			switch (port - ioBase) {
 				case 0: return address;
-				case 4: return ReadConfiguration();
+				case 4: return ReadConfig32();
 				default: return 0xFFFFFFFF;
 			}
 		}
@@ -137,7 +145,7 @@ namespace Mosa.EmulatedDevices.Emulated
 		{
 			switch (port - ioBase) {
 				case 0: address = data; return;
-				case 4: WriteConfiguration(data); return;
+				case 4: WriteConfig32(data); return;
 				default: return;
 			}
 		}
@@ -152,50 +160,88 @@ namespace Mosa.EmulatedDevices.Emulated
 		}
 
 		/// <summary>
-		/// Reads the configuration.
+		/// Gets the index.
 		/// </summary>
 		/// <returns></returns>
-		protected uint ReadConfiguration()
+		protected uint GetIndex()
 		{
 			byte bus = (byte)((address >> 16) & 0xFF);
 			byte slot = (byte)((address >> 11) & 0x0F);
 			byte fun = (byte)((address >> 8) & 0x07);
-			byte registry = (byte)(address & 0xFC);
 
-			uint index = (uint)(bus | (slot << 8) | (fun << 16));
+			return (uint)(bus | (slot << 8) | (fun << 16));
+		}
 
-			PCIDevice pciDevice = pciBus.Get(index);
+		/// <summary>
+		/// Gets the PCI device.
+		/// </summary>
+		/// <returns></returns>
+		protected PCIDevice GetPCIDevice()
+		{
+			return pciBus.Get(GetIndex());
+		}
+
+		/// <summary>
+		/// Reads the configuration.
+		/// </summary>
+		/// <returns></returns>
+		protected uint ReadConfig32()
+		{
+			PCIDevice pciDevice = GetPCIDevice();
 
 			if (pciDevice == null)
 				return 0xFFFFFFFF;
 
-			return pciDevice.ReadConfig32(registry);
+			return pciDevice.ReadConfig32((byte)(address & 0xFF));
 		}
 
+		/// <summary>
+		/// Reads the configuration.
+		/// </summary>
+		/// <returns></returns>
+		protected ushort ReadConfig16()
+		{
+			PCIDevice pciDevice = GetPCIDevice();
+
+			if (pciDevice == null)
+				return 0xFFFF;
+
+			return pciDevice.ReadConfig16((byte)(address & 0xFF));
+		}
+
+		/// <summary>
+		/// Reads the configuration.
+		/// </summary>
+		/// <returns></returns>
+		protected byte ReadConfig8()
+		{
+			PCIDevice pciDevice = GetPCIDevice();
+
+			if (pciDevice == null)
+				return 0xFF;
+
+			return pciDevice.ReadConfig8((byte)(address & 0xFF));
+		}
 		/// <summary>
 		/// Writes the configuration.
 		/// </summary>
 		/// <param name="data">The data.</param>
-		protected void WriteConfiguration(uint data)
+		protected void WriteConfig32(uint data)
 		{
-			byte bus = (byte)((address >> 16) & 0xFF);
-			byte slot = (byte)((address >> 11) & 0x0F);
-			byte fun = (byte)((address >> 8) & 0x07);
-			byte registry = (byte)(address & 0xFC);
-
-			uint index = (uint)(bus | (slot << 8) | (fun << 16));
-
-			PCIDevice pciDevice = pciBus.Get(index);
+			PCIDevice pciDevice = GetPCIDevice();
 
 			if (pciDevice == null)
 				return;
+
+			byte registry = (byte)(address & 0xFF);
+			uint index = GetIndex();
 
 			uint barMask = 0xFFFFFFFF;
 
 			if ((registry >= 0x10) && (registry < 0x28))
 				barMask = GetBarMask((byte)((index - 0x10) >> 2));
 
-			pciDevice.WriteConfig32(registry, data & barMask & GetWriteMask(registry));
+			pciDevice.WriteConfig32(registry, data & barMask & GetWriteMask32(registry));
 		}
 
 	}

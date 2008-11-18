@@ -8,7 +8,6 @@
  */
 
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.ISA;
 using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.ISA
@@ -16,8 +15,8 @@ namespace Mosa.DeviceDrivers.ISA
 	/// <summary>
 	/// Direct Memory Access (DMA) Device Driver
 	/// </summary>
-	[DeviceSignature(AutoLoad = false, BasePort = 0x0000, PortRange = 32, AltBasePort = 0x0080, AltPortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class DMA8Bit : ISAHardwareDevice, IDevice, IHardwareDevice
+	//[DeviceSignature(AutoLoad = false, BasePort = 0x0000, PortRange = 32, AltBasePort = 0x0080, AltPortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	public class DMA8Bit : HardwareDevice, IDevice, IHardwareDevice
 	{
 		#region Definitions
 
@@ -151,56 +150,51 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup()
+		public override bool Setup(IHardwareResources hardwareResources)
 		{
-			base.name = "DMA_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");
+			this.hardwareResources = hardwareResources;
+			base.name = "DMA_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
-			statusRegister = base.busResources.GetIOPort(0, 0x08);
-			commandRegister = base.busResources.GetIOPort(0, 0x08);
-			requestRegister = base.busResources.GetIOPort(0, 0x09);
-			channelMaskRegister = base.busResources.GetIOPort(0, 0x0A);
-			modeRegister = base.busResources.GetIOPort(0, 0x0B);
-			byteWordRegister = base.busResources.GetIOPort(0, 0x0C);
-			intermediateRegister = base.busResources.GetIOPort(0, 0x0D);
-			maskRegister = base.busResources.GetIOPort(0, 0x0F);
+			statusRegister = base.hardwareResources.GetIOPort(0, 0x08);
+			commandRegister = base.hardwareResources.GetIOPort(0, 0x08);
+			requestRegister = base.hardwareResources.GetIOPort(0, 0x09);
+			channelMaskRegister = base.hardwareResources.GetIOPort(0, 0x0A);
+			modeRegister = base.hardwareResources.GetIOPort(0, 0x0B);
+			byteWordRegister = base.hardwareResources.GetIOPort(0, 0x0C);
+			intermediateRegister = base.hardwareResources.GetIOPort(0, 0x0D);
+			maskRegister = base.hardwareResources.GetIOPort(0, 0x0F);
 
-			channel0Address = base.busResources.GetIOPort(0, 0x00);
-			channel0Count = base.busResources.GetIOPort(0, 0x01);
-			channel0Page = base.busResources.GetIOPort(0, 0x87);
+			channel0Address = base.hardwareResources.GetIOPort(0, 0x00);
+			channel0Count = base.hardwareResources.GetIOPort(0, 0x01);
+			channel0Page = base.hardwareResources.GetIOPort(0, 0x87);
 
-			channel1Address = base.busResources.GetIOPort(0, 0x02);
-			channel1Count = base.busResources.GetIOPort(0, 0x03);
-			channel1Page = base.busResources.GetIOPort(0, 0x83);
+			channel1Address = base.hardwareResources.GetIOPort(0, 0x02);
+			channel1Count = base.hardwareResources.GetIOPort(0, 0x03);
+			channel1Page = base.hardwareResources.GetIOPort(0, 0x83);
 
-			channel2Address = base.busResources.GetIOPort(0, 0x04);
-			channel2Count = base.busResources.GetIOPort(0, 0x05);
-			channel2Page = base.busResources.GetIOPort(0, 0x81);
+			channel2Address = base.hardwareResources.GetIOPort(0, 0x04);
+			channel2Count = base.hardwareResources.GetIOPort(0, 0x05);
+			channel2Page = base.hardwareResources.GetIOPort(0, 0x81);
 
-			channel3Address = base.busResources.GetIOPort(0, 0x06);
-			channel3Count = base.busResources.GetIOPort(0, 0x07);
-			channel3Page = base.busResources.GetIOPort(0, 0x82);
+			channel3Address = base.hardwareResources.GetIOPort(0, 0x06);
+			channel3Count = base.hardwareResources.GetIOPort(0, 0x07);
+			channel3Page = base.hardwareResources.GetIOPort(0, 0x82);
 
-			memory0 = base.busResources.GetMemory(0);
-			memory1 = base.busResources.GetMemory(1);
-			memory2 = base.busResources.GetMemory(2);
-			memory3 = base.busResources.GetMemory(3);
+			memory0 = base.hardwareResources.GetMemory(0);
+			memory1 = base.hardwareResources.GetMemory(1);
+			memory2 = base.hardwareResources.GetMemory(2);
+			memory3 = base.hardwareResources.GetMemory(3);
 
 			return true;
 		}
 
 		/// <summary>
-		/// Probes for this device.
-		/// </summary>
-		/// <returns></returns>
-		public override bool Probe() { return true; }
-
-		/// <summary>
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public override bool Start()
+		public override DeviceDriverStartStatus Start()
 		{
-			return true;
+			return DeviceDriverStartStatus.Started;
 		}
 
 		/// <summary>

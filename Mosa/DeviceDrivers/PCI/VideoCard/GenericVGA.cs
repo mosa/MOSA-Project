@@ -12,7 +12,7 @@ using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 
 /*
- * Some code was adapted from:
+ * Portions of this device driver was adapted from:
  * 
  * Sets VGA-compatible video modes without using the BIOS
  * Chris Giese <geezer@execpc.com>	http://www.execpc.com/~geezer
@@ -25,8 +25,8 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 	/// <summary>
 	/// Generic VGA Device Driver
 	/// </summary>
-	[DeviceSignature(ClassCode = 0X03, SubClassCode = 0x00, ProgIF = 0x00, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class GenericVGADriver : PCIHardwareDevice, IDevice, IPixelPaletteGraphicsDevice
+	//[DeviceSignature(ClassCode = 0X03, SubClassCode = 0x00, ProgIF = 0x00, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	public class GenericVGA : HardwareDevice, IDevice, IPixelPaletteGraphicsDevice
 	{
 		#region Definitions
 
@@ -171,40 +171,41 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		private WriteMethod writeMethod;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="GenericVGADriver"/> class.
+		/// Initializes a new instance of the <see cref="GenericVGA"/> class.
 		/// </summary>
-		public GenericVGADriver(PCIDevice pciDevice) : base(pciDevice) { }
+		public GenericVGA() { }
 
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup()
+		public override bool Setup(IHardwareResources hardwareResources)
 		{
+			this.hardwareResources = hardwareResources;
 			base.name = "GenericVGA";
 
-			byte portBar = (byte)(base.busResources.IOPointRegionCount - 1);
+			byte portBar = (byte)(base.hardwareResources.IOPointRegionCount - 1);
 
-			miscellaneousOutputRead = base.busResources.GetIOPort(portBar, 0x1C);
-			crtControllerIndex = base.busResources.GetIOPort(portBar, 0x04);
-			crtControllerData = base.busResources.GetIOPort(portBar, 0x05);
-			crtControllerIndexColor = base.busResources.GetIOPort(portBar, 0x24);
-			crtControllerDataColor = base.busResources.GetIOPort(portBar, 0x25);
-			dacPaletteMask = base.busResources.GetIOPort(portBar, 0x16);
-			dacIndexRead = base.busResources.GetIOPort(portBar, 0x17);
-			dacIndexWrite = base.busResources.GetIOPort(portBar, 0x18);
-			dacData = base.busResources.GetIOPort(portBar, 0x19);
-			inputStatus1 = base.busResources.GetIOPort(portBar, 0x12);
-			miscellaneousOutputWrite = base.busResources.GetIOPort(portBar, 0x12);
-			sequencerAddress = base.busResources.GetIOPort(portBar, 0x14);
-			sequencerData = base.busResources.GetIOPort(portBar, 0x15);
-			graphicsControllerAddress = base.busResources.GetIOPort(portBar, 0x1E);
-			graphicsControllerData = base.busResources.GetIOPort(portBar, 0x1F);
-			inputStatus1ReadB = base.busResources.GetIOPort(portBar, 0x2A);
-			attributeAddress = base.busResources.GetIOPort(portBar, 0x10);
-			attributeData = base.busResources.GetIOPort(portBar, 0x11);
+			miscellaneousOutputRead = base.hardwareResources.GetIOPort(portBar, 0x1C);
+			crtControllerIndex = base.hardwareResources.GetIOPort(portBar, 0x04);
+			crtControllerData = base.hardwareResources.GetIOPort(portBar, 0x05);
+			crtControllerIndexColor = base.hardwareResources.GetIOPort(portBar, 0x24);
+			crtControllerDataColor = base.hardwareResources.GetIOPort(portBar, 0x25);
+			dacPaletteMask = base.hardwareResources.GetIOPort(portBar, 0x16);
+			dacIndexRead = base.hardwareResources.GetIOPort(portBar, 0x17);
+			dacIndexWrite = base.hardwareResources.GetIOPort(portBar, 0x18);
+			dacData = base.hardwareResources.GetIOPort(portBar, 0x19);
+			inputStatus1 = base.hardwareResources.GetIOPort(portBar, 0x12);
+			miscellaneousOutputWrite = base.hardwareResources.GetIOPort(portBar, 0x12);
+			sequencerAddress = base.hardwareResources.GetIOPort(portBar, 0x14);
+			sequencerData = base.hardwareResources.GetIOPort(portBar, 0x15);
+			graphicsControllerAddress = base.hardwareResources.GetIOPort(portBar, 0x1E);
+			graphicsControllerData = base.hardwareResources.GetIOPort(portBar, 0x1F);
+			inputStatus1ReadB = base.hardwareResources.GetIOPort(portBar, 0x2A);
+			attributeAddress = base.hardwareResources.GetIOPort(portBar, 0x10);
+			attributeData = base.hardwareResources.GetIOPort(portBar, 0x11);
 
-			memory = base.busResources.GetMemory((byte)(base.busResources.MemoryRegionCount - 1));
+			memory = base.hardwareResources.GetMemory((byte)(base.hardwareResources.MemoryRegionCount - 1));
 
 			return true;
 		}
@@ -213,19 +214,13 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public override bool Start()
+		public override DeviceDriverStartStatus Start()
 		{
 			if (!SetMode(13))
-				return false;
+				return DeviceDriverStartStatus.Failed;
 
-			return true;
+			return DeviceDriverStartStatus.Started;
 		}
-
-		/// <summary>
-		/// Probes for this device.
-		/// </summary>
-		/// <returns></returns>
-		public override bool Probe() { return true; }
 
 		/// <summary>
 		/// Creates the sub devices.

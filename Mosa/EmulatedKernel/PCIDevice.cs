@@ -254,7 +254,7 @@ namespace Mosa.EmulatedKernel
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public uint GetWriteMask(byte index)
+		public uint GetWriteMask32(byte index)
 		{
 			// Must be 32-bit aligned, otherwise no read-only attributes are applied
 			if (index % 4 != 0)

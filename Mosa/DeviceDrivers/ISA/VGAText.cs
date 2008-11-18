@@ -9,15 +9,14 @@
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.ISA;
 
-namespace Mosa.DeviceDrivers.ISA.VideoCard
+namespace Mosa.DeviceDrivers.ISA
 {
 	/// <summary>
 	/// VGA Text Device Driver
 	/// </summary>
-	[DeviceSignature(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class VGATextDriver : ISAHardwareDevice, IDevice, ITextDevice
+	//[DeviceSignature(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	public class VGAText : HardwareDevice, IDevice, ITextDevice
 	{
 		#region Definitions
 
@@ -96,27 +95,28 @@ namespace Mosa.DeviceDrivers.ISA.VideoCard
 		protected TextColor defaultBackground = TextColor.White;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VGATextDriver"/> class.
+		/// Initializes a new instance of the <see cref="VGAText"/> class.
 		/// </summary>
-		public VGATextDriver() { }
+		public VGAText() { }
 
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup()
+		public override bool Setup(IHardwareResources hardwareResources)
 		{
+			this.hardwareResources = hardwareResources;
 			base.name = "VGAText";
 
-			miscellaneousOutput = base.busResources.GetIOPort(0, (byte)(0x3CC - 0x3B0));
+			miscellaneousOutput = base.hardwareResources.GetIOPort(0, (byte)(0x3CC - 0x3B0));
 
-			crtControllerIndex = base.busResources.GetIOPort(0, (byte)(0x3B4 - 0x3B0));
-			crtControllerData = base.busResources.GetIOPort(0, (byte)(0x3B5 - 0x3B0));
+			crtControllerIndex = base.hardwareResources.GetIOPort(0, (byte)(0x3B4 - 0x3B0));
+			crtControllerData = base.hardwareResources.GetIOPort(0, (byte)(0x3B5 - 0x3B0));
 
-			crtControllerIndexColor = base.busResources.GetIOPort(0, (byte)(0x3D4 - 0x3B0));
-			crtControllerDataColor = base.busResources.GetIOPort(0, (byte)(0x3D5 - 0x3B0));
+			crtControllerIndexColor = base.hardwareResources.GetIOPort(0, (byte)(0x3D4 - 0x3B0));
+			crtControllerDataColor = base.hardwareResources.GetIOPort(0, (byte)(0x3D5 - 0x3B0));
 
-			memory = base.busResources.GetMemory(0);
+			memory = base.hardwareResources.GetMemory(0);
 
 			return true;
 		}
@@ -125,7 +125,7 @@ namespace Mosa.DeviceDrivers.ISA.VideoCard
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public override bool Start()
+		public override DeviceDriverStartStatus Start()
 		{
 			colorMode = ((miscellaneousOutput.Read8() & 1) == 1);
 
@@ -150,14 +150,9 @@ namespace Mosa.DeviceDrivers.ISA.VideoCard
 
 			height = 25; // override for bug?
 
-			return true;
+			base.deviceStatus = DeviceStatus.Online;
+			return DeviceDriverStartStatus.Started;
 		}
-
-		/// <summary>
-		/// Probes for this device.
-		/// </summary>
-		/// <returns></returns>
-		public override bool Probe() { return true; }
 
 		/// <summary>
 		/// Creates the sub devices.

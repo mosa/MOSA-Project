@@ -18,7 +18,7 @@ namespace Mosa.EmulatedDevices.Emulated
 	/// <summary>
 	/// Represents an emulated a simple IDE controller
 	/// </summary>
-	public class IDEDiskDevice : IHardwareDevice, IIOPortDevice
+	public class IDEController : IHardwareDevice, IIOPortDevice
 	{
 		/// <summary>
 		/// 
@@ -114,11 +114,11 @@ namespace Mosa.EmulatedDevices.Emulated
 		protected DeviceStatus status;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="IDEDiskDevice"/> class.
+		/// Initializes a new instance of the <see cref="IDEController"/> class.
 		/// </summary>
 		/// <param name="ioBase">The io base.</param>
 		/// <param name="filenames">The filenames.</param>
-		public IDEDiskDevice(ushort ioBase, string[] filenames)
+		public IDEController(ushort ioBase, string[] filenames)
 		{
 			this.ioBase = ioBase;
 

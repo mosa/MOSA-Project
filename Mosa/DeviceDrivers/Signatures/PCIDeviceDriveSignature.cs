@@ -7,18 +7,19 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.DeviceSystem.PCI
+using Mosa.ClassLib;
+using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.PCI;
+using Mosa.DeviceDrivers;
+
+namespace Mosa.DeviceDrivers.Signatures
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	[System.AttributeUsage(System.AttributeTargets.All | System.AttributeTargets.Property, AllowMultiple = true)]
-	public class DeviceSignatureAttribute : System.Attribute
+	public abstract class PCIDeviceDriverSignature
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		public PlatformArchitecture Platforms = PlatformArchitecture.None;
+		#region Flags
 
 		/// <summary>
 		/// 
@@ -60,10 +61,8 @@ namespace Mosa.DeviceSystem.PCI
 			SubClassCode = 128
 		};
 
-		/// <summary>
-		/// 
-		/// </summary>
-		protected Field fields;
+		#endregion
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -96,6 +95,14 @@ namespace Mosa.DeviceSystem.PCI
 		/// 
 		/// </summary>
 		protected byte subClassCode;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected Field fields;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected PlatformArchitecture platforms;
 
 		/// <summary>
 		/// Gets or sets the device ID.
@@ -137,6 +144,11 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		/// <value>The sub class code.</value>
 		public byte SubClassCode { get { return subClassCode; } set { subClassCode = value; fields = fields | Field.SubClassCode; } }
+		/// <summary>
+		/// Gets or sets the platform.
+		/// </summary>
+		/// <value>The platform.</value>
+		public PlatformArchitecture Platforms { get { return platforms; } set { platforms = value; } }
 
 		/// <summary>
 		/// 
@@ -188,11 +200,6 @@ namespace Mosa.DeviceSystem.PCI
 				return 0; // no binding
 			}
 		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DeviceSignatureAttribute"/> class.
-		/// </summary>
-		public DeviceSignatureAttribute() { fields = 0; }
 
 		/// <summary>
 		/// Compares to.

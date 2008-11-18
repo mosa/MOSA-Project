@@ -18,16 +18,15 @@
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.ISA;
 
-namespace Mosa.DeviceDrivers.ISA.DiskController
+namespace Mosa.DeviceDrivers.ISA
 {
     /// <summary>
     /// Floppy Disk Controller (FDC) Device Driver
     /// </summary>
-	[DeviceSignature(AutoLoad = true, BasePort = 0x03F0, PortRange = 8, IRQ = 6, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	[DeviceSignature(AutoLoad = false, BasePort = 0x0370, PortRange = 8, IRQ = 5, ForceOption = "fdc2", Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class FloppyDiskDriver : ISAHardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
+	//[DeviceSignature(AutoLoad = true, BasePort = 0x03F0, PortRange = 8, IRQ = 6, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	//[DeviceSignature(AutoLoad = false, BasePort = 0x0370, PortRange = 8, IRQ = 5, ForceOption = "fdc2", Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	public class FloppyDiskController : HardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
 	{
 
 		#region Definitions
@@ -256,9 +255,9 @@ namespace Mosa.DeviceDrivers.ISA.DiskController
 		//protected OperationPending pendingOperation;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FloppyDiskDriver"/> class.
+		/// Initializes a new instance of the <see cref="FloppyDiskController"/> class.
         /// </summary>
-		public FloppyDiskDriver()
+		public FloppyDiskController()
 		{
 			floppyDrives = new FloppyDriveInfo[DrivesPerController];
 			floppyMedia = new FloppyMediaInfo[DrivesPerController];
@@ -274,16 +273,16 @@ namespace Mosa.DeviceDrivers.ISA.DiskController
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup()
+		public override bool Setup(IHardwareResources hardwareResources)
 		{
-			base.name = "FDC_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");
+			this.hardwareResources = hardwareResources;
+			base.name = "FDC_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
 			base.parent = null; // no parent
-			base.deviceStatus = DeviceStatus.Initializing;
 
-			commandPort = base.busResources.GetIOPort(0, 2);
-			statusPort = base.busResources.GetIOPort(0, 4);
-			dataPort = base.busResources.GetIOPort(0, 5);
-			configPort = base.busResources.GetIOPort(0, 7);
+			commandPort = base.hardwareResources.GetIOPort(0, 2);
+			statusPort = base.hardwareResources.GetIOPort(0, 4);
+			dataPort = base.hardwareResources.GetIOPort(0, 5);
+			configPort = base.hardwareResources.GetIOPort(0, 7);
 
 			//			floppyDMA = base.CreateDMAChannel(2);
 			//			floppyIRQ = base.CreateIRQHandler(6);
@@ -292,25 +291,10 @@ namespace Mosa.DeviceDrivers.ISA.DiskController
 		}
 
 		/// <summary>
-		/// Probes for this device.
-		/// </summary>
-		/// <returns></returns>
-		public override bool Probe()
-		{
-			// TODO
-
-			return false;
-
-			//ResetController();
-
-			//return true;
-		}
-
-		/// <summary>
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public override bool Start()
+		public override DeviceDriverStartStatus Start()
 		{
 			for (int drive = 0; drive < DrivesPerController; drive++) {
 				trackCache[drive].valid = false;
@@ -350,7 +334,7 @@ namespace Mosa.DeviceDrivers.ISA.DiskController
 
 			DetectDrives();
 
-			return true;
+			return DeviceDriverStartStatus.Started;
 		}
 
 		/// <summary>

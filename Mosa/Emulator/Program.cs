@@ -43,14 +43,14 @@ namespace Mosa.Emulator
 			// Initialize the driver system
 			DeviceSystem.Setup.Initialize();
 
-			// Start the driver system
-			DeviceSystem.Setup.AddDriverAssembly(typeof(Mosa.DeviceDrivers.ISA.CMOS).Module.Assembly);
-
-			// Start the driver system
-			DeviceSystem.Setup.Start();
+			// Initialize the device driver registry
+			Mosa.DeviceDrivers.Setup.Initialize(Mosa.DeviceSystem.Setup.DeviceDriverRegistry);			
 
 			// Set the interrupt handler
 			DeviceSystem.HAL.SetInterruptHandler(DeviceSystem.Setup.ResourceManager.InterruptManager.ProcessInterrupt);
+
+			// Start the driver system
+			DeviceSystem.Setup.Start();
 
 			// Create Emulated Keyboard device
 			Mosa.EmulatedDevices.Synthetic.Keyboard keyboard = new Mosa.EmulatedDevices.Synthetic.Keyboard();

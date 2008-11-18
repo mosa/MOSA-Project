@@ -12,16 +12,14 @@
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.ISA;
-
 
 namespace Mosa.DeviceDrivers.ISA
 {
     /// <summary>
 	/// Programmable Interval Timer (PIT) Device Driver
     /// </summary>
-	[DeviceSignature(AutoLoad = true, BasePort = 0x0040, PortRange = 4, IRQ = 0, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class PIT : ISAHardwareDevice, IDevice, IHardwareDevice
+	//[DeviceSignature(AutoLoad = true, BasePort = 0x40, PortRange = 4, IRQ = 0, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	public class PIT : HardwareDevice, IDevice, IHardwareDevice
 	{
 		#region Definitions
 
@@ -62,27 +60,22 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup()
+		public override bool Setup(IHardwareResources hardwareResources)
 		{
-			base.name = "PIT_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");
+			this.hardwareResources = hardwareResources;
+			base.name = "PIT_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
-			modeControlPort = base.busResources.GetIOPort(0, 3);
-			counter0Divisor = base.busResources.GetIOPort(0, 0);
+			modeControlPort = base.hardwareResources.GetIOPort(0, 3);
+			counter0Divisor = base.hardwareResources.GetIOPort(0, 0);
 
 			return true;
 		}
 
 		/// <summary>
-		/// Probes for this device.
-		/// </summary>
-		/// <returns></returns>
-		public override bool Probe() { return true; }
-
-		/// <summary>
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public override bool Start()
+		public override DeviceDriverStartStatus Start()
 		{
 			ushort timerCount = (ushort)(Frequency / Hz);
 
@@ -93,7 +86,8 @@ namespace Mosa.DeviceDrivers.ISA
 
 			tickCount = 0;
 
-			return true;
+			base.deviceStatus = DeviceStatus.Online;
+			return DeviceDriverStartStatus.Started;
 		}
 
 		/// <summary>

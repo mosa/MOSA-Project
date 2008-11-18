@@ -28,12 +28,12 @@ namespace Mosa.EmulatedDevices
 			IOPortDispatch.RegisterDevice(pciBus.Get(0) as IIOPortDevice);
 
 			IOPortDispatch.RegisterDevice(new CMOS(CMOS.StandardIOBase));
-			IOPortDispatch.RegisterDevice(new VGATextDriver());
+			IOPortDispatch.RegisterDevice(new VGAText());
 
 			string[] files = new string[1];
 			files[0] = @"..\..\Data\HardDriveImage\hd.img";
 
-			IOPortDispatch.RegisterDevice(new IDEDiskDevice(IDEDiskDevice.PrimaryIOBase, files));
+			IOPortDispatch.RegisterDevice(new IDEController(IDEController.PrimaryIOBase, files));
 		}
 	}
 }

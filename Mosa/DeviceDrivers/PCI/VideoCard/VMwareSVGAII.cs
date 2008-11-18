@@ -24,8 +24,8 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 	/// <summary>
 	/// VMware SVGA II Device Driver
 	/// </summary>
-	[DeviceSignature(VendorID = 0x15AD, DeviceID = 0x0405, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class VMwareSVGAII : PCIHardwareDevice, IHardwareDevice // , IPixelGraphicsDevice
+	//[DeviceSignature(VendorID = 0x15AD, DeviceID = 0x0405, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	public class VMwareSVGAII : HardwareDevice, IHardwareDevice // , IPixelGraphicsDevice
 	{
 		#region Definitions
 
@@ -117,6 +117,30 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <summary>
 		/// 
 		/// </summary>
+		protected IReadWriteIOPort indexPort;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IReadWriteIOPort valuePort;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IMemory memory;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IMemory fifo;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IFrameBuffer frameBuffer;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected SpinLock spinLock;
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ushort width;
 		/// <summary>
 		/// 
@@ -125,43 +149,11 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <summary>
 		/// 
 		/// </summary>
-		protected IReadWriteIOPort indexPort;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		protected IReadWriteIOPort valuePort;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		protected IMemory memory;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		protected IMemory fifo;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		protected IFrameBuffer frameBuffer;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		protected SpinLock spinLock;
-
-		/// <summary>
-		/// 
-		/// </summary>
 		protected uint version;
-
 		/// <summary>
 		/// 
 		/// </summary>
 		protected uint offset;
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -222,37 +214,31 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VMwareSVGAII"/> class.
 		/// </summary>
-		/// <param name="pciDevice"></param>
-		public VMwareSVGAII(PCIDevice pciDevice) : base(pciDevice) { }
+		public VMwareSVGAII() { }
 
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup()
+		public override bool Setup(IHardwareResources hardwareResources)
 		{
-			base.name = "VMWARE_SVGA_0x" + busResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+			this.hardwareResources = hardwareResources;
+			base.name = "VMWARE_SVGA_0x" + hardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-			indexPort = busResources.GetIOPort(0, 0);
-			valuePort = busResources.GetIOPort(0, 1);
+			indexPort = hardwareResources.GetIOPort(0, 0);
+			valuePort = hardwareResources.GetIOPort(0, 1);
 
-			memory = base.busResources.GetMemory(0);
-			fifo = base.busResources.GetMemory(1);
+			memory = base.hardwareResources.GetMemory(0);
+			fifo = base.hardwareResources.GetMemory(1);
 
 			return true;
 		}
 
 		/// <summary>
-		/// Probes for this device.
-		/// </summary>
-		/// <returns></returns>
-		public override bool Probe() { return true; }
-
-		/// <summary>
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public override bool Start()
+		public override DeviceDriverStartStatus Start()
 		{
 			capabilities = GetValue(Register.Capabilities);
 			videoRamSize = GetValue(Register.VRamSize);
@@ -270,10 +256,10 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			offset = GetValue(Register.FrameBufferOffset);
 
 			SetMode(640, 480);
-
 			InitializeFifo();
 
-			return true;
+			base.deviceStatus = DeviceStatus.Online;
+			return DeviceDriverStartStatus.Started;
 		}
 
 		/// <summary>

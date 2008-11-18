@@ -19,7 +19,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		protected IBusResources busResources;
+		protected IHardwareResources hardwareResources;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HardwareDevice"/> class.
@@ -30,19 +30,19 @@ namespace Mosa.DeviceSystem
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public abstract bool Setup();
-
-		/// <summary>
-		/// Probes for this device.
-		/// </summary>
-		/// <returns></returns>
-		public abstract bool Probe();
+		public abstract bool Setup(IHardwareResources hardwareResources);
 
 		/// <summary>
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public abstract bool Start();
+		public abstract DeviceDriverStartStatus Start();
+
+		/// <summary>
+		/// Stops this hardware device.
+		/// </summary>
+		/// <returns></returns>
+		public bool Stop() { return false; }
 
 		/// <summary>
 		/// Creates the sub devices.
@@ -56,57 +56,42 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public abstract bool OnInterrupt();
 
-		/// <summary>
-		/// Stops this hardware device.
-		/// </summary>
-		/// <returns></returns>
-		public bool Stop() { return false; }
-
-		/// <summary>
-		/// Activates the device driver
-		/// </summary>
-		/// <param name="deviceManager">The device manager.</param>
-		/// <returns></returns>
-		public bool Activate(IDeviceManager deviceManager)
-		{
-			base.deviceStatus = DeviceStatus.Initializing;
-
-			if (!Setup()) {
-				base.deviceStatus = DeviceStatus.Error;
-				return false;
-			}
-
-			this.busResources.EnableIRQ();
-
-			if (!Probe()) {
-				base.deviceStatus = DeviceStatus.NotFound;
-				return false;
-			}
-
-			if (!Start()) {
-				base.deviceStatus = DeviceStatus.Error;
-				return false;
-			}
-
-			base.deviceStatus = DeviceStatus.Online;
-
-			LinkedList<IDevice> devices = CreateSubDevices();
-
-			if (devices != null)
-				foreach (IDevice device in devices)
-					deviceManager.Add(device);
-
-			return true;
-		}
-
-		/// <summary>
-		/// Assigns the bus resources to this driver
-		/// </summary>
-		/// <param name="busResources">The bus resources.</param>
-		public void AssignBusResources(IBusResources busResources)
-		{
-			this.busResources = busResources;
-		}
+		///// <summary>
+		///// Activates the device driver
+		///// </summary>
+		///// <param name="deviceManager">The device manager.</param>
+		///// <returns></returns>
+		//public bool Activate(IDeviceManager deviceManager)
+		//{
+		//    base.deviceStatus = DeviceStatus.Initializing;
+		//
+		//    if (!Setup()) {
+		//        base.deviceStatus = DeviceStatus.Error;
+		//        return false;
+		//    }
+		//
+		//    this.hardwareResources.EnableIRQ();
+		//
+		//    if (!Probe()) {
+		//        base.deviceStatus = DeviceStatus.NotFound;
+		//        return false;
+		//    }
+		//
+		//    if (!Start()) {
+		//        base.deviceStatus = DeviceStatus.Error;
+		//        return false;
+		//    }
+		//
+		//    base.deviceStatus = DeviceStatus.Online;
+		//
+		//    LinkedList<IDevice> devices = CreateSubDevices();
+		//
+		//    if (devices != null)
+		//        foreach (IDevice device in devices)
+		//            deviceManager.Add(device);
+		//
+		//    return true;
+		//}
 
 	}
 }

@@ -12,9 +12,9 @@ using Mosa.DeviceSystem;
 namespace Mosa.DeviceSystem
 {
     /// <summary>
-    /// Interface to bus resources
+    /// Interface to hardware resources
     /// </summary>
-	public interface IBusResources
+	public interface IHardwareResources
 	{
         /// <summary>
         /// Gets the IO port region.

@@ -12,13 +12,12 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BusResources : IBusResources
+	public class HardwareResources : IHardwareResources
 	{
 		/// <summary>
 		/// 
 		/// </summary>
 		protected IResourceManager resourceManager;
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -33,13 +32,13 @@ namespace Mosa.DeviceSystem
 		protected IInterruptHandler interruptHandler;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BusResources"/> class.
+		/// Initializes a new instance of the <see cref="HardwareResources"/> class.
 		/// </summary>
 		/// <param name="resourceManager">The resource manager.</param>
 		/// <param name="ioPortRegions">The io port regions.</param>
 		/// <param name="memoryRegions">The memory regions.</param>
 		/// <param name="interruptHandler">The interrupt handler.</param>
-		public BusResources(IResourceManager resourceManager, IIOPortRegion[] ioPortRegions, IMemoryRegion[] memoryRegions, IInterruptHandler interruptHandler)
+		public HardwareResources(IResourceManager resourceManager, IIOPortRegion[] ioPortRegions, IMemoryRegion[] memoryRegions, IInterruptHandler interruptHandler)
 		{
 			this.resourceManager = resourceManager;
 			this.ioPortRegions = ioPortRegions;

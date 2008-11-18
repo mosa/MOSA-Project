@@ -9,15 +9,14 @@
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.ISA;
 
 namespace Mosa.DeviceDrivers.ISA
 {
     /// <summary>
     /// CMOS Device Driver
     /// </summary>
-    [DeviceSignature(AutoLoad = true, BasePort = 0x0070, PortRange = 2, Platforms = PlatformArchitecture.x86)]
-    public class CMOS : ISAHardwareDevice, IDevice, IHardwareDevice
+    //[DeviceSignature(AutoLoad = true, BasePort = 0x0070, PortRange = 2, Platforms = PlatformArchitecture.x86)]
+    public class CMOS : HardwareDevice, IDevice, IHardwareDevice
     {
         /// <summary>
         /// 
@@ -43,12 +42,13 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-        public override bool Setup()
-        {
+		public override bool Setup(IHardwareResources hardwareResources)
+		{
+			this.hardwareResources = hardwareResources;
             base.name = "CMOS";
 
-            commandPort = base.busResources.GetIOPort(0, 0);
-            dataPort = base.busResources.GetIOPort(0, 4);
+            commandPort = base.hardwareResources.GetIOPort(0, 0);
+            dataPort = base.hardwareResources.GetIOPort(0, 4);
 
             return true;
         }
@@ -57,19 +57,12 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-        public override bool Start()
+		public override DeviceDriverStartStatus Start()
         {
-            return true;
+			base.deviceStatus = DeviceStatus.Online;
+            return DeviceDriverStartStatus.Started;
         }
 
-		/// <summary>
-		/// Probes for this device.
-		/// </summary>
-		/// <returns></returns>
-        public override bool Probe()
-        {
-            return true;
-        }
 
 		/// <summary>
 		/// Creates the sub devices.

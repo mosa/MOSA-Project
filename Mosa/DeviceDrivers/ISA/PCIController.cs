@@ -8,17 +8,16 @@
  */
 
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.ISA;
 using PCI = Mosa.DeviceSystem.PCI;
 using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.ISA
 {
-    /// <summary>
-    /// 
-    /// </summary>
-	[DeviceSignature(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class PCIController : ISAHardwareDevice, IDevice, IHardwareDevice, IPCIController
+	/// <summary>
+	/// 
+	/// </summary>
+	//[DeviceSignature(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	public class PCIController : HardwareDevice, IDevice, IHardwareDevice, IPCIController
 	{
 
 		#region Definitions
@@ -27,19 +26,19 @@ namespace Mosa.DeviceDrivers.ISA
 
 		#endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected SpinLock spinLock;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort configAddress;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort configData;
 
 		/// <summary>
@@ -51,12 +50,13 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup()
+		public override bool Setup(IHardwareResources hardwareResources)
 		{
-			base.name = "PCI_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");
+			this.hardwareResources = hardwareResources;
+			base.name = "PCI_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
-			configAddress = base.busResources.GetIOPort(0, 0);
-			configData = base.busResources.GetIOPort(0, 4);
+			configAddress = base.hardwareResources.GetIOPort(0, 0);
+			configData = base.hardwareResources.GetIOPort(0, 4);
 
 			return true;
 		}
@@ -65,7 +65,7 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Probes for this device.
 		/// </summary>
 		/// <returns></returns>
-		public override bool Probe()
+		public bool Probe()
 		{
 			configAddress.Write32(BaseValue);
 
@@ -79,7 +79,17 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public override bool Start() { return true; }
+		public override DeviceDriverStartStatus Start()
+		{
+			if (Probe()) {
+				base.deviceStatus = DeviceStatus.Online;
+				return DeviceDriverStartStatus.Started;
+			}
+			else {
+				base.deviceStatus = DeviceStatus.NotFound;
+				return DeviceDriverStartStatus.NotFound;
+			}
+		}
 
 		/// <summary>
 		/// Creates the sub devices.
@@ -109,6 +119,35 @@ namespace Mosa.DeviceDrivers.ISA
 		public override bool OnInterrupt() { return false; }
 
 		/// <summary>
+		/// Probes the device.
+		/// </summary>
+		/// <param name="bus">The bus.</param>
+		/// <param name="slot">The slot.</param>
+		/// <param name="fun">The fun.</param>
+		/// <returns></returns>
+		protected bool ProbeDevice(byte bus, byte slot, byte fun)
+		{
+			return (ReadConfig32(bus, slot, fun, 0) != 0xFFFFFFFF);
+		}
+
+		/// <summary>
+		/// Gets the index.
+		/// </summary>
+		/// <param name="bus">The bus.</param>
+		/// <param name="slot">The slot.</param>
+		/// <param name="function">The function.</param>
+		/// <param name="register">The register.</param>
+		/// <returns></returns>
+		protected uint GetIndex(byte bus, byte slot, byte function, byte register)
+		{
+			return (uint)(BaseValue
+					   | (uint)((bus & 0xFF) << 16)
+					   | (uint)((slot & 0x0F) << 11)
+					   | (uint)((function & 0x07) << 8)
+					   | (uint)(register));
+		}
+
+		/// <summary>
 		/// Reads from configuraton space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
@@ -116,15 +155,38 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		public uint ReadConfig(byte bus, byte slot, byte function, byte register)
+		public uint ReadConfig32(byte bus, byte slot, byte function, byte register)
 		{
-			configAddress.Write32((uint)(BaseValue
-					   | (uint)((bus & 0xFF) << 16)
-                       | (uint)((slot & 0x0F) << 11)
-                       | (uint)((function & 0x07) << 8)
-                       | (uint)(register & 0xFC)));
-
+			configAddress.Write32(GetIndex(bus, slot, function, register));
 			return configData.Read32();
+		}
+
+		/// <summary>
+		/// Reads from configuraton space
+		/// </summary>
+		/// <param name="bus">The bus.</param>
+		/// <param name="slot">The slot.</param>
+		/// <param name="function">The function.</param>
+		/// <param name="register">The register.</param>
+		/// <returns></returns>
+		public ushort ReadConfig16(byte bus, byte slot, byte function, byte register)
+		{
+			configAddress.Write32(GetIndex(bus, slot, function, register));
+			return configData.Read16();
+		}
+
+		/// <summary>
+		/// Reads from configuraton space
+		/// </summary>
+		/// <param name="bus">The bus.</param>
+		/// <param name="slot">The slot.</param>
+		/// <param name="function">The function.</param>
+		/// <param name="register">The register.</param>
+		/// <returns></returns>
+		public byte ReadConfig8(byte bus, byte slot, byte function, byte register)
+		{
+			configAddress.Write32(GetIndex(bus, slot, function, register));
+			return configData.Read8();
 		}
 
 		/// <summary>
@@ -135,27 +197,38 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="value">The value.</param>
-		public void WriteConfig(byte bus, byte slot, byte function, byte register, uint value)
+		public void WriteConfig32(byte bus, byte slot, byte function, byte register, uint value)
 		{
-			configAddress.Write32((uint)(BaseValue
-                       | (uint)((bus & 0xFF) << 16)
-                       | (uint)((slot & 0x0F) << 11)
-                       | (uint)((function & 0x07) << 8)
-                       | (uint)(register & 0xFC)));
-
+			configAddress.Write32(GetIndex(bus, slot, function, register));
 			configData.Write32(value);
 		}
 
 		/// <summary>
-		/// Probes the device.
+		/// Writes to configuraton space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>
-		/// <param name="fun">The fun.</param>
-		/// <returns></returns>
-		public bool ProbeDevice(byte bus, byte slot, byte fun)
+		/// <param name="function">The function.</param>
+		/// <param name="register">The register.</param>
+		/// <param name="value">The value.</param>
+		public void WriteConfig16(byte bus, byte slot, byte function, byte register, ushort value)
 		{
-			return (ReadConfig(bus, slot, fun, 0) != 0xFFFFFFFF);
+			configAddress.Write32(GetIndex(bus, slot, function, register));
+			configData.Write16(value);
+		}
+
+		/// <summary>
+		/// Writes to configuraton space
+		/// </summary>
+		/// <param name="bus">The bus.</param>
+		/// <param name="slot">The slot.</param>
+		/// <param name="function">The function.</param>
+		/// <param name="register">The register.</param>
+		/// <param name="value">The value.</param>
+		public void WriteConfig8(byte bus, byte slot, byte function, byte register, byte value)
+		{
+			configAddress.Write32(GetIndex(bus, slot, function, register));
+			configData.Write8(value);
 		}
 
 	}

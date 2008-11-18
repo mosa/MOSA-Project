@@ -9,15 +9,14 @@
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.ISA;
 
 namespace Mosa.DeviceDrivers.ISA
 {
 	/// <summary>
 	/// Standard Keyboard Device Driver
 	/// </summary>
-	[DeviceSignature(AutoLoad = true, BasePort = 0x0060, PortRange = 1, AltBasePort = 0x0064, AltPortRange = 1, IRQ = 1, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class StandardKeyboard : ISAHardwareDevice, IDevice, IHardwareDevice, IKeyboardDevice
+	//[DeviceSignature(AutoLoad = true, BasePort = 0x60, PortRange = 1, AltBasePort = 0x64, AltPortRange = 1, IRQ = 1, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	public class StandardKeyboard : HardwareDevice, IDevice, IHardwareDevice, IKeyboardDevice
 	{
         /// <summary>
         /// 
@@ -59,12 +58,13 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Setups the standard keyboard driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup()
+		public override bool Setup(IHardwareResources hardwareResources)
 		{
+			this.hardwareResources = hardwareResources;
 			base.name = "StandardKeyboard";
 
-			commandPort = base.busResources.GetIOPort(0, 0);
-			dataPort = base.busResources.GetIOPort(1, 0);
+			commandPort = base.hardwareResources.GetIOPort(0, 0);
+			dataPort = base.hardwareResources.GetIOPort(1, 0);
 
 			this.fifoBuffer = new byte[fifoSize];
 			this.fifoStart = 0;
@@ -77,13 +77,10 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Starts the standard keyboard device.
 		/// </summary>
 		/// <returns></returns>
-		public override bool Start() { return true; }
-
-		/// <summary>
-		/// Probes for the standard keyboard device.
-		/// </summary>
-		/// <returns></returns>
-		public override bool Probe() { return true; }
+		public override DeviceDriverStartStatus Start() 
+		{
+			return DeviceDriverStartStatus.Started;
+		}
 
 		/// <summary>
 		/// Creates the sub devices.

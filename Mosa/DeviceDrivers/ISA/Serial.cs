@@ -9,18 +9,17 @@
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.ISA;
 
 namespace Mosa.DeviceDrivers.ISA
 {
 	/// <summary>
 	/// Serial Device Driver
 	/// </summary>
-	[DeviceSignature(AutoLoad = true, BasePort = 0x03F8, PortRange = 8, IRQ = 4, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	[DeviceSignature(AutoLoad = false, BasePort = 0x02F8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	[DeviceSignature(AutoLoad = false, BasePort = 0x03E8, PortRange = 8, IRQ = 4, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	[DeviceSignature(AutoLoad = false, BasePort = 0x02E8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class Serial : ISAHardwareDevice, IDevice, IHardwareDevice, ISerialDevice
+	//[DeviceSignature(AutoLoad = true, BasePort = 0x03F8, PortRange = 8, IRQ = 4, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	//[DeviceSignature(AutoLoad = false, BasePort = 0x02F8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	//[DeviceSignature(AutoLoad = false, BasePort = 0x03E8, PortRange = 8, IRQ = 4, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	//[DeviceSignature(AutoLoad = false, BasePort = 0x02E8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	public class Serial : HardwareDevice, IDevice, IHardwareDevice, ISerialDevice
 	{
 		/// <summary>
 		/// Receive Buffer Register (read only)		
@@ -339,41 +338,37 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup()
+		public override bool Setup(IHardwareResources hardwareResources)
 		{
-			base.name = "COM_0x" + base.busResources.GetIOPort(0, 0).Address.ToString("X");
+			this.hardwareResources = hardwareResources;
+			base.name = "COM_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
-			rbrBase = base.busResources.GetIOPort(0, 0); // Receive Buffer Register (read only)
-			thrBase = base.busResources.GetIOPort(0, 0); // Transmitter Holding Register (write only)
-			ierBase = base.busResources.GetIOPort(0, 1); // Interrupt Enable Register
-			dllBase = base.busResources.GetIOPort(0, 0); // Divisor Latch (LSB and MSB)
-			dlmBase = base.busResources.GetIOPort(0, 1);
-			iirBase = base.busResources.GetIOPort(0, 2); // Interrupt Identification Register (read only)
-			fcrBase = base.busResources.GetIOPort(0, 2); // FIFO Control Register (write only, 16550+ only)
-			lcrBase = base.busResources.GetIOPort(0, 3); // Line Control Register
-			mcrBase = base.busResources.GetIOPort(0, 4); // Modem Control Register
-			lsrBase = base.busResources.GetIOPort(0, 5); // Line Status Register
-			msrBase = base.busResources.GetIOPort(0, 6); // Modem Status Register
-			scrBase = base.busResources.GetIOPort(0, 7); // Scratch Register (16450+ and some 8250s, special use with some boards)
+			rbrBase = base.hardwareResources.GetIOPort(0, 0); // Receive Buffer Register (read only)
+			thrBase = base.hardwareResources.GetIOPort(0, 0); // Transmitter Holding Register (write only)
+			ierBase = base.hardwareResources.GetIOPort(0, 1); // Interrupt Enable Register
+			dllBase = base.hardwareResources.GetIOPort(0, 0); // Divisor Latch (LSB and MSB)
+			dlmBase = base.hardwareResources.GetIOPort(0, 1);
+			iirBase = base.hardwareResources.GetIOPort(0, 2); // Interrupt Identification Register (read only)
+			fcrBase = base.hardwareResources.GetIOPort(0, 2); // FIFO Control Register (write only, 16550+ only)
+			lcrBase = base.hardwareResources.GetIOPort(0, 3); // Line Control Register
+			mcrBase = base.hardwareResources.GetIOPort(0, 4); // Modem Control Register
+			lsrBase = base.hardwareResources.GetIOPort(0, 5); // Line Status Register
+			msrBase = base.hardwareResources.GetIOPort(0, 6); // Modem Status Register
+			scrBase = base.hardwareResources.GetIOPort(0, 7); // Scratch Register (16450+ and some 8250s, special use with some boards)
 
 			this.fifoBuffer = new byte[fifoSize];
 			this.fifoStart = 0;
 			this.fifoEnd = 0;
 
+			base.deviceStatus = DeviceStatus.Online;
 			return true;
 		}
-
-		/// <summary>
-		/// Probes for this device.
-		/// </summary>
-		/// <returns></returns>
-		public override bool Probe() { return true; }   // not implemented 
 
 		/// <summary>
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public override bool Start()
+		public override DeviceDriverStartStatus Start()
 		{
 			//TODO: auto detect - otherwise just assume one is there
 			//TODO: could use BIOS to help w/ detection; 0x0400-x0403 supply base address for COM1-4
@@ -402,7 +397,7 @@ namespace Mosa.DeviceDrivers.ISA
 			// Interrupt when data received
 			ierBase.Write8((byte)IER.DR);
 
-			return true;
+			return DeviceDriverStartStatus.Started;
 		}
 
 		/// <summary>
