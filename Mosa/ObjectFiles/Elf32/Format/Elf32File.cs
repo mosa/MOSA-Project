@@ -15,15 +15,28 @@ using Mosa.ObjectFiles.Elf32.Format.Sections;
 
 namespace Mosa.ObjectFiles.Elf32.Format
 {
+    /// <summary>
+    /// 
+    /// </summary>
     class Elf32File
     {
         public const int EHDR_SIZE = 52;
 
+        /// <summary>
+        /// The "magic" signature containted in an ELF32 file
+        /// </summary>
         public static readonly byte[] MagicBytes = new byte[] { 0x7f, (byte)'E', (byte)'L', (byte)'F' };
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="machineKind">The machinetype we want to create an ELF32 binary for</param>
         public Elf32File(Elf32MachineKind machineKind)
         {
+            // Save machinetype
             this.MachineKind = machineKind;
+
+            // Create new list of sections
             this.Sections = new List<Elf32Section>();
 
             // create default sections
@@ -43,10 +56,29 @@ namespace Mosa.ObjectFiles.Elf32.Format
             ) { SymbolTable = SymbolTable, TargetSection = Code };
         }
 
+        /// <summary>
+        /// The machine's type
+        /// </summary>
         public Elf32MachineKind MachineKind { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Elf32NullSection NullSection { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Elf32SymbolTableSection SymbolTable { get; private set; }
+
+        /// <summary>
+        /// The Code section
+        /// </summary>
         public Elf32CodeSection Code { get; private set; }
+
+        /// <summary>
+        /// The Data section
+        /// </summary>
         public Elf32DataSection Data { get; private set; }
         public Elf32DataSection ReadOnlyData { get; private set; }
         public Elf32RuntimeDataSection RuntimeData { get; private set; }
@@ -58,24 +90,33 @@ namespace Mosa.ObjectFiles.Elf32.Format
         private long ProgramHeaderOffset { get; set; }
         private long SectionHeaderOffset { get; set; }
 
+        /// <summary>
+        /// Write an ELF32 file to a binary file
+        /// </summary>
+        /// <param name="writer">A reference to a binary writer that has already a file open</param>
         public void Write(BinaryWriter writer)
         {
             int headerOffset = (int)writer.Seek(0, SeekOrigin.Current);
+
+            // First we need to write the header
             WriteHeader(writer);
 
-            foreach (var section in Sections)
+            // 
+            foreach (Elf32Section section in Sections)
             {
                 int index = SectionNames.GetStringIndex(section.Name);
             }
 
-            foreach (var section in Sections)
+            // Write section's data
+            foreach (Elf32Section section in Sections)
             {
                 section.WriteData(writer);
             }
 
             this.SectionHeaderOffset = (int)writer.Seek(0, SeekOrigin.Current);
 
-            foreach (var section in Sections)
+            // Now we need to write every single section's header
+            foreach (Elf32Section section in Sections)
             {
                 section.WriteHeader(writer);
             }
@@ -84,26 +125,28 @@ namespace Mosa.ObjectFiles.Elf32.Format
             WriteHeader(writer);
         }
 
+        /// <summary>
+        /// Write an ELF32's main header
+        /// </summary>
+        /// <param name="writer"></param>
         private void WriteHeader(BinaryWriter writer)
         {
+            // Write the magic signature to the binary to make it recognizable as an ELF32 file
             writer.Write(MagicBytes);
+
             switch (MachineKind)
             {
                 case Elf32MachineKind.I386:
                     writer.Write((byte)Elf32Class.ElfClass32);
                     writer.Write((byte)Elf32DataFormat.ElfData2Lsb);
                     break;
-                case Elf32MachineKind.Arm32Le:
-                    writer.Write((byte)Elf32Class.ElfClass32);
-                    writer.Write((byte)Elf32DataFormat.ElfData2Lsb);
-                    break;
-                case Elf32MachineKind.Arm32Be:
-                    writer.Write((byte)Elf32Class.ElfClass32);
-                    writer.Write((byte)Elf32DataFormat.ElfData2Msb);
-                    break;
+                case Elf32MachineKind.Arm32Le: goto case Elf32MachineKind.I386;
+                case Elf32MachineKind.Arm32Be: goto case Elf32MachineKind.I386;
+
                 default:
                     throw new NotSupportedException();
             }
+
             writer.Write((byte)Elf32Version.Current);
             writer.Write(new byte[16 - 7]);
             writer.Write((short)Elf32ObjectFileType.Relocatable);

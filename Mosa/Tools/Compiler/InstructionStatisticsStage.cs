@@ -5,27 +5,29 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// 
+    /// This stage just saves statistics about the code we're compiling, for example
+    /// ratio of IL to IR code, number of compiled instructions, etc.
     /// </summary>
     public class InstructionStatisticsStage : IInstructionVisitor<int>, IMethodCompilerStage
     {
         /// <summary>
-        /// 
+        /// A reference to the running instance of this stage
         /// </summary>
         public static readonly InstructionStatisticsStage Instance = new InstructionStatisticsStage();
 
         /// <summary>
-        /// 
+        /// Every instructiontype is stored here to be able to count the number of compiled instructiontypes.
         /// </summary>
         private Dictionary<Type, int> disjointInstructions = new Dictionary<Type,int>();
 
         /// <summary>
-        /// 
+        /// Every namespace is stored here to be able to iterate over all used
+        /// namespaces (IL, IR, x86, etc)
         /// </summary>
         private Dictionary<string, int> namespaces = new Dictionary<string, int>();
 
         /// <summary>
-        /// 
+        /// Total number of compiled instructions.
         /// </summary>
         private uint numberOfInstructions = 0;
 
@@ -99,8 +101,9 @@ namespace Mosa.Runtime.CompilerFramework
             System.IO.StreamWriter writer = System.IO.File.CreateText("statistics.txt");
             writer.WriteLine("Instruction statistics:");
             writer.WriteLine("-----------------------");
-            writer.WriteLine("  - Total number of instructions:\t {0}", numberOfInstructions);
-            writer.WriteLine("  - Number of disjoint instructions:\t {0}", disjointInstructions.Count);
+            writer.WriteLine("  - Total number of instructions:\t\t\t {0}", numberOfInstructions);
+            writer.WriteLine("  - Number of disjoint instructions:\t\t\t {0}", disjointInstructions.Count);
+            writer.WriteLine("  - Ratio of disjoint instructions to total number:\t {0}", string.Format("{0:.00}%", ((double)disjointInstructions.Count / (double)numberOfInstructions)).Substring(1));
             writer.WriteLine();
             writer.WriteLine("Namespace statistics:");
             writer.WriteLine("---------------------");
@@ -108,7 +111,8 @@ namespace Mosa.Runtime.CompilerFramework
             foreach (string name in namespaces.Keys)
             {
                 string n = name.Substring(name.LastIndexOf('.') + 1, name.Length - name.LastIndexOf('.') - 1);
-                writer.WriteLine("    + {0}\t: {1}", n, namespaces[name]);
+                string percentage = string.Format("{0:.00}%", ((double)namespaces[name] / (double)numberOfInstructions));
+                writer.WriteLine("    + {0}\t: {1}\t[{2}]", n, namespaces[name], percentage.Substring(1));
             }
 
 

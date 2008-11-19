@@ -199,6 +199,7 @@ namespace Mosa.Runtime.CompilerFramework
                 if (_pipeline[i].GetType() == typeof(StageType))
                 {
                     _pipeline.Insert(i, item);
+                    ++i;
                     result = true;
                 }
             }
