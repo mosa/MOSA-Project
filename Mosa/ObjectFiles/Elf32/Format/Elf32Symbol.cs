@@ -15,10 +15,20 @@ using System.IO;
 
 namespace Mosa.ObjectFiles.Elf32.Format
 {
+    /// <summary>
+    /// 
+    /// </summary>
     class Elf32Symbol
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public const int SYM_SIZE = 16;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Elf32Symbol"/> class.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
         public Elf32Symbol(object tag)
         {
             this.Tag = tag;
@@ -26,14 +36,48 @@ namespace Mosa.ObjectFiles.Elf32.Format
             Size = -1;
         }
 
+        /// <summary>
+        /// Gets or sets the tag.
+        /// </summary>
+        /// <value>The tag.</value>
         public object Tag { get; private set; }
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name { get; set; }
+        /// <summary>
+        /// Gets or sets the offset.
+        /// </summary>
+        /// <value>The offset.</value>
         public int Offset { get; private set; }
+        /// <summary>
+        /// Gets or sets the size.
+        /// </summary>
+        /// <value>The size.</value>
         public int Size { get; private set; }
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        /// <value>The type.</value>
         public Elf32SymbolType Type { get; set; }
+        /// <summary>
+        /// Gets or sets the bind.
+        /// </summary>
+        /// <value>The bind.</value>
         public Elf32SymbolBinding Bind { get; set; }
+        /// <summary>
+        /// Gets or sets the section.
+        /// </summary>
+        /// <value>The section.</value>
         public Elf32SymbolDefinitionSection Section { get; private set; }
 
+        /// <summary>
+        /// Writes the specified file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="symbolNames">The symbol names.</param>
+        /// <param name="writer">The writer.</param>
         public void Write(Elf32File file, Elf32StringTableSection symbolNames, BinaryWriter writer)
         {
             if (IsDefined)
@@ -56,21 +100,42 @@ namespace Mosa.ObjectFiles.Elf32.Format
             }
         }
 
+        /// <summary>
+        /// Begins the specified section.
+        /// </summary>
+        /// <param name="section">The section.</param>
+        /// <param name="offset">The offset.</param>
         public void Begin(Elf32SymbolDefinitionSection section, int offset)
         {
             Section = section;
             Offset = offset;
         }
+        /// <summary>
+        /// Ends the specified size.
+        /// </summary>
+        /// <param name="size">The size.</param>
         public void End(int size)
         {
             Size = size;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is defined.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is defined; otherwise, <c>false</c>.
+        /// </value>
         public bool IsDefined
         {
             get { return Section != null && Offset >= 0; }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is finished.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is finished; otherwise, <c>false</c>.
+        /// </value>
         public bool IsFinished
         {
             get { return Section != null && Offset >= 0 && Size >= 0; }

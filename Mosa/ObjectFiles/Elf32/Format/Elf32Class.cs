@@ -13,6 +13,9 @@ using System.Text;
 
 namespace Mosa.ObjectFiles.Elf32.Format
 {
+    /// <summary>
+    /// 
+    /// </summary>
     enum Elf32Class
     {
         /// <summary>

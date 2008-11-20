@@ -20,14 +20,17 @@ namespace Mosa.ObjectFiles.Elf32.Format.Sections
     class Elf32RuntimeDataSection : Elf32NobitsSection
     {
         /// <summary>
-        /// 
+        /// This member gives the section's size in bytes.  Unless the section type is
+        /// SHT_NOBITS, the section occupies sh_size bytes in the file. A section
+        /// of type SHT_NOBITS may have a non-zero size, but it occupies no space
+        /// in the file.
         /// </summary>
         int _size;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="Elf32RuntimeDataSection"/> class.
         /// </summary>
-        /// <param name="file"></param>
+        /// <param name="file">The file.</param>
         public Elf32RuntimeDataSection(Elf32File file)
             : base(file, ".bss", Elf32SectionType.SHT_NOBITS, Elf32SectionFlags.SHF_ALLOC | Elf32SectionFlags.SHF_WRITE)
         {
@@ -35,8 +38,12 @@ namespace Mosa.ObjectFiles.Elf32.Format.Sections
         }
 
         /// <summary>
-        /// 
+        /// This member gives the section's size in bytes.  Unless the section type is
+        /// SHT_NOBITS, the section occupies sh_size bytes in the file. A section
+        /// of type SHT_NOBITS may have a non-zero size, but it occupies no space
+        /// in the file.
         /// </summary>
+        /// <value></value>
         public override int Size
         {
             get { return _size; }

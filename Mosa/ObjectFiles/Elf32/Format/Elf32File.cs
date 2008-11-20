@@ -153,7 +153,7 @@ namespace Mosa.ObjectFiles.Elf32.Format
 
         #region Construction
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="Elf32File"/> class.
         /// </summary>
         /// <param name="machineKind">The machinetype we want to create an ELF32 binary for</param>
         public Elf32File(Elf32MachineKind machineKind)

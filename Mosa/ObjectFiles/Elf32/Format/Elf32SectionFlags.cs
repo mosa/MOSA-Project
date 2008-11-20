@@ -13,17 +13,30 @@ using System.Text;
 
 namespace Mosa.ObjectFiles.Elf32.Format
 {
+    /// <summary>
+    /// 
+    /// </summary>
     enum Elf32SectionFlags : uint
     {
-        /// <summary></summary>
+        /// <summary>
+        /// 
+        /// </summary>
         SHF_NONE = 0x0,
-        ///<summary></summary>
+        /// <summary>
+        /// 
+        /// </summary>
         SHF_WRITE = 0x1,
-        ///<summary></summary>
+        /// <summary>
+        /// 
+        /// </summary>
         SHF_ALLOC = 0x2,
-        ///<summary></summary>
+        /// <summary>
+        /// 
+        /// </summary>
         SHF_EXECINSTR = 0x4,
-        ///<summary></summary>
+        /// <summary>
+        /// 
+        /// </summary>
         SHF_MASKPROC = 0xf0000000,
     }
 }

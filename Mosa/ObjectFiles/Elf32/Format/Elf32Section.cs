@@ -56,7 +56,7 @@ namespace Mosa.ObjectFiles.Elf32.Format
 
         #region Construction
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="Elf32Section"/> class.
         /// </summary>
         /// <param name="file">File to write to</param>
         /// <param name="name">The section's name</param>
