@@ -38,6 +38,13 @@ namespace Mosa.ObjectFiles.Elf32.Format.Sections
             writer.Write(new byte[SHDR_SIZE]);
         }
 
+        /// <summary>
+        /// Overloaded method to write the section's data accoring to the
+        /// section's specification.
+        /// Every section inherting Elf32ProgbitsSection has to implement
+        /// this method.
+        /// </summary>
+        /// <param name="writer">Reference to the binary writer</param>
         protected override void WriteDataImpl(BinaryWriter writer)
         {
         }

@@ -110,9 +110,12 @@ namespace Mosa.ObjectFiles.Elf32.Format.Sections
         }
 
         /// <summary>
-        /// Writes the data impl.
+        /// Overloaded method to write the section's data accoring to the
+        /// section's specification.
+        /// Every section inherting Elf32ProgbitsSection has to implement
+        /// this method.
         /// </summary>
-        /// <param name="writer">The writer.</param>
+        /// <param name="writer">Reference to the binary writer</param>
         protected override void WriteDataImpl(BinaryWriter writer)
         {
             byte relative32Type, absolute32Type;

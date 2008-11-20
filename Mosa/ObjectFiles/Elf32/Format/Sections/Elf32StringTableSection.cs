@@ -16,7 +16,16 @@ using System.IO;
 namespace Mosa.ObjectFiles.Elf32.Format.Sections
 {
     /// <summary>
+    /// This section holds strings, most commonly the strings that represent the names 
+    /// associated with symbol table entries. If a file has a loadable segment that 
+    /// includes the symbol string table, the section's attributes will include the 
+    /// SHF_ALLOC bit; otherwise, that bit will be off. 
     /// 
+    /// Everything according to the specification in
+    /// the TIS (Tool Interface Standard) ELF (Executable and Linking Format)
+    /// Specification, 1-4, page 30.
+    /// 
+    /// Section's ELF Name: ".strtab"
     /// </summary>
     class Elf32StringTableSection : Elf32ProgbitsSection
     {
@@ -69,6 +78,13 @@ namespace Mosa.ObjectFiles.Elf32.Format.Sections
             return (int)index;
         }
 
+        /// <summary>
+        /// Overloaded method to write the section's data accoring to the
+        /// section's specification.
+        /// Every section inherting Elf32ProgbitsSection has to implement
+        /// this method.
+        /// </summary>
+        /// <param name="writer">Reference to the binary writer</param>
         protected override void WriteDataImpl(BinaryWriter writer)
         {
             writer.Write(

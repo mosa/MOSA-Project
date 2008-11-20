@@ -14,7 +14,10 @@ using System.Text;
 namespace Mosa.ObjectFiles.Elf32.Format.Sections
 {
     /// <summary>
-    /// 
+    /// This section holds the "data" or executable instructions, of a program.
+    /// Also referred to as ".data" on page 29 according to the specification in
+    /// the TIS (Tool Interface Standard) ELF (Executable and Linking Format)
+    /// Specification, 1-4
     /// </summary>
     class Elf32DataSection : Elf32SymbolDefinitionSection
     {

@@ -15,7 +15,10 @@ using Mosa.Runtime.Vm;
 namespace Mosa.ObjectFiles.Elf32.Format.Sections
 {
     /// <summary>
-    /// 
+    /// This section holds the "text" or executable instructions, of a program.
+    /// Also referred to as ".text" on page 30 according to the specification in
+    /// the TIS (Tool Interface Standard) ELF (Executable and Linking Format)
+    /// Specification, 1-4
     /// </summary>
     class Elf32CodeSection : Elf32SymbolDefinitionSection
     {
