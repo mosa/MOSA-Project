@@ -20,28 +20,56 @@ namespace Mosa.ObjectFiles.Elf32
     /// </summary>
     public enum Elf32MachineKind : uint
     {
-        ///<summary>No machine</summary>
+        /// <summary>
+        /// No machine
+        /// </summary>
         None = 0,
-        ///<summary>AT&amp;T WE 32100</summary>
+
+        /// <summary>
+        /// AT&amp;T WE 32100
+        /// </summary>
         M32 = 1,
-        ///<summary>SPARC</summary>
+
+        /// <summary>
+        /// SPARC
+        /// </summary>
         Sparc = 2,
-        ///<summary>Intel Architecture</summary>
+
+        /// <summary>
+        /// Intel Architecture
+        /// </summary>
         I386 = 3,
-        ///<summary>Motorola 68000</summary>
+
+        /// <summary>
+        /// Motorola 68000
+        /// </summary>
         M68k = 4,
-        ///<summary>Motorola 88000</summary>
+
+        /// <summary>
+        /// Motorola 88000
+        /// </summary>
         M88k = 5,
-        ///<summary>Intel 80860</summary>
+
+        /// <summary>
+        /// Intel 80860
+        /// </summary>
         I860 = 7,
-        ///<summary>MIPS RS3000 Big-Endian</summary>
+
+        /// <summary>
+        /// MIPS RS3000 Big-Endian
+        /// </summary>
         MipsRS3Be = 8,
-        ///<summary>MIPS RS4000 Big-Endian</summary>
+
+        /// <summary>
+        /// MIPS RS4000 Big-Endian
+        /// </summary>
         MipsRS4Be = 10,
+
         /// <summary>
         /// ARM32 Little-Endian
         /// </summary>
         Arm32Le = 40,
+
         /// <summary>
         /// ARM32 Big-Endian
         /// </summary>

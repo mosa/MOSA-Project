@@ -14,21 +14,27 @@ using System.Text;
 namespace Mosa.ObjectFiles.Elf32.Format
 {
     /// <summary>
+    /// The file format is designed to be portable among machines of various sizes, without 
+    /// imposing the sizes of the largest machine on the smallest.
     /// 
+    /// Therefore, Elf32Class identifies the file's class and/or capacity
     /// </summary>
     enum Elf32Class
     {
         /// <summary>
         /// Invalid class
         /// </summary>
-        ElfClassNone = 0,
+        ElfClassNone    = 0x0,
         /// <summary>
-        /// 32-bit objects
+        /// ElfClass32 supports machines with files and virtual address 
+        /// spaces up to 4 gigabytes; it uses the basic types defined above. 
         /// </summary>
-        ElfClass32 = 1,
+        ElfClass32      = 0x1,
         /// <summary>
-        /// 64-bit objects
+        /// ElfClass64 is incomplete and refers to the 64-bit architectures. Its 
+        /// appearance here shows how the object file may change. Other classes will be defined 
+        /// as necessary, with different basic types and sizes for object file data. 
         /// </summary>
-        ElfClass64 = 2,
+        ElfClass64      = 0x2,
     }
 }

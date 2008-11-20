@@ -14,7 +14,21 @@ using System.Text;
 namespace Mosa.ObjectFiles.Elf32.Format
 {
     /// <summary>
+    /// This enum identifies the object file version. 
     /// 
+    /// |----------------------------------------------|
+    /// |      Name     | Value |        Meaning       |
+    /// |----------------------------------------------|
+    /// | EV_NONE       |   0   |  Invalid version     |
+    /// | EV_CURRENT    |   1   |  Current version     |
+    /// |----------------------------------------------|
+    /// 
+    /// The value 1 signifies the original file format; extensions will create new versions 
+    /// with higher numbers. The value of EV_CURRENT, though given as 1 above, will 
+    /// change as necessary to reflect the current version number. 
+    /// 
+    /// Refer to the specification in the TIS (Tool Interface Standard) 
+    /// ELF (Executable and Linking Format) Specification, 1-4, page 19, "e_version"
     /// </summary>
     enum Elf32Version
     {

@@ -36,41 +36,94 @@ namespace Mosa.ObjectFiles.Elf32.Format
             Size = -1;
         }
 
+        #region Properties
         /// <summary>
         /// Gets or sets the tag.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; private set; }
+        public object Tag 
+        {
+            get;
+            private set; 
+        }
+
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name { get; set; }
+        public string Name 
+        { 
+            get;
+            set;
+        }
         /// <summary>
         /// Gets or sets the offset.
         /// </summary>
         /// <value>The offset.</value>
-        public int Offset { get; private set; }
+        public int Offset 
+        { 
+            get; 
+            private set;
+        }
         /// <summary>
         /// Gets or sets the size.
         /// </summary>
         /// <value>The size.</value>
-        public int Size { get; private set; }
+        public int Size 
+        { 
+            get;
+            private set;
+        }
         /// <summary>
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
-        public Elf32SymbolType Type { get; set; }
+        public Elf32SymbolType Type 
+        { 
+            get; 
+            set; 
+        }
         /// <summary>
         /// Gets or sets the bind.
         /// </summary>
         /// <value>The bind.</value>
-        public Elf32SymbolBinding Bind { get; set; }
+        public Elf32SymbolBinding Bind 
+        {
+            get;
+            set;
+        }
         /// <summary>
         /// Gets or sets the section.
         /// </summary>
         /// <value>The section.</value>
-        public Elf32SymbolDefinitionSection Section { get; private set; }
+        public Elf32SymbolDefinitionSection Section 
+        { 
+            get; 
+            private set; 
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is defined.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is defined; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsDefined
+        {
+            get { return Section != null && Offset >= 0; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is finished.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is finished; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsFinished
+        {
+            get { return Section != null && Offset >= 0 && Size >= 0; }
+        }
+        #endregion
 
         /// <summary>
         /// Writes the specified file.
@@ -117,28 +170,6 @@ namespace Mosa.ObjectFiles.Elf32.Format
         public void End(int size)
         {
             Size = size;
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is defined.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is defined; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsDefined
-        {
-            get { return Section != null && Offset >= 0; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is finished.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is finished; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsFinished
-        {
-            get { return Section != null && Offset >= 0 && Size >= 0; }
         }
     }
 }
