@@ -13,31 +13,59 @@ using System.Text;
 
 namespace Mosa.ObjectFiles.Elf32.Format
 {
+    /// <summary>
+    /// This enum categorizes the section's contents and semantics. Section 
+    /// types and their descriptions appear below.
+    /// </summary>
     enum Elf32SectionType
     {
-        ///<summary></summary>
+        ///<summary>
+        ///
+        ///</summary>
         SHT_NULL = 0,
-        ///<summary></summary>
+        ///<summary>
+        ///
+        ///</summary>
         SHT_PROGBITS = 1,
-        ///<summary></summary>
+        ///<summary>
+        ///
+        ///</summary>
         SHT_SYMTAB = 2,
-        ///<summary></summary>
+        ///<summary>
+        ///
+        ///</summary>
         SHT_STRTAB = 3,
-        ///<summary></summary>
+        ///<summary>
+        ///
+        ///</summary>
         SHT_RELA = 4,
-        ///<summary></summary>
+        ///<summary>
+        ///
+        ///</summary>
         SHT_HASH = 5,
-        ///<summary></summary>
+        ///<summary>
+        ///
+        ///</summary>
         SHT_DYNAMIC = 6,
-        ///<summary></summary>
+        ///<summary>
+        ///
+        ///</summary>
         SHT_NOTE = 7,
-        ///<summary></summary>
+        ///<summary>
+        ///
+        ///</summary>
         SHT_NOBITS = 8,
-        ///<summary></summary>
+        ///<summary>
+        ///
+        ///</summary>
         SHT_REL = 9,
-        ///<summary></summary>
+        ///<summary>
+        ///
+        ///</summary>
         SHT_SHLIB = 10,
-        ///<summary></summary>
+        ///<summary>
+        ///
+        ///</summary>
         SHT_DYNSYM = 11,
         ///<summary>x70000000</summary>
         SHT_LOPROC = 0,

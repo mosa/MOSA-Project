@@ -18,10 +18,10 @@ namespace Mosa.ObjectFiles.Elf32.Format
     /// <summary>
     /// 
     /// </summary>
-    class Elf32File
+    public class Elf32File
     {
         /// <summary>
-        /// Elf32 Header size
+        /// This member holds the ELF header's size in bytes. 
         /// </summary>
         public const int EHDR_SIZE = 52;
 
@@ -131,7 +131,8 @@ namespace Mosa.ObjectFiles.Elf32.Format
         }
 
         /// <summary>
-        /// Offset into the program header
+        /// This member holds the program header table's file offset in bytes. If the file has no 
+        /// program header table, this member holds zero. 
         /// </summary>
         private long ProgramHeaderOffset 
         { 
@@ -140,7 +141,8 @@ namespace Mosa.ObjectFiles.Elf32.Format
         }
 
         /// <summary>
-        /// Offset into the section header
+        /// This member holds the section header table's file offset in bytes. If the file has no 
+        /// section header table, this member holds zero.
         /// </summary>
         private long SectionHeaderOffset 
         { 
@@ -253,7 +255,7 @@ namespace Mosa.ObjectFiles.Elf32.Format
             writer.Write((short)((int)MachineKind & 0xffff));
             // Version
             writer.Write((int)Elf32Version.Current);
-            // Entry
+            // Entry adress
             writer.Write((int)0);
             // Program header offset
             writer.Write((int)ProgramHeaderOffset);
