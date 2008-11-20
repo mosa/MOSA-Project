@@ -20,6 +20,9 @@ namespace Mosa.ObjectFiles.Elf32.Format
     /// </summary>
     class Elf32File
     {
+        /// <summary>
+        /// Elf32 Header size
+        /// </summary>
         public const int EHDR_SIZE = 52;
 
         /// <summary>
@@ -27,6 +30,126 @@ namespace Mosa.ObjectFiles.Elf32.Format
         /// </summary>
         public static readonly byte[] MagicBytes = new byte[] { 0x7f, (byte)'E', (byte)'L', (byte)'F' };
 
+        #region Properties
+        /// <summary>
+        /// The machine's type
+        /// </summary>
+        public Elf32MachineKind MachineKind 
+        { 
+            get; 
+            private set; 
+        }
+
+        /// <summary>
+        /// The nullsection, this is required!
+        /// </summary>
+        public Elf32NullSection NullSection 
+        { 
+            get; 
+            private set; 
+        }
+
+        /// <summary>
+        /// The symbol table
+        /// </summary>
+        public Elf32SymbolTableSection SymbolTable 
+        { 
+            get; 
+            private set; 
+        }
+
+        /// <summary>
+        /// The Code section
+        /// </summary>
+        public Elf32CodeSection Code 
+        { 
+            get; 
+            private set; 
+        }
+
+        /// <summary>
+        /// The Data section
+        /// </summary>
+        public Elf32DataSection Data 
+        { 
+            get; 
+            private set; 
+        }
+
+        /// <summary>
+        /// Read-Only Data section
+        /// </summary>
+        public Elf32DataSection ReadOnlyData 
+        { 
+            get; 
+            private set; 
+        }
+
+        /// <summary>
+        /// Runtime Data section
+        /// </summary>
+        public Elf32RuntimeDataSection RuntimeData 
+        { 
+            get; 
+            private set; 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Elf32StringTableSection SectionNames 
+        { 
+            get; 
+            private set; 
+        }
+
+        /// <summary>
+        /// Symbolnames 
+        /// </summary>
+        public Elf32StringTableSection SymbolNames 
+        { 
+            get; 
+            private set; 
+        }
+
+        /// <summary>
+        /// Code relocationss
+        /// </summary>
+        public Elf32RelocationSection CodeRelocations 
+        { 
+            get; 
+            private set; 
+        }
+
+        /// <summary>
+        /// List of all contained sections
+        /// </summary>
+        public List<Elf32Section> Sections 
+        { 
+            get; 
+            private set; 
+        }
+
+        /// <summary>
+        /// Offset into the program header
+        /// </summary>
+        private long ProgramHeaderOffset 
+        { 
+            get; 
+            set; 
+        }
+
+        /// <summary>
+        /// Offset into the section header
+        /// </summary>
+        private long SectionHeaderOffset 
+        { 
+            get; 
+            set;
+        }
+        #endregion
+
+        #region Construction
         /// <summary>
         /// 
         /// </summary>
@@ -50,46 +173,15 @@ namespace Mosa.ObjectFiles.Elf32.Format
             this.SymbolNames = new Elf32StringTableSection(this, ".strtab", Elf32SectionFlags.SHF_NONE);
             SymbolTable.SymbolNames = SymbolNames;
 
-            this.CodeRelocations = new Elf32RelocationSection(
-                this,
-                ".rel.text"
-            ) { SymbolTable = SymbolTable, TargetSection = Code };
+            this.CodeRelocations = new Elf32RelocationSection(this, ".rel.text") 
+            { 
+                SymbolTable = SymbolTable, 
+                TargetSection = Code 
+            };
         }
+        #endregion
 
-        /// <summary>
-        /// The machine's type
-        /// </summary>
-        public Elf32MachineKind MachineKind { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Elf32NullSection NullSection { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Elf32SymbolTableSection SymbolTable { get; private set; }
-
-        /// <summary>
-        /// The Code section
-        /// </summary>
-        public Elf32CodeSection Code { get; private set; }
-
-        /// <summary>
-        /// The Data section
-        /// </summary>
-        public Elf32DataSection Data { get; private set; }
-        public Elf32DataSection ReadOnlyData { get; private set; }
-        public Elf32RuntimeDataSection RuntimeData { get; private set; }
-        public Elf32StringTableSection SectionNames { get; private set; }
-        public Elf32StringTableSection SymbolNames { get; private set; }
-        public Elf32RelocationSection CodeRelocations { get; private set; }
-        public List<Elf32Section> Sections { get; private set; }
-
-        private long ProgramHeaderOffset { get; set; }
-        private long SectionHeaderOffset { get; set; }
-
+        #region Methods
         /// <summary>
         /// Write an ELF32 file to a binary file
         /// </summary>
@@ -144,24 +236,44 @@ namespace Mosa.ObjectFiles.Elf32.Format
                 case Elf32MachineKind.Arm32Be: goto case Elf32MachineKind.I386;
 
                 default:
-                    throw new NotSupportedException();
+                    throw new NotSupportedException("Target machine type not supported.");
             }
 
+            // Write the ELF Header according to the specification in
+            // the TIS (Tool Interface Standard) ELF (Executable and Linking Format)
+            // Specification, 1-4, page 18, figure 1-3
+
+            // Ident, first byte
             writer.Write((byte)Elf32Version.Current);
+            // Ident, fill up 9 empty bytes
             writer.Write(new byte[16 - 7]);
+            // Ident, remaining 6 bytes
             writer.Write((short)Elf32ObjectFileType.Relocatable);
+            // Machinetype ID
             writer.Write((short)((int)MachineKind & 0xffff));
+            // Version
             writer.Write((int)Elf32Version.Current);
-            writer.Write((int)0); // e_entry
-            writer.Write((int)ProgramHeaderOffset); // e_phoff
-            writer.Write((int)SectionHeaderOffset); // e_shoff
-            writer.Write((int)0); // e_flags
-            writer.Write((short)EHDR_SIZE); // e_ehsize
-            writer.Write((short)0); // e_phentsize
-            writer.Write((short)0); // e_phnum
-            writer.Write((short)Elf32Section.SHDR_SIZE); // e_shentsize
-            writer.Write((short)Sections.Count); // e_shnum
-            writer.Write((short)Sections.IndexOf(SectionNames)); // e_shstrndx
+            // Entry
+            writer.Write((int)0);
+            // Program header offset
+            writer.Write((int)ProgramHeaderOffset);
+            // Section header offset
+            writer.Write((int)SectionHeaderOffset); 
+            // Flags
+            writer.Write((int)0); 
+            // Elf header size
+            writer.Write((short)EHDR_SIZE); 
+            // Program header size
+            writer.Write((short)0); 
+            // Program header number
+            writer.Write((short)0); 
+            // Section header size
+            writer.Write((short)Elf32Section.SHDR_SIZE); 
+            // Section header number
+            writer.Write((short)Sections.Count); 
+            // Section header string index
+            writer.Write((short)Sections.IndexOf(SectionNames));
         }
+        #endregion
     }
 }
