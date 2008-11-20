@@ -20,17 +20,20 @@ namespace Mosa.ObjectFiles.Elf32.Format.Sections
     abstract class Elf32NobitsSection : Elf32Section
     {
         /// <summary>
-        /// 
+        /// This member's value gives the byte offset from the beginning of the file to
+        /// the first byte in the section. One section type, SHT_NOBITS described
+        /// below, occupies no space in the file, and its sh_offset member locates
+        /// the conceptual placement in the file.
         /// </summary>
         int _offset;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="Elf32NobitsSection"/> class.
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="name"></param>
-        /// <param name="type"></param>
-        /// <param name="flags"></param>
+        /// <param name="file">File to write to</param>
+        /// <param name="name">The section's name</param>
+        /// <param name="type">Sectiontype</param>
+        /// <param name="flags">Flags to use for this section</param>
         public Elf32NobitsSection(Elf32File file, string name, Elf32SectionType type, Elf32SectionFlags flags)
             : base(file, name, type, flags)
         {
@@ -38,17 +41,21 @@ namespace Mosa.ObjectFiles.Elf32.Format.Sections
         }
 
         /// <summary>
-        /// 
+        /// This member's value gives the byte offset from the beginning of the file to
+        /// the first byte in the section. One section type, SHT_NOBITS described
+        /// below, occupies no space in the file, and its sh_offset member locates
+        /// the conceptual placement in the file.
         /// </summary>
+        /// <value></value>
         public sealed override int Offset 
         { 
             get { return _offset; } 
         }
 
         /// <summary>
-        /// 
+        /// Writes the section's data into the binary file
         /// </summary>
-        /// <param name="writer"></param>
+        /// <param name="writer">Reference to the binary writer</param>
         public override void WriteData(BinaryWriter writer)
         {
         }

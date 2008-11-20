@@ -205,9 +205,9 @@ namespace Mosa.ObjectFiles.Elf32.Format
 
         #region Methods
         /// <summary>
-        /// 
+        /// Writes the section's header into the binary file
         /// </summary>
-        /// <param name="writer"></param>
+        /// <param name="writer">Reference to the binary writer</param>
         public virtual void WriteHeader(BinaryWriter writer)
         {
             writer.Write((Int32)File.SectionNames.GetStringIndex(Name));
@@ -223,9 +223,9 @@ namespace Mosa.ObjectFiles.Elf32.Format
         }
 
         /// <summary>
-        /// 
+        /// Writes the section's data into the binary file
         /// </summary>
-        /// <param name="writer"></param>
+        /// <param name="writer">Reference to the binary writer</param>
         public abstract void WriteData(BinaryWriter writer);
         #endregion
     }

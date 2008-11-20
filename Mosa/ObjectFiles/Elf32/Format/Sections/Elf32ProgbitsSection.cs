@@ -14,18 +14,67 @@ using System.IO;
 
 namespace Mosa.ObjectFiles.Elf32.Format.Sections
 {
+    /// <summary>
+    /// 
+    /// </summary>
     abstract class Elf32ProgbitsSection : Elf32Section
     {
-        int _offset, _size;
+        /// <summary>
+        /// This member's value gives the byte offset from the beginning of the file to
+        /// the first byte in the section. One section type, SHT_NOBITS described
+        /// below, occupies no space in the file, and its sh_offset member locates
+        /// the conceptual placement in the file.
+        /// </summary>
+        int _offset;
 
+        /// <summary>
+        /// This member gives the section's size in bytes.  Unless the section type is
+        /// SHT_NOBITS, the section occupies sh_size bytes in the file. A section
+        /// of type SHT_NOBITS may have a non-zero size, but it occupies no space
+        /// in the file.
+        /// </summary>
+        int _size;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Elf32ProgbitsSection"/> class.
+        /// </summary>
+        /// <param name="file">File to write to</param>
+        /// <param name="name">The section's name</param>
+        /// <param name="type">Sectiontype</param>
+        /// <param name="flags">Flags to use for this section</param>
         public Elf32ProgbitsSection(Elf32File file, string name, Elf32SectionType type, Elf32SectionFlags flags)
             : base(file, name, type, flags)
         {
         }
 
+        /// <summary>
+        /// This member's value gives the byte offset from the beginning of the file to
+        /// the first byte in the section. One section type, SHT_NOBITS described
+        /// below, occupies no space in the file, and its sh_offset member locates
+        /// the conceptual placement in the file.
+        /// </summary>
+        /// <value></value>
         public sealed override int Offset { get { return _offset; } }
-        public sealed override int Size { get { return _size; } }
 
+        /// <summary>
+        /// This member gives the section's size in bytes.  Unless the section type is
+        /// SHT_NOBITS, the section occupies sh_size bytes in the file. A section
+        /// of type SHT_NOBITS may have a non-zero size, but it occupies no space
+        /// in the file.
+        /// </summary>
+        /// <value></value>
+        public sealed override int Size 
+        { 
+            get 
+            { 
+                return _size; 
+            }
+        }
+
+        /// <summary>
+        /// Writes the section's data into the binary file
+        /// </summary>
+        /// <param name="writer">Reference to the binary writer</param>
         public sealed override void WriteData(System.IO.BinaryWriter writer)
         {
             _offset = (int)writer.Seek(0, SeekOrigin.Current);
@@ -33,6 +82,10 @@ namespace Mosa.ObjectFiles.Elf32.Format.Sections
             _size = (int)writer.Seek(0, SeekOrigin.Current) - _offset;
         }
 
+        /// <summary>
+        /// Writes the data impl.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
         protected abstract void WriteDataImpl(BinaryWriter writer);
     }
 }

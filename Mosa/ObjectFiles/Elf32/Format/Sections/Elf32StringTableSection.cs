@@ -15,11 +15,27 @@ using System.IO;
 
 namespace Mosa.ObjectFiles.Elf32.Format.Sections
 {
+    /// <summary>
+    /// 
+    /// </summary>
     class Elf32StringTableSection : Elf32ProgbitsSection
     {
+        /// <summary>
+        /// 
+        /// </summary>
         MemoryStream _stream;
+
+        /// <summary>
+        /// 
+        /// </summary>
         StreamWriter _writer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Elf32StringTableSection"/> class.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="flags">The flags.</param>
         public Elf32StringTableSection(Elf32File file, string name, Elf32SectionFlags flags)
             : base(file, name, Elf32SectionType.SHT_STRTAB, flags)
         {
@@ -29,8 +45,16 @@ namespace Mosa.ObjectFiles.Elf32.Format.Sections
             mapping.Add("", 0);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         Dictionary<string, long> mapping = new Dictionary<string, long>();
 
+        /// <summary>
+        /// Gets the index of the string.
+        /// </summary>
+        /// <param name="str">The STR.</param>
+        /// <returns></returns>
         public int GetStringIndex(string str)
         {
             if (str == null) str = "";
