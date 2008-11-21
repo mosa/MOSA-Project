@@ -18,7 +18,6 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework;
 using IL = Mosa.Runtime.CompilerFramework.IL;
 using Mosa.ObjectFiles.Elf32;
-using Mosa.ObjectFiles.Elf32.Format;
 using Mosa.Platforms.x86.Constraints;
 
 namespace Mosa.Platforms.x86
@@ -278,9 +277,9 @@ namespace Mosa.Platforms.x86
         public override ObjectFileBuilderBase[] GetObjectFileBuilders()
         {
             return new ObjectFileBuilderBase[] {
-                new Elf32ObjectFileBuilder(
+                /*new Elf32ObjectFileBuilder(
                     Elf32MachineKind.I386
-                )
+                )*/
             };
         }
 
