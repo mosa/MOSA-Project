@@ -56,11 +56,11 @@ namespace Mosa.DeviceSystem
         /// </summary>
 		public uint BlockSize { get { return diskController.GetSectorSize(driveNbr); } }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="partitionNbr"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the <see cref="Mosa.DeviceSystem.GenericPartition"/> with the specified partition NBR.
+		/// </summary>
+		/// <value></value>
+		/// <returns></returns>
 		public GenericPartition this[uint partitionNbr] { get { return mbr[partitionNbr]; } }
 
 		/// <summary>
@@ -86,12 +86,12 @@ namespace Mosa.DeviceSystem
 			mbr = new MasterBootBlock(this);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads the block.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="count">The count.</param>
+		/// <returns></returns>
 		public byte[] ReadBlock(uint block, uint count)
 		{
 			byte[] data = new byte[count * BlockSize];
@@ -99,13 +99,13 @@ namespace Mosa.DeviceSystem
 			return data;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="count"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads the block.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="count">The count.</param>
+		/// <param name="data">The data.</param>
+		/// <returns></returns>
 		public bool ReadBlock(uint block, uint count, byte[] data)
 		{
 			return diskController.ReadBlock(driveNbr, block, count, data);
@@ -123,10 +123,10 @@ namespace Mosa.DeviceSystem
 			return diskController.WriteBlock(driveNbr, block, count, data);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates the partition devices.
+		/// </summary>
+		/// <returns></returns>
 		public LinkedList<IDevice> CreatePartitionDevices()
 		{
 			LinkedList<IDevice> devices = new LinkedList<IDevice>();

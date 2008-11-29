@@ -12,7 +12,7 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceSystem
 {
     /// <summary>
-    /// 
+    /// The Interrupt Manager dispatches interrupts to the approporate hardware device drivers
     /// </summary>
 	public class InterruptManager
 	{
@@ -31,9 +31,9 @@ namespace Mosa.DeviceSystem
         /// </summary>
 		protected SpinLock spinLock;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InterruptManager"/> class.
+		/// </summary>
 		public InterruptManager()
 		{
 			interruptHandlers = new LinkedList<IHardwareDevice>[MaxInterrupts];
@@ -42,10 +42,10 @@ namespace Mosa.DeviceSystem
 				interruptHandlers[i] = new LinkedList<IHardwareDevice>();
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="irq"></param>
+		/// <summary>
+		/// Processes the interrupt.
+		/// </summary>
+		/// <param name="irq">The irq.</param>
 		public void ProcessInterrupt(byte irq)
 		{
 			try {
@@ -58,11 +58,11 @@ namespace Mosa.DeviceSystem
 			}
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="irq"></param>
-        /// <param name="hardwareDevice"></param>
+		/// <summary>
+		/// Adds the interrupt handler.
+		/// </summary>
+		/// <param name="irq">The irq.</param>
+		/// <param name="hardwareDevice">The hardware device.</param>
 		public void AddInterruptHandler(byte irq, IHardwareDevice hardwareDevice)
 		{
 			try {
@@ -74,11 +74,11 @@ namespace Mosa.DeviceSystem
 			}
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="irq"></param>
-        /// <param name="hardwareDevice"></param>
+		/// <summary>
+		/// Releases the interrupt handler.
+		/// </summary>
+		/// <param name="irq">The irq.</param>
+		/// <param name="hardwareDevice">The hardware device.</param>
 		public void ReleaseInterruptHandler(byte irq, IHardwareDevice hardwareDevice)
 		{
 			try {

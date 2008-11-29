@@ -5,103 +5,75 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
 namespace Mosa.Kernel.Memory.X86
 {
 	/// <summary>
-	/// A physical page manager.
+	/// 
 	/// </summary>
-	/// <remarks>
-	/// This interface defines the abstract operations to allocate and free at the physical page level.
-	/// </remarks>
-	public class PhysicalPageManager
+	public class PhysicalPageManager : IPhysicalPageManager
 	{
 		/// <summary>
-		/// 
+		/// Allocates the page.
 		/// </summary>
-		protected const ushort X86PageSize = 4096;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected uint totalPages;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected uint totalUsedPages;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected uint firstIndexPage;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected uint lastIndexPage;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected uint indexSize;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected uint indexAddress;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PhysicalPageManager"/> class.
-		/// </summary>
-		public PhysicalPageManager(ulong startPage, ulong totalPages)
-		{
-			this.totalPages = (uint)totalPages;
-			this.totalUsedPages = 0;
-			this.firstIndexPage = (uint)startPage;
-			this.lastIndexPage = (uint)(firstIndexPage + (totalPages * sizeof(uint) / X86PageSize) + 1);
-			this.indexSize = lastIndexPage - firstIndexPage + 1;
-			this.indexAddress = firstIndexPage * X86PageSize;
-
-			// Populate free table
-			for (uint i = 0; i < totalPages - indexSize; i++)
-				unsafe {
-					(*(uint*)(indexAddress + (i * sizeof(uint)))) = (lastIndexPage + 1 + i);
-				}
-		}
-
-		/// <summary>
-		/// Allocate a physical page from the free list
-		/// </summary>
-		/// <returns>The page</returns>
+		/// <returns>An IntPtr to the allocated memory.</returns>
 		public ulong Allocate()
 		{
-			if (totalPages == totalUsedPages)
-				return 0; // out of memory
+			// Get physical page
+			uint page = PageAllocator.Allocate();
 
-			unsafe {
-				return (ulong)(*((uint*)(indexAddress + (totalUsedPages++) * sizeof(uint))));
-			}
+			// Map page into virtual space (0x02 = Read/Write)
+			PageTable.MapVirtualAddressToPhysical(page, page, 0x02);
+
+			return page;
 		}
 
 		/// <summary>
-		/// Releases a page to the free list
+		/// Frees the page.
 		/// </summary>
-		/// <param name="page">The page.</param>
-		public unsafe void Free(ulong page)
+		/// <param name="address">The starting address of the page to freed.</param>
+		public void Free(ulong address)
 		{
-			(*((uint*)(indexAddress + (++totalUsedPages) * sizeof(uint)))) = (uint)page;
+			// Remove virtual page from page table
+			PageTable.ReleaseVirtualAddress((uint)address);
+
+			// Release physical page
+			PageAllocator.Free((uint)address);
 		}
 
 		/// <summary>
 		/// Retrieves the size of a single memory page.
 		/// </summary>
-		public static ulong PageSize { get { return X86PageSize; } }
+		public ulong PageSize
+		{
+			get
+			{
+				return PageAllocator.PageSize;
+			}
+		}
 
 		/// <summary>
 		/// Retrieves the amount of total physical memory pages available in the system.
 		/// </summary>
-		public ulong TotalPages { get { return totalPages; } }
+		public ulong TotalPages
+		{
+			get
+			{
+				return PageAllocator.TotalPages;
+			}
+		}
 
 		/// <summary>
 		/// Retrieves the amount of number of physical pages in use.
 		/// </summary>
-		public ulong TotalPagesInUse { get { return totalUsedPages; } }
-
+		public ulong TotalPagesInUse
+		{
+			get
+			{
+				return PageAllocator.TotalPagesInUse;
+			}
+		}
 	}
 }

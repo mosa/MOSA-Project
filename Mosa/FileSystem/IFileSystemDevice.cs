@@ -16,11 +16,11 @@ namespace Mosa.FileSystem
     /// </summary>
 	public interface IFileSystemDevice
 	{
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="partition"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates the specified partition.
+		/// </summary>
+		/// <param name="partition">The partition.</param>
+		/// <returns></returns>
 		GenericFileSystem Create(IPartitionDevice partition);
 	}
 }

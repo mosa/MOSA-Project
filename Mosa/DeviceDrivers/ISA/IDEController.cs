@@ -352,45 +352,57 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
-		//protected bool ReadLBA48 (SectorOperation operation, uint drive, uint lba, MemoryBlock memory)
-		//{
-		//    FeaturePort.Write8Bits (0);
-		//    FeaturePort.Write8Bits (0);
+		/// <summary>
+		/// Reads the LBA48.
+		/// </summary>
+		/// <param name="operation">The operation.</param>
+		/// <param name="drive">The drive.</param>
+		/// <param name="lba">The lba.</param>
+		/// <param name="data">The data.</param>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
+		protected bool ReadLBA48(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
+		{
+			FeaturePort.Write8(0);
+			FeaturePort.Write8(0);
 
-		//    SectorCountPort.Write8Bits (0);
-		//    SectorCountPort.Write8Bits (1);
+			SectorCountPort.Write8(0);
+			SectorCountPort.Write8(1);
 
-		//    LBALowPort.Write8Bits ((byte)((lba >> 24) & 0xFF));
-		//    LBALowPort.Write8Bits ((byte)(lba & 0xFF));
+			LBALowPort.Write8((byte)((lba >> 24) & 0xFF));
+			LBALowPort.Write8((byte)(lba & 0xFF));
 
-		//    LBAMidPort.Write8Bits ((byte)((lba >> 32) & 0xFF));
-		//    LBAMidPort.Write8Bits ((byte)((lba >> 8) & 0xFF));
+			LBAMidPort.Write8((byte)((lba >> 32) & 0xFF));
+			LBAMidPort.Write8((byte)((lba >> 8) & 0xFF));
 
-		//    LBAHighPort.Write8Bits ((byte)((lba >> 40) & 0xFF));
-		//    LBAHighPort.Write8Bits ((byte)((lba >> 16) & 0xFF));
+			LBAHighPort.Write8((byte)((lba >> 40) & 0xFF));
+			LBAHighPort.Write8((byte)((lba >> 16) & 0xFF));
 
-		//    DeviceHeadPort.Write8Bits ((byte)(0x40 | (drive << 4)));
+			DeviceHeadPort.Write8((byte)(0x40 | (drive << 4)));
 
-		//    if (operation == SectorOperation.Write)
-		//        CommandPort.Write8Bits (0x34);
-		//    else
-		//        CommandPort.Write8Bits (0x24);
+			if (operation == SectorOperation.Write)
+				CommandPort.Write8(0x34);
+			else
+				CommandPort.Write8(0x24);
 
-		//    if (!WaitForReqisterReady ())
-		//        return false;
+			if (!WaitForReqisterReady())
+				return false;
 
-		//    //TODO: Don't use PIO
-		//    if (operation == SectorOperation.Read) {
-		//        for (uint index = 0; index < 256; index++)
-		//            memory.SetUShort (index * 2, DataPort.Read16Bits ());
-		//    }
-		//    else {
-		//        for (uint index = 0; index < 256; index++)
-		//            DataPort.WriteUShort (memory.GetUShort (index * 2));
-		//    }
+			BinaryFormat sector = new BinaryFormat(data);
 
-		//    return true;
-		//}
+			//TODO: Don't use PIO
+			if (operation == SectorOperation.Read) {
+				for (uint index = 0; index < 256; index++)
+					sector.SetUShort(offset + (index * 2), DataPort.Read16());
+			}
+			else {
+				for (uint index = 0; index < 256; index++)
+					DataPort.Write16(sector.GetUShort(offset + (index * 2)));
+
+			}
+
+			return true;
+		}
 
 		/// <summary>
 		/// Opens the specified drive NBR.

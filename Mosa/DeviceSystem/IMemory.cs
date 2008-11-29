@@ -75,7 +75,7 @@ namespace Mosa.DeviceSystem
 		void Write32(uint index, uint value);
 
 		/// <summary>
-		/// Read32s the specified index.
+		/// Reads the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="count">The count.</param>
