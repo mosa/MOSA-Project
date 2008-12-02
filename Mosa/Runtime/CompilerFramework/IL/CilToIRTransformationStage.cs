@@ -161,6 +161,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         void IILVisitor<Context>.Dup(DupInstruction instruction, Context ctx)
         {
+            // We don't need the dup anymore.
+            Remove(ctx);
         }
 
         void IILVisitor<Context>.Pop(PopInstruction instruction, Context ctx)
