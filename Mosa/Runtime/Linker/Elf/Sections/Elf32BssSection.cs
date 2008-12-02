@@ -24,6 +24,8 @@ namespace Mosa.Runtime.Linker.Elf.Sections
         public Elf32BssSection()
             : base(Mosa.Runtime.Linker.SectionKind.BSS, @".bss", IntPtr.Zero)
         {
+            header.Type = Elf32SectionType.NoBits;
+            header.Flags = Elf32SectionAttribute.Alloc | Elf32SectionAttribute.Write;
         }
     }
 }

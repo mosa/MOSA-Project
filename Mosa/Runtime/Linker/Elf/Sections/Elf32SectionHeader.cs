@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.ObjectFiles.Elf32.Sections
+namespace Mosa.Runtime.Linker.Elf.Sections
 {
     /// <summary>
     /// 
@@ -25,11 +25,11 @@ namespace Mosa.ObjectFiles.Elf32.Sections
         /// <summary>
         /// 
         /// </summary>
-        public uint Type;
+        public Elf32SectionType Type;
         /// <summary>
         /// 
         /// </summary>
-        public uint Flags;
+        public Elf32SectionAttribute Flags;
         /// <summary>
         /// 
         /// </summary>
@@ -67,8 +67,8 @@ namespace Mosa.ObjectFiles.Elf32.Sections
         {
             System.IO.BinaryWriter writer = new System.IO.BinaryWriter(fs);
             writer.Write(Name);
-            writer.Write(Type);
-            writer.Write(Flags);
+            writer.Write((uint)Type);
+            writer.Write((uint)Flags);
             writer.Write(Address);
             writer.Write(Offset);
             writer.Write(Size);

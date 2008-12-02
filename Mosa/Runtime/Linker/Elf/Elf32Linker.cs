@@ -44,7 +44,7 @@ namespace Mosa.Runtime.Linker.Elf
             this.sections = new List<LinkerSection>();
 
             // Create the default section set
-            Elf32Section[] sections = new Elf32Section[(int)SectionKind.Max];
+            Sections.Elf32Section[] sections  = new Sections.Elf32Section[(int)SectionKind.Max];
             sections[(int)SectionKind.Text]   = new Sections.Elf32CodeSection();
             sections[(int)SectionKind.Data]   = new Sections.Elf32DataSection();
             sections[(int)SectionKind.ROData] = new Sections.Elf32RoDataSection();
@@ -130,7 +130,7 @@ namespace Mosa.Runtime.Linker.Elf
         /// </returns>
         protected override System.IO.Stream Allocate(SectionKind section, int size, int alignment)
         {
-            Elf32Section linkerSection = (Elf32Section)this.sections[(int)section];
+            Sections.Elf32Section linkerSection = (Sections.Elf32Section)this.sections[(int)section];
             //return linkerSection.Allocate(size, alignment);
             return System.IO.Stream.Null;
         }
@@ -181,6 +181,9 @@ namespace Mosa.Runtime.Linker.Elf
             {
                 Elf32Header header = new Elf32Header();
                 header.Write(fs);
+
+                foreach (Mosa.Runtime.Linker.Elf.Sections.Elf32Section section in Sections)
+                    section.Write(fs);
             }
         }
     }

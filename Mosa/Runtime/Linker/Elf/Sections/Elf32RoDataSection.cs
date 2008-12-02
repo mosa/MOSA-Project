@@ -24,6 +24,8 @@ namespace Mosa.Runtime.Linker.Elf.Sections
         public Elf32RoDataSection()
             : base(Mosa.Runtime.Linker.SectionKind.ROData, @".rodata", IntPtr.Zero)
         {
+            header.Type = Elf32SectionType.ProgBits;
+            header.Flags = Elf32SectionAttribute.Alloc;
         }
     }
 }

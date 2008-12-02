@@ -11,13 +11,17 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.Linker.Elf
+namespace Mosa.Runtime.Linker.Elf.Sections
 {
     /// <summary>
     /// 
     /// </summary>
     public class Elf32Section : Mosa.Runtime.Linker.LinkerSection
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        protected Elf32SectionHeader header;
         /// <summary>
         /// 
         /// </summary>
@@ -44,6 +48,16 @@ namespace Mosa.Runtime.Linker.Elf
             {
                 return length;
             }
+        }
+
+        /// <summary>
+        /// Writes the specified fs.
+        /// </summary>
+        /// <param name="fs">The fs.</param>
+        public void Write(System.IO.FileStream fs)
+        {
+            System.IO.BinaryWriter writer = new System.IO.BinaryWriter(fs);
+            header.Write();
         }
     }
 }
