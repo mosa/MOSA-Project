@@ -22,16 +22,23 @@ namespace Mosa.Tools.Compiler.Boot
     /// </summary>
     public class BootFormatSelector : IAssemblyCompilerStage, IHasOptions
     {
-        IAssemblyCompilerStage implementation;
+        /// <summary>
+        /// Holds the real stage implementation to use.
+        /// </summary>
+        private IAssemblyCompilerStage implementation;
+
+        /// <summary>
+        /// Holds the Multiboot 0.7 stage.
+        /// </summary>
+        private IAssemblyCompilerStage multiboot07Stage;
         
         /// <summary>
         /// Initializes a new instance of the BootFormatSelector class.
-        /// Selects an appropriate implementation of the boot format stage based on the format.
         /// </summary>
-        /// <param name="format">The format.</param>
-        public BootFormatSelector(string format)
+        public BootFormatSelector()
         {
-            implementation = SelectImplementation(format);
+            this.multiboot07Stage = new Multiboot0695AssemblyStage();
+            this.implementation = null;
         }
         
         private IAssemblyCompilerStage SelectImplementation(string format)
@@ -40,7 +47,7 @@ namespace Mosa.Tools.Compiler.Boot
             {
                 case "multiboot-0.7":
                 case "mb0.7":
-                    return new Multiboot0695AssemblyStage();
+                    return this.multiboot07Stage;
                 default:
                     throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
             }
@@ -52,16 +59,20 @@ namespace Mosa.Tools.Compiler.Boot
         /// <param name="optionSet">A given OptionSet to add the options to.</param>
         public void AddOptions(OptionSet optionSet)
         {
-            ((IHasOptions)implementation).AddOptions(optionSet);
-        }
-        
-        /// <summary>
-        /// Adds the additional options for all possible implementations of this type for the parsing process to the given OptionSet.
-        /// </summary>
-        /// <param name="optionSet">A given OptionSet to add the options to.</param>
-        public static void AddOptionsForAll(OptionSet optionSet)
-        {
-            new Multiboot0695AssemblyStage().AddOptions(optionSet);
+            IHasOptions options;
+            
+            optionSet.Add(
+                "b|boot=",
+                "Specify the bootable format of the produced binary [{mb0.7}].",
+                delegate(string format)
+                {
+                    this.implementation = SelectImplementation(format);
+                }
+            );
+            
+            options = multiboot07Stage as IHasOptions;
+            if (options != null)
+                options.AddOptions(optionSet);
         }
         
         /// <summary>
@@ -72,7 +83,20 @@ namespace Mosa.Tools.Compiler.Boot
         {
             get
             {
+                if (implementation == null)
+                    return @"Boot Format Selector";
                 return implementation.Name;
+            }
+        }
+        
+        /// <summary>
+        /// Gets a value indicating wheter an implementation has been selected.
+        /// </summary>
+        public bool IsImplementationSelected
+        {
+            get
+            {
+                return (implementation != null);
             }
         }
         
@@ -82,7 +106,17 @@ namespace Mosa.Tools.Compiler.Boot
         /// <param name="compiler">The compiler context to perform processing in.</param>
         public void Run(AssemblyCompiler compiler)
         {
+            CheckImplementation();
             implementation.Run(compiler);
+        }
+        
+        /// <summary>
+        /// Checks if an implementation is set.
+        /// </summary>
+        private void CheckImplementation()
+        {
+            if (this.implementation == null)
+                throw new InvalidOperationException(@"BootFormatSelector not initialized.");
         }
     }
 }

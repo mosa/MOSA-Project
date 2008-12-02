@@ -12,17 +12,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
-using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
+using Mosa.Runtime.Linker.Elf;
+using Mosa.Runtime.Linker.PE;
 using Mosa.Runtime.Vm;
 
 using NDesk.Options;
-using Mosa.Runtime.Linker.PE;
-using Mosa.Runtime.Linker.Elf;
-using System.Diagnostics;
 
 namespace Mosa.Tools.Compiler
 {
@@ -70,6 +69,17 @@ namespace Mosa.Tools.Compiler
         #endregion // Construction
 
         #region Properties
+        
+        /// <summary>
+        /// Gets a value indicating wheter an implementation has been selected.
+        /// </summary>
+        public bool IsImplementationSelected
+        {
+            get
+            {
+                return (implementation != null);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the output file.
@@ -155,15 +165,6 @@ namespace Mosa.Tools.Compiler
             if (options != null)
                 options.AddOptions(optionSet);
         }
-        
-        /// <summary>
-        /// Adds the additional options for all possible implementations of this type for the parsing process to the given OptionSet.
-        /// </summary>
-        /// <param name="optionSet">A given OptionSet to add the options to.</param>
-        public static void AddOptionsForAll(OptionSet optionSet)
-        {
-        }
-
         #endregion // IHasOptions Members
 
         #region IAssemblyLinker Members

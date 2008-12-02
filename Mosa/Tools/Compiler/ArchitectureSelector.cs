@@ -22,17 +22,17 @@ namespace Mosa.Tools.Compiler
     /// </summary>
     public class ArchitectureSelector : IAssemblyCompilerStage, IHasOptions
     {
-        IAssemblyCompilerStage implementation;
+        /// <summary>
+        /// Holds the real stage implementation to use.
+        /// </summary>
+        private IAssemblyCompilerStage implementation;
         
         /// <summary>
         /// Initializes a new instance of the ArchitectureSelector class.
-        /// Selects an appropriate implementation of the architecture stage
-        /// based on the architecture's name.
         /// </summary>
-        /// <param name="architecture">The architecture.</param>
-        public ArchitectureSelector(string architecture)
+        public ArchitectureSelector()
         {
-            implementation = SelectImplementation(architecture);
+            this.implementation = null;
         }
         
         private IAssemblyCompilerStage SelectImplementation(string architecture)
@@ -54,7 +54,14 @@ namespace Mosa.Tools.Compiler
         /// <param name="optionSet">A given OptionSet to add the options to.</param>
         public void AddOptions(OptionSet optionSet)
         {
-            ((IHasOptions)implementation).AddOptions(optionSet);
+            optionSet.Add(
+                "a|arch=",
+                "Select one of the MOSA architectures to compile for [{x86|x64}].",
+                delegate(string arch)
+                {
+                    this.implementation = SelectImplementation(arch);
+                }
+            );
         }
         
         /// <summary>
@@ -67,6 +74,17 @@ namespace Mosa.Tools.Compiler
         }
         
         /// <summary>
+        /// Gets a value indicating wheter an implementation has been selected.
+        /// </summary>
+        public bool IsImplementationSelected
+        {
+            get
+            {
+                return (implementation != null);
+            }
+        }
+        
+        /// <summary>
         /// Retrieves the name of the compilation stage.
         /// </summary>
         /// <value>The name of the compilation stage.</value>
@@ -74,6 +92,8 @@ namespace Mosa.Tools.Compiler
         {
             get
             {
+                if (implementation == null)
+                    return @"Boot Format Selector";
                 return implementation.Name;
             }
         }
@@ -84,7 +104,17 @@ namespace Mosa.Tools.Compiler
         /// <param name="compiler">The compiler context to perform processing in.</param>
         public void Run(AssemblyCompiler compiler)
         {
+            CheckImplementation();
             implementation.Run(compiler);
+        }
+        
+        /// <summary>
+        /// Checks if an implementation is set.
+        /// </summary>
+        private void CheckImplementation()
+        {
+            if (this.implementation == null)
+                throw new InvalidOperationException(@"ArchitectureFormatSelector not initialized.");
         }
     }
 }
