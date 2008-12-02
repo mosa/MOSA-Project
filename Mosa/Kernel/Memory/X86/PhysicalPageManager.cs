@@ -25,7 +25,7 @@ namespace Mosa.Kernel.Memory.X86
 			uint page = PageAllocator.Allocate();
 
 			// Map page into virtual space (0x02 = Read/Write)
-			PageTable.MapVirtualAddressToPhysical(page, page, 0x02);
+			PageTable.MapVirtualAddressToPhysical(page, page, 0x02); // TODO: Wrong place for this
 
 			return page;
 		}
@@ -37,7 +37,7 @@ namespace Mosa.Kernel.Memory.X86
 		public void Free(ulong address)
 		{
 			// Remove virtual page from page table
-			PageTable.ReleaseVirtualAddress((uint)address);
+			PageTable.ReleaseVirtualAddress((uint)address);  // TODO: Wrong place for this
 
 			// Release physical page
 			PageAllocator.Free((uint)address);

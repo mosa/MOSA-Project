@@ -55,5 +55,24 @@ namespace Mosa.Kernel.Memory.X86
 			return (uint)(*((uint*)(location)));
 		}
 
+		/// <summary>
+		/// Gets the value at specified location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <returns></returns>
+		public unsafe static byte Get8(uint location)
+		{
+			return (byte)(*((uint*)(location)));
+		}
+
+		/// <summary>
+		/// Gets the value at specified location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <returns></returns>
+		public unsafe static ulong Get64(uint location)
+		{
+			return (ulong)(*((ulong*)(location)));
+		}
 	}
 }

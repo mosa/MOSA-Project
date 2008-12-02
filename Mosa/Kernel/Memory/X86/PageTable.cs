@@ -34,6 +34,12 @@ namespace Mosa.Kernel.Memory.X86
 
 			// Clear out that page
 			Memory.X86.Util.Clear(pageDirectory, 4096);
+
+			// Map Page Directory
+			SetupIdentityPages(pageDirectory, 4096, false);
+
+			// Map the first 1M of memory
+			SetupIdentityPages(0, 1024 * 1024, false);
 		}
 
 		/// <summary>
@@ -62,6 +68,9 @@ namespace Mosa.Kernel.Memory.X86
 			// Set the Page Directory Entry to the new Page Table
 			// 0x02 = Read/Write, 0x01 = Present, 0x100 = Available (used to mark this page is not swappable to disk)
 			Memory.X86.Util.Set32(location + (index * sizeof(uint)), (uint)(pageEntry & ~(0x03FF)) | 0x02 | 0x01 | 0x100);
+
+			// Map Page Table Entry
+			SetupIdentityPages(pageEntry, 4096, false);
 
 			// TODO: Flush TLB?
 
@@ -98,17 +107,19 @@ namespace Mosa.Kernel.Memory.X86
 		/// Sets up the identity pages.
 		/// </summary>
 		/// <param name="start">The start.</param>
-		/// <param name="end">The end.</param>
+		/// <param name="size">The size.</param>
 		/// <param name="readOnly">if set to <c>true</c> [read only].</param>
-		public static void SetupIdentityPages(uint start, uint end, bool readOnly)
+		public static void SetupIdentityPages(uint start, uint size, bool readOnly)
 		{
-			// force alignment to 4Kb Page
+			if (size == 0) return;
+
+			// force alignment to 4Kb page boundary
 			start = (uint)(start & ~(0xFFF));
-			end = (uint)(end & ~(0xFFF));
+			size = (uint)((size + 0xFFF - 1) & ~(0xFFF));
 
 			uint flag = (uint)(readOnly ? 0x00 : 0x02);
 
-			for (uint mem = start; mem <= end; mem = mem + 4096)
+			for (uint mem = start; mem < start + size; mem = mem + 4096)
 				MapVirtualAddressToPhysical(mem, mem, flag);
 		}
 	}
