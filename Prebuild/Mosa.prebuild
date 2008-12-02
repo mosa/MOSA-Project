@@ -404,7 +404,7 @@
       </Project>
     </EmbeddedSolution>
     <EmbeddedSolution name="TestBoot">
-      <Project name="Mosa.HelloWorld" type="Library" path="..\Mosa\HelloWorld" language="C#" runtime="Microsoft" rootNamespace="Mosa.HelloWorld" assemblyName="Mosa.HelloWorld">
+      <Project name="Mosa.HelloWorld" type="Exe" path="..\Mosa\HelloWorld" language="C#" runtime="Microsoft" rootNamespace="Mosa.HelloWorld" assemblyName="Mosa.HelloWorld">
         <Configuration name="Debug">
           <Options>
             <OutputPath>..\bin</OutputPath>
