@@ -10,32 +10,23 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-
-using NDesk.Options;
-
-using Mosa.Platforms.x86;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Loader;
-using Mosa.Runtime.Loader.PE;
-using Mosa.Runtime.Metadata;
 
 namespace Mosa.Tools.Compiler
 {
     /// <summary>
     /// Class containing the entry point of the program.
     /// </summary>
-    public class Program
+    internal static class Program
     {
         /// <summary>
         /// Main entry point for the compiler.
         /// </summary>
         /// <param name="args">The command line arguments.</param>
-        public static void Main(string[] args)
+        internal static void Main(string[] args)
         {
             Compiler compiler = new Compiler();
             compiler.Run(args);
         }
     }
 }
+

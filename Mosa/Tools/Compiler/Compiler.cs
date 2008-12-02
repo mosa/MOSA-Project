@@ -21,85 +21,36 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Loader.PE;
 using Mosa.Runtime.Metadata;
-
 using Mosa.Tools.Compiler.Boot;
 
 namespace Mosa.Tools.Compiler
 {
-    #region Enums
-
-    /// <summary>
-    /// Available architectures.
-    /// </summary>
-    public enum TargetArchitecture
-    {
-        /// <summary>
-        /// Architecture not defined.
-        /// </summary>
-        Undefined,
-        
-        /// <summary>
-        /// The x86 architecture.
-        /// </summary>
-        x86,
-        
-        /// <summary>
-        /// The x64 architecture,
-        /// </summary>
-        x64
-    }
-    
-    /// <summary>
-    /// Available binary formats
-    /// </summary>
-    public enum BinaryFormat
-    {
-        /// <summary>
-        /// Binary format not defined.
-        /// </summary>
-        Undefined,
-        
-        /// <summary>
-        /// The ELF (Executable and Linking Format) format.
-        /// </summary>
-        ELF,
-        
-        /// <summary>
-        /// The PE (Portable Executable) format.
-        /// </summary>
-        PE
-    }
-
-    #endregion // Enums
-
     /// <summary>
     /// Class containing the Compiler.
     /// </summary>
     public class Compiler
     {
-        // TODO: replace architecture and binaryFormat by stages (see bootFormatStage)
-        
         #region Fields
 
         /// <summary>
-        /// Determines the compilation architecture.
+        /// Holds the stage responsible for the architecture.
         /// </summary>
-        private TargetArchitecture architecture;
+        private ArchitectureSelector architectureStage;
         
         /// <summary>
-        /// Determines the output binary format.
+        /// Holds the stage responsible for the linker/binary format.
         /// </summary>
-        private BinaryFormat binaryFormat;
+        private LinkerFormatSelector linkerStage;
 
         /// <summary>
         /// Holds the stage responsible for the boot format.
         /// </summary>
-        private IAssemblyCompilerStage bootFormatStage = null;
+        private BootFormatSelector bootFormatStage;
 
         /// <summary>
         /// Holds a list of input files.
         /// </summary>
-        private List<FileInfo> inputFiles = null;
+        private List<FileInfo> inputFiles;
         
         /// <summary>
         /// Determines if the file is executable.
@@ -131,13 +82,11 @@ namespace Mosa.Tools.Compiler
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the CompileOptions class.
+        /// Initializes a new instance of the Compiler class.
         /// </summary>
         public Compiler()
         {
             usageString = "Usage: mosacl -o outputfile --arch=[x86|x64] --format=[ELF|PE] --boot=[mb0.7] {additional options} inputfiles";
-            architecture = TargetArchitecture.Undefined;
-            binaryFormat = BinaryFormat.Undefined;
             optionSet = new OptionSet();
             
             #region Setup general options
@@ -160,7 +109,7 @@ namespace Mosa.Tools.Compiler
                 {
                     if (v != null)
                     {
-                        this.AddAllOptions();
+                        this.AddOptionsForAll();
                         this.ShowHelp();
                         Environment.Exit(0);
                     }
@@ -200,28 +149,10 @@ namespace Mosa.Tools.Compiler
 
         #endregion Constructors
 
-        #region Properties
-        
-        /// <summary>
-        /// Gets a list of input file names.
-        /// </summary>
-        private IEnumerable<string> InputFileNames
-        {
-            get
-            {
-                foreach (FileInfo file in inputFiles)
-                {
-                    yield return file.FullName;
-                }
-            }
-        }
-
-        #endregion Properties
-
         #region Public Methods
         
         /// <summary>
-        /// Runs the parser and the compilation process.
+        /// Runs the command line parser and the compilation process.
         /// </summary>
         /// <param name="args">The command line arguments.</param>
         public void Run(string[] args)
@@ -233,7 +164,7 @@ namespace Mosa.Tools.Compiler
             
             try
             {
-                if (args.Length == 0)
+                if (args == null || args.Length == 0)
                 {
                     // no arguments are specified
                     ShowShortHelp();
@@ -278,7 +209,7 @@ namespace Mosa.Tools.Compiler
                 {
                     if (bootFormatStage == null)
                     {
-                        throw new OptionException("No boot format specified or boot format unknown or not supported.", "boot");
+                        throw new OptionException("No boot format specified.", "boot");
                     }
                 }
                 else if (bootFormatStage != null)
@@ -293,12 +224,12 @@ namespace Mosa.Tools.Compiler
                     throw new OptionException("No output file specified.", "o");
                 }
                 
-                if (binaryFormat == BinaryFormat.Undefined)
+                if (linkerStage == null)
                 {
                     throw new OptionException("No binary format specified.", "format");
                 }
                 
-                if (architecture == TargetArchitecture.Undefined)
+                if (architectureStage == null)
                 {
                     throw new OptionException("No architecture specified.", "arch");
                 }
@@ -320,10 +251,10 @@ namespace Mosa.Tools.Compiler
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("Output file: ").AppendLine(outputFile);
-            sb.Append("Input file(s): ").AppendLine(String.Join(", ", new List<string>(InputFileNames).ToArray()));
-            sb.Append("Architecture: ").AppendLine(architecture.ToString());
-            sb.Append("Binary format: ").AppendLine(binaryFormat.ToString());
-            sb.Append("Boot format: ").AppendLine(bootFormatStage.ToString());
+            sb.Append("Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
+            sb.Append("Architecture: ").AppendLine(architectureStage.Name);
+            sb.Append("Binary format: ").AppendLine(linkerStage.Name);
+            sb.Append("Boot format: ").AppendLine(bootFormatStage.Name);
             sb.Append("Is executable: ").AppendLine(isExecutable.ToString());
             return sb.ToString();
         }
@@ -360,14 +291,8 @@ namespace Mosa.Tools.Compiler
         /// <param name="arch">The architecture as a string.</param>
         private void SetArchitecture(string arch)
         {
-            try
-            {
-                architecture = EnumParse<TargetArchitecture>(arch);
-            }
-            catch (ArgumentException)
-            {
-                throw new OptionException(String.Format("Unknown or unsupported architecture {0}.", arch), "arch");
-            }
+            architectureStage = new ArchitectureSelector(arch);
+            architectureStage.AddOptions(optionSet);
         }
 
         /// <summary>
@@ -376,14 +301,8 @@ namespace Mosa.Tools.Compiler
         /// <param name="format">The binary format as a string.</param>
         private void SetBinaryFormat(string format)
         {
-            try
-            {
-                binaryFormat = EnumParse<BinaryFormat>(format);
-            }
-            catch (ArgumentException)
-            {
-                throw new OptionException(String.Format("Unknown or unsupported binary format {0}.", format), "format");
-            }
+            linkerStage = new LinkerFormatSelector(format);
+            linkerStage.AddOptions(optionSet);
         }
 
         /// <summary>
@@ -392,15 +311,8 @@ namespace Mosa.Tools.Compiler
         /// <param name="format">The boot format as a string.</param>
         private void SetBootFormat(string format)
         {
-            switch (format.ToLower())
-            {
-                case "multiboot-0.7":
-                case "mb0.7":
-                    Multiboot0695AssemblyStage stage = new Multiboot0695AssemblyStage();
-                    stage.AddOptions(optionSet);
-                    bootFormatStage = stage;
-                    break;
-            }
+            bootFormatStage = new BootFormatSelector(format);
+            bootFormatStage.AddOptions(optionSet);
         }
 
         /// <summary>
@@ -425,26 +337,21 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Adds all options to the OptionSet, to print them in the help text.
         /// </summary>
-        private void AddAllOptions()
+        private void AddOptionsForAll()
         {
-            new Multiboot0695AssemblyStage().AddOptions(optionSet);
+            LinkerFormatSelector.AddOptionsForAll(optionSet);
+            BootFormatSelector.AddOptionsForAll(optionSet);
         }
-
+        
         /// <summary>
-        /// Parses the given string to an enumeration value.
+        /// Gets a list of input file names.
         /// </summary>
-        /// <typeparam name="T">The enumeration type.</typeparam>
-        /// <param name="value">The string to parse.</param>
-        /// <returns>The enumeration value.</returns>
-        /// <exception cref="T:System.ArgumentException"><paramref name="value"/> is not a member of the enumeration <typeparamref name="T"/></exception>
-        private T EnumParse<T>(string value)
+        private IEnumerable<string> GetInputFileNames()
         {
-            T parsed = (T) Enum.Parse(typeof(T), value, true);
-            if (false == Enum.IsDefined(typeof(T), parsed))
+            foreach (FileInfo file in inputFiles)
             {
-                throw new ArgumentException();
+                yield return file.FullName;
             }
-            return parsed;
         }
         
         private void ShowError(string message)
