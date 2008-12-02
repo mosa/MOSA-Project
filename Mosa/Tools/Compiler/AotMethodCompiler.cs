@@ -44,19 +44,25 @@ namespace Mosa.Tools.Compiler
             this.aotCompiler = compiler;
             this.Pipeline.AddRange(new IMethodCompilerStage[] {
                 new ILDecodingStage(),
+                //InstructionLogger.Instance,
                 new BasicBlockBuilderStage(),
+                //InstructionLogger.Instance,
                 new CilToIrTransformationStage(),
+                //InstructionLogger.Instance,
                 InstructionStatisticsStage.Instance,
+                new DominanceCalculationStage(),
                 //InstructionLogger.Instance,
-                //new StackResolutionStage(),
+                new EnterSSA(),
                 //InstructionLogger.Instance,
-                //new FunctionCallInliningProcessor(),
+                new ConstantPropagationStage(),
                 //InstructionLogger.Instance,
-                //new EnterSSA(),
+                new ConstantFoldingStage(),
                 //InstructionLogger.Instance,
-                //new ScheduleBasicBlocks(),
-                //new LeaveSSA(),
-                //new LinearScanRegisterAllocator(),
+                new LeaveSSA(),
+                //InstructionLogger.Instance,
+				//new BasicBlockReduction(),
+                //InstructionLogger.Instance,
+                new StackLayoutStage(),
             });
         }
 

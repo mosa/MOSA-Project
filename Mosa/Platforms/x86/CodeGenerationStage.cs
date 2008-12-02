@@ -758,7 +758,19 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<int>.UnaryBranch(IL.UnaryBranchInstruction instruction, int arg)
         {
-            //throw new NotImplementedException();
+            SigType I4 = new SigType(CilElementType.I4);
+            _emitter.Cmp(new RegisterOperand(I4, GeneralPurposeRegister.EAX), new ConstantOperand(I4, 0));
+
+            if (instruction.Code == IL.OpCode.Brtrue || instruction.Code == IL.OpCode.Brtrue_s)
+            {
+                _emitter.Jne(instruction.BranchTargets[0]);
+                _emitter.Je(instruction.BranchTargets[1]);
+            }
+            else
+            {
+                _emitter.Jne(instruction.BranchTargets[1]);
+                _emitter.Je(instruction.BranchTargets[0]);
+            }
         }
 
         void IL.IILVisitor<int>.BinaryBranch(IL.BinaryBranchInstruction instruction, int arg)
