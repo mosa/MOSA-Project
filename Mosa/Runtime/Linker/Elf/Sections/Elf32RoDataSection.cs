@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.ObjectFiles.Elf32.Sections
+namespace Mosa.Runtime.Linker.Elf.Sections
 {
     /// <summary>
     /// 

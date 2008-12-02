@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.ObjectFiles.Elf32
+namespace Mosa.Runtime.Linker.Elf
 {
     /// <summary>
     /// 

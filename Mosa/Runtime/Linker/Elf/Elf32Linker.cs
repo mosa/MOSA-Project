@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.Linker;
 
-namespace Mosa.ObjectFiles.Elf32
+namespace Mosa.Runtime.Linker.Elf
 {
     /// <summary>
     /// 
