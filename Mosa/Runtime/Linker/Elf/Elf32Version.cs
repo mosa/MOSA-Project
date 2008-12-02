@@ -16,7 +16,7 @@ namespace Mosa.Runtime.Linker.Elf
     /// <summary>
     /// 
     /// </summary>
-    public enum Elf32Version
+    public enum Elf32Version : uint
     {
         /// <summary>
         /// Invalid version

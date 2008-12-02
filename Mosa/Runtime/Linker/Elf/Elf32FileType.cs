@@ -16,7 +16,7 @@ namespace Mosa.Runtime.Linker.Elf
     /// <summary>
     /// 
     /// </summary>
-    public enum Elf32FileType
+    public enum Elf32FileType : ushort
     {
         /// <summary>
         /// No file type

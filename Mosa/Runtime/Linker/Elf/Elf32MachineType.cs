@@ -16,7 +16,7 @@ namespace Mosa.Runtime.Linker.Elf
     /// <summary>
     /// 
     /// </summary>
-    public enum Elf32MachineType
+    public enum Elf32MachineType : ushort
     {
         /// <summary>
         /// No machine 
