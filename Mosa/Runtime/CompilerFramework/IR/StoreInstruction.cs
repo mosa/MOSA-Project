@@ -36,6 +36,18 @@ namespace Mosa.Runtime.CompilerFramework.IR
             RefSigType dref = destinationPtr.Type as RefSigType;
             PtrSigType dptr = destinationPtr.Type as PtrSigType;
             Debug.Assert((null != dref || null != dptr), @"Destination not a pointer or reference.");
+
+            /*
+             * __grover, 12/01/08
+             * Unfortunately the following checks don't work. The C# compiler doesn't emit strict IL (still safe though):
+             * 
+             * ldc.i4.s 72
+             * stind.i1
+             * 
+             * It doesn't insert an explicit conversion because the CIL spec specifies truncation - so we check the stack
+             * type instead.
+             * 
+             *
             if (null != dref)
             {
                 Debug.Assert(true == dref.ElementType.Equals(value.Type), @"Incompatible destination and source types.");
@@ -46,6 +58,21 @@ namespace Mosa.Runtime.CompilerFramework.IR
             {
                 Debug.Assert(true == dptr.ElementType.Equals(value.Type), @"Incompatible destination and source types.");
                 if (false == dptr.ElementType.Equals(value.Type))
+                    throw new ArgumentException(@"Destination pointer incompatible with value type.", @"destinationPtr");
+            }
+             */
+            if (dref != null)
+            {
+                StackTypeCode drefType = Operand.StackTypeFromSigType(dref.ElementType);
+                Debug.Assert(value.StackType == drefType, @"Incompatible destination and source types.");
+                if (value.StackType != drefType)
+                    throw new ArgumentException(@"Destination reference incompatible with value type.", @"destinationPtr");
+            }
+            else if (dptr != null)
+            {
+                StackTypeCode dptrType = Operand.StackTypeFromSigType(dptr.ElementType);
+                Debug.Assert(value.StackType == dptrType, @"Incompatible destination and source types.");
+                if (value.StackType != dptrType)
                     throw new ArgumentException(@"Destination pointer incompatible with value type.", @"destinationPtr");
             }
             else
