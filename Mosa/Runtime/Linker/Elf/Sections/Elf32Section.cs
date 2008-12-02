@@ -51,13 +51,24 @@ namespace Mosa.Runtime.Linker.Elf.Sections
         }
 
         /// <summary>
+        /// Gets the header.
+        /// </summary>
+        /// <value>The header.</value>
+        public Elf32SectionHeader Header
+        {
+            get
+            {
+                return header;
+            }
+        }
+
+        /// <summary>
         /// Writes the specified fs.
         /// </summary>
         /// <param name="fs">The fs.</param>
         public void Write(System.IO.FileStream fs)
         {
             System.IO.BinaryWriter writer = new System.IO.BinaryWriter(fs);
-            header.Write();
         }
     }
 }

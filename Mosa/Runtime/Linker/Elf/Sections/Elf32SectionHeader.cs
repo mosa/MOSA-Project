@@ -19,23 +19,31 @@ namespace Mosa.Runtime.Linker.Elf.Sections
     public class Elf32SectionHeader
     {
         /// <summary>
-        /// 
+        /// This member specifies the name of the section. Its value is an index into 
+        /// the section header string table section , giving 
+        /// the location of a null-terminated string. 
         /// </summary>
         public uint Name;
         /// <summary>
-        /// 
+        /// This member categorizes the section's contents and semantics. Section 
+        /// types and their descriptions appear below.
         /// </summary>
         public Elf32SectionType Type;
         /// <summary>
-        /// 
+        /// Sections support 1-bit flags that describe miscellaneous attributes. 
         /// </summary>
         public Elf32SectionAttribute Flags;
         /// <summary>
-        /// 
+        /// If the section will appear in the memory image of a process, this member 
+        /// gives the address at which the section's first byte should reside. Otherwise, 
+        /// the member contains 0. 
         /// </summary>
         public uint Address;
         /// <summary>
-        /// 
+        /// This member's value gives the byte offset from the beginning of the file to 
+        /// the first byte in the section. One section type, NoBits,occupies no 
+        /// space in the file, and its Offset member locates 
+        /// the conceptual placement in the file. 
         /// </summary>
         public uint Offset;
         /// <summary>
@@ -43,19 +51,28 @@ namespace Mosa.Runtime.Linker.Elf.Sections
         /// </summary>
         public uint Size;
         /// <summary>
-        /// 
+        /// This member holds a section header table index link, whose interpretation 
+        /// depends on the section type. 
         /// </summary>
         public uint Link;
         /// <summary>
-        /// 
+        /// This member holds extra information, whose interpretation depends on the 
+        /// section type.
         /// </summary>
         public uint Info;
         /// <summary>
-        /// 
+        /// Some sections have address alignment constraints. For example, if a section 
+        /// holds a doubleword, the system must ensure doubleword alignment for the 
+        /// entire section.  That is, the value of sh_addr must be congruent to 0, 
+        /// modulo the value of sh_addralign. Currently, only 0 and positive 
+        /// integral powers of two are allowed. Values 0 and 1 mean the section has no 
+        /// alignment constraints. 
         /// </summary>
         public uint AddressAlignment;
         /// <summary>
-        /// 
+        /// Some sections hold a table of fixed-size entries, such as a symbol table. For 
+        /// such a section, this member gives the size in bytes of each entry. The 
+        /// member contains 0 if the section does not hold a table of fixed-size entries. 
         /// </summary>
         public uint EntrySize;
 
