@@ -55,6 +55,12 @@ namespace Mosa.Runtime.Linker
         ICollection<LinkerSymbol> Symbols { get; }
 
         /// <summary>
+        /// Gets or sets the output file of the linker.
+        /// </summary>
+        /// <value>The output file.</value>
+        string OutputFile { get; set; }
+
+        /// <summary>
         /// Gets the time stamp.
         /// </summary>
         /// <value>The time stamp.</value>

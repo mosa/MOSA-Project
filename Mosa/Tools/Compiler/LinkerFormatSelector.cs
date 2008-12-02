@@ -7,6 +7,7 @@
  *
  * Authors:
  *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
 using System;
@@ -19,6 +20,9 @@ using Mosa.Runtime.Linker;
 using Mosa.Runtime.Vm;
 
 using NDesk.Options;
+using Mosa.Runtime.Linker.PE;
+using Mosa.Runtime.Linker.Elf;
+using System.Diagnostics;
 
 namespace Mosa.Tools.Compiler
 {
@@ -27,38 +31,72 @@ namespace Mosa.Tools.Compiler
     /// </summary>
     public class LinkerFormatSelector : IAssemblyLinker, IAssemblyCompilerStage, IHasOptions
     {
-        AssemblyLinkerStageBase implementation;
-        
+        #region Data Members
+
+        /// <summary>
+        /// Holds the real linker implementation to use.
+        /// </summary>
+        private IAssemblyLinker implementation;
+
+        /// <summary>
+        /// Holds the PE linker.
+        /// </summary>
+        private IAssemblyLinker peLinker;
+
+        /// <summary>
+        /// Holds the ELF32 linker.
+        /// </summary>
+        private IAssemblyLinker elfLinker = null;
+
+        /// <summary>
+        /// Holds the output file of the linker.
+        /// </summary>
+        private string outputFile;
+
+        #endregion // Data Members
+
+        #region Construction
+
         /// <summary>
         /// Initializes a new instance of the LinkerFormalSelector class.
-        /// Selects an appropriate implementation of the linker based on the format.
         /// </summary>
-        /// <param name="format">The format.</param>
-        public LinkerFormatSelector(string format)
+        public LinkerFormatSelector()
         {
-            implementation = SelectImplementation(format);
+            this.peLinker = new PortableExecutableLinker();
+            this.elfLinker = new Elf32Linker();
+            this.implementation = null;
         }
-        
-        private AssemblyLinkerStageBase SelectImplementation(string format)
+
+        #endregion // Construction
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the output file.
+        /// </summary>
+        /// <value>The output file.</value>
+        public string OutputFile
         {
-            switch (format.ToLower())
-            {
-                case "elf":
-                    throw new NotImplementedException("ELF linker stage is not implemented yet.");
-                case "pe":
-                    throw new NotImplementedException("PE linker stage is not implemented yet.");
-                default:
-                    throw new OptionException(String.Format("Unknown or unsupported binary format {0}.", format), "format");
-            }
+            get { return this.outputFile; }
+            set { this.outputFile = value; }
         }
-        
+
+        #endregion // Properties
+
+        #region IAssemblyCompilerStage Members
+
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>
         public void Run(AssemblyCompiler compiler)
         {
-            implementation.Run(compiler);
+            CheckImplementation();
+
+            IAssemblyCompilerStage acs = this.implementation as IAssemblyCompilerStage;
+            Debug.Assert(acs != null, @"Linker doesn't implement IAssemblyCompilerStage.");
+            if (acs != null)
+                acs.Run(compiler);
         }
         
         /// <summary>
@@ -69,17 +107,53 @@ namespace Mosa.Tools.Compiler
         {
             get
             {
-                return implementation.Name;
+                IAssemblyCompilerStage acs = this.implementation as IAssemblyCompilerStage;
+                if (acs == null)
+                    return @"Linker Selector";
+
+                return acs.Name;
             }
         }
-        
+
+        #endregion // IAssemblyCompilerStage Members
+
+        #region IHasOptions Members
+
         /// <summary>
         /// Adds the additional options for the parsing process to the given OptionSet.
         /// </summary>
         /// <param name="optionSet">A given OptionSet to add the options to.</param>
         public void AddOptions(OptionSet optionSet)
         {
-            ((IHasOptions)implementation).AddOptions(optionSet);
+            IHasOptions options;
+
+            optionSet.Add(
+                "f|format=",
+                "Select the format of the binary file to create [{ELF|PE}].",
+                delegate(string format)
+                {
+                    this.implementation = SelectImplementation(format);
+                }
+            );
+
+            optionSet.Add(
+                "o|out=",
+                "The name of the output {file}.",
+                delegate(string file)
+                {
+                    this.outputFile = file;
+                    peLinker.OutputFile = file;
+                    elfLinker.OutputFile = file;
+                }
+            );
+
+            options = peLinker as IHasOptions;
+            if (options != null)
+                options.AddOptions(optionSet);
+
+            options = elfLinker as IHasOptions;
+            if (options != null)
+                options.AddOptions(optionSet);
         }
         
         /// <summary>
@@ -88,9 +162,12 @@ namespace Mosa.Tools.Compiler
         /// <param name="optionSet">A given OptionSet to add the options to.</param>
         public static void AddOptionsForAll(OptionSet optionSet)
         {
-            throw new NotImplementedException();
         }
-        
+
+        #endregion // IHasOptions Members
+
+        #region IAssemblyLinker Members
+
         /// <summary>
         /// Gets the base address.
         /// </summary>
@@ -99,7 +176,8 @@ namespace Mosa.Tools.Compiler
         {
             get
             {
-                return implementation.BaseAddress;
+                CheckImplementation();
+                return this.implementation.BaseAddress;
             }
         }
 
@@ -111,7 +189,8 @@ namespace Mosa.Tools.Compiler
         {
             get
             {
-                return implementation.EntryPoint;
+                CheckImplementation();
+                return this.implementation.EntryPoint;
             }
         }
 
@@ -123,7 +202,8 @@ namespace Mosa.Tools.Compiler
         {
             get
             {
-                return implementation.Sections;
+                CheckImplementation();
+                return this.implementation.Sections;
             }
         }
 
@@ -135,7 +215,8 @@ namespace Mosa.Tools.Compiler
         {
             get
             {
-                return implementation.Symbols;
+                CheckImplementation();
+                return this.implementation.Symbols;
             }
         }
 
@@ -147,7 +228,8 @@ namespace Mosa.Tools.Compiler
         {
             get
             {
-                return implementation.TimeStamp;
+                CheckImplementation();
+                return this.implementation.TimeStamp;
             }
         }
 
@@ -166,7 +248,8 @@ namespace Mosa.Tools.Compiler
         /// </returns>
         public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
-            return implementation.Link(linkType, method, methodOffset, methodRelativeBase, target);
+            CheckImplementation();
+            return this.implementation.Link(linkType, method, methodOffset, methodRelativeBase, target);
         }
 
         /// <summary>
@@ -184,7 +267,8 @@ namespace Mosa.Tools.Compiler
         /// </returns>
         public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol)
         {
-            return implementation.Link(linkType, method, methodOffset, methodRelativeBase, symbol);
+            CheckImplementation();
+            return this.implementation.Link(linkType, method, methodOffset, methodRelativeBase, symbol);
         }
 
         /// <summary>
@@ -197,7 +281,8 @@ namespace Mosa.Tools.Compiler
         /// <returns>A stream, which can be used to populate the section.</returns>
         public Stream Allocate(RuntimeMember symbol, SectionKind section, int size, int alignment)
         {
-            return implementation.Allocate(symbol, section, size, alignment);
+            CheckImplementation();
+            return this.implementation.Allocate(symbol, section, size, alignment);
         }
 
         /// <summary>
@@ -210,7 +295,43 @@ namespace Mosa.Tools.Compiler
         /// <returns>A stream, which can be used to populate the section.</returns>
         public Stream Allocate(string name, SectionKind section, int size, int alignment)
         {
-            return implementation.Allocate(name, section, size, alignment);
+            CheckImplementation();
+            return this.implementation.Allocate(name, section, size, alignment);
         }
+
+        #endregion // IAssemblyLinker Members
+
+        #region Internals
+
+        /// <summary>
+        /// Checks if a linker implementation is set.
+        /// </summary>
+        private void CheckImplementation()
+        {
+            if (this.implementation == null)
+                throw new InvalidOperationException(@"LinkerFormatSelector not initialized.");
+        }
+
+        /// <summary>
+        /// Selects the linker implementation to use.
+        /// </summary>
+        /// <param name="format">The linker format.</param>
+        /// <returns>The implementation of the linker.</returns>
+        private IAssemblyLinker SelectImplementation(string format)
+        {
+            switch (format.ToLower())
+            {
+                case "elf":
+                    return this.elfLinker;
+
+                case "pe":
+                    return this.peLinker;
+
+                default:
+                    throw new OptionException(String.Format("Unknown or unsupported binary format {0}.", format), "format");
+            }
+        }
+
+        #endregion // Internals
     }
 }

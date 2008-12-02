@@ -58,11 +58,6 @@ namespace Mosa.Tools.Compiler
         private bool isExecutable;
 
         /// <summary>
-        /// Holds the name of the output file to generate.
-        /// </summary>
-        private string outputFile;
-
-        /// <summary>
         /// Holds the name of the map file to generate.
         /// </summary>
         private string mapFile;
@@ -88,6 +83,8 @@ namespace Mosa.Tools.Compiler
         {
             usageString = "Usage: mosacl -o outputfile --arch=[x86|x64] --format=[ELF|PE] --boot=[mb0.7] {additional options} inputfiles";
             optionSet = new OptionSet();
+
+            this.linkerStage = new LinkerFormatSelector();
             
             #region Setup general options
             optionSet.Add(
@@ -116,21 +113,9 @@ namespace Mosa.Tools.Compiler
                 });
             
             optionSet.Add(
-                "o|out=",
-                "The name of the output {file}.",
-                this.SetOutputFile
-               );
-            
-            optionSet.Add(
                 "a|arch=",
                 "Select one of the MOSA architectures to compile for [{x86|x64}].",
                 this.SetArchitecture
-               );
-            
-            optionSet.Add(
-                "f|format=",
-                "Select the format of the binary file to create [{ELF|PE}].",
-                this.SetBinaryFormat
                );
             
             optionSet.Add(
@@ -144,7 +129,10 @@ namespace Mosa.Tools.Compiler
                 "Generate a map {file} of the produced binary.",
                 this.SetMapFile
                );
+
             #endregion
+
+            this.linkerStage.AddOptions(optionSet);
         }
 
         #endregion Constructors
@@ -219,16 +207,11 @@ namespace Mosa.Tools.Compiler
                 }
                 
                 // Check for missing options
-                if (String.IsNullOrEmpty(outputFile))
+                if (String.IsNullOrEmpty(this.linkerStage.OutputFile))
                 {
                     throw new OptionException("No output file specified.", "o");
                 }
-                
-                if (linkerStage == null)
-                {
-                    throw new OptionException("No binary format specified.", "format");
-                }
-                
+                                
                 if (architectureStage == null)
                 {
                     throw new OptionException("No architecture specified.", "arch");
@@ -250,7 +233,7 @@ namespace Mosa.Tools.Compiler
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("Output file: ").AppendLine(outputFile);
+            sb.Append("Output file: ").AppendLine(this.linkerStage.OutputFile);
             sb.Append("Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
             sb.Append("Architecture: ").AppendLine(architectureStage.Name);
             sb.Append("Binary format: ").AppendLine(linkerStage.Name);
@@ -296,16 +279,6 @@ namespace Mosa.Tools.Compiler
         }
 
         /// <summary>
-        /// Sets the binary format to compile to.
-        /// </summary>
-        /// <param name="format">The binary format as a string.</param>
-        private void SetBinaryFormat(string format)
-        {
-            linkerStage = new LinkerFormatSelector(format);
-            linkerStage.AddOptions(optionSet);
-        }
-
-        /// <summary>
         /// Sets the boot format to compile for.
         /// </summary>
         /// <param name="format">The boot format as a string.</param>
@@ -313,15 +286,6 @@ namespace Mosa.Tools.Compiler
         {
             bootFormatStage = new BootFormatSelector(format);
             bootFormatStage.AddOptions(optionSet);
-        }
-
-        /// <summary>
-        /// Sets the output file for the compilation.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        private void SetOutputFile(string file)
-        {
-            outputFile = file;
         }
 
         /// <summary>

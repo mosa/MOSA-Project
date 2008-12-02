@@ -32,6 +32,11 @@ namespace Mosa.Runtime.Linker
         private Dictionary<string, List<LinkRequest>> _linkRequests;
 
         /// <summary>
+        /// Holds the output file of the linker.
+        /// </summary>
+        private string outputFile;
+
+        /// <summary>
         /// A dictionary containing all symbol seen in the assembly.
         /// </summary>
         private Dictionary<string, LinkerSymbol> symbols;
@@ -133,6 +138,19 @@ namespace Mosa.Runtime.Linker
         public LinkerSymbol EntryPoint
         {
             get { return null; }
+        }
+
+        /// <summary>
+        /// Gets or sets the output file of the linker.
+        /// </summary>
+        /// <value>The output file.</value>
+        public string OutputFile
+        {
+            get { return this.outputFile; }
+            set
+            {
+                this.outputFile = value;
+            }
         }
 
         /// <summary>

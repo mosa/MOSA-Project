@@ -10,7 +10,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Base class for object file builders.
     /// </summary>
-    public abstract class ObjectFileBuilderBase : IAssemblyLinker
+    public abstract class ObjectFileBuilderBase // : IAssemblyLinker
     {
         /// <summary>
         /// The name of the object file builder

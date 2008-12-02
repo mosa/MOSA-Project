@@ -24,11 +24,6 @@ namespace Mosa.Runtime.Linker.PE
         #region Data members
 
         /// <summary>
-        /// Holds the name of the output file.
-        /// </summary>
-        private string outputFile;
-
-        /// <summary>
         /// Holds the sections of the PE file.
         /// </summary>
         private List<LinkerSection> sections;
@@ -45,13 +40,8 @@ namespace Mosa.Runtime.Linker.PE
         /// <summary>
         /// Initializes a new instance of the <see cref="PortableExecutableLinker"/> class.
         /// </summary>
-        /// <param name="outputFile">The output file.</param>
-        public PortableExecutableLinker(string outputFile)
+        public PortableExecutableLinker()
         {
-            if (String.IsNullOrEmpty(outputFile) == true)
-                throw new ArgumentException(@"Invalid argument.", @"outputFile");
-
-            this.outputFile = outputFile;
             this.sections = new List<LinkerSection>();
 
             // Create the default section set
@@ -142,6 +132,9 @@ namespace Mosa.Runtime.Linker.PE
         /// <param name="compiler">The compiler context to perform processing in.</param>
         public override void Run(AssemblyCompiler compiler)
         {
+            if (String.IsNullOrEmpty(this.OutputFile) == true)
+                throw new InvalidOperationException(@"Invalid output file specification.");
+
             // Layout the sections in memory
             LayoutSections();
             
@@ -161,7 +154,7 @@ namespace Mosa.Runtime.Linker.PE
         /// </summary>
         private void CreatePEFile()
         {
-            using (FileStream fs = new FileStream(this.outputFile, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (FileStream fs = new FileStream(this.OutputFile, FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 
             }

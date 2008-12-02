@@ -20,11 +20,6 @@ namespace Mosa.Runtime.Linker.Elf
     public class Elf32Linker : Mosa.Runtime.Linker.AssemblyLinkerStageBase
     {
         /// <summary>
-        /// Holds the name of the output file.
-        /// </summary>
-        private string outputFile = null;
-
-        /// <summary>
         /// 
         /// </summary>
         private List<Mosa.Runtime.Linker.LinkerSection> sections;
@@ -44,13 +39,8 @@ namespace Mosa.Runtime.Linker.Elf
         /// <summary>
         /// Initializes a new instance of the <see cref="Elf32Linker"/> class.
         /// </summary>
-        /// <param name="file">The file.</param>
-        public Elf32Linker(string file)
+        public Elf32Linker()
         {
-            if (String.IsNullOrEmpty(file) == true)
-                throw new ArgumentException(@"Invalid argument.", @"outputFile");
-
-            this.outputFile = file;
             this.sections = new List<LinkerSection>();
 
             // Create the default section set
@@ -187,7 +177,7 @@ namespace Mosa.Runtime.Linker.Elf
         /// </summary>
         private void CreateElf32File()
         {
-            using (System.IO.FileStream fs = new System.IO.FileStream(this.outputFile, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None))
+            using (System.IO.FileStream fs = new System.IO.FileStream(this.OutputFile, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None))
             {
                 Elf32Header header = new Elf32Header();
                 header.Write(fs);

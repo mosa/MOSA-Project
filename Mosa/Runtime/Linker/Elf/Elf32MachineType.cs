@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Linker.Elf
         /// </summary>
         NoMachine       = 0x0,
         /// <summary>
-        /// AT&T WE 32100
+        /// AT&amp;T WE 32100
         /// </summary>
         M32             = 0x1,
         /// <summary>
