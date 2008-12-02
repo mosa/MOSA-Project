@@ -20,12 +20,12 @@ namespace Mosa.Tools.Compiler
     /// <summary>
     /// Selector proxy type for the architecture. 
     /// </summary>
-    public class ArchitectureSelector : IAssemblyCompilerStage, IHasOptions
+    public class ArchitectureSelector : IHasOptions
     {
         /// <summary>
         /// Holds the real stage implementation to use.
         /// </summary>
-        private IAssemblyCompilerStage implementation;
+        private IArchitecture implementation;
         
         /// <summary>
         /// Initializes a new instance of the ArchitectureSelector class.
@@ -35,14 +35,16 @@ namespace Mosa.Tools.Compiler
             this.implementation = null;
         }
         
-        private IAssemblyCompilerStage SelectImplementation(string architecture)
+        private IArchitecture SelectImplementation(string architecture)
         {
             switch (architecture.ToLower())
             {
                 case "x86":
-                    throw new NotImplementedException("x86 architecture not implemented yet.");
+                    return Mosa.Platforms.x86.Architecture.CreateArchitecture(Mosa.Platforms.x86.ArchitectureFeatureFlags.AutoDetect);
+
                 case "x64":
                     throw new NotImplementedException("x64 architecture not implemented yet.");
+
                 default:
                     throw new OptionException(String.Format("Unknown or unsupported architecture {0}.", architecture), "arch");
             }
@@ -76,38 +78,26 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Gets a value indicating wheter an implementation has been selected.
         /// </summary>
-        public bool IsImplementationSelected
+        public IArchitecture Architecture
         {
             get
             {
-                return (implementation != null);
+                CheckImplementation();
+                return this.implementation;
             }
         }
-        
+
         /// <summary>
-        /// Retrieves the name of the compilation stage.
+        /// Gets a value indicating whether an implementation is selected.
         /// </summary>
-        /// <value>The name of the compilation stage.</value>
-        public string Name
+        /// <value>
+        /// 	<c>true</c> if an implementation is selected; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsConfigured
         {
-            get
-            {
-                if (implementation == null)
-                    return @"Boot Format Selector";
-                return implementation.Name;
-            }
+            get { return (this.implementation != null); }
         }
-        
-        /// <summary>
-        /// Performs stage specific processing on the compiler context.
-        /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(AssemblyCompiler compiler)
-        {
-            CheckImplementation();
-            implementation.Run(compiler);
-        }
-        
+                
         /// <summary>
         /// Checks if an implementation is set.
         /// </summary>

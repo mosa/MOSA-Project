@@ -13,6 +13,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;
+using System.Diagnostics;
 
 namespace Mosa.Tools.Compiler
 {
@@ -30,42 +31,46 @@ namespace Mosa.Tools.Compiler
     /// </remarks>
     public sealed class AotCompiler : AssemblyCompiler
     {
+        #region Construction
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AotCompiler"/> class.
         /// </summary>
         /// <param name="architecture">The target compilation architecture.</param>
         /// <param name="assembly">The assembly to compile.</param>
-        public AotCompiler(IArchitecture architecture, IMetadataModule assembly)
-            : base(architecture, assembly)
-        {           
-            // Build the default assembly compiler pipeline
-            this.Pipeline.AddRange(new IAssemblyCompilerStage[] {
-                new TypeLayoutStage(),
-                new MethodCompilerBuilderStage(),
-                new MethodCompilerRunnerStage(),
-            });
-            architecture.ExtendAssemblyCompilerPipeline(this.Pipeline);
-        }
-
-        /// <summary>
-        /// Compiles an entire assemblyName.
-        /// </summary>
-        /// <param name="architecture">The architecture to compile for</param>
-        /// <param name="assemblyName">The compiled assembly name</param>
-        /// <param name="objectFileBuilder">The objectfilebuilder to use</param>
-        public static void Compile(IArchitecture architecture, string assemblyName, ObjectFileBuilderBase objectFileBuilder)
+        public AotCompiler(IArchitecture architecture, IMetadataModule assembly) : 
+            base(architecture, assembly)
         {
-            IMetadataModule assembly = RuntimeBase.Instance.AssemblyLoader.Load(assemblyName);
-            AotCompiler c = new AotCompiler(architecture, assembly);
-            c.Compile();
+        }
+
+        #endregion // Construction
+
+        #region Methods
+
+        /// <summary>
+        /// Executes the compiler using the configured stages.
+        /// </summary>
+        /// <remarks>
+        /// The method iterates the compilation stage chain and runs each
+        /// stage on the input.
+        /// </remarks>
+        public void Run()
+        {
+            // Build the default assembly compiler pipeline
+            this.Architecture.ExtendAssemblyCompilerPipeline(this.Pipeline);
+
+            // Run the compiler
+            base.Compile();
         }
 
         /// <summary>
-        /// 
+        /// Creates a method compiler
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="method"></param>
-        /// <returns></returns>
+        /// <param name="type">The type.</param>
+        /// <param name="method">The method to compile.</param>
+        /// <returns>
+        /// An instance of a MethodCompilerBase for the given type/method pair.
+        /// </returns>
         public override MethodCompilerBase CreateMethodCompiler(RuntimeType type, RuntimeMethod method)
         {
             IArchitecture arch = this.Architecture;
@@ -77,5 +82,7 @@ namespace Mosa.Tools.Compiler
             arch.ExtendMethodCompilerPipeline(mc.Pipeline);
             return mc;
         }
+
+        #endregion // Methods
     }
 }

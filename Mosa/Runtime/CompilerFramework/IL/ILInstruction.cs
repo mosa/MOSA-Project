@@ -148,7 +148,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         public override void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
         {
             IILVisitor<ArgType> ilv = visitor as IILVisitor<ArgType>;
-            Debug.Assert(null != ilv);
             if (null != ilv)
                 Visit(ilv, arg);
             else

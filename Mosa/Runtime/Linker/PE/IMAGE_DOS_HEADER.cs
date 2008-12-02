@@ -24,7 +24,7 @@ namespace Mosa.Runtime.Linker.PE
 		/// <summary>
 		/// MZ magic dos header value.
 		/// </summary>
-		private const ushort DOS_HEADER_MAGIC = 0x5A4D;
+		public const ushort DOS_HEADER_MAGIC = 0x5A4D;
 
 		#endregion // Constants
 
@@ -187,48 +187,91 @@ namespace Mosa.Runtime.Linker.PE
 
 		#endregion // Data members
 
-		#region Methods
+        #region Construction
 
-		/// <summary>
+        #endregion // Construction
+
+        #region Methods
+
+        /// <summary>
 		/// Loads and validates the DOS header.
 		/// </summary>
-		public void Load(BinaryReader reader)
+		public void Read(BinaryReader reader)
 		{
-			e_magic = reader.ReadUInt16();
-			e_cblp = reader.ReadUInt16();
-			e_cp = reader.ReadUInt16();
-			e_crlc = reader.ReadUInt16();
-			e_cparhdr = reader.ReadUInt16();
-			e_minalloc = reader.ReadUInt16();
-			e_maxalloc = reader.ReadUInt16();
-			e_ss = reader.ReadUInt16();
-			e_sp = reader.ReadUInt16();
-			e_csum = reader.ReadUInt16();
-			e_ip = reader.ReadUInt16();
-			e_cs = reader.ReadUInt16();
-			e_lfarlc = reader.ReadUInt16();
-			e_ovno = reader.ReadUInt16();
-			e_res00 = reader.ReadUInt16();
-			e_res01 = reader.ReadUInt16();
-			e_res02 = reader.ReadUInt16();
-			e_res03 = reader.ReadUInt16();
-			e_oemid = reader.ReadUInt16();
-			e_oeminfo = reader.ReadUInt16();
-			e_res20 = reader.ReadUInt16();
-			e_res21 = reader.ReadUInt16();
-			e_res22 = reader.ReadUInt16();
-			e_res23 = reader.ReadUInt16();
-			e_res24 = reader.ReadUInt16();
-			e_res25 = reader.ReadUInt16();
-			e_res26 = reader.ReadUInt16();
-			e_res27 = reader.ReadUInt16();
-			e_res28 = reader.ReadUInt16();
-			e_res29 = reader.ReadUInt16();
-			e_lfanew = reader.ReadUInt32();
+            this.e_magic = reader.ReadUInt16();
+            this.e_cblp = reader.ReadUInt16();
+            this.e_cp = reader.ReadUInt16();
+            this.e_crlc = reader.ReadUInt16();
+            this.e_cparhdr = reader.ReadUInt16();
+            this.e_minalloc = reader.ReadUInt16();
+            this.e_maxalloc = reader.ReadUInt16();
+            this.e_ss = reader.ReadUInt16();
+            this.e_sp = reader.ReadUInt16();
+            this.e_csum = reader.ReadUInt16();
+            this.e_ip = reader.ReadUInt16();
+            this.e_cs = reader.ReadUInt16();
+            this.e_lfarlc = reader.ReadUInt16();
+            this.e_ovno = reader.ReadUInt16();
+            this.e_res00 = reader.ReadUInt16();
+            this.e_res01 = reader.ReadUInt16();
+            this.e_res02 = reader.ReadUInt16();
+            this.e_res03 = reader.ReadUInt16();
+            this.e_oemid = reader.ReadUInt16();
+            this.e_oeminfo = reader.ReadUInt16();
+            this.e_res20 = reader.ReadUInt16();
+            this.e_res21 = reader.ReadUInt16();
+            this.e_res22 = reader.ReadUInt16();
+            this.e_res23 = reader.ReadUInt16();
+            this.e_res24 = reader.ReadUInt16();
+            this.e_res25 = reader.ReadUInt16();
+            this.e_res26 = reader.ReadUInt16();
+            this.e_res27 = reader.ReadUInt16();
+            this.e_res28 = reader.ReadUInt16();
+            this.e_res29 = reader.ReadUInt16();
+            this.e_lfanew = reader.ReadUInt32();
 
-			if (DOS_HEADER_MAGIC != e_magic)
+            if (DOS_HEADER_MAGIC != this.e_magic)
 				throw new BadImageFormatException();
 		}
+
+        /// <summary>
+        /// Writes the header to the given binary writer.
+        /// </summary>
+        /// <param name="writer">The binary writer to write to.</param>
+        public void Write(BinaryWriter writer)
+        {
+            writer.Write(this.e_magic);
+            writer.Write(this.e_cblp);
+            writer.Write(this.e_cp);
+            writer.Write(this.e_crlc);
+            writer.Write(this.e_cparhdr);
+            writer.Write(this.e_minalloc);
+            writer.Write(this.e_maxalloc);
+            writer.Write(this.e_ss);
+            writer.Write(this.e_sp);
+            writer.Write(this.e_csum);
+            writer.Write(this.e_ip);
+            writer.Write(this.e_cs);
+            writer.Write(this.e_lfarlc);
+            writer.Write(this.e_ovno);
+            writer.Write(this.e_res00);
+            writer.Write(this.e_res01);
+            writer.Write(this.e_res02);
+            writer.Write(this.e_res03);
+            writer.Write(this.e_oemid);
+            writer.Write(this.e_oeminfo);
+            writer.Write(this.e_res20);
+            writer.Write(this.e_res21);
+            writer.Write(this.e_res22);
+            writer.Write(this.e_res23);
+            writer.Write(this.e_res24);
+            writer.Write(this.e_res25);
+            writer.Write(this.e_res26);
+            writer.Write(this.e_res27);
+            writer.Write(this.e_res28);
+            writer.Write(this.e_res29);
+            writer.Write(this.e_lfanew);
+        }
 
 		#endregion // Methods
 	}

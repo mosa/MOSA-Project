@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Base class for just-in-time and ahead-of-time compilers, which use
 	/// the Mosa.Runtime.CompilerFramework framework.
 	/// </summary>
-	public abstract class AssemblyCompiler
+	public abstract class AssemblyCompiler : IDisposable
     {
 		#region Data members
 
@@ -69,6 +69,17 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		#endregion // Construction
+
+        #region IDisposable Members
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public virtual void Dispose()
+        {
+        }
+
+        #endregion // IDisposable Members
 
 		#region Properties
 
@@ -116,7 +127,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="method">The method to compile.</param>
-        /// <returns></returns>
+        /// <returns>An instance of a MethodCompilerBase for the given type/method pair.</returns>
         public abstract MethodCompilerBase CreateMethodCompiler(RuntimeType type, RuntimeMethod method);
 
 		/// <summary>
@@ -129,7 +140,6 @@ namespace Mosa.Runtime.CompilerFramework
 		protected void Compile()
 		{
             IMetadataProvider metadata = this.Metadata;
-            //TokenTypes maxTypeToken = metadata.GetMaxTokenValue(TokenTypes.TypeDef);
 
             this.BeginCompile();
 

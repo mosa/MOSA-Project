@@ -24,7 +24,7 @@ namespace Mosa.Runtime.Linker.PE
         /// <summary>
         /// The name of the section.
         /// </summary>
-		public string name;
+		public string Name;
 
         /// <summary>
         /// The size of the section in virtual memory.
@@ -79,12 +79,12 @@ namespace Mosa.Runtime.Linker.PE
         /// Loads IMAGE_SECTION_HEADER from the reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
-		public void Load(BinaryReader reader)
+		public void Read(BinaryReader reader)
 		{
 			byte[] name = reader.ReadBytes(8);
             int length = Array.IndexOf<byte>(name, 0);
             if (-1 == length) length = 8;
-			this.name = Encoding.UTF8.GetString(name, 0, length);
+			this.Name = Encoding.UTF8.GetString(name, 0, length);
 			this.VirtualSize = reader.ReadUInt32();
 			this.VirtualAddress = reader.ReadUInt32();
 			this.SizeOfRawData = reader.ReadUInt32();
@@ -96,6 +96,29 @@ namespace Mosa.Runtime.Linker.PE
 			this.Characteristics = reader.ReadUInt32();
 		}
 
-		#endregion // Methods
-	}
+        /// <summary>
+        /// Writes the structure to the given writer.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        public void Write(BinaryWriter writer)
+        {
+            if (writer == null)
+                throw new ArgumentNullException(@"writer");
+
+            byte[] name = Encoding.ASCII.GetBytes(this.Name);
+            Array.Resize<byte>(ref name, 8);
+            writer.Write(name, 0, 8);
+            writer.Write(this.VirtualSize);
+            writer.Write(this.VirtualAddress);
+            writer.Write(this.SizeOfRawData);
+            writer.Write(this.PointerToRawData);
+            writer.Write(this.PointerToRelocations);
+            writer.Write(this.PointerToLinenumbers);
+            writer.Write(this.NumberOfRelocations);
+            writer.Write(this.NumberOfLinenumbers);
+            writer.Write(this.Characteristics);
+        }
+
+        #endregion // Methods
+    }
 }

@@ -95,20 +95,20 @@ namespace Mosa.Runtime.Linker.PE
         /// Loads the CLI_HEADER from the reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
-		public void Load(BinaryReader reader)
+		public void Read(BinaryReader reader)
 		{
 			this.Cb = reader.ReadUInt32();
 			this.MajorRuntimeVersion = reader.ReadUInt16();
 			this.MinorRuntimeVersion = reader.ReadUInt16();
-			this.Metadata.Load(reader);
+			this.Metadata.Read(reader);
 			this.Flags = (RuntimeImageFlags)reader.ReadUInt32();
 			this.EntryPointToken = reader.ReadUInt32();
-			this.Resources.Load(reader);
-			this.StrongNameSignature.Load(reader);
-			this.CodeManagerTable.Load(reader);
-			this.VTableFixups.Load(reader);
-			this.ExportAddressTableJumps.Load(reader);
-			this.ManagedNativeHeader.Load(reader);
+			this.Resources.Read(reader);
+			this.StrongNameSignature.Read(reader);
+			this.CodeManagerTable.Read(reader);
+			this.VTableFixups.Read(reader);
+			this.ExportAddressTableJumps.Read(reader);
+			this.ManagedNativeHeader.Read(reader);
 		}
 
 		#endregion // Methods

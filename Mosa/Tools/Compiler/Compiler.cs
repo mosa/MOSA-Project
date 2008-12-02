@@ -14,11 +14,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using Mosa.Platforms.x86;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Tools.Compiler.Boot;
 
 using NDesk.Options;
+using Mosa.Runtime.Loader;
 
 namespace Mosa.Tools.Compiler
 {
@@ -32,7 +32,7 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Holds the stage responsible for the architecture.
         /// </summary>
-        private ArchitectureSelector architectureStage;
+        private ArchitectureSelector architectureSelector;
 
         /// <summary>
         /// Holds the stage responsible for the linker/binary format.
@@ -45,6 +45,11 @@ namespace Mosa.Tools.Compiler
         private BootFormatSelector bootFormatStage;
 
         /// <summary>
+        /// Holds the name of the map file to generate.
+        /// </summary>
+        private MapFileGeneratorWrapper mapFileWrapper;
+
+        /// <summary>
         /// Holds a list of input files.
         /// </summary>
         private List<FileInfo> inputFiles;
@@ -53,11 +58,6 @@ namespace Mosa.Tools.Compiler
         /// Determines if the file is executable.
         /// </summary>
         private bool isExecutable;
-
-        /// <summary>
-        /// Holds the name of the map file to generate.
-        /// </summary>
-        private string mapFile;
 
         /// <summary>
         /// Holds a reference to the OptionSet used for option parsing.
@@ -83,7 +83,8 @@ namespace Mosa.Tools.Compiler
 
             this.linkerStage = new LinkerFormatSelector();
             this.bootFormatStage = new BootFormatSelector();
-            this.architectureStage = new ArchitectureSelector();
+            this.architectureSelector = new ArchitectureSelector();
+            this.mapFileWrapper = new MapFileGeneratorWrapper();
 
             #region Setup general options
             optionSet.Add(
@@ -110,17 +111,12 @@ namespace Mosa.Tools.Compiler
                     }
                 });
 
-            optionSet.Add(
-                "map=",
-                "Generate a map {file} of the produced binary.",
-                this.SetMapFile
-               );
-
             #endregion
 
             this.linkerStage.AddOptions(optionSet);
             this.bootFormatStage.AddOptions(optionSet);
-            this.architectureStage.AddOptions(optionSet);
+            this.architectureSelector.AddOptions(optionSet);
+            this.mapFileWrapper.AddOptions(optionSet);
         }
 
         #endregion Constructors
@@ -181,21 +177,14 @@ namespace Mosa.Tools.Compiler
                 // Process boot format:
                 // Boot format only matters if it's an executable
                 // Process this only now, because input files must be known
-                if (isExecutable)
-                {
-                    if (!bootFormatStage.IsImplementationSelected)
-                    {
-                        throw new OptionException("No boot format specified.", "boot");
-                    }
-                }
-                else if (bootFormatStage.IsImplementationSelected)
+                if (isExecutable == false && bootFormatStage.IsConfigured == true)
                 {
                     Console.WriteLine("Warning: Ignoring boot format, because target is not an executable.");
                     Console.WriteLine();
                 }
 
                 // Check for missing options
-                if (!linkerStage.IsImplementationSelected)
+                if (!linkerStage.IsConfigured)
                 {
                     throw new OptionException("No binary format specified.", "arch");
                 }
@@ -205,7 +194,7 @@ namespace Mosa.Tools.Compiler
                     throw new OptionException("No output file specified.", "o");
                 }
 
-                if (!architectureStage.IsImplementationSelected)
+                if (!architectureSelector.IsConfigured)
                 {
                     throw new OptionException("No architecture specified.", "arch");
                 }
@@ -228,7 +217,7 @@ namespace Mosa.Tools.Compiler
             StringBuilder sb = new StringBuilder();
             sb.Append("Output file: ").AppendLine(this.linkerStage.OutputFile);
             sb.Append("Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
-            sb.Append("Architecture: ").AppendLine(architectureStage.Name);
+            sb.Append("Architecture: ").AppendLine(architectureSelector.Architecture.GetType().FullName);
             sb.Append("Binary format: ").AppendLine(linkerStage.Name);
             sb.Append("Boot format: ").AppendLine(bootFormatStage.Name);
             sb.Append("Is executable: ").AppendLine(isExecutable.ToString());
@@ -241,33 +230,51 @@ namespace Mosa.Tools.Compiler
 
         private void Compile()
         {
-            // TODO: compilation has to start here, showing parsing results
-
             Console.WriteLine(this.ToString());
 
-            //CompilerScheduler.Setup(2);
+            using (CompilationRuntime runtime = new CompilationRuntime()) {
+                
+                // Append the paths of the folder to the loader path
+                List<string> paths = new List<string>();
+                foreach (FileInfo assembly in this.inputFiles)
+                {
+                    string path = Path.GetDirectoryName(assembly.FullName);
+                    if (paths.Contains(path) == false)
+                        paths.Add(path);
+                }
 
-            string assembly = this.inputFiles[0].FullName, path;
+                // Append the search paths
+                foreach (string path in paths)
+                    runtime.AssemblyLoader.AppendPrivatePath(path);
+                paths = null;
 
-            IArchitecture architecture = Architecture.CreateArchitecture(ArchitectureFeatureFlags.AutoDetect);
-            ObjectFileBuilderBase objfile = architecture.GetObjectFileBuilders()[0];
-            using (CompilationRuntime cr = new CompilationRuntime()) {
-                path = Path.GetDirectoryName(assembly);
-                cr.AssemblyLoader.AppendPrivatePath(path);
-                AotCompiler.Compile(architecture, assembly, objfile);
+                /* FIXME: This only compiles the very first assembly, but we want to
+                 * potentially merge multiple assemblies into our kernel. This will
+                 * need an extension/modification of the assembly compiler method.
+                 * 
+                // Load all input assemblies
+                foreach (FileInfo assembly in this.inputFiles)
+                {
+                    IMetadataModule module = runtime.AssemblyLoader.Load(assembly.FullName);
+                }
+                */
+                IMetadataModule assemblyModule = runtime.AssemblyLoader.Load(this.inputFiles[0].FullName);
+
+                // Create the compiler
+                using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, assemblyModule))
+                {
+                    aot.Pipeline.AddRange(new IAssemblyCompilerStage[] {
+                        new TypeLayoutStage(),
+                        new MethodCompilerBuilderStage(),
+                        new MethodCompilerRunnerStage(),
+                        bootFormatStage,
+                        linkerStage,
+                        mapFileWrapper
+                    });
+
+                    aot.Run();
+                }
             }
-
-            //CompilerScheduler.Wait();
-        }
-
-        /// <summary>
-        /// Sets the map file to generate after linking.
-        /// </summary>
-        /// <param name="file">The map file.</param>
-        private void SetMapFile(string file)
-        {
-            // Optional!
-            mapFile = file;
         }
 
         /// <summary>

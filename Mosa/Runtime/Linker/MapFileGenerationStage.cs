@@ -66,15 +66,16 @@ namespace Mosa.Runtime.Linker
             IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
 
             // Emit map file header
-            this.writer.WriteLine(compiler.Assembly.Name);
+            this.writer.WriteLine(linker.OutputFile);
             this.writer.WriteLine();
-            this.writer.WriteLine("Timestamp is {0} ({1})", linker.TimeStamp, linker.TimeStamp);
+            this.writer.WriteLine("Timestamp is {0}", linker.TimeStamp);
             this.writer.WriteLine();
-            this.writer.WriteLine("Preferred load address is {0}", linker.BaseAddress);
+            this.writer.WriteLine("Preferred load address is {0:x16}", linker.BaseAddress);
             this.writer.WriteLine();
 
             // Emit the sections
             EmitSections(linker);
+            this.writer.WriteLine();
 
             // Emit all symbols
             EmitSymbols(linker);
@@ -90,10 +91,10 @@ namespace Mosa.Runtime.Linker
         /// <param name="linker">The assembly linker.</param>
         private void EmitSections(IAssemblyLinker linker)
         {
-            this.writer.WriteLine("Start            Length           Name                            Class");
+            this.writer.WriteLine("Offset           Virtual          Length           Name                             Class");
             foreach (LinkerSection section in linker.Sections)
             {
-                this.writer.WriteLine("{0:X16} {1:x16} {2:s32} {3}", section.Address, section.Length, section.Name, section.SectionKind);
+                this.writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.Offset, section.Address.ToInt64(), section.Length, section.Name.PadRight(32), section.SectionKind);
             }
         }
 
@@ -103,16 +104,18 @@ namespace Mosa.Runtime.Linker
         /// <param name="linker">The assembly linker.</param>
         private void EmitSymbols(IAssemblyLinker linker)
         {
-            this.writer.WriteLine("Address              RVA               Symbol");
+            this.writer.WriteLine("Offset           Virtual          Symbol");
             foreach (LinkerSymbol symbol in linker.Symbols)
             {
-                this.writer.WriteLine("{0:x16} {1:x16} {2}", symbol.Address, symbol.Address, symbol.Name);
+                this.writer.WriteLine("{0:x16} {1:x16} {2}", symbol.Offset, symbol.Address.ToInt64(), symbol.Name);
             }
 
             LinkerSymbol entryPoint = linker.EntryPoint;
             if (null != entryPoint)
             {
-                this.writer.WriteLine("Entry point is at {0} ({1})", entryPoint.Address, entryPoint.Name);
+                this.writer.WriteLine("Entry point is {0}", entryPoint.Name);
+                this.writer.WriteLine("\tat offset {0:x16}", entryPoint.Offset);
+                this.writer.WriteLine("\tat virtual address {0:x16}", entryPoint.Address.ToInt64());
             }
         }
 

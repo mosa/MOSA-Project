@@ -19,7 +19,10 @@ namespace Mosa.Runtime.Linker.PE
     {
 		#region Constants
 
-		private const ushort IMAGE_FILE_MACHINE_I386 = 0x014c;
+        /// <summary>
+        /// The PE machine type for I386.
+        /// </summary>
+		public const ushort IMAGE_FILE_MACHINE_I386 = 0x014c;
 
 		#endregion // Constants
 
@@ -68,20 +71,38 @@ namespace Mosa.Runtime.Linker.PE
 		/// Loads and validates the image file header.
 		/// </summary>
 		/// <param name="reader">The reader, to read from.</param>
-		public void Load(BinaryReader reader)
+		public void Read(BinaryReader reader)
 		{
-			Machine = reader.ReadUInt16();
-			NumberOfSections = reader.ReadUInt16();
-			TimeDateStamp = reader.ReadUInt32();
-			PointerToSymbolTable = reader.ReadUInt32();
-			NumberOfSymbols = reader.ReadUInt32();
-			SizeOfOptionalHeader = reader.ReadUInt16();
-			Characteristics = reader.ReadUInt16();
+			this.Machine = reader.ReadUInt16();
+            this.NumberOfSections = reader.ReadUInt16();
+            this.TimeDateStamp = reader.ReadUInt32();
+            this.PointerToSymbolTable = reader.ReadUInt32();
+            this.NumberOfSymbols = reader.ReadUInt32();
+            this.SizeOfOptionalHeader = reader.ReadUInt16();
+            this.Characteristics = reader.ReadUInt16();
 
-			if (Machine != IMAGE_FILE_MACHINE_I386)
+            if (this.Machine != IMAGE_FILE_MACHINE_I386)
 				throw new BadImageFormatException(@"Unknown machine identifier type.");
 		}
 
-		#endregion // Methods
-	}
+        /// <summary>
+        /// Writes the structure to the given writer.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        public void Write(BinaryWriter writer)
+        {
+            if (writer == null)
+                throw new ArgumentNullException(@"writer");
+
+            writer.Write(this.Machine);
+            writer.Write(this.NumberOfSections);
+            writer.Write(this.TimeDateStamp);
+            writer.Write(this.PointerToSymbolTable);
+            writer.Write(this.NumberOfSymbols);
+            writer.Write(this.SizeOfOptionalHeader);
+            writer.Write(this.Characteristics);
+        }
+
+        #endregion // Methods
+    }
 }

@@ -36,6 +36,11 @@ namespace Mosa.Runtime.Linker
         private string name;
 
         /// <summary>
+        /// Holds the symbol offset in the file.
+        /// </summary>
+        private long offset;
+
+        /// <summary>
         /// Holds the section containing the linker symbol.
         /// </summary>
         private SectionKind section;
@@ -101,6 +106,16 @@ namespace Mosa.Runtime.Linker
         public string Name
         {
             get { return this.name; }
+        }
+
+        /// <summary>
+        /// Gets or sets the offset of the symbol in the file.
+        /// </summary>
+        /// <value>The symbol offset.</value>
+        public long Offset
+        {
+            get { return this.offset; }
+            internal set { this.offset = value; }
         }
 
         /// <summary>

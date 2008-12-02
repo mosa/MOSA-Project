@@ -22,6 +22,8 @@ namespace Mosa.Tools.Compiler.Boot
     /// </summary>
     public class BootFormatSelector : IAssemblyCompilerStage, IHasOptions
     {
+        #region Data Members
+
         /// <summary>
         /// Holds the real stage implementation to use.
         /// </summary>
@@ -31,7 +33,11 @@ namespace Mosa.Tools.Compiler.Boot
         /// Holds the Multiboot 0.7 stage.
         /// </summary>
         private IAssemblyCompilerStage multiboot07Stage;
-        
+
+        #endregion // Data Members
+
+        #region Construction
+
         /// <summary>
         /// Initializes a new instance of the BootFormatSelector class.
         /// </summary>
@@ -40,19 +46,26 @@ namespace Mosa.Tools.Compiler.Boot
             this.multiboot07Stage = new Multiboot0695AssemblyStage();
             this.implementation = null;
         }
-        
-        private IAssemblyCompilerStage SelectImplementation(string format)
+
+        #endregion // Construction
+
+        #region Properties
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is configured.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is configured; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsConfigured
         {
-            switch (format.ToLower())
-            {
-                case "multiboot-0.7":
-                case "mb0.7":
-                    return this.multiboot07Stage;
-                default:
-                    throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
-            }
+            get { return (this.implementation != null); }
         }
-        
+
+        #endregion // Properties
+
+        #region IHasOptions Members
+
         /// <summary>
         /// Adds the additional options for the parsing process to the given OptionSet.
         /// </summary>
@@ -74,7 +87,11 @@ namespace Mosa.Tools.Compiler.Boot
             if (options != null)
                 options.AddOptions(optionSet);
         }
-        
+
+        #endregion // IHasOptions Members
+
+        #region IAssemblyCompilerStage Members
+
         /// <summary>
         /// Retrieves the name of the compilation stage.
         /// </summary>
@@ -83,40 +100,45 @@ namespace Mosa.Tools.Compiler.Boot
         {
             get
             {
-                if (implementation == null)
-                    return @"Boot Format Selector";
-                return implementation.Name;
+                if (this.implementation == null)
+                    return @"Not bootable";
+
+                return this.implementation.Name;
             }
         }
-        
-        /// <summary>
-        /// Gets a value indicating wheter an implementation has been selected.
-        /// </summary>
-        public bool IsImplementationSelected
-        {
-            get
-            {
-                return (implementation != null);
-            }
-        }
-        
+
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>
         public void Run(AssemblyCompiler compiler)
         {
-            CheckImplementation();
-            implementation.Run(compiler);
+            if (this.implementation != null)
+                implementation.Run(compiler);
         }
+
+        #endregion // IAssemblyCompilerStage
         
+        #region Internals
+
         /// <summary>
-        /// Checks if an implementation is set.
+        /// Selects the implementation.
         /// </summary>
-        private void CheckImplementation()
+        /// <param name="format">The format.</param>
+        /// <returns></returns>
+        private IAssemblyCompilerStage SelectImplementation(string format)
         {
-            if (this.implementation == null)
-                throw new InvalidOperationException(@"BootFormatSelector not initialized.");
+            switch (format.ToLower())
+            {
+                case "multiboot-0.7":
+                case "mb0.7":
+                    return this.multiboot07Stage;
+
+                default:
+                    throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
+            }
         }
+
+        #endregion // Internals
     }
 }

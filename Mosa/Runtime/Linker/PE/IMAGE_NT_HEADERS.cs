@@ -22,7 +22,7 @@ namespace Mosa.Runtime.Linker.PE
         /// <summary>
         /// The signature for PE files.
         /// </summary>
-		private const uint PE_SIGNATURE = 0x00004550;
+		public const uint PE_SIGNATURE = 0x00004550;
 
 		#endregion // Constants
 
@@ -51,16 +51,30 @@ namespace Mosa.Runtime.Linker.PE
 		/// Loads and validates the image file header.
 		/// </summary>
 		/// <param name="reader">The reader, to read from.</param>
-		public void Load(BinaryReader reader)
+		public void Read(BinaryReader reader)
 		{
-			Signature = reader.ReadUInt32();
-			if (Signature != PE_SIGNATURE)
+            this.Signature = reader.ReadUInt32();
+            if (this.Signature != PE_SIGNATURE)
 				throw new BadImageFormatException();
 
-			FileHeader.Load(reader);
-			OptionalHeader.Load(reader);
+            this.FileHeader.Read(reader);
+            this.OptionalHeader.Read(reader);
 		}
 
+        /// <summary>
+        /// Writes the structure to the given writer.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        public void Write(BinaryWriter writer)
+        {
+            if (writer == null)
+                throw new ArgumentNullException(@"writer");
+
+            writer.Write(this.Signature);
+            this.FileHeader.Write(writer);
+            this.OptionalHeader.Write(writer);
+        }
+
 		#endregion // Methods
-	}
+    }
 }

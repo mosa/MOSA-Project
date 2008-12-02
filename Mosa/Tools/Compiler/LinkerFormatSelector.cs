@@ -73,7 +73,7 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Gets a value indicating wheter an implementation has been selected.
         /// </summary>
-        public bool IsImplementationSelected
+        public bool IsConfigured
         {
             get
             {

@@ -31,6 +31,11 @@ namespace Mosa.Runtime.Linker
         private SectionKind kind;
 
         /// <summary>
+        /// Holds the file offset of this section.
+        /// </summary>
+        private long offset;
+
+        /// <summary>
         /// Holds the section name.
         /// </summary>
         private string name;
@@ -82,6 +87,16 @@ namespace Mosa.Runtime.Linker
         public string Name
         {
             get { return this.name; }
+        }
+
+        /// <summary>
+        /// Gets or sets the file offset of the section.
+        /// </summary>
+        /// <value>The file offset.</value>
+        public long Offset
+        {
+            get { return this.offset; }
+            internal set { this.offset = value; }
         }
 
         /// <summary>

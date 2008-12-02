@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Linker.PE
         /// <summary>
         /// The number of directory entries.
         /// </summary>
-		private const int IMAGE_NUMBEROF_DIRECTORY_ENTRIES = 16;
+		public const int IMAGE_NUMBEROF_DIRECTORY_ENTRIES = 16;
 
         /// <summary>
         /// The magic value at the start of the optional header.
         /// </summary>
-        private const ushort IMAGE_OPTIONAL_HEADER_MAGIC = 0x10b;
+        public const ushort IMAGE_OPTIONAL_HEADER_MAGIC = 0x10b;
 
 		#endregion // Constants
 
@@ -206,50 +206,96 @@ namespace Mosa.Runtime.Linker.PE
         /// Loads the header from the reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
-		public void Load(BinaryReader reader)
+		public void Read(BinaryReader reader)
 		{
-			Magic = reader.ReadUInt16();
+			this.Magic = reader.ReadUInt16();
 			if (IMAGE_OPTIONAL_HEADER_MAGIC != Magic)
 				throw new BadImageFormatException();
 
-			MajorLinkerVersion = reader.ReadByte();
-			MinorLinkerVersion = reader.ReadByte();
-			SizeOfCode = reader.ReadUInt32();
-			SizeOfInitializedData = reader.ReadUInt32();
-			SizeOfUninitializedData = reader.ReadUInt32();
-			AddressOfEntryPoint = reader.ReadUInt32();
-			BaseOfCode = reader.ReadUInt32();
-			BaseOfData = reader.ReadUInt32();
+            this.MajorLinkerVersion = reader.ReadByte();
+            this.MinorLinkerVersion = reader.ReadByte();
+            this.SizeOfCode = reader.ReadUInt32();
+            this.SizeOfInitializedData = reader.ReadUInt32();
+            this.SizeOfUninitializedData = reader.ReadUInt32();
+            this.AddressOfEntryPoint = reader.ReadUInt32();
+            this.BaseOfCode = reader.ReadUInt32();
+            this.BaseOfData = reader.ReadUInt32();
 
-			ImageBase = reader.ReadUInt32();
-			SectionAlignment = reader.ReadUInt32();
-			FileAlignment = reader.ReadUInt32();
-			MajorOperatingSystemVersion = reader.ReadUInt16();
-			MinorOperatingSystemVersion = reader.ReadUInt16();
-			MajorImageVersion = reader.ReadUInt16();
-			MinorImageVersion = reader.ReadUInt16();
-			MajorSubsystemVersion = reader.ReadUInt16();
-			MinorSubsystemVersion = reader.ReadUInt16();
-			Win32VersionValue = reader.ReadUInt32();
-			SizeOfImage = reader.ReadUInt32();
-			SizeOfHeaders = reader.ReadUInt32();
-			CheckSum = reader.ReadUInt32();
-			Subsystem = reader.ReadUInt16();
-			DllCharacteristics = reader.ReadUInt16();
-			SizeOfStackReserve = reader.ReadUInt32();
-			SizeOfStackCommit = reader.ReadUInt32();
-			SizeOfHeapReserve = reader.ReadUInt32();
-			SizeOfHeapCommit = reader.ReadUInt32();
-			LoaderFlags = reader.ReadUInt32();
-			NumberOfRvaAndSizes = reader.ReadUInt32();
+            this.ImageBase = reader.ReadUInt32();
+            this.SectionAlignment = reader.ReadUInt32();
+            this.FileAlignment = reader.ReadUInt32();
+            this.MajorOperatingSystemVersion = reader.ReadUInt16();
+            this.MinorOperatingSystemVersion = reader.ReadUInt16();
+            this.MajorImageVersion = reader.ReadUInt16();
+            this.MinorImageVersion = reader.ReadUInt16();
+            this.MajorSubsystemVersion = reader.ReadUInt16();
+            this.MinorSubsystemVersion = reader.ReadUInt16();
+            this.Win32VersionValue = reader.ReadUInt32();
+            this.SizeOfImage = reader.ReadUInt32();
+            this.SizeOfHeaders = reader.ReadUInt32();
+            this.CheckSum = reader.ReadUInt32();
+            this.Subsystem = reader.ReadUInt16();
+            this.DllCharacteristics = reader.ReadUInt16();
+            this.SizeOfStackReserve = reader.ReadUInt32();
+            this.SizeOfStackCommit = reader.ReadUInt32();
+            this.SizeOfHeapReserve = reader.ReadUInt32();
+            this.SizeOfHeapCommit = reader.ReadUInt32();
+            this.LoaderFlags = reader.ReadUInt32();
+            this.NumberOfRvaAndSizes = reader.ReadUInt32();
 
-			DataDirectory = new IMAGE_DATA_DIRECTORY[NumberOfRvaAndSizes];
-			for (int i = 0; i < NumberOfRvaAndSizes; i++)
+            this.DataDirectory = new IMAGE_DATA_DIRECTORY[NumberOfRvaAndSizes];
+			for (int i = 0; i < this.NumberOfRvaAndSizes; i++)
 			{
-				DataDirectory[i].Load(reader);
+                this.DataDirectory[i].Read(reader);
 			}
 		}
 
-		#endregion // Methods
-	}
+        /// <summary>
+        /// Writes the structure to the given writer.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        public void Write(BinaryWriter writer)
+        {
+            if (writer == null)
+                throw new ArgumentNullException(@"writer");
+
+            writer.Write(this.Magic);
+
+            writer.Write(this.MajorLinkerVersion);
+            writer.Write(this.MinorLinkerVersion);
+            writer.Write(this.SizeOfCode);
+            writer.Write(this.SizeOfInitializedData);
+            writer.Write(this.SizeOfUninitializedData);
+            writer.Write(this.AddressOfEntryPoint);
+            writer.Write(this.BaseOfCode);
+            writer.Write(this.BaseOfData);
+
+            writer.Write(this.ImageBase);
+            writer.Write(this.SectionAlignment);
+            writer.Write(this.FileAlignment);
+            writer.Write(this.MajorOperatingSystemVersion);
+            writer.Write(this.MinorOperatingSystemVersion);
+            writer.Write(this.MajorImageVersion);
+            writer.Write(this.MinorImageVersion);
+            writer.Write(this.MajorSubsystemVersion);
+            writer.Write(this.MinorSubsystemVersion);
+            writer.Write(this.Win32VersionValue);
+            writer.Write(this.SizeOfImage);
+            writer.Write(this.SizeOfHeaders);
+            writer.Write(this.CheckSum);
+            writer.Write(this.Subsystem);
+            writer.Write(this.DllCharacteristics);
+            writer.Write(this.SizeOfStackReserve);
+            writer.Write(this.SizeOfStackCommit);
+            writer.Write(this.SizeOfHeapReserve);
+            writer.Write(this.SizeOfHeapCommit);
+            writer.Write(this.LoaderFlags);
+            writer.Write(this.NumberOfRvaAndSizes);
+
+            foreach (IMAGE_DATA_DIRECTORY dd in this.DataDirectory)
+                dd.Write(writer);
+        }
+
+        #endregion // Methods
+    }
 }

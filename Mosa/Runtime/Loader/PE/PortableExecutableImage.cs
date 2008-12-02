@@ -89,10 +89,10 @@ namespace Mosa.Runtime.Loader.PE
             _loadOrder = loadOrder;
 
             // Load all headers by visiting them sequentially
-            _dosHeader.Load(_assemblyReader);
+            _dosHeader.Read(_assemblyReader);
 
             _assemblyReader.BaseStream.Seek(_dosHeader.e_lfanew, SeekOrigin.Begin);
-            _ntHeader.Load(_assemblyReader);
+            _ntHeader.Read(_assemblyReader);
 
             if (CLI_HEADER_DATA_DIRECTORY >= _ntHeader.OptionalHeader.NumberOfRvaAndSizes)
                 throw new BadImageFormatException();
@@ -100,12 +100,12 @@ namespace Mosa.Runtime.Loader.PE
             _sections = new IMAGE_SECTION_HEADER[_ntHeader.FileHeader.NumberOfSections];
             for (int i = 0; i < _ntHeader.FileHeader.NumberOfSections; i++)
             {
-                _sections[i].Load(_assemblyReader);
+                _sections[i].Read(_assemblyReader);
             }
 
             long position = ResolveVirtualAddress(_ntHeader.OptionalHeader.DataDirectory[CLI_HEADER_DATA_DIRECTORY].VirtualAddress);
             _assemblyReader.BaseStream.Seek(position, SeekOrigin.Begin);
-            _cliHeader.Load(_assemblyReader);
+            _cliHeader.Read(_assemblyReader);
 
             // Load the provider...
             position = ResolveVirtualAddress(_cliHeader.Metadata.VirtualAddress);

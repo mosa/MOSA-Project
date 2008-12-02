@@ -27,6 +27,11 @@ namespace Mosa.Runtime.Linker
         #region Data members
 
         /// <summary>
+        /// Holds the base address of the link result.
+        /// </summary>
+        private long baseAddress;
+
+        /// <summary>
         /// Holds all unresolved link requests.
         /// </summary>
         private Dictionary<string, List<LinkRequest>> _linkRequests;
@@ -50,6 +55,7 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         protected AssemblyLinkerStageBase()
         {
+            this.baseAddress = 0x00400000; // Use the Win32 default for now, FIXME
             _linkRequests = new Dictionary<string, List<LinkRequest>>();
             this.symbols = new Dictionary<string, LinkerSymbol>();
         }
@@ -76,6 +82,7 @@ namespace Mosa.Runtime.Linker
             foreach (LinkerSymbol symbol in this.Symbols)
             {
                 LinkerSection ls = this.GetSection(symbol.Section);
+                symbol.Offset = ls.Offset + symbol.SectionAddress;
                 symbol.Address = new IntPtr(ls.Address.ToInt64() + symbol.SectionAddress);
             }
 
@@ -128,7 +135,7 @@ namespace Mosa.Runtime.Linker
         /// <value>The base address.</value>
         public long BaseAddress
         {
-            get { return 0L; }
+            get { return this.baseAddress; }
         }
 
         /// <summary>
