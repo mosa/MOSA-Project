@@ -21,7 +21,7 @@ namespace Mosa.Runtime.Linker.Elf.Sections
         /// <summary>
         /// 
         /// </summary>
-        protected Elf32SectionHeader header;
+        protected Elf32SectionHeader header = new Elf32SectionHeader();
         /// <summary>
         /// 
         /// </summary>

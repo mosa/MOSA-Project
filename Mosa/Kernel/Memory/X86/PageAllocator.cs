@@ -45,7 +45,7 @@ namespace Mosa.Kernel.Memory.X86
 
 			// Populate free table
 			for (uint mem = normstart; mem < normstart + normsize; mem = mem + PageSize, at = at + sizeof(int))
-				Memory.X86.Util.Set32(at, mem);
+				Util.Set32(at, mem);
 
 			totalPages = totalPages + (normsize / PageSize);
 		}
@@ -59,7 +59,7 @@ namespace Mosa.Kernel.Memory.X86
 			if (at == start) return 0; // out of memory
 
 			totalUsedPages++;
-			uint avail = Memory.X86.Util.Get32(at);
+			uint avail = Util.Get32(at);
 			at = at - sizeof(uint);
 			return avail;
 		}
@@ -72,7 +72,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			totalUsedPages--;
 			at = at + sizeof(uint);
-			Memory.X86.Util.Set32(at, page);
+			Util.Set32(at, page);
 		}
 
 		/// <summary>
