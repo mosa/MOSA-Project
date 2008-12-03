@@ -62,7 +62,7 @@ namespace Mosa.Runtime.Linker.PE
         /// <summary>
         /// Holds the sections of the PE file.
         /// </summary>
-        private List<LinkerSection> sections;
+        private Dictionary<SectionKind, LinkerSection> sections;
 
         /// <summary>
         /// Holds the entire size of the image.
@@ -87,15 +87,14 @@ namespace Mosa.Runtime.Linker.PE
             this.ntHeaders = new IMAGE_NT_HEADERS();
             this.sectionAlignment = SECTION_ALIGNMENT;
             this.fileAlignment = FILE_SECTION_ALIGNMENT;
-            this.sections = new List<LinkerSection>();
-
             // Create the default section set
-            LinkerSection[] sections = new LinkerSection[(int)SectionKind.Max];
-            sections[(int)SectionKind.Text] = new PortableExecutableLinkerSection(SectionKind.Text, @".text", IntPtr.Zero);
-            sections[(int)SectionKind.Data] = new PortableExecutableLinkerSection(SectionKind.Data, @".data", IntPtr.Zero);
-            sections[(int)SectionKind.ROData] = new PortableExecutableLinkerSection(SectionKind.ROData, @".rodata", IntPtr.Zero);
-            sections[(int)SectionKind.BSS] = new PortableExecutableLinkerSection(SectionKind.BSS, @".bss", IntPtr.Zero);
-            this.sections.AddRange(sections);
+            this.sections = new Dictionary<SectionKind, LinkerSection>() 
+            {
+                { SectionKind.Text, new PortableExecutableLinkerSection(SectionKind.Text, @".text", IntPtr.Zero) },
+                { SectionKind.Data, new PortableExecutableLinkerSection(SectionKind.Data, @".data", IntPtr.Zero) },
+                { SectionKind.ROData, new PortableExecutableLinkerSection(SectionKind.ROData, @".rodata", IntPtr.Zero) },
+                { SectionKind.BSS, new PortableExecutableLinkerSection(SectionKind.BSS, @".bss", IntPtr.Zero) }
+            };
         }
 
         #endregion // Construction
@@ -141,15 +140,7 @@ namespace Mosa.Runtime.Linker.PE
         /// <returns>The retrieved linker section.</returns>
         protected override LinkerSection GetSection(SectionKind sectionKind)
         {
-            try
-            {
-                return this.sections[(int)sectionKind];
-            }
-            catch
-            {
-            }
-
-            return null;
+            return this.sections[sectionKind];
         }
 
         /// <summary>
@@ -181,7 +172,7 @@ namespace Mosa.Runtime.Linker.PE
         /// <value>The sections collection.</value>
         public override ICollection<LinkerSection> Sections
         {
-            get { return this.sections; }
+            get { return this.sections.Values; }
         }
 
         /// <summary>
@@ -195,7 +186,7 @@ namespace Mosa.Runtime.Linker.PE
         /// </returns>
         protected override Stream Allocate(SectionKind section, int size, int alignment)
         {
-            PortableExecutableLinkerSection linkerSection = (PortableExecutableLinkerSection)this.sections[(int)section];
+            PortableExecutableLinkerSection linkerSection = (PortableExecutableLinkerSection)GetSection(section);
             return linkerSection.Allocate(size, alignment);
         }
 
@@ -237,7 +228,7 @@ namespace Mosa.Runtime.Linker.PE
 
                 // Iterate all sections and store their data
                 long position = writer.BaseStream.Position;
-                foreach (PortableExecutableLinkerSection section in this.sections)
+                foreach (PortableExecutableLinkerSection section in this.sections.Values)
                 {
                     // Write the section
                     section.Write(writer);
@@ -270,8 +261,8 @@ namespace Mosa.Runtime.Linker.PE
             long address = this.BaseAddress + this.sectionAlignment;
 
             // Move all sections to their right positions
-            List<LinkerSection> usedSections = new List<LinkerSection>();
-            foreach (LinkerSection ls in this.sections)
+            Dictionary<SectionKind, LinkerSection> usedSections = new Dictionary<SectionKind, LinkerSection>();
+            foreach (LinkerSection ls in this.sections.Values)
             {
                 // Only use a section with something inside
                 if (ls.Length != 0)
@@ -289,7 +280,7 @@ namespace Mosa.Runtime.Linker.PE
                     this.sizeOfImage = AlignValue(this.sizeOfImage, this.fileAlignment);
 
                     // Copy the section
-                    usedSections.Add(ls);
+                    usedSections.Add(ls.SectionKind, ls);
                 }
             }
 
@@ -394,7 +385,7 @@ namespace Mosa.Runtime.Linker.PE
 
             // Write the section headers
             uint address = this.fileAlignment;
-            foreach (LinkerSection section in this.sections)
+            foreach (LinkerSection section in this.sections.Values)
             {
                 IMAGE_SECTION_HEADER ish = new IMAGE_SECTION_HEADER();
                 ish.Name = section.Name;
@@ -440,8 +431,8 @@ namespace Mosa.Runtime.Linker.PE
 
         private long GetSectionAddress(SectionKind sectionKind)
         {
-            LinkerSection section = GetSection(sectionKind);
-            if (section != null)
+            LinkerSection section;            
+            if (this.sections.TryGetValue(sectionKind, out section) == true)
                 return (uint)section.Address.ToInt64();
 
             return 0L;
@@ -449,8 +440,8 @@ namespace Mosa.Runtime.Linker.PE
 
         private uint GetSectionLength(SectionKind sectionKind)
         {
-            LinkerSection section = GetSection(sectionKind);
-            if (section != null)
+            LinkerSection section;            
+            if (this.sections.TryGetValue(sectionKind, out section) == true)
                 return (uint)section.Length;
 
             return 0;

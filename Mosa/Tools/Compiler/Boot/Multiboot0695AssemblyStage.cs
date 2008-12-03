@@ -132,7 +132,7 @@ namespace Mosa.Tools.Compiler.Boot
         /// <param name="compiler">The compiler context to perform processing in.</param>
         public void Run(AssemblyCompiler compiler)
         {
-            if (null != compiler)
+            if (compiler == null)
                 throw new ArgumentNullException(@"compiler");
 
             IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();

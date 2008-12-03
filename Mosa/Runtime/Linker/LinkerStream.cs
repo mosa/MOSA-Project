@@ -418,7 +418,7 @@ namespace Mosa.Runtime.Linker
                 throw new ArgumentException(@"Buffer too small.", @"buffer");
 
             // Check that we're not writing past the end of our stream
-            if (0 != this.length && count + this.Position < this.Length)
+            if (0 != this.length && count + this.Position > this.Length)
                 throw new IOException(@"Can't fit buffer in the remaining space for the current symbol.");
 
             this.stream.Write(buffer, offset, count);
