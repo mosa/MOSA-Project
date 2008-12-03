@@ -40,6 +40,16 @@ namespace Mosa.Runtime.Linker.PE
         #region Data members
 
         /// <summary>
+        /// Holds the DOS header of the generated PE file.
+        /// </summary>
+        private IMAGE_DOS_HEADER dosHeader;
+
+        /// <summary>
+        /// Holds the PE headers.
+        /// </summary>
+        private IMAGE_NT_HEADERS ntHeaders;
+
+        /// <summary>
         /// Holds the file alignment used for this PE file.
         /// </summary>
         private uint fileAlignment;
@@ -73,6 +83,8 @@ namespace Mosa.Runtime.Linker.PE
         /// </summary>
         public PortableExecutableLinker()
         {
+            this.dosHeader = new IMAGE_DOS_HEADER();
+            this.ntHeaders = new IMAGE_NT_HEADERS();
             this.sectionAlignment = SECTION_ALIGNMENT;
             this.fileAlignment = FILE_SECTION_ALIGNMENT;
             this.sections = new List<LinkerSection>();
@@ -216,7 +228,7 @@ namespace Mosa.Runtime.Linker.PE
         private void CreatePEFile()
         {
             // Open the output file
-            using (FileStream fs = new FileStream(this.OutputFile, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (FileStream fs = new FileStream(this.OutputFile, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
             using (BinaryWriter writer = new BinaryWriter(fs, Encoding.Unicode))
             {
                 // Write the PE headers
@@ -235,6 +247,14 @@ namespace Mosa.Runtime.Linker.PE
                     position += (this.fileAlignment - (position % this.fileAlignment));                    
                     WritePaddingToPosition(writer, position);
                 }
+
+                // Flush all data to disk
+                writer.Flush();
+
+                // Write the checksum to the file
+                this.ntHeaders.OptionalHeader.CheckSum = CalculateChecksum(this.OutputFile);
+                fs.Position = this.dosHeader.e_lfanew;
+                this.ntHeaders.Write(writer);
             }
         }
 
@@ -290,32 +310,23 @@ namespace Mosa.Runtime.Linker.PE
              * These constants are not further documented here, please consult
              * MSDN for their meaning.
              */
-            IMAGE_DOS_HEADER dosHeader = new IMAGE_DOS_HEADER();
-            dosHeader.e_magic = IMAGE_DOS_HEADER.DOS_HEADER_MAGIC;
-            dosHeader.e_cblp = 0x0090;
-            dosHeader.e_cp = 0x0003;
-            dosHeader.e_cparhdr = 0x0004;
-            dosHeader.e_maxalloc = 0xFFFF;
-            dosHeader.e_sp = 0xb8;
-            dosHeader.e_lfarlc = 0x0040;
-            dosHeader.e_lfanew = 0x00000080;
-            dosHeader.Write(writer);
+            this.dosHeader.e_magic = IMAGE_DOS_HEADER.DOS_HEADER_MAGIC;
+            this.dosHeader.e_cblp = 0x0090;
+            this.dosHeader.e_cp = 0x0003;
+            this.dosHeader.e_cparhdr = 0x0004;
+            this.dosHeader.e_maxalloc = 0xFFFF;
+            this.dosHeader.e_sp = 0xb8;
+            this.dosHeader.e_lfarlc = 0x0040;
+            this.dosHeader.e_lfanew = 0x00000080;
+            this.dosHeader.Write(writer);
 
             // Write the following 64 bytes, which represent the default x86 code to
             // print a message on the screen.
-/*
             byte[] message = new byte[] {
                 0x0E, 0x1F, 0xBA, 0x0E, 0x00, 0xB4, 0x09, 0xCD, 0x21, 0xB8, 0x01, 0x4C, 0xCD, 0x21, 0x54, 0x68,
                 0x69, 0x73, 0x20, 0x70, 0x72, 0x6F, 0x67, 0x72, 0x61, 0x6D, 0x20, 0x72, 0x65, 0x71, 0x75, 0x69,
                 0x72, 0x65, 0x73, 0x20, 0x61, 0x20, 0x4D, 0x4F, 0x53, 0x41, 0x20, 0x70, 0x6F, 0x77, 0x65, 0x72,
                 0x65, 0x64, 0x20, 0x4F, 0x53, 0x2E, 0x0D, 0x0D, 0x0A, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-            };
- */
-            byte[] message = {
-	            0x0E, 0x1F, 0xBA, 0x0E, 0x00, 0xB4, 0x09, 0xCD, 0x21, 0xB8, 0x01, 0x4C, 0xCD, 0x21, 0x54, 0x68,
-	            0x69, 0x73, 0x20, 0x70, 0x72, 0x6F, 0x67, 0x72, 0x61, 0x6D, 0x20, 0x63, 0x61, 0x6E, 0x6E, 0x6F,
-	            0x74, 0x20, 0x62, 0x65, 0x20, 0x72, 0x75, 0x6E, 0x20, 0x69, 0x6E, 0x20, 0x44, 0x4F, 0x53, 0x20,
-	            0x6D, 0x6F, 0x64, 0x65, 0x2E, 0x0D, 0x0D, 0x0A, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
             };
             writer.Write(message);
         }
@@ -327,61 +338,59 @@ namespace Mosa.Runtime.Linker.PE
         private void WritePEHeader(BinaryWriter writer)
         {
             // Write the PE signature and headers
-            IMAGE_NT_HEADERS ntHeaders = new IMAGE_NT_HEADERS();
-            ntHeaders.Signature = IMAGE_NT_HEADERS.PE_SIGNATURE;
+            this.ntHeaders.Signature = IMAGE_NT_HEADERS.PE_SIGNATURE;
 
             // Prepare the file header
-            ntHeaders.FileHeader.Machine = IMAGE_FILE_HEADER.IMAGE_FILE_MACHINE_I386;
-            ntHeaders.FileHeader.NumberOfSections = (ushort)this.Sections.Count;
-            ntHeaders.FileHeader.TimeDateStamp = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
-            ntHeaders.FileHeader.PointerToSymbolTable = 0;
-            ntHeaders.FileHeader.NumberOfSymbols = 0;
-            ntHeaders.FileHeader.SizeOfOptionalHeader = 0x00E0; // FIXME: Really this way?
-            ntHeaders.FileHeader.Characteristics = 0x010E; // FIXME: Use an enum here
+            this.ntHeaders.FileHeader.Machine = IMAGE_FILE_HEADER.IMAGE_FILE_MACHINE_I386;
+            this.ntHeaders.FileHeader.NumberOfSections = (ushort)this.Sections.Count;
+            this.ntHeaders.FileHeader.TimeDateStamp = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+            this.ntHeaders.FileHeader.PointerToSymbolTable = 0;
+            this.ntHeaders.FileHeader.NumberOfSymbols = 0;
+            this.ntHeaders.FileHeader.SizeOfOptionalHeader = 0x00E0;
+            this.ntHeaders.FileHeader.Characteristics = 0x010E; // FIXME: Use an enum here
 
             // Prepare the "optional" headers
-            ntHeaders.OptionalHeader.Magic = IMAGE_OPTIONAL_HEADER.IMAGE_OPTIONAL_HEADER_MAGIC;
-            ntHeaders.OptionalHeader.MajorLinkerVersion = 6;
-            ntHeaders.OptionalHeader.MinorLinkerVersion = 0;
-            ntHeaders.OptionalHeader.SizeOfCode = AlignValue(GetSectionLength(SectionKind.Text), this.sectionAlignment);
-            ntHeaders.OptionalHeader.SizeOfInitializedData = AlignValue(GetSectionLength(SectionKind.Data) + GetSectionLength(SectionKind.ROData), this.sectionAlignment);
-            ntHeaders.OptionalHeader.SizeOfUninitializedData = AlignValue(GetSectionLength(SectionKind.BSS), this.sectionAlignment);
-            // FIXME: Lookup the entry point symbol address
-            ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(GetSectionAddress(SectionKind.Text) - this.BaseAddress);
-            ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSectionAddress(SectionKind.Text) - this.BaseAddress);
+            this.ntHeaders.OptionalHeader.Magic = IMAGE_OPTIONAL_HEADER.IMAGE_OPTIONAL_HEADER_MAGIC;
+            this.ntHeaders.OptionalHeader.MajorLinkerVersion = 6;
+            this.ntHeaders.OptionalHeader.MinorLinkerVersion = 0;
+            this.ntHeaders.OptionalHeader.SizeOfCode = AlignValue(GetSectionLength(SectionKind.Text), this.sectionAlignment);
+            this.ntHeaders.OptionalHeader.SizeOfInitializedData = AlignValue(GetSectionLength(SectionKind.Data) + GetSectionLength(SectionKind.ROData), this.sectionAlignment);
+            this.ntHeaders.OptionalHeader.SizeOfUninitializedData = AlignValue(GetSectionLength(SectionKind.BSS), this.sectionAlignment);
+            this.ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(this.EntryPoint.Address.ToInt64() - this.BaseAddress);
+            this.ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSectionAddress(SectionKind.Text) - this.BaseAddress);
 
             long sectionAddress = GetSectionAddress(SectionKind.Data);
             if (sectionAddress != 0)
-                ntHeaders.OptionalHeader.BaseOfData = (uint)(sectionAddress - this.BaseAddress);
+                this.ntHeaders.OptionalHeader.BaseOfData = (uint)(sectionAddress - this.BaseAddress);
 
-            ntHeaders.OptionalHeader.ImageBase = (uint)this.BaseAddress; // FIXME: Linker Script/cmdline
-            ntHeaders.OptionalHeader.SectionAlignment = this.sectionAlignment; // FIXME: Linker Script/cmdline
-            ntHeaders.OptionalHeader.FileAlignment = this.fileAlignment; // FIXME: Linker Script/cmdline
-            ntHeaders.OptionalHeader.MajorOperatingSystemVersion = 4;
-            ntHeaders.OptionalHeader.MinorOperatingSystemVersion = 0;
-            ntHeaders.OptionalHeader.MajorImageVersion = 0;
-            ntHeaders.OptionalHeader.MinorImageVersion = 0;
-            ntHeaders.OptionalHeader.MajorSubsystemVersion = 4;
-            ntHeaders.OptionalHeader.MinorSubsystemVersion = 0;
-            ntHeaders.OptionalHeader.Win32VersionValue = 0;
-            ntHeaders.OptionalHeader.SizeOfImage = this.sizeOfImage;
-            ntHeaders.OptionalHeader.SizeOfHeaders = this.fileAlignment; // FIXME: Use the full header size
-            ntHeaders.OptionalHeader.CheckSum = 0; // FIXME: We will checksum native code, determine algorithm used by Win32 here
-            ntHeaders.OptionalHeader.Subsystem = 0x03;
-            ntHeaders.OptionalHeader.DllCharacteristics = 0x0540;
-            ntHeaders.OptionalHeader.SizeOfStackReserve = 0x100000;
-            ntHeaders.OptionalHeader.SizeOfStackCommit = 0x1000;
-            ntHeaders.OptionalHeader.SizeOfHeapReserve = 0x100000;
-            ntHeaders.OptionalHeader.SizeOfHeapCommit = 0x1000;
-            ntHeaders.OptionalHeader.LoaderFlags = 0;
-            ntHeaders.OptionalHeader.NumberOfRvaAndSizes = IMAGE_OPTIONAL_HEADER.IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
-            ntHeaders.OptionalHeader.DataDirectory = new IMAGE_DATA_DIRECTORY[IMAGE_OPTIONAL_HEADER.IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
+            this.ntHeaders.OptionalHeader.ImageBase = (uint)this.BaseAddress; // FIXME: Linker Script/cmdline
+            this.ntHeaders.OptionalHeader.SectionAlignment = this.sectionAlignment; // FIXME: Linker Script/cmdline
+            this.ntHeaders.OptionalHeader.FileAlignment = this.fileAlignment; // FIXME: Linker Script/cmdline
+            this.ntHeaders.OptionalHeader.MajorOperatingSystemVersion = 4;
+            this.ntHeaders.OptionalHeader.MinorOperatingSystemVersion = 0;
+            this.ntHeaders.OptionalHeader.MajorImageVersion = 0;
+            this.ntHeaders.OptionalHeader.MinorImageVersion = 0;
+            this.ntHeaders.OptionalHeader.MajorSubsystemVersion = 4;
+            this.ntHeaders.OptionalHeader.MinorSubsystemVersion = 0;
+            this.ntHeaders.OptionalHeader.Win32VersionValue = 0;
+            this.ntHeaders.OptionalHeader.SizeOfImage = this.sizeOfImage;
+            this.ntHeaders.OptionalHeader.SizeOfHeaders = this.fileAlignment; // FIXME: Use the full header size
+            this.ntHeaders.OptionalHeader.CheckSum = 0;
+            this.ntHeaders.OptionalHeader.Subsystem = 0x03;
+            this.ntHeaders.OptionalHeader.DllCharacteristics = 0x0540;
+            this.ntHeaders.OptionalHeader.SizeOfStackReserve = 0x100000;
+            this.ntHeaders.OptionalHeader.SizeOfStackCommit = 0x1000;
+            this.ntHeaders.OptionalHeader.SizeOfHeapReserve = 0x100000;
+            this.ntHeaders.OptionalHeader.SizeOfHeapCommit = 0x1000;
+            this.ntHeaders.OptionalHeader.LoaderFlags = 0;
+            this.ntHeaders.OptionalHeader.NumberOfRvaAndSizes = IMAGE_OPTIONAL_HEADER.IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
+            this.ntHeaders.OptionalHeader.DataDirectory = new IMAGE_DATA_DIRECTORY[IMAGE_OPTIONAL_HEADER.IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
 
             // Populate the CIL data directory (FIXME)
-            ntHeaders.OptionalHeader.DataDirectory[14].VirtualAddress = 0;
-            ntHeaders.OptionalHeader.DataDirectory[14].Size = 0;
+            this.ntHeaders.OptionalHeader.DataDirectory[14].VirtualAddress = 0;
+            this.ntHeaders.OptionalHeader.DataDirectory[14].Size = 0;
 
-            ntHeaders.Write(writer);
+            this.ntHeaders.Write(writer);
 
             // Write the section headers
             uint address = this.fileAlignment;
@@ -465,6 +474,30 @@ namespace Mosa.Runtime.Linker.PE
             {
                 writer.Write(new byte[address - position]);
             }
+        }
+
+        private uint CalculateChecksum(string file)
+        {
+            uint csum = 0;
+
+            using (FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (BinaryReader reader = new BinaryReader(stream))
+            {
+                uint l = (uint)stream.Length;
+                for (uint p = 0; p < l; p += 2)
+                {
+                    csum += reader.ReadUInt16();
+                    if (csum > 0x0000FFFF)
+                    {
+                        csum = (csum & 0xFFFF) + (csum >> 16);
+                    }
+                }
+
+                csum = (csum & 0xFFFF) + (csum >> 16);
+                csum += l;
+            }
+
+            return csum;
         }
 
         #endregion // Internals

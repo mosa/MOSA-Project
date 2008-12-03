@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Linker
         /// Gets the entry point symbol.
         /// </summary>
         /// <value>The entry point symbol.</value>
-        LinkerSymbol EntryPoint { get; }
+        LinkerSymbol EntryPoint { get; set; }
 
         /// <summary>
         /// Retrieves the collection of sections created during compilation.
@@ -69,6 +69,26 @@ namespace Mosa.Runtime.Linker
         #endregion // Properties
 
         #region Methods
+
+        /// <summary>
+        /// Allocates memory in the specified section.
+        /// </summary>
+        /// <param name="symbol">The metadata member to allocate space for.</param>
+        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+        /// <returns>A stream, which can be used to populate the section.</returns>
+        Stream Allocate(RuntimeMember symbol, SectionKind section, int size, int alignment);
+
+        /// <summary>
+        /// Allocates a symbol of the given name in the specified section.
+        /// </summary>
+        /// <param name="name">The name of the symbol.</param>
+        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+        /// <returns>A stream, which can be used to populate the section.</returns>
+        Stream Allocate(string name, SectionKind section, int size, int alignment);
 
         /// <summary>
         /// Issues a linker request for the given runtime method.
@@ -101,24 +121,11 @@ namespace Mosa.Runtime.Linker
         long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol);
 
         /// <summary>
-        /// Allocates memory in the specified section.
+        /// Retrieves a linker symbol.
         /// </summary>
-        /// <param name="symbol">The metadata member to allocate space for.</param>
-        /// <param name="section">The executable section to allocate from.</param>
-        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-        /// <returns>A stream, which can be used to populate the section.</returns>
-        Stream Allocate(RuntimeMember symbol, SectionKind section, int size, int alignment);
-
-        /// <summary>
-        /// Allocates a symbol of the given name in the specified section.
-        /// </summary>
-        /// <param name="name">The name of the symbol.</param>
-        /// <param name="section">The executable section to allocate from.</param>
-        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-        /// <returns>A stream, which can be used to populate the section.</returns>
-        Stream Allocate(string name, SectionKind section, int size, int alignment);
+        /// <param name="member">The runtime member to retrieve a symbol for.</param>
+        /// <returns>A linker symbol, which represents the runtime member.</returns>
+        LinkerSymbol GetSymbol(RuntimeMember member);
 
         #endregion // Methods
     }

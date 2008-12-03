@@ -24,6 +24,11 @@ namespace Mosa.Runtime.Linker.PE
         /// </summary>
 		public const ushort IMAGE_FILE_MACHINE_I386 = 0x014c;
 
+        /// <summary>
+        /// Characteristic flag, which indicates the file is a DLL.
+        /// </summary>
+        public const ushort IMAGE_FILE_DLL = 0x2000;
+
 		#endregion // Constants
 
 		#region Data members

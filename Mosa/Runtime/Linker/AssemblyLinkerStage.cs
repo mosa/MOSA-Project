@@ -32,6 +32,11 @@ namespace Mosa.Runtime.Linker
         private long baseAddress;
 
         /// <summary>
+        /// Holds the entry point of the compiled binary.
+        /// </summary>
+        private LinkerSymbol entryPoint;
+
+        /// <summary>
         /// Holds all unresolved link requests.
         /// </summary>
         private Dictionary<string, List<LinkRequest>> _linkRequests;
@@ -144,7 +149,8 @@ namespace Mosa.Runtime.Linker
         /// <value>The entry point symbol.</value>
         public LinkerSymbol EntryPoint
         {
-            get { return null; }
+            get { return this.entryPoint; }
+            set { this.entryPoint = value; }
         }
 
         /// <summary>
@@ -259,6 +265,23 @@ namespace Mosa.Runtime.Linker
         /// A stream, which can be used to populate the section.
         /// </returns>
         protected abstract Stream Allocate(SectionKind section, int size, int alignment);
+
+        /// <summary>
+        /// Retrieves a linker symbol.
+        /// </summary>
+        /// <param name="member">The runtime member to retrieve a symbol for.</param>
+        /// <returns>
+        /// A linker symbol, which represents the runtime member.
+        /// </returns>
+        public LinkerSymbol GetSymbol(RuntimeMember member)
+        {
+            LinkerSymbol result;
+            string symbolName = CreateSymbolName(member);
+            if (false == this.symbols.TryGetValue(symbolName, out result))
+                throw new ArgumentException(@"Given member not compiled.", @"member");
+
+            return result;
+        }
 
         /// <summary>
         /// Issues a linker request for the given runtime method.

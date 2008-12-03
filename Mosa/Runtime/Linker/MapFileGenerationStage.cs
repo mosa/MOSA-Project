@@ -113,6 +113,7 @@ namespace Mosa.Runtime.Linker
             LinkerSymbol entryPoint = linker.EntryPoint;
             if (null != entryPoint)
             {
+                this.writer.WriteLine();
                 this.writer.WriteLine("Entry point is {0}", entryPoint.Name);
                 this.writer.WriteLine("\tat offset {0:x16}", entryPoint.Offset);
                 this.writer.WriteLine("\tat virtual address {0:x16}", entryPoint.Address.ToInt64());

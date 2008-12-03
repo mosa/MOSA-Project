@@ -16,6 +16,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker.PE;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.Loader.PE
 {
@@ -122,6 +123,21 @@ namespace Mosa.Runtime.Loader.PE
         #region Properties
 
         /// <summary>
+        /// Gets the entry point of the module.
+        /// </summary>
+        /// <value>The entry point.</value>
+        public RuntimeMethod EntryPoint
+        {
+            get
+            {
+                if (_cliHeader.EntryPointToken == 0)
+                    return null;
+
+                return RuntimeBase.Instance.TypeLoader.GetMethod(this, (TokenTypes)_cliHeader.EntryPointToken);
+            }
+        }
+
+        /// <summary>
         /// Retrieves the load order index of the module.
         /// </summary>
         /// <value></value>
@@ -155,6 +171,21 @@ namespace Mosa.Runtime.Loader.PE
             get
             {
                 return _metadataRoot;
+            }
+        }
+
+        /// <summary>
+        /// Gets the type of the module.
+        /// </summary>
+        /// <value>The type of the module.</value>
+        public ModuleType ModuleType
+        {
+            get
+            {
+                if ((_ntHeader.FileHeader.Characteristics & IMAGE_FILE_HEADER.IMAGE_FILE_DLL) == IMAGE_FILE_HEADER.IMAGE_FILE_DLL)
+                    return ModuleType.Library;
+
+                return ModuleType.Executable;
             }
         }
 

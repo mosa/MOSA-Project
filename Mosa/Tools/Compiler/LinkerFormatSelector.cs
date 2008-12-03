@@ -103,10 +103,14 @@ namespace Mosa.Tools.Compiler
         {
             CheckImplementation();
 
+            this.implementation.EntryPoint = this.implementation.GetSymbol(compiler.Assembly.EntryPoint);
+
             IAssemblyCompilerStage acs = this.implementation as IAssemblyCompilerStage;
             Debug.Assert(acs != null, @"Linker doesn't implement IAssemblyCompilerStage.");
             if (acs != null)
+            {
                 acs.Run(compiler);
+            }
         }
         
         /// <summary>
@@ -192,6 +196,12 @@ namespace Mosa.Tools.Compiler
             {
                 CheckImplementation();
                 return this.implementation.EntryPoint;
+            }
+
+            set
+            {
+                CheckImplementation();
+                this.implementation.EntryPoint = value;
             }
         }
 
@@ -298,6 +308,19 @@ namespace Mosa.Tools.Compiler
         {
             CheckImplementation();
             return this.implementation.Allocate(name, section, size, alignment);
+        }
+
+        /// <summary>
+        /// Retrieves a linker symbol.
+        /// </summary>
+        /// <param name="member">The runtime member to retrieve a symbol for.</param>
+        /// <returns>
+        /// A linker symbol, which represents the runtime member.
+        /// </returns>
+        public LinkerSymbol GetSymbol(RuntimeMember member)
+        {
+            CheckImplementation();
+            return this.implementation.GetSymbol(member);
         }
 
         #endregion // IAssemblyLinker Members
