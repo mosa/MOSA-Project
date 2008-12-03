@@ -17,6 +17,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
 
 using NDesk.Options;
+using Mosa.Runtime.Linker.Elf;
 
 namespace Mosa.Tools.Compiler.Boot
 {
@@ -181,8 +182,8 @@ namespace Mosa.Tools.Compiler.Boot
                 // FIXME: Extract multiboot information from the linker and store it
                 // in the multiboot format. Write it directly into the stream
                 uint flags = HEADER_MB_FLAG_VIDEO_MODES_REQUIRED | HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
-                //if (!(linker is ELFLinker))
-                //    flags |= HEADER_MB_FLAG_NON_ELF_BINARY;
+                if (!(linker is Elf32Linker))
+                    flags |= HEADER_MB_FLAG_NON_ELF_BINARY;
 
                 uint csum = unchecked(0U - HEADER_MB_MAGIC - flags);
                 bw.Write(HEADER_MB_MAGIC);
