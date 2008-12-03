@@ -15,9 +15,25 @@ namespace Mosa.Kernel.Memory.X86
 	public static class Multiboot
 	{
 		/// <summary>
-		/// Set by the kernel immediately upon startup. 
+		/// Location of the Multiboot Structure 
 		/// </summary>
-		public static uint MultibootAddress = 0x0;
+		private static uint MultibootStructure = 0x0;
+		
+		/// <summary>
+		/// Magic value that indicates that kernel was loaded by a Multiboot-compliant boot loader 
+		/// </summary>
+		public const uint MultibootMagic = 0x2BADB002;
+
+		/// <summary>
+		/// Sets the multiboot location, if given the proper magic value
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <param name="magic">The magic value.</param>
+		public static void SetMultibootLocation(uint address, uint magic)
+		{
+			if (magic == MultibootMagic)
+				MultibootStructure = address;
+		}
 
 		/// <summary>
 		/// Sets the multiboot location.
@@ -25,7 +41,18 @@ namespace Mosa.Kernel.Memory.X86
 		/// <param name="address">The address.</param>
 		public static void SetMultibootLocation(uint address)
 		{
-			MultibootAddress = address;
+			MultibootStructure = address;
+		}
+
+		/// <summary>
+		/// Determines whether this instance is multiboot.
+		/// </summary>
+		/// <returns>
+		/// 	<c>true</c> if this instance is multiboot; otherwise, <c>false</c>.
+		/// </returns>
+		public static bool IsMultiboot()
+		{
+			return (MultibootStructure != 0x0);
 		}
 
 		/// <summary>
@@ -36,9 +63,9 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				if (MultibootAddress == 0) return 0;
+				if (MultibootStructure == 0) return 0;
 
-				return Util.Get8(MultibootAddress);
+				return Memory.Get8(MultibootStructure);
 			}
 		}
 
@@ -50,7 +77,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 4);
+				return Memory.Get32(MultibootStructure + 4);
 			}
 		}
 
@@ -62,7 +89,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 8);
+				return Memory.Get32(MultibootStructure + 8);
 			}
 		}
 
@@ -74,7 +101,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 12);
+				return Memory.Get32(MultibootStructure + 12);
 			}
 		}
 
@@ -86,7 +113,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 16);
+				return Memory.Get32(MultibootStructure + 16);
 			}
 		}
 
@@ -98,7 +125,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 20);
+				return Memory.Get32(MultibootStructure + 20);
 			}
 		}
 
@@ -110,7 +137,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 24);
+				return Memory.Get32(MultibootStructure + 24);
 			}
 		}
 
@@ -122,7 +149,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 44);
+				return Memory.Get32(MultibootStructure + 44);
 			}
 		}
 
@@ -134,7 +161,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 48);
+				return Memory.Get32(MultibootStructure + 48);
 			}
 		}
 
@@ -148,7 +175,7 @@ namespace Mosa.Kernel.Memory.X86
 			uint location = MemoryMapStart;
 
 			for (uint i = 0; i < index; i++)
-				location = location + Util.Get32(location - 4);
+				location = location + Memory.Get32(location - 4);
 
 			return location;
 		}
@@ -160,7 +187,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <returns></returns>
 		public static ulong GetMemoryMapBase(uint index)
 		{
-			return Util.Get64(GetMemoryMapIndexLocation(index) + 0);
+			return Memory.Get64(GetMemoryMapIndexLocation(index) + 0);
 		}
 
 		/// <summary>
@@ -170,7 +197,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <returns></returns>
 		public static ulong GetMemoryMapLength(uint index)
 		{
-			return Util.Get64(GetMemoryMapIndexLocation(index) + 8);
+			return Memory.Get64(GetMemoryMapIndexLocation(index) + 8);
 		}
 
 		/// <summary>
@@ -180,7 +207,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <returns></returns>
 		public static ulong GetMemoryMapType(uint index)
 		{
-			return Util.Get64(GetMemoryMapIndexLocation(index) + 16);
+			return Memory.Get64(GetMemoryMapIndexLocation(index) + 16);
 		}
 
 		/// <summary>
@@ -191,7 +218,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 52);
+				return Memory.Get32(MultibootStructure + 52);
 			}
 		}
 
@@ -203,7 +230,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 56);
+				return Memory.Get32(MultibootStructure + 56);
 			}
 		}
 
@@ -215,7 +242,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 60);
+				return Memory.Get32(MultibootStructure + 60);
 			}
 		}
 
@@ -227,7 +254,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 64);
+				return Memory.Get32(MultibootStructure + 64);
 			}
 		}
 
@@ -239,7 +266,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 68);
+				return Memory.Get32(MultibootStructure + 68);
 			}
 		}
 
@@ -251,7 +278,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 72);
+				return Memory.Get32(MultibootStructure + 72);
 			}
 		}
 
@@ -264,7 +291,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 72);
+				return Memory.Get32(MultibootStructure + 72);
 			}
 		}
 
@@ -276,7 +303,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 76);
+				return Memory.Get32(MultibootStructure + 76);
 			}
 		}
 
@@ -288,7 +315,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 80);
+				return Memory.Get32(MultibootStructure + 80);
 			}
 		}
 
@@ -300,7 +327,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 84);
+				return Memory.Get32(MultibootStructure + 84);
 			}
 		}
 
@@ -312,7 +339,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return Util.Get32(MultibootAddress + 86);
+				return Memory.Get32(MultibootStructure + 86);
 			}
 		}
 	}

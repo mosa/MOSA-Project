@@ -22,7 +22,7 @@ namespace Mosa.Kernel.Memory.X86
 		public ulong Allocate()
 		{
 			// Get physical page
-			uint page = PageAllocator.Allocate();
+			uint page = PageFrameAllocator.Allocate();
 
 			// Map page into virtual space (0x02 = Read/Write)
 			PageTable.MapVirtualAddressToPhysical(page, page, 0x02); // TODO: Wrong place for this
@@ -40,7 +40,7 @@ namespace Mosa.Kernel.Memory.X86
 			PageTable.ReleaseVirtualAddress((uint)address);  // TODO: Wrong place for this
 
 			// Release physical page
-			PageAllocator.Free((uint)address);
+			PageFrameAllocator.Free((uint)address);
 		}
 
 		/// <summary>
@@ -50,7 +50,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return PageAllocator.PageSize;
+				return PageFrameAllocator.PageSize;
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return PageAllocator.TotalPages;
+				return PageFrameAllocator.TotalPages;
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			get
 			{
-				return PageAllocator.TotalPagesInUse;
+				return PageFrameAllocator.TotalPagesInUse;
 			}
 		}
 	}

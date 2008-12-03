@@ -30,10 +30,10 @@ namespace Mosa.Kernel.Memory.X86
 		public static void SetupPageDirectory()
 		{
 			// Get Page for Page Directory
-			pageDirectory = PageAllocator.Allocate();
+			pageDirectory = PageFrameAllocator.Allocate();
 
 			// Clear out that page
-			Memory.X86.Util.Clear(pageDirectory, 4096);
+			Memory.Clear(pageDirectory, 4096);
 
 			// Map Page Directory
 			SetupIdentityPages(pageDirectory, 4096, false);
@@ -51,7 +51,7 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			uint index = location >> 22;
 
-			uint entry = Memory.X86.Util.Get32(location + (index * sizeof(uint)));
+			uint entry = Memory.Get32(location + (index * sizeof(uint)));
 
 			// Check if Page Directory Entry does exist
 			if ((entry >> 12) != 0)
@@ -60,19 +60,20 @@ namespace Mosa.Kernel.Memory.X86
 			// Page Directory Entry does not exists, so create one
 
 			// Get Page for Page Table Entry
-			uint pageEntry = PageAllocator.Allocate();
+			uint pageEntry = PageFrameAllocator.Allocate();
 
 			// Clear out that page
-			Memory.X86.Util.Clear(pageEntry, 4096);
+			Memory.Clear(pageEntry, 4096);
 
 			// Set the Page Directory Entry to the new Page Table
 			// 0x02 = Read/Write, 0x01 = Present, 0x100 = Available (used to mark this page is not swappable to disk)
-			Memory.X86.Util.Set32(location + (index * sizeof(uint)), (uint)(pageEntry & ~(0x03FF)) | 0x02 | 0x01 | 0x100);
+			Memory.Set32(location + (index * sizeof(uint)), (uint)(pageEntry & ~(0x03FF)) | 0x02 | 0x01 | 0x100);
 
 			// Map Page Table Entry
 			SetupIdentityPages(pageEntry, 4096, false);
 
-			// TODO: Flush TLB?
+			// Flush TLB
+			Memory.FlushTLB();
 
 			return pageEntry;
 		}
@@ -88,7 +89,7 @@ namespace Mosa.Kernel.Memory.X86
 			uint pageTable = GetPageTable(virtualAddress);
 			uint pageTableIndex = virtualAddress >> 12 & 0x03FF;
 
-			Memory.X86.Util.Set32(pageTable + (pageTableIndex * 4), (uint)(physicalAddress | (flags & 0xFFF) | 0x01));
+			Memory.Set32(pageTable + (pageTableIndex * 4), (uint)(physicalAddress | (flags & 0xFFF) | 0x01));
 		}
 
 		/// <summary>
@@ -100,7 +101,7 @@ namespace Mosa.Kernel.Memory.X86
 			uint pageTable = GetPageTable(virtualAddress);
 			uint pageTableIndex = virtualAddress >> 12 & 0x03FF;
 
-			Memory.X86.Util.Set32(pageTable + (pageTableIndex * 4), 0x00);
+			Memory.Set32(pageTable + (pageTableIndex * 4), 0x00);
 		}
 
 		/// <summary>
