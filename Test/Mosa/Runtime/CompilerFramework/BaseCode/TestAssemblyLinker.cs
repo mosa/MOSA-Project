@@ -97,20 +97,20 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         }
 
         /// <summary>
-        /// 
+        /// A request to patch already emitted code by storing the calculated address value.
         /// </summary>
-        /// <param name="linkType"></param>
-        /// <param name="method"></param>
-        /// <param name="methodOffset"></param>
-        /// <param name="methodRelativeBase"></param>
-        /// <param name="targetAddress"></param>
-        protected unsafe override void ApplyPatch(LinkType linkType, RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress)
+        /// <param name="linkType">Type of the link.</param>
+        /// <param name="methodAddress">The virtual address of the method whose code is being patched.</param>
+        /// <param name="methodOffset">The value to store at the position in code.</param>
+        /// <param name="methodRelativeBase">The method relative base.</param>
+        /// <param name="targetAddress">The position in code, where it should be patched.</param>
+        protected unsafe override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
         {
             long value;
             switch (linkType & LinkType.KindMask)
             {
                 case LinkType.RelativeOffset:
-                    value = targetAddress - (method.Address.ToInt64() + methodRelativeBase);
+                    value = targetAddress - (methodAddress + methodRelativeBase);
                     break;
                 case LinkType.AbsoluteAddress:
                     value = targetAddress;
@@ -118,7 +118,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 default:
                     throw new NotSupportedException();
             }
-            long address = method.Address.ToInt64() + methodOffset;
+            long address = methodAddress + methodOffset;
             // Position is a raw memory address, we're just storing value there
             Debug.Assert(0 != value && value == (int)value);
             int* pAddress = (int*)address;

@@ -46,6 +46,7 @@ namespace Mosa.Tools.Compiler
                 throw new ArgumentNullException(@"name");
 
             this.name = name;
+            this.Parameters = new List<RuntimeParameter>();
         }
 
         #endregion // Construction

@@ -15,6 +15,7 @@ using System.Text;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
+using Mosa.Runtime.Linker;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -139,11 +140,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </remarks>
 		protected void Compile()
 		{
-            IMetadataProvider metadata = this.Metadata;
-
             this.BeginCompile();
 
-            IMetadataModule module = this.Assembly;
             this.Pipeline.Execute(delegate(IAssemblyCompilerStage stage)
             {
                 stage.Run(this);

@@ -15,10 +15,11 @@ using System.IO;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Loader;
 using Mosa.Tools.Compiler.Boot;
+using Mosa.Tools.Compiler.Linkers;
 
 using NDesk.Options;
-using Mosa.Runtime.Loader;
 
 namespace Mosa.Tools.Compiler
 {
@@ -267,6 +268,7 @@ namespace Mosa.Tools.Compiler
                         new TypeLayoutStage(),
                         new MethodCompilerBuilderStage(),
                         new MethodCompilerRunnerStage(),
+                        new TypeInitializers.TypeInitializerSchedulerStage(),
                         bootFormatStage,
                         linkerStage,
                         mapFileWrapper

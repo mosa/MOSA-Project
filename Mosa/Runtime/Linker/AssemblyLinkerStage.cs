@@ -117,11 +117,11 @@ namespace Mosa.Runtime.Linker
         /// A request to patch already emitted code by storing the calculated address value.
         /// </summary>
         /// <param name="linkType">Type of the link.</param>
-        /// <param name="method">The method whose code is being patched.</param>
+        /// <param name="methodAddress">The virtual address of the method whose code is being patched.</param>
         /// <param name="methodOffset">The value to store at the position in code.</param>
         /// <param name="methodRelativeBase">The method relative base.</param>
         /// <param name="targetAddress">The position in code, where it should be patched.</param>
-        protected abstract void ApplyPatch(LinkType linkType, RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress);
+        protected abstract void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress);
 
         /// <summary>
         /// Retrieves a linker section by its type.
@@ -455,12 +455,17 @@ namespace Mosa.Runtime.Linker
         /// <param name="requests">A list of requests to patch.</param>
         private void PatchRequests(long address, IEnumerable<LinkRequest> requests)
         {
+            long methodAddress;
+
             foreach (LinkRequest request in requests)
             {
+                if (IsResolved(request.Method, out methodAddress) == false)
+                    throw new InvalidOperationException(@"Method not compiled - but making link requests??");
+
                 // Patch the code stream
                 ApplyPatch(
                     request.LinkType,
-                    request.Method,
+                    methodAddress,
                     request.MethodOffset,
                     request.MethodRelativeBase,
                     address

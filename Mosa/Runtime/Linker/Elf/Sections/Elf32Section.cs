@@ -36,6 +36,7 @@ namespace Mosa.Runtime.Linker.Elf.Sections
         public Elf32Section(Mosa.Runtime.Linker.SectionKind kind, string name, IntPtr address) 
             : base(kind, name, address)
         {
+            header = new Elf32SectionHeader();
         }
 
         /// <summary>

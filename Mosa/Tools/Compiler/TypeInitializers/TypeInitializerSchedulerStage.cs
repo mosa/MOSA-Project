@@ -9,6 +9,10 @@
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Vm;
+using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
+using Mosa.Runtime.CompilerFramework.IR;
+using System.Collections.Generic;
+using Mosa.Runtime.Linker;
 
 namespace Mosa.Tools.Compiler.TypeInitializers
 {
@@ -26,9 +30,9 @@ namespace Mosa.Tools.Compiler.TypeInitializers
         #region Data Members
 
         /// <summary>
-        /// Holds a list of cctors scheduled for inclusion.
+        /// Holds a list of cctors call instructions.
         /// </summary>
-        private TypeInitializerInstructionSource source;
+        private List<Instruction> instructions;
 
         #endregion // Data Members
 
@@ -39,7 +43,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
         /// </summary>
         public TypeInitializerSchedulerStage()
         {
-            this.source = new TypeInitializerInstructionSource();
+            this.instructions = new List<Instruction>();
         }
 
         #endregion // Construction
@@ -52,7 +56,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
         /// <param name="method">The method.</param>
         public void Schedule(RuntimeMethod method)
         {
-            this.source.Schedule(method);
+            this.instructions.Add(new CallInstruction(method));
         }
 
         #endregion // Methods
@@ -75,22 +79,16 @@ namespace Mosa.Tools.Compiler.TypeInitializers
         public void Run(AssemblyCompiler compiler)
         {
             // Any initializers to run?
-            if (this.source.Instructions.Count > 0)
+            if (this.instructions.Count > 0)
             {
                 // FIXME: Add a call to the current entry point to the scheduler
-                //this.source.Schedule(compiler.Assembly.EntryPoint);
+                this.instructions.Add(new CallInstruction(compiler.Assembly.EntryPoint));
 
-                CompilerGeneratedType initType = new CompilerGeneratedType(compiler.Assembly, @"Mosa.Tools.Compiler", @"AssemblyInitializer");
-                CompilerGeneratedMethod initMethod = new CompilerGeneratedMethod(compiler.Assembly, @"AssemblyInit", initType);
-                initType.Methods.Add(initMethod);
-
-                // FIXME: Add the compiler generated type/method to the compilation assembly
+                CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", this.instructions);
 
                 // FIXME: Set the assembly initializer method as the entry point
-                //compiler.Assembly.EntryPoint = initMethod;
-
-                TypeInitializerMethodCompiler timc = new TypeInitializerMethodCompiler((AotCompiler)compiler, initMethod, this.source);
-                timc.Compile();
+                IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
+                linker.EntryPoint = linker.GetSymbol(method);
             }
         }
 

@@ -66,38 +66,6 @@ namespace Mosa.Runtime.Linker.Elf
         }
 
         /// <summary>
-        /// Issues a linker request for the given runtime method.
-        /// </summary>
-        /// <param name="linkType">The type of link required.</param>
-        /// <param name="method">The method the patched code belongs to.</param>
-        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-        /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
-        /// <param name="target">The method or static field to link against.</param>
-        /// <returns></returns>
-        public override long Link(LinkType linkType, Mosa.Runtime.Vm.RuntimeMethod method, int methodOffset, int methodRelativeBase, Mosa.Runtime.Vm.RuntimeMember target)
-        {
-            return base.Link(linkType, method, methodOffset, methodRelativeBase, target);
-        }
-
-        /// <summary>
-        /// Issues a linker request for the given runtime method.
-        /// </summary>
-        /// <param name="linkType">The type of link required.</param>
-        /// <param name="method">The method the patched code belongs to.</param>
-        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-        /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
-        /// <param name="symbol">The linker symbol to link against.</param>
-        /// <returns>
-        /// The return value is the preliminary address to place in the generated machine
-        /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
-        /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
-        /// </returns>
-        public override long Link(LinkType linkType, Mosa.Runtime.Vm.RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol)
-        {
-            return base.Link(linkType, method, methodOffset, methodRelativeBase, symbol);
-        }
-
-        /// <summary>
         /// Retrieves the name of the compilation stage.
         /// </summary>
         /// <value>The name of the compilation stage.</value>
@@ -139,11 +107,11 @@ namespace Mosa.Runtime.Linker.Elf
         /// A request to patch already emitted code by storing the calculated address value.
         /// </summary>
         /// <param name="linkType">Type of the link.</param>
-        /// <param name="method">The method whose code is being patched.</param>
+        /// <param name="methodAddress">The virtual address of the method whose code is being patched.</param>
         /// <param name="methodOffset">The value to store at the position in code.</param>
         /// <param name="methodRelativeBase">The method relative base.</param>
         /// <param name="targetAddress">The position in code, where it should be patched.</param>
-        protected override void ApplyPatch(LinkType linkType, Mosa.Runtime.Vm.RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress)
+        protected override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
         {
             throw new NotImplementedException();
         }

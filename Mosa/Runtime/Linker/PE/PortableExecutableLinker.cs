@@ -28,12 +28,12 @@ namespace Mosa.Runtime.Linker.PE
         /// <summary>
         /// Specifies the default section alignment in a PE file.
         /// </summary>
-        private const uint FILE_SECTION_ALIGNMENT = 0x1000;
+        private const uint FILE_SECTION_ALIGNMENT = 0x200;
 
         /// <summary>
         /// Specifies the default section alignment in virtual memory.
         /// </summary>
-        private const uint SECTION_ALIGNMENT = FILE_SECTION_ALIGNMENT;
+        private const uint SECTION_ALIGNMENT = 0x1000;
 
         #endregion // Constants
 
@@ -65,9 +65,19 @@ namespace Mosa.Runtime.Linker.PE
         private Dictionary<SectionKind, LinkerSection> sections;
 
         /// <summary>
-        /// Holds the entire size of the image.
+        /// Determines if the checksum of the generated executable must be set.
         /// </summary>
-        private uint sizeOfImage;
+        private bool setChecksum;
+
+        /// <summary>
+        /// Holds the file size of the image.
+        /// </summary>
+        private uint fileSizeOfImage;
+
+        /// <summary>
+        /// Holds the virtual size of the image as if it is loaded into memory.
+        /// </summary>
+        private uint virtualSizeOfImage;
 
         /// <summary>
         /// Flag, if the symbols have been resolved.
@@ -87,6 +97,8 @@ namespace Mosa.Runtime.Linker.PE
             this.ntHeaders = new IMAGE_NT_HEADERS();
             this.sectionAlignment = SECTION_ALIGNMENT;
             this.fileAlignment = FILE_SECTION_ALIGNMENT;
+            this.setChecksum = true;
+
             // Create the default section set
             this.sections = new Dictionary<SectionKind, LinkerSection>() 
             {
@@ -99,17 +111,67 @@ namespace Mosa.Runtime.Linker.PE
 
         #endregion // Construction
 
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a checksum is calculated for the linked binary.
+        /// </summary>
+        /// <value><c>true</c> if a checksum is calculated; otherwise, <c>false</c>.</value>
+        public bool SetChecksum
+        {
+            get { return this.setChecksum; }
+            set { this.setChecksum = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the file alignment in bytes.
+        /// </summary>
+        /// <value>The file alignment in bytes.</value>
+        public uint FileAlignment
+        {
+            get { return this.fileAlignment; }
+            set 
+            {
+                if (value < FILE_SECTION_ALIGNMENT)
+                    throw new ArgumentException(@"Section alignment must not be less than 512 bytes.", @"value");
+                if ((value & (FILE_SECTION_ALIGNMENT - 1)) != 0)
+                    throw new ArgumentException(@"Section alignment must be a multiple of 512 bytes.", @"value");
+
+                this.fileAlignment = value; 
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the section alignment in bytes.
+        /// </summary>
+        /// <value>The section alignment in bytes.</value>
+        public uint SectionAlignment
+        {
+            get { return this.sectionAlignment; }
+            set 
+            {
+                if (value < SECTION_ALIGNMENT)
+                    throw new ArgumentException(@"Section alignment must not be less than 4K.", @"value");
+                if ((value & (SECTION_ALIGNMENT - 1)) != 0)
+                    throw new ArgumentException(@"Section alignment must be a multiple of 4K.", @"value");
+
+                this.sectionAlignment = value; 
+            }
+        }
+
+        #endregion // Properties
+
         #region AssembyLinkerStageBase Overrides
 
         /// <summary>
         /// A request to patch already emitted code by storing the calculated address value.
         /// </summary>
         /// <param name="linkType">Type of the link.</param>
-        /// <param name="method">The method whose code is being patched.</param>
+        /// <param name="methodAddress">The virtual address of the method whose code is being patched.</param>
         /// <param name="methodOffset">The value to store at the position in code.</param>
         /// <param name="methodRelativeBase">The method relative base.</param>
         /// <param name="targetAddress">The position in code, where it should be patched.</param>
-        protected override void ApplyPatch(LinkType linkType, RuntimeMethod method, long methodOffset, long methodRelativeBase, long targetAddress)
+        protected override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
         {
             if (this.symbolsResolved == false)
                 throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
@@ -117,7 +179,7 @@ namespace Mosa.Runtime.Linker.PE
             if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
             {
                 // FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
-                // the runtime loader must patch this link request, we'll just skip it.
+                // the runtime loader must patch this link request, we'll fail it until we can do relocations.
                 throw new NotSupportedException(@".reloc section not supported.");
             }
             else
@@ -125,9 +187,9 @@ namespace Mosa.Runtime.Linker.PE
                 // Retrieve the text section
                 PortableExecutableLinkerSection text = (PortableExecutableLinkerSection)GetSection(SectionKind.Text);
                 // Calculate the relative offset
-                long value = targetAddress - (method.Address.ToInt64() + methodRelativeBase);
+                long value = targetAddress - (methodAddress + methodRelativeBase);
                 // Calculate the patch offset
-                long offset = (method.Address.ToInt64() - text.Address.ToInt64()) + methodOffset;
+                long offset = (methodAddress - text.Address.ToInt64()) + methodOffset;
                 // Save the stream position
                 text.ApplyPatch(offset, linkType, value);
             }
@@ -239,13 +301,17 @@ namespace Mosa.Runtime.Linker.PE
                     WritePaddingToPosition(writer, position);
                 }
 
-                // Flush all data to disk
-                writer.Flush();
+                // Do we need to set the checksum?
+                if (true == this.setChecksum)
+                {
+                    // Flush all data to disk
+                    writer.Flush();
 
-                // Write the checksum to the file
-                this.ntHeaders.OptionalHeader.CheckSum = CalculateChecksum(this.OutputFile);
-                fs.Position = this.dosHeader.e_lfanew;
-                this.ntHeaders.Write(writer);
+                    // Write the checksum to the file
+                    this.ntHeaders.OptionalHeader.CheckSum = CalculateChecksum(this.OutputFile);
+                    fs.Position = this.dosHeader.e_lfanew;
+                    this.ntHeaders.Write(writer);
+                }
             }
         }
 
@@ -255,10 +321,8 @@ namespace Mosa.Runtime.Linker.PE
         private void LayoutSections()
         {
             // Reset the size of the image
-            this.sizeOfImage = this.fileAlignment;
-
-            // Take the base address of the image
-            long address = this.BaseAddress + this.sectionAlignment;
+            this.virtualSizeOfImage = this.sectionAlignment;
+            this.fileSizeOfImage = this.fileAlignment;
 
             // Move all sections to their right positions
             Dictionary<SectionKind, LinkerSection> usedSections = new Dictionary<SectionKind, LinkerSection>();
@@ -268,16 +332,16 @@ namespace Mosa.Runtime.Linker.PE
                 if (ls.Length != 0)
                 {
                     // Set the section address
-                    ls.Address = new IntPtr(address);
-                    ls.Offset = this.sizeOfImage;
+                    ls.Address = new IntPtr(this.BaseAddress + this.virtualSizeOfImage);
+                    ls.Offset = this.fileSizeOfImage;
 
-                    // Calculate the address of the next section
-                    address += ls.Length;
-                    this.sizeOfImage += (uint)ls.Length;
+                    // Update the file size
+                    this.fileSizeOfImage += (uint)ls.Length;
+                    this.fileSizeOfImage = AlignValue(this.fileSizeOfImage, this.fileAlignment);
 
-                    // Perform the section alignment
-                    address += (this.sectionAlignment - (address % this.sectionAlignment));
-                    this.sizeOfImage = AlignValue(this.sizeOfImage, this.fileAlignment);
+                    // Update the virtual size
+                    this.virtualSizeOfImage += (uint)ls.Length;
+                    this.virtualSizeOfImage = AlignValue(this.virtualSizeOfImage, this.sectionAlignment);
 
                     // Copy the section
                     usedSections.Add(ls.SectionKind, ls);
@@ -364,7 +428,7 @@ namespace Mosa.Runtime.Linker.PE
             this.ntHeaders.OptionalHeader.MajorSubsystemVersion = 4;
             this.ntHeaders.OptionalHeader.MinorSubsystemVersion = 0;
             this.ntHeaders.OptionalHeader.Win32VersionValue = 0;
-            this.ntHeaders.OptionalHeader.SizeOfImage = this.sizeOfImage;
+            this.ntHeaders.OptionalHeader.SizeOfImage = this.virtualSizeOfImage;
             this.ntHeaders.OptionalHeader.SizeOfHeaders = this.fileAlignment; // FIXME: Use the full header size
             this.ntHeaders.OptionalHeader.CheckSum = 0;
             this.ntHeaders.OptionalHeader.Subsystem = 0x03;

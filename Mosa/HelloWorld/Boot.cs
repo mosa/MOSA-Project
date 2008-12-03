@@ -6,11 +6,24 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Boot
 	{
+        private static int static_ctor;
+
+        static Boot()
+        {
+            static_ctor = 1;
+        }
+
 		/// <summary>
 		/// 
 		/// </summary>
 		public static void Main()
 		{
+            if (static_ctor == 0)
+                return;
+
+            for (int i = 0; i < int.MaxValue; )
+                i++;
+/*
 			// Start the boot process
 
 			// Write HelloWorld to Screen
@@ -50,6 +63,7 @@ namespace Mosa.HelloWorld
 					*index = (byte)'|';					
 				}
 			}
-		}
+ */
+        }
 	}
 }

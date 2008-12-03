@@ -37,7 +37,7 @@ namespace Mosa.Runtime.Linker
         long BaseAddress { get; }
 
         /// <summary>
-        /// Gets the entry point symbol.
+        /// Gets or sets the entry point symbol.
         /// </summary>
         /// <value>The entry point symbol.</value>
         LinkerSymbol EntryPoint { get; set; }
@@ -112,13 +112,13 @@ namespace Mosa.Runtime.Linker
         /// <param name="method">The method the patched code belongs to.</param>
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
         /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
-        /// <param name="symbol">The linker symbol to link against.</param>
+        /// <param name="symbolName">The linker symbol name to link against.</param>
         /// <returns>
         /// The return value is the preliminary address to place in the generated machine 
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
-        long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol);
+        long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbolName);
 
         /// <summary>
         /// Retrieves a linker symbol.

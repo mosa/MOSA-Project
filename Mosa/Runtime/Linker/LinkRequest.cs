@@ -25,27 +25,27 @@ namespace Mosa.Runtime.Linker
         /// <summary>
         /// The method whose code is being patched.
         /// </summary>
-        RuntimeMethod _method;
+        private readonly RuntimeMethod method;
 
         /// <summary>
         /// The position within the code stream where the address is patched
         /// </summary>
-        private int _methodOffset;
+        private readonly int methodOffset;
 
         /// <summary>
         /// Holds the relative request flag.
         /// </summary>
-        private int _methodRelativeBase;
+        private readonly int methodRelativeBase;
 
         /// <summary>
-        /// 
+        /// The type of the link operation to perform.
         /// </summary>
-        private LinkType _linkType;
+        private readonly LinkType linkType;
 
         /// <summary>
-        /// The symbolic target of this link request
+        /// Holds the symbol name to link against.
         /// </summary>
-        private string symbol;
+        private readonly string symbolName;
 
         #endregion // Data members
 
@@ -58,14 +58,14 @@ namespace Mosa.Runtime.Linker
         /// <param name="method">The method whose code is being patched.</param>
         /// <param name="methodOffset">The method offset.</param>
         /// <param name="methodRelativeBase">The method relative base.</param>
-        /// <param name="symbol">The symbol.</param>
-        public LinkRequest(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol)
+        /// <param name="symbolName">The linker symbol to link against.</param>
+        public LinkRequest(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbolName)
         {
-            _method = method;
-            _methodOffset = methodOffset;
-            _linkType = linkType;
-            _methodRelativeBase = methodRelativeBase;
-            this.symbol = symbol;
+            this.method = method;
+            this.methodOffset = methodOffset;
+            this.linkType = linkType;
+            this.methodRelativeBase = methodRelativeBase;
+            this.symbolName = symbolName;
         }
 
         #endregion // Construction
@@ -77,7 +77,7 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         public RuntimeMethod Method
         {
-            get { return _method; }
+            get { return this.method; }
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         public int MethodRelativeBase
         {
-            get { return _methodRelativeBase; }
+            get { return this.methodRelativeBase; }
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         public LinkType LinkType
         {
-            get { return _linkType; }
+            get { return this.linkType; }
         }
 
         /// <summary>
@@ -101,15 +101,16 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         public int MethodOffset
         {
-            get { return _methodOffset; }
+            get { return this.methodOffset; }
         }
 
         /// <summary>
-        /// The target of this link
+        /// Gets the name of the symbol.
         /// </summary>
-        public string Symbol
+        /// <value>The name of the symbol.</value>
+        public string SymbolName
         {
-            get { return this.symbol; }
+            get { return this.symbolName; }
         }
 
         #endregion // Properties

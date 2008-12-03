@@ -61,7 +61,9 @@ namespace Mosa.Platforms.x86
 
         protected override void BeginGenerate()
         {
-            FileInfo t = new FileInfo(String.Format("{0}.asm", this._compiler.Method.Name));
+            string fileName = this._compiler.Method.Name;
+            fileName = fileName.Replace('<', '_').Replace('$', '_').Replace('>', '_');
+            FileInfo t = new FileInfo(fileName + ".asm");
             StreamWriter textwriter = t.CreateText();
             MultiplexingCodeEmitter mce = new MultiplexingCodeEmitter();
             mce.Emitters.Add(new AsmCodeEmitter(textwriter));

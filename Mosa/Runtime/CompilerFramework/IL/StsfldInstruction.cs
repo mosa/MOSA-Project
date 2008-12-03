@@ -49,7 +49,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         public StsfldInstruction(OpCode code)
             : base(code)
         {
-            _field = Field;
             Debug.Assert(OpCode.Stsfld == code);
             if (OpCode.Stsfld != code)
                 throw new ArgumentException(@"Invalid opcode.", @"code");

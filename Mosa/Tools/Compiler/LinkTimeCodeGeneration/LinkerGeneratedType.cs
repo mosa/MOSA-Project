@@ -9,9 +9,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Mosa.Runtime.Vm;
+
 using Mosa.Runtime.Loader;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Tools.Compiler
 {
@@ -20,15 +20,6 @@ namespace Mosa.Tools.Compiler
     /// </summary>
     public sealed class CompilerGeneratedType : RuntimeType
     {
-        #region Data Members
-
-        /// <summary>
-        /// Holds all methods of the compiler generated type.
-        /// </summary>
-        private List<CompilerGeneratedMethod> methods;
-
-        #endregion // Data Members
-
         #region Construction
 
         /// <summary>
@@ -44,28 +35,13 @@ namespace Mosa.Tools.Compiler
                 throw new ArgumentNullException(@"namespace");
             if (null == name)
                 throw new ArgumentNullException(@"name");
-
-            this.methods = new List<CompilerGeneratedMethod>();
             
             base.Namespace = @namespace;
             base.Name = name;
-            base.Methods = (IList<RuntimeMethod>)this.methods;
+            base.Methods = new List<RuntimeMethod>();
         }
 
         #endregion // Construction
-
-        #region Methods
-
-        /// <summary>
-        /// Gets the methods.
-        /// </summary>
-        /// <returns>A list, which contains all methods of the compiler generated type.</returns>
-        public IList<CompilerGeneratedMethod> GetMethods()
-        {
-            return this.methods;
-        }
-
-        #endregion // Methods
 
         #region RuntimeType Overrides
 

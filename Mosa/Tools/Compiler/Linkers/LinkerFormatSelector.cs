@@ -17,18 +17,16 @@ using System.IO;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
-using Mosa.Runtime.Linker.Elf;
-using Mosa.Runtime.Linker.PE;
 using Mosa.Runtime.Vm;
 
 using NDesk.Options;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Tools.Compiler.Linkers
 {
     /// <summary>
-    /// Selector proxy type for the linker. 
+    /// Proxy type, which selects the appropriate linker for an output format.
     /// </summary>
-    public class LinkerFormatSelector : IAssemblyLinker, IAssemblyCompilerStage, IHasOptions
+    public sealed class LinkerFormatSelector : IAssemblyLinker, IAssemblyCompilerStage, IHasOptions
     {
         #region Data Members
 
@@ -40,12 +38,12 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Holds the PE linker.
         /// </summary>
-        private IAssemblyLinker peLinker;
+        private PortableExecutableLinkerWrapper peLinker;
 
         /// <summary>
         /// Holds the ELF32 linker.
         /// </summary>
-        private IAssemblyLinker elfLinker = null;
+        private Elf32LinkerWrapper elfLinker = null;
 
         /// <summary>
         /// Holds the output file of the linker.
@@ -61,8 +59,8 @@ namespace Mosa.Tools.Compiler
         /// </summary>
         public LinkerFormatSelector()
         {
-            this.peLinker = new PortableExecutableLinker();
-            this.elfLinker = new Elf32Linker();
+            this.peLinker = new PortableExecutableLinkerWrapper();
+            this.elfLinker = new Elf32LinkerWrapper();
             this.implementation = null;
         }
 
@@ -103,8 +101,14 @@ namespace Mosa.Tools.Compiler
         {
             CheckImplementation();
 
-            this.implementation.EntryPoint = this.implementation.GetSymbol(compiler.Assembly.EntryPoint);
+            // Set the default entry point in the linker, if no previous stage has replaced it.
+            RuntimeMethod entryPoint = compiler.Assembly.EntryPoint;
+            if (this.implementation.EntryPoint == null && entryPoint != null)
+            {
+                this.implementation.EntryPoint = GetSymbol(entryPoint);
+            }
 
+            // Run the real linker
             IAssemblyCompilerStage acs = this.implementation as IAssemblyCompilerStage;
             Debug.Assert(acs != null, @"Linker doesn't implement IAssemblyCompilerStage.");
             if (acs != null)
@@ -155,9 +159,10 @@ namespace Mosa.Tools.Compiler
                 "The name of the output {file}.",
                 delegate(string file)
                 {
-                    this.outputFile = file;
-                    peLinker.OutputFile = file;
-                    elfLinker.OutputFile = file;
+                    this.outputFile =
+                        peLinker.Wrapped.OutputFile =
+                        elfLinker.Wrapped.OutputFile = 
+                            file;
                 }
             );
 
@@ -346,10 +351,10 @@ namespace Mosa.Tools.Compiler
             switch (format.ToLower())
             {
                 case "elf":
-                    return this.elfLinker;
+                    return this.elfLinker.Wrapped;
 
                 case "pe":
-                    return this.peLinker;
+                    return this.peLinker.Wrapped;
 
                 default:
                     throw new OptionException(String.Format("Unknown or unsupported binary format {0}.", format), "format");
