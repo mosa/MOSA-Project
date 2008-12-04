@@ -8,8 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
@@ -18,8 +17,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
 	/// <summary>
 	/// Implements the internal representation for the IL conversion instructions.
 	/// </summary>
-	public class ConversionInstruction : UnaryArithmeticInstruction {
-
+	public class ConversionInstruction : UnaryArithmeticInstruction 
+    {
 		#region Data members
 
 		// FIXME
