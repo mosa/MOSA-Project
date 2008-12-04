@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
+using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
@@ -108,6 +109,22 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
 
             // FIXME: Check the value/destinations
+        }
+
+        /// <summary>
+        /// Validates the current set of stack operands.
+        /// </summary>
+        /// <param name="compiler"></param>
+        /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
+        /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
+        public override void Validate(MethodCompilerBase compiler)
+        {
+            base.Validate(compiler);
+
+            SigType destType = this.Operands[0].Type;
+            Debug.Assert(destType is PtrSigType || destType is RefSigType, @"Destination operand not a pointer or reference.");
+            if (!(destType is PtrSigType || destType is RefSigType))
+                throw new ExecutionEngineException(@"Invalid operand.");
         }
 
         /// <summary>

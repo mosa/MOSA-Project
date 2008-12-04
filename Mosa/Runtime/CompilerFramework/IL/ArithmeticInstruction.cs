@@ -8,9 +8,8 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Mosa.Runtime.Metadata;
+
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
@@ -152,7 +151,25 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (StackTypeCode.Unknown == result)
                 throw new InvalidOperationException(@"Invalid operand types passed to " + _code);
 
-            SetResult(0, compiler.CreateResultOperand(Operand.SigTypeFromStackType(result)));
+            SigType resultType;
+            if (result != StackTypeCode.Ptr)
+            {
+                resultType = Operand.SigTypeFromStackType(result);
+            }
+            else
+            {
+                // Copy the pointer element type
+                PtrSigType op0 = ops[0].Type as PtrSigType;
+                PtrSigType op1 = ops[1].Type as PtrSigType;
+                if (op0 != null)
+                    resultType = new PtrSigType(op0.CustomMods, op0.ElementType);
+                else if (op1 != null)
+                    resultType = new PtrSigType(op1.CustomMods, op1.ElementType);
+                else
+                    throw new InvalidOperationException();
+            }
+
+            SetResult(0, compiler.CreateResultOperand(resultType));
         }
 
         #endregion // Methods

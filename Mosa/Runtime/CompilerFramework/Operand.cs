@@ -9,10 +9,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 using Mosa.Runtime.Metadata;
-using System.Diagnostics;
 using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -156,7 +154,6 @@ namespace Mosa.Runtime.CompilerFramework
                 case StackTypeCode.Int64: result = new SigType(CilElementType.I8); break;
                 case StackTypeCode.F: result = new SigType(CilElementType.R8); break;
                 case StackTypeCode.O: result = new SigType(CilElementType.Object); break;
-                case StackTypeCode.Ptr: result = new SigType(CilElementType.Ptr); break;
                 case StackTypeCode.N: result = new SigType(CilElementType.I); break;
                 default:
                     throw new NotSupportedException(@"Can't convert stack type code to SigType.");
