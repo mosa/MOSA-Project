@@ -43,8 +43,6 @@ namespace Mosa.Tools.Compiler
                     return Mosa.Platforms.x86.Architecture.CreateArchitecture(Mosa.Platforms.x86.ArchitectureFeatureFlags.AutoDetect);
 
                 case "x64":
-                    throw new NotImplementedException("x64 architecture not implemented yet.");
-
                 default:
                     throw new OptionException(String.Format("Unknown or unsupported architecture {0}.", architecture), "arch");
             }
@@ -58,7 +56,7 @@ namespace Mosa.Tools.Compiler
         {
             optionSet.Add(
                 "a|arch=",
-                "Select one of the MOSA architectures to compile for [{x86|x64}].",
+                "Select one of the MOSA architectures to compile for [{x86}].",
                 delegate(string arch)
                 {
                     this.implementation = SelectImplementation(arch);
@@ -67,16 +65,7 @@ namespace Mosa.Tools.Compiler
         }
         
         /// <summary>
-        /// Adds the additional options for all possible implementations of this type for the parsing process to the given OptionSet.
-        /// </summary>
-        /// <param name="optionSet">A given OptionSet to add the options to.</param>
-        public static void AddOptionsForAll(OptionSet optionSet)
-        {
-            throw new NotImplementedException();
-        }
-        
-        /// <summary>
-        /// Gets a value indicating wheter an implementation has been selected.
+        /// Gets the selected architecture.
         /// </summary>
         public IArchitecture Architecture
         {

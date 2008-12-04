@@ -81,6 +81,7 @@ namespace Mosa.Tools.Compiler
         {
             usageString = "Usage: mosacl -o outputfile --arch=[x86|x64] --format=[ELF|PE] --boot=[mb0.7] {additional options} inputfiles";
             optionSet = new OptionSet();
+            inputFiles = new List<FileInfo>();
 
             this.linkerStage = new LinkerFormatSelector();
             this.bootFormatStage = new BootFormatSelector();
@@ -110,6 +111,32 @@ namespace Mosa.Tools.Compiler
                         this.ShowHelp();
                         Environment.Exit(0);
                     }
+                });
+            
+            // default option handler for input files
+            optionSet.Add(
+                "<>",
+                "Input files.",
+                delegate(string v)
+                {
+                    if (!File.Exists(v))
+                    {
+                        throw new OptionException(String.Format("Input file or option '{0}' doesn't exist.", v), String.Empty);
+                    }
+
+                    FileInfo file  = new FileInfo(v);
+                    if (file.Extension.ToLower() == ".exe")
+                    {
+                        if (isExecutable)
+                        {
+                            // there are more than one exe files in the list
+                            throw new OptionException("Multiple executables aren't allowed.", String.Empty);
+                        }
+
+                        isExecutable = true;
+                    }
+
+                    inputFiles.Add(file);
                 });
 
             #endregion
@@ -144,35 +171,11 @@ namespace Mosa.Tools.Compiler
                     return;
                 }
 
-                List<string> files = optionSet.Parse(args);
+                optionSet.Parse(args);
 
-                if (files.Count == 0)
+                if (inputFiles.Count == 0)
                 {
                     throw new OptionException("No input file(s) specified.", String.Empty);
-                }
-
-                inputFiles = new List<FileInfo>();
-
-                for (int i = 0; i < files.Count; i++)
-                {
-                    if (!File.Exists(files[i]))
-                    {
-                        throw new OptionException(String.Format("Input file or option '{0}' doesn't exist.", files[i]), String.Empty);
-                    }
-
-                    FileInfo file  = new FileInfo(files[i]);
-                    if (file.Extension.ToLower() == ".exe")
-                    {
-                        if (isExecutable)
-                        {
-                            // there are more than one exe files in the list
-                            throw new OptionException("Multiple executables aren't allowed.", String.Empty);
-                        }
-
-                        isExecutable = true;
-                    }
-
-                    inputFiles.Add(file);
                 }
 
                 // Process boot format:
@@ -290,6 +293,10 @@ namespace Mosa.Tools.Compiler
             }
         }
 
+        /// <summary>
+        /// Shows an error and a short information text.
+        /// </summary>
+        /// <param name="message">The error message to show.</param>
         private void ShowError(string message)
         {
             Console.WriteLine(usageString);
@@ -300,6 +307,9 @@ namespace Mosa.Tools.Compiler
             Console.WriteLine ("Run 'mosacl --help' for more information.");
         }
 
+        /// <summary>
+        /// Shows a short help text pointing to the '--help' option.
+        /// </summary>
         private void ShowShortHelp()
         {
             Console.WriteLine(usageString);
@@ -307,6 +317,9 @@ namespace Mosa.Tools.Compiler
             Console.WriteLine ("Run 'mosacl --help' for more information.");
         }
 
+        /// <summary>
+        /// Shows the full help containing descriptions for all possible options.
+        /// </summary>
         private void ShowHelp()
         {
             Console.WriteLine(usageString);
