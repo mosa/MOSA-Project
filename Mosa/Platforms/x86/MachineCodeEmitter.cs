@@ -2104,7 +2104,7 @@ namespace Mosa.Platforms.x86
         private void Emit(byte[] code, byte? regField, Operand dest, Operand src)
         {
             byte? sib = null, modRM = null;
-            IntPtr? displacement = null;
+            MemoryOperand displacement = null;
 
             // Write the opcode
             _codeStream.Write(code, 0, code.Length);
@@ -2125,17 +2125,7 @@ namespace Mosa.Platforms.x86
 
             // Add displacement to the code
             if (null != displacement)
-            {
-                LabelOperand label = src as LabelOperand;
-                if (null != label)
-                {
-                    int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-                    displacement = new IntPtr(_linker.Link(LinkType.AbsoluteAddress|LinkType.I4, _compiler.Method, pos, 0, label.Name));
-                }
-
-                byte[] disp = BitConverter.GetBytes(displacement.Value.ToInt32());
-                _codeStream.Write(disp, 0, disp.Length);
-            }
+                EmitDisplacement(displacement);
 
             // Add immediate bytes
             if (dest is ConstantOperand)
@@ -2155,7 +2145,7 @@ namespace Mosa.Platforms.x86
         private void Emit(byte[] code, byte? regField, Operand dest, Operand src, Operand op3)
         {
             byte? sib = null, modRM = null;
-            IntPtr? displacement = null;
+            MemoryOperand displacement = null;
 
             // Write the opcode
             _codeStream.Write(code, 0, code.Length);
@@ -2176,19 +2166,7 @@ namespace Mosa.Platforms.x86
 
             // Add displacement to the code
             if (null != displacement)
-            {
-                LabelOperand label = src as LabelOperand;
-                if (null != label)
-                {
-                    // HACK: PIC and FP won't work for now, have to really fix this for moveable 
-                    // jitted code though
-                    displacement = IntPtr.Zero;
-                    _literals.Add(new Patch(label.Label, _codeStream.Position));
-                }
-
-                byte[] disp = BitConverter.GetBytes(displacement.Value.ToInt32());
-                _codeStream.Write(disp, 0, disp.Length);
-            }
+                EmitDisplacement(displacement);
 
             // Add immediate bytes
             if (op3 is ConstantOperand)
@@ -2223,6 +2201,33 @@ namespace Mosa.Platforms.x86
             _codeStream.Write(bytes, 0, bytes.Length);
         }
 
+        /// <summary>
+        /// Emits the displacement operand.
+        /// </summary>
+        /// <param name="displacement">The displacement operand.</param>
+        private void EmitDisplacement(MemoryOperand displacement)
+        {
+            byte[] disp;
+
+            MemberOperand member = displacement as MemberOperand;
+            LabelOperand label = displacement as LabelOperand;
+            if (null != label)
+            {
+                int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
+                disp = BitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name));
+            }
+            else if (null != member)
+            {
+                int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
+                disp = BitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member));
+            }
+            else
+            {
+                disp = BitConverter.GetBytes(displacement.Offset.ToInt32());
+            }
+
+            _codeStream.Write(disp, 0, disp.Length);
+        }
 
         /// <summary>
         /// Emits an immediate operand.
@@ -2304,7 +2309,7 @@ namespace Mosa.Platforms.x86
         /// <param name="sib">A potential SIB byte to emit.</param>
         /// <param name="displacement">An immediate displacement to emit.</param>
         /// <returns>The value of the modR/M byte.</returns>
-        private byte? CalculateModRM(byte? regField, Operand op1, Operand op2, out byte? sib, out IntPtr? displacement)
+        private byte? CalculateModRM(byte? regField, Operand op1, Operand op2, out byte? sib, out MemoryOperand displacement)
         {
             byte? modRM = null;
 
@@ -2341,7 +2346,7 @@ namespace Mosa.Platforms.x86
                 {
                     modRM |= (byte)(rop1.Register.RegisterCode << 3);
                 }
-                displacement = mop2.Offset;
+                displacement = mop2;
             }
             else if (null != mop2)
             {
@@ -2351,7 +2356,7 @@ namespace Mosa.Platforms.x86
                 {
                     modRM |= (byte)(rop1.Register.RegisterCode << 3);
                 }
-                displacement = mop2.Offset;
+                displacement = mop2;
             }
             else if (null != mop1 && null != mop1.Base)
             {
@@ -2361,7 +2366,7 @@ namespace Mosa.Platforms.x86
                 {
                     modRM |= (byte)(rop2.Register.RegisterCode << 3);
                 }
-                displacement = mop1.Offset;
+                displacement = mop1;
             }
             else if (null != mop1)
             {
@@ -2371,7 +2376,7 @@ namespace Mosa.Platforms.x86
                 {
                     modRM |= (byte)(rop2.Register.RegisterCode << 3);
                 }
-                displacement = mop1.Offset;
+                displacement = mop1;
             }
             else if (null != rop1)
             {

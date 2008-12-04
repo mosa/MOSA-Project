@@ -27,16 +27,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Contains the VM representation of the static field to store to.
         /// </summary>
-        private RuntimeField _field;
-
-        /// <summary>
-        /// Gets the field.
-        /// </summary>
-        /// <value>The field.</value>
-        public RuntimeField Field
-        {
-            get { return _field; }
-        }
+        private RuntimeField field;
 
         #endregion // Data members
 
@@ -57,16 +48,35 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Initializes a new instance of the <see cref="StsfldInstruction"/> class.
         /// </summary>
-        /// <param name="target">The target.</param>
+        /// <param name="target">The target field.</param>
         /// <param name="value">The value.</param>
-        public StsfldInstruction(Operand target, Operand value) :
+        /// <exception cref="System.ArgumentNullException"><paramref name="target"/> or <paramref name="value"/> is null.</exception>
+        public StsfldInstruction(RuntimeField target, Operand value) :
             base(OpCode.Stsfld, 1)
         {
-            SetResult(0, target);
+            if (target == null)
+                throw new ArgumentNullException(@"target");
+            if (value == null)
+                throw new ArgumentNullException(@"value");
+
+            this.field = target;
             SetOperand(0, value);
         }
 
         #endregion // Construction
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the field.
+        /// </summary>
+        /// <value>The field.</value>
+        public RuntimeField Field
+        {
+            get { return this.field; }
+        }
+
+        #endregion // Properties
 
         #region Methods
 
@@ -83,11 +93,11 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Decode the base class
             base.Decode(decoder);
 
-            // Read the _stackFrameIndex from the code
+            // Read the field from the code
             TokenTypes token;
             decoder.Decode(out token);
-            _field = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
-            Debug.Assert((_field.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
+            this.field = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
+            Debug.Assert((this.field.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
         }
 
         /// <summary>
@@ -96,7 +106,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
-            return String.Format("IL stsfld ; {0}.{1} = {2}", _field.DeclaringType.FullName, _field.Name, this.Operands[0]);
+            return String.Format("IL stsfld ; {0}.{1} = {2}", this.field.DeclaringType.FullName, this.field.Name, this.Operands[0]);
         }
 
         /// <summary>

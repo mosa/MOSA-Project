@@ -44,6 +44,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
         public TypeInitializerSchedulerStage()
         {
             this.instructions = new List<Instruction>();
+            this.instructions.Add(new PrologueInstruction(0));
         }
 
         #endregion // Construction
@@ -81,8 +82,11 @@ namespace Mosa.Tools.Compiler.TypeInitializers
             // Any initializers to run?
             if (this.instructions.Count > 0)
             {
-                // FIXME: Add a call to the current entry point to the scheduler
-                this.instructions.Add(new CallInstruction(compiler.Assembly.EntryPoint));
+                // Add a call to the current entry point to the scheduler
+                this.instructions.AddRange(new Instruction[] {
+                    new CallInstruction(compiler.Assembly.EntryPoint),
+                    new EpilogueInstruction(0)
+                });
 
                 CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", this.instructions);
 

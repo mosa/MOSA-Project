@@ -18,25 +18,16 @@ using Mosa.Runtime.Vm;
 namespace Mosa.Runtime.CompilerFramework.IL
 {
     /// <summary>
-    /// 
+    /// Represents a CIL load instruction for a static field.
     /// </summary>
     public class LdsfldInstruction : LoadInstruction
     {
         #region Data members
 
         /// <summary>
-        /// 
+        /// Holds the field of the load instruction.
         /// </summary>
-        private RuntimeField _field;
-
-        /// <summary>
-        /// Gets or sets the field1.
-        /// </summary>
-        /// <value>The field1.</value>
-        public RuntimeField Field1
-        {
-            get { return _field; }
-        }
+        private RuntimeField field;
 
         #endregion // Data members
 
@@ -49,7 +40,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
         public LdsfldInstruction(OpCode code)
             : base(code)
         {
-            _field = Field;
             Debug.Assert(OpCode.Ldsfld == code);
             if (OpCode.Ldsfld != code)
                 throw new ArgumentException(@"Invalid opcode.", @"code");
@@ -63,7 +53,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// Retrieves the _stackFrameIndex loaded by this instruction.
         /// </summary>
         /// <value>The field.</value>
-        public RuntimeField Field { get { return _field; } }
+        public RuntimeField Field 
+        { 
+            get { return this.field; }
+        }
 
         #endregion // Properties
 
@@ -85,10 +78,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Read the _stackFrameIndex from the code
             TokenTypes token;
             decoder.Decode(out token);
-            _field = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
+            this.field = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
 
-            Debug.Assert((_field.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
-            SetResult(0, decoder.Compiler.CreateResultOperand(_field.Type));
+            Debug.Assert((this.field.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
+            SetResult(0, decoder.Compiler.CreateResultOperand(field.Type));
         }
 
         /// <summary>
@@ -97,7 +90,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <returns>The code as a string value.</returns>
         public override string ToString()
         {
-            return String.Format("IL ldsfld ; {0} = {1}.{2}", this.Results[0], _field.DeclaringType.FullName, _field.Name);
+            return String.Format("IL ldsfld ; {0} = {1}.{2}", this.Results[0], this.field.DeclaringType.FullName, this.field.Name);
         }
 
         /// <summary>

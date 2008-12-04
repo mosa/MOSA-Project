@@ -176,23 +176,25 @@ namespace Mosa.Runtime.Linker.PE
             if (this.symbolsResolved == false)
                 throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
 
+            // Retrieve the text section
+            PortableExecutableLinkerSection text = (PortableExecutableLinkerSection)GetSection(SectionKind.Text);
+            // Calculate the patch offset
+            long offset = (methodAddress - text.Address.ToInt64()) + methodOffset;
+
             if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
             {
                 // FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
                 // the runtime loader must patch this link request, we'll fail it until we can do relocations.
-                throw new NotSupportedException(@".reloc section not supported.");
+                //throw new NotSupportedException(@".reloc section not supported.");
             }
             else
             {
-                // Retrieve the text section
-                PortableExecutableLinkerSection text = (PortableExecutableLinkerSection)GetSection(SectionKind.Text);
-                // Calculate the relative offset
-                long value = targetAddress - (methodAddress + methodRelativeBase);
-                // Calculate the patch offset
-                long offset = (methodAddress - text.Address.ToInt64()) + methodOffset;
-                // Save the stream position
-                text.ApplyPatch(offset, linkType, value);
+                // Change the absolute into a relative offset
+                targetAddress = targetAddress - (methodAddress + methodRelativeBase);
             }
+
+            // Save the stream position
+            text.ApplyPatch(offset, linkType, targetAddress);
         }
 
         /// <summary>

@@ -75,8 +75,15 @@
   <Class Name="Mosa.Runtime.CompilerFramework.LabelOperand">
     <Position X="15.5" Y="8.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAEAAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAEAAAAAAEABAAAAQAAAAEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>CompilerFramework\LabelOperand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mosa.Runtime.CompilerFramework.MemberOperand">
+    <Position X="10.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAIAIAACAAAAAAAAAA=</HashCode>
+      <FileName>CompilerFramework\MemberOperand.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Tahoma" Size="8.25" />

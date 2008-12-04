@@ -68,7 +68,7 @@ namespace Mosa.Tools.Compiler
         /// <returns>The method signature.</returns>
         protected override MethodSignature GetMethodSignature()
         {
-            return new MethodSignature(TokenTypes.Assembly);
+            return new MethodSignature(new SigType(CilElementType.Void), new SigType[0]);
         }
 
         #endregion // RuntimeMethod Overrides

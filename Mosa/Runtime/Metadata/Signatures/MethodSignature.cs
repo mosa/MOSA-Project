@@ -130,6 +130,26 @@ namespace Mosa.Runtime.Metadata.Signatures
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MethodSignature"/> class.
+        /// </summary>
+        /// <param name="returnType">Type of the return value.</param>
+        /// <param name="parameters">The parameter types.</param>
+        public MethodSignature(SigType returnType, SigType[] parameters)
+        {
+            if (returnType == null)
+                throw new ArgumentNullException(@"returnType");
+            if (parameters == null)
+                throw new ArgumentNullException(@"parameters");
+
+            this.token = TokenTypes.Assembly;
+            this._callingConvention = CallingConvention.Default;
+            this._hasExplicitThis = this._hasThis = false;
+            this._parameters = parameters;
+            this._returnType = returnType;
+            this._genericParameterCount = 0;
+        }
+
+        /// <summary>
         /// Parses the specified provider.
         /// </summary>
         /// <param name="provider">The provider.</param>
