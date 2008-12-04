@@ -17,7 +17,7 @@ namespace Mosa.Runtime.Linker.Elf
     /// Specifies the data encoding of the 
     /// processor-specific data in the object file. 
     /// </summary>
-    public enum Elf32IdentData
+    public enum Elf32IdentData : byte
     {
         /// <summary>
         /// Invalid data encoding

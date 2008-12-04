@@ -79,10 +79,10 @@ namespace Mosa.Runtime.Linker.Elf.Sections
         /// <summary>
         /// Writes the specified fs.
         /// </summary>
-        /// <param name="fs">The fs.</param>
-        public void Write(System.IO.FileStream fs)
+        /// <param name="writer">The writer.</param>
+        public void Write(System.IO.BinaryWriter writer)
         {
-            System.IO.BinaryWriter writer = new System.IO.BinaryWriter(fs);
+            Address = (uint)writer.BaseStream.Position;
             writer.Write(Name);
             writer.Write((uint)Type);
             writer.Write((uint)Flags);
@@ -93,6 +93,25 @@ namespace Mosa.Runtime.Linker.Elf.Sections
             writer.Write(Info);
             writer.Write(AddressAlignment);
             writer.Write(EntrySize);
+        }
+
+        /// <summary>
+        /// Reads the specified writer.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        public void Read(System.IO.BinaryReader reader)
+        {
+            Address = reader.ReadUInt16();
+            Name = reader.ReadUInt32();
+            Type = (Elf32SectionType)reader.ReadUInt16();
+            Flags = (Elf32SectionAttribute)reader.ReadUInt16();
+            Address = reader.ReadUInt32();
+            Offset = reader.ReadUInt32();
+            Size = reader.ReadUInt32();
+            Link = reader.ReadUInt32();
+            Info = reader.ReadUInt32();
+            AddressAlignment = reader.ReadUInt32();
+            EntrySize = reader.ReadUInt32();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Mosa.Runtime.Linker.Elf
     /// <summary>
     /// Identifies the file's class, or capacity.
     /// </summary>
-    public enum Elf32IdentClass
+    public enum Elf32IdentClass : byte
     {
         /// <summary>
         /// Invalid class

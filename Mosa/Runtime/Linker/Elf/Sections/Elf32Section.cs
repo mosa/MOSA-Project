@@ -37,6 +37,7 @@ namespace Mosa.Runtime.Linker.Elf.Sections
             : base(kind, name, address)
         {
             header = new Elf32SectionHeader();
+            length = 50;
         }
 
         /// <summary>
@@ -66,10 +67,24 @@ namespace Mosa.Runtime.Linker.Elf.Sections
         /// <summary>
         /// Writes the specified fs.
         /// </summary>
-        /// <param name="fs">The fs.</param>
-        public void Write(System.IO.FileStream fs)
+        /// <param name="writer">The writer.</param>
+        public void Write(System.IO.BinaryWriter writer)
         {
-            System.IO.BinaryWriter writer = new System.IO.BinaryWriter(fs);
+            Header.Offset = (uint)writer.BaseStream.Position;
+            Random rnd = new Random();
+            byte[] data = new byte[length];
+            rnd.NextBytes(data);
+            writer.Write(data);
+        }
+
+        /// <summary>
+        /// Writes the header.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        public void WriteHeader(System.IO.BinaryWriter writer)
+        {
+            Header.Size = (uint)Length;
+            Header.Write(writer);
         }
     }
 }

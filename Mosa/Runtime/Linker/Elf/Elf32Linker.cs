@@ -62,7 +62,7 @@ namespace Mosa.Runtime.Linker.Elf
             //base.Run(compiler);
           
             // Persist the Elf32 file now
-            CreateElf32File();
+            CreateElf32File(compiler);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Mosa.Runtime.Linker.Elf
         {
             get
             {
-                throw new NotImplementedException();
+                return @"Executable and Linking Format (ELF) Linker";
             }
         }
 
@@ -143,15 +143,50 @@ namespace Mosa.Runtime.Linker.Elf
         /// <summary>
         /// Creates the elf32 file.
         /// </summary>
-        private void CreateElf32File()
+        /// <param name="compiler">The compiler.</param>
+        private void CreateElf32File(Mosa.Runtime.CompilerFramework.AssemblyCompiler compiler)
         {
             using (System.IO.FileStream fs = new System.IO.FileStream(this.OutputFile, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None))
             {
                 Elf32Header header = new Elf32Header();
-                header.Write(fs);
+                header.Type = Elf32FileType.Executable;
+                header.Machine = Elf32MachineType.Intel386;
+                header.SectionHeaderNumber = (ushort)Sections.Count;
+                header.SectionHeaderOffset = header.ElfHeaderSize;
 
+                header.CreateIdent(Elf32IdentClass.Class32, Elf32IdentData.Data2LSB, null);
+
+                // Calculate the concatenated size of all section's data
+                uint offset = 0;
                 foreach (Mosa.Runtime.Linker.Elf.Sections.Elf32Section section in Sections)
-                    section.Write(fs);
+                {
+                    offset += (uint)section.Length;
+                }
+
+                // Calculate offsets
+                header.ProgramHeaderOffset = (uint)header.ElfHeaderSize + (uint)header.SectionHeaderEntrySize * (uint)header.SectionHeaderNumber + offset;
+                header.SectionHeaderStringIndex = (ushort)((ushort)header.ProgramHeaderOffset + (ushort)header.ProgramHeaderNumber * (ushort)header.ProgramHeaderEntrySize);
+
+                System.IO.BinaryWriter writer = new System.IO.BinaryWriter(fs);
+
+                // Write the ELF Header
+                header.Write(writer);
+
+                // Overjump the Section Header Table and write the section's data first
+                long tmp = fs.Position;
+                writer.Seek((int)(tmp + header.SectionHeaderNumber * header.SectionHeaderEntrySize), System.IO.SeekOrigin.Begin);
+
+                // Write the sections
+                foreach (Mosa.Runtime.Linker.Elf.Sections.Elf32Section section in Sections)
+                    section.Write(writer);
+
+
+                // Jump back to the Section Header Table
+                writer.Seek((int)tmp, System.IO.SeekOrigin.Begin);
+
+                // Write the section headers
+                foreach (Mosa.Runtime.Linker.Elf.Sections.Elf32Section section in Sections)
+                    section.WriteHeader(writer);
             }
         }
     }
