@@ -47,5 +47,21 @@ namespace Mosa.Runtime.Linker.Elf32
         /// 
         /// </summary>
         public uint Alignment;
+
+        /// <summary>
+        /// Writes the specified writer.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        public virtual void Write(System.IO.BinaryWriter writer)
+        {
+            writer.Write((uint)Type);
+            writer.Write(Offset);
+            writer.Write(VirtualAddress);
+            writer.Write(PhysicalAddress);
+            writer.Write(FileSize);
+            writer.Write(MemorySize);
+            writer.Write((uint)Flags);
+            writer.Write(Alignment);
+        }
     }
 }

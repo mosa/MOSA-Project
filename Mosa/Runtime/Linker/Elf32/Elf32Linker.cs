@@ -164,7 +164,6 @@ namespace Mosa.Runtime.Linker.Elf32
                 header.Machine = Elf32MachineType.Intel386;
                 header.SectionHeaderNumber = (ushort)(Sections.Count + 2);
                 header.SectionHeaderOffset = header.ElfHeaderSize;
-                header.ProgramHeaderNumber = 1;
 
                 header.CreateIdent(Elf32IdentClass.Class32, Elf32IdentData.Data2LSB, null);
 
@@ -179,6 +178,7 @@ namespace Mosa.Runtime.Linker.Elf32
 
                 // Calculate offsets
                 header.ProgramHeaderOffset = (uint)header.ElfHeaderSize + (uint)header.SectionHeaderEntrySize * (uint)header.SectionHeaderNumber + offset;
+                header.ProgramHeaderNumber = 1;
                 header.SectionHeaderStringIndex = 1;
 
                 System.IO.BinaryWriter writer = new System.IO.BinaryWriter(fs);
@@ -208,9 +208,16 @@ namespace Mosa.Runtime.Linker.Elf32
                     section.WriteHeader(writer);
 
                 Elf32ProgramHeader pheader = new Elf32ProgramHeader();
+                pheader.Alignment = 0;
+                pheader.FileSize = (uint)(GetSection(SectionKind.Text) as Elf32.Sections.Elf32Section).Length;
+                pheader.MemorySize = pheader.FileSize;
+                pheader.VirtualAddress = 0xFF0000;
                 pheader.Flags = Elf32ProgramHeaderFlags.Execute | Elf32ProgramHeaderFlags.Read | Elf32ProgramHeaderFlags.Write;
-                pheader.Offset = header.ProgramHeaderOffset;
+                pheader.Offset = (GetSection(SectionKind.Text) as Elf32.Sections.Elf32Section).Header.Offset;
                 pheader.Type = Elf32ProgramHeaderType.Load;
+
+                writer.Seek((int)header.ProgramHeaderOffset, System.IO.SeekOrigin.Begin);
+                pheader.Write(writer);
             }
         }
     }

@@ -103,7 +103,6 @@ namespace Mosa.Runtime.Linker.Elf32
             ElfHeaderSize = 0x34;
             ProgramHeaderEntrySize = 0x20;
             SectionHeaderEntrySize = 0x28;
-            SectionHeaderStringIndex = 1;
         }
 
         /// <summary>
@@ -120,14 +119,12 @@ namespace Mosa.Runtime.Linker.Elf32
             writer.Write(EntryAddress);
             writer.Write(ProgramHeaderOffset);
             writer.Write(SectionHeaderOffset);
-            Flags = 0;
             writer.Write(Flags);
             writer.Write(ElfHeaderSize);
             writer.Write(ProgramHeaderEntrySize);
             writer.Write(ProgramHeaderNumber);
             writer.Write(SectionHeaderEntrySize);
             writer.Write(SectionHeaderNumber);
-            SectionHeaderStringIndex = 1;
             writer.Write(SectionHeaderStringIndex);
         }
 
