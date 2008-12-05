@@ -109,7 +109,7 @@ namespace Mosa.Runtime.Linker.Elf64
         /// </returns>
         protected override System.IO.Stream Allocate(SectionKind section, int size, int alignment)
         {
-            Elf32.Sections.Elf32Section linkerSection = (Elf32.Sections.Elf32Section)GetSection(section);
+            Elf64.Sections.Elf64Section linkerSection = (Elf64.Sections.Elf64Section)GetSection(section);
             return linkerSection.Allocate(size, alignment);
         }
 
@@ -183,7 +183,7 @@ namespace Mosa.Runtime.Linker.Elf64
                 header.SectionHeaderNumber = (ushort)(Sections.Count + 2);
                 header.SectionHeaderOffset = header.ElfHeaderSize;
 
-                header.CreateIdent(Elf64IdentClass.Class32, Elf64IdentData.Data2LSB, null);
+                header.CreateIdent(Elf64IdentClass.Class64, Elf64IdentData.Data2LSB, null);
 
                 // Calculate the concatenated size of all section's data
                 uint offset = 0;
