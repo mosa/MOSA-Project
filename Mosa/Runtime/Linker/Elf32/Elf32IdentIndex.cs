@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.Linker.Elf
+namespace Mosa.Runtime.Linker.Elf32
 {
     /// <summary>
     /// ELF provides an object file framework to support multiple processors, 

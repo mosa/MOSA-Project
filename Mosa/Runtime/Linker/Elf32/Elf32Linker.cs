@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.Linker;
 
-namespace Mosa.Runtime.Linker.Elf
+namespace Mosa.Runtime.Linker.Elf32
 {
     /// <summary>
     /// 
@@ -26,11 +26,11 @@ namespace Mosa.Runtime.Linker.Elf
         /// <summary>
         /// 
         /// </summary>
-        private Elf.Sections.Elf32NullSection nullSection;
+        private Elf32.Sections.Elf32NullSection nullSection;
         /// <summary>
         /// 
         /// </summary>
-        private Elf.Sections.Elf32StringTableSection stringTableSection;
+        private Elf32.Sections.Elf32StringTableSection stringTableSection;
 
         /// <summary>
         /// Retrieves the collection of sections created during compilation.
@@ -52,15 +52,15 @@ namespace Mosa.Runtime.Linker.Elf
             this.sections = new List<LinkerSection>();
 
             // Create the default section set
-            Sections.Elf32Section[] sections  = new Sections.Elf32Section[(int)SectionKind.Max];
+            Elf32.Sections.Elf32Section[] sections = new Sections.Elf32Section[(int)SectionKind.Max];
             sections[(int)SectionKind.Text]   = new Sections.Elf32CodeSection();
             sections[(int)SectionKind.Data]   = new Sections.Elf32DataSection();
             sections[(int)SectionKind.ROData] = new Sections.Elf32RoDataSection();
             sections[(int)SectionKind.BSS]    = new Sections.Elf32BssSection();
             this.sections.AddRange(sections);
 
-            nullSection = new Mosa.Runtime.Linker.Elf.Sections.Elf32NullSection();
-            stringTableSection = new Mosa.Runtime.Linker.Elf.Sections.Elf32StringTableSection();
+            nullSection = new Mosa.Runtime.Linker.Elf32.Sections.Elf32NullSection();
+            stringTableSection = new Mosa.Runtime.Linker.Elf32.Sections.Elf32StringTableSection();
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace Mosa.Runtime.Linker.Elf
         /// </returns>
         protected override System.IO.Stream Allocate(SectionKind section, int size, int alignment)
         {
-            Elf.Sections.Elf32Section linkerSection = (Elf.Sections.Elf32Section)GetSection(section);
+            Elf32.Sections.Elf32Section linkerSection = (Elf32.Sections.Elf32Section)GetSection(section);
             return linkerSection.Allocate(size, alignment);
         }
 
@@ -169,7 +169,7 @@ namespace Mosa.Runtime.Linker.Elf
 
                 // Calculate the concatenated size of all section's data
                 uint offset = 0;
-                foreach (Mosa.Runtime.Linker.Elf.Sections.Elf32Section section in Sections)
+                foreach (Mosa.Runtime.Linker.Elf32.Sections.Elf32Section section in Sections)
                 {
                     offset += (uint)section.Length;
                 }
@@ -193,7 +193,7 @@ namespace Mosa.Runtime.Linker.Elf
                 stringTableSection.Write(writer);
 
                 // Write the sections
-                foreach (Mosa.Runtime.Linker.Elf.Sections.Elf32Section section in Sections)
+                foreach (Mosa.Runtime.Linker.Elf32.Sections.Elf32Section section in Sections)
                     section.Write(writer);
 
                 // Jump back to the Section Header Table
@@ -203,7 +203,7 @@ namespace Mosa.Runtime.Linker.Elf
                 stringTableSection.WriteHeader(writer);
 
                 // Write the section headers
-                foreach (Mosa.Runtime.Linker.Elf.Sections.Elf32Section section in Sections)
+                foreach (Mosa.Runtime.Linker.Elf32.Sections.Elf32Section section in Sections)
                     section.WriteHeader(writer);
             }
         }

@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.Linker.Elf.Sections
+namespace Mosa.Runtime.Linker.Elf32.Sections
 {
     /// <summary>
     /// Describes miscellaneous attributes for a section.
