@@ -19,7 +19,9 @@ namespace Mosa.Kernel.Memory.X86
 	/// </remarks>
 	public sealed class VirtualPageManager
 	{
-		private IPhysicalPageManager physicalPageManager;
+		private const ulong StartVirtualSpace = 1024 * 1024 * 32; // 32Mb
+
+		private static IPhysicalPageManager _physicalPageManager;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VirtualPageManager"/> class.
@@ -27,22 +29,31 @@ namespace Mosa.Kernel.Memory.X86
 		/// <param name="physicalPageManager">The physical page manager.</param>
 		public VirtualPageManager(IPhysicalPageManager physicalPageManager)
 		{
-			this.physicalPageManager = physicalPageManager;
+			_physicalPageManager = physicalPageManager;
+
+			DumbVirtualPageAllocator.Setup(StartVirtualSpace, 0xFFFFFFFFFFFFFFFF, physicalPageManager.PageSize);
 		}
 
 		/// <summary>
 		/// Reserves or commits a range of pages.
 		/// </summary>
 		/// <param name="pages">The pages to allocate</param>
-		/// <param name="protectionFlags">One or more flag that controls the protection of the retrieved pages.</param>
 		/// <returns>An IntPtr to the allocated memory.</returns>
-		public System.IntPtr Allocate(ulong pages, PageProtectionFlags protectionFlags)
+		public ulong Allocate(ulong pages)
 		{
+			// First reserve virtual memory space
+			ulong reservedStart = DumbVirtualPageAllocator.Allocate(pages);
+
+			if (reservedStart == 0)
+				return 0; // failed to reserve any pages
+
 			// Get pages from physical page manager
+			// [TODO]
 
-			// Map pags to virtual memory spaces (that fits)
+			// Map pages to virtual memory spaces 
+			// [TODO]
 
-			return System.IntPtr.Zero;	// TODO
+			return 0x00;	// TODO
 		}
 
 		/// <summary>
@@ -50,13 +61,15 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		/// <param name="address">The starting address, where pages are freed.</param>
 		/// <param name="pages">The number of pages.</param>
-		public void Free(System.IntPtr address, ulong pages)
+		public void Free(ulong address, ulong pages)
 		{
-			// TODO
+			DumbVirtualPageAllocator.Free(address, pages);
 
-			// Remove pages from virtual memory spaces
+			// Unmap pages to virtual memory spaces 
+			// [TODO]
 
 			// Release to physical page manager			
+			// [TODO]
 		}
 
 		/// <summary>
@@ -66,7 +79,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <param name="pages">The number of pages.</param>
 		/// <param name="protectionFlags">The new set of protection flags.</param>
 		/// <returns>The old protection flags of the first page in the range of memory. </returns>
-		public PageProtectionFlags Protect(System.IntPtr address, ulong pages, PageProtectionFlags protectionFlags)
+		public PageProtectionFlags Protect(ulong address, ulong pages, PageProtectionFlags protectionFlags)
 		{
 			return PageProtectionFlags.NoAccess;	// TODO
 		}
@@ -74,17 +87,17 @@ namespace Mosa.Kernel.Memory.X86
 		/// <summary>
 		/// Retrieves the size of a single memory page.
 		/// </summary>
-		public ulong PageSize { get { return physicalPageManager.PageSize; } }
+		public ulong PageSize { get { return _physicalPageManager.PageSize; } }
 
 		/// <summary>
 		/// Retrieves the amount of virtual memory available in the system.
 		/// </summary>
-		public ulong TotalMemory { get { return physicalPageManager.TotalPages * physicalPageManager.PageSize; } }
+		public ulong TotalMemory { get { return _physicalPageManager.TotalPages * _physicalPageManager.PageSize; } }
 
 		/// <summary>
 		/// Retrieves the amount of virtual memory currently in use.
 		/// </summary>
-		public ulong TotalMemoryInUse { get { return physicalPageManager.TotalPagesInUse * physicalPageManager.PageSize; } }
+		public ulong TotalMemoryInUse { get { return _physicalPageManager.TotalPagesInUse * _physicalPageManager.PageSize; } }
 
 		//private uint VirtualToPhysicalAddress(uint address)
 

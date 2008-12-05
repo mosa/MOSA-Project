@@ -33,7 +33,7 @@ namespace Mosa.Kernel.Memory
 		/// <summary>
 		/// Retrieves the size of a single memory page.
 		/// </summary>
-		ulong PageSize { get; }
+		uint PageSize { get; }
 
 		/// <summary>
 		/// Retrieves the amount of total physical memory pages available in the system.
