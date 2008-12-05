@@ -120,6 +120,7 @@ namespace Mosa.Runtime.Linker.Elf32
             writer.Write(EntryAddress);
             writer.Write(ProgramHeaderOffset);
             writer.Write(SectionHeaderOffset);
+            Flags = 0;
             writer.Write(Flags);
             writer.Write(ElfHeaderSize);
             writer.Write(ProgramHeaderEntrySize);

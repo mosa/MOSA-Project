@@ -79,7 +79,7 @@ namespace Mosa.Tools.Compiler
         /// </summary>
         public Compiler()
         {
-            usageString = "Usage: mosacl -o outputfile --arch=[x86|x64] --format=[ELF|PE] --boot=[mb0.7] {additional options} inputfiles";
+            usageString = "Usage: mosacl -o outputfile --arch=[x86|x64] --format=[ELF32|ELF64|PE] --boot=[mb0.7] {additional options} inputfiles";
             optionSet = new OptionSet();
             inputFiles = new List<FileInfo>();
 
