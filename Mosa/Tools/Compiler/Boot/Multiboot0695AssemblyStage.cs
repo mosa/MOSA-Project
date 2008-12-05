@@ -17,7 +17,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
 
 using NDesk.Options;
-using Mosa.Runtime.Linker.Elf;
+using Mosa.Runtime.Linker.Elf32;
 
 namespace Mosa.Tools.Compiler.Boot
 {

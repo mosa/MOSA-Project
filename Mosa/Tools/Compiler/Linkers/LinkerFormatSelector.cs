@@ -43,7 +43,12 @@ namespace Mosa.Tools.Compiler.Linkers
         /// <summary>
         /// Holds the ELF32 linker.
         /// </summary>
-        private Elf32LinkerWrapper elfLinker = null;
+        private Elf32LinkerWrapper elf32Linker = null;
+
+        /// <summary>
+        /// Holds the ELF64 linker.
+        /// </summary>
+        private Elf64LinkerWrapper elf64Linker = null;
 
         /// <summary>
         /// Holds the output file of the linker.
@@ -60,7 +65,8 @@ namespace Mosa.Tools.Compiler.Linkers
         public LinkerFormatSelector()
         {
             this.peLinker = new PortableExecutableLinkerWrapper();
-            this.elfLinker = new Elf32LinkerWrapper();
+            this.elf32Linker = new Elf32LinkerWrapper();
+            this.elf64Linker = new Elf64LinkerWrapper();
             this.implementation = null;
         }
 
@@ -161,7 +167,8 @@ namespace Mosa.Tools.Compiler.Linkers
                 {
                     this.outputFile =
                         peLinker.Wrapped.OutputFile =
-                        elfLinker.Wrapped.OutputFile = 
+                        elf32Linker.Wrapped.OutputFile = 
+                        elf64Linker.Wrapped.OutputFile = 
                             file;
                 }
             );
@@ -170,7 +177,11 @@ namespace Mosa.Tools.Compiler.Linkers
             if (options != null)
                 options.AddOptions(optionSet);
 
-            options = elfLinker as IHasOptions;
+            options = elf32Linker as IHasOptions;
+            if (options != null)
+                options.AddOptions(optionSet);
+
+            options = elf64Linker as IHasOptions;
             if (options != null)
                 options.AddOptions(optionSet);
         }
@@ -350,8 +361,11 @@ namespace Mosa.Tools.Compiler.Linkers
         {
             switch (format.ToLower())
             {
-                case "elf":
-                    return this.elfLinker.Wrapped;
+                case "elf32":
+                    return this.elf32Linker.Wrapped;
+
+                case "elf64":
+                    return this.elf32Linker.Wrapped;
 
                 case "pe":
                     return this.peLinker.Wrapped;
