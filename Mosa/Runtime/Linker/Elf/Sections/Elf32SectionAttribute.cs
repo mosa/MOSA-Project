@@ -33,6 +33,10 @@ namespace Mosa.Runtime.Linker.Elf.Sections
         /// </summary>
         ExecuteInstructions = 0x00000004,
         /// <summary>
+        /// 
+        /// </summary>
+        AllocExecute        = 0x00000006,
+        /// <summary>
         /// All bits included in this mask are reserved for processor-specific semantics. 
         /// </summary>
         ProcessorMask       = 0xF0000000,

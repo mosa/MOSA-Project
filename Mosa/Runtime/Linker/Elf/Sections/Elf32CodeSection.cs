@@ -25,7 +25,7 @@ namespace Mosa.Runtime.Linker.Elf.Sections
             : base(Mosa.Runtime.Linker.SectionKind.Text, @".text", IntPtr.Zero)
         {
             header.Type = Elf32SectionType.ProgBits;
-            header.Flags = Elf32SectionAttribute.Alloc | Elf32SectionAttribute.ExecuteInstructions;
+            header.Flags = Elf32SectionAttribute.AllocExecute;
         }
     }
 }

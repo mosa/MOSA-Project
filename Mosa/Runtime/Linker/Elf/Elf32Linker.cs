@@ -23,6 +23,14 @@ namespace Mosa.Runtime.Linker.Elf
         /// 
         /// </summary>
         private List<Mosa.Runtime.Linker.LinkerSection> sections;
+        /// <summary>
+        /// 
+        /// </summary>
+        private Elf.Sections.Elf32NullSection nullSection;
+        /// <summary>
+        /// 
+        /// </summary>
+        private Elf.Sections.Elf32StringTableSection stringTableSection;
 
         /// <summary>
         /// Retrieves the collection of sections created during compilation.
@@ -50,6 +58,9 @@ namespace Mosa.Runtime.Linker.Elf
             sections[(int)SectionKind.ROData] = new Sections.Elf32RoDataSection();
             sections[(int)SectionKind.BSS]    = new Sections.Elf32BssSection();
             this.sections.AddRange(sections);
+
+            nullSection = new Mosa.Runtime.Linker.Elf.Sections.Elf32NullSection();
+            stringTableSection = new Mosa.Runtime.Linker.Elf.Sections.Elf32StringTableSection();
         }
 
         /// <summary>
@@ -59,7 +70,7 @@ namespace Mosa.Runtime.Linker.Elf
         public override void Run(Mosa.Runtime.CompilerFramework.AssemblyCompiler compiler)
         {
             // Resolve all symbols first
-            //base.Run(compiler);
+            base.Run(compiler);
           
             // Persist the Elf32 file now
             CreateElf32File(compiler);
@@ -98,9 +109,8 @@ namespace Mosa.Runtime.Linker.Elf
         /// </returns>
         protected override System.IO.Stream Allocate(SectionKind section, int size, int alignment)
         {
-            Sections.Elf32Section linkerSection = (Sections.Elf32Section)this.sections[(int)section];
-            //return linkerSection.Allocate(size, alignment);
-            return System.IO.Stream.Null;
+            Elf.Sections.Elf32Section linkerSection = (Elf.Sections.Elf32Section)GetSection(section);
+            return linkerSection.Allocate(size, alignment);
         }
 
         /// <summary>
@@ -137,7 +147,8 @@ namespace Mosa.Runtime.Linker.Elf
         protected override bool IsResolved(string symbol, out long address)
         {
             address = 0;
-            return base.IsResolved(symbol, out address);
+            return true;
+            //return base.IsResolved(symbol, out address);*/
         }
 
         /// <summary>
@@ -151,7 +162,7 @@ namespace Mosa.Runtime.Linker.Elf
                 Elf32Header header = new Elf32Header();
                 header.Type = Elf32FileType.Executable;
                 header.Machine = Elf32MachineType.Intel386;
-                header.SectionHeaderNumber = (ushort)Sections.Count;
+                header.SectionHeaderNumber = (ushort)(Sections.Count + 2);
                 header.SectionHeaderOffset = header.ElfHeaderSize;
 
                 header.CreateIdent(Elf32IdentClass.Class32, Elf32IdentData.Data2LSB, null);
@@ -162,6 +173,8 @@ namespace Mosa.Runtime.Linker.Elf
                 {
                     offset += (uint)section.Length;
                 }
+                offset += (uint)nullSection.Length;
+                offset += (uint)stringTableSection.Length;
 
                 // Calculate offsets
                 header.ProgramHeaderOffset = (uint)header.ElfHeaderSize + (uint)header.SectionHeaderEntrySize * (uint)header.SectionHeaderNumber + offset;
@@ -176,13 +189,18 @@ namespace Mosa.Runtime.Linker.Elf
                 long tmp = fs.Position;
                 writer.Seek((int)(tmp + header.SectionHeaderNumber * header.SectionHeaderEntrySize), System.IO.SeekOrigin.Begin);
 
+                nullSection.Write(writer);
+                stringTableSection.Write(writer);
+
                 // Write the sections
                 foreach (Mosa.Runtime.Linker.Elf.Sections.Elf32Section section in Sections)
                     section.Write(writer);
 
-
                 // Jump back to the Section Header Table
                 writer.Seek((int)tmp, System.IO.SeekOrigin.Begin);
+
+                nullSection.WriteHeader(writer);
+                stringTableSection.WriteHeader(writer);
 
                 // Write the section headers
                 foreach (Mosa.Runtime.Linker.Elf.Sections.Elf32Section section in Sections)

@@ -103,6 +103,7 @@ namespace Mosa.Runtime.Linker.Elf
             ElfHeaderSize = 0x34;
             ProgramHeaderEntrySize = 0x20;
             SectionHeaderEntrySize = 0x28;
+            SectionHeaderStringIndex = 1;
         }
 
         /// <summary>
@@ -125,6 +126,7 @@ namespace Mosa.Runtime.Linker.Elf
             writer.Write(ProgramHeaderNumber);
             writer.Write(SectionHeaderEntrySize);
             writer.Write(SectionHeaderNumber);
+            SectionHeaderStringIndex = 1;
             writer.Write(SectionHeaderStringIndex);
         }
 
@@ -192,9 +194,9 @@ namespace Mosa.Runtime.Linker.Elf
         /// </summary>
         public void PrintInfo()
         {
-            Console.WriteLine("-----------");
-            Console.WriteLine("Elf32 Info:");
-            Console.WriteLine("-----------");
+            Console.WriteLine("--------------");
+            Console.WriteLine("| Elf32 Info:");
+            Console.WriteLine("--------------");
             Console.WriteLine();
             Console.WriteLine("Magic number equals 0x7F454C46: Yes");
             Console.WriteLine("Ident class:                    {0} ({1})", ((Elf32IdentClass)Ident[4]).ToString(), ((Elf32IdentClass)Ident[4]).ToString("x"));

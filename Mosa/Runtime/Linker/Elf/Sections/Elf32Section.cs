@@ -25,7 +25,7 @@ namespace Mosa.Runtime.Linker.Elf.Sections
         /// <summary>
         /// 
         /// </summary>
-        protected long length = 0;
+        protected System.IO.MemoryStream sectionStream;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Elf32Section"/> class.
@@ -37,7 +37,8 @@ namespace Mosa.Runtime.Linker.Elf.Sections
             : base(kind, name, address)
         {
             header = new Elf32SectionHeader();
-            length = 50;
+            header.Name = Elf32StringTableSection.AddString(name);
+            sectionStream = new System.IO.MemoryStream();
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace Mosa.Runtime.Linker.Elf.Sections
         {
             get 
             {
-                return length;
+                return this.sectionStream.Length;
             }
         }
 
@@ -65,26 +66,53 @@ namespace Mosa.Runtime.Linker.Elf.Sections
         }
 
         /// <summary>
+        /// Allocates the specified size.
+        /// </summary>
+        /// <param name="size">The size.</param>
+        /// <param name="alignment">The alignment.</param>
+        /// <returns></returns>
+        public System.IO.Stream Allocate(int size, int alignment)
+        {
+            // Do we need to ensure a specific alignment?
+            if (alignment > 1)
+                InsertPadding(alignment);
+
+            return this.sectionStream;
+        }
+
+        /// <summary>
         /// Writes the specified fs.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        public void Write(System.IO.BinaryWriter writer)
+        public virtual void Write(System.IO.BinaryWriter writer)
         {
             Header.Offset = (uint)writer.BaseStream.Position;
-            Random rnd = new Random();
-            byte[] data = new byte[length];
-            rnd.NextBytes(data);
-            writer.Write(data);
+            this.sectionStream.WriteTo(writer.BaseStream);
         }
 
         /// <summary>
         /// Writes the header.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        public void WriteHeader(System.IO.BinaryWriter writer)
+        public virtual void WriteHeader(System.IO.BinaryWriter writer)
         {
             Header.Size = (uint)Length;
             Header.Write(writer);
         }
+
+        #region Internals
+
+        /// <summary>
+        /// Pads the stream with zeros until the specific alignment is reached.
+        /// </summary>
+        /// <param name="alignment">The alignment.</param>
+        private void InsertPadding(int alignment)
+        {
+            long address = this.Address.ToInt64() + this.sectionStream.Length;
+            int pad = (int)(alignment - (address % alignment));
+            this.sectionStream.Write(new byte[pad], 0, pad);
+        }
+
+        #endregion // Internals
     }
 }
