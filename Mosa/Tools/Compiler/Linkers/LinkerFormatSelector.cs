@@ -153,7 +153,7 @@ namespace Mosa.Tools.Compiler.Linkers
 
             optionSet.Add(
                 "f|format=",
-                "Select the format of the binary file to create [{ELF|PE}].",
+                "Select the format of the binary file to create [{ELF32|ELF64|PE}].",
                 delegate(string format)
                 {
                     this.implementation = SelectImplementation(format);

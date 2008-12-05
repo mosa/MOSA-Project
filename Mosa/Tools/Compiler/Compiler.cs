@@ -79,7 +79,7 @@ namespace Mosa.Tools.Compiler
         /// </summary>
         public Compiler()
         {
-            usageString = "Usage: mosacl -o outputfile --arch=[x86|x64] --format=[ELF32|ELF64|PE] --boot=[mb0.7] {additional options} inputfiles";
+            usageString = "Usage: mosacl -o outputfile --arch=[x86] --format=[ELF32|ELF64|PE] {--boot=[mb0.7]} {additional options} inputfiles";
             optionSet = new OptionSet();
             inputFiles = new List<FileInfo>();
 
@@ -208,6 +208,10 @@ namespace Mosa.Tools.Compiler
                 ShowError(e.Message);
                 return;
             }
+            
+            Console.WriteLine(this.ToString());
+            
+            Console.WriteLine("Compiling ...");
 
             Compile();
         }
@@ -234,8 +238,6 @@ namespace Mosa.Tools.Compiler
 
         private void Compile()
         {
-            Console.WriteLine(this.ToString());
-
             using (CompilationRuntime runtime = new CompilationRuntime()) {
                 
                 // Append the paths of the folder to the loader path
@@ -261,8 +263,21 @@ namespace Mosa.Tools.Compiler
                 {
                     IMetadataModule module = runtime.AssemblyLoader.Load(assembly.FullName);
                 }
-                */
-                IMetadataModule assemblyModule = runtime.AssemblyLoader.Load(this.inputFiles[0].FullName);
+                 */
+                
+                IMetadataModule assemblyModule;
+                FileInfo file = null;
+                
+                try
+                {
+                    file = this.inputFiles[0];
+                    assemblyModule = runtime.AssemblyLoader.Load(file.FullName);
+                }
+                catch(BadImageFormatException)
+                {
+                    ShowError(String.Format("Couldn't load input file {0} (invalid format).", file.FullName));
+                    return;
+                }
 
                 // Create the compiler
                 using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, assemblyModule))
@@ -305,6 +320,7 @@ namespace Mosa.Tools.Compiler
             Console.WriteLine (message);
             Console.WriteLine();
             Console.WriteLine ("Run 'mosacl --help' for more information.");
+            Console.WriteLine();
         }
 
         /// <summary>
