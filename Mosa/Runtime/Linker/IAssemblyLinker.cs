@@ -20,7 +20,7 @@ namespace Mosa.Runtime.Linker
     /// </summary>
     /// <remarks>
     /// The assembly linker collector performs runtime specific requests in order to resolve a metadata object
-    /// to its physical address in memory. All link requests require the metadata object, the request address
+    /// to its physical virtualAddress in memory. All link requests require the metadata object, the request virtualAddress
     /// and a relative flag. These are used to either resolve the request immediately or patch the code during
     /// a later linker stage, when all methods and fields have been compiled.
     /// <para/>
@@ -31,9 +31,9 @@ namespace Mosa.Runtime.Linker
         #region Properties
 
         /// <summary>
-        /// Gets the base address.
+        /// Gets the base virtualAddress.
         /// </summary>
-        /// <value>The base address.</value>
+        /// <value>The base virtualAddress.</value>
         long BaseAddress { get; }
 
         /// <summary>
@@ -41,6 +41,12 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         /// <value>The entry point symbol.</value>
         LinkerSymbol EntryPoint { get; set; }
+
+        /// <summary>
+        /// Gets the load alignment of sections.
+        /// </summary>
+        /// <value>The load alignment.</value>
+        long LoadSectionAlignment { get; }
 
         /// <summary>
         /// Retrieves the collection of sections created during compilation.
@@ -65,6 +71,12 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         /// <value>The time stamp.</value>
         DateTime TimeStamp { get; }
+
+        /// <summary>
+        /// Gets the virtual alignment of sections.
+        /// </summary>
+        /// <value>The virtual section alignment.</value>
+        long VirtualSectionAlignment { get; }
 
         #endregion // Properties
 
@@ -91,15 +103,40 @@ namespace Mosa.Runtime.Linker
         Stream Allocate(string name, SectionKind section, int size, int alignment);
 
         /// <summary>
+        /// Gets the section.
+        /// </summary>
+        /// <param name="sectionKind">Kind of the section.</param>
+        /// <returns>The section of the requested kind.</returns>
+        LinkerSection GetSection(SectionKind sectionKind);
+
+        /// <summary>
+        /// Retrieves a linker symbol.
+        /// </summary>
+        /// <param name="member">The runtime member to retrieve a symbol for.</param>
+        /// <returns>A linker symbol, which represents the runtime member.</returns>
+        /// <exception cref="System.ArgumentNullException"><paramref name="member"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">There's no symbol for the given member.</exception>
+        LinkerSymbol GetSymbol(RuntimeMember member);
+
+        /// <summary>
+        /// Retrieves a linker symbol.
+        /// </summary>
+        /// <param name="symbolName">The name of the symbol to retrieve.</param>
+        /// <returns>The named linker symbol.</returns>
+        /// <exception cref="System.ArgumentNullException"><paramref name="symbolName"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">There's no symbol of the given name.</exception>
+        LinkerSymbol GetSymbol(string symbolName);
+
+        /// <summary>
         /// Issues a linker request for the given runtime method.
         /// </summary>
         /// <param name="linkType">The type of link required.</param>
         /// <param name="method">The method the patched code belongs to.</param>
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-        /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
+        /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
         /// <param name="target">The method or static field to link against.</param>
         /// <returns>
-        /// The return value is the preliminary address to place in the generated machine 
+        /// The return value is the preliminary virtualAddress to place in the generated machine 
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
@@ -111,21 +148,29 @@ namespace Mosa.Runtime.Linker
         /// <param name="linkType">The type of link required.</param>
         /// <param name="method">The method the patched code belongs to.</param>
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-        /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
+        /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
         /// <param name="symbolName">The linker symbol name to link against.</param>
         /// <returns>
-        /// The return value is the preliminary address to place in the generated machine 
+        /// The return value is the preliminary virtualAddress to place in the generated machine 
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
         long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbolName);
 
         /// <summary>
-        /// Retrieves a linker symbol.
+        /// Issues a linker request for the given runtime method.
         /// </summary>
-        /// <param name="member">The runtime member to retrieve a symbol for.</param>
-        /// <returns>A linker symbol, which represents the runtime member.</returns>
-        LinkerSymbol GetSymbol(RuntimeMember member);
+        /// <param name="linkType">The type of link required.</param>
+        /// <param name="symbolName">The method the patched code belongs to.</param>
+        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
+        /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
+        /// <param name="targetSymbol">The linker symbol name to link against.</param>
+        /// <returns>
+        /// The return value is the preliminary virtualAddress to place in the generated machine 
+        /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
+        /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
+        /// </returns>
+        long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol);
 
         #endregion // Methods
     }

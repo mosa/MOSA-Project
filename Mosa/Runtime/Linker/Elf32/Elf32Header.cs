@@ -36,7 +36,7 @@ namespace Mosa.Runtime.Linker.Elf32
         /// </summary>
         public Elf32Version Version;
         /// <summary>
-        /// This member gives the virtual address to which the system first transfers control, 
+        /// This member gives the virtual virtualAddress to which the system first transfers control, 
         /// thus starting the process. If the file has no associated entry point, this member holds 
         /// zero. 
         /// </summary>
@@ -202,7 +202,7 @@ namespace Mosa.Runtime.Linker.Elf32
             Console.WriteLine("FileType:                       {0}", Type.ToString());
             Console.WriteLine("Machine:                        {0}", Machine.ToString());
             Console.WriteLine("Version:                        {0}", Version.ToString());
-            Console.WriteLine("Entry Address:                  0x{0}", EntryAddress.ToString("x"));
+            Console.WriteLine("Entry VirtualAddress:                  0x{0}", EntryAddress.ToString("x"));
             Console.WriteLine("ProgramHeaderOffset:            0x{0}", ProgramHeaderOffset.ToString("x"));
             Console.WriteLine("SectionHeaderOffset:            0x{0}", SectionHeaderOffset.ToString("x"));
             Console.WriteLine("Flags:                          0x{0}", Flags.ToString("x"));

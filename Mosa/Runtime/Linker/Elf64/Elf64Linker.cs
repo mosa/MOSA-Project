@@ -77,6 +77,26 @@ namespace Mosa.Runtime.Linker.Elf64
         }
 
         /// <summary>
+        /// Gets the load alignment of sections.
+        /// </summary>
+        /// <value>The load alignment.</value>
+        public override long LoadSectionAlignment
+        {
+            // TODO
+            get { throw new NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Gets the virtual alignment of sections.
+        /// </summary>
+        /// <value>The virtual section alignment.</value>
+        public override long VirtualSectionAlignment
+        {
+            // TODO
+            get { throw new NotImplementedException(); }
+        }
+
+        /// <summary>
         /// Retrieves the name of the compilation stage.
         /// </summary>
         /// <value>The name of the compilation stage.</value>
@@ -92,7 +112,7 @@ namespace Mosa.Runtime.Linker.Elf64
         /// Special resolution for internal calls.
         /// </summary>
         /// <param name="method">The internal call method to resolve.</param>
-        /// <returns>The address</returns>
+        /// <returns>The virtualAddress</returns>
         protected override long ResolveInternalCall(Mosa.Runtime.Vm.RuntimeMethod method)
         {
             return base.ResolveInternalCall(method);
@@ -114,10 +134,10 @@ namespace Mosa.Runtime.Linker.Elf64
         }
 
         /// <summary>
-        /// A request to patch already emitted code by storing the calculated address value.
+        /// A request to patch already emitted code by storing the calculated virtualAddress value.
         /// </summary>
         /// <param name="linkType">Type of the link.</param>
-        /// <param name="methodAddress">The virtual address of the method whose code is being patched.</param>
+        /// <param name="methodAddress">The virtual virtualAddress of the method whose code is being patched.</param>
         /// <param name="methodOffset">The value to store at the position in code.</param>
         /// <param name="methodRelativeBase">The method relative base.</param>
         /// <param name="targetAddress">The position in code, where it should be patched.</param>
@@ -126,7 +146,7 @@ namespace Mosa.Runtime.Linker.Elf64
             // Retrieve the text section
             Elf64.Sections.Elf64Section text = (Elf64.Sections.Elf64Section)GetSection(SectionKind.Text);
             // Calculate the patch offset
-            long offset = (methodAddress - text.Address.ToInt64()) + methodOffset;
+            long offset = (methodAddress - text.VirtualAddress.ToInt64()) + methodOffset;
 
             if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
             {
@@ -149,7 +169,7 @@ namespace Mosa.Runtime.Linker.Elf64
         /// </summary>
         /// <param name="sectionKind">The type of the section to retrieve.</param>
         /// <returns>The retrieved linker section.</returns>
-        protected override LinkerSection GetSection(SectionKind sectionKind)
+        public override LinkerSection GetSection(SectionKind sectionKind)
         {
             return this.sections[(int)sectionKind];
         }
@@ -158,7 +178,7 @@ namespace Mosa.Runtime.Linker.Elf64
         /// Determines whether the specified symbol is resolved.
         /// </summary>
         /// <param name="symbol">The symbol.</param>
-        /// <param name="address">The address.</param>
+        /// <param name="address">The virtualAddress.</param>
         /// <returns>
         /// 	<c>true</c> if the specified symbol is resolved; otherwise, <c>false</c>.
         /// </returns>
@@ -166,7 +186,7 @@ namespace Mosa.Runtime.Linker.Elf64
         {
             address = 0;
             return true;
-            //return base.IsResolved(symbol, out address);*/
+            //return base.IsResolved(symbol, out virtualAddress);*/
         }
 
         /// <summary>

@@ -70,16 +70,6 @@ namespace Mosa.Runtime.Linker.PE
         private bool setChecksum;
 
         /// <summary>
-        /// Holds the file size of the image.
-        /// </summary>
-        private uint fileSizeOfImage;
-
-        /// <summary>
-        /// Holds the virtual size of the image as if it is loaded into memory.
-        /// </summary>
-        private uint virtualSizeOfImage;
-
-        /// <summary>
         /// Flag, if the symbols have been resolved.
         /// </summary>
         private bool symbolsResolved;
@@ -102,7 +92,7 @@ namespace Mosa.Runtime.Linker.PE
             // Create the default section set
             this.sections = new Dictionary<SectionKind, LinkerSection>() 
             {
-                { SectionKind.Text, new PortableExecutableLinkerSection(SectionKind.Text, @".text", IntPtr.Zero) },
+                { SectionKind.Text, new PortableExecutableLinkerSection(SectionKind.Text, @".text", new IntPtr(this.BaseAddress + this.sectionAlignment)) },
                 { SectionKind.Data, new PortableExecutableLinkerSection(SectionKind.Data, @".data", IntPtr.Zero) },
                 { SectionKind.ROData, new PortableExecutableLinkerSection(SectionKind.ROData, @".rodata", IntPtr.Zero) },
                 { SectionKind.BSS, new PortableExecutableLinkerSection(SectionKind.BSS, @".bss", IntPtr.Zero) }
@@ -164,10 +154,10 @@ namespace Mosa.Runtime.Linker.PE
         #region AssembyLinkerStageBase Overrides
 
         /// <summary>
-        /// A request to patch already emitted code by storing the calculated address value.
+        /// A request to patch already emitted code by storing the calculated virtualAddress value.
         /// </summary>
         /// <param name="linkType">Type of the link.</param>
-        /// <param name="methodAddress">The virtual address of the method whose code is being patched.</param>
+        /// <param name="methodAddress">The virtual virtualAddress of the method whose code is being patched.</param>
         /// <param name="methodOffset">The value to store at the position in code.</param>
         /// <param name="methodRelativeBase">The method relative base.</param>
         /// <param name="targetAddress">The position in code, where it should be patched.</param>
@@ -179,7 +169,7 @@ namespace Mosa.Runtime.Linker.PE
             // Retrieve the text section
             PortableExecutableLinkerSection text = (PortableExecutableLinkerSection)GetSection(SectionKind.Text);
             // Calculate the patch offset
-            long offset = (methodAddress - text.Address.ToInt64()) + methodOffset;
+            long offset = (methodAddress - text.VirtualAddress.ToInt64()) + methodOffset;
 
             if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
             {
@@ -202,7 +192,7 @@ namespace Mosa.Runtime.Linker.PE
         /// </summary>
         /// <param name="sectionKind">The type of the section to retrieve.</param>
         /// <returns>The retrieved linker section.</returns>
-        protected override LinkerSection GetSection(SectionKind sectionKind)
+        public override LinkerSection GetSection(SectionKind sectionKind)
         {
             return this.sections[sectionKind];
         }
@@ -211,14 +201,23 @@ namespace Mosa.Runtime.Linker.PE
         /// Determines whether the specified symbol is resolved.
         /// </summary>
         /// <param name="symbol">The symbol.</param>
-        /// <param name="address">The address.</param>
+        /// <param name="virtualAddress">The virtualAddress.</param>
         /// <returns>
         /// 	<c>true</c> if the specified symbol is resolved; otherwise, <c>false</c>.
         /// </returns>
-        protected override bool IsResolved(string symbol, out long address)
+        protected override bool IsResolved(string symbol, out long virtualAddress)
         {
-            address = 0;
-            return (this.symbolsResolved == true && base.IsResolved(symbol, out address) == true);
+            virtualAddress = 0;
+            return (this.symbolsResolved == true && base.IsResolved(symbol, out virtualAddress) == true);
+        }
+
+        /// <summary>
+        /// Gets the load alignment of sections.
+        /// </summary>
+        /// <value>The load alignment.</value>
+        public override long LoadSectionAlignment
+        {
+            get { return this.fileAlignment; }
         }
 
         /// <summary>
@@ -237,6 +236,15 @@ namespace Mosa.Runtime.Linker.PE
         public override ICollection<LinkerSection> Sections
         {
             get { return this.sections.Values; }
+        }
+
+        /// <summary>
+        /// Gets the virtual alignment of sections.
+        /// </summary>
+        /// <value>The virtual section alignment.</value>
+        public override long VirtualSectionAlignment
+        {
+            get { return this.sectionAlignment; }
         }
 
         /// <summary>
@@ -294,13 +302,16 @@ namespace Mosa.Runtime.Linker.PE
                 long position = writer.BaseStream.Position;
                 foreach (PortableExecutableLinkerSection section in this.sections.Values)
                 {
-                    // Write the section
-                    section.Write(writer);
+                    if (section.Length > 0)
+                    {
+                        // Write the section
+                        section.Write(writer);
 
-                    // Add padding...
-                    position += section.Length;
-                    position += (this.fileAlignment - (position % this.fileAlignment));                    
-                    WritePaddingToPosition(writer, position);
+                        // Add padding...
+                        position += section.Length;
+                        position += (this.fileAlignment - (position % this.fileAlignment));
+                        WritePaddingToPosition(writer, position);
+                    }
                 }
 
                 // Do we need to set the checksum?
@@ -322,6 +333,7 @@ namespace Mosa.Runtime.Linker.PE
         /// </summary>
         private void LayoutSections()
         {
+/*
             // Reset the size of the image
             this.virtualSizeOfImage = this.sectionAlignment;
             this.fileSizeOfImage = this.fileAlignment;
@@ -333,7 +345,7 @@ namespace Mosa.Runtime.Linker.PE
                 // Only use a section with something inside
                 if (ls.Length != 0)
                 {
-                    // Set the section address
+                    // Set the section virtualAddress
                     ls.Address = new IntPtr(this.BaseAddress + this.virtualSizeOfImage);
                     ls.Offset = this.fileSizeOfImage;
 
@@ -351,7 +363,7 @@ namespace Mosa.Runtime.Linker.PE
             }
 
             this.sections = usedSections;
-
+*/
             // We've resolved all symbols, allow IsResolved to succeed
             this.symbolsResolved = true;
         }
@@ -399,7 +411,7 @@ namespace Mosa.Runtime.Linker.PE
 
             // Prepare the file header
             this.ntHeaders.FileHeader.Machine = IMAGE_FILE_HEADER.IMAGE_FILE_MACHINE_I386;
-            this.ntHeaders.FileHeader.NumberOfSections = (ushort)this.Sections.Count;
+            this.ntHeaders.FileHeader.NumberOfSections = CountSections();
             this.ntHeaders.FileHeader.TimeDateStamp = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
             this.ntHeaders.FileHeader.PointerToSymbolTable = 0;
             this.ntHeaders.FileHeader.NumberOfSymbols = 0;
@@ -413,7 +425,7 @@ namespace Mosa.Runtime.Linker.PE
             this.ntHeaders.OptionalHeader.SizeOfCode = AlignValue(GetSectionLength(SectionKind.Text), this.sectionAlignment);
             this.ntHeaders.OptionalHeader.SizeOfInitializedData = AlignValue(GetSectionLength(SectionKind.Data) + GetSectionLength(SectionKind.ROData), this.sectionAlignment);
             this.ntHeaders.OptionalHeader.SizeOfUninitializedData = AlignValue(GetSectionLength(SectionKind.BSS), this.sectionAlignment);
-            this.ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(this.EntryPoint.Address.ToInt64() - this.BaseAddress);
+            this.ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(this.EntryPoint.VirtualAddress.ToInt64() - this.BaseAddress);
             this.ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSectionAddress(SectionKind.Text) - this.BaseAddress);
 
             long sectionAddress = GetSectionAddress(SectionKind.Data);
@@ -430,7 +442,7 @@ namespace Mosa.Runtime.Linker.PE
             this.ntHeaders.OptionalHeader.MajorSubsystemVersion = 4;
             this.ntHeaders.OptionalHeader.MinorSubsystemVersion = 0;
             this.ntHeaders.OptionalHeader.Win32VersionValue = 0;
-            this.ntHeaders.OptionalHeader.SizeOfImage = this.virtualSizeOfImage;
+            this.ntHeaders.OptionalHeader.SizeOfImage = CalculateSizeOfImage();
             this.ntHeaders.OptionalHeader.SizeOfHeaders = this.fileAlignment; // FIXME: Use the full header size
             this.ntHeaders.OptionalHeader.CheckSum = 0;
             this.ntHeaders.OptionalHeader.Subsystem = 0x03;
@@ -453,53 +465,93 @@ namespace Mosa.Runtime.Linker.PE
             uint address = this.fileAlignment;
             foreach (LinkerSection section in this.sections.Values)
             {
-                IMAGE_SECTION_HEADER ish = new IMAGE_SECTION_HEADER();
-                ish.Name = section.Name;
-                ish.VirtualSize = (uint)section.Length;
-                ish.VirtualAddress = (uint)(section.Address.ToInt64() - this.BaseAddress);
-
-                if (section.SectionKind != SectionKind.BSS)
-                    ish.SizeOfRawData = (uint)section.Length;
-
-                ish.PointerToRawData = address;
-                ish.PointerToRelocations = 0;
-                ish.PointerToLinenumbers = 0;
-                ish.NumberOfRelocations = 0;
-                ish.NumberOfLinenumbers = 0;
-
-                switch (section.SectionKind)
+                if (section.Length > 0)
                 {
-                    case SectionKind.BSS:
-                        ish.Characteristics = 0x40000000 | 0x80000000 | 0x00000080;
-                        break;
+                    IMAGE_SECTION_HEADER ish = new IMAGE_SECTION_HEADER();
+                    ish.Name = section.Name;
+                    ish.VirtualSize = (uint)section.Length;
+                    ish.VirtualAddress = (uint)(section.VirtualAddress.ToInt64() - this.BaseAddress);
 
-                    case SectionKind.Data:
-                        ish.Characteristics = 0x40000000 | 0x80000000 | 0x00000040;
-                        break;
+                    if (section.SectionKind != SectionKind.BSS)
+                        ish.SizeOfRawData = (uint)section.Length;
 
-                    case SectionKind.ROData:
-                        ish.Characteristics = 0x40000000 | 0x00000040;
-                        break;
+                    ish.PointerToRawData = address;
+                    ish.PointerToRelocations = 0;
+                    ish.PointerToLinenumbers = 0;
+                    ish.NumberOfRelocations = 0;
+                    ish.NumberOfLinenumbers = 0;
 
-                    case SectionKind.Text:
-                        ish.Characteristics = 0x20000000 | 0x40000000 | 0x80000000 | 0x00000020;
-                        break;
+                    switch (section.SectionKind)
+                    {
+                        case SectionKind.BSS:
+                            ish.Characteristics = 0x40000000 | 0x80000000 | 0x00000080;
+                            break;
+
+                        case SectionKind.Data:
+                            ish.Characteristics = 0x40000000 | 0x80000000 | 0x00000040;
+                            break;
+
+                        case SectionKind.ROData:
+                            ish.Characteristics = 0x40000000 | 0x00000040;
+                            break;
+
+                        case SectionKind.Text:
+                            ish.Characteristics = 0x20000000 | 0x40000000 | 0x80000000 | 0x00000020;
+                            break;
+                    }
+
+                    ish.Write(writer);
+
+                    address += (uint)section.Length;
+                    address = AlignValue(address, this.fileAlignment);
                 }
-
-                ish.Write(writer);
-
-                address += (uint)section.Length;
-                address = AlignValue(address, this.fileAlignment);
             }
 
             WritePaddingToPosition(writer, this.fileAlignment);
         }
 
+        /// <summary>
+        /// Counts the valid sections.
+        /// </summary>
+        /// <returns>Determines the number of sections.</returns>
+        private ushort CountSections()
+        {
+            ushort sections = 0;
+            foreach (LinkerSection ls in this.sections.Values)
+            {
+                if (ls.Length > 0)
+                    sections++;
+            }
+            return sections;
+        }
+
+        private uint CalculateSizeOfImage()
+        {
+            // Reset the size of the image
+            uint virtualSizeOfImage = this.sectionAlignment, sectionEnd;
+
+            // Move all sections to their right positions
+            foreach (LinkerSection ls in this.sections.Values)
+            {
+                // Only use a section with something inside
+                if (ls.Length > 0)
+                {
+                    sectionEnd = (uint)(ls.VirtualAddress.ToInt32() + AlignValue(ls.Length, this.sectionAlignment));
+                    if (sectionEnd > virtualSizeOfImage)
+                        virtualSizeOfImage = sectionEnd;
+                }
+            }
+
+            return virtualSizeOfImage - (uint)this.BaseAddress;
+        }
+
         private long GetSectionAddress(SectionKind sectionKind)
         {
-            LinkerSection section;            
-            if (this.sections.TryGetValue(sectionKind, out section) == true)
-                return (uint)section.Address.ToInt64();
+            LinkerSection section;
+            if (this.sections.TryGetValue(sectionKind, out section) == true && section.Length > 0)
+            {
+                return (uint)section.VirtualAddress.ToInt64();
+            }
 
             return 0L;
         }
@@ -507,19 +559,32 @@ namespace Mosa.Runtime.Linker.PE
         private uint GetSectionLength(SectionKind sectionKind)
         {
             LinkerSection section;            
-            if (this.sections.TryGetValue(sectionKind, out section) == true)
+            if (this.sections.TryGetValue(sectionKind, out section) == true && section.Length > 0)
                 return (uint)section.Length;
 
             return 0;
         }
 
+        private long AlignValue(long value, uint alignment)
+        {
+            long off = (value % alignment);
+            if (0 != off)
+                value += (alignment - off);
+
+            return value;
+        }
+
         private uint AlignValue(uint value, uint alignment)
         {
-            return (value + (alignment - (value % alignment)));
+            uint off = (value % alignment);
+            if (0 != off)
+                value += (alignment - off);
+
+            return value;
         }
 
         /// <summary>
-        /// Adds padding to the writer to ensure the next write starts at a specific address.
+        /// Adds padding to the writer to ensure the next write starts at a specific virtualAddress.
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="address">The address.</param>

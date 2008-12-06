@@ -194,7 +194,7 @@ namespace Mosa.Runtime.Loader.PE
         #region Methods
 
         /// <summary>
-        /// Retrieves an instruction for the specified relative virtual address.
+        /// Retrieves an instruction for the specified relative virtual virtualAddress.
         /// </summary>
         /// <param name="rva">The method to retrieve the instruction stream for.</param>
         /// <returns>A new instance of CILInstructionStream, which represents the stream.</returns>
@@ -253,7 +253,7 @@ namespace Mosa.Runtime.Loader.PE
                 }
             }
 
-            throw new ArgumentException(@"Failed to resolve virtual address to disk position.", @"address");
+            throw new ArgumentException(@"Failed to resolve virtual virtualAddress to disk position.", @"virtualAddress");
         }
 
         #endregion // Methods

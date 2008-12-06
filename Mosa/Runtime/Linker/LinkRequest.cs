@@ -25,10 +25,10 @@ namespace Mosa.Runtime.Linker
         /// <summary>
         /// The method whose code is being patched.
         /// </summary>
-        private readonly RuntimeMethod method;
+        private readonly string symbolName;
 
         /// <summary>
-        /// The position within the code stream where the address is patched
+        /// The position within the code stream where the virtualAddress is patched
         /// </summary>
         private readonly int methodOffset;
 
@@ -45,7 +45,7 @@ namespace Mosa.Runtime.Linker
         /// <summary>
         /// Holds the symbol name to link against.
         /// </summary>
-        private readonly string symbolName;
+        private readonly string targetSymbolName;
 
         #endregion // Data members
 
@@ -55,17 +55,17 @@ namespace Mosa.Runtime.Linker
         /// Initializes a new instance of LinkRequest.
         /// </summary>
         /// <param name="linkType">Type of the link.</param>
-        /// <param name="method">The method whose code is being patched.</param>
+        /// <param name="symbolName">The method whose code is being patched.</param>
         /// <param name="methodOffset">The method offset.</param>
         /// <param name="methodRelativeBase">The method relative base.</param>
-        /// <param name="symbolName">The linker symbol to link against.</param>
-        public LinkRequest(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbolName)
+        /// <param name="targetSymbolName">The linker symbol to link against.</param>
+        public LinkRequest(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbolName)
         {
-            this.method = method;
+            this.symbolName = symbolName;
             this.methodOffset = methodOffset;
             this.linkType = linkType;
             this.methodRelativeBase = methodRelativeBase;
-            this.symbolName = symbolName;
+            this.targetSymbolName = targetSymbolName;
         }
 
         #endregion // Construction
@@ -75,9 +75,9 @@ namespace Mosa.Runtime.Linker
         /// <summary>
         /// The method whose code is being patched.
         /// </summary>
-        public RuntimeMethod Method
+        public string LinkSymbol
         {
-            get { return this.method; }
+            get { return this.symbolName; }
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Mosa.Runtime.Linker
         }
 
         /// <summary>
-        /// The position within the code stream where the address is patched.
+        /// The position within the code stream where the virtualAddress is patched.
         /// </summary>
         public int MethodOffset
         {
@@ -108,9 +108,9 @@ namespace Mosa.Runtime.Linker
         /// Gets the name of the symbol.
         /// </summary>
         /// <value>The name of the symbol.</value>
-        public string SymbolName
+        public string TargetSymbolName
         {
-            get { return this.symbolName; }
+            get { return this.targetSymbolName; }
         }
 
         #endregion // Properties

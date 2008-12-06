@@ -21,9 +21,9 @@ namespace Mosa.Runtime.Linker
         #region Data members
 
         /// <summary>
-        /// Holds the sections load address.
+        /// Holds the sections load virtualAddress.
         /// </summary>
-        private IntPtr address;
+        private IntPtr virtualAddress;
 
         /// <summary>
         /// Holds the kind of the section.
@@ -49,10 +49,10 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         /// <param name="kind">The kind of the section.</param>
         /// <param name="name">The name.</param>
-        /// <param name="address">The address.</param>
-        protected LinkerSection(SectionKind kind, string name, IntPtr address)
+        /// <param name="virtualAddress">The virtualAddress.</param>
+        protected LinkerSection(SectionKind kind, string name, IntPtr virtualAddress)
         {
-            this.address = address;
+            this.virtualAddress = virtualAddress;
             this.kind = kind;
             this.name = name;
         }
@@ -62,13 +62,13 @@ namespace Mosa.Runtime.Linker
         #region Properties
 
         /// <summary>
-        /// Gets the address.
+        /// Gets the virtual address of the section.
         /// </summary>
-        /// <value>The address.</value>
-        public IntPtr Address
+        /// <value>The virtual address.</value>
+        public IntPtr VirtualAddress
         {
-            get { return this.address; }
-            internal set { this.address = value; }
+            get { return this.virtualAddress; }
+            internal set { this.virtualAddress = value; }
         }
 
         /// <summary>

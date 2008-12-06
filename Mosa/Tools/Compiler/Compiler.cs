@@ -20,6 +20,7 @@ using Mosa.Tools.Compiler.Boot;
 using Mosa.Tools.Compiler.Linkers;
 
 using NDesk.Options;
+using Mosa.Runtime.Linker;
 
 namespace Mosa.Tools.Compiler
 {
@@ -285,9 +286,10 @@ namespace Mosa.Tools.Compiler
                     aot.Pipeline.AddRange(new IAssemblyCompilerStage[] {
                         new TypeLayoutStage(),
                         new MethodCompilerBuilderStage(),
+                        bootFormatStage,
                         new MethodCompilerRunnerStage(),
                         new TypeInitializers.TypeInitializerSchedulerStage(),
-                        bootFormatStage,
+                        new ObjectFileLayoutStage(),
                         linkerStage,
                         mapFileWrapper
                     });

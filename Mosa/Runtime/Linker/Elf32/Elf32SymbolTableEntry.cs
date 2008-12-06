@@ -16,7 +16,7 @@ namespace Mosa.Runtime.Linker.Elf32
         public uint Name;
         /// <summary>
         /// This member gives the value of the associated symbol. Depending on the context, 
-        /// this may be an absolute value, an address, and so on; details appear below. 
+        /// this may be an absolute value, an virtualAddress, and so on; details appear below. 
         /// </summary>
         public uint Value;
         /// <summary>

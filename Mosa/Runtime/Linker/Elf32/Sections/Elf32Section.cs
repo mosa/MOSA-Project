@@ -32,9 +32,9 @@ namespace Mosa.Runtime.Linker.Elf32.Sections
         /// </summary>
         /// <param name="kind">The kind of the section.</param>
         /// <param name="name">The name.</param>
-        /// <param name="address">The address.</param>
-        public Elf32Section(Mosa.Runtime.Linker.SectionKind kind, string name, IntPtr address) 
-            : base(kind, name, address)
+        /// <param name="virtualAddress">The virtualAddress.</param>
+        public Elf32Section(Mosa.Runtime.Linker.SectionKind kind, string name, IntPtr virtualAddress)
+            : base(kind, name, virtualAddress)
         {
             header = new Elf32SectionHeader();
             header.Name = Elf32StringTableSection.AddString(name);
@@ -108,7 +108,7 @@ namespace Mosa.Runtime.Linker.Elf32.Sections
         /// <param name="alignment">The alignment.</param>
         private void InsertPadding(int alignment)
         {
-            long address = this.Address.ToInt64() + this.sectionStream.Length;
+            long address = this.VirtualAddress.ToInt64() + this.sectionStream.Length;
             int pad = (int)(alignment - (address % alignment));
             this.sectionStream.Write(new byte[pad], 0, pad);
         }

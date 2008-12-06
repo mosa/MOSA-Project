@@ -20,13 +20,13 @@ namespace Mosa.Runtime.Linker.Elf32
         /// </summary>
         public uint Offset;
         /// <summary>
-        /// This member gives the virtual address at which the first byte of the segment resides 
+        /// This member gives the virtual virtualAddress at which the first byte of the segment resides 
         /// in memory. 
         /// </summary>
         public uint VirtualAddress;
         /// <summary>
         /// On systems for which physical addressing is relevant, this member is reserved for 
-        /// the segment's physical address. 
+        /// the segment's physical virtualAddress. 
         /// </summary>
         public uint PhysicalAddress;
         /// <summary>

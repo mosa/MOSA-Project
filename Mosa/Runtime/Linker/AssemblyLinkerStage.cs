@@ -27,7 +27,7 @@ namespace Mosa.Runtime.Linker
         #region Data members
 
         /// <summary>
-        /// Holds the base address of the link result.
+        /// Holds the base virtualAddress of the link result.
         /// </summary>
         private long baseAddress;
 
@@ -83,14 +83,6 @@ namespace Mosa.Runtime.Linker
         {
             long address;
 
-            // Adjust the symbol addresses
-            foreach (LinkerSymbol symbol in this.Symbols)
-            {
-                LinkerSection ls = this.GetSection(symbol.Section);
-                symbol.Offset = ls.Offset + symbol.SectionAddress;
-                symbol.Address = new IntPtr(ls.Address.ToInt64() + symbol.SectionAddress);
-            }
-
             // Check if we have unresolved requests and try to link them
             List<string> members = new List<string>(_linkRequests.Keys);
             foreach (string member in members)
@@ -104,6 +96,7 @@ namespace Mosa.Runtime.Linker
                     _linkRequests.Remove(member);
                 }
             }
+
             Debug.Assert(0 == _linkRequests.Count, @"AssemblyLinker has found unresolved symbols.");
             if (0 != _linkRequests.Count)
                 throw new LinkerException(@"Unresolved symbols.");
@@ -114,30 +107,23 @@ namespace Mosa.Runtime.Linker
         #region Methods
 
         /// <summary>
-        /// A request to patch already emitted code by storing the calculated address value.
+        /// A request to patch already emitted code by storing the calculated virtualAddress value.
         /// </summary>
         /// <param name="linkType">Type of the link.</param>
-        /// <param name="methodAddress">The virtual address of the method whose code is being patched.</param>
+        /// <param name="methodAddress">The virtual virtualAddress of the method whose code is being patched.</param>
         /// <param name="methodOffset">The value to store at the position in code.</param>
         /// <param name="methodRelativeBase">The method relative base.</param>
         /// <param name="targetAddress">The position in code, where it should be patched.</param>
         protected abstract void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress);
-
-        /// <summary>
-        /// Retrieves a linker section by its type.
-        /// </summary>
-        /// <param name="sectionKind">The type of the section to retrieve.</param>
-        /// <returns>The retrieved linker section.</returns>
-        protected abstract LinkerSection GetSection(SectionKind sectionKind);
 
         #endregion // Methods
 
         #region IAssemblyLinker Members
 
         /// <summary>
-        /// Gets the base address.
+        /// Gets the base virtualAddress.
         /// </summary>
-        /// <value>The base address.</value>
+        /// <value>The base virtualAddress.</value>
         public long BaseAddress
         {
             get { return this.baseAddress; }
@@ -151,6 +137,15 @@ namespace Mosa.Runtime.Linker
         {
             get { return this.entryPoint; }
             set { this.entryPoint = value; }
+        }
+
+        /// <summary>
+        /// Gets the load alignment of sections.
+        /// </summary>
+        /// <value>The load alignment.</value>
+        public abstract long LoadSectionAlignment
+        {
+            get;
         }
 
         /// <summary>
@@ -194,6 +189,15 @@ namespace Mosa.Runtime.Linker
         }
 
         /// <summary>
+        /// Gets the virtual alignment of sections.
+        /// </summary>
+        /// <value>The virtual section alignment.</value>
+        public abstract long VirtualSectionAlignment
+        {
+            get;
+        }
+
+        /// <summary>
         /// Allocates memory in the specified section.
         /// </summary>
         /// <param name="symbol">The metadata member to allocate space for.</param>
@@ -211,7 +215,7 @@ namespace Mosa.Runtime.Linker
             try
             {
                 // Save the symbol position
-                symbol.Address = new IntPtr(stream.BaseStream.Position);
+                symbol.Address = this.symbols[name].VirtualAddress;
             }
             catch
             {
@@ -267,18 +271,45 @@ namespace Mosa.Runtime.Linker
         protected abstract Stream Allocate(SectionKind section, int size, int alignment);
 
         /// <summary>
+        /// Gets the section.
+        /// </summary>
+        /// <param name="sectionKind">Kind of the section.</param>
+        /// <returns>The section of the requested kind.</returns>
+        public abstract LinkerSection GetSection(SectionKind sectionKind);
+
+        /// <summary>
         /// Retrieves a linker symbol.
         /// </summary>
         /// <param name="member">The runtime member to retrieve a symbol for.</param>
         /// <returns>
         /// A linker symbol, which represents the runtime member.
         /// </returns>
+        /// <exception cref="System.ArgumentNullException"><paramref name="member"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">There's no symbol of the given name.</exception>
         public LinkerSymbol GetSymbol(RuntimeMember member)
         {
-            LinkerSymbol result;
+            if (member == null)
+                throw new ArgumentNullException(@"member");
+
             string symbolName = CreateSymbolName(member);
+            return GetSymbol(symbolName);
+        }
+
+        /// <summary>
+        /// Retrieves a linker symbol.
+        /// </summary>
+        /// <param name="symbolName">The name of the symbol to retrieve.</param>
+        /// <returns>The named linker symbol.</returns>
+        /// <exception cref="System.ArgumentNullException"><paramref name="symbolName"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">There's no symbol of the given name.</exception>
+        public LinkerSymbol GetSymbol(string symbolName)
+        {
+            if (symbolName == null)
+                throw new ArgumentNullException(@"symbolName");
+
+            LinkerSymbol result;
             if (false == this.symbols.TryGetValue(symbolName, out result))
-                throw new ArgumentException(@"Given member not compiled.", @"member");
+                throw new ArgumentException(@"Symbol not compiled.", @"member");
 
             return result;
         }
@@ -289,7 +320,7 @@ namespace Mosa.Runtime.Linker
         /// <param name="linkType">The type of link required.</param>
         /// <param name="method">The method the patched code belongs to.</param>
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-        /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
+        /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
         /// <param name="target">The method or static field to link against.</param>
         public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
@@ -312,10 +343,10 @@ namespace Mosa.Runtime.Linker
         /// <param name="linkType">The type of link required.</param>
         /// <param name="method">The method the patched code belongs to.</param>
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-        /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
+        /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
         /// <param name="symbol">The linker symbol to link against.</param>
         /// <returns>
-        /// The return value is the preliminary address to place in the generated machine
+        /// The return value is the preliminary virtualAddress to place in the generated machine
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
@@ -332,7 +363,7 @@ namespace Mosa.Runtime.Linker
                 if (false == _linkRequests.TryGetValue(symbol, out patchList))
                 {
                     patchList = new List<LinkRequest>(1);
-                    patchList.Add(new LinkRequest(linkType, method, methodOffset, methodRelativeBase, symbol));
+                    patchList.Add(new LinkRequest(linkType, CreateSymbolName(method), methodOffset, methodRelativeBase, symbol));
                 }
 
                 PatchRequests(result, patchList);
@@ -347,7 +378,54 @@ namespace Mosa.Runtime.Linker
                     _linkRequests.Add(symbol, list);
                 }
 
-                list.Add(new LinkRequest(linkType, method, methodOffset, methodRelativeBase, symbol));
+                list.Add(new LinkRequest(linkType, CreateSymbolName(method), methodOffset, methodRelativeBase, symbol));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Issues a linker request for the given runtime method.
+        /// </summary>
+        /// <param name="linkType">The type of link required.</param>
+        /// <param name="symbolName">The method the patched code belongs to.</param>
+        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
+        /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
+        /// <param name="targetSymbol">The linker symbol to link against.</param>
+        /// <returns>
+        /// The return value is the preliminary virtualAddress to place in the generated machine
+        /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
+        /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
+        /// </returns>
+        public virtual long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol)
+        {
+            Debug.Assert(null != symbolName, @"Symbol can't be null.");
+            if (null == symbolName)
+                throw new ArgumentNullException(@"symbol");
+
+            long result = 0;
+            if (true == IsResolved(symbolName, out result))
+            {
+                List<LinkRequest> patchList;
+                if (false == _linkRequests.TryGetValue(targetSymbol, out patchList))
+                {
+                    patchList = new List<LinkRequest>(1);
+                    patchList.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol));
+                }
+
+                PatchRequests(result, patchList);
+            }
+            else
+            {
+                // FIXME: Make this thread safe
+                List<LinkRequest> list;
+                if (false == _linkRequests.TryGetValue(targetSymbol, out list))
+                {
+                    list = new List<LinkRequest>();
+                    _linkRequests.Add(targetSymbol, list);
+                }
+
+                list.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol));
             }
 
             return result;
@@ -385,40 +463,40 @@ namespace Mosa.Runtime.Linker
         /// Determines whether the specified symbol is resolved.
         /// </summary>
         /// <param name="symbol">The symbol.</param>
-        /// <param name="address">The address.</param>
+        /// <param name="virtualAddress">The virtualAddress.</param>
         /// <returns>
         /// 	<c>true</c> if the specified symbol is resolved; otherwise, <c>false</c>.
         /// </returns>
-        protected virtual bool IsResolved(string symbol, out long address)
+        protected virtual bool IsResolved(string symbol, out long virtualAddress)
         {
-            address = 0;
+            virtualAddress = 0;
             LinkerSymbol linkerSymbol;
             if (true == this.symbols.TryGetValue(symbol, out linkerSymbol))
             {
-                address = linkerSymbol.Address.ToInt64();
+                virtualAddress = linkerSymbol.VirtualAddress.ToInt64();
             }
-            return (0 != address);
+            return (0 != virtualAddress);
         }
 
         /// <summary>
         /// Determines if the given runtime member can be resolved immediately.
         /// </summary>
         /// <param name="member">The runtime member to determine resolution of.</param>
-        /// <param name="address">Receives the determined address of the runtime member.</param>
+        /// <param name="virtualAddress">Receives the determined virtualAddress of the runtime member.</param>
         /// <returns>
         /// The method returns true, when it was successfully resolved.
         /// </returns>
-        protected bool IsResolved(RuntimeMember member, out long address)
+        protected bool IsResolved(RuntimeMember member, out long virtualAddress)
         {
             // Is this a method?
             RuntimeMethod method = member as RuntimeMethod;
             if (null != method && method.ImplAttributes == MethodImplAttributes.InternalCall)
             {
-                address = ResolveInternalCall(method);
-                return (0 != address);
+                virtualAddress = ResolveInternalCall(method);
+                return (0 != virtualAddress);
             }
 
-            return IsResolved(CreateSymbolName(member), out address);
+            return IsResolved(CreateSymbolName(member), out virtualAddress);
         }
 
         /// <summary>
@@ -437,7 +515,7 @@ namespace Mosa.Runtime.Linker
         /// Special resolution for internal calls.
         /// </summary>
         /// <param name="method">The internal call method to resolve.</param>
-        /// <returns>The address </returns>
+        /// <returns>The virtualAddress </returns>
         protected virtual long ResolveInternalCall(RuntimeMethod method)
         {
             long address = 0;
@@ -451,15 +529,15 @@ namespace Mosa.Runtime.Linker
         /// <summary>
         /// Patches all requests in the given link request list.
         /// </summary>
-        /// <param name="address">The address of the member.</param>
+        /// <param name="virtualAddress">The virtualAddress of the member.</param>
         /// <param name="requests">A list of requests to patch.</param>
-        private void PatchRequests(long address, IEnumerable<LinkRequest> requests)
+        private void PatchRequests(long virtualAddress, IEnumerable<LinkRequest> requests)
         {
             long methodAddress;
 
             foreach (LinkRequest request in requests)
             {
-                if (IsResolved(request.Method, out methodAddress) == false)
+                if (IsResolved(request.LinkSymbol, out methodAddress) == false)
                     throw new InvalidOperationException(@"Method not compiled - but making link requests??");
 
                 // Patch the code stream
@@ -468,7 +546,7 @@ namespace Mosa.Runtime.Linker
                     methodAddress,
                     request.MethodOffset,
                     request.MethodRelativeBase,
-                    address
+                    virtualAddress
                 );
             }
         }

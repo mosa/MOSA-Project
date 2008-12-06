@@ -25,12 +25,12 @@ namespace Mosa.Runtime.Linker.Elf
         DataNone    = 0x00,
         /// <summary>
         /// Encoding Data2LSB specifies 2's complement values, with the least significant byte 
-        /// occupying the lowest address. 
+        /// occupying the lowest virtualAddress. 
         /// </summary>
         Data2LSB    = 0x01,
         /// <summary>
         /// Encoding Data2MSB specifies 2's complement values, with the most significant byte 
-        /// occupying the lowest address. 
+        /// occupying the lowest virtualAddress. 
         /// </summary>
         Data2MSB    = 0x02,
     }

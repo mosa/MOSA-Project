@@ -39,9 +39,27 @@ namespace Mosa.Jit.SimpleJit
         /// </summary>
         /// <param name="sectionKind">The type of the section to retrieve.</param>
         /// <returns>The retrieved linker section.</returns>
-        protected override LinkerSection GetSection(SectionKind sectionKind)
+        public override LinkerSection GetSection(SectionKind sectionKind)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the load alignment of sections.
+        /// </summary>
+        /// <value>The load alignment.</value>
+        public override long LoadSectionAlignment
+        {
+            get { return 1; }
+        }
+
+        /// <summary>
+        /// Gets the virtual alignment of sections.
+        /// </summary>
+        /// <value>The virtual section alignment.</value>
+        public override long VirtualSectionAlignment
+        {
+            get { return 1; }
         }
 
         /// <summary>
@@ -77,10 +95,10 @@ namespace Mosa.Jit.SimpleJit
         }
 
         /// <summary>
-        /// A request to patch already emitted code by storing the calculated address value.
+        /// A request to patch already emitted code by storing the calculated virtualAddress value.
         /// </summary>
         /// <param name="linkType">Type of the link.</param>
-        /// <param name="methodAddress">The virtual address of the method whose code is being patched.</param>
+        /// <param name="methodAddress">The virtual virtualAddress of the method whose code is being patched.</param>
         /// <param name="methodOffset">The value to store at the position in code.</param>
         /// <param name="methodRelativeBase">The method relative base.</param>
         /// <param name="targetAddress">The position in code, where it should be patched.</param>
@@ -95,7 +113,7 @@ namespace Mosa.Jit.SimpleJit
         /// <param name="linkType">The type of link required.</param>
         /// <param name="method">The method the patched code belongs to.</param>
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-        /// <param name="methodRelativeBase">The base address, if a relative link is required.</param>
+        /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
         /// <param name="target">The method or static field to link against.</param>
         /// <returns></returns>
         public override long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)

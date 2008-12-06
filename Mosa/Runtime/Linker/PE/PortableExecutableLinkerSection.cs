@@ -33,9 +33,9 @@ namespace Mosa.Runtime.Linker.PE
         /// </summary>
         /// <param name="kind">The kind of the section.</param>
         /// <param name="name">The name of the section.</param>
-        /// <param name="address">The address of the section.</param>
-        public PortableExecutableLinkerSection(SectionKind kind, string name, IntPtr address) : 
-            base(kind, name, address)
+        /// <param name="virtualAddress">The virtualAddress of the section.</param>
+        public PortableExecutableLinkerSection(SectionKind kind, string name, IntPtr virtualAddress) :
+            base(kind, name, virtualAddress)
         {
             sectionStream = new MemoryStream();
         }
@@ -125,9 +125,12 @@ namespace Mosa.Runtime.Linker.PE
         /// <param name="alignment">The alignment.</param>
         private void InsertPadding(int alignment)
         {
-            long address = this.Address.ToInt64() + this.sectionStream.Length;
+            long address = this.VirtualAddress.ToInt64() + this.sectionStream.Length;
             int pad = (int)(alignment - (address % alignment));
-            this.sectionStream.Write(new byte[pad], 0, pad);
+            if (pad < alignment)
+            {
+                this.sectionStream.Write(new byte[pad], 0, pad);
+            }
         }
 
         #endregion // Internals

@@ -35,7 +35,7 @@ namespace Mosa.Runtime.Linker.Elf32.Sections
         public Elf32SectionAttribute Flags;
         /// <summary>
         /// If the section will appear in the memory image of a process, this member 
-        /// gives the address at which the section's first byte should reside. Otherwise, 
+        /// gives the virtualAddress at which the section's first byte should reside. Otherwise, 
         /// the member contains 0. 
         /// </summary>
         public uint Address;
@@ -61,7 +61,7 @@ namespace Mosa.Runtime.Linker.Elf32.Sections
         /// </summary>
         public uint Info;
         /// <summary>
-        /// Some sections have address alignment constraints. For example, if a section 
+        /// Some sections have virtualAddress alignment constraints. For example, if a section 
         /// holds a doubleword, the system must ensure doubleword alignment for the 
         /// entire section.  That is, the value of sh_addr must be congruent to 0, 
         /// modulo the value of sh_addralign. Currently, only 0 and positive 

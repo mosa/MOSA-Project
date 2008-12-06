@@ -21,7 +21,7 @@ namespace Mosa.Runtime.Linker
         #region Data members
 
         /// <summary>
-        /// Holds the address of the symbol.
+        /// Holds the virtualAddress of the symbol.
         /// </summary>
         private IntPtr address;
 
@@ -46,7 +46,7 @@ namespace Mosa.Runtime.Linker
         private SectionKind section;
 
         /// <summary>
-        /// The section start relative address.
+        /// The section start relative virtualAddress.
         /// </summary>
         private long sectionAddress;
 
@@ -59,10 +59,10 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         /// <param name="name">The name of the symbol.</param>
         /// <param name="section">The section holding the symbol.</param>
-        /// <param name="address">Holds the address of the symbol.</param>
+        /// <param name="sectionAddress">Holds the section relative address of the symbol.</param>
         /// <exception cref="T:System.ArgumentException"><paramref name="name"/> is empty.</exception>
         /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is null.</exception>
-        public LinkerSymbol(string name, SectionKind section, long address)
+        public LinkerSymbol(string name, SectionKind section, long sectionAddress)
         {
             Debug.Assert(false == String.IsNullOrEmpty(name), @"LinkerSymbol requires a proper name.");
             if (name == null)
@@ -72,7 +72,7 @@ namespace Mosa.Runtime.Linker
 
             this.name = name;
             this.section = section;
-            this.sectionAddress = address;
+            this.sectionAddress = sectionAddress;
         }
 
         #endregion // Construction
@@ -80,10 +80,10 @@ namespace Mosa.Runtime.Linker
         #region Properties
 
         /// <summary>
-        /// Gets the address of the linker symbol.
+        /// Gets the virtualAddress of the linker symbol.
         /// </summary>
-        /// <value>The address of the linker symbol.</value>
-        public IntPtr Address
+        /// <value>The virtualAddress of the linker symbol.</value>
+        public IntPtr VirtualAddress
         {
             get { return this.address; }
             internal set { this.address = value; }
@@ -128,9 +128,9 @@ namespace Mosa.Runtime.Linker
         }
 
         /// <summary>
-        /// Gets the section start relative address of the symbol.
+        /// Gets the section start relative virtualAddress of the symbol.
         /// </summary>
-        /// <value>The section start relative address.</value>
+        /// <value>The section start relative virtualAddress.</value>
         public long SectionAddress
         {
             get { return this.sectionAddress; }
