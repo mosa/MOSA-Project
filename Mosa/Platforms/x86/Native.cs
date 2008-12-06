@@ -131,6 +131,12 @@ namespace Mosa.Platforms.x86
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
         public static void Out32(byte address, uint value) { ThrowPlatformNotSupported(); }
 
+        /// <summary>
+        /// Wraps the x86 hlt instruction.
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.HltInstruction))]
+        public static void Hlt() { ThrowPlatformNotSupported(); }
+
         #endregion
 
         /// <summary>
