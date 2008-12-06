@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <summary>
         /// The type referenced by this signature type.
         /// </summary>
-        private SigType _elementType;
+        private SigType elementType;
 
         #endregion // Data members
 
@@ -39,7 +39,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (null == type)
                 throw new ArgumentNullException(@"type");
 
-            _elementType = type;
+            this.elementType = type;
         }
 
         #endregion // Construction
@@ -50,7 +50,10 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// Gets the type referenced by this signature type.
         /// </summary>
         /// <value>The referenced type.</value>
-        public SigType ElementType { get { return _elementType; } }
+        public SigType ElementType 
+        { 
+            get { return this.elementType; } 
+        }
 
         #endregion // Properties
 
@@ -69,7 +72,19 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (null == rst)
                 return false;
 
-            return (true == base.Equals(other) && _elementType == rst._elementType);
+            return (true == base.Equals(other) && this.elementType.Matches(rst.elementType) == true);
+        }
+
+        /// <summary>
+        /// Matches the specified other.
+        /// </summary>
+        /// <param name="other">The other signature type.</param>
+        /// <returns>True, if the signature type matches.</returns>
+        public override bool Matches(SigType other)
+        {
+            RefSigType refOther = other as RefSigType;
+            // FIXME: Do we need to consider custom mods here?
+            return (refOther != null && refOther.elementType.Matches(this.ElementType) == true);
         }
 
         #endregion // SigType Overrides

@@ -23,12 +23,12 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <summary>
         /// Holds the modifiers of the pointer signature type.
         /// </summary>
-        private CustomMod[] _customMods;
+        private CustomMod[] customMods;
 
         /// <summary>
         /// Specifies the type pointed to.
         /// </summary>
-        private SigType _elementType;
+        private SigType elementType;
 
         #endregion // Data members
 
@@ -45,8 +45,8 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (null == type)
                 throw new ArgumentNullException(@"type");
 
-            _customMods = customMods;
-            _elementType = type;
+            this.customMods = customMods;
+            this.elementType = type;
         }
 
         #endregion // Construction
@@ -57,13 +57,19 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// Gets the custom modifiers of the pointer type.
         /// </summary>
         /// <value>The custom modifiers of the pointer type.</value>
-        public CustomMod[] CustomMods { get { return _customMods; } }
+        public CustomMod[] CustomMods 
+        { 
+            get { return this.customMods; } 
+        }
 
         /// <summary>
         /// Gets the type pointed to.
         /// </summary>
         /// <value>The type pointed to.</value>
-        public SigType ElementType { get { return _elementType; } }
+        public SigType ElementType 
+        {
+            get { return this.elementType; }
+        }
 
         #endregion // Properties
 
@@ -82,7 +88,19 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (null == pother)
                 return false;
 
-            return (base.Equals(other) == true && _elementType == pother._elementType && true == CustomMod.Equals(_customMods, pother._customMods));
+            return (base.Equals(other) == true && this.elementType.Matches(pother.elementType) == true && true == CustomMod.Equals(this.customMods, pother.customMods));
+        }
+
+        /// <summary>
+        /// Matches the specified other.
+        /// </summary>
+        /// <param name="other">The other signature type.</param>
+        /// <returns>True, if the signature type matches.</returns>
+        public override bool Matches(SigType other)
+        {
+            PtrSigType ptrOther = other as PtrSigType;
+            // FIXME: Do we need to consider custom mods here?
+            return (ptrOther != null && ptrOther.elementType.Matches(this.elementType) == true);
         }
 
         #endregion // SigType Overrides

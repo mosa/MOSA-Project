@@ -80,6 +80,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             // TODO: Check to make sure a SigType matches
             if (other.Type != this.Type)
                 return false;
+
             switch (this.Type)
             {
                 case CilElementType.Void:
