@@ -576,6 +576,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         {
             switch (cet)
             {
+                case CilElementType.Char: return ConvType.I2;
                 case CilElementType.I1: return ConvType.I1;
                 case CilElementType.I2: return ConvType.I2;
                 case CilElementType.I4: return ConvType.I4;
