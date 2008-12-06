@@ -94,7 +94,7 @@ namespace Mosa.Runtime.Linker
             this.writer.WriteLine("Offset           Virtual          Length           Name                             Class");
             foreach (LinkerSection section in linker.Sections)
             {
-                this.writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.Offset, section.Address.ToInt64(), section.Length, section.Name.PadRight(32), section.SectionKind);
+                this.writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.Offset, section.VirtualAddress.ToInt64(), section.Length, section.Name.PadRight(32), section.SectionKind);
             }
         }
 
@@ -107,7 +107,7 @@ namespace Mosa.Runtime.Linker
             this.writer.WriteLine("Offset           Virtual          Symbol");
             foreach (LinkerSymbol symbol in linker.Symbols)
             {
-                this.writer.WriteLine("{0:x16} {1:x16} {2}", symbol.Offset, symbol.Address.ToInt64(), symbol.Name);
+                this.writer.WriteLine("{0:x16} {1:x16} {2}", symbol.Offset, symbol.VirtualAddress.ToInt64(), symbol.Name);
             }
 
             LinkerSymbol entryPoint = linker.EntryPoint;
@@ -116,7 +116,7 @@ namespace Mosa.Runtime.Linker
                 this.writer.WriteLine();
                 this.writer.WriteLine("Entry point is {0}", entryPoint.Name);
                 this.writer.WriteLine("\tat offset {0:x16}", entryPoint.Offset);
-                this.writer.WriteLine("\tat virtual address {0:x16}", entryPoint.Address.ToInt64());
+                this.writer.WriteLine("\tat virtual address {0:x16}", entryPoint.VirtualAddress.ToInt64());
             }
         }
 
