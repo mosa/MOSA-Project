@@ -577,8 +577,6 @@ namespace Mosa.Runtime.Vm
                 LoadFields(module, rt, typeDefRow.FieldList, maxField, ref fieldOffset);
                 _types[typeOffset++] = rt;
 
-                Debug.Assert(rt.Name != @"CompilerSupport");
-
                 if (rtCallTypeAttribute == null)
                 {
                     if (rt.Name == "InternalCallTypeAttribute" && rt.Namespace == "Mosa.Runtime.Vm")
