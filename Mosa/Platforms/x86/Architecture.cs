@@ -17,7 +17,6 @@ using Mosa.Runtime.Metadata.Signatures;
 
 using Mosa.Runtime.CompilerFramework;
 using IL = Mosa.Runtime.CompilerFramework.IL;
-using Mosa.ObjectFiles.Elf32;
 using Mosa.Platforms.x86.Constraints;
 
 namespace Mosa.Platforms.x86
