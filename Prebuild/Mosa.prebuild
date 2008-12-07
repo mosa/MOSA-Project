@@ -308,12 +308,14 @@
             <Options>
               <OutputPath>..\..\bin</OutputPath>
               <XmlDocFile>Mosa.Platforms.x86.xml</XmlDocFile>
+			  <AllowUnsafe>true</AllowUnsafe>
             </Options>
           </Configuration>
           <Configuration name="Release">
             <Options>
               <OutputPath>..\..\bin</OutputPath>
               <XmlDocFile>Mosa.Platforms.x86.xml</XmlDocFile>
+			  <AllowUnsafe>true</AllowUnsafe>
             </Options>
           </Configuration>
           <Reference name="System" version="2.0.0.0" localCopy="false" />
@@ -323,7 +325,7 @@
             <Match pattern="*.cs" path="." recurse="true"/>
           </Files>
         </Project>
-        <Project name="mosacl" type="Exe" path="..\Mosa\Tools\Compiler" language="C#" runtime="Microsoft" rootNamespace="Mosa.Tools.Compiler" assemblyName="mosacl">
+        <Project name="mosacl" type="Exe" path="..\Mosa\Tools\Compiler" language="C#" runtime="Microsoft" rootNamespace="Mosa.Tools.Compiler" assemblyName="mosacl" frameworkVersion="v3_5">
           <Configuration name="Debug">
             <Options>
               <OutputPath>..\..\bin</OutputPath>
@@ -338,6 +340,7 @@
           </Configuration>
           <ReferencePath>..\..\..\3rdParty</ReferencePath>
           <Reference name="System" version="2.0.0.0" localCopy="false" />
+		  <Reference name="System.Core" version="3.5.0.0" localCopy="false" />
           <Reference name="Mosa.Kernel" localCopy="true" />
           <Reference name="Mosa.Platforms.x86" localCopy="true" />
           <Reference name="Mosa.Runtime" localCopy="true" />
