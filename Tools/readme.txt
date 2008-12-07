@@ -17,5 +17,5 @@ syslinux
 - http://syslinux.zytor.com/wiki/index.php/The_Syslinux_Project
 
 mkdosfs
-- GPL License-Like (see mkdosfs.c)
-- http://www.frontiernet.net/~fys/mtools.htm
+- GPL License
+- http://www1.mager.org/mkdosfs/
