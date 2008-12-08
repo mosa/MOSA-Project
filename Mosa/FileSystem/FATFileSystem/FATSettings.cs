@@ -30,6 +30,11 @@ namespace Mosa.FileSystem.FATFileSystem
 		public byte[] SerialID;
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public bool FloppyMedia;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="FATSettings"/> class.
 		/// </summary>
 		public FATSettings()
@@ -37,6 +42,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			this.FatType = FATType.FAT16;	// default
 			this.VolumeLabel = string.Empty;
 			this.SerialID = new byte[0];
+			this.FloppyMedia = false;
 		}
 	}
 }

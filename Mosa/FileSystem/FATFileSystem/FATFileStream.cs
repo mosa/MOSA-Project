@@ -370,7 +370,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// </summary>
 		protected void NextCluster()
 		{
-			uint newcluster = fs.NextCluster(currentCluster);
+			uint newcluster = fs.GetNextCluster(currentCluster);
 			ReadCluster(newcluster);
 		}
 
