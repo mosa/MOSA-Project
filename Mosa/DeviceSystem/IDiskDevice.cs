@@ -70,6 +70,6 @@ namespace Mosa.DeviceSystem
 		/// Creates the partition devices.
 		/// </summary>
 		/// <returns></returns>
-		LinkedList<IDevice> CreatePartitionDevices();
+		LinkedList<PartitionDevice> CreatePartitionDevices();
 	}
 }

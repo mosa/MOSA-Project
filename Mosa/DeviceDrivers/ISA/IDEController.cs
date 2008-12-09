@@ -261,8 +261,8 @@ namespace Mosa.DeviceDrivers.ISA
 					devices.Add(diskDevice as IDevice);
 
 					// TODO: Move the following outside of the driver
-					foreach (IDevice device in diskDevice.CreatePartitionDevices())
-						devices.Add(device);
+					foreach (PartitionDevice partition in diskDevice.CreatePartitionDevices())
+						devices.Add(partition);
 				}
 			}
 

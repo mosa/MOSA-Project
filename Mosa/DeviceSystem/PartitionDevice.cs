@@ -34,27 +34,30 @@ namespace Mosa.DeviceSystem
         /// </summary>
 		private bool readOnly;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the block count.
+		/// </summary>
+		/// <value>The block count.</value>
 		public uint BlockCount { get { return blockCount; } }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the size of the block.
+		/// </summary>
+		/// <value>The size of the block.</value>
 		public uint BlockSize { get { return diskDevice.BlockSize; } }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets a value indicating whether this instance can write.
+		/// </summary>
+		/// <value><c>true</c> if this instance can write; otherwise, <c>false</c>.</value>
 		public bool CanWrite { get { return !readOnly; } }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="partition"></param>
-        /// <param name="diskDevice"></param>
-        /// <param name="readOnly"></param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PartitionDevice"/> class.
+		/// </summary>
+		/// <param name="partition">The partition.</param>
+		/// <param name="diskDevice">The disk device.</param>
+		/// <param name="readOnly">if set to <c>true</c> [read only].</param>
 		public PartitionDevice(GenericPartition partition, IDiskDevice diskDevice, bool readOnly)
 		{
 			this.diskDevice = diskDevice;
@@ -67,36 +70,36 @@ namespace Mosa.DeviceSystem
 			base.deviceStatus = DeviceStatus.Online;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads the block.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="count">The count.</param>
+		/// <returns></returns>
 		public byte[] ReadBlock(uint block, uint count)
 		{
 			return diskDevice.ReadBlock(block + start, count);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="count"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads the block.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="count">The count.</param>
+		/// <param name="data">The data.</param>
+		/// <returns></returns>
 		public bool ReadBlock(uint block, uint count, byte[] data)
 		{
 			return diskDevice.ReadBlock(block + start, count, data);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="count"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Writes the block.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="count">The count.</param>
+		/// <param name="data">The data.</param>
+		/// <returns></returns>
 		public bool WriteBlock(uint block, uint count, byte[] data)
 		{
 			return diskDevice.WriteBlock(block + start, count, data);

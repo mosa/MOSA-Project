@@ -26,9 +26,9 @@ namespace Mosa.DeviceSystem
         /// </summary>
 		private uint driveNbr;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		private uint totalSectors;
 
         /// <summary>
@@ -41,19 +41,22 @@ namespace Mosa.DeviceSystem
         /// </summary>
 		private bool readOnly;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets a value indicating whether this instance can write.
+		/// </summary>
+		/// <value><c>true</c> if this instance can write; otherwise, <c>false</c>.</value>
 		public bool CanWrite { get { return !readOnly; } }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the total blocks.
+		/// </summary>
+		/// <value>The total blocks.</value>
 		public uint TotalBlocks { get { return totalSectors; } }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the size of the block.
+		/// </summary>
+		/// <value>The size of the block.</value>
 		public uint BlockSize { get { return diskController.GetSectorSize(driveNbr); } }
 
 		/// <summary>
@@ -111,13 +114,13 @@ namespace Mosa.DeviceSystem
 			return diskController.ReadBlock(driveNbr, block, count, data);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="count"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Writes the block.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="count">The count.</param>
+		/// <param name="data">The data.</param>
+		/// <returns></returns>
 		public bool WriteBlock(uint block, uint count, byte[] data)
 		{
 			return diskController.WriteBlock(driveNbr, block, count, data);
@@ -127,16 +130,16 @@ namespace Mosa.DeviceSystem
 		/// Creates the partition devices.
 		/// </summary>
 		/// <returns></returns>
-		public LinkedList<IDevice> CreatePartitionDevices()
+		public LinkedList<PartitionDevice> CreatePartitionDevices()
 		{
-			LinkedList<IDevice> devices = new LinkedList<IDevice>();
+			LinkedList<PartitionDevice> partitions = new LinkedList<PartitionDevice>();
 
 			if (mbr.Valid)
 				for (uint i = 0; i < MasterBootBlock.MaxMBRPartitions; i++)
 					if (mbr[i].PartitionType != PartitionTypes.Empty)
-						devices.Add(new PartitionDevice(mbr[i], this, readOnly));
+						partitions.Add(new PartitionDevice(mbr[i], this, readOnly));
 
-			return devices;
+			return partitions;
 		}
 	}
 }

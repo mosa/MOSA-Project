@@ -513,6 +513,8 @@ namespace Mosa.FileSystem.FATFileSystem
 
 			uint sectorsPerFat = (val1 + (val2 - 1)) / val2;
 
+			firstRootDirectorySector = reservedSectors + (sectorsPerFat * nbrFats);
+
 			BinaryFormat bootSector = new BinaryFormat(512);
 
 			bootSector.SetUInt(BootSector.JumpInstruction, 0);
@@ -664,9 +666,10 @@ namespace Mosa.FileSystem.FATFileSystem
 			if (nbrFats == 2)
 				partition.WriteBlock(reservedSectors + sectorsPerFat, 1, firstFat.Data);
 
-			// Create Root Directory
-
-			// TODO
+			// Create Empty Root Directory
+			if ((fatType == FATType.FAT16) || (fatType == FATType.FAT16)) 
+				for (uint i = 0; i < rootDirSectors; i++)
+					partition.WriteBlock(firstRootDirectorySector + i, 1, emptyFat.Data);
 
 			return ReadBootSector();
 		}
