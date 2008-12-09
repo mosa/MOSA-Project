@@ -451,6 +451,28 @@
           <Match pattern="*.cs" path="." recurse="true"/>
         </Files>
       </Project>
+      <Project name="Mosa.Tools.MakeFAT" type="Exe" path="..\Mosa\Tools\MakeFAT" language="C#" runtime="Microsoft" rootNamespace="Mosa.Tools.MakeFAT" assemblyName="Mosa.Tools.MakeFAT">
+        <Configuration name="Debug">
+          <Options>
+            <OutputPath>..\..\bin</OutputPath>
+            <XmlDocFile>Mosa.Tools.MakeFAT.xml</XmlDocFile>
+          </Options>
+        </Configuration>
+        <Configuration name="Release">
+          <Options>
+            <OutputPath>..\..\bin</OutputPath>
+            <XmlDocFile>Mosa.Tools.MakeFAT.xml</XmlDocFile>
+          </Options>
+        </Configuration>
+        <Reference name="System" version="2.0.0.0" localCopy="false" />
+        <Reference name="Mosa.ClassLib" localCopy="true" />
+        <Reference name="Mosa.DeviceSystem" localCopy="true" />
+        <Reference name="Mosa.DeviceDrivers" localCopy="true" />
+        <Reference name="Mosa.FileSystem" localCopy="true" />
+        <Files>
+          <Match pattern="*.cs" path="." recurse="true"/>
+        </Files>
+      </Project>
     </EmbeddedSolution>
   </Solution>
 </Prebuild>
