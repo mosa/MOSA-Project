@@ -319,7 +319,6 @@
             </Options>
           </Configuration>
           <Reference name="System" version="2.0.0.0" localCopy="false" />
-          <Reference name="Mosa.ObjectFiles.Elf32" localCopy="true" />
           <Reference name="Mosa.Runtime"  localCopy="true" />
           <Files>
             <Match pattern="*.cs" path="." recurse="true"/>
