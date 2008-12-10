@@ -19,65 +19,67 @@ namespace Mosa.ClassLib
         /// </summary>
 		private byte[] data;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="data"></param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BinaryFormat"/> struct.
+		/// </summary>
+		/// <param name="data">The data.</param>
 		public BinaryFormat(byte[] data) { this.data = data; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="length"></param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BinaryFormat"/> struct.
+		/// </summary>
+		/// <param name="length">The length.</param>
 		public BinaryFormat(uint length) { this.data = new byte[length]; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the length.
+		/// </summary>
+		/// <value>The length.</value>
 		public uint Length
 		{
 			get { return (uint)data.Length; }
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the data.
+		/// </summary>
+		/// <value>The data.</value>
 		public byte[] Data
 		{
 			get { return data; }
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets or sets the <see cref="System.Byte"/> at the specified index.
+		/// </summary>
+		/// <value></value>
+		/// <returns></returns>
 		public byte this[int index]
 		{
 			get { return data[index]; }
 			set { data[index] = value; }
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the char.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
 		public char GetChar(uint offset) { return (char)(data[offset]); }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="value"></param>
+		/// <summary>
+		/// Sets the char.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public void SetChar(uint offset, char value) { data[offset] = (byte)value; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the chars.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="length">The length.</param>
+		/// <returns></returns>
 		public char[] GetChars(uint offset, uint length)
 		{
 			char[] value = new char[length];
@@ -87,12 +89,12 @@ namespace Mosa.ClassLib
 			return value;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the bytes.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="length">The length.</param>
+		/// <returns></returns>
 		public byte[] GetBytes(uint offset, uint length)
 		{
 			byte[] value = new byte[length];
@@ -102,42 +104,42 @@ namespace Mosa.ClassLib
 			return value;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="value"></param>
+		/// <summary>
+		/// Sets the chars.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public void SetChars(uint offset, char[] value)
 		{
 			for (uint index = 0; index < value.Length; index++) { data[offset + index] = (byte)value[index]; }
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="value"></param>
+		/// <summary>
+		/// Sets the string.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public void SetString(uint offset, string value)
 		{
 			for (int index = 0; index < value.Length; index++) { data[offset + index] = (byte)value[index]; }
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="value"></param>
-        /// <param name="length"></param>
+		/// <summary>
+		/// Sets the string.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="length">The length.</param>
 		public void SetString(uint offset, string value, uint length)
 		{
 			for (int index = 0; index < length; index++) { data[offset + index] = (byte)value[index]; }
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the usigned int.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
 		public uint GetUInt(uint offset)
 		{
 			uint value = data[offset++];
@@ -148,11 +150,11 @@ namespace Mosa.ClassLib
 			return value;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="value"></param>
+		/// <summary>
+		/// Sets the unsigned int.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public void SetUInt(uint offset, uint value)
 		{
 			data[offset++] = (byte)(value & 0xFF);
@@ -162,10 +164,10 @@ namespace Mosa.ClassLib
 		}
 
 		/// <summary>
-		/// 
+		/// Sets the unsigned int reversed.
 		/// </summary>
-		/// <param name="offset"></param>
-		/// <param name="value"></param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public void SetUIntReversed(uint offset, uint value)
 		{
 			data[offset++] = (byte)((value >> 24) & 0xFF);
@@ -175,10 +177,10 @@ namespace Mosa.ClassLib
 		}
 
 		/// <summary>
-		/// 
+		/// Sets the unsigned long.
 		/// </summary>
-		/// <param name="offset"></param>
-		/// <param name="value"></param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public void SetULong(uint offset, ulong value)
 		{
 			data[offset++] = (byte)(value & 0xFF);
@@ -192,10 +194,10 @@ namespace Mosa.ClassLib
 		}
 
 		/// <summary>
-		/// 
+		/// Sets the unsigned long reversed.
 		/// </summary>
-		/// <param name="offset"></param>
-		/// <param name="value"></param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public void SetULongReversed(uint offset, ulong value)
 		{
 			data[offset++] = (byte)((value >> 56) & 0xFF); 
@@ -207,12 +209,12 @@ namespace Mosa.ClassLib
 			data[offset++] = (byte)((value >> 8) & 0xFF);
 			data[offset++] = (byte)(value & 0xFF);
 		}
-		
+
 		/// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <returns></returns>
+		/// Gets the unsigned short.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
 		public ushort GetUShort(uint offset)
 		{
 			ushort value = data[offset++];
@@ -221,33 +223,33 @@ namespace Mosa.ClassLib
 			return value;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="value"></param>
+		/// <summary>
+		/// Sets the unsigned short.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public void SetUShort(uint offset, ushort value)
 		{
 			data[offset++] = (byte)(value & 0xFF);
 			data[offset++] = (byte)((value >> 8) & 0xFF);
 		}
-		
+
 		/// <summary>
-		/// 
+		/// Sets the unsigned short reversed.
 		/// </summary>
-		/// <param name="offset"></param>
-		/// <param name="value"></param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public void SetUShortReversed(uint offset, ushort value)
 		{
 			data[offset++] = (byte)((value >> 8) & 0xFF);
 			data[offset++] = (byte)(value & 0xFF);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the unsigned long.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
         public ulong GetULong(uint offset)
         {
             ulong value = data[offset++];
@@ -262,11 +264,11 @@ namespace Mosa.ClassLib
             return value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="value"></param>
+		/// <summary>
+		/// Sets the unsigned long.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
         public void SetULong(ulong offset, ulong value)
         {
             data[offset++] = (byte)(value & 0xFF);
@@ -279,65 +281,65 @@ namespace Mosa.ClassLib
             data[offset++] = (byte)((value >> 56) & 0xFF);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the int.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
 		public int GetInt(uint offset) { return (int)GetUInt(offset); }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="value"></param>
+		/// <summary>
+		/// Sets the int.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public void SetInt(uint offset, int value) { SetUInt(offset, (uint)value); }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the byte.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
 		public byte GetByte(uint offset) { return data[offset]; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="value"></param>
+		/// <summary>
+		/// Sets the byte.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public void SetByte(uint offset, byte value) { data[offset] = value; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="value"></param>
+		/// <summary>
+		/// Sets the bytes.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public void SetBytes(uint offset, byte[] value)
 		{
-			for (uint index = 0; index < value.Length; index++) { data[offset] = value[index]; }
+			for (uint index = 0; index < value.Length; index++) { data[offset + index] = value[index]; }
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="value"></param>
-        /// <param name="start"></param>
-        /// <param name="length"></param>
+		/// <summary>
+		/// Sets the bytes.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="start">The start.</param>
+		/// <param name="length">The length.</param>
 		public void SetBytes(uint offset, byte[] value, uint start, uint length)
 		{
-			for (uint index = 0; index < length; index++) { data[offset] = value[start + index]; }
+			for (uint index = 0; index < length; index++) { data[offset + index] = value[start + index]; }
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="value"></param>
-        /// <param name="length"></param>
+		/// <summary>
+		/// Fills the specified offset.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="length">The length.</param>
 		public void Fill(uint offset, byte value, uint length)
 		{
-			for (uint index = 0; index < length; index++) { data[offset] = value; }
+			for (uint index = 0; index < length; index++) { data[offset + index] = value; }
 		}
 	}
 }

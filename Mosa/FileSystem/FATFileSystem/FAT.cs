@@ -549,6 +549,10 @@ namespace Mosa.FileSystem.FATFileSystem
 			bootSector.SetUInt(BootSector.HiddenSectors, 0);
 
 			if (fatType != FATType.FAT32) {
+				bootSector.SetByte(BootSector.JumpInstruction, 0xEB); // 0xEB = JMP Instruction
+				bootSector.SetByte(BootSector.JumpInstruction + 1, 0x3C);
+				bootSector.SetByte(BootSector.JumpInstruction + 2, 0x90); 
+
 				bootSector.SetUShort(BootSector.SectorsPerFAT, (ushort)sectorsPerFat);
 				bootSector.SetByte(BootSector.PhysicalDriveNbr, 0x80); // 0x80 = Hard disk (no support for FAT32 on Floppy)
 				bootSector.SetByte(BootSector.ReservedCurrentHead, 0);
@@ -572,6 +576,10 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 
 			if (fatType == FATType.FAT32) {
+				bootSector.SetByte(BootSector.JumpInstruction, 0xEB);  // 0xEB = JMP Instruction
+				bootSector.SetByte(BootSector.JumpInstruction + 1, 0x58);
+				bootSector.SetByte(BootSector.JumpInstruction + 2, 0x90); 
+
 				bootSector.SetUShort(BootSector.SectorsPerFAT, 0);
 				bootSector.SetString(BootSector.FATType, "FAT32   ");
 				bootSector.SetUInt(BootSector.FAT32_SectorPerFAT, sectorsPerFat);
@@ -639,17 +647,17 @@ namespace Mosa.FileSystem.FATFileSystem
 			BinaryFormat firstFat = new BinaryFormat(512);
 
 			if (fatType == FATType.FAT12) {
-				firstFat.SetByte(1, (byte)((0xF0) | (endOfClusterMark >> 8))); // = 0xFF
-				firstFat.SetByte(2, (byte)(endOfClusterMark & 0xFF)); // = 0xF8
+				firstFat.SetByte(1, 0xFF); 
+				firstFat.SetByte(2, 0xF8); 
 			}
 			else if (fatType == FATType.FAT16) {
 				firstFat.SetUShort(0, 0xFFFF);
-				firstFat.SetUShort(2, (ushort)endOfClusterMark);
+				firstFat.SetUShort(2, 0xFFF8);
 			}
 			else // if (type == FatType.FAT32)
 			{
 				firstFat.SetUInt(0, 0x0FFFFFFF);
-				firstFat.SetUInt(4, endOfClusterMark);
+				firstFat.SetUInt(4, 0x0FFFFFF8);
 			}
 
 			if (fatSettings.FloppyMedia)
@@ -662,8 +670,10 @@ namespace Mosa.FileSystem.FATFileSystem
 			if (nbrFats == 2)
 				partition.WriteBlock(reservedSectors + sectorsPerFat, 1, firstFat.Data);
 
+			emptyFat.SetString(0,"DIR"); // TESTING
+
 			// Create Empty Root Directory
-			if ((fatType == FATType.FAT16) || (fatType == FATType.FAT16))
+			if ((fatType == FATType.FAT12) || (fatType == FATType.FAT16))
 				for (uint i = 0; i < rootDirSectors; i++)
 					partition.WriteBlock(firstRootDirectorySector + i, 1, emptyFat.Data);
 

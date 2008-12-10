@@ -35,15 +35,15 @@ namespace Mosa.DeviceSystem
         /// <summary>
         /// 
         /// </summary>
-		public const byte Fat12 = 0x01;
+		public const byte FAT12 = 0x01;
         /// <summary>
         /// 
         /// </summary>
-		public const byte Fat16 = 0x04;
+		public const byte FAT16 = 0x04;
         /// <summary>
         /// 
         /// </summary>
-		public const byte Fat32 = 0x0B;
+		public const byte FAT32 = 0x0B;
 	}
 
 	#endregion

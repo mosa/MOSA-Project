@@ -37,6 +37,9 @@ namespace Mosa.Tools.MakeFAT
 			//}
 
 			try {
+				
+				System.IO.File.Delete(imageFilename);
+
 				byte[] mbrCode = ReadFile(mbrFilename);
 				byte[] fatCode = ReadFile(fatcodeFilename);
 
@@ -51,9 +54,9 @@ namespace Mosa.Tools.MakeFAT
 
 				mbr.DiskSignature = 0x12345678;
 				mbr.Partitions[0].Bootable = true;
-				mbr.Partitions[0].StartLBA = 1;
-				mbr.Partitions[0].TotalBlocks = blockCount - 1;
-				mbr.Partitions[0].PartitionType = PartitionType.Fat12;
+				mbr.Partitions[0].StartLBA = 17;
+				mbr.Partitions[0].TotalBlocks = blockCount - 17;
+				mbr.Partitions[0].PartitionType = PartitionType.FAT12;
 				mbr.Code = mbrCode;
 
 				mbr.Write();
@@ -64,7 +67,7 @@ namespace Mosa.Tools.MakeFAT
 				// Set FAT settings
 				FATSettings fatSettings = new FATSettings();
 
-				fatSettings.FATType = FATType.FAT16;
+				fatSettings.FATType = FATType.FAT12;
 				fatSettings.FloppyMedia = false;
 				fatSettings.VolumeLabel = "MOSA BOOT";
 				fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };

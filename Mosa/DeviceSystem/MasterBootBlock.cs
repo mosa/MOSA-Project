@@ -182,10 +182,8 @@ namespace Mosa.DeviceSystem
 			masterboot.SetUShort(MasterBootRecord.MBRSignature, MasterBootConstants.MBRSignature);
 
 			if (code != null)
-				for (uint index = 0; index < MasterBootConstants.CodeAreaSize; index++)
+				for (uint index = 0; ((index < MasterBootConstants.CodeAreaSize) && (index < code.Length)); index++)
 					masterboot.SetByte(index, code[index]);
-
-			diskDevice.WriteBlock(0, 1, masterboot.Data);
 
 			for (uint index = 0; index < MaxMBRPartitions; index++) {
 				uint offset = MasterBootRecord.PrimaryPartitions + (index * 16);
@@ -193,7 +191,16 @@ namespace Mosa.DeviceSystem
 				masterboot.SetByte(offset + PartitionRecord.PartitionType, Partitions[index].PartitionType);
 				masterboot.SetUInt(offset + PartitionRecord.LBA, Partitions[index].StartLBA);
 				masterboot.SetUInt(offset + PartitionRecord.Sectors, Partitions[index].TotalBlocks);
+
+				masterboot.SetByte(offset + PartitionRecord.FirstCRS, 0);
+				masterboot.SetByte(offset + PartitionRecord.FirstCRS + 1, 0);
+				masterboot.SetByte(offset + PartitionRecord.FirstCRS + 2, 0);
+				masterboot.SetByte(offset + PartitionRecord.LastCRS, 0);
+				masterboot.SetByte(offset + PartitionRecord.LastCRS + 1, 0);
+				masterboot.SetByte(offset + PartitionRecord.LastCRS + 2, 0);
 			}
+
+			diskDevice.WriteBlock(0, 1, masterboot.Data);
 
 			return true;
 		}
