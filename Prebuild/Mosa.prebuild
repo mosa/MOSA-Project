@@ -474,6 +474,24 @@
           <Match pattern="*.cs" path="." recurse="true"/>
         </Files>
       </Project>
+<Project name="Mosa.Tools.CreatePCIList" type="Exe" path="..\Mosa\Tools\CreatePCIList" language="C#" runtime="Microsoft" rootNamespace="Mosa.Tools.CreatePCIList" assemblyName="Mosa.Tools.CreatePCIList">
+        <Configuration name="Debug">
+          <Options>
+            <OutputPath>..\..\bin</OutputPath>
+            <XmlDocFile>Mosa.Tools.CreatePCIList.xml</XmlDocFile>
+          </Options>
+        </Configuration>
+        <Configuration name="Release">
+          <Options>
+            <OutputPath>..\..\bin</OutputPath>
+            <XmlDocFile>Mosa.Tools.CreatePCIList.xml</XmlDocFile>
+          </Options>
+        </Configuration>
+        <Reference name="System" version="2.0.0.0" localCopy="false" />      
+        <Files>
+          <Match pattern="*.cs" path="." recurse="true"/>
+        </Files>
+      </Project>
     </EmbeddedSolution>
   </Solution>
 </Prebuild>

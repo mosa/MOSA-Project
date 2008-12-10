@@ -1,0 +1,1236 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon></ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Mosa.Runtime</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder></AppDesignerFolder>
+    <RootNamespace>Mosa.Runtime</RootNamespace>
+    <StartupObject></StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>Mosa.Runtime.xml</DocumentationFile>
+    <DebugSymbols>True</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>False</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>False</NoStdLib>
+    <NoWarn></NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>Mosa.Runtime.xml</DocumentationFile>
+    <DebugSymbols>False</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>True</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <NoStdLib>False</NoStdLib>
+    <NoWarn></NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+        <Name>System</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Kernel\Mosa.Kernel.csproj">
+      <Name>Mosa.Kernel</Name>
+      <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IJitService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MethodCompilationStageComposite.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RuntimeBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\ArchitectureSpecificAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\AssemblyCompiler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\BasicArchitecture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\BasicBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\BasicBlockBuilderStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\BasicBlockReduction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\BlockOrderFlags.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\CodeGenerationStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\CodeTransformationStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\CompilationException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\CompilerBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\CompilerPipeline.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\CompilerScheduler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\CompilerSupport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\CompilerSupportAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\CompilerSupportFunction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\ConstantFoldingStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\ConstantOperand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\ConstantPropagationStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\DominanceCalculationStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\EnterSSA.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\FlowControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\FunctionCallInliningProcessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IArchitecture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IAssemblyCompilerStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IBasicBlockProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IBranchInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\ICallingConvention.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\ICodeGenerationStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IDominanceProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IInstructionDecoder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IInstructionsProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IInstructionVisitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IMethodCompilerBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IMethodCompilerStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\Instruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\InstructionLogger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\InstructionStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IntrinsicAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IPlatformTransformationStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IRegisterConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IStackLayoutProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\JitTrampolineAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\LabelOperand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\LeaveSSA.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\LinearRegisterAllocator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\MemberOperand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\MemoryOperand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\MethodCompilerBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\MethodCompilerBuilderStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\MethodCompilerRunnerStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\NakedAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\ObjectFieldOperand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\ObjectFileBuilderBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\Operand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\ParameterOperand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\Register.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\RegisterOperand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\RuntimeSupportAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\SimpleRegisterAllocator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\StackLayoutStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\StackOperand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\StackTypeCode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\StaticFieldOperand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\TemporaryOperand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\TypeLayoutStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\VariableOperand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\AddInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\ArglistInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\ArithmeticInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\ArithmeticOverflowInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\BinaryBranchInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\BinaryComparisonInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\BinaryInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\BinaryLogicInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\BoxingInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\BoxInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\BranchInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\BreakInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\CalliInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\CallInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\CallvirtInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\CastclassInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\CilToIRTransformationStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\ConstrainedPrefixInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\ConversionInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\CpblkInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\CpobjInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\DivInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\DupInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\EhClause.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\EndfilterInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\EndfinallyInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\IILVisitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\ILDecodingStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\ILInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\ILoadInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\InitblkInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\InitObjInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\InvokeInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\IsInstInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\IStoreInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\JumpInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdargaInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdargInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdcInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdelemaInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdelemInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdfldaInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdfldInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdftnInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdlenInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdlocaInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdlocInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdobjInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdsfldaInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdsfldInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdstrInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdtokenInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LdvirtftnInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LeaveInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LoadInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\LocalallocInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\MethodDataSectionType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\MethodFlags.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\MethodHeader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\MkrefanyInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\MulInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\NaryInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\NegInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\NewarrInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\NewobjInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\NopInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\NoPrefixInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\NotInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\OpCode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\OpCodeFlags.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\PopInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\PrefixInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\RefanytypeInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\RefanyvalInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\RemInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\RethrowInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\ReturnInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\ShiftInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\SizeofInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\StargInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\StelemInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\StfldInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\StlocInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\StobjInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\StsfldInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\SubInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\SwitchInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\ThrowInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\UnalignedPrefixInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\UnaryArithmeticInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\UnaryBranchInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\UnaryInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\UnboxAnyInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IL\UnboxInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\AddressOfInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\ArithmeticShiftRightInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\BranchInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\CallInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\ConditionCode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\EpilogueInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\FloatingPointCompareInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\FloatingPointToIntegerConversionInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\IConditionalInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\IIrVisitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\IntegerCompareInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\IntegerToFloatingPointConversionInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\IRInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\JmpInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\LiteralInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\LoadInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\LogicalAndInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\LogicalNotInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\LogicalOrInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\LogicalXorInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\MoveInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\OneOperandInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\PhiInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\PopInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\PrologueInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\PushInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\ReturnInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\ShiftLeftInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\ShiftRightInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\SignExtendedMoveInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\StoreInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\ThreeOperandInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\TwoOperandInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\UDivInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\URemInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilerFramework\IR\ZeroExtendedMoveInstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\AssemblyLinkerStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\IAssemblyLinker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\LinkerException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\LinkerSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\LinkerStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\LinkerSymbol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\LinkRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\LinkType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\MapFileGenerationStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\ObjectFileLayoutStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\SectionKind.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf32FileType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf32Header.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf32IdentClass.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf32IdentData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf32IdentIndex.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf32Linker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf32MachineType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf32ProgramHeader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf32ProgramHeaderFlags.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf32ProgramHeaderType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf32SymbolTableEntry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf32Version.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Elf3IdentData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Sections\Elf32BssSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Sections\Elf32CodeSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Sections\Elf32DataSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Sections\Elf32NullSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Sections\Elf32RoDataSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Sections\Elf32Section.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Sections\Elf32SectionAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Sections\Elf32SectionHeader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Sections\Elf32SectionType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf32\Sections\Elf32StringTableSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Elf64FileType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Elf64Header.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Elf64IdentClass.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Elf64IdentData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Elf64IdentIndex.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Elf64Linker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Elf64MachineType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Elf64ProgramHeader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Elf64SymbolTableEntry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Elf64Version.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Sections\Elf64BssSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Sections\Elf64CodeSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Sections\Elf64DataSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Sections\Elf64NullSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Sections\Elf64RoDataSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Sections\Elf64Section.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Sections\Elf64SectionAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Sections\Elf64SectionHeader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Sections\Elf64SectionType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\Elf64\Sections\Elf64StringTableSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\PE\CLI_HEADER.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\PE\IMAGE_DATA_DIRECTORY.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\PE\IMAGE_DOS_HEADER.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\PE\IMAGE_FILE_HEADER.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\PE\IMAGE_NT_HEADERS.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\PE\IMAGE_OPTIONAL_HEADER.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\PE\IMAGE_SECTION_HEADER.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\PE\PortableExecutableLinker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\PE\PortableExecutableLinkerSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linker\PE\RuntimeImageFlags.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Loader\AssemblyLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Loader\GenericArgument.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Loader\IAssemblyImage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Loader\IAssemblyLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Loader\ModuleType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Loader\PE\MetadataRoot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Loader\PE\PortableExecutableImage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\AssemblyFlags.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\AssemblyHashAlgorithm.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\BlobHeap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\CallingConvention.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\CilElementType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\EventAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\FieldAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\FileAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\GenericParamAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\GuidHeap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Heap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\HeapType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IMetadataProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\IndexType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\ManifestResourceAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\MethodAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\MethodImplAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\MethodSemanticsAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\ParameterAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\PInvokeAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\PropertyAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\StringHeap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\TableHeap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\TokenTypes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\TypeAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\UserStringHeap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Utilities.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Blobs\CustomAttributeParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Runtime\CilRuntimeField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Runtime\CilRuntimeMethod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Runtime\CilRuntimeType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\ArraySigType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\ClassSigType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\CustomMod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\FieldSignature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\FnptrSigType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\GenericInstSigType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\LocalVariableSignature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\MethodReferenceSignature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\MethodSignature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\MethodSpecSignature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\MVarSigType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\PropertySignature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\PtrSigType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\RefSigType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\Signature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\SigType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\StandaloneMethodSignature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\SZArraySigType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\TypeSpecSignature.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\ValueTypeSigType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Signatures\VarSigType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\AssemblyOSRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\AssemblyProcessorRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\AssemblyRefOSRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\AssemblyRefProcessorRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\AssemblyRefRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\AssemblyRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\ClassLayoutRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\ConstantRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\CustomAttributeRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\DeclSecurityRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\EventMapRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\EventRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\ExportedTypeRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\FieldLayoutRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\FieldMarshalRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\FieldRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\FieldRVARow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\FileRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\GenericParamConstraintRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\GenericParamRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\ImplMapRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\InterfaceImplRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\ManifestResourceRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\MemberRefRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\MethodDefRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\MethodImplRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\MethodSemanticsRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\MethodSpecRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\ModuleRefRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\ModuleRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\NestedClassRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\ParamRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\PropertyMapRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\PropertyRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\StandaloneSigRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\TypeDefRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\TypeRefRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Tables\TypeSpecRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\DefaultTypeSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\InternalCallImplAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\InternalCallTypeAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\IRuntimeAttributable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\ITypeSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\MethodTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\ModuleOffsets.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\Object.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\ReadOnlyRuntimeFieldListView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\ReadOnlyRuntimeListView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\ReadOnlyRuntimeMethodListView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\ReadOnlyRuntimeParameterListView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\ReadOnlyRuntimeTypeListView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\RuntimeAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\RuntimeField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\RuntimeMember.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\RuntimeMethod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\RuntimeObject.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\RuntimeParameter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\RuntimeSupport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\RuntimeType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\VmCall.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vm\VmCallAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,208 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1D756AD8-07A2-44F3-9A69-B6573A339CB4}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon></ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Pictor</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder></AppDesignerFolder>
+    <RootNamespace>Pictor</RootNamespace>
+    <StartupObject></StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>Pictor.xml</DocumentationFile>
+    <DebugSymbols>True</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>False</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>False</NoStdLib>
+    <NoWarn></NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>Pictor.xml</DocumentationFile>
+    <DebugSymbols>False</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>True</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <NoStdLib>False</NoStdLib>
+    <NoWarn></NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+        <Name>System</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\Control.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math\AffineRotationTransformation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math\AffineTransformation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math\AffineTranslationTransformation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math\MathHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math\Point.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math\Rect.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math\Vector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Constants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\PathCommands.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Primitive.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Arcs\Arc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Arcs\BezierArc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Arcs\BezierArcSvg.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Curves\Curve.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Curves\Curve3.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Curves\Curve3Div.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Curves\Curve3Inc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Curves\Curve4.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Curves\Curve4Div.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Curves\Curve4Inc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Curves\Curve4Points.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Curves\CurveApproximationMethod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Primitives\Ellipse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Objects\Splines\BSpline.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\BaseRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\FillingRule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\RenderingBuffer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\ColorTypes\IColorType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\ColorTypes\IColorTypeAlpha.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\ColorTypes\RgbColor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\PixelFormats\BasePixelFormat.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\PixelFormats\RgbPixelFormat.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\Scanline\AntiAliasedCell.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\Scanline\AntiAliasedRasterizerCells.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\Scanline\AntiAliasedScanlineRasterizer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\Scanline\ICell.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\Scanline\IClipper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\Scanline\ScanlineHitTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\Scanline\ScanlineRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\Scanline\Scanlines\BinaryScanline.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\Scanline\Scanlines\BinaryScanline32.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Renderer\Scanline\Scanlines\IScanline.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
