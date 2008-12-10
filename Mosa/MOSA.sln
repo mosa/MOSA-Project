@@ -66,7 +66,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution 
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 17
+		SccNumberOfProjects = 20
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs01.codeplex.com/
 		SccLocalPath0 = .
@@ -134,6 +134,18 @@ Global
 		SccProjectTopLevelParentUniqueName16 = MOSA.sln
 		SccProjectName16 = EmulatedKernel
 		SccLocalPath16 = EmulatedKernel
+		SccProjectUniqueName17 = ..\\Test\\Mosa\\Runtime\\CompilerFramework\\Test.Mosa.Runtime.CompilerFramework.csproj
+		SccProjectTopLevelParentUniqueName17 = MOSA.sln
+		SccProjectName17 = ../Test/Mosa/Runtime/CompilerFramework
+		SccLocalPath17 = ..\\Test\\Mosa\\Runtime\\CompilerFramework
+		SccProjectUniqueName18 = HelloWorld\\Mosa.HelloWorld.csproj
+		SccProjectTopLevelParentUniqueName18 = MOSA.sln
+		SccProjectName18 = HelloWorld
+		SccLocalPath18 = HelloWorld
+		SccProjectUniqueName19 = Tools\\CreatePCIList\\Mosa.Tools.CreatePCIList.csproj
+		SccProjectTopLevelParentUniqueName19 = MOSA.sln
+		SccProjectName19 = Tools/CreatePCIList
+		SccLocalPath19 = Tools\\CreatePCIList
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -73,9 +73,6 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
-    <Reference Include="Mosa.ObjectFiles.Elf32">
-      <Name>Mosa.ObjectFiles.Elf32</Name>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Runtime\Mosa.Runtime.csproj">

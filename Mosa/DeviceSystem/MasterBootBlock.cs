@@ -121,6 +121,8 @@ namespace Mosa.DeviceSystem
 		{
 			this.diskDevice = diskDevice;
 			Partitions = new GenericPartition[MaxMBRPartitions];
+			for (uint i = 0; i < MaxMBRPartitions; i++)
+				Partitions[i] = new GenericPartition(i);
 			Read();
 		}
 

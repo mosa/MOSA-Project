@@ -19,20 +19,29 @@ namespace Mosa.Tools.MakeFAT
 
 		static int Main(string[] args)
 		{
-			string filename = string.Empty;
-			uint blockCount = 0;
+			string imageFilename = string.Empty;
+			string mbrFilename = string.Empty;
+			string fatcodeFilename = string.Empty;
+			uint blockCount = 1024 * 1024 * 4 / 512;
 
 			// TODO: Parse command line parameters
 
-			if (args.Length < 3) {
-				Console.WriteLine("ERROR: Missing arguments");
-				Console.WriteLine("MakeFAT [-mbr <master boot record>] <number of blocks>  <destination img file>");
-				return -1;
-			}
+			imageFilename = @"x:\boot\bootimage.img";
+			mbrFilename = @"x:\boot\freedos-mbr.bin";
+			fatcodeFilename = @"x:\boot\freedos-boot.bin";
+
+			//if (args.Length < 3) {
+			//    Console.WriteLine("ERROR: Missing arguments");
+			//    Console.WriteLine("MakeFAT [-mbr <master boot record>] <number of blocks>  <destination img file>");
+			//    return -1;
+			//}
 
 			try {
+				byte[] mbrCode = ReadFile(mbrFilename);
+				byte[] fatCode = ReadFile(fatcodeFilename);
+
 				// Create disk image file
-				Mosa.EmulatedDevices.Synthetic.DiskDevice diskDevice = new Mosa.EmulatedDevices.Synthetic.DiskDevice(filename);
+				Mosa.EmulatedDevices.Synthetic.DiskDevice diskDevice = new Mosa.EmulatedDevices.Synthetic.DiskDevice(imageFilename);
 
 				// Expand disk image
 				diskDevice.WriteBlock(blockCount - 1, 1, new byte[512]);
@@ -45,8 +54,7 @@ namespace Mosa.Tools.MakeFAT
 				mbr.Partitions[0].StartLBA = 1;
 				mbr.Partitions[0].TotalBlocks = blockCount - 1;
 				mbr.Partitions[0].PartitionType = PartitionType.Fat12;
-
-				// TODO: mbr.Code = < something >;
+				mbr.Code = mbrCode;
 
 				mbr.Write();
 
@@ -60,7 +68,8 @@ namespace Mosa.Tools.MakeFAT
 				fatSettings.FloppyMedia = false;
 				fatSettings.VolumeLabel = "MOSA BOOT";
 				fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };
-				
+				fatSettings.OSBootCode = fatCode;
+
 				// Create FAT file system
 				FAT fat = new FAT(partitionDevice);
 
@@ -73,6 +82,15 @@ namespace Mosa.Tools.MakeFAT
 			}
 
 			return 0;
+		}
+
+		static private byte[] ReadFile(string filename)
+		{
+			FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
+			byte[] data = new byte[fileStream.Length];
+			fileStream.Read(data, 0, data.Length);
+			fileStream.Close();
+			return data;
 		}
 	}
 }

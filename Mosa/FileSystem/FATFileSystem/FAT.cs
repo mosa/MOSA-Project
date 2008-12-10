@@ -546,14 +546,10 @@ namespace Mosa.FileSystem.FATFileSystem
 				bootSector.SetUShort(BootSector.NumberOfHeads, 16);
 			}
 
-			if (fatType == FATType.FAT32)
-				bootSector.SetUShort(BootSector.SectorsPerFAT, 0);
-			else
-				bootSector.SetUShort(BootSector.SectorsPerFAT, (ushort)sectorsPerFat);
-
 			bootSector.SetUInt(BootSector.HiddenSectors, 0);
 
 			if (fatType != FATType.FAT32) {
+				bootSector.SetUShort(BootSector.SectorsPerFAT, (ushort)sectorsPerFat);
 				bootSector.SetByte(BootSector.PhysicalDriveNbr, 0x80); // 0x80 = Hard disk (no support for FAT32 on Floppy)
 				bootSector.SetByte(BootSector.ReservedCurrentHead, 0);
 				bootSector.SetByte(BootSector.ExtendedBootSignature, 0x29);
@@ -567,17 +563,17 @@ namespace Mosa.FileSystem.FATFileSystem
 				}
 
 				bootSector.SetUShort(BootSector.BootSectorSignature, 0x55AA);
-				//BootSector.OSBootCode // TODO
+				bootSector.SetBytes(BootSector.OSBootCode, fatSettings.OSBootCode, 0, 448);
+
+				if (fatType == FATType.FAT12)
+					bootSector.SetString(BootSector.FATType, "FAT12   ");
+				else 
+					bootSector.SetString(BootSector.FATType, "FAT16   ");
 			}
 
-			if (fatType == FATType.FAT12)
-				bootSector.SetString(BootSector.FATType, "FAT12   ");
-			else if (fatType == FATType.FAT16)
-				bootSector.SetString(BootSector.FATType, "FAT16   ");
-			else // if (type == FatType.FAT32)
-				bootSector.SetString(BootSector.FATType, "FAT32   ");
-
 			if (fatType == FATType.FAT32) {
+				bootSector.SetUShort(BootSector.SectorsPerFAT, 0);
+				bootSector.SetString(BootSector.FATType, "FAT32   ");
 				bootSector.SetUInt(BootSector.FAT32_SectorPerFAT, sectorsPerFat);
 				bootSector.SetByte(BootSector.FAT32_Flags, 0);
 				bootSector.SetUShort(BootSector.FAT32_Version, 0);
@@ -592,7 +588,7 @@ namespace Mosa.FileSystem.FATFileSystem
 				bootSector.SetString(BootSector.FAT32_VolumeLabel, "            ");  // 12 blank spaces
 				bootSector.SetString(BootSector.FAT32_VolumeLabel, fatSettings.VolumeLabel, (uint)(fatSettings.VolumeLabel.Length <= 12 ? fatSettings.VolumeLabel.Length : 12));
 				bootSector.SetString(BootSector.FAT32_FATType, "FAT32   ");
-				//BootSector.OSBootCode // TODO
+				bootSector.SetBytes(BootSector.FAT32_OSBootCode, fatSettings.OSBootCode, 0, 420);
 			}
 
 			// Write Boot Sector
@@ -667,7 +663,7 @@ namespace Mosa.FileSystem.FATFileSystem
 				partition.WriteBlock(reservedSectors + sectorsPerFat, 1, firstFat.Data);
 
 			// Create Empty Root Directory
-			if ((fatType == FATType.FAT16) || (fatType == FATType.FAT16)) 
+			if ((fatType == FATType.FAT16) || (fatType == FATType.FAT16))
 				for (uint i = 0; i < rootDirSectors; i++)
 					partition.WriteBlock(firstRootDirectorySector + i, 1, emptyFat.Data);
 

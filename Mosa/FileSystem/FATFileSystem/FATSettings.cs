@@ -30,6 +30,40 @@ namespace Mosa.FileSystem.FATFileSystem
 		public bool FloppyMedia;
 
 		/// <summary>
+		/// 
+		/// </summary>
+		protected byte[] osBootCode;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public byte[] OSBootCode
+		{
+			get
+			{
+				if (osBootCode == null) return null;
+
+				byte[] copy = new byte[osBootCode.Length];
+
+				for (int i = 0; i < osBootCode.Length; i++)
+					copy[i] = osBootCode[i];
+
+				return copy;
+			}
+			set
+			{
+				if (value == null) {
+					osBootCode = null;
+					return;
+				}
+
+				osBootCode = new byte[value.Length];
+
+				for (int i = 0; i < value.Length; i++)
+					osBootCode[i] = value[i];
+			}
+		}
+		/// <summary>
 		/// Initializes a new instance of the <see cref="FATSettings"/> class.
 		/// </summary>
 		public FATSettings()
@@ -37,6 +71,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			this.FATType = FATType.FAT16;	// default
 			this.SerialID = new byte[0];
 			this.FloppyMedia = false;
+			this.OSBootCode = null;
 		}
 	}
 }
