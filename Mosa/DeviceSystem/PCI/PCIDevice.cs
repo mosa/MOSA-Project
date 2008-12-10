@@ -160,12 +160,13 @@ namespace Mosa.DeviceSystem.PCI
 				pciBaseAddresses[6] = new BaseAddress(AddressRegion.Memory, 0xA0000, 0x1FFFF, false);
 				pciBaseAddresses[7] = new BaseAddress(AddressRegion.IO, 0x3B0, 0x0F, false);
 			}
-			
+
 			foreach (BaseAddress baseAddress in pciBaseAddresses)
-				switch (baseAddress.Region) {
-					case AddressRegion.IO: ioPortRegionCount++; break;
-					case AddressRegion.Memory: memoryRegionCount++; break;
-				}
+				if (baseAddress != null)
+					switch (baseAddress.Region) {
+						case AddressRegion.IO: ioPortRegionCount++; break;
+						case AddressRegion.Memory: memoryRegionCount++; break;
+					}
 		}
 
 		/// <summary>

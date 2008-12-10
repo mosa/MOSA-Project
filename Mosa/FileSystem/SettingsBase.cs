@@ -25,7 +25,7 @@ namespace Mosa.FileSystem
 		/// <summary>
 		/// The volume label.
 		/// </summary>
-		private string label;
+		public string VolumeLabel;
 
 		#endregion // Data members
 
@@ -36,28 +36,9 @@ namespace Mosa.FileSystem
 		/// </summary>
 		public SettingsBase()
 		{
-			label = "New Volume";
+			VolumeLabel = "New Volume";
 		}
 
 		#endregion // Construction
-
-		#region Methods
-
-		/// <summary>
-		/// Gets or sets the volume label.
-		/// </summary>
-		public string Label
-		{
-			get { return label; }
-			set
-			{
-				if (value == null)
-					throw new System.ArgumentNullException(@"value");
-
-				label = value;
-			}
-		}
-
-		#endregion // Methods
 	}
 }

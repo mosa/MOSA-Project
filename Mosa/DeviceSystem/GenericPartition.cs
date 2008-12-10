@@ -14,7 +14,7 @@ namespace Mosa.DeviceSystem
     /// <summary>
     /// 
     /// </summary>
-	public struct PartitionTypes
+	public struct PartitionType
 	{
         /// <summary>
         /// 

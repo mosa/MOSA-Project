@@ -60,16 +60,5 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		bool WriteBlock(uint block, uint count, byte[] data);
 
-		/// <summary>
-		/// Gets the <see cref="Mosa.DeviceSystem.GenericPartition"/> with the specified partition NBR.
-		/// </summary>
-		/// <value></value>
-		GenericPartition this[uint partitionNbr] { get; }
-
-		/// <summary>
-		/// Creates the partition devices.
-		/// </summary>
-		/// <returns></returns>
-		LinkedList<PartitionDevice> CreatePartitionDevices();
 	}
 }

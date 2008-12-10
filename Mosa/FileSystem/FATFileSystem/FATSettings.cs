@@ -17,12 +17,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		public FATType FatType;
-
-        /// <summary>
-        /// 
-        /// </summary>
-		public string VolumeLabel;
+		public FATType FATType;
 
 		/// <summary>
 		/// 
@@ -39,8 +34,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// </summary>
 		public FATSettings()
 		{
-			this.FatType = FATType.FAT16;	// default
-			this.VolumeLabel = string.Empty;
+			this.FATType = FATType.FAT16;	// default
 			this.SerialID = new byte[0];
 			this.FloppyMedia = false;
 		}

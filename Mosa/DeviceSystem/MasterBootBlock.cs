@@ -40,73 +40,95 @@ namespace Mosa.DeviceSystem
 
 	#endregion
 
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public class MasterBootBlock
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public const uint MaxMBRPartitions = 4;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IDiskDevice diskDevice;
+		/// <summary>
+		/// 
+		/// </summary>
+		public GenericPartition[] Partitions;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected uint diskSignature;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected bool valid;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected byte[] code;
 
-        /// <summary>
-        /// 
-        /// </summary>
-		private IDiskDevice diskDevice;
-        /// <summary>
-        /// 
-        /// </summary>
-		private GenericPartition[] partitions;
-        /// <summary>
-        /// 
-        /// </summary>
-		private uint diskSignature;
-        /// <summary>
-        /// 
-        /// </summary>
-		private bool valid;
-        /// <summary>
-        /// 
-        /// </summary>
-		private byte[] code;
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="MasterBootBlock"/> is valid.
+		/// </summary>
+		/// <value><c>true</c> if valid; otherwise, <c>false</c>.</value>
+		public bool Valid { get { return valid; } }
 
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="MasterBootBlock"/> is valid.
-        /// </summary>
-        /// <value><c>true</c> if valid; otherwise, <c>false</c>.</value>
-		public bool Valid
+		/// <summary>
+		/// Gets the disk signature.
+		/// </summary>
+		/// <value>The disk signature.</value>
+		public uint DiskSignature { get { return diskSignature; } set { diskSignature = value; } }
+
+		/// <summary>
+		/// Gets or sets the code.
+		/// </summary>
+		/// <value>The code.</value>
+		public byte[] Code
 		{
-			get { return valid; }
+			get
+			{
+				if (code == null) return null;
+
+				byte[] copy = new byte[code.Length];
+
+				for (int i = 0; i < code.Length; i++)
+					copy[i] = code[i];
+
+				return copy;
+			}
+			set
+			{
+				if (value == null) {
+					code = null;
+					return;
+				}
+
+				code = new byte[value.Length];
+
+				for (int i = 0; i < value.Length; i++)
+					code[i] = value[i];
+			}
 		}
 
-        /// <summary>
-        /// Gets the disk signature.
-        /// </summary>
-        /// <value>The disk signature.</value>
-		public uint DiskSignature
-		{
-			get { return diskSignature; }
-		}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MasterBootBlock"/> class.
-        /// </summary>
-        /// <param name="diskDevice">The disk device.</param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MasterBootBlock"/> class.
+		/// </summary>
+		/// <param name="diskDevice">The disk device.</param>
 		public MasterBootBlock(IDiskDevice diskDevice)
 		{
 			this.diskDevice = diskDevice;
-			this.valid = false;	// needs to be read first
-			partitions = new GenericPartition[MaxMBRPartitions];
-			code = null;
-			ReadMasterBootBlock();
+			Partitions = new GenericPartition[MaxMBRPartitions];
+			Read();
 		}
 
-        /// <summary>
-        /// Reads the master boot block.
-        /// </summary>
-        /// <returns></returns>
-		private bool ReadMasterBootBlock()
+		/// <summary>
+		/// Reads the master boot block.
+		/// </summary>
+		/// <returns></returns>
+		public bool Read()
 		{
 			valid = false;
 
@@ -130,37 +152,25 @@ namespace Mosa.DeviceSystem
 					partition.StartLBA = masterboot.GetUInt(offset + PartitionRecord.LBA);
 					partition.TotalBlocks = masterboot.GetUInt(offset + PartitionRecord.Sectors);
 
-					partitions[index] = partition;
+					Partitions[index] = partition;
 				}
 
 				//TODO: Extended Partitions
 			}
 
 			code = new byte[MasterBootConstants.CodeAreaSize];
-			for (uint index = 0; index < MasterBootConstants.CodeAreaSize; index++) { code[index] = masterboot.GetByte(index); }
+			for (uint index = 0; index < MasterBootConstants.CodeAreaSize; index++)
+				code[index] = masterboot.GetByte(index);
 
 			return valid;
 		}
 
-        /// <summary>
-        /// Gets the <see cref="Mosa.DeviceSystem.GenericPartition"/> with the specified partition NBR.
-        /// </summary>
-        /// <value></value>
-		public GenericPartition this[uint partitionNbr]
-		{
-			get
-			{
-				if (partitionNbr >= MaxMBRPartitions) { return null; } // TODO: or throw exception?
 
-				return partitions[partitionNbr];
-			}
-		}
-
-        /// <summary>
-        /// Formats this instance.
-        /// </summary>
-        /// <returns></returns>
-		public bool Format()
+		/// <summary>
+		/// Writes the master boot block.
+		/// </summary>
+		/// <returns></returns>
+		public bool Write()
 		{
 			if (!diskDevice.CanWrite) { return false; }
 
@@ -169,18 +179,23 @@ namespace Mosa.DeviceSystem
 			masterboot.SetUInt(MasterBootRecord.DiskSignature, diskSignature);
 			masterboot.SetUShort(MasterBootRecord.MBRSignature, MasterBootConstants.MBRSignature);
 
-			if (code != null) {
-				for (uint index = 0; index < MasterBootConstants.CodeAreaSize; index++) {
+			if (code != null)
+				for (uint index = 0; index < MasterBootConstants.CodeAreaSize; index++)
 					masterboot.SetByte(index, code[index]);
-				}
-			}
-
-			//TODO: write partitions
 
 			diskDevice.WriteBlock(0, 1, masterboot.Data);
 
+			for (uint index = 0; index < MaxMBRPartitions; index++) {
+				uint offset = MasterBootRecord.PrimaryPartitions + (index * 16);
+				masterboot.SetByte(offset + PartitionRecord.Status, (byte)(Partitions[index].Bootable ? 0x80 : 0x00));
+				masterboot.SetByte(offset + PartitionRecord.PartitionType, Partitions[index].PartitionType);
+				masterboot.SetUInt(offset + PartitionRecord.LBA, Partitions[index].StartLBA);
+				masterboot.SetUInt(offset + PartitionRecord.Sectors, Partitions[index].TotalBlocks);
+			}
+
 			return true;
 		}
+
 
 		//public void Dump ()
 		//{

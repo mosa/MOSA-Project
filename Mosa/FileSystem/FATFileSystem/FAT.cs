@@ -486,7 +486,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			if (!partition.CanWrite)
 				return false;
 
-			this.fatType = fatSettings.FatType;
+			this.fatType = fatSettings.FATType;
 			bytesPerSector = 512;
 
 			totalSectors = partition.BlockCount;

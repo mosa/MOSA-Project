@@ -60,13 +60,6 @@ namespace Mosa.DeviceSystem
 		public uint BlockSize { get { return diskController.GetSectorSize(driveNbr); } }
 
 		/// <summary>
-		/// Gets the <see cref="Mosa.DeviceSystem.GenericPartition"/> with the specified partition NBR.
-		/// </summary>
-		/// <value></value>
-		/// <returns></returns>
-		public GenericPartition this[uint partitionNbr] { get { return mbr[partitionNbr]; } }
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="DiskDevice"/> class.
 		/// </summary>
 		/// <param name="diskController">The disk controller.</param>
@@ -126,20 +119,5 @@ namespace Mosa.DeviceSystem
 			return diskController.WriteBlock(driveNbr, block, count, data);
 		}
 
-		/// <summary>
-		/// Creates the partition devices.
-		/// </summary>
-		/// <returns></returns>
-		public LinkedList<PartitionDevice> CreatePartitionDevices()
-		{
-			LinkedList<PartitionDevice> partitions = new LinkedList<PartitionDevice>();
-
-			if (mbr.Valid)
-				for (uint i = 0; i < MasterBootBlock.MaxMBRPartitions; i++)
-					if (mbr[i].PartitionType != PartitionTypes.Empty)
-						partitions.Add(new PartitionDevice(mbr[i], this, readOnly));
-
-			return partitions;
-		}
 	}
 }

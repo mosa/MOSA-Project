@@ -110,27 +110,5 @@ namespace Mosa.EmulatedDevices.Synthetic
 			diskFile.Write(data, 0, 512);
 			return true;
 		}
-
-		/// <summary>
-		/// Gets the <see cref="Mosa.DeviceSystem.GenericPartition"/> with the specified partition NBR.
-		/// </summary>
-		/// <value></value>
-		public GenericPartition this[uint partitionNbr] { get { return mbr[partitionNbr]; } }
-
-		/// <summary>
-		/// Creates the partition devices.
-		/// </summary>
-		/// <returns></returns>
-		public LinkedList<PartitionDevice> CreatePartitionDevices()
-		{
-			LinkedList<PartitionDevice> partitions = new LinkedList<PartitionDevice>();
-
-			if (mbr.Valid)
-				for (uint i = 0; i < MasterBootBlock.MaxMBRPartitions; i++)
-					if (mbr[i].PartitionType != PartitionTypes.Empty)
-						partitions.Add(new PartitionDevice(mbr[i], this, false));
-
-			return partitions;
-		}
 	}
 }

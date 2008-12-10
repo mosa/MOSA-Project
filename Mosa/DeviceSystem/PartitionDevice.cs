@@ -55,10 +55,10 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PartitionDevice"/> class.
 		/// </summary>
-		/// <param name="partition">The partition.</param>
 		/// <param name="diskDevice">The disk device.</param>
+		/// <param name="partition">The partition.</param>
 		/// <param name="readOnly">if set to <c>true</c> [read only].</param>
-		public PartitionDevice(GenericPartition partition, IDiskDevice diskDevice, bool readOnly)
+		public PartitionDevice(IDiskDevice diskDevice, GenericPartition partition, bool readOnly)
 		{
 			this.diskDevice = diskDevice;
 			this.start = partition.StartLBA;
