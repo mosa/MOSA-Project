@@ -93,6 +93,9 @@
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
+    <Compile Include="ConstantFoldingWrapper.cs" />
+    <Compile Include="MethodCompilerStageWrapper.cs" />
+    <Compile Include="RegisterAllocatorSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AotCompiler.cs">
