@@ -9,79 +9,79 @@
 
 namespace Mosa.FileSystem.FATFileSystem
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public class FATFileStream : System.IO.Stream
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected uint startCluster;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected uint currentCluster;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-		protected uint directorySector;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-		protected uint directoryIndex;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
+		protected uint directorySector;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected uint directorySectorIndex;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		protected uint nthCluster;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected long position;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected long length;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected long lengthOnDisk;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool read;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool write;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte[] data;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool dirty;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected uint clusterSize;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected FAT fs;
 
 		/// <summary>
@@ -98,10 +98,10 @@ namespace Mosa.FileSystem.FATFileSystem
 			this.data = new byte[clusterSize];
 			this.startCluster = startCluster;
 			this.directorySector = directorySector;
-			this.directoryIndex = directoryIndex;
+			this.directorySectorIndex = directoryIndex;
 			this.read = true;
 			this.write = false;
-			this.position = -1;
+			this.position = 0;
 			this.dirty = false;
 
 			this.nthCluster = System.UInt32.MaxValue; // Not positioned yet 
@@ -109,8 +109,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			this.lengthOnDisk = fs.GetFileSize(directorySector, directoryIndex);
 			this.length = this.lengthOnDisk;
 
-			if (length != 0)
-				ReadCluster(startCluster);
+			currentCluster = 0;
 		}
 
 		/// <summary>
@@ -119,13 +118,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <value></value>
 		/// <returns>true if the stream supports reading; otherwise, false.
 		/// </returns>
-		public override bool CanRead
-		{
-			get
-			{
-				return read;
-			}
-		}
+		public override bool CanRead { get { return read; } }
 
 		/// <summary>
 		/// When overridden in a derived class, gets a value indicating whether the current stream supports seeking.
@@ -133,13 +126,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <value></value>
 		/// <returns>true if the stream supports seeking; otherwise, false.
 		/// </returns>
-		public override bool CanSeek
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public override bool CanSeek { get { return true; } }
 
 		/// <summary>
 		/// When overridden in a derived class, gets a value indicating whether the current stream supports writing.
@@ -147,13 +134,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <value></value>
 		/// <returns>true if the stream supports writing; otherwise, false.
 		/// </returns>
-		public override bool CanWrite
-		{
-			get
-			{
-				return write;
-			}
-		}
+		public override bool CanWrite { get { return write; } }
 
 		/// <summary>
 		/// Gets a value that determines whether the current stream can time out.
@@ -162,13 +143,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <returns>
 		/// A value that determines whether the current stream can time out.
 		/// </returns>
-		public override bool CanTimeout
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public override bool CanTimeout { get { return false; } }
 
 		/// <summary>
 		/// When overridden in a derived class, gets the length in bytes of the stream.
@@ -183,13 +158,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <exception cref="T:System.ObjectDisposedException">
 		/// Methods were called after the stream was closed.
 		/// </exception>
-		public override long Length
-		{
-			get
-			{
-				return length;
-			}
-		}
+		public override long Length { get { return length; } }
 
 		/// <summary>
 		/// When overridden in a derived class, gets or sets the position within the current stream.
@@ -231,7 +200,6 @@ namespace Mosa.FileSystem.FATFileSystem
 				return;
 
 			fs.WriteCluster(currentCluster, data);
-
 			SetLength(length);
 
 			dirty = false;
@@ -295,19 +263,13 @@ namespace Mosa.FileSystem.FATFileSystem
 			if (position >= length)
 				return -1;	// EOF
 
-			if (position < 0)
-				position = 0;
+			uint index = (uint)(position % clusterSize);
 
-			uint index = (uint)((uint)position % clusterSize); // BUG WORKAROUND: inner (uint) is because long drive is not supported yet
-
-			position++;
+			if (index == 0)
+				NextCluster();
 
 			byte b = data[index];
-
-			if (index == clusterSize) {
-				if (position < length)
-					NextCluster();
-			}
+			position++;
 
 			return b;
 		}
@@ -331,6 +293,8 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// </exception>
 		public override long Seek(long offset, System.IO.SeekOrigin origin)
 		{
+			// FIXME: off-by-one bug when new position modulus 512 = 0
+
 			long newposition = position;
 
 			switch (origin) {
@@ -340,27 +304,27 @@ namespace Mosa.FileSystem.FATFileSystem
 			}
 
 			// find cluster number of new position
-			uint newNthCluster = (uint)((uint)newposition / clusterSize);		// BUG WORKAROUND: inner (uint) is because long is not supported yet
-			uint currentNthCluster = (uint)((uint)position / clusterSize);		// BUG WORKAROUND: inner (uint) is because long is not supported yet
+			uint newNthCluster = (uint)(newposition / clusterSize);
+			uint currentNthCluster = (uint)(position / clusterSize);
 			int diff = (int)(newNthCluster - currentNthCluster);
 
-			uint newcluster = 0;
+			uint newCluster = 0;
 
 			if (newNthCluster == currentNthCluster) {
-				newcluster = currentCluster;
+				newCluster = currentCluster;
 			}
 			else
 				if (newNthCluster > currentNthCluster) {
-					newcluster = fs.FindNthCluster(currentCluster, (uint)diff);
+					newCluster = fs.FindNthCluster(currentCluster, (uint)diff);
 					currentNthCluster = currentNthCluster + (uint)diff;
 				}
 				else
 					if (newNthCluster < currentNthCluster) {
-						newcluster = fs.FindNthCluster(this.startCluster, newNthCluster);
+						newCluster = fs.FindNthCluster(this.startCluster, newNthCluster);
 						currentNthCluster = newNthCluster;
 					}
 
-			ReadCluster(newcluster);
+			ReadCluster(newCluster);
 			position = newposition;
 			return position;
 		}
@@ -370,14 +334,20 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// </summary>
 		protected void NextCluster()
 		{
-			uint newcluster = fs.GetNextCluster(currentCluster);
+			uint newcluster = 0;
+
+			if (currentCluster == 0)
+				newcluster = startCluster;
+			else
+				newcluster = fs.GetNextCluster(currentCluster);
+
 			ReadCluster(newcluster);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cluster"></param>
+		/// <summary>
+		/// Reads the cluster.
+		/// </summary>
+		/// <param name="cluster">The cluster.</param>
 		protected void ReadCluster(uint cluster)
 		{
 			if (currentCluster == cluster)
@@ -405,16 +375,12 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// </exception>
 		public override void SetLength(long value)
 		{
-			// TODO: incomplete
-
 			if (value == lengthOnDisk)
 				return;
 
-			// incomplete here
-
 			lengthOnDisk = value;
 
-			return;
+			fs.UpdateLength((uint)lengthOnDisk, startCluster, directorySector, directorySectorIndex);
 		}
 
 		/// <summary>
@@ -443,7 +409,14 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// </exception>
 		public override void Write(byte[] buffer, int offset, int count)
 		{
-			// TODO
+			if ((count == 0) || (buffer.Length == 0))
+				return;
+
+			if (buffer.Length - offset < count)
+				count = buffer.Length - offset;
+
+			for (int i = 0; i < count; i++)
+				WriteByte(buffer[offset + count]);
 		}
 
 		/// <summary>
@@ -461,7 +434,18 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// </exception>
 		public override void WriteByte(byte value)
 		{
-			// TODO
+			uint index = (uint)(position % clusterSize);
+
+			if (position >= length) {
+				// TODO
+			}
+
+			if (index == 0)
+				NextCluster();
+
+			dirty = true;
+			data[index] = value;
+			position++;
 		}
 	}
 }

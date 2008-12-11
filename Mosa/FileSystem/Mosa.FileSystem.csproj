@@ -92,6 +92,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FATFileSystem\Find\ByName.cs" />
+    <Compile Include="FATFileSystem\Find\Any.cs" />
+    <Compile Include="FATFileSystem\Find\ByCluster.cs" />
+    <Compile Include="FATFileSystem\DirectoryEntryLocation.cs" />
+    <Compile Include="FATFileSystem\Find\Empty.cs" />
     <Compile Include="GenericFileSystem.cs">
       <SubType>Code</SubType>
     </Compile>

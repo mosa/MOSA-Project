@@ -61,15 +61,15 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <returns></returns>
 		public override IVfsNode Lookup(string name)
 		{
-			FAT.DirectoryEntryLocation location = (FileSystem as VFSFileSystem).FAT.FindEntry(new FAT.FatEntityComparer(name), this.directoryCluster);
+			DirectoryEntryLocation location = (FileSystem as VFSFileSystem).FAT.FindEntry(new Find.ByName(name), this.directoryCluster);
 
 			if (!location.Valid)
 				return null;
 
 			if (location.IsDirectory)
-				return new VFSDirectory(FileSystem, location.Block);
+				return new VFSDirectory(FileSystem, location.StartCluster);
 			else
-				return new VFSFile(FileSystem, location.Block, location.DirectorySector, location.DirectoryIndex);
+				return new VFSFile(FileSystem, location.StartCluster, location.DirectorySector, location.DirectorySectorIndex);
 		}
 
 		/// <summary>
@@ -108,14 +108,14 @@ namespace Mosa.FileSystem.FATFileSystem
 		{
 			FAT fs = this.FileSystem as FAT;
 
-			uint childBlock = (child as VFSDirectory).directoryCluster;
+			uint targetCluster = (child as VFSDirectory).directoryCluster;
 
-			FAT.DirectoryEntryLocation location = fs.FindEntry(new FAT.FatMatchClusterComparer(childBlock), this.directoryCluster);
+			DirectoryEntryLocation location = fs.FindEntry(new Find.ByCluster(targetCluster), this.directoryCluster);
 
 			if (!location.Valid)
 				throw new System.ArgumentException(); //throw new IOException ("Unable to delete directory because it is not empty");
 
-			fs.Delete(childBlock, directoryCluster, location.DirectoryIndex);
+			fs.Delete(targetCluster, location.DirectorySector, location.DirectorySectorIndex);
 		}
 
 	}

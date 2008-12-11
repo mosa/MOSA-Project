@@ -151,7 +151,7 @@ namespace Mosa.FileSystem.FATFileSystem
 	internal struct FileNameAttribute
 	{
 		internal const uint LastEntry = 0x00;
-		internal const uint Escape = 0x05;	// special msdos hack where 0x05 really means 0xE5 (since 0xE5 was already used for delete
+		internal const uint Escape = 0x05;	// special msdos hack where 0x05 really means 0xE5 (since 0xE5 was already used for delete)
 		internal const uint Dot = 0x2E;
 		internal const uint Deleted = 0xE5;
 	}
@@ -551,7 +551,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			if (fatType != FATType.FAT32) {
 				bootSector.SetByte(BootSector.JumpInstruction, 0xEB); // 0xEB = JMP Instruction
 				bootSector.SetByte(BootSector.JumpInstruction + 1, 0x3C);
-				bootSector.SetByte(BootSector.JumpInstruction + 2, 0x90); 
+				bootSector.SetByte(BootSector.JumpInstruction + 2, 0x90);
 
 				bootSector.SetUShort(BootSector.SectorsPerFAT, (ushort)sectorsPerFat);
 				bootSector.SetByte(BootSector.PhysicalDriveNbr, 0x80); // 0x80 = Hard disk (no support for FAT32 on Floppy)
@@ -571,14 +571,14 @@ namespace Mosa.FileSystem.FATFileSystem
 
 				if (fatType == FATType.FAT12)
 					bootSector.SetString(BootSector.FATType, "FAT12   ");
-				else 
+				else
 					bootSector.SetString(BootSector.FATType, "FAT16   ");
 			}
 
 			if (fatType == FATType.FAT32) {
 				bootSector.SetByte(BootSector.JumpInstruction, 0xEB);  // 0xEB = JMP Instruction
 				bootSector.SetByte(BootSector.JumpInstruction + 1, 0x58);
-				bootSector.SetByte(BootSector.JumpInstruction + 2, 0x90); 
+				bootSector.SetByte(BootSector.JumpInstruction + 2, 0x90);
 
 				bootSector.SetUShort(BootSector.SectorsPerFAT, 0);
 				bootSector.SetString(BootSector.FATType, "FAT32   ");
@@ -647,8 +647,8 @@ namespace Mosa.FileSystem.FATFileSystem
 			BinaryFormat firstFat = new BinaryFormat(512);
 
 			if (fatType == FATType.FAT12) {
-				firstFat.SetByte(1, 0xFF); 
-				firstFat.SetByte(2, 0xF8); 
+				firstFat.SetByte(1, 0xFF);
+				firstFat.SetByte(2, 0xF8);
 			}
 			else if (fatType == FATType.FAT16) {
 				firstFat.SetUShort(0, 0xFFFF);
@@ -670,7 +670,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			if (nbrFats == 2)
 				partition.WriteBlock(reservedSectors + sectorsPerFat, 1, firstFat.Data);
 
-			emptyFat.SetString(0,"DIR"); // TESTING
+			emptyFat.SetString(0, "DIR"); // TESTING
 
 			// Create Empty Root Directory
 			if ((fatType == FATType.FAT12) || (fatType == FATType.FAT16))
@@ -975,7 +975,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		{
 			BinaryFormat entry = new BinaryFormat(data);
 
-			uint cluster = entry.GetUShort((index * Entry.EntrySize) + Entry.FirstCluster);
+			uint cluster = entry.GetUShort(Entry.FirstCluster + (index * Entry.EntrySize));
 
 			if (type == FATType.FAT32) {
 				uint clusterhi = ((uint)entry.GetUShort((index * Entry.EntrySize) + Entry.EAIndex)) << 16;
@@ -1060,35 +1060,118 @@ namespace Mosa.FileSystem.FATFileSystem
 		}
 
 		/// <summary>
-		/// Deletes the specified child block.
+		/// Updates the length.
 		/// </summary>
-		/// <param name="childBlock">The child block.</param>
-		/// <param name="parentBlock">The parent block.</param>
-		/// <param name="parentBlockIndex">Index of the parent block.</param>
-		public void Delete(uint childBlock, uint parentBlock, uint parentBlockIndex)
+		/// <param name="size">The size.</param>
+		/// <param name="firstCluster">The first cluster.</param>
+		/// <param name="directorySector">The directory sector.</param>
+		/// <param name="directorySectorIndex">Index of the directory sector.</param>
+		public void UpdateLength(uint size, uint firstCluster, uint directorySector, uint directorySectorIndex)
 		{
-			BinaryFormat entry = new BinaryFormat(partition.ReadBlock(parentBlock, 1));
+			// Truncate the file
+			BinaryFormat entry = new BinaryFormat(partition.ReadBlock(directorySector, 1));
 
-			entry.SetByte((parentBlockIndex * Entry.EntrySize) + Entry.DOSName, (byte)FileNameAttribute.Deleted);
+			// Truncate the file length and set
+			entry.SetUInt(Entry.FileSize + (directorySector * Entry.EntrySize), size);
 
-			partition.WriteBlock(parentBlock, 1, entry.Data);
+			if (size == 0) 
+				entry.SetUInt(Entry.FirstCluster + (directorySector * Entry.EntrySize), 0);
 
-			if (!FreeClusterChain(childBlock))
-				throw new System.ArgumentException();	//throw new IOException ("Unable to free all cluster allocations in fat");
+			partition.WriteBlock(directorySector, 1, entry.Data);
+
+			if (size == 0)
+				FreeClusterChain(firstCluster);
+		}
+
+		/// <summary>
+		/// Creates the file.
+		/// </summary>
+		/// <param name="filename">The filename.</param>
+		/// <param name="directoryCluster">The directory cluster.</param>
+		/// <returns></returns>
+		public DirectoryEntryLocation CreateFile(string filename, uint directoryCluster)
+		{
+			DirectoryEntryLocation location = FindEntry(new Find.ByName(filename), directoryCluster);
+
+			if (location.Valid) {
+				// Truncate the file
+				BinaryFormat entry = new BinaryFormat(partition.ReadBlock(location.DirectorySector, 1));
+
+				// Truncate the file length and set
+				entry.SetUInt(Entry.FileSize + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+				entry.SetUInt(Entry.FirstCluster + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+
+				partition.WriteBlock(location.DirectorySector, 1, entry.Data);
+
+				FreeClusterChain(location.StartCluster);
+
+				location.StartCluster = 0;
+
+				return location;
+			}
+
+			// Find an empty location in the directory
+			location = FindEntry(new Find.Empty(), directoryCluster);
+
+			if (!location.Valid) {
+				// Extended Directory
+
+				// TODO
+
+				return location;
+			}
+
+			BinaryFormat directory = new BinaryFormat(partition.ReadBlock(location.DirectorySector, 1));
+
+			// Create Entry
+			// TODO: Add DOS NAME
+			directory.SetByte(Entry.FileAttributes + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+			directory.SetByte(Entry.Reserved + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+			directory.SetByte(Entry.CreationTimeFine + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+			directory.SetUShort(Entry.CreationTime + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+			directory.SetUShort(Entry.CreationDate + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+			directory.SetUShort(Entry.LastAccessDate + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+			directory.SetUShort(Entry.LastModifiedTime + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+			directory.SetUShort(Entry.LastModifiedDate + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+			directory.SetUShort(Entry.FirstCluster + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+			directory.SetUInt(Entry.FileSize + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+
+			partition.WriteBlock(location.DirectorySector, 1, directory.Data);
+
+			return location;
+		}
+
+		/// <summary>
+		/// Deletes the specified file or directory
+		/// </summary>
+		/// <param name="targetCluster">The target cluster.</param>
+		/// <param name="directorySector">The directory sector.</param>
+		/// <param name="directorySectorIndex">Index of the directory sector.</param>
+		public void Delete(uint targetCluster, uint directorySector, uint directorySectorIndex)
+		{
+			BinaryFormat entry = new BinaryFormat(partition.ReadBlock(directorySector, 1));
+
+			entry.SetByte(Entry.DOSName + (directorySectorIndex * Entry.EntrySize), (byte)FileNameAttribute.Deleted);
+
+			partition.WriteBlock(directorySector, 1, entry.Data);
+
+			FreeClusterChain(targetCluster);
 		}
 
 		/// <summary>
 		/// Frees the cluster chain.
 		/// </summary>
-		/// <param name="first">The first.</param>
+		/// <param name="firstCluster">The first cluster.</param>
 		/// <returns></returns>
-		protected bool FreeClusterChain(uint first)
+		protected bool FreeClusterChain(uint firstCluster)
 		{
-			//TODO: add locking
-			uint at = first;
+			if (firstCluster == 0)
+				return true;
+
+			uint at = firstCluster;
 
 			while (true) {
-				uint next = GetClusterEntryValue(first);
+				uint next = GetClusterEntryValue(firstCluster);
 				SetClusterEntryValue(at, 0);
 
 				if (IsClusterLast(next))
@@ -1284,214 +1367,5 @@ namespace Mosa.FileSystem.FATFileSystem
 
 		//    return file;
 		//}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public class DirectoryEntryLocation
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			public bool Valid;
-
-			/// <summary>
-			/// 
-			/// </summary>
-			public uint Block;
-
-			/// <summary>
-			///  
-			/// </summary>
-			public uint DirectorySector;
-
-			/// <summary>
-			/// 
-			/// </summary>
-			public uint DirectoryIndex;
-
-			/// <summary>
-			/// 
-			/// </summary>
-			private bool directory;
-
-			/// <summary>
-			/// 
-			/// </summary>
-			public bool IsDirectory
-			{
-				get
-				{
-					return directory;
-				}
-			}
-
-			/// <summary>
-			/// Initializes a new instance of the <see cref="DirectoryEntryLocation"/> class.
-			/// </summary>
-			public DirectoryEntryLocation()
-			{
-				this.Valid = false;
-			}
-
-			/// <summary>
-			/// Initializes a new instance of the <see cref="DirectoryEntryLocation"/> class.
-			/// </summary>
-			/// <param name="block">The block.</param>
-			/// <param name="directorySector">The directory sector.</param>
-			/// <param name="directoryIndex">Index of the directory.</param>
-			/// <param name="directory">if set to <c>true</c> [directory].</param>
-			public DirectoryEntryLocation(uint block, uint directorySector, uint directoryIndex, bool directory)
-			{
-				this.Valid = true;
-				this.Block = block;
-				this.DirectorySector = directorySector;
-				this.DirectoryIndex = directoryIndex;
-				this.directory = directory;
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public class FatMatchClusterComparer : FAT.ICompare
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			protected uint cluster;
-
-			/// <summary>
-			/// Initializes a new instance of the <see cref="FatMatchClusterComparer"/> class.
-			/// </summary>
-			/// <param name="cluster">The cluster.</param>
-			public FatMatchClusterComparer(uint cluster)
-			{
-				this.cluster = cluster;
-			}
-
-			/// <summary>
-			/// Compares the specified data.
-			/// </summary>
-			/// <param name="data">The data.</param>
-			/// <param name="offset">The offset.</param>
-			/// <param name="type">The type.</param>
-			/// <returns></returns>
-			public bool Compare(byte[] data, uint offset, FATType type)
-			{
-				BinaryFormat entry = new BinaryFormat(data);
-
-				byte first = entry.GetByte(offset + Entry.DOSName);
-
-				if (first == FileNameAttribute.LastEntry)
-					return false;
-
-				if ((first == FileNameAttribute.Deleted) | (first == FileNameAttribute.Dot))
-					return false;
-
-				if (first == FileNameAttribute.Escape)
-					return false;
-
-				uint startcluster = FAT.GetClusterEntry(data, offset, type);
-
-				if (startcluster == cluster)
-					return true;
-
-				return false;
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public class FatAnyExistComparer : FAT.ICompare
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			protected uint cluster;
-
-			/// <summary>
-			/// 
-			/// </summary>
-			public FatAnyExistComparer()
-			{
-			}
-
-			/// <summary>
-			/// Compares the specified data.
-			/// </summary>
-			/// <param name="data">The data.</param>
-			/// <param name="offset">The offset.</param>
-			/// <param name="type">The type.</param>
-			/// <returns></returns>
-			public bool Compare(byte[] data, uint offset, FATType type)
-			{
-				BinaryFormat entry = new BinaryFormat(data);
-
-				byte first = entry.GetByte(offset + Entry.DOSName);
-
-				if (first == FileNameAttribute.LastEntry)
-					return false;
-
-				if ((first == FileNameAttribute.Deleted) | (first == FileNameAttribute.Dot))
-					return false;
-
-				if (first == FileNameAttribute.Escape)
-					return false;
-
-				return true;
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public class FatEntityComparer : FAT.ICompare
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			protected string name;
-
-			/// <summary>
-			/// Initializes a new instance of the <see cref="FatEntityComparer"/> class.
-			/// </summary>
-			/// <param name="name">The name.</param>
-			public FatEntityComparer(string name)
-			{
-				this.name = name;
-			}
-
-			/// <summary>
-			/// Compares the specified data.
-			/// </summary>
-			/// <param name="data">The data.</param>
-			/// <param name="offset">The offset.</param>
-			/// <param name="type">The type.</param>
-			/// <returns></returns>
-			public bool Compare(byte[] data, uint offset, FATType type)
-			{
-				BinaryFormat entry = new BinaryFormat(data);
-
-				byte first = entry.GetByte(offset + Entry.DOSName);
-
-				if (first == FileNameAttribute.LastEntry)
-					return false;
-
-				if ((first == FileNameAttribute.Deleted) | (first == FileNameAttribute.Dot))
-					return false;
-
-				if (first == FileNameAttribute.Escape)
-					return false;
-
-				string entryname = FAT.ExtractFileName(data, offset);
-
-				if (entryname == name)
-					return true;
-
-				return false;
-			}
-		}
 	}
 }
