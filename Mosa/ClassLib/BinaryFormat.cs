@@ -9,14 +9,14 @@
 
 namespace Mosa.ClassLib
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public struct BinaryFormat
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		private byte[] data;
 
 		/// <summary>
@@ -200,11 +200,11 @@ namespace Mosa.ClassLib
 		/// <param name="value">The value.</param>
 		public void SetULongReversed(uint offset, ulong value)
 		{
-			data[offset++] = (byte)((value >> 56) & 0xFF); 
+			data[offset++] = (byte)((value >> 56) & 0xFF);
 			data[offset++] = (byte)((value >> 48) & 0xFF);
 			data[offset++] = (byte)((value >> 40) & 0xFF);
 			data[offset++] = (byte)((value >> 32) & 0xFF);
-			data[offset++] = (byte)((value >> 24) & 0xFF);			
+			data[offset++] = (byte)((value >> 24) & 0xFF);
 			data[offset++] = (byte)((value >> 16) & 0xFF);
 			data[offset++] = (byte)((value >> 8) & 0xFF);
 			data[offset++] = (byte)(value & 0xFF);
@@ -250,36 +250,36 @@ namespace Mosa.ClassLib
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-        public ulong GetULong(uint offset)
-        {
-            ulong value = data[offset++];
-            value += (uint)(data[offset++] << 8);
-            value += (uint)(data[offset++] << 16);
-            value += (uint)(data[offset++] << 24);
-            value += (uint)(data[offset++] << 32);
-            value += (uint)(data[offset++] << 40);
-            value += (uint)(data[offset++] << 48);
-            value += (uint)(data[offset++] << 56);
+		public ulong GetULong(uint offset)
+		{
+			ulong value = data[offset++];
+			value += (uint)(data[offset++] << 8);
+			value += (uint)(data[offset++] << 16);
+			value += (uint)(data[offset++] << 24);
+			value += (uint)(data[offset++] << 32);
+			value += (uint)(data[offset++] << 40);
+			value += (uint)(data[offset++] << 48);
+			value += (uint)(data[offset++] << 56);
 
-            return value;
-        }
+			return value;
+		}
 
 		/// <summary>
 		/// Sets the unsigned long.
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <param name="value">The value.</param>
-        public void SetULong(ulong offset, ulong value)
-        {
-            data[offset++] = (byte)(value & 0xFF);
-            data[offset++] = (byte)((value >> 8) & 0xFF);
-            data[offset++] = (byte)((value >> 16) & 0xFF);
-            data[offset++] = (byte)((value >> 24) & 0xFF);
-            data[offset++] = (byte)((value >> 32) & 0xFF);
-            data[offset++] = (byte)((value >> 40) & 0xFF);
-            data[offset++] = (byte)((value >> 48) & 0xFF);
-            data[offset++] = (byte)((value >> 56) & 0xFF);
-        }
+		public void SetULong(ulong offset, ulong value)
+		{
+			data[offset++] = (byte)(value & 0xFF);
+			data[offset++] = (byte)((value >> 8) & 0xFF);
+			data[offset++] = (byte)((value >> 16) & 0xFF);
+			data[offset++] = (byte)((value >> 24) & 0xFF);
+			data[offset++] = (byte)((value >> 32) & 0xFF);
+			data[offset++] = (byte)((value >> 40) & 0xFF);
+			data[offset++] = (byte)((value >> 48) & 0xFF);
+			data[offset++] = (byte)((value >> 56) & 0xFF);
+		}
 
 		/// <summary>
 		/// Gets the int.
@@ -340,6 +340,22 @@ namespace Mosa.ClassLib
 		public void Fill(uint offset, byte value, uint length)
 		{
 			for (uint index = 0; index < length; index++) { data[offset + index] = value; }
+		}
+
+		/// <summary>
+		/// Gets the string.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="length">The length.</param>
+		/// <returns></returns>
+		public string GetString(uint offset, uint length)
+		{
+			string str = string.Empty;
+
+			for (uint i = 0; i < length; i++)
+				str = str + (char)data[offset + i];
+
+			return str;
 		}
 	}
 }

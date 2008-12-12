@@ -61,7 +61,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <returns></returns>
 		public override IVfsNode Lookup(string name)
 		{
-			DirectoryEntryLocation location = (FileSystem as VFSFileSystem).FAT.FindEntry(new Find.ByName(name), this.directoryCluster);
+			DirectoryEntryLocation location = (FileSystem as VFSFileSystem).FAT.FindEntry(new Find.WithName(name), this.directoryCluster);
 
 			if (!location.Valid)
 				return null;

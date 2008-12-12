@@ -17,33 +17,33 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public class TextScreen : ITextScreen
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ITextDevice textDevice;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ushort cursorX;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ushort cursorY;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected TextColor foreground;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected TextColor background;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ushort width;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ushort height;
 
 		/// <summary>
@@ -92,26 +92,48 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
+		/// Writes the specified character.
+		/// </summary>
+		/// <param name="character">The character.</param>
+		protected void InternalWrite(char character)
+		{
+			// TODO: handle character = newline!
+
+			textDevice.WriteChar(cursorX, cursorY, character, foreground, background);
+			cursorX++;
+
+			if (cursorX == width) {
+				cursorY++;
+
+				if (cursorY == height) {
+					textDevice.ScrollUp();
+					cursorY--;
+				}
+
+				cursorX = 0;
+			}
+			SetCursor();
+		}
+
+		/// <summary>
 		/// Writes the specified text to the screen.
 		/// </summary>
 		/// <param name="text">The text.</param>
 		public void Write(string text)
 		{
-			foreach (char c in text) {
-				textDevice.WriteChar(cursorX, cursorY, c, foreground, background);
-				cursorX++;
+			foreach (char c in text) 
+				InternalWrite(c);
+			
+			SetCursor();
+		}
 
-				if (cursorX == width) {
-					cursorY++;
-
-					if (cursorY == height) {
-						textDevice.ScrollUp();
-						cursorY--;
-					}
-
-					cursorX = 0;
-				}
-			}
+		/// <summary>
+		/// Writes the specified character.
+		/// </summary>
+		/// <param name="character"></param>
+		public void Write(char character)
+		{
+			InternalWrite(character);
 			SetCursor();
 		}
 

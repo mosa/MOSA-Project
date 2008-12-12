@@ -99,6 +99,10 @@
       <Project>{A6C1F330-B858-44DE-89E6-C89D2B80DA62}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
+    <ProjectReference Include="..\FileSystem\Mosa.FileSystem.csproj">
+      <Project>{D89972FD-A930-4D0C-B393-1895E78FAFAB}</Project>
+      <Name>Mosa.FileSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Pictor\Pictor.csproj">
       <Name>Pictor</Name>
       <Project>{1D756AD8-07A2-44F3-9A69-B6573A339CB4}</Project>

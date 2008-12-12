@@ -15,7 +15,7 @@ namespace Mosa.FileSystem.FATFileSystem.Find
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ByName : FAT.ICompare
+	public class WithName : FAT.ICompare
 	{
 		/// <summary>
 		/// 
@@ -23,10 +23,10 @@ namespace Mosa.FileSystem.FATFileSystem.Find
 		protected string name;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ByName"/> class.
+		/// Initializes a new instance of the <see cref="WithName"/> class.
 		/// </summary>
 		/// <param name="name">The name.</param>
-		public ByName(string name)
+		public WithName(string name)
 		{
 			this.name = name;
 		}

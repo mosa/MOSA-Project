@@ -192,5 +192,51 @@ namespace Mosa.DeviceSystem
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		public class IsDiskDevice : IFindDevice
+		{
+			/// <summary>
+			/// Initializes a new instance of the <see cref="IsPCIDevice"/> class.
+			/// </summary>
+			public IsDiskDevice() { }
+
+			/// <summary>
+			/// Determines whether the specified device is match.
+			/// </summary>
+			/// <param name="device">The device.</param>
+			/// <returns>
+			/// 	<c>true</c> if the specified device is match; otherwise, <c>false</c>.
+			/// </returns>
+			public bool IsMatch(IDevice device)
+			{
+				return device is IDiskDevice;
+			}
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public class IsPartitionDevice : IFindDevice
+		{
+			/// <summary>
+			/// Initializes a new instance of the <see cref="IsPartitionDevice"/> class.
+			/// </summary>
+			public IsPartitionDevice() { }
+
+			/// <summary>
+			/// Determines whether the specified device is match.
+			/// </summary>
+			/// <param name="device">The device.</param>
+			/// <returns>
+			/// 	<c>true</c> if the specified device is match; otherwise, <c>false</c>.
+			/// </returns>
+			public bool IsMatch(IDevice device)
+			{
+				return device is IPartitionDevice;
+			}
+		}
 	}
 }

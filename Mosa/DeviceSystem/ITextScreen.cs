@@ -33,6 +33,12 @@ namespace Mosa.DeviceSystem
 		void Write(string text);
 
 		/// <summary>
+		/// Writes the specified character to the screen.
+		/// </summary>
+		/// <param name="character">The character.</param>
+		void Write(char character);
+
+		/// <summary>
 		/// Writes an empty line to the screen.
 		/// </summary>
 		void WriteLine();

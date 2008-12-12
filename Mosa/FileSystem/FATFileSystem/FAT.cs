@@ -301,32 +301,28 @@ namespace Mosa.FileSystem.FATFileSystem
 		private uint clusterSizeInBytes;
 
 		/// <summary>
+		/// Gets the type of the FAT.
+		/// </summary>
+		/// <value>The type of the FAT.</value>
+		public FATType FATType { get { return fatType; } }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="FAT"/> class.
 		/// </summary>
 		/// <param name="partition">The partition.</param>
-		public FAT(IPartitionDevice partition)
-			: base(partition)
-		{
-			ReadBootSector();
-		}
+		public FAT(IPartitionDevice partition) : base(partition) { ReadBootSector(); }
 
 		/// <summary>
 		/// Gets the type of the settings.
 		/// </summary>
 		/// <value>The type of the settings.</value>
-		public object SettingsType
-		{
-			get { return new FATSettings(); }
-		}
+		public object SettingsType { get { return new FATSettings(); } }
 
 		/// <summary>
 		/// Creates the VFS mount.
 		/// </summary>
 		/// <returns></returns>
-		public override IFileSystem CreateVFSMount()
-		{
-			return new VFSFileSystem(this);
-		}
+		public override IFileSystem CreateVFSMount() { return new VFSFileSystem(this); }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is read only.
@@ -348,7 +344,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <returns></returns>
 		public byte[] ReadCluster(uint cluster)
 		{
-			return partition.ReadBlock(dataAreaStart + ((cluster - 1) * (uint)sectorsPerCluster), clusterSizeInBytes / blockSize);
+			return partition.ReadBlock(dataAreaStart + ((cluster - 2) * (uint)sectorsPerCluster), clusterSizeInBytes / blockSize);
 		}
 
 		/// <summary>
@@ -359,7 +355,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <returns></returns>
 		public bool ReadCluster(uint cluster, byte[] block)
 		{
-			return partition.ReadBlock(dataAreaStart + ((cluster - 1) * (uint)sectorsPerCluster), clusterSizeInBytes / blockSize, block);
+			return partition.ReadBlock(dataAreaStart + ((cluster - 2) * (uint)sectorsPerCluster), clusterSizeInBytes / blockSize, block);
 		}
 
 		/// <summary>
@@ -370,7 +366,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <returns></returns>
 		public bool WriteCluster(uint cluster, byte[] block)
 		{
-			return partition.WriteBlock(dataAreaStart + ((cluster - 1) * (uint)sectorsPerCluster), clusterSizeInBytes / blockSize, block);
+			return partition.WriteBlock(dataAreaStart + ((cluster - 2) * (uint)sectorsPerCluster), clusterSizeInBytes / blockSize, block);
 		}
 
 		/// <summary>
@@ -391,13 +387,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			if ((bootSignature != 0x29) && (bootSignature != 0x28))
 				return false;
 
-			//TextMode.Write ("EOM NAME: ");
-
-			//for (uint i = 0; i < 8; i++)
-			//    TextMode.WriteChar (bootsector.GetByte (BootSector.EOMName + i));
-
-			//TextMode.WriteLine ();
-
+			volumeLabel = bootSector.GetString(BootSector.VolumeLabel, 8).ToString().TrimEnd();
 			bytesPerSector = bootSector.GetUShort(BootSector.BytesPerSector);
 			sectorsPerCluster = bootSector.GetByte(BootSector.SectorsPerCluster);
 			reservedSectors = bootSector.GetByte(BootSector.ReservedSectors);
@@ -936,7 +926,13 @@ namespace Mosa.FileSystem.FATFileSystem
 
 			len = len - spaces;
 
-			return name.ToString();
+			// FIXME
+			string str = string.Empty;
+
+			for (uint i = 0; i < len; i++)
+				str = str + (char)name[i];
+
+			return str;
 		}
 
 		/// <summary>
@@ -1074,7 +1070,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			// Truncate the file length and set
 			entry.SetUInt(Entry.FileSize + (directorySector * Entry.EntrySize), size);
 
-			if (size == 0) 
+			if (size == 0)
 				entry.SetUInt(Entry.FirstCluster + (directorySector * Entry.EntrySize), 0);
 
 			partition.WriteBlock(directorySector, 1, entry.Data);
@@ -1091,7 +1087,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <returns></returns>
 		public DirectoryEntryLocation CreateFile(string filename, uint directoryCluster)
 		{
-			DirectoryEntryLocation location = FindEntry(new Find.ByName(filename), directoryCluster);
+			DirectoryEntryLocation location = FindEntry(new Find.WithName(filename), directoryCluster);
 
 			if (location.Valid) {
 				// Truncate the file

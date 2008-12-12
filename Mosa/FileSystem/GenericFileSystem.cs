@@ -22,24 +22,24 @@ namespace Mosa.FileSystem
 		/// </summary>
 		protected IPartitionDevice partition;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected uint blockSize;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool valid;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected string volumeLabel;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte[] serialNbr;
 
 		/// <summary>
@@ -65,28 +65,19 @@ namespace Mosa.FileSystem
 		/// Gets a value indicating whether this <see cref="GenericFileSystem"/> is valid.
 		/// </summary>
 		/// <value><c>true</c> if valid; otherwise, <c>false</c>.</value>
-		public bool Valid 
-        { 
-            get { return valid; } 
-        }
+		public bool IsValid { get { return valid; } }
 
 		/// <summary>
 		/// Gets the volume label.
 		/// </summary>
 		/// <value>The volume label.</value>
-		public string VolumeLabel 
-        { 
-            get { return volumeLabel; } 
-        }
+		public string VolumeLabel { get { return volumeLabel; } }
 
 		/// <summary>
-		/// Gets the serial NBR.
+		/// Gets the serial number.
 		/// </summary>
-		/// <value>The serial NBR.</value>
-		public byte[] SerialNbr 
-        { 
-            get { return serialNbr; } 
-        }
+		/// <value>The serial number.</value>
+		public byte[] SerialNumber { get { return serialNbr; } }
 
 	}
 }

@@ -495,7 +495,7 @@ namespace Mosa.DeviceDrivers.ISA
 			try {
 				spinLock.Enter();
 				for (uint index = 0; index < count; index++) {
-					if (!PerformLBA28(SectorOperation.Read, driveNbr, block, data, index * 512))
+					if (!PerformLBA28(SectorOperation.Read, driveNbr, block + index, data, index * 512))
 						return false;
 				}
 				return true;
@@ -521,7 +521,7 @@ namespace Mosa.DeviceDrivers.ISA
 			try {
 				spinLock.Enter();
 				for (uint index = 0; index < count; index++) {
-					if (!PerformLBA28(SectorOperation.Write, driveNbr, block, data, index * 512))
+					if (!PerformLBA28(SectorOperation.Write, driveNbr, block + index, data, index * 512))
 						return false;
 				}
 				return true;

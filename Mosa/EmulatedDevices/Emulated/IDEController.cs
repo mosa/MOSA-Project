@@ -129,7 +129,7 @@ namespace Mosa.EmulatedDevices.Emulated
 			status = DeviceStatus.Ready;
 
 			for (int i = 0; i < numDrives; i++) {
-				driveFiles[i] = new FileStream(filenames[i], FileMode.OpenOrCreate);
+				driveFiles[i] = new FileStream(filenames[i], FileMode.Open);
 			}
 
 			Initialize();

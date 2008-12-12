@@ -88,17 +88,27 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// Initializes a new instance of the <see cref="FATFileStream"/> class.
 		/// </summary>
 		/// <param name="fs">The fs.</param>
+		/// <param name="location">The location.</param>
+		public FATFileStream(FAT fs, DirectoryEntryLocation location)
+			: this(fs, location.StartCluster, location.DirectorySector, location.DirectorySectorIndex)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FATFileStream"/> class.
+		/// </summary>
+		/// <param name="fs">The fs.</param>
 		/// <param name="startCluster">The start cluster.</param>
 		/// <param name="directorySector">The directory sector.</param>
-		/// <param name="directoryIndex">Index of the directory.</param>
-		public FATFileStream(FAT fs, uint startCluster, uint directorySector, uint directoryIndex)
+		/// <param name="directorySectorIndex">Index of the directory sector.</param>
+		public FATFileStream(FAT fs, uint startCluster, uint directorySector, uint directorySectorIndex)
 		{
 			this.fs = fs;
 			this.clusterSize = fs.ClusterSizeInBytes;
 			this.data = new byte[clusterSize];
 			this.startCluster = startCluster;
 			this.directorySector = directorySector;
-			this.directorySectorIndex = directoryIndex;
+			this.directorySectorIndex = directorySectorIndex;
 			this.read = true;
 			this.write = false;
 			this.position = 0;
@@ -106,7 +116,7 @@ namespace Mosa.FileSystem.FATFileSystem
 
 			this.nthCluster = System.UInt32.MaxValue; // Not positioned yet 
 
-			this.lengthOnDisk = fs.GetFileSize(directorySector, directoryIndex);
+			this.lengthOnDisk = fs.GetFileSize(directorySector, directorySectorIndex);
 			this.length = this.lengthOnDisk;
 
 			currentCluster = 0;
