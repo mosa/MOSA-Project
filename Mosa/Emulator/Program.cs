@@ -82,12 +82,27 @@ namespace Mosa.Emulator
 			mbr.Partitions[0].PartitionType = PartitionType.FAT12;
 			mbr.Write();
 
+			// Create partition device 
+			PartitionDevice partitionDevice = new PartitionDevice(ramDiskDevice, mbr.Partitions[0], false);
+
+			// Set FAT settings
+			FATSettings fatSettings = new FATSettings();
+
+			fatSettings.FATType = FATType.FAT12;
+			fatSettings.FloppyMedia = false;
+			fatSettings.VolumeLabel = "MOSADISK";
+			fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };
+
+			// Create FAT file system
+			FAT fat12 = new FAT(partitionDevice);
+			fat12.Format(fatSettings);
+
 			// Get the text VGA device
 			LinkedList<IDevice> devices = Mosa.DeviceSystem.Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText"));
 
 			// Create a screen interface to the text VGA device
 			ITextScreen screen = new TextScreen((ITextDevice)devices.First.value);
-
+	
 			// Create partition manager
 			PartitionManager partitionManager = new PartitionManager(Mosa.DeviceSystem.Setup.DeviceManager);
 

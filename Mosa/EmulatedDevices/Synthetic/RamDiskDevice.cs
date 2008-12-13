@@ -22,7 +22,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// <summary>
 		/// 
 		/// </summary>
-		protected uint blocks;
+		protected uint totalBlocks;
 
 		/// <summary>
 		/// 
@@ -38,7 +38,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 			base.name = "RamDiskDevice_" + ((blocks * 512) / (1024 * 1024)).ToString() + "Mb";
 			base.parent = null;
 			base.deviceStatus = DeviceStatus.Online;
-			this.blocks = blocks;
+			this.totalBlocks = blocks;
 			this.mem = new byte[blocks * 512];
 		}
 
@@ -52,7 +52,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// Gets the total blocks.
 		/// </summary>
 		/// <value>The total blocks.</value>
-		public uint TotalBlocks { get { return (uint)(blocks / 512); } }
+		public uint TotalBlocks { get { return totalBlocks; } }
 
 		/// <summary>
 		/// Gets the size of the block.

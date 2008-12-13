@@ -41,7 +41,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		internal const uint PhysicalDriveNbr = 0x24; // 1
 		internal const uint ReservedCurrentHead = 0x25; // 1
 		internal const uint ExtendedBootSignature = 0x26; // 1 // value: 0x29 or 0x28
-		internal const uint IDSerialNumber = 0x25; // 4
+		internal const uint IDSerialNumber = 0x27; // 4
 		internal const uint VolumeLabel = 0x2B; // 11
 		internal const uint FATType = 0x36; // 8 - padded with blanks (0x20) "FAT12"; "FAT16"
 		internal const uint OSBootCode = 0x3E; // 448 - Operating system boot code
@@ -557,7 +557,8 @@ namespace Mosa.FileSystem.FATFileSystem
 				}
 
 				bootSector.SetUShort(BootSector.BootSectorSignature, 0x55AA);
-				bootSector.SetBytes(BootSector.OSBootCode, fatSettings.OSBootCode, 0, 448);
+				if (fatSettings.OSBootCode != null)
+					bootSector.SetBytes(BootSector.OSBootCode, fatSettings.OSBootCode, 0, 448);
 
 				if (fatType == FATType.FAT12)
 					bootSector.SetString(BootSector.FATType, "FAT12   ");

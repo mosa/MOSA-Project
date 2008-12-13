@@ -72,7 +72,7 @@ namespace Mosa.Tools.MakeFAT
 
 				fatSettings.FATType = FATType.FAT12;
 				fatSettings.FloppyMedia = false;
-				fatSettings.VolumeLabel = "MOSA BOOT";
+				fatSettings.VolumeLabel = "MOSABOOT";
 				fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };
 				fatSettings.OSBootCode = fatCode;
 
