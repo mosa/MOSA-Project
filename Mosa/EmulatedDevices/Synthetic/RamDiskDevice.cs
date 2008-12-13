@@ -15,34 +15,31 @@ using Mosa.DeviceSystem;
 namespace Mosa.EmulatedDevices.Synthetic
 {
 	/// <summary>
-	/// Emulates a disk device
+	/// Emulates a ram disk device
 	/// </summary>
-	public class DiskDevice : Device, IDiskDevice
+	public class RamDiskDevice : Device, IDiskDevice
 	{
 		/// <summary>
 		/// 
 		/// </summary>
-		protected FileStream diskFile;
+		protected uint blocks;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DiskDevice"/> class.
+		/// 
 		/// </summary>
-		/// <param name="filename">The filename.</param>
-		public DiskDevice(string filename)
+		protected byte[] mem;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RamDiskDevice"/> class.
+		/// </summary>
+		/// <param name="blocks">The blocks.</param>
+		public RamDiskDevice(uint blocks)
 		{
-			base.name = "DiskDevice_" + Path.GetFileName(filename);
+			base.name = "RamDiskDevice_" + ((blocks * 512) / (1024 * 1024)).ToString() + "Mb";
 			base.parent = null;
 			base.deviceStatus = DeviceStatus.Online;
-
-			diskFile = new FileStream(filename, FileMode.OpenOrCreate);
-		}
-
-		/// <summary>
-		/// Releases unmanaged and - optionally - managed resources
-		/// </summary>
-		public void Dispose()
-		{
-			diskFile.Close();
+			this.blocks = blocks;
+			this.mem = new byte[blocks * 512];
 		}
 
 		/// <summary>
@@ -55,7 +52,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// Gets the total blocks.
 		/// </summary>
 		/// <value>The total blocks.</value>
-		public uint TotalBlocks { get { return (uint)(diskFile.Length / 512); } }
+		public uint TotalBlocks { get { return (uint)(blocks / 512); } }
 
 		/// <summary>
 		/// Gets the size of the block.
@@ -85,8 +82,8 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// <returns></returns>
 		public bool ReadBlock(uint block, uint count, byte[] data)
 		{
-			diskFile.Seek(block * 512, SeekOrigin.Begin);
-			diskFile.Read(data, 0, 512);
+			for (int i = 0; i < 512; i++)
+				data[i] = mem[(block * 512) + i];
 			return true;
 		}
 
@@ -99,8 +96,8 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// <returns></returns>
 		public bool WriteBlock(uint block, uint count, byte[] data)
 		{
-			diskFile.Seek(block * 512, SeekOrigin.Begin);
-			diskFile.Write(data, 0, 512);
+			for (int i = 0; i < 512; i++)
+				mem[(block * 512) + i] = data[i];
 			return true;
 		}
 	}

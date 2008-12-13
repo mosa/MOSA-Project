@@ -118,6 +118,7 @@
     <Compile Include="Emulated\VGAText.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Synthetic\RamDiskDevice.cs" />
     <Compile Include="Synthetic\DiskDevice.cs">
       <SubType>Code</SubType>
     </Compile>

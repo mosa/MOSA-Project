@@ -16,54 +16,54 @@ namespace Mosa.DeviceSystem
     /// </summary>
 	public interface IDeviceManager
 	{
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="device"></param>
+		/// <summary>
+		/// Adds the specified device.
+		/// </summary>
+		/// <param name="device">The device.</param>
 		void Add(IDevice device);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets all devices.
+		/// </summary>
+		/// <returns></returns>
 		LinkedList<IDevice> GetAllDevices();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="match"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the devices.
+		/// </summary>
+		/// <param name="match">The match.</param>
+		/// <returns></returns>
 		LinkedList<IDevice> GetDevices(IFindDevice match);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="match1"></param>
-        /// <param name="match2"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the devices.
+		/// </summary>
+		/// <param name="match1">The match1.</param>
+		/// <param name="match2">The match2.</param>
+		/// <returns></returns>
 		LinkedList<IDevice> GetDevices(IFindDevice match1, IFindDevice match2);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="match1"></param>
-        /// <param name="match2"></param>
-        /// <param name="match3"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the devices.
+		/// </summary>
+		/// <param name="match1">The match1.</param>
+		/// <param name="match2">The match2.</param>
+		/// <param name="match3">The match3.</param>
+		/// <returns></returns>
 		LinkedList<IDevice> GetDevices(IFindDevice match1, IFindDevice match2, IFindDevice match3);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="matches"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the devices.
+		/// </summary>
+		/// <param name="matches">The matches.</param>
+		/// <returns></returns>
 		LinkedList<IDevice> GetDevices(IFindDevice[] matches);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the children of.
+		/// </summary>
+		/// <param name="parent">The parent.</param>
+		/// <returns></returns>
 		LinkedList<IDevice> GetChildrenOf(IDevice parent);
 	}
 }

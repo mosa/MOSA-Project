@@ -15,6 +15,11 @@ namespace Mosa.DeviceSystem
 	public interface IPartitionDevice
 	{
 		/// <summary>
+		/// Gets the starting block number on the disk
+		/// </summary>
+		uint StartBlock { get; }
+
+		/// <summary>
 		/// Gets the block count.
 		/// </summary>
 		/// <value>The block count.</value>

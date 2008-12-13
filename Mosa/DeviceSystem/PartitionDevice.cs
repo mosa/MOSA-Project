@@ -22,7 +22,7 @@ namespace Mosa.DeviceSystem
         /// <summary>
         /// 
         /// </summary>
-		private uint start;
+		private uint startBlock;
 
         /// <summary>
         /// 
@@ -33,6 +33,12 @@ namespace Mosa.DeviceSystem
         /// 
         /// </summary>
 		private bool readOnly;
+
+		/// <summary>
+		/// Gets the start block.
+		/// </summary>
+		/// <value>The start block.</value>
+		public uint StartBlock { get { return startBlock; } }
 
 		/// <summary>
 		/// Gets the block count.
@@ -61,7 +67,7 @@ namespace Mosa.DeviceSystem
 		public PartitionDevice(IDiskDevice diskDevice, GenericPartition partition, bool readOnly)
 		{
 			this.diskDevice = diskDevice;
-			this.start = partition.StartLBA;
+			this.startBlock = partition.StartLBA;
 			this.blockCount = partition.TotalBlocks;
 			this.readOnly = readOnly;
 
@@ -78,7 +84,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public byte[] ReadBlock(uint block, uint count)
 		{
-			return diskDevice.ReadBlock(block + start, count);
+			return diskDevice.ReadBlock(block + startBlock, count);
 		}
 
 		/// <summary>
@@ -90,7 +96,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool ReadBlock(uint block, uint count, byte[] data)
 		{
-			return diskDevice.ReadBlock(block + start, count, data);
+			return diskDevice.ReadBlock(block + startBlock, count, data);
 		}
 
 		/// <summary>
@@ -102,7 +108,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool WriteBlock(uint block, uint count, byte[] data)
 		{
-			return diskDevice.WriteBlock(block + start, count, data);
+			return diskDevice.WriteBlock(block + startBlock, count, data);
 		}
 
 	}

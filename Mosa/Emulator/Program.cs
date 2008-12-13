@@ -11,6 +11,8 @@ using System;
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
+using Mosa.FileSystem;
+using Mosa.FileSystem.FATFileSystem;
 using Mosa.EmulatedDevices.Synthetic;
 
 using Pictor;
@@ -32,10 +34,10 @@ namespace Mosa.Emulator
 		[STAThread]
 		public static void Main(string[] args)
 		{
-			// Setup Hardware Abstraction Interface
+			// Setup hardware abstraction interface
 			IHardwareAbstraction hardwareAbstraction = new Mosa.EmulatedKernel.HardwareAbstraction();
 
-			// Set Device Driver system to the emulator port and memory methods
+			// Set device driver system to the emulator port and memory methods
 			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardwareAbstraction);
 
 			// Start the emulated devices
@@ -45,7 +47,7 @@ namespace Mosa.Emulator
 			Mosa.DeviceSystem.Setup.Initialize();
 
 			// Initialize the device driver registry
-			Mosa.DeviceDrivers.Setup.Initialize(Mosa.DeviceSystem.Setup.DeviceDriverRegistry);			
+			Mosa.DeviceDrivers.Setup.Initialize(Mosa.DeviceSystem.Setup.DeviceDriverRegistry);
 
 			// Set the interrupt handler
 			Mosa.DeviceSystem.HAL.SetInterruptHandler(Mosa.DeviceSystem.Setup.ResourceManager.InterruptManager.ProcessInterrupt);
@@ -53,23 +55,44 @@ namespace Mosa.Emulator
 			// Start the driver system
 			Mosa.DeviceSystem.Setup.Start();
 
-			// Create Emulated Keyboard device
+			// Create emulated keyboard device
 			Mosa.EmulatedDevices.Synthetic.Keyboard keyboard = new Mosa.EmulatedDevices.Synthetic.Keyboard();
 
 			// Added the emulated keyboard device to the device drivers
 			Mosa.DeviceSystem.Setup.DeviceManager.Add(keyboard);
 
-			// Create Emulated Graphic Pixel device
+			// Create emulated graphic pixel device
 			Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice pixelGraphicDevice = new Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice(500, 500);
 
-			// Added the emulated keyboard device to the device drivers
+			// Added the emulated graphic device to the device drivers
 			Mosa.DeviceSystem.Setup.DeviceManager.Add(pixelGraphicDevice);
 
-			// Get the Text VGA device
+			// Create ram disk device
+			Mosa.EmulatedDevices.Synthetic.RamDiskDevice ramDiskDevice = new Mosa.EmulatedDevices.Synthetic.RamDiskDevice(1024 * 1024 * 10 / 512);
+
+			// Added the emulated ram disk device to the device drivers
+			Mosa.DeviceSystem.Setup.DeviceManager.Add(ramDiskDevice);
+
+			// Create master boot block record
+			MasterBootBlock mbr = new MasterBootBlock(ramDiskDevice);
+			mbr.DiskSignature = 0x12345678;
+			mbr.Partitions[0].Bootable = true;
+			mbr.Partitions[0].StartLBA = 17;
+			mbr.Partitions[0].TotalBlocks = ramDiskDevice.TotalBlocks - 17;
+			mbr.Partitions[0].PartitionType = PartitionType.FAT12;
+			mbr.Write();
+
+			// Get the text VGA device
 			LinkedList<IDevice> devices = Mosa.DeviceSystem.Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText"));
 
-			// Create a screen interface to the Text VGA device
+			// Create a screen interface to the text VGA device
 			ITextScreen screen = new TextScreen((ITextDevice)devices.First.value);
+
+			// Create partition manager
+			PartitionManager partitionManager = new PartitionManager(Mosa.DeviceSystem.Setup.DeviceManager);
+
+			// Create partition devices
+			partitionManager.CreatePartitionDevices();
 
 			// Get a list of all devices
 			devices = Mosa.DeviceSystem.Setup.DeviceManager.GetAllDevices();
@@ -96,6 +119,34 @@ namespace Mosa.Emulator
 				}
 				screen.WriteLine();
 
+				if (device is IPartitionDevice) {
+					FileSystem.FATFileSystem.FAT fat = new Mosa.FileSystem.FATFileSystem.FAT(device as IPartitionDevice);
+
+					screen.Write("  File System: ");
+					if (fat.IsValid) {
+						switch (fat.FATType) {
+							case FATType.FAT12: screen.WriteLine("FAT12"); break;
+							case FATType.FAT16: screen.WriteLine("FAT16"); break;
+							case FATType.FAT32: screen.WriteLine("FAT32"); break;
+							default: screen.WriteLine("Unknown"); break;
+						}
+						screen.WriteLine("  Volume Name: " + fat.VolumeLabel);
+
+						DirectoryEntryLocation location = fat.FindEntry(new Mosa.FileSystem.FATFileSystem.Find.WithName("TEST2.TXT"), 0);
+
+						if (location.Valid) {
+							FATFileStream file = new FATFileStream(fat, location);
+
+							//for (int b = file.ReadByte(); b >= 0; b = file.ReadByte())
+							//    screen.Write((char)b);
+						}
+
+						screen.Write("");
+					}
+					else
+						screen.WriteLine("Unknown");
+				}
+
 				if (device is PCIDevice) {
 					PCIDevice pciDevice = (device as PCIDevice);
 
@@ -103,7 +154,7 @@ namespace Mosa.Emulator
 					screen.Write(pciDevice.VendorID.ToString("X"));
 					screen.Write(" [");
 					screen.Write(DeviceTable.Lookup(pciDevice.VendorID));
-					screen.WriteLine("]"); 
+					screen.WriteLine("]");
 
 					screen.Write("  Device:0x");
 					screen.Write(pciDevice.DeviceID.ToString("X"));
@@ -111,27 +162,27 @@ namespace Mosa.Emulator
 					screen.Write(pciDevice.RevisionID.ToString("X"));
 					screen.Write(" [");
 					screen.Write(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID));
-					screen.WriteLine("]"); 
+					screen.WriteLine("]");
 
 					screen.Write("  Class:0x");
 					screen.Write(pciDevice.ClassCode.ToString("X"));
 					screen.Write(" [");
 					screen.Write(ClassCodeTable.Lookup(pciDevice.ClassCode));
-					screen.WriteLine("]"); 
+					screen.WriteLine("]");
 
 					screen.Write("  SubClass:0x");
 					screen.Write(pciDevice.SubClassCode.ToString("X"));
 					screen.Write(" [");
 					screen.Write(SubClassCodeTable.Lookup(pciDevice.ClassCode, pciDevice.SubClassCode, pciDevice.ProgIF));
-					screen.WriteLine("]"); 
+					screen.WriteLine("]");
 
-//					screen.Write("  ");
-//					screen.WriteLine(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID, pciDevice.SubDeviceID, pciDevice.SubVendorID));
+					//					screen.Write("  ");
+					//					screen.WriteLine(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID, pciDevice.SubDeviceID, pciDevice.SubVendorID));
 
 					foreach (BaseAddress address in pciDevice.BaseAddresses) {
 						if (address == null)
 							continue;
-						
+
 						if (address.Address == 0)
 							continue;
 
@@ -174,6 +225,7 @@ namespace Mosa.Emulator
 				}
 			}
 
+			// Test Pictor Graphics
 			byte[] buffer = new byte[pixelGraphicDevice.Width * pixelGraphicDevice.Height * 3];
 			RenderingBuffer<byte> renderbuffer = new RenderingBuffer<byte>(buffer, (uint)pixelGraphicDevice.Width, (uint)pixelGraphicDevice.Height, 3);
 

@@ -16,7 +16,11 @@ namespace Mosa.Tools.MakeFAT
 {
 	class Program
 	{
-
+		/// <summary>
+		/// Main
+		/// </summary>
+		/// <param name="args">The args.</param>
+		/// <returns></returns>
 		static int Main(string[] args)
 		{
 			string imageFilename = string.Empty;
@@ -36,8 +40,7 @@ namespace Mosa.Tools.MakeFAT
 			//    return -1;
 			//}
 
-			try {
-				
+			try {				
 				System.IO.File.Delete(imageFilename);
 
 				byte[] mbrCode = ReadFile(mbrFilename);
@@ -61,7 +64,7 @@ namespace Mosa.Tools.MakeFAT
 
 				mbr.Write();
 
-				// Open partition within image File
+				// Open partition within image file
 				PartitionDevice partitionDevice = new PartitionDevice(diskDevice, mbr.Partitions[0], false);
 
 				// Set FAT settings
@@ -87,6 +90,11 @@ namespace Mosa.Tools.MakeFAT
 			return 0;
 		}
 
+		/// <summary>
+		/// Reads the file.
+		/// </summary>
+		/// <param name="filename">The filename.</param>
+		/// <returns></returns>
 		static private byte[] ReadFile(string filename)
 		{
 			FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read);

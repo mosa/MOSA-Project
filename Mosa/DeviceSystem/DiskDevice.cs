@@ -34,11 +34,6 @@ namespace Mosa.DeviceSystem
         /// <summary>
         /// 
         /// </summary>
-		private MasterBootBlock mbr;
-
-        /// <summary>
-        /// 
-        /// </summary>
 		private bool readOnly;
 
 		/// <summary>
@@ -78,8 +73,6 @@ namespace Mosa.DeviceSystem
 				this.readOnly = true;
 			else
 				this.readOnly = this.diskController.CanWrite(driveNbr);
-
-			mbr = new MasterBootBlock(this);
 		}
 
 		/// <summary>

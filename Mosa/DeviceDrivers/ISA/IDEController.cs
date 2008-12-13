@@ -259,13 +259,6 @@ namespace Mosa.DeviceDrivers.ISA
 
 					IDiskDevice diskDevice = new DiskDevice(this, drive, false);
 					devices.Add(diskDevice as IDevice);
-
-					MasterBootBlock mbr = new MasterBootBlock(diskDevice);
-
-					if (mbr.Valid)
-						for (uint i = 0; i < MasterBootBlock.MaxMBRPartitions; i++)
-							if (mbr.Partitions[i].PartitionType != PartitionType.Empty)
-								devices.Add(new PartitionDevice(diskDevice, mbr.Partitions[i], false));
 				}
 			}
 
