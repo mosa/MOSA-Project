@@ -85,6 +85,7 @@
     <Compile Include="ColorPalette.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CHS.cs" />
     <Compile Include="PartitionManager.cs" />
     <Compile Include="Device.cs">
       <SubType>Code</SubType>

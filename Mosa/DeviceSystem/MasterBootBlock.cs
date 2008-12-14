@@ -192,12 +192,15 @@ namespace Mosa.DeviceSystem
 				masterboot.SetUInt(offset + PartitionRecord.LBA, Partitions[index].StartLBA);
 				masterboot.SetUInt(offset + PartitionRecord.Sectors, Partitions[index].TotalBlocks);
 
-				masterboot.SetByte(offset + PartitionRecord.FirstCRS, 0);
-				masterboot.SetByte(offset + PartitionRecord.FirstCRS + 1, 0);
-				masterboot.SetByte(offset + PartitionRecord.FirstCRS + 2, 0);
-				masterboot.SetByte(offset + PartitionRecord.LastCRS, 0);
-				masterboot.SetByte(offset + PartitionRecord.LastCRS + 1, 0);
-				masterboot.SetByte(offset + PartitionRecord.LastCRS + 2, 0);
+				CHS chsStart = new CHS(Partitions[index].StartLBA);
+				CHS chsEnd = new CHS(Partitions[index].StartLBA + Partitions[index].TotalBlocks);
+
+				masterboot.SetByte(offset + PartitionRecord.FirstCRS, chsStart.Heads);
+				masterboot.SetByte(offset + PartitionRecord.FirstCRS + 1, (byte)((chsStart.Sectors & 0x3F) | ((chsStart.Cylinders >> 8) & 0x03)));
+				masterboot.SetByte(offset + PartitionRecord.FirstCRS + 2, (byte)(chsStart.Cylinders & 0xFF));
+				masterboot.SetByte(offset + PartitionRecord.LastCRS, chsEnd.Heads);
+				masterboot.SetByte(offset + PartitionRecord.LastCRS + 1, (byte)((chsEnd.Sectors & 0x3F) | ((chsEnd.Cylinders >> 8) & 0x03)));
+				masterboot.SetByte(offset + PartitionRecord.LastCRS + 2, (byte)(chsEnd.Cylinders & 0xFF));
 			}
 
 			diskDevice.WriteBlock(0, 1, masterboot.Data);
@@ -205,28 +208,5 @@ namespace Mosa.DeviceSystem
 			return true;
 		}
 
-
-		//public void Dump ()
-		//{
-		//    for (uint index = 0; index < MaxMBRPartitions; index++) {
-
-		//        GenericPartition partition = partitions[index];
-
-		//        if (partition.PartitionType != PartitionTypes.Empty) {
-
-		//            TextMode.Write ("partition #", (int)index);
-		//            TextMode.Write (" found, lba=", (int)partition.StartLBA);
-		//            TextMode.Write (", count=", (int)partition.TotalBlocks);
-		//            TextMode.Write (", type=", (int)partition.PartitionType);
-
-		//            // for testing
-		//            //if (FAT.FileSystem.IsFat (partition.BlockDevice))
-		//            //    TextMode.Write (" (fat)");
-		//            //else
-		//            TextMode.Write (" (unknown)");
-		//            TextMode.WriteLine ();
-		//        }
-		//    }
-		//}
 	}
 }

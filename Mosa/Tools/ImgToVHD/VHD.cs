@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -33,54 +42,6 @@ namespace Mosa.Tools.ImgToVHD
 
 		#endregion
 
-		public struct CHS
-		{
-			public ushort Cylinders;
-			public byte Heads;
-			public byte Sectors;
-		}
-
-		static CHS ComputeCHS(ulong totalSectors)
-		{
-			uint cylinderTimesHeads;
-
-			CHS chs = new CHS();
-
-			if (totalSectors > 65535 * 16 * 255)
-				totalSectors = 65535 * 16 * 255;
-
-			if (totalSectors >= 65535 * 16 * 63) {
-				chs.Sectors = 255;
-				chs.Heads = 16;
-				cylinderTimesHeads = (uint) (totalSectors / chs.Sectors);
-			}
-			else {
-				chs.Sectors = 17;
-				cylinderTimesHeads = (uint)(totalSectors / chs.Sectors);
-
-				chs.Heads = (byte)((cylinderTimesHeads + 1023) / 1024);
-
-				if (chs.Heads < 4)
-					chs.Heads = 4;
-
-				if (cylinderTimesHeads >= (chs.Heads * 1024) || chs.Heads > 16) {
-					chs.Sectors = 31;
-					chs.Heads = 16;
-					cylinderTimesHeads = (uint)(totalSectors / chs.Sectors);
-				}
-
-				if (cylinderTimesHeads >= (chs.Heads * 1024)) {
-					chs.Sectors = 63;
-					chs.Heads = 16;
-					cylinderTimesHeads = (uint)(totalSectors / chs.Sectors);
-				}
-			}
-
-			chs.Cylinders = (ushort)(cylinderTimesHeads / chs.Heads);
-
-			return chs;
-		}
-
 		static private ulong GetAlignedSize(ulong size)
 		{
 			return (size + 511) & ~((ulong)511);
@@ -109,10 +70,10 @@ namespace Mosa.Tools.ImgToVHD
 			binaryFooter.SetULongReversed(VHDFooterOffset.OriginalSize, alignedSize);
 			binaryFooter.SetULongReversed(VHDFooterOffset.CurrentSize, alignedSize);
 
-			CHS chs = VHD.ComputeCHS(alignedSize);
+			Mosa.DeviceSystem.CHS chs = new Mosa.DeviceSystem.CHS(alignedSize);
 			binaryFooter.SetUShortReversed(VHDFooterOffset.DiskGeometryCylinders, chs.Cylinders);
 			binaryFooter.SetByte(VHDFooterOffset.DiskGeometryHeads, chs.Heads);
-			binaryFooter.SetByte(VHDFooterOffset.DiskGeometrySectors, chs.Sectors);
+			binaryFooter.SetByte(VHDFooterOffset.DiskGeometrySectors, (byte)chs.Sectors);
 
 			binaryFooter.SetUIntReversed(VHDFooterOffset.DiskType, 0x02); // Fixed disk
 			binaryFooter.SetUIntReversed(VHDFooterOffset.Checksum, 0x00);
