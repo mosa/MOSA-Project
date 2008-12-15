@@ -26,13 +26,18 @@ namespace Mosa.Tools.MakeFAT
 			string imageFilename = string.Empty;
 			string mbrFilename = string.Empty;
 			string fatcodeFilename = string.Empty;
+			string[] copyFiles;
+
 			uint blockCount = 1024 * 1024 * 4 / 512;
 
 			// TODO: Parse command line parameters
 
+			copyFiles = new string[2];
 			imageFilename = @"x:\boot\bootimage.img";
 			mbrFilename = @"x:\boot\freedos-mbr.bin";
 			fatcodeFilename = @"x:\boot\freedos-boot.bin";
+			copyFiles[0] = @"X:\Boot\Boot\KERNEL.SYS";
+			copyFiles[1] = @"X:\Boot\Boot\COMMAND.COM";
 
 			//if (args.Length < 3) {
 			//    Console.WriteLine("ERROR: Missing arguments");
@@ -40,7 +45,7 @@ namespace Mosa.Tools.MakeFAT
 			//    return -1;
 			//}
 
-			try {				
+			try {
 				System.IO.File.Delete(imageFilename);
 
 				byte[] mbrCode = ReadFile(mbrFilename);
@@ -58,7 +63,7 @@ namespace Mosa.Tools.MakeFAT
 				mbr.DiskSignature = 0x12345678;
 				mbr.Partitions[0].Bootable = true;
 				mbr.Partitions[0].StartLBA = 17;
-				mbr.Partitions[0].TotalBlocks = blockCount - 17;
+				mbr.Partitions[0].TotalBlocks = blockCount - 17 - 32;
 				mbr.Partitions[0].PartitionType = PartitionType.FAT12;
 				mbr.Code = mbrCode;
 
@@ -78,9 +83,19 @@ namespace Mosa.Tools.MakeFAT
 
 				// Create FAT file system
 				FAT fat = new FAT(partitionDevice);
-
 				fat.Format(fatSettings);
 
+				fat.SetVolumeName("MOSABOOT");
+
+				foreach (string filename in copyFiles)
+					if (filename != null) {
+						byte[] file = ReadFile(filename);
+						string name = Path.GetFileNameWithoutExtension(filename).PadRight(8).Substring(0, 8) + Path.GetExtension(filename).PadRight(3).Substring(1, 3);
+						DirectoryEntryLocation location = fat.CreateFile(name, 0);
+						FATFileStream fatFileStream = new FATFileStream(fat, location);
+						fatFileStream.Write(file, 0, file.Length);
+						fatFileStream.Flush();
+					}
 			}
 			catch (Exception e) {
 				Console.WriteLine("Error: " + e.ToString());

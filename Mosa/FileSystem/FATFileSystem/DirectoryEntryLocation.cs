@@ -22,7 +22,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		public uint StartCluster;
+		public uint FirstCluster;
 
 		/// <summary>
 		///  
@@ -59,7 +59,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		public DirectoryEntryLocation(uint startCluster, uint directorySector, uint directoryIndex, bool directory)
 		{
 			this.Valid = true;
-			this.StartCluster = startCluster;
+			this.FirstCluster = startCluster;
 			this.DirectorySector = directorySector;
 			this.DirectorySectorIndex = directoryIndex;
 			this.directory = directory;

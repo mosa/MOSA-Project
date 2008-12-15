@@ -67,9 +67,9 @@ namespace Mosa.FileSystem.FATFileSystem
 				return null;
 
 			if (location.IsDirectory)
-				return new VFSDirectory(FileSystem, location.StartCluster);
+				return new VFSDirectory(FileSystem, location.FirstCluster);
 			else
-				return new VFSFile(FileSystem, location.StartCluster, location.DirectorySector, location.DirectorySectorIndex);
+				return new VFSFile(FileSystem, location.FirstCluster, location.DirectorySector, location.DirectorySectorIndex);
 		}
 
 		/// <summary>

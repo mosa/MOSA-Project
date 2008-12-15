@@ -90,7 +90,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <param name="fs">The fs.</param>
 		/// <param name="location">The location.</param>
 		public FATFileStream(FAT fs, DirectoryEntryLocation location)
-			: this(fs, location.StartCluster, location.DirectorySector, location.DirectorySectorIndex)
+			: this(fs, location.FirstCluster, location.DirectorySector, location.DirectorySectorIndex)
 		{
 		}
 
@@ -210,7 +210,7 @@ namespace Mosa.FileSystem.FATFileSystem
 				return;
 
 			fs.WriteCluster(currentCluster, data);
-			SetLength(length);
+			SetLength(length);			
 
 			dirty = false;
 		}
@@ -340,9 +340,9 @@ namespace Mosa.FileSystem.FATFileSystem
 		}
 
 		/// <summary>
-		/// Nexts the cluster.
+		/// Gets the next cluster.
 		/// </summary>
-		protected void NextCluster()
+		protected bool NextCluster()
 		{
 			uint newcluster = 0;
 
@@ -352,6 +352,63 @@ namespace Mosa.FileSystem.FATFileSystem
 				newcluster = fs.GetNextCluster(currentCluster);
 
 			ReadCluster(newcluster);
+
+			return true;
+		}
+
+		/// <summary>
+		/// Gets the next cluster
+		/// </summary>
+		/// <returns></returns>
+		protected bool NextClusterExpand()
+		{
+			Flush();
+
+			uint newcluster = 0;
+
+			if (currentCluster == 0) {
+				if (startCluster == 0) {
+					uint newCluster = fs.AllocateFirstCluster(directorySector, directorySectorIndex);
+
+					if (newCluster == 0)
+						return false;
+
+					startCluster = newCluster;
+					currentCluster = newCluster;
+					dirty = true;
+
+					// Clear cluster
+					for (int i = 0; i < clusterSize; i++)
+						data[i] = 0;
+
+					return true;
+				}
+
+				newcluster = startCluster;
+			}
+			else {
+				newcluster = fs.GetNextCluster(currentCluster);
+
+				if (newcluster == 0) {
+					uint newCluster = fs.AddCluster(currentCluster);
+
+					if (newCluster == 0)
+						return false;
+
+					currentCluster = newCluster;
+					dirty = true;
+
+					// Clear cluster
+					for (int i = 0; i < clusterSize; i++)
+						data[i] = 0;
+
+					return true;
+				}
+			}
+
+			ReadCluster(newcluster);
+
+			return true;
 		}
 
 		/// <summary>
@@ -426,7 +483,7 @@ namespace Mosa.FileSystem.FATFileSystem
 				count = buffer.Length - offset;
 
 			for (int i = 0; i < count; i++)
-				WriteByte(buffer[offset + count]);
+				WriteByte(buffer[offset + i]);
 		}
 
 		/// <summary>
@@ -446,16 +503,15 @@ namespace Mosa.FileSystem.FATFileSystem
 		{
 			uint index = (uint)(position % clusterSize);
 
-			if (position >= length) {
-				// TODO
-			}
-
 			if (index == 0)
-				NextCluster();
+				NextClusterExpand();
 
 			dirty = true;
 			data[index] = value;
 			position++;
+
+			if (position > length)
+				length = position;
 		}
 	}
 }
