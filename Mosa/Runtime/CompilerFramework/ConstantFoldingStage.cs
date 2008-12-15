@@ -387,9 +387,30 @@ namespace Mosa.Runtime.CompilerFramework
                 int result = 0;
                 switch (instruction.Results[0].Type.Type)
                 {
+                    case Mosa.Runtime.Metadata.CilElementType.Char:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                    case Mosa.Runtime.Metadata.CilElementType.U1:
+                        result = ((byte)(instruction.First as ConstantOperand).Value) + ((byte)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U2:
+                        result = ((ushort)(instruction.First as ConstantOperand).Value) + ((ushort)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U4:
+                        result = (int)(((uint)(instruction.First as ConstantOperand).Value) + ((uint)(instruction.Second as ConstantOperand).Value));
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I1:
+                        result = ((sbyte)(instruction.First as ConstantOperand).Value) + ((sbyte)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I2:
+                        result = ((short)(instruction.First as ConstantOperand).Value) + ((short)(instruction.Second as ConstantOperand).Value);
+                        break;
                     case Mosa.Runtime.Metadata.CilElementType.I4:
                         result = ((int)(instruction.First as ConstantOperand).Value) + ((int)(instruction.Second as ConstantOperand).Value); 
                         break;
+                    case Mosa.Runtime.Metadata.CilElementType.I:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                    case Mosa.Runtime.Metadata.CilElementType.U:
+                        goto case Mosa.Runtime.Metadata.CilElementType.U4;
                     default: 
                         goto case Mosa.Runtime.Metadata.CilElementType.I4;
                 }
