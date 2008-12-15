@@ -17,282 +17,450 @@ namespace Mosa.Runtime.CompilerFramework
     /// Performs IR constant folding of arithmetic instructions to optimize
     /// the code down to fewer calculations.
     /// </summary>
-    public sealed class ConstantFoldingStage : IMethodCompilerStage
+    public sealed class ConstantFoldingStage : CodeTransformationStage, IMethodCompilerStage, IL.IILVisitor<CodeTransformationStage.Context>, IInstructionVisitor<CodeTransformationStage.Context>
     {
-        #region IMethodCompilerStage Members
-
-        string IMethodCompilerStage.Name
+        #region Non-Folding
+        void IL.IILVisitor<CodeTransformationStage.Context>.Nop(IL.NopInstruction instruction, CodeTransformationStage.Context ctx)
         {
-            get { return @"IR Constant Folding"; }
+            throw new NotImplementedException();
         }
 
+        void IL.IILVisitor<CodeTransformationStage.Context>.Break(IL.BreakInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldarg(IL.LdargInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldarga(IL.LdargaInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldloc(IL.LdlocInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldloca(IL.LdlocaInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldc(IL.LdcInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldobj(IL.LdobjInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldstr(IL.LdstrInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldfld(IL.LdfldInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldflda(IL.LdfldaInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldsfld(IL.LdsfldInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldsflda(IL.LdsfldaInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldftn(IL.LdftnInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldvirtftn(IL.LdvirtftnInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldtoken(IL.LdtokenInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Stloc(IL.StlocInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Starg(IL.StargInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Stobj(IL.StobjInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Stfld(IL.StfldInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Stsfld(IL.StsfldInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Dup(IL.DupInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Pop(IL.PopInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Jmp(IL.JumpInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Call(IL.CallInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Calli(IL.CalliInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ret(IL.ReturnInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Branch(IL.BranchInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.UnaryBranch(IL.UnaryBranchInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.BinaryBranch(IL.BinaryBranchInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Switch(IL.SwitchInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.BinaryLogic(IL.BinaryLogicInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Shift(IL.ShiftInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Neg(IL.NegInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Not(IL.NotInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Conversion(IL.ConversionInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Callvirt(IL.CallvirtInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Cpobj(IL.CpobjInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Newobj(IL.NewobjInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Castclass(IL.CastclassInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Isinst(IL.IsInstInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Unbox(IL.UnboxInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Throw(IL.ThrowInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Box(IL.BoxInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Newarr(IL.NewarrInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldlen(IL.LdlenInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldelema(IL.LdelemaInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Ldelem(IL.LdelemInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Stelem(IL.StelemInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.UnboxAny(IL.UnboxAnyInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Refanyval(IL.RefanyvalInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.UnaryArithmetic(IL.UnaryArithmeticInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Mkrefany(IL.MkrefanyInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.ArithmeticOverflow(IL.ArithmeticOverflowInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Endfinally(IL.EndfinallyInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Leave(IL.LeaveInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Arglist(IL.ArglistInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.BinaryComparison(IL.BinaryComparisonInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Localalloc(IL.LocalallocInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Endfilter(IL.EndfilterInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.InitObj(IL.InitObjInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Cpblk(IL.CpblkInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Initblk(IL.InitblkInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Prefix(IL.PrefixInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Rethrow(IL.RethrowInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Sizeof(IL.SizeofInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Refanytype(IL.RefanytypeInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Mul(IL.MulInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Div(IL.DivInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IL.IILVisitor<CodeTransformationStage.Context>.Rem(IL.RemInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IInstructionVisitor<CodeTransformationStage.Context>.Visit(Instruction instruction, CodeTransformationStage.Context ctx)
+        {
+        }
+
+        /// <summary>
+        /// Adds the specified instruction.
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="ctx">The CTX.</param>
+        void IL.IILVisitor<CodeTransformationStage.Context>.Add(IL.AddInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            if (instruction.First is ConstantOperand && instruction.Second is ConstantOperand)
+            {
+                int result = 0;
+                switch (instruction.Results[0].Type.Type)
+                {
+                    case Mosa.Runtime.Metadata.CilElementType.I4:
+                        result = ((int)(instruction.First as ConstantOperand).Value) + ((int)(instruction.Second as ConstantOperand).Value); 
+                        break;
+                    default: 
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                }
+                Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, result)));
+            }
+        }
+
+        /// <summary>
+        /// Subs the specified instruction.
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="ctx">The CTX.</param>
+        void IL.IILVisitor<CodeTransformationStage.Context>.Sub(IL.SubInstruction instruction, CodeTransformationStage.Context ctx)
+        {
+            if (instruction.First is ConstantOperand && instruction.Second is ConstantOperand)
+            {
+                int result = 0;
+                switch (instruction.Results[0].Type.Type)
+                {
+                    case Mosa.Runtime.Metadata.CilElementType.I4:
+                        result = ((int)(instruction.First as ConstantOperand).Value) - ((int)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    default:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                }
+                Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, result)));
+            }
+        }
+
+        #region IMethodCompilerStage
+
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+        public override string Name
+        {
+            get { return @"Constant Folding"; }
+        }
+
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        /// <param name="compiler">The compiler context to perform processing in.</param>
         void IMethodCompilerStage.Run(MethodCompilerBase compiler)
         {
+            if (null == compiler)
+                throw new ArgumentNullException(@"compiler");
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
             if (null == blockProvider)
-                throw new InvalidOperationException(@"SSA Conversion requires basic blocks.");
+                throw new InvalidOperationException(@"Instruction stream must have been split to basic blocks.");
 
-            bool remove = false;
-
-            // Loop through all blocks
-            foreach (BasicBlock block in blockProvider)
+            CodeTransformationStage.Context ctx = new CodeTransformationStage.Context();
+            for (int currentBlock = 0; currentBlock < blockProvider.Blocks.Count; currentBlock++)
             {
-                bool nothing_left = false;
-                // Loop over instructionlist until there is nothing
-                // left to fold.
-                while (!nothing_left)
+                BasicBlock block = blockProvider.Blocks[currentBlock];
+                ctx.Block = block;
+                for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++)
                 {
-                    nothing_left = true;
-                    // Iterate over all instructions within this block
-                    // and look for places to fold.
-                    List<Instruction> instructions = block.Instructions;
-                    for (int i = 0; i < instructions.Count; i++)
-                    {
-                        Instruction instruction = instructions[i];
-                        Operand op = null;
-
-                        // Watch out for arithmetic instructions as they
-                        // are the only place where constant folding is needed.
-                        if (instruction is IL.ArithmeticInstruction)
-                        {
-                            Operand first = instruction.Operands[0];
-                            Operand second = instruction.Operands[1];
-
-                            // To fold, we need an arithmetic instruction operating
-                            // on 2 constants.
-                            if (first is ConstantOperand && second is ConstantOperand)
-                            {
-                                // Check for type of instruction
-                                if (instruction is IL.AddInstruction)
-                                    op = Add(first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
-                                else if (instruction is IL.SubInstruction)
-                                    op = Sub(first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
-                                else if (instruction is IL.MulInstruction)
-                                    op = Mul(first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
-                                else if (instruction is IL.DivInstruction)
-                                    op = Div(first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
-
-                                // We folded, so replace the current instruction
-                                remove = true;
-
-                                // We folded, so check the block again
-                                nothing_left = false;
-                            }
-                        }
-                        else if (instruction is IL.BinaryLogicInstruction)
-                        {
-                            Operand first = instruction.Operands[0];
-                            Operand second = instruction.Operands[1];
-
-                            // To fold, we need an binary logic instruction operating
-                            // on 2 constants.
-                            if (first is ConstantOperand && second is ConstantOperand)
-                            {
-                                // Check for type of instruction
-                                if (instruction is IR.LogicalAndInstruction)
-                                    op = And(first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
-                                else if (instruction is IR.LogicalOrInstruction)
-                                    op = Or(first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
-                                else if (instruction is IR.LogicalXorInstruction)
-                                    op = Xor(first as ConstantOperand, second as ConstantOperand, instruction.Results[0].StackType);
-
-                                // We folded, so replace the current instruction
-                                remove = true;
-
-                                // We folded, so check the block again
-                                nothing_left = false;
-                            }
-                        }
-
-
-                        // Shall we remove this instruction?
-                        if (true == remove)
-                        {
-                            // Remove the arithmetic instruction and replace it
-                            // by a store instruction
-                            Instruction new_instruction = new IR.MoveInstruction(instruction.Results[0], op);
-                            instructions[i] = new_instruction;
-
-                            // Reset flag
-                            remove = false;
-                        }
-                    }
+                    block.Instructions[ctx.Index].Visit(this, ctx);
                 }
             }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="pipeline"></param>
-        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        new void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
         {
-            pipeline.InsertAfter<ConstantPropagationStage>(this);
+            pipeline.InsertBefore<IL.CilToIrTransformationStage>(this);
         }
-
-        #endregion // IMethodCompilerStage Members
-
-        #region Internals
-
-        #region Arithmetics
-        /// <summary>
-        /// Fold 2 constants by adding them
-        /// </summary>
-        /// <param name="first">First constant to fold</param>
-        /// <param name="second">Second constant to fold</param>
-        /// <param name="type">Stacktype for the result</param>
-        private Operand Add(ConstantOperand first, ConstantOperand second, StackTypeCode type)
-        {
-            switch (type)
-            {
-                case StackTypeCode.N:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), Convert.ToInt32(first.Value) + (int)second.Value);
-                case StackTypeCode.Int32:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), Convert.ToInt32(first.Value) + Convert.ToInt32(second.Value));
-                case StackTypeCode.Int64:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), Convert.ToInt64(first.Value) + Convert.ToInt32(second.Value));
-                case StackTypeCode.F:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.R8), Convert.ToDouble(first.Value) + Convert.ToDouble(second.Value));
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-        /// <summary>
-        /// Fold 2 constants by substracting them
-        /// </summary>
-        /// <param name="first">First constant to fold</param>
-        /// <param name="second">Second constant to fold</param>
-        /// <param name="type">Stacktype for the result</param>
-        private Operand Sub(ConstantOperand first, ConstantOperand second, StackTypeCode type)
-        {
-            switch (type)
-            {
-                case StackTypeCode.N:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), Convert.ToInt32(first.Value) - (int)second.Value);
-                case StackTypeCode.Int32:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), Convert.ToInt32(first.Value) - Convert.ToInt32(second.Value));
-                case StackTypeCode.Int64:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), Convert.ToInt64(first.Value) - Convert.ToInt32(second.Value));
-                case StackTypeCode.F:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.R8), Convert.ToDouble(first.Value) - Convert.ToDouble(second.Value));
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-        /// <summary>
-        /// Fold 2 constants by multiplying them
-        /// </summary>
-        /// <param name="first">First constant to fold</param>
-        /// <param name="second">Second constant to fold</param>
-        /// <param name="type">Stacktype for the result</param>
-        private Operand Mul(ConstantOperand first, ConstantOperand second, StackTypeCode type)
-        {
-            switch (type)
-            {
-                case StackTypeCode.N:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), Convert.ToInt32(first.Value) * (int)second.Value);
-                case StackTypeCode.Int32:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), Convert.ToInt32(first.Value) * Convert.ToInt32(second.Value));
-                case StackTypeCode.Int64:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), Convert.ToInt64(first.Value) * Convert.ToInt32(second.Value));
-                case StackTypeCode.F:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.R8), Convert.ToDouble(first.Value) * Convert.ToDouble(second.Value));
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-        /// <summary>
-        /// Fold 2 constants by dividing them
-        /// </summary>
-        /// <param name="first">First constant to fold</param>
-        /// <param name="second">Second constant to fold</param>
-        /// <param name="type">Stacktype for the result</param>
-        private Operand Div(ConstantOperand first, ConstantOperand second, StackTypeCode type)
-        {
-            switch (type)
-            {
-                case StackTypeCode.N:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), Convert.ToInt32(first.Value) / (int)second.Value);
-                case StackTypeCode.Int32:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), Convert.ToInt32(first.Value) / Convert.ToInt32(second.Value));
-                case StackTypeCode.Int64:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), Convert.ToInt64(first.Value) / Convert.ToInt32(second.Value));
-                case StackTypeCode.F:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.R8), Convert.ToDouble(first.Value) / Convert.ToDouble(second.Value));
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-        #endregion // Arithmetics
-
-        #region Logical operations
-        /// <summary>
-        /// Fold 2 constants by multiplying them
-        /// </summary>
-        /// <param name="first">First constant to fold</param>
-        /// <param name="second">Second constant to fold</param>
-        /// <param name="type">Stacktype for the result</param>
-        private Operand And(ConstantOperand first, ConstantOperand second, StackTypeCode type)
-        {
-            switch (type)
-            {
-                case StackTypeCode.N:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), Convert.ToInt32(first.Value) & (int)second.Value);
-                case StackTypeCode.Int32:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), Convert.ToInt32(first.Value) & Convert.ToInt32(second.Value));
-                case StackTypeCode.Int64:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), Convert.ToInt64(first.Value) & Convert.ToInt32(second.Value));
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-        /// <summary>
-        /// Fold 2 constants by using binary or
-        /// </summary>
-        /// <param name="first">First constant to fold</param>
-        /// <param name="second">Second constant to fold</param>
-        /// <param name="type">Stacktype for the result</param>
-        /// <returns></returns>
-        private Operand Or(ConstantOperand first, ConstantOperand second, StackTypeCode type)
-        {
-            switch (type)
-            {
-                case StackTypeCode.N:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), Convert.ToInt32(first.Value) | (int)second.Value);
-                case StackTypeCode.Int32:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), Convert.ToInt32(first.Value) | Convert.ToInt32(second.Value));
-                case StackTypeCode.Int64:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), Convert.ToInt64(first.Value) | Convert.ToInt64(second.Value));
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-        /// <summary>
-        /// Fold 2 constants by using xor
-        /// </summary>
-        /// <param name="first">First constant to fold</param>
-        /// <param name="second">Second constant to fold</param>
-        /// <param name="type">Stacktype for the result</param>
-        private Operand Xor(ConstantOperand first, ConstantOperand second, StackTypeCode type)
-        {
-            switch (type)
-            {
-                case StackTypeCode.N:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Internal), Convert.ToInt32(first.Value) ^ (int)second.Value);
-                case StackTypeCode.Int32:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), Convert.ToInt32(first.Value) ^ Convert.ToInt32(second.Value));
-                case StackTypeCode.Int64:
-                    return new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I8), Convert.ToInt64(first.Value) ^ Convert.ToInt32(second.Value));
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-        #endregion // Logical Operations
-        #endregion // Internals
+        #endregion
     }
 }

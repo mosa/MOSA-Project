@@ -30,6 +30,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 //InstructionLogger.Instance,
                 new BasicBlockBuilderStage(),
                 //InstructionLogger.Instance,
+                new ConstantFoldingStage(),
                 new CilToIrTransformationStage(),
                 //InstructionLogger.Instance,
                 InstructionStatisticsStage.Instance,
