@@ -56,12 +56,20 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IMethodCompilerStage Members
 
-        string IMethodCompilerStage.Name
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+        public string Name
         {
             get { return @"StackLayoutStage"; }
         }
 
-        void IMethodCompilerStage.Run(MethodCompilerBase methodCompiler)
+        /// <summary>
+        /// Runs the specified method compiler.
+        /// </summary>
+        /// <param name="methodCompiler">The method compiler.</param>
+        public void Run(IMethodCompiler methodCompiler)
         {
             if (null == methodCompiler)
                 throw new ArgumentNullException(@"methodCompiler");
@@ -173,7 +181,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="compiler">The method compiler providing the parameters.</param>
         /// <param name="cc">The calling convention used to invoke the method, which controls parameter layout.</param>
-        private void LayoutParameters(MethodCompilerBase compiler, ICallingConvention cc)
+        private void LayoutParameters(IMethodCompiler compiler, ICallingConvention cc)
         {
             List<StackOperand> paramOps = new List<StackOperand>();
             for (int i = 0; i < compiler.Method.Parameters.Count; i++)

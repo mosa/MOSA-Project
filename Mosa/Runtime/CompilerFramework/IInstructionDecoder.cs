@@ -24,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Gets the compiler, that is currently executing.
         /// </summary>
-        MethodCompilerBase Compiler { get; }
+        IMethodCompiler Compiler { get; }
 
         /// <summary>
         /// Gets the RuntimeMethod being compiled.

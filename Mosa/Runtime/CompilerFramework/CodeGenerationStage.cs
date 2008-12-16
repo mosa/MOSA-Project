@@ -30,7 +30,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Holds the method compiler, which is executing this stage.
         /// </summary>
-        protected MethodCompilerBase _compiler;
+        protected IMethodCompiler _compiler;
 
         // <summary>
         // Maps label targets as instruction offsets.
@@ -55,8 +55,8 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Retrieves the name of the compilation stage.
         /// </summary>
-        /// <value></value>
-        string IMethodCompilerStage.Name
+        /// <value>The name of the compilation stage.</value>
+        public string Name
         {
             get { return @"CodeGeneration"; }
         }
@@ -65,7 +65,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>
-		void IMethodCompilerStage.Run(MethodCompilerBase compiler)
+		public void Run(IMethodCompiler compiler)
 		{
             // Check preconditions
             if (null == compiler)

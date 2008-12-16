@@ -175,7 +175,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="compiler">The compiler.</param>
         /// <param name="method">The method.</param>
-        public void SetInvokeTarget(MethodCompilerBase compiler, RuntimeMethod method)
+        public void SetInvokeTarget(IMethodCompiler compiler, RuntimeMethod method)
         {
             if (null == method)
                 throw new ArgumentNullException(@"method");
@@ -201,7 +201,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Is the function returning void?
             if (signature.ReturnType.Type != CilElementType.Void)
             {
-                SetResult(0, compiler.CreateResultOperand(signature.ReturnType));
+                SetResult(0, compiler.CreateTemporary(signature.ReturnType));
             }
         }
 
@@ -408,7 +408,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="compiler"></param>
         /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
         /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
-        public override void Validate(MethodCompilerBase compiler)
+        public override void Validate(IMethodCompiler compiler)
         {
             // Validate the base class first.
             base.Validate(compiler);

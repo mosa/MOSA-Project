@@ -31,7 +31,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// created by invoking CreateMethodCompiler on a specific compiler
     /// instance.
     /// </remarks>
-    public class MethodCompilerBase : CompilerBase<IMethodCompilerStage>, IDisposable
+    public class MethodCompilerBase : CompilerBase<IMethodCompilerStage>, IMethodCompiler, IDisposable
     {
         #region Data members
 
@@ -295,7 +295,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// Requests a stream to emit native instructions to.
         /// </summary>
         /// <returns>A stream object, which can be used to store emitted instructions.</returns>
-        public Stream RequestCodeStream()
+        public virtual Stream RequestCodeStream()
         {
             return _linker.Allocate(this._method, SectionKind.Text, 0, 0);
         }

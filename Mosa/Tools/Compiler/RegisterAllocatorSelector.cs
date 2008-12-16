@@ -119,7 +119,7 @@ namespace Mosa.Tools.Compiler
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(MethodCompilerBase compiler)
+        public void Run(IMethodCompiler compiler)
         {
             CheckImplementation();
             implementation.Run(compiler);

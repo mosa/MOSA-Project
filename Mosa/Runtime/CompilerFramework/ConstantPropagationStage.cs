@@ -31,12 +31,20 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IMethodCompilerStage Members
 
-        string IMethodCompilerStage.Name
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+        public string Name
         {
             get { return @"Constant Propagation"; }
         }
 
-        void IMethodCompilerStage.Run(MethodCompilerBase compiler)
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        /// <param name="compiler">The compiler context to perform processing in.</param>
+        public void Run(IMethodCompiler compiler)
         {
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
             if (null == blockProvider)

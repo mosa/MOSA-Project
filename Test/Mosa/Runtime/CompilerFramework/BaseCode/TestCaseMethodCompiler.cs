@@ -16,6 +16,7 @@ using Mosa.Runtime.Linker;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
+using System;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
@@ -52,6 +53,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         }
 
         private delegate void CCtor();
+
+        public override Stream RequestCodeStream()
+        {
+            Stream stream = base.RequestCodeStream();
+
+            // Save the start address of the method
+            this.Method.Address = new IntPtr(stream.Position);
+
+            return stream;
+        }
 
         /// <summary>
         /// Called after the method compiler has finished compiling the method.

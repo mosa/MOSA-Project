@@ -108,7 +108,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(MethodCompilerBase compiler)
+        public void Run(IMethodCompiler compiler)
         {
             // Retrieve the architecture
             _architecture = compiler.Architecture;
@@ -334,7 +334,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="compiler">The compiler.</param>
         /// <param name="blockProvider">The block provider.</param>
-        private void CaptureLiveRanges(MethodCompilerBase compiler, IBasicBlockProvider blockProvider)
+        private void CaptureLiveRanges(IMethodCompiler compiler, IBasicBlockProvider blockProvider)
         {
             // Start live ranges for the parameters of the method
             int paramIdx = 0;

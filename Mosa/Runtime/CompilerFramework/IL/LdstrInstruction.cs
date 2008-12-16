@@ -65,7 +65,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             metadata.Read(token, out _value);
 
             // Set the result
-            SetResult(0, decoder.Compiler.CreateResultOperand(new SigType(CilElementType.String)));
+            SetResult(0, decoder.Compiler.CreateTemporary(new SigType(CilElementType.String)));
         }
 
         /// <summary>

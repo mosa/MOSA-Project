@@ -127,7 +127,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Validates the instruction operands and creates a matching variable for the result.
         /// </summary>
-        public sealed override void Validate(MethodCompilerBase compiler)
+        public sealed override void Validate(IMethodCompiler compiler)
         {
             base.Validate(compiler);
 
@@ -169,7 +169,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     throw new InvalidOperationException();
             }
 
-            SetResult(0, compiler.CreateResultOperand(resultType));
+            SetResult(0, compiler.CreateTemporary(resultType));
         }
 
         #endregion // Methods

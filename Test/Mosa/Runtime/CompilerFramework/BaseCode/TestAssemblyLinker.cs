@@ -32,7 +32,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// <summary>
         /// Holds the linker sections of the assembly linker.
         /// </summary>
-        private List<TestLinkerSection> _sections;
+        private List<LinkerSection> _sections;
 
         #endregion // Data members
 
@@ -44,7 +44,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         public TestAssemblyLinker()
         {
             int maxSections = (int)SectionKind.Max;
-            _sections = new List<TestLinkerSection>(maxSections);
+            _sections = new List<LinkerSection>(maxSections);
             for (int i = 0; i < maxSections; i++)
                 _sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, IntPtr.Zero));
         }
@@ -110,7 +110,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// </returns>
         protected override Stream Allocate(SectionKind section, int size, int alignment)
         {
-            TestLinkerSection tle = _sections[(int)section];
+            TestLinkerSection tle = (TestLinkerSection)_sections[(int)section];
             return tle.Allocate(size, alignment);
         }
 

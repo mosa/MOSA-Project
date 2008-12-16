@@ -49,7 +49,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             base.Decode(decoder);
 
             // Set the result
-            SetResult(0, decoder.Compiler.CreateResultOperand(new SigType(CilElementType.I4)));
+            SetResult(0, decoder.Compiler.CreateTemporary(new SigType(CilElementType.I4)));
         }
 
         /// <summary>

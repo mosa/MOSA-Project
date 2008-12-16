@@ -55,7 +55,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Validates the operands and creates a result
         /// </summary>
-        public sealed override void Validate(MethodCompilerBase compiler)
+        public sealed override void Validate(IMethodCompiler compiler)
         {
             Operand[] ops = this.Operands;
             StackTypeCode result = _operandTable[(int)ops[0].StackType][(int)ops[1].StackType];
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (StackTypeCode.Unknown == result)
                 throw new ExecutionEngineException(@"Invalid stack state.");
 
-            SetResult(0, compiler.CreateResultOperand(Operand.SigTypeFromStackType(result)));
+            SetResult(0, compiler.CreateTemporary(Operand.SigTypeFromStackType(result)));
         }
 
         /// <summary>

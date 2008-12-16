@@ -50,17 +50,17 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Retrieves the name of the compilation stage.
         /// </summary>
-        /// <value></value>
-		string IMethodCompilerStage.Name
+        /// <value>The name of the compilation stage.</value>
+		public string Name
 		{
 			get { return @"Basic Block Reduction"; }
 		}
 
-		/// <summary>
-		/// Runs the specified compiler.
-		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		void IMethodCompilerStage.Run(MethodCompilerBase compiler)
+        /// <summary>
+        /// Runs the specified compiler.
+        /// </summary>
+        /// <param name="compiler">The compiler.</param>
+		public void Run(IMethodCompiler compiler)
 		{
 			// Retrieve the basic block provider
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));

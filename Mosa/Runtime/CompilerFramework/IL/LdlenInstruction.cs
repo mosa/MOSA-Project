@@ -54,14 +54,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="compiler"></param>
         /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
         /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
-        public override void Validate(MethodCompilerBase compiler)
+        public override void Validate(IMethodCompiler compiler)
         {
             base.Validate(compiler);
 
             Mosa.Runtime.Metadata.Signatures.ArraySigType a = this.Operands[0].Type as Mosa.Runtime.Metadata.Signatures.ArraySigType;
             if (null == a || 1 != a.Rank)
                 throw new InvalidProgramException(@"Operand to ldlen is not a vector.");
-            SetResult(0, compiler.CreateResultOperand(new SigType(CilElementType.I)));
+            SetResult(0, compiler.CreateTemporary(new SigType(CilElementType.I)));
         }
 
         /// <summary>

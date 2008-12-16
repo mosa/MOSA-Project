@@ -81,7 +81,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             this.field = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
 
             Debug.Assert((this.field.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
-            SetResult(0, decoder.Compiler.CreateResultOperand(field.Type));
+            SetResult(0, decoder.Compiler.CreateTemporary(field.Type));
         }
 
         /// <summary>

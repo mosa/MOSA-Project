@@ -77,7 +77,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Holds the executing method compiler.
         /// </summary>
-        protected MethodCompilerBase _compiler;
+        protected IMethodCompiler _compiler;
 
         /// <summary>
         /// Holds the current block.
@@ -109,7 +109,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(MethodCompilerBase compiler)
+        public void Run(IMethodCompiler compiler)
         {
             if (null == compiler)
                 throw new ArgumentNullException(@"compiler");

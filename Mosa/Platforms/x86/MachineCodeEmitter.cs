@@ -123,7 +123,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// The compiler thats generating the code.
         /// </summary>
-        MethodCompilerBase _compiler;
+        IMethodCompiler _compiler;
 
         /// <summary>
         /// The stream used to write machine code bytes to.
@@ -165,7 +165,7 @@ namespace Mosa.Platforms.x86
         /// <param name="compiler"></param>
         /// <param name="codeStream">The stream the machine code is written to.</param>
         /// <param name="linker">The linker used to resolve external addresses.</param>
-        public MachineCodeEmitter(MethodCompilerBase compiler, Stream codeStream, IAssemblyLinker linker)
+        public MachineCodeEmitter(IMethodCompiler compiler, Stream codeStream, IAssemblyLinker linker)
         {
             Debug.Assert(null != compiler, @"MachineCodeEmitter needs a method compiler.");
             if (null == compiler)

@@ -48,10 +48,10 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return @"Logger"; }
 		}
 
-		void IMethodCompilerStage.Run(MethodCompilerBase compiler)
+		void IMethodCompilerStage.Run(IMethodCompiler compiler)
 		{
             // Previous stage
-            IMethodCompilerStage prevStage = compiler.GetPreviousStage(typeof(IMethodCompilerStage));
+            IMethodCompilerStage prevStage = compiler.GetPreviousStage<IMethodCompilerStage>();
             // Line number
             int line = 0, index = 1;
             StringBuilder text = new StringBuilder();

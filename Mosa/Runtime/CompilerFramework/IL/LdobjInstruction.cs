@@ -114,7 +114,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
 
             // Push the loaded value
-            SetResult(0, decoder.Compiler.CreateResultOperand(_typeRef));
+            SetResult(0, decoder.Compiler.CreateTemporary(_typeRef));
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="compiler"></param>
         /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
         /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
-        public override void Validate(MethodCompilerBase compiler)
+        public override void Validate(IMethodCompiler compiler)
         {
             // If we're ldind.i8, fix an IL deficiency that the result may be U8
             if (this.Code == OpCode.Ldind_i8 && _typeRef.Type == CilElementType.I8)
@@ -135,7 +135,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 if (rst != null && rst.ElementType.Type == CilElementType.U8 ||
                     ptr != null && ptr.ElementType.Type == CilElementType.U8)
                 {
-                    SetResult(0, compiler.CreateResultOperand(new SigType(CilElementType.U8)));
+                    SetResult(0, compiler.CreateTemporary(new SigType(CilElementType.U8)));
                 }
             }
         }

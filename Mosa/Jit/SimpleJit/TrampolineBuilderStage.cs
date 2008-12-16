@@ -47,12 +47,20 @@ namespace Mosa.Jit.SimpleJit
 
         #region IMethodCompilerStage Members
 
-        string IMethodCompilerStage.Name
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+        public string Name
         {
             get { return @"TrampolineBuilderStage"; }
         }
 
-        void IMethodCompilerStage.Run(MethodCompilerBase compiler)
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        /// <param name="compiler">The compiler context to perform processing in.</param>
+        public void Run(IMethodCompiler compiler)
         {
             // Nothing to do here, the jit already gives us a list of instructions 
             // we need to compile so we don't have to do anything here.

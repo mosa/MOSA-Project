@@ -65,7 +65,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Holds the currently running method compiler.
         /// </summary>
-        private MethodCompilerBase _compiler;
+        private IMethodCompiler _compiler;
 
         /// <summary>
         /// Holds the dominance frontier blocks of the stage.
@@ -102,12 +102,20 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IMethodCompilerStage Members
 
-        string IMethodCompilerStage.Name
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+        public string Name
         {
             get { return @"EnterSSA"; }
         }
 
-        void IMethodCompilerStage.Run(MethodCompilerBase compiler)
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        /// <param name="compiler">The compiler context to perform processing in.</param>
+        public void Run(IMethodCompiler compiler)
         {
             // Retrieve the basic block provider
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
@@ -193,7 +201,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="compiler">The method compiler.</param>
         /// <param name="blockProvider">The block provider.</param>
-        private void AddPhiFunctionsForOutParameters(MethodCompilerBase compiler, IBasicBlockProvider blockProvider)
+        private void AddPhiFunctionsForOutParameters(IMethodCompiler compiler, IBasicBlockProvider blockProvider)
         {
             Dictionary<StackOperand, StackOperand> liveIn = null;
 

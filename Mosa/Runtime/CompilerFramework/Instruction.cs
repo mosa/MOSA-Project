@@ -344,7 +344,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
         /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
-        public virtual void Validate(MethodCompilerBase compiler)
+        public virtual void Validate(IMethodCompiler compiler)
         {
             if (null == compiler)
                 throw new ArgumentNullException(@"compiler");

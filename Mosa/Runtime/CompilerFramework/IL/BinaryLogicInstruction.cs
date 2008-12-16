@@ -61,7 +61,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="compiler"></param>
         /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
         /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
-        public override void Validate(MethodCompilerBase compiler)
+        public override void Validate(IMethodCompiler compiler)
         {
             base.Validate(compiler);
             Operand[] ops = this.Operands;
@@ -69,7 +69,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (StackTypeCode.Unknown == result)
                 throw new ExecutionEngineException(@"Invalid stack result of instruction.");
 
-            SetResult(0, compiler.CreateResultOperand(Operand.SigTypeFromStackType(result)));
+            SetResult(0, compiler.CreateTemporary(Operand.SigTypeFromStackType(result)));
         }
 
         /// <summary>

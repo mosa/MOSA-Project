@@ -82,7 +82,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Validates the instruction operands and creates a matching variable for the result.
         /// </summary>
-        public sealed override void Validate(MethodCompilerBase compiler)
+        public sealed override void Validate(IMethodCompiler compiler)
         {
             base.Validate(compiler);
 
@@ -106,7 +106,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (StackTypeCode.Unknown == result)
                 throw new InvalidOperationException(@"Invalid operand types passed to " + _code);
 
-            SetResult(0, compiler.CreateResultOperand(Operand.SigTypeFromStackType(result)));
+            SetResult(0, compiler.CreateTemporary(Operand.SigTypeFromStackType(result)));
         }
 
         /// <summary>

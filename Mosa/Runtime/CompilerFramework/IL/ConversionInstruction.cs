@@ -49,7 +49,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="compiler"></param>
         /// <exception cref="System.ExecutionEngineException">One of the stack operands is invalid.</exception>
         /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> is null.</exception>
-        public sealed override void Validate(MethodCompilerBase compiler)
+        public sealed override void Validate(IMethodCompiler compiler)
         {
 			// Validate the typecode & determine the resulting stack type
             SigType resultType;
@@ -104,7 +104,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     throw new NotSupportedException(@"Overflow checking conversions not supported.");
             }
 
-            SetResult(0, compiler.CreateResultOperand(resultType));
+            SetResult(0, compiler.CreateTemporary(resultType));
 		}
 
         /// <summary>

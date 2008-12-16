@@ -83,7 +83,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(MethodCompilerBase compiler)
+        public void Run(IMethodCompiler compiler)
         {
             // Call Run on every stage
             foreach (IMethodCompilerStage stage in Stages)

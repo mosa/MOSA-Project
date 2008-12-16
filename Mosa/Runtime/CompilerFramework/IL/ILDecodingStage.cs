@@ -278,7 +278,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// The current compiler context.
         /// </summary>
-        private MethodCompilerBase _compiler;
+        private IMethodCompiler _compiler;
 
         /// <summary>
         /// The method implementation of the currently compiled method.
@@ -319,9 +319,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
         #region IMethodCompilerStage Members
 
         /// <summary>
-        /// 
+        /// Retrieves the name of the compilation stage.
         /// </summary>
-        string IMethodCompilerStage.Name
+        /// <value>The name of the compilation stage.</value>
+        public string Name
         {
             get { return @"CIL decoder"; }
         }
@@ -330,7 +331,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>
-        void IMethodCompilerStage.Run(MethodCompilerBase compiler)
+        public void Run(IMethodCompiler compiler)
         {
             // The size of the code in bytes
             MethodHeader header = new MethodHeader();
@@ -467,7 +468,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="compiler">The compiler to populate.</param>
         /// <param name="header">The method header.</param>
-        private void Decode(MethodCompilerBase compiler, ref MethodHeader header)
+        private void Decode(IMethodCompiler compiler, ref MethodHeader header)
         {
             // Instruction object decoded for an IL instruction
             ILInstruction instruction = null;
@@ -635,7 +636,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// Gets the compiler, that is currently executing.
         /// </summary>
         /// <value></value>
-        MethodCompilerBase IInstructionDecoder.Compiler
+        IMethodCompiler IInstructionDecoder.Compiler
         {
             get { return _compiler; }
         }

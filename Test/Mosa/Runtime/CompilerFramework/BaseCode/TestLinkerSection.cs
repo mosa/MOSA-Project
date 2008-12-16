@@ -79,7 +79,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// <value>The length of the section in bytes.</value>
         public override long Length
         {
-            get { throw new NotImplementedException(); }
+            get { return (this.stream != null ? this.stream.Length : 0); }
         }
 
         #endregion // LinkerSection Overrides

@@ -96,7 +96,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
             get { return @"Link Time Code Generation Instruction Source"; }
         }
 
-        public void Run(MethodCompilerBase compiler)
+        public void Run(IMethodCompiler compiler)
         {
             // Nothing to do here, normally an instruction source would parse some source code
             // or intermediate form of it. We've already got the instructions in the ctor.

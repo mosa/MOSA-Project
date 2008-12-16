@@ -54,6 +54,16 @@ namespace Mosa.Runtime.CompilerFramework
         #region Methods
 
         /// <summary>
+        /// Gets the previous stage.
+        /// </summary>
+        /// <typeparam name="T">The type of the previous stage. Usually a public interface.</typeparam>
+        /// <returns>The previous compilation stage supporting the requested type or null.</returns>
+        public T GetPreviousStage<T>()
+        {
+            return (T)GetPreviousStage(typeof(T));
+        }
+
+        /// <summary>
         /// Finds a stage, which ran before the current one and supports the specified type.
         /// </summary>
         /// <param name="stageType">The (interface) type to look for.</param>
@@ -61,7 +71,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <remarks>
         /// This method is used by stages to access the results of a previous compilation stage.
         /// </remarks>
-        public PipelineType GetPreviousStage(Type stageType)
+        public object GetPreviousStage(Type stageType)
         {
             PipelineType result = null;
 

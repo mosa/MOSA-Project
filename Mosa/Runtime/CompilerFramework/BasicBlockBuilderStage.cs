@@ -55,7 +55,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// Retrieves the name of the compilation stage.
         /// </summary>
         /// <value></value>
-        string IMethodCompilerStage.Name
+        public string Name
         {
             get { return @"Basic Block Builder"; }
         }
@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>
-        void IMethodCompilerStage.Run(MethodCompilerBase compiler)
+        public void Run(IMethodCompiler compiler)
         {
             // Epilogue and current basic block
             BasicBlock currentBlock = null, epilogue;

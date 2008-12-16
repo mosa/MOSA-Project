@@ -27,6 +27,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 new TypeLayoutStage(),
                 new MethodCompilerBuilderStage(),
                 new MethodCompilerRunnerStage(),
+                new ObjectFileLayoutStage(),
                 new TestAssemblyLinker(),
             });
             architecture.ExtendAssemblyCompilerPipeline(pipeline);

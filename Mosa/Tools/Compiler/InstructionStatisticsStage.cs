@@ -32,8 +32,9 @@ namespace Mosa.Runtime.CompilerFramework
         private uint numberOfInstructions = 0;
 
         /// <summary>
-        /// 
+        /// Retrieves the name of the compilation stage.
         /// </summary>
+        /// <value>The name of the compilation stage.</value>
         public string Name { get { return "InstructionStatisticsStage"; } }
 
         /// <summary>
@@ -70,10 +71,10 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// 
+        /// Performs stage specific processing on the compiler context.
         /// </summary>
-        /// <param name="compiler"></param>
-        public void Run(MethodCompilerBase compiler)
+        /// <param name="compiler">The compiler context to perform processing in.</param>
+        public void Run(IMethodCompiler compiler)
         {
             if (null == compiler)
                 throw new ArgumentNullException(@"compiler");
