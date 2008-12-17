@@ -7,13 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Mosa.DeviceSystem;
 
-namespace Mosa.Tools.ImgToVHD
+namespace Mosa.DeviceSystem
 {
-	static class VHD
+	/// <summary>
+	/// 
+	/// </summary>
+	public static class VHD
 	{
 		#region Constants
 
@@ -42,17 +43,35 @@ namespace Mosa.Tools.ImgToVHD
 
 		#endregion
 
+		/// <summary>
+		/// Gets the size of the aligned.
+		/// </summary>
+		/// <param name="size">The size.</param>
+		/// <returns></returns>
 		static private ulong GetAlignedSize(ulong size)
 		{
 			return (size + 511) & ~((ulong)511);
 		}
 
+		/// <summary>
+		/// Gets the alignment padding.
+		/// </summary>
+		/// <param name="size">The size.</param>
+		/// <returns></returns>
 		static public uint GetAlignmentPadding(ulong size)
 		{
 			return (uint)(GetAlignedSize(size) - size);
 		}
 
-		static public byte[] CreateFooter(ulong size)
+		/// <summary>
+		/// Creates the footer.
+		/// </summary>
+		/// <param name="size">The size.</param>
+		/// <param name="timeStamp">The time stamp.</param>
+		/// <param name="guid">The GUID.</param>
+		/// <param name="diskGeometry">The disk geometry.</param>
+		/// <returns></returns>
+		static public byte[] CreateFooter(ulong size, uint timeStamp, byte[] guid, DiskGeometry diskGeometry)
 		{
 			byte[] footer = new byte[512];
 			ulong alignedSize = GetAlignedSize(size);
@@ -63,21 +82,23 @@ namespace Mosa.Tools.ImgToVHD
 			binaryFooter.SetUIntReversed(VHDFooterOffset.Features, 0x00000002);
 			binaryFooter.SetUIntReversed(VHDFooterOffset.FileFormatVersion, 0x00010000);
 			binaryFooter.SetULong(VHDFooterOffset.DataOffset, ~(ulong)0);
-			binaryFooter.SetUIntReversed(VHDFooterOffset.TimeStamp, (uint)(DateTime.Now.Second - (new DateTime(2000, 1, 1, 0, 0, 0)).Second));
+			binaryFooter.SetUIntReversed(VHDFooterOffset.TimeStamp, timeStamp);
 			binaryFooter.SetString(VHDFooterOffset.CreatorApplication, "MOSA");
-			binaryFooter.SetUIntReversed(VHDFooterOffset.CreatorVersion, 0x00010000);
+			binaryFooter.SetUIntReversed(VHDFooterOffset.CreatorVersion, 0x00050000);
 			binaryFooter.SetUIntReversed(VHDFooterOffset.CreatorHostOS, 0x5769326B); // Windows
 			binaryFooter.SetULongReversed(VHDFooterOffset.OriginalSize, alignedSize);
 			binaryFooter.SetULongReversed(VHDFooterOffset.CurrentSize, alignedSize);
 
-			Mosa.DeviceSystem.CHS chs = new Mosa.DeviceSystem.CHS(alignedSize);
-			binaryFooter.SetUShortReversed(VHDFooterOffset.DiskGeometryCylinders, chs.Cylinders);
-			binaryFooter.SetByte(VHDFooterOffset.DiskGeometryHeads, chs.Heads);
-			binaryFooter.SetByte(VHDFooterOffset.DiskGeometrySectors, (byte)chs.Sectors);
+			//Mosa.DeviceSystem.CHS chs = new Mosa.DeviceSystem.CHS();
+			//chs.ComputeCHSv2(alignedSize/512);
+
+			binaryFooter.SetUShortReversed(VHDFooterOffset.DiskGeometryCylinders, diskGeometry.Cylinders);
+			binaryFooter.SetByte(VHDFooterOffset.DiskGeometryHeads, diskGeometry.Heads);
+			binaryFooter.SetByte(VHDFooterOffset.DiskGeometrySectors, (byte)diskGeometry.SectorsPerTrack);
 
 			binaryFooter.SetUIntReversed(VHDFooterOffset.DiskType, 0x02); // Fixed disk
 			binaryFooter.SetUIntReversed(VHDFooterOffset.Checksum, 0x00);
-			binaryFooter.SetBytes(VHDFooterOffset.UniqueId, (new Guid()).ToByteArray(), 0, 16);
+			binaryFooter.SetBytes(VHDFooterOffset.UniqueId, guid, 0, 16);
 			binaryFooter.SetByte(VHDFooterOffset.SavedState, 0x00); // No saved state
 
 			uint checksum = 0;

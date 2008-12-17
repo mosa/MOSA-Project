@@ -17,67 +17,102 @@ namespace Mosa.DeviceSystem
 	public class CHS
 	{
 		/// <summary>
-		/// Cylinders
+		/// Cylinder
 		/// </summary>
-		public ushort Cylinders = 0;
+		public ushort Cylinder = 0;
 		/// <summary>
-		/// Heads
+		/// Head
 		/// </summary>
-		public byte Heads = 0;
+		public byte Head = 0;
 		/// <summary>
-		/// Sectors
+		/// Sector
 		/// </summary>
-		public ushort Sectors = 0;
+		public ushort Sector = 0;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CHS"/> struct.
 		/// </summary>
-		/// <param name="totalSectors">The total sectors.</param>
-		public CHS(ulong totalSectors)
+		public CHS()
 		{
-			ComputeCHS(totalSectors);
 		}
 
 		/// <summary>
 		/// Computes the CHS (Cylinders-Heads-Sectors)
 		/// </summary>
-		/// <param name="totalSectors">The total sectors.</param>
-		/// <returns></returns>
-		public void ComputeCHS(ulong totalSectors)
+		/// <param name="lba">The lba.</param>
+		public void ComputeCHSv1(ulong lba)
 		{
 			ushort cylinderTimesHeads;
 
-			if (totalSectors > 65535 * 16 * 255)
-				totalSectors = 65535 * 16 * 255;
+			if (lba > 65535 * 16 * 255)
+				lba = 65535 * 16 * 255;
 
-			if (totalSectors >= 65535 * 16 * 63) {
-				Sectors = 255;
-				Heads = 16;
-				cylinderTimesHeads = (ushort)(totalSectors / Sectors);
+			if (lba >= 65535 * 16 * 63) {
+				Sector = 255;
+				Head = 16;
+				cylinderTimesHeads = (ushort)(lba / Sector);
 			}
 			else {
-				Sectors = 17;
-				cylinderTimesHeads = (ushort)(totalSectors / Sectors);
+				Sector = 17;
+				cylinderTimesHeads = (ushort)(lba / Sector);
 
-				Heads = (byte)((cylinderTimesHeads + 1023) / 1024);
+				Head = (byte)((cylinderTimesHeads + 1023) / 1024);
 
-				if (Heads < 4)
-					Heads = 4;
+				if (Head < 4)
+					Head = 4;
 
-				if (cylinderTimesHeads >= (Heads * 1024) || Heads > 16) {
-					Sectors = 31;
-					Heads = 16;
-					cylinderTimesHeads = (ushort)(totalSectors / Sectors);
+				if (cylinderTimesHeads >= (Head * 1024) || Head > 16) {
+					Sector = 31;
+					Head = 16;
+					cylinderTimesHeads = (ushort)(lba / Sector);
 				}
 
-				if (cylinderTimesHeads >= (Heads * 1024)) {
-					Sectors = 63;
-					Heads = 16;
-					cylinderTimesHeads = (ushort)(totalSectors / Sectors);
+				if (cylinderTimesHeads >= (Head * 1024)) {
+					Sector = 63;
+					Head = 16;
+					cylinderTimesHeads = (ushort)(lba / Sector);
 				}
 			}
 
-			Cylinders = (ushort)(cylinderTimesHeads / Heads);
+			Cylinder = (ushort)(cylinderTimesHeads / Head);
+		}
+
+		/// <summary>
+		/// Computes the CHS v2.
+		/// </summary>
+		/// <param name="lba">The lba.</param>
+		public void ComputeCHSv2(ulong lba)
+		{
+			uint SectorsPerTrack = 17; // 63
+			uint NumHeads = 4;
+
+			if ((lba / (SectorsPerTrack * NumHeads) > 1023))
+				lba = NumHeads * SectorsPerTrack * 1024 - 1;
+
+			Sector = (ushort)(lba % SectorsPerTrack + 1);
+			lba /= SectorsPerTrack;
+			Head = (byte)(lba % NumHeads);
+			lba /= NumHeads;
+			Cylinder = (ushort)(lba & 0xFF);
+			Sector |= (ushort)((lba >> 2) & 0xC0);
+		}
+
+		/// <summary>
+		/// Computes the CHS given a disk geometry
+		/// </summary>
+		/// <param name="lba">The lba.</param>
+		/// <param name="diskGeometry">The disk geometry.</param>
+		public void ComputeCHS(ulong lba, DiskGeometry diskGeometry)
+		{
+			if ((lba / (uint)(diskGeometry.SectorsPerTrack * diskGeometry.Heads) > 1023))
+				lba = (uint)diskGeometry.Heads * diskGeometry.SectorsPerTrack * 1024 - 1;
+
+			Sector = (ushort)(lba % diskGeometry.SectorsPerTrack + 1);
+			lba /= diskGeometry.SectorsPerTrack;
+			Head = (byte)(lba % diskGeometry.Heads);
+			lba /= diskGeometry.Heads;
+			Cylinder = (ushort)(lba & 0xFF);
+			Sector |= (ushort)((lba >> 2) & 0xC0);
 		}
 	}
 }

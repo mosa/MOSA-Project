@@ -193,15 +193,18 @@ namespace Mosa.DeviceSystem
 					masterboot.SetUInt(offset + PartitionRecord.LBA, Partitions[index].StartLBA);
 					masterboot.SetUInt(offset + PartitionRecord.Sectors, Partitions[index].TotalBlocks);
 
-					CHS chsStart = new CHS(Partitions[index].StartLBA);
-					CHS chsEnd = new CHS(Partitions[index].StartLBA + Partitions[index].TotalBlocks);
+					CHS chsStart = new CHS();
+					CHS chsEnd = new CHS();
 
-					masterboot.SetByte(offset + PartitionRecord.FirstCRS, chsStart.Heads);
-					masterboot.SetByte(offset + PartitionRecord.FirstCRS + 1, (byte)((chsStart.Sectors & 0x3F) | ((chsStart.Cylinders >> 8) & 0x03)));
-					masterboot.SetByte(offset + PartitionRecord.FirstCRS + 2, (byte)(chsStart.Cylinders & 0xFF));
-					masterboot.SetByte(offset + PartitionRecord.LastCRS, chsEnd.Heads);
-					masterboot.SetByte(offset + PartitionRecord.LastCRS + 1, (byte)((chsEnd.Sectors & 0x3F) | ((chsEnd.Cylinders >> 8) & 0x03)));
-					masterboot.SetByte(offset + PartitionRecord.LastCRS + 2, (byte)(chsEnd.Cylinders & 0xFF));
+					chsStart.ComputeCHSv2(Partitions[index].StartLBA);
+					chsEnd.ComputeCHSv2(Partitions[index].StartLBA + Partitions[index].TotalBlocks - 1);
+
+					masterboot.SetByte(offset + PartitionRecord.FirstCRS, chsStart.Head);
+					masterboot.SetByte(offset + PartitionRecord.FirstCRS + 1, (byte)((chsStart.Sector & 0x3F) | ((chsStart.Cylinder >> 8) & 0x03)));
+					masterboot.SetByte(offset + PartitionRecord.FirstCRS + 2, (byte)(chsStart.Cylinder & 0xFF));
+					masterboot.SetByte(offset + PartitionRecord.LastCRS, chsEnd.Head);
+					masterboot.SetByte(offset + PartitionRecord.LastCRS + 1, (byte)((chsEnd.Sector & 0x3F) | ((chsEnd.Cylinder >> 8) & 0x03)));
+					masterboot.SetByte(offset + PartitionRecord.LastCRS + 2, (byte)(chsEnd.Cylinder & 0xFF));
 				}
 
 			diskDevice.WriteBlock(0, 1, masterboot.Data);

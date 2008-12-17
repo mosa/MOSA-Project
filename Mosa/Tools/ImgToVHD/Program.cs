@@ -34,11 +34,16 @@ namespace Mosa.Tools.ImgToVHD
 				fileStream.Seek(0, SeekOrigin.End);
 
 				// Pad to 512 byte block
-				for (int index = (int)VHD.GetAlignmentPadding(size); index >= 0; index--)
+				for (int index = (int)Mosa.DeviceSystem.VHD.GetAlignmentPadding(size); index > 0; index--)
 					fileStream.WriteByte(0);
 
 				// Create footer
-				byte[] footer = VHD.CreateFooter(size);
+				byte[] footer = Mosa.DeviceSystem.VHD.CreateFooter(
+					size,
+					(uint)(DateTime.Now - (new DateTime(2000, 1, 1, 0, 0, 0))).Seconds,
+					(new Guid()).ToByteArray(),
+					new Mosa.DeviceSystem.DiskGeometry(0x78, 4, 17)
+				);
 
 				// Added footer
 				fileStream.Write(footer, 0, 512);

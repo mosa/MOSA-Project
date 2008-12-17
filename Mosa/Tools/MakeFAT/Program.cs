@@ -27,13 +27,14 @@ namespace Mosa.Tools.MakeFAT
 			string mbrFilename = string.Empty;
 			string fatcodeFilename = string.Empty;
 			string[] copyFiles;
+			bool vhd = true;
 
 			uint blockCount = 1024 * 1024 * 4 / 512;
 
 			// TODO: Parse command line parameters
 
 			copyFiles = new string[2];
-			imageFilename = @"x:\boot\bootimage.img";
+			imageFilename = @"x:\boot\bootimage.vhd";
 			mbrFilename = @"x:\boot\freedos-mbr.bin";
 			fatcodeFilename = @"x:\boot\freedos-boot.bin";
 			copyFiles[0] = @"X:\Boot\Boot\KERNEL.SYS";
@@ -96,6 +97,19 @@ namespace Mosa.Tools.MakeFAT
 						fatFileStream.Write(file, 0, file.Length);
 						fatFileStream.Flush();
 					}
+
+				if (vhd) {
+
+					// Create footer
+					byte[] footer = Mosa.DeviceSystem.VHD.CreateFooter(
+						blockCount * 512,
+						(uint)(DateTime.Now - (new DateTime(2000, 1, 1, 0, 0, 0))).Seconds,
+						(new Guid()).ToByteArray(),
+						new Mosa.DeviceSystem.DiskGeometry(0x78, 4, 17)
+					);
+
+					diskDevice.WriteBlock(blockCount, 1, footer);
+				}
 			}
 			catch (Exception e) {
 				Console.WriteLine("Error: " + e.ToString());

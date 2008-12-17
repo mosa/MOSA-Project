@@ -496,7 +496,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			rootDirSectors = (((rootEntries * 32) + (bytesPerSector - 1)) / bytesPerSector);
 
 			uint val1 = totalSectors - (reservedSectors + rootDirSectors);
-			uint val2 = (uint)((256 * sectorsPerCluster) + nbrFats);
+			uint val2 = (uint)((sectorsPerCluster * 256) + nbrFats);
 
 			if (fatType == FATType.FAT32)
 				val2 = val2 / 2;
@@ -529,15 +529,15 @@ namespace Mosa.FileSystem.FATFileSystem
 				bootSector.SetByte(BootSector.MediaDescriptor, 0xF0); // 0xF0 = 3.5" Double Sided, 80 tracks per side, 18 sectors per track (1.44MB).
 				bootSector.SetUShort(BootSector.SectorsPerTrack, 18);
 				bootSector.SetUShort(BootSector.NumberOfHeads, 2);
+				bootSector.SetUInt(BootSector.HiddenSectors, 0);
 			}
 			else {
 				bootSector.SetByte(BootSector.MediaDescriptor, 0xF8); // 0xF8 = Hard disk
-				bootSector.SetUShort(BootSector.SectorsPerTrack, 63);
-				bootSector.SetUShort(BootSector.NumberOfHeads, 16);
+				bootSector.SetUShort(BootSector.SectorsPerTrack, 17); // FIXME: 63
+				bootSector.SetUShort(BootSector.NumberOfHeads, 4); // FIXME: 255
+				bootSector.SetUInt(BootSector.HiddenSectors, 17); // FIXME: 63
 			}
-
-			bootSector.SetUInt(BootSector.HiddenSectors, 0);
-
+		
 			if (fatType != FATType.FAT32) {
 				bootSector.SetByte(BootSector.JumpInstruction, 0xEB); // 0xEB = JMP Instruction
 				bootSector.SetByte(BootSector.JumpInstruction + 1, 0x3C);
@@ -639,16 +639,16 @@ namespace Mosa.FileSystem.FATFileSystem
 
 			if (fatType == FATType.FAT12) {
 				firstFat.SetByte(1, 0xFF);
-				firstFat.SetByte(2, 0xF8);
+				firstFat.SetByte(2, 0xFF); // 0xF8
 			}
 			else if (fatType == FATType.FAT16) {
 				firstFat.SetUShort(0, 0xFFFF);
-				firstFat.SetUShort(2, 0xFFF8);
+				firstFat.SetUShort(2, 0xFFFF); // 0xFFF8
 			}
 			else // if (type == FatType.FAT32)
 			{
 				firstFat.SetUInt(0, 0x0FFFFFFF);
-				firstFat.SetUInt(4, 0x0FFFFFF8);
+				firstFat.SetUInt(4, 0x0FFFFFFF); // 0x0FFFFFF8
 			}
 
 			if (fatSettings.FloppyMedia)
@@ -1279,7 +1279,7 @@ namespace Mosa.FileSystem.FATFileSystem
 				uint value = GetClusterEntryValue(at);
 
 				if (IsClusterFree(value)) {
-					SetClusterEntryValue(at, endOfClusterMark);
+					SetClusterEntryValue(at, 0xFFFFFFFF /*endOfClusterMark*/);
 					return at;
 				}
 				at++;

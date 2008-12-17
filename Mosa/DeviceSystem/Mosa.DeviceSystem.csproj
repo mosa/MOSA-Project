@@ -86,6 +86,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CHS.cs" />
+    <Compile Include="DiskGeometry.cs" />
     <Compile Include="PartitionManager.cs" />
     <Compile Include="Device.cs">
       <SubType>Code</SubType>
@@ -300,6 +301,7 @@
     <Compile Include="PCI\SubClassCodeTable.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="VHD.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
