@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// Performs IR constant folding of arithmetic instructions to optimize
     /// the code down to fewer calculations.
     /// </summary>
-    public sealed class ConstantFoldingStage : CodeTransformationStage, IMethodCompilerStage, IL.IILVisitor<CodeTransformationStage.Context>, IInstructionVisitor<CodeTransformationStage.Context>
+    public sealed class ConstantFoldingStage : CodeTransformationStage, IMethodCompilerStage, IL.IILVisitor<CodeTransformationStage.Context>, IR.IIRVisitor<CodeTransformationStage.Context>, IInstructionVisitor<CodeTransformationStage.Context>
     {
         #region Non-Folding
         void IL.IILVisitor<CodeTransformationStage.Context>.Nop(IL.NopInstruction instruction, CodeTransformationStage.Context ctx)
@@ -291,10 +291,104 @@ namespace Mosa.Runtime.CompilerFramework
 
         void IL.IILVisitor<CodeTransformationStage.Context>.Mul(IL.MulInstruction instruction, CodeTransformationStage.Context ctx)
         {
+            if (instruction.First is ConstantOperand && instruction.Second is ConstantOperand)
+            {
+                int result = 0;
+                float fresult = 0.0f; ;
+                double dresult = 0.0;
+                switch (instruction.Results[0].Type.Type)
+                {
+                    case Mosa.Runtime.Metadata.CilElementType.Char:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                    case Mosa.Runtime.Metadata.CilElementType.U1:
+                        result = ((byte)(instruction.First as ConstantOperand).Value) * ((byte)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U2:
+                        result = ((ushort)(instruction.First as ConstantOperand).Value) * ((ushort)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U4:
+                        result = (int)(((uint)(instruction.First as ConstantOperand).Value) * ((uint)(instruction.Second as ConstantOperand).Value));
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I1:
+                        result = ((sbyte)(instruction.First as ConstantOperand).Value) * ((sbyte)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I2:
+                        result = ((short)(instruction.First as ConstantOperand).Value) * ((short)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I4:
+                        result = ((int)(instruction.First as ConstantOperand).Value) * ((int)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.R4:
+                        fresult = ((float)(instruction.First as ConstantOperand).Value) * ((float)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.R8:
+                        dresult = ((double)(instruction.First as ConstantOperand).Value) * ((double)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                    case Mosa.Runtime.Metadata.CilElementType.U:
+                        goto case Mosa.Runtime.Metadata.CilElementType.U4;
+                    default:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                }
+                if (instruction.Results[0].Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
+                    Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, fresult)));
+                else if (instruction.Results[0].Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
+                    Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, dresult)));
+                else
+                    Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, result)));
+            }
         }
 
         void IL.IILVisitor<CodeTransformationStage.Context>.Div(IL.DivInstruction instruction, CodeTransformationStage.Context ctx)
         {
+            if (instruction.First is ConstantOperand && instruction.Second is ConstantOperand)
+            {
+                int result = 0;
+                float fresult = 0.0f; ;
+                double dresult = 0.0;
+                switch (instruction.Results[0].Type.Type)
+                {
+                    case Mosa.Runtime.Metadata.CilElementType.Char:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                    case Mosa.Runtime.Metadata.CilElementType.U1:
+                        result = ((byte)(instruction.First as ConstantOperand).Value) / ((byte)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U2:
+                        result = ((ushort)(instruction.First as ConstantOperand).Value) / ((ushort)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U4:
+                        result = (int)(((uint)(instruction.First as ConstantOperand).Value) / ((uint)(instruction.Second as ConstantOperand).Value));
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I1:
+                        result = ((sbyte)(instruction.First as ConstantOperand).Value) / ((sbyte)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I2:
+                        result = ((short)(instruction.First as ConstantOperand).Value) / ((short)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I4:
+                        result = ((int)(instruction.First as ConstantOperand).Value) / ((int)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.R4:
+                        fresult = ((float)(instruction.First as ConstantOperand).Value) / ((float)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.R8:
+                        dresult = ((double)(instruction.First as ConstantOperand).Value) / ((double)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                    case Mosa.Runtime.Metadata.CilElementType.U:
+                        goto case Mosa.Runtime.Metadata.CilElementType.U4;
+                    default:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                }
+                if (instruction.Results[0].Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
+                    Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, fresult)));
+                else if (instruction.Results[0].Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
+                    Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, dresult)));
+                else
+                    Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, result)));
+            }
         }
 
         void IL.IILVisitor<CodeTransformationStage.Context>.Rem(IL.RemInstruction instruction, CodeTransformationStage.Context ctx)
@@ -315,6 +409,8 @@ namespace Mosa.Runtime.CompilerFramework
             if (instruction.First is ConstantOperand && instruction.Second is ConstantOperand)
             {
                 int result = 0;
+                float fresult = 0.0f; ;
+                double dresult = 0.0;
                 switch (instruction.Results[0].Type.Type)
                 {
                     case Mosa.Runtime.Metadata.CilElementType.Char:
@@ -335,16 +431,27 @@ namespace Mosa.Runtime.CompilerFramework
                         result = ((short)(instruction.First as ConstantOperand).Value) + ((short)(instruction.Second as ConstantOperand).Value);
                         break;
                     case Mosa.Runtime.Metadata.CilElementType.I4:
-                        result = ((int)(instruction.First as ConstantOperand).Value) + ((int)(instruction.Second as ConstantOperand).Value); 
+                        result = ((int)(instruction.First as ConstantOperand).Value) + ((int)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.R4:
+                        fresult = ((float)(instruction.First as ConstantOperand).Value) + ((float)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.R8:
+                        dresult = ((double)(instruction.First as ConstantOperand).Value) + ((double)(instruction.Second as ConstantOperand).Value);
                         break;
                     case Mosa.Runtime.Metadata.CilElementType.I:
                         goto case Mosa.Runtime.Metadata.CilElementType.I4;
                     case Mosa.Runtime.Metadata.CilElementType.U:
                         goto case Mosa.Runtime.Metadata.CilElementType.U4;
-                    default: 
+                    default:
                         goto case Mosa.Runtime.Metadata.CilElementType.I4;
                 }
-                Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, result)));
+                if (instruction.Results[0].Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
+                    Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, fresult)));
+                else if (instruction.Results[0].Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
+                    Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, dresult)));
+                else
+                    Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, result)));
             }
         }
 
@@ -358,11 +465,266 @@ namespace Mosa.Runtime.CompilerFramework
             if (instruction.First is ConstantOperand && instruction.Second is ConstantOperand)
             {
                 int result = 0;
+                float fresult = 0.0f; ;
+                double dresult = 0.0;
                 switch (instruction.Results[0].Type.Type)
                 {
+                    case Mosa.Runtime.Metadata.CilElementType.Char:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                    case Mosa.Runtime.Metadata.CilElementType.U1:
+                        result = ((byte)(instruction.First as ConstantOperand).Value) - ((byte)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U2:
+                        result = ((ushort)(instruction.First as ConstantOperand).Value) - ((ushort)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U4:
+                        result = (int)(((uint)(instruction.First as ConstantOperand).Value) - ((uint)(instruction.Second as ConstantOperand).Value));
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I1:
+                        result = ((sbyte)(instruction.First as ConstantOperand).Value) - ((sbyte)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I2:
+                        result = ((short)(instruction.First as ConstantOperand).Value) - ((short)(instruction.Second as ConstantOperand).Value);
+                        break;
                     case Mosa.Runtime.Metadata.CilElementType.I4:
                         result = ((int)(instruction.First as ConstantOperand).Value) - ((int)(instruction.Second as ConstantOperand).Value);
                         break;
+                    case Mosa.Runtime.Metadata.CilElementType.R4:
+                        fresult = ((float)(instruction.First as ConstantOperand).Value) - ((float)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.R8:
+                        dresult = ((double)(instruction.First as ConstantOperand).Value) - ((double)(instruction.Second as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                    case Mosa.Runtime.Metadata.CilElementType.U:
+                        goto case Mosa.Runtime.Metadata.CilElementType.U4;
+                    default:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                }
+                if (instruction.Results[0].Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
+                    Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, fresult)));
+                else if (instruction.Results[0].Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
+                    Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, dresult)));
+                else
+                    Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, result)));
+            }
+        }
+
+        #region IR
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.AddressOfInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.ArithmeticShiftRightInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.BranchInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.CallInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.EpilogueInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.FloatingPointCompareInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.FloatingPointToIntegerConversionInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.IntegerCompareInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.IntegerToFloatingPointConversionInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.JmpInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.LiteralInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.LoadInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.PhiInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.PopInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.PrologueInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.PushInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.MoveInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.ReturnInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.ShiftLeftInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.ShiftRightInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.SignExtendedMoveInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.StoreInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.UDivInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.URemInstruction instruction, Context ctx)
+        {
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.ZeroExtendedMoveInstruction instruction, Context ctx)
+        {
+        }
+        #endregion
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.LogicalAndInstruction instruction, Context ctx)
+        {
+            if (instruction.Operand1 is ConstantOperand && instruction.Operand2 is ConstantOperand)
+            {
+                int result = 0;
+                switch (instruction.Results[0].Type.Type)
+                {
+                    case Mosa.Runtime.Metadata.CilElementType.Char:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                    case Mosa.Runtime.Metadata.CilElementType.U1:
+                        result = ((byte)(instruction.Operand1 as ConstantOperand).Value) & ((byte)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U2:
+                        result = ((ushort)(instruction.Operand1 as ConstantOperand).Value) & ((ushort)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U4:
+                        result = (int)(((uint)(instruction.Operand1 as ConstantOperand).Value) & ((uint)(instruction.Operand2 as ConstantOperand).Value));
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I1:
+                        result = ((sbyte)(instruction.Operand1 as ConstantOperand).Value) & ((sbyte)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I2:
+                        result = ((short)(instruction.Operand1 as ConstantOperand).Value) & ((short)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I4:
+                        result = ((int)(instruction.Operand1 as ConstantOperand).Value) & ((int)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                    case Mosa.Runtime.Metadata.CilElementType.U:
+                        goto case Mosa.Runtime.Metadata.CilElementType.U4;
+                    default:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                }
+                Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, result)));
+            }
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.LogicalNotInstruction instruction, Context ctx)
+        {
+            
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.LogicalOrInstruction instruction, Context ctx)
+        {
+            if (instruction.Operand1 is ConstantOperand && instruction.Operand2 is ConstantOperand)
+            {
+                int result = 0;
+                switch (instruction.Results[0].Type.Type)
+                {
+                    case Mosa.Runtime.Metadata.CilElementType.Char:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                    case Mosa.Runtime.Metadata.CilElementType.U1:
+                        result = ((byte)(instruction.Operand1 as ConstantOperand).Value) | ((byte)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U2:
+                        result = ((ushort)(instruction.Operand1 as ConstantOperand).Value) | ((ushort)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U4:
+                        result = (int)(((uint)(instruction.Operand1 as ConstantOperand).Value) | ((uint)(instruction.Operand2 as ConstantOperand).Value));
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I1:
+                        result = ((sbyte)(instruction.Operand1 as ConstantOperand).Value) | ((sbyte)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I2:
+                        result = ((short)(instruction.Operand1 as ConstantOperand).Value) | ((short)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I4:
+                        result = ((int)(instruction.Operand1 as ConstantOperand).Value) | ((int)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                    case Mosa.Runtime.Metadata.CilElementType.U:
+                        goto case Mosa.Runtime.Metadata.CilElementType.U4;
+                    default:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                }
+                Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, result)));
+            }
+        }
+
+        void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.LogicalXorInstruction instruction, Context ctx)
+        {
+            if (instruction.Operand1 is ConstantOperand && instruction.Operand2 is ConstantOperand)
+            {
+                int result = 0;
+                switch (instruction.Results[0].Type.Type)
+                {
+                    case Mosa.Runtime.Metadata.CilElementType.Char:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                    case Mosa.Runtime.Metadata.CilElementType.U1:
+                        result = ((byte)(instruction.Operand1 as ConstantOperand).Value) ^ ((byte)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U2:
+                        result = ((ushort)(instruction.Operand1 as ConstantOperand).Value) ^ ((ushort)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.U4:
+                        result = (int)(((uint)(instruction.Operand1 as ConstantOperand).Value) ^ ((uint)(instruction.Operand2 as ConstantOperand).Value));
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I1:
+                        result = ((sbyte)(instruction.Operand1 as ConstantOperand).Value) ^ ((sbyte)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I2:
+                        result = ((short)(instruction.Operand1 as ConstantOperand).Value) ^ ((short)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I4:
+                        result = ((int)(instruction.Operand1 as ConstantOperand).Value) ^ ((int)(instruction.Operand2 as ConstantOperand).Value);
+                        break;
+                    case Mosa.Runtime.Metadata.CilElementType.I:
+                        goto case Mosa.Runtime.Metadata.CilElementType.I4;
+                    case Mosa.Runtime.Metadata.CilElementType.U:
+                        goto case Mosa.Runtime.Metadata.CilElementType.U4;
                     default:
                         goto case Mosa.Runtime.Metadata.CilElementType.I4;
                 }
