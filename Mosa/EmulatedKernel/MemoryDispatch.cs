@@ -129,6 +129,42 @@ namespace Mosa.EmulatedKernel
 			return 0;
 		}
 
+        /// <summary>
+        /// Writes a short to the specified address.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <param name="value">The value.</param>
+        public static void Write24(uint address, ushort value)
+        {
+            MemoryRange memoryRange = Find(address);
+
+            if (memoryRange != null)
+                if (memoryRange.write8 != null)
+                {
+                    memoryRange.write8(address, (byte)value);
+                    memoryRange.write8(address + 1, (byte)(value >>  8));
+                    memoryRange.write8(address + 2, (byte)(value >> 16));
+                }
+
+            return;
+        }
+
+        /// <summary>
+        /// Reads a short from the specified address.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <returns></returns>
+        public static ushort Read24(uint address)
+        {
+            MemoryRange memoryRange = Find(address);
+
+            if (memoryRange != null)
+                if (memoryRange.read8 != null)
+                    return (ushort)(memoryRange.read8(address) | (memoryRange.read8(address + 1) << 8) | (memoryRange.read8(address + 2) << 16));
+
+            return 0;
+        }
+
 		/// <summary>
 		/// Reads an integer from the specified address.
 		/// </summary>
