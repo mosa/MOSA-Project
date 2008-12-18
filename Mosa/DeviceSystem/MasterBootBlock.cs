@@ -193,11 +193,14 @@ namespace Mosa.DeviceSystem
 					masterboot.SetUInt(offset + PartitionRecord.LBA, Partitions[index].StartLBA);
 					masterboot.SetUInt(offset + PartitionRecord.Sectors, Partitions[index].TotalBlocks);
 
+					DiskGeometry diskGeometry = new DiskGeometry();
+					diskGeometry.GuessGeometry(diskDevice.TotalBlocks);
+
 					CHS chsStart = new CHS();
 					CHS chsEnd = new CHS();
 
-					chsStart.ComputeCHSv2(Partitions[index].StartLBA);
-					chsEnd.ComputeCHSv2(Partitions[index].StartLBA + Partitions[index].TotalBlocks - 1);
+					chsStart.SetCHS(diskGeometry, Partitions[index].StartLBA);
+					chsEnd.SetCHS(diskGeometry, Partitions[index].StartLBA + Partitions[index].TotalBlocks - 1);
 
 					masterboot.SetByte(offset + PartitionRecord.FirstCRS, chsStart.Head);
 					masterboot.SetByte(offset + PartitionRecord.FirstCRS + 1, (byte)((chsStart.Sector & 0x3F) | ((chsStart.Cylinder >> 8) & 0x03)));

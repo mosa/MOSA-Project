@@ -338,6 +338,12 @@ namespace Mosa.FileSystem.FATFileSystem
 		public uint ClusterSizeInBytes { get { return clusterSizeInBytes; } }
 
 		/// <summary>
+		/// Gets the sectors per cluster.
+		/// </summary>
+		/// <value>The sectors per cluster.</value>
+		public uint SectorsPerCluster { get { return sectorsPerCluster; } }
+
+		/// <summary>
 		/// Reads the cluster.
 		/// </summary>
 		/// <param name="cluster">The cluster.</param>
@@ -527,38 +533,39 @@ namespace Mosa.FileSystem.FATFileSystem
 			if (fatSettings.FloppyMedia) {
 				// Default is 1.44
 				bootSector.SetByte(BootSector.MediaDescriptor, 0xF0); // 0xF0 = 3.5" Double Sided, 80 tracks per side, 18 sectors per track (1.44MB).
-				bootSector.SetUShort(BootSector.SectorsPerTrack, 18);
-				bootSector.SetUShort(BootSector.NumberOfHeads, 2);
-				bootSector.SetUInt(BootSector.HiddenSectors, 0);
 			}
-			else {
+			else
 				bootSector.SetByte(BootSector.MediaDescriptor, 0xF8); // 0xF8 = Hard disk
-				bootSector.SetUShort(BootSector.SectorsPerTrack, 17); // FIXME: 63
-				bootSector.SetUShort(BootSector.NumberOfHeads, 4); // FIXME: 255
-				bootSector.SetUInt(BootSector.HiddenSectors, 17); // FIXME: 63
-			}
-		
+
+			bootSector.SetUShort(BootSector.SectorsPerTrack, fatSettings.SectorsPerTrack);
+			bootSector.SetUShort(BootSector.NumberOfHeads, fatSettings.NumberOfHeads);
+			bootSector.SetUInt(BootSector.HiddenSectors, fatSettings.HiddenSectors);
+
 			if (fatType != FATType.FAT32) {
 				bootSector.SetByte(BootSector.JumpInstruction, 0xEB); // 0xEB = JMP Instruction
 				bootSector.SetByte(BootSector.JumpInstruction + 1, 0x3C);
 				bootSector.SetByte(BootSector.JumpInstruction + 2, 0x90);
 
 				bootSector.SetUShort(BootSector.SectorsPerFAT, (ushort)sectorsPerFat);
-				bootSector.SetByte(BootSector.PhysicalDriveNbr, 0x80); // 0x80 = Hard disk (no support for FAT32 on Floppy)
+				if (fatSettings.FloppyMedia)
+					bootSector.SetByte(BootSector.PhysicalDriveNbr, 0x00);
+				else
+					bootSector.SetByte(BootSector.PhysicalDriveNbr, 0x80);
+
 				bootSector.SetByte(BootSector.ReservedCurrentHead, 0);
 				bootSector.SetByte(BootSector.ExtendedBootSignature, 0x29);
-				bootSector.SetBytes(BootSector.IDSerialNumber, fatSettings.SerialID, 0, (uint)(fatSettings.SerialID.Length <= 4 ? fatSettings.SerialID.Length : 4));
+				bootSector.SetBytes(BootSector.IDSerialNumber, fatSettings.SerialID, 0, (uint)Math.Min(4, fatSettings.SerialID.Length));
 
 				if (string.IsNullOrEmpty(fatSettings.VolumeLabel))
 					bootSector.SetString(BootSector.VolumeLabel, "NO NAME    ");
 				else {
 					bootSector.SetString(BootSector.VolumeLabel, "           ");  // 11 blank spaces
-					bootSector.SetString(BootSector.VolumeLabel, fatSettings.VolumeLabel, (uint)(fatSettings.VolumeLabel.Length <= 11 ? fatSettings.VolumeLabel.Length : 11));
+					bootSector.SetString(BootSector.VolumeLabel, fatSettings.VolumeLabel, (uint)Math.Min(11, fatSettings.VolumeLabel.Length));
 				}
 
 				bootSector.SetUShort(BootSector.BootSectorSignature, 0xAA55);
 				if (fatSettings.OSBootCode != null)
-					bootSector.SetBytes(BootSector.OSBootCode, fatSettings.OSBootCode, 0, 448);
+					bootSector.SetBytes(BootSector.OSBootCode, fatSettings.OSBootCode, 0, (uint)Math.Min(448, fatSettings.OSBootCode.Length));
 
 				if (fatType == FATType.FAT12)
 					bootSector.SetString(BootSector.FATType, "FAT12   ");
@@ -579,15 +586,14 @@ namespace Mosa.FileSystem.FATFileSystem
 				bootSector.SetUInt(BootSector.FAT32_ClusterNumberOfRoot, 2);
 				bootSector.SetUShort(BootSector.FAT32_SectorFSInformation, 1);
 				bootSector.SetUShort(BootSector.FAT32_SecondBootSector, 6);
-				//FAT32_Reserved1
 				bootSector.SetByte(BootSector.FAT32_PhysicalDriveNbr, 0x80);
 				bootSector.SetByte(BootSector.FAT32_Reserved2, 0);
 				bootSector.SetByte(BootSector.FAT32_ExtendedBootSignature, 0x29);
-				bootSector.SetBytes(BootSector.FAT32_IDSerialNumber, fatSettings.SerialID, 0, (uint)(fatSettings.SerialID.Length <= 4 ? fatSettings.SerialID.Length : 4));
+				bootSector.SetBytes(BootSector.FAT32_IDSerialNumber, fatSettings.SerialID, 0, (uint)Math.Min(4, fatSettings.SerialID.Length));
 				bootSector.SetString(BootSector.FAT32_VolumeLabel, "           ");  // 11 blank spaces
 				bootSector.SetString(BootSector.FAT32_VolumeLabel, fatSettings.VolumeLabel, (uint)(fatSettings.VolumeLabel.Length <= 11 ? fatSettings.VolumeLabel.Length : 11));
 				bootSector.SetString(BootSector.FAT32_FATType, "FAT32   ");
-				bootSector.SetBytes(BootSector.FAT32_OSBootCode, fatSettings.OSBootCode, 0, 420);
+				bootSector.SetBytes(BootSector.FAT32_OSBootCode, fatSettings.OSBootCode, 0, (uint)Math.Min(420, fatSettings.OSBootCode.Length));
 			}
 
 			// Write Boot Sector
@@ -742,10 +748,15 @@ namespace Mosa.FileSystem.FATFileSystem
 			return (sector - dataAreaStart) / sectorsPerCluster;
 		}
 
-		//protected uint ClusterToFirstSector (uint cluster)
-		//{
-		//    return ((cluster - 2) * sectorspercluster) + firstdatasector;
-		//}
+		/// <summary>
+		/// Gets the sector by cluster.
+		/// </summary>
+		/// <param name="cluster">The cluster.</param>
+		/// <returns></returns>
+		public uint GetSectorByCluster(uint cluster)
+		{
+			return dataAreaStart + ((cluster - 2) * sectorsPerCluster);
+		}
 
 		/// <summary>
 		/// Gets the cluster entry value.
@@ -850,7 +861,8 @@ namespace Mosa.FileSystem.FATFileSystem
 						else if (sectors == 1440) return 2;
 						else if (sectors <= 2880) return 1;
 						else if (sectors <= 5760) return 2;
-						//else if (sectors <= 16384) return 4;
+						else if (sectors == 6143) return 5;	// TESTING
+						else if (sectors <= 16384) return 4;
 						else if (sectors <= 32768) return 8;
 						else return 0;
 					}
@@ -1082,9 +1094,10 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// Creates the file.
 		/// </summary>
 		/// <param name="filename">The filename.</param>
+		/// <param name="fileAttributes">The file attributes.</param>
 		/// <param name="directoryCluster">The directory cluster.</param>
 		/// <returns></returns>
-		public DirectoryEntryLocation CreateFile(string filename, uint directoryCluster)
+		public DirectoryEntryLocation CreateFile(string filename, FileAttributes fileAttributes, uint directoryCluster)
 		{
 			DirectoryEntryLocation location = FindEntry(new Find.WithName(filename), directoryCluster);
 
@@ -1124,7 +1137,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			// Create Entry
 			directory.SetString(Entry.DOSName + (location.DirectorySectorIndex * Entry.EntrySize), "            ", 11);
 			directory.SetString(Entry.DOSName + (location.DirectorySectorIndex * Entry.EntrySize), filename);
-			directory.SetByte(Entry.FileAttributes + (location.DirectorySectorIndex * Entry.EntrySize), (byte)FileAttributes.Archive);
+			directory.SetByte(Entry.FileAttributes + (location.DirectorySectorIndex * Entry.EntrySize), (byte)fileAttributes);
 			directory.SetByte(Entry.Reserved + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 			directory.SetByte(Entry.CreationTimeFine + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 			directory.SetUShort(Entry.CreationTime + (location.DirectorySectorIndex * Entry.EntrySize), 0);

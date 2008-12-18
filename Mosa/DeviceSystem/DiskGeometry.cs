@@ -42,5 +42,47 @@ namespace Mosa.DeviceSystem
 			this.SectorsPerTrack = sectorsPerTrack;
 		}
 
+		/// <summary>
+		/// Guesses the geometry.
+		/// </summary>
+		/// <param name="lba">The lba.</param>
+		public void GuessGeometry(ulong lba)
+		{
+			uint cylinderTimesHeads;
+
+			if (lba > 65535 * 16 * 255)
+				lba = 65535 * 16 * 255;
+
+			if (lba >= 65535 * 16 * 63) {
+				SectorsPerTrack = 255;
+				Heads = 16;
+				cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
+			}
+			else {
+				SectorsPerTrack = 17;
+				cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
+
+				Heads = (byte)((cylinderTimesHeads + 1023) / 1024);
+
+				if (Heads < 4)
+					Heads = 4;
+
+				if (cylinderTimesHeads >= (Heads * 1024) || Heads > 16) {
+					SectorsPerTrack = 31;
+					Heads = 16;
+					cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
+				}
+
+				if (cylinderTimesHeads >= (Heads * 1024)) {
+					SectorsPerTrack = 63;
+					Heads = 16;
+					cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
+				}
+			}
+
+			Cylinders = (ushort)(cylinderTimesHeads / Heads);
+		}
+
+
 	}
 }

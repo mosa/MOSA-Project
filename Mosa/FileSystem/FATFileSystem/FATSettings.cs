@@ -9,9 +9,9 @@
 
 namespace Mosa.FileSystem.FATFileSystem
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public class FATSettings : SettingsBase
 	{
 		/// <summary>
@@ -63,6 +63,20 @@ namespace Mosa.FileSystem.FATFileSystem
 					osBootCode[i] = value[i];
 			}
 		}
+
+		/// <summary>
+		/// Sectors Per Track
+		/// </summary>
+		public ushort SectorsPerTrack;
+		/// <summary>
+		/// Number of Heads
+		/// </summary>
+		public ushort NumberOfHeads;
+		/// <summary>
+		/// Hidden Sectors
+		/// </summary>
+		public ushort HiddenSectors;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FATSettings"/> class.
 		/// </summary>
