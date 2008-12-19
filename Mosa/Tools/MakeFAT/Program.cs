@@ -59,7 +59,7 @@ namespace Mosa.Tools.MakeFAT
 
 			//if (args.Length < 3) {
 			//    Console.WriteLine("ERROR: Missing arguments");
-			//    Console.WriteLine("MakeFAT [-mbr <master boot record>] <number of blocks>  <destination img file>");
+			//    Console.WriteLine("MakeFAT [-mbr <master boot record>] <number of blocks> <destination img file>");
 			//    return -1;
 			//}
 
@@ -84,7 +84,7 @@ namespace Mosa.Tools.MakeFAT
 
 				mbr.DiskSignature = 0x12345678;
 				mbr.Partitions[0].Bootable = true;
-				mbr.Partitions[0].StartLBA = 1; // diskGeometry.SectorsPerTrack; 
+				mbr.Partitions[0].StartLBA = diskGeometry.SectorsPerTrack;
 				mbr.Partitions[0].TotalBlocks = blockCount - mbr.Partitions[0].StartLBA;
 				mbr.Partitions[0].PartitionType = PartitionType.FAT12;
 				mbr.Code = mbrCode;
@@ -102,9 +102,9 @@ namespace Mosa.Tools.MakeFAT
 				fatSettings.VolumeLabel = "MOSABOOT";
 				fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };
 				fatSettings.OSBootCode = fatCode;
-				fatSettings.SectorsPerTrack = 1; // diskGeometry.SectorsPerTrack;
-				fatSettings.NumberOfHeads = 1; //diskGeometry.Heads;
-				fatSettings.HiddenSectors = 0; //diskGeometry.SectorsPerTrack;
+				fatSettings.SectorsPerTrack = diskGeometry.SectorsPerTrack;
+				fatSettings.NumberOfHeads = diskGeometry.Heads;
+				fatSettings.HiddenSectors = diskGeometry.SectorsPerTrack;
 				fatSettings.FloppyMedia = false;
 
 				// Create FAT file system
@@ -127,33 +127,41 @@ namespace Mosa.Tools.MakeFAT
 				}
 
 				if (patchSyslinux) {
+					// Locate ldlinux.sys file for patching
+
 					string filename = "ldlinux.sys";
 					string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(3).Substring(0, 4)).ToUpper();
-
-					Mosa.ClassLib.BinaryFormat bootSector = new Mosa.ClassLib.BinaryFormat(partitionDevice.ReadBlock(0, 1));
 
 					DirectoryEntryLocation location = fat.FindEntry(new Mosa.FileSystem.FATFileSystem.Find.WithName(name), 0);
 
 					if (location.Valid) {
+						// Read boot sector
+						Mosa.ClassLib.BinaryFormat bootSector = new Mosa.ClassLib.BinaryFormat(partitionDevice.ReadBlock(0, 1));
+
+						// Set the first sector location of the file
+						bootSector.SetUInt(0x1F8, fat.GetSectorByCluster(location.FirstCluster));
+
+						// Change jump address
+						bootSector.SetUInt(0x01, 0x58);
+
+						// Write back patched boot sector
+						partitionDevice.WriteBlock(0, 1, bootSector.Data);
+
+						// Get the file size & number of sectors used
 						uint fileSize = fat.GetFileSize(location.DirectorySector, location.DirectorySectorIndex);
 						uint sectorCount = (fileSize + 511) >> 9;
-						uint sector = fat.GetSectorByCluster(location.FirstCluster);
-
-						//bootSector.SetUShort(0x1FC, 0x01);	// 0x01 = Access only one sector at a time 
-
-						bootSector.SetUInt(0x1F8, sector); // First Sector
-
-						partitionDevice.WriteBlock(0, 1, bootSector.Data);
 
 						uint[] sectors = new uint[65];
 						uint nsec = 0;
 
+						// Create list of the first 65 sectors of the file
 						for (uint cluster = location.FirstCluster; ((cluster != 0) & (nsec <= 64)); cluster = fat.GetNextCluster(cluster)) {
 							uint sec = fat.GetSectorByCluster(cluster);
 							for (uint s = 0; s < fat.SectorsPerCluster; s++)
 								sectors[nsec++] = sec + s;
 						}
 
+						// Read the first cluster of the file
 						Mosa.ClassLib.BinaryFormat firstCluster = new Mosa.ClassLib.BinaryFormat(fat.ReadCluster(location.FirstCluster));
 
 						uint patchArea = 0;
@@ -164,20 +172,24 @@ namespace Mosa.Tools.MakeFAT
 						patchArea = patchArea + 8;
 
 						if (patchArea < fat.ClusterSizeInBytes) {
-
 							// Set up the totals 
 							firstCluster.SetUShort(patchArea, (ushort)(fileSize >> 2));
 							firstCluster.SetUShort(patchArea + 2, (ushort)(sectorCount - 1));
 
+							// Clear sector entries
 							firstCluster.Fill(patchArea + 8, 0, 64 * 4);
 
+							// Set sector entries
 							for (nsec = 0; nsec < 64; nsec++)
 								firstCluster.SetUInt(patchArea + 8 + (nsec * 4), sectors[nsec + 1]);
 
+							// Clear out checksum
 							firstCluster.SetUInt(patchArea + 4, 0);
 
+							// Write back the updated cluster
 							fat.WriteCluster(location.FirstCluster, firstCluster.Data);
 
+							// Re-Calculate checksum by openning the file
 							FATFileStream file = new FATFileStream(fat, location);
 
 							uint csum = 0x3EB202FE;
@@ -186,8 +198,10 @@ namespace Mosa.Tools.MakeFAT
 								csum -= value;
 							}
 
+							// Set the checksum
 							firstCluster.SetUInt(patchArea + 4, csum);
 
+							// Write patched cluster back to disk
 							fat.WriteCluster(location.FirstCluster, firstCluster.Data);
 						}
 
