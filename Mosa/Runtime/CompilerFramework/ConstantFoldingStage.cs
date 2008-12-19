@@ -346,7 +346,6 @@ namespace Mosa.Runtime.CompilerFramework
             
         }
 
-
         /// <summary>
         /// Folds logical ORs with 2 constants
         /// </summary>
@@ -747,7 +746,6 @@ namespace Mosa.Runtime.CompilerFramework
         {
         }
         #endregion
-
 
         #region IR
         void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.AddressOfInstruction instruction, Context ctx)

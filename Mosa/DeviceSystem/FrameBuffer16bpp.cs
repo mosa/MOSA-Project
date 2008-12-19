@@ -49,9 +49,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
 		/// <returns></returns>
-		public override uint GetPixel(uint x, uint y)
+        public override uint GetPixel(uint x, uint y)
 		{
-			return memory.Read16(GetOffset(x, y), 2);
+			return memory.Read16(GetOffset(x, y));
 		}
 
 		/// <summary>
@@ -62,7 +62,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">The y.</param>
 		public override void SetPixel(uint color, uint x, uint y)
 		{
-			memory.Write16(GetOffset(x, y), color, 2);
+			memory.Write16(GetOffset(x, y), (ushort)color);
 		}
 	}
 
