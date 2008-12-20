@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FATFileSystem;
 
-namespace Mosa.Tools.MakeBoot
+namespace Mosa.Tools.MakeBootImage
 {
 	/// <summary>
 	/// 

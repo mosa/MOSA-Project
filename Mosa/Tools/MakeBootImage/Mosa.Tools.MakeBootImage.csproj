@@ -8,8 +8,8 @@
     <ProjectGuid>{BE9A5A27-22C4-4664-A8BD-388B30B5972C}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MakeBoot</RootNamespace>
-    <AssemblyName>MakeBoot</AssemblyName>
+    <RootNamespace>MakeBootImage</RootNamespace>
+    <AssemblyName>MakeBootImage</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
