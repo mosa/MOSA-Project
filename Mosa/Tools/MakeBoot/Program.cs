@@ -21,6 +21,7 @@ namespace Mosa.Tools.MakeBoot
 	class Program
 	{
 		enum FileSystem { FAT12, FAT16 };
+		enum ImageFormat { Raw, VHD, VDI };
 
 		/// <summary>
 		/// Main
@@ -37,8 +38,8 @@ namespace Mosa.Tools.MakeBoot
 			string mbrFilename = string.Empty;
 			string fatcodeFilename = string.Empty;
 			string volumeLabel = string.Empty;
+			ImageFormat imageFormat = ImageFormat.VHD;
 			bool mbrOption = true;
-			bool vhdOption = false;
 			bool patchSyslinuxOption = false;
 			uint blockCount = 1024 * 1024 / 512;
 			FileSystem fileSystem = FileSystem.FAT12;
@@ -74,7 +75,9 @@ namespace Mosa.Tools.MakeBoot
 					switch (parts[0].Trim()) {
 						case "-mbr": mbrOption = true; mbrFilename = (parts.Length > 1) ? parts[1] : null; break;
 						case "-boot": fatcodeFilename = (parts.Length > 1) ? parts[1] : null; break;
-						case "-vhd": vhdOption = true; break;
+						case "-vhd": imageFormat = ImageFormat.VHD; break;
+						case "-raw": imageFormat = ImageFormat.Raw; break;
+						case "-vdi": imageFormat = ImageFormat.VDI; break;
 						case "-syslinux": patchSyslinuxOption = true; break;
 						case "-fat12": fileSystem = FileSystem.FAT12; break;
 						case "-fat16": fileSystem = FileSystem.FAT16; break;
@@ -96,6 +99,24 @@ namespace Mosa.Tools.MakeBoot
 
 				// Create disk image file
 				Mosa.EmulatedDevices.Synthetic.DiskDevice diskDevice = new Mosa.EmulatedDevices.Synthetic.DiskDevice(args[1]);
+
+				if (imageFormat == ImageFormat.VDI) {
+					// Create header
+					byte[] header = Mosa.DeviceSystem.VDI.CreateHeader(
+						blockCount,
+						Guid.NewGuid().ToByteArray(),
+						Guid.NewGuid().ToByteArray(),
+						diskGeometry
+					);
+
+					diskDevice.WriteBlock(0, 1, header);
+
+					byte[] map = Mosa.DeviceSystem.VDI.CreateImageMap(blockCount);
+
+					diskDevice.WriteBlock(1, (uint)(map.Length / 512), map);
+
+					diskDevice.BlockOffset = 1 + (uint)(map.Length / 512);
+				}
 
 				// Expand disk image
 				diskDevice.WriteBlock(blockCount - 1, 1, new byte[512]);
@@ -246,12 +267,12 @@ namespace Mosa.Tools.MakeBoot
 
 				}
 
-				if (vhdOption) {
+				if (imageFormat == ImageFormat.VHD) {
 					// Create footer
 					byte[] footer = Mosa.DeviceSystem.VHD.CreateFooter(
-						blockCount * 512,
+						blockCount,
 						(uint)(DateTime.Now - (new DateTime(2000, 1, 1, 0, 0, 0))).Seconds,
-						(new Guid()).ToByteArray(),
+						Guid.NewGuid().ToByteArray(),
 						diskGeometry
 					);
 

@@ -25,6 +25,11 @@ namespace Mosa.EmulatedDevices.Synthetic
 		protected FileStream diskFile;
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public uint BlockOffset = 0;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="DiskDevice"/> class.
 		/// </summary>
 		/// <param name="filename">The filename.</param>
@@ -71,7 +76,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// <returns></returns>
 		public byte[] ReadBlock(uint block, uint count)
 		{
-			byte[] data = new byte[count * 512];
+			byte[] data = new byte[count  * 512];
 			ReadBlock(block, count, data);
 			return data;
 		}
@@ -85,7 +90,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// <returns></returns>
 		public bool ReadBlock(uint block, uint count, byte[] data)
 		{
-			diskFile.Seek(block * 512, SeekOrigin.Begin);
+			diskFile.Seek((block + BlockOffset) * 512, SeekOrigin.Begin);
 			diskFile.Read(data, 0, (int)(count*512));
 			return true;
 		}
@@ -99,7 +104,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// <returns></returns>
 		public bool WriteBlock(uint block, uint count, byte[] data)
 		{
-			diskFile.Seek(block * 512, SeekOrigin.Begin);
+			diskFile.Seek((block + BlockOffset) * 512, SeekOrigin.Begin);
 			diskFile.Write(data, 0, (int)(count*512));
 			return true;
 		}
