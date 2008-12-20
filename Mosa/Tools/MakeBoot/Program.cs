@@ -54,7 +54,7 @@ namespace Mosa.Tools.MakeBoot
 				Console.WriteLine("ERROR: Missing arguments");
 				return -1;
 			}
-			
+
 			Console.WriteLine("Building image...");
 
 			try {
@@ -78,7 +78,8 @@ namespace Mosa.Tools.MakeBoot
 						case "-syslinux": patchSyslinuxOption = true; break;
 						case "-fat12": fileSystem = FileSystem.FAT12; break;
 						case "-fat16": fileSystem = FileSystem.FAT16; break;
-						case "-file": includeFiles.Add(new IncludeFile(parts[1])); break;
+						case "-file": if (parts.Length > 2) includeFiles.Add(new IncludeFile(parts[1], parts[2]));
+							else includeFiles.Add(new IncludeFile(parts[1])); break;
 						case "-blocks": blockCount = Convert.ToUInt32(parts[1]); break;
 						case "-volume": volumeLabel = parts[1]; break;
 						default: break;
@@ -155,8 +156,8 @@ namespace Mosa.Tools.MakeBoot
 
 					if (filename != null) {
 						byte[] file = ReadFile(filename);
-						string name = (Path.GetFileNameWithoutExtension(filename).PadRight(8).Substring(0, 8) + Path.GetExtension(filename).PadRight(3).Substring(1, 3)).ToUpper();
-						DirectoryEntryLocation location = fat.CreateFile(name, fileAttributes, 0);
+						string newname = (Path.GetFileNameWithoutExtension(includeFile.Newname).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Newname).PadRight(3).Substring(1, 3)).ToUpper();
+						DirectoryEntryLocation location = fat.CreateFile(newname, fileAttributes, 0);
 						FATFileStream fatFileStream = new FATFileStream(fat, location);
 						fatFileStream.Write(file, 0, file.Length);
 						fatFileStream.Flush();
@@ -288,7 +289,7 @@ namespace Mosa.Tools.MakeBoot
 		class IncludeFile
 		{
 			public string Filename;
-			public string Destination = string.Empty;
+			public string Newname;
 			public bool ReadOnly = false;
 			public bool Hidden = false;
 			public bool Archive = true;
@@ -300,7 +301,24 @@ namespace Mosa.Tools.MakeBoot
 			/// <param name="filename">The filename.</param>
 			public IncludeFile(string filename)
 			{
-				this.Filename = filename;
+				Filename = filename;
+
+				Newname = filename.Replace('\\', '/');
+
+				int at = Newname.LastIndexOf('/');
+
+				if (at > 0)
+					Newname = Newname.Substring(at + 1, Newname.Length - at - 1);
+			}
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="IncludeFile"/> class.
+			/// </summary>
+			/// <param name="filename">The filename.</param>
+			public IncludeFile(string filename, string newname)
+			{
+				Filename = filename;
+				Newname = newname;
 			}
 		}
 
