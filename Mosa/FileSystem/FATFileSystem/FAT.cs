@@ -1176,6 +1176,9 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <param name="volumeName">Name of the volume.</param>
 		public void SetVolumeName(string volumeName)
 		{
+			if (volumeLabel.Length > 8)
+				volumeLabel = volumeLabel.Substring(0, 8);
+
 			DirectoryEntryLocation location = FindEntry(new Find.Volume(), 0);
 
 			if (!location.Valid) {

@@ -9,13 +9,19 @@
 
 using System;
 using System.IO;
+using System.Collections.Generic;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FATFileSystem;
 
-namespace Mosa.Tools.MakeFAT
+namespace Mosa.Tools.MakeBoot
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	class Program
 	{
+		enum FileSystem { FAT12, FAT16 };
+
 		/// <summary>
 		/// Main
 		/// </summary>
@@ -23,112 +29,142 @@ namespace Mosa.Tools.MakeFAT
 		/// <returns></returns>
 		static int Main(string[] args)
 		{
-			string imageFilename = string.Empty;
+			Console.WriteLine("MakeBoot v0.1 [www.mosa-project.org]");
+			Console.WriteLine("Copyright 2008. New BSD License.");
+			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
+			Console.WriteLine();
+
 			string mbrFilename = string.Empty;
 			string fatcodeFilename = string.Empty;
-			string[] copyFiles;
-			Mosa.FileSystem.FATFileSystem.FileAttributes[] fileAttributes;
-			bool vhd = true;
-			bool patchSyslinux = true;
+			string volumeLabel = string.Empty;
+			bool mbrOption = true;
+			bool vhdOption = false;
+			bool patchSyslinuxOption = false;
+			uint blockCount = 1024 * 1024 / 512;
+			FileSystem fileSystem = FileSystem.FAT12;
+			List<IncludeFile> includeFiles = new List<IncludeFile>();
 
-			uint blockCount = 1024 * 1024 * 3 / 512;
+			bool valid = (args.Length < 2);
 
-			// TODO: Parse command line parameters
+			if (valid)
+				valid = System.IO.File.Exists(args[0]);
 
-			copyFiles = new string[5];
-			fileAttributes = new Mosa.FileSystem.FATFileSystem.FileAttributes[5];
-
-			imageFilename = @"x:\boot\bootimage.vhd";
-			//mbrFilename = @"x:\boot\freedos\freedos-mbr.bin";
-			//fatcodeFilename = @"x:\boot\freedos\freedos-boot.bin";
-			//copyFiles[0] = @"X:\Boot\freedos\KERNEL.SYS";
-			//copyFiles[1] = @"X:\Boot\freedos\COMMAND.COM";
-			fileAttributes[0] = Mosa.FileSystem.FATFileSystem.FileAttributes.Archive;
-			fileAttributes[1] = Mosa.FileSystem.FATFileSystem.FileAttributes.Archive;
-
-			mbrFilename = @"x:\boot\syslinux\syslinux-mbr.bin";
-			fatcodeFilename = @"x:\boot\syslinux\syslinux-boot.bin";
-			copyFiles[0] = @"X:\Boot\syslinux\hello.exe";
-			copyFiles[1] = @"X:\Boot\syslinux\mboot.c32";
-			copyFiles[2] = @"X:\Boot\syslinux\syslinux.cfg";
-			copyFiles[3] = @"X:\Boot\syslinux\ldlinux.sys";
-			fileAttributes[0] = Mosa.FileSystem.FATFileSystem.FileAttributes.Archive;
-			fileAttributes[1] = Mosa.FileSystem.FATFileSystem.FileAttributes.Archive;
-			fileAttributes[2] = Mosa.FileSystem.FATFileSystem.FileAttributes.Archive;
-			fileAttributes[3] = Mosa.FileSystem.FATFileSystem.FileAttributes.Archive | Mosa.FileSystem.FATFileSystem.FileAttributes.Hidden | Mosa.FileSystem.FATFileSystem.FileAttributes.ReadOnly | Mosa.FileSystem.FATFileSystem.FileAttributes.System;
-
-			//if (args.Length < 3) {
-			//    Console.WriteLine("ERROR: Missing arguments");
-			//    Console.WriteLine("MakeFAT [-mbr <master boot record>] <number of blocks> <destination img file>");
-			//    return -1;
-			//}
+			if (valid) {
+				Console.WriteLine("MakeBoot <boot.config> <image name>");
+				Console.WriteLine("ERROR: Missing arguments");
+				return -1;
+			}
+			
+			Console.WriteLine("Building image...");
 
 			try {
-				if (System.IO.File.Exists(imageFilename))
-					System.IO.File.Delete(imageFilename);
 
-				byte[] mbrCode = ReadFile(mbrFilename);
-				byte[] fatCode = ReadFile(fatcodeFilename);
+				StreamReader reader = File.OpenText(args[0]);
+				string line = reader.ReadLine();
+
+				while (true) {
+					line = reader.ReadLine();
+					if (line == null) break;
+
+					if (string.IsNullOrEmpty(line))
+						continue;
+
+					string[] parts = line.Split('\t');
+
+					switch (parts[0].Trim()) {
+						case "-mbr": mbrOption = true; mbrFilename = (parts.Length > 1) ? parts[1] : null; break;
+						case "-boot": fatcodeFilename = (parts.Length > 1) ? parts[1] : null; break;
+						case "-vhd": vhdOption = true; break;
+						case "-syslinux": patchSyslinuxOption = true; break;
+						case "-fat12": fileSystem = FileSystem.FAT12; break;
+						case "-fat16": fileSystem = FileSystem.FAT16; break;
+						case "-file": includeFiles.Add(new IncludeFile(parts[1])); break;
+						case "-blocks": blockCount = Convert.ToUInt32(parts[1]); break;
+						case "-volume": volumeLabel = parts[1]; break;
+						default: break;
+					}
+				}
+
+				reader.Close();
+
+				if (System.IO.File.Exists(args[1]))
+					System.IO.File.Delete(args[1]);
 
 				DiskGeometry diskGeometry = new Mosa.DeviceSystem.DiskGeometry();
 				diskGeometry.GuessGeometry(blockCount);
 
 				// Create disk image file
-				Mosa.EmulatedDevices.Synthetic.DiskDevice diskDevice = new Mosa.EmulatedDevices.Synthetic.DiskDevice(imageFilename);
+				Mosa.EmulatedDevices.Synthetic.DiskDevice diskDevice = new Mosa.EmulatedDevices.Synthetic.DiskDevice(args[1]);
 
 				// Expand disk image
 				diskDevice.WriteBlock(blockCount - 1, 1, new byte[512]);
 
-				// Create master boot block record
-				MasterBootBlock mbr = new MasterBootBlock(diskDevice);
+				GenericPartition partition = new GenericPartition(0);
 
-				mbr.DiskSignature = 0x12345678;
-				mbr.Partitions[0].Bootable = true;
-				mbr.Partitions[0].StartLBA = diskGeometry.SectorsPerTrack;
-				mbr.Partitions[0].TotalBlocks = blockCount - mbr.Partitions[0].StartLBA;
-				mbr.Partitions[0].PartitionType = PartitionType.FAT12;
-				mbr.Code = mbrCode;
+				partition.Bootable = true;
+				partition.StartLBA = diskGeometry.SectorsPerTrack;
+				partition.TotalBlocks = blockCount - partition.StartLBA;
+				partition.PartitionType = (fileSystem == FileSystem.FAT12) ? PartitionType.FAT12 : PartitionType.FAT16;
 
-				mbr.Write();
+				if (mbrOption) {
+					// Create master boot block record
+					MasterBootBlock mbr = new MasterBootBlock(diskDevice);
+
+					mbr.DiskSignature = 0x12345678;
+					mbr.Partitions[0] = partition;
+
+					if (!string.IsNullOrEmpty(mbrFilename))
+						mbr.Code = ReadFile(mbrFilename);
+
+					mbr.Write();
+
+					partition = mbr.Partitions[0];
+				}
 
 				// Open partition within image file
-				PartitionDevice partitionDevice = new PartitionDevice(diskDevice, mbr.Partitions[0], false);
+				PartitionDevice partitionDevice = new PartitionDevice(diskDevice, partition, false);
 
 				// Set FAT settings
 				FATSettings fatSettings = new FATSettings();
 
-				fatSettings.FATType = FATType.FAT12;
+				fatSettings.FATType = (fileSystem == FileSystem.FAT12) ? FATType.FAT12 : FATType.FAT16;
 				fatSettings.FloppyMedia = false;
-				fatSettings.VolumeLabel = "MOSABOOT";
+				fatSettings.VolumeLabel = volumeLabel;
 				fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };
-				fatSettings.OSBootCode = fatCode;
 				fatSettings.SectorsPerTrack = diskGeometry.SectorsPerTrack;
 				fatSettings.NumberOfHeads = diskGeometry.Heads;
 				fatSettings.HiddenSectors = diskGeometry.SectorsPerTrack;
+				if (!string.IsNullOrEmpty(fatcodeFilename))
+					fatSettings.OSBootCode = ReadFile(fatcodeFilename);
 				fatSettings.FloppyMedia = false;
 
 				// Create FAT file system
 				FAT fat = new FAT(partitionDevice);
 				fat.Format(fatSettings);
 
-				fat.SetVolumeName("MOSABOOT");
+				fat.SetVolumeName(volumeLabel);
 
-				for (uint index = 0; index < copyFiles.Length; index++) {
-					string filename = copyFiles[index];
+				foreach (IncludeFile includeFile in includeFiles) {
+					string filename = includeFile.Filename;
+
+					Mosa.FileSystem.FATFileSystem.FileAttributes fileAttributes = new Mosa.FileSystem.FATFileSystem.FileAttributes();
+					if (includeFile.Archive) fileAttributes |= Mosa.FileSystem.FATFileSystem.FileAttributes.Archive;
+					if (includeFile.ReadOnly) fileAttributes |= Mosa.FileSystem.FATFileSystem.FileAttributes.ReadOnly;
+					if (includeFile.Hidden) fileAttributes |= Mosa.FileSystem.FATFileSystem.FileAttributes.Hidden;
+					if (includeFile.System) fileAttributes |= Mosa.FileSystem.FATFileSystem.FileAttributes.System;
 
 					if (filename != null) {
 						byte[] file = ReadFile(filename);
 						string name = (Path.GetFileNameWithoutExtension(filename).PadRight(8).Substring(0, 8) + Path.GetExtension(filename).PadRight(3).Substring(1, 3)).ToUpper();
-						DirectoryEntryLocation location = fat.CreateFile(name, fileAttributes[index], 0);
+						DirectoryEntryLocation location = fat.CreateFile(name, fileAttributes, 0);
 						FATFileStream fatFileStream = new FATFileStream(fat, location);
 						fatFileStream.Write(file, 0, file.Length);
 						fatFileStream.Flush();
 					}
 				}
 
-				if (patchSyslinux) {
+				if (patchSyslinuxOption) {
 					// Locate ldlinux.sys file for patching
-
 					string filename = "ldlinux.sys";
 					string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(3).Substring(0, 4)).ToUpper();
 
@@ -209,8 +245,7 @@ namespace Mosa.Tools.MakeFAT
 
 				}
 
-				if (vhd) {
-
+				if (vhdOption) {
 					// Create footer
 					byte[] footer = Mosa.DeviceSystem.VHD.CreateFooter(
 						blockCount * 512,
@@ -221,6 +256,9 @@ namespace Mosa.Tools.MakeFAT
 
 					diskDevice.WriteBlock(blockCount, 1, footer);
 				}
+
+				Console.WriteLine("Completed!");
+
 			}
 			catch (Exception e) {
 				Console.WriteLine("Error: " + e.ToString());
@@ -243,5 +281,28 @@ namespace Mosa.Tools.MakeFAT
 			fileStream.Close();
 			return data;
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		class IncludeFile
+		{
+			public string Filename;
+			public string Destination = string.Empty;
+			public bool ReadOnly = false;
+			public bool Hidden = false;
+			public bool Archive = true;
+			public bool System = false;
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="IncludeFile"/> class.
+			/// </summary>
+			/// <param name="filename">The filename.</param>
+			public IncludeFile(string filename)
+			{
+				this.Filename = filename;
+			}
+		}
+
 	}
 }
