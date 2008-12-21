@@ -21,7 +21,7 @@ namespace Mosa.Tools.MakeBootImage
 	class Program
 	{
 		enum FileSystem { FAT12, FAT16 };
-		enum ImageFormat { Raw, VHD, VDI };
+		enum ImageFormat { IMG, VHD, VDI };
 
 		/// <summary>
 		/// Main
@@ -30,7 +30,7 @@ namespace Mosa.Tools.MakeBootImage
 		/// <returns></returns>
 		static int Main(string[] args)
 		{
-			Console.WriteLine("MakeBoot v0.1 [www.mosa-project.org]");
+			Console.WriteLine("MakeImageBoot v0.1 [www.mosa-project.org]");
 			Console.WriteLine("Copyright 2008. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
@@ -76,7 +76,7 @@ namespace Mosa.Tools.MakeBootImage
 						case "-mbr": mbrOption = true; mbrFilename = (parts.Length > 1) ? parts[1] : null; break;
 						case "-boot": fatcodeFilename = (parts.Length > 1) ? parts[1] : null; break;
 						case "-vhd": imageFormat = ImageFormat.VHD; break;
-						case "-raw": imageFormat = ImageFormat.Raw; break;
+						case "-img": imageFormat = ImageFormat.IMG; break;
 						case "-vdi": imageFormat = ImageFormat.VDI; break;
 						case "-syslinux": patchSyslinuxOption = true; break;
 						case "-fat12": fileSystem = FileSystem.FAT12; break;
