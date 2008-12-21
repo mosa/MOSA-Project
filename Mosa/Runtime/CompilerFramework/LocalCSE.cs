@@ -72,6 +72,10 @@ namespace Mosa.Runtime.CompilerFramework
             /// <summary>
             /// 
             /// </summary>
+            None,
+            /// <summary>
+            /// 
+            /// </summary>
             Add,
             /// <summary>
             /// 
@@ -199,7 +203,7 @@ namespace Mosa.Runtime.CompilerFramework
                                 }
                                 else
                                 {
-                                    temp = aeb.Var;
+                                    temp = (RegisterOperand)aeb.Var;
                                 }
                                 block.Instructions[i] = new IR.MoveInstruction(instruction.Results[0], temp);      
                             }
@@ -207,8 +211,16 @@ namespace Mosa.Runtime.CompilerFramework
 
                         if (!found)
                         {
+                            Operation opr = Operation.None;
+
+                            if (instruction is IL.AddInstruction)
+                                opr = Operation.Add;
+                            else if (instruction is IL.MulInstruction)
+                                opr = Operation.Mul;
+                            else if (instruction is IR.LogicalAndInstruction)
+                                opr = Operation.And;
                             // Insert new tuple
-                            AEB.Add(new AEBinExp(i, instruction.Operands[0], null, instruction.Operands[1], null));
+                            AEB.Add(new AEBinExp(i, instruction.Operands[0], opr, instruction.Operands[1], null));
                         }
 
                         // Remove all tuples that use the variable assigned to by
