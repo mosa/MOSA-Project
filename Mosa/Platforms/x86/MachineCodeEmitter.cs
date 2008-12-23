@@ -395,8 +395,12 @@ namespace Mosa.Platforms.x86
         /// <param name="src">The value.</param>
         void ICodeEmitter.Out(Operand dest, Operand src)
         {
-            if (src.Type.Type == CilElementType.I1 || src.Type.Type == CilElementType.U1)
-                Emit(dest, src, cd_out8);
+            byte[] out8 = new byte[] { 0xEE };
+            bool x = false;
+            Debug.Assert(x, dest.Type.ToString() + " :: " + src.Type.ToString());
+            if (dest.Type.Type == CilElementType.I1 || dest.Type.Type == CilElementType.U1)
+                //Emit(dest, src, cd_out8);
+                Emit(out8, null, null, null);
             else
                 Emit(dest, src, cd_out32);
         }
@@ -543,8 +547,10 @@ namespace Mosa.Platforms.x86
         /// <param name="src">The source operand</param>
         void ICodeEmitter.In(Operand dest, Operand src)
         {
+            byte[] in8 = new byte[] { 0xED };
             if (dest.Type.Type == CilElementType.I1 || dest.Type.Type == CilElementType.U1)
-                Emit(dest, src, cd_in8);
+                //Emit(null, null, cd_in8);
+                Emit(in8, null, null, null);
             else
                 Emit(dest, src, cd_in32);
         }

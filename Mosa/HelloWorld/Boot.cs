@@ -6,11 +6,8 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Boot
 	{
-        private static int static_ctor;
-
         static Boot()
         {
-            static_ctor = 1;
         }
 
 		/// <summary>
@@ -18,52 +15,91 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		public static void Main()
 		{
-            if (static_ctor == 0)
-                return;
+            unsafe
+            {
+                byte* index = (byte*)(0xB8000);
 
-            for (int i = 0; i < int.MaxValue; )
-                i++;
-/*
-			// Start the boot process
+                for (byte* i = (byte*)0xB8000; i < (byte*)0xB8FA0; )
+                {
+                    WriteChar((byte)0x00, i++);
+                    WriteChar((byte)' ', i++);
+                }
 
-			// Write HelloWorld to Screen
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'M', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'O', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'S', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'A', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)' ', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'O', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'S', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)' ', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'V', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'e', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'r', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'s', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'i', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'o', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'n', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)' ', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'0', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'.', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'1', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)' ', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'\'', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'W', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'a', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'k', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'e', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)'\'', index++);
 
-			unsafe {
-				byte* index = (byte*)(0xB8000);
-
-				*(index++) = (byte)'H';
-				*(index++) = 1;
-				*(index++) = (byte)'E';
-				*(index++) = 1;
-				*(index++) = (byte)'L';
-				*(index++) = 1;
-				*(index++) = (byte)'L';
-				*(index++) = 1;
-				*(index++) = (byte)'O';
-				*(index++) = 1;
-				*(index++) = (byte)' ';
-				*(index++) = 1;
-				*(index++) = (byte)'W';
-				*(index++) = 1;
-				*(index++) = (byte)'O';
-				*(index++) = 1;
-				*(index++) = (byte)'R';
-				*(index++) = 1;
-				*(index++) = (byte)'L';
-				*(index++) = 1;
-				*(index++) = (byte)'D';
-				*(index++) = 1;
-				*(index++) = (byte)'!';
-				*(index++) = 1;
-				
-				*(index + 1) = 4;
-
-				while (true) {
-					*index = (byte)'-';
-					*index = (byte)'|';					
-				}
-			}
- */
+                while (true)
+                {
+                    WriteChar((byte)0x0B, index++);
+                    WriteChar((byte)'-', index--);
+                    WriteChar((byte)0x0B, index++);
+                    WriteChar((byte)'\\', index--);
+                    WriteChar((byte)0x0B, index++);
+                    WriteChar((byte)'|', index--);
+                    WriteChar((byte)0x0B, index++);
+                    WriteChar((byte)'/', index--);
+                }
+            }
         }
-	}
+
+        /// <summary>
+        /// Writes the char.
+        /// </summary>
+        /// <param name="c">The c.</param>
+        /// <param name="address">The address.</param>
+        public unsafe static void WriteChar(byte c, byte* address)
+        {
+            *address = c;
+        }
+    }
 }

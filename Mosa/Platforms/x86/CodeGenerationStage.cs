@@ -231,19 +231,14 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.In(InInstruction instruction, int arg)
         {
-            Operand src = instruction.Operand1;
-            RegisterOperand dst = instruction.Operand0 as RegisterOperand;
+            Operand src = instruction.Operand0;
+            Operand dst = instruction.Results[0];// as RegisterOperand;
 
-            Debug.Assert(dst != null, @"Destination must be the EAX register.");
-            Debug.Assert(src is ConstantOperand || (src is RegisterOperand && ((RegisterOperand)src).Register == GeneralPurposeRegister.EDX), @"Source must be a constant or the EDX-register.");
-
-            if (dst == null || dst.Register != GeneralPurposeRegister.EAX)
-                throw new ArgumentException(@"Destination must be the EAX register.");
-            if (!(src is ConstantOperand || src is RegisterOperand) ||
-                 (src is RegisterOperand && ((RegisterOperand)src).Register != GeneralPurposeRegister.EDX))
-                throw new ArgumentException(@"Source must be constant or the EDX register.");
-
-            _emitter.In(dst, src);
+            bool x = false;
+            Debug.Assert(x, "IN: " + dst.Type.ToString() + " :: " + src.Type.ToString());
+            _emitter.Mov(new RegisterOperand(src.Type, GeneralPurposeRegister.EDX), src);
+            _emitter.In(new RegisterOperand(dst.Type, GeneralPurposeRegister.EAX), new RegisterOperand(src.Type, GeneralPurposeRegister.EDX));
+            _emitter.Mov(dst, new RegisterOperand(dst.Type, GeneralPurposeRegister.EAX));
         }
 
         /// <summary>
@@ -358,19 +353,14 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Out(OutInstruction instruction, int arg)
         {
-            RegisterOperand src = instruction.Operand1 as RegisterOperand;
-            Operand dst = instruction.Operand0;
+            Operand src = instruction.Operand0;
+            Operand dst = instruction.Results[0];// as RegisterOperand;
 
-            Debug.Assert(src != null && src.Register == GeneralPurposeRegister.EAX, @"Source must be the EAX register.");
-            Debug.Assert(dst is ConstantOperand || (dst is RegisterOperand && ((RegisterOperand)dst).Register == GeneralPurposeRegister.EDX), @"Destination must be a constant or the EDX-register.");
-
-            if (src == null || src.Register != GeneralPurposeRegister.EAX)
-                throw new ArgumentException(@"Source must be the EAX register.");
-            if (!(dst is ConstantOperand || dst is RegisterOperand) ||
-                 (dst is RegisterOperand && ((RegisterOperand)dst).Register != GeneralPurposeRegister.EDX))
-                throw new ArgumentException(@"Destination must be constant or the EDX register.");
-
-            _emitter.Out(instruction.Operand0, instruction.Operand1);
+            bool x = false;
+            Debug.Assert(x, "OUT: " + dst.Type.ToString() + " :: " + src.Type.ToString());
+            _emitter.Mov(new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.EDX), dst);
+            _emitter.Out(new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.EAX), new RegisterOperand(dst.Type, GeneralPurposeRegister.EDX));
+            _emitter.Mov(dst, new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.EAX));
         }
 
         /// <summary>
