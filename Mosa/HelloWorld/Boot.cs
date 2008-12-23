@@ -77,6 +77,10 @@ namespace Mosa.HelloWorld
                 WriteChar((byte)'e', index++);
                 WriteChar((byte)0x0A, index++);
                 WriteChar((byte)'\'', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)' ', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)' ', index++);
 
                 while (true)
                 {
