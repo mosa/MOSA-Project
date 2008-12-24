@@ -89,7 +89,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// </summary>
 		/// <param name="fs">The fs.</param>
 		/// <param name="location">The location.</param>
-		public FATFileStream(FAT fs, DirectoryEntryLocation location)
+		public FATFileStream(FAT fs, FileLocation location)
 			: this(fs, location.FirstCluster, location.DirectorySector, location.DirectorySectorIndex)
 		{
 		}

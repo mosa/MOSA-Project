@@ -12,7 +12,7 @@ namespace Mosa.FileSystem.FATFileSystem
 	/// <summary>
 	/// 
 	/// </summary>
-	public class DirectoryEntryLocation
+	public class FileLocation
 	{
 		/// <summary>
 		/// 
@@ -47,7 +47,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DirectoryEntryLocation"/> class.
 		/// </summary>
-		public DirectoryEntryLocation() { this.Valid = false; }
+		public FileLocation() { this.Valid = false; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DirectoryEntryLocation"/> class.
@@ -56,7 +56,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <param name="directorySector">The directory sector.</param>
 		/// <param name="directoryIndex">Index of the directory.</param>
 		/// <param name="directory">if set to <c>true</c> [directory].</param>
-		public DirectoryEntryLocation(uint startCluster, uint directorySector, uint directoryIndex, bool directory)
+		public FileLocation(uint startCluster, uint directorySector, uint directoryIndex, bool directory)
 		{
 			this.Valid = true;
 			this.FirstCluster = startCluster;

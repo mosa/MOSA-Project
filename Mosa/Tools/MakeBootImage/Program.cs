@@ -191,7 +191,7 @@ namespace Mosa.Tools.MakeBootImage
 					if (filename != null) {
 						byte[] file = ReadFile(filename);
 						string newname = (Path.GetFileNameWithoutExtension(includeFile.Newname).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Newname).PadRight(3).Substring(1, 3)).ToUpper();
-						DirectoryEntryLocation location = fat.CreateFile(newname, fileAttributes, 0);
+						FileLocation location = fat.CreateFile(newname, fileAttributes, 0);
 						FATFileStream fatFileStream = new FATFileStream(fat, location);
 						fatFileStream.Write(file, 0, file.Length);
 						fatFileStream.Flush();
@@ -203,7 +203,7 @@ namespace Mosa.Tools.MakeBootImage
 					string filename = "ldlinux.sys";
 					string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(3).Substring(0, 4)).ToUpper();
 
-					DirectoryEntryLocation location = fat.FindEntry(new Mosa.FileSystem.FATFileSystem.Find.WithName(name), 0);
+					FileLocation location = fat.FindEntry(new Mosa.FileSystem.FATFileSystem.Find.WithName(name), 0);
 
 					if (location.Valid) {
 						// Read boot sector

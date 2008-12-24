@@ -998,7 +998,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <param name="compare">The compare.</param>
 		/// <param name="startCluster">The start cluster.</param>
 		/// <returns></returns>
-		public DirectoryEntryLocation FindEntry(FAT.ICompare compare, uint startCluster)
+		public FileLocation FindEntry(FAT.ICompare compare, uint startCluster)
 		{
 			uint activeSector = (startCluster == 0) ? firstRootDirectorySector : (startCluster * this.sectorsPerCluster);
 			uint increment = 0;
@@ -1010,11 +1010,11 @@ namespace Mosa.FileSystem.FATFileSystem
 
 					if (compare.Compare(directory.Data, index * 32, fatType)) {
 						FileAttributes attribute = (FileAttributes)directory.GetByte((index * Entry.EntrySize) + Entry.FileAttributes);
-						return new DirectoryEntryLocation(GetClusterEntry(directory.Data, index, fatType), activeSector, index, (attribute & FileAttributes.SubDirectory) != 0);
+						return new FileLocation(GetClusterEntry(directory.Data, index, fatType), activeSector, index, (attribute & FileAttributes.SubDirectory) != 0);
 					}
 
 					if (directory.GetByte(Entry.DOSName + (index * Entry.EntrySize)) == FileNameAttribute.LastEntry)
-						return new DirectoryEntryLocation();
+						return new FileLocation();
 				}
 
 				++increment;
@@ -1022,7 +1022,7 @@ namespace Mosa.FileSystem.FATFileSystem
 				if (startCluster == 0) {
 					// root directory
 					if (increment >= rootDirSectors)
-						return new DirectoryEntryLocation();
+						return new FileLocation();
 
 					activeSector = startCluster + increment;
 					continue;
@@ -1040,12 +1040,12 @@ namespace Mosa.FileSystem.FATFileSystem
 					uint cluster = GetClusterBySector(startCluster);
 
 					if (cluster == 0)
-						return new DirectoryEntryLocation();
+						return new FileLocation();
 
 					uint nextCluster = GetClusterEntryValue(cluster);
 
 					if ((IsClusterLast(nextCluster)) || (IsClusterBad(nextCluster)) || (IsClusterFree(nextCluster)) || (IsClusterReserved(nextCluster)))
-						return new DirectoryEntryLocation();
+						return new FileLocation();
 
 					activeSector = (uint)(dataAreaStart + (nextCluster - 1 * sectorsPerCluster));
 
@@ -1097,9 +1097,9 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <param name="fileAttributes">The file attributes.</param>
 		/// <param name="directoryCluster">The directory cluster.</param>
 		/// <returns></returns>
-		public DirectoryEntryLocation CreateFile(string filename, FileAttributes fileAttributes, uint directoryCluster)
+		public FileLocation CreateFile(string filename, FileAttributes fileAttributes, uint directoryCluster)
 		{
-			DirectoryEntryLocation location = FindEntry(new Find.WithName(filename), directoryCluster);
+			FileLocation location = FindEntry(new Find.WithName(filename), directoryCluster);
 
 			if (location.Valid) {
 				// Truncate the file
@@ -1179,7 +1179,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			if (volumeLabel.Length > 8)
 				volumeLabel = volumeLabel.Substring(0, 8);
 
-			DirectoryEntryLocation location = FindEntry(new Find.Volume(), 0);
+			FileLocation location = FindEntry(new Find.Volume(), 0);
 
 			if (!location.Valid) {
 				location = FindEntry(new Find.Empty(), 0);

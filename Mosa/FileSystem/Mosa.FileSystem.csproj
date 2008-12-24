@@ -96,7 +96,7 @@
     <Compile Include="FATFileSystem\Find\WithName.cs" />
     <Compile Include="FATFileSystem\Find\Volume.cs" />
     <Compile Include="FATFileSystem\Find\ByCluster.cs" />
-    <Compile Include="FATFileSystem\DirectoryEntryLocation.cs" />
+    <Compile Include="FATFileSystem\FileLocation.cs" />
     <Compile Include="FATFileSystem\Find\Empty.cs" />
     <Compile Include="GenericFileSystem.cs">
       <SubType>Code</SubType>

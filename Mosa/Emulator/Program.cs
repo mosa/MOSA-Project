@@ -147,7 +147,7 @@ namespace Mosa.Emulator
 						}
 						screen.WriteLine("  Volume Name: " + fat.VolumeLabel);
 
-						DirectoryEntryLocation location = fat.FindEntry(new Mosa.FileSystem.FATFileSystem.Find.WithName("TEST2.TXT"), 0);
+						FileLocation location = fat.FindEntry(new Mosa.FileSystem.FATFileSystem.Find.WithName("TEST2.TXT"), 0);
 
 						if (location.Valid) {
 							FATFileStream file = new FATFileStream(fat, location);
