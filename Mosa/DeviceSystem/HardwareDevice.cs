@@ -55,43 +55,5 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <returns></returns>
 		public abstract bool OnInterrupt();
-
-		///// <summary>
-		///// Activates the device driver
-		///// </summary>
-		///// <param name="deviceManager">The device manager.</param>
-		///// <returns></returns>
-		//public bool Activate(IDeviceManager deviceManager)
-		//{
-		//    base.deviceStatus = DeviceStatus.Initializing;
-		//
-		//    if (!Setup()) {
-		//        base.deviceStatus = DeviceStatus.Error;
-		//        return false;
-		//    }
-		//
-		//    this.hardwareResources.EnableIRQ();
-		//
-		//    if (!Probe()) {
-		//        base.deviceStatus = DeviceStatus.NotFound;
-		//        return false;
-		//    }
-		//
-		//    if (!Start()) {
-		//        base.deviceStatus = DeviceStatus.Error;
-		//        return false;
-		//    }
-		//
-		//    base.deviceStatus = DeviceStatus.Online;
-		//
-		//    LinkedList<IDevice> devices = CreateSubDevices();
-		//
-		//    if (devices != null)
-		//        foreach (IDevice device in devices)
-		//            deviceManager.Add(device);
-		//
-		//    return true;
-		//}
-
 	}
 }

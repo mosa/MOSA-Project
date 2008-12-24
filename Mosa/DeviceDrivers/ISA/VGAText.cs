@@ -53,6 +53,38 @@ namespace Mosa.DeviceDrivers.ISA
 		/// 
 		/// </summary>
 		protected IReadWriteIOPort crtControllerDataColor;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IWriteOnlyIOPort miscellaneousOutputWrite;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IReadWriteIOPort sequencerAddress;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IReadWriteIOPort sequencerData;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IReadWriteIOPort graphicsControllerAddress;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IReadWriteIOPort graphicsControllerData;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IReadWriteIOPort inputStatus1ReadB;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IReadWriteIOPort attributeAddress;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IReadWriteIOPort attributeData;
 
 		/// <summary>
 		/// 
@@ -108,13 +140,20 @@ namespace Mosa.DeviceDrivers.ISA
 			this.hardwareResources = hardwareResources;
 			base.name = "VGAText";
 
-			miscellaneousOutput = base.hardwareResources.GetIOPort(0, (byte)(0x3CC - 0x3B0));
+			miscellaneousOutput = base.hardwareResources.GetIOPort(0, 0x1C);
+			crtControllerIndex = base.hardwareResources.GetIOPort(0, 0x04);
+			crtControllerData = base.hardwareResources.GetIOPort(0, 0x05);
+			crtControllerIndexColor = base.hardwareResources.GetIOPort(0, 0x24);
+			crtControllerDataColor = base.hardwareResources.GetIOPort(0, 0x25);
 
-			crtControllerIndex = base.hardwareResources.GetIOPort(0, (byte)(0x3B4 - 0x3B0));
-			crtControllerData = base.hardwareResources.GetIOPort(0, (byte)(0x3B5 - 0x3B0));
-
-			crtControllerIndexColor = base.hardwareResources.GetIOPort(0, (byte)(0x3D4 - 0x3B0));
-			crtControllerDataColor = base.hardwareResources.GetIOPort(0, (byte)(0x3D5 - 0x3B0));
+			miscellaneousOutputWrite = base.hardwareResources.GetIOPort(0, 0x12);
+			sequencerAddress = base.hardwareResources.GetIOPort(0, 0x14);
+			sequencerData = base.hardwareResources.GetIOPort(0, 0x15);
+			graphicsControllerAddress = base.hardwareResources.GetIOPort(0, 0x1E);
+			graphicsControllerData = base.hardwareResources.GetIOPort(0, 0x1F);
+			inputStatus1ReadB = base.hardwareResources.GetIOPort(0, 0x2A);
+			attributeAddress = base.hardwareResources.GetIOPort(0, 0x10);
+			attributeData = base.hardwareResources.GetIOPort(0, 0x11);
 
 			memory = base.hardwareResources.GetMemory(0);
 
@@ -127,6 +166,8 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <returns></returns>
 		public override DeviceDriverStartStatus Start()
 		{
+			WriteSettings(VGAText80x25);
+
 			colorMode = ((miscellaneousOutput.Read8() & 1) == 1);
 
 			if (colorMode) {
@@ -281,5 +322,78 @@ namespace Mosa.DeviceDrivers.ISA
 			for (int i = 0; i < width * 2; i++)
 				memory[(uint)(index + i)] = 0;
 		}
+
+		/// <summary>
+		/// Writes the settings.
+		/// </summary>
+		/// <param name="settings">The settings.</param>
+		protected void WriteSettings(byte[] settings)
+		{
+			// Write MISCELLANEOUS reg
+			miscellaneousOutputWrite.Write8(settings[0]);
+
+			// Write SEQUENCER regs
+			for (byte i = 0; i < 5; i++) {
+				sequencerAddress.Write8(i);
+				sequencerData.Write8(settings[1 + i]);
+			}
+
+			// Unlock CRTC registers 
+			crtControllerIndexColor.Write8(0x03);
+			crtControllerDataColor.Write8((byte)(crtControllerData.Read8() | 0x80));
+			crtControllerIndexColor.Write8(0x11);
+			crtControllerDataColor.Write8((byte)(crtControllerData.Read8() & ~0x80));
+
+			// Make sure they remain unlocked 
+			settings[0x03] = (byte)(settings[0x03] | 0x80);
+			settings[0x11] = (byte)(settings[0x11] & ~0x80);
+
+			// Write CRTC regs 
+			for (byte i = 0; i < 25; i++) {
+				crtControllerIndexColor.Write8(i);
+				crtControllerDataColor.Write8(settings[6 + i]);
+			}
+
+			// Write GRAPHICS CONTROLLER regs 
+			for (byte i = 0; i < 9; i++) {
+				graphicsControllerAddress.Write8(i);
+				graphicsControllerData.Write8(settings[31 + i]);
+			}
+
+			// Write ATTRIBUTE CONTROLLER regs 
+			for (byte i = 0; i < 21; i++) {
+				inputStatus1ReadB.Read8();
+				attributeAddress.Write8(i);
+				attributeAddress.Write8(settings[52 + i]);
+			}
+
+			// Lock 16-color palette and unblank display */
+			inputStatus1ReadB.Read8();
+			attributeAddress.Write8(0x20);
+		}
+
+		#region Modes
+		
+		private static byte[] VGAText80x25 = new byte[] {
+		/* MISC */
+			0x67,
+		/* SEQ */
+			0x03, 0x00, 0x03, 0x00, 0x02,
+		/* CRTC */
+			0x5F, 0x4F, 0x50, 0x82, 0x55, 0x81, 0xBF, 0x1F,
+			0x00, 0x4F, 0x0D, 0x0E, 0x00, 0x00, 0x00, 0x50,
+			0x9C, 0x0E, 0x8F, 0x28, 0x1F, 0x96, 0xB9, 0xA3,
+			0xFF,
+		/* GC */
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x0E, 0x00,
+			0xFF,
+		/* AC */
+			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x14, 0x07,
+			0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F,
+			0x0C, 0x00, 0x0F, 0x08, 0x00
+		};
+		
+		#endregion
+
 	}
 }

@@ -20,7 +20,7 @@ namespace Mosa.Tools.MakeBootImage
 	/// </summary>
 	class Program
 	{
-		enum FileSystem { FAT12, FAT16 };
+		enum FileSystem { FAT12, FAT16, FAT32 };
 		enum ImageFormat { IMG, VHD, VDI };
 
 		/// <summary>
@@ -81,6 +81,7 @@ namespace Mosa.Tools.MakeBootImage
 						case "-syslinux": patchSyslinuxOption = true; break;
 						case "-fat12": fileSystem = FileSystem.FAT12; break;
 						case "-fat16": fileSystem = FileSystem.FAT16; break;
+						case "-fat32": fileSystem = FileSystem.FAT32; break;
 						case "-file": if (parts.Length > 2) includeFiles.Add(new IncludeFile(parts[1], parts[2]));
 							else includeFiles.Add(new IncludeFile(parts[1])); break;
 						case "-blocks": blockCount = Convert.ToUInt32(parts[1]); break;
@@ -121,35 +122,47 @@ namespace Mosa.Tools.MakeBootImage
 				// Expand disk image
 				diskDevice.WriteBlock(blockCount - 1, 1, new byte[512]);
 
-				GenericPartition partition = new GenericPartition(0);
+				// Create partition device
+				PartitionDevice partitionDevice;
 
-				partition.Bootable = true;
-				partition.StartLBA = diskGeometry.SectorsPerTrack;
-				partition.TotalBlocks = blockCount - partition.StartLBA;
-				partition.PartitionType = (fileSystem == FileSystem.FAT12) ? PartitionType.FAT12 : PartitionType.FAT16;
-
-				if (mbrOption) {
+				if (mbrOption) {					
 					// Create master boot block record
 					MasterBootBlock mbr = new MasterBootBlock(diskDevice);
 
+					// Setup partition entry					
 					mbr.DiskSignature = 0x12345678;
-					mbr.Partitions[0] = partition;
+					mbr.Partitions[0].Bootable = true;
+					mbr.Partitions[0].StartLBA = diskGeometry.SectorsPerTrack;
+					mbr.Partitions[0].TotalBlocks = blockCount - mbr.Partitions[0].StartLBA;
+
+					switch (fileSystem) {
+						case FileSystem.FAT12: mbr.Partitions[0].PartitionType = PartitionType.FAT12; break;
+						case FileSystem.FAT16: mbr.Partitions[0].PartitionType = PartitionType.FAT16; break;
+						case FileSystem.FAT32: mbr.Partitions[0].PartitionType = PartitionType.FAT32; break;
+						default: break;
+					}
 
 					if (!string.IsNullOrEmpty(mbrFilename))
 						mbr.Code = ReadFile(mbrFilename);
 
 					mbr.Write();
 
-					partition = mbr.Partitions[0];
+					partitionDevice = new PartitionDevice(diskDevice, mbr.Partitions[0], false);
 				}
-
-				// Open partition within image file
-				PartitionDevice partitionDevice = new PartitionDevice(diskDevice, partition, false);
+				else {
+					partitionDevice = new PartitionDevice(diskDevice, false);
+				}
 
 				// Set FAT settings
 				FATSettings fatSettings = new FATSettings();
 
-				fatSettings.FATType = (fileSystem == FileSystem.FAT12) ? FATType.FAT12 : FATType.FAT16;
+				switch (fileSystem) {
+					case FileSystem.FAT12: fatSettings.FATType = FATType.FAT12; break;
+					case FileSystem.FAT16: fatSettings.FATType = FATType.FAT16; break;
+					case FileSystem.FAT32: fatSettings.FATType = FATType.FAT32; break;
+					default: break;
+				}
+
 				fatSettings.FloppyMedia = false;
 				fatSettings.VolumeLabel = volumeLabel;
 				fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };
@@ -264,7 +277,6 @@ namespace Mosa.Tools.MakeBootImage
 						}
 
 					}
-
 				}
 
 				if (imageFormat == ImageFormat.VHD) {

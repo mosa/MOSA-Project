@@ -62,6 +62,23 @@ namespace Mosa.DeviceSystem
 		/// Initializes a new instance of the <see cref="PartitionDevice"/> class.
 		/// </summary>
 		/// <param name="diskDevice">The disk device.</param>
+		/// <param name="readOnly">if set to <c>true</c> [read only].</param>
+		public PartitionDevice(IDiskDevice diskDevice, bool readOnly)
+		{
+			this.diskDevice = diskDevice;
+			this.startBlock = 0;
+			this.blockCount = diskDevice.TotalBlocks;
+			this.readOnly = readOnly;
+
+			base.parent = diskDevice as Device;
+			base.name = base.parent.Name + "/Raw";	// need to give it a unique name
+			base.deviceStatus = DeviceStatus.Online;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PartitionDevice"/> class.
+		/// </summary>
+		/// <param name="diskDevice">The disk device.</param>
 		/// <param name="partition">The partition.</param>
 		/// <param name="readOnly">if set to <c>true</c> [read only].</param>
 		public PartitionDevice(IDiskDevice diskDevice, GenericPartition partition, bool readOnly)
