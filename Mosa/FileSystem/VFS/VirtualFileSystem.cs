@@ -304,7 +304,7 @@ namespace Mosa.FileSystem.VFS
 			return false;
 		}
 
-		bool IFileSystemService.Format(SettingsBase settings)
+		bool IFileSystemService.Format(GenericFileSystemSettings settings)
 		{
 			// We do not support formatting.
 			throw new System.NotSupportedException();

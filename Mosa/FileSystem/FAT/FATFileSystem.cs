@@ -11,7 +11,7 @@ using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.VFS;
 
-namespace Mosa.FileSystem.FATFileSystem
+namespace Mosa.FileSystem.FAT
 {
 
 	#region Constants
@@ -180,7 +180,7 @@ namespace Mosa.FileSystem.FATFileSystem
 	/// <summary>
 	/// 
 	/// </summary>
-	public class FAT : GenericFileSystem
+	public class FATFileSystem : GenericFileSystem
 	{
 		// limitations: fat32 and vfat (long files) are not supported
 		// plus almost all testing has been against fat12 
@@ -310,7 +310,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// Initializes a new instance of the <see cref="FAT"/> class.
 		/// </summary>
 		/// <param name="partition">The partition.</param>
-		public FAT(IPartitionDevice partition) : base(partition) { ReadBootSector(); }
+		public FATFileSystem(IPartitionDevice partition) : base(partition) { ReadBootSector(); }
 
 		/// <summary>
 		/// Gets the type of the settings.
@@ -509,7 +509,7 @@ namespace Mosa.FileSystem.FATFileSystem
 
 			uint sectorsPerFat = (val1 + (val2 - 1)) / val2;
 
-			firstRootDirectorySector = reservedSectors + (sectorsPerFat);
+			firstRootDirectorySector = reservedSectors + sectorsPerFat;
 
 			BinaryFormat bootSector = new BinaryFormat(512);
 
@@ -668,9 +668,13 @@ namespace Mosa.FileSystem.FATFileSystem
 				partition.WriteBlock(reservedSectors + sectorsPerFat, 1, firstFat.Data);
 
 			// Create Empty Root Directory
-			if ((fatType == FATType.FAT12) || (fatType == FATType.FAT16))
+			if (fatType == FATType.FAT32) {
+				
+			}
+			else {
 				for (uint i = 0; i < rootDirSectors; i++)
 					partition.WriteBlock(firstRootDirectorySector + i, 1, emptyFat.Data);
+			}
 
 			return ReadBootSector();
 		}
@@ -998,7 +1002,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <param name="compare">The compare.</param>
 		/// <param name="startCluster">The start cluster.</param>
 		/// <returns></returns>
-		public FileLocation FindEntry(FAT.ICompare compare, uint startCluster)
+		public FileLocation FindEntry(FATFileSystem.ICompare compare, uint startCluster)
 		{
 			uint activeSector = (startCluster == 0) ? firstRootDirectorySector : (startCluster * this.sectorsPerCluster);
 			uint increment = 0;
@@ -1122,7 +1126,7 @@ namespace Mosa.FileSystem.FATFileSystem
 			location = FindEntry(new Find.Empty(), directoryCluster);
 
 			if (!location.Valid) {
-				// Extended Directory
+				// Extend Directory
 
 				// TODO
 
@@ -1285,10 +1289,6 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <returns></returns>
 		protected uint AllocateCluster()
 		{
-			//This is super slow!
-			//TODO: add locking
-			//TODO: improve performance by scanning the block directly for free entries (FAT16 & 32 only)
-			//TODO: keep cache of last allocation and re-use as next starting location
 			uint at = 2;
 
 			while (at < fatEntries) {

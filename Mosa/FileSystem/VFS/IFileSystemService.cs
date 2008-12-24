@@ -58,7 +58,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		/// <param name="settings">The settings for the filesystem to create.</param>
 		/// <returns>The created and mounted filesystem.</returns>
-		bool Format(SettingsBase settings);
+		bool Format(GenericFileSystemSettings settings);
 
 		#endregion // Methods
 	}

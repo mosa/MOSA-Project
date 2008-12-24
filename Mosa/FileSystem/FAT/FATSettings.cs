@@ -7,12 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.FileSystem.FATFileSystem
+namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class FATSettings : SettingsBase
+	public class FATSettings : GenericFileSystemSettings
 	{
 		/// <summary>
 		/// 

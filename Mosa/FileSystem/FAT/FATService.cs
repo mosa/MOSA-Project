@@ -11,17 +11,17 @@ using Mosa.DeviceSystem;
 using Mosa.FileSystem;
 using Mosa.FileSystem.VFS;
 
-namespace Mosa.FileSystem.FATFileSystem
+namespace Mosa.FileSystem.FAT
 {
     /// <summary>
     /// 
     /// </summary>
-	public class FATDevice : Device, IDevice, IFileSystemDevice
+	public class FATService : Device, IDevice, IFileSystemDevice
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="FATDevice"/> class.
+		/// Initializes a new instance of the <see cref="FATService"/> class.
 		/// </summary>
-		public FATDevice()
+		public FATService()
 		{
 			base.name = "FAT";
 			base.parent = null;
@@ -29,12 +29,13 @@ namespace Mosa.FileSystem.FATFileSystem
 		}
 
 		/// <summary>
+		/// Creates the specified file system.
 		/// </summary>
-		/// <param name="partition"></param>
+		/// <param name="partition">The partition.</param>
 		/// <returns></returns>
 		public GenericFileSystem Create(IPartitionDevice partition)
 		{
-			return new FAT(partition);
+			return new FATFileSystem(partition);
 		}
 
 	}

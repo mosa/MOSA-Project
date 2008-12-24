@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.FileSystem.FATFileSystem
+namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
 	/// 
@@ -82,14 +82,14 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		protected FAT fs;
+		protected FATFileSystem fs;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FATFileStream"/> class.
 		/// </summary>
 		/// <param name="fs">The fs.</param>
 		/// <param name="location">The location.</param>
-		public FATFileStream(FAT fs, FileLocation location)
+		public FATFileStream(FATFileSystem fs, FileLocation location)
 			: this(fs, location.FirstCluster, location.DirectorySector, location.DirectorySectorIndex)
 		{
 		}
@@ -101,7 +101,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <param name="startCluster">The start cluster.</param>
 		/// <param name="directorySector">The directory sector.</param>
 		/// <param name="directorySectorIndex">Index of the directory sector.</param>
-		public FATFileStream(FAT fs, uint startCluster, uint directorySector, uint directorySectorIndex)
+		public FATFileStream(FATFileSystem fs, uint startCluster, uint directorySector, uint directorySectorIndex)
 		{
 			this.fs = fs;
 			this.clusterSize = fs.ClusterSizeInBytes;

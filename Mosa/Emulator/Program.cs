@@ -12,7 +12,7 @@ using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 using Mosa.FileSystem;
-using Mosa.FileSystem.FATFileSystem;
+using Mosa.FileSystem.FAT;
 using Mosa.EmulatedDevices.Synthetic;
 
 using Pictor;
@@ -94,7 +94,7 @@ namespace Mosa.Emulator
 			fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };
 
 			// Create FAT file system
-			FAT fat12 = new FAT(partitionDevice);
+			FATFileSystem fat12 = new FATFileSystem(partitionDevice);
 			fat12.Format(fatSettings);
 
 			// Get the text VGA device
@@ -135,7 +135,7 @@ namespace Mosa.Emulator
 				screen.WriteLine();
 
 				if (device is IPartitionDevice) {
-					FileSystem.FATFileSystem.FAT fat = new Mosa.FileSystem.FATFileSystem.FAT(device as IPartitionDevice);
+					FileSystem.FAT.FATFileSystem fat = new Mosa.FileSystem.FAT.FATFileSystem(device as IPartitionDevice);
 
 					screen.Write("  File System: ");
 					if (fat.IsValid) {
@@ -147,7 +147,7 @@ namespace Mosa.Emulator
 						}
 						screen.WriteLine("  Volume Name: " + fat.VolumeLabel);
 
-						FileLocation location = fat.FindEntry(new Mosa.FileSystem.FATFileSystem.Find.WithName("TEST2.TXT"), 0);
+						FileLocation location = fat.FindEntry(new Mosa.FileSystem.FAT.Find.WithName("TEST2.TXT"), 0);
 
 						if (location.Valid) {
 							FATFileStream file = new FATFileStream(fat, location);

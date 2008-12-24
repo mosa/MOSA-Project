@@ -9,22 +9,27 @@
 
 using Mosa.ClassLib;
 
-namespace Mosa.FileSystem.FATFileSystem.Find
+namespace Mosa.FileSystem.FAT.Find
 {
+
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Any : FAT.ICompare
+	public class WithName : FATFileSystem.ICompare
 	{
 		/// <summary>
 		/// 
 		/// </summary>
-		protected uint cluster;
+		protected string name;
 
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="WithName"/> class.
 		/// </summary>
-		public Any() { }
+		/// <param name="name">The name.</param>
+		public WithName(string name)
+		{
+			this.name = name;
+		}
 
 		/// <summary>
 		/// Compares the specified data.
@@ -48,8 +53,12 @@ namespace Mosa.FileSystem.FATFileSystem.Find
 			if (first == FileNameAttribute.Escape)
 				return false;
 
-			return true;
+			string entryname = FATFileSystem.ExtractFileName(data, offset);
+
+			if (entryname == name)
+				return true;
+
+			return false;
 		}
 	}
-
 }

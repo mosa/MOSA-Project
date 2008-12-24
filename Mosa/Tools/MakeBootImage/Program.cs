@@ -11,7 +11,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using Mosa.DeviceSystem;
-using Mosa.FileSystem.FATFileSystem;
+using Mosa.FileSystem.FAT;
 
 namespace Mosa.Tools.MakeBootImage
 {
@@ -174,7 +174,7 @@ namespace Mosa.Tools.MakeBootImage
 				fatSettings.FloppyMedia = false;
 
 				// Create FAT file system
-				FAT fat = new FAT(partitionDevice);
+				FATFileSystem fat = new FATFileSystem(partitionDevice);
 				fat.Format(fatSettings);
 
 				fat.SetVolumeName(volumeLabel);
@@ -182,11 +182,11 @@ namespace Mosa.Tools.MakeBootImage
 				foreach (IncludeFile includeFile in includeFiles) {
 					string filename = includeFile.Filename;
 
-					Mosa.FileSystem.FATFileSystem.FileAttributes fileAttributes = new Mosa.FileSystem.FATFileSystem.FileAttributes();
-					if (includeFile.Archive) fileAttributes |= Mosa.FileSystem.FATFileSystem.FileAttributes.Archive;
-					if (includeFile.ReadOnly) fileAttributes |= Mosa.FileSystem.FATFileSystem.FileAttributes.ReadOnly;
-					if (includeFile.Hidden) fileAttributes |= Mosa.FileSystem.FATFileSystem.FileAttributes.Hidden;
-					if (includeFile.System) fileAttributes |= Mosa.FileSystem.FATFileSystem.FileAttributes.System;
+					Mosa.FileSystem.FAT.FileAttributes fileAttributes = new Mosa.FileSystem.FAT.FileAttributes();
+					if (includeFile.Archive) fileAttributes |= Mosa.FileSystem.FAT.FileAttributes.Archive;
+					if (includeFile.ReadOnly) fileAttributes |= Mosa.FileSystem.FAT.FileAttributes.ReadOnly;
+					if (includeFile.Hidden) fileAttributes |= Mosa.FileSystem.FAT.FileAttributes.Hidden;
+					if (includeFile.System) fileAttributes |= Mosa.FileSystem.FAT.FileAttributes.System;
 
 					if (filename != null) {
 						byte[] file = ReadFile(filename);
@@ -203,7 +203,7 @@ namespace Mosa.Tools.MakeBootImage
 					string filename = "ldlinux.sys";
 					string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(3).Substring(0, 4)).ToUpper();
 
-					FileLocation location = fat.FindEntry(new Mosa.FileSystem.FATFileSystem.Find.WithName(name), 0);
+					FileLocation location = fat.FindEntry(new Mosa.FileSystem.FAT.Find.WithName(name), 0);
 
 					if (location.Valid) {
 						// Read boot sector

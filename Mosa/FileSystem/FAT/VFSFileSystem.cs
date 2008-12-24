@@ -9,7 +9,7 @@
 
 using Mosa.FileSystem.VFS;
 
-namespace Mosa.FileSystem.FATFileSystem
+namespace Mosa.FileSystem.FAT
 {
     /// <summary>
     /// 
@@ -19,13 +19,13 @@ namespace Mosa.FileSystem.FATFileSystem
         /// <summary>
         /// 
         /// </summary>
-		protected FAT fat;
+		protected FATFileSystem fat;
 
 		/// <summary>
 		/// Gets the FAT.
 		/// </summary>
 		/// <value>The FAT.</value>
-		public FAT FAT 
+		public FATFileSystem FAT 
         { 
             get { return fat; } 
         }
@@ -34,7 +34,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// Initializes a new instance of the <see cref="VFSFileSystem"/> class.
 		/// </summary>
 		/// <param name="fat">The fat.</param>
-		public VFSFileSystem(FAT fat)
+		public VFSFileSystem(FATFileSystem fat)
 		{
 			this.fat = fat;
 		}
@@ -69,7 +69,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// </summary>
 		/// <param name="settings">The settings for the filesystem to create.</param>
 		/// <returns>The created and mounted filesystem.</returns>
-		public bool Format(SettingsBase settings)
+		public bool Format(GenericFileSystemSettings settings)
 		{
 			return (fat.Format(((FATSettings)settings)));
 		}

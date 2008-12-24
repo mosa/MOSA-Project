@@ -10,7 +10,7 @@
 using Mosa.FileSystem;
 using Mosa.FileSystem.VFS;
 
-namespace Mosa.FileSystem.FATFileSystem
+namespace Mosa.FileSystem.FAT
 {
     /// <summary>
     /// 
@@ -106,7 +106,7 @@ namespace Mosa.FileSystem.FATFileSystem
 		/// <exception cref="System.NotSupportedException">The object does not support removal this way. There's most likely an object specific API to remove this IVfsNode.</exception>
 		public override void Delete(IVfsNode child, DirectoryEntry dentry)
 		{
-			FAT fs = this.FileSystem as FAT;
+			FATFileSystem fs = this.FileSystem as FATFileSystem;
 
 			uint targetCluster = (child as VFSDirectory).directoryCluster;
 

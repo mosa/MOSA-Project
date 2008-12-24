@@ -9,12 +9,12 @@
 
 using Mosa.ClassLib;
 
-namespace Mosa.FileSystem.FATFileSystem.Find
+namespace Mosa.FileSystem.FAT.Find
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ByCluster : FAT.ICompare
+	public class ByCluster : FATFileSystem.ICompare
 	{
 		/// <summary>
 		/// 
@@ -52,7 +52,7 @@ namespace Mosa.FileSystem.FATFileSystem.Find
 			if (first == FileNameAttribute.Escape)
 				return false;
 
-			uint startcluster = FAT.GetClusterEntry(data, offset, type);
+			uint startcluster = FATFileSystem.GetClusterEntry(data, offset, type);
 
 			if (startcluster == cluster)
 				return true;

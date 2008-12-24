@@ -92,40 +92,40 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FATFileSystem\Find\Any.cs" />
-    <Compile Include="FATFileSystem\Find\WithName.cs" />
-    <Compile Include="FATFileSystem\Find\Volume.cs" />
-    <Compile Include="FATFileSystem\Find\ByCluster.cs" />
-    <Compile Include="FATFileSystem\FileLocation.cs" />
-    <Compile Include="FATFileSystem\Find\Empty.cs" />
+    <Compile Include="FAT\Find\Any.cs" />
+    <Compile Include="FAT\Find\WithName.cs" />
+    <Compile Include="FAT\Find\Volume.cs" />
+    <Compile Include="FAT\Find\ByCluster.cs" />
+    <Compile Include="FAT\FileLocation.cs" />
+    <Compile Include="FAT\Find\Empty.cs" />
     <Compile Include="GenericFileSystem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IFileSystemDevice.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SettingsBase.cs">
+    <Compile Include="GenericFileSystemSettings.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FATFileSystem\FAT.cs">
+    <Compile Include="FAT\FATFileSystem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FATFileSystem\FATDevice.cs">
+    <Compile Include="FAT\FATService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FATFileSystem\FATFileStream.cs">
+    <Compile Include="FAT\FATFileStream.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FATFileSystem\FATSettings.cs">
+    <Compile Include="FAT\FATSettings.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FATFileSystem\VFSDirectory.cs">
+    <Compile Include="FAT\VFSDirectory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FATFileSystem\VFSFile.cs">
+    <Compile Include="FAT\VFSFile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FATFileSystem\VFSFileSystem.cs">
+    <Compile Include="FAT\VFSFileSystem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="VFS\AccessCheck.cs">

@@ -9,7 +9,7 @@
 
 using Mosa.FileSystem.VFS;
 
-namespace Mosa.FileSystem.FATFileSystem
+namespace Mosa.FileSystem.FAT
 {
     /// <summary>
     /// 

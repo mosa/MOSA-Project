@@ -9,12 +9,12 @@
 
 using Mosa.ClassLib;
 
-namespace Mosa.FileSystem.FATFileSystem.Find
+namespace Mosa.FileSystem.FAT.Find
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Volume : FAT.ICompare
+	public class Volume : FATFileSystem.ICompare
 	{
 		/// <summary>
 		/// 

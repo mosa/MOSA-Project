@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.FileSystem.FATFileSystem
+namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
 	/// 
@@ -45,12 +45,12 @@ namespace Mosa.FileSystem.FATFileSystem
 		public bool IsDirectory { get { return directory; } }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DirectoryEntryLocation"/> class.
+		/// Initializes a new instance of the <see cref="FileLocation"/> class.
 		/// </summary>
 		public FileLocation() { this.Valid = false; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DirectoryEntryLocation"/> class.
+		/// Initializes a new instance of the <see cref="FileLocation"/> class.
 		/// </summary>
 		/// <param name="startCluster">The start cluster.</param>
 		/// <param name="directorySector">The directory sector.</param>
