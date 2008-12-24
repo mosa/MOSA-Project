@@ -69,19 +69,124 @@ namespace Mosa.HelloWorld
                 WriteChar((byte)'\'', index++);
                 WriteChar((byte)0x0A, index++);
                 WriteChar((byte)'W', index++);
-                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)0x0C, index++);
                 WriteChar((byte)'a', index++);
-                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)0x0C, index++);
                 WriteChar((byte)'k', index++);
-                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)0x0C, index++);
                 WriteChar((byte)'e', index++);
-                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)0x0C, index++);
                 WriteChar((byte)'\'', index++);
                 WriteChar((byte)0x0A, index++);
                 WriteChar((byte)' ', index++);
                 WriteChar((byte)0x0A, index++);
                 WriteChar((byte)' ', index++);
+                WriteChar((byte)0x0A, index++);
+                WriteChar((byte)' ', index++);
 
+                byte* line = (byte*)(0xB80A0);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+                WriteChar((byte)0x07, line++);
+                WriteChar((byte)'-', line++);
+
+                byte* index_2 = (byte*)(0xB8140);
+                WriteChar((byte)0x0E, index_2++);
+                WriteChar((byte)'C', index_2++);
+                WriteChar((byte)0x0E, index_2++);
+                WriteChar((byte)'o', index_2++);
+                WriteChar((byte)0x0E, index_2++);
+                WriteChar((byte)'p', index_2++);
+                WriteChar((byte)0x0E, index_2++);
+                WriteChar((byte)'y', index_2++);
+                WriteChar((byte)0x0E, index_2++);
+                WriteChar((byte)'r', index_2++);
+                WriteChar((byte)0x0E, index_2++);
+                WriteChar((byte)'i', index_2++);
+                WriteChar((byte)0x0E, index_2++);
+                WriteChar((byte)'g', index_2++);
+                WriteChar((byte)0x0E, index_2++);
+                WriteChar((byte)'h', index_2++);
+                WriteChar((byte)0x0E, index_2++);
+                WriteChar((byte)'t', index_2++);
+                WriteChar((byte)0x0E, index_2++);
+                WriteChar((byte)' ', index_2++);
+                WriteChar((byte)0x0E, index_2++);
+                WriteChar((byte)'2', index_2++);
+                WriteChar((byte)0x0A, index_2++);
+                WriteChar((byte)'0', index_2++);
+                WriteChar((byte)0x0A, index_2++);
+                WriteChar((byte)'0', index_2++);
+                WriteChar((byte)0x0A, index_2++);
+                WriteChar((byte)'8', index_2++);
+                WriteChar((byte)0x0A, index_2++);
+                WriteChar((byte)'-', index_2++);
+                WriteChar((byte)0x0A, index_2++);
+                WriteChar((byte)'2', index_2++);
+                WriteChar((byte)0x0A, index_2++);
+                WriteChar((byte)'0', index_2++);
+                WriteChar((byte)0x0A, index_2++);
+                WriteChar((byte)'0', index_2++);
+                WriteChar((byte)0x0A, index_2++);
+                WriteChar((byte)'9', index_2++);
+                WriteChar((byte)0x0A, index_2++);
+                WriteChar((byte)' ', index_2++);
                 while (true)
                 {
                     WriteChar((byte)0x0B, index++);
@@ -97,10 +202,10 @@ namespace Mosa.HelloWorld
         }
 
         /// <summary>
-        /// Writes the char.
+        /// 
         /// </summary>
-        /// <param name="c">The c.</param>
-        /// <param name="address">The address.</param>
+        /// <param name="c"></param>
+        /// <param name="address"></param>
         public unsafe static void WriteChar(byte c, byte* address)
         {
             *address = c;
