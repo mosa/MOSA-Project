@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <StartWorkingDirectory>X:\MosaTF\trunk\Setup</StartWorkingDirectory>
-    <StartArguments>mosaboot-vdi.config bootimage.vdi</StartArguments>
+    <StartArguments>VirtualPC\mosaboot-vhd.config VirtualPC\bootimage.vhd</StartArguments>
     <StartAction>Project</StartAction>
   </PropertyGroup>
 </Project>

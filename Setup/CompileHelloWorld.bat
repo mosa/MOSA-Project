@@ -3,11 +3,9 @@ rem #### Compile the solution first ####
 
 if not exist output mkdir output
 
-copy ..\Mosa\Bin\Mosa.HelloWorld.exe output
-
 cd output
 
-..\bin\mosacl.exe -a=x86 -f=PE --pe-file-alignment=4096 --map=hello.map -b=mb0.7 -o hello.exe Mosa.HelloWorld.exe
+..\..\Mosa\bin\mosacl.exe -a=x86 -f=PE --pe-file-alignment=4096 --map=hello.map -b=mb0.7 -o ..\..\Mosa\Bin\Mosa.HelloWorld.exe Mosa.HelloWorld.exe
 
 cd ..
 

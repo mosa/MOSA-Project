@@ -125,7 +125,7 @@ namespace Mosa.Tools.MakeBootImage
 				// Create partition device
 				PartitionDevice partitionDevice;
 
-				if (mbrOption) {					
+				if (mbrOption) {
 					// Create master boot block record
 					MasterBootBlock mbr = new MasterBootBlock(diskDevice);
 
@@ -188,14 +188,16 @@ namespace Mosa.Tools.MakeBootImage
 					if (includeFile.Hidden) fileAttributes |= Mosa.FileSystem.FAT.FileAttributes.Hidden;
 					if (includeFile.System) fileAttributes |= Mosa.FileSystem.FAT.FileAttributes.System;
 
-					if (filename != null) {
-						byte[] file = ReadFile(filename);
-						string newname = (Path.GetFileNameWithoutExtension(includeFile.Newname).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Newname).PadRight(3).Substring(1, 3)).ToUpper();
-						FileLocation location = fat.CreateFile(newname, fileAttributes, 0);
-						FATFileStream fatFileStream = new FATFileStream(fat, location);
-						fatFileStream.Write(file, 0, file.Length);
-						fatFileStream.Flush();
-					}
+					byte[] file = ReadFile(filename);
+					string newname = (Path.GetFileNameWithoutExtension(includeFile.Newname).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Newname).PadRight(3).Substring(1, 3)).ToUpper();
+					FileLocation location = fat.CreateFile(newname, fileAttributes, 0);
+
+					if (!location.Valid)
+						throw new Exception("Unable to write file");
+
+					FATFileStream fatFileStream = new FATFileStream(fat, location);
+					fatFileStream.Write(file, 0, file.Length);
+					fatFileStream.Flush();
 				}
 
 				if (patchSyslinuxOption) {
