@@ -550,9 +550,6 @@ namespace Mosa.FileSystem.FAT
 			bootSector.SetUInt(BootSector.HiddenSectors, fatSettings.HiddenSectors);
 
 			if (fatType != FATType.FAT32) {
-				bootSector.SetByte(BootSector.JumpInstruction, 0xEB); // 0xEB = JMP Instruction
-				bootSector.SetByte(BootSector.JumpInstruction + 1, 0x3C);
-				bootSector.SetByte(BootSector.JumpInstruction + 2, 0x90);
 
 				bootSector.SetUShort(BootSector.SectorsPerFAT, (ushort)sectorsPerFat);
 				if (fatSettings.FloppyMedia)
@@ -571,8 +568,18 @@ namespace Mosa.FileSystem.FAT
 					bootSector.SetString(BootSector.VolumeLabel, fatSettings.VolumeLabel, (uint)Math.Min(11, fatSettings.VolumeLabel.Length));
 				}
 
-				if (fatSettings.OSBootCode != null)
-					bootSector.SetBytes(BootSector.OSBootCode, fatSettings.OSBootCode, 0, (uint)Math.Min(448, fatSettings.OSBootCode.Length));
+				if (fatSettings.OSBootCode != null) {
+					if (fatSettings.OSBootCode.Length == 512) {
+						bootSector.SetBytes(BootSector.JumpInstruction, fatSettings.OSBootCode, BootSector.JumpInstruction, 3);
+						bootSector.SetBytes(BootSector.OSBootCode, fatSettings.OSBootCode, BootSector.OSBootCode, 448);
+					}
+					else {
+						bootSector.SetByte(BootSector.JumpInstruction, 0xEB); // 0xEB = JMP Instruction
+						bootSector.SetByte(BootSector.JumpInstruction + 1, 0x3C);
+						bootSector.SetByte(BootSector.JumpInstruction + 2, 0x90);
+						bootSector.SetBytes(BootSector.OSBootCode, fatSettings.OSBootCode, 0, (uint)Math.Min(448, fatSettings.OSBootCode.Length));
+					}
+				}
 
 				if (fatType == FATType.FAT12)
 					bootSector.SetString(BootSector.FATType, "FAT12   ");
@@ -581,12 +588,7 @@ namespace Mosa.FileSystem.FAT
 			}
 
 			if (fatType == FATType.FAT32) {
-				bootSector.SetByte(BootSector.JumpInstruction, 0xEB);  // 0xEB = JMP Instruction
-				bootSector.SetByte(BootSector.JumpInstruction + 1, 0x58);
-				bootSector.SetByte(BootSector.JumpInstruction + 2, 0x90);
-
 				bootSector.SetUShort(BootSector.SectorsPerFAT, 0);
-				bootSector.SetString(BootSector.FATType, "FAT32   ");
 				bootSector.SetUInt(BootSector.FAT32_SectorPerFAT, sectorsPerFat);
 				bootSector.SetByte(BootSector.FAT32_Flags, 0);
 				bootSector.SetUShort(BootSector.FAT32_Version, 0);
@@ -600,7 +602,17 @@ namespace Mosa.FileSystem.FAT
 				bootSector.SetString(BootSector.FAT32_VolumeLabel, "           ");  // 11 blank spaces
 				bootSector.SetString(BootSector.FAT32_VolumeLabel, fatSettings.VolumeLabel, (uint)(fatSettings.VolumeLabel.Length <= 11 ? fatSettings.VolumeLabel.Length : 11));
 				bootSector.SetString(BootSector.FAT32_FATType, "FAT32   ");
-				bootSector.SetBytes(BootSector.FAT32_OSBootCode, fatSettings.OSBootCode, 0, (uint)Math.Min(420, fatSettings.OSBootCode.Length));
+
+				if (fatSettings.OSBootCode.Length == 512) {
+					bootSector.SetBytes(BootSector.JumpInstruction, fatSettings.OSBootCode, BootSector.JumpInstruction, 3);
+					bootSector.SetBytes(BootSector.FAT32_OSBootCode, fatSettings.OSBootCode, BootSector.FAT32_OSBootCode, 420);
+				}
+				else {
+					bootSector.SetByte(BootSector.JumpInstruction, 0xEB);  // 0xEB = JMP Instruction
+					bootSector.SetByte(BootSector.JumpInstruction + 1, 0x58);
+					bootSector.SetByte(BootSector.JumpInstruction + 2, 0x90);
+					bootSector.SetBytes(BootSector.FAT32_OSBootCode, fatSettings.OSBootCode, 0, (uint)Math.Min(420, fatSettings.OSBootCode.Length));
+				}
 			}
 
 			// Write Boot Sector
@@ -995,7 +1007,7 @@ namespace Mosa.FileSystem.FAT
 
 			uint cluster = entry.GetUShort(Entry.FirstCluster + (index * Entry.EntrySize));
 
-			if (type == FATType.FAT32) 
+			if (type == FATType.FAT32)
 				cluster |= ((uint)entry.GetUShort(Entry.EAIndex + (index * Entry.EntrySize))) << 16;
 
 			return cluster;
@@ -1012,7 +1024,7 @@ namespace Mosa.FileSystem.FAT
 			uint activeSector = startCluster * sectorsPerCluster;
 
 			if (startCluster == 0)
-				activeSector = (fatType == FATType.FAT32) ? dataAreaStart + (rootCluster32 * sectorsPerCluster) : firstRootDirectorySector;
+				activeSector = (fatType == FATType.FAT32) ? GetSectorByCluster(rootCluster32) : firstRootDirectorySector;
 
 			uint increment = 0;
 
