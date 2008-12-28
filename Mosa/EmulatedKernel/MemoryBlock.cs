@@ -115,7 +115,7 @@ namespace Mosa.EmulatedKernel
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        public ushort Read24(uint index)
+		public uint Read24(uint index)
         {
             return MemoryDispatch.Read24((uint)(address + index));
         }
@@ -125,7 +125,7 @@ namespace Mosa.EmulatedKernel
         /// </summary>
         /// <param name="index">The index.</param>
         /// <param name="value">The value.</param>
-        public void Write24(uint index, ushort value)
+		public void Write24(uint index, uint value)
         {
             MemoryDispatch.Write24((uint)(address + index), value);
         }

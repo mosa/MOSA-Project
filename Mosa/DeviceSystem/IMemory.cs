@@ -58,15 +58,14 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		void Write24(uint index, ushort value);
-
+		void Write24(uint index, uint value);
 
         /// <summary>
         /// Reads the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        ushort Read24(uint index);
+        uint Read24(uint index);
 
         /// <summary>
         /// Writes the specified index.

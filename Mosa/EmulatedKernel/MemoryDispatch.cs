@@ -134,7 +134,7 @@ namespace Mosa.EmulatedKernel
         /// </summary>
         /// <param name="address">The address.</param>
         /// <param name="value">The value.</param>
-        public static void Write24(uint address, ushort value)
+        public static void Write24(uint address, uint value)
         {
             MemoryRange memoryRange = Find(address);
 
