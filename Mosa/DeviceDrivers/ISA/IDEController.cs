@@ -20,8 +20,8 @@ namespace Mosa.DeviceDrivers.ISA
 	/// <summary>
 	/// 
 	/// </summary>
-	//[DeviceSignature(AutoLoad = true, BasePort = 0x1F0, PortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	//[DeviceSignature(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2", Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[ISADeviceSignature(AutoLoad = true, BasePort = 0x1F0, PortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[ISADeviceSignature(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2", Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class IDEController : HardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
 	{
 

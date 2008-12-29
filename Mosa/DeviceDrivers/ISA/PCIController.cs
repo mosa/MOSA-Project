@@ -16,7 +16,7 @@ namespace Mosa.DeviceDrivers.ISA
 	/// <summary>
 	/// 
 	/// </summary>
-	//[DeviceSignature(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[ISADeviceSignature(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class PCIController : HardwareDevice, IDevice, IHardwareDevice, IPCIController
 	{
 
