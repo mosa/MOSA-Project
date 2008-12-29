@@ -215,13 +215,7 @@ namespace Mosa.ClassLib
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		public ushort GetUShort(uint offset)
-		{
-			ushort value = data[offset++];
-			value += (ushort)(data[offset++] << 8);
-
-			return value;
-		}
+		public ushort GetUShort(uint offset) { return (ushort)(data[offset++] | (data[offset++] << 8)); }
 
 		/// <summary>
 		/// Sets the unsigned short.
@@ -280,20 +274,6 @@ namespace Mosa.ClassLib
 			data[offset++] = (byte)((value >> 48) & 0xFF);
 			data[offset++] = (byte)((value >> 56) & 0xFF);
 		}
-
-		/// <summary>
-		/// Gets the int.
-		/// </summary>
-		/// <param name="offset">The offset.</param>
-		/// <returns></returns>
-		public int GetInt(uint offset) { return (int)GetUInt(offset); }
-
-		/// <summary>
-		/// Sets the int.
-		/// </summary>
-		/// <param name="offset">The offset.</param>
-		/// <param name="value">The value.</param>
-		public void SetInt(uint offset, int value) { SetUInt(offset, (uint)value); }
 
 		/// <summary>
 		/// Gets the byte.

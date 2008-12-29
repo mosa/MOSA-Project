@@ -13,19 +13,20 @@ namespace Mosa.DeviceSystem
 {
 	#region Definitions
 
-	internal struct MasterBootRecord
+	internal struct MBR
 	{
 		internal const uint CodeArea = 0x00;
 		internal const uint DiskSignature = 0x01B8;
-		internal const uint PrimaryPartitions = 0x01BE;
+		internal const uint FirstPartition = 0x01BE;
 		internal const uint MBRSignature = 0x01FE;
 	}
 
-	internal struct MasterBootConstants
+	internal struct MBRConstant
 	{
 		internal const ushort MBRSignature = 0xAA55;
-		internal const byte BootableIndicator = 0x00;
+		internal const byte Bootable = 0x80;
 		internal const ushort CodeAreaSize = 446;
+		internal const byte PartitionSize = 16;
 	}
 
 	internal struct PartitionRecord
@@ -134,34 +135,35 @@ namespace Mosa.DeviceSystem
 		{
 			valid = false;
 
-			if (diskDevice.BlockSize != 512) { return false; } // only going to work with 512 sector sizes
+			if (diskDevice.BlockSize != 512) return false;  // only going to work with 512 sector sizes
+			if (diskDevice.TotalBlocks < 3) return false;
 
 			BinaryFormat masterboot = new BinaryFormat(diskDevice.ReadBlock(0, 1));
 
-			ushort mbrsignature = masterboot.GetUShort(MasterBootRecord.MBRSignature);
-			diskSignature = masterboot.GetUInt(MasterBootRecord.DiskSignature);
+			if (masterboot.GetUShort(MBR.MBRSignature) != MBRConstant.MBRSignature)
+				return false;
 
-			valid = (mbrsignature == MasterBootConstants.MBRSignature);
+			valid = true;
 
-			if (valid) {
-				for (uint index = 0; index < MaxMBRPartitions; index++) {
-					uint offset = MasterBootRecord.PrimaryPartitions + (index * 16);
+			diskSignature = masterboot.GetUInt(MBR.DiskSignature);
 
-					GenericPartition partition = new GenericPartition(index);
+			for (uint index = 0; index < MaxMBRPartitions; index++) {
+				uint offset = MBR.FirstPartition + (index * MBRConstant.PartitionSize);
 
-					partition.Bootable = masterboot.GetByte(offset + PartitionRecord.Status) == 0x80;
-					partition.PartitionType = masterboot.GetByte(offset + PartitionRecord.PartitionType);
-					partition.StartLBA = masterboot.GetUInt(offset + PartitionRecord.LBA);
-					partition.TotalBlocks = masterboot.GetUInt(offset + PartitionRecord.Sectors);
+				GenericPartition partition = new GenericPartition(index);
 
-					Partitions[index] = partition;
-				}
+				partition.Bootable = masterboot.GetByte(offset + PartitionRecord.Status) == MBRConstant.Bootable;
+				partition.PartitionType = masterboot.GetByte(offset + PartitionRecord.PartitionType);
+				partition.StartLBA = masterboot.GetUInt(offset + PartitionRecord.LBA);
+				partition.TotalBlocks = masterboot.GetUInt(offset + PartitionRecord.Sectors);
 
-				//TODO: Extended Partitions
+				Partitions[index] = partition;
 			}
 
-			code = new byte[MasterBootConstants.CodeAreaSize];
-			for (uint index = 0; index < MasterBootConstants.CodeAreaSize; index++)
+			//TODO: Extended Partitions
+
+			code = new byte[MBRConstant.CodeAreaSize];
+			for (uint index = 0; index < MBRConstant.CodeAreaSize; index++)
 				code[index] = masterboot.GetByte(index);
 
 			return valid;
@@ -178,16 +180,16 @@ namespace Mosa.DeviceSystem
 
 			BinaryFormat masterboot = new BinaryFormat(new byte[512]);
 
-			masterboot.SetUInt(MasterBootRecord.DiskSignature, diskSignature);
-			masterboot.SetUShort(MasterBootRecord.MBRSignature, MasterBootConstants.MBRSignature);
+			masterboot.SetUInt(MBR.DiskSignature, diskSignature);
+			masterboot.SetUShort(MBR.MBRSignature, MBRConstant.MBRSignature);
 
 			if (code != null)
-				for (uint index = 0; ((index < MasterBootConstants.CodeAreaSize) && (index < code.Length)); index++)
+				for (uint index = 0; ((index < MBRConstant.CodeAreaSize) && (index < code.Length)); index++)
 					masterboot.SetByte(index, code[index]);
 
 			for (uint index = 0; index < MaxMBRPartitions; index++)
 				if (Partitions[index].TotalBlocks != 0) {
-					uint offset = MasterBootRecord.PrimaryPartitions + (index * 16);
+					uint offset = MBR.FirstPartition + (index * 16);
 					masterboot.SetByte(offset + PartitionRecord.Status, (byte)(Partitions[index].Bootable ? 0x80 : 0x00));
 					masterboot.SetByte(offset + PartitionRecord.PartitionType, Partitions[index].PartitionType);
 					masterboot.SetUInt(offset + PartitionRecord.LBA, Partitions[index].StartLBA);
