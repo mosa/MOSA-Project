@@ -15,7 +15,7 @@ namespace Mosa.DeviceDrivers.ISA
 	/// <summary>
 	/// Standard Keyboard Device Driver
 	/// </summary>
-	[ISADeviceSignature(AutoLoad = true, BasePort = 0x60, PortRange = 1, AltBasePort = 0x64, AltPortRange = 1, IRQ = 1, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[ISADeviceDriver(AutoLoad = true, BasePort = 0x60, PortRange = 1, AltBasePort = 0x64, AltPortRange = 1, IRQ = 1, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class StandardKeyboard : HardwareDevice, IDevice, IHardwareDevice, IKeyboardDevice
 	{
         /// <summary>

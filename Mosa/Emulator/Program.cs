@@ -46,8 +46,9 @@ namespace Mosa.Emulator
 			// Initialize the driver system
 			Mosa.DeviceSystem.Setup.Initialize();
 
-			// Initialize the device driver registry
-			Mosa.DeviceDrivers.Setup.Initialize(Mosa.DeviceSystem.Setup.DeviceDriverRegistry);
+			// Registry device drivers
+			Mosa.DeviceSystem.Setup.DeviceDriverRegistry.RegisterBuiltInDeviceDrivers();
+			Mosa.DeviceSystem.Setup.DeviceDriverRegistry.RegisterDeviceDrivers(typeof(Mosa.DeviceDrivers.ISA.CMOS).Module.Assembly);
 
 			// Set the interrupt handler
 			Mosa.DeviceSystem.HAL.SetInterruptHandler(Mosa.DeviceSystem.Setup.ResourceManager.InterruptManager.ProcessInterrupt);
@@ -70,7 +71,7 @@ namespace Mosa.Emulator
 			// Create ram disk device
 			Mosa.EmulatedDevices.Synthetic.RamDiskDevice ramDiskDevice = new Mosa.EmulatedDevices.Synthetic.RamDiskDevice(1024 * 1024 * 10 / 512);
 
-			// Added the emulated ram disk device to the device drivers
+			// Add emulated ram disk device to the device drivers
 			Mosa.DeviceSystem.Setup.DeviceManager.Add(ramDiskDevice);
 
 			// Create master boot block record
@@ -319,7 +320,6 @@ namespace Mosa.Emulator
 
 			//return;
 		}
-
 
 	}
 }

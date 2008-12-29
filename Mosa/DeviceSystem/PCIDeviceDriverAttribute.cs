@@ -15,13 +15,12 @@ namespace Mosa.DeviceSystem
 	/// 
 	/// </summary>
 	[System.AttributeUsage(System.AttributeTargets.All | System.AttributeTargets.Property, AllowMultiple = true)]
-	public class PCIDeviceSignatureAttribute : System.Attribute
+	public class PCIDeviceDriverAttribute : System.Attribute, IDeviceDriverAttribute
 	{
 		/// <summary>
 		/// 
 		/// </summary>
-		public PlatformArchitecture Platforms = PlatformArchitecture.None;
-
+		protected PlatformArchitecture platforms;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -99,6 +98,10 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		protected byte subClassCode;
 
+		/// <summary>
+		/// </summary>
+		/// <value>The sub class code.</value>
+		public PlatformArchitecture Platforms { get { return platforms; } set { platforms = value; } }
 		/// <summary>
 		/// Gets or sets the device ID.
 		/// </summary>
@@ -192,9 +195,9 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PCIDeviceSignatureAttribute"/> class.
+		/// Initializes a new instance of the <see cref="PCIDeviceDriverAttribute"/> class.
 		/// </summary>
-		public PCIDeviceSignatureAttribute() { fields = 0; }
+		public PCIDeviceDriverAttribute() { fields = 0; }
 
 		/// <summary>
 		/// Compares to.

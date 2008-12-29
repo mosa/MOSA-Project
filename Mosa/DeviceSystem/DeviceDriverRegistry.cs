@@ -25,7 +25,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		protected LinkedList<IDeviceDriverSignature> deviceDrivers;
+		protected LinkedList<DeviceDriver> deviceDrivers;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeviceDriverRegistry"/> class.
@@ -34,16 +34,17 @@ namespace Mosa.DeviceSystem
 		public DeviceDriverRegistry(PlatformArchitecture platformArchitecture)
 		{
 			this.platformArchitecture = platformArchitecture;
-			deviceDrivers = new LinkedList<IDeviceDriverSignature>();
+			deviceDrivers = new LinkedList<DeviceDriver>();
 		}
 
 		/// <summary>
 		/// Adds the specified device driver attribute.
 		/// </summary>
 		/// <param name="deviceDriverAttribute">The device driver attribute.</param>
-		public void Add(IDeviceDriverSignature deviceDriverAttribute)
+		/// <param name="driverType">Type of the driver.</param>
+		public void Add(IDeviceDriverAttribute deviceDriverAttribute, System.Type driverType)
 		{
-			deviceDrivers.Add(deviceDriverAttribute);
+			deviceDrivers.Add(new DeviceDriver(deviceDriverAttribute, driverType));
 		}
 
 		/// <summary>
@@ -51,57 +52,66 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="pciDevice">The pci device.</param>
 		/// <returns></returns>
-		public IPCIDeviceDriverSignature FindDriver(PCIDevice pciDevice)
+		public DeviceDriver FindDriver(PCIDevice pciDevice)
 		{
-			IPCIDeviceDriverSignature bestDeviceDriverAttribute = null;
+			DeviceDriver bestDeviceDriver = null;
 			int bestPriority = System.Int32.MaxValue;
 
-			foreach (IDeviceDriverSignature deviceDriverAttribute in deviceDrivers)
-			{
-				if (deviceDriverAttribute is IPCIDeviceDriverSignature)
-				{
-					IPCIDeviceDriverSignature pciDeviceDriverAttribute = deviceDriverAttribute as IPCIDeviceDriverSignature;
-					if ((pciDeviceDriverAttribute.Priority != 0) && (pciDeviceDriverAttribute.Priority < bestPriority))
-					{
-						if (pciDeviceDriverAttribute.CompareTo(pciDevice))
-						{
-							bestDeviceDriverAttribute = pciDeviceDriverAttribute;
+			foreach (DeviceDriver deviceDriver in deviceDrivers) {
+				if (deviceDriver.Attribute is PCIDeviceDriverAttribute) {
+					PCIDeviceDriverAttribute pciDeviceDriverAttribute = deviceDriver.Attribute as PCIDeviceDriverAttribute;
+					if ((pciDeviceDriverAttribute.Priority != 0) && (pciDeviceDriverAttribute.Priority < bestPriority)) {
+						if (pciDeviceDriverAttribute.CompareTo(pciDevice)) {
+							bestDeviceDriver = deviceDriver;
 							bestPriority = pciDeviceDriverAttribute.Priority;
 						}
 					}
 				}
 			}
 
-			return bestDeviceDriverAttribute;
+			return bestDeviceDriver;
 		}
 
 		/// <summary>
 		/// Gets the ISA device drivers.
 		/// </summary>
 		/// <returns></returns>
-		public LinkedList<IISADeviceDriverSignature> GetISADeviceDrivers()
+		public LinkedList<DeviceDriver> GetISADeviceDrivers()
 		{
-			LinkedList<IISADeviceDriverSignature> isaDeviceDrivers = new LinkedList<IISADeviceDriverSignature>();
+			LinkedList<DeviceDriver> isaDeviceDrivers = new LinkedList<DeviceDriver>();
 
-			foreach (IDeviceDriverSignature deviceDriverAttribute in deviceDrivers)
-				if (deviceDriverAttribute is IISADeviceDriverSignature)
-					isaDeviceDrivers.Add(deviceDriverAttribute as IISADeviceDriverSignature);
+			foreach (DeviceDriver deviceDriver in deviceDrivers)
+				if (deviceDriver.Attribute is ISADeviceDriverAttribute)
+					isaDeviceDrivers.Add(deviceDriver);
 
 			return isaDeviceDrivers;
+		}
+
+		/// <summary>
+		/// Registers the build in device drivers.
+		/// </summary>
+		public void RegisterBuiltInDeviceDrivers()
+		{
+			System.Reflection.Assembly assemblyInfo = typeof(DeviceDriverRegistry).Module.Assembly;
+			RegisterDeviceDrivers(assemblyInfo);
+		}
+
+		/// <summary>
+		/// Registers the device drivers.
+		/// </summary>
+		/// <param name="assemblyInfo">The assembly info.</param>
+		public void RegisterDeviceDrivers(System.Reflection.Assembly assemblyInfo)
+		{
+			System.Type[] types = assemblyInfo.GetTypes();
+
+			foreach (System.Type type in types) {
+				object[] attributes = type.GetCustomAttributes(typeof(IDeviceDriverAttribute), false);
+
+				foreach (object attribute in attributes)
+					if (((attribute as IDeviceDriverAttribute).Platforms & platformArchitecture) != 0)
+						Add(attribute as IDeviceDriverAttribute, type);
+			}
 		}
 	}
 
 }
-
-
-//public void StartDrivers(IDeviceManager deviceManager, IResourceManager resourceManager)
-//{
-//    foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable())) {
-//        PCIDevice pciDevice = device as PCIDevice;
-//        PCIHardwareDevice pciHardwareDevice = CreateDevice(pciDevice);
-//        if (pciHardwareDevice != null)
-//            pciDevice.Start(deviceManager, resourceManager, pciHardwareDevice);
-//        else
-//            pciDevice.SetNoDriverFound();
-//    }
-//}

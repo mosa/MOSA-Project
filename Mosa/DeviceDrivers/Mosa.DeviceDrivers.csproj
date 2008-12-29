@@ -84,9 +84,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Setup.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ISA\CMOS.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -127,66 +124,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ScanCodeMap\US.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISADeviceDriveSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\PCIDeviceDriveSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\Setup.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\CMOSSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\DMA8BitSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\FloppyDiskControllerPrimarySignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\FloppyDiskControllerSecondarySignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\IDEControllerPrimarySignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\IDEControllerSecondarySignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\PCIControllerSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\PICSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\PITSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\Serial1Signature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\Serial2Signature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\Serial3Signature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\Serial4Signature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\StandardKeyboardSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\ISA\VGATextSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\PCI\GenericVGASignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signatures\PCI\VMwareSVGAIISignature.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

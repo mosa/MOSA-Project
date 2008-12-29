@@ -86,8 +86,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CHS.cs" />
-    <Compile Include="ISADeviceSignatureAttribute.cs" />
-    <Compile Include="PCIDeviceSignatureAttribute.cs" />
+    <Compile Include="DeviceDriver.cs" />
+    <Compile Include="ISADeviceDriverAttribute.cs" />
+    <Compile Include="PCIDeviceDriverAttribute.cs" />
     <Compile Include="GUIDPartitionTable.cs" />
     <Compile Include="PartitionType.cs" />
     <Compile Include="VDI.cs" />
@@ -144,7 +145,7 @@
     <Compile Include="IDevice.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IDeviceDriverSignature.cs">
+    <Compile Include="IDeviceDriverAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IDeviceManager.cs">
@@ -183,9 +184,6 @@
     <Compile Include="IIOPorts.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IISADeviceDriverSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IKeyboard.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -214,9 +212,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IPCIController.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IPCIDeviceDriverSignature.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IPixelGraphicsDevice.cs">

@@ -13,13 +13,17 @@ namespace Mosa.DeviceSystem
     /// 
     /// </summary>
 	[System.AttributeUsage(System.AttributeTargets.All | System.AttributeTargets.Property, AllowMultiple = true)]
-	public class ISADeviceSignatureAttribute : System.Attribute
+	public class ISADeviceDriverAttribute : System.Attribute, IDeviceDriverAttribute
 	{
-        /// <summary>
-        /// 
-        /// </summary>
-		public PlatformArchitecture Platforms = PlatformArchitecture.None;
-        /// <summary>
+		/// <summary>
+		/// 
+		/// </summary>
+		protected PlatformArchitecture platforms;
+		/// <summary>
+		/// </summary>
+		/// <value></value>
+		public PlatformArchitecture Platforms { get { return platforms; } set { platforms = value; } }	
+		/// <summary>
         /// 
         /// </summary>
 		public ushort BasePort = 0x00;

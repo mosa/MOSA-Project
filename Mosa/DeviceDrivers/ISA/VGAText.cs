@@ -15,7 +15,7 @@ namespace Mosa.DeviceDrivers.ISA
 	/// <summary>
 	/// VGA Text Device Driver
 	/// </summary>
-	[ISADeviceSignature(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[ISADeviceDriver(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.Both_x86_and_x64)]
 	public class VGAText : HardwareDevice, IDevice, ITextDevice
 	{
 		#region Definitions
@@ -364,7 +364,7 @@ namespace Mosa.DeviceDrivers.ISA
 			for (byte i = 0; i < 21; i++) {
 				inputStatus1ReadB.Read8();
 				attributeAddress.Write8(i);
-				attributeAddress.Write8(settings[52 + i]);
+				attributeAddress.Write8(settings[40 + i]); // TODO: Double check
 			}
 
 			// Lock 16-color palette and unblank display */

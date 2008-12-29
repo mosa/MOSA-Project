@@ -12,14 +12,8 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// 
 	/// </summary>
-	public interface IDeviceDriverSignature
+	public interface IDeviceDriverAttribute
 	{
-		/// <summary>
-		/// Creates the instance.
-		/// </summary>
-		/// <returns></returns>
-		IHardwareDevice CreateInstance();
-
 		/// <summary>
 		/// 
 		/// </summary>

@@ -75,13 +75,16 @@ namespace Mosa.DeviceSystem
 			foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable())) {
 				PCIDevice pciDevice = device as PCIDevice;
 
-				IPCIDeviceDriverSignature pciDeviceDriverAttribute = deviceDriverRegistry.FindDriver(pciDevice);
-				IHardwareDevice hardwareDevice = pciDeviceDriverAttribute.CreateInstance();
+				DeviceDriver deviceDriver = deviceDriverRegistry.FindDriver(pciDevice);
 
-				if (hardwareDevice != null)
-					pciDevice.Start(hardwareDevice, deviceManager, resourceManager);
-				else
-					pciDevice.SetNoDriverFound();
+				if (deviceDriver != null) {
+					IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
+
+					if (hardwareDevice != null)
+						pciDevice.Start(hardwareDevice, deviceManager, resourceManager);
+					else
+						pciDevice.SetNoDriverFound();
+				}
 			}
 		}
 
@@ -90,24 +93,26 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		static public void StartISADevices()
 		{
-			LinkedList<IISADeviceDriverSignature> isaDeviceDrivers = deviceDriverRegistry.GetISADeviceDrivers();
+			LinkedList<DeviceDriver> deviceDrivers = deviceDriverRegistry.GetISADeviceDrivers();
 
-			foreach (IISADeviceDriverSignature isaDeviceDriver in isaDeviceDrivers)
-				if (isaDeviceDriver.AutoLoad) {
-					IIOPortRegion[] ioPortRegions = new IIOPortRegion[(isaDeviceDriver.AltBasePort != 0x00) ? 2 : 1];
-					IMemoryRegion[] memoryRegion = new IMemoryRegion[(isaDeviceDriver.BaseAddress != 0x00) ? 1 : 0];
+			foreach (DeviceDriver deviceDriver in deviceDrivers) {
+				ISADeviceDriverAttribute driverAtttribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
 
-					ioPortRegions[0] = new IOPortRegion(isaDeviceDriver.BasePort, isaDeviceDriver.PortRange);
+				if (driverAtttribute.AutoLoad) {
+					IIOPortRegion[] ioPortRegions = new IIOPortRegion[(driverAtttribute.AltBasePort != 0x00) ? 2 : 1];
+					IMemoryRegion[] memoryRegion = new IMemoryRegion[(driverAtttribute.BaseAddress != 0x00) ? 1 : 0];
 
-					if (isaDeviceDriver.AltBasePort != 0x00)
-						ioPortRegions[1] = new IOPortRegion(isaDeviceDriver.AltBasePort, isaDeviceDriver.AltPortRange);
+					ioPortRegions[0] = new IOPortRegion(driverAtttribute.BasePort, driverAtttribute.PortRange);
 
-					if (isaDeviceDriver.BaseAddress != 0x00)
-						memoryRegion[0] = new MemoryRegion(isaDeviceDriver.BaseAddress, isaDeviceDriver.AddressRange);
+					if (driverAtttribute.AltBasePort != 0x00)
+						ioPortRegions[1] = new IOPortRegion(driverAtttribute.AltBasePort, driverAtttribute.AltPortRange);
 
-					IHardwareDevice hardwareDevice = isaDeviceDriver.CreateInstance();
+					if (driverAtttribute.BaseAddress != 0x00)
+						memoryRegion[0] = new MemoryRegion(driverAtttribute.BaseAddress, driverAtttribute.AddressRange);
 
-					IHardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions, memoryRegion, new InterruptHandler(resourceManager.InterruptManager, isaDeviceDriver.IRQ, hardwareDevice));
+					IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
+
+					IHardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions, memoryRegion, new InterruptHandler(resourceManager.InterruptManager, driverAtttribute.IRQ, hardwareDevice));
 
 					hardwareDevice.Setup(hardwareResources);
 
@@ -128,8 +133,8 @@ namespace Mosa.DeviceSystem
 						}
 					}
 				}
+			}
 		}
-
 
 	}
 }
