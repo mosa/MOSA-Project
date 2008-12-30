@@ -78,9 +78,11 @@
     </Reference>
     <Reference Include="MbUnit">
       <Name>MbUnit</Name>
+      <HintPath>..\..\..\..\3rdParty\MbUnit.dll</HintPath>
     </Reference>
     <Reference Include="Gallio">
       <Name>Gallio</Name>
+      <HintPath>..\..\..\..\3rdParty\Gallio.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
