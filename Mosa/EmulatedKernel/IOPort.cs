@@ -14,18 +14,15 @@ namespace Mosa.EmulatedKernel
     /// <summary>
     /// 
     /// </summary>
-	public class EmulatedIOPort : IReadWriteIOPort
+	public class IOPort : IReadWriteIOPort
 	{
-        /// <summary>
-        /// 
-        /// </summary>
-		protected ushort port;
+		private ushort port;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="EmulatedIOPort"/> class.
+		/// Initializes a new instance of the <see cref="IOPort"/> class.
 		/// </summary>
 		/// <param name="port">The port.</param>
-		public EmulatedIOPort(ushort port) { this.port = port; }
+		public IOPort(ushort port) { this.port = port; }
 
 		/// <summary>
 		/// Gets the address.

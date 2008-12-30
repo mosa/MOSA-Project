@@ -198,9 +198,9 @@ namespace Mosa.EmulatedDevices.Emulated
 		public void Write8(ushort port, byte data)
 		{
 			switch (port - ioBase) {
-				case 0x1C: miscellaneous = data; return;
 				case 0x04: WriteCommand(data); return;
 				case 0x05: WriteIndex(data); return;
+				case 0x1C: miscellaneous = data; return;
 				case 0x24: WriteCommandColor(data); return;
 				case 0x25: WriteIndex(data); return;
 				default: return;

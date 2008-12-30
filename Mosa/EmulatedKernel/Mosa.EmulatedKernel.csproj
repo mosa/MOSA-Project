@@ -92,7 +92,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmulatedIOPort.cs">
+    <Compile Include="IOPort.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HardwareAbstraction.cs">
@@ -110,13 +110,13 @@
     <Compile Include="IOPortHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MemoryBlock.cs">
+    <Compile Include="Memory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MemoryDispatch.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MemoryRange.cs">
+    <Compile Include="MemoryHandler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PCIBus.cs">

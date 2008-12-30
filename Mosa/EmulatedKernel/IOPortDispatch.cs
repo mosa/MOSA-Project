@@ -10,43 +10,7 @@
 using Mosa.DeviceSystem;
 
 namespace Mosa.EmulatedKernel
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-	public delegate byte IOPortRead8();
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-	public delegate ushort IOPortRead16();
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-	public delegate uint IOPortRead32();
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="data"></param>
-	public delegate void IOPortWrite8(byte data);
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="data"></param>
-	public delegate void IOPortWrite16(ushort data);
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="data"></param>
-	public delegate void IOPortWrite32(uint data);
-
+{    
     /// <summary>
     /// 
     /// </summary>
@@ -106,7 +70,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public static IReadWriteIOPort RegisterIOPort(ushort port)
 		{
-			return new EmulatedIOPort(port);
+			return new IOPort(port);
 		}
 
 		/// <summary>
@@ -117,7 +81,5 @@ namespace Mosa.EmulatedKernel
 		{
 			portHandler.Register(device);
 		}
-
 	}
-
 }

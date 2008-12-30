@@ -13,19 +13,6 @@ using Mosa.EmulatedKernel;
 
 namespace Mosa.EmulatedKernel
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="address"></param>
-	/// <returns></returns>
-	public delegate byte MemoryRead8(uint address);
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="address"></param>
-	/// <param name="value"></param>
-	public delegate void MemoryWrite8(uint address, byte value);
 
 	/// <summary>
 	/// 
@@ -35,7 +22,7 @@ namespace Mosa.EmulatedKernel
 		/// <summary>
 		/// 
 		/// </summary>
-		private static List<MemoryRange> dispatches = new List<MemoryRange>();
+		private static List<MemoryHandler> dispatches = new List<MemoryHandler>();
 
 		/// <summary>
 		/// Registers the memory.
@@ -46,7 +33,7 @@ namespace Mosa.EmulatedKernel
 		/// <param name="write8">The write8 delegate.</param>
 		public static void RegisterMemory(uint address, uint size, MemoryRead8 read8, MemoryWrite8 write8)
 		{
-			dispatches.Add(new MemoryRange(address, size, read8, write8));
+			dispatches.Add(new MemoryHandler(address, size, read8, write8));
 		}
 
 		/// <summary>
@@ -54,9 +41,9 @@ namespace Mosa.EmulatedKernel
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
-		public static MemoryRange Find(uint address)
+		public static MemoryHandler Find(uint address)
 		{
-			foreach (MemoryRange memoryRange in dispatches)
+			foreach (MemoryHandler memoryRange in dispatches)
 				if (memoryRange.Contains(address))
 					return memoryRange;
 
@@ -70,7 +57,7 @@ namespace Mosa.EmulatedKernel
 		/// <param name="value">The value.</param>
 		public static void Write8(uint address, byte value)
 		{
-			MemoryRange memoryRange = Find(address);
+			MemoryHandler memoryRange = Find(address);
 
 			if (memoryRange != null)
 				if (memoryRange.write8 != null)
@@ -86,7 +73,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public static byte Read8(uint address)
 		{
-			MemoryRange memoryRange = Find(address);
+			MemoryHandler memoryRange = Find(address);
 
 			if (memoryRange != null)
 				if (memoryRange.read8 != null)
@@ -102,7 +89,7 @@ namespace Mosa.EmulatedKernel
 		/// <param name="value">The value.</param>
 		public static void Write16(uint address, ushort value)
 		{
-			MemoryRange memoryRange = Find(address);
+			MemoryHandler memoryRange = Find(address);
 
 			if (memoryRange != null)
 				if (memoryRange.write8 != null) {
@@ -120,7 +107,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public static ushort Read16(uint address)
 		{
-			MemoryRange memoryRange = Find(address);
+			MemoryHandler memoryRange = Find(address);
 
 			if (memoryRange != null)
 				if (memoryRange.read8 != null)
@@ -136,7 +123,7 @@ namespace Mosa.EmulatedKernel
         /// <param name="value">The value.</param>
         public static void Write24(uint address, uint value)
         {
-            MemoryRange memoryRange = Find(address);
+            MemoryHandler memoryRange = Find(address);
 
             if (memoryRange != null)
                 if (memoryRange.write8 != null)
@@ -156,7 +143,7 @@ namespace Mosa.EmulatedKernel
         /// <returns></returns>
         public static ushort Read24(uint address)
         {
-            MemoryRange memoryRange = Find(address);
+            MemoryHandler memoryRange = Find(address);
 
             if (memoryRange != null)
                 if (memoryRange.read8 != null)
@@ -172,7 +159,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public static ushort Read32(uint address)
 		{
-			MemoryRange memoryRange = Find(address);
+			MemoryHandler memoryRange = Find(address);
 
 			if (memoryRange != null)
 				if (memoryRange.write8 != null)
@@ -188,7 +175,7 @@ namespace Mosa.EmulatedKernel
 		/// <param name="value">The value.</param>
 		public static void Write32(uint address, uint value)
 		{
-			MemoryRange memoryRange = Find(address);
+			MemoryHandler memoryRange = Find(address);
 
 			if (memoryRange != null)
 				if (memoryRange.write8 != null) {
@@ -208,7 +195,17 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public static IMemory RegisterMemory(uint address, uint size)
 		{
-			return new MemoryBlock(address, size);
+			return new Memory(address, size);
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public delegate byte MemoryRead8(uint address);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public delegate void MemoryWrite8(uint address, byte value);
 	}
 }

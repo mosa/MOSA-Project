@@ -17,7 +17,7 @@ namespace Mosa.EmulatedKernel
 	public interface IIOPortDevice
 	{
 		/// <summary>
-		/// Read3s the specified port.
+		/// Reads the specified port.
 		/// </summary>
 		/// <param name="port"></param>
 		/// <returns></returns>
@@ -31,7 +31,7 @@ namespace Mosa.EmulatedKernel
 		ushort Read16(ushort port);
 
 		/// <summary>
-		/// Read3s the specified port.
+		/// Reads the specified port.
 		/// </summary>
 		/// <param name="port">The port.</param>
 		/// <returns></returns>

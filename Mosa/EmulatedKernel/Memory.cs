@@ -14,29 +14,18 @@ namespace Mosa.EmulatedKernel
 	/// <summary>
 	/// 
 	/// </summary>
-	public class MemoryBlock : IMemory
+	public class Memory : IMemory
 	{
-		/// <summary>
-		/// 
-		/// </summary>
 		private uint address;
-
-		/// <summary>
-		/// 
-		/// </summary>
 		private uint size;
-
-		/// <summary>
-		/// 
-		/// </summary>
 		private uint end;
 
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="Memory"/> class.
 		/// </summary>
-		/// <param name="address"></param>
-		/// <param name="size"></param>
-		public MemoryBlock(uint address, uint size)
+		/// <param name="address">The address.</param>
+		/// <param name="size">The size.</param>
+		public Memory(uint address, uint size)
 		{
 			this.address = address;
 			this.size = size;
@@ -44,19 +33,21 @@ namespace Mosa.EmulatedKernel
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the address.
 		/// </summary>
+		/// <value>The address.</value>
 		public uint Address { get { return address; } }
 
 		/// <summary>
-		/// 
+		/// Gets the size.
 		/// </summary>
+		/// <value>The size.</value>
 		public uint Size { get { return size; } }
 
 		/// <summary>
-		/// 
+		/// Gets or sets the <see cref="System.Byte"/> at the specified index.
 		/// </summary>
-		/// <param name="index"></param>
+		/// <value></value>
 		/// <returns></returns>
 		public byte this[uint index]
 		{
