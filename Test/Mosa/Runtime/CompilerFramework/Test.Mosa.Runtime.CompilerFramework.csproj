@@ -91,11 +91,6 @@
       <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Mosa\Tools\Compiler\mosacl.csproj">
-      <Name>mosacl</Name>
-      <Project>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Mosa\Platforms\x86\Mosa.Platforms.x86.csproj">
       <Name>Mosa.Platforms.x86</Name>
       <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
@@ -110,6 +105,10 @@
       <Name>Mosa.Jit.SimpleJit</Name>
       <Project>{57399D8B-1B6C-4169-A340-B804F240B450}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Mosa\Tools\Compiler\Mosa.Tools.Compiler.csproj">
+      <Project>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</Project>
+      <Name>Mosa.Tools.Compiler</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
