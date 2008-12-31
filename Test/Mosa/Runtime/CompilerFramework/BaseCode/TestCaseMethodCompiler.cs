@@ -56,11 +56,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
         public override Stream RequestCodeStream()
         {
-            Stream stream = base.RequestCodeStream();
-
-            // Save the start address of the method
-            this.Method.Address = new IntPtr(stream.Position);
-
+            LinkerStream stream = base.RequestCodeStream() as LinkerStream;
+            VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
+            if (this.Method.Address == IntPtr.Zero)
+                this.Method.Address = new IntPtr(vms.Base.ToInt64() + vms.Position);
             return stream;
         }
 

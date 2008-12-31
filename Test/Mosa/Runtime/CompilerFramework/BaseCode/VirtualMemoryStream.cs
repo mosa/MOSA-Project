@@ -79,12 +79,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         #region Properties
 
         /// <summary>
-        /// Retrieves the stream position as a physical address.
+        /// Gets the memory base pointer.
         /// </summary>
-        public override unsafe long Position
+        /// <value>The memory base pointer.</value>
+        public IntPtr Base
         {
-            get { return (long)_memory + base.Position; }
-            set { base.Position = value - (long)_memory; }
+            get { return this._memory; }
         }
 
         #endregion // Properties
