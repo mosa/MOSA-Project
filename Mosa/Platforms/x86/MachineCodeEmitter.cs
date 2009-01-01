@@ -931,11 +931,23 @@ namespace Mosa.Platforms.x86
 
         void ICodeEmitter.Div(Operand dest, Operand src)
         {
+            if (src is ConstantOperand)
+            {
+                Operand newsrc = new RegisterOperand(src.Type, GeneralPurposeRegister.ECX);
+                Emit(newsrc, src, cd_mov);
+                src = newsrc;
+            }
             Emit(src, null, cd_div);
         }
 
         void ICodeEmitter.IDiv(Operand dest, Operand src)
         {
+            if (src is ConstantOperand)
+            {
+                Operand newsrc = new RegisterOperand(src.Type, GeneralPurposeRegister.ECX);
+                Emit(newsrc, src, cd_mov);
+                src = newsrc;
+            }
             Emit(src, null, cd_idiv);
         }
         
