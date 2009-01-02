@@ -45,12 +45,6 @@ namespace Mosa.DeviceSystem
 		public bool Stop() { return false; }
 
 		/// <summary>
-		/// Creates the sub devices.
-		/// </summary>
-		/// <returns></returns>
-		public abstract LinkedList<IDevice> CreateSubDevices();
-
-		/// <summary>
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>

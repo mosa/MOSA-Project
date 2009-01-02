@@ -56,23 +56,41 @@ namespace Mosa.Emulator
 			// Start the driver system
 			Mosa.DeviceSystem.Setup.Start();
 
-			// Create emulated keyboard device
+			// Create pci controller manager
+			PCIControllerManager pciControllerManager = new PCIControllerManager(Mosa.DeviceSystem.Setup.DeviceManager);
+
+			// Create pci controller devices
+			pciControllerManager.CreatePartitionDevices();
+
+			// Create synthetic keyboard device
 			Mosa.EmulatedDevices.Synthetic.Keyboard keyboard = new Mosa.EmulatedDevices.Synthetic.Keyboard();
 
 			// Added the emulated keyboard device to the device drivers
 			Mosa.DeviceSystem.Setup.DeviceManager.Add(keyboard);
 
-			// Create emulated graphic pixel device
+			// Create synthetic graphic pixel device
 			Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice pixelGraphicDevice = new Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice(500, 500);
 
-			// Added the emulated graphic device to the device drivers
+			// Added the synthetic graphic device to the device drivers
 			Mosa.DeviceSystem.Setup.DeviceManager.Add(pixelGraphicDevice);
 
-			// Create ram disk device
+			// Create synthetic ram disk device
 			Mosa.EmulatedDevices.Synthetic.RamDiskDevice ramDiskDevice = new Mosa.EmulatedDevices.Synthetic.RamDiskDevice(1024 * 1024 * 10 / 512);
 
 			// Add emulated ram disk device to the device drivers
 			Mosa.DeviceSystem.Setup.DeviceManager.Add(ramDiskDevice);
+
+			// Create disk controller manager
+			DiskControllerManager diskControllerManager = new DiskControllerManager(Mosa.DeviceSystem.Setup.DeviceManager);
+	
+			// Create disk devices from disk controller devices
+			diskControllerManager.CreateDiskDevices();
+
+			// Get the text VGA device
+			LinkedList<IDevice> devices = Mosa.DeviceSystem.Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText"));
+
+			// Create a screen interface to the text VGA device
+			ITextScreen screen = new TextScreen((ITextDevice)devices.First.value);
 
 			// Create master boot block record
 			MasterBootBlock mbr = new MasterBootBlock(ramDiskDevice);
@@ -98,12 +116,6 @@ namespace Mosa.Emulator
 			FATFileSystem fat12 = new FATFileSystem(partitionDevice);
 			fat12.Format(fatSettings);
 
-			// Get the text VGA device
-			LinkedList<IDevice> devices = Mosa.DeviceSystem.Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText"));
-
-			// Create a screen interface to the text VGA device
-			ITextScreen screen = new TextScreen((ITextDevice)devices.First.value);
-	
 			// Create partition manager
 			PartitionManager partitionManager = new PartitionManager(Mosa.DeviceSystem.Setup.DeviceManager);
 

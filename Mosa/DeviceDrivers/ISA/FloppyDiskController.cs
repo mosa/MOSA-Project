@@ -338,32 +338,6 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// Creates the sub devices.
-		/// </summary>
-		/// <returns></returns>
-		public override LinkedList<IDevice> CreateSubDevices()
-		{
-			LinkedList<IDevice> devices = new LinkedList<IDevice>();
-
-			for (uint drive = 0; drive < DrivesPerController; drive++) {
-				if (floppyDrives[drive].Type != FloppyDriveType.None) {
-					Open(drive);
-
-					//TextMode.Write (base.name);
-					//TextMode.Write (": Disk #");
-					//TextMode.Write ((int)drive);
-					//TextMode.Write (" - ", (int)floppyDrives[drive].KiloByteSize);
-					//TextMode.WriteLine ("KB, media sector/track=", (int)floppyMedia[drive].SectorsPerTrack);
-
-					IDiskDevice diskDevice = new DiskDevice(this, drive, false);
-					devices.Add(diskDevice as IDevice);
-				}
-			}
-
-			return devices;
-		}
-
-		/// <summary>
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
@@ -376,10 +350,16 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <summary>
 		/// Opens the specified drive.
 		/// </summary>
-		/// <param name="drive">The drive.</param>
+		/// <param name="drive">The drive NBR.</param>
 		/// <returns></returns>
 		public bool Open(uint drive)
 		{
+			if (drive > MaximunDriveCount)
+				return false;
+
+			if (floppyDrives[drive].Type != FloppyDriveType.None)
+				return false;
+
 			// clear it
 			floppyMedia[drive].TotalTracks = 0;
 			floppyMedia[drive].SectorsPerTrack = 0;
@@ -449,6 +429,12 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
+		/// Gets the maximun drive count.
+		/// </summary>
+		/// <value>The drive count.</value>
+		public uint MaximunDriveCount { get { return 2; } }
+
+		/// <summary>
 		/// Gets the size of the sector.
 		/// </summary>
 		/// <param name="drive">The drive.</param>
@@ -461,22 +447,28 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <summary>
 		/// Gets the total sectors.
 		/// </summary>
-		/// <param name="drive">The drive.</param>
+		/// <param name="drive">The drive NBR.</param>
 		/// <returns></returns>
 		public uint GetTotalSectors(uint drive)
 		{
+			if (drive > MaximunDriveCount)
+				return 0;
+
 			return floppyMedia[drive].SectorsPerTrack * floppyMedia[drive].TotalTracks * 2;
 		}
 
 		/// <summary>
 		/// Determines whether this instance can write the specified drive NBR.
 		/// </summary>
-		/// <param name="drive">The drive.</param>
+		/// <param name="drive">The drive NBR.</param>
 		/// <returns>
 		/// 	<c>true</c> if this instance can write the specified drive NBR; otherwise, <c>false</c>.
 		/// </returns>
 		public bool CanWrite(uint drive)
 		{
+			if (drive > MaximunDriveCount)
+				return false;
+
 			if (floppyMedia[drive].SectorsPerTrack == 0)
 				return false;
 
@@ -761,12 +753,12 @@ namespace Mosa.DeviceDrivers.ISA
         /// <summary>
         /// Reads the block.
         /// </summary>
-        /// <param name="driveNbr">The drive NBR.</param>
+        /// <param name="drive">The drive NBR.</param>
         /// <param name="block">The block.</param>
         /// <param name="count">The count.</param>
         /// <param name="data">The data.</param>
         /// <returns></returns>
-		public bool ReadBlock(uint driveNbr, uint block, uint count, byte[] data)
+		public bool ReadBlock(uint drive, uint block, uint count, byte[] data)
 		{
 			if (data.Length < count * 512)
 				return false;
@@ -774,13 +766,13 @@ namespace Mosa.DeviceDrivers.ISA
 			try {
 				spinLock.Enter();
 				for (uint index = 0; index < count; index++) {
-					if (!ReadBlock2(driveNbr, block + index, data, index * FDC.BytesPerSector))
+					if (!ReadBlock2(drive, block + index, data, index * FDC.BytesPerSector))
 						return false;
 				}
 				return true;
 			}
 			finally {
-				TurnOffMotor(driveNbr);	//TODO: create timer to turn off drive motors after 1 sec.
+				TurnOffMotor(drive);	//TODO: create timer to turn off drive motors after 1 sec.
 				spinLock.Exit();
 			}
 		}
@@ -788,12 +780,12 @@ namespace Mosa.DeviceDrivers.ISA
         /// <summary>
         /// Writes the block.
         /// </summary>
-        /// <param name="driveNbr">The drive NBR.</param>
+        /// <param name="drive">The drive NBR.</param>
         /// <param name="block">The block.</param>
         /// <param name="count">The count.</param>
         /// <param name="data">The data.</param>
         /// <returns></returns>
-		public bool WriteBlock(uint driveNbr, uint block, uint count, byte[] data)
+		public bool WriteBlock(uint drive, uint block, uint count, byte[] data)
 		{
 			if (data.Length < count * 512)
 				return false;
@@ -801,13 +793,13 @@ namespace Mosa.DeviceDrivers.ISA
 			try {
 				spinLock.Enter();
 				for (uint index = 0; index < count; index++) {
-					if (!WriteBlock2(driveNbr, block + index, 1, data, index * FDC.BytesPerSector))
+					if (!WriteBlock2(drive, block + index, 1, data, index * FDC.BytesPerSector))
 						return false;
 				}
 				return true;
 			}
 			finally {
-				TurnOffMotor(driveNbr);	//TODO: create timer to turn off drive motors after 1 sec.
+				TurnOffMotor(drive);	//TODO: create timer to turn off drive motors after 1 sec.
 				spinLock.Exit();
 			}
 		}
@@ -822,6 +814,9 @@ namespace Mosa.DeviceDrivers.ISA
         /// <returns></returns>
 		protected bool ReadBlock2(uint drive, uint lba, byte[] data, uint offset)
 		{
+			if (drive > MaximunDriveCount)
+				return false;
+
 			byte track = LBAToTrack(drive, lba);
 			byte head = LBAToHead(drive, lba);
 			byte sector = LBAToSector(drive, lba);
@@ -844,7 +839,7 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
         /// <summary>
-        /// Writes the block2.
+        /// Writes the block.
         /// </summary>
         /// <param name="drive">The drive.</param>
         /// <param name="lba">The lba.</param>
@@ -854,6 +849,9 @@ namespace Mosa.DeviceDrivers.ISA
         /// <returns></returns>
 		protected bool WriteBlock2(uint drive, uint lba, uint count, byte[] data, uint offset)
 		{
+			if (drive > MaximunDriveCount)
+				return false;
+			
 			byte track = LBAToTrack(drive, lba);
 			byte head = LBAToHead(drive, lba);
 			byte sector = LBAToSector(drive, lba);

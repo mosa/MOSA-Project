@@ -138,14 +138,10 @@ namespace Mosa.DeviceDrivers.ISA
 			return DeviceDriverStartStatus.Started;
 		}
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-		public override LinkedList<IDevice> CreateSubDevices() { return null; }
-
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Called when an interrupt is received.
+		/// </summary>
+		/// <returns></returns>
 		public override bool OnInterrupt() { return false; }
 
         /// <summary>

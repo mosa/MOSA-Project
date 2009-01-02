@@ -269,12 +269,6 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		public override bool OnInterrupt() { return false; }
 
 		/// <summary>
-		/// Creates the sub devices.
-		/// </summary>
-		/// <returns></returns>
-		public override LinkedList<IDevice> CreateSubDevices() { return null; }
-
-		/// <summary>
 		/// Sends the command.
 		/// </summary>
 		/// <param name="command">The command.</param>

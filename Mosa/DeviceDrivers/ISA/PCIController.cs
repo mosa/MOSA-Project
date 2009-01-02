@@ -92,43 +92,10 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// Creates the sub devices.
-		/// </summary>
-		/// <returns></returns>
-		public override LinkedList<IDevice> CreateSubDevices()
-		{
-			LinkedList<IDevice> devices = new LinkedList<IDevice>();
-
-			for (byte bus = 0; bus < 255; bus++) {
-				for (byte slot = 0; slot < 16; slot++) {
-					for (byte fun = 0; fun < 7; fun++) {
-						if (ProbeDevice(bus, slot, fun)) {
-							devices.Add(new Mosa.DeviceSystem.PCI.PCIDevice(this, bus, slot, fun));
-						}
-					}
-				}
-			}
-
-			return devices;
-		}
-
-		/// <summary>
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
 		public override bool OnInterrupt() { return false; }
-
-		/// <summary>
-		/// Probes the device.
-		/// </summary>
-		/// <param name="bus">The bus.</param>
-		/// <param name="slot">The slot.</param>
-		/// <param name="fun">The fun.</param>
-		/// <returns></returns>
-		protected bool ProbeDevice(byte bus, byte slot, byte fun)
-		{
-			return (ReadConfig32(bus, slot, fun, 0) != 0xFFFFFFFF);
-		}
 
 		/// <summary>
 		/// Gets the index.

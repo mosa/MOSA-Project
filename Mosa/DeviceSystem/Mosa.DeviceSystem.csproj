@@ -88,9 +88,11 @@
     <Compile Include="CHS.cs" />
     <Compile Include="DeviceDriver.cs" />
     <Compile Include="ISADeviceDriverAttribute.cs" />
+    <Compile Include="DiskControllerManager.cs" />
     <Compile Include="PCIDeviceDriverAttribute.cs" />
     <Compile Include="GUIDPartitionTable.cs" />
     <Compile Include="PartitionType.cs" />
+    <Compile Include="PCIControllerManager.cs" />
     <Compile Include="VDI.cs" />
     <Compile Include="DiskGeometry.cs" />
     <Compile Include="PartitionManager.cs" />

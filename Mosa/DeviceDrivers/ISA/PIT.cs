@@ -91,12 +91,6 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// Creates the sub devices.
-		/// </summary>
-		/// <returns></returns>
-		public override LinkedList<IDevice> CreateSubDevices() { return null; }
-
-		/// <summary>
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>

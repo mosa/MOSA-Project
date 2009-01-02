@@ -41,7 +41,6 @@ namespace Mosa.DeviceSystem
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
 		byte ReadConfig8(byte bus, byte slot, byte function, byte register);
-
 		/// <summary>
 		/// Writes to configuraton space
 		/// </summary>

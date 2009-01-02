@@ -121,11 +121,11 @@ namespace Mosa.DeviceSystem
 						if (hardwareDevice.Start() == DeviceDriverStartStatus.Started) {
 							deviceManager.Add(hardwareDevice);
 
-							LinkedList<IDevice> devices = hardwareDevice.CreateSubDevices();
+							//LinkedList<IDevice> devices = hardwareDevice.CreateSubDevices();
 
-							if (devices != null)
-								foreach (IDevice device in devices)
-									deviceManager.Add(device);
+							//if (devices != null)
+							//    foreach (IDevice device in devices)
+							//        deviceManager.Add(device);
 						}
 						else {
 							hardwareResources.DisableIRQ();

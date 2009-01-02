@@ -37,7 +37,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// <summary>
 		/// 
 		/// </summary>
-		protected BaseAddress[] pciBaseAddresses;
+		protected BaseAddress[] baseAddresses;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -113,7 +113,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the base addresses.
 		/// </summary>
 		/// <value>The base addresses.</value>
-		public BaseAddress[] BaseAddresses { get { return pciBaseAddresses; } }
+		public BaseAddress[] BaseAddresses { get { return baseAddresses; } }
 
 		/// <summary>
 		/// Create a new PCIDevice instance at the selected PCI address
@@ -134,7 +134,7 @@ namespace Mosa.DeviceSystem.PCI
 			this.function = fun;
 
 			ioPortRegionCount = memoryRegionCount = 0;
-			this.pciBaseAddresses = new BaseAddress[8];
+			this.baseAddresses = new BaseAddress[8];
 
 			for (byte i = 0; i < 6; i++) {
 				uint address = pciController.ReadConfig32(bus, slot, fun, (byte)(16 + (i * 4)));
@@ -149,24 +149,49 @@ namespace Mosa.DeviceSystem.PCI
 					HAL.EnableAllInterrupts();
 
 					if (address % 2 == 1)
-						pciBaseAddresses[i] = new BaseAddress(AddressRegion.IO, address & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
+						baseAddresses[i] = new BaseAddress(AddressRegion.IO, address & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
 					else
-						pciBaseAddresses[i] = new BaseAddress(AddressRegion.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
+						baseAddresses[i] = new BaseAddress(AddressRegion.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
 				}
 			}
 
 			if ((ClassCode == 0x03) && (SubClassCode == 0x00) && (ProgIF == 0x00)) {
 				// Special case for generic VGA
-				pciBaseAddresses[6] = new BaseAddress(AddressRegion.Memory, 0xA0000, 0x1FFFF, false);
-				pciBaseAddresses[7] = new BaseAddress(AddressRegion.IO, 0x3B0, 0x0F, false);
+				baseAddresses[6] = new BaseAddress(AddressRegion.Memory, 0xA0000, 0x1FFFF, false);
+				baseAddresses[7] = new BaseAddress(AddressRegion.IO, 0x3B0, 0x0F, false);
 			}
 
-			foreach (BaseAddress baseAddress in pciBaseAddresses)
+			foreach (BaseAddress baseAddress in baseAddresses)
 				if (baseAddress != null)
 					switch (baseAddress.Region) {
 						case AddressRegion.IO: ioPortRegionCount++; break;
 						case AddressRegion.Memory: memoryRegionCount++; break;
 					}
+		}
+
+		/// <summary>
+		/// Gets the resources.
+		/// </summary>
+		/// <param name="hardwareDevice">The hardware device.</param>
+		/// <param name="deviceManager">The device manager.</param>
+		/// <param name="resourceManager">The resource manager.</param>
+		/// <returns></returns>
+		public IHardwareResources GetResources(IHardwareDevice hardwareDevice, IDeviceManager deviceManager, IResourceManager resourceManager)
+		{
+			IIOPortRegion[] ioPortRegions = new IIOPortRegion[ioPortRegionCount];
+			IMemoryRegion[] memoryRegion = new IMemoryRegion[memoryRegionCount];
+
+			int ioRegions = 0;
+			int memoryRegions = 0;
+
+			foreach (BaseAddress pciBaseAddress in baseAddresses)
+				switch (pciBaseAddress.Region) {
+					case AddressRegion.IO: ioPortRegions[ioRegions++] = new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size); break;
+					case AddressRegion.Memory: memoryRegion[memoryRegions++] = new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size); break;
+					default: break;
+				}
+
+			return new HardwareResources(resourceManager, ioPortRegions, memoryRegion, new InterruptHandler(resourceManager.InterruptManager, IRQ, hardwareDevice));
 		}
 
 		/// <summary>
@@ -178,20 +203,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// <returns></returns>
 		public bool Start(IHardwareDevice hardwareDevice, IDeviceManager deviceManager, IResourceManager resourceManager)
 		{
-			IIOPortRegion[] ioPortRegions = new IIOPortRegion[ioPortRegionCount];
-			IMemoryRegion[] memoryRegion = new IMemoryRegion[memoryRegionCount];
-
-			int ioRegions = 0;
-			int memoryRegions = 0;
-
-			foreach (BaseAddress pciBaseAddress in pciBaseAddresses)
-				switch (pciBaseAddress.Region) {
-					case AddressRegion.IO: ioPortRegions[ioRegions++] = new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size); break;
-					case AddressRegion.Memory: memoryRegion[memoryRegions++] = new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size); break;
-					default: break;
-				}
-
-			IHardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions, memoryRegion, new InterruptHandler(resourceManager.InterruptManager, IRQ, hardwareDevice));
+			IHardwareResources hardwareResources = GetResources(hardwareDevice, deviceManager, resourceManager);
 
 			if (resourceManager.ClaimResources(hardwareResources)) {
 				hardwareResources.EnableIRQ();

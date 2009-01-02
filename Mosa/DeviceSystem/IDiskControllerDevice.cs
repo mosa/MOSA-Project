@@ -15,6 +15,12 @@ namespace Mosa.DeviceSystem
 	public interface IDiskControllerDevice
 	{
 		/// <summary>
+		/// Gets the maximun drive count.
+		/// </summary>
+		/// <value>The drive count.</value>
+		uint MaximunDriveCount { get; }
+
+		/// <summary>
 		/// Opens the specified drive.
 		/// </summary>
 		/// <param name="drive">The drive.</param>

@@ -39,11 +39,5 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <returns></returns>
 		bool OnInterrupt();
-
-		/// <summary>
-		/// Creates the sub devices.
-		/// </summary>
-		/// <returns></returns>
-		LinkedList<IDevice> CreateSubDevices();
 	}
 }

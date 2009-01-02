@@ -239,33 +239,6 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// Creates the sub devices.
-		/// </summary>
-		/// <returns></returns>
-		public override LinkedList<IDevice> CreateSubDevices()
-		{
-			LinkedList<IDevice> devices = new LinkedList<IDevice>();
-
-			for (uint drive = 0; drive < DrivesPerConroller; drive++) {
-				if (driveInfo[drive].Present) {
-					Open(drive);
-
-					//TextMode.Write(base.name);
-					//TextMode.Write(": Disk #");
-					//TextMode.Write(drive.ToString());
-					//TextMode.Write(" - ", (driveInfo[drive].MaxLBA / 1024 / 2).ToString());
-					//TextMode.Write("MB, LBA=", driveInfo[drive].MaxLBAToString());
-					//TextMode.WriteLine("");
-
-					IDiskDevice diskDevice = new DiskDevice(this, drive, false);
-					devices.Add(diskDevice as IDevice);
-				}
-			}
-
-			return devices;
-		}
-
-		/// <summary>
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
@@ -309,13 +282,16 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Performs the LBA28.
 		/// </summary>
 		/// <param name="operation">The operation.</param>
-		/// <param name="driveNbr">The drive NBR.</param>
+		/// <param name="drive">The drive NBR.</param>
 		/// <param name="lba">The lba.</param>
 		/// <param name="data">The data.</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		protected bool PerformLBA28(SectorOperation operation, uint driveNbr, uint lba, byte[] data, uint offset)
+		protected bool PerformLBA28(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 		{
+			if (drive > MaximunDriveCount)
+				return false;
+
 			FeaturePort.Write8(0);
 			SectorCountPort.Write8(1);
 
@@ -323,7 +299,7 @@ namespace Mosa.DeviceDrivers.ISA
 			LBAMidPort.Write8((byte)((lba >> 8) & 0xFF));
 			LBAHighPort.Write8((byte)((lba >> 16) & 0xFF));
 
-			DeviceHeadPort.Write8((byte)(0xE0 | (driveNbr << 4) | ((lba >> 24) & 0x0F)));
+			DeviceHeadPort.Write8((byte)(0xE0 | (drive << 4) | ((lba >> 24) & 0x0F)));
 
 			if (operation == SectorOperation.Write)
 				CommandPort.Write8(IDECommands.WriteSectorsWithRetry);
@@ -359,6 +335,9 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <returns></returns>
 		protected bool ReadLBA48(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 		{
+			if (drive > MaximunDriveCount)
+				return false;
+
 			FeaturePort.Write8(0);
 			FeaturePort.Write8(0);
 
@@ -403,14 +382,20 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <summary>
 		/// Opens the specified drive NBR.
 		/// </summary>
-		/// <param name="driveNbr">The drive NBR.</param>
+		/// <param name="drive">The drive NBR.</param>
 		/// <returns></returns>
-		public bool Open(uint driveNbr)
+		public bool Open(uint drive)
 		{
-			if (driveNbr == 0)
+			if (drive > MaximunDriveCount)
+				return false;
+
+			if (!driveInfo[drive].Present)
+				return false;
+
+			if (drive == 0)
 				DeviceHeadPort.Write8(0xA0);
 			else
-				if (driveNbr == 1)
+				if (drive == 1)
 					DeviceHeadPort.Write8(0xB0);
 				else
 					return false;
@@ -425,7 +410,7 @@ namespace Mosa.DeviceDrivers.ISA
 			for (uint index = 0; index < 256; index++)
 				info.SetUShort(index * 2, DataPort.Read16());
 
-			driveInfo[driveNbr].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA28);
+			driveInfo[drive].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA28);
 
 			return true;
 		}
@@ -433,19 +418,25 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <summary>
 		/// Releases the specified drive NBR.
 		/// </summary>
-		/// <param name="driveNbr">The drive NBR.</param>
+		/// <param name="drive">The drive NBR.</param>
 		/// <returns></returns>
-		public bool Release(uint driveNbr)
+		public bool Release(uint drive)
 		{
 			return true;
 		}
 
 		/// <summary>
+		/// Gets the maximun drive count.
+		/// </summary>
+		/// <value>The drive count.</value>
+		public uint MaximunDriveCount { get { return 2; } }
+
+		/// <summary>
 		/// Gets the size of the sector.
 		/// </summary>
-		/// <param name="driveNbr">The drive NBR.</param>
+		/// <param name="drive">The drive NBR.</param>
 		/// <returns></returns>
-		public uint GetSectorSize(uint driveNbr)
+		public uint GetSectorSize(uint drive)
 		{
 			return 512;
 		}
@@ -453,17 +444,20 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <summary>
 		/// Gets the total sectors.
 		/// </summary>
-		/// <param name="driveNbr">The drive NBR.</param>
+		/// <param name="drive">The drive NBR.</param>
 		/// <returns></returns>
-		public uint GetTotalSectors(uint driveNbr)
+		public uint GetTotalSectors(uint drive)
 		{
-			return driveInfo[driveNbr].MaxLBA;
+			if (drive > MaximunDriveCount)
+				return 0; 
+
+			return driveInfo[drive].MaxLBA;
 		}
 
 		/// <summary>
 		/// Determines whether this instance can write to the specified drive.
 		/// </summary>
-		/// <param name="drive">The drive.</param>
+		/// <param name="drive">The drive NBR.</param>
 		/// <returns>
 		/// 	<c>true</c> if this instance can write to the specified drive; otherwise, <c>false</c>.
 		/// </returns>
@@ -475,20 +469,23 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <summary>
 		/// Reads the block.
 		/// </summary>
-		/// <param name="driveNbr">The drive NBR.</param>
+		/// <param name="drive">The drive NBR.</param>
 		/// <param name="block">The block.</param>
 		/// <param name="count">The count.</param>
 		/// <param name="data">The data.</param>
 		/// <returns></returns>
-		public bool ReadBlock(uint driveNbr, uint block, uint count, byte[] data)
+		public bool ReadBlock(uint drive, uint block, uint count, byte[] data)
 		{
+			if (drive > MaximunDriveCount)
+				return false;
+			
 			if (data.Length < count * 512)
 				return false;
 
 			try {
 				spinLock.Enter();
 				for (uint index = 0; index < count; index++) {
-					if (!PerformLBA28(SectorOperation.Read, driveNbr, block + index, data, index * 512))
+					if (!PerformLBA28(SectorOperation.Read, drive, block + index, data, index * 512))
 						return false;
 				}
 				return true;
@@ -501,20 +498,23 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <summary>
 		/// Writes the block.
 		/// </summary>
-		/// <param name="driveNbr">The drive NBR.</param>
+		/// <param name="drive">The drive NBR.</param>
 		/// <param name="block">The block.</param>
 		/// <param name="count">The count.</param>
 		/// <param name="data">The data.</param>
 		/// <returns></returns>
-		public bool WriteBlock(uint driveNbr, uint block, uint count, byte[] data)
+		public bool WriteBlock(uint drive, uint block, uint count, byte[] data)
 		{
+			if (drive > MaximunDriveCount)
+				return false;
+
 			if (data.Length < count * 512)
 				return false;
 
 			try {
 				spinLock.Enter();
 				for (uint index = 0; index < count; index++) {
-					if (!PerformLBA28(SectorOperation.Write, driveNbr, block + index, data, index * 512))
+					if (!PerformLBA28(SectorOperation.Write, drive, block + index, data, index * 512))
 						return false;
 				}
 				return true;

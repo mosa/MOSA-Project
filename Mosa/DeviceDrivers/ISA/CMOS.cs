@@ -63,16 +63,6 @@ namespace Mosa.DeviceDrivers.ISA
             return DeviceDriverStartStatus.Started;
         }
 
-
-		/// <summary>
-		/// Creates the sub devices.
-		/// </summary>
-		/// <returns></returns>
-        public override LinkedList<IDevice> CreateSubDevices()
-        {
-            return null;
-        }
-
 		/// <summary>
 		/// Called when an interrupt is received.
 		/// </summary>

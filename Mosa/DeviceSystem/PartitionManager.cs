@@ -30,7 +30,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public void CreatePartitionDevices()
 		{
-			// TODO: Do not create multiple partition devices if method executed more than once
+			// FIXME: Do not create multiple partition devices if this method executed more than once
 
 			// Find all online disk devices
 			foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsDiskDevice(), new FindDevice.IsOnline())) {

@@ -44,7 +44,7 @@ namespace Mosa.DeviceDrivers.PCI
 		public override bool Setup(IHardwareResources hardwareResources)
 		{
 			this.hardwareResources = hardwareResources;
-			base.name = "TEST_0x" + hardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+			//base.name = "TEST_" + pciDevice.			.ToString("X");
 
 			TestPort = hardwareResources.GetIOPort(0, 0);
 
@@ -62,11 +62,5 @@ namespace Mosa.DeviceDrivers.PCI
 		/// </summary>
 		/// <returns></returns>
 		public override bool OnInterrupt() { return false; }
-
-		/// <summary>
-		/// Creates the sub devices.
-		/// </summary>
-		/// <returns></returns>
-		public override LinkedList<IDevice> CreateSubDevices() { return null; }
 	}
 }
