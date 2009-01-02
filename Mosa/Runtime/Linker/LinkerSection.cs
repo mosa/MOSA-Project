@@ -68,7 +68,7 @@ namespace Mosa.Runtime.Linker
         public IntPtr VirtualAddress
         {
             get { return this.virtualAddress; }
-            internal set { this.virtualAddress = value; }
+            internal protected set { this.virtualAddress = value; }
         }
 
         /// <summary>

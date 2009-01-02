@@ -55,16 +55,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         public Stream Allocate(int size, int alignment)
         {
             Stream stream = this.stream;
-            if (null == stream || (size != 0 && size > (stream.Length - stream.Position)))
+            if (null == stream)
             {
                 // Request 64K of memory
-                stream = new VirtualMemoryStream(RuntimeBase.Instance.MemoryManager, 16 * 4096);
-
-                // FIXME: Put the old stream into a list to dispose
+                VirtualMemoryStream vms = new VirtualMemoryStream(RuntimeBase.Instance.MemoryManager, 16 * 4096);
 
                 // Save the stream for further references
-                this.stream = stream;
+                this.stream = stream = vms;
+                base.VirtualAddress = vms.Base;
             }
+
+            if (size != 0 && size > (stream.Length - stream.Position))
+                throw new OutOfMemoryException(@"Not enough space in section to allocate symbol.");
 
             return stream;
         }

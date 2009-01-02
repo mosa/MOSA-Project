@@ -86,7 +86,7 @@ namespace Mosa.Runtime.Linker
         public IntPtr VirtualAddress
         {
             get { return this.address; }
-            internal set { this.address = value; }
+            set { this.address = value; }
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Mosa.Runtime.Linker
         public long Length
         {
             get { return this.length; }
-            internal set { this.length = value; }
+            set { this.length = value; }
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Mosa.Runtime.Linker
         public long Offset
         {
             get { return this.offset; }
-            internal set { this.offset = value; }
+            set { this.offset = value; }
         }
 
         /// <summary>

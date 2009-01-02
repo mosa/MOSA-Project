@@ -23,8 +23,13 @@ using Mosa.Runtime.CompilerFramework;
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
     /// <summary>
-    /// 
+    /// A specialized linker for in-memory tests. This linker performs live linking in memory without
+    /// respect to an executable format.
     /// </summary>
+    /// <remarks>
+    /// It is similar to the Jit linker. TODO: Move most of this code to the Jit linker and reuse 
+    /// the Jit linker.
+    /// </remarks>
     public class TestAssemblyLinker : AssemblyLinkerStageBase
     {
         #region Data members
@@ -176,6 +181,25 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 throw new NotImplementedException(@"InternalCall implementation not loaded.");
 
             return Marshal.GetFunctionPointerForDelegate(methodDelegate).ToInt64();
+        }
+
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        /// <param name="compiler">The compiler context to perform processing in.</param>
+        public override void Run(AssemblyCompiler compiler)
+        {
+            // Adjust the symbol addresses
+            // __grover, 01/02/2009: Copied from ObjectFileLayoutStage
+            foreach (LinkerSymbol symbol in this.Symbols)
+            {
+                LinkerSection ls = GetSection(symbol.Section);
+                symbol.Offset = ls.Offset + symbol.SectionAddress;
+                symbol.VirtualAddress = new IntPtr(ls.VirtualAddress.ToInt64() + symbol.SectionAddress);
+            }
+
+            // Now run the linker
+            base.Run(compiler);
         }
 
         #endregion // AssemblyLinkerStageBase Overrides

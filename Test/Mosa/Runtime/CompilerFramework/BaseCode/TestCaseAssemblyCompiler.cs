@@ -27,7 +27,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 new TypeLayoutStage(),
                 new MethodCompilerBuilderStage(),
                 new MethodCompilerRunnerStage(),
-                new ObjectFileLayoutStage(),
+                // __grover, 01/02/2009: No object files in test!
+                // new ObjectFileLayoutStage()
                 new TestAssemblyLinker(),
             });
             architecture.ExtendAssemblyCompilerPipeline(pipeline);
