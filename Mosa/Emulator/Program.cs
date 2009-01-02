@@ -65,7 +65,7 @@ namespace Mosa.Emulator
 			// Create synthetic keyboard device
 			Mosa.EmulatedDevices.Synthetic.Keyboard keyboard = new Mosa.EmulatedDevices.Synthetic.Keyboard();
 
-			// Added the emulated keyboard device to the device drivers
+			// Add the emulated keyboard device to the device drivers
 			Mosa.DeviceSystem.Setup.DeviceManager.Add(keyboard);
 
 			// Create synthetic graphic pixel device
@@ -159,17 +159,6 @@ namespace Mosa.Emulator
 							default: screen.WriteLine("Unknown"); break;
 						}
 						screen.WriteLine("  Volume Name: " + fat.VolumeLabel);
-
-						FileLocation location = fat.FindEntry(new Mosa.FileSystem.FAT.Find.WithName("TEST2.TXT"), 0);
-
-						if (location.Valid) {
-							FATFileStream file = new FATFileStream(fat, location);
-
-							//for (int b = file.ReadByte(); b >= 0; b = file.ReadByte())
-							//    screen.Write((char)b);
-						}
-
-						screen.Write("");
 					}
 					else
 						screen.WriteLine("Unknown");
@@ -207,7 +196,7 @@ namespace Mosa.Emulator
 					//					screen.Write("  ");
 					//					screen.WriteLine(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID, pciDevice.SubDeviceID, pciDevice.SubVendorID));
 
-					foreach (BaseAddress address in pciDevice.BaseAddresses) {
+					foreach (PCIBaseAddress address in pciDevice.PCIBaseAddresses) {
 						if (address == null)
 							continue;
 
@@ -216,7 +205,7 @@ namespace Mosa.Emulator
 
 						screen.Write("    ");
 
-						if (address.Region == AddressRegion.IO)
+						if (address.Region == PCIAddressType.IO)
 							screen.Write("I/O Port at 0x");
 						else
 							screen.Write("Memory at 0x");

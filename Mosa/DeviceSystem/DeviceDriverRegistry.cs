@@ -52,7 +52,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="pciDevice">The pci device.</param>
 		/// <returns></returns>
-		public DeviceDriver FindDriver(PCIDevice pciDevice)
+		public DeviceDriver FindDriver(IPCIDevice pciDevice)
 		{
 			DeviceDriver bestDeviceDriver = null;
 			int bestPriority = System.Int32.MaxValue;

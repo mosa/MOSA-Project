@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.DeviceSystem.PCI;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -32,6 +34,11 @@ namespace Mosa.DeviceSystem
 		protected IInterruptHandler interruptHandler;
 
 		/// <summary>
+		/// 
+		/// </summary>
+		protected IPCIDeviceResource pciDeviceResource;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="HardwareResources"/> class.
 		/// </summary>
 		/// <param name="resourceManager">The resource manager.</param>
@@ -44,6 +51,23 @@ namespace Mosa.DeviceSystem
 			this.ioPortRegions = ioPortRegions;
 			this.memoryRegions = memoryRegions;
 			this.interruptHandler = interruptHandler;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HardwareResources"/> class.
+		/// </summary>
+		/// <param name="resourceManager">The resource manager.</param>
+		/// <param name="ioPortRegions">The io port regions.</param>
+		/// <param name="memoryRegions">The memory regions.</param>
+		/// <param name="interruptHandler">The interrupt handler.</param>
+		/// <param name="pciDeviceResource">The pci device resource.</param>
+		public HardwareResources(IResourceManager resourceManager, IIOPortRegion[] ioPortRegions, IMemoryRegion[] memoryRegions, IInterruptHandler interruptHandler, IPCIDeviceResource pciDeviceResource)
+		{
+			this.resourceManager = resourceManager;
+			this.ioPortRegions = ioPortRegions;
+			this.memoryRegions = memoryRegions;
+			this.interruptHandler = interruptHandler;
+			this.pciDeviceResource = pciDeviceResource;
 		}
 
 		/// <summary>
@@ -109,8 +133,8 @@ namespace Mosa.DeviceSystem
 			{
 				if (interruptHandler == null)
 					return 0xFF;	// 0xFF means unused
-
-				return interruptHandler.IRQ;
+				else
+					return interruptHandler.IRQ;
 			}
 		}
 
@@ -129,6 +153,12 @@ namespace Mosa.DeviceSystem
 		{
 			interruptHandler.Enable();
 		}
+
+		/// <summary>
+		/// Gets the PCI device resource.
+		/// </summary>
+		/// <value>The PCI device resource.</value>
+		public IPCIDeviceResource PCIDeviceResource { get { return pciDeviceResource; } }
 
 	}
 

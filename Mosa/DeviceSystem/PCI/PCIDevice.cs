@@ -14,7 +14,7 @@ namespace Mosa.DeviceSystem.PCI
 	/// <summary>
 	/// 
 	/// </summary>
-	public class PCIDevice : Device, IDevice
+	public class PCIDevice : Device, IDevice, IPCIDevice, IPCIDeviceResource
 	{
 		/// <summary>
 		/// 
@@ -37,7 +37,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// <summary>
 		/// 
 		/// </summary>
-		protected BaseAddress[] baseAddresses;
+		protected PCIBaseAddress[] pciBaseAddresses;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -113,10 +113,10 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the base addresses.
 		/// </summary>
 		/// <value>The base addresses.</value>
-		public BaseAddress[] BaseAddresses { get { return baseAddresses; } }
+		public PCIBaseAddress[] PCIBaseAddresses { get { return pciBaseAddresses; } }
 
 		/// <summary>
-		/// Create a new PCIDevice instance at the selected PCI address
+		/// Create a new PCIDevice instance
 		/// </summary>
 		/// <param name="pciController">The pci controller.</param>
 		/// <param name="bus">The bus.</param>
@@ -134,7 +134,7 @@ namespace Mosa.DeviceSystem.PCI
 			this.function = fun;
 
 			ioPortRegionCount = memoryRegionCount = 0;
-			this.baseAddresses = new BaseAddress[8];
+			this.pciBaseAddresses = new PCIBaseAddress[8];
 
 			for (byte i = 0; i < 6; i++) {
 				uint address = pciController.ReadConfig32(bus, slot, fun, (byte)(16 + (i * 4)));
@@ -149,75 +149,44 @@ namespace Mosa.DeviceSystem.PCI
 					HAL.EnableAllInterrupts();
 
 					if (address % 2 == 1)
-						baseAddresses[i] = new BaseAddress(AddressRegion.IO, address & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
+						pciBaseAddresses[i] = new PCIBaseAddress(PCIAddressType.IO, address & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
 					else
-						baseAddresses[i] = new BaseAddress(AddressRegion.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
+						pciBaseAddresses[i] = new PCIBaseAddress(PCIAddressType.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
 				}
 			}
 
 			if ((ClassCode == 0x03) && (SubClassCode == 0x00) && (ProgIF == 0x00)) {
 				// Special case for generic VGA
-				baseAddresses[6] = new BaseAddress(AddressRegion.Memory, 0xA0000, 0x1FFFF, false);
-				baseAddresses[7] = new BaseAddress(AddressRegion.IO, 0x3B0, 0x0F, false);
+				pciBaseAddresses[6] = new PCIBaseAddress(PCIAddressType.Memory, 0xA0000, 0x1FFFF, false);
+				pciBaseAddresses[7] = new PCIBaseAddress(PCIAddressType.IO, 0x3B0, 0x0F, false);
 			}
 
-			foreach (BaseAddress baseAddress in baseAddresses)
+			foreach (PCIBaseAddress baseAddress in pciBaseAddresses)
 				if (baseAddress != null)
 					switch (baseAddress.Region) {
-						case AddressRegion.IO: ioPortRegionCount++; break;
-						case AddressRegion.Memory: memoryRegionCount++; break;
+						case PCIAddressType.IO: ioPortRegionCount++; break;
+						case PCIAddressType.Memory: memoryRegionCount++; break;
 					}
 		}
 
 		/// <summary>
-		/// Gets the resources.
+		/// Gets or sets the status register.
 		/// </summary>
-		/// <param name="hardwareDevice">The hardware device.</param>
-		/// <param name="deviceManager">The device manager.</param>
-		/// <param name="resourceManager">The resource manager.</param>
-		/// <returns></returns>
-		public IHardwareResources GetResources(IHardwareDevice hardwareDevice, IDeviceManager deviceManager, IResourceManager resourceManager)
+		/// <value>The status.</value>
+		public ushort StatusRegister
 		{
-			IIOPortRegion[] ioPortRegions = new IIOPortRegion[ioPortRegionCount];
-			IMemoryRegion[] memoryRegion = new IMemoryRegion[memoryRegionCount];
-
-			int ioRegions = 0;
-			int memoryRegions = 0;
-
-			foreach (BaseAddress pciBaseAddress in baseAddresses)
-				switch (pciBaseAddress.Region) {
-					case AddressRegion.IO: ioPortRegions[ioRegions++] = new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size); break;
-					case AddressRegion.Memory: memoryRegion[memoryRegions++] = new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size); break;
-					default: break;
-				}
-
-			return new HardwareResources(resourceManager, ioPortRegions, memoryRegion, new InterruptHandler(resourceManager.InterruptManager, IRQ, hardwareDevice));
+			get { return pciController.ReadConfig16(bus, slot, function, 0x04); }
+			set { pciController.WriteConfig16(bus, slot, function, 0x04, value); }
 		}
 
 		/// <summary>
-		/// Starts the specified hardware device.
+		/// Gets or sets the command register.
 		/// </summary>
-		/// <param name="hardwareDevice">The hardware device.</param>
-		/// <param name="deviceManager">The device manager.</param>
-		/// <param name="resourceManager">The resource manager.</param>
-		/// <returns></returns>
-		public bool Start(IHardwareDevice hardwareDevice, IDeviceManager deviceManager, IResourceManager resourceManager)
+		/// <value>The status.</value>
+		public ushort CommandRegister
 		{
-			IHardwareResources hardwareResources = GetResources(hardwareDevice, deviceManager, resourceManager);
-
-			if (resourceManager.ClaimResources(hardwareResources)) {
-				hardwareResources.EnableIRQ();
-				if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
-					base.deviceStatus = hardwareDevice.Status;
-				else {
-					hardwareResources.DisableIRQ();
-					resourceManager.ReleaseResources(hardwareResources);
-				}
-			}
-			else
-				base.deviceStatus = DeviceStatus.Error;
-
-			return (base.deviceStatus == DeviceStatus.Online);
+			get { return pciController.ReadConfig16(bus, slot, function, 0x06); }
+			set { pciController.WriteConfig16(bus, slot, function, 0x06, value); }
 		}
 
 		/// <summary>
@@ -225,7 +194,15 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		public void SetNoDriverFound()
 		{
-			base.deviceStatus = DeviceStatus.NotFound;
+			deviceStatus = DeviceStatus.NotFound;
+		}
+
+		/// <summary>
+		/// Sets the device online.
+		/// </summary>
+		public void SetDeviceOnline()
+		{
+			deviceStatus = DeviceStatus.Online;
 		}
 
 	}

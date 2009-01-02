@@ -93,6 +93,9 @@
     <Compile Include="GUIDPartitionTable.cs" />
     <Compile Include="PartitionType.cs" />
     <Compile Include="PCIControllerManager.cs" />
+    <Compile Include="PCI\IPCIDeviceResource.cs" />
+    <Compile Include="PCI\IPCIDevice.cs" />
+    <Compile Include="PCI\PCIDevice.cs" />
     <Compile Include="VDI.cs" />
     <Compile Include="DiskGeometry.cs" />
     <Compile Include="PartitionManager.cs" />
@@ -282,22 +285,16 @@
     <Compile Include="VGAFont.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PCI\AddressRegion.cs">
+    <Compile Include="PCI\PCIAddressType.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PCI\BaseAddress.cs">
+    <Compile Include="PCI\PCIBaseAddress.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PCI\ClassCodeTable.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PCI\DeviceTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PCI\PCIDevice.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PCI\PCIHardwareDevice.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PCI\SubClassCodeTable.cs">

@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.DeviceSystem.PCI;
+
 namespace Mosa.DeviceSystem
 {
     /// <summary>
@@ -188,7 +190,7 @@ namespace Mosa.DeviceSystem
             /// </returns>
 			public bool IsMatch(IDevice device)
 			{
-				return device is PCI.PCIDevice;
+				return device is IPCIDevice;
 			}
 		}
 

@@ -204,7 +204,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="pciDevice">The pci device.</param>
 		/// <returns></returns>
-		public bool CompareTo(PCIDevice pciDevice)
+		public bool CompareTo(IPCIDevice pciDevice)
 		{
 			if (fields == 0)
 				return false;

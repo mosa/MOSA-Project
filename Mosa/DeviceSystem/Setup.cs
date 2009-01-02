@@ -73,18 +73,49 @@ namespace Mosa.DeviceSystem
 		static public void StartPCIDevices()
 		{
 			foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable())) {
-				PCIDevice pciDevice = device as PCIDevice;
+				IPCIDevice pciDevice = device as IPCIDevice;
 
 				DeviceDriver deviceDriver = deviceDriverRegistry.FindDriver(pciDevice);
 
 				if (deviceDriver != null) {
 					IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
 
-					if (hardwareDevice != null)
-						pciDevice.Start(hardwareDevice, deviceManager, resourceManager);
-					else
-						pciDevice.SetNoDriverFound();
+					uint ioPortRegionCount = 0;
+					uint memoryRegionCount = 0;
+
+					foreach (PCIBaseAddress baseAddress in pciDevice.PCIBaseAddresses)
+						if (baseAddress != null)
+							switch (baseAddress.Region) {
+								case PCIAddressType.IO: ioPortRegionCount++; break;
+								case PCIAddressType.Memory: memoryRegionCount++; break;
+							}
+
+					IIOPortRegion[] ioPortRegions = new IIOPortRegion[ioPortRegionCount];
+					IMemoryRegion[] memoryRegions = new IMemoryRegion[memoryRegionCount];
+
+					ioPortRegionCount = memoryRegionCount = 0;
+
+					foreach (PCIBaseAddress pciBaseAddress in pciDevice.PCIBaseAddresses)
+						switch (pciBaseAddress.Region) {
+							case PCIAddressType.IO: ioPortRegions[ioPortRegionCount++] = new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size); break;
+							case PCIAddressType.Memory: memoryRegions[memoryRegionCount++] = new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size); break;
+							default: break;
+						}
+
+					HardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions, memoryRegions, new InterruptHandler(resourceManager.InterruptManager, pciDevice.IRQ, hardwareDevice), pciDevice as IPCIDeviceResource);
+
+					if (resourceManager.ClaimResources(hardwareResources)) {
+						hardwareResources.EnableIRQ();
+						if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
+							pciDevice.SetDeviceOnline();
+						else {
+							hardwareResources.DisableIRQ();
+							resourceManager.ReleaseResources(hardwareResources);
+						}
+					}
 				}
+				else
+					pciDevice.SetNoDriverFound();
 			}
 		}
 
@@ -118,15 +149,8 @@ namespace Mosa.DeviceSystem
 
 					if (resourceManager.ClaimResources(hardwareResources)) {
 						hardwareResources.EnableIRQ();
-						if (hardwareDevice.Start() == DeviceDriverStartStatus.Started) {
+						if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
 							deviceManager.Add(hardwareDevice);
-
-							//LinkedList<IDevice> devices = hardwareDevice.CreateSubDevices();
-
-							//if (devices != null)
-							//    foreach (IDevice device in devices)
-							//        deviceManager.Add(device);
-						}
 						else {
 							hardwareResources.DisableIRQ();
 							resourceManager.ReleaseResources(hardwareResources);
