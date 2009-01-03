@@ -824,6 +824,12 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.Mul(Operand dest, Operand src)
         {
             Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
+            if (src is ConstantOperand)
+            {
+                Operand newsrc = new RegisterOperand(src.Type, GeneralPurposeRegister.ECX);
+                Emit(newsrc, src, cd_mov);
+                src = newsrc;
+            }
             Emit(src, null, cd_mul);
         }
 
