@@ -189,6 +189,22 @@ namespace Mosa.Platforms.x86
                 instructions.Add(this.architecture.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IR.MoveInstruction), rop, op));
                 op = rop;
             }
+            else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64)
+            {
+                Operand opL, opH;
+                SigType I4 = new SigType(CilElementType.I4);
+                RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+                LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
+
+                instructions.AddRange(new Instruction[] {
+                    new x86.Instructions.MoveInstruction(eax, opL),
+                    new x86.Instructions.MoveInstruction(new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax),
+                    new x86.Instructions.MoveInstruction(eax, opH),
+                    new x86.Instructions.MoveInstruction(new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize+4)), eax),
+                });
+
+                return;
+            }
 
             instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.MoveInstruction), new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op));
         }

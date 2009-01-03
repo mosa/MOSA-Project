@@ -69,7 +69,7 @@ namespace Mosa.Platforms.x86
         /// <param name="opL">The low operand.</param>
         /// <param name="opH">The high operand.</param>
         /// <exception cref="T:System.ArgumentException"><paramref name="op"/> is not a ConstantOperand and not a MemoryOperand.</exception>
-        private void SplitLongOperand(Operand op, out Operand opL, out Operand opH)
+        public static void SplitLongOperand(Operand op, out Operand opL, out Operand opH)
         {
             Debug.Assert(op is MemoryOperand || op is ConstantOperand, @"Long operand not memory or constant.");
 
