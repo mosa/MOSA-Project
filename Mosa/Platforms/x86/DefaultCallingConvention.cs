@@ -111,20 +111,31 @@ namespace Mosa.Platforms.x86
                 instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.AddInstruction), esp, new ConstantOperand(I, stackSize)));
             }
 
-            if (instruction.Results.Length > 0 && instruction.Results[0].StackType == StackTypeCode.Int64)
+            if (instruction.Results.Length > 0)
             {
-                MemoryOperand mop = instruction.Results[0] as MemoryOperand;
-                SigType I4 = new SigType(CilElementType.I4);
-                MemoryOperand opL = new MemoryOperand(I4, mop.Base, mop.Offset);
-                MemoryOperand opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
-                RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-                RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+                if (instruction.Results[0].StackType == StackTypeCode.Int64)
+                {
+                    MemoryOperand mop = instruction.Results[0] as MemoryOperand;
+                    SigType I4 = new SigType(CilElementType.I4);
+                    MemoryOperand opL = new MemoryOperand(I4, mop.Base, mop.Offset);
+                    MemoryOperand opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
+                    RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+                    RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
-                // Move the return value to the memory operand destined for it
-                instructions.AddRange(new Instruction[] {
-                    new Instructions.MoveInstruction(opL, eax),
-                    new Instructions.MoveInstruction(opH, edx)
-                });
+                    // Move the return value to the memory operand destined for it
+                    instructions.AddRange(new Instruction[] {
+                        new Instructions.MoveInstruction(opL, eax),
+                        new Instructions.MoveInstruction(opH, edx)
+                    });
+                }
+                else
+                {
+                    Operand result = instruction.Results[0];
+                    RegisterOperand eax = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+
+                    // Small results are in EAX
+                    instructions.Add(new Instructions.MoveInstruction(result, eax));
+                }
             }
 
             return instructions;
