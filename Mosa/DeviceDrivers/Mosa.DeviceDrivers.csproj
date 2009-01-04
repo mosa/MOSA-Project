@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4DBD4C50-BEC5-48D9-B471-9FB0A7F69999}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -120,6 +120,7 @@
     <Compile Include="PCI\VideoCard\GenericVGA.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PCI\VideoCard\S3Trio64V2.cs" />
     <Compile Include="PCI\VideoCard\VMwareSVGAII.cs">
       <SubType>Code</SubType>
     </Compile>
