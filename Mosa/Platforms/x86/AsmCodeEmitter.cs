@@ -648,8 +648,9 @@ namespace Mosa.Platforms.x86
         /// <param name="op2">The second operand.</param>
         public void Div(Operand op1, Operand op2)
         {
-            if (op1 is ConstantOperand)
-                throw new NotSupportedException(@"Constants are not allowed as destination.");
+            // FIXME
+            //if (op1 is ConstantOperand)
+            //    throw new NotSupportedException(@"Constants are not allowed as destination.");
             _textWriter.WriteLine("\t\tdiv\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
 
         }
@@ -661,8 +662,8 @@ namespace Mosa.Platforms.x86
         /// <param name="op2">The second operand.</param>
         public void IDiv(Operand op1, Operand op2)
         {
-            if (op1 is ConstantOperand)
-                throw new NotSupportedException(@"Constants are not allowed as destination.");
+            //if (op1 is ConstantOperand)
+            //    throw new NotSupportedException(@"Constants are not allowed as destination.");
             _textWriter.WriteLine("\t\tidiv\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
             
         }
