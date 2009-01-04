@@ -73,49 +73,52 @@ namespace Mosa.DeviceSystem
 		static public void StartPCIDevices()
 		{
 			foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable())) {
-				IPCIDevice pciDevice = device as IPCIDevice;
+				StartDevice(device as IPCIDevice);
+			}
+		}
 
-				DeviceDriver deviceDriver = deviceDriverRegistry.FindDriver(pciDevice);
+		/// <summary>
+		/// Starts the device.
+		/// </summary>
+		/// <param name="pciDevice">The pci device.</param>
+		static public void StartDevice(IPCIDevice pciDevice)
+		{
+			DeviceDriver deviceDriver = deviceDriverRegistry.FindDriver(pciDevice);
 
-				if (deviceDriver != null) {
-					IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
+			if (deviceDriver == null) {
+				pciDevice.SetNoDriverFound();
+				return;
+			}
 
-					uint ioPortRegionCount = 0;
-					uint memoryRegionCount = 0;
+			IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
+			PCIDeviceDriverAttribute attribute = deviceDriver.Attribute as PCIDeviceDriverAttribute;
 
-					foreach (PCIBaseAddress baseAddress in pciDevice.PCIBaseAddresses)
-						if (baseAddress != null)
-							switch (baseAddress.Region) {
-								case PCIAddressType.IO: ioPortRegionCount++; break;
-								case PCIAddressType.Memory: memoryRegionCount++; break;
-							}
+			LinkedList<IIOPortRegion> ioPortRegions = new LinkedList<IIOPortRegion>();
+			LinkedList<IMemoryRegion> memoryRegions = new LinkedList<IMemoryRegion>();
 
-					IIOPortRegion[] ioPortRegions = new IIOPortRegion[ioPortRegionCount];
-					IMemoryRegion[] memoryRegions = new IMemoryRegion[memoryRegionCount];
-
-					ioPortRegionCount = memoryRegionCount = 0;
-
-					foreach (PCIBaseAddress pciBaseAddress in pciDevice.PCIBaseAddresses)
-						switch (pciBaseAddress.Region) {
-							case PCIAddressType.IO: ioPortRegions[ioPortRegionCount++] = new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size); break;
-							case PCIAddressType.Memory: memoryRegions[memoryRegionCount++] = new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size); break;
-							default: break;
-						}
-
-					HardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions, memoryRegions, new InterruptHandler(resourceManager.InterruptManager, pciDevice.IRQ, hardwareDevice), pciDevice as IPCIDeviceResource);
-
-					if (resourceManager.ClaimResources(hardwareResources)) {
-						hardwareResources.EnableIRQ();
-						if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
-							pciDevice.SetDeviceOnline();
-						else {
-							hardwareResources.DisableIRQ();
-							resourceManager.ReleaseResources(hardwareResources);
-						}
-					}
+			foreach (PCIBaseAddress pciBaseAddress in pciDevice.PCIBaseAddresses)
+				switch (pciBaseAddress.Region) {
+					case PCIAddressType.IO: ioPortRegions.Add(new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size)); break;
+					case PCIAddressType.Memory: memoryRegions.Add(new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size)); break;
+					default: break;
 				}
-				else
-					pciDevice.SetNoDriverFound();
+
+			foreach (DeviceDriverMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
+				if (memoryAttribute.MemorySize > 0) {
+					IMemory memory = HAL.RequestPhysicalMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
+					memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
+				}
+
+			HardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions.ToArray(), memoryRegions.ToArray(), new InterruptHandler(resourceManager.InterruptManager, pciDevice.IRQ, hardwareDevice), pciDevice as IPCIDeviceResource);
+
+			if (resourceManager.ClaimResources(hardwareResources)) {
+				hardwareResources.EnableIRQ();
+				if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
+					pciDevice.SetDeviceOnline();
+				else {
+					hardwareResources.DisableIRQ();
+					resourceManager.ReleaseResources(hardwareResources);
+				}
 			}
 		}
 
@@ -126,39 +129,54 @@ namespace Mosa.DeviceSystem
 		{
 			LinkedList<DeviceDriver> deviceDrivers = deviceDriverRegistry.GetISADeviceDrivers();
 
-			foreach (DeviceDriver deviceDriver in deviceDrivers) {
-				ISADeviceDriverAttribute driverAtttribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
-
-				if (driverAtttribute.AutoLoad) {
-					IIOPortRegion[] ioPortRegions = new IIOPortRegion[(driverAtttribute.AltBasePort != 0x00) ? 2 : 1];
-					IMemoryRegion[] memoryRegion = new IMemoryRegion[(driverAtttribute.BaseAddress != 0x00) ? 1 : 0];
-
-					ioPortRegions[0] = new IOPortRegion(driverAtttribute.BasePort, driverAtttribute.PortRange);
-
-					if (driverAtttribute.AltBasePort != 0x00)
-						ioPortRegions[1] = new IOPortRegion(driverAtttribute.AltBasePort, driverAtttribute.AltPortRange);
-
-					if (driverAtttribute.BaseAddress != 0x00)
-						memoryRegion[0] = new MemoryRegion(driverAtttribute.BaseAddress, driverAtttribute.AddressRange);
-
-					IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
-
-					IHardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions, memoryRegion, new InterruptHandler(resourceManager.InterruptManager, driverAtttribute.IRQ, hardwareDevice));
-
-					hardwareDevice.Setup(hardwareResources);
-
-					if (resourceManager.ClaimResources(hardwareResources)) {
-						hardwareResources.EnableIRQ();
-						if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
-							deviceManager.Add(hardwareDevice);
-						else {
-							hardwareResources.DisableIRQ();
-							resourceManager.ReleaseResources(hardwareResources);
-						}
-					}
-				}
-			}
+			foreach (DeviceDriver deviceDriver in deviceDrivers)
+				StartDevice(deviceDriver);
 		}
 
+		/// <summary>
+		/// Starts the device.
+		/// </summary>
+		/// <param name="deviceDriver">The device driver.</param>
+		static public void StartDevice(DeviceDriver deviceDriver)
+		{
+			ISADeviceDriverAttribute driverAtttribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
+
+			if (driverAtttribute.AutoLoad) {
+				IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
+				ISADeviceDriverAttribute attribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
+
+				LinkedList<IIOPortRegion> ioPortRegions = new LinkedList<IIOPortRegion>();
+				LinkedList<IMemoryRegion> memoryRegions = new LinkedList<IMemoryRegion>();
+
+				ioPortRegions.Add(new IOPortRegion(driverAtttribute.BasePort, driverAtttribute.PortRange));
+
+				if (driverAtttribute.AltBasePort != 0x00)
+					ioPortRegions.Add(new IOPortRegion(driverAtttribute.AltBasePort, driverAtttribute.AltPortRange));
+
+				if (driverAtttribute.BaseAddress != 0x00)
+					memoryRegions.Add(new MemoryRegion(driverAtttribute.BaseAddress, driverAtttribute.AddressRange));
+
+				foreach (DeviceDriverMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
+					if (memoryAttribute.MemorySize > 0) {
+						IMemory memory = HAL.RequestPhysicalMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
+						memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
+					}
+
+				IHardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions.ToArray(), memoryRegions.ToArray(), new InterruptHandler(resourceManager.InterruptManager, driverAtttribute.IRQ, hardwareDevice));
+
+				hardwareDevice.Setup(hardwareResources);
+
+				if (resourceManager.ClaimResources(hardwareResources)) {
+					hardwareResources.EnableIRQ();
+					if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
+						deviceManager.Add(hardwareDevice);
+					else {
+						hardwareResources.DisableIRQ();
+						resourceManager.ReleaseResources(hardwareResources);
+					}
+				}
+
+			}
+		}
 	}
 }

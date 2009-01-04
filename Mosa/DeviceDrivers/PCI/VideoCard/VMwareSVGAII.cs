@@ -25,7 +25,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 	/// VMware SVGA II Device Driver
 	/// </summary>
 	[PCIDeviceDriver(VendorID = 0x15AD, DeviceID = 0x0405, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class VMwareSVGAII : HardwareDevice, IHardwareDevice // , IPixelGraphicsDevice
+	public class VMwareSVGAII : HardwareDevice, IPixelGraphicsDevice
 	{
 		#region Definitions
 

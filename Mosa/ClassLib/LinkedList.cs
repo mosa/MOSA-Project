@@ -389,13 +389,30 @@ namespace Mosa.ClassLib
 			//    throw new ArgumentException();
 
 			LinkedListNode<T> cur = First;
-			int index = arrayIndex;
+
+			while (cur != null) {
+				array[arrayIndex++] = cur.value;
+				cur = cur.next;
+			}
+		}
+
+		/// <summary>
+		/// To the array.
+		/// </summary>
+		/// <returns></returns>
+		public T[] ToArray()
+		{
+			T[] array = new T[this.count];
+
+			LinkedListNode<T> cur = First;
+			uint index = 0;
 
 			while (cur != null) {
 				array[index++] = cur.value;
 				cur = cur.next;
-
 			}
+
+			return array;
 		}
 
 		/// <summary>

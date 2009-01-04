@@ -38,16 +38,6 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Adds the specified device driver attribute.
-		/// </summary>
-		/// <param name="deviceDriverAttribute">The device driver attribute.</param>
-		/// <param name="driverType">Type of the driver.</param>
-		public void Add(IDeviceDriverAttribute deviceDriverAttribute, System.Type driverType)
-		{
-			deviceDrivers.Add(new DeviceDriver(deviceDriverAttribute, driverType));
-		}
-
-		/// <summary>
 		/// Finds the driver.
 		/// </summary>
 		/// <param name="pciDevice">The pci device.</param>
@@ -108,8 +98,16 @@ namespace Mosa.DeviceSystem
 				object[] attributes = type.GetCustomAttributes(typeof(IDeviceDriverAttribute), false);
 
 				foreach (object attribute in attributes)
-					if (((attribute as IDeviceDriverAttribute).Platforms & platformArchitecture) != 0)
-						Add(attribute as IDeviceDriverAttribute, type);
+					if (((attribute as IDeviceDriverAttribute).Platforms & platformArchitecture) != 0) {
+						DeviceDriver deviceDriver = new DeviceDriver(attribute as IDeviceDriverAttribute, type);
+
+						object[] memAttributes = type.GetCustomAttributes(typeof(DeviceDriverMemoryAttribute), false);
+
+						foreach (object memAttribute in memAttributes)
+							deviceDriver.Add(memAttribute as DeviceDriverMemoryAttribute);
+
+						deviceDrivers.Add(deviceDriver);
+					}
 			}
 		}
 	}

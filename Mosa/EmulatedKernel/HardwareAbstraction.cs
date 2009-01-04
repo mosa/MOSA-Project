@@ -67,6 +67,19 @@ namespace Mosa.EmulatedKernel
 		public void Sleep(uint milliseconds)
 		{
 		}
+
+		/// <summary>
+		/// Allocates the memory.
+		/// </summary>
+		/// <param name="size">The size.</param>
+		/// <param name="alignment">The alignment.</param>
+		/// <returns></returns>
+		public IMemory AllocateMemory(uint size, uint alignment)
+		{
+			System.IntPtr ptr = System.Runtime.InteropServices.Marshal.AllocHGlobal((int)(size + alignment - 1));
+			return new Memory((uint)(ptr.ToInt64() & ~(alignment - 1)), size);
+		}
+
 	}
 }
 

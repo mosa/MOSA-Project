@@ -42,7 +42,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public IMemory GetMemory(uint address, uint size)
 		{
-			return HAL.RequestMemory(address, size);
+			return HAL.RequestPhysicalMemory(address, size);
 		}
 
 		/// <summary>

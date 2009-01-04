@@ -99,6 +99,16 @@ namespace Mosa.DeviceSystem
 		protected byte subClassCode;
 
 		/// <summary>
+		/// 
+		/// </summary>
+		protected uint memoryRequired = 0;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected uint memoryAlignment = 4096; // on 4k boundary (default), must be a value in 2^n
+
+		/// <summary>
 		/// </summary>
 		/// <value>The sub class code.</value>
 		public PlatformArchitecture Platforms { get { return platforms; } set { platforms = value; } }

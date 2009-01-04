@@ -114,6 +114,7 @@
     <Compile Include="ISA\VGAText.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PCI\NetworkCard\RTL8139.cs" />
     <Compile Include="PCI\TestDriver.cs">
       <SubType>Code</SubType>
     </Compile>

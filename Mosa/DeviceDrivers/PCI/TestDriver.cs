@@ -24,7 +24,37 @@ namespace Mosa.DeviceDrivers.PCI
 		/// <summary>
 		/// 
 		/// </summary>
+		public class CommandRegister : IOPortRegister
+		{
+			/// <summary>
+			/// Initializes a new instance of the <see cref="CommandRegister"/> class.
+			/// </summary>
+			/// <param name="ioPort">The io port.</param>
+			/// <param name="bits">The bits.</param>
+			public CommandRegister(IReadWriteIOPort ioPort, byte bits) : base(ioPort, bits) { }
+
+			/// <summary>
+			/// Gets or sets a value indicating whether this <see cref="CommandRegister"/> is enabled.
+			/// </summary>
+			/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
+			public bool Enabled { get { return GetBit(0); } set { SetBit(0, value); } }
+
+			/// <summary>
+			/// Sets the drive.
+			/// </summary>
+			/// <value>The drive.</value>
+			public byte Drive { get { return (byte)GetBits(1, 2); } set { SetBits(value, 1, 2); } }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort TestPort;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected CommandRegister Command;
 
 		/// <summary>
 		/// 
@@ -34,8 +64,7 @@ namespace Mosa.DeviceDrivers.PCI
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TestDriver"/> class.
 		/// </summary>
-		/// <param name="pciDevice"></param>
-		public TestDriver(PCIDevice pciDevice) /* : base(pciDevice) */ { }
+		public TestDriver() { }
 
 		/// <summary>
 		/// Setups this hardware device driver
@@ -44,9 +73,13 @@ namespace Mosa.DeviceDrivers.PCI
 		public override bool Setup(IHardwareResources hardwareResources)
 		{
 			this.hardwareResources = hardwareResources;
-			//base.name = "TEST_" + pciDevice.			.ToString("X");
+			base.name = "TEST_" + hardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
 			TestPort = hardwareResources.GetIOPort(0, 0);
+
+			Command = new CommandRegister(TestPort, 8);
+
+			Command.Enabled = true;
 
 			return true;
 		}

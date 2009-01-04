@@ -9,9 +9,9 @@
 
 namespace Mosa.DeviceSystem
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	[System.AttributeUsage(System.AttributeTargets.All | System.AttributeTargets.Property, AllowMultiple = true)]
 	public class ISADeviceDriverAttribute : System.Attribute, IDeviceDriverAttribute
 	{

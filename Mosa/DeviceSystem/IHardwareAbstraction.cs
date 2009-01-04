@@ -50,6 +50,14 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="irq">The irq.</param>
 		void ProcessInterrupt(byte irq);
+
+		/// <summary>
+		/// Allocates the memory.
+		/// </summary>
+		/// <param name="size">The size.</param>
+		/// <param name="alignment">The alignment.</param>
+		/// <returns></returns>
+		IMemory AllocateMemory(uint size, uint alignment);
 	}
 }
 

@@ -7,7 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.DeviceSystem.PCI
+using Mosa.ClassLib;
+
+namespace Mosa.DeviceSystem
 {
 	/// <summary>
 	/// 
@@ -16,6 +18,7 @@ namespace Mosa.DeviceSystem.PCI
 	{
 		private IDeviceDriverAttribute deviceDriverAttribute;
 		private System.Type driverType;
+		private LinkedList<DeviceDriverMemoryAttribute> memoryAttributes;
 
 		/// <summary>
 		/// Gets the signature attribute.
@@ -30,6 +33,12 @@ namespace Mosa.DeviceSystem.PCI
 		public System.Type DriverType { get { return driverType; } }
 
 		/// <summary>
+		/// Gets the memory attributes.
+		/// </summary>
+		/// <value>The memory attributes.</value>
+		public LinkedList<DeviceDriverMemoryAttribute> MemoryAttributes { get { return memoryAttributes; } }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="DeviceDriver"/> class.
 		/// </summary>
 		/// <param name="deviceDriverAttribute">The device driver attribute.</param>
@@ -38,7 +47,16 @@ namespace Mosa.DeviceSystem.PCI
 		{
 			this.deviceDriverAttribute = deviceDriverAttribute;
 			this.driverType = driverType;
+			this.memoryAttributes = new LinkedList<DeviceDriverMemoryAttribute>();
 		}
 
+		/// <summary>
+		/// Adds the specified memory attribute.
+		/// </summary>
+		/// <param name="memoryAttribute">The memory attribute.</param>
+		public void Add(DeviceDriverMemoryAttribute memoryAttribute)
+		{
+			memoryAttributes.Add(memoryAttribute);
+		}
 	}
 }

@@ -26,7 +26,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 	/// Generic VGA Device Driver
 	/// </summary>
 	[PCIDeviceDriver(ClassCode = 0X03, SubClassCode = 0x00, ProgIF = 0x00, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	public class GenericVGA : HardwareDevice, IDevice, IPixelPaletteGraphicsDevice
+	public class GenericVGA : HardwareDevice, IPixelPaletteGraphicsDevice
 	{
 		#region Definitions
 
