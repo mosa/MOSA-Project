@@ -35,6 +35,14 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
             /// 
             /// </summary>
             internal const ushort CrtcData = 0x3d5;
+            /// <summary>
+            /// 
+            /// </summary>
+            internal const ushort SequenceIndex = 0x3c4;
+            /// <summary>
+            /// 
+            /// </summary>
+            internal const ushort SequenceData = 0x3c5;
         }
 
         /// <summary>
@@ -50,6 +58,29 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
             /// 
             /// </summary>
             internal const ushort AdvFuncCntl = 0x4ae8;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        internal enum DisplayModeState
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            On,
+            /// <summary>
+            /// 
+            /// </summary>
+            StandBy,
+            /// <summary>
+            /// 
+            /// </summary>
+            Suspend,
+            /// <summary>
+            /// 
+            /// </summary>
+            Off
         }
 
         #region Members
@@ -82,10 +113,21 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
         /// 
         /// </summary>
         protected IReadWriteIOPort crtcControllerIndex;
+
         /// <summary>
         /// 
         /// </summary>
         protected IReadWriteIOPort crtcControllerData;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected IReadWriteIOPort seqControllerIndex;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected IReadWriteIOPort seqControllerData;
 
         /// <summary>
         /// 
@@ -158,6 +200,8 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
             vgaEnableController = base.hardwareResources.GetIOPort(portBar, Register.VgaEnable);
             crtcControllerIndex = base.hardwareResources.GetIOPort(portBar, Register.CrtcIndex);
             crtcControllerData  = base.hardwareResources.GetIOPort(portBar, Register.CrtcData);
+            seqControllerIndex = base.hardwareResources.GetIOPort(portBar, Register.SequenceIndex);
+            seqControllerData = base.hardwareResources.GetIOPort(portBar, Register.SequenceData);
 
             // Everything went fine
             return true;
@@ -253,6 +297,42 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
         }
         #endregion
 
+        #region S3Trio
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dpmsMode"></param>
+        /// <returns></returns>
+        private bool SetDisplayModeState(DisplayModeState dpmsMode)
+        {
+            // Unlock extended sequencer registers
+            WriteSequenceRegister(0x08, 0x06);
+
+            byte sr0D = (byte)(ReadSequenceRegister(0x0d) & 0x03);
+
+            switch (dpmsMode)
+            {
+                case DisplayModeState.On:
+                    break;
+                case DisplayModeState.StandBy:
+                    sr0D |= 0x10;
+                    break;
+                case DisplayModeState.Suspend:
+                    sr0D |= 0x40;
+                    break;
+                case DisplayModeState.Off:
+                    sr0D |= 0x50;
+                    break;
+                default:
+                    return false;
+            }
+
+            WriteSequenceRegister(0x0d, sr0D);
+
+            return true;
+        }
+        #endregion
+
         #region Helper
         /// <summary>
         /// 
@@ -286,6 +366,28 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
         {
             crtcControllerIndex.Write8(index);
             return crtcControllerData.Read8();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="value"></param>
+        private void WriteSequenceRegister(byte index, byte value)
+        {
+            seqControllerIndex.Write8(index);
+            seqControllerData.Write8(value);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private byte ReadSequenceRegister(byte index)
+        {
+            seqControllerIndex.Write8(index);
+            return seqControllerData.Read8();
         }
         #endregion
     }
