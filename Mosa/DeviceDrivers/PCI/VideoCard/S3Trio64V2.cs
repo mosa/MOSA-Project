@@ -68,19 +68,19 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
             /// <summary>
             /// 
             /// </summary>
-            On,
+            On          = 0x00,
             /// <summary>
             /// 
             /// </summary>
-            StandBy,
+            StandBy     = 0x10,
             /// <summary>
             /// 
             /// </summary>
-            Suspend,
+            Suspend     = 0x40,
             /// <summary>
             /// 
             /// </summary>
-            Off
+            Off         = 0x50,
         }
 
         #region Members
@@ -331,6 +331,35 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 
             return true;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private DisplayModeState GetDisplayModeState()
+        {
+            DisplayModeState mode = DisplayModeState.On;
+
+            switch (ReadSequenceRegister(0x0d) & 0x70)
+            {
+                case 0:
+                    mode = DisplayModeState.On;
+                    break;
+                case 0x10:
+                    mode = DisplayModeState.StandBy;
+                    break;
+                case 0x40:
+                    mode = DisplayModeState.Suspend;
+                    break;
+                case 0x50:
+                    mode = DisplayModeState.Off;
+                    break;
+                default:
+                    break;
+            }
+
+            return mode;
+        }
         #endregion
 
         #region Helper
@@ -377,6 +406,18 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
         {
             seqControllerIndex.Write8(index);
             seqControllerData.Write8(value);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="value"></param>
+        /// <param name="mask"></param>
+        private void WriteSequenceRegister(byte index, byte value, byte mask)
+        {
+            seqControllerIndex.Write8(index);
+            seqControllerData.Write8((byte)((crtcControllerData.Read8() & ~mask) | (value & mask)));
         }
 
         /// <summary>
