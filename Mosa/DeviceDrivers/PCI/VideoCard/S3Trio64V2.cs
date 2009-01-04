@@ -15,34 +15,42 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
     /// <summary>
     /// S3 Trio64 V2 Graphics Device Driver
     /// </summary>
-    [PCIDeviceDriver(ClassCode = 0X03, SubClassCode = 0x00, ProgIF = 0x00, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+    [PCIDeviceDriver(VendorID = 0x5333, DeviceID = 0x8811, Platforms = PlatformArchitecture.Both_x86_and_x64)]
     public class S3Trio64V2 : HardwareDevice, IDevice, IPixelPaletteGraphicsDevice
     {
         /// <summary>
         /// 
         /// </summary>
         internal struct Register
-        {
+        { 
             /// <summary>
             /// 
             /// </summary>
-            internal const ushort VgaEnable = 0x3c3;
+            internal const ushort VgaEnable = 0x13;
             /// <summary>
             /// 
             /// </summary>
-            internal const ushort CrtcIndex = 0x3d4;
+            internal const ushort MiscOutRead = 0x1c;
             /// <summary>
             /// 
             /// </summary>
-            internal const ushort CrtcData = 0x3d5;
+            internal const ushort MiscOutWrite = 0x12;
             /// <summary>
             /// 
             /// </summary>
-            internal const ushort SequenceIndex = 0x3c4;
+            internal const ushort CrtcIndex = 0x24;
             /// <summary>
             /// 
             /// </summary>
-            internal const ushort SequenceData = 0x3c5;
+            internal const ushort CrtcData = 0x25;
+            /// <summary>
+            /// 
+            /// </summary>
+            internal const ushort SequenceIndex = 0x14;
+            /// <summary>
+            /// 
+            /// </summary>
+            internal const ushort SequenceData = 0x15;
         }
 
         /// <summary>
@@ -51,13 +59,16 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
         internal struct CommandRegister
         {
             /// <summary>
-            /// 
+            /// The cursor normally needs 1024 bytes. But if 1024 bytes
+            /// are used, some Trio64 chips draw a short white horizontal
+            /// line below and to the right. Setting the number of bytes
+            /// to 2048 solves it.
             /// </summary>
             internal const ushort CursorBytes = 2084;
             /// <summary>
             /// 
             /// </summary>
-            internal const ushort AdvFuncCntl = 0x4ae8;
+            internal const ushort AdvFuncCntl = 0x4738;
         }
 
         /// <summary>
@@ -66,19 +77,19 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
         internal enum DisplayModeState
         {
             /// <summary>
-            /// 
+            /// Display is turned on
             /// </summary>
             On          = 0x00,
             /// <summary>
-            /// 
+            /// Display is on standby
             /// </summary>
             StandBy     = 0x10,
             /// <summary>
-            /// 
+            /// Display is in suspend mode
             /// </summary>
             Suspend     = 0x40,
             /// <summary>
-            /// 
+            /// Display is turned off
             /// </summary>
             Off         = 0x50,
         }
@@ -112,6 +123,16 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
         /// <summary>
         /// 
         /// </summary>
+        protected IReadWriteIOPort miscOutputReader;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected IReadWriteIOPort miscOutputWriter;
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected IReadWriteIOPort crtcControllerIndex;
 
         /// <summary>
@@ -120,12 +141,12 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
         protected IReadWriteIOPort crtcControllerData;
 
         /// <summary>
-        /// 
+        /// IOPort to index sequence registers
         /// </summary>
         protected IReadWriteIOPort seqControllerIndex;
 
         /// <summary>
-        /// 
+        /// IOPort to write data to the sequence registers
         /// </summary>
         protected IReadWriteIOPort seqControllerData;
 
@@ -198,6 +219,8 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
             byte portBar = (byte)(base.hardwareResources.IOPointRegionCount - 1);
 
             vgaEnableController = base.hardwareResources.GetIOPort(portBar, Register.VgaEnable);
+            miscOutputReader = base.hardwareResources.GetIOPort(portBar, Register.MiscOutRead);
+            miscOutputWriter = base.hardwareResources.GetIOPort(portBar, Register.MiscOutWrite);
             crtcControllerIndex = base.hardwareResources.GetIOPort(portBar, Register.CrtcIndex);
             crtcControllerData  = base.hardwareResources.GetIOPort(portBar, Register.CrtcData);
             seqControllerIndex = base.hardwareResources.GetIOPort(portBar, Register.SequenceIndex);
@@ -214,6 +237,13 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
         public override DeviceDriverStartStatus Start()
         {
             vgaEnableController.Write8((byte)(vgaEnableController.Read8() | 0x01));
+
+            // Enable colors
+            miscOutputWriter.Write8((byte)(miscOutputReader.Read8() | 0x01));
+
+            // Enable MMIO
+            crtcControllerIndex.Write8(0x53);
+            crtcControllerData.Write8((byte)(crtcControllerData.Read8() | 0x8));
 
             // Unlock system registers
             WriteCrtcRegister(0x38, 0x48);
@@ -232,6 +262,13 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 
             // Setup video memory
             memory = base.hardwareResources.GetMemory((byte)(ramSizeMB * 1024 * 1024));
+
+            // Detect current mclk
+            WriteSequenceRegister(0x08, 0x06);
+            byte m = (byte)(ReadSequenceRegister(0x11) & 0x7f);
+            byte n = ReadSequenceRegister(0x10);
+            byte n1 = (byte)(n & 0x1f);
+            byte n2 = (byte)((n >> 5) & 0x03);
 
             base.deviceStatus = DeviceStatus.Online;
             return DeviceDriverStartStatus.Started;
@@ -398,36 +435,43 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
         }
 
         /// <summary>
-        /// 
+        /// Write a value to the indexed sequence register.
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="value"></param>
+        /// <param name="index">The index to the register</param>
+        /// <param name="value">Value to write</param>
         private void WriteSequenceRegister(byte index, byte value)
         {
+            // Select target register
             seqControllerIndex.Write8(index);
+            // Write masked value to register
             seqControllerData.Write8(value);
         }
 
         /// <summary>
-        /// 
+        /// Write a masked value to the indexed sequence register.
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="value"></param>
-        /// <param name="mask"></param>
+        /// <param name="index">The index to the register</param>
+        /// <param name="value">Value to write</param>
+        /// <param name="mask">Mask for the value</param>
         private void WriteSequenceRegister(byte index, byte value, byte mask)
         {
+            // Select target register
             seqControllerIndex.Write8(index);
+            // Write masked value to register
             seqControllerData.Write8((byte)((crtcControllerData.Read8() & ~mask) | (value & mask)));
         }
 
         /// <summary>
-        /// 
+        /// Reads in the sequence register's current value. The register is chosen by
+        /// the given index.
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <param name="index">The index to the register</param>
+        /// <returns>The register's value</returns>
         private byte ReadSequenceRegister(byte index)
         {
+            // Select register
             seqControllerIndex.Write8(index);
+            // Read contained value
             return seqControllerData.Read8();
         }
         #endregion
