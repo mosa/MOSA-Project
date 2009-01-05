@@ -16,12 +16,12 @@ namespace Mosa.FileSystem.FAT
     /// <summary>
     /// 
     /// </summary>
-	public class FATService : Device, IDevice, IFileSystemDevice
+	public class FatService : Device, IDevice, IFileSystemDevice
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="FATService"/> class.
+		/// Initializes a new instance of the <see cref="FatService"/> class.
 		/// </summary>
-		public FATService()
+		public FatService()
 		{
 			base.name = "FAT";
 			base.parent = null;
@@ -35,7 +35,7 @@ namespace Mosa.FileSystem.FAT
 		/// <returns></returns>
 		public GenericFileSystem Create(IPartitionDevice partition)
 		{
-			return new FATFileSystem(partition);
+			return new FatFileSystem(partition);
 		}
 
 	}

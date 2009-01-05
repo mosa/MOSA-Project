@@ -14,7 +14,7 @@ namespace Mosa.FileSystem.FAT.Find
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ByCluster : FATFileSystem.ICompare
+	public class ByCluster : FatFileSystem.ICompare
 	{
 		/// <summary>
 		/// 
@@ -37,7 +37,7 @@ namespace Mosa.FileSystem.FAT.Find
 		/// <param name="offset">The offset.</param>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public bool Compare(byte[] data, uint offset, FATType type)
+		public bool Compare(byte[] data, uint offset, FatType type)
 		{
 			BinaryFormat entry = new BinaryFormat(data);
 
@@ -52,7 +52,7 @@ namespace Mosa.FileSystem.FAT.Find
 			if (first == FileNameAttribute.Escape)
 				return false;
 
-			uint startcluster = FATFileSystem.GetClusterEntry(data, offset, type);
+			uint startcluster = FatFileSystem.GetClusterEntry(data, offset, type);
 
 			if (startcluster == cluster)
 				return true;

@@ -14,7 +14,7 @@ namespace Mosa.FileSystem.FAT.Find
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Any : FATFileSystem.ICompare
+	public class Any : FatFileSystem.ICompare
 	{
 		/// <summary>
 		/// 
@@ -33,7 +33,7 @@ namespace Mosa.FileSystem.FAT.Find
 		/// <param name="offset">The offset.</param>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public bool Compare(byte[] data, uint offset, FATType type)
+		public bool Compare(byte[] data, uint offset, FatType type)
 		{
 			BinaryFormat entry = new BinaryFormat(data);
 

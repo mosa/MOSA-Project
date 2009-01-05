@@ -92,11 +92,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FAT\FatFileAttributes.cs" />
+    <Compile Include="FAT\FatType.cs" />
     <Compile Include="FAT\Find\Any.cs" />
     <Compile Include="FAT\Find\WithName.cs" />
     <Compile Include="FAT\Find\Volume.cs" />
     <Compile Include="FAT\Find\ByCluster.cs" />
-    <Compile Include="FAT\FileLocation.cs" />
+    <Compile Include="FAT\FatFileLocation.cs" />
     <Compile Include="FAT\Find\Empty.cs" />
     <Compile Include="GenericFileSystem.cs">
       <SubType>Code</SubType>
@@ -107,25 +109,25 @@
     <Compile Include="GenericFileSystemSettings.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FAT\FATFileSystem.cs">
+    <Compile Include="FAT\FatFileSystem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FAT\FATService.cs">
+    <Compile Include="FAT\FatService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FAT\FATFileStream.cs">
+    <Compile Include="FAT\FatFileStream.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FAT\FATSettings.cs">
+    <Compile Include="FAT\FatSettings.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FAT\VFSDirectory.cs">
+    <Compile Include="FAT\VfsDirectory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FAT\VFSFile.cs">
+    <Compile Include="FAT\VfsFile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FAT\VFSFileSystem.cs">
+    <Compile Include="FAT\VfsFileSystem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="VFS\AccessCheck.cs">

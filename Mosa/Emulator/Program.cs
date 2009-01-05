@@ -105,15 +105,15 @@ namespace Mosa.Emulator
 			PartitionDevice partitionDevice = new PartitionDevice(ramDiskDevice, mbr.Partitions[0], false);
 
 			// Set FAT settings
-			FATSettings fatSettings = new FATSettings();
+			FatSettings fatSettings = new FatSettings();
 
-			fatSettings.FATType = FATType.FAT12;
+			fatSettings.FATType = FatType.FAT12;
 			fatSettings.FloppyMedia = false;
 			fatSettings.VolumeLabel = "MOSADISK";
 			fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };
 
 			// Create FAT file system
-			FATFileSystem fat12 = new FATFileSystem(partitionDevice);
+			FatFileSystem fat12 = new FatFileSystem(partitionDevice);
 			fat12.Format(fatSettings);
 
 			// Create partition manager
@@ -148,14 +148,14 @@ namespace Mosa.Emulator
 				screen.WriteLine();
 
 				if (device is IPartitionDevice) {
-					FileSystem.FAT.FATFileSystem fat = new Mosa.FileSystem.FAT.FATFileSystem(device as IPartitionDevice);
+					FileSystem.FAT.FatFileSystem fat = new Mosa.FileSystem.FAT.FatFileSystem(device as IPartitionDevice);
 
 					screen.Write("  File System: ");
 					if (fat.IsValid) {
 						switch (fat.FATType) {
-							case FATType.FAT12: screen.WriteLine("FAT12"); break;
-							case FATType.FAT16: screen.WriteLine("FAT16"); break;
-							case FATType.FAT32: screen.WriteLine("FAT32"); break;
+							case FatType.FAT12: screen.WriteLine("FAT12"); break;
+							case FatType.FAT16: screen.WriteLine("FAT16"); break;
+							case FatType.FAT32: screen.WriteLine("FAT32"); break;
 							default: screen.WriteLine("Unknown"); break;
 						}
 						screen.WriteLine("  Volume Name: " + fat.VolumeLabel);

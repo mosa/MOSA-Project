@@ -27,11 +27,7 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// Retrieves the type of the filesystem settings class to pass to IFileSystemService.Format
 		/// </summary>
-		// FIXME: Should be System.Type
-		object SettingsType
-		{
-			get;
-		}
+		GenericFileSystemSettings SettingsType { get; }
 
 		#endregion // Properties
 

@@ -14,7 +14,7 @@ namespace Mosa.FileSystem.FAT.Find
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Volume : FATFileSystem.ICompare
+	public class Volume : FatFileSystem.ICompare
 	{
 		/// <summary>
 		/// 
@@ -33,7 +33,7 @@ namespace Mosa.FileSystem.FAT.Find
 		/// <param name="offset">The offset.</param>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public bool Compare(byte[] data, uint offset, FATType type)
+		public bool Compare(byte[] data, uint offset, FatType type)
 		{
 			BinaryFormat entry = new BinaryFormat(data);
 
@@ -48,9 +48,9 @@ namespace Mosa.FileSystem.FAT.Find
 			if (first == FileNameAttribute.Escape)
 				return false;
 
-			FileAttributes attribute = (FileAttributes)entry.GetByte(Entry.FileAttributes + offset);
+			FatFileAttributes attribute = (FatFileAttributes)entry.GetByte(Entry.FileAttributes + offset);
 
-			if ((attribute & FileAttributes.VolumeLabel) == FileAttributes.VolumeLabel)
+			if ((attribute & FatFileAttributes.VolumeLabel) == FatFileAttributes.VolumeLabel)
 				return true;
 
 			return false;

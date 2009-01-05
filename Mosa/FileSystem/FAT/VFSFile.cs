@@ -14,7 +14,7 @@ namespace Mosa.FileSystem.FAT
     /// <summary>
     /// 
     /// </summary>
-	public class VFSFile : NodeBase
+	public class VfsFile : NodeBase
 	{
         /// <summary>
         /// 
@@ -33,13 +33,13 @@ namespace Mosa.FileSystem.FAT
 
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VFSFile"/> class.
+		/// Initializes a new instance of the <see cref="VfsFile"/> class.
 		/// </summary>
 		/// <param name="fs">The fs.</param>
 		/// <param name="fileCluster">The file cluster.</param>
 		/// <param name="directorySector">The directory sector.</param>
 		/// <param name="directoryIndex">Index of the directory.</param>
-		public VFSFile(IFileSystem fs, uint fileCluster, uint directorySector, uint directoryIndex)
+		public VfsFile(IFileSystem fs, uint fileCluster, uint directorySector, uint directoryIndex)
 			: base(fs, VfsNodeType.File)
 		{
 			this.fileCluster = fileCluster;
@@ -91,7 +91,7 @@ namespace Mosa.FileSystem.FAT
 		public override object Open(System.IO.FileAccess access, System.IO.FileShare sharing)
 		{
 			if (access == System.IO.FileAccess.Read)
-				return new FATFileStream((FileSystem as VFSFileSystem).FAT, fileCluster, directorySector, directoryIndex);
+				return new FatFileStream((FileSystem as VfsFileSystem).FAT, fileCluster, directorySector, directoryIndex);
 
 			// TODO
 			throw new System.NotSupportedException("file write not supported");

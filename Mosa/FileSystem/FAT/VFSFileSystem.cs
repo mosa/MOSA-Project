@@ -14,27 +14,27 @@ namespace Mosa.FileSystem.FAT
     /// <summary>
     /// 
     /// </summary>
-	public class VFSFileSystem : IFileSystemService, IFileSystem
+	public class VfsFileSystem : IFileSystemService, IFileSystem
 	{
         /// <summary>
         /// 
         /// </summary>
-		protected FATFileSystem fat;
+		protected FatFileSystem fat;
 
 		/// <summary>
 		/// Gets the FAT.
 		/// </summary>
 		/// <value>The FAT.</value>
-		public FATFileSystem FAT 
+		public FatFileSystem FAT 
         { 
             get { return fat; } 
         }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VFSFileSystem"/> class.
+		/// Initializes a new instance of the <see cref="VfsFileSystem"/> class.
 		/// </summary>
 		/// <param name="fat">The fat.</param>
-		public VFSFileSystem(FATFileSystem fat)
+		public VfsFileSystem(FatFileSystem fat)
 		{
 			this.fat = fat;
 		}
@@ -43,7 +43,7 @@ namespace Mosa.FileSystem.FAT
 		/// Retrieves the type of the filesystem settings class to pass to IFileSystemService.Format
 		/// </summary>
 		/// <value></value>
-		public object SettingsType { get { return fat.SettingsType; } }
+		public GenericFileSystemSettings SettingsType { get { return fat.SettingsType; } }
 
 		/// <summary>
 		/// Mounts a file system from the specified stream/device.
@@ -71,7 +71,7 @@ namespace Mosa.FileSystem.FAT
 		/// <returns>The created and mounted filesystem.</returns>
 		public bool Format(GenericFileSystemSettings settings)
 		{
-			return (fat.Format(((FATSettings)settings)));
+			return (fat.Format(((FatSettings)settings)));
 		}
 
 		/// <summary>
@@ -85,7 +85,7 @@ namespace Mosa.FileSystem.FAT
 		/// <summary>
 		/// 
 		/// </summary>
-		private VFSDirectory root;
+		private VfsDirectory root;
 
 		/// <summary>
 		/// </summary>
@@ -95,7 +95,7 @@ namespace Mosa.FileSystem.FAT
 			get
 			{
 				if (root == null)
-					root = new VFSDirectory(this, 0);
+					root = new VfsDirectory(this, 0);
 
 				return root;
 			}

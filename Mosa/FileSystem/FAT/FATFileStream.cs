@@ -12,7 +12,7 @@ namespace Mosa.FileSystem.FAT
 	/// <summary>
 	/// 
 	/// </summary>
-	public class FATFileStream : System.IO.Stream
+	public class FatFileStream : System.IO.Stream
 	{
 		/// <summary>
 		/// 
@@ -82,26 +82,26 @@ namespace Mosa.FileSystem.FAT
 		/// <summary>
 		/// 
 		/// </summary>
-		protected FATFileSystem fs;
+		protected FatFileSystem fs;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="FATFileStream"/> class.
+		/// Initializes a new instance of the <see cref="FatFileStream"/> class.
 		/// </summary>
 		/// <param name="fs">The fs.</param>
 		/// <param name="location">The location.</param>
-		public FATFileStream(FATFileSystem fs, FileLocation location)
+		public FatFileStream(FatFileSystem fs, FatFileLocation location)
 			: this(fs, location.FirstCluster, location.DirectorySector, location.DirectorySectorIndex)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="FATFileStream"/> class.
+		/// Initializes a new instance of the <see cref="FatFileStream"/> class.
 		/// </summary>
 		/// <param name="fs">The fs.</param>
 		/// <param name="startCluster">The start cluster.</param>
 		/// <param name="directorySector">The directory sector.</param>
 		/// <param name="directorySectorIndex">Index of the directory sector.</param>
-		public FATFileStream(FATFileSystem fs, uint startCluster, uint directorySector, uint directorySectorIndex)
+		public FatFileStream(FatFileSystem fs, uint startCluster, uint directorySector, uint directorySectorIndex)
 		{
 			this.fs = fs;
 			this.clusterSize = fs.ClusterSizeInBytes;

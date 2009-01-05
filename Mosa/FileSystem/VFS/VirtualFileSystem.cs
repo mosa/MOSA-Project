@@ -296,7 +296,7 @@ namespace Mosa.FileSystem.VFS
 
 		#region IFileSystemService Members
 
-		object IFileSystemService.SettingsType { get { return null; } }
+		GenericFileSystemSettings IFileSystemService.SettingsType { get { return null; } }
 
 		bool IFileSystemService.Mount()
 		{

@@ -15,7 +15,7 @@ namespace Mosa.FileSystem.FAT
     /// <summary>
     /// 
     /// </summary>
-	public class VFSDirectory : DirectoryNode
+	public class VfsDirectory : DirectoryNode
 	{
         /// <summary>
         /// 
@@ -23,11 +23,11 @@ namespace Mosa.FileSystem.FAT
 		protected uint directoryCluster;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VFSDirectory"/> class.
+		/// Initializes a new instance of the <see cref="VfsDirectory"/> class.
 		/// </summary>
 		/// <param name="fs">The fs.</param>
 		/// <param name="directoryCluster">The directory cluster.</param>
-		public VFSDirectory(IFileSystem fs, uint directoryCluster)
+		public VfsDirectory(IFileSystem fs, uint directoryCluster)
 			: base(fs)
 		{
 			this.directoryCluster = directoryCluster;
@@ -61,15 +61,15 @@ namespace Mosa.FileSystem.FAT
 		/// <returns></returns>
 		public override IVfsNode Lookup(string name)
 		{
-			FileLocation location = (FileSystem as VFSFileSystem).FAT.FindEntry(new Find.WithName(name), this.directoryCluster);
+			FatFileLocation location = (FileSystem as VfsFileSystem).FAT.FindEntry(new Find.WithName(name), this.directoryCluster);
 
 			if (!location.Valid)
 				return null;
 
 			if (location.IsDirectory)
-				return new VFSDirectory(FileSystem, location.FirstCluster);
+				return new VfsDirectory(FileSystem, location.FirstCluster);
 			else
-				return new VFSFile(FileSystem, location.FirstCluster, location.DirectorySector, location.DirectorySectorIndex);
+				return new VfsFile(FileSystem, location.FirstCluster, location.DirectorySector, location.DirectorySectorIndex);
 		}
 
 		/// <summary>
@@ -106,11 +106,11 @@ namespace Mosa.FileSystem.FAT
 		/// <exception cref="System.NotSupportedException">The object does not support removal this way. There's most likely an object specific API to remove this IVfsNode.</exception>
 		public override void Delete(IVfsNode child, DirectoryEntry dentry)
 		{
-			FATFileSystem fs = this.FileSystem as FATFileSystem;
+			FatFileSystem fs = this.FileSystem as FatFileSystem;
 
-			uint targetCluster = (child as VFSDirectory).directoryCluster;
+			uint targetCluster = (child as VfsDirectory).directoryCluster;
 
-			FileLocation location = fs.FindEntry(new Find.ByCluster(targetCluster), this.directoryCluster);
+			FatFileLocation location = fs.FindEntry(new Find.ByCluster(targetCluster), this.directoryCluster);
 
 			if (!location.Valid)
 				throw new System.ArgumentException(); //throw new IOException ("Unable to delete directory because it is not empty");

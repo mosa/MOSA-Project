@@ -12,12 +12,12 @@ namespace Mosa.FileSystem.FAT
 	/// <summary>
 	/// 
 	/// </summary>
-	public class FATSettings : GenericFileSystemSettings
+	public class FatSettings : GenericFileSystemSettings
 	{
 		/// <summary>
 		/// 
 		/// </summary>
-		public FATType FATType;
+		public FatType FATType;
 
 		/// <summary>
 		/// 
@@ -42,13 +42,9 @@ namespace Mosa.FileSystem.FAT
 			get
 			{
 				if (osBootCode == null) return null;
-
-				byte[] copy = new byte[osBootCode.Length];
-
-				for (int i = 0; i < osBootCode.Length; i++)
-					copy[i] = osBootCode[i];
-
-				return copy;
+				byte[] clone = new byte[osBootCode.Length];
+				osBootCode.CopyTo(clone, 0);
+				return clone;
 			}
 			set
 			{
@@ -58,9 +54,7 @@ namespace Mosa.FileSystem.FAT
 				}
 
 				osBootCode = new byte[value.Length];
-
-				for (int i = 0; i < value.Length; i++)
-					osBootCode[i] = value[i];
+				value.CopyTo(osBootCode, 0);				
 			}
 		}
 
@@ -78,11 +72,11 @@ namespace Mosa.FileSystem.FAT
 		public ushort HiddenSectors;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="FATSettings"/> class.
+		/// Initializes a new instance of the <see cref="FatSettings"/> class.
 		/// </summary>
-		public FATSettings()
+		public FatSettings()
 		{
-			this.FATType = FATType.FAT16;	// default
+			this.FATType = FatType.FAT16;	// default
 			this.SerialID = new byte[0];
 			this.FloppyMedia = false;
 			this.OSBootCode = null;

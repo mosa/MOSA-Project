@@ -154,12 +154,12 @@ namespace Mosa.Tools.MakeBootImage
 				}
 
 				// Set FAT settings
-				FATSettings fatSettings = new FATSettings();
+				FatSettings fatSettings = new FatSettings();
 
 				switch (fileSystem) {
-					case FileSystem.FAT12: fatSettings.FATType = FATType.FAT12; break;
-					case FileSystem.FAT16: fatSettings.FATType = FATType.FAT16; break;
-					case FileSystem.FAT32: fatSettings.FATType = FATType.FAT32; break;
+					case FileSystem.FAT12: fatSettings.FATType = FatType.FAT12; break;
+					case FileSystem.FAT16: fatSettings.FATType = FatType.FAT16; break;
+					case FileSystem.FAT32: fatSettings.FATType = FatType.FAT32; break;
 					default: break;
 				}
 
@@ -174,7 +174,7 @@ namespace Mosa.Tools.MakeBootImage
 				fatSettings.FloppyMedia = false;
 
 				// Create FAT file system
-				FATFileSystem fat = new FATFileSystem(partitionDevice);
+				FatFileSystem fat = new FatFileSystem(partitionDevice);
 				fat.Format(fatSettings);
 
 				fat.SetVolumeName(volumeLabel);
@@ -182,20 +182,20 @@ namespace Mosa.Tools.MakeBootImage
 				foreach (IncludeFile includeFile in includeFiles) {
 					string filename = includeFile.Filename;
 
-					Mosa.FileSystem.FAT.FileAttributes fileAttributes = new Mosa.FileSystem.FAT.FileAttributes();
-					if (includeFile.Archive) fileAttributes |= Mosa.FileSystem.FAT.FileAttributes.Archive;
-					if (includeFile.ReadOnly) fileAttributes |= Mosa.FileSystem.FAT.FileAttributes.ReadOnly;
-					if (includeFile.Hidden) fileAttributes |= Mosa.FileSystem.FAT.FileAttributes.Hidden;
-					if (includeFile.System) fileAttributes |= Mosa.FileSystem.FAT.FileAttributes.System;
+					Mosa.FileSystem.FAT.FatFileAttributes fileAttributes = new Mosa.FileSystem.FAT.FatFileAttributes();
+					if (includeFile.Archive) fileAttributes |= Mosa.FileSystem.FAT.FatFileAttributes.Archive;
+					if (includeFile.ReadOnly) fileAttributes |= Mosa.FileSystem.FAT.FatFileAttributes.ReadOnly;
+					if (includeFile.Hidden) fileAttributes |= Mosa.FileSystem.FAT.FatFileAttributes.Hidden;
+					if (includeFile.System) fileAttributes |= Mosa.FileSystem.FAT.FatFileAttributes.System;
 
 					byte[] file = ReadFile(filename);
 					string newname = (Path.GetFileNameWithoutExtension(includeFile.Newname).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Newname).PadRight(3).Substring(1, 3)).ToUpper();
-					FileLocation location = fat.CreateFile(newname, fileAttributes, 0);
+					FatFileLocation location = fat.CreateFile(newname, fileAttributes, 0);
 
 					if (!location.Valid)
 						throw new Exception("Unable to write file");
 
-					FATFileStream fatFileStream = new FATFileStream(fat, location);
+					FatFileStream fatFileStream = new FatFileStream(fat, location);
 					fatFileStream.Write(file, 0, file.Length);
 					fatFileStream.Flush();
 				}
@@ -205,7 +205,7 @@ namespace Mosa.Tools.MakeBootImage
 					string filename = "ldlinux.sys";
 					string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(3).Substring(0, 4)).ToUpper();
 
-					FileLocation location = fat.FindEntry(new Mosa.FileSystem.FAT.Find.WithName(name), 0);
+					FatFileLocation location = fat.FindEntry(new Mosa.FileSystem.FAT.Find.WithName(name), 0);
 
 					if (location.Valid) {
 						// Read boot sector
@@ -263,7 +263,7 @@ namespace Mosa.Tools.MakeBootImage
 							fat.WriteCluster(location.FirstCluster, firstCluster.Data);
 
 							// Re-Calculate checksum by openning the file
-							FATFileStream file = new FATFileStream(fat, location);
+							FatFileStream file = new FatFileStream(fat, location);
 
 							uint csum = 0x3EB202FE;
 							for (uint i = 0; i < file.Length >> 2; i++) {

@@ -10,7 +10,7 @@
 namespace Mosa.ClassLib
 {
 	/// <summary>
-	/// 
+	/// Binary Formatter (Little Endian)
 	/// </summary>
 	public struct BinaryFormat
 	{
