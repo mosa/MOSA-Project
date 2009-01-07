@@ -22,21 +22,21 @@ namespace Mosa.Runtime.CompilerFramework
 	{
 		#region Data members
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected BasicBlock firstBlock;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IArchitecture arch;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected BitArray workArray;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected Stack<BasicBlock> workList;
 
 		#endregion // Data members
@@ -47,24 +47,24 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#region IMethodCompilerStage Members
 
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value>The name of the compilation stage.</value>
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
 		public string Name
 		{
 			get { return @"Basic Block Reduction"; }
 		}
 
-        /// <summary>
-        /// Runs the specified compiler.
-        /// </summary>
-        /// <param name="compiler">The compiler.</param>
+		/// <summary>
+		/// Runs the specified compiler.
+		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		public void Run(IMethodCompiler compiler)
 		{
 			// Retrieve the basic block provider
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-            List<BasicBlock> blocks = blockProvider.Blocks;
+			List<BasicBlock> blocks = blockProvider.Blocks;
 
 			// Retreive the first block
 			firstBlock = blockProvider.FromLabel(-1);
@@ -100,14 +100,13 @@ namespace Mosa.Runtime.CompilerFramework
 
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pipeline"></param>
-        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
-        {
-            pipeline.InsertBefore<IL.CilToIrTransformationStage>(this);
-        }
+		/// <summary>
+		/// </summary>
+		/// <param name="pipeline"></param>
+		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		{
+			pipeline.InsertBefore<IL.CilToIrTransformationStage>(this);
+		}
 
 		/// <summary>
 		/// Processes the block.
@@ -118,7 +117,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			bool changed = false;
 
-            if (TryToRemoveUnreferencedBlock(block))
+			if (TryToRemoveUnreferencedBlock(block))
 				changed = true;
 
 			if (TryToFoldRedundantBranch(block))
@@ -136,8 +135,8 @@ namespace Mosa.Runtime.CompilerFramework
 			//if (TryToRemoveEmptyBlock(block))
 			//	changed = true;
 
-			//if (TryToHoistBranch(block))
-			//    changed = true;
+			if (TryToHoistBranch(block))
+				changed = true;
 
 			return changed;
 		}
@@ -164,11 +163,11 @@ namespace Mosa.Runtime.CompilerFramework
 				MarkBlockForReview(block);
 		}
 
-        /// <summary>
-        /// Marks the related blocks for review.
-        /// </summary>
-        /// <param name="block">The block.</param>
-        /// <param name="self">if set to <c>true</c> [self].</param>
+		/// <summary>
+		/// Marks the related blocks for review.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="self">if set to <c>true</c> [self].</param>
 		protected void MarkRelatedBlocksForReview(BasicBlock block, bool self)
 		{
 			foreach (BasicBlock previousBlock in block.PreviousBlocks)
@@ -191,7 +190,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected bool TryToRemoveUnreferencedBlock(BasicBlock block)
 		{
-			if ((block.PreviousBlocks.Count == 0) && (block != firstBlock) && (block.NextBlocks.Count != 0)) {
+			if ((block.PreviousBlocks.Count == 0) && (block != firstBlock) && (block.Instructions.Count != 0)) {
 
 				//Mark blocks for review in second pass
 				MarkBlocksForReview(block.NextBlocks);
@@ -375,6 +374,9 @@ namespace Mosa.Runtime.CompilerFramework
 					// Sanity check
 					Debug.Assert(block.LastInstruction is IBranchInstruction);
 
+					// Sanity check
+					//Debug.Assert(nextBlock.LastInstruction is IBranchInstruction);
+
 					// Mark blocks for review in second pass
 					MarkRelatedBlocksForReview(block, false);
 
@@ -405,6 +407,9 @@ namespace Mosa.Runtime.CompilerFramework
 					nextBlock.Instructions.Clear();
 					nextBlock.PreviousBlocks.Clear();
 					nextBlock.NextBlocks.Clear();
+
+					// Sanity check
+					//Debug.Assert(block.LastInstruction is IBranchInstruction);
 
 					return true;
 				}
