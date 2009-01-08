@@ -4,6 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
+ *  Simon "Kintaro" Wollwage (<mailto:kintaro@mosa-project.org>)
  */
 
 using Mosa.ClassLib;

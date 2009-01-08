@@ -100,6 +100,40 @@ namespace Mosa.Runtime.Linker.Elf32.Sections
             Header.Write(writer);
         }
 
+        /// <summary>
+        /// Patches the section at the given offset with the specified value.
+        /// </summary>
+        /// <param name="offset">The offset.</param>
+        /// <param name="linkType">Type of the link.</param>
+        /// <param name="value">The value.</param>
+        public void ApplyPatch(long offset, LinkType linkType, long value)
+        {
+            long pos = this.sectionStream.Position;
+            this.sectionStream.Position = offset;
+
+            // Apply the patch
+            switch (linkType & LinkType.SizeMask)
+            {
+                case LinkType.I1:
+                    this.sectionStream.WriteByte((byte)value);
+                    break;
+
+                case LinkType.I2:
+                    this.sectionStream.Write(BitConverter.GetBytes((ushort)value), 0, 2);
+                    break;
+
+                case LinkType.I4:
+                    this.sectionStream.Write(BitConverter.GetBytes((uint)value), 0, 4);
+                    break;
+
+                case LinkType.I8:
+                    this.sectionStream.Write(BitConverter.GetBytes(value), 0, 8);
+                    break;
+            }
+
+            this.sectionStream.Position = pos;
+        }
+
         #region Internals
 
         /// <summary>

@@ -210,7 +210,7 @@ namespace Mosa.Runtime.Linker.Elf32
             }
 
             // Save the stream position
-           // text.ApplyPatch(offset, linkType, targetAddress);
+            text.ApplyPatch(offset, linkType, targetAddress);
         }
 
         /// <summary>
