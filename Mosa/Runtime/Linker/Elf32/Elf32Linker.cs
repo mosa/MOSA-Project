@@ -22,6 +22,16 @@ namespace Mosa.Runtime.Linker.Elf32
         /// <summary>
         /// 
         /// </summary>
+        private const uint FileSectionAlignment = 0x200;
+
+        /// <summary>
+        /// Specifies the default section alignment in virtual memory.
+        /// </summary>
+        private const uint SectionAlignment = 0x1000;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private List<Mosa.Runtime.Linker.LinkerSection> sections;
         /// <summary>
         /// 
@@ -31,6 +41,18 @@ namespace Mosa.Runtime.Linker.Elf32
         /// 
         /// </summary>
         private Elf32.Sections.Elf32StringTableSection stringTableSection;
+        /// <summary>
+        /// Holds the file alignment used for this ELF32 file.
+        /// </summary>
+        private uint fileAlignment;
+        /// <summary>
+        /// Holds the section alignment used for this ELF32 file.
+        /// </summary>
+        private uint sectionAlignment;
+        /// <summary>
+        /// Flag, if the symbols have been resolved.
+        /// </summary>
+        private bool symbolsResolved;
 
         /// <summary>
         /// Retrieves the collection of sections created during compilation.
@@ -50,6 +72,8 @@ namespace Mosa.Runtime.Linker.Elf32
         public Elf32Linker()
         {
             this.sections = new List<LinkerSection>();
+            this.fileAlignment = FileSectionAlignment;
+            this.sectionAlignment = SectionAlignment;
 
             // Create the default section set
             Elf32.Sections.Elf32Section[] sections = new Sections.Elf32Section[(int)SectionKind.Max];
@@ -69,6 +93,12 @@ namespace Mosa.Runtime.Linker.Elf32
         /// <param name="compiler">The compiler context to perform processing in.</param>
         public override void Run(Mosa.Runtime.CompilerFramework.AssemblyCompiler compiler)
         {
+            if (String.IsNullOrEmpty(this.OutputFile) == true)
+                throw new ArgumentException(@"Invalid argument.", @"outputFile");
+
+            // Layout the sections in memory
+            LayoutSections();
+
             // Resolve all symbols first
             base.Run(compiler);
           
@@ -82,8 +112,7 @@ namespace Mosa.Runtime.Linker.Elf32
         /// <value>The load alignment.</value>
         public override long LoadSectionAlignment
         {
-            // TODO
-            get { throw new NotImplementedException(); }
+            get { return this.fileAlignment; }
         }
 
         /// <summary>
@@ -92,8 +121,7 @@ namespace Mosa.Runtime.Linker.Elf32
         /// <value>The virtual section alignment.</value>
         public override long VirtualSectionAlignment
         {
-            // TODO
-            get { throw new NotImplementedException(); }
+            get { return this.sectionAlignment; }
         }
 
         /// <summary>
@@ -105,6 +133,24 @@ namespace Mosa.Runtime.Linker.Elf32
             get
             {
                 return @"Executable and Linking Format (ELF) Linker";
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the file alignment in bytes.
+        /// </summary>
+        /// <value>The file alignment in bytes.</value>
+        public uint FileAlignment
+        {
+            get { return this.fileAlignment; }
+            set
+            {
+                if (value < FileSectionAlignment)
+                    throw new ArgumentException(@"Section alignment must not be less than 512 bytes.", @"value");
+                if ((value & (FileSectionAlignment - 1)) != 0)
+                    throw new ArgumentException(@"Section alignment must be a multiple of 512 bytes.", @"value");
+
+                this.fileAlignment = value;
             }
         }
 
@@ -143,7 +189,28 @@ namespace Mosa.Runtime.Linker.Elf32
         /// <param name="targetAddress">The position in code, where it should be patched.</param>
         protected override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
         {
-            throw new NotImplementedException();
+            if (this.symbolsResolved == false)
+                throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
+
+            // Retrieve the text section
+            Sections.Elf32Section text = (Sections.Elf32Section)GetSection(SectionKind.Text);
+            // Calculate the patch offset
+            long offset = (methodAddress - text.VirtualAddress.ToInt64()) + methodOffset;
+
+            if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
+            {
+                // FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
+                // the runtime loader must patch this link request, we'll fail it until we can do relocations.
+                //throw new NotSupportedException(@".reloc section not supported.");
+            }
+            else
+            {
+                // Change the absolute into a relative offset
+                targetAddress = targetAddress - (methodAddress + methodRelativeBase);
+            }
+
+            // Save the stream position
+           // text.ApplyPatch(offset, linkType, targetAddress);
         }
 
         /// <summary>
@@ -167,8 +234,7 @@ namespace Mosa.Runtime.Linker.Elf32
         protected override bool IsResolved(string symbol, out long virtualAddress)
         {
             virtualAddress = 0;
-            return true;
-            //return base.IsResolved(symbol, out virtualAddress);*/
+            return (this.symbolsResolved == true && base.IsResolved(symbol, out virtualAddress) == true);
         }
 
         /// <summary>
@@ -239,6 +305,15 @@ namespace Mosa.Runtime.Linker.Elf32
                 writer.Seek((int)header.ProgramHeaderOffset, System.IO.SeekOrigin.Begin);
                 pheader.Write(writer);
             }
+        }
+
+        /// <summary>
+        /// Adjusts the section addresses and performs a proper layout.
+        /// </summary>
+        private void LayoutSections()
+        {
+            // We've resolved all symbols, allow IsResolved to succeed
+            this.symbolsResolved = true;
         }
     }
 }

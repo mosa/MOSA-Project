@@ -92,6 +92,10 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
             /// Display is turned off
             /// </summary>
             Off         = 0x50,
+            /// <summary>
+            /// Used when current modestate is unknown
+            /// </summary>
+            Unknown     = 0xFF,
         }
 
         #region Members
@@ -360,6 +364,8 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
                 case DisplayModeState.Off:
                     sr0D |= 0x50;
                     break;
+                case DisplayModeState.Unknown:
+                    return false;
                 default:
                     return false;
             }
@@ -375,7 +381,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
         /// <returns></returns>
         private DisplayModeState GetDisplayModeState()
         {
-            DisplayModeState mode = DisplayModeState.On;
+            DisplayModeState mode = DisplayModeState.Unknown;
 
             switch (ReadSequenceRegister(0x0d) & 0x70)
             {

@@ -39,7 +39,21 @@ namespace Mosa.Tools.Compiler.Linkers
         /// <param name="optionSet">A given OptionSet to add the options to.</param>
         public override void AddOptions(OptionSet optionSet)
         {
-            // FIXME: Add ELF32 specific command line options here.
+            optionSet.Add<uint>(
+                "elf-file-alignment=",
+                "Determines the alignment of sections within the ELF file. Must be a multiple of 512 bytes.",
+                delegate(uint alignment)
+                {
+                    try
+                    {
+                        this.Wrapped.FileAlignment = alignment;
+                    }
+                    catch (System.Exception x)
+                    {
+                        throw new OptionException(@"The specified file alignment is invalid.", @"elf-file-alignment", x);
+                    }
+                }
+            );
         }
 
         #endregion // AssemblyCompilerStageWrapper Overrides
