@@ -43,10 +43,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="compiler">The compiler context to perform processing in.</param>
 		void Run(IMethodCompiler compiler);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pipeline"></param>
+		/// <summary>
+		/// Adds to pipeline.
+		/// </summary>
+		/// <param name="pipeline">The pipeline.</param>
         void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline);
 	}
 }

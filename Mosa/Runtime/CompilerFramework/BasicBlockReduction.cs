@@ -72,7 +72,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Architecture
 			arch = compiler.Architecture;
 
-			// Contains a lsit of blocks which need to be review during the second pass
+			// Contains a list of blocks which need to be review during the second pass
 			workArray = new BitArray(blocks.Count);
 			workList = new Stack<BasicBlock>();
 
