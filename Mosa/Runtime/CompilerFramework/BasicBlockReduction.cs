@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,10 +42,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#region Properties
 
-		#endregion // Properties
-
-		#region IMethodCompilerStage Members
-
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
@@ -55,6 +50,10 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			get { return @"Basic Block Reduction"; }
 		}
+
+		#endregion // Properties
+
+		#region IMethodCompilerStage Members
 
 		/// <summary>
 		/// Runs the specified compiler.
@@ -101,8 +100,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Adds to pipeline.
 		/// </summary>
-		/// <param name="pipeline"></param>
+		/// <param name="pipeline">The pipeline.</param>
 		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
 			pipeline.InsertBefore<IL.CilToIrTransformationStage>(this);

@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,7 +15,7 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// BasicBlockReduction attempts to eliminate useless control flow created as a side effect of other compiler optimizations.
+	/// BlockOrderingStage reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
 	public class BlockOrderingStage : IMethodCompilerStage
 	{
@@ -31,10 +30,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#region Properties
 
-		#endregion // Properties
-
-		#region IMethodCompilerStage Members
-
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
@@ -43,6 +38,10 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			get { return @"Basic Block Reduction"; }
 		}
+
+		#endregion // Properties
+
+		#region IMethodCompilerStage Members
 
 		/// <summary>
 		/// Pair of two blocks; from/to 
