@@ -79,14 +79,8 @@ namespace Mosa.Runtime.CompilerFramework
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 			List<BasicBlock> blocks = blockProvider.Blocks;
 
-			// Start counter for unique loop index (starts at 1)
-			int uniqueLoopIndexCount = 1;
-
 			// Retreive the first block
 			BasicBlock firstBlock = blockProvider.FromLabel(-1);
-
-			// Initial loop index for the first block is set to -1
-			firstBlock.LoopIndex = -1;
 
 			// Create list for loop 
 			List<ConnectedBlocks> loops = new List<ConnectedBlocks>();
@@ -98,6 +92,9 @@ namespace Mosa.Runtime.CompilerFramework
 			// Flag per basic block
 			BitArray visited = new BitArray(blocks.Count, false);
 			BitArray active = new BitArray(blocks.Count, false);
+
+			// Create dictionary for loop header index assignments
+			Dictionary<BasicBlock, int> loopHeaderIndexes = new Dictionary<BasicBlock, int>();
 
 			while (queue.Count != 0) {
 				ConnectedBlocks at = queue.Dequeue();
@@ -111,8 +108,8 @@ namespace Mosa.Runtime.CompilerFramework
 					loops.Add(at);
 
 					// Assign unique loop index (if not already set)
-					if (at.to.LoopIndex <= 0)
-						at.to.LoopIndex = uniqueLoopIndexCount++;
+					if (!loopHeaderIndexes.ContainsKey(at.to))
+						loopHeaderIndexes.Add(at.to, loopHeaderIndexes.Count + 1);
 
 					// and continue iteration
 					continue;
@@ -130,19 +127,19 @@ namespace Mosa.Runtime.CompilerFramework
 					queue.Enqueue(new ConnectedBlocks(at.to, successor));
 			}
 
+			// Create two-dimensional bit set of blocks belonging to loops
+			BitArray bitSet = new BitArray(loopHeaderIndexes.Count * blocks.Count, false);
+
 			// Create stack of blocks for next step of iterations
 			Stack<BasicBlock> stack = new Stack<BasicBlock>();
 
 			// Second set of iterations
 			foreach (ConnectedBlocks loop in loops) {
-				BasicBlock loopHeader = loop.to;
-				BasicBlock loopEnd = loop.from;
-
-				// Creat list of blocks in loop
-				List<BasicBlock> loopBlocks = new List<BasicBlock>();
+				// Add loop-tail to bit set
+				bitSet[(loopHeaderIndexes[loop.to] * loopHeaderIndexes.Count) + loop.to.Index] = true;
 
 				// Add loop-end to stack
-				stack.Push(loopEnd);
+				stack.Push(loop.from);
 
 				// Clear visit flag
 				visited = new BitArray(blocks.Count, false);
@@ -151,22 +148,34 @@ namespace Mosa.Runtime.CompilerFramework
 					BasicBlock at = stack.Pop();
 
 					// already visited, continue loop
-					if (visited.Get(at.Index)) 						
+					if (visited.Get(at.Index))
 						continue;
 
 					// Mark as visisted
 					visited.Set(at.Index, false);
 
-					// Add loop to list of blocks in loop
-					loopBlocks.Add(at);
+					// Set predecessor to bit set
+					bitSet[(loopHeaderIndexes[loop.to] * loopHeaderIndexes.Count) + at.Index] = true;
 
 					// Add predecessors to queue
 					foreach (BasicBlock predecessor in at.PreviousBlocks)
-						if (predecessor != loopHeader)
+						if (predecessor != loop.to) // Exclude if Loop-Header
 							stack.Push(predecessor);
 				}
+			}
 
-				loopBlocks.Add(loopHeader);
+			// Last step, assign LoopIndex and LoopDepth to each basic block
+			foreach (BasicBlock block in blocks) {
+				// Loop depth is the number of bits that are set for the according block id
+				int depth = 0;
+
+				for (int i = 0; i < loopHeaderIndexes.Count; i++)
+					if (bitSet[(i * loopHeaderIndexes.Count) + block.Index])
+						depth++;
+
+				block.LoopDepth = depth;
+
+				// Loop index is the index of the lowest bit that is set
 
 			}
 
