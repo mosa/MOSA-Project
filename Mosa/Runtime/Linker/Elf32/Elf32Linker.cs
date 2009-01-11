@@ -28,7 +28,6 @@ namespace Mosa.Runtime.Linker.Elf32
         /// Specifies the default section alignment in virtual memory.
         /// </summary>
         private const uint SectionAlignment = 0x1000;
-
         /// <summary>
         /// 
         /// </summary>
@@ -132,7 +131,7 @@ namespace Mosa.Runtime.Linker.Elf32
         {
             get
             {
-                return @"Executable and Linking Format (ELF) Linker";
+                return @"Executable and Linking Format (ELF) Linker [32 Bit]";
             }
         }
 
