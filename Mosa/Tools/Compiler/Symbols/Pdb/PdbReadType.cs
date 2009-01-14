@@ -45,10 +45,6 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
         {
             get
             {
-                Debugger.Break();
-                //if (this.LineNoSize == 0)
-                //    return new CvStartEnd[0];
-
                 return new CvLineEnumerator(this.pdbReader, this.Stream, this.SymbolSize);
             }
         }

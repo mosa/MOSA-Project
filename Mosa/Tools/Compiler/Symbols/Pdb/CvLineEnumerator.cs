@@ -73,15 +73,16 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 
                     nextBlockOffset = reader.ReadInt32();
                     start = reader.ReadInt32();
+                    seg = reader.ReadInt32() & 0xFFFF;
                     
                     // Is this the function we're looking for?
-                    if (start == this.functionAddress)
+                    if (true || start == this.functionAddress)
                     {
-                        seg = reader.ReadInt32() & 0xFFFF;
                         size = reader.ReadInt32();
                         fileOffset = reader.ReadInt32();
                         numberOfLines = reader.ReadInt32();
                         sizeOfLines = reader.ReadInt32();
+                        Debug.WriteLine(String.Format("Line numbers table header: size={0}, fileOffset={1}, numberOfLines={2}, sizeOfLines={3}, address={4:x4}:{5:x8}", size, fileOffset, numberOfLines, sizeOfLines, seg, start));
 
                         int[] startCol = new int[numberOfLines], endCol = new int[numberOfLines];
                         long pos = reader.BaseStream.Position;

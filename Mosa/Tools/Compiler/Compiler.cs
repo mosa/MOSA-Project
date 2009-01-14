@@ -277,7 +277,9 @@ namespace Mosa.Tools.Compiler
                     assemblyModule = runtime.AssemblyLoader.Load(file.FullName);
 
                     // Try to load debug information for the compilation
-                    string dbgFile = Path.Combine(Path.GetDirectoryName(file.FullName), Path.GetFileNameWithoutExtension(file.FullName) + ".pdb");
+                    string dbgFile;
+                    dbgFile = Path.Combine(Path.GetDirectoryName(file.FullName), Path.GetFileNameWithoutExtension(file.FullName) + ".pdb");
+                    //dbgFile = Path.Combine(Path.GetDirectoryName(file.FullName), "mosacl.pdb");
                     if (File.Exists(dbgFile) == true)
                     {
                         using (FileStream fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read))
