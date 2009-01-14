@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -176,6 +176,26 @@
     <Compile Include="LinkTimeCodeGeneration\LinkTimeCodeGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Symbols\Pdb\CvEntryType.cs" />
+    <Compile Include="Symbols\Pdb\CvFunctionSymbol3.cs" />
+    <Compile Include="Symbols\Pdb\CvGlobalSymbolEnumerator.cs" />
+    <Compile Include="Symbols\Pdb\CvLine.cs" />
+    <Compile Include="Symbols\Pdb\CvLineEnumerator.cs" />
+    <Compile Include="Symbols\Pdb\CvPublicSymbol3.cs" />
+    <Compile Include="Symbols\Pdb\CvStream.cs" />
+    <Compile Include="Symbols\Pdb\CvSymbol.cs" />
+    <Compile Include="Symbols\Pdb\CvSymbol1129.cs" />
+    <Compile Include="Symbols\Pdb\CvSymbolEnumerator.cs" />
+    <Compile Include="Symbols\Pdb\CvUtil.cs" />
+    <Compile Include="Symbols\Pdb\PdbFileHeader.cs" />
+    <Compile Include="Symbols\Pdb\PdbReader.cs" />
+    <Compile Include="Symbols\Pdb\PdbReadType.cs" />
+    <Compile Include="Symbols\Pdb\PdbRootStream.cs" />
+    <Compile Include="Symbols\Pdb\PdbStream.cs" />
+    <Compile Include="Symbols\Pdb\PdbSymbolHeader.cs" />
+    <Compile Include="Symbols\Pdb\PdbSymbolRangeEx.cs" />
+    <Compile Include="Symbols\Pdb\PdbType.cs" />
+    <Compile Include="Symbols\Pdb\PdbTypesHeader.cs" />
     <Compile Include="TypeInitializers\TypeInitializerSchedulerStage.cs">
       <SubType>Code</SubType>
     </Compile>

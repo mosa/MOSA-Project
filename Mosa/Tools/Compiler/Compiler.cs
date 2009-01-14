@@ -21,6 +21,8 @@ using Mosa.Tools.Compiler.Linkers;
 
 using NDesk.Options;
 using Mosa.Runtime.Linker;
+using Mosa.Tools.Compiler.Symbols.Pdb;
+using System.Diagnostics;
 
 namespace Mosa.Tools.Compiler
 {
@@ -273,6 +275,40 @@ namespace Mosa.Tools.Compiler
                 {
                     file = this.inputFiles[0];
                     assemblyModule = runtime.AssemblyLoader.Load(file.FullName);
+
+                    // Try to load debug information for the compilation
+                    string dbgFile = Path.Combine(Path.GetDirectoryName(file.FullName), Path.GetFileNameWithoutExtension(file.FullName) + ".pdb");
+                    if (File.Exists(dbgFile) == true)
+                    {
+                        using (FileStream fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        {
+                            using (PdbReader reader = new PdbReader(fileStream))
+                            {
+                                Debug.WriteLine(@"Global symbols:");
+                                foreach (CvSymbol symbol in reader.GlobalSymbols)
+                                {
+                                    Debug.WriteLine("\t" + symbol.ToString());
+                                }
+
+                                Debug.WriteLine(@"Types:");
+                                foreach (PdbType type in reader.Types)
+                                {
+                                    Debug.WriteLine("\t" + type.Name);
+                                    Debug.WriteLine("\t\tSymbols:");
+                                    foreach (CvSymbol symbol in type.Symbols)
+                                    {
+                                        Debug.WriteLine("\t\t\t" + symbol.ToString());
+                                    }
+
+                                    Debug.WriteLine("\t\tLines:");
+                                    foreach (CvLine line in type.LineNumbers)
+                                    {
+                                        Debug.WriteLine("\t\t\t" + line.ToString());
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 catch(BadImageFormatException)
                 {
