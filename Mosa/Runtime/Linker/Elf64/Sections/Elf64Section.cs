@@ -18,6 +18,8 @@ namespace Mosa.Runtime.Linker.Elf64.Sections
     /// </summary>
     public class Elf64Section : Mosa.Runtime.Linker.LinkerSection
     {
+        private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
+
         /// <summary>
         /// 
         /// </summary>
@@ -99,15 +101,15 @@ namespace Mosa.Runtime.Linker.Elf64.Sections
                     break;
 
                 case LinkType.I2:
-                    this.sectionStream.Write(BitConverter.GetBytes((ushort)value), 0, 2);
+                    this.sectionStream.Write(LittleEndianBitConverter.GetBytes((ushort)value), 0, 2);
                     break;
 
                 case LinkType.I4:
-                    this.sectionStream.Write(BitConverter.GetBytes((uint)value), 0, 4);
+                    this.sectionStream.Write(LittleEndianBitConverter.GetBytes((uint)value), 0, 4);
                     break;
 
                 case LinkType.I8:
-                    this.sectionStream.Write(BitConverter.GetBytes(value), 0, 8);
+                    this.sectionStream.Write(LittleEndianBitConverter.GetBytes(value), 0, 8);
                     break;
             }
 

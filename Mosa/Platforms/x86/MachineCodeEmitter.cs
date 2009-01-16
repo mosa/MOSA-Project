@@ -27,6 +27,8 @@ namespace Mosa.Platforms.x86
     /// </summary>
     public sealed class MachineCodeEmitter : ICodeEmitter, IDisposable
     {
+        private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
+
         #region Types
 
         /// <summary>
@@ -255,7 +257,7 @@ namespace Mosa.Platforms.x86
                         // Compute relative offset
                         relOffset = (int)currentPosition - ((int)p.position + 4);
                         // Write relative offset to stream
-                        byte[] bytes = BitConverter.GetBytes(relOffset);
+                        byte[] bytes = LittleEndianBitConverter.GetBytes(relOffset);
                         _codeStream.Write(bytes, 0, bytes.Length);
 
                         // Success
@@ -317,7 +319,7 @@ namespace Mosa.Platforms.x86
                     _codeStream.Position = p.position;
                     // HACK: We can't do PIC right now
                     //relOffset = (int)currentPosition - ((int)p.position + 4);
-                    bytes = BitConverter.GetBytes((int)currentPosition);
+                    bytes = LittleEndianBitConverter.GetBytes((int)currentPosition);
                     _codeStream.Write(bytes, 0, bytes.Length);
                     return true;
                 }
@@ -331,19 +333,19 @@ namespace Mosa.Platforms.x86
                 switch (type.Type)
                 {
                     case CilElementType.I8:
-                        bytes = BitConverter.GetBytes((long)data);
+                        bytes = LittleEndianBitConverter.GetBytes((long)data);
                         break;
 
                     case CilElementType.U8:
-                        bytes = BitConverter.GetBytes((ulong)data);
+                        bytes = LittleEndianBitConverter.GetBytes((ulong)data);
                         break;
 
                     case CilElementType.R4:
-                        bytes = BitConverter.GetBytes((float)data);
+                        bytes = LittleEndianBitConverter.GetBytes((float)data);
                         break;
 
                     case CilElementType.R8:
-                        bytes = BitConverter.GetBytes((double)data);
+                        bytes = LittleEndianBitConverter.GetBytes((double)data);
                         break;
 
                     default:
@@ -2221,7 +2223,7 @@ namespace Mosa.Platforms.x86
             }
 
             // Emit the relative jump offset (zero if we don't know it yet!)
-            byte[] bytes = BitConverter.GetBytes(relOffset);
+            byte[] bytes = LittleEndianBitConverter.GetBytes(relOffset);
             _codeStream.Write(bytes, 0, bytes.Length);
         }
 
@@ -2238,16 +2240,16 @@ namespace Mosa.Platforms.x86
             if (null != label)
             {
                 int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-                disp = BitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name));
+                disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name));
             }
             else if (null != member)
             {
                 int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-                disp = BitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member));
+                disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member));
             }
             else
             {
-                disp = BitConverter.GetBytes(displacement.Offset.ToInt32());
+                disp = LittleEndianBitConverter.GetBytes(displacement.Offset.ToInt32());
             }
 
             _codeStream.Write(disp, 0, disp.Length);
@@ -2264,7 +2266,7 @@ namespace Mosa.Platforms.x86
             {
                 // Add the displacement
                 StackOperand so = (StackOperand)op;
-                imm = BitConverter.GetBytes(so.Offset.ToInt32());
+                imm = LittleEndianBitConverter.GetBytes(so.Offset.ToInt32());
             }
             else if (op is LabelOperand)
             {
@@ -2275,7 +2277,7 @@ namespace Mosa.Platforms.x86
             {
                 // Add the displacement
                 MemoryOperand mo = (MemoryOperand)op;
-                imm = BitConverter.GetBytes(mo.Offset.ToInt32());
+                imm = LittleEndianBitConverter.GetBytes(mo.Offset.ToInt32());
             }
             else if (op is ConstantOperand)
             {
@@ -2284,7 +2286,7 @@ namespace Mosa.Platforms.x86
                 switch (op.Type.Type)
                 {
                     case CilElementType.I:
-                        imm = BitConverter.GetBytes(Convert.ToInt32(co.Value));
+                        imm = LittleEndianBitConverter.GetBytes(Convert.ToInt32(co.Value));
                         break;
 
                     case CilElementType.I1:
@@ -2300,10 +2302,10 @@ namespace Mosa.Platforms.x86
 
                     case CilElementType.I8: goto case CilElementType.U8;
                     case CilElementType.U8:
-                        imm = BitConverter.GetBytes(Convert.ToInt64(co.Value));
+                        imm = LittleEndianBitConverter.GetBytes(Convert.ToInt64(co.Value));
                         break;
                     case CilElementType.R4:
-                        imm = BitConverter.GetBytes(Convert.ToSingle(co.Value));
+                        imm = LittleEndianBitConverter.GetBytes(Convert.ToSingle(co.Value));
                         break;
                     case CilElementType.R8: goto default;
                     default:

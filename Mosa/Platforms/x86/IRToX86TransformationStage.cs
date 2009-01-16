@@ -35,6 +35,8 @@ namespace Mosa.Platforms.x86
         IX86InstructionVisitor<CodeTransformationStage.Context>,
         Mosa.Runtime.CompilerFramework.IPlatformTransformationStage
     {
+        private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
+
         #region Construction
 
         /// <summary>
@@ -1111,11 +1113,11 @@ namespace Mosa.Platforms.x86
                     switch (cop.Type.Type)
                     {
                         case CilElementType.R4:
-                            buffer = BitConverter.GetBytes((float)cop.Value);
+                            buffer = LittleEndianBitConverter.GetBytes((float)cop.Value);
                             break;
 
                         case CilElementType.R8:
-                            buffer = BitConverter.GetBytes((double)cop.Value);
+                            buffer = LittleEndianBitConverter.GetBytes((double)cop.Value);
                             break;
 
                         default:

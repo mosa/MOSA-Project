@@ -32,6 +32,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
     /// </remarks>
     public sealed partial class ILDecodingStage : IMethodCompilerStage, IInstructionsProvider, IInstructionDecoder
     {
+        private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
+
         #region Static data
 
         private static readonly Dictionary<OpCode, Type> s_opcodeMap = new Dictionary<OpCode,Type>{
@@ -437,7 +439,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     {
                         byte[] buffer = new byte[4];
                         reader.Read(buffer, 0, 3);
-                        length = BitConverter.ToInt32(buffer, 0);
+                        length = LittleEndianBitConverter.GetInt32(buffer, 0);
                         blocks = (length - 4) / 24;
                     }
                     else
