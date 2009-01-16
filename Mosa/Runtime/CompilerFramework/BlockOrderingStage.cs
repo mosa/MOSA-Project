@@ -116,11 +116,11 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 				else {
 					// Mark as active
-					active.Set(at.to.Index, false);
+					active.Set(at.to.Index, true);
 				}
 
 				// Mark as visited
-				visited.Set(at.to.Index, false);
+				visited.Set(at.to.Index, true);
 
 				// Add successors to queue
 				foreach (BasicBlock successor in at.to.NextBlocks)
@@ -152,7 +152,7 @@ namespace Mosa.Runtime.CompilerFramework
 						continue;
 
 					// Mark as visisted
-					visited.Set(at.Index, false);
+					visited.Set(at.Index, true);
 
 					// Set predecessor to bit set
 					bitSet[(loopHeaderIndexes[loop.to] * loopHeaderIndexes.Count) + at.Index] = true;
