@@ -1170,6 +1170,9 @@
     <Compile Include="Metadata\Tables\TypeSpecRow.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="System\DataConverter.cs" />
+    <Compile Include="System\IO\EndianAwareBinaryReader.cs" />
+    <Compile Include="System\IO\EndianAwareBinaryWriter.cs" />
     <Compile Include="Vm\DefaultTypeSystem.cs">
       <SubType>Code</SubType>
     </Compile>
