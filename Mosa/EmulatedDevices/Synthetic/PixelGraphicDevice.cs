@@ -95,6 +95,7 @@ namespace Mosa.EmulatedDevices.Synthetic
         /// </summary>
         public void Lock()
         {
+            System.Threading.Monitor.Enter(bitmap);
             bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, Width, Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
         }
 
@@ -103,6 +104,7 @@ namespace Mosa.EmulatedDevices.Synthetic
         /// </summary>
         public void Unlock()
         {
+            System.Threading.Monitor.Exit(bitmap);
             bitmap.UnlockBits(bitmapData);
             //dislayForm.Changed = true;
         }
@@ -115,7 +117,11 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// <returns></returns>
 		public Color ReadPixel(ushort x, ushort y)
 		{
-			System.Drawing.Color color = bitmap.GetPixel(x, y);
+            System.Drawing.Color color;
+            lock (bitmap)
+            {
+                color = bitmap.GetPixel(x, y);
+            }
 
 			return new Mosa.DeviceSystem.Color(color.R, color.G, color.B);
 		}
