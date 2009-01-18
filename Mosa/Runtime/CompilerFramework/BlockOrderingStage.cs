@@ -41,7 +41,22 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Properties
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private List<BasicBlock> blocks;
+		/// <summary>
+		/// 
+		/// </summary>
+		private BasicBlock firstBlock;
+		/// <summary>
+		/// 
+		/// </summary>
+		List<ConnectedBlocks> loops;
+
 		#region IMethodCompilerStage Members
+
+		#region ConnectedBlocks class
 
 		/// <summary>
 		/// Pair of two blocks; from/to 
@@ -69,6 +84,8 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
+		#endregion
+
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
@@ -77,14 +94,26 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			// Retrieve the basic block provider
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-			List<BasicBlock> blocks = blockProvider.Blocks;
+			blocks = blockProvider.Blocks;
 
 			// Retreive the first block
-			BasicBlock firstBlock = blockProvider.FromLabel(-1);
+			firstBlock = blockProvider.FromLabel(-1);
 
-			// Create list for loop 
-			List<ConnectedBlocks> loops = new List<ConnectedBlocks>();
+			// Create list for loops
+			loops = new List<ConnectedBlocks>();
 
+			// Deteremine Loop Depths
+			DetermineLoopDepths();
+
+			// Order the blocks based on loop depth
+			OrderBlocks();
+		}
+
+		/// <summary>
+		/// Determines the loop depths.
+		/// </summary>
+		private void DetermineLoopDepths()
+		{
 			// Create queue for first iteration 
 			Queue<ConnectedBlocks> queue = new Queue<ConnectedBlocks>();
 			queue.Enqueue(new ConnectedBlocks(null, firstBlock));
@@ -109,7 +138,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 					// Assign unique loop index (if not already set)
 					if (!loopHeaderIndexes.ContainsKey(at.to))
-						loopHeaderIndexes.Add(at.to, loopHeaderIndexes.Count + 1);
+						loopHeaderIndexes.Add(at.to, loopHeaderIndexes.Count);
 
 					// and continue iteration
 					continue;
@@ -135,8 +164,12 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Second set of iterations
 			foreach (ConnectedBlocks loop in loops) {
+				int index = loopHeaderIndexes[loop.to];
+
 				// Add loop-tail to bit set
-				bitSet[(loopHeaderIndexes[loop.to] * loopHeaderIndexes.Count) + loop.to.Index] = true;
+				bitSet[(index * blocks.Count) + loop.to.Index] = true;
+
+				Console.WriteLine(index.ToString() + " : B" + loop.to.Index.ToString());
 
 				// Add loop-end to stack
 				stack.Push(loop.from);
@@ -155,7 +188,9 @@ namespace Mosa.Runtime.CompilerFramework
 					visited.Set(at.Index, true);
 
 					// Set predecessor to bit set
-					bitSet[(loopHeaderIndexes[loop.to] * loopHeaderIndexes.Count) + at.Index] = true;
+					bitSet[(index * blocks.Count) + at.Index] = true;
+
+					Console.WriteLine(index.ToString() + " : B" + at.Index.ToString());
 
 					// Add predecessors to queue
 					foreach (BasicBlock predecessor in at.PreviousBlocks)
@@ -170,15 +205,114 @@ namespace Mosa.Runtime.CompilerFramework
 				int depth = 0;
 
 				for (int i = 0; i < loopHeaderIndexes.Count; i++)
-					if (bitSet[(i * loopHeaderIndexes.Count) + block.Index])
+					if (bitSet[(i * blocks.Count) + block.Index])
 						depth++;
 
+				// Set loop depth
 				block.LoopDepth = depth;
 
-				// Loop index is the index of the lowest bit that is set
+				// TODO: loop index  ???
+			}
+		}
 
+		#region Priority class
+		/// <summary>
+		/// 
+		/// </summary>
+		private class Priority : IComparable<Priority>
+		{
+			public int Depth;
+			public int Order;
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="Priority"/> class.
+			/// </summary>
+			/// <param name="depth">The depth.</param>
+			/// <param name="order">The order.</param>
+			public Priority(int depth, int order)
+			{
+				Depth = depth;
+				Order = order;
 			}
 
+			/// <summary>
+			/// Compares the current object with another object of the same type.
+			/// </summary>
+			/// <param name="other">An object to compare with this object.</param>
+			/// <returns>
+			/// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings:
+			/// Value
+			/// Meaning
+			/// Less than zero
+			/// This object is less than the <paramref name="other"/> parameter.
+			/// Zero
+			/// This object is equal to <paramref name="other"/>.
+			/// Greater than zero
+			/// This object is greater than <paramref name="other"/>.
+			/// </returns>
+			public int CompareTo(Priority other)
+			{
+				if (Depth > other.Depth)
+					return 1;
+				else
+					if (Depth < other.Depth)
+						return -1;
+					else
+						if (Order > other.Order)
+							return 1;
+						else
+							if (Order < other.Order)
+								return -1;
+							else
+								return 0;
+			}
+		}
+		#endregion
+
+		/// <summary>
+		/// Orders the blocks.
+		/// </summary>
+		private void OrderBlocks()
+		{
+			// Create an array to hold the forward branch count
+			int[] forwardBranches = new int[blocks.Count];
+
+			// Copy previous branch count to array
+			for (int i = 0; i < blocks.Count; i++)
+				forwardBranches[i] = blocks[i].PreviousBlocks.Count;
+
+			// Calculate forward branch count (PreviousBlock.Count minus loops to head)
+			foreach (ConnectedBlocks connecterBlock in loops)
+				forwardBranches[connecterBlock.to.Index]--;
+
+			// Create new list of ordered blocks
+			List<BasicBlock> orderedBlocks = new List<BasicBlock>();
+
+			// Create sorted worklist
+			SortedList<Priority, BasicBlock> workList = new SortedList<Priority, BasicBlock>();
+
+			// Start worklist with first block
+			workList.Add(new Priority(0, 0), firstBlock);
+
+			// Order helps sorted the worklist
+			int order = 0;
+
+			while (workList.Count != 0) {
+				BasicBlock block = workList.Values[workList.Count - 1];
+				workList.RemoveAt(workList.Count - 1);
+
+				orderedBlocks.Add(block);
+
+				foreach (BasicBlock successor in block.NextBlocks) {
+					forwardBranches[successor.Index]--;
+
+					if (forwardBranches[successor.Index] == 0)
+						workList.Add(new Priority(successor.LoopDepth, order++), successor);
+				}
+			}
+
+			foreach (BasicBlock block in orderedBlocks)
+				Console.WriteLine(block.Index);
 		}
 
 		/// <summary>
