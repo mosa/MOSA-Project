@@ -196,6 +196,17 @@ namespace Mosa.Runtime.CompilerFramework
 			return result;
 		}
 
+		/// <summary>
+		/// Compares two blocks by their index.
+		/// </summary>
+		/// <param name="a">A.</param>
+		/// <param name="b">The b.</param>
+		/// <returns></returns>
+		public static int CompareBlocksByIndex(BasicBlock a, BasicBlock b)
+		{
+			return (a.Index - b.Index);
+		}
+
 		#endregion // Methods
 
 		#region Block order fields

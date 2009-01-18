@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// BasicBlockReduction attempts to eliminate useless control flow created as a side effect of other compiler optimizations.
 	/// </summary>
-	public class BasicBlockReduction : IMethodCompilerStage
+	public class BlockReductionStage : IMethodCompilerStage
 	{
 		#region Data members
 
@@ -96,7 +96,6 @@ namespace Mosa.Runtime.CompilerFramework
 					workArray.Set(block.Index, false);
 				}
 			}
-
 		}
 
 		/// <summary>

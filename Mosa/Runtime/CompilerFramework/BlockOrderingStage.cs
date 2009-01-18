@@ -169,7 +169,7 @@ namespace Mosa.Runtime.CompilerFramework
 				// Add loop-tail to bit set
 				bitSet[(index * blocks.Count) + loop.to.Index] = true;
 
-				Console.WriteLine(index.ToString() + " : B" + loop.to.Index.ToString());
+				//Console.WriteLine(index.ToString() + " : B" + loop.to.Index.ToString());
 
 				// Add loop-end to stack
 				stack.Push(loop.from);
@@ -190,7 +190,7 @@ namespace Mosa.Runtime.CompilerFramework
 					// Set predecessor to bit set
 					bitSet[(index * blocks.Count) + at.Index] = true;
 
-					Console.WriteLine(index.ToString() + " : B" + at.Index.ToString());
+					//Console.WriteLine(index.ToString() + " : B" + at.Index.ToString());
 
 					// Add predecessors to queue
 					foreach (BasicBlock predecessor in at.PreviousBlocks)
@@ -286,7 +286,11 @@ namespace Mosa.Runtime.CompilerFramework
 				forwardBranches[connecterBlock.to.Index]--;
 
 			// Create new list of ordered blocks
-			List<BasicBlock> orderedBlocks = new List<BasicBlock>();
+			int[] orderedBlocks = new int[blocks.Count];
+			int orderBlockCnt = 0;
+
+			// Create bit array of refereced blocks (by index)
+			BitArray referencedBlocks = new BitArray(blocks.Count, false);
 
 			// Create sorted worklist
 			SortedList<Priority, BasicBlock> workList = new SortedList<Priority, BasicBlock>();
@@ -294,14 +298,16 @@ namespace Mosa.Runtime.CompilerFramework
 			// Start worklist with first block
 			workList.Add(new Priority(0, 0), firstBlock);
 
-			// Order helps sorted the worklist
+			// Order value helps sorted the worklist
 			int order = 0;
 
 			while (workList.Count != 0) {
 				BasicBlock block = workList.Values[workList.Count - 1];
 				workList.RemoveAt(workList.Count - 1);
 
-				orderedBlocks.Add(block);
+				referencedBlocks.Set(block.Index, true);
+
+				orderedBlocks[orderBlockCnt++] = block.Index;
 
 				foreach (BasicBlock successor in block.NextBlocks) {
 					forwardBranches[successor.Index]--;
@@ -311,8 +317,16 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 			}
 
-			foreach (BasicBlock block in orderedBlocks)
-				Console.WriteLine(block.Index);
+			// Place unreferenced blocks at the end of the list
+			for (int i = 0; i < blocks.Count; i++)
+				if (!referencedBlocks.Get(i))
+					orderedBlocks[orderBlockCnt++] = i;
+			
+			// Reorder the block list
+			for (int i = 0; i < orderBlockCnt; i++)
+				blocks[orderedBlocks[i]].Index = i;
+
+			blocks.Sort(BasicBlock.CompareBlocksByIndex);
 		}
 
 		/// <summary>

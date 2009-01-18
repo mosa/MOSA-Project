@@ -111,7 +111,7 @@
     <Compile Include="CompilerFramework\BasicBlockBuilderStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\BasicBlockReduction.cs">
+    <Compile Include="CompilerFramework\BlockReductionStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\BlockOrderFlags.cs">
