@@ -15,9 +15,9 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// BlockOrderingStage reorders blocks to optimize loops and reduce the distance of jumps and branches.
+	/// LoopAwareBlockOrderingStage reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class BlockOrderingStage : IMethodCompilerStage
+	public class LoopAwareBlockOrderingStage : IMethodCompilerStage
 	{
 		#region Data members
 

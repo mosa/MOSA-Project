@@ -84,7 +84,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompilerFramework\BlockOrderingStage.cs" />
+    <Compile Include="CompilerFramework\SimpleTraceBlockOrderingStage.cs" />
+    <Compile Include="CompilerFramework\LoopAwareBlockOrderingStage.cs" />
     <Compile Include="CompilerFramework\LocalCSE.cs" />
     <Compile Include="CompilerFramework\IMethodCompiler.cs" />
     <Compile Include="IJitService.cs">
