@@ -26,302 +26,278 @@ using System.Diagnostics;
 
 namespace Mosa.Tools.Compiler
 {
-    /// <summary>
-    /// Class containing the Compiler.
-    /// </summary>
-    public class Compiler
-    {
-        #region Fields
+	/// <summary>
+	/// Class containing the Compiler.
+	/// </summary>
+	public class Compiler
+	{
+		#region Fields
 
-        /// <summary>
-        /// Holds the stage responsible for the architecture.
-        /// </summary>
-        private ArchitectureSelector architectureSelector;
+		/// <summary>
+		/// Holds the stage responsible for the architecture.
+		/// </summary>
+		private ArchitectureSelector architectureSelector;
 
-        /// <summary>
-        /// Holds the stage responsible for the linker/binary format.
-        /// </summary>
-        private LinkerFormatSelector linkerStage;
+		/// <summary>
+		/// Holds the stage responsible for the linker/binary format.
+		/// </summary>
+		private LinkerFormatSelector linkerStage;
 
-        /// <summary>
-        /// Holds the stage responsible for the boot format.
-        /// </summary>
-        private BootFormatSelector bootFormatStage;
+		/// <summary>
+		/// Holds the stage responsible for the boot format.
+		/// </summary>
+		private BootFormatSelector bootFormatStage;
 
-        /// <summary>
-        /// Holds the name of the map file to generate.
-        /// </summary>
-        private MapFileGeneratorWrapper mapFileWrapper;
+		/// <summary>
+		/// Holds the name of the map file to generate.
+		/// </summary>
+		private MapFileGeneratorWrapper mapFileWrapper;
 
-        /// <summary>
-        /// Holds a list of input files.
-        /// </summary>
-        private List<FileInfo> inputFiles;
+		/// <summary>
+		/// Holds a list of input files.
+		/// </summary>
+		private List<FileInfo> inputFiles;
 
-        /// <summary>
-        /// Determines if the file is executable.
-        /// </summary>
-        private bool isExecutable;
+		/// <summary>
+		/// Determines if the file is executable.
+		/// </summary>
+		private bool isExecutable;
 
-        /// <summary>
-        /// Holds a reference to the OptionSet used for option parsing.
-        /// </summary>
-        private OptionSet optionSet;
+		/// <summary>
+		/// Holds a reference to the OptionSet used for option parsing.
+		/// </summary>
+		private OptionSet optionSet;
 
-        /// <summary>
-        /// A string holding a simple usage description.
-        /// </summary>
-        private readonly string usageString;
+		/// <summary>
+		/// A string holding a simple usage description.
+		/// </summary>
+		private readonly string usageString;
 
-        #endregion Fields
+		#endregion Fields
 
-        #region Constructors
+		#region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the Compiler class.
-        /// </summary>
-        public Compiler()
-        {
-            usageString = "Usage: mosacl -o outputfile --arch=[x86] --format=[ELF32|ELF64|PE] {--boot=[mb0.7]} {additional options} inputfiles";
-            optionSet = new OptionSet();
-            inputFiles = new List<FileInfo>();
+		/// <summary>
+		/// Initializes a new instance of the Compiler class.
+		/// </summary>
+		public Compiler()
+		{
+			usageString = "Usage: mosacl -o outputfile --arch=[x86] --format=[ELF32|ELF64|PE] {--boot=[mb0.7]} {additional options} inputfiles";
+			optionSet = new OptionSet();
+			inputFiles = new List<FileInfo>();
 
-            this.linkerStage = new LinkerFormatSelector();
-            this.bootFormatStage = new BootFormatSelector();
-            this.architectureSelector = new ArchitectureSelector();
-            this.mapFileWrapper = new MapFileGeneratorWrapper();
+			this.linkerStage = new LinkerFormatSelector();
+			this.bootFormatStage = new BootFormatSelector();
+			this.architectureSelector = new ArchitectureSelector();
+			this.mapFileWrapper = new MapFileGeneratorWrapper();
 
-            #region Setup general options
-            optionSet.Add(
-                "v|version",
-                "Display version information.",
-                delegate(string v)
-                {
-                    if (v != null)
-                    {
-                        // only show header and exit
-                        Environment.Exit(0);
-                    }
-                });
+			#region Setup general options
+			optionSet.Add(
+				"v|version",
+				"Display version information.",
+				delegate(string v)
+				{
+					if (v != null) {
+						// only show header and exit
+						Environment.Exit(0);
+					}
+				});
 
-            optionSet.Add(
-                "h|?|help",
-                "Display the full set of available options.",
-                delegate(string v)
-                {
-                    if (v != null)
-                    {
-                        this.ShowHelp();
-                        Environment.Exit(0);
-                    }
-                });
-            
-            // default option handler for input files
-            optionSet.Add(
-                "<>",
-                "Input files.",
-                delegate(string v)
-                {
-                    if (!File.Exists(v))
-                    {
-                        throw new OptionException(String.Format("Input file or option '{0}' doesn't exist.", v), String.Empty);
-                    }
+			optionSet.Add(
+				"h|?|help",
+				"Display the full set of available options.",
+				delegate(string v)
+				{
+					if (v != null) {
+						this.ShowHelp();
+						Environment.Exit(0);
+					}
+				});
 
-                    FileInfo file  = new FileInfo(v);
-                    if (file.Extension.ToLower() == ".exe")
-                    {
-                        if (isExecutable)
-                        {
-                            // there are more than one exe files in the list
-                            throw new OptionException("Multiple executables aren't allowed.", String.Empty);
-                        }
+			// default option handler for input files
+			optionSet.Add(
+				"<>",
+				"Input files.",
+				delegate(string v)
+				{
+					if (!File.Exists(v)) {
+						throw new OptionException(String.Format("Input file or option '{0}' doesn't exist.", v), String.Empty);
+					}
 
-                        isExecutable = true;
-                    }
+					FileInfo file = new FileInfo(v);
+					if (file.Extension.ToLower() == ".exe") {
+						if (isExecutable) {
+							// there are more than one exe files in the list
+							throw new OptionException("Multiple executables aren't allowed.", String.Empty);
+						}
 
-                    inputFiles.Add(file);
-                });
+						isExecutable = true;
+					}
 
-            #endregion
+					inputFiles.Add(file);
+				});
 
-            this.linkerStage.AddOptions(optionSet);
-            this.bootFormatStage.AddOptions(optionSet);
-            this.architectureSelector.AddOptions(optionSet);
-            this.mapFileWrapper.AddOptions(optionSet);
-        }
+			#endregion
 
-        #endregion Constructors
+			this.linkerStage.AddOptions(optionSet);
+			this.bootFormatStage.AddOptions(optionSet);
+			this.architectureSelector.AddOptions(optionSet);
+			this.mapFileWrapper.AddOptions(optionSet);
+		}
 
-        #region Public Methods
+		#endregion Constructors
 
-        /// <summary>
-        /// Runs the command line parser and the compilation process.
-        /// </summary>
-        /// <param name="args">The command line arguments.</param>
-        public void Run(string[] args)
-        {
-            // always print header with version information
-            Console.WriteLine("MOSA AOT Compiler, Version 0.1 'Wake'");
-            Console.WriteLine("(C) 2008 by the MOSA Project, Licensed under the new BSD license.");
-            Console.WriteLine();
+		#region Public Methods
 
-            try
-            {
-                if (args == null || args.Length == 0)
-                {
-                    // no arguments are specified
-                    ShowShortHelp();
-                    return;
-                }
+		/// <summary>
+		/// Runs the command line parser and the compilation process.
+		/// </summary>
+		/// <param name="args">The command line arguments.</param>
+		public void Run(string[] args)
+		{
+			// always print header with version information
+			Console.WriteLine("MOSA AOT Compiler, Version 0.1 'Wake'");
+			Console.WriteLine("(C) 2008 by the MOSA Project, Licensed under the new BSD license.");
+			Console.WriteLine();
 
-                optionSet.Parse(args);
+			try {
+				if (args == null || args.Length == 0) {
+					// no arguments are specified
+					ShowShortHelp();
+					return;
+				}
 
-                if (inputFiles.Count == 0)
-                {
-                    throw new OptionException("No input file(s) specified.", String.Empty);
-                }
+				optionSet.Parse(args);
 
-                // Process boot format:
-                // Boot format only matters if it's an executable
-                // Process this only now, because input files must be known
-                if (isExecutable == false && bootFormatStage.IsConfigured == true)
-                {
-                    Console.WriteLine("Warning: Ignoring boot format, because target is not an executable.");
-                    Console.WriteLine();
-                }
+				if (inputFiles.Count == 0) {
+					throw new OptionException("No input file(s) specified.", String.Empty);
+				}
 
-                // Check for missing options
-                if (!linkerStage.IsConfigured)
-                {
-                    throw new OptionException("No binary format specified.", "arch");
-                }
+				// Process boot format:
+				// Boot format only matters if it's an executable
+				// Process this only now, because input files must be known
+				if (isExecutable == false && bootFormatStage.IsConfigured == true) {
+					Console.WriteLine("Warning: Ignoring boot format, because target is not an executable.");
+					Console.WriteLine();
+				}
 
-                if (String.IsNullOrEmpty(this.linkerStage.OutputFile))
-                {
-                    throw new OptionException("No output file specified.", "o");
-                }
+				// Check for missing options
+				if (!linkerStage.IsConfigured) {
+					throw new OptionException("No binary format specified.", "arch");
+				}
 
-                if (!architectureSelector.IsConfigured)
-                {
-                    throw new OptionException("No architecture specified.", "arch");
-                }
-            }
-            catch (OptionException e)
-            {
-                ShowError(e.Message);
-                return;
-            }
-            
-            Console.WriteLine(this.ToString());
-            
-            Console.WriteLine("Compiling ...");
+				if (String.IsNullOrEmpty(this.linkerStage.OutputFile)) {
+					throw new OptionException("No output file specified.", "o");
+				}
 
-            Compile();
-        }
+				if (!architectureSelector.IsConfigured) {
+					throw new OptionException("No architecture specified.", "arch");
+				}
+			}
+			catch (OptionException e) {
+				ShowError(e.Message);
+				return;
+			}
 
-        /// <summary>
-        /// Returns a string representation of the current options.
-        /// </summary>
-        /// <returns>A string containing the options.</returns>
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Output file: ").AppendLine(this.linkerStage.OutputFile);
-            sb.Append("Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
-            sb.Append("Architecture: ").AppendLine(architectureSelector.Architecture.GetType().FullName);
-            sb.Append("Binary format: ").AppendLine(linkerStage.Name);
-            sb.Append("Boot format: ").AppendLine(bootFormatStage.Name);
-            sb.Append("Is executable: ").AppendLine(isExecutable.ToString());
-            return sb.ToString();
-        }
+			Console.WriteLine(this.ToString());
 
-        #endregion Public Methods
+			Console.WriteLine("Compiling ...");
 
-        #region Private Methods
+			Compile();
+		}
 
-        private void Compile()
-        {
-            using (CompilationRuntime runtime = new CompilationRuntime()) {
-                
-                // Append the paths of the folder to the loader path
-                List<string> paths = new List<string>();
-                foreach (FileInfo assembly in this.inputFiles)
-                {
-                    string path = Path.GetDirectoryName(assembly.FullName);
-                    if (paths.Contains(path) == false)
-                        paths.Add(path);
-                }
+		/// <summary>
+		/// Returns a string representation of the current options.
+		/// </summary>
+		/// <returns>A string containing the options.</returns>
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append("Output file: ").AppendLine(this.linkerStage.OutputFile);
+			sb.Append("Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
+			sb.Append("Architecture: ").AppendLine(architectureSelector.Architecture.GetType().FullName);
+			sb.Append("Binary format: ").AppendLine(linkerStage.Name);
+			sb.Append("Boot format: ").AppendLine(bootFormatStage.Name);
+			sb.Append("Is executable: ").AppendLine(isExecutable.ToString());
+			return sb.ToString();
+		}
 
-                // Append the search paths
-                foreach (string path in paths)
-                    runtime.AssemblyLoader.AppendPrivatePath(path);
-                paths = null;
+		#endregion Public Methods
 
-                /* FIXME: This only compiles the very first assembly, but we want to
-                 * potentially merge multiple assemblies into our kernel. This will
-                 * need an extension/modification of the assembly compiler method.
-                 * 
-                // Load all input assemblies
-                foreach (FileInfo assembly in this.inputFiles)
-                {
-                    IMetadataModule module = runtime.AssemblyLoader.Load(assembly.FullName);
-                }
-                 */
-                
-                IMetadataModule assemblyModule;
-                FileInfo file = null;
-                
-                try
-                {
-                    file = this.inputFiles[0];
-                    assemblyModule = runtime.AssemblyLoader.Load(file.FullName);
+		#region Private Methods
 
-                    // Try to load debug information for the compilation
-                    string dbgFile;
-                    dbgFile = Path.Combine(Path.GetDirectoryName(file.FullName), Path.GetFileNameWithoutExtension(file.FullName) + ".pdb");
-                    //dbgFile = Path.Combine(Path.GetDirectoryName(file.FullName), "mosacl.pdb");
-                    if (File.Exists(dbgFile) == true)
-                    {
-                        using (FileStream fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-                        {
-                            using (PdbReader reader = new PdbReader(fileStream))
-                            {
-                                Debug.WriteLine(@"Global symbols:");
-                                foreach (CvSymbol symbol in reader.GlobalSymbols)
-                                {
-                                    Debug.WriteLine("\t" + symbol.ToString());
-                                }
+		private void Compile()
+		{
+			using (CompilationRuntime runtime = new CompilationRuntime()) {
 
-                                Debug.WriteLine(@"Types:");
-                                foreach (PdbType type in reader.Types)
-                                {
-                                    Debug.WriteLine("\t" + type.Name);
-                                    Debug.WriteLine("\t\tSymbols:");
-                                    foreach (CvSymbol symbol in type.Symbols)
-                                    {
-                                        Debug.WriteLine("\t\t\t" + symbol.ToString());
-                                    }
+				// Append the paths of the folder to the loader path
+				List<string> paths = new List<string>();
+				foreach (FileInfo assembly in this.inputFiles) {
+					string path = Path.GetDirectoryName(assembly.FullName);
+					if (paths.Contains(path) == false)
+						paths.Add(path);
+				}
 
-                                    Debug.WriteLine("\t\tLines:");
-                                    foreach (CvLine line in type.LineNumbers)
-                                    {
-                                        Debug.WriteLine("\t\t\t" + line.ToString());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                catch(BadImageFormatException)
-                {
-                    ShowError(String.Format("Couldn't load input file {0} (invalid format).", file.FullName));
-                    return;
-                }
+				// Append the search paths
+				foreach (string path in paths)
+					runtime.AssemblyLoader.AppendPrivatePath(path);
+				paths = null;
 
-                // Create the compiler
-                using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, assemblyModule))
-                {
-                    aot.Pipeline.AddRange(new IAssemblyCompilerStage[] {
+				/* FIXME: This only compiles the very first assembly, but we want to
+				 * potentially merge multiple assemblies into our kernel. This will
+				 * need an extension/modification of the assembly compiler method.
+				 * 
+				// Load all input assemblies
+				foreach (FileInfo assembly in this.inputFiles)
+				{
+					IMetadataModule module = runtime.AssemblyLoader.Load(assembly.FullName);
+				}
+				 */
+
+				IMetadataModule assemblyModule;
+				FileInfo file = null;
+
+				try {
+					file = this.inputFiles[0];
+					assemblyModule = runtime.AssemblyLoader.Load(file.FullName);
+
+					// Try to load debug information for the compilation
+					string dbgFile;
+					dbgFile = Path.Combine(Path.GetDirectoryName(file.FullName), Path.GetFileNameWithoutExtension(file.FullName) + ".pdb");
+					//dbgFile = Path.Combine(Path.GetDirectoryName(file.FullName), "mosacl.pdb");
+					if (File.Exists(dbgFile) == true) {
+						using (FileStream fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+							using (PdbReader reader = new PdbReader(fileStream)) {
+								Debug.WriteLine(@"Global symbols:");
+								foreach (CvSymbol symbol in reader.GlobalSymbols) {
+									Debug.WriteLine("\t" + symbol.ToString());
+								}
+
+								Debug.WriteLine(@"Types:");
+								foreach (PdbType type in reader.Types) {
+									Debug.WriteLine("\t" + type.Name);
+									Debug.WriteLine("\t\tSymbols:");
+									foreach (CvSymbol symbol in type.Symbols) {
+										Debug.WriteLine("\t\t\t" + symbol.ToString());
+									}
+
+									Debug.WriteLine("\t\tLines:");
+									foreach (CvLine line in type.LineNumbers) {
+										Debug.WriteLine("\t\t\t" + line.ToString());
+									}
+								}
+							}
+						}
+					}
+				}
+				catch (BadImageFormatException) {
+					ShowError(String.Format("Couldn't load input file {0} (invalid format).", file.FullName));
+					return;
+				}
+
+				// Create the compiler
+				using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, assemblyModule)) {
+					aot.Pipeline.AddRange(new IAssemblyCompilerStage[] {
                         new TypeLayoutStage(),
                         new MethodCompilerBuilderStage(),
                         bootFormatStage,
@@ -332,58 +308,57 @@ namespace Mosa.Tools.Compiler
                         mapFileWrapper
                     });
 
-                    aot.Run();
-                }
-            }
-        }
+					aot.Run();
+				}
+			}
+		}
 
-        /// <summary>
-        /// Gets a list of input file names.
-        /// </summary>
-        private IEnumerable<string> GetInputFileNames()
-        {
-            foreach (FileInfo file in inputFiles)
-            {
-                yield return file.FullName;
-            }
-        }
+		/// <summary>
+		/// Gets a list of input file names.
+		/// </summary>
+		private IEnumerable<string> GetInputFileNames()
+		{
+			foreach (FileInfo file in inputFiles) {
+				yield return file.FullName;
+			}
+		}
 
-        /// <summary>
-        /// Shows an error and a short information text.
-        /// </summary>
-        /// <param name="message">The error message to show.</param>
-        private void ShowError(string message)
-        {
-            Console.WriteLine(usageString);
-            Console.WriteLine();
-            Console.Write ("Error: ");
-            Console.WriteLine (message);
-            Console.WriteLine();
-            Console.WriteLine ("Run 'mosacl --help' for more information.");
-            Console.WriteLine();
-        }
+		/// <summary>
+		/// Shows an error and a short information text.
+		/// </summary>
+		/// <param name="message">The error message to show.</param>
+		private void ShowError(string message)
+		{
+			Console.WriteLine(usageString);
+			Console.WriteLine();
+			Console.Write("Error: ");
+			Console.WriteLine(message);
+			Console.WriteLine();
+			Console.WriteLine("Run 'mosacl --help' for more information.");
+			Console.WriteLine();
+		}
 
-        /// <summary>
-        /// Shows a short help text pointing to the '--help' option.
-        /// </summary>
-        private void ShowShortHelp()
-        {
-            Console.WriteLine(usageString);
-            Console.WriteLine();
-            Console.WriteLine ("Run 'mosacl --help' for more information.");
-        }
+		/// <summary>
+		/// Shows a short help text pointing to the '--help' option.
+		/// </summary>
+		private void ShowShortHelp()
+		{
+			Console.WriteLine(usageString);
+			Console.WriteLine();
+			Console.WriteLine("Run 'mosacl --help' for more information.");
+		}
 
-        /// <summary>
-        /// Shows the full help containing descriptions for all possible options.
-        /// </summary>
-        private void ShowHelp()
-        {
-            Console.WriteLine(usageString);
-            Console.WriteLine();
-            Console.WriteLine("Options:");
-            this.optionSet.WriteOptionDescriptions(Console.Out);
-        }
+		/// <summary>
+		/// Shows the full help containing descriptions for all possible options.
+		/// </summary>
+		private void ShowHelp()
+		{
+			Console.WriteLine(usageString);
+			Console.WriteLine();
+			Console.WriteLine("Options:");
+			this.optionSet.WriteOptionDescriptions(Console.Out);
+		}
 
-        #endregion Private Methods
-    }
+		#endregion Private Methods
+	}
 }
