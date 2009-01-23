@@ -36,7 +36,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The name of the compilation stage.</value>
 		public string Name
 		{
-			get { return @"Basic Block Reduction"; }
+			get { return @"Simple Trace Block Ordering"; }
 		}
 
 		#endregion // Properties
@@ -90,6 +90,10 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			// Retrieve the basic block provider
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
+
+			if (blockProvider == null)
+				throw new InvalidOperationException(@"Simple Trace Block Ordering stage requires basic blocks.");
+			
 			blocks = blockProvider.Blocks;
 
 			// Retreive the first block

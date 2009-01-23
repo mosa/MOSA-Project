@@ -208,22 +208,5 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		#endregion // Methods
-
-		#region Block order fields
-
-        /// <summary>
-        /// 
-        /// </summary>
-		public BlockOrderFlags Flags;
-        /// <summary>
-        /// 
-        /// </summary>
-		public int LoopIndex;
-        /// <summary>
-        /// 
-        /// </summary>
-		public int LoopDepth;
-
-		#endregion // Block ordering fields
 	}
 }

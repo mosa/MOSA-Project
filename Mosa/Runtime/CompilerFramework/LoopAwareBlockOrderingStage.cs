@@ -36,7 +36,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The name of the compilation stage.</value>
 		public string Name
 		{
-			get { return @"Basic Block Reduction"; }
+			get { return @"Loop Aware Block Ordering"; }
 		}
 
 		#endregion // Properties
@@ -52,7 +52,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		List<ConnectedBlocks> loops;
+		private List<ConnectedBlocks> loops;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private Dictionary<BasicBlock, int> loopDepths;
 
 		#region IMethodCompilerStage Members
 
@@ -94,6 +99,10 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			// Retrieve the basic block provider
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
+
+			if (blockProvider == null)
+				throw new InvalidOperationException(@"Loop Aware Block Ordering stage requires basic blocks.");
+			
 			blocks = blockProvider.Blocks;
 
 			// Retreive the first block
@@ -101,6 +110,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Create list for loops
 			loops = new List<ConnectedBlocks>();
+
+			// Create dictionary for the depth of basic blocks
+			loopDepths = new Dictionary<BasicBlock, int>(blocks.Count);
 
 			// Deteremine Loop Depths
 			DetermineLoopDepths();
@@ -207,11 +219,9 @@ namespace Mosa.Runtime.CompilerFramework
 				for (int i = 0; i < loopHeaderIndexes.Count; i++)
 					if (bitSet[(i * blocks.Count) + block.Index])
 						depth++;
-
+				
 				// Set loop depth
-				block.LoopDepth = depth;
-
-				// TODO: loop index  ???
+				loopDepths.Add(block, depth);
 			}
 		}
 
@@ -313,7 +323,7 @@ namespace Mosa.Runtime.CompilerFramework
 					forwardBranches[successor.Index]--;
 
 					if (forwardBranches[successor.Index] == 0)
-						workList.Add(new Priority(successor.LoopDepth, order++), successor);
+						workList.Add(new Priority(loopDepths[successor], order++), successor);
 				}
 			}
 

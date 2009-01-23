@@ -63,6 +63,10 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			// Retrieve the basic block provider
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
+
+			if (blockProvider == null)
+				throw new InvalidOperationException(@"Block Reduction stage requires basic blocks.");
+
 			List<BasicBlock> blocks = blockProvider.Blocks;
 
 			// Retreive the first block

@@ -131,6 +131,11 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
+		/// <summary>
+		/// Folds the remainder of 2 constants
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The CTX.</param>
         void IL.IILVisitor<CodeTransformationStage.Context>.Rem(IL.RemInstruction instruction, CodeTransformationStage.Context ctx)
         {
             if (instruction.First is ConstantOperand && instruction.Second is ConstantOperand)
@@ -456,9 +461,9 @@ namespace Mosa.Runtime.CompilerFramework
                 throw new InvalidOperationException(@"Instruction stream must have been split to basic blocks.");
 
             CodeTransformationStage.Context ctx = new CodeTransformationStage.Context();
-            for (int currentBlock = 0; currentBlock < blockProvider.Blocks.Count; currentBlock++)
+
+			foreach (BasicBlock block in blockProvider.Blocks)
             {
-                BasicBlock block = blockProvider.Blocks[currentBlock];
                 ctx.Block = block;
                 for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++)
                 {
