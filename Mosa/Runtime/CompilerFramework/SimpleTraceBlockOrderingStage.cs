@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// SimpleTraceBlockOrderingStage reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class SimpleTraceBlockOrderingStage : IMethodCompilerStage
+	public class SimpleTraceBlockOrderingStage : IMethodCompilerStage, IBasicBlockOrder
 	{
 		#region Data members
 
@@ -25,6 +25,19 @@ namespace Mosa.Runtime.CompilerFramework
 		/// 
 		/// </summary>
 		protected IArchitecture arch;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private List<BasicBlock> blocks;
+		/// <summary>
+		/// 
+		/// </summary>
+		private BasicBlock firstBlock;
+		/// <summary>
+		/// 
+		/// </summary>
+		private int[] orderedBlocks;
 
 		#endregion // Data members
 
@@ -39,16 +52,13 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return @"Simple Trace Block Ordering"; }
 		}
 
-		#endregion // Properties
+		/// <summary>
+		/// Gets the ordered blocks.
+		/// </summary>
+		/// <value>The ordered blocks.</value>
+		public int[] OrderedBlocks { get { return orderedBlocks; } }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		private List<BasicBlock> blocks;
-		/// <summary>
-		/// 
-		/// </summary>
-		private BasicBlock firstBlock;
+		#endregion // Properties
 
 		#region IMethodCompilerStage Members
 
@@ -93,26 +103,26 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (blockProvider == null)
 				throw new InvalidOperationException(@"Simple Trace Block Ordering stage requires basic blocks.");
-			
+
 			blocks = blockProvider.Blocks;
 
 			// Retreive the first block
 			firstBlock = blockProvider.FromLabel(-1);
 
-			// Order the blocks based on loop depth
-			OrderBlocks();
+			// Determines the block order
+			DetermineBlockOrder();
 		}
 
 		/// <summary>
-		/// Orders the blocks.
+		/// Determines the block order.
 		/// </summary>
-		private void OrderBlocks()
+		private void DetermineBlockOrder()
 		{
 			// Create bit array of refereced blocks (by index)
 			BitArray referencedBlocks = new BitArray(blocks.Count, false);
 
-			// Create new list of ordered blocks
-			int[] orderedBlocks = new int[blocks.Count];
+			// Allocate list of ordered blocks
+			orderedBlocks = new int[blocks.Count];
 			int orderBlockCnt = 0;
 
 			// Create sorted worklist
@@ -137,11 +147,11 @@ namespace Mosa.Runtime.CompilerFramework
 				if (!referencedBlocks.Get(i))
 					orderedBlocks[orderBlockCnt++] = i;
 
-			// Reorder the block list
-			for (int i = 0; i < orderBlockCnt; i++)
-				blocks[orderedBlocks[i]].Index = i;
+			//// Reorder the block list
+			//for (int i = 0; i < orderBlockCnt; i++)
+			//    blocks[orderedBlocks[i]].Index = i;
 
-			blocks.Sort(BasicBlock.CompareBlocksByIndex);
+			//blocks.Sort(BasicBlock.CompareBlocksByIndex);
 		}
 
 		/// <summary>

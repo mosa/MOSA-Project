@@ -65,6 +65,7 @@ namespace Mosa.Tools.Compiler
                 new StackLayoutStage(),
 				new BlockReductionStage(),
 				new LoopAwareBlockOrderingStage(),
+				new BasicBlockOrderStage(),
 				//new SimpleTraceBlockOrderingStage(),
             });
         }
