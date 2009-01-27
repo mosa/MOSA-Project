@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
+ *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
  */
 
 using System;
@@ -2390,6 +2391,10 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Ucomiss(UcomissInstruction instruction, Context arg)
+        {
+        }
+        
+        void IX86InstructionVisitor<Context>.CpuId(CpuIdInstruction instruction, Context arg)
         {
         }
 
