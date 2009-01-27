@@ -109,6 +109,7 @@
     <Compile Include="ICodeEmitter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Instructions\Intrinsics\CpuIdInstruction.cs" />
     <Compile Include="IRToX86TransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
