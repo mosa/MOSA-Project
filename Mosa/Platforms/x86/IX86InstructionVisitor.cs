@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
+ *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
  */
 
 using System;
@@ -82,6 +83,12 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         /// <param name="arg">The arguments</param>
         void CmpXchg(CmpXchgInstruction instruction, ArgType arg);
+        /// <summary>
+        /// Retrieves the CPU ID
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void CpuId(CpuIdInstruction instruction, ArgType arg);
         /// <summary>
         /// Halts the machine
         /// </summary>

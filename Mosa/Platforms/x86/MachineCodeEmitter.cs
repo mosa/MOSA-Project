@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
+ *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
  */
 
 using System;
@@ -533,7 +534,16 @@ namespace Mosa.Platforms.x86
         {
             Emit(op1, op2, cd_cvttss2si);
         }
-
+        
+        
+        /// <summary>
+        /// Retrieves the CPU ID
+        /// </summary>
+        void ICodeEmitter.CpuId()
+        {
+            Emit(new byte[] { 0x0F, 0xA2 }, null, null, null);
+        }
+        
         /// <summary>
         /// Halts the machine
         /// </summary>

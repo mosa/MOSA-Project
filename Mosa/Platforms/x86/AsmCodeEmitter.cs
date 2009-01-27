@@ -1047,6 +1047,15 @@ namespace Mosa.Platforms.x86
         {
             _textWriter.WriteLine("\t\twrmsr");
         }
+        
+        /// <summary>
+        /// Retrieve CPU ID
+        /// </summary>
+        public void CpuId()
+        {
+            _textWriter.WriteLine("\t\tcpuid");
+        }
+        
         /// <summary>
         /// Exchange Register/Memory with a register
         /// </summary>

@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
  */
 
 using System;
@@ -149,7 +150,12 @@ namespace Mosa.Platforms.x86
         /// <param name="op1">The first fp operand.</param>
         /// <param name="op2">The second fp operand.</param>
         void Ucomisd(Operand op1, Operand op2);
-
+        
+        /// <summary>
+        /// Retrieves the CPU ID
+        /// </summary>
+        void CpuId();
+        
         /// <summary>
         /// Converts the signed integer to a double precision floating point value.
         /// </summary>

@@ -7,6 +7,7 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Phil Garcia (<mailto:phil@thinkedge.com>)
  *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
+ *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
 */
 
 using System;
@@ -136,6 +137,12 @@ namespace Mosa.Platforms.x86
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.HltInstruction))]
         public static void Hlt() { ThrowPlatformNotSupported(); }
+
+        /// <summary>
+        /// Wraps the x86 CPUID instruction.
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CpuIdInstruction))]
+        public static void CpuId() { ThrowPlatformNotSupported(); }
 
         #endregion
 
