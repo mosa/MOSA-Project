@@ -16,56 +16,61 @@ namespace Mosa.ClassLib
 	/// <typeparam name="T"></typeparam>
 	public class RedBlackTree<K, T> where K : System.IComparable
 	{
-        /// <summary>
-        /// 
-        /// </summary>
-		protected enum Color 
-        { 
-            /// <summary>
-            /// 
-            /// </summary>
-            Red = 1, 
-            
-            /// <summary>
-            /// 
-            /// </summary>
-            Black = 0 
-        };
-
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <typeparam name="NK">The type of the K.</typeparam>
-		/// <typeparam name="NT">The type of the T.</typeparam>
-		protected class RedBlackTreeNode<NK, NT> where NK : System.IComparable
+		protected enum Color
 		{
-            /// <summary>
-            /// 
-            /// </summary>
-			public Color color;
-
-            /// <summary>
-            /// 
-            /// </summary>
-			public NT data;
-
-            /// <summary>
-            /// 
-            /// </summary>
-			public NK key;
+			/// <summary>
+			/// 
+			/// </summary>
+			Red = 1,
 
 			/// <summary>
 			/// 
 			/// </summary>
-			public RedBlackTreeNode<NK, NT> parent, left, right;
+			Black = 0
+		};
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="X"></typeparam>
+		/// <typeparam name="Y"></typeparam>
+		protected class RedBlackTreeNode<X, Y> where X : System.IComparable
+		{
+			/// <summary>
+			/// 
+			/// </summary>
+			public Color color;
+			/// <summary>
+			/// 
+			/// </summary>
+			public Y data;
+			/// <summary>
+			/// 
+			/// </summary>
+			public X key;
+			/// <summary>
+			/// 
+			/// </summary>
+			public RedBlackTreeNode<X, Y> parent;
+			/// <summary>
+			/// 
+			/// </summary>
+			public RedBlackTreeNode<X, Y> left;
+			/// <summary>
+			/// 
+			/// </summary>
+			public RedBlackTreeNode<X, Y> right;
 
 			/// <summary>
-			/// Initializes a new instance of the <see cref="RedBlackTree&lt;K, T&gt;.RedBlackTreeNode&lt;NK, NT&gt;"/> class.
+			/// Initializes a new instance 
 			/// </summary>
 			/// <param name="key">The key.</param>
 			/// <param name="data">The data.</param>
 			/// <param name="color">The color.</param>
-			public RedBlackTreeNode(NK key, NT data, Color color)
+			public RedBlackTreeNode(X key, Y data, Color color)
 			{
 				this.key = key;
 				this.color = color;
@@ -79,9 +84,9 @@ namespace Mosa.ClassLib
 		/// </summary>
 		protected RedBlackTreeNode<K, T> root;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected uint size = 0;
 
 		/// <summary>

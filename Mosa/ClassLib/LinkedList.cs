@@ -37,7 +37,7 @@ namespace Mosa.ClassLib
 			public LinkedListNode<U> previous;
 
 			/// <summary>
-			/// Initializes a new instance of the <see cref="LinkedList&lt;T&gt;.LinkedListNode&lt;U&gt;"/> class.
+			/// Initializes a new instance of the <see cref="T:LinkedList.U:LinkedListNode"/> class.
 			/// </summary>
 			/// <param name="value">The value.</param>
 			/// <param name="previous">The previous.</param>
@@ -107,7 +107,7 @@ namespace Mosa.ClassLib
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LinkedList&lt;T&gt;"/> class.
+		/// Initializes a new instance of the <see cref="T:LinkedList"/> class.
 		/// </summary>
 		public LinkedList()
 		{
