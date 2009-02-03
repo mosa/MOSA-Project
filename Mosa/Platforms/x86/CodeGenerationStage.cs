@@ -312,9 +312,19 @@ namespace Mosa.Platforms.x86
             _emitter.CmpXchg(instruction.Operand0, instruction.Operand1);
         }
         
+        /// <summary>
+        /// Read CPUID characteristics
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.CpuId(CpuIdInstruction instruction, int arg)
         {
-            _emitter.CpuId();
+        	  Operand function = instruction.Operand0;
+              MemoryOperand dst = instruction.Results[0] as MemoryOperand;
+        	  
+        	  bool x = false;
+        	  Debug.Assert(x, "CPUID: " + dst.Type.ToString() + " :: " + function.Type.ToString());
+              _emitter.CpuId(dst, function);
         }
         
         void IX86InstructionVisitor<int>.Cvtsi2sd(Cvtsi2sdInstruction instruction, int arg)

@@ -535,13 +535,20 @@ namespace Mosa.Platforms.x86
             Emit(op1, op2, cd_cvttss2si);
         }
         
-        
         /// <summary>
         /// Retrieves the CPU ID
         /// </summary>
-        void ICodeEmitter.CpuId()
+        /// <param name="dst">The destination base memory address</param>
+        /// <param name="function">The CPUID function to execute</param>
+        void ICodeEmitter.CpuId(Operand dst, Operand function)
         {
+            MemoryOperand mopdst = dst as MemoryOperand;
+            Emit(new RegisterOperand(function.Type, GeneralPurposeRegister.EAX), function, cd_mov);
             Emit(new byte[] { 0x0F, 0xA2 }, null, null, null);
+            Emit(mopdst, new RegisterOperand(mopdst.Type, GeneralPurposeRegister.EAX), cd_mov);
+            Emit(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 4)), new RegisterOperand(dst.Type, GeneralPurposeRegister.EBX), cd_mov);
+            Emit(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 8)), new RegisterOperand(dst.Type, GeneralPurposeRegister.ECX), cd_mov);
+            Emit(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 12)), new RegisterOperand(dst.Type, GeneralPurposeRegister.EDX), cd_mov);
         }
         
         /// <summary>

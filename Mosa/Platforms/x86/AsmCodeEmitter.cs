@@ -1051,9 +1051,19 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Retrieve CPU ID
         /// </summary>
-        public void CpuId()
+        /// <param name="dst">The destination memory address.</param>
+        /// <param name="src">The CPUID function to run.</param>
+        public void CpuId(Operand dst, Operand src)
         {
+        	  if (!(dst is MemoryOperand))
+        	      throw new NotSupportedException(@"Only memory addresses allowed as destinations");
+        	  
+        	  _textWriter.WriteLine("\t\tmov\teax, {0}", WriteOperand(src));
             _textWriter.WriteLine("\t\tcpuid");
+            _textWriter.WriteLine("\t\tmov\t{0}, eax", WriteOperand(dst));
+            _textWriter.WriteLine("\t\tmov\t{0}[4], ebx", WriteOperand(dst));
+            _textWriter.WriteLine("\t\tmov\t{0}[8], ecx", WriteOperand(dst));
+            _textWriter.WriteLine("\t\tmov\t{0}[8], edx", WriteOperand(dst));
         }
         
         /// <summary>

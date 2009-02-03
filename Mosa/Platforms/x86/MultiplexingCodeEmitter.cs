@@ -300,11 +300,13 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Retrieves the CPU ID
         /// </summary>
-        public void CpuId()
+        /// <param name="dst">The destination base memory address</param>
+        /// <param name="function">The CPUID function to execute</param>
+        public void CpuId(Operand dst, Operand function)
         {
             _emitters.ForEach(delegate(ICodeEmitter emitter)
             {
-                emitter.CpuId();
+                emitter.CpuId(dst, function);
             });
         }
 

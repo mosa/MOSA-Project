@@ -154,7 +154,9 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Retrieves the CPU ID
         /// </summary>
-        void CpuId();
+        /// <param name="dest">The destination base memory address</param>
+        /// <param name="function">The CPUID function to execute</param>
+        void CpuId(Operand dest, Operand function);
         
         /// <summary>
         /// Converts the signed integer to a double precision floating point value.

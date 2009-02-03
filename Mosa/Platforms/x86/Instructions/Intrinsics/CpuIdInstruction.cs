@@ -21,20 +21,31 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
     /// <summary>
     /// Intermediate representation of the x86 CPUID instruction.
     /// </summary>
-    public sealed class CpuIdInstruction : IR.IRInstruction
+    public sealed class CpuIdInstruction : IR.TwoOperandInstruction
     {
         #region Construction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CpuIdInstruction"/> class.
         /// </summary>
-        public CpuIdInstruction()
+        public CpuIdInstruction() :
+            base()
         {
         }
-
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CpuIdInstruction"/> class.
+        /// </summary>
+        /// <param name="destination">The destination operand.</param>
+        /// <param name="source">The source operand.</param>
+        public CpuIdInstruction(Operand destination, Operand source) :
+            base(source, destination)
+        {
+        }
+        
         #endregion // Construction
 
-        #region IRInstruction Overrides
+        #region TwoOperandInstruction Overrides
 
         /// <summary>
         /// Returns a string representation of the instruction.
@@ -44,7 +55,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         /// </returns>
         public override string ToString()
         {
-            return String.Format(@"x86 CPUID");
+            return String.Format(@"x86 cpuid {0}, {1}", this.Operand0, this.Operand1);
         }
 
         /// <summary>
@@ -63,6 +74,6 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
                 visitor.Visit(this, arg);
         }
 
-        #endregion // IRInstruction Overrides
+        #endregion // TwoOperandInstruction Overrides
     }
 }
