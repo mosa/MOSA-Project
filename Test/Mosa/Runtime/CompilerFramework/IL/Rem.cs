@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Alex Lyman (<mailto:rootnode@mosa-project.org>)
- *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
+ *  Alex Lyman (<mailto:kintaro@mosa-project.org>)
+ *  Simon Wollwage (<mailto:kintaro@mosa-project.org>)
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
  *  

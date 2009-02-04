@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
- *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
+ *  Simon Wollwage (<mailto:kintaro@mosa-project.org>)
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  
  */

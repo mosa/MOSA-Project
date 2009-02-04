@@ -549,12 +549,12 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.Dec(DecInstruction instruction, int arg)
         {
-            _emitter.Dec(instruction.Operand0);
+            _emitter.Sub(instruction.Operand0, new ConstantOperand(instruction.Operand0.Type, (int)1));
         }
 
         void IX86InstructionVisitor<int>.Inc(IncInstruction instruction, int arg)
         {
-            _emitter.Inc(instruction.Operand0);
+            _emitter.Add(instruction.Operand0, new ConstantOperand(instruction.Operand0.Type, (int)1));
         }
 
         void IX86InstructionVisitor<int>.Neg(NegInstruction instruction, int arg)
