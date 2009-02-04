@@ -1055,15 +1055,17 @@ namespace Mosa.Platforms.x86
         /// <param name="src">The CPUID function to run.</param>
         public void CpuId(Operand dst, Operand src)
         {
-        	  if (!(dst is MemoryOperand))
-        	      throw new NotSupportedException(@"Only memory addresses allowed as destinations");
-        	  
-        	  _textWriter.WriteLine("\t\tmov\teax, {0}", WriteOperand(src));
+        	if (!(dst is MemoryOperand))
+        	    throw new NotSupportedException(@"Only memory addresses allowed as destinations");
+
+            MemoryOperand mopdst = dst as MemoryOperand;
+
+            Mov(new RegisterOperand(src.Type, GeneralPurposeRegister.EAX), src);
             _textWriter.WriteLine("\t\tcpuid");
-            _textWriter.WriteLine("\t\tmov\t{0}, eax", WriteOperand(dst));
-            _textWriter.WriteLine("\t\tmov\t{0}[4], ebx", WriteOperand(dst));
-            _textWriter.WriteLine("\t\tmov\t{0}[8], ecx", WriteOperand(dst));
-            _textWriter.WriteLine("\t\tmov\t{0}[8], edx", WriteOperand(dst));
+            Mov(mopdst, new RegisterOperand(dst.Type, GeneralPurposeRegister.EAX));
+            Mov(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 4)), new RegisterOperand(mopdst.Type, GeneralPurposeRegister.EBX));
+            Mov(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 8)), new RegisterOperand(mopdst.Type, GeneralPurposeRegister.ECX));
+            Mov(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 12)), new RegisterOperand(mopdst.Type, GeneralPurposeRegister.EDX));
         }
         
         /// <summary>

@@ -543,12 +543,12 @@ namespace Mosa.Platforms.x86
         void ICodeEmitter.CpuId(Operand dst, Operand function)
         {
             MemoryOperand mopdst = dst as MemoryOperand;
-            Emit(new RegisterOperand(function.Type, GeneralPurposeRegister.EAX), function, cd_mov);
+            ((ICodeEmitter)this).Mov(new RegisterOperand(function.Type, GeneralPurposeRegister.EAX), function);
             Emit(new byte[] { 0x0F, 0xA2 }, null, null, null);
-            Emit(mopdst, new RegisterOperand(mopdst.Type, GeneralPurposeRegister.EAX), cd_mov);
-            Emit(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 4)), new RegisterOperand(dst.Type, GeneralPurposeRegister.EBX), cd_mov);
-            Emit(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 8)), new RegisterOperand(dst.Type, GeneralPurposeRegister.ECX), cd_mov);
-            Emit(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 12)), new RegisterOperand(dst.Type, GeneralPurposeRegister.EDX), cd_mov);
+            ((ICodeEmitter)this).Mov(mopdst, new RegisterOperand(mopdst.Type, GeneralPurposeRegister.EAX));
+            ((ICodeEmitter)this).Mov(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 4)), new RegisterOperand(dst.Type, GeneralPurposeRegister.EBX));
+            ((ICodeEmitter)this).Mov(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 8)), new RegisterOperand(dst.Type, GeneralPurposeRegister.ECX));
+            ((ICodeEmitter)this).Mov(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 12)), new RegisterOperand(dst.Type, GeneralPurposeRegister.EDX));
         }
         
         /// <summary>
