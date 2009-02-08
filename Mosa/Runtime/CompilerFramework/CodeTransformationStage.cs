@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
- *  Simon Wollwage (<mailto:kintaro@mosa-project.org>)
+ *  Simon Wollwage (<mailto:kintaro@think-in-co.de>)
  */
 
 using System;

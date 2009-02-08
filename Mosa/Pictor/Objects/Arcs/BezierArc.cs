@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Simon Wollwage (<mailto:kintaro@mosa-project.org>)
+ *  Simon Wollwage (<mailto:kintaro@think-in-co.de>)
  */
 
 namespace Pictor.Objects.Arcs

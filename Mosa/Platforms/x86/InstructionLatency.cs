@@ -14,7 +14,7 @@ namespace Mosa.Platforms.x86
     /// Older chipsets contain longer latencies, so by using shorter latencies
     /// we don't screw up things.
     /// </summary>
-    public sealed class IntructionLatency
+    public sealed class InstructionLatency
     {
         /// <summary>
         /// Contains the latencies for the usual instructions most widely used

@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Simon "Kintaro" Wollwage (<mailto:kintaro@mosa-project.org>)
+ *  Simon "Kintaro" Wollwage (<mailto:kintaro@think-in-co.de>)
  */
 
 using System;
