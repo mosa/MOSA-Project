@@ -21,11 +21,9 @@ namespace Mosa.Platforms.x86
     /// 
     /// </summary>
     public sealed class InstructionSchedulingStage : IMethodCompilerStage
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        private static int latencySum = 0;
+    {        
+        //private static int latencySum = 0;
+
         /// <summary>
         /// Retrieves the name of the compilation stage.
         /// </summary>
