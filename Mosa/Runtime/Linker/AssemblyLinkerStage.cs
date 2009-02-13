@@ -310,7 +310,8 @@ namespace Mosa.Runtime.Linker
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
         /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
         /// <param name="target">The method or static field to link against.</param>
-        public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
+        /// <param name="offset">An offset to apply to the link target.</param>
+        public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target, IntPtr offset)
         {
             Debug.Assert(true == IsValid(target), @"Invalid RuntimeMember passed to IAssemblyLinker.Link");
             if (false == IsValid(target))
@@ -319,7 +320,11 @@ namespace Mosa.Runtime.Linker
             long address;
             if (false == IsResolved(target, out address))
             {
-                address = Link(linkType, method, methodOffset, methodRelativeBase, CreateSymbolName(target));
+                address = Link(linkType, method, methodOffset, methodRelativeBase, CreateSymbolName(target), offset);
+            }
+            else
+            {
+                address += offset.ToInt64();
             }
 
             return address;
@@ -333,12 +338,13 @@ namespace Mosa.Runtime.Linker
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
         /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
         /// <param name="symbol">The linker symbol to link against.</param>
+        /// <param name="offset">The offset to apply to the symbol to link against.</param>
         /// <returns>
         /// The return value is the preliminary virtualAddress to place in the generated machine
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
-        public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol)
+        public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol, IntPtr offset)
         {
             Debug.Assert(null != symbol, @"Symbol can't be null.");
             if (null == symbol)
@@ -351,10 +357,11 @@ namespace Mosa.Runtime.Linker
                 if (false == _linkRequests.TryGetValue(symbol, out patchList))
                 {
                     patchList = new List<LinkRequest>(1);
-                    patchList.Add(new LinkRequest(linkType, CreateSymbolName(method), methodOffset, methodRelativeBase, symbol));
+                    patchList.Add(new LinkRequest(linkType, CreateSymbolName(method), methodOffset, methodRelativeBase, symbol, offset));
                 }
 
                 PatchRequests(result, patchList);
+                result += offset.ToInt64();
             }
             else
             {
@@ -366,7 +373,7 @@ namespace Mosa.Runtime.Linker
                     _linkRequests.Add(symbol, list);
                 }
 
-                list.Add(new LinkRequest(linkType, CreateSymbolName(method), methodOffset, methodRelativeBase, symbol));
+                list.Add(new LinkRequest(linkType, CreateSymbolName(method), methodOffset, methodRelativeBase, symbol, offset));
             }
 
             return result;
@@ -380,12 +387,13 @@ namespace Mosa.Runtime.Linker
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
         /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
         /// <param name="targetSymbol">The linker symbol to link against.</param>
+        /// <param name="offset">An offset to apply to the link target.</param>
         /// <returns>
         /// The return value is the preliminary virtualAddress to place in the generated machine
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
-        public virtual long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol)
+        public virtual long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset)
         {
             Debug.Assert(null != symbolName, @"Symbol can't be null.");
             if (null == symbolName)
@@ -398,10 +406,11 @@ namespace Mosa.Runtime.Linker
                 if (false == _linkRequests.TryGetValue(targetSymbol, out patchList))
                 {
                     patchList = new List<LinkRequest>(1);
-                    patchList.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol));
+                    patchList.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
                 }
 
                 PatchRequests(result, patchList);
+                result += offset.ToInt64();
             }
             else
             {
@@ -413,7 +422,7 @@ namespace Mosa.Runtime.Linker
                     _linkRequests.Add(targetSymbol, list);
                 }
 
-                list.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol));
+                list.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
             }
 
             return result;
@@ -534,7 +543,7 @@ namespace Mosa.Runtime.Linker
                     methodAddress,
                     request.MethodOffset,
                     request.MethodRelativeBase,
-                    virtualAddress
+                    virtualAddress + request.Offset.ToInt64()
                 );
             }
         }

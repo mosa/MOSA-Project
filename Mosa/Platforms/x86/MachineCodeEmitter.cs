@@ -444,7 +444,8 @@ namespace Mosa.Platforms.x86
                 _compiler.Method,
                 (int)(_codeStream.Position - _codeStreamBasePosition) - 4,
                 (int)(_codeStream.Position - _codeStreamBasePosition),
-                target
+                target,
+                IntPtr.Zero
             );
         }
 
@@ -2257,12 +2258,12 @@ namespace Mosa.Platforms.x86
             if (null != label)
             {
                 int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-                disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name));
+                disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name, IntPtr.Zero));
             }
             else if (null != member)
             {
                 int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-                disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member));
+                disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member, member.Offset));
             }
             else
             {

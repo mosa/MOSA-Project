@@ -59,6 +59,21 @@ namespace Mosa.Runtime.CompilerFramework
             this.member = method;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MemberOperand"/> class.
+        /// </summary>
+        /// <param name="member">The member to reference.</param>
+        /// <param name="type">The type of data held in the operand.</param>
+        /// <param name="offset">The offset from the base register or absolute address to retrieve.</param>
+        public MemberOperand(RuntimeMember member, SigType type, IntPtr offset) :
+            base(type, null, offset)
+        {
+            if (member == null)
+                throw new ArgumentNullException(@"member");
+
+            this.member = member;
+        }
+
         #endregion // Construction
 
         #region Properties

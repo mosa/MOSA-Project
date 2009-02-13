@@ -47,6 +47,11 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         private readonly string targetSymbolName;
 
+        /// <summary>
+        /// Holds an offset to apply to the link target.
+        /// </summary>
+        private readonly IntPtr offset;
+
         #endregion // Data members
 
         #region Construction
@@ -59,13 +64,15 @@ namespace Mosa.Runtime.Linker
         /// <param name="methodOffset">The method offset.</param>
         /// <param name="methodRelativeBase">The method relative base.</param>
         /// <param name="targetSymbolName">The linker symbol to link against.</param>
-        public LinkRequest(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbolName)
+        /// <param name="offset">An offset to apply to the link target.</param>
+        public LinkRequest(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbolName, IntPtr offset)
         {
             this.symbolName = symbolName;
             this.methodOffset = methodOffset;
             this.linkType = linkType;
             this.methodRelativeBase = methodRelativeBase;
             this.targetSymbolName = targetSymbolName;
+            this.offset = offset;
         }
 
         #endregion // Construction
@@ -111,6 +118,15 @@ namespace Mosa.Runtime.Linker
         public string TargetSymbolName
         {
             get { return this.targetSymbolName; }
+        }
+
+        /// <summary>
+        /// Gets the offset to apply to the link target.
+        /// </summary>
+        /// <value>The offset.</value>
+        public IntPtr Offset
+        {
+            get { return this.offset; }
         }
 
         #endregion // Properties

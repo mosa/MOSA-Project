@@ -294,15 +294,16 @@ namespace Mosa.Tools.Compiler.Linkers
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
         /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
         /// <param name="target">The method or static field to link against.</param>
+        /// <param name="offset">An offset to apply to the link target.</param>
         /// <returns>
-        /// The return value is the preliminary virtualAddress to place in the generated machine 
+        /// The return value is the preliminary virtualAddress to place in the generated machine
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
-        public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
+        public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target, IntPtr offset)
         {
             CheckImplementation();
-            return this.implementation.Link(linkType, method, methodOffset, methodRelativeBase, target);
+            return this.implementation.Link(linkType, method, methodOffset, methodRelativeBase, target, offset);
         }
 
         /// <summary>
@@ -313,15 +314,16 @@ namespace Mosa.Tools.Compiler.Linkers
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
         /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
         /// <param name="symbol">The linker symbol to link against.</param>
+        /// <param name="offset">The offset.</param>
         /// <returns>
-        /// The return value is the preliminary virtualAddress to place in the generated machine 
+        /// The return value is the preliminary virtualAddress to place in the generated machine
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
-        public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol)
+        public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol, IntPtr offset)
         {
             CheckImplementation();
-            return this.implementation.Link(linkType, method, methodOffset, methodRelativeBase, symbol);
+            return this.implementation.Link(linkType, method, methodOffset, methodRelativeBase, symbol, offset);
         }
 
         /// <summary>
@@ -332,15 +334,16 @@ namespace Mosa.Tools.Compiler.Linkers
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
         /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
         /// <param name="targetSymbolName">The linker symbol to link against.</param>
+        /// <param name="offset">The offset.</param>
         /// <returns>
-        /// The return value is the preliminary virtualAddress to place in the generated machine 
+        /// The return value is the preliminary virtualAddress to place in the generated machine
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
-        public long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbolName)
+        public long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbolName, IntPtr offset)
         {
             CheckImplementation();
-            return this.implementation.Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbolName);
+            return this.implementation.Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbolName, offset);
         }
         
         /// <summary>

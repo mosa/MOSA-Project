@@ -75,21 +75,33 @@ namespace Mosa.Platforms.x86
             Debug.Assert(op is MemoryOperand || op is ConstantOperand, @"Long operand not memory or constant.");
 
             SigType I4 = new SigType(CilElementType.I4);
-            MemoryOperand mop = op as MemoryOperand;
-            if (mop == null)
-            {
-                ConstantOperand cop = op as ConstantOperand;
-                if (null == cop)
-                    throw new ArgumentException(@"Invalid long operand.", @"op");
 
+            // Is it a constant operand?
+            ConstantOperand cop = op as ConstantOperand;
+            if (cop != null)
+            {
                 long value = (long)cop.Value;
                 opL = new ConstantOperand(I4, (int)(value & 0xFFFFFFFF));
                 opH = new ConstantOperand(I4, (int)((value >> 32) & 0xFFFFFFFF));
             }
             else
             {
-                opL = new MemoryOperand(I4, mop.Base, mop.Offset);
-                opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
+                // No, could be a member or a plain memory operand
+                MemberOperand memberOp = op as MemberOperand;
+                if (memberOp != null)
+                {
+                    // We need to keep the member reference, otherwise the linker can't fixup
+                    // the member address.
+                    opL = new MemberOperand(memberOp.Member, I4, memberOp.Offset);
+                    opH = new MemberOperand(memberOp.Member, I4, new IntPtr(memberOp.Offset.ToInt64() + 4));
+                }
+                else
+                {
+                    // Plain memory, we can handle it here
+                    MemoryOperand mop = (MemoryOperand)op;
+                    opL = new MemoryOperand(I4, mop.Base, mop.Offset);
+                    opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
+                }
             }
         }
 
