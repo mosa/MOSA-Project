@@ -120,6 +120,68 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         }
 
         /// <summary>
+        /// Allocates a symbol of the given name in the specified section.
+        /// </summary>
+        /// <param name="name">The name of the symbol.</param>
+        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+        /// <returns>
+        /// A stream, which can be used to populate the section.
+        /// </returns>
+        public override Stream Allocate(string name, SectionKind section, int size, int alignment)
+        {
+            LinkerStream stream = (LinkerStream)base.Allocate(name, section, size, alignment);
+            try
+            {
+                VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
+                LinkerSymbol symbol = this.GetSymbol(name);
+                symbol.VirtualAddress = new IntPtr(vms.Base.ToInt64() + vms.Position);
+            }
+            catch
+            {
+                stream.Dispose();
+                throw;
+            }
+
+            return stream;
+        }
+
+        /// <summary>
+        /// Allocates memory in the specified section.
+        /// </summary>
+        /// <param name="member">The metadata member to allocate space for.</param>
+        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+        /// <returns>
+        /// A stream, which can be used to populate the section.
+        /// </returns>
+        public override Stream Allocate(RuntimeMember member, SectionKind section, int size, int alignment)
+        {
+            string name = CreateSymbolName(member);
+
+            LinkerStream stream = (LinkerStream)base.Allocate(name, section, size, alignment);
+            try
+            {
+                VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
+
+                // Save the member address
+                member.Address = new IntPtr(vms.Base.ToInt64() + vms.Position);
+
+                LinkerSymbol symbol = this.GetSymbol(name);
+                symbol.VirtualAddress = member.Address;
+            }
+            catch
+            {
+                stream.Dispose();
+                throw;
+            }
+
+            return stream;
+        }
+
+        /// <summary>
         /// A request to patch already emitted code by storing the calculated virtualAddress value.
         /// </summary>
         /// <param name="linkType">Type of the link.</param>

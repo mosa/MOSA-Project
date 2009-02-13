@@ -200,30 +200,18 @@ namespace Mosa.Runtime.Linker
         /// <summary>
         /// Allocates memory in the specified section.
         /// </summary>
-        /// <param name="symbol">The metadata member to allocate space for.</param>
+        /// <param name="member">The metadata member to allocate space for.</param>
         /// <param name="section">The executable section to allocate from.</param>
         /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
         /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
         /// <returns>A stream, which can be used to populate the section.</returns>
-        public Stream Allocate(RuntimeMember symbol, SectionKind section, int size, int alignment)
+        public virtual Stream Allocate(RuntimeMember member, SectionKind section, int size, int alignment)
         {
             // Create a canonical symbol name
-            string name = CreateSymbolName(symbol);
+            string name = CreateSymbolName(member);
             
             // Create a stream
-            LinkerStream stream = Allocate(name, section, size, alignment) as LinkerStream;
-            try
-            {
-                // Save the symbol position
-                symbol.Address = this.symbols[name].VirtualAddress;
-            }
-            catch
-            {
-                stream.Dispose();
-                throw;
-            }
-
-            return stream;
+            return Allocate(name, section, size, alignment);
         }
 
         /// <summary>
@@ -236,7 +224,7 @@ namespace Mosa.Runtime.Linker
         /// <returns>
         /// A stream, which can be used to populate the section.
         /// </returns>
-        public Stream Allocate(string name, SectionKind section, int size, int alignment)
+        public virtual Stream Allocate(string name, SectionKind section, int size, int alignment)
         {
             Stream stream = Allocate(section, size, alignment);
 
@@ -440,7 +428,7 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         /// <param name="symbol">The symbol name.</param>
         /// <returns>A string, which represents the symbol name.</returns>
-        private string CreateSymbolName(RuntimeMember symbol)
+        protected string CreateSymbolName(RuntimeMember symbol)
         {
             if (symbol == null)
                 throw new ArgumentNullException(@"symbol");

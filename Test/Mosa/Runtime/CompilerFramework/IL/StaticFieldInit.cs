@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MbUnit.Framework;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
@@ -23,7 +24,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         ";
 
         private delegate bool B_B(bool value);
-        private delegate bool B_C(char value);
+        private delegate bool B_C([MarshalAs(UnmanagedType.U2)]char value);
         private delegate bool B_I1(sbyte value);
         private delegate bool B_I2(short value);
         private delegate bool B_I4(int value);
