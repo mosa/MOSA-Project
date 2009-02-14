@@ -44,9 +44,9 @@ namespace Mosa.Runtime.CompilerFramework
 		void Run(IMethodCompiler compiler);
 
 		/// <summary>
-		/// Adds to pipeline.
+		/// Adds the stage to the pipeline.
 		/// </summary>
-		/// <param name="pipeline">The pipeline.</param>
+		/// <param name="pipeline">The pipeline to add to.</param>
         void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline);
 	}
 }

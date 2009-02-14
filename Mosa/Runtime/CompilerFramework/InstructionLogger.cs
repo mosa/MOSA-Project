@@ -43,12 +43,20 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#region IMethodCompilerStage Members
 
-		string IMethodCompilerStage.Name
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+		public string Name
 		{
 			get { return @"Logger"; }
 		}
 
-		void IMethodCompilerStage.Run(IMethodCompiler compiler)
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        /// <param name="compiler">The compiler context to perform processing in.</param>
+		public void Run(IMethodCompiler compiler)
 		{
             // Previous stage
             IMethodCompilerStage prevStage = compiler.GetPreviousStage<IMethodCompilerStage>();
@@ -83,9 +91,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
         /// <summary>
-        /// 
+        /// Adds the stage to the pipeline.
         /// </summary>
-        /// <param name="pipeline"></param>
+        /// <param name="pipeline">The pipeline to add to.</param>
         public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
         {
             pipeline.InsertAfter<IMethodCompilerStage>(this);
