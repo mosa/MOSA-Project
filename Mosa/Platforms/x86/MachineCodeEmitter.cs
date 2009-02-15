@@ -7,6 +7,7 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -58,6 +59,72 @@ namespace Mosa.Platforms.x86
             public long position;
         }
 
+		/// <summary>
+		/// Operand Size
+		/// </summary>
+		public enum OperandSize
+		{
+			/// <summary>
+			/// Any Size
+			/// </summary>
+			Any = 0,
+			/// <summary>
+			/// 8 bits
+			/// </summary>
+			B8 = 8,
+			/// <summary>
+			/// 16 bits
+			/// </summary>
+			B16 = 16,
+			/// <summary>
+			/// 32 bits
+			/// </summary>
+			B32 = 32,
+			/// <summary>
+			/// 64 bits 
+			/// </summary>
+			B64 = 64,
+			/// <summary>
+			/// None
+			/// </summary>
+			None = 255
+		};
+
+		/// <summary>
+		/// Gets the size of the operand.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <returns></returns>
+		public static OperandSize GetOperandSize(Operand operand)
+		{
+			if (operand == null) return OperandSize.None; else return GetOperandSize(operand.Type.Type);
+		}
+
+		/// <summary>
+		/// Gets the size of the operand.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public static OperandSize GetOperandSize(CilElementType type)
+		{
+			switch (type) {
+				case CilElementType.Char: return OperandSize.B8;
+				case CilElementType.I1: return OperandSize.B8;
+				case CilElementType.U1: return OperandSize.B8;
+				case CilElementType.I2: return OperandSize.B16;
+				case CilElementType.U2: return OperandSize.B16;
+				case CilElementType.I4: return OperandSize.B32;
+				case CilElementType.U4: return OperandSize.B32;
+				case CilElementType.I8: return OperandSize.B64;
+				case CilElementType.U8: return OperandSize.B64;
+				case CilElementType.R4: return OperandSize.B32;
+				case CilElementType.R8: return OperandSize.B8;
+				case CilElementType.I: return OperandSize.B32; // ???
+				case CilElementType.U: return OperandSize.B32; // ???
+				default: return OperandSize.B32; // ???
+			}
+		}
+
         /// <summary>
         /// Used to define OpCodes for various Operations
         /// and their different OpCodes for different
@@ -65,13 +132,13 @@ namespace Mosa.Platforms.x86
         /// </summary>
         struct CodeDef
         {
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="dest">The destination Operand</param>
-            /// <param name="src">The source Operand</param>
-            /// <param name="code">The corresponding opcodes</param>
-            /// <param name="regField">Additonal parameterfield</param>
+			/// <summary>
+			/// Initializes a new instance of the <see cref="CodeDef"/> struct.
+			/// </summary>
+			/// <param name="dest">The destination operand</param>
+			/// <param name="src">The source operand</param>
+			/// <param name="code">The corresponding opcodes</param>
+			/// <param name="regField">Additonal parameterfield</param>
             public CodeDef(Type dest, Type src, byte[] code, byte? regField)
             {
                 this.dest = dest;
@@ -79,16 +146,38 @@ namespace Mosa.Platforms.x86
                 this.op3 = null;
                 this.code = code;
                 this.regField = regField;
+				this.destSize = OperandSize.Any;
+				this.srcSize = OperandSize.Any;
             }
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="CodeDef"/> struct.
+			/// </summary>
+			/// <param name="dest">The destination operand</param>
+			/// <param name="srcSize">Size of the source operand</param>
+			/// <param name="src">The source operand</param>
+			/// <param name="destSize">Size of the destination operand</param>
+			/// <param name="code">The corresponding opcodes</param>
+			/// <param name="regField">Additonal parameterfield</param>
+			public CodeDef(Type dest, OperandSize srcSize, Type src, OperandSize destSize, byte[] code, byte? regField)
+			{
+				this.dest = dest;
+				this.src = src;
+				this.op3 = null;
+				this.code = code;
+				this.regField = regField;
+				this.destSize = destSize;
+				this.srcSize = srcSize;
+			}
+
             /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="dest">The destination Operand</param>
-            /// <param name="src">The source Operand</param>
-            /// <param name="op3">The 3rd operand.</param>
-            /// <param name="code">The corresponding opcodes</param>
-            /// <param name="regField">Additonal parameterfield</param>
+			/// Initializes a new instance of the <see cref="CodeDef"/> struct.
+			/// </summary>
+			/// <param name="dest">The destination operand</param>
+			/// <param name="src">The source operand</param>
+			/// <param name="op3">The third operand</param>
+			/// <param name="code">The corresponding opcodes</param>
+			/// <param name="regField">Additonal parameterfield</param>
             public CodeDef(Type dest, Type src, Type op3, byte[] code, byte? regField)
             {
                 this.dest = dest;
@@ -96,7 +185,30 @@ namespace Mosa.Platforms.x86
                 this.op3 = op3;
                 this.code = code;
                 this.regField = regField;
+				this.destSize = OperandSize.Any;
+				this.srcSize = OperandSize.Any;
             }
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="CodeDef"/> struct.
+			/// </summary>
+			/// <param name="dest">The destination operand</param>
+			/// <param name="srcSize">Size of the source operand</param>
+			/// <param name="src">The source operand</param>
+			/// <param name="destSize">Size of the destination operand</param>
+			/// <param name="op3">The third operand</param>
+			/// <param name="code">The corresponding opcodes</param>
+			/// <param name="regField">Additonal parameterfield</param>
+			public CodeDef(Type dest, OperandSize srcSize, Type src, OperandSize destSize, Type op3, byte[] code, byte? regField)
+			{
+				this.dest = dest;
+				this.src = src;
+				this.op3 = op3;
+				this.code = code;
+				this.regField = regField;
+				this.destSize = destSize;
+				this.srcSize = srcSize;
+			}
 
             /// <summary>
             /// Destinationtype
@@ -106,17 +218,26 @@ namespace Mosa.Platforms.x86
             /// Sourcetype
             /// </summary>
             public Type src;
-
+			/// <summary>
+			/// Third operand
+			/// </summary>
             public Type op3;
-
             /// <summary>
             /// Bytecodes corresponding to the operation
             /// </summary>
             public byte[] code;
             /// <summary>
-            /// Registerfield to extend the operation
+            /// Register field to extend the operation
             /// </summary>
             public byte? regField;
+			/// <summary>
+			/// 
+			/// </summary>
+			public OperandSize srcSize;
+			/// <summary>
+			/// 
+			/// </summary>
+			public OperandSize destSize;
         }
 
         #endregion // Types
@@ -985,9 +1106,9 @@ namespace Mosa.Platforms.x86
             // Check that we're not dealing with floatingpoint values
             if (dest.StackType != StackTypeCode.F && src.StackType != StackTypeCode.F)
             {
-                Emit(dest, src, cd_mov);
+				Emit(dest, src, cd_mov);
             }
-            // We are dealing with floatingpoint values
+            // We are dealing with floating point values
             else
             {
                 if (src.Type.Type == CilElementType.R4)
@@ -1778,18 +1899,65 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),      null,    new byte[] { 0x0F, 0x01 }, 6),
         };
 
-        /// <summary>
-        /// Asmcode: MOV
-        /// Moves second into first parameter
-        /// 
-        /// Section: Standard x86
-        /// </summary>
-        private static readonly CodeDef[] cd_mov = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC7 }, 0),
-            new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC7 }, 0),
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x8B }, null),
-            new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x8B }, null),
-            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x89 }, null),
+		/// <summary>
+		/// Asmcode: MOV
+		/// Moves second into first parameter
+		/// 
+		/// Section: Standard x86
+		/// </summary>
+		private static readonly CodeDef[] cd_mov = new CodeDef[] {					
+			// --- Originals ---
+			// C7 /0 MOV r/m16, imm16 Valid Valid Move imm16 to r/m16.
+			// C7 /0 MOV r/m32, imm32 Valid Valid Move imm32 to r/m32.
+			new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC7 }, 0),			
+			new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC7 }, 0),
+
+			// 8B /r MOV r16,r/m16 Valid Valid Move r/m16 to r16.
+			// 8B /r MOV r32,r/m32 Valid Valid Move r/m32 to r32.
+			new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x8B }, null),
+			new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x8B }, null),
+
+			// 89 /r MOV r/m16,r16 Valid Valid Move r16 to r/m16.
+			// 89 /r MOV r/m32,r32 Valid Valid Move r32 to r/m32.
+			new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x89 }, null),
+
+			// --- Updated ---
+
+			// C6 /0 MOV r/m8, imm8 Valid Valid Move imm8 to r/m8.
+			new CodeDef(typeof(RegisterOperand), OperandSize.B8,  typeof(ConstantOperand),  OperandSize.B8,  new byte[] { 0xC6 }, 0),
+			// C7 /0 MOV r/m16, imm16 Valid Valid Move imm16 to r/m16.
+			new CodeDef(typeof(RegisterOperand), OperandSize.B16, typeof(ConstantOperand),  OperandSize.B16, new byte[] { 0xC7 }, 0),
+			// C7 /0 MOV r/m32, imm32 Valid Valid Move imm32 to r/m32.
+			new CodeDef(typeof(RegisterOperand), OperandSize.B32, typeof(ConstantOperand),  OperandSize.B32, new byte[] { 0xC7 }, 0),
+
+			// C6 /0 MOV r/m8, imm8 Valid Valid Move imm8 to r/m8.
+			new CodeDef(typeof(MemoryOperand), OperandSize.B8,  typeof(ConstantOperand),  OperandSize.B8,  new byte[] { 0xC6 }, 0),
+			// C7 /0 MOV r/m16, imm16 Valid Valid Move imm16 to r/m16.
+			new CodeDef(typeof(MemoryOperand), OperandSize.B16, typeof(ConstantOperand),  OperandSize.B16, new byte[] { 0xC7 }, 0),
+			// C7 /0 MOV r/m32, imm32 Valid Valid Move imm32 to r/m32.
+			new CodeDef(typeof(MemoryOperand), OperandSize.B32, typeof(ConstantOperand),  OperandSize.B32, new byte[] { 0xC7 }, 0),
+
+			// B0+ rb MOV r8, imm8 Valid Valid Move imm8 to r8.
+			new CodeDef(typeof(RegisterOperand), OperandSize.B8,  typeof(RegisterOperand),  OperandSize.B8,  new byte[] { 0xB0 }, null),
+			// 8B /r MOV r16,r/m16 Valid Valid Move r/m16 to r16.
+			new CodeDef(typeof(RegisterOperand), OperandSize.B16, typeof(RegisterOperand),  OperandSize.B16, new byte[] { 0x8B }, null),
+			// 8B /r MOV r32,r/m32 Valid Valid Move r/m32 to r32.
+			new CodeDef(typeof(RegisterOperand), OperandSize.B32, typeof(RegisterOperand),  OperandSize.B32, new byte[] { 0x8B }, null),
+
+			// 8A /r MOV r8,r/m8 Valid Valid Move r/m8 to r8.
+			new CodeDef(typeof(RegisterOperand), OperandSize.B8,  typeof(MemoryOperand),  OperandSize.B8,  new byte[] { 0x8A }, null),
+			// 8B /r MOV r16,r/m16 Valid Valid Move r/m16 to r16.
+			new CodeDef(typeof(RegisterOperand), OperandSize.B16, typeof(MemoryOperand),  OperandSize.B16, new byte[] { 0x8B }, null),
+			// 8B /r MOV r32,r/m32 Valid Valid Move r/m32 to r32.
+			new CodeDef(typeof(RegisterOperand), OperandSize.B32, typeof(MemoryOperand),  OperandSize.B32, new byte[] { 0x8B }, null),
+
+			// 8A /r MOV r8,r/m8 Valid Valid Move r/m8 to r8.
+			new CodeDef(typeof(MemoryOperand), OperandSize.B8,  typeof(RegisterOperand),  OperandSize.B8,  new byte[] { 0x88 }, null),
+			// 89 /r MOV r/m16,r16 Valid Valid Move r16 to r/m16.
+			new CodeDef(typeof(MemoryOperand), OperandSize.B16, typeof(RegisterOperand),  OperandSize.B16, new byte[] { 0x89 }, null),
+			// 89 /r MOV r/m32,r32 Valid Valid Move r32 to r/m32.
+			new CodeDef(typeof(MemoryOperand), OperandSize.B32, typeof(RegisterOperand),  OperandSize.B32, new byte[] { 0x89 }, null),
+
         };
 
         /// <summary>
@@ -2086,7 +2254,7 @@ namespace Mosa.Platforms.x86
         /// <param name="dest">The destination operand.</param>
         /// <param name="src">The source operand.</param>
         /// <param name="codeDef">The code definition array.</param>
-        private void Emit(Operand dest, Operand src, CodeDef[] codeDef)
+		private void EmitRelaxed(Operand dest, Operand src, CodeDef[] codeDef)
         {
             foreach (CodeDef cd in codeDef)
             {
@@ -2102,6 +2270,38 @@ namespace Mosa.Platforms.x86
             Debug.Assert(false, @"Failed to find an opcode for the instruction.");
             throw new NotSupportedException(@"Unsupported operand combination for the instruction.");
         }
+
+		/// <summary>
+		/// Walks the code definition array for a matching combination and emits the corresponding code.
+		/// </summary>
+		/// <param name="dest">The destination operand.</param>
+		/// <param name="src">The source operand.</param>
+		/// <param name="codeDef">The code definition array.</param>
+		private void Emit(Operand dest, Operand src, CodeDef[] codeDef)
+		{
+			CodeDef other = new CodeDef();
+
+			foreach (CodeDef cd in codeDef) {
+				if (true == cd.dest.IsInstanceOfType(dest) && (null == src || true == cd.src.IsInstanceOfType(src))) {
+					other = cd;
+					break;
+				}
+			}
+
+			OperandSize destSize = GetOperandSize(dest);
+			OperandSize srcSize = GetOperandSize(src);
+
+			foreach (CodeDef cd in codeDef) {
+				if ((cd.dest.IsInstanceOfType(dest) && (cd.destSize == destSize)) &&
+					(null == src || (cd.src.IsInstanceOfType(src)) && (cd.srcSize == srcSize))) {
+						Emit(cd.code, cd.regField, dest, src);
+					return;
+				}
+			}
+
+			//unable to find exact match, try relaxed fit
+			EmitRelaxed(dest, src, codeDef);
+		}
 
         /// <summary>
         /// Walks the code definition array for a matching combination and emits the corresponding code.
