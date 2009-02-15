@@ -1905,22 +1905,7 @@ namespace Mosa.Platforms.x86
 		/// 
 		/// Section: Standard x86
 		/// </summary>
-		private static readonly CodeDef[] cd_mov = new CodeDef[] {					
-			// --- Originals ---
-			// C7 /0 MOV r/m16, imm16 Valid Valid Move imm16 to r/m16.
-			// C7 /0 MOV r/m32, imm32 Valid Valid Move imm32 to r/m32.
-			new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC7 }, 0),			
-			new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC7 }, 0),
-
-			// 8B /r MOV r16,r/m16 Valid Valid Move r/m16 to r16.
-			// 8B /r MOV r32,r/m32 Valid Valid Move r/m32 to r32.
-			new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x8B }, null),
-			new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x8B }, null),
-
-			// 89 /r MOV r/m16,r16 Valid Valid Move r16 to r/m16.
-			// 89 /r MOV r/m32,r32 Valid Valid Move r32 to r/m32.
-			new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x89 }, null),
-
+		private static readonly CodeDef[] cd_mov = new CodeDef[] {								
 			// --- Updated ---
 
 			// C6 /0 MOV r/m8, imm8 Valid Valid Move imm8 to r/m8.
