@@ -1937,8 +1937,8 @@ namespace Mosa.Platforms.x86
 			// C7 /0 MOV r/m32, imm32 Valid Valid Move imm32 to r/m32.
 			new CodeDef(typeof(MemoryOperand), OperandSize.B32, typeof(ConstantOperand),  OperandSize.B32, new byte[] { 0xC7 }, 0),
 
-			// B0+ rb MOV r8, imm8 Valid Valid Move imm8 to r8.
-			new CodeDef(typeof(RegisterOperand), OperandSize.B8,  typeof(RegisterOperand),  OperandSize.B8,  new byte[] { 0xB0 }, null),
+			// 8A /r MOV r8,r/m8 Valid Valid Move r/m8 to r8.
+			new CodeDef(typeof(RegisterOperand), OperandSize.B8,  typeof(RegisterOperand),  OperandSize.B8,  new byte[] { 0x8A }, null),
 			// 8B /r MOV r16,r/m16 Valid Valid Move r/m16 to r16.
 			new CodeDef(typeof(RegisterOperand), OperandSize.B16, typeof(RegisterOperand),  OperandSize.B16, new byte[] { 0x8B }, null),
 			// 8B /r MOV r32,r/m32 Valid Valid Move r/m32 to r32.
@@ -1951,7 +1951,7 @@ namespace Mosa.Platforms.x86
 			// 8B /r MOV r32,r/m32 Valid Valid Move r/m32 to r32.
 			new CodeDef(typeof(RegisterOperand), OperandSize.B32, typeof(MemoryOperand),  OperandSize.B32, new byte[] { 0x8B }, null),
 
-			// 8A /r MOV r8,r/m8 Valid Valid Move r/m8 to r8.
+			// 88 /r MOV r/m8,r8 Valid Valid Move r8 to r/m8.
 			new CodeDef(typeof(MemoryOperand), OperandSize.B8,  typeof(RegisterOperand),  OperandSize.B8,  new byte[] { 0x88 }, null),
 			// 89 /r MOV r/m16,r16 Valid Valid Move r16 to r/m16.
 			new CodeDef(typeof(MemoryOperand), OperandSize.B16, typeof(RegisterOperand),  OperandSize.B16, new byte[] { 0x89 }, null),
@@ -2279,15 +2279,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="codeDef">The code definition array.</param>
 		private void Emit(Operand dest, Operand src, CodeDef[] codeDef)
 		{
-			CodeDef other = new CodeDef();
-
-			foreach (CodeDef cd in codeDef) {
-				if (true == cd.dest.IsInstanceOfType(dest) && (null == src || true == cd.src.IsInstanceOfType(src))) {
-					other = cd;
-					break;
-				}
-			}
-
 			OperandSize destSize = GetOperandSize(dest);
 			OperandSize srcSize = GetOperandSize(src);
 
