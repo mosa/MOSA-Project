@@ -43,7 +43,7 @@ namespace Mosa.Tools.Compiler
         {
             this.aotCompiler = compiler;
             this.Pipeline.AddRange(new IMethodCompilerStage[] {
-                new ILDecodingStage(),
+				new ILDecodingStage(),
                 //InstructionLogger.Instance,
                 new BasicBlockBuilderStage(),
                 //InstructionLogger.Instance,
@@ -58,6 +58,7 @@ namespace Mosa.Tools.Compiler
                 new ConstantPropagationStage(),
                 //InstructionLogger.Instance,
                 new ConstantFoldingStage(),
+				new StrengthReductionStage(),
                 //InstructionLogger.Instance,
                 new LeaveSSA(),
                 //InstructionLogger.Instance,
@@ -65,8 +66,8 @@ namespace Mosa.Tools.Compiler
                 new StackLayoutStage(),
 				new BlockReductionStage(),
 				new LoopAwareBlockOrderingStage(),
-				new BasicBlockOrderStage(),
 				//new SimpleTraceBlockOrderingStage(),
+				new BasicBlockOrderStage(),				
             });
         }
 

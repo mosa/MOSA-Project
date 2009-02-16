@@ -24,9 +24,9 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
-    /// <summary>
-    /// An x86 machine code emitter.
-    /// </summary>
+	/// <summary>
+	/// An x86 machine code emitter.
+	/// </summary>
     public sealed class MachineCodeEmitter : ICodeEmitter, IDisposable
     {
         private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
@@ -34,24 +34,24 @@ namespace Mosa.Platforms.x86
         #region Types
 
         /// <summary>
-        /// 
+        /// Patch
         /// </summary>
         struct Patch
         {
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="label"></param>
-            /// <param name="position"></param>
+			/// <summary>
+			/// Initializes a new instance of the <see cref="Patch"/> struct.
+			/// </summary>
+			/// <param name="label">The label.</param>
+			/// <param name="position">The position.</param>
             public Patch(int label, long position)
             {
                 this.label = label;
                 this.position = position;
             }
 
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// Patch label
+			/// </summary>
             public int label;
             /// <summary>
             /// The patch's position in the stream
@@ -64,10 +64,6 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		public enum OperandSize
 		{
-			/// <summary>
-			/// Any Size
-			/// </summary>
-			Any = 0,
 			/// <summary>
 			/// 8 bits
 			/// </summary>
@@ -85,9 +81,9 @@ namespace Mosa.Platforms.x86
 			/// </summary>
 			B64 = 64,
 			/// <summary>
-			/// None
+			/// Unknown
 			/// </summary>
-			None = 255
+			Unknown = 255
 		};
 
 		/// <summary>
@@ -97,7 +93,7 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OperandSize GetOperandSize(Operand operand)
 		{
-			if (operand == null) return OperandSize.None; else return GetOperandSize(operand.Type.Type);
+			if (operand == null) return OperandSize.Unknown; else return GetOperandSize(operand.Type.Type);
 		}
 
 		/// <summary>
@@ -146,8 +142,8 @@ namespace Mosa.Platforms.x86
                 this.op3 = null;
                 this.code = code;
                 this.regField = regField;
-				this.destSize = OperandSize.Any;
-				this.srcSize = OperandSize.Any;
+				this.destSize = OperandSize.Unknown;
+				this.srcSize = OperandSize.Unknown;
             }
 
 			/// <summary>
@@ -185,8 +181,8 @@ namespace Mosa.Platforms.x86
                 this.op3 = op3;
                 this.code = code;
                 this.regField = regField;
-				this.destSize = OperandSize.Any;
-				this.srcSize = OperandSize.Any;
+				this.destSize = OperandSize.Unknown;
+				this.srcSize = OperandSize.Unknown;
             }
 
 			/// <summary>
