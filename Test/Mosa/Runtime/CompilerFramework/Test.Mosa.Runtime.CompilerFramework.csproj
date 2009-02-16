@@ -24,10 +24,14 @@
     </StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
@@ -73,6 +77,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml">
       <Name>System.Xml</Name>
     </Reference>
@@ -115,6 +120,7 @@
     <Compile Include="CodeDomTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IL\Stind.cs" />
     <Compile Include="MosaCompilerTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
