@@ -67,7 +67,7 @@ namespace Mosa.Tools.CreatePCIList
 
 					textWriter.WriteLine("\t\tpublic static string Lookup(ushort vendorID, ushort deviceID)");
 					textWriter.WriteLine("\t\t{");
-					textWriter.WriteLine("\t\t\tswitch ((uint)((vendorID << 16) | deviceID)) {");
+					textWriter.WriteLine("\t\t\tswitch ((uint)(((uint)vendorID << 16) | (uint)deviceID)) {");
 
 					using (TextReader textReader = new StreamReader(args[0])) {
 						string line = null;
@@ -92,7 +92,8 @@ namespace Mosa.Tools.CreatePCIList
 
 					textWriter.WriteLine("\t\tpublic static string Lookup(ushort vendorID, ushort deviceID, ushort subSystem, ushort subVendor)");
 					textWriter.WriteLine("\t\t{");
-					textWriter.WriteLine("\t\t\tswitch ((ulong)((vendorID << 48) | (deviceID << 32) | (subSystem << 16) | subVendor)) {");
+					textWriter.WriteLine("\t\t\tswitch ((((ulong)vendorID << 48) | ((ulong)deviceID << 32) | ((ulong)subSystem << 16) | subVendor)) {");
+					textWriter.WriteLine("#if !MONO");
 
 					using (TextReader textReader = new StreamReader(args[0])) {
 						string line = null;
@@ -111,6 +112,7 @@ namespace Mosa.Tools.CreatePCIList
 						textReader.Close();
 					}
 
+					textWriter.WriteLine("#endif");
 					textWriter.WriteLine("\t\t\t\tdefault: return string.Empty;");
 					textWriter.WriteLine("\t\t\t}");
 					textWriter.WriteLine("\t\t}");
