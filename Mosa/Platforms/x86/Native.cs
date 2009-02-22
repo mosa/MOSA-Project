@@ -144,6 +144,12 @@ namespace Mosa.Platforms.x86
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CpuIdInstruction))]
         public static unsafe char* CpuId(uint function) { ThrowPlatformNotSupported(); return null; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.BochsDebug))]
+        public static void BochsDebug() { ThrowPlatformNotSupported(); return; }
+
         #endregion
 
         /// <summary>

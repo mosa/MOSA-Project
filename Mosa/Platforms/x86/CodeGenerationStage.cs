@@ -311,6 +311,11 @@ namespace Mosa.Platforms.x86
         {
             _emitter.CmpXchg(instruction.Operand0, instruction.Operand1);
         }
+
+        void IX86InstructionVisitor<int>.BochsDebug(BochsDebug instruction, int arg)
+        {
+            _emitter.Xchg(new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EBX), new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EBX));
+        }
         
         /// <summary>
         /// Read CPUID characteristics

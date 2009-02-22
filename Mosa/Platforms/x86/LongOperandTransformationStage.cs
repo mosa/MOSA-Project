@@ -2410,6 +2410,10 @@ namespace Mosa.Platforms.x86
         {
         }
 
+        void IX86InstructionVisitor<Context>.BochsDebug(BochsDebug instruction, Context arg)
+        {
+        }
+
         #endregion // IX86InstructionVisitor<Context> Members
     }
 }

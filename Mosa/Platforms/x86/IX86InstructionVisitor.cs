@@ -66,6 +66,12 @@ namespace Mosa.Platforms.x86
 
         #region Intrinsics
         /// <summary>
+        /// Emits xchg bx, bx to force bochs into debug mode
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="arg">The arguments</param>
+        void BochsDebug(BochsDebug instruction, ArgType arg);
+        /// <summary>
         /// Disable interrupts
         /// </summary>
         /// <param name="instruction">The instruction.</param>

@@ -679,6 +679,8 @@ namespace Mosa.Platforms.x86
                  */
                 // int 3
                 //_architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
+                // Uncomment this line to enable breakpoints within Bochs
+                _architecture.CreateInstruction(typeof(Instructions.Intrinsics.BochsDebug), null),
                 // push ebp
                 _architecture.CreateInstruction(typeof(IR.PushInstruction), ebp),
                 // mov ebp, esp
@@ -1067,6 +1069,10 @@ namespace Mosa.Platforms.x86
         }
         
         void IX86InstructionVisitor<Context>.CpuId(Instructions.Intrinsics.CpuIdInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.BochsDebug(Instructions.Intrinsics.BochsDebug instruction, Context arg)
         {
         }
 
