@@ -58,7 +58,7 @@ namespace Mosa.Tools.Compiler
                 new ConstantPropagationStage(),
                 //InstructionLogger.Instance,
                 new ConstantFoldingStage(),
-				new StrengthReductionStage(),
+				//new StrengthReductionStage(),
                 //InstructionLogger.Instance,
                 new LeaveSSA(),
                 //InstructionLogger.Instance,

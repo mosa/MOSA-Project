@@ -6,8 +6,8 @@
 megs: 32
 
 # filename of ROM images
-romimage: file=BIOS-bochs-latest
-vgaromimage: file=VGABIOS-lgpl-latest
+romimage: file=..\..\Tools\Bochs\BIOS-bochs-latest
+vgaromimage: file=..\..\Tools\Bochs\VGABIOS-lgpl-latest
 
 # what disk images will be used 
 floppya: 1_44=floppya.img, status=inserted

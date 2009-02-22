@@ -1,1 +1,1 @@
-bochs.exe -q -f bochsrc.bxrc
+..\..\Tools\Bochs\bochs.exe -q -f bochsrc.bxrc
