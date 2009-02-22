@@ -24,7 +24,7 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// An x86 machine code emitter.
 	/// </summary>
-	public sealed class X86
+	public static class X86
 	{
 		/// <summary>
 		/// Negates the specified dest.
@@ -136,9 +136,6 @@ namespace Mosa.Platforms.x86
 		{
 			if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
 				return new OpCode(new byte[] { 0x88 }, null);
-
-			//if ((dest.Type.Type == CilElementType.I2) || (dest.Type.Type == CilElementType.U2))
-			//    return new OpCode(new byte[] { 0x88 }, null);
 
 			return new OpCode(new byte[] { 0x89 }, null);
 		}

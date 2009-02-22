@@ -1366,23 +1366,6 @@ namespace Mosa.Platforms.x86
 		/// Section: Standard x86
 		/// </summary>
 		private static readonly CodeDef[] cd_add = new CodeDef[] {
-
-			//new CodeDef(typeof(RegisterOperand), OperandSize.B8,  typeof(ConstantOperand), OperandSize.B8,  new byte[] { 0x80 }, 0),
-			//new CodeDef(typeof(RegisterOperand), OperandSize.B16, typeof(ConstantOperand), OperandSize.B16, new byte[] { 0x81 }, 0),
-			//new CodeDef(typeof(RegisterOperand), OperandSize.B32, typeof(ConstantOperand), OperandSize.B32, new byte[] { 0x81 }, 0),
-			
-			//new CodeDef(typeof(RegisterOperand), OperandSize.B8,  typeof(RegisterOperand), OperandSize.B8,  new byte[] { 0x03 }, null),
-			//new CodeDef(typeof(RegisterOperand), OperandSize.B16, typeof(RegisterOperand), OperandSize.B16, new byte[] { 0x03 }, null),
-			//new CodeDef(typeof(RegisterOperand), OperandSize.B32, typeof(RegisterOperand), OperandSize.B32, new byte[] { 0x03 }, null),
-
-			//new CodeDef(typeof(RegisterOperand), OperandSize.B8,  typeof(MemoryOperand), OperandSize.B8,  new byte[] { 0x03 }, null),
-			//new CodeDef(typeof(RegisterOperand), OperandSize.B16, typeof(MemoryOperand), OperandSize.B16, new byte[] { 0x03 }, null),
-			//new CodeDef(typeof(RegisterOperand), OperandSize.B32, typeof(MemoryOperand), OperandSize.B32, new byte[] { 0x03 }, null),
-
-			//new CodeDef(typeof(MemoryOperand), OperandSize.B8,  typeof(RegisterOperand), OperandSize.B8,  new byte[] { 0x01 }, null),
-			//new CodeDef(typeof(MemoryOperand), OperandSize.B16, typeof(RegisterOperand), OperandSize.B16, new byte[] { 0x01 }, null),
-			//new CodeDef(typeof(MemoryOperand), OperandSize.B32, typeof(RegisterOperand), OperandSize.B32, new byte[] { 0x01 }, null),
-
 			new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x81 }, 0),
 			new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x03 }, null),
 			new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x03 }, null),
@@ -2077,7 +2060,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The destination operand.</param>
 		/// <param name="src">The source operand.</param>
 		/// <param name="codeDef">The code definition array.</param>
-		private void EmitRelaxed(Operand dest, Operand src, CodeDef[] codeDef)
+		private void Emit(Operand dest, Operand src, CodeDef[] codeDef)
 		{
 			foreach (CodeDef cd in codeDef) {
 				if (true == cd.dest.IsInstanceOfType(dest) && (null == src || true == cd.src.IsInstanceOfType(src))) {
@@ -2090,29 +2073,6 @@ namespace Mosa.Platforms.x86
 			// not specified in the code definition table
 			Debug.Assert(false, @"Failed to find an opcode for the instruction.");
 			throw new NotSupportedException(@"Unsupported operand combination for the instruction.");
-		}
-
-		/// <summary>
-		/// Walks the code definition array for a matching combination and emits the corresponding code.
-		/// </summary>
-		/// <param name="dest">The destination operand.</param>
-		/// <param name="src">The source operand.</param>
-		/// <param name="codeDef">The code definition array.</param>
-		private void Emit(Operand dest, Operand src, CodeDef[] codeDef)
-		{
-			//OperandSize destSize = GetOperandSize(dest);
-			//OperandSize srcSize = GetOperandSize(src);
-
-			//foreach (CodeDef cd in codeDef) {
-			//    if ((cd.dest.IsInstanceOfType(dest) && (cd.destSize == destSize)) &&
-			//        (null == src || (cd.src.IsInstanceOfType(src)) && (cd.srcSize == srcSize))) {
-			//            Emit(cd.code, cd.regField, dest, src);
-			//        return;
-			//    }
-			//}
-
-			//unable to find exact match, try relaxed fit
-			EmitRelaxed(dest, src, codeDef);
 		}
 
 		/// <summary>

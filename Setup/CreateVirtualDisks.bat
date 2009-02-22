@@ -4,4 +4,4 @@
 ..\Mosa\Bin\MakeBootImage.exe qemu\mosaboot-img.config qemu\bootimage.img
 ..\Mosa\Bin\MakeBootImage.exe bochs\mosaboot-img.config bochs\bootimage.img
 
-pause
+rem pause
