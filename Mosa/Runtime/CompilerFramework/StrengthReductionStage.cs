@@ -4,6 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  *  Simon Wollwage (<mailto:simon_wollwage@yahoo.co.jp>)
  */
 
@@ -24,12 +25,12 @@ namespace Mosa.Runtime.CompilerFramework
 	{
 
 		/// <summary>
-		/// Determines whether [is value zero] [the specified cil element type].
+		/// Determines whether the value is zero.
 		/// </summary>
 		/// <param name="cilElementType">Type of the cil element.</param>
 		/// <param name="constantOperand">The constant operand.</param>
 		/// <returns>
-		/// 	<c>true</c> if [is value zero] [the specified cil element type]; otherwise, <c>false</c>.
+		/// 	<c>true</c> if the value is zero; otherwise, <c>false</c>.
 		/// </returns>
 		private bool IsValueZero(Mosa.Runtime.Metadata.CilElementType cilElementType, ConstantOperand constantOperand)
 		{
@@ -62,30 +63,83 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Determines whether the value is one.
+		/// </summary>
+		/// <param name="cilElementType">Type of the cil element.</param>
+		/// <param name="constantOperand">The constant operand.</param>
+		/// <returns>
+		/// 	<c>true</c> if the value is one; otherwise, <c>false</c>.
+		/// </returns>
+		private bool IsValueOne(Mosa.Runtime.Metadata.CilElementType cilElementType, ConstantOperand constantOperand)
+		{
+			switch (cilElementType) {
+				case Mosa.Runtime.Metadata.CilElementType.Char:
+					goto case Mosa.Runtime.Metadata.CilElementType.I1;
+				case Mosa.Runtime.Metadata.CilElementType.U1:
+					return (byte)(constantOperand.Value) == 1;
+				case Mosa.Runtime.Metadata.CilElementType.U2:
+					return (ushort)(constantOperand.Value) == 1;
+				case Mosa.Runtime.Metadata.CilElementType.U4:
+					return (int)(constantOperand.Value) == 1;
+				case Mosa.Runtime.Metadata.CilElementType.I1:
+					return (sbyte)(constantOperand.Value) == 1;
+				case Mosa.Runtime.Metadata.CilElementType.I2:
+					return (short)(constantOperand.Value) == 1;
+				case Mosa.Runtime.Metadata.CilElementType.I4:
+					return (int)(constantOperand.Value) == 1;
+				case Mosa.Runtime.Metadata.CilElementType.R4:
+					return (float)(constantOperand.Value) == 1;
+				case Mosa.Runtime.Metadata.CilElementType.R8:
+					return (double)(constantOperand.Value) == 1;
+				case Mosa.Runtime.Metadata.CilElementType.I:
+					goto case Mosa.Runtime.Metadata.CilElementType.I4;
+				case Mosa.Runtime.Metadata.CilElementType.U:
+					goto case Mosa.Runtime.Metadata.CilElementType.U4;
+				default:
+					goto case Mosa.Runtime.Metadata.CilElementType.I4;
+			}
+		}
+
+		/// <summary>
 		/// Folds multiplication when one of the constants is zero
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The context.</param>
 		void IL.IILVisitor<CodeTransformationStage.Context>.Mul(IL.MulInstruction instruction, CodeTransformationStage.Context ctx)
 		{
-			bool multipleByZero = false;
+			bool multiplyByZero = false;
 
 			if (instruction.First is ConstantOperand) 
 				if (IsValueZero(instruction.Results[0].Type.Type, instruction.First as ConstantOperand))
-					multipleByZero = true;
+					multiplyByZero = true;
 
 			if (instruction.Second is ConstantOperand)
 				if (IsValueZero(instruction.Results[0].Type.Type, instruction.Second as ConstantOperand))
-					multipleByZero = true;
+					multiplyByZero = true;
 
-			if (multipleByZero) {
+			if (multiplyByZero) {
 				if (instruction.Results[0].Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
 					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, 0)));
 				else if (instruction.Results[0].Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
 					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, 0)));
 				else
 					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, 0)));
+
+				return;
 			}
+
+			if (instruction.First is ConstantOperand)
+				if (IsValueOne(instruction.Results[0].Type.Type, instruction.First as ConstantOperand)) {
+					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], instruction.Second));
+					return;
+				}
+
+			if (instruction.Second is ConstantOperand)
+				if (IsValueOne(instruction.Results[0].Type.Type, instruction.Second as ConstantOperand)) {
+					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], instruction.First));
+					return;
+				}
+
 		}
 
 
