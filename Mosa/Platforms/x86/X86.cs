@@ -49,10 +49,19 @@ namespace Mosa.Platforms.x86
 				public static OpCode R_R = new OpCode(new byte[] { 0x23 }, null);
 				public static OpCode M_R = new OpCode(new byte[] { 0x21 }, null);
 			}
+			public static class Div
+			{
+				public static OpCode R = new OpCode(new byte[] { 0xF7 }, 6);
+				public static OpCode R_8 = new OpCode(new byte[] { 0xF6 }, 6);
+				public static OpCode R_16 = new OpCode(new byte[] { 0x66, 0xF7 }, 6);
+				public static OpCode M = new OpCode(new byte[] { 0xF7 }, 6);
+				public static OpCode M_8 = new OpCode(new byte[] { 0xF6 }, 6);
+				public static OpCode M_16 = new OpCode(new byte[] { 0x66, 0xF7 }, 6);
+			}
 		}
 #pragma warning restore 1591
 
-		#endregion 
+		#endregion
 
 		#region Add
 		/// <summary>
@@ -97,17 +106,17 @@ namespace Mosa.Platforms.x86
 		{
 			if ((dest is RegisterOperand) && (src is ConstantOperand))
 				return X86Intruction.And.R_C;
-			
+
 			if ((dest is MemoryOperand) && (src is ConstantOperand))
 				return X86Intruction.And.M_C;
-			
+
 			if ((dest is RegisterOperand) && (src is MemoryOperand))
 				return X86Intruction.And.R_M;
-			
+
 			if ((dest is RegisterOperand) && (src is RegisterOperand))
 				return X86Intruction.And.R_R;
 
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) 
+			if ((dest is MemoryOperand) && (src is RegisterOperand))
 				return X86Intruction.And.M_C;
 
 			throw new ArgumentException(@"No opcode for operand type.");
@@ -124,43 +133,25 @@ namespace Mosa.Platforms.x86
 		/// <returns>The matching OpCode</returns>
 		public static OpCode Div(Operand dest, Operand src)
 		{
-			if (src is RegisterOperand) return Div(dest, src as RegisterOperand);
-			if (src is MemoryOperand) return Div(dest, src as MemoryOperand);
+			if (src is RegisterOperand)
+				if ((src.Type.Type == CilElementType.U1) || (src.Type.Type == CilElementType.I1))
+					return X86Intruction.Div.R_8;
+				else if ((src.Type.Type == CilElementType.U2) || (src.Type.Type == CilElementType.I2))
+					return X86Intruction.Div.R_16;
+				else
+					return X86Intruction.Div.R;
+
+			if (src is MemoryOperand)
+				if ((src.Type.Type == CilElementType.U1) || (src.Type.Type == CilElementType.I1))
+					return X86Intruction.Div.M_8;
+				else if ((src.Type.Type == CilElementType.U2) || (src.Type.Type == CilElementType.I2))
+					return X86Intruction.Div.M_16;
+				else
+					return X86Intruction.Div.M;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-		/// <summary>
-		/// Returns the matching OpCode for DIV
-		/// </summary>
-		/// <param name="dest">Destination operand</param>
-		/// <param name="src">Source Operand</param>
-		/// <returns>The matching OpCode</returns>
-		public static OpCode Div(Operand dest, RegisterOperand src)
-		{
-			if ((src.Type.Type == CilElementType.U1) || (src.Type.Type == CilElementType.I1))
-				return new OpCode(new byte[] { 0xF6 }, 6);
-			else if ((src.Type.Type == CilElementType.U2) || (src.Type.Type == CilElementType.I2))
-				return new OpCode(new byte[] { 0x66, 0xF7 }, 6);
-
-			return new OpCode(new byte[] { 0xF7 }, 6);
-		}
-
-		/// <summary>
-		/// Returns the matching OpCode for DIV
-		/// </summary>
-		/// <param name="dest">Destination operand</param>
-		/// <param name="src">Source Operand</param>
-		/// <returns>The matching OpCode</returns>
-		public static OpCode Div(Operand dest, MemoryOperand src)
-		{
-			if ((src.Type.Type == CilElementType.U1) || (src.Type.Type == CilElementType.I1))
-				return new OpCode(new byte[] { 0xF6 }, 6);
-			else if ((src.Type.Type == CilElementType.U2) || (src.Type.Type == CilElementType.I2))
-				return new OpCode(new byte[] { 0x66, 0xF7 }, 6);
-
-			return new OpCode(new byte[] { 0xF7 }, 6);
-		}
 		#endregion
 
 		#region Move
