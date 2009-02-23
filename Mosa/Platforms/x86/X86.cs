@@ -26,8 +26,23 @@ namespace Mosa.Platforms.x86
 	/// </summary>
 	public static class X86
     {
-        #region Add
-        /// <summary>
+#pragma warning disable 1591
+		public static class X86Intruction
+		{
+			public static class Add
+			{
+				public static OpCode R_C = new OpCode(new byte[] { 0x81 }, 0);
+				public static OpCode R_R = new OpCode(new byte[] { 0x03 });
+				public static OpCode R_M_8 = new OpCode(new byte[] { 0x02 }, null);
+				public static OpCode R_M = new OpCode(new byte[] { 0x03 }, null);
+				public static OpCode M_R_8 = new OpCode(new byte[] { 0x00 }, null);
+				public static OpCode M_R = new OpCode(new byte[] { 0x01 }, null);
+			}
+		}
+#pragma warning restore 1591
+
+		#region Add
+		/// <summary>
 		/// Adds the specified dest.
 		/// </summary>
 		/// <param name="dest">The dest.</param>
@@ -35,64 +50,28 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Add(Operand dest, Operand src)
 		{
-			if ((dest is RegisterOperand) && (src is ConstantOperand)) return Add(dest as RegisterOperand, src as ConstantOperand);
-			if ((dest is RegisterOperand) && (src is RegisterOperand)) return Add(dest as RegisterOperand, src as RegisterOperand);
-			if ((dest is RegisterOperand) && (src is MemoryOperand)) return Add(dest as RegisterOperand, src as MemoryOperand);
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) return Add(dest as MemoryOperand, src as RegisterOperand);
+			if ((dest is RegisterOperand) && (src is ConstantOperand))
+				return X86Intruction.Add.R_C;
+
+			if ((dest is RegisterOperand) && (src is RegisterOperand))
+				return X86Intruction.Add.R_R;
+
+			if ((dest is RegisterOperand) && (src is MemoryOperand))
+				if ((src.Type.Type == CilElementType.I1) || (src.Type.Type == CilElementType.U1))
+					return X86Intruction.Add.R_M_8;
+				else
+					return X86Intruction.Add.R_M;
+
+			if ((dest is MemoryOperand) && (src is RegisterOperand))
+				if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+					return X86Intruction.Add.M_R_8;
+				else
+					return X86Intruction.Add.M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-		/// <summary>
-		/// Adds the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Add(RegisterOperand dest, ConstantOperand src)
-		{
-			return new OpCode(new byte[] { 0x81 }, 0);
-		}
-
-		/// <summary>
-		/// Adds the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Add(RegisterOperand dest, RegisterOperand src)
-		{
-			return new OpCode(new byte[] { 0x03 }, null);
-		}
-
-		/// <summary>
-		/// Adds the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Add(RegisterOperand dest, MemoryOperand src)
-		{
-			if ((src.Type.Type == CilElementType.I1) || (src.Type.Type == CilElementType.U1))
-				return new OpCode(new byte[] { 0x02 }, null);
-
-			return new OpCode(new byte[] { 0x03 }, null);
-		}
-
-		/// <summary>
-		/// Adds the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Add(MemoryOperand dest, RegisterOperand src)
-		{
-			if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
-				return new OpCode(new byte[] { 0x00 }, null);
-
-			return new OpCode(new byte[] { 0x01 }, null);
-		}
-        #endregion
+		#endregion
 
         #region And
         /// <summary>
