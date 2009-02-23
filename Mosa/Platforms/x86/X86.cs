@@ -167,6 +167,54 @@ namespace Mosa.Platforms.x86
         }
         #endregion
 
+        #region Div
+        /// <summary>
+        /// Returns the matching OpCode for DIV
+        /// </summary>
+        /// <param name="dest">Destination operand</param>
+        /// <param name="src">Source Operand</param>
+        /// <returns>The matching OpCode</returns>
+        public static OpCode Div(Operand dest, Operand src)
+        {
+            if (src is RegisterOperand) return Div(dest, src as RegisterOperand);
+            if (src is MemoryOperand)   return Div(dest, src as MemoryOperand);
+
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
+
+        /// <summary>
+        /// Returns the matching OpCode for DIV
+        /// </summary>
+        /// <param name="dest">Destination operand</param>
+        /// <param name="src">Source Operand</param>
+        /// <returns>The matching OpCode</returns>
+        public static OpCode Div(Operand dest, RegisterOperand src)
+        {
+            if ((src.Type.Type == CilElementType.U1) || (src.Type.Type == CilElementType.I1))
+                return new OpCode(new byte[] { 0xF6 }, 6);
+            else if ((src.Type.Type == CilElementType.U2) || (src.Type.Type == CilElementType.I2))
+                return new OpCode(new byte[] { 0x66, 0xF7 }, 6);
+            
+            return new OpCode(new byte[] { 0xF7 }, 6);
+        }
+
+        /// <summary>
+        /// Returns the matching OpCode for DIV
+        /// </summary>
+        /// <param name="dest">Destination operand</param>
+        /// <param name="src">Source Operand</param>
+        /// <returns>The matching OpCode</returns>
+        public static OpCode Div(Operand dest, MemoryOperand src)
+        {
+            if ((src.Type.Type == CilElementType.U1) || (src.Type.Type == CilElementType.I1))
+                return new OpCode(new byte[] { 0xF6 }, 6);
+            else if ((src.Type.Type == CilElementType.U2) || (src.Type.Type == CilElementType.I2))
+                return new OpCode(new byte[] { 0x66, 0xF7 }, 6);
+
+            return new OpCode(new byte[] { 0xF7 }, 6);
+        }
+        #endregion
+
         #region Move
         /// <summary>
         /// Moves the specified dest.

@@ -930,12 +930,8 @@ namespace Mosa.Platforms.x86
 		{
 			// Write the opcode byte
 			Debug.Assert(dest is RegisterOperand);
-
-			if (src is ConstantOperand && (int)(src as ConstantOperand).Value == (int)1) {
-				Emit(dest, null, cd_shr_const);
-			}
-			else
-				Emit(dest, null, cd_shr);
+            // FIXME: Make sure the constant is emitted as a single-byte opcode
+            Emit(dest, null, X86.Shr(dest, src);
 		}
 
 		void ICodeEmitter.Shrd(Operand dst, Operand src, Operand count)
@@ -954,7 +950,7 @@ namespace Mosa.Platforms.x86
 				Emit(newsrc, src, X86.Move(dest, src));
 				src = newsrc;
 			}
-			Emit(src, null, cd_div);
+			Emit(src, null, X86.Div(null, src));
 		}
 
 		void ICodeEmitter.IDiv(Operand dest, Operand src)
