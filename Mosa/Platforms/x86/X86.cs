@@ -140,5 +140,124 @@ namespace Mosa.Platforms.x86
 			return new OpCode(new byte[] { 0x89 }, null);
 		}
 
+
+		/// <summary>
+		/// Adds the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Add(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return Add(dest as RegisterOperand, src as ConstantOperand);
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return Add(dest as RegisterOperand, src as RegisterOperand);
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return Add(dest as RegisterOperand, src as MemoryOperand);
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) return Add(dest as MemoryOperand, src as RegisterOperand);
+
+			throw new ArgumentException(@"Not such op code for operand type.");
+		}
+
+		/// <summary>
+		/// Adds the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Add(RegisterOperand dest, ConstantOperand src)
+		{
+			return new OpCode(new byte[] { 0x81 }, 0);
+		}
+
+		/// <summary>
+		/// Adds the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Add(RegisterOperand dest, RegisterOperand src)
+		{
+			return new OpCode(new byte[] { 0x03 }, null);
+		}
+
+		/// <summary>
+		/// Adds the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Add(RegisterOperand dest, MemoryOperand src)
+		{
+			if ((src.Type.Type == CilElementType.I1) || (src.Type.Type == CilElementType.U1))
+				return new OpCode(new byte[] { 0x02 }, null);
+
+			return new OpCode(new byte[] { 0x03 }, null);
+		}
+
+		/// <summary>
+		/// Adds the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Add(MemoryOperand dest, RegisterOperand src)
+		{
+			if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+				return new OpCode(new byte[] { 0x00 }, null);
+
+			return new OpCode(new byte[] { 0x01 }, null);
+		}
+
+		/// <summary>
+		/// Subs the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Sub(Operand dest, Operand src)
+		{
+			if ((dest is Operand) && (src is ConstantOperand)) return Sub(dest as Operand, src as ConstantOperand);
+			if ((dest is RegisterOperand) && (src is Operand)) return Sub(dest as RegisterOperand, src as Operand);
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) return Sub(dest as MemoryOperand, src as RegisterOperand);
+
+			throw new ArgumentException(@"Not such op code for operand type.");
+		}
+
+		/// <summary>
+		/// Subs the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Sub(Operand dest, ConstantOperand src)
+		{
+			return new OpCode(new byte[] { 0x81 }, 5);
+		}
+
+		/// <summary>
+		/// Subs the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Sub(RegisterOperand dest, Operand src)
+		{
+			return new OpCode(new byte[] { 0x2B }, null);
+		}
+
+		/// <summary>
+		/// Subs the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Sub(MemoryOperand dest, RegisterOperand src)
+		{
+			if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+				return new OpCode(new byte[] { 0x28 }, null);
+
+			return new OpCode(new byte[] { 0x29 }, null);
+		}
+
 	}
 }
+

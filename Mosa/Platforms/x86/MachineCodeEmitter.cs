@@ -414,7 +414,7 @@ namespace Mosa.Platforms.x86
 			//if (src is RegisterOperand)
 			//    if ((src as RegisterOperand) != (new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX)))
 			//        throw new NotSupportedException("Register has to be EAX");
-			Emit(dest, src, cd_add);
+			Emit(dest, src, X86.Add(dest, src));
 		}
 
 		/// <summary>
@@ -840,7 +840,7 @@ namespace Mosa.Platforms.x86
 			if (src is ConstantOperand) {
 				Operand newsrc = new RegisterOperand(src.Type, GeneralPurposeRegister.ECX);
 				//Emit(newsrc, src, cd_mov);
-				Emit(newsrc, src, X86.Move(dest,src));
+				Emit(newsrc, src, X86.Move(dest, src));
 				src = newsrc;
 			}
 			Emit(src, null, cd_mul);
@@ -951,7 +951,7 @@ namespace Mosa.Platforms.x86
 			if (src is ConstantOperand) {
 				Operand newsrc = new RegisterOperand(src.Type, GeneralPurposeRegister.ECX);
 				//Emit(newsrc, src, cd_mov);
-				Emit(newsrc, src, X86.Move(dest,src));
+				Emit(newsrc, src, X86.Move(dest, src));
 				src = newsrc;
 			}
 			Emit(src, null, cd_div);
@@ -1261,7 +1261,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The source operand.</param>
 		void ICodeEmitter.Sub(Operand dest, Operand src)
 		{
-			Emit(dest, src, cd_sub);
+			Emit(dest, src, X86.Sub(dest, src));
 		}
 
 		/// <summary>
@@ -1299,8 +1299,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The source operand of the instruction.</param>
 		void ICodeEmitter.Xchg(Operand dest, Operand src)
 		{
-            byte[] code = { 0x66 };
-            Emit(code, null, null, null);
+			byte[] code = { 0x66 };
+			Emit(code, null, null, null);
 			Emit(dest, src, cd_xchg);
 		}
 
@@ -1359,19 +1359,6 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x99 }, null),
             new CodeDef(typeof(MemoryOperand),      typeof(MemoryOperand),      new byte[] { 0x99 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x99 }, null)
-        };
-
-		/// <summary>
-		/// Asmcode: ADD
-		/// Adds two values
-		/// 
-		/// Section: Standard x86
-		/// </summary>
-		private static readonly CodeDef[] cd_add = new CodeDef[] {
-			new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0x81 }, 0),
-			new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x03 }, null),
-			new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x03 }, null),
-			new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x01 }, null)
         };
 
 		/// <summary>
@@ -1810,20 +1797,6 @@ namespace Mosa.Platforms.x86
 		private static readonly CodeDef[] cd_movzx16 = new CodeDef[] {
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x0F, 0xB7 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x0F, 0xB7 }, null),
-        };
-
-		/// <summary>
-		/// Asmcode: SUB
-		/// Substracts 2 given values
-		/// 
-		/// Note: Signed
-		/// 
-		/// Section: Standard x86
-		/// </summary>
-		private static readonly CodeDef[] cd_sub = new CodeDef[] {
-            new CodeDef(typeof(Operand),            typeof(ConstantOperand),    new byte[] { 0x81 }, 5),
-            new CodeDef(typeof(RegisterOperand),    typeof(Operand),            new byte[] { 0x2B }, null),
-            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x29 }, null),
         };
 
 		/// <summary>
