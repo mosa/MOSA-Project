@@ -117,11 +117,17 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Move(RegisterOperand dest, MemoryOperand src)
 		{
-			if ((src.Type.Type == CilElementType.I1) || (src.Type.Type == CilElementType.U1))
+			if (src.Type.Type == CilElementType.U1)
 				return new OpCode(new byte[] { 0x0F, 0xB6 }, null);
 
-			if ((src.Type.Type == CilElementType.I2) || (src.Type.Type == CilElementType.U2))
+			if (src.Type.Type == CilElementType.I1)
+				return new OpCode(new byte[] { 0x0F, 0xBE }, null);
+
+			if (src.Type.Type == CilElementType.U2)
 				return new OpCode(new byte[] { 0x0F, 0xB7 }, null);
+
+			if (src.Type.Type == CilElementType.I2)
+				return new OpCode(new byte[] { 0x0F, 0xBF }, null);
 
 			return new OpCode(new byte[] { 0x8B }, null);
 		}
@@ -139,7 +145,6 @@ namespace Mosa.Platforms.x86
 
 			return new OpCode(new byte[] { 0x89 }, null);
 		}
-
 
 		/// <summary>
 		/// Adds the specified dest.
