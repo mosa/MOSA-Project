@@ -88,5 +88,17 @@ namespace Mosa.Runtime.Metadata.Signatures
         }
 
         #endregion // SigType Overrides
+
+        /// <summary>
+        /// Expresses the byref parameter signature component in a meaningful, symbol-friendly string form
+        /// </summary>
+        /// <returns></returns>
+        public override string ToSymbolPart()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("ref ");
+            sb.Append(this.ElementType.ToSymbolPart());
+            return sb.ToString();
+        }
     }
 }

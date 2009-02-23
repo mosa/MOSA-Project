@@ -71,5 +71,18 @@ namespace Mosa.Runtime.Metadata.Signatures
         }
 
         #endregion // SigType Overrides
+
+        /// <summary>
+        /// Expresses the class reference in a meaningful, symbol-friendly string form
+        /// </summary>
+        public override string ToSymbolPart()
+        {
+            // FIXME: This needs to be a class name
+            //StringBuilder sb = new StringBuilder();
+            //sb.Append("Token");
+            //sb.AppendFormat("0x{0:X}", (int)this.Token);
+            //return sb.ToString();
+            throw new NotImplementedException();
+        }
     }
 }

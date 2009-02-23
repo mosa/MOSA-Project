@@ -83,5 +83,24 @@ namespace Mosa.Runtime.Metadata.Signatures
         }
 
         #endregion // SigType Overrides
+
+        /// <summary>
+        /// Expresses the generic instance type in a meaningful, symbol-friendly string form
+        /// </summary>
+        public override string ToSymbolPart()
+        {
+            StringBuilder sb = new StringBuilder();
+            SigType[] genericArgs = this.GenericArgs;
+            sb.Append(this.BaseType.ToSymbolPart());
+            sb.Append('<');
+            for (int x = 0; x < genericArgs.GetLength(0); x++)
+            {
+                if (x > 0)
+                    sb.Append(',');
+                sb.Append(genericArgs[x].ToSymbolPart());
+            }
+            sb.Append('>');
+            return sb.ToString();
+        }
     }
 }

@@ -231,7 +231,7 @@ namespace Mosa.Tools.Compiler.Boot
                 bw.Write(load_end_addr);
                 bw.Write(bss_end_addr);
 
-                linker.Link(LinkType.AbsoluteAddress | LinkType.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, String.Format("{0}.{1}", compiler.Assembly.EntryPoint.DeclaringType.FullName, compiler.Assembly.EntryPoint.Name), IntPtr.Zero);
+                linker.Link(LinkType.AbsoluteAddress | LinkType.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, linker.CreateSymbolName(compiler.Assembly.EntryPoint), IntPtr.Zero);
                 //bw.Write(entry_point);
 
                 bw.Write(this.videoMode);

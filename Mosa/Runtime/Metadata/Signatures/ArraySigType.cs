@@ -132,5 +132,23 @@ namespace Mosa.Runtime.Metadata.Signatures
         }
 
         #endregion // SigType Overrides
+
+        /// <summary>
+        /// Expresses the array type reference in a meaningful, symbol-friendly string form
+        /// </summary>
+        /// <returns></returns>
+        public override string ToSymbolPart()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(this.ElementType.ToSymbolPart());
+            sb.Append('[');
+            // Don't write a comma for rank 1 on purpose...
+            for (int x = 1; x < this.Rank; x++)
+            {
+                sb.Append(',');
+            }
+            sb.Append(']');
+            return sb.ToString();
+        }
     }
 }

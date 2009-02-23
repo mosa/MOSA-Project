@@ -15,6 +15,8 @@ using System.IO;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
+using System.Text;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.Linker
 {
@@ -432,29 +434,98 @@ namespace Mosa.Runtime.Linker
 
         #region Internals
 
+        #region CreateSymbolName
+
         /// <summary>
         /// Creates a symbol name.
         /// </summary>
         /// <param name="symbol">The symbol name.</param>
         /// <returns>A string, which represents the symbol name.</returns>
-        protected string CreateSymbolName(RuntimeMember symbol)
+        public string CreateSymbolName(RuntimeMember symbol)
         {
             if (symbol == null)
                 throw new ArgumentNullException(@"symbol");
 
-            string name;
-            RuntimeType declaringType = symbol.DeclaringType;
-            if (declaringType != null)
+            if (symbol is RuntimeMethod)
+                return CreateSymbolName(symbol as RuntimeMethod);
+            else if (symbol is RuntimeType)
+                return CreateSymbolName(symbol as RuntimeType);
+            else
             {
-                name = String.Format("{0}.{1}", declaringType.FullName, symbol.Name);
+                string name;
+                RuntimeType declaringType = symbol.DeclaringType;
+                if (declaringType != null)
+                {
+                    string declaringTypeSymbolName = CreateSymbolName(declaringType);
+                    name = String.Format("{0}.{1}", CreateSymbolName(declaringType), symbol.Name);
+                }
+                else
+                {
+                    name = symbol.Name;
+                }
+
+                return name;
+            }
+        }
+
+        private string CreateSymbolName(RuntimeMethod symbol)
+        {
+            if(symbol==null)
+                throw new ArgumentNullException("symbol");
+
+            // TODO: If it is a generic method instance, then the symbol name needs to be carefully constructed. ~BMarkham,2/18/09
+            if(symbol.IsGeneric)
+                throw new NotImplementedException();
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(CreateSymbolName(symbol.DeclaringType));
+            sb.Append('.');
+            sb.Append(symbol.Name);
+            sb.Append('(');
+            bool hasEmittedSignaturePart = false;
+            foreach (SigType parameterSignatureType in symbol.Signature.Parameters )
+            {
+                if (hasEmittedSignaturePart)
+                    sb.Append(',');
+                sb.Append(parameterSignatureType.ToSymbolPart()); // FIXME : This obviously doesn't work! We need to emit class names.
+                hasEmittedSignaturePart = true;
+            }
+            sb.Append(')');
+            return sb.ToString();
+        }
+
+        private string CreateSymbolName(RuntimeType symbol)
+        {
+            if (symbol == null)
+                throw new ArgumentNullException("symbol");
+            if (symbol.IsGeneric)
+                throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+            if (symbol.DeclaringType != null)
+            {
+                sb.Append(CreateSymbolName(symbol.DeclaringType));
+                sb.Append('+');
             }
             else
             {
-                name = symbol.Name;
+                if(!string.IsNullOrEmpty(symbol.Namespace))
+                {
+                    sb.Append(symbol.Namespace);
+                    sb.Append('.');
+                }
             }
-
-            return name;
+            sb.Append(symbol.Name);
+            return sb.ToString();
         }
+
+        private string CreateSymbolName(SigType signatureType)
+        {
+            if (signatureType == null)
+                throw new ArgumentNullException("signatureType");
+            return signatureType.ToSymbolPart();
+        }
+
+#endregion
 
         /// <summary>
         /// Determines whether the specified symbol is resolved.

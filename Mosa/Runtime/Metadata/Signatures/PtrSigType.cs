@@ -104,5 +104,26 @@ namespace Mosa.Runtime.Metadata.Signatures
         }
 
         #endregion // SigType Overrides
+
+        /// <summary>
+        /// Expresses the pointer type reference signature component in a meaningful, symbol-friendly string form
+        /// </summary>
+        /// <returns></returns>
+        public override string ToSymbolPart()
+        {
+            StringBuilder sb = new StringBuilder();
+            if (this.ElementType.Type == CilElementType.Void)
+            {
+                // NOTE: Void should only ever be written for a symbol when used as a pointer in a signature
+                sb.Append("void*");
+            }
+            else
+            {
+                sb.Append(this.ElementType.ToSymbolPart());
+                sb.Append('*');
+            }
+            
+            return sb.ToString();
+        }
     }
 }

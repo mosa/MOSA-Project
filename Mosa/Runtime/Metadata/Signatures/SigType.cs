@@ -413,5 +413,96 @@ namespace Mosa.Runtime.Metadata.Signatures
         }
 
         #endregion // IEquatable<SigType> Members
+
+        /// <summary>
+        /// Expresses the signature element information in a string form differentiating it from other signature
+        /// elements expressed the same way
+        /// </summary>
+        /// <remarks>Sub-classes should override this method completely and not call it. If the subclass is in this same library, and there is a preliminary implementation in this
+        /// base of this method, then replace that with an exception thrower.</remarks>
+        public virtual string ToSymbolPart()
+        {
+            // If it's not a subclass of SigType and it is trivial to express, do it here. 
+            // Otherwise, call the virtual method _ToSymbolPart() and hope that it is overriden so that it doesn't throw a NotImplementedException
+            switch (this.Type)
+            {
+                case CilElementType.Boolean:
+                    return "bool";
+                case CilElementType.Char:
+                    return "char";
+                case CilElementType.I1:
+                    return "sbyte";
+                case CilElementType.U1:
+                    return "byte";
+                case CilElementType.I2:
+                    return "short";
+                case CilElementType.U2:
+                    return "ushort";
+                case CilElementType.I4:
+                    return "int";
+                case CilElementType.U4:
+                    return "uint";
+                case CilElementType.I8:
+                    return "long";
+                case CilElementType.U8:
+                    return "ulong";
+                case CilElementType.R4:
+                    return "single";
+                case CilElementType.R8:
+                    return "double";
+                case CilElementType.String:
+                    return "string";
+                case CilElementType.ValueType:
+                    throw new NotImplementedException();
+                case CilElementType.Class:
+                    throw new NotImplementedException();
+                case CilElementType.Var:
+                    throw new NotImplementedException();
+                case CilElementType.Array:
+                    throw new NotImplementedException();
+                case CilElementType.GenericInst:
+                    throw new NotImplementedException();
+                case CilElementType.TypedByRef:
+                    throw new NotImplementedException();
+                case CilElementType.I:
+                    return "IntPtr";
+                case CilElementType.U:
+                    return "UIntPtr";
+                case CilElementType.FunctionPtr:
+                    throw new NotImplementedException();
+                case CilElementType.Object:
+                    throw new NotImplementedException();
+                case CilElementType.SZArray:
+                    throw new NotImplementedException();
+                case CilElementType.MVar:
+                    throw new NotImplementedException();
+                case CilElementType.Required:
+                    throw new NotImplementedException();
+                case CilElementType.Optional:
+                    throw new NotImplementedException();
+                case CilElementType.Internal:
+                    throw new NotImplementedException();
+                case CilElementType.Modifier:
+                    throw new NotImplementedException();
+                case CilElementType.Sentinel:
+                    throw new NotImplementedException();
+                case CilElementType.Pinned:
+                    throw new NotImplementedException();
+                case CilElementType.Type:
+                    throw new NotImplementedException();
+                case CilElementType.BoxedObject:
+                    throw new NotImplementedException();
+                case CilElementType.Reserved:
+                    throw new NotImplementedException();
+                case CilElementType.Field:
+                    throw new NotImplementedException();
+                case CilElementType.Property:
+                    throw new NotImplementedException();
+                case CilElementType.Enum:
+                    throw new NotImplementedException();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
     }
 }

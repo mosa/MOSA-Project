@@ -175,6 +175,13 @@ namespace Mosa.Runtime.Linker
         /// </returns>
         long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset);
 
+        /// <summary>
+        /// Creates a canonical symbol name for the given runtime member
+        /// </summary>
+        /// <param name="member">The runtime member to create a symbol name for</param>
+        /// <returns>A string containing the canonical symbol name for the given runtime member</returns>
+        string CreateSymbolName(RuntimeMember member);
+
         #endregion // Methods
     }
 }

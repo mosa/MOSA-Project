@@ -411,6 +411,17 @@ namespace Mosa.Tools.Compiler.Linkers
             return this.implementation.GetSymbol(symbolName);
         }
 
+        /// <summary>
+        /// Creates a canonical symbol name for the given runtime member
+        /// </summary>
+        /// <param name="member">The runtime member to create a symbol name for</param>
+        /// <returns>A string containing the canonical symbol name for the given runtime member</returns>
+        public string CreateSymbolName(RuntimeMember member)
+        {
+            CheckImplementation();
+            return this.implementation.CreateSymbolName(member);
+        }
+
         #endregion // IAssemblyLinker Members
 
         #region Internals
