@@ -25,131 +25,9 @@ namespace Mosa.Platforms.x86
 	/// An x86 machine code emitter.
 	/// </summary>
 	public static class X86
-	{
-		/// <summary>
-		/// Negates the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <returns></returns>
-		public static OpCode Neg(Operand dest)
-		{
-			if (dest is RegisterOperand) return Neg(dest as RegisterOperand);
-			if (dest is MemoryOperand) return Neg(dest as MemoryOperand);
-
-			throw new ArgumentException(@"No opcode for operand type.");
-		}
-
-		/// <summary>
-		/// Negates the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <returns></returns>
-		public static OpCode Neg(RegisterOperand dest)
-		{
-			return new OpCode(new byte[] { 0xF7 }, 3);
-		}
-
-		/// <summary>
-		/// Negates the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <returns></returns>
-		public static OpCode Neg(MemoryOperand dest)
-		{
-			if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
-				return new OpCode(new byte[] { 0xF6 }, 3);
-
-			return new OpCode(new byte[] { 0xF7 }, 3);
-		}
-
-		/// <summary>
-		/// Moves the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Move(Operand dest, Operand src)
-		{
-			if ((dest is RegisterOperand) && (src is ConstantOperand)) return Move(dest as RegisterOperand, src as ConstantOperand);
-			if ((dest is MemoryOperand) && (src is ConstantOperand)) return Move(dest as MemoryOperand, src as ConstantOperand);
-			if ((dest is RegisterOperand) && (src is RegisterOperand)) return Move(dest as RegisterOperand, src as RegisterOperand);
-			if ((dest is RegisterOperand) && (src is MemoryOperand)) return Move(dest as RegisterOperand, src as MemoryOperand);
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) return Move(dest as MemoryOperand, src as RegisterOperand);
-
-			throw new ArgumentException(@"No opcode for operand type.");
-		}
-
-		/// <summary>
-		/// Moves the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Move(RegisterOperand dest, ConstantOperand src)
-		{
-			return new OpCode(new byte[] { 0xC7 }, 0);
-		}
-
-		/// <summary>
-		/// Moves the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Move(MemoryOperand dest, ConstantOperand src)
-		{
-			return new OpCode(new byte[] { 0xC7 }, 0);
-		}
-
-		/// <summary>
-		/// Moves the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Move(RegisterOperand dest, RegisterOperand src)
-		{
-			return new OpCode(new byte[] { 0x8B }, null);
-		}
-
-		/// <summary>
-		/// Moves the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Move(RegisterOperand dest, MemoryOperand src)
-		{
-			if (src.Type.Type == CilElementType.U1)
-				return new OpCode(new byte[] { 0x0F, 0xB6 }, null);
-
-			if (src.Type.Type == CilElementType.I1)
-				return new OpCode(new byte[] { 0x0F, 0xBE }, null);
-
-			if (src.Type.Type == CilElementType.U2)
-				return new OpCode(new byte[] { 0x0F, 0xB7 }, null);
-
-			if (src.Type.Type == CilElementType.I2)
-				return new OpCode(new byte[] { 0x0F, 0xBF }, null);
-
-			return new OpCode(new byte[] { 0x8B }, null);
-		}
-
-		/// <summary>
-		/// Moves the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Move(MemoryOperand dest, RegisterOperand src)
-		{
-			if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
-				return new OpCode(new byte[] { 0x88 }, null);
-
-			return new OpCode(new byte[] { 0x89 }, null);
-		}
-
-		/// <summary>
+    {
+        #region Add
+        /// <summary>
 		/// Adds the specified dest.
 		/// </summary>
 		/// <param name="dest">The dest.</param>
@@ -214,8 +92,408 @@ namespace Mosa.Platforms.x86
 
 			return new OpCode(new byte[] { 0x01 }, null);
 		}
+        #endregion
 
-		/// <summary>
+        #region And
+        /// <summary>
+        /// Ands the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode And(Operand dest, Operand src)
+        {
+            if ((dest is RegisterOperand) && (src is ConstantOperand)) return And(dest as RegisterOperand, src as ConstantOperand);
+            if ((dest is MemoryOperand) && (src is ConstantOperand)) return And(dest as MemoryOperand, src as ConstantOperand);
+            if ((dest is RegisterOperand) && (src is MemoryOperand)) return And(dest as RegisterOperand, src as MemoryOperand);
+            if ((dest is RegisterOperand) && (src is RegisterOperand)) return And(dest as RegisterOperand, src as RegisterOperand);
+            if ((dest is MemoryOperand) && (src is RegisterOperand)) return And(dest as MemoryOperand, src as RegisterOperand);
+
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
+
+        /// <summary>
+        /// Ands the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode And(RegisterOperand dest, ConstantOperand src)
+        {
+            return new OpCode(new byte[] { 0x81 }, 4);
+        }
+
+        /// <summary>
+        /// Ands the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode And(MemoryOperand dest, ConstantOperand src)
+        {
+            return new OpCode(new byte[] { 0x81 }, 4);
+        }
+
+        /// <summary>
+        /// Ands the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode And(RegisterOperand dest, MemoryOperand src)
+        {
+            return new OpCode(new byte[] { 0x23 }, null);
+        }
+
+        /// <summary>
+        /// Ands the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode And(RegisterOperand dest, RegisterOperand src)
+        {
+            return new OpCode(new byte[] { 0x23 }, null);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode And(MemoryOperand dest, RegisterOperand src)
+        {
+            return new OpCode(new byte[] { 0x21 }, null);
+        }
+        #endregion
+
+        #region Move
+        /// <summary>
+        /// Moves the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Move(Operand dest, Operand src)
+        {
+            if ((dest is RegisterOperand) && (src is ConstantOperand)) return Move(dest as RegisterOperand, src as ConstantOperand);
+            if ((dest is MemoryOperand) && (src is ConstantOperand)) return Move(dest as MemoryOperand, src as ConstantOperand);
+            if ((dest is RegisterOperand) && (src is RegisterOperand)) return Move(dest as RegisterOperand, src as RegisterOperand);
+            if ((dest is RegisterOperand) && (src is MemoryOperand)) return Move(dest as RegisterOperand, src as MemoryOperand);
+            if ((dest is MemoryOperand) && (src is RegisterOperand)) return Move(dest as MemoryOperand, src as RegisterOperand);
+
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
+
+        /// <summary>
+        /// Moves the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Move(RegisterOperand dest, ConstantOperand src)
+        {
+            return new OpCode(new byte[] { 0xC7 }, 0);
+        }
+
+        /// <summary>
+        /// Moves the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Move(MemoryOperand dest, ConstantOperand src)
+        {
+            return new OpCode(new byte[] { 0xC7 }, 0);
+        }
+
+        /// <summary>
+        /// Moves the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Move(RegisterOperand dest, RegisterOperand src)
+        {
+            return new OpCode(new byte[] { 0x8B }, null);
+        }
+
+        /// <summary>
+        /// Moves the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Move(RegisterOperand dest, MemoryOperand src)
+        {
+            if (src.Type.Type == CilElementType.U1)
+                return new OpCode(new byte[] { 0x0F, 0xB6 }, null);
+
+            if (src.Type.Type == CilElementType.I1)
+                return new OpCode(new byte[] { 0x0F, 0xBE }, null);
+
+            if (src.Type.Type == CilElementType.U2)
+                return new OpCode(new byte[] { 0x0F, 0xB7 }, null);
+
+            if (src.Type.Type == CilElementType.I2)
+                return new OpCode(new byte[] { 0x0F, 0xBF }, null);
+
+            return new OpCode(new byte[] { 0x8B }, null);
+        }
+
+        /// <summary>
+        /// Moves the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Move(MemoryOperand dest, RegisterOperand src)
+        {
+            if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+                return new OpCode(new byte[] { 0x88 }, null);
+
+            return new OpCode(new byte[] { 0x89 }, null);
+        }
+        #endregion
+
+        #region Neg
+        /// <summary>
+        /// Negates the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <returns></returns>
+        public static OpCode Neg(Operand dest)
+        {
+            if (dest is RegisterOperand) return Neg(dest as RegisterOperand);
+            if (dest is MemoryOperand) return Neg(dest as MemoryOperand);
+
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
+
+        /// <summary>
+        /// Negates the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <returns></returns>
+        public static OpCode Neg(RegisterOperand dest)
+        {
+            return new OpCode(new byte[] { 0xF7 }, 3);
+        }
+
+        /// <summary>
+        /// Negates the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <returns></returns>
+        public static OpCode Neg(MemoryOperand dest)
+        {
+            if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+                return new OpCode(new byte[] { 0xF6 }, 3);
+
+            return new OpCode(new byte[] { 0xF7 }, 3);
+        }
+        #endregion
+
+        #region Or
+        /// <summary>
+        /// Ors the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Or(Operand dest, Operand src)
+        {
+            if ((dest is RegisterOperand) && (src is ConstantOperand)) return Or(dest as RegisterOperand, src as ConstantOperand);
+            if ((dest is RegisterOperand) && (src is MemoryOperand)) return Or(dest as RegisterOperand, src as MemoryOperand);
+            if ((dest is RegisterOperand) && (src is RegisterOperand)) return Or(dest as RegisterOperand, src as RegisterOperand);
+            if ((dest is MemoryOperand) && (src is RegisterOperand)) return Or(dest as MemoryOperand, src as RegisterOperand);
+
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
+
+        /// <summary>
+        /// Ors the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Or(RegisterOperand dest, ConstantOperand src)
+        {
+            return new OpCode(new byte[] { 0x81 }, 1);
+        }
+
+        /// <summary>
+        /// Ors the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Or(RegisterOperand dest, MemoryOperand src)
+        {
+            return new OpCode(new byte[] { 0x0B }, null);
+        }
+
+        /// <summary>
+        /// Ors the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Or(RegisterOperand dest, RegisterOperand src)
+        {
+            return new OpCode(new byte[] { 0x0B }, null);
+        }
+
+        /// <summary>
+        /// Ors the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Or(MemoryOperand dest, RegisterOperand src)
+        {
+            return new OpCode(new byte[] { 0x09 }, null);
+        }
+        #endregion
+
+        #region SHL
+        /// <summary>
+        /// SHLs the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Shl(Operand dest, Operand src)
+        {
+            if ((dest is RegisterOperand) && (src is RegisterOperand)) return Shl(dest as RegisterOperand, src as RegisterOperand);
+            if ((dest is MemoryOperand) && (src is RegisterOperand)) return Shl(dest as MemoryOperand, src as RegisterOperand);
+            if ((dest is RegisterOperand) && (src is ConstantOperand)) return Shl(dest as RegisterOperand, src as ConstantOperand);
+            if ((dest is MemoryOperand) && (src is ConstantOperand)) return Shl(dest as MemoryOperand, src as ConstantOperand);
+
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
+
+        /// <summary>
+        /// SHLs the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Shl(RegisterOperand dest, RegisterOperand src)
+        {
+            return new OpCode(new byte[] { 0xD3 }, 4);
+        }
+
+        /// <summary>
+        /// SHLs the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Shl(MemoryOperand dest, RegisterOperand src)
+        {
+            //if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+            //    return new OpCode(new byte[] { 0xD2 }, 4);
+
+            return new OpCode(new byte[] { 0xD3 }, 4);
+        }
+
+        /// <summary>
+        /// SHLs the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Shl(RegisterOperand dest, ConstantOperand src)
+        {
+            return new OpCode(new byte[] { 0xC1 }, 4);
+        }
+
+        /// <summary>
+        /// SHLs the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Shl(MemoryOperand dest, ConstantOperand src)
+        {
+            //if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+            //    return new OpCode(new byte[] { 0xC0 }, 4);
+
+            return new OpCode(new byte[] { 0xC1 }, 4);
+        }
+        #endregion
+
+        #region SHR
+        /// <summary>
+        /// SHRs the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Shr(Operand dest, Operand src)
+        {
+            if ((dest is RegisterOperand) && (src is RegisterOperand)) return Shr(dest as RegisterOperand, src as RegisterOperand);
+            if ((dest is MemoryOperand) && (src is RegisterOperand)) return Shr(dest as MemoryOperand, src as RegisterOperand);
+            if ((dest is RegisterOperand) && (src is ConstantOperand)) return Shr(dest as RegisterOperand, src as ConstantOperand);
+            if ((dest is MemoryOperand) && (src is ConstantOperand)) return Shr(dest as MemoryOperand, src as ConstantOperand);
+
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
+
+        /// <summary>
+        /// SHRs the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Shr(RegisterOperand dest, RegisterOperand src)
+        {
+            return new OpCode(new byte[] { 0xD3 }, 5);
+        }
+
+        /// <summary>
+        /// SHRs the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Shr(MemoryOperand dest, RegisterOperand src)
+        {
+            //if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+            //    return new OpCode(new byte[] { 0xD2 }, 4);
+
+            return new OpCode(new byte[] { 0xD3 }, 5);
+        }
+
+        /// <summary>
+        /// SHRs the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Shr(RegisterOperand dest, ConstantOperand src)
+        {
+            return new OpCode(new byte[] { 0xC1 }, 5);
+        }
+
+        /// <summary>
+        /// SHRs the specified dest.
+        /// </summary>
+        /// <param name="dest">The dest.</param>
+        /// <param name="src">The SRC.</param>
+        /// <returns></returns>
+        public static OpCode Shr(MemoryOperand dest, ConstantOperand src)
+        {
+            //if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+            //    return new OpCode(new byte[] { 0xC0 }, 4);
+
+            return new OpCode(new byte[] { 0xC1 }, 5);
+        }
+        #endregion
+
+        #region Sub
+        /// <summary>
 		/// Subs the specified dest.
 		/// </summary>
 		/// <param name="dest">The dest.</param>
@@ -264,141 +542,11 @@ namespace Mosa.Platforms.x86
 				return new OpCode(new byte[] { 0x28 }, null);
 
 			return new OpCode(new byte[] { 0x29 }, null);
-		}
+        }
+        #endregion
 
-		/// <summary>
-		/// Ands the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode And(Operand dest, Operand src)
-		{
-			if ((dest is RegisterOperand) && (src is ConstantOperand)) return And(dest as RegisterOperand, src as ConstantOperand);
-			if ((dest is MemoryOperand) && (src is ConstantOperand)) return And(dest as MemoryOperand, src as ConstantOperand);
-			if ((dest is RegisterOperand) && (src is MemoryOperand)) return And(dest as RegisterOperand, src as MemoryOperand);
-			if ((dest is RegisterOperand) && (src is RegisterOperand)) return And(dest as RegisterOperand, src as RegisterOperand);
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) return And(dest as MemoryOperand, src as RegisterOperand);
-
-			throw new ArgumentException(@"No opcode for operand type.");
-		}
-
-		/// <summary>
-		/// Ands the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode And(RegisterOperand dest, ConstantOperand src)
-		{
-			return new OpCode(new byte[] { 0x81 }, 4);
-		}
-
-		/// <summary>
-		/// Ands the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode And(MemoryOperand dest, ConstantOperand src)
-		{
-			return new OpCode(new byte[] { 0x81 }, 4);
-		}
-
-		/// <summary>
-		/// Ands the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode And(RegisterOperand dest, MemoryOperand src)
-		{
-			return new OpCode(new byte[] { 0x23 }, null);
-		}
-
-		/// <summary>
-		/// Ands the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode And(RegisterOperand dest, RegisterOperand src)
-		{
-			return new OpCode(new byte[] { 0x23 }, null);
-		}
-
-		/// <summary>
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode And(MemoryOperand dest, RegisterOperand src)
-		{
-			return new OpCode(new byte[] { 0x21 }, null);
-		}
-
-		/// <summary>
-		/// Ors the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Or(Operand dest, Operand src)
-		{
-			if ((dest is RegisterOperand) && (src is ConstantOperand)) return Or(dest as RegisterOperand, src as ConstantOperand);
-			if ((dest is RegisterOperand) && (src is MemoryOperand)) return Or(dest as RegisterOperand, src as MemoryOperand);
-			if ((dest is RegisterOperand) && (src is RegisterOperand)) return Or(dest as RegisterOperand, src as RegisterOperand);
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) return Or(dest as MemoryOperand, src as RegisterOperand);
-
-			throw new ArgumentException(@"No opcode for operand type.");
-		}
-
-		/// <summary>
-		/// Ors the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Or(RegisterOperand dest, ConstantOperand src)
-		{
-			return new OpCode(new byte[] { 0x81 }, 1);
-		}
-
-		/// <summary>
-		/// Ors the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Or(RegisterOperand dest, MemoryOperand src)
-		{
-			return new OpCode(new byte[] { 0x0B }, null);
-		}
-
-		/// <summary>
-		/// Ors the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Or(RegisterOperand dest, RegisterOperand src)
-		{
-			return new OpCode(new byte[] { 0x0B }, null);
-		}
-
-		/// <summary>
-		/// Ors the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Or(MemoryOperand dest, RegisterOperand src)
-		{
-			return new OpCode(new byte[] { 0x09 }, null);
-		}
-
-
-		/// <summary>
+        #region Xor
+        /// <summary>
 		/// Xors the specified dest.
 		/// </summary>
 		/// <param name="dest">The dest.</param>
@@ -456,74 +604,8 @@ namespace Mosa.Platforms.x86
 		public static OpCode Xor(MemoryOperand dest, RegisterOperand src)
 		{
 			return new OpCode(new byte[] { 0x31 }, null);
-		}
-
-		/// <summary>
-		/// SHLs the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Shl(Operand dest, Operand src)
-		{
-			if ((dest is RegisterOperand) && (src is RegisterOperand)) return Shl(dest as RegisterOperand, src as RegisterOperand);
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) return Shl(dest as MemoryOperand, src as RegisterOperand);
-			if ((dest is RegisterOperand) && (src is ConstantOperand)) return Shl(dest as RegisterOperand, src as ConstantOperand);
-			if ((dest is MemoryOperand) && (src is ConstantOperand)) return Shl(dest as MemoryOperand, src as ConstantOperand);
-
-			throw new ArgumentException(@"No opcode for operand type.");
-		}
-
-		/// <summary>
-		/// SHLs the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Shl(RegisterOperand dest, RegisterOperand src)
-		{
-			return new OpCode(new byte[] { 0xD3 }, 4);
-		}
-
-		/// <summary>
-		/// SHLs the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Shl(MemoryOperand dest, RegisterOperand src)
-		{
-			//if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
-			//    return new OpCode(new byte[] { 0xD2 }, 4);
-
-			return new OpCode(new byte[] { 0xD3 }, 4);
-		}
-
-		/// <summary>
-		/// SHLs the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Shl(RegisterOperand dest, ConstantOperand src)
-		{
-			return new OpCode(new byte[] { 0xC1 }, 4);
-		}
-
-		/// <summary>
-		/// SHLs the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Shl(MemoryOperand dest, ConstantOperand src)
-		{
-			//if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
-			//    return new OpCode(new byte[] { 0xC0 }, 4);
-
-			return new OpCode(new byte[] { 0xC1 }, 4);
-		}
-
-	}
+        }
+        #endregion
+    }
 }
 
