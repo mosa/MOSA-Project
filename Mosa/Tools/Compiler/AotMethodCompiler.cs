@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Runtime.CompilerFramework;
@@ -47,7 +48,7 @@ namespace Mosa.Tools.Compiler
                 //InstructionLogger.Instance,
                 new BasicBlockBuilderStage(),
                 //InstructionLogger.Instance,
-                new ConstantFoldingStage(),
+                //new ConstantFoldingStage(),
                 new CilToIrTransformationStage(),
                 //InstructionLogger.Instance,
                 InstructionStatisticsStage.Instance,
@@ -55,19 +56,19 @@ namespace Mosa.Tools.Compiler
                 //InstructionLogger.Instance,
                 new EnterSSA(),
                 //InstructionLogger.Instance,
-                new ConstantPropagationStage(),
+                //new ConstantPropagationStage(),
                 //InstructionLogger.Instance,
-                new ConstantFoldingStage(),
+                //new ConstantFoldingStage(),
 				//new StrengthReductionStage(),
                 //InstructionLogger.Instance,
                 new LeaveSSA(),
                 //InstructionLogger.Instance,
                 //InstructionLogger.Instance,
                 new StackLayoutStage(),
-				new BlockReductionStage(),
-				new LoopAwareBlockOrderingStage(),
+				//new BlockReductionStage(),
+				//new LoopAwareBlockOrderingStage(),
 				//new SimpleTraceBlockOrderingStage(),
-				new BasicBlockOrderStage(),				
+				//new BasicBlockOrderStage(),				
             });
         }
 

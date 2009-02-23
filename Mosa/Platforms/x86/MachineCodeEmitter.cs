@@ -360,7 +360,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The source operand of the instruction.</param>
 		void ICodeEmitter.And(Operand dest, Operand src)
 		{
-			Emit(dest, src, cd_and);
+			Emit(dest, src, X86.And(dest,src));
 		}
 
 		void ICodeEmitter.Cdq()
@@ -1372,20 +1372,6 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0x11 }, null),
             new CodeDef(typeof(RegisterOperand),    typeof(MemoryOperand),      new byte[] { 0x13 }, null),
             new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0x11 }, null),
-        };
-
-		/// <summary>
-		/// Asmcode: AND
-		/// Bitwise And on given values
-		/// 
-		/// Section: Standard x86
-		/// </summary>
-		private static readonly CodeDef[] cd_and = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 4),
-            new CodeDef(typeof(MemoryOperand), typeof(ConstantOperand),         new byte[] { 0x81 }, 4),
-            new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x23 }, null),
-            new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0x23 }, null),
-            new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x21 }, null),
         };
 
 		/// <summary>

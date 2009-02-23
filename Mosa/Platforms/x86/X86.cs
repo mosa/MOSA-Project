@@ -36,7 +36,7 @@ namespace Mosa.Platforms.x86
 			if (dest is RegisterOperand) return Neg(dest as RegisterOperand);
 			if (dest is MemoryOperand) return Neg(dest as MemoryOperand);
 
-			throw new ArgumentException(@"Not such op code for operand type.");
+			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
 		/// <summary>
@@ -56,6 +56,9 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Neg(MemoryOperand dest)
 		{
+			if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+				return new OpCode(new byte[] { 0xF6 }, 3);
+
 			return new OpCode(new byte[] { 0xF7 }, 3);
 		}
 
@@ -73,7 +76,7 @@ namespace Mosa.Platforms.x86
 			if ((dest is RegisterOperand) && (src is MemoryOperand)) return Move(dest as RegisterOperand, src as MemoryOperand);
 			if ((dest is MemoryOperand) && (src is RegisterOperand)) return Move(dest as MemoryOperand, src as RegisterOperand);
 
-			throw new ArgumentException(@"Not such op code for operand type.");
+			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
 		/// <summary>
@@ -159,7 +162,7 @@ namespace Mosa.Platforms.x86
 			if ((dest is RegisterOperand) && (src is MemoryOperand)) return Add(dest as RegisterOperand, src as MemoryOperand);
 			if ((dest is MemoryOperand) && (src is RegisterOperand)) return Add(dest as MemoryOperand, src as RegisterOperand);
 
-			throw new ArgumentException(@"Not such op code for operand type.");
+			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
 		/// <summary>
@@ -224,7 +227,7 @@ namespace Mosa.Platforms.x86
 			if ((dest is RegisterOperand) && (src is Operand)) return Sub(dest as RegisterOperand, src as Operand);
 			if ((dest is MemoryOperand) && (src is RegisterOperand)) return Sub(dest as MemoryOperand, src as RegisterOperand);
 
-			throw new ArgumentException(@"Not such op code for operand type.");
+			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
 		/// <summary>
@@ -261,6 +264,93 @@ namespace Mosa.Platforms.x86
 				return new OpCode(new byte[] { 0x28 }, null);
 
 			return new OpCode(new byte[] { 0x29 }, null);
+		}
+
+
+			//new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 4),
+			//new CodeDef(typeof(MemoryOperand), typeof(ConstantOperand),         new byte[] { 0x81 }, 4),
+			//new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x23 }, null),
+			//new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0x23 }, null),
+			//new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x21 }, null),
+
+		/// <summary>
+		/// Ands the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode And(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return And(dest as RegisterOperand, src as ConstantOperand);
+			if ((dest is MemoryOperand) && (src is ConstantOperand)) return And(dest as MemoryOperand, src as ConstantOperand);
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return And(dest as RegisterOperand, src as MemoryOperand);
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return And(dest as RegisterOperand, src as RegisterOperand);
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) return And(dest as MemoryOperand, src as RegisterOperand);
+
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+
+		/// <summary>
+		/// Ands the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode And(RegisterOperand dest, ConstantOperand src)
+		{
+			return new OpCode(new byte[] { 0x81 }, 4);
+		}
+
+		/// <summary>
+		/// Ands the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode And(MemoryOperand dest, ConstantOperand src)
+		{
+			return new OpCode(new byte[] { 0x81 }, 4);
+		}
+
+		/// <summary>
+		/// Ands the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode And(RegisterOperand dest, MemoryOperand src)
+		{
+			if ((src.Type.Type == CilElementType.I1) || (src.Type.Type == CilElementType.U1))
+				return new OpCode(new byte[] { 0x23 }, null);
+
+			return new OpCode(new byte[] { 0x23 }, null);
+		}
+
+		/// <summary>
+		/// Ands the specified dest.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode And(RegisterOperand dest, RegisterOperand src)
+		{
+			if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+				return new OpCode(new byte[] { 0x23 }, null);
+
+			return new OpCode(new byte[] { 0x23 }, null);
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode And(MemoryOperand dest, RegisterOperand src)
+		{
+			if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+				return new OpCode(new byte[] { 0x21 }, null);
+
+			return new OpCode(new byte[] { 0x21 }, null);
 		}
 
 	}
