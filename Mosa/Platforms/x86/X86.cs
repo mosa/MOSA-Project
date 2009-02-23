@@ -83,7 +83,7 @@ namespace Mosa.Platforms.x86
 				public static OpCode R_R = new OpCode(new byte[] { 0xD3 }, 4);
 				public static OpCode M_R = new OpCode(new byte[] { 0xD3 }, 4);
 				public static OpCode R_C = new OpCode(new byte[] { 0xC1 }, 4);
-				public static OpCode M_C = new OpCode(new byte[] { 0xC1 }, 4);			
+				public static OpCode M_C = new OpCode(new byte[] { 0xC1 }, 4);
 			}
 			public static class Shr
 			{
@@ -107,7 +107,278 @@ namespace Mosa.Platforms.x86
 				public static OpCode R_R = new OpCode(new byte[] { 0x33 });
 				public static OpCode M_R = new OpCode(new byte[] { 0x31 });
 			}
-		}
+			public static class Cwd
+			{
+				public static OpCode ALL = new OpCode(new byte[] { 0x99 });
+			}
+			public static class Adc
+			{
+				public static OpCode R_C = new OpCode(new byte[] { 0x81 });
+				public static OpCode R_R = new OpCode(new byte[] { 0x11 });
+				public static OpCode R_M = new OpCode(new byte[] { 0x13 });
+				public static OpCode M_R = new OpCode(new byte[] { 0x11 });
+			}
+			public static class Out8
+			{
+				public static OpCode C_R = new OpCode(new byte[] { 0xE6 });
+				public static OpCode R_R = new OpCode(new byte[] { 0xEE });
+			}
+			public static class Out32
+			{
+				public static OpCode C_R = new OpCode(new byte[] { 0xE7 });
+				public static OpCode R_R = new OpCode(new byte[] { 0xEF });
+			}
+			public static class Xchg
+			{
+				public static OpCode R_M = new OpCode(new byte[] { 0x87 });
+				public static OpCode R_R = new OpCode(new byte[] { 0x87 });
+				public static OpCode M_R = new OpCode(new byte[] { 0x87 });
+			}
+			public static class Xsave
+			{
+				public static OpCode M = new OpCode(new byte[] { 0x0F, 0xAE }, 4);
+			}
+			public static class Dec
+			{
+				public static OpCode R = new OpCode(new byte[] { 0xFF }, 1);
+				public static OpCode M = new OpCode(new byte[] { 0xFF }, 1);
+			}
+			public static class Inc
+			{
+				public static OpCode R = new OpCode(new byte[] { 0xFF }, 0);
+				public static OpCode M = new OpCode(new byte[] { 0xFF }, 0);
+			}
+			public static class Not
+			{
+				public static OpCode R_M = new OpCode(new byte[] { 0xF7 }, 2);
+				public static OpCode R_R = new OpCode(new byte[] { 0xF7 }, 2);
+				public static OpCode M_R = new OpCode(new byte[] { 0xF7 }, 2);
+			}
+			public static class Cmp
+			{
+				public static OpCode M_R = new OpCode(new byte[] { 0x39 });
+				public static OpCode R_M = new OpCode(new byte[] { 0x3B });
+				public static OpCode R_R = new OpCode(new byte[] { 0x3B });
+				public static OpCode M_C = new OpCode(new byte[] { 0x81 }, 7);
+				public static OpCode R_C = new OpCode(new byte[] { 0x81 }, 7);
+			}
+			public static class Cmpxchg
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0x0F, 0xB1 });
+				public static OpCode M_R = new OpCode(new byte[] { 0x0F, 0xB1 });
+			}
+			public static class Mul
+			{
+				public static OpCode R = new OpCode(new byte[] { 0xF7 }, 4);
+				public static OpCode M = new OpCode(new byte[] { 0xF7 }, 4);
+			}
+			public static class Sar
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0xD3 }, 7);
+				public static OpCode M_R = new OpCode(new byte[] { 0xD3 }, 7);
+				public static OpCode R_C = new OpCode(new byte[] { 0xC1 }, 7);
+				public static OpCode M_C = new OpCode(new byte[] { 0xC1 }, 7);
+			}
+			public static class Sfence
+			{
+				public static OpCode ALL = new OpCode(new byte[] { 0x0F, 0xAE }, 7);
+			}
+			public static class Sgdt
+			{
+				public static OpCode M = new OpCode(new byte[] { 0x0F, 0x01 }, 0);
+			}
+			public static class Sidt
+			{
+				public static OpCode M = new OpCode(new byte[] { 0x0F, 0x01 }, 1);
+			}
+			public static class Sldt
+			{
+				public static OpCode M = new OpCode(new byte[] { 0x0F, 0x00 }, 0);
+			}
+			public static class Smsw
+			{
+				public static OpCode M = new OpCode(new byte[] { 0x0F, 0x01 }, 4);
+				public static OpCode R = new OpCode(new byte[] { 0x0F, 0x01 }, 4);
+			}
+			public static class Stmxcsr
+			{
+				public static OpCode M = new OpCode(new byte[] { 0x0F, 0xAE }, 3);
+			}
+			public static class Shr_const
+			{
+				public static OpCode R = new OpCode(new byte[] { 0xD1 }, 5);
+				public static OpCode M = new OpCode(new byte[] { 0xD1 }, 5);
+			}
+			public static class Rcr
+			{
+				public static OpCode R = new OpCode(new byte[] { 0xD1 }, 3);
+				public static OpCode M = new OpCode(new byte[] { 0xD1 }, 3);
+			}
+			public static class Idiv
+			{
+				public static OpCode R = new OpCode(new byte[] { 0xF7 }, 7);
+				public static OpCode M = new OpCode(new byte[] { 0xF7 }, 7);
+			}
+			public static class In8
+			{
+				public static OpCode R_C = new OpCode(new byte[] { 0xE4 });
+				public static OpCode R_R = new OpCode(new byte[] { 0xEC });
+			}
+			public static class In32
+			{
+				public static OpCode R_C = new OpCode(new byte[] { 0xE5 });
+				public static OpCode R_R = new OpCode(new byte[] { 0xED });
+			}
+			public static class Lgdt
+			{
+				public static OpCode M = new OpCode(new byte[] { 0x0F, 0x01 }, 2);
+			}
+			public static class Lidt
+			{
+				public static OpCode M = new OpCode(new byte[] { 0x0F, 0x01 }, 3);
+			}
+			public static class Lldt
+			{
+				public static OpCode R = new OpCode(new byte[] { 0x0F, 0x00 }, 2);
+				public static OpCode M = new OpCode(new byte[] { 0x0F, 0x00 }, 2);
+			}
+			public static class Lmsw
+			{
+				public static OpCode R = new OpCode(new byte[] { 0x0F, 0x01 }, 6);
+				public static OpCode M = new OpCode(new byte[] { 0x0F, 0x01 }, 6);
+			}
+			public static class Movsx8
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0x0F, 0xBE });
+				public static OpCode R_M = new OpCode(new byte[] { 0x0F, 0xBE });
+			}
+			public static class Movsx16
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0x0F, 0xBF });
+				public static OpCode R_M = new OpCode(new byte[] { 0x0F, 0xBF });
+			}
+			public static class Movzx8
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0x0F, 0xB6 });
+				public static OpCode R_M = new OpCode(new byte[] { 0x0F, 0xB6 });
+			}
+			public static class Movzx16
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0x0F, 0xB7 });
+				public static OpCode R_M = new OpCode(new byte[] { 0x0F, 0xB7 });
+			}
+			public static class Sbb
+			{
+				public static OpCode R_C = new OpCode(new byte[] { 0x81 }, 3);
+				public static OpCode M_C = new OpCode(new byte[] { 0x81 }, 3);
+				public static OpCode R_R = new OpCode(new byte[] { 0x19 });
+				public static OpCode M_R = new OpCode(new byte[] { 0x19 });
+				public static OpCode R_M = new OpCode(new byte[] { 0x1B });
+			}
+			public static class Movsd
+			{
+				public static OpCode R_L = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
+				public static OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
+				public static OpCode M_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x11 });
+			}
+			public static class Movss
+			{
+				public static OpCode R_L = new OpCode(new byte[] { 0xF3, 0x0F, 0x10 });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF3, 0x0F, 0x10 });
+				public static OpCode R_R = new OpCode(new byte[] { 0xF3, 0x0F, 0x10 });
+				public static OpCode M_R = new OpCode(new byte[] { 0xF3, 0x0F, 0x11 });
+			}
+			public static class Cvtsd2ss
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x5A });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x5A });
+			}
+			public static class Cvtsi2sd
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x2A });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x2A });
+			}
+			public static class Cvtsi2ss
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0xF3, 0x0F, 0x2A });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF3, 0x0F, 0x2A });
+			}
+			public static class Cvttsd2si
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x2C });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x2C });
+			}
+			public static class Cvttss2si
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0xF3, 0x0F, 0x2C });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF3, 0x0F, 0x2C });
+			}
+			public static class Cvtss2sd
+			{
+				public static OpCode R_L = new OpCode(new byte[] { 0xF3, 0x0F, 0x5A });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF3, 0x0F, 0x5A });
+				public static OpCode R_R = new OpCode(new byte[] { 0xF3, 0x0F, 0x5A });
+			}
+			public static class Addsd
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x58 });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x58 });
+				public static OpCode R_L = new OpCode(new byte[] { 0xF2, 0x0F, 0x58 });
+			}
+			public static class Subsd
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x5C });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x5C });
+				public static OpCode R_L = new OpCode(new byte[] { 0xF2, 0x0F, 0x5C });
+			}
+			public static class Mulsd
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x59 });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x59 });
+				public static OpCode R_L = new OpCode(new byte[] { 0xF2, 0x0F, 0x59 });
+			}
+			public static class Divsd
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x5E });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x5E });
+			}
+			public static class Cmpsd
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0xC2 });
+				public static OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0xC2 });
+				public static OpCode R_L = new OpCode(new byte[] { 0xF2, 0x0F, 0xC2 });
+				public static OpCode R_C = new OpCode(new byte[] { 0xF2, 0x0F, 0xC2 });
+			}
+			public static class Comisd
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
+				public static OpCode R_M = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
+				public static OpCode R_L = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
+				public static OpCode R_C = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
+			}
+			public static class Comiss
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0x0F, 0x2F });
+				public static OpCode R_M = new OpCode(new byte[] { 0x0F, 0x2F });
+				public static OpCode R_L = new OpCode(new byte[] { 0x0F, 0x2F });
+				public static OpCode R_C = new OpCode(new byte[] { 0x0F, 0x2F });
+			}
+			public static class Ucomisd
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0x66, 0x0F, 0x2E });
+				public static OpCode R_M = new OpCode(new byte[] { 0x66, 0x0F, 0x2E });
+				public static OpCode R_L = new OpCode(new byte[] { 0x66, 0x0F, 0x2E });
+				public static OpCode R_C = new OpCode(new byte[] { 0x66, 0x0F, 0x2E });
+			}
+			public static class Ucomiss
+			{
+				public static OpCode R_R = new OpCode(new byte[] { 0x0F, 0x2E });
+				public static OpCode R_M = new OpCode(new byte[] { 0x0F, 0x2E });
+				public static OpCode R_L = new OpCode(new byte[] { 0x0F, 0x2E });
+				public static OpCode R_C = new OpCode(new byte[] { 0x0F, 0x2E });
+			}
+		};
 #pragma warning restore 1591
 
 		#endregion
