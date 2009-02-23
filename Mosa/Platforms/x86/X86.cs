@@ -36,9 +36,9 @@ namespace Mosa.Platforms.x86
 			{
 				public static OpCode R_C = new OpCode(new byte[] { 0x81 }, 0);
 				public static OpCode R_R = new OpCode(new byte[] { 0x03 });
-				public static OpCode R_M_8 = new OpCode(new byte[] { 0x02 }, null);
+				public static OpCode R_M_I8 = new OpCode(new byte[] { 0x02 }, null);
 				public static OpCode R_M = new OpCode(new byte[] { 0x03 }, null);
-				public static OpCode M_R_8 = new OpCode(new byte[] { 0x00 }, null);
+				public static OpCode M_R_I8 = new OpCode(new byte[] { 0x00 }, null);
 				public static OpCode M_R = new OpCode(new byte[] { 0x01 }, null);
 			}
 			public static class And
@@ -52,11 +52,38 @@ namespace Mosa.Platforms.x86
 			public static class Div
 			{
 				public static OpCode R = new OpCode(new byte[] { 0xF7 }, 6);
-				public static OpCode R_8 = new OpCode(new byte[] { 0xF6 }, 6);
-				public static OpCode R_16 = new OpCode(new byte[] { 0x66, 0xF7 }, 6);
+				public static OpCode R_I8 = new OpCode(new byte[] { 0xF6 }, 6);
+				public static OpCode R_I16 = new OpCode(new byte[] { 0x66, 0xF7 }, 6);
 				public static OpCode M = new OpCode(new byte[] { 0xF7 }, 6);
-				public static OpCode M_8 = new OpCode(new byte[] { 0xF6 }, 6);
+				public static OpCode M_I8 = new OpCode(new byte[] { 0xF6 }, 6);
 				public static OpCode M_16 = new OpCode(new byte[] { 0x66, 0xF7 }, 6);
+			}
+			public static class Mov
+			{
+				public static OpCode R_C = new OpCode(new byte[] { 0xC7 }, 0);
+				public static OpCode M_C = new OpCode(new byte[] { 0xC7 }, 0);
+				public static OpCode R_R = new OpCode(new byte[] { 0x8B });
+				public static OpCode R_M = new OpCode(new byte[] { 0x8B });
+				public static OpCode R_M_I8 = new OpCode(new byte[] { 0x0F, 0xBE });
+				public static OpCode R_M_U8 = new OpCode(new byte[] { 0x0F, 0xB6 });
+				public static OpCode R_M_I16 = new OpCode(new byte[] { 0x0F, 0xBF });
+				public static OpCode R_M_U16 = new OpCode(new byte[] { 0x0F, 0xB7 });
+				public static OpCode M_R = new OpCode(new byte[] { 0x89 });
+				public static OpCode M_R_I8 = new OpCode(new byte[] { 0x88 });
+			}
+			public static class Neg
+			{
+				public static OpCode R = new OpCode(new byte[] { 0xF7 }, 3);
+				public static OpCode M = new OpCode(new byte[] { 0xF7 }, 3);
+				public static OpCode M_I8 = new OpCode(new byte[] { 0xF6 }, 3);
+			}
+			public static class Or
+			{
+				public static OpCode R_C = new OpCode(new byte[] { 0x81 }, 1);
+				public static OpCode M_C = new OpCode(new byte[] { 0x81 }, 1);
+				public static OpCode R_M = new OpCode(new byte[] { 0x0B });
+				public static OpCode R_R = new OpCode(new byte[] { 0x0B });
+				public static OpCode M_R = new OpCode(new byte[] { 0x09 });
 			}
 		}
 #pragma warning restore 1591
@@ -80,13 +107,13 @@ namespace Mosa.Platforms.x86
 
 			if ((dest is RegisterOperand) && (src is MemoryOperand))
 				if ((src.Type.Type == CilElementType.I1) || (src.Type.Type == CilElementType.U1))
-					return X86Intruction.Add.R_M_8;
+					return X86Intruction.Add.R_M_I8;
 				else
 					return X86Intruction.Add.R_M;
 
 			if ((dest is MemoryOperand) && (src is RegisterOperand))
 				if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
-					return X86Intruction.Add.M_R_8;
+					return X86Intruction.Add.M_R_I8;
 				else
 					return X86Intruction.Add.M_R;
 
@@ -135,15 +162,15 @@ namespace Mosa.Platforms.x86
 		{
 			if (src is RegisterOperand)
 				if ((src.Type.Type == CilElementType.U1) || (src.Type.Type == CilElementType.I1))
-					return X86Intruction.Div.R_8;
+					return X86Intruction.Div.R_I8;
 				else if ((src.Type.Type == CilElementType.U2) || (src.Type.Type == CilElementType.I2))
-					return X86Intruction.Div.R_16;
+					return X86Intruction.Div.R_I16;
 				else
 					return X86Intruction.Div.R;
 
 			if (src is MemoryOperand)
 				if ((src.Type.Type == CilElementType.U1) || (src.Type.Type == CilElementType.I1))
-					return X86Intruction.Div.M_8;
+					return X86Intruction.Div.M_I8;
 				else if ((src.Type.Type == CilElementType.U2) || (src.Type.Type == CilElementType.I2))
 					return X86Intruction.Div.M_16;
 				else
@@ -163,84 +190,36 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Move(Operand dest, Operand src)
 		{
-			if ((dest is RegisterOperand) && (src is ConstantOperand)) return Move(dest as RegisterOperand, src as ConstantOperand);
-			if ((dest is MemoryOperand) && (src is ConstantOperand)) return Move(dest as MemoryOperand, src as ConstantOperand);
-			if ((dest is RegisterOperand) && (src is RegisterOperand)) return Move(dest as RegisterOperand, src as RegisterOperand);
-			if ((dest is RegisterOperand) && (src is MemoryOperand)) return Move(dest as RegisterOperand, src as MemoryOperand);
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) return Move(dest as MemoryOperand, src as RegisterOperand);
+			if ((dest is RegisterOperand) && (src is ConstantOperand))
+				return X86Intruction.Mov.R_C;
+
+			if ((dest is MemoryOperand) && (src is ConstantOperand))
+				return X86Intruction.Mov.M_C;
+
+			if ((dest is RegisterOperand) && (src is RegisterOperand))
+				return X86Intruction.Mov.R_R;
+
+			if ((dest is RegisterOperand) && (src is MemoryOperand))
+				if (src.Type.Type == CilElementType.U1)
+					return X86Intruction.Mov.R_M_U8;
+				else if (src.Type.Type == CilElementType.I1)
+					return X86Intruction.Mov.R_M_I8;
+				else if (src.Type.Type == CilElementType.U2)
+					return X86Intruction.Mov.R_M_U16;
+				else if (src.Type.Type == CilElementType.I2)
+					return X86Intruction.Mov.R_M_I16;
+				else
+					return X86Intruction.Mov.R_M;
+
+			if ((dest is MemoryOperand) && (src is RegisterOperand))
+				if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+					return X86Intruction.Mov.M_R_I8;
+				else
+					return X86Intruction.Mov.M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-		/// <summary>
-		/// Moves the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Move(RegisterOperand dest, ConstantOperand src)
-		{
-			return new OpCode(new byte[] { 0xC7 }, 0);
-		}
-
-		/// <summary>
-		/// Moves the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Move(MemoryOperand dest, ConstantOperand src)
-		{
-			return new OpCode(new byte[] { 0xC7 }, 0);
-		}
-
-		/// <summary>
-		/// Moves the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Move(RegisterOperand dest, RegisterOperand src)
-		{
-			return new OpCode(new byte[] { 0x8B }, null);
-		}
-
-		/// <summary>
-		/// Moves the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Move(RegisterOperand dest, MemoryOperand src)
-		{
-			if (src.Type.Type == CilElementType.U1)
-				return new OpCode(new byte[] { 0x0F, 0xB6 }, null);
-
-			if (src.Type.Type == CilElementType.I1)
-				return new OpCode(new byte[] { 0x0F, 0xBE }, null);
-
-			if (src.Type.Type == CilElementType.U2)
-				return new OpCode(new byte[] { 0x0F, 0xB7 }, null);
-
-			if (src.Type.Type == CilElementType.I2)
-				return new OpCode(new byte[] { 0x0F, 0xBF }, null);
-
-			return new OpCode(new byte[] { 0x8B }, null);
-		}
-
-		/// <summary>
-		/// Moves the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Move(MemoryOperand dest, RegisterOperand src)
-		{
-			if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
-				return new OpCode(new byte[] { 0x88 }, null);
-
-			return new OpCode(new byte[] { 0x89 }, null);
-		}
 		#endregion
 
 		#region Neg
@@ -251,34 +230,18 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Neg(Operand dest)
 		{
-			if (dest is RegisterOperand) return Neg(dest as RegisterOperand);
-			if (dest is MemoryOperand) return Neg(dest as MemoryOperand);
+			if (dest is RegisterOperand)
+				return X86Intruction.Neg.R;
+
+			if (dest is MemoryOperand)
+				if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
+					return X86Intruction.Neg.M_I8;
+				else
+					return X86Intruction.Neg.M;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-		/// <summary>
-		/// Negates the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <returns></returns>
-		public static OpCode Neg(RegisterOperand dest)
-		{
-			return new OpCode(new byte[] { 0xF7 }, 3);
-		}
-
-		/// <summary>
-		/// Negates the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <returns></returns>
-		public static OpCode Neg(MemoryOperand dest)
-		{
-			if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
-				return new OpCode(new byte[] { 0xF6 }, 3);
-
-			return new OpCode(new byte[] { 0xF7 }, 3);
-		}
 		#endregion
 
 		#region Or
@@ -290,57 +253,21 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Or(Operand dest, Operand src)
 		{
-			if ((dest is RegisterOperand) && (src is ConstantOperand)) return Or(dest as RegisterOperand, src as ConstantOperand);
-			if ((dest is RegisterOperand) && (src is MemoryOperand)) return Or(dest as RegisterOperand, src as MemoryOperand);
-			if ((dest is RegisterOperand) && (src is RegisterOperand)) return Or(dest as RegisterOperand, src as RegisterOperand);
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) return Or(dest as MemoryOperand, src as RegisterOperand);
+			if ((dest is RegisterOperand) && (src is ConstantOperand))
+				return X86Intruction.Or.R_C;
+
+			if ((dest is RegisterOperand) && (src is MemoryOperand))
+				return X86Intruction.Or.R_M;
+
+			if ((dest is RegisterOperand) && (src is RegisterOperand))
+				return X86Intruction.Or.R_R;
+
+			if ((dest is MemoryOperand) && (src is RegisterOperand))
+				return X86Intruction.Or.M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-		/// <summary>
-		/// Ors the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Or(RegisterOperand dest, ConstantOperand src)
-		{
-			return new OpCode(new byte[] { 0x81 }, 1);
-		}
-
-		/// <summary>
-		/// Ors the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Or(RegisterOperand dest, MemoryOperand src)
-		{
-			return new OpCode(new byte[] { 0x0B }, null);
-		}
-
-		/// <summary>
-		/// Ors the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Or(RegisterOperand dest, RegisterOperand src)
-		{
-			return new OpCode(new byte[] { 0x0B }, null);
-		}
-
-		/// <summary>
-		/// Ors the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode Or(MemoryOperand dest, RegisterOperand src)
-		{
-			return new OpCode(new byte[] { 0x09 }, null);
-		}
 		#endregion
 
 		#region SHL
