@@ -41,6 +41,14 @@ namespace Mosa.Platforms.x86
 				public static OpCode M_R_8 = new OpCode(new byte[] { 0x00 }, null);
 				public static OpCode M_R = new OpCode(new byte[] { 0x01 }, null);
 			}
+			public static class And
+			{
+				public static OpCode R_C = new OpCode(new byte[] { 0x81 }, 4);
+				public static OpCode M_C = new OpCode(new byte[] { 0x81 }, 4);
+				public static OpCode R_M = new OpCode(new byte[] { 0x23 }, null);
+				public static OpCode R_R = new OpCode(new byte[] { 0x23 }, null);
+				public static OpCode M_R = new OpCode(new byte[] { 0x21 }, null);
+			}
 		}
 #pragma warning restore 1591
 
@@ -87,68 +95,24 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode And(Operand dest, Operand src)
 		{
-			if ((dest is RegisterOperand) && (src is ConstantOperand)) return And(dest as RegisterOperand, src as ConstantOperand);
-			if ((dest is MemoryOperand) && (src is ConstantOperand)) return And(dest as MemoryOperand, src as ConstantOperand);
-			if ((dest is RegisterOperand) && (src is MemoryOperand)) return And(dest as RegisterOperand, src as MemoryOperand);
-			if ((dest is RegisterOperand) && (src is RegisterOperand)) return And(dest as RegisterOperand, src as RegisterOperand);
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) return And(dest as MemoryOperand, src as RegisterOperand);
+			if ((dest is RegisterOperand) && (src is ConstantOperand))
+				return X86Intruction.And.R_C;
+			
+			if ((dest is MemoryOperand) && (src is ConstantOperand))
+				return X86Intruction.And.M_C;
+			
+			if ((dest is RegisterOperand) && (src is MemoryOperand))
+				return X86Intruction.And.R_M;
+			
+			if ((dest is RegisterOperand) && (src is RegisterOperand))
+				return X86Intruction.And.R_R;
+
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) 
+				return X86Intruction.And.M_C;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-		/// <summary>
-		/// Ands the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode And(RegisterOperand dest, ConstantOperand src)
-		{
-			return new OpCode(new byte[] { 0x81 }, 4);
-		}
-
-		/// <summary>
-		/// Ands the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode And(MemoryOperand dest, ConstantOperand src)
-		{
-			return new OpCode(new byte[] { 0x81 }, 4);
-		}
-
-		/// <summary>
-		/// Ands the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode And(RegisterOperand dest, MemoryOperand src)
-		{
-			return new OpCode(new byte[] { 0x23 }, null);
-		}
-
-		/// <summary>
-		/// Ands the specified dest.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode And(RegisterOperand dest, RegisterOperand src)
-		{
-			return new OpCode(new byte[] { 0x23 }, null);
-		}
-
-		/// <summary>
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <returns></returns>
-		public static OpCode And(MemoryOperand dest, RegisterOperand src)
-		{
-			return new OpCode(new byte[] { 0x21 }, null);
-		}
 		#endregion
 
 		#region Div
