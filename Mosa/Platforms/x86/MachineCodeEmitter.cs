@@ -360,7 +360,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The source operand of the instruction.</param>
 		void ICodeEmitter.And(Operand dest, Operand src)
 		{
-			Emit(dest, src, X86.And(dest,src));
+			Emit(dest, src, X86.And(dest, src));
 		}
 
 		void ICodeEmitter.Cdq()
@@ -384,7 +384,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The source operand of the instruction.</param>
 		void ICodeEmitter.Or(Operand dest, Operand src)
 		{
-			Emit(dest, src, cd_or);
+			Emit(dest, src, X86.Or(dest, src));
 		}
 
 		/// <summary>
@@ -915,7 +915,7 @@ namespace Mosa.Platforms.x86
 			// We force the shl reg, ecx notion
 			Debug.Assert(dest is RegisterOperand);
 			// FIXME: Make sure the constant is emitted as a single-byte opcode
-			Emit(dest, null, cd_shl);
+			Emit(dest, null, X86.Shl(dest, src));
 		}
 
 		void ICodeEmitter.Shld(Operand dst, Operand src, Operand count)
@@ -1329,7 +1329,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The source operand of the instruction.</param>
 		void ICodeEmitter.Xor(Operand dest, Operand src)
 		{
-			Emit(dest, src, cd_xor);
+			Emit(dest, src, X86.Xor(dest, src));
 		}
 
 		/// <summary>
@@ -1375,19 +1375,6 @@ namespace Mosa.Platforms.x86
         };
 
 		/// <summary>
-		/// Asmcode: OR
-		/// Bitwise OR on given values
-		/// 
-		/// Section: Standard x86
-		/// </summary>
-		private static readonly CodeDef[] cd_or = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 1),
-            new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x0B }, null),
-            new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0x0B }, null),
-            new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x09 }, null),
-        };
-
-		/// <summary>
 		/// 
 		/// </summary>
 		private static readonly CodeDef[] cd_out8 = new CodeDef[] {
@@ -1416,36 +1403,12 @@ namespace Mosa.Platforms.x86
         };
 
 		/// <summary>
-		/// Asmcode: XOR
-		/// Bitwise XOR on given values
-		/// 
-		/// Section: Standard x86
-		/// </summary>
-		private static readonly CodeDef[] cd_xor = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand), typeof(ConstantOperand),       new byte[] { 0x81 }, 6),
-            new CodeDef(typeof(RegisterOperand), typeof(MemoryOperand),         new byte[] { 0x33 }, null),
-            new CodeDef(typeof(RegisterOperand), typeof(RegisterOperand),       new byte[] { 0x33 }, null),
-            new CodeDef(typeof(MemoryOperand),   typeof(RegisterOperand),       new byte[] { 0x31 }, null),
-        };
-
-		/// <summary>
 		/// Asmcode: Xsave
 		/// 
 		/// Section: Standard x86	
 		/// </summary>
 		private static readonly CodeDef[] cd_xsave = new CodeDef[] {
             new CodeDef(typeof(MemoryOperand),   null,                          new byte[] { 0x0F, 0xAE }, 4),
-        };
-
-		/// <summary>
-		/// Asmcode: NEG
-		/// Negation
-		/// 
-		/// Section: Standard x86
-		/// </summary>
-		private static readonly CodeDef[] cd_neg = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand), null,                          new byte[] { 0xF7 }, 3),
-            new CodeDef(typeof(MemoryOperand),   null,                          new byte[] { 0xF7 }, 3),
         };
 
 		/// <summary>
@@ -1578,20 +1541,6 @@ namespace Mosa.Platforms.x86
             new CodeDef(typeof(MemoryOperand),      null,                       new byte[] { 0x0F, 0xAE }, 3),
         };
 
-		/// <summary>
-		/// Asmcode: SHL
-		/// Shifts first parameter a given amount of times to the left
-		/// 
-		/// Note: Non-circular
-		/// 
-		/// Section: Standard x86
-		/// </summary>
-		private static readonly CodeDef[] cd_shl = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    new byte[] { 0xD3 }, 4),
-            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    new byte[] { 0xD3 }, 4),
-            new CodeDef(typeof(RegisterOperand),    typeof(ConstantOperand),    new byte[] { 0xC1 }, 4),
-            new CodeDef(typeof(MemoryOperand),      typeof(ConstantOperand),    new byte[] { 0xC1 }, 4),
-        };
 
 		/// <summary>
 		/// Asmcode: SHLD
