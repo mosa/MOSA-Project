@@ -150,9 +150,8 @@ namespace Mosa.Platforms.x86
 			}
 			public static class Not
 			{
-				public static OpCode R_M = new OpCode(new byte[] { 0xF7 }, 2);
-				public static OpCode R_R = new OpCode(new byte[] { 0xF7 }, 2);
-				public static OpCode M_R = new OpCode(new byte[] { 0xF7 }, 2);
+				public static OpCode R = new OpCode(new byte[] { 0xF7 }, 2);
+				public static OpCode M = new OpCode(new byte[] { 0xF7 }, 2);
 			}
 			public static class Cmp
 			{
@@ -727,32 +726,30 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The dest.</param>
 		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Xsave(Operand dest, Operand src)
+		public static OpCode Xsave(Operand dest)
 		{
 			if (dest is MemoryOperand) return X86Intruction.Xsave.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// Dec
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Dec(Operand dest, Operand src)
+		public static OpCode Dec(Operand dest)
 		{
 			if (dest is RegisterOperand) return X86Intruction.Dec.R;
 			if (dest is MemoryOperand) return X86Intruction.Dec.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// Inc
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Inc(Operand dest, Operand src)
+		public static OpCode Inc(Operand dest)
 		{
 			if (dest is RegisterOperand) return X86Intruction.Inc.R;
 			if (dest is MemoryOperand) return X86Intruction.Inc.M;
@@ -765,11 +762,10 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The dest.</param>
 		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Not(Operand dest, Operand src)
+		public static OpCode Not(Operand dest)
 		{
-			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Not.R_M;
-			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Not.R_R;
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) return X86Intruction.Not.M_R;
+			if (dest is RegisterOperand) return X86Intruction.Not.R;
+			if (dest is MemoryOperand)  return X86Intruction.Not.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 		
@@ -829,113 +825,103 @@ namespace Mosa.Platforms.x86
 			if ((dest is MemoryOperand) && (src is ConstantOperand)) return X86Intruction.Sar.M_C;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// Sfence
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Sfence(Operand dest, Operand src)
+		public static OpCode Sfence()
 		{
 			return X86Intruction.Sfence.ALL;
-			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// SGDT
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Sgdt(Operand dest, Operand src)
+		public static OpCode Sgdt(Operand dest)
 		{
 			if (dest is MemoryOperand) return X86Intruction.Sgdt.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// Sidt
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Sidt(Operand dest, Operand src)
+		public static OpCode Sidt(Operand dest)
 		{
 			if (dest is MemoryOperand) return X86Intruction.Sidt.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// SLDT
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Sldt(Operand dest, Operand src)
+		public static OpCode Sldt(Operand dest)
 		{
 			if (dest is MemoryOperand) return X86Intruction.Sldt.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// SMSW
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Smsw(Operand dest, Operand src)
+		public static OpCode Smsw(Operand dest)
 		{
 			if (dest is MemoryOperand) return X86Intruction.Smsw.M;
 			if (dest is RegisterOperand) return X86Intruction.Smsw.R;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// STMXCSR
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Stmxcsr(Operand dest, Operand src)
+		public static OpCode Stmxcsr(Operand dest)
 		{
 			if (dest is MemoryOperand) return X86Intruction.Stmxcsr.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// Shr_const
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Shr_const(Operand dest, Operand src)
+		public static OpCode Shr_const(Operand dest)
 		{
 			if (dest is RegisterOperand) return X86Intruction.Shr_const.R;
 			if (dest is MemoryOperand) return X86Intruction.Shr_const.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// RCR
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Rcr(Operand dest, Operand src)
+		public static OpCode Rcr(Operand dest)
 		{
 			if (dest is RegisterOperand) return X86Intruction.Rcr.R;
 			if (dest is MemoryOperand) return X86Intruction.Rcr.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// Idiv
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Idiv(Operand dest, Operand src)
+		public static OpCode Idiv(Operand dest)
 		{
 			if (dest is RegisterOperand) return X86Intruction.Idiv.R;
 			if (dest is MemoryOperand) return X86Intruction.Idiv.M;
@@ -954,7 +940,7 @@ namespace Mosa.Platforms.x86
 			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.In8.R_R;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// In32
 		/// </summary>
@@ -967,51 +953,47 @@ namespace Mosa.Platforms.x86
 			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.In32.R_R;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// LGDT
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Lgdt(Operand dest, Operand src)
+		public static OpCode Lgdt(Operand dest)
 		{
 			if (dest is MemoryOperand) return X86Intruction.Lgdt.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// Lidt
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Lidt(Operand dest, Operand src)
+		public static OpCode Lidt(Operand dest)
 		{
 			if (dest is MemoryOperand) return X86Intruction.Lidt.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// LLDT
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Lldt(Operand dest, Operand src)
+		public static OpCode Lldt(Operand dest)
 		{
 			if (dest is RegisterOperand) return X86Intruction.Lldt.R;
 			if (dest is MemoryOperand) return X86Intruction.Lldt.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// LMSW
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
-		public static OpCode Lmsw(Operand dest, Operand src)
+		public static OpCode Lmsw(Operand dest)
 		{
 			if (dest is RegisterOperand) return X86Intruction.Lmsw.R;
 			if (dest is MemoryOperand) return X86Intruction.Lmsw.M;
