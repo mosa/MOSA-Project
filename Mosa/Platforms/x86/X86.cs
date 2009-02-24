@@ -909,7 +909,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="dest">The dest.</param>
 		/// <returns></returns>
-		public static OpCode Rcr(Operand dest)
+		public static OpCode Rcr(Operand dest, Operand source)
 		{
 			if (dest is RegisterOperand) return X86Intruction.Rcr.R;
 			if (dest is MemoryOperand) return X86Intruction.Rcr.M;
@@ -921,7 +921,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="dest">The dest.</param>
 		/// <returns></returns>
-		public static OpCode Idiv(Operand dest)
+		public static OpCode Idiv(Operand dest, Operand source)
 		{
 			if (dest is RegisterOperand) return X86Intruction.Idiv.R;
 			if (dest is MemoryOperand) return X86Intruction.Idiv.M;
