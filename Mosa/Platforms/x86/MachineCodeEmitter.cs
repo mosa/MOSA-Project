@@ -336,7 +336,6 @@ namespace Mosa.Platforms.x86
 			bool x = false;
 			Debug.Assert(x, dest.Type.ToString() + " :: " + src.Type.ToString());
 			if (dest.Type.Type == CilElementType.I1 || dest.Type.Type == CilElementType.U1)
-				//Emit(dest, src, X86.out8);
 				Emit(out8, null, null, null);
 			else
 				Emit(dest, src, X86.Out32(dest, src));
@@ -502,7 +501,6 @@ namespace Mosa.Platforms.x86
 		{
 			byte[] in8 = new byte[] { 0xED };
 			if (dest.Type.Type == CilElementType.I1 || dest.Type.Type == CilElementType.U1)
-				//Emit(null, null, X86.in8);
 				Emit(in8, null, null, null);
 			else
 				Emit(dest, src, X86.In32(dest, src));
@@ -777,7 +775,6 @@ namespace Mosa.Platforms.x86
 			Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
 			if (src is ConstantOperand) {
 				Operand newsrc = new RegisterOperand(src.Type, GeneralPurposeRegister.ECX);
-				//Emit(newsrc, src, X86.Mov);
 				Emit(newsrc, src, X86.Move(dest, src));
 				src = newsrc;
 			}
@@ -879,7 +876,6 @@ namespace Mosa.Platforms.x86
 		{
 			if (src is ConstantOperand) {
 				Operand newsrc = new RegisterOperand(src.Type, GeneralPurposeRegister.ECX);
-				//Emit(newsrc, src, X86.Mov);
 				Emit(newsrc, src, X86.Move(dest, src));
 				src = newsrc;
 			}
@@ -890,7 +886,6 @@ namespace Mosa.Platforms.x86
 		{
 			if (src is ConstantOperand) {
 				Operand newsrc = new RegisterOperand(src.Type, GeneralPurposeRegister.ECX);
-				//Emit(newsrc, src, X86.Mov);
 				Emit(newsrc, src, X86.Move(dest, src));
 				src = newsrc;
 			}
@@ -904,7 +899,6 @@ namespace Mosa.Platforms.x86
 
 			// Check that we're not dealing with floatingpoint values
 			if (dest.StackType != StackTypeCode.F && src.StackType != StackTypeCode.F) {
-				//Emit(dest, src, X86.Mov);
 				Emit(dest, src, X86.Move(dest, src));
 
 			}
@@ -957,7 +951,6 @@ namespace Mosa.Platforms.x86
 					break;
 
 				default:
-					//Emit(dest, src, X86.Mov);
 					Emit(dest, src, X86.Move(dest, src));
 
 					break;
@@ -988,7 +981,6 @@ namespace Mosa.Platforms.x86
 					break;
 
 				default:
-					//Emit(dest, src, X86.Mov);
 					Emit(dest, src, X86.Move(dest, src));
 
 					break;
