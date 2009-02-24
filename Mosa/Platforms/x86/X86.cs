@@ -385,7 +385,7 @@ namespace Mosa.Platforms.x86
 
 		#region Add
 		/// <summary>
-		/// Adds the specified dest.
+		/// Add
 		/// </summary>
 		/// <param name="dest">The dest.</param>
 		/// <param name="src">The SRC.</param>
@@ -417,7 +417,7 @@ namespace Mosa.Platforms.x86
 
 		#region And
 		/// <summary>
-		/// Ands the specified dest.
+		/// And
 		/// </summary>
 		/// <param name="dest">The dest.</param>
 		/// <param name="src">The SRC.</param>
@@ -476,7 +476,7 @@ namespace Mosa.Platforms.x86
 
 		#region Move
 		/// <summary>
-		/// Moves the specified dest.
+		/// Move
 		/// </summary>
 		/// <param name="dest">The dest.</param>
 		/// <param name="src">The SRC.</param>
@@ -517,7 +517,7 @@ namespace Mosa.Platforms.x86
 
 		#region Neg
 		/// <summary>
-		/// Negates the specified dest.
+		/// Negate
 		/// </summary>
 		/// <param name="dest">The dest.</param>
 		/// <returns></returns>
@@ -539,7 +539,7 @@ namespace Mosa.Platforms.x86
 
 		#region Or
 		/// <summary>
-		/// Ors the specified dest.
+		/// Or
 		/// </summary>
 		/// <param name="dest">The dest.</param>
 		/// <param name="src">The SRC.</param>
@@ -565,7 +565,7 @@ namespace Mosa.Platforms.x86
 
 		#region Shl
 		/// <summary>
-		/// SHLs the specified dest.
+		/// SHL
 		/// </summary>
 		/// <param name="dest">The dest.</param>
 		/// <param name="src">The SRC.</param>
@@ -591,7 +591,7 @@ namespace Mosa.Platforms.x86
 
 		#region Shr
 		/// <summary>
-		/// SHRs the specified dest.
+		/// SHR
 		/// </summary>
 		/// <param name="dest">The dest.</param>
 		/// <param name="src">The SRC.</param>
@@ -617,7 +617,7 @@ namespace Mosa.Platforms.x86
 
 		#region Sub
 		/// <summary>
-		/// Subs the specified dest.
+		/// Sub
 		/// </summary>
 		/// <param name="dest">The dest.</param>
 		/// <param name="src">The SRC.</param>
@@ -642,7 +642,7 @@ namespace Mosa.Platforms.x86
 
 		#region Xor
 		/// <summary>
-		/// Xors the specified dest.
+		/// Xor
 		/// </summary>
 		/// <param name="dest">The dest.</param>
 		/// <param name="src">The SRC.</param>
@@ -665,6 +665,665 @@ namespace Mosa.Platforms.x86
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Adc
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Adc(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.Adc.R_C;
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Adc.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Adc.R_M;
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) return X86Intruction.Adc.M_R;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Out8
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Out8(Operand dest, Operand src)
+		{
+			if ((dest is ConstantOperand) && (src is RegisterOperand)) return X86Intruction.Out8.C_R;
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Out8.R_R;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+
+		/// <summary>
+		/// Out32
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Out32(Operand dest, Operand src)
+		{
+			if ((dest is ConstantOperand) && (src is RegisterOperand)) return X86Intruction.Out32.C_R;
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Out32.R_R;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+
+		/// <summary>
+		/// XCHG
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Xchg(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Xchg.R_M;
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Xchg.R_R;
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) return X86Intruction.Xchg.M_R;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+
+		/// <summary>
+		/// Xsave
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Xsave(Operand dest, Operand src)
+		{
+			if (dest is MemoryOperand) return X86Intruction.Xsave.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Dec
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Dec(Operand dest, Operand src)
+		{
+			if (dest is RegisterOperand) return X86Intruction.Dec.R;
+			if (dest is MemoryOperand) return X86Intruction.Dec.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Inc
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Inc(Operand dest, Operand src)
+		{
+			if (dest is RegisterOperand) return X86Intruction.Inc.R;
+			if (dest is MemoryOperand) return X86Intruction.Inc.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Not
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Not(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Not.R_M;
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Not.R_R;
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) return X86Intruction.Not.M_R;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// CMP
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Cmp(Operand dest, Operand src)
+		{
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) return X86Intruction.Cmp.M_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Cmp.R_M;
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Cmp.R_R;
+			if ((dest is MemoryOperand) && (src is ConstantOperand)) return X86Intruction.Cmp.M_C;
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.Cmp.R_C;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// CMPXCHG
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Cmpxchg(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Cmpxchg.R_R;
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) return X86Intruction.Cmpxchg.M_R;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Mul
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Mul(Operand dest, Operand src)
+		{
+			if (dest is RegisterOperand) return X86Intruction.Mul.R;
+			if (dest is MemoryOperand) return X86Intruction.Mul.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Sar
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Sar(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Sar.R_R;
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) return X86Intruction.Sar.M_R;
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.Sar.R_C;
+			if ((dest is MemoryOperand) && (src is ConstantOperand)) return X86Intruction.Sar.M_C;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Sfence
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Sfence(Operand dest, Operand src)
+		{
+			return X86Intruction.Sfence.ALL;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// SGDT
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Sgdt(Operand dest, Operand src)
+		{
+			if (dest is MemoryOperand) return X86Intruction.Sgdt.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Sidt
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Sidt(Operand dest, Operand src)
+		{
+			if (dest is MemoryOperand) return X86Intruction.Sidt.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// SLDT
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Sldt(Operand dest, Operand src)
+		{
+			if (dest is MemoryOperand) return X86Intruction.Sldt.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// SMSW
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Smsw(Operand dest, Operand src)
+		{
+			if (dest is MemoryOperand) return X86Intruction.Smsw.M;
+			if (dest is RegisterOperand) return X86Intruction.Smsw.R;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// STMXCSR
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Stmxcsr(Operand dest, Operand src)
+		{
+			if (dest is MemoryOperand) return X86Intruction.Stmxcsr.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Shr_const
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Shr_const(Operand dest, Operand src)
+		{
+			if (dest is RegisterOperand) return X86Intruction.Shr_const.R;
+			if (dest is MemoryOperand) return X86Intruction.Shr_const.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// RCR
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Rcr(Operand dest, Operand src)
+		{
+			if (dest is RegisterOperand) return X86Intruction.Rcr.R;
+			if (dest is MemoryOperand) return X86Intruction.Rcr.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Idiv
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Idiv(Operand dest, Operand src)
+		{
+			if (dest is RegisterOperand) return X86Intruction.Idiv.R;
+			if (dest is MemoryOperand) return X86Intruction.Idiv.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// In8
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode In8(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.In8.R_C;
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.In8.R_R;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// In32
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode In32(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.In32.R_C;
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.In32.R_R;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// LGDT
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Lgdt(Operand dest, Operand src)
+		{
+			if (dest is MemoryOperand) return X86Intruction.Lgdt.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Lidt
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Lidt(Operand dest, Operand src)
+		{
+			if (dest is MemoryOperand) return X86Intruction.Lidt.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// LLDT
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Lldt(Operand dest, Operand src)
+		{
+			if (dest is RegisterOperand) return X86Intruction.Lldt.R;
+			if (dest is MemoryOperand) return X86Intruction.Lldt.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// LMSW
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Lmsw(Operand dest, Operand src)
+		{
+			if (dest is RegisterOperand) return X86Intruction.Lmsw.R;
+			if (dest is MemoryOperand) return X86Intruction.Lmsw.M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Movsx8
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Movsx8(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Movsx8.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Movsx8.R_M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Movsx16
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Movsx16(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Movsx16.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Movsx16.R_M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Movzx8
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Movzx8(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Movzx8.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Movzx8.R_M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Movzx16
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Movzx16(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Movzx16.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Movzx16.R_M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// SBB
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Sbb(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.Sbb.R_C;
+			if ((dest is MemoryOperand) && (src is ConstantOperand)) return X86Intruction.Sbb.M_C;
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Sbb.R_R;
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) return X86Intruction.Sbb.M_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Sbb.R_M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Movsd
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Movsd(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Intruction.Movsd.R_L;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Movsd.R_M;
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Movsd.R_R;
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) return X86Intruction.Movsd.M_R;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Movsse
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Movss(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Intruction.Movss.R_L;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Movss.R_M;
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Movss.R_R;
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) return X86Intruction.Movss.M_R;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// CVTSD2SS
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Cvtsd2ss(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Cvtsd2ss.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Cvtsd2ss.R_M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Cvtsi2sd
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Cvtsi2sd(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Cvtsi2sd.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Cvtsi2sd.R_M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Cvtsi2sse
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Cvtsi2ss(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Cvtsi2ss.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Cvtsi2ss.R_M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Cvttsd2si
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Cvttsd2si(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Cvttsd2si.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Cvttsd2si.R_M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Cvttss2si
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Cvttss2si(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Cvttss2si.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Cvttss2si.R_M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// CVTSS2SD
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Cvtss2sd(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Intruction.Cvtss2sd.R_L;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Cvtss2sd.R_M;
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Cvtss2sd.R_R;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Addsd
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Addsd(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Addsd.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Addsd.R_M;
+			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Intruction.Addsd.R_L;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Subsd
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Subsd(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Subsd.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Subsd.R_M;
+			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Intruction.Subsd.R_L;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Mulsd
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Mulsd(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Mulsd.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Mulsd.R_M;
+			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Intruction.Mulsd.R_L;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Divsd
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Divsd(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Divsd.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Divsd.R_M;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// CMPSD
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Cmpsd(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Cmpsd.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Cmpsd.R_M;
+			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Intruction.Cmpsd.R_L;
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.Cmpsd.R_C;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Comisd
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Comisd(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Comisd.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Comisd.R_M;
+			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Intruction.Comisd.R_L;
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.Comisd.R_C;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Comisse
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Comiss(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Comiss.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Comiss.R_M;
+			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Intruction.Comiss.R_L;
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.Comiss.R_C;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+		
+		/// <summary>
+		/// Ucomisd
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Ucomisd(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Ucomisd.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Ucomisd.R_M;
+			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Intruction.Ucomisd.R_L;
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.Ucomisd.R_C;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+				
+		/// <summary>
+		/// Ucomisse
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <returns></returns>
+		public static OpCode Ucomiss(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Ucomiss.R_R;
+			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Ucomiss.R_M;
+			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Intruction.Ucomiss.R_L;
+			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.Ucomiss.R_C;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
 	}
 }
 
