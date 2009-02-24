@@ -29,9 +29,7 @@ namespace Mosa.Platforms.x86
 			{
 				public static OpCode R_C = new OpCode(new byte[] { 0x81 }, 0);
 				public static OpCode R_R = new OpCode(new byte[] { 0x03 });
-				public static OpCode R_M_I8 = new OpCode(new byte[] { 0x02 });
 				public static OpCode R_M = new OpCode(new byte[] { 0x03 });
-				public static OpCode M_R_I8 = new OpCode(new byte[] { 0x00 });
 				public static OpCode M_R = new OpCode(new byte[] { 0x01 });
 			}
 			public static class And
@@ -45,11 +43,7 @@ namespace Mosa.Platforms.x86
 			public static class Div
 			{
 				public static OpCode R = new OpCode(new byte[] { 0xF7 }, 6);
-				public static OpCode R_I8 = new OpCode(new byte[] { 0xF6 }, 6);
-				public static OpCode R_I16 = new OpCode(new byte[] { 0x66, 0xF7 }, 6);
 				public static OpCode M = new OpCode(new byte[] { 0xF7 }, 6);
-				public static OpCode M_I8 = new OpCode(new byte[] { 0xF6 }, 6);
-				public static OpCode M_16 = new OpCode(new byte[] { 0x66, 0xF7 }, 6);
 			}
 			public static class Mov
 			{
@@ -68,7 +62,6 @@ namespace Mosa.Platforms.x86
 			{
 				public static OpCode R = new OpCode(new byte[] { 0xF7 }, 3);
 				public static OpCode M = new OpCode(new byte[] { 0xF7 }, 3);
-				public static OpCode M_I8 = new OpCode(new byte[] { 0xF6 }, 3);
 			}
 			public static class Or
 			{
@@ -97,7 +90,6 @@ namespace Mosa.Platforms.x86
 				public static OpCode O_C = new OpCode(new byte[] { 0x81 }, 5);
 				public static OpCode R_O = new OpCode(new byte[] { 0x2B });
 				public static OpCode M_R = new OpCode(new byte[] { 0x29 });
-				public static OpCode M_R_I8 = new OpCode(new byte[] { 0x28 });
 
 			}
 			public static class Xor
@@ -412,16 +404,10 @@ namespace Mosa.Platforms.x86
 				return X86Intruction.Add.R_R;
 
 			if ((dest is RegisterOperand) && (src is MemoryOperand))
-				if ((src.Type.Type == CilElementType.I1) || (src.Type.Type == CilElementType.U1))
-					return X86Intruction.Add.R_M_I8;
-				else
-					return X86Intruction.Add.R_M;
+				return X86Intruction.Add.R_M;
 
 			if ((dest is MemoryOperand) && (src is RegisterOperand))
-				if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
-					return X86Intruction.Add.M_R_I8;
-				else
-					return X86Intruction.Add.M_R;
+				return X86Intruction.Add.M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
@@ -467,20 +453,10 @@ namespace Mosa.Platforms.x86
 		public static OpCode Div(Operand dest, Operand src)
 		{
 			if (src is RegisterOperand)
-				if ((src.Type.Type == CilElementType.U1) || (src.Type.Type == CilElementType.I1))
-					return X86Intruction.Div.R_I8;
-				else if ((src.Type.Type == CilElementType.U2) || (src.Type.Type == CilElementType.I2))
-					return X86Intruction.Div.R_I16;
-				else
-					return X86Intruction.Div.R;
+				return X86Intruction.Div.R;
 
 			if (src is MemoryOperand)
-				if ((src.Type.Type == CilElementType.U1) || (src.Type.Type == CilElementType.I1))
-					return X86Intruction.Div.M_I8;
-				else if ((src.Type.Type == CilElementType.U2) || (src.Type.Type == CilElementType.I2))
-					return X86Intruction.Div.M_16;
-				else
-					return X86Intruction.Div.M;
+				return X86Intruction.Div.M;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
@@ -540,10 +516,7 @@ namespace Mosa.Platforms.x86
 				return X86Intruction.Neg.R;
 
 			if (dest is MemoryOperand)
-				if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
-					return X86Intruction.Neg.M_I8;
-				else
-					return X86Intruction.Neg.M;
+				return X86Intruction.Neg.M;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
@@ -644,10 +617,7 @@ namespace Mosa.Platforms.x86
 				return X86Intruction.Sub.R_O;
 
 			if ((dest is MemoryOperand) && (src is RegisterOperand))
-				if ((dest.Type.Type == CilElementType.I1) || (dest.Type.Type == CilElementType.U1))
-					return X86Intruction.Sub.M_R_I8;
-				else
-					return X86Intruction.Sub.M_R;
+				return X86Intruction.Sub.M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

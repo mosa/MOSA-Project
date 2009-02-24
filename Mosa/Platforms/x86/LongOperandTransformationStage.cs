@@ -133,18 +133,6 @@ namespace Mosa.Platforms.x86
             SplitLongOperand(instruction.First, out op1L, out op1H);
             SplitLongOperand(instruction.Second, out op2L, out op2H);
             SplitLongOperand(instruction.Results[0], out resL, out resH);
-            /*MemoryOperand op1 = (MemoryOperand)instruction.First;
-            MemoryOperand op2 = (MemoryOperand)instruction.Second;
-            MemoryOperand res = (MemoryOperand)instruction.Results[0];*/
-
-            /*Instruction[] result = new Instruction[] {
-                new Instructions.MoveInstruction(eaxH, op1),
-                new Instructions.AddInstruction(eaxH, op2),
-                new Instructions.MoveInstruction(res, eaxH),
-                new Instructions.MoveInstruction(eaxL, new MemoryOperand(op1.Type, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4))),
-                new Instructions.AdcInstruction(eaxL, new MemoryOperand(op2.Type, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4))),
-                new Instructions.MoveInstruction(new MemoryOperand(res.Type, res.Base, new IntPtr(res.Offset.ToInt64() + 4)), eaxL),
-            };*/
 
             Instruction[] result = new Instruction[] {
                 new Instructions.MoveInstruction(eaxL, op1L),
@@ -206,15 +194,13 @@ namespace Mosa.Platforms.x86
             MemoryOperand op0 = instruction.Results[0] as MemoryOperand;
             MemoryOperand op1 = instruction.Operands[0] as MemoryOperand;
             MemoryOperand op2 = instruction.Operands[1] as MemoryOperand;
-            Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to LogicalNotInstruction are not MemoryOperand.");
+            Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to 64 bit multiplication are not MemoryOperands.");
 
             SigType I4 = new SigType(CilElementType.I4);
-            MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
-            MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
-            MemoryOperand op2L = new MemoryOperand(I4, op2.Base, op2.Offset);
-            MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
-            MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
-            MemoryOperand op2H = new MemoryOperand(I4, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
+            Operand op0H, op1H, op2H, op0L, op1L, op2L;
+            SplitLongOperand(instruction.Results[0], out op0L, out op0H);
+            SplitLongOperand(instruction.First, out op1L, out op1H);
+            SplitLongOperand(instruction.Second, out op2L, out op2H);
 
             // op0 = EDX:EAX, op1 = A, op2 = B
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
