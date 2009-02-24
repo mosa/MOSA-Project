@@ -611,9 +611,6 @@ namespace Mosa.Platforms.x86
         /// <param name="op2">The second operand.</param>
         public void Shl(Operand op1, Operand op2)
         {
-            if (!(op1 is RegisterOperand))
-                throw new NotSupportedException(@"Only registers allowed as destination.");
-
             _textWriter.WriteLine("\t\tshl\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
         }
 
@@ -629,11 +626,7 @@ namespace Mosa.Platforms.x86
         /// <param name="op2">The second operand.</param>
         public void Shr(Operand op1, Operand op2)
         {
-            if (!(op1 is RegisterOperand))
-                throw new NotSupportedException(@"Only registers allowed as destination.");
-
             _textWriter.WriteLine("\t\tshr\t{0}, {1}", WriteOperand(op1), WriteOperand(op2));
-
         }
 
         void ICodeEmitter.Shrd(Operand dst, Operand src, Operand count)

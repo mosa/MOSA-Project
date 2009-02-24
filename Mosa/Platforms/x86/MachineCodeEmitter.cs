@@ -845,7 +845,17 @@ namespace Mosa.Platforms.x86
 			// We force the shl reg, ecx notion
 			Debug.Assert(dest is RegisterOperand);
 			// FIXME: Make sure the constant is emitted as a single-byte opcode
-			Emit(dest, null, X86.Shl(dest, src));
+            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I1), GeneralPurposeRegister.ECX);
+
+            if (src is ConstantOperand)
+            {
+                Emit(dest, src, X86.Shl(dest, src));
+            }
+            else
+            {
+                Emit(ecx, src, X86.Move(ecx, src));
+                Emit(dest, null, X86.Shl(dest, src));
+            }
 		}
 
 		void ICodeEmitter.Shld(Operand dest, Operand src, Operand count)
@@ -861,7 +871,17 @@ namespace Mosa.Platforms.x86
 			// Write the opcode byte
 			Debug.Assert(dest is RegisterOperand);
 			// FIXME: Make sure the constant is emitted as a single-byte opcode
-			Emit(dest, null, X86.Shr(dest, src));
+            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I1), GeneralPurposeRegister.ECX);
+
+            if (src is ConstantOperand)
+            {
+                Emit(dest, src, X86.Shr(dest, src));
+            }
+            else
+            {
+                Emit(ecx, src, X86.Move(ecx, src));
+                Emit(dest, null, X86.Shr(dest, src));
+            }
 		}
 
 		void ICodeEmitter.Shrd(Operand dest, Operand src, Operand count)
@@ -899,6 +919,13 @@ namespace Mosa.Platforms.x86
 
 			// Check that we're not dealing with floatingpoint values
 			if (dest.StackType != StackTypeCode.F && src.StackType != StackTypeCode.F) {
+
+                if (dest is MemoryOperand && src is MemoryOperand)
+                {
+                    Emit(new RegisterOperand(src.Type, GeneralPurposeRegister.EDX), src, X86.Move(new RegisterOperand(src.Type, GeneralPurposeRegister.EDX), src));
+                    src = new RegisterOperand(src.Type, GeneralPurposeRegister.EDX);
+                }
+
 				Emit(dest, src, X86.Move(dest, src));
 
 			}

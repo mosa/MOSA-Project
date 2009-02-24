@@ -68,15 +68,15 @@ namespace Mosa.Platforms.x86
 			}
 			public static class Shl
 			{
-				public static OpCode R_R = new OpCode(new byte[] { 0xD3 }, 4);
-				public static OpCode M_R = new OpCode(new byte[] { 0xD3 }, 4);
+				public static OpCode R   = new OpCode(new byte[] { 0xD3 }, 4);
+				public static OpCode M   = new OpCode(new byte[] { 0xD3 }, 4);
 				public static OpCode R_C = new OpCode(new byte[] { 0xC1 }, 4);
 				public static OpCode M_C = new OpCode(new byte[] { 0xC1 }, 4);
 			}
 			public static class Shr
 			{
-				public static OpCode R_R = new OpCode(new byte[] { 0xD3 }, 5);
-				public static OpCode M_R = new OpCode(new byte[] { 0xD3 }, 5);
+				public static OpCode R   = new OpCode(new byte[] { 0xD3 }, 5);
+				public static OpCode M   = new OpCode(new byte[] { 0xD3 }, 5);
 				public static OpCode R_C = new OpCode(new byte[] { 0xC1 }, 5);
 				public static OpCode M_C = new OpCode(new byte[] { 0xC1 }, 5);
 			}
@@ -160,8 +160,8 @@ namespace Mosa.Platforms.x86
 			}
 			public static class Sar
 			{
-				public static OpCode R_R = new OpCode(new byte[] { 0xD3 }, 7);
-				public static OpCode M_R = new OpCode(new byte[] { 0xD3 }, 7);
+				public static OpCode R   = new OpCode(new byte[] { 0xD3 }, 7);
+				public static OpCode M   = new OpCode(new byte[] { 0xD3 }, 7);
 				public static OpCode R_C = new OpCode(new byte[] { 0xC1 }, 7);
 				public static OpCode M_C = new OpCode(new byte[] { 0xC1 }, 7);
 			}
@@ -482,7 +482,7 @@ namespace Mosa.Platforms.x86
 			if ((dest is MemoryOperand) && (src is RegisterOperand))
 				return X86Intruction.Mov.M_R;
 
-			throw new ArgumentException(@"No opcode for operand type.");
+			throw new ArgumentException(@"No opcode for operand type. [" + dest.GetType() + ", " + src.GetType() + ")");
 		}
 
 		#endregion
@@ -541,17 +541,17 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Shl(Operand dest, Operand src)
 		{
-			if ((dest is RegisterOperand) && (src is RegisterOperand))
-				return X86Intruction.Shl.R_R;
-
-			if ((dest is MemoryOperand) && (src is RegisterOperand))
-				return X86Intruction.Shl.M_R;
-
 			if ((dest is RegisterOperand) && (src is ConstantOperand))
 				return X86Intruction.Shl.R_C;
 
 			if ((dest is MemoryOperand) && (src is ConstantOperand))
 				return X86Intruction.Shl.M_C;
+
+            if (dest is RegisterOperand)
+                return X86Intruction.Shl.R;
+
+            if (dest is MemoryOperand)
+                return X86Intruction.Shl.M;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
@@ -567,17 +567,17 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Shr(Operand dest, Operand src)
 		{
-			if ((dest is RegisterOperand) && (src is RegisterOperand))
-				return X86Intruction.Shr.R_R;
-
-			if ((dest is MemoryOperand) && (src is RegisterOperand))
-				return X86Intruction.Shr.M_R;
-
-			if ((dest is RegisterOperand) && (src is ConstantOperand))
+            if ((dest is RegisterOperand) && (src is ConstantOperand))
 				return X86Intruction.Shr.R_C;
 
 			if ((dest is MemoryOperand) && (src is ConstantOperand))
 				return X86Intruction.Shr.M_C;
+
+            if (dest is RegisterOperand)
+                return X86Intruction.Shr.R;
+
+            if (dest is MemoryOperand)
+                return X86Intruction.Shr.M;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
@@ -784,10 +784,10 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Sar(Operand dest, Operand src)
 		{
-			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Intruction.Sar.R_R;
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) return X86Intruction.Sar.M_R;
 			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.Sar.R_C;
 			if ((dest is MemoryOperand) && (src is ConstantOperand)) return X86Intruction.Sar.M_C;
+            if (dest is RegisterOperand) return X86Intruction.Sar.R;
+            if (dest is MemoryOperand) return X86Intruction.Sar.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
