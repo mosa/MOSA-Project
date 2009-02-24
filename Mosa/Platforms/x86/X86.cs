@@ -724,7 +724,6 @@ namespace Mosa.Platforms.x86
 		/// Xsave
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
 		public static OpCode Xsave(Operand dest)
 		{
@@ -755,12 +754,11 @@ namespace Mosa.Platforms.x86
 			if (dest is MemoryOperand) return X86Intruction.Inc.M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-		
+
 		/// <summary>
 		/// Not
 		/// </summary>
 		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
 		/// <returns></returns>
 		public static OpCode Not(Operand dest)
 		{
@@ -829,7 +827,6 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Sfence
 		/// </summary>
-		/// <param name="dest">The dest.</param>
 		/// <returns></returns>
 		public static OpCode Sfence()
 		{
@@ -908,6 +905,7 @@ namespace Mosa.Platforms.x86
 		/// RCR
 		/// </summary>
 		/// <param name="dest">The dest.</param>
+		/// <param name="source">The source.</param>
 		/// <returns></returns>
 		public static OpCode Rcr(Operand dest, Operand source)
 		{
@@ -920,6 +918,7 @@ namespace Mosa.Platforms.x86
 		/// Idiv
 		/// </summary>
 		/// <param name="dest">The dest.</param>
+		/// <param name="source">The source.</param>
 		/// <returns></returns>
 		public static OpCode Idiv(Operand dest, Operand source)
 		{
