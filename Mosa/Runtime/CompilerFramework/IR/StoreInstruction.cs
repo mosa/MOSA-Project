@@ -71,9 +71,17 @@ namespace Mosa.Runtime.CompilerFramework.IR
             else if (dptr != null)
             {
                 StackTypeCode dptrType = Operand.StackTypeFromSigType(dptr.ElementType);
-                Debug.Assert(value.StackType == dptrType, @"Incompatible destination and source types.");
-                if (value.StackType != dptrType)
-                    throw new ArgumentException(@"Destination pointer incompatible with value type.", @"destinationPtr");
+                if (dptrType != StackTypeCode.Unknown)
+                {
+                    Debug.Assert(value.StackType == dptrType, @"Incompatible destination and source types.");
+                    if (value.StackType != dptrType)
+                        throw new ArgumentException(@"Destination pointer incompatible with value type.", @"destinationPtr");
+                }
+                else
+                {
+                    // dptrType == StackTypeCode.Unknown probably because it is a void* pointer that was cast to another
+                    // pointer type, but the C# compiler doesn't emit the conversion, so we can't validate the pointer rules
+                }
             }
             else
                 throw new ArgumentException(@"Destination not a pointer or reference type.", @"destinationPtr");
