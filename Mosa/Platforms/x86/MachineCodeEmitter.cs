@@ -59,68 +59,6 @@ namespace Mosa.Platforms.x86
 			public long position;
 		}
 
-		/// <summary>
-		/// Used to define OpCodes for various Operations
-		/// and their different OpCodes for different
-		/// types of Operands.
-		/// </summary>
-		struct CodeDef
-		{
-			/// <summary>
-			/// Initializes a new instance of the <see cref="CodeDef"/> struct.
-			/// </summary>
-			/// <param name="dest">The destination operand</param>
-			/// <param name="src">The source operand</param>
-			/// <param name="code">The corresponding opcodes</param>
-			/// <param name="regField">Additonal parameter field</param>
-			public CodeDef(Type dest, Type src, byte[] code, byte? regField)
-			{
-				this.dest = dest;
-				this.src = src;
-				this.op3 = null;
-				this.code = code;
-				this.regField = regField;
-			}
-
-			/// <summary>
-			/// Initializes a new instance of the <see cref="CodeDef"/> struct.
-			/// </summary>
-			/// <param name="dest">The destination operand</param>
-			/// <param name="src">The source operand</param>
-			/// <param name="op3">The third operand</param>
-			/// <param name="code">The corresponding opcodes</param>
-			/// <param name="regField">Additonal parameterfield</param>
-			public CodeDef(Type dest, Type src, Type op3, byte[] code, byte? regField)
-			{
-				this.dest = dest;
-				this.src = src;
-				this.op3 = op3;
-				this.code = code;
-				this.regField = regField;
-			}
-
-			/// <summary>
-			/// Destinationtype
-			/// </summary>
-			public Type dest;
-			/// <summary>
-			/// Sourcetype
-			/// </summary>
-			public Type src;
-			/// <summary>
-			/// Third operand
-			/// </summary>
-			public Type op3;
-			/// <summary>
-			/// Bytecodes corresponding to the operation
-			/// </summary>
-			public byte[] code;
-			/// <summary>
-			/// Register field to extend the operation
-			/// </summary>
-			public byte? regField;
-		}
-
 		#endregion // Types
 
 		#region Data members
@@ -913,12 +851,12 @@ namespace Mosa.Platforms.x86
 			Emit(dest, null, X86.Shl(dest, src));
 		}
 
-		void ICodeEmitter.Shld(Operand dst, Operand src, Operand count)
+		void ICodeEmitter.Shld(Operand dest, Operand src, Operand count)
 		{
 			// HACK: For some reason shld isn't emitted properly if we do
 			// Emit(dst, src, count, X86.Shld). It is emitted backwards, if
 			// we turn this around the following way - it works.
-			Emit(src, dst, count, cxd_shld);
+			Emit(src, dest, count, X86.Shrd(dest,src,count));
 		}
 
 		void ICodeEmitter.Shr(Operand dest, Operand src)
@@ -929,12 +867,12 @@ namespace Mosa.Platforms.x86
 			Emit(dest, null, X86.Shr(dest, src));
 		}
 
-		void ICodeEmitter.Shrd(Operand dst, Operand src, Operand count)
+		void ICodeEmitter.Shrd(Operand dest, Operand src, Operand count)
 		{
 			// HACK: For some reason shrd isn't emitted properly if we do
 			// Emit(dst, src, count, X86.Shrd). It is emitted backwards, if
 			// we turn this around the following way - it works.
-			Emit(src, dst, count, cxd_shrd);
+			Emit(src, dest, count, X86.Shrd(dest,src,count));
 		}
 
 		void ICodeEmitter.Div(Operand dest, Operand src)
@@ -1334,87 +1272,7 @@ namespace Mosa.Platforms.x86
 
 		#endregion // ICodeEmitter Members
 
-		#region Code Definition Tables
-		#region Standard x86
-
-		/// <summary>
-		/// Asmcode: SHrD
-		/// Shifts first parameter a given amount of times to the right, moving bits from the second parameter.
-		/// 
-		/// Note: Non-circular
-		/// 
-		/// Section: Standard x86
-		/// </summary>
-		private static readonly CodeDef[] cxd_shrd = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    typeof(ConstantOperand), new byte[] { 0x0F, 0xAC }, 4),
-            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    typeof(ConstantOperand), new byte[] { 0x0F, 0xAC }, 4),
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    typeof(RegisterOperand), new byte[] { 0x0F, 0xAD }, 4),
-            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    typeof(RegisterOperand), new byte[] { 0x0F, 0xAD }, 4),
-        };
-
-
-		/// <summary>
-		/// Asmcode: SHLD
-		/// Shifts first parameter a given amount of times to the left, moving bits from the second parameter.
-		/// 
-		/// Note: Non-circular
-		/// 
-		/// Section: Standard x86
-		/// </summary>
-		private static readonly CodeDef[] cxd_shld = new CodeDef[] {
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    typeof(ConstantOperand), new byte[] { 0x0F, 0xA4 }, 4),
-            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    typeof(ConstantOperand), new byte[] { 0x0F, 0xA4 }, 4),
-            new CodeDef(typeof(RegisterOperand),    typeof(RegisterOperand),    typeof(RegisterOperand), new byte[] { 0x0F, 0xA5 }, 4),
-            new CodeDef(typeof(MemoryOperand),      typeof(RegisterOperand),    typeof(RegisterOperand), new byte[] { 0x0F, 0xA5 }, 4),
-        };
-
-		#endregion
-		#endregion // Code Definition Tables
-
 		#region Code Generation
-
-		/// <summary>
-		/// Walks the code definition array for a matching combination and emits the corresponding code.
-		/// </summary>
-		/// <param name="dest">The destination operand.</param>
-		/// <param name="src">The source operand.</param>
-		/// <param name="codeDef">The code definition array.</param>
-		private void Emit(Operand dest, Operand src, CodeDef[] codeDef)
-		{
-			foreach (CodeDef cd in codeDef) {
-				if (true == cd.dest.IsInstanceOfType(dest) && (null == src || true == cd.src.IsInstanceOfType(src))) {
-					Emit(cd.code, cd.regField, dest, src);
-					return;
-				}
-			}
-
-			// If this is reached, the operand combination could not be emitted as it is
-			// not specified in the code definition table
-			Debug.Assert(false, @"Failed to find an opcode for the instruction.");
-			throw new NotSupportedException(@"Unsupported operand combination for the instruction.");
-		}
-
-		/// <summary>
-		/// Walks the code definition array for a matching combination and emits the corresponding code.
-		/// </summary>
-		/// <param name="dest">The destination operand.</param>
-		/// <param name="src">The source operand.</param>
-		/// <param name="op3">An additional register or constant operand.</param>
-		/// <param name="codeDef">The code definition array.</param>
-		private void Emit(Operand dest, Operand src, Operand op3, CodeDef[] codeDef)
-		{
-			foreach (CodeDef cd in codeDef) {
-				if (true == cd.dest.IsInstanceOfType(dest) && (null == src || true == cd.src.IsInstanceOfType(src)) && (null == op3 || true == cd.op3.IsInstanceOfType(op3))) {
-					Emit(cd.code, cd.regField, dest, src, op3);
-					return;
-				}
-			}
-
-			// If this is reached, the operand combination could not be emitted as it is
-			// not specified in the code definition table
-			Debug.Assert(false, @"Failed to find an opcode for the instruction.");
-			throw new NotSupportedException(@"Unsupported operand combination for the instruction.");
-		}
 
 		/// <summary>
 		/// Emits relative branch code.
@@ -1436,6 +1294,18 @@ namespace Mosa.Platforms.x86
 		private void Emit(Operand dest, Operand src, OpCode opCode)
 		{
 			Emit(opCode.Code, opCode.RegField, dest, src);
+		}
+
+		/// <summary>
+		/// Emits the specified op code.
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <param name="op">The op.</param>
+		/// <param name="opCode">The op code.</param>
+		private void Emit(Operand dest, Operand src, Operand op, OpCode opCode)
+		{
+			Emit(opCode.Code, opCode.RegField, dest, src, op);
 		}
 
 		/// <summary>

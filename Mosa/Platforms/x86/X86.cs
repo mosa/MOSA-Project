@@ -377,6 +377,20 @@ namespace Mosa.Platforms.x86
 				public static OpCode R_L = new OpCode(new byte[] { 0x0F, 0x2E });
 				public static OpCode R_C = new OpCode(new byte[] { 0x0F, 0x2E });
 			}
+			public static class Shrd
+			{
+				public static OpCode R_R_C = new OpCode(new byte[] { 0x0F, 0xAC }, 4);
+				public static OpCode M_R_C = new OpCode(new byte[] { 0x0F, 0xAC }, 4);
+				public static OpCode R_R_R = new OpCode(new byte[] { 0x0F, 0xAD }, 4);
+				public static OpCode M_R_R = new OpCode(new byte[] { 0x0F, 0xAD }, 4);
+			}
+			public static class Shld
+			{
+				public static OpCode R_R_C = new OpCode(new byte[] { 0x0F, 0xA4 }, 4);
+				public static OpCode M_R_C = new OpCode(new byte[] { 0x0F, 0xA4 }, 4);
+				public static OpCode R_R_R = new OpCode(new byte[] { 0x0F, 0xA5 }, 4);
+				public static OpCode M_R_R = new OpCode(new byte[] { 0x0F, 0xA5 }, 4);
+			}
 		};
 #pragma warning restore 1591
 
@@ -1303,6 +1317,42 @@ namespace Mosa.Platforms.x86
 			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Intruction.Ucomiss.R_M;
 			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Intruction.Ucomiss.R_L;
 			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Intruction.Ucomiss.R_C;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+
+		/// <summary>
+		/// SHRD
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <param name="count">The count.</param>
+		/// <returns></returns>
+		public static OpCode Shrd(Operand dest, Operand src, Operand count)
+		{
+			if (src is RegisterOperand) {
+				if ((dest is RegisterOperand) && (count is ConstantOperand)) return X86Intruction.Shrd.R_R_C;
+				if ((dest is MemoryOperand) && (count is ConstantOperand)) return X86Intruction.Shrd.M_R_C;
+				if ((dest is RegisterOperand) && (count is RegisterOperand)) return X86Intruction.Shrd.R_R_R;
+				if ((dest is MemoryOperand) && (count is RegisterOperand)) return X86Intruction.Shrd.M_R_R;
+			}
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+
+		/// <summary>
+		/// SHLD
+		/// </summary>
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The SRC.</param>
+		/// <param name="count">The count.</param>
+		/// <returns></returns>
+		public static OpCode Shld(Operand dest, Operand src, Operand count)
+		{
+			if (src is RegisterOperand) {
+				if ((dest is RegisterOperand) && (count is ConstantOperand)) return X86Intruction.Shld.R_R_C;
+				if ((dest is MemoryOperand) && (count is ConstantOperand)) return X86Intruction.Shld.M_R_C;
+				if ((dest is RegisterOperand) && (count is RegisterOperand)) return X86Intruction.Shld.R_R_R;
+				if ((dest is MemoryOperand) && (count is RegisterOperand)) return X86Intruction.Shld.M_R_R;
+			}
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 	}
