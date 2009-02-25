@@ -34,7 +34,7 @@ namespace Mosa.Runtime.CompilerFramework
                 switch (instruction.Results[0].Type.Type)
                 {
                     case Mosa.Runtime.Metadata.CilElementType.Char:
-                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                        goto case Mosa.Runtime.Metadata.CilElementType.U2;
                     case Mosa.Runtime.Metadata.CilElementType.U1:
                         result = ((byte)(instruction.First as ConstantOperand).Value) * ((byte)(instruction.Second as ConstantOperand).Value);
                         break;
@@ -90,7 +90,7 @@ namespace Mosa.Runtime.CompilerFramework
                 switch (instruction.Results[0].Type.Type)
                 {
                     case Mosa.Runtime.Metadata.CilElementType.Char:
-                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                        goto case Mosa.Runtime.Metadata.CilElementType.U2;
                     case Mosa.Runtime.Metadata.CilElementType.U1:
                         result = ((byte)(instruction.First as ConstantOperand).Value) / ((byte)(instruction.Second as ConstantOperand).Value);
                         break;
@@ -146,7 +146,7 @@ namespace Mosa.Runtime.CompilerFramework
                 switch (instruction.Results[0].Type.Type)
                 {
                     case Mosa.Runtime.Metadata.CilElementType.Char:
-                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                        goto case Mosa.Runtime.Metadata.CilElementType.U2;
                     case Mosa.Runtime.Metadata.CilElementType.U1:
                         result = ((byte)(instruction.First as ConstantOperand).Value) % ((byte)(instruction.Second as ConstantOperand).Value);
                         break;
@@ -206,7 +206,7 @@ namespace Mosa.Runtime.CompilerFramework
                 switch (instruction.Results[0].Type.Type)
                 {
                     case Mosa.Runtime.Metadata.CilElementType.Char:
-                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                        goto case Mosa.Runtime.Metadata.CilElementType.U2;
                     case Mosa.Runtime.Metadata.CilElementType.U1:
                         result = ((byte)(instruction.First as ConstantOperand).Value) + ((byte)(instruction.Second as ConstantOperand).Value);
                         break;
@@ -262,7 +262,7 @@ namespace Mosa.Runtime.CompilerFramework
                 switch (instruction.Results[0].Type.Type)
                 {
                     case Mosa.Runtime.Metadata.CilElementType.Char:
-                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                        goto case Mosa.Runtime.Metadata.CilElementType.U2;
                     case Mosa.Runtime.Metadata.CilElementType.U1:
                         result = ((byte)(instruction.First as ConstantOperand).Value) - ((byte)(instruction.Second as ConstantOperand).Value);
                         break;
@@ -316,7 +316,7 @@ namespace Mosa.Runtime.CompilerFramework
                 switch (instruction.Results[0].Type.Type)
                 {
                     case Mosa.Runtime.Metadata.CilElementType.Char:
-                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                        goto case Mosa.Runtime.Metadata.CilElementType.U2;
                     case Mosa.Runtime.Metadata.CilElementType.U1:
                         result = ((byte)(instruction.Operand1 as ConstantOperand).Value) & ((byte)(instruction.Operand2 as ConstantOperand).Value);
                         break;
@@ -364,7 +364,7 @@ namespace Mosa.Runtime.CompilerFramework
                 switch (instruction.Results[0].Type.Type)
                 {
                     case Mosa.Runtime.Metadata.CilElementType.Char:
-                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                        goto case Mosa.Runtime.Metadata.CilElementType.U2;
                     case Mosa.Runtime.Metadata.CilElementType.U1:
                         result = ((byte)(instruction.Operand1 as ConstantOperand).Value) | ((byte)(instruction.Operand2 as ConstantOperand).Value);
                         break;
@@ -407,7 +407,7 @@ namespace Mosa.Runtime.CompilerFramework
                 switch (instruction.Results[0].Type.Type)
                 {
                     case Mosa.Runtime.Metadata.CilElementType.Char:
-                        goto case Mosa.Runtime.Metadata.CilElementType.I1;
+                        goto case Mosa.Runtime.Metadata.CilElementType.U2;
                     case Mosa.Runtime.Metadata.CilElementType.U1:
                         result = ((byte)(instruction.Operand1 as ConstantOperand).Value) ^ ((byte)(instruction.Operand2 as ConstantOperand).Value);
                         break;

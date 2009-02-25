@@ -556,12 +556,14 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.Dec(DecInstruction instruction, int arg)
         {
-            _emitter.Sub(instruction.Operand0, new ConstantOperand(instruction.Operand0.Type, (int)1));
+            _emitter.Dec(instruction.Operand0);
+            //_emitter.Sub(instruction.Operand0, new ConstantOperand(instruction.Operand0.Type, (int)1));
         }
 
         void IX86InstructionVisitor<int>.Inc(IncInstruction instruction, int arg)
         {
-            _emitter.Add(instruction.Operand0, new ConstantOperand(instruction.Operand0.Type, (int)1));
+            _emitter.Inc(instruction.Operand0);
+            //_emitter.Add(instruction.Operand0, new ConstantOperand(instruction.Operand0.Type, (int)1));
         }
 
         void IX86InstructionVisitor<int>.Neg(NegInstruction instruction, int arg)
@@ -1645,9 +1647,9 @@ namespace Mosa.Platforms.x86
                 case CilElementType.I8:
                     throw new NotSupportedException();
 
-                case CilElementType.U1: break;
-                case CilElementType.U2: break;
-                case CilElementType.U4: break;
+                case CilElementType.U1: goto case CilElementType.I1;
+                case CilElementType.U2: goto case CilElementType.I1;
+                case CilElementType.U4: goto case CilElementType.I1;
                 case CilElementType.U8: goto case CilElementType.I8;
 
                 default:

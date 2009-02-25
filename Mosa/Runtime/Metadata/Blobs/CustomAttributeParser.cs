@@ -200,7 +200,7 @@ namespace Mosa.Runtime.Metadata.Blobs
                     break;
 
                 case CilElementType.Char:
-                    result = (char)reader.ReadInt16();
+                    result = (char)reader.ReadUInt16();
                     break;
 
                 case CilElementType.I1:

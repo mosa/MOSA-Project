@@ -36,7 +36,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			switch (cilElementType) {
 				case Mosa.Runtime.Metadata.CilElementType.Char:
-					goto case Mosa.Runtime.Metadata.CilElementType.I1;
+					goto case Mosa.Runtime.Metadata.CilElementType.U2;
 				case Mosa.Runtime.Metadata.CilElementType.U1:
 					return (byte)(constantOperand.Value) == 0;
 				case Mosa.Runtime.Metadata.CilElementType.U2:
@@ -74,7 +74,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			switch (cilElementType) {
 				case Mosa.Runtime.Metadata.CilElementType.Char:
-					goto case Mosa.Runtime.Metadata.CilElementType.I1;
+					goto case Mosa.Runtime.Metadata.CilElementType.U2;
 				case Mosa.Runtime.Metadata.CilElementType.U1:
 					return (byte)(constantOperand.Value) == 1;
 				case Mosa.Runtime.Metadata.CilElementType.U2:
