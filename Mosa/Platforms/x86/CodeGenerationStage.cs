@@ -147,6 +147,8 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.UDiv(UDivInstruction instruction, int arg)
         {
+            RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
+            _emitter.Xor(edx, edx);
             _emitter.Div(instruction.Operand0, instruction.Operand1);
         }
 
