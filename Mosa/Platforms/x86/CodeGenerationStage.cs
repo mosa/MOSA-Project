@@ -345,7 +345,7 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<int>.Cvtss2sd(Cvtss2sdInstruction instruction, int arg)
-        {
+        {                
             _emitter.Cvtss2sd(instruction.Operand0, instruction.Operand1);
         }
 

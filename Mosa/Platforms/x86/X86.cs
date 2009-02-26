@@ -48,8 +48,11 @@ namespace Mosa.Platforms.x86
 			public static class Mov
 			{
 				public static OpCode R_C = new OpCode(new byte[] { 0xC7 }, 0);
+                public static OpCode R_C_16 = new OpCode(new byte[] { 0x66, 0xC7 }, 0);
 				public static OpCode M_C = new OpCode(new byte[] { 0xC7 }, 0);
+                public static OpCode M_C_16 = new OpCode(new byte[] { 0x66, 0xC7 }, 0);
 				public static OpCode R_R = new OpCode(new byte[] { 0x8B });
+                public static OpCode R_R_16 = new OpCode(new byte[] { 0x66, 0x8B });
 				public static OpCode R_M = new OpCode(new byte[] { 0x8B });
                 public static OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x8B });
 				public static OpCode M_R = new OpCode(new byte[] { 0x89 });
@@ -315,6 +318,12 @@ namespace Mosa.Platforms.x86
 				public static OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x58 });
 				public static OpCode R_L = new OpCode(new byte[] { 0xF2, 0x0F, 0x58 });
 			}
+            public static class Addss
+            {
+                public static OpCode R_R = new OpCode(new byte[] { 0xF3, 0x0F, 0x58 });
+                public static OpCode R_M = new OpCode(new byte[] { 0xF3, 0x0F, 0x58 });
+                public static OpCode R_L = new OpCode(new byte[] { 0xF3, 0x0F, 0x58 });
+            }
 			public static class Subsd
 			{
 				public static OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x5C });
@@ -471,22 +480,43 @@ namespace Mosa.Platforms.x86
 		public static OpCode Move(Operand dest, Operand src)
 		{
 			if ((dest is RegisterOperand) && (src is ConstantOperand))
-				return X86Instruction.Mov.R_C;
+            {
+                if (src.Type.Type == CilElementType.Char)
+                    return X86Instruction.Mov.R_C_16;
+                else
+                    return X86Instruction.Mov.R_C;
+            }
 
-			if ((dest is MemoryOperand) && (src is ConstantOperand))
-				return X86Instruction.Mov.M_C;
+            if ((dest is MemoryOperand) && (src is ConstantOperand))
+            {
+                if (src.Type.Type == CilElementType.Char)
+                    return X86Instruction.Mov.M_C_16;
+                else
+                    return X86Instruction.Mov.M_C;
+            }
 
 			if ((dest is RegisterOperand) && (src is RegisterOperand))
-				return X86Instruction.Mov.R_R;
+            {
+                if (src.Type.Type == CilElementType.Char)
+                    return X86Instruction.Mov.R_R_16;
+                else
+                    return X86Instruction.Mov.R_R;
+            }
 
             if ((dest is RegisterOperand) && (src is MemoryOperand))
             {
-                return X86Instruction.Mov.R_M;
+                if (src.Type.Type == CilElementType.Char)
+                    return X86Instruction.Mov.R_M_16;
+                else
+                    return X86Instruction.Mov.R_M;
             }
 
             if ((dest is MemoryOperand) && (src is RegisterOperand))
             {
-                return X86Instruction.Mov.M_R;
+                if (src.Type.Type == CilElementType.Char)
+                    return X86Instruction.Mov.M_R_16;
+                else
+                    return X86Instruction.Mov.M_R;
             }
 
 			throw new ArgumentException(@"No opcode for operand type. [" + dest.GetType() + ", " + src.GetType() + ")");
@@ -1149,6 +1179,10 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Cvtss2sd(Operand dest, Operand src)
 		{
+            System.IO.StreamWriter w = new System.IO.StreamWriter("cvtss2sd.txt", true);
+            w.WriteLine("{0} :: {1}", dest.GetType(), src.GetType());
+            w.Flush();
+            w.Close();
 			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Instruction.Cvtss2sd.R_L;
 			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Instruction.Cvtss2sd.R_M;
 			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Instruction.Cvtss2sd.R_R;
@@ -1168,6 +1202,20 @@ namespace Mosa.Platforms.x86
 			if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Instruction.Addsd.R_L;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        /// <returns></returns>
+        public static OpCode Addss(Operand dest, Operand src)
+        {
+            if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Instruction.Addss.R_R;
+            if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Instruction.Addss.R_M;
+            if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Instruction.Addss.R_L;
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 		
 		/// <summary>
 		/// Subsd

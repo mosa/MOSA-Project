@@ -798,8 +798,15 @@ namespace Mosa.Platforms.x86
 
 		void ICodeEmitter.SseAdd(Operand dest, Operand src)
 		{
-			CheckAndConvertR4(ref src);
-			Emit(dest, src, X86.Addsd(dest, src));
+            if (dest.Type.Type == CilElementType.R4 && src.Type.Type == CilElementType.R4)
+            {
+                Emit(dest, src, X86.Addss(dest, src));
+            }
+            else
+            {
+                CheckAndConvertR4(ref src);
+                Emit(dest, src, X86.Addsd(dest, src));
+            }
 		}
 
 		void ICodeEmitter.SseSub(Operand dest, Operand src)

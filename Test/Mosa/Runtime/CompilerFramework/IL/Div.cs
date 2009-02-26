@@ -648,7 +648,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(uint.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
         [Row(uint.MinValue, 1)]
         [Row(uint.MinValue, 17)]
-        [Row(uint.MinValue, 123)]
+        [Row(uint.MinValue, 123)] 
         // (MaxValue, X) Cases
         [Row(uint.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
         [Row(uint.MaxValue, 1)]
@@ -667,7 +667,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(uint.MinValue, uint.MaxValue)]
         [Row(uint.MaxValue, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]      
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void DivU4(uint a, uint b)
         {

@@ -155,10 +155,10 @@ namespace Mosa.Platforms.x86
             /* This function transforms the SUB into the following sequence of x86 instructions:
              * 
              * mov eax, [op1]       ; Move lower 32-bits of the first operand into eax
-             * add eax, [op2]       ; Add lower 32-bits of second operand to eax
+             * sub eax, [op2]       ; Sub lower 32-bits of second operand to eax
              * mov [result], eax    ; Save the result into the lower 32-bits of the result operand
              * mov eax, [op1+4]     ; Move upper 32-bits of the first operand into eax
-             * adc eax, [op2+4]     ; Add upper 32-bits of the second operand to eax
+             * sbb eax, [op2+4]     ; Sub with borrow upper 32-bits of the second operand to eax
              * mov [result+4], eax  ; Save the result into the upper 32-bits of the result operand
              * 
              */
@@ -168,18 +168,19 @@ namespace Mosa.Platforms.x86
             // with a literal/literal operand first - TODO
             RegisterOperand eaxH = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
             RegisterOperand eaxL = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
-            Debug.Assert(instruction.First is MemoryOperand && instruction.Second is MemoryOperand && instruction.Results[0] is MemoryOperand);
-            MemoryOperand op1 = (MemoryOperand)instruction.First;
-            MemoryOperand op2 = (MemoryOperand)instruction.Second;
-            MemoryOperand res = (MemoryOperand)instruction.Results[0];
+
+            Operand op1L, op1H, op2L, op2H, resL, resH;
+            SplitLongOperand(instruction.First, out op1L, out op1H);
+            SplitLongOperand(instruction.Second, out op2L, out op2H);
+            SplitLongOperand(instruction.Results[0], out resL, out resH);
 
             Instruction[] result = new Instruction[] {
-                new Instructions.MoveInstruction(eaxH, op1),
-                new Instructions.SubInstruction(eaxH, op2),
-                new Instructions.MoveInstruction(res, eaxH),
-                new Instructions.MoveInstruction(eaxL, new MemoryOperand(op1.Type, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4))),
-                new Instructions.SbbInstruction(eaxL, new MemoryOperand(op2.Type, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4))),
-                new Instructions.MoveInstruction(new MemoryOperand(res.Type, res.Base, new IntPtr(res.Offset.ToInt64() + 4)), eaxL),
+                new Instructions.MoveInstruction(eaxL, op1L),
+                new Instructions.SubInstruction(eaxL, op2L),
+                new Instructions.MoveInstruction(resL, eaxL),
+                new Instructions.MoveInstruction(eaxH, op1H),
+                new Instructions.SbbInstruction(eaxH, op2H),
+                new Instructions.MoveInstruction(resH, eaxH),
             };
             Replace(ctx, result);
         }

@@ -356,7 +356,7 @@ namespace Mosa.Platforms.x86
             {
                 replType = typeof(x86.Instructions.SseSubInstruction);
             }
-            ThreeTwoAddressConversion(ctx, instruction, replType);
+            HandleNonCommutativeOperation(ctx, instruction, replType);
         }
 
         void IL.IILVisitor<Context>.Mul(IL.MulInstruction instruction, Context ctx)
@@ -974,6 +974,9 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<Context>.SseSub(Instructions.SseSubInstruction instruction, Context ctx)
         {
+            Operand[] ops = instruction.Operands;
+            EmitConstants(ops);
+            ThreeTwoAddressConversion(ctx, instruction, typeof(Instructions.SseSubInstruction));
         }
 
         void IX86InstructionVisitor<Context>.SseMul(Instructions.SseMulInstruction instruction, Context ctx)
@@ -1172,6 +1175,24 @@ namespace Mosa.Platforms.x86
                 ops[0] = ops[1];
                 ops[1] = t;
             }
+
+            // In order for mul to work out, the first operand must be equal to the destination operand -
+            // if it is not (e.g. c = a + b) then transform it to c = a, c = c + b.
+            ThreeTwoAddressConversion(ctx, instruction, replacementType);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="instruction"></param>
+        /// <param name="replacementType"></param>
+        private void HandleNonCommutativeOperation(Context ctx, Instruction instruction, Type replacementType)
+        {
+            EmitConstants(instruction.Results);
+            Operand result = instruction.Results[0];
+            Operand[] ops = instruction.Operands;
+            EmitConstants(ops);
 
             // In order for mul to work out, the first operand must be equal to the destination operand -
             // if it is not (e.g. c = a + b) then transform it to c = a, c = c + b.
