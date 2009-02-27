@@ -460,12 +460,28 @@ namespace Mosa.Platforms.x86
 
 		void ICodeEmitter.Cvttsd2si(Operand op1, Operand op2)
 		{
-			Emit(op1, op2, X86.Cvttsd2si(op1, op2));
+            RegisterOperand edx = new RegisterOperand(op1.Type, GeneralPurposeRegister.EDX);
+            if (!(op1 is RegisterOperand))
+            {
+                Emit(edx, op1, X86.Move(edx, op1));
+                Emit(edx, op2, X86.Cvttss2si(edx, op2));
+                Emit(op1, edx, X86.Move(op1, edx));
+            }
+            else
+                Emit(op1, op2, X86.Cvttsd2si(op1, op2));
 		}
 
 		void ICodeEmitter.Cvttss2si(Operand op1, Operand op2)
 		{
-			Emit(op1, op2, X86.Cvttss2si(op1, op2));
+            RegisterOperand edx = new RegisterOperand(op1.Type, GeneralPurposeRegister.EDX);
+            if (!(op1 is RegisterOperand))
+            {
+                Emit(edx, op1, X86.Move(edx, op1));
+                Emit(edx, op2, X86.Cvttss2si(edx, op2));
+                Emit(op1, edx, X86.Move(op1, edx));
+            }
+            else
+			    Emit(op1, op2, X86.Cvttss2si(op1, op2));
 		}
 
 		/// <summary>
@@ -856,6 +872,7 @@ namespace Mosa.Platforms.x86
 
             if (src is ConstantOperand)
             {
+                src = new ConstantOperand(new SigType(CilElementType.U1), (src as ConstantOperand).Value);
                 Emit(dest, src, X86.Shl(dest, src));
             }
             else
@@ -1490,19 +1507,29 @@ namespace Mosa.Platforms.x86
 						break;
 
 					case CilElementType.I1:
-						imm = new byte[] { (byte)Convert.ToSByte(co.Value) };
+						imm = LittleEndianBitConverter.GetBytes(Convert.ToSByte(co.Value));
 						break;
 
-					case CilElementType.I2: goto case CilElementType.I;
+					case CilElementType.I2:
+                        imm = LittleEndianBitConverter.GetBytes(Convert.ToInt16(co.Value));
+                        break; 
 					case CilElementType.I4: goto case CilElementType.I;
 
-					case CilElementType.U1: goto case CilElementType.I;
-					case CilElementType.U2: goto case CilElementType.I;
-					case CilElementType.U4: goto case CilElementType.I;
-
-					case CilElementType.I8: goto case CilElementType.U8;
+					case CilElementType.U1:
+                        //imm = LittleEndianBitConverter.GetBytes(Convert.ToByte(co.Value));
+                        imm = new byte[1] { Convert.ToByte(co.Value) };
+                        break; 
+					case CilElementType.U2:
+                        imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt16(co.Value));
+                        break;
+					case CilElementType.U4:
+                        imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt32(co.Value));
+                        break;
+					case CilElementType.I8:
+                        imm = LittleEndianBitConverter.GetBytes(Convert.ToInt64(co.Value));
+                        break;
 					case CilElementType.U8:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToInt64(co.Value));
+						imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt64(co.Value));
 						break;
 					case CilElementType.R4:
 						imm = LittleEndianBitConverter.GetBytes(Convert.ToSingle(co.Value));

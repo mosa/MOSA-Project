@@ -75,6 +75,7 @@ namespace Mosa.Platforms.x86
             Debug.Assert(op is MemoryOperand || op is ConstantOperand, @"Long operand not memory or constant.");
 
             SigType I4 = new SigType(CilElementType.I4);
+            SigType U4 = new SigType(CilElementType.U4);
 
             // Is it a constant operand?
             ConstantOperand cop = op as ConstantOperand;
@@ -198,6 +199,7 @@ namespace Mosa.Platforms.x86
             Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to 64 bit multiplication are not MemoryOperands.");
 
             SigType I4 = new SigType(CilElementType.I4);
+            SigType U4 = new SigType(CilElementType.U4);
             Operand op0H, op1H, op2H, op0L, op1L, op2L;
             SplitLongOperand(instruction.Results[0], out op0L, out op0H);
             SplitLongOperand(instruction.First, out op1L, out op1H);
@@ -224,6 +226,8 @@ namespace Mosa.Platforms.x86
             BasicBlock nextBlock;
             BasicBlock[] blocks = CreateBlocks(ctx, instruction, 7, out nextBlock);
             SigType I4 = new SigType(CilElementType.I4);
+            SigType U4 = new SigType(CilElementType.U4);
+            SigType U1 = new SigType(CilElementType.U1);
 
             Operand op0H, op1H, op2H, op0L, op1L, op2L;
             SplitLongOperand(instruction.Results[0], out op0L, out op0H);
@@ -261,7 +265,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(edx, op1L),
                 new Instructions.NegInstruction(eax),
                 new Instructions.NegInstruction(edx),
-                new Instructions.SbbInstruction(eax, new ConstantOperand(I4, (byte)0)),
+                new Instructions.SbbInstruction(eax, new ConstantOperand(U4, (byte)0)),
                 new Instructions.MoveInstruction(op1H, eax),
                 new Instructions.MoveInstruction(op1L, edx),
             });
@@ -286,7 +290,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(edx, op2L),
                 new Instructions.NegInstruction(eax),
                 new Instructions.NegInstruction(edx),
-                new Instructions.SbbInstruction(eax, new ConstantOperand(I4, (int)0)),
+                new Instructions.SbbInstruction(eax, new ConstantOperand(U4, (int)0)),
                 new Instructions.MoveInstruction(op2H, eax),
                 new Instructions.MoveInstruction(op2L, edx),
             });
@@ -367,10 +371,10 @@ namespace Mosa.Platforms.x86
             // add     edx,ecx         ; EDX:EAX = QUOT * DVSR
             // jc      short L6        ; carry means Quotient is off by 1
             blocks[3].Instructions.AddRange(new Instruction[] {
-                new Instructions.ShrInstruction(ebx, new ConstantOperand(I4, 1)),
-                new Instructions.RcrInstruction(ecx, new ConstantOperand(I4, 1)), // RCR
-                new Instructions.ShrInstruction(edx, new ConstantOperand(I4, 1)),
-                new Instructions.RcrInstruction(eax, new ConstantOperand(I4, 1)),
+                new Instructions.ShrInstruction(ebx, new ConstantOperand(U1, 1)),
+                new Instructions.RcrInstruction(ecx, new ConstantOperand(U1, 1)), // RCR
+                new Instructions.ShrInstruction(edx, new ConstantOperand(U1, 1)),
+                new Instructions.RcrInstruction(eax, new ConstantOperand(U1, 1)),
                 new Instructions.LogicalOrInstruction(ebx, ebx),
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[3].Label),
                 new Instructions.UDivInstruction(eax, ecx),
@@ -414,7 +418,7 @@ namespace Mosa.Platforms.x86
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, nextBlock.Label),
                 new Instructions.NegInstruction(edx),
                 new Instructions.NegInstruction(eax),
-                new Instructions.SbbInstruction(edx, new ConstantOperand(I4, 0)),
+                new Instructions.SbbInstruction(edx, new ConstantOperand(U4, 0)),
             });
 
             nextBlock.Instructions.InsertRange(0, new Instruction[] {
@@ -486,7 +490,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(edx, op1L),
                 new Instructions.NegInstruction(eax),
                 new Instructions.NegInstruction(edx),
-                new Instructions.SbbInstruction(eax, new ConstantOperand(I4, (byte)0)),
+                new Instructions.SbbInstruction(eax, new ConstantOperand(U1, (byte)0)),
                 new Instructions.MoveInstruction(op1H, eax),
                 new Instructions.MoveInstruction(op1L, edx),
             });
@@ -509,7 +513,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(edx, op2L),
                 new Instructions.NegInstruction(eax),
                 new Instructions.NegInstruction(edx),
-                new Instructions.SbbInstruction(eax, new ConstantOperand(I4, (int)0)),
+                new Instructions.SbbInstruction(eax, new ConstantOperand(U1, (int)0)),
                 new Instructions.MoveInstruction(op2H, eax),
                 new Instructions.MoveInstruction(op2L, edx),
             });
@@ -601,10 +605,10 @@ namespace Mosa.Platforms.x86
             //  jbe     short L7        ; if less or equal we are ok, else subtract
 
             blocks[3].Instructions.AddRange(new Instruction[] {
-                new Instructions.ShrInstruction(ebx, new ConstantOperand(I4, 1)),
-                new Instructions.RcrInstruction(ecx, new ConstantOperand(I4, 1)), // RCR
-                new Instructions.ShrInstruction(edx, new ConstantOperand(I4, 1)),
-                new Instructions.RcrInstruction(eax, new ConstantOperand(I4, 1)),
+                new Instructions.ShrInstruction(ebx, new ConstantOperand(U1, 1)),
+                new Instructions.RcrInstruction(ecx, new ConstantOperand(U1, 1)), // RCR
+                new Instructions.ShrInstruction(edx, new ConstantOperand(U1, 1)),
+                new Instructions.RcrInstruction(eax, new ConstantOperand(U1, 1)),
                 new Instructions.LogicalOrInstruction(ebx, ebx),
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[3].Label),
                 new Instructions.UDivInstruction(eax, ecx),
@@ -650,7 +654,7 @@ namespace Mosa.Platforms.x86
             blocks[6].Instructions.InsertRange(0, new Instruction[] {
                 new Instructions.NegInstruction(edx),
                 new Instructions.NegInstruction(eax),
-                new Instructions.SbbInstruction(edx, new ConstantOperand(I4, 0)),
+                new Instructions.SbbInstruction(edx, new ConstantOperand(U4, 0)),
                 new IR.JmpInstruction(nextBlock.Label),
             });
 
@@ -1498,17 +1502,21 @@ namespace Mosa.Platforms.x86
         private void ExpandComparison(Context ctx, IR.IntegerCompareInstruction instruction)
         {
             Operand op0 = instruction.Operand0;
-            MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
-            MemoryOperand op2 = instruction.Operand2 as MemoryOperand;
+            Operand op1 = instruction.Operand1;
+            Operand op2 = instruction.Operand2;
 
             Debug.Assert(op1 != null && op2 != null, @"IntegerCompareInstruction operand not memory!");
             Debug.Assert(op0 is MemoryOperand || op0 is RegisterOperand, @"IntegerCompareInstruction result not memory and not register!");
 
             SigType I4 = new SigType(CilElementType.I4), U4 = new SigType(CilElementType.U4);
-            MemoryOperand op1L = new MemoryOperand(U4, op1.Base, op1.Offset);
+            /*MemoryOperand op1L = new MemoryOperand(U4, op1.Base, op1.Offset);
             MemoryOperand op2L = new MemoryOperand(U4, op2.Base, op2.Offset);
             MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
-            MemoryOperand op2H = new MemoryOperand(I4, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));
+            MemoryOperand op2H = new MemoryOperand(I4, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));*/
+
+            Operand op1L, op1H, op2L, op2H;
+            SplitLongOperand(op1, out op1L, out op1H);
+            SplitLongOperand(op2, out op2L, out op2H);
 
             // Create an additional block to split the comparison
             BasicBlock nextBlock;
