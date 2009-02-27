@@ -453,6 +453,8 @@ namespace Mosa.Platforms.x86
             BasicBlock nextBlock;
             BasicBlock[] blocks = CreateBlocks(ctx, instruction, 7, out nextBlock);
             SigType I4 = new SigType(CilElementType.I4);
+            SigType U4 = new SigType(CilElementType.U4);
+            SigType U1 = new SigType(CilElementType.U1);
 
             Operand op0H, op1H, op2H, op0L, op1L, op2L;
             SplitLongOperand(instruction.Results[0], out op0L, out op0H);
@@ -691,17 +693,19 @@ namespace Mosa.Platforms.x86
             BasicBlock nextBlock;
             BasicBlock[] blocks = CreateBlocks(ctx, instruction, 4, out nextBlock);
             SigType I4 = new SigType(CilElementType.I4);
+            SigType U4 = new SigType(CilElementType.U4);
+            SigType U1 = new SigType(CilElementType.U1);
 
             Operand op0H, op1H, op2H, op0L, op1L, op2L;
             SplitLongOperand(instruction.Results[0], out op0L, out op0H);
             SplitLongOperand(instruction.Operand1, out op1L, out op1H);
             SplitLongOperand(instruction.Operand2, out op2L, out op2H);
-            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-            RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
-            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
-            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
-            RegisterOperand edi = new RegisterOperand(I4, GeneralPurposeRegister.EDI);
-            RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
+            RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
+            RegisterOperand ebx = new RegisterOperand(U4, GeneralPurposeRegister.EBX);
+            RegisterOperand edx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
+            RegisterOperand ecx = new RegisterOperand(U4, GeneralPurposeRegister.ECX);
+            RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
+            RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
 
             Replace(ctx, new Instruction[] {
                 new IR.PushInstruction(edi),
@@ -731,10 +735,10 @@ namespace Mosa.Platforms.x86
 
             // L3
             blocks[1].Instructions.AddRange(new Instruction[] {
-                new Instructions.ShrInstruction(ecx, new ConstantOperand(I4, 1)),
-                new Instructions.RcrInstruction(ebx, new ConstantOperand(I4, 1)), // RCR
-                new Instructions.ShrInstruction(edx, new ConstantOperand(I4, 1)),
-                new Instructions.RcrInstruction(eax, new ConstantOperand(I4, 1)),
+                new Instructions.ShrInstruction(ecx, new ConstantOperand(U1, 1)),
+                new Instructions.RcrInstruction(ebx, new ConstantOperand(U1, 1)), // RCR
+                new Instructions.ShrInstruction(edx, new ConstantOperand(U1, 1)),
+                new Instructions.RcrInstruction(eax, new ConstantOperand(U1, 1)),
                 new Instructions.LogicalOrInstruction(ecx, ecx),
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[1].Label),
                 new Instructions.UDivInstruction(eax, ebx),
@@ -793,17 +797,19 @@ namespace Mosa.Platforms.x86
             BasicBlock nextBlock;
             BasicBlock[] blocks = CreateBlocks(ctx, instruction, 4, out nextBlock);
             SigType I4 = new SigType(CilElementType.I4);
+            SigType U4 = new SigType(CilElementType.U4);
+            SigType U1 = new SigType(CilElementType.U1);
 
             Operand op0H, op1H, op2H, op0L, op1L, op2L;
             SplitLongOperand(instruction.Results[0], out op0L, out op0H);
             SplitLongOperand(instruction.Operand1, out op1L, out op1H);
             SplitLongOperand(instruction.Operand2, out op2L, out op2H);
-            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-            RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
-            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
-            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
-            RegisterOperand edi = new RegisterOperand(I4, GeneralPurposeRegister.EDI);
-            RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
+            RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
+            RegisterOperand ebx = new RegisterOperand(U4, GeneralPurposeRegister.EBX);
+            RegisterOperand edx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
+            RegisterOperand ecx = new RegisterOperand(U4, GeneralPurposeRegister.ECX);
+            RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
+            RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
 
             // Determine sign of the result (edi = 0 if result is positive, non-zero
             // otherwise) and make operands positive.
@@ -846,10 +852,10 @@ namespace Mosa.Platforms.x86
 
             // L3:
             blocks[1].Instructions.AddRange(new Instruction[] {
-                new Instructions.ShrInstruction(ecx, new ConstantOperand(I4, 1)),
-                new Instructions.RcrInstruction(ebx, new ConstantOperand(I4, 1)), // RCR
-                new Instructions.ShrInstruction(edx, new ConstantOperand(I4, 1)),
-                new Instructions.RcrInstruction(eax, new ConstantOperand(I4, 1)),
+                new Instructions.ShrInstruction(ecx, new ConstantOperand(U1, 1)),
+                new Instructions.RcrInstruction(ebx, new ConstantOperand(U1, 1)), // RCR
+                new Instructions.ShrInstruction(edx, new ConstantOperand(U1, 1)),
+                new Instructions.RcrInstruction(eax, new ConstantOperand(U1, 1)),
                 new Instructions.LogicalOrInstruction(ecx, ecx),
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[1].Label),
                 new Instructions.UDivInstruction(eax, ebx),
@@ -878,7 +884,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.SbbInstruction(edx, op1H),
                 new Instructions.NegInstruction(edx),
                 new Instructions.NegInstruction(eax),
-                new Instructions.SbbInstruction(edx, new ConstantOperand(I4, (int)0)),
+                new Instructions.SbbInstruction(edx, new ConstantOperand(U4, (int)0)),
             });
 
             nextBlock.Instructions.InsertRange(0, new Instruction[] {

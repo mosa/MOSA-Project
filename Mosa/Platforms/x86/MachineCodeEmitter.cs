@@ -464,7 +464,7 @@ namespace Mosa.Platforms.x86
             if (!(op1 is RegisterOperand))
             {
                 Emit(edx, op1, X86.Move(edx, op1));
-                Emit(edx, op2, X86.Cvttss2si(edx, op2));
+                Emit(edx, op2, X86.Cvttsd2si(edx, op2));
                 Emit(op1, edx, X86.Move(op1, edx));
             }
             else
