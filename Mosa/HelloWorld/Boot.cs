@@ -19,104 +19,184 @@ namespace Mosa.HelloWorld
 		public static void Main()
 		{
 			unsafe {
-
-				// Clear the screen
-				for (byte* i = (byte*)0xB8000; i < (byte*)0xB8FA0; ) {
-					WriteChar((byte)' ', 0x00, i);
-					i = i + 2;
-				}
-
 				byte* index = (byte*)(0xB8000);
 
-				WriteChar((byte)'M', 0x0A, index); index = index + 2;
-				WriteChar((byte)'O', 0x0A, index); index = index + 2;
-				WriteChar((byte)'S', 0x0A, index); index = index + 2;
-				WriteChar((byte)'A', 0x0A, index); index = index + 2;
-				WriteChar((byte)' ', 0x0A, index); index = index + 2;
-				WriteChar((byte)'O', 0x0A, index); index = index + 2;
-				WriteChar((byte)'S', 0x0A, index); index = index + 2;
-				WriteChar((byte)' ', 0x0A, index); index = index + 2;
-				WriteChar((byte)'V', 0x0A, index); index = index + 2;
-				WriteChar((byte)'e', 0x0A, index); index = index + 2;
-				WriteChar((byte)'r', 0x0A, index); index = index + 2;
-				WriteChar((byte)'s', 0x0A, index); index = index + 2;
-				WriteChar((byte)'i', 0x0A, index); index = index + 2;
-				WriteChar((byte)'o', 0x0A, index); index = index + 2;
-				WriteChar((byte)'n', 0x0A, index); index = index + 2;
-				WriteChar((byte)' ', 0x0A, index); index = index + 2;
-				WriteChar((byte)'0', 0x0A, index); index = index + 2;
-				WriteChar((byte)'.', 0x0A, index); index = index + 2;
-				WriteChar((byte)'1', 0x0A, index); index = index + 2;
-				WriteChar((byte)' ', 0x0A, index); index = index + 2;
-				WriteChar((byte)'\'', 0x0A, index); index = index + 2;
+				for (byte* i = (byte*)0xB8000; i < (byte*)0xB8FA0; ) {
+					WriteChar((byte)0x00, i++);
+					WriteChar((byte)' ', i++);
+				}
 
-				WriteChar((byte)'W', 0x0C, index); index = index + 2;
-				WriteChar((byte)'a', 0x0C, index); index = index + 2;
-				WriteChar((byte)'k', 0x0C, index); index = index + 2;
-				WriteChar((byte)'e', 0x0C, index); index = index + 2;
-				WriteChar((byte)'\'', 0x0A, index); index = index + 2;
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'M', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'O', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'S', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'A', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)' ', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'O', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'S', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)' ', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'V', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'e', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'r', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'s', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'i', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'o', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'n', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)' ', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'0', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'.', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'1', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)' ', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'\'', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)'W', index++);
+				WriteChar((byte)0x0C, index++);
+				WriteChar((byte)'a', index++);
+				WriteChar((byte)0x0C, index++);
+				WriteChar((byte)'k', index++);
+				WriteChar((byte)0x0C, index++);
+				WriteChar((byte)'e', index++);
+				WriteChar((byte)0x0C, index++);
+				WriteChar((byte)'\'', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)' ', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)' ', index++);
+				WriteChar((byte)0x0A, index++);
+				WriteChar((byte)' ', index++);
 
 				byte* line = (byte*)(0xB80A0);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
+				WriteChar((byte)0x07, line++);
+				WriteChar((byte)'-', line++);
 
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-				WriteChar((byte)'-', 0x07, line); line = line + 2;
-
-				byte* index2 = (byte*)(0xB8140);
-				WriteChar((byte)'C', 0x0E, index2); index2 = index2 + 2;
-				WriteChar((byte)'o', 0x0E, index2); index2 = index2 + 2;
-				WriteChar((byte)'p', 0x0E, index2); index2 = index2 + 2;
-				WriteChar((byte)'y', 0x0E, index2); index2 = index2 + 2;
-				WriteChar((byte)'r', 0x0E, index2); index2 = index2 + 2;
-				WriteChar((byte)'i', 0x0E, index2); index2 = index2 + 2;
-				WriteChar((byte)'g', 0x0E, index2); index2 = index2 + 2;
-				WriteChar((byte)'h', 0x0E, index2); index2 = index2 + 2;
-				WriteChar((byte)'t', 0x0E, index2); index2 = index2 + 2;
-				WriteChar((byte)' ', 0x0E, index2); index2 = index2 + 2;
-				WriteChar((byte)'2', 0x0E, index2); index2 = index2 + 2;
-				WriteChar((byte)'0', 0x0A, index2); index2 = index2 + 2;
-				WriteChar((byte)'0', 0x0A, index2); index2 = index2 + 2;
-				WriteChar((byte)'8', 0x0A, index2); index2 = index2 + 2;
-				WriteChar((byte)'-', 0x0A, index2); index2 = index2 + 2;
-				WriteChar((byte)'2', 0x0A, index2); index2 = index2 + 2;
-				WriteChar((byte)'0', 0x0A, index2); index2 = index2 + 2;
-				WriteChar((byte)'0', 0x0A, index2); index2 = index2 + 2;
-				WriteChar((byte)'9', 0x0A, index2); index2 = index2 + 2;
-				WriteChar((byte)' ', 0x0A, index2); index2 = index2 + 2;
-
+				byte* index_2 = (byte*)(0xB8140);
+				WriteChar((byte)0x0E, index_2++);
+				WriteChar((byte)'C', index_2++);
+				WriteChar((byte)0x0E, index_2++);
+				WriteChar((byte)'o', index_2++);
+				WriteChar((byte)0x0E, index_2++);
+				WriteChar((byte)'p', index_2++);
+				WriteChar((byte)0x0E, index_2++);
+				WriteChar((byte)'y', index_2++);
+				WriteChar((byte)0x0E, index_2++);
+				WriteChar((byte)'r', index_2++);
+				WriteChar((byte)0x0E, index_2++);
+				WriteChar((byte)'i', index_2++);
+				WriteChar((byte)0x0E, index_2++);
+				WriteChar((byte)'g', index_2++);
+				WriteChar((byte)0x0E, index_2++);
+				WriteChar((byte)'h', index_2++);
+				WriteChar((byte)0x0E, index_2++);
+				WriteChar((byte)'t', index_2++);
+				WriteChar((byte)0x0E, index_2++);
+				WriteChar((byte)' ', index_2++);
+				WriteChar((byte)0x0E, index_2++);
+				WriteChar((byte)'2', index_2++);
+				WriteChar((byte)0x0A, index_2++);
+				WriteChar((byte)'0', index_2++);
+				WriteChar((byte)0x0A, index_2++);
+				WriteChar((byte)'0', index_2++);
+				WriteChar((byte)0x0A, index_2++);
+				WriteChar((byte)'8', index_2++);
+				WriteChar((byte)0x0A, index_2++);
+				WriteChar((byte)'-', index_2++);
+				WriteChar((byte)0x0A, index_2++);
+				WriteChar((byte)'2', index_2++);
+				WriteChar((byte)0x0A, index_2++);
+				WriteChar((byte)'0', index_2++);
+				WriteChar((byte)0x0A, index_2++);
+				WriteChar((byte)'0', index_2++);
+				WriteChar((byte)0x0A, index_2++);
+				WriteChar((byte)'9', index_2++);
+				WriteChar((byte)0x0A, index_2++);
+				WriteChar((byte)' ', index_2++);
 				while (true) {
-					WriteChar((byte)'-', 0x0A, index2);
-					WriteChar((byte)'\\', 0x0B, index2);
-					WriteChar((byte)'|', 0x0C, index2);
-					WriteChar((byte)'/', 0x0B, index2);
+					WriteChar((byte)0x0B, index++);
+					WriteChar((byte)'-', index--);
+					WriteChar((byte)0x0B, index++);
+					WriteChar((byte)'\\', index--);
+					WriteChar((byte)0x0B, index++);
+					WriteChar((byte)'|', index--);
+					WriteChar((byte)0x0B, index++);
+					WriteChar((byte)'/', index--);
 				}
 			}
 		}
@@ -125,25 +205,30 @@ namespace Mosa.HelloWorld
 		/// Writes the char.
 		/// </summary>
 		/// <param name="c">The c.</param>
-		/// <param name="color">The color.</param>
 		/// <param name="address">The address.</param>
-		public unsafe static void WriteChar(byte c, byte color, byte* address)
+		public unsafe static void WriteChar(byte c, byte* address)
 		{
-			byte* address2 = address + 1;
 			*address = c;
-			*address2 = color;
 		}
 
 		/// <summary>
-		/// Writes the char2.
+		/// Tests this instance.
 		/// </summary>
-		/// <param name="a">A.</param>
-		/// <param name="b">The b.</param>
-		public unsafe static void Test(byte a, byte b)
+		public static void Test(int x, int y)
 		{
-			byte test = (byte)(a + b);
+			int i = (x + y);
+			int z = i + 1;
+			int q = z * 2;
 		}
 
-
+		/// <summary>
+		/// Tests the specified x.
+		/// </summary>
+		/// <param name="x">The x.</param>
+		/// <param name="y">The y.</param>
+		/// <param name="z">The z.</param>
+		public static void Test2(int x, int y, int z)
+		{
+		}
 	}
 }
