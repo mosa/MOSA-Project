@@ -73,8 +73,40 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Antialias.cs" />
+    <Compile Include="Content.cs" />
+    <Compile Include="Context.cs" />
+    <Compile Include="FillRule.cs" />
+    <Compile Include="FontExtents.cs" />
+    <Compile Include="FontFace.cs" />
+    <Compile Include="FontSlant.cs" />
+    <Compile Include="FontType.cs" />
+    <Compile Include="FontOptions.cs" />
+    <Compile Include="FontWeight.cs" />
+    <Compile Include="Format.cs" />
+    <Compile Include="Glyph.cs" />
+    <Compile Include="HintMetrics.cs" />
+    <Compile Include="HintStyle.cs" />
+    <Compile Include="LineCap.cs" />
+    <Compile Include="LineJoin.cs" />
+    <Compile Include="Matrix.cs" />
+    <Compile Include="Operator.cs" />
+    <Compile Include="Path.cs" />
+    <Compile Include="Pattern.cs" />
+    <Compile Include="PatternType.cs" />
+    <Compile Include="Rectangle.cs" />
+    <Compile Include="ScaledFont.cs" />
+    <Compile Include="Status.cs" />
+    <Compile Include="SubpixelOrder.cs" />
+    <Compile Include="Surface.cs" />
+    <Compile Include="SurfaceType.cs" />
+    <Compile Include="TextExtents.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
