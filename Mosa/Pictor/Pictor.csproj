@@ -80,6 +80,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Antialias.cs" />
+    <Compile Include="CairoLib\CairoGState.cs" />
+    <Compile Include="CairoLib\CairoT.cs" />
     <Compile Include="Content.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="FillRule.cs" />

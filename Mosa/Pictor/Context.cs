@@ -361,6 +361,7 @@ namespace Pictor
         public void Save()
         {
             //NativeMethods.cairo_save(state);
+            
         }
 
         /// <summary>
