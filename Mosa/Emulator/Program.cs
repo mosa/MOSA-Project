@@ -15,8 +15,6 @@ using Mosa.FileSystem;
 using Mosa.FileSystem.FAT;
 using Mosa.EmulatedDevices.Synthetic;
 
-using Pictor;
-
 namespace Mosa.Emulator
 {
 	/// <summary>
