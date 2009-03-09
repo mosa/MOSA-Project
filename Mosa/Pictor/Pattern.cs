@@ -28,17 +28,17 @@ namespace Pictor
             if (x != null)
                 return (Pattern)x;
 
-            PatternType pt = PatternType.Linear;// = NativeMethods.cairo_pattern_get_type(pattern);
+            PatternType pt = PatternType.Linear; // = NativeMethods.cairo_pattern_get_type(pattern);
             switch (pt)
             {
-                /*case PatternType.Solid:
+                case PatternType.Solid:
                     return new SolidPattern(pattern);
                 case PatternType.Surface:
                     return new SurfacePattern(pattern);
                 case PatternType.Linear:
                     return new LinearGradient(pattern);
                 case PatternType.Radial:
-                    return new RadialGradient(pattern);*/
+                    return new RadialGradient(pattern);
                 default:
                     return new Pattern(pattern);
             }
@@ -83,7 +83,7 @@ namespace Pictor
         [Obsolete("Use the SurfacePattern constructor")]
         public Pattern(Surface surface)
         {
-            //pattern = NativeMethods.cairo_pattern_create_for_surface(surface.Handle);
+            pattern = IntPtr.Zero; // cairo_pattern_create_for_surface(surface.Handle);
         }
 
         /// <summary>

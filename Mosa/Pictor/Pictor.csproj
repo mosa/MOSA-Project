@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1D756AD8-07A2-44F3-9A69-B6573A339CB4}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -80,11 +80,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Antialias.cs" />
-    <Compile Include="CairoLib\CairoGState.cs" />
-    <Compile Include="CairoLib\CairoT.cs" />
     <Compile Include="Content.cs" />
     <Compile Include="Context.cs" />
+    <Compile Include="Extend.cs" />
     <Compile Include="FillRule.cs" />
+    <Compile Include="Filter.cs" />
     <Compile Include="FontExtents.cs" />
     <Compile Include="FontFace.cs" />
     <Compile Include="FontSlant.cs" />
@@ -93,8 +93,10 @@
     <Compile Include="FontWeight.cs" />
     <Compile Include="Format.cs" />
     <Compile Include="Glyph.cs" />
+    <Compile Include="Gradient.cs" />
     <Compile Include="HintMetrics.cs" />
     <Compile Include="HintStyle.cs" />
+    <Compile Include="LinearGradient.cs" />
     <Compile Include="LineCap.cs" />
     <Compile Include="LineJoin.cs" />
     <Compile Include="Matrix.cs" />
@@ -102,11 +104,14 @@
     <Compile Include="Path.cs" />
     <Compile Include="Pattern.cs" />
     <Compile Include="PatternType.cs" />
+    <Compile Include="RadialGradient.cs" />
     <Compile Include="Rectangle.cs" />
     <Compile Include="ScaledFont.cs" />
+    <Compile Include="SolidPattern.cs" />
     <Compile Include="Status.cs" />
     <Compile Include="SubpixelOrder.cs" />
     <Compile Include="Surface.cs" />
+    <Compile Include="SurfacePattern.cs" />
     <Compile Include="SurfaceType.cs" />
     <Compile Include="TextExtents.cs" />
   </ItemGroup>
