@@ -17,32 +17,17 @@ namespace Pictor
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="pattern"></param>
-        /// <returns></returns>
-        internal static Pattern Lookup(IntPtr pattern)
-        {
-            if (pattern == IntPtr.Zero)
-                return null;
+        protected Status status = Status.NullPointer;
 
-            object x = patterns[pattern];
-            if (x != null)
-                return (Pattern)x;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected Matrix matrix = new Matrix();
 
-            PatternType pt = PatternType.Linear; // = NativeMethods.cairo_pattern_get_type(pattern);
-            switch (pt)
-            {
-                case PatternType.Solid:
-                    return new SolidPattern(pattern);
-                case PatternType.Surface:
-                    return new SurfacePattern(pattern);
-                case PatternType.Linear:
-                    return new LinearGradient(pattern);
-                case PatternType.Radial:
-                    return new RadialGradient(pattern);
-                default:
-                    return new Pattern(pattern);
-            }
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        protected PatternType type = PatternType.Linear;
 
         /// <summary>
         /// 
@@ -134,7 +119,11 @@ namespace Pictor
         /// </summary>
         public Status Status
         {
-            get { return Status.ClipNotRepresentable; }
+            get 
+            {
+                return status;
+                //return Status.ClipNotRepresentable; 
+            }
             //get { return NativeMethods.cairo_pattern_status(pattern); }
         }
 
@@ -145,14 +134,15 @@ namespace Pictor
         {
             set
             {
+                matrix = value;
                 //NativeMethods.cairo_pattern_set_matrix(pattern, value);
             }
 
             get
             {
-                Matrix m = new Matrix();
+                return matrix;
                 //NativeMethods.cairo_pattern_get_matrix(pattern, m);
-                return m;
+                //return m;
             }
         }
 
@@ -169,7 +159,10 @@ namespace Pictor
         /// </summary>
         public PatternType PatternType
         {
-            get { return PatternType.Linear; }
+            get 
+            { 
+                return type; 
+            }
             //get { return NativeMethods.cairo_pattern_get_type(pattern); }
         }
     }

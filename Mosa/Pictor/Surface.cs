@@ -21,6 +21,16 @@ namespace Pictor
         /// <summary>
         /// 
         /// </summary>
+        protected SurfaceType type = SurfaceType.DirectFB;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected Content content = Content.Color;
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected Surface()
         {
         }
@@ -66,32 +76,7 @@ namespace Pictor
         /// <returns></returns>
         static internal Surface LookupSurface(IntPtr surface)
         {
-            SurfaceType st = SurfaceType.BeOS;// = NativeMethods.cairo_surface_get_type(surface);
-            switch (st)
-            {
-                /*case SurfaceType.Image:
-                    return new ImageSurface(surface, true);
-                case SurfaceType.Xlib:
-                    return new XlibSurface(surface, true);
-                case SurfaceType.Xcb:
-                    return new XcbSurface(surface, true);
-                case SurfaceType.Glitz:
-                    return new GlitzSurface(surface, true);
-                case SurfaceType.Win32:
-                    return new Win32Surface(surface, true);
-
-                case SurfaceType.Pdf:
-                    return new PdfSurface(surface, true);
-                case SurfaceType.PS:
-                    return new PSSurface(surface, true);
-                case SurfaceType.DirectFB:
-                    return new DirectFBSurface(surface, true);
-                case SurfaceType.Svg:
-                    return new SvgSurface(surface, true);
-                */
-                default:
-                    return Surface.LookupExternalSurface(surface);
-            }
+            return Surface.LookupExternalSurface(surface);
         }
 
         /// <summary>
@@ -309,7 +294,10 @@ namespace Pictor
         /// </summary>
         public Content Content
         {
-            get { return Content.Color; }
+            get 
+            { 
+                return content; 
+            }
             //get { return NativeMethods.cairo_surface_get_content(surface); }
         }
 
@@ -318,7 +306,10 @@ namespace Pictor
         /// </summary>
         public SurfaceType SurfaceType
         {
-            get { return SurfaceType.BeOS; }
+            get
+            {
+                return type;
+            }
             //get { return NativeMethods.cairo_surface_get_type(surface); }
         }
 
@@ -327,7 +318,10 @@ namespace Pictor
         /// </summary>
         public uint ReferenceCount
         {
-            get { return 0; }
+            get 
+            { 
+                return 0; 
+            }
             //get { return NativeMethods.cairo_surface_get_reference_count(surface); }
         }
     }

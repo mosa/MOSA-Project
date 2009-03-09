@@ -3,7 +3,10 @@
 namespace Pictor
 {
     /// <summary>
-    /// 
+    /// An enumeration of various target platforms.
+    /// This is obsolete and not used internally, as
+    /// MOSA doesn't support Win32 or BeOS targets for
+    /// example, as we provide our own Server target.
     /// </summary>
     [Serializable]
     public enum SurfaceType

@@ -10,11 +10,12 @@ namespace Pictor
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="handle"></param>
-        internal SurfacePattern(IntPtr handle)
-            : base(handle)
-        {
-        }
+        protected Filter filter = Filter.Good;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected Extend extend = Extend.None;
 
         /// <summary>
         /// 
@@ -31,12 +32,13 @@ namespace Pictor
         public Extend Extend
         {
             set 
-            { 
+            {
+                extend = value;
                 //NativeMethods.cairo_pattern_set_extend(pattern, value); 
             }
             get 
             {
-                return Extend.None;
+                return extend;
                 //return NativeMethods.cairo_pattern_get_extend(pattern); 
             }
         }
@@ -47,12 +49,13 @@ namespace Pictor
         public Filter Filter
         {
             set 
-            { 
+            {
+                filter = value;
                 //NativeMethods.cairo_pattern_set_filter(pattern, value); 
             }
             get
             {
-                return Filter.Good;
+                return filter;
                 //return NativeMethods.cairo_pattern_get_filter(pattern); }
             }
         }

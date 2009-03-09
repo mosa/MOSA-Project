@@ -96,6 +96,7 @@
     <Compile Include="Gradient.cs" />
     <Compile Include="HintMetrics.cs" />
     <Compile Include="HintStyle.cs" />
+    <Compile Include="ImageSurface.cs" />
     <Compile Include="LinearGradient.cs" />
     <Compile Include="LineCap.cs" />
     <Compile Include="LineJoin.cs" />
