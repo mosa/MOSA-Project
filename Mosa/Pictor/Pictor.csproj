@@ -30,7 +30,7 @@
     <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
@@ -43,7 +43,7 @@
     <OutputPath>..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <NoStdLib>False</NoStdLib>
     <NoWarn>
@@ -79,42 +79,80 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Antialias.cs" />
-    <Compile Include="Content.cs" />
-    <Compile Include="Context.cs" />
-    <Compile Include="Extend.cs" />
-    <Compile Include="FillRule.cs" />
-    <Compile Include="Filter.cs" />
-    <Compile Include="FontExtents.cs" />
-    <Compile Include="FontFace.cs" />
-    <Compile Include="FontSlant.cs" />
-    <Compile Include="FontType.cs" />
-    <Compile Include="FontOptions.cs" />
-    <Compile Include="FontWeight.cs" />
-    <Compile Include="Format.cs" />
-    <Compile Include="Glyph.cs" />
-    <Compile Include="Gradient.cs" />
-    <Compile Include="HintMetrics.cs" />
-    <Compile Include="HintStyle.cs" />
-    <Compile Include="ImageSurface.cs" />
-    <Compile Include="LinearGradient.cs" />
-    <Compile Include="LineCap.cs" />
-    <Compile Include="LineJoin.cs" />
-    <Compile Include="Matrix.cs" />
-    <Compile Include="Operator.cs" />
-    <Compile Include="Path.cs" />
-    <Compile Include="Pattern.cs" />
-    <Compile Include="PatternType.cs" />
-    <Compile Include="RadialGradient.cs" />
-    <Compile Include="Rectangle.cs" />
-    <Compile Include="ScaledFont.cs" />
-    <Compile Include="SolidPattern.cs" />
-    <Compile Include="Status.cs" />
-    <Compile Include="SubpixelOrder.cs" />
-    <Compile Include="Surface.cs" />
-    <Compile Include="SurfacePattern.cs" />
-    <Compile Include="SurfaceType.cs" />
-    <Compile Include="TextExtents.cs" />
+    <Compile Include="AntiAliasedCompundRasterizer.cs" />
+    <Compile Include="AntiAliasedLineBasics.cs" />
+    <Compile Include="AntiAliasedOutlineRasterizer.cs" />
+    <Compile Include="AntiAliasedOutlineRenderer.cs" />
+    <Compile Include="AntialiasedRasterizerCells.cs" />
+    <Compile Include="AntiAliasedScanlineRasterizer.cs" />
+    <Compile Include="Array.cs" />
+    <Compile Include="Basics.cs" />
+    <Compile Include="Blur.cs" />
+    <Compile Include="BoundingRect.cs" />
+    <Compile Include="BSpline.cs" />
+    <Compile Include="ClipLiangBarsky.cs" />
+    <Compile Include="ColorGray.cs" />
+    <Compile Include="ColorRGBA.cs" />
+    <Compile Include="DdaLine.cs" />
+    <Compile Include="EquationSimulator.cs" />
+    <Compile Include="Execution Timer.cs" />
+    <Compile Include="GammaFunctions.cs" />
+    <Compile Include="GammaLookupTable.cs" />
+    <Compile Include="IColorType.cs" />
+    <Compile Include="IGenerator.cs" />
+    <Compile Include="ImageFilters.cs" />
+    <Compile Include="IMarkers.cs" />
+    <Compile Include="IScanline.cs" />
+    <Compile Include="IVertexDest.cs" />
+    <Compile Include="LinearSpanInterpolator.cs" />
+    <Compile Include="Math.cs" />
+    <Compile Include="MathStroke.cs" />
+    <Compile Include="OutlineImageRenderer.cs" />
+    <Compile Include="PatternFiltersRGBA.cs" />
+    <Compile Include="PerspectiveSpanInterpolator.cs" />
+    <Compile Include="PixelFormat\AlphaMaskAdaptor.cs" />
+    <Compile Include="PixelFormat\AlphaMaskU8.cs" />
+    <Compile Include="PixelFormat\ClippingProxy.cs" />
+    <Compile Include="PixelFormat\Gray.cs" />
+    <Compile Include="PixelFormat\IPixelFormat.cs" />
+    <Compile Include="PixelFormat\RGB.cs" />
+    <Compile Include="PixelFormat\RgbA.cs" />
+    <Compile Include="PixelFormat\Transposer.cs" />
+    <Compile Include="Quicksort.cs" />
+    <Compile Include="RasterBuffer.cs" />
+    <Compile Include="RasterBufferAccessors.cs" />
+    <Compile Include="RasterizerClip.cs" />
+    <Compile Include="Scanline.cs" />
+    <Compile Include="ScanlineBin.cs" />
+    <Compile Include="ScanlineRenderer.cs" />
+    <Compile Include="SpanAllocator.cs" />
+    <Compile Include="SpanGradient.cs" />
+    <Compile Include="SpanImageFilter.cs" />
+    <None Include="SpanImageFilterGray.cs" />
+    <Compile Include="SpanImageFilterRGB.cs" />
+    <Compile Include="SpanImageFilterRGBA.cs" />
+    <Compile Include="SpanSubdivisionAdaptor.cs" />
+    <Compile Include="Transform\Affine.cs" />
+    <Compile Include="Transform\Bilinear.cs" />
+    <Compile Include="Transform\ITransform.cs" />
+    <Compile Include="Transform\Perspective.cs" />
+    <Compile Include="Transform\Viewport.cs" />
+    <Compile Include="UnpackedScanline.cs" />
+    <Compile Include="VcGenStroke.cs" />
+    <Compile Include="VertexSequence.cs" />
+    <Compile Include="VertexSource\Arc.cs" />
+    <Compile Include="VertexSource\CurveConverter.cs" />
+    <Compile Include="VertexSource\Curves.cs" />
+    <Compile Include="VertexSource\Ellipse.cs" />
+    <Compile Include="VertexSource\GouraudSpan.cs" />
+    <Compile Include="VertexSource\GouraudSpanRGBA.cs" />
+    <Compile Include="VertexSource\GsvText.cs" />
+    <Compile Include="VertexSource\IVertexSource.cs" />
+    <Compile Include="VertexSource\PathStorage.cs" />
+    <Compile Include="VertexSource\RoundedRect.cs" />
+    <Compile Include="VertexSource\StrokeConverter.cs" />
+    <Compile Include="VertexSource\TransformConverter.cs" />
+    <Compile Include="VertexSource\VcGenConverterAdaptor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
