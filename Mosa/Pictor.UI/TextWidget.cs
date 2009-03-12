@@ -89,7 +89,7 @@ namespace Pictor.UI
         }
 
         // If the Text is "TEXT" and the position is less than half the distance to the center
-        // of "T" the return value will be 0 if it is between the center of 'T' and the center of 'E'
+        // of "T" the return Value will be 0 if it is between the center of 'T' and the center of 'E'
         // it will be 1 and so on.
         public int GetCharacterIndex(double xOffset)
         {

@@ -31,8 +31,9 @@ namespace Mosa.Emulator
         Pictor.UI.ButtonWidget blue;
         Pictor.UI.ButtonWidget reset;
         Pictor.RGBA_Bytes background;
-        Pictor.UI.TextWidget text;
         Pictor.UI.CheckBoxWidget border;
+        Pictor.UI.SliderWidget alpha;
+        Pictor.UI.SliderWidget radius;
 
         public EmulatorDemo(PixelFormats format, Pictor.UI.PlatformSupportAbstract.ERenderOrigin RenderOrigin)
             : base(format, RenderOrigin)
@@ -41,15 +42,25 @@ namespace Mosa.Emulator
             background = new Pictor.RGBA_Bytes(127, 127, 127);
             m_x[0] = 100; m_y[0] = 100;
             m_x[1] = 500; m_y[1] = 350;
-            button = Pictor.UI.UIManager.CreateButton(8.0, 105.0, "Quit", 8, 1, 1, 3);
+            button = Pictor.UI.UIManager.CreateButton(8.0, 130.0, "Quit", 8, 1, 1, 3);
             button.ButtonClick += Quit;
             AddChild(button);
 
-            white = Pictor.UI.UIManager.CreateButton(8.0, 85.0, "Gray", 8, 1, 1, 3);
-            blue = Pictor.UI.UIManager.CreateButton(8.0, 65.0, "Blue", 8, 1, 1, 3);
-            reset = Pictor.UI.UIManager.CreateButton(8.0, 45.0, "Reset", 8, 1, 1, 3);
-            border = new Pictor.UI.CheckBoxWidget(8.0, 25.0, "Draw as outline");
-            border.Status(true);
+            white = Pictor.UI.UIManager.CreateButton(8.0, 110.0, "Gray", 8, 1, 1, 3);
+            blue = Pictor.UI.UIManager.CreateButton(8.0, 90.0, "Blue", 8, 1, 1, 3);
+            reset = Pictor.UI.UIManager.CreateButton(8.0, 70.0, "Reset", 8, 1, 1, 3);
+            border = new Pictor.UI.CheckBoxWidget(8.0, 50.0, "Draw as outline");
+            alpha = new Pictor.UI.SliderWidget(10, 10, 590, 19);
+            radius = new Pictor.UI.SliderWidget(10, 30, 590, 39);
+            alpha.Range(0, 255);
+            alpha.Value(255);
+            //alpha.BackgroundColor(new Pictor.RGBA_Doubles(255, 255, 255));
+
+            radius.Label("Radius = {0:F3}");
+            radius.Range(0.0, 50.0);
+            radius.Value(25.0);
+
+            border.Status(false);
             white.ButtonClick += White;
             blue.ButtonClick += Blue;
             reset.ButtonClick += Reset;
@@ -57,9 +68,8 @@ namespace Mosa.Emulator
             AddChild(blue);
             AddChild(reset);
             AddChild(border);
-
-            text = new Pictor.UI.TextWidget("MOSA :: Pictor.UI :: Demo", 8.0, 5.0, 8);
-            AddChild(text);
+            AddChild(alpha);
+            AddChild(radius);
         }
 
         public void Quit(Pictor.UI.ButtonWidget button)
@@ -86,6 +96,8 @@ namespace Mosa.Emulator
 
         public override void OnDraw()
         {
+            background.A_Byte = (uint)alpha.Value();
+            alpha.Label("Opacity: " + ((uint)((alpha.Value() / 255.0) * 100)).ToString() + "%");
             Pictor.GammaLookupTable gamma = new Pictor.GammaLookupTable(1.8);
             Pictor.PixelFormat.IBlender NormalBlender = new Pictor.PixelFormat.BlenderBGRA();
             Pictor.PixelFormat.IBlender GammaBlender = new Pictor.PixelFormat.BlenderGammaBGRA(gamma);
@@ -114,10 +126,10 @@ namespace Mosa.Emulator
             double d = 0.0;
 
             // Creating a rounded rectangle
-            Pictor.VertexSource.RoundedRect r = new Pictor.VertexSource.RoundedRect(m_x[0] + d, m_y[0] + d, m_x[1] + d, m_y[1] + d, 25.0);
+            Pictor.VertexSource.RoundedRect r = new Pictor.VertexSource.RoundedRect(m_x[0] + d, m_y[0] + d, m_x[1] + d, m_y[1] + d, radius.Value());
             r.NormalizeRadius();
 
-            if (!border.Status())
+            if (border.Status())
             {
                 Pictor.VertexSource.StrokeConverter p = new Pictor.VertexSource.StrokeConverter(r);
                 p.Width(1.0);
