@@ -28,10 +28,10 @@ namespace Pictor.UI
     {
         private bool m_Visible = true;
         protected RectD m_Bounds = new RectD();
-        protected UIWidget m_Parrent = null;
+        protected UIWidget parent = null;
 
         protected Transform.Affine m_Transform = Affine.NewIdentity();
-        public List<UIWidget> m_Children = new List<UIWidget>();
+        public List<UIWidget> children = new List<UIWidget>();
 
         private bool m_ContainsFocus = false;
 
@@ -66,11 +66,11 @@ namespace Pictor.UI
             }
         }
 
-        public UIWidget Parrent
+        public UIWidget Parent
         {
             get
             {
-                return m_Parrent;
+                return parent;
             }
         }
 
@@ -92,9 +92,9 @@ namespace Pictor.UI
 
         public virtual Renderer GetRenderer()
         {
-            if (m_Parrent != null)
+            if (parent != null)
             {
-                return m_Parrent.GetRenderer();
+                return parent.GetRenderer();
             }
 
             return null;
@@ -102,14 +102,14 @@ namespace Pictor.UI
 
         public void AddChild(UIWidget child)
         {
-            child.m_Parrent = this;
-            m_Children.Add(child);
+            child.parent = this;
+            children.Add(child);
         }
 
         public void RemoveChild(UIWidget child)
         {
-            child.m_Parrent = null;
-            m_Children.Remove(child);
+            child.parent = null;
+            children.Remove(child);
         }
 
         public virtual bool InRect(double x, double y)
@@ -124,18 +124,18 @@ namespace Pictor.UI
 
         public virtual void Invalidate()
         {
-            Parrent.Invalidate(Bounds);
+            Parent.Invalidate(Bounds);
         }
 
         public virtual void Invalidate(RectD rectToInvalidate)
         {
-            Parrent.Invalidate(rectToInvalidate);
+            Parent.Invalidate(rectToInvalidate);
         }
 
         protected void Unfocus()
         {
             m_ContainsFocus = false;
-            foreach (UIWidget child in m_Children)
+            foreach (UIWidget child in children)
             {
                 child.Unfocus();
             }
@@ -143,9 +143,9 @@ namespace Pictor.UI
 
         public void Focus()
         {
-            if (m_Parrent != null)
+            if (parent != null)
             {
-                m_Parrent.Focus();
+                parent.Focus();
             }
 
             // make sure none of the children have focus.
@@ -169,7 +169,7 @@ namespace Pictor.UI
             {
                 if (ContainsFocus)
                 {
-                    foreach (UIWidget child in m_Children)
+                    foreach (UIWidget child in children)
                     {
                         if (child.ContainsFocus)
                         {
@@ -195,7 +195,7 @@ namespace Pictor.UI
 
         protected UIWidget GetChildContainingFocus()
         {
-            foreach (UIWidget child in m_Children)
+            foreach (UIWidget child in children)
             {
                 if (child.ContainsFocus)
                 {
@@ -208,9 +208,8 @@ namespace Pictor.UI
 
         public virtual void OnDraw()
         {
-            for (int i = 0; i < m_Children.Count; i++)
+            foreach (UIWidget child in children)
             {
-                UIWidget child = m_Children[i];
                 if (child.Visible)
                 {
                     GetRenderer().PushTransform();
@@ -218,13 +217,6 @@ namespace Pictor.UI
                     transform *= GetTransform();
                     GetRenderer().Transform = transform;
                     child.OnDraw();
-#if false
-                    if (Focused)
-                    {
-                        RoundedRect rect = new RoundedRect(-5, -5, 5, 5, 0);
-                        GetRenderer().Render(rect, new RGBA_Bytes(1.0, 0, 0, .5));
-                    }
-#endif
 
                     GetRenderer().PopTransform();
                 }
@@ -238,11 +230,11 @@ namespace Pictor.UI
 
         public void PointToClient(ref double screenPointX, ref double screenPointY)
         {
-            UIWidget prevGUIWidget = Parrent;
+            UIWidget prevGUIWidget = Parent;
             while (prevGUIWidget != null)
             {
                 prevGUIWidget.GetTransform().InverseTransform(ref screenPointX, ref screenPointY);
-                prevGUIWidget = prevGUIWidget.Parrent;
+                prevGUIWidget = prevGUIWidget.Parent;
             }
         }
 
@@ -252,14 +244,14 @@ namespace Pictor.UI
             while (prevGUIWidget != null)
             {
                 prevGUIWidget.GetTransform().Transform(ref clientPoint);
-                prevGUIWidget = prevGUIWidget.Parrent;
+                prevGUIWidget = prevGUIWidget.Parent;
             }
         }
 
         public virtual void OnMouseDown(MouseEventArgs mouseEvent)
         {
             int i = 0;
-            foreach (UIWidget child in m_Children)
+            foreach (UIWidget child in children)
             {
                 if (child.Visible)
                 {
@@ -279,7 +271,7 @@ namespace Pictor.UI
 
         public virtual void OnMouseMove(MouseEventArgs mouseEvent)
         {
-            foreach (UIWidget child in m_Children)
+            foreach (UIWidget child in children)
             {
                 if (child.Visible)
                 {
@@ -290,7 +282,7 @@ namespace Pictor.UI
 
         public virtual void OnMouseUp(MouseEventArgs mouseEvent)
         {
-            foreach (UIWidget child in m_Children)
+            foreach (UIWidget child in children)
             {
                 if (child.Visible)
                 {
@@ -311,9 +303,9 @@ namespace Pictor.UI
         protected void FocusNext()
         {
             UIWidget childWithFocus = GetChildContainingFocus();
-            for (int i = 0; i < m_Children.Count; i++)
+            for (int i = 0; i < children.Count; i++)
             {
-                UIWidget child = m_Children[i];
+                UIWidget child = children[i];
                 if (child.Visible)
                 {
                 }
@@ -357,9 +349,9 @@ namespace Pictor.UI
 
         public bool SetChildCurrent(double x, double y)
         {
-            for (int i = 0; i < m_Children.Count; i++)
+            for (int i = 0; i < children.Count; i++)
             {
-                UIWidget child = m_Children[i];
+                UIWidget child = children[i];
                 if (child.Visible)
                 {
                     if (child.InRect(x, y))
@@ -388,7 +380,7 @@ namespace Pictor.UI
             m_Transform = value;
         }
 
-        public double scale() { return GetTransform().GetScale(); }
+        public double Scale() { return GetTransform().GetScale(); }
     };
 
     abstract public class SimpleVertexSourceWidget : UIWidget, IVertexSource
@@ -409,7 +401,7 @@ namespace Pictor.UI
 
         public override void OnDraw()
         {
-            Renderer rendererForSurfaceThisIsOn = Parrent.GetRenderer();
+            Renderer rendererForSurfaceThisIsOn = Parent.GetRenderer();
 
             for (uint i = 0; i < NumberOfPaths; i++)
             {
@@ -417,26 +409,5 @@ namespace Pictor.UI
             }
             base.OnDraw();
         }
-
-#if false
-        public override void Render(Renderer renderer)
-        {
-            for (uint i = 0; i < num_paths(); i++)
-            {
-                renderer.Render(this, i, color(i).Get_rgba8());
-            }
-        }
-
-        public void Render(IRasterizer rasterizer, IScanline scanline, IPixelFormat rendererBase)
-        {
-            uint i;
-            for(i = 0; i < num_paths(); i++)
-            {
-                rasterizer.reset();
-                rasterizer.add_path(this, i);
-                Renderer.RenderSolid(rendererBase, rasterizer, scanline, color(i).Get_rgba8());
-            }
-        }
-#endif
     }
 }

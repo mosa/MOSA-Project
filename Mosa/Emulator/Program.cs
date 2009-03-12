@@ -27,17 +27,60 @@ namespace Mosa.Emulator
         double m_dy;
         int m_idx;
         Pictor.UI.ButtonWidget button;
-
+        Pictor.UI.ButtonWidget white;
+        Pictor.UI.ButtonWidget blue;
+        Pictor.UI.ButtonWidget reset;
+        Pictor.RGBA_Bytes background;
+        Pictor.UI.TextWidget text;
+        Pictor.UI.CheckBoxWidget border;
 
         public EmulatorDemo(PixelFormats format, Pictor.UI.PlatformSupportAbstract.ERenderOrigin RenderOrigin)
             : base(format, RenderOrigin)
         {
             m_idx = (-1);
-
+            background = new Pictor.RGBA_Bytes(127, 127, 127);
             m_x[0] = 100; m_y[0] = 100;
             m_x[1] = 500; m_y[1] = 350;
-            //button = new Pictor.UI.ButtonWidget(200, 600, "Quit Emulator");
-            //AddChild(button);
+            button = Pictor.UI.UIManager.CreateButton(8.0, 105.0, "Quit", 8, 1, 1, 3);
+            button.ButtonClick += Quit;
+            AddChild(button);
+
+            white = Pictor.UI.UIManager.CreateButton(8.0, 85.0, "Gray", 8, 1, 1, 3);
+            blue = Pictor.UI.UIManager.CreateButton(8.0, 65.0, "Blue", 8, 1, 1, 3);
+            reset = Pictor.UI.UIManager.CreateButton(8.0, 45.0, "Reset", 8, 1, 1, 3);
+            border = new Pictor.UI.CheckBoxWidget(8.0, 25.0, "Draw as outline");
+            border.Status(true);
+            white.ButtonClick += White;
+            blue.ButtonClick += Blue;
+            reset.ButtonClick += Reset;
+            AddChild(white);
+            AddChild(blue);
+            AddChild(reset);
+            AddChild(border);
+
+            text = new Pictor.UI.TextWidget("MOSA :: Pictor.UI :: Demo", 8.0, 5.0, 8);
+            AddChild(text);
+        }
+
+        public void Quit(Pictor.UI.ButtonWidget button)
+        {
+            System.Windows.Forms.Application.Exit();
+        }
+
+        public void White(Pictor.UI.ButtonWidget button)
+        {
+            background = new Pictor.RGBA_Bytes(127, 127, 127);
+        }
+
+        public void Blue(Pictor.UI.ButtonWidget button)
+        {
+            background = new Pictor.RGBA_Bytes(117, 115, 217);
+        }
+
+        public void Reset(Pictor.UI.ButtonWidget button)
+        {
+            m_x[0] = 100; m_y[0] = 100;
+            m_x[1] = 500; m_y[1] = 350;
         }
 
 
@@ -58,7 +101,7 @@ namespace Mosa.Emulator
 
             // TODO: If you drag the control circles below the bottom of the window we get an exception.  This does not happen in Pictor.
             // It needs to be debugged.  Turning on clipping fixes it.  But standard Pictor works without clipping.  Could be a bigger problem than this.
-            //ras.clip_box(0, 0, width(), height());
+            //ras.clip_box(0, 0, Width(), Height());
 
             // Render two "control" circles
             e.Init(m_x[0], m_y[0], 3, 3, 16);
@@ -74,10 +117,19 @@ namespace Mosa.Emulator
             Pictor.VertexSource.RoundedRect r = new Pictor.VertexSource.RoundedRect(m_x[0] + d, m_y[0] + d, m_x[1] + d, m_y[1] + d, 25.0);
             r.NormalizeRadius();
 
-            ras.AddPath(r);
+            if (!border.Status())
+            {
+                Pictor.VertexSource.StrokeConverter p = new Pictor.VertexSource.StrokeConverter(r);
+                p.Width(1.0);
+                ras.AddPath(p);
+            }
+            else
+            {
+                ras.AddPath(r);
+            }
 
             pixf.Blender = GammaBlender;
-            Pictor.Renderer.RenderSolid(clippingProxy, ras, sl, new Pictor.RGBA_Bytes(117, 115, 217));
+            Pictor.Renderer.RenderSolid(clippingProxy, ras, sl, background);
 
             // this was in the original demo, but it does nothing because we changed the blender not the gamma function.
             //ras.gamma(new gamma_none());

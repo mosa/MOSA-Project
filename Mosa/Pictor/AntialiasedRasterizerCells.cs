@@ -370,6 +370,8 @@ namespace Pictor
 
         public uint ScanlineNumCells(uint y)
         {
+            if (y - m_min_y > m_sorted_y.Data().Length)
+                return 0;
             return (uint)m_sorted_y.Data()[(int)y - m_min_y].num;
         }
 

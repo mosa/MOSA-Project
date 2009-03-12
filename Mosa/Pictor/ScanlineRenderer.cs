@@ -189,7 +189,7 @@ namespace Pictor
             Affine transform = Transform;
             if (!transform.IsIdentity())
             {
-                vertexSource = new conv_transform(vertexSource, transform);
+                vertexSource = new TransformationConverter(vertexSource, transform);
             }
             m_Rasterizer.AddPath(vertexSource, idx);
             Renderer.RenderSolid(m_PixelFormat, m_Rasterizer, m_Scanline, color);

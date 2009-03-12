@@ -32,7 +32,7 @@ using Pictor.PixelFormat;
 
 namespace Pictor.UI.EmulatorPlatform
 {
-    public class pixel_map //: IRenderingBuffer
+    public class PixelMap //: IRenderingBuffer
     {
         Bitmap m_bmp;
         BitmapData m_bmd;
@@ -40,12 +40,12 @@ namespace Pictor.UI.EmulatorPlatform
         unsafe byte* m_buf;
         uint m_BitsPerPixel;
 
-        ~pixel_map()
+        ~PixelMap()
         {
             destroy();
         }
 
-        public pixel_map()
+        public PixelMap()
         {
         }
 
@@ -55,12 +55,12 @@ namespace Pictor.UI.EmulatorPlatform
             m_buf = null;
         }
 
-        public void create(uint width, uint height, uint BytesPerPixel)
+        public void Create(uint width, uint height, uint BytesPerPixel)
         {
-            create(width, height, BytesPerPixel, 255);
+            Create(width, height, BytesPerPixel, 255);
         }
 
-        unsafe public void create(uint width, uint height, uint BitsPerPixel, uint clear_val)
+        unsafe public void Create(uint width, uint height, uint BitsPerPixel, uint clear_val)
         {
             destroy();
             if (width == 0) width = 1;
@@ -84,7 +84,7 @@ namespace Pictor.UI.EmulatorPlatform
             m_buf = (byte*)m_bmd.Scan0;
             if (clear_val <= 255)
             {
-                clear(clear_val);
+                Clear(clear_val);
             }
         }
 
@@ -99,7 +99,7 @@ namespace Pictor.UI.EmulatorPlatform
             m_buf = null;
         }
 
-        unsafe void clear(uint clear_val)
+        unsafe void Clear(uint clear_val)
         {
             if (m_buf != null)
             {
@@ -115,14 +115,14 @@ namespace Pictor.UI.EmulatorPlatform
         }
 
         //------------------------------------------------------------------------
-        public void draw(Graphics displayGraphics)
+        public void Draw(Graphics displayGraphics)
         {
             m_bmp.UnlockBits(m_bmd);
             displayGraphics.DrawImage(m_bmp, 0, 0);
             m_bmd = m_bmp.LockBits(new Rectangle(0, 0, m_bmp.Width, m_bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, m_bmp.PixelFormat);
         }
 
-        public void draw(Graphics displayGraphics, Rectangle device_rect, Rectangle bmp_rect)
+        public void Draw(Graphics displayGraphics, Rectangle device_rect, Rectangle bmp_rect)
         {
             displayGraphics.DrawImage(m_bmp, 0, 0);
         }
@@ -164,13 +164,13 @@ namespace Pictor.UI.EmulatorPlatform
         }
 
         //------------------------------------------------------------------------
-        public uint width()
+        public uint Width()
         {
             return (uint)m_bmp.Width;
         }
 
         //------------------------------------------------------------------------
-        public uint height()
+        public uint Height()
         {
             return (uint)m_bmp.Height;
         }
@@ -191,8 +191,8 @@ namespace Pictor.UI.EmulatorPlatform
         public PlatformSupportAbstract.PixelFormats m_sys_format;
         private PlatformSupportAbstract.ERenderOrigin m_RenderOrigin;
         //private HWND          m_hwnd;
-        internal pixel_map m_pmap_window;
-        internal pixel_map[] m_pmap_img = new pixel_map[(int)PlatformSupportAbstract.max_images_e.max_images];
+        internal PixelMap m_pmap_window;
+        internal PixelMap[] m_pmap_img = new PixelMap[(int)PlatformSupportAbstract.max_images_e.max_images];
         private uint[] m_keymap = new uint[256];
         private uint m_last_translated_key;
         //private int           m_cur_x;
@@ -407,11 +407,11 @@ namespace Pictor.UI.EmulatorPlatform
 
         public unsafe void create_pmap(uint width, uint height, RasterBuffer wnd)
         {
-            m_pmap_window = new pixel_map();
-            m_pmap_window.create(width, height, PlatformSupportAbstract.GetBitDepthForPixelFormat(m_format));
+            m_pmap_window = new PixelMap();
+            m_pmap_window.Create(width, height, PlatformSupportAbstract.GetBitDepthForPixelFormat(m_format));
             wnd.Attach(m_pmap_window.buf(),
-                m_pmap_window.width(),
-                m_pmap_window.height(),
+                m_pmap_window.Width(),
+                m_pmap_window.Height(),
                 m_RenderOrigin == PlatformSupportAbstract.ERenderOrigin.OriginBottomLeft ? -m_pmap_window.stride() : m_pmap_window.stride(),
                 m_pmap_window.bpp());
         }
@@ -427,27 +427,27 @@ namespace Pictor.UI.EmulatorPlatform
         {
             if (m_sys_format == m_format)
             {
-                m_pmap_window.draw(displayGraphics);
+                m_pmap_window.Draw(displayGraphics);
             }
             else
             {
-                pixel_map pmap_tmp = new pixel_map();
-                pmap_tmp.create(m_pmap_window.width(),
-                    m_pmap_window.height(), PlatformSupportAbstract.GetBitDepthForPixelFormat(m_sys_format));
+                PixelMap pmap_tmp = new PixelMap();
+                pmap_tmp.Create(m_pmap_window.Width(),
+                    m_pmap_window.Height(), PlatformSupportAbstract.GetBitDepthForPixelFormat(m_sys_format));
 
                 RasterBuffer rbuf_tmp = new RasterBuffer();
                 unsafe
                 {
                     rbuf_tmp.Attach(pmap_tmp.buf(),
-                        pmap_tmp.width(),
-                        pmap_tmp.height(),
+                        pmap_tmp.Width(),
+                        pmap_tmp.Height(),
                         m_app.FlipY() ?
                         pmap_tmp.stride() :
                         -pmap_tmp.stride(), pmap_tmp.bpp());
                 }
 
                 convert_pmap(rbuf_tmp, src, m_format);
-                pmap_tmp.draw(displayGraphics);
+                pmap_tmp.Draw(displayGraphics);
 
                 throw new System.NotImplementedException();
             }
@@ -455,28 +455,28 @@ namespace Pictor.UI.EmulatorPlatform
 
         public bool load_pmap(string fn, uint idx, RasterBuffer dst)
         {
-            pixel_map pmap_tmp = new pixel_map();
+            PixelMap pmap_tmp = new PixelMap();
             if (!pmap_tmp.load_from_bmp(fn)) return false;
 
             RasterBuffer rbuf_tmp = new RasterBuffer();
             unsafe
             {
                 rbuf_tmp.Attach(pmap_tmp.buf(),
-                                pmap_tmp.width(),
-                                pmap_tmp.height(),
+                                pmap_tmp.Width(),
+                                pmap_tmp.Height(),
                                 m_app.FlipY() ?
                                   pmap_tmp.stride() :
                                  -pmap_tmp.stride(),
                                  pmap_tmp.bpp());
 
-                m_pmap_img[idx] = new pixel_map();
-                m_pmap_img[idx].create(pmap_tmp.width(), pmap_tmp.height(),
+                m_pmap_img[idx] = new PixelMap();
+                m_pmap_img[idx].Create(pmap_tmp.Width(), pmap_tmp.Height(),
                     PlatformSupportAbstract.GetBitDepthForPixelFormat(m_format),
                     0);
 
                 dst.Attach(m_pmap_img[idx].buf(),
-                    m_pmap_img[idx].width(),
-                    m_pmap_img[idx].height(),
+                    m_pmap_img[idx].Width(),
+                    m_pmap_img[idx].Height(),
                     m_app.FlipY() ?
                     m_pmap_img[idx].stride() :
                     -m_pmap_img[idx].stride(), m_pmap_img[idx].bpp());
@@ -867,19 +867,19 @@ namespace Pictor.UI.EmulatorPlatform
         {
             if (idx < (uint)max_images_e.max_images)
             {
-                if (width == 0) width = m_specific.m_pmap_window.width();
-                if (height == 0) height = m_specific.m_pmap_window.height();
+                if (width == 0) width = m_specific.m_pmap_window.Width();
+                if (height == 0) height = m_specific.m_pmap_window.Height();
                 if (m_specific.m_pmap_img[idx] == null)
                 {
-                    m_specific.m_pmap_img[idx] = new pixel_map();
+                    m_specific.m_pmap_img[idx] = new PixelMap();
                     m_rbuf_img.Add(new RasterBuffer());
                 }
-                m_specific.m_pmap_img[idx].create(width, height, BitsPerPixel);
+                m_specific.m_pmap_img[idx].Create(width, height, BitsPerPixel);
                 unsafe
                 {
                     m_rbuf_img[(int)idx].Attach(m_specific.m_pmap_img[idx].buf(),
-                                           m_specific.m_pmap_img[idx].width(),
-                                           m_specific.m_pmap_img[idx].height(),
+                                           m_specific.m_pmap_img[idx].Width(),
+                                           m_specific.m_pmap_img[idx].Height(),
                                             m_specific.m_pmap_img[idx].stride(),
                                             m_specific.m_pmap_img[idx].bpp());
                 }

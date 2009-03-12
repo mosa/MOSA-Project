@@ -193,7 +193,7 @@ namespace Pictor.UI
                     return m_text_color;
 
                 default:
-                    throw new System.IndexOutOfRangeException("There is not a color for this index");
+                    throw new System.IndexOutOfRangeException("There is not a Color for this index");
             }
         }
     };

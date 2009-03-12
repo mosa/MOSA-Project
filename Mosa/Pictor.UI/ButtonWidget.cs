@@ -103,19 +103,6 @@ namespace Pictor.UI
 
             GetRenderer().Render(rectInside, insideColor);
 
-#if false
-            double x1, y1, x2, y2;
-            m_ButtonText.GetTextBounds(out x1, out y1, out x2, out y2);
-            RoundedRect rectText = new RoundedRect(x1, y1, x2, y2, 0);
-            conv_stroke rectOutline = new conv_stroke(rectText);
-            GetRenderer().Render(rectOutline, new RGBA_Bytes(1.0, 0, 0));
-#endif
-#if false
-            RoundedRect rectText2 = new RoundedRect(m_ButtonText.Bounds, 0);
-            conv_stroke rectOutline2 = new conv_stroke(rectText2);
-            GetRenderer().Render(rectOutline, new RGBA_Bytes(0, 0, 1.0));
-#endif
-
             base.OnDraw();
         }
 

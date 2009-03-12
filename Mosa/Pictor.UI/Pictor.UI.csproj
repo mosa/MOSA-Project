@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Pictor.UI</RootNamespace>
     <AssemblyName>Pictor.UI</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -37,9 +37,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -52,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ButtonWidget.cs" />
+    <Compile Include="CheckBoxWidget.cs" />
     <Compile Include="KeyEventArgs.cs" />
     <Compile Include="KeyPressEventArgs.cs" />
     <Compile Include="Keys.cs" />

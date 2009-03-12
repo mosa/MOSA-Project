@@ -23,6 +23,7 @@ namespace Pictor.VertexSource
 
         new public void RemoveAll()
         {
+            base.RemoveAll();
         }
     };
     //============================================================VcGenStroke

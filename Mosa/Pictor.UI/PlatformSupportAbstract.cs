@@ -98,7 +98,7 @@ namespace Pictor.UI
         public enum PixelFormats
         {
             Undefined = 0,  // By default. No conversions are applied 
-            BlackWhite,             // 1 bit per color B/W
+            BlackWhite,             // 1 bit per Color B/W
             Gray8,          // Simple 256 level grayscale
             Gray16,         // Simple 65535 level grayscale
             Rgb555,         // 15 bit rgb. Depends on the byte ordering!
@@ -107,17 +107,17 @@ namespace Pictor.UI
             RgbBBA,         // 32 bit rgb. Depends on the byte ordering!
             BgrAAA,         // 30 bit bgr. Depends on the byte ordering!
             BgrABB,         // 32 bit bgr. Depends on the byte ordering!
-            Rgb24,          // R-G-B, one byte per color component
+            Rgb24,          // R-G-B, one byte per Color component
             Bgr24,          // B-G-R, native win32 BMP Format.
-            Rgba32,         // R-G-B-A, one byte per color component
+            Rgba32,         // R-G-B-A, one byte per Color component
             Argb32,         // A-R-G-B, native MAC Format
-            Abgr32,         // A-B-G-R, one byte per color component
+            Abgr32,         // A-B-G-R, one byte per Color component
             Bgra32,         // B-G-R-A, native win32 BMP Format
-            Rgb48,          // R-G-B, 16 bits per color component
+            Rgb48,          // R-G-B, 16 bits per Color component
             Bgr48,          // B-G-R, native win32 BMP Format.
-            Rgba64,         // R-G-B-A, 16 bits byte per color component
+            Rgba64,         // R-G-B-A, 16 bits byte per Color component
             Argb64,         // A-R-G-B, native MAC Format
-            Abgr64,         // A-B-G-R, one byte per color component
+            Abgr64,         // A-B-G-R, one byte per Color component
             Bgra64,         // B-G-R-A, native win32 BMP Format
 
             EndOfPixelFormats

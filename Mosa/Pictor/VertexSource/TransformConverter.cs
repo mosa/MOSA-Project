@@ -9,19 +9,19 @@
 
 namespace Pictor.VertexSource
 {
-    //----------------------------------------------------------conv_transform
-    public class conv_transform : IVertexSource
+    //----------------------------------------------------------TransformationConverter
+    public class TransformationConverter : IVertexSource
     {
         private IVertexSource m_VertexSource;
         private Transform.ITransform m_Transform;
 
-        public conv_transform(IVertexSource VertexSource, Transform.ITransform InTransform)
+        public TransformationConverter(IVertexSource VertexSource, Transform.ITransform InTransform)
         {
             m_VertexSource = VertexSource;
             m_Transform = InTransform;
         }
 
-        public void attach(IVertexSource VertexSource) { m_VertexSource = VertexSource; }
+        public void Attach(IVertexSource VertexSource) { m_VertexSource = VertexSource; }
 
         public void Rewind(uint path_id) 
         { 
@@ -38,7 +38,7 @@ namespace Pictor.VertexSource
             return cmd;
         }
 
-        public void transformer(Transform.ITransform InTransform)
+        public void Transformer(Transform.ITransform InTransform)
         {
             m_Transform = InTransform;
         }

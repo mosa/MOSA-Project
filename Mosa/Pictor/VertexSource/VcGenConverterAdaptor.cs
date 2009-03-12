@@ -15,8 +15,8 @@ namespace Pictor.VertexSource
         public void AddVertex(double x, double y, uint unknown) { }
         public void prepare_src() { }
 
-        public void rewind(uint unknown) { }
-        public uint vertex(ref double x, ref double y) { return (uint)Path.EPathCommands.Stop; }
+        public void Rewind(uint unknown) { }
+        public uint Vertex(ref double x, ref double y) { return (uint)Path.EPathCommands.Stop; }
     };
 
 
