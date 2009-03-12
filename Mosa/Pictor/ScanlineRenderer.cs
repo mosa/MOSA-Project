@@ -211,11 +211,11 @@ namespace Pictor
         /// <param name="color"></param>
         public void Clear(IColorType color)
         {
-        	FormatClippingProxy clipper = (FormatClippingProxy)m_PixelFormat;
+        	/*FormatClippingProxy clipper = (FormatClippingProxy)m_PixelFormat;
         	if(clipper != null)
         	{
         		clipper.Clear(color);
-        	}
+        	}*/
         }
 
         #region RenderSolid

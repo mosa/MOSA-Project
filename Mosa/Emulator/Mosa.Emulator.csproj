@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{65D89ED3-D999-4E8F-BB82-F470F7EC06E4}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -29,7 +29,7 @@
     <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
@@ -42,7 +42,7 @@
     <OutputPath>..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <NoStdLib>False</NoStdLib>
     <NoWarn>
@@ -72,6 +72,10 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EmulatedDevices\Mosa.EmulatedDevices.csproj">
@@ -103,8 +107,19 @@
       <Project>{D89972FD-A930-4D0C-B393-1895E78FAFAB}</Project>
       <Name>Mosa.FileSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Pictor.UI\Pictor.UI.csproj">
+      <Project>{79BA50A4-B1A8-45E0-B6C2-65FDC165C147}</Project>
+      <Name>Pictor.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pictor\Pictor.csproj">
+      <Project>{1D756AD8-07A2-44F3-9A69-B6573A339CB4}</Project>
+      <Name>Pictor %28Pictor\Pictor%29</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmulatorPlatformSupport.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>

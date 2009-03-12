@@ -49,7 +49,7 @@ namespace Pictor
         //--------------------------------------------------------------------
         public unsafe RasterBuffer(byte* buf, uint width, uint height, int stride, uint BytesPerPixel)
         {
-            attach(buf, width, height, stride, BytesPerPixel);
+            Attach(buf, width, height, stride, BytesPerPixel);
         }
 
         public uint BitsPerPixel
@@ -61,7 +61,7 @@ namespace Pictor
         }
 
         //--------------------------------------------------------------------
-        public unsafe void attach(byte* buf, uint width, uint height, int stride, uint BitsPerPixel)
+        public unsafe void Attach(byte* buf, uint width, uint height, int stride, uint BitsPerPixel)
         {
 			m_BufferPointer = m_FirstPixelPointer = buf;
 			m_Width = width;

@@ -1868,7 +1868,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
                 int stride = pixf.Stride;
                 unsafe
                 {
-                    m_rbuf.attach(pixf.PixelPointer(r.x1, stride < 0 ? r.y2 : r.y1),
+                    m_rbuf.Attach(pixf.PixelPointer(r.x1, stride < 0 ? r.y2 : r.y1),
                         (uint)(r.x2 - r.x1) + 1,
                         (uint)(r.y2 - r.y1) + 1,
                         stride, 3);

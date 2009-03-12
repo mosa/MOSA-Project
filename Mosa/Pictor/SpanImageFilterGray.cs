@@ -10,7 +10,7 @@
 
 namespace Pictor
 {
-
+    /*
     //==============================================span_image_filter_gray_nn
     //template<class Source, class Interpolator> 
     public class span_image_filter_gray_nn : span_image_filter // <Source, Interpolator>
@@ -702,5 +702,5 @@ namespace Pictor
                 ++base_type::interpolator();
             } while(--len);
         }
-    };
+    };*/
 }

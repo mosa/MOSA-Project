@@ -14,9 +14,142 @@ using Mosa.DeviceSystem.PCI;
 using Mosa.FileSystem;
 using Mosa.FileSystem.FAT;
 using Mosa.EmulatedDevices.Synthetic;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Mosa.Emulator
 {
+    public class EmulatorDemo : Pictor.UI.EmulatorPlatform.PlatformSupport
+    {
+        double[] m_x = new double[2];
+        double[] m_y = new double[2];
+        double m_dx;
+        double m_dy;
+        int m_idx;
+        Pictor.UI.ButtonWidget button;
+
+
+        public EmulatorDemo(PixelFormats format, Pictor.UI.PlatformSupportAbstract.ERenderOrigin RenderOrigin)
+            : base(format, RenderOrigin)
+        {
+            m_idx = (-1);
+
+            m_x[0] = 100; m_y[0] = 100;
+            m_x[1] = 500; m_y[1] = 350;
+            //button = new Pictor.UI.ButtonWidget(200, 600, "Quit Emulator");
+            //AddChild(button);
+        }
+
+
+        public override void OnDraw()
+        {
+            Pictor.GammaLookupTable gamma = new Pictor.GammaLookupTable(1.8);
+            Pictor.PixelFormat.IBlender NormalBlender = new Pictor.PixelFormat.BlenderBGRA();
+            Pictor.PixelFormat.IBlender GammaBlender = new Pictor.PixelFormat.BlenderGammaBGRA(gamma);
+            Pictor.PixelFormat.FormatRGBA pixf = new Pictor.PixelFormat.FormatRGBA(RenderBufferWindow, NormalBlender);
+            Pictor.PixelFormat.FormatClippingProxy clippingProxy = new Pictor.PixelFormat.FormatClippingProxy(pixf);
+
+            clippingProxy.Clear(new Pictor.RGBA_Doubles(1, 1, 1));
+
+            Pictor.AntiAliasedScanlineRasterizer ras = new Pictor.AntiAliasedScanlineRasterizer();
+            Pictor.Scanline sl = new Pictor.Scanline();
+
+            Pictor.VertexSource.Ellipse e = new Pictor.VertexSource.Ellipse();
+
+            // TODO: If you drag the control circles below the bottom of the window we get an exception.  This does not happen in Pictor.
+            // It needs to be debugged.  Turning on clipping fixes it.  But standard Pictor works without clipping.  Could be a bigger problem than this.
+            //ras.clip_box(0, 0, width(), height());
+
+            // Render two "control" circles
+            e.Init(m_x[0], m_y[0], 3, 3, 16);
+            ras.AddPath(e);
+            Pictor.Renderer.RenderSolid(clippingProxy, ras, sl, new Pictor.RGBA_Bytes(127, 127, 127));
+            e.Init(m_x[1], m_y[1], 3, 3, 16);
+            ras.AddPath(e);
+            Pictor.Renderer.RenderSolid(clippingProxy, ras, sl, new Pictor.RGBA_Bytes(127, 127, 127));
+
+            double d = 0.0;
+
+            // Creating a rounded rectangle
+            Pictor.VertexSource.RoundedRect r = new Pictor.VertexSource.RoundedRect(m_x[0] + d, m_y[0] + d, m_x[1] + d, m_y[1] + d, 25.0);
+            r.NormalizeRadius();
+
+            ras.AddPath(r);
+
+            pixf.Blender = GammaBlender;
+            Pictor.Renderer.RenderSolid(clippingProxy, ras, sl, new Pictor.RGBA_Bytes(117, 115, 217));
+
+            // this was in the original demo, but it does nothing because we changed the blender not the gamma function.
+            //ras.gamma(new gamma_none());
+            // so let's change the blender instead
+            pixf.Blender = NormalBlender;
+
+            // Render the controls
+            //m_radius.Render(ras, sl, clippingProxy);
+            //m_gamma.Render(ras, sl, clippingProxy);
+            //m_offset.Render(ras, sl, clippingProxy);
+            //m_white_on_black.Render(ras, sl, clippingProxy);
+            //m_DrawAsOutlineCheckBox.Render(ras, sl, clippingProxy);
+            base.OnDraw();
+        }
+
+
+        public override void OnMouseDown(Pictor.UI.MouseEventArgs mouseEvent)
+        {
+            if (mouseEvent.Button == Pictor.UI.MouseButtons.Left)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    double x = mouseEvent.X;
+                    double y = mouseEvent.Y;
+                    if (System.Math.Sqrt((x - m_x[i]) * (x - m_x[i]) + (y - m_y[i]) * (y - m_y[i])) < 5.0)
+                    {
+                        m_dx = x - m_x[i];
+                        m_dy = y - m_y[i];
+                        m_idx = i;
+                        break;
+                    }
+                }
+            }
+
+            base.OnMouseDown(mouseEvent);
+        }
+
+
+        public override void OnMouseMove(Pictor.UI.MouseEventArgs mouseEvent)
+        {
+            if (mouseEvent.Button == Pictor.UI.MouseButtons.Left)
+            {
+                if (m_idx >= 0)
+                {
+                    m_x[m_idx] = mouseEvent.X - m_dx;
+                    m_y[m_idx] = mouseEvent.Y - m_dy;
+                    ForceRedraw();
+                }
+            }
+
+            base.OnMouseMove(mouseEvent);
+        }
+
+        override public void OnMouseUp(Pictor.UI.MouseEventArgs mouseEvent)
+        {
+            m_idx = -1;
+            base.OnMouseUp(mouseEvent);
+        }
+
+        public static void StartDemo()
+        {
+            EmulatorDemo app = new EmulatorDemo(Pictor.UI.PlatformSupportAbstract.PixelFormats.Rgba32, Pictor.UI.PlatformSupportAbstract.ERenderOrigin.OriginBottomLeft);
+            app.Caption = "MOSA :: Emulator :: Pictor Demonstration";
+
+            if (app.Init(600, 400, (uint)Pictor.UI.PlatformSupportAbstract.EWindowFlags.Risizeable))
+            {
+                app.Run();
+            }
+        }
+
+    };
+
 	/// <summary>
 	/// Program with CLR emulated devices
 	/// </summary>
@@ -64,10 +197,10 @@ namespace Mosa.Emulator
 			Mosa.DeviceSystem.Setup.DeviceManager.Add(keyboard);
 
 			// Create synthetic graphic pixel device
-			Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice pixelGraphicDevice = new Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice(500, 500);
+			//Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice pixelGraphicDevice = new Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice(500, 500);
 
 			// Added the synthetic graphic device to the device drivers
-			Mosa.DeviceSystem.Setup.DeviceManager.Add(pixelGraphicDevice);
+			//Mosa.DeviceSystem.Setup.DeviceManager.Add(pixelGraphicDevice);
 
 			// Create synthetic ram disk device
 			Mosa.EmulatedDevices.Synthetic.RamDiskDevice ramDiskDevice = new Mosa.EmulatedDevices.Synthetic.RamDiskDevice(1024 * 1024 * 10 / 512);
@@ -236,6 +369,8 @@ namespace Mosa.Emulator
 					}
 				}
 			}
+
+            EmulatorDemo.StartDemo();
 
 
 			//Key key = keyboard.GetKeyPressed();
