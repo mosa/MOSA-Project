@@ -11,7 +11,7 @@ using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 
-namespace Mosa.DeviceDrivers.PCI.VideoCard
+namespace Mosa.DeviceDrivers.PCI.NetworkCard
 {
 	/// <summary>
 	/// RTL8139 Network Chip

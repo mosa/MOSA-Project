@@ -141,6 +141,7 @@ namespace Mosa.Emulator
             }
 
             pixf.Blender = GammaBlender;
+
             Pictor.Renderer.RenderSolid(clippingProxy, ras, sl, background);
 
             // this was in the original demo, but it does nothing because we changed the blender not the gamma function.
