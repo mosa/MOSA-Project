@@ -35,6 +35,8 @@ namespace Mosa.Emulator
         Pictor.UI.SliderWidget alpha;
         Pictor.UI.SliderWidget radius;
 
+        Pictor.UI.Dialogs.YesNoDialog dialog;
+
         public EmulatorDemo(PixelFormats format, Pictor.UI.PlatformSupportAbstract.ERenderOrigin RenderOrigin)
             : base(format, RenderOrigin)
         {
@@ -64,6 +66,7 @@ namespace Mosa.Emulator
             white.ButtonClick += White;
             blue.ButtonClick += Blue;
             reset.ButtonClick += Reset;
+
             AddChild(white);
             AddChild(blue);
             AddChild(reset);
@@ -74,7 +77,8 @@ namespace Mosa.Emulator
 
         public void Quit(Pictor.UI.ButtonWidget button)
         {
-            System.Windows.Forms.Application.Exit();
+            dialog = new Pictor.UI.Dialogs.YesNoDialog(150, 200, "Close Application?");
+            dialog.Show(this);
         }
 
         public void White(Pictor.UI.ButtonWidget button)
@@ -148,6 +152,9 @@ namespace Mosa.Emulator
             //ras.gamma(new gamma_none());
             // so let's change the blender instead
             pixf.Blender = NormalBlender;
+
+            if (null != dialog && !dialog.Running && dialog.Result)
+                System.Windows.Forms.Application.Exit();
 
             // Render the controls
             //m_radius.Render(ras, sl, clippingProxy);

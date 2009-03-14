@@ -282,11 +282,11 @@ namespace Pictor.UI
 
         public virtual void OnMouseUp(MouseEventArgs mouseEvent)
         {
-            foreach (UIWidget child in children)
+            for (int i = 0; i < children.Count; i++)
             {
-                if (child.Visible)
+                if (children[i].Visible)
                 {
-                    child.OnMouseUp(mouseEvent);
+                    children[i].OnMouseUp(mouseEvent);
                 }
             }
         }
