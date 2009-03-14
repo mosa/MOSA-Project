@@ -61,10 +61,9 @@ namespace Mosa.Tools.MakeBootImage
 			try {
 
 				StreamReader reader = File.OpenText(args[0]);
-				string line = reader.ReadLine();
 
 				while (true) {
-					line = reader.ReadLine();
+					string line = reader.ReadLine();
 					if (line == null) break;
 
 					if (string.IsNullOrEmpty(line))
