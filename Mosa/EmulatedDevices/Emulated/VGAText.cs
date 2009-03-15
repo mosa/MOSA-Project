@@ -124,7 +124,7 @@ namespace Mosa.EmulatedDevices.Emulated
 			Console.SetWindowPosition(0, 0);
 			Console.SetCursorPosition(0, 0);
 			Console.SetWindowSize(width, height + 1);
-			Console.SetBufferSize(width, height + 1);
+			//Console.SetBufferSize(width, height + 1);
 			Console.CursorSize = 1;
 
 			Initialize();
