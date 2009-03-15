@@ -265,7 +265,7 @@ namespace Mosa.Tools.MakeBootImage
 							FatFileStream file = new FatFileStream(fat, location);
 
 							uint csum = 0x3EB202FE;
-							for (uint i = 0; i < (file.Length >> 2); i++) {
+							for (uint index = 0; index < (file.Length >> 2); index++) {
 								uint value = (uint)file.ReadByte() | ((uint)file.ReadByte() << 8) | ((uint)file.ReadByte() << 16) | ((uint)file.ReadByte() << 24);
 								csum -= value;
 							}
