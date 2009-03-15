@@ -75,7 +75,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EmulatedDevices\Mosa.EmulatedDevices.csproj">
@@ -117,6 +116,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PixcelMap.cs">
+    </Compile>
     <Compile Include="EmulatorDemo.cs" />
     <Compile Include="EmulatorPlatformSupport.cs">
       <SubType>Form</SubType>

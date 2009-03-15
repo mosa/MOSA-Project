@@ -17,6 +17,9 @@ using Mosa.EmulatedDevices.Synthetic;
 
 namespace Mosa.Emulator
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class EmulatorDemo : Pictor.UI.EmulatorPlatform.PlatformSupport
 	{
 		double[] m_x = new double[2];
