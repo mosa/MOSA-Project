@@ -7,14 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using Mosa.ClassLib;
-using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.PCI;
-using Mosa.FileSystem;
-using Mosa.FileSystem.FAT;
-using Mosa.EmulatedDevices.Synthetic;
-
 namespace Mosa.Emulator
 {
 	/// <summary>

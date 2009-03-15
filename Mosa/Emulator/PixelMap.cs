@@ -23,9 +23,7 @@
 //#define USE_OPENGL
 
 using System;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Pictor.PixelFormat;

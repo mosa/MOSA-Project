@@ -116,12 +116,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PixcelMap.cs">
-    </Compile>
-    <Compile Include="EmulatorDemo.cs" />
-    <Compile Include="EmulatorPlatformSupport.cs">
+    <Compile Include="PlatformSpecificWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="PixelMap.cs">
+    </Compile>
+    <Compile Include="EmulatorDemo.cs" />
+    <Compile Include="PlatformSupport.cs" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
