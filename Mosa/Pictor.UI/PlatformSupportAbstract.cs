@@ -336,11 +336,11 @@ namespace Pictor.UI
 
         public Transform.Affine TransAffineResizing() { return m_resize_mtx; }
 
-        public double Width
+        new public double Width
         {
             get { return m_rbuf_window.Width(); }
         }
-        public double Height
+        new public double Height
         {
             get { return m_rbuf_window.Height(); }
         }
