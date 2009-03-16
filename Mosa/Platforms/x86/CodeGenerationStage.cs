@@ -186,7 +186,7 @@ namespace Mosa.Platforms.x86
         {
             Operand op0 = instruction.Operand0;
 
-            if (instruction.Operand0 is MemoryOperand && instruction.Operand1 is MemoryOperand)
+            if (instruction.Operand0 is LocalVariableOperand && instruction.Operand1 is LocalVariableOperand)
             {
                 op0 = new RegisterOperand(op0.Type, GeneralPurposeRegister.EDX);
                 _emitter.Mov(op0, instruction.Operand0);
