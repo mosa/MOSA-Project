@@ -419,13 +419,20 @@ namespace Mosa.Platforms.x86
 		/// <param name="op2"></param>
 		void ICodeEmitter.Cmp(Operand op1, Operand op2)
 		{
+            Operand op0 = op1;
+
+            if (op1 is LocalVariableOperand && op2 is LocalVariableOperand)
+            {
+                op0 = new RegisterOperand(op0.Type, GeneralPurposeRegister.EDX);
+                Emit(op0, op1, X86.Move(op0, op1));
+            }
 			// Swap if needed
-			if (op1 is ConstantOperand && !(op2 is ConstantOperand)) {
-				Operand tmp = op1;
-				op1 = op2;
+			if (op0 is ConstantOperand && !(op2 is ConstantOperand)) {
+				Operand tmp = op0;
+				op0 = op2;
 				op2 = tmp;
 			}
-			Emit(op1, op2, X86.Cmp(op1, op2));
+			Emit(op0, op2, X86.Cmp(op0, op2));
 		}
 
 		/// <summary>
