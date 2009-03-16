@@ -184,7 +184,7 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.Cmp(CmpInstruction instruction, int arg)
         {
-            _emitter.Cmp(op0, instruction.Operand1);
+            _emitter.Cmp(instruction.Operand0, instruction.Operand1);
         }
 
         void IX86InstructionVisitor<int>.Setcc(SetccInstruction instruction, int arg)
