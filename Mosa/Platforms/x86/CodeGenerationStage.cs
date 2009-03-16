@@ -184,7 +184,14 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.Cmp(CmpInstruction instruction, int arg)
         {
-            _emitter.Cmp(instruction.Operand0, instruction.Operand1);
+            Operand op0 = instruction.Operand0;
+
+            if (instruction.Operand0 is MemoryOperand && instruction.Operand1 is MemoryOperand)
+            {
+                op0 = new RegisterOperand(op0.Type, GeneralPurposeRegister.EDX);
+                _emitter.Mov(op0, instruction.Operand0);
+            }
+            _emitter.Cmp(op0, instruction.Operand1);
         }
 
         void IX86InstructionVisitor<int>.Setcc(SetccInstruction instruction, int arg)
