@@ -14,14 +14,8 @@ namespace Pictor
     public interface IRasterBufferAccessor
     {
         unsafe byte* Span(int x, int y, uint len);
-        unsafe byte* NextX
-        {
-            get;
-        }
-        unsafe byte* NextY
-        {
-            get;
-        }
+        unsafe byte* NextX();
+        unsafe byte* NextY();
 
         IPixelFormat PixelFormat
         {
@@ -107,10 +101,8 @@ namespace Pictor
             return Pixel;
         }
 
-        unsafe public byte* NextX
+        unsafe public byte* NextX()
         {
-            get
-            {
                 if (m_pix_ptr != null)
                 {
                     return m_pix_ptr += (int)m_PixelWidthInBytes;
@@ -118,13 +110,10 @@ namespace Pictor
 
                 ++m_x;
                 return Pixel;
-            }
         }
 
-        unsafe public byte* NextY
+        unsafe public byte* NextY()
         {
-            get
-            {
                 ++m_y;
                 m_x = m_x0;
                 if (m_pix_ptr != null
@@ -135,7 +124,6 @@ namespace Pictor
                 }
                 m_pix_ptr = null;
                 return Pixel;
-            }
         }
     };
 
@@ -246,23 +234,18 @@ namespace Pictor
                 return Pixel;
             }
 
-            public unsafe byte* NextX
+            public unsafe byte* NextX()
             {
-                get
-                {
                     if (m_pix_ptr != null)
                     {
                         return m_pix_ptr += m_PixelWidthInBytes;
                     }
                     ++m_x;
                     return Pixel;
-                }
             }
 
-            public unsafe byte* NextY
+            public unsafe byte* NextY()
             {
-                get
-                {
                     ++m_y;
                     m_x = m_x0;
                     if (m_pix_ptr != null
@@ -273,7 +256,6 @@ namespace Pictor
                     }
                     m_pix_ptr = null;
                     return Pixel;
-                }
             }
         };
     /*

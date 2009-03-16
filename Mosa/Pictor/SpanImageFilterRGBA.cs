@@ -896,7 +896,7 @@ namespace Pictor
                             total_weight += weight;
                             x_hr  += rx_inv;
                             if(x_hr >= filter_scale) break;
-                            fg_ptr = base.source().NextX;
+                            fg_ptr = base.source().NextX();
                         }
                         y_hr += ry_inv;
                         if (y_hr >= filter_scale)
@@ -904,7 +904,7 @@ namespace Pictor
                             break;
                         }
 
-                        fg_ptr = base.source().NextY;
+                        fg_ptr = base.source().NextY();
                     }
 
                     fg[0] /= total_weight;
