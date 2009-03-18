@@ -211,24 +211,5 @@ namespace Mosa.HelloWorld
 			*address = c;
 		}
 
-		/// <summary>
-		/// Tests this instance.
-		/// </summary>
-		public static void Test(int x, int y)
-		{
-			int i = (x + y);
-			int z = i + 1;
-			int q = z * 2;
-		}
-
-		/// <summary>
-		/// Tests the specified x.
-		/// </summary>
-		/// <param name="x">The x.</param>
-		/// <param name="y">The y.</param>
-		/// <param name="z">The z.</param>
-		public static void Test2(int x, int y, int z)
-		{
-		}
 	}
 }

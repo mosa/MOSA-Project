@@ -16,9 +16,15 @@ namespace Mosa.Tools.CreatePCIList
 	{
 		static int Main(string[] args)
 		{
+			Console.WriteLine("CreatePCIList v0.1 [www.mosa-project.org]");
+			Console.WriteLine("Copyright 2009. New BSD License.");
+			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
+			Console.WriteLine();
+			Console.WriteLine("Usage: CreatePCIList <pci list file> <destination>");
+			Console.WriteLine();
+
 			if (args.Length < 2) {
 				Console.WriteLine("ERROR: Missing arguments");
-				Console.WriteLine("CreatePCIList <source> <destination>");
 				return -1;
 			}
 
@@ -26,7 +32,7 @@ namespace Mosa.Tools.CreatePCIList
 				using (TextWriter textWriter = new StreamWriter(args[1], false)) {
 
 					textWriter.WriteLine("/*");
-					textWriter.WriteLine("* (c) 2008 MOSA - The Managed Operating System Alliance");
+					textWriter.WriteLine("* (c) 2009 MOSA - The Managed Operating System Alliance");
 					textWriter.WriteLine("*");
 					textWriter.WriteLine("* Licensed under the terms of the New BSD License.");
 					textWriter.WriteLine("*");

@@ -31,10 +31,12 @@ namespace Mosa.Tools.MakeBootImage
 		static int Main(string[] args)
 		{
 			Console.WriteLine("MakeImageBoot v0.1 [www.mosa-project.org]");
-			Console.WriteLine("Copyright 2008. New BSD License.");
+			Console.WriteLine("Copyright 2009. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
-
+			Console.WriteLine("Usage: MakeImageBoot <boot.config file> <image name>");
+			Console.WriteLine();
+			
 			string mbrFilename = string.Empty;
 			string fatcodeFilename = string.Empty;
 			string volumeLabel = string.Empty;
@@ -51,7 +53,6 @@ namespace Mosa.Tools.MakeBootImage
 				valid = System.IO.File.Exists(args[0]);
 
 			if (valid) {
-				Console.WriteLine("MakeBoot <boot.config> <image name>");
 				Console.WriteLine("ERROR: Missing arguments");
 				return -1;
 			}
