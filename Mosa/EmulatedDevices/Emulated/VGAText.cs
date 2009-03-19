@@ -297,6 +297,10 @@ namespace Mosa.EmulatedDevices.Emulated
 			int y = (int)(cursorPosition / width);
 			int x = (int)(cursorPosition - (y * width));
 
+			if (x >= Console.BufferWidth)
+				x = Console.BufferWidth - 1;
+			if (y >= Console.BufferHeight)
+				y = Console.BufferHeight - 1;
 			Console.SetCursorPosition(x, y);
 		}
 
