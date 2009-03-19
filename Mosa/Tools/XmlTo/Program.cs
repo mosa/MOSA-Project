@@ -24,25 +24,11 @@ namespace Mosa.Tools.XmlTo
 			}
 
 			try {
-				string xmlFile = args[0];
-				string xslFile = args[1];
-				string output = args[2];
-
-				// Load the XML
-				XPathDocument xml = new XPathDocument(xmlFile);
-
-				XslTransform xsl = new XslTransform();
-
-				// Load the XSL 
-				xsl.Load(xslFile);
-
-				// Create the output stream
-				XmlTextWriter outFile = new XmlTextWriter(output, null);
-
-				// Transform of XML
-				xsl.Transform(xml, null, outFile);
-
-				outFile.Close();
+				XPathDocument myXPathDoc = new XPathDocument(args[0]); 
+				XslCompiledTransform myXslTrans = new XslCompiledTransform();
+				myXslTrans.Load(args[1]);
+				XmlTextWriter myWriter = new XmlTextWriter(args[2], null); 
+				myXslTrans.Transform(myXPathDoc, null, myWriter);
 
 				return 0;
 			}
