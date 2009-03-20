@@ -23,14 +23,14 @@ namespace Mosa.MakeIsoImage
 
             // TODO FIXME - support remappings something like -map boot/boot.bin=c:/muos/build/debug/bin/iso9660_boot.bin
 #if false
-            var test = new Mosa.ClassLib.Iso9660Generator(false);
+            var test = new Mosa.MakeIsoImage.Iso9660Generator(false);
             test.AddFile("Long File Name.txt",new System.IO.FileInfo("C:\\cvs\\mosa\\Mosa\\Tools\\MakeIsoImage\\bin\\Debug\\Long File Name.txt"));
             test.Generate("Iso9660Generator.iso");
             return;
 #endif
 
             int i;
-            var iso = new Mosa.ClassLib.Iso9660Generator(false);
+            var iso = new Mosa.MakeIsoImage.Iso9660Generator(false);
             for (i = 0; i < args.Length; i++)
             {
                 if ( args[i].Trim()[0] != '-' )
@@ -77,7 +77,7 @@ namespace Mosa.MakeIsoImage
             }
             iso.Generate(iso_file_name);
         }
-        static private void AddDirectoryTree ( Mosa.ClassLib.Iso9660Generator iso, string root, string virtual_prepend )
+        static private void AddDirectoryTree(Mosa.MakeIsoImage.Iso9660Generator iso, string root, string virtual_prepend)
         {
             int i;
             var dirinfo = new System.IO.DirectoryInfo(root.Replace('/','\\'));

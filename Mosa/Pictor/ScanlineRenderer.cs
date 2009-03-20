@@ -24,25 +24,25 @@ namespace Pictor
         /// <summary>
         /// Determines whether the given stylee is solid or not
         /// </summary>
-        /// <param name="Style"></param>
+        /// <param name="style"></param>
         /// <returns>True if it is solid</returns>
         bool IsSolid(uint style);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="Style"></param>
+        /// <param name="style"></param>
         /// <returns></returns>
         RGBA_Bytes Color(uint style);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="Span"></param>
+        /// <param name="span"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="len"></param>
-        /// <param name="Style"></param>
+        /// <param name="style"></param>
         unsafe void GenerateSpan(RGBA_Bytes* span, int x, int y, uint len, uint style);
     };
 
