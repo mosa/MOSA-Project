@@ -36,6 +36,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.MakeBootImage", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.MakeIsoImage", "Tools\MakeIsoImage\Mosa.Tools.MakeIsoImage.csproj", "{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pictor", "Pictor\Pictor.csproj", "{1D756AD8-07A2-44F3-9A69-B6573A339CB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pictor.UI", "Pictor.UI\Pictor.UI.csproj", "{79BA50A4-B1A8-45E0-B6C2-65FDC165C147}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 17
@@ -204,6 +208,14 @@ Global
 		{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D756AD8-07A2-44F3-9A69-B6573A339CB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D756AD8-07A2-44F3-9A69-B6573A339CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D756AD8-07A2-44F3-9A69-B6573A339CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D756AD8-07A2-44F3-9A69-B6573A339CB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79BA50A4-B1A8-45E0-B6C2-65FDC165C147}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79BA50A4-B1A8-45E0-B6C2-65FDC165C147}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79BA50A4-B1A8-45E0-B6C2-65FDC165C147}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79BA50A4-B1A8-45E0-B6C2-65FDC165C147}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
