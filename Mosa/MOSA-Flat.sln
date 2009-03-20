@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+# Visual C# Express 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.System", "System\Mosa.System.csproj", "{631BC4F3-E2D8-4319-814C-13904CAA17CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Mosa.Runtime.CompilerFramework", "..\Test\Mosa\Runtime\CompilerFramework\Test.Mosa.Runtime.CompilerFramework.csproj", "{AD653B6B-EBB7-4E69-93F7-FADA40462648}"
@@ -33,6 +33,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.EmulatedKernel", "EmulatedKernel\Mosa.EmulatedKernel.csproj", "{A6C1F330-B858-44DE-89E6-C89D2B80DA62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.MakeBootImage", "Tools\MakeBootImage\Mosa.Tools.MakeBootImage.csproj", "{BE9A5A27-22C4-4664-A8BD-388B30B5972C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.MakeIsoImage", "Tools\MakeIsoImage\Mosa.Tools.MakeIsoImage.csproj", "{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -198,6 +200,10 @@ Global
 		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
