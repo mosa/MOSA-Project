@@ -20,7 +20,7 @@
     <xsl:call-template name="format-statistics">
       <xsl:with-param name="statistics" select="." />
     </xsl:call-template>
-		<xsl:text>&#xA;</xsl:text>
+		<xsl:text>&#xD;&#xA;</xsl:text>
 	</xsl:template>
   
   <xsl:template match="g:report" mode="results">
@@ -46,10 +46,8 @@
     </xsl:if>
 
     <xsl:value-of select="g:testStep/@fullName" />
-    <xsl:text>&#xA;</xsl:text>
-    <xsl:apply-templates select="g:testLog" />
-    <xsl:text>&#xA;</xsl:text>
-
+    <xsl:text>&#xD;&#xA;</xsl:text>
+    
     <xsl:apply-templates select="g:children/g:testStepRun" />
   </xsl:template>
 
