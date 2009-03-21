@@ -31,6 +31,8 @@ namespace Mosa.Platforms.x86
 				public static OpCode R_R = new OpCode(new byte[] { 0x03 });
 				public static OpCode R_M = new OpCode(new byte[] { 0x03 });
 				public static OpCode M_R = new OpCode(new byte[] { 0x01 });
+				public static OpCode R_M_U8 = new OpCode(new byte[] { 0x02 }); // Add r/m8 to r8
+				public static OpCode M_R_U8 = new OpCode(new byte[] { 0x00 }); // Add r8 to r/m8
 			}
 			public static class And
 			{
@@ -57,12 +59,8 @@ namespace Mosa.Platforms.x86
 				public static OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x8B });
 				public static OpCode M_R = new OpCode(new byte[] { 0x89 });
 				public static OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x89 });
-
 				public static OpCode M_R_U8 = new OpCode(new byte[] { 0x88 }); // Move R8 to r/rm8
 				public static OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
-
-				//public static OpCode R_M_U8 = new OpCode(new byte[] { 0x0F, 0xB6 }); // Move byte to word							
-
 			}
 			public static class Neg
 			{
@@ -417,10 +415,16 @@ namespace Mosa.Platforms.x86
 				return X86Instruction.Add.R_R;
 
 			if ((dest is RegisterOperand) && (src is MemoryOperand))
-				return X86Instruction.Add.R_M;
+				if (src.Type.Type == CilElementType.U1)
+					return X86Instruction.Add.R_M_U8;
+				else
+					return X86Instruction.Add.R_M;
 
 			if ((dest is MemoryOperand) && (src is RegisterOperand))
-				return X86Instruction.Add.M_R;
+				if (dest.Type.Type == CilElementType.U1)
+					return X86Instruction.Add.M_R_U8;
+				else
+					return X86Instruction.Add.M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
