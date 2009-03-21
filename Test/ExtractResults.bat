@@ -1,3 +1,3 @@
-..\Mosa\bin\XmlTo.exe Mosa\Runtime\CompilerFramework\Tests\test-report.xml FormatTestResults.xslt results.txt
+..\Mosa\bin\XmlTo.exe Reports\Tests.xml Gallio-Text.xsl Reports\Tests.txt
 
 pause
