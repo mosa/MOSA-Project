@@ -27,5 +27,15 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		/// <value>The status.</value>
 		ushort CommandRegister { get; set; }
+
+		/// <summary>
+		/// Enables the device.
+		/// </summary>
+		void EnableDevice();
+
+		/// <summary>
+		/// Disables the device.
+		/// </summary>
+		void DisableDevice();
 	}
 }
