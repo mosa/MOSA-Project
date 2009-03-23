@@ -86,7 +86,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CHS.cs" />
-    <Compile Include="DeviceDriverMemoryAttribute.cs" />
+    <Compile Include="INetworkDevice.cs" />
+    <Compile Include="DeviceDriverPhysicalMemoryAttribute.cs" />
     <Compile Include="IOPortRegister.cs" />
     <Compile Include="MACAddress.cs" />
     <Compile Include="DeviceDriver.cs" />

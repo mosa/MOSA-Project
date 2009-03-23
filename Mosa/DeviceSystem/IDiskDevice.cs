@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.ClassLib;
-
 namespace Mosa.DeviceSystem
 {
     /// <summary>

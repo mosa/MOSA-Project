@@ -101,10 +101,10 @@ namespace Mosa.DeviceSystem
 					if (((attribute as IDeviceDriverAttribute).Platforms & platformArchitecture) != 0) {
 						DeviceDriver deviceDriver = new DeviceDriver(attribute as IDeviceDriverAttribute, type);
 
-						object[] memAttributes = type.GetCustomAttributes(typeof(DeviceDriverMemoryAttribute), false);
+						object[] memAttributes = type.GetCustomAttributes(typeof(DeviceDriverPhysicalMemoryAttribute), false);
 
 						foreach (object memAttribute in memAttributes)
-							deviceDriver.Add(memAttribute as DeviceDriverMemoryAttribute);
+							deviceDriver.Add(memAttribute as DeviceDriverPhysicalMemoryAttribute);
 
 						deviceDrivers.Add(deviceDriver);
 					}

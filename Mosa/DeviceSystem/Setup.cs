@@ -103,7 +103,7 @@ namespace Mosa.DeviceSystem
 					default: break;
 				}
 
-			foreach (DeviceDriverMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
+			foreach (DeviceDriverPhysicalMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
 				if (memoryAttribute.MemorySize > 0) {
 					IMemory memory = HAL.RequestPhysicalMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
 					memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
@@ -156,7 +156,7 @@ namespace Mosa.DeviceSystem
 				if (driverAtttribute.BaseAddress != 0x00)
 					memoryRegions.Add(new MemoryRegion(driverAtttribute.BaseAddress, driverAtttribute.AddressRange));
 
-				foreach (DeviceDriverMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
+				foreach (DeviceDriverPhysicalMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
 					if (memoryAttribute.MemorySize > 0) {
 						IMemory memory = HAL.RequestPhysicalMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
 						memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));

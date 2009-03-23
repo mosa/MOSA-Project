@@ -16,9 +16,9 @@ namespace Mosa.DeviceDrivers.ISA
 	/// Direct Memory Access (DMA) Device Driver
 	/// </summary>
 	[ISADeviceDriver(AutoLoad = false, BasePort = 0x0000, PortRange = 32, AltBasePort = 0x0080, AltPortRange = 8, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	[DeviceDriverMemory(MemorySize = 64 * 1024, MemoryAlignment = 64 * 1024, RestrictUnder16M = true)]
-	[DeviceDriverMemory(MemorySize = 64 * 1024, MemoryAlignment = 64 * 1024, RestrictUnder16M = true)]
-	[DeviceDriverMemory(MemorySize = 64 * 1024, MemoryAlignment = 64 * 1024, RestrictUnder16M = true)]
+	[DeviceDriverPhysicalMemory(MemorySize = 64 * 1024, MemoryAlignment = 64 * 1024, RestrictUnder16M = true)]
+	[DeviceDriverPhysicalMemory(MemorySize = 64 * 1024, MemoryAlignment = 64 * 1024, RestrictUnder16M = true)]
+	[DeviceDriverPhysicalMemory(MemorySize = 64 * 1024, MemoryAlignment = 64 * 1024, RestrictUnder16M = true)]
 	public class DMA8Bit : HardwareDevice, IDevice, IHardwareDevice
 	{
 		#region Definitions
