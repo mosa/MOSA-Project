@@ -177,10 +177,14 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 		/// <returns></returns>
 		public override bool OnInterrupt()
 		{
-			RetrievePackets();
+			uint status = StatusRegister;
 
-			if (packetBuffer != null)
-				packetBuffer.Pulse();
+			if ((status & 0x200) != 0)
+				if (packetBuffer != null)
+					packetBuffer.Pulse();
+
+			if ((status & 0x400) != 0)
+				RetrievePackets();
 
 			return true;
 		}
@@ -235,7 +239,10 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 			for (uint rxd = 0; rxd < 16; rxd++) {
 				uint offset = rxd * 4;
 
-				if ((rxDescriptor.Read32(offset + 1) & 0x80000000) == 0) {
+				uint status = rxDescriptor.Read32(offset + 1);
+
+				// Check is 31/OWN bit is not set
+				if ((status & 0x80000000) == 0) {
 
 					ushort length = (ushort)(rxDescriptor.Read16(offset + 0) & 0xFFF);
 					byte[] data = new byte[length];
@@ -243,7 +250,11 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 					for (uint i = 0; i < data.Length; i++)
 						data[i] = buffers.Read8((rxd * bufferSize) + i);
 
+					// if queue fails because it is already full, the packet is discarded
 					packetBuffer.QueuePacketForStack(data);
+
+					// Clear 31/OWN bit 
+					rxDescriptor.Write32(offset + 1, status | 0x80000000);
 				}
 			}
 		}
