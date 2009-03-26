@@ -59,7 +59,7 @@ namespace Mosa.Platforms.x86
 				public static OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x8B });
 				public static OpCode M_R = new OpCode(new byte[] { 0x89 });
 				public static OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x89 });
-				public static OpCode M_R_U8 = new OpCode(new byte[] { 0x88 }); // Move R8 to r/rm8
+				public static OpCode M_R_8 = new OpCode(new byte[] { 0x88 }); // Move R8 to r/rm8
 				public static OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
 			}
 			public static class Neg
@@ -415,13 +415,13 @@ namespace Mosa.Platforms.x86
 				return X86Instruction.Add.R_R;
 
 			if ((dest is RegisterOperand) && (src is MemoryOperand))
-				if (src.Type.Type == CilElementType.U1)
+				if (IsUByte(src))
 					return X86Instruction.Add.R_M_U8;
 				else
 					return X86Instruction.Add.R_M;
 
 			if ((dest is MemoryOperand) && (src is RegisterOperand))
-				if (dest.Type.Type == CilElementType.U1)
+                if (IsUByte(dest))
 					return X86Instruction.Add.M_R_U8;
 				else
 					return X86Instruction.Add.M_R;
@@ -490,44 +490,44 @@ namespace Mosa.Platforms.x86
 		public static OpCode Move(Operand dest, Operand src)
 		{
 			if ((dest is RegisterOperand) && (src is ConstantOperand)) {
-				if (src.Type.Type == CilElementType.Char)
+                if (IsChar(src))
 					return X86Instruction.Mov.R_C_16;
 				else
 					return X86Instruction.Mov.R_C;
 			}
 
 			if ((dest is MemoryOperand) && (src is ConstantOperand)) {
-				if (src.Type.Type == CilElementType.Char)
+                if (IsChar(src))
 					return X86Instruction.Mov.M_C_16;
 				else
 					return X86Instruction.Mov.M_C;
 			}
 
-			if ((dest is RegisterOperand) && (src is RegisterOperand)) {
-				if (src.Type.Type == CilElementType.Char)
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) 
+            {
+                if (IsChar(src))
 					return X86Instruction.Mov.R_R_16;
 				else
 					return X86Instruction.Mov.R_R;
 			}
 
 			if ((dest is RegisterOperand) && (src is MemoryOperand)) {
-				if (src.Type.Type == CilElementType.U1)
+				if (IsUByte(src))
 					return X86Instruction.Mov.R_M_U8;
-				else
-					if (src.Type.Type == CilElementType.Char)
-						return X86Instruction.Mov.R_M_16;
-					else
-						return X86Instruction.Mov.R_M;
+				else if (IsChar(src))
+					return X86Instruction.Mov.R_M_16;
+			    else
+					return X86Instruction.Mov.R_M;
 			}
 
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) {
-				if (dest.Type.Type == CilElementType.U1)
-					return X86Instruction.Mov.M_R_U8;
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) 
+            {
+                if (IsByte(src))
+					return X86Instruction.Mov.M_R_8;
+				else if (IsChar(src))
+                    return X86Instruction.Mov.M_R_16;
 				else
-					if (src.Type.Type == CilElementType.Char)
-						return X86Instruction.Mov.M_R_16;
-					else
-						return X86Instruction.Mov.M_R;
+					return X86Instruction.Mov.M_R;
 			}
 
 			throw new ArgumentException(@"No opcode for operand type. [" + dest.GetType() + ", " + src.GetType() + ")");
@@ -1163,10 +1163,6 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Cvttsd2si(Operand dest, Operand src)
 		{
-			System.IO.StreamWriter w = new System.IO.StreamWriter("cvtsd2si.txt", true);
-			w.WriteLine("{0} :: {1}", dest.Type.Type, src.Type.Type);
-			w.Flush();
-			w.Close();
 			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Instruction.Cvttsd2si.R_R;
 			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Instruction.Cvttsd2si.R_M;
 			throw new ArgumentException(@"No opcode for operand type.");
@@ -1382,6 +1378,76 @@ namespace Mosa.Platforms.x86
 			}
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
+        private static bool IsByte(Operand op)
+        {
+            return IsSByte(op) && IsUByte(op);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
+        private static bool IsSByte(Operand op)
+        {
+            return (op.Type.Type == CilElementType.I1);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
+        private static bool IsUByte(Operand op)
+        {
+            return (op.Type.Type == CilElementType.U1);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
+        private static bool IsShort(Operand op)
+        {
+            return IsSByte(op) && IsUByte(op);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
+        private static bool IsSShort(Operand op)
+        {
+            return (op.Type.Type == CilElementType.I2);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
+        private static bool IsUShort(Operand op)
+        {
+            return (op.Type.Type == CilElementType.U2);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
+        private static bool IsChar(Operand op)
+        {
+            return (op.Type.Type == CilElementType.Char || IsUShort(op));
+        }
 	}
 }
 
