@@ -70,6 +70,18 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 		/// 
 		/// </summary>
 		protected IMemory rxDescriptor;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected byte nextTXDesc;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected ushort bufferSize;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected NetworkDevicePacketBuffer packetBuffer;
 
 		#endregion
 
@@ -98,16 +110,18 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 			rxDescriptor = hardwareResources.GetMemory(3);
 			buffers = hardwareResources.GetMemory(4);
 
-			ushort bufferLen = 2048;
-			uint len = (ushort)(~bufferLen);
+			bufferSize = 2048;
+			uint len = (ushort)(~bufferSize);
 			len = (len + 1) & 0x0FFF | 0x8000F000;
 
 			for (uint index = 0; index < 16; index++) {
 				uint offset = index * 4;
 				rxDescriptor.Write32((offset + 1) * 4, len);
-				rxDescriptor.Write32((offset + 2) * 4, buffers.Address + (bufferLen * index));
-				txDescriptor.Write32((offset + 2) * 4, buffers.Address + (bufferLen * (index + 16)));
+				rxDescriptor.Write32((offset + 2) * 4, buffers.Address + (bufferSize * index));
+				txDescriptor.Write32((offset + 2) * 4, buffers.Address + (bufferSize * (index + 16)));
 			}
+
+			nextTXDesc = 0;
 
 			return true;
 		}
@@ -152,8 +166,7 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 			// Set the device to PCNet-PCI II Controller mode (full 32-bit mode)
 			SoftwareStyleRegister = 0x03;
 
-			// Initialize the RX and TX buffers
-			// TODO
+			nextTXDesc = 0;
 
 			return DeviceDriverStartStatus.Started;
 		}
@@ -162,7 +175,78 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt() { return true; }
+		public override bool OnInterrupt()
+		{
+			RetrievePackets();
+
+			if (packetBuffer != null)
+				packetBuffer.Pulse();
+
+			return true;
+		}
+
+		/// <summary>
+		/// Assigns the packet buffer to the device
+		/// </summary>
+		/// <param name="packetBuffer">The packet buffer.</param>
+		public void AssignPacketBuffer(NetworkDevicePacketBuffer packetBuffer)
+		{
+			this.packetBuffer = packetBuffer;
+		}
+
+		/// <summary>
+		/// Sends the packet.
+		/// </summary>
+		/// <param name="data">The data.</param>
+		/// <returns></returns>
+		public bool SendPacket(byte[] data)
+		{
+			uint txd = nextTXDesc++;
+
+			if (nextTXDesc >= 16)
+				nextTXDesc = 0;
+
+			uint offset = txd * 4;
+
+			// check if (oldest) descriptor is available (Bit 31/OWN = 0 available)
+			if ((txDescriptor.Read32(offset + 1) & 0x80000000) == 0) {
+
+				for (uint i = 0; i < data.Length; i++)
+					buffers.Write8((txd * bufferSize) + i, data[i]);
+
+				ushort length = (ushort)(~data.Length);
+				length++;
+
+				// Set bits 31/OWN, 25/STP (start of packet), 24/ENP (end of packet) and two's compliment of the buffer length
+				txDescriptor.Write32(offset + 1, (uint)(length & (uint)(0x0FFF) | (uint)(0x8300F000)));
+
+				return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Retrieves the packets.
+		/// </summary>
+		protected void RetrievePackets()
+		{
+			// Check all descriptors
+			for (uint rxd = 0; rxd < 16; rxd++) {
+				uint offset = rxd * 4;
+
+				if ((rxDescriptor.Read32(offset + 1) & 0x80000000) == 0) {
+
+					ushort length = (ushort)(rxDescriptor.Read16(offset + 0) & 0xFFF);
+					byte[] data = new byte[length];
+
+					for (uint i = 0; i < data.Length; i++)
+						data[i] = buffers.Read8((rxd * bufferSize) + i);
+
+					packetBuffer.QueuePacketForStack(data);
+				}
+			}
+		}
 
 		/// <summary>
 		/// Gets the MAC address.

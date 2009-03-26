@@ -352,7 +352,9 @@ namespace Mosa.ClassLib
 			if (last == null)
 				throw new System.InvalidOperationException();
 
-			last.previous = null;
+			if (last.previous != null)
+				last.previous.next = null;
+			
 			count--;
 		}
 
