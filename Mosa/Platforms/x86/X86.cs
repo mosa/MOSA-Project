@@ -59,7 +59,7 @@ namespace Mosa.Platforms.x86
 				public static OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x8B });
 				public static OpCode M_R = new OpCode(new byte[] { 0x89 });
 				public static OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x89 });
-				public static OpCode M_R_8 = new OpCode(new byte[] { 0x88 }); // Move R8 to r/rm8
+				public static OpCode M_R_U8 = new OpCode(new byte[] { 0x88 }); // Move R8 to r/rm8
 				public static OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
 			}
 			public static class Neg
@@ -415,13 +415,13 @@ namespace Mosa.Platforms.x86
 				return X86Instruction.Add.R_R;
 
 			if ((dest is RegisterOperand) && (src is MemoryOperand))
-				if (IsUByte(src))
+				if (IsUByte(dest))
 					return X86Instruction.Add.R_M_U8;
 				else
 					return X86Instruction.Add.R_M;
 
 			if ((dest is MemoryOperand) && (src is RegisterOperand))
-                if (IsUByte(dest))
+				if (IsUByte(dest))
 					return X86Instruction.Add.M_R_U8;
 				else
 					return X86Instruction.Add.M_R;
@@ -490,14 +490,14 @@ namespace Mosa.Platforms.x86
 		public static OpCode Move(Operand dest, Operand src)
 		{
 			if ((dest is RegisterOperand) && (src is ConstantOperand)) {
-                if (IsChar(src))
+				if (IsChar(src))
 					return X86Instruction.Mov.R_C_16;
 				else
 					return X86Instruction.Mov.R_C;
 			}
 
 			if ((dest is MemoryOperand) && (src is ConstantOperand)) {
-                if (IsChar(src))
+				if (IsChar(src))
 					return X86Instruction.Mov.M_C_16;
 				else
 					return X86Instruction.Mov.M_C;
@@ -505,16 +505,16 @@ namespace Mosa.Platforms.x86
 
 			if ((dest is RegisterOperand) && (src is RegisterOperand)) 
             {
-                if (IsChar(src))
+				if (IsChar(src))
 					return X86Instruction.Mov.R_R_16;
 				else
 					return X86Instruction.Mov.R_R;
 			}
 
 			if ((dest is RegisterOperand) && (src is MemoryOperand)) {
-				if (IsUByte(src))
+				if (IsByte(dest))
 					return X86Instruction.Mov.R_M_U8;
-				else if (IsChar(src))
+				else if (IsChar(dest))
 					return X86Instruction.Mov.R_M_16;
 			    else
 					return X86Instruction.Mov.R_M;
@@ -522,9 +522,9 @@ namespace Mosa.Platforms.x86
 
 			if ((dest is MemoryOperand) && (src is RegisterOperand)) 
             {
-                if (IsByte(src))
-					return X86Instruction.Mov.M_R_8;
-				else if (IsChar(src))
+				if (IsByte(dest))
+					return X86Instruction.Mov.M_R_U8;
+				else if (IsChar(dest))
                     return X86Instruction.Mov.M_R_16;
 				else
 					return X86Instruction.Mov.M_R;
@@ -1386,7 +1386,7 @@ namespace Mosa.Platforms.x86
         /// <returns></returns>
         private static bool IsByte(Operand op)
         {
-            return IsSByte(op) && IsUByte(op);
+            return IsSByte(op) || IsUByte(op);
         }
 
         /// <summary>
@@ -1416,7 +1416,7 @@ namespace Mosa.Platforms.x86
         /// <returns></returns>
         private static bool IsShort(Operand op)
         {
-            return IsSByte(op) && IsUByte(op);
+			return IsSShort(op) || IsUShort(op);
         }
 
         /// <summary>
