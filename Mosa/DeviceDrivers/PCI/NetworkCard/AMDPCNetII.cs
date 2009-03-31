@@ -86,7 +86,7 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 		#endregion
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RTL8139"/> class.
+		/// Initializes a new instance of the <see cref="AMDPCNet"/> class.
 		/// </summary>
 		public AMDPCNet() { }
 
