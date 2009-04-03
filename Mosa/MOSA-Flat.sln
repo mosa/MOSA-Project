@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C# Express 2008
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.System", "System\Mosa.System.csproj", "{631BC4F3-E2D8-4319-814C-13904CAA17CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Mosa.Runtime.CompilerFramework", "..\Test\Mosa\Runtime\CompilerFramework\Test.Mosa.Runtime.CompilerFramework.csproj", "{AD653B6B-EBB7-4E69-93F7-FADA40462648}"
@@ -40,9 +40,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pictor", "Pictor\Pictor.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pictor.UI", "Pictor.UI\Pictor.UI.csproj", "{79BA50A4-B1A8-45E0-B6C2-65FDC165C147}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlugGen.Console", "Tools\PlugGen.Console\PlugGen.Console.csproj", "{34060993-5BE4-4D96-816C-BCB0AE103398}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlugGen.Core", "Tools\PlugGen.Core\PlugGen.Core.csproj", "{1306E901-47C2-4654-A7B5-9CB1BBC4064D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 17
+		SccNumberOfProjects = 22
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs01.codeplex.com/
 		SccProjectUniqueName0 = System\\Mosa.System.csproj
@@ -130,6 +134,31 @@ Global
 		SccAuxPath16 = https://tfs01.codeplex.com
 		SccLocalPath16 = Tools\\MakeBootImage
 		SccProvider16 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName17 = Tools\\MakeIsoImage\\Mosa.Tools.MakeIsoImage.csproj
+		SccProjectName17 = Tools/MakeIsoImage
+		SccAuxPath17 = https://tfs01.codeplex.com
+		SccLocalPath17 = Tools\\MakeIsoImage
+		SccProvider17 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName18 = Pictor\\Pictor.csproj
+		SccProjectName18 = Pictor
+		SccAuxPath18 = https://tfs01.codeplex.com
+		SccLocalPath18 = Pictor
+		SccProvider18 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName19 = Pictor.UI\\Pictor.UI.csproj
+		SccProjectName19 = Pictor.UI
+		SccAuxPath19 = https://tfs01.codeplex.com
+		SccLocalPath19 = Pictor.UI
+		SccProvider19 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName20 = Tools\\PlugGen.Console\\PlugGen.Console.csproj
+		SccProjectName20 = Tools/PlugGen.Console
+		SccAuxPath20 = https://tfs01.codeplex.com
+		SccLocalPath20 = Tools\\PlugGen.Console
+		SccProvider20 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName21 = Tools\\PlugGen.Core\\PlugGen.Core.csproj
+		SccProjectName21 = Tools/PlugGen.Core
+		SccAuxPath21 = https://tfs01.codeplex.com
+		SccLocalPath21 = Tools\\PlugGen.Core
+		SccProvider21 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -216,6 +245,14 @@ Global
 		{79BA50A4-B1A8-45E0-B6C2-65FDC165C147}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79BA50A4-B1A8-45E0-B6C2-65FDC165C147}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79BA50A4-B1A8-45E0-B6C2-65FDC165C147}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34060993-5BE4-4D96-816C-BCB0AE103398}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34060993-5BE4-4D96-816C-BCB0AE103398}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34060993-5BE4-4D96-816C-BCB0AE103398}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34060993-5BE4-4D96-816C-BCB0AE103398}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1306E901-47C2-4654-A7B5-9CB1BBC4064D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1306E901-47C2-4654-A7B5-9CB1BBC4064D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1306E901-47C2-4654-A7B5-9CB1BBC4064D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1306E901-47C2-4654-A7B5-9CB1BBC4064D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
