@@ -19,13 +19,105 @@ namespace Mosa.HelloWorld
 		public static void Main()
 		{
 			unsafe {
-				WriteChar((byte)'X', 0x0B, (byte*)0xB8000);
-				WriteChar((byte)'X', 0x0A, (byte*)0xB8002);
 
-				while (true) {
-					AddOne((byte*)0xB8004);
+				// Clear the screen
+				for (byte* i = (byte*)0xB8000; i < (byte*)0xB8FA0; ) {
+					WriteChar((byte)' ', 0x0A, i);
+					i = i + 2;
 				}
 
+				byte* index = (byte*)(0xB8000);
+
+				WriteChar((byte)'M', 0x0A, index); index = index + 2;
+				WriteChar((byte)'O', 0x0A, index); index = index + 2;
+				WriteChar((byte)'S', 0x0A, index); index = index + 2;
+				WriteChar((byte)'A', 0x0A, index); index = index + 2;
+				WriteChar((byte)' ', 0x0A, index); index = index + 2;
+				WriteChar((byte)'O', 0x0A, index); index = index + 2;
+				WriteChar((byte)'S', 0x0A, index); index = index + 2;
+				WriteChar((byte)' ', 0x0A, index); index = index + 2;
+				WriteChar((byte)'V', 0x0A, index); index = index + 2;
+				WriteChar((byte)'e', 0x0A, index); index = index + 2;
+				WriteChar((byte)'r', 0x0A, index); index = index + 2;
+				WriteChar((byte)'s', 0x0A, index); index = index + 2;
+				WriteChar((byte)'i', 0x0A, index); index = index + 2;
+				WriteChar((byte)'o', 0x0A, index); index = index + 2;
+				WriteChar((byte)'n', 0x0A, index); index = index + 2;
+				WriteChar((byte)' ', 0x0A, index); index = index + 2;
+				WriteChar((byte)'0', 0x0A, index); index = index + 2;
+				WriteChar((byte)'.', 0x0A, index); index = index + 2;
+				WriteChar((byte)'1', 0x0A, index); index = index + 2;
+				WriteChar((byte)' ', 0x0A, index); index = index + 2;
+				WriteChar((byte)'\'', 0x0A, index); index = index + 2;
+
+				WriteChar((byte)'W', 0x0C, index); index = index + 2;
+				WriteChar((byte)'a', 0x0C, index); index = index + 2;
+				WriteChar((byte)'k', 0x0C, index); index = index + 2;
+				WriteChar((byte)'e', 0x0C, index); index = index + 2;
+				WriteChar((byte)'\'', 0x0A, index); index = index + 2;
+				WriteChar((byte)' ', 0x0A, index); index = index + 2;
+				WriteChar((byte)' ', 0x0A, index); index = index + 2;
+
+				byte* line = (byte*)(0xB80A0);
+
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+				WriteChar((byte)'-', 0x07, line); line = line + 2;
+			
+				byte* index2 = (byte*)(0xB8140);
+				WriteChar((byte)'C', 0x0E, index2); index2 = index2 + 2;
+				WriteChar((byte)'o', 0x0E, index2); index2 = index2 + 2;
+				WriteChar((byte)'p', 0x0E, index2); index2 = index2 + 2;
+				WriteChar((byte)'y', 0x0E, index2); index2 = index2 + 2;
+				WriteChar((byte)'r', 0x0E, index2); index2 = index2 + 2;
+				WriteChar((byte)'i', 0x0E, index2); index2 = index2 + 2;
+				WriteChar((byte)'g', 0x0E, index2); index2 = index2 + 2;
+				WriteChar((byte)'h', 0x0E, index2); index2 = index2 + 2;
+				WriteChar((byte)'t', 0x0E, index2); index2 = index2 + 2;
+				WriteChar((byte)' ', 0x0E, index2); index2 = index2 + 2;
+				WriteChar((byte)'2', 0x0A, index2); index2 = index2 + 2;
+				WriteChar((byte)'0', 0x0A, index2); index2 = index2 + 2;
+				WriteChar((byte)'0', 0x0A, index2); index2 = index2 + 2;
+				WriteChar((byte)'8', 0x0A, index2); index2 = index2 + 2;
+				WriteChar((byte)'-', 0x0A, index2); index2 = index2 + 2;
+				WriteChar((byte)'2', 0x0A, index2); index2 = index2 + 2;
+				WriteChar((byte)'0', 0x0A, index2); index2 = index2 + 2;
+				WriteChar((byte)'0', 0x0A, index2); index2 = index2 + 2;
+				WriteChar((byte)'9', 0x0A, index2); index2 = index2 + 2;
+				WriteChar((byte)' ', 0x0A, index2); index2 = index2 + 2;
+
+				while (true) {
+					WriteChar((byte)'-', 0x0A, index);
+					WriteChar((byte)'\\', 0x0B, index);
+					WriteChar((byte)'|', 0x0C, index);
+					WriteChar((byte)'/', 0x0B, index);
+				}
 			}
 		}
 
@@ -37,19 +129,11 @@ namespace Mosa.HelloWorld
 		/// <param name="address">The address.</param>
 		public unsafe static void WriteChar(byte c, byte color, byte* address)
 		{
-			*address = c;
 			byte* address2 = address + 1;
+			*address = c;
 			*address2 = color;
 		}
 
-		/// <summary>
-		/// Adds the one.
-		/// </summary>
-		/// <param name="address">The address.</param>
-		public unsafe static void AddOne(byte* address)
-		{
-			byte* address2 = address + 1;
-		}
 
 	}
 }
