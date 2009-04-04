@@ -45,7 +45,7 @@
       <xsl:text>: </xsl:text>
     </xsl:if>
 
-    <xsl:value-of select="g:testStep/@fullName" />
+    <xsl:value-of select="substring-after(g:testStep/@fullName,'&#47;')" />
     <xsl:text>&#xD;&#xA;</xsl:text>
     
     <xsl:apply-templates select="g:children/g:testStepRun" />
