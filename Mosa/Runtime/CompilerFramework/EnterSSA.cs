@@ -375,12 +375,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>A new StackOperand.</returns>
         private StackOperand RedefineOperand(StackOperand cur)
         {
-            // HACK: This needs to be done differently
             int idx = -(cur.Offset.ToInt32() / 4);
             string name = cur.Name;
             if (0 == cur.Version)
                 name = String.Format(@"T_{0}", name);
-            StackOperand op = new LocalVariableOperand(cur.Base, name, idx, cur.Type);
+            StackOperand op = this._compiler.CreateTemporary(cur.Type) as StackOperand;
+            //StackOperand op = new LocalVariableOperand(cur.Base, name, idx, cur.Type);
             op.Version = ++_ssaVersion;
             return op;
         }
