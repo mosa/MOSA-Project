@@ -157,6 +157,8 @@ namespace Mosa.Platforms.x86
 				public static OpCode R_R = new OpCode(new byte[] { 0x3B });
 				public static OpCode M_C = new OpCode(new byte[] { 0x81 }, 7);
 				public static OpCode R_C = new OpCode(new byte[] { 0x81 }, 7);
+				public static OpCode M_R_8 = new OpCode(new byte[] { 0x38 });
+				public static OpCode R_M_8 = new OpCode(new byte[] { 0x3A });
 			}
 			public static class Cmpxchg
 			{
@@ -503,8 +505,7 @@ namespace Mosa.Platforms.x86
 					return X86Instruction.Mov.M_C;
 			}
 
-			if ((dest is RegisterOperand) && (src is RegisterOperand)) 
-            {
+			if ((dest is RegisterOperand) && (src is RegisterOperand)) {
 				if (IsChar(src))
 					return X86Instruction.Mov.R_R_16;
 				else
@@ -516,16 +517,15 @@ namespace Mosa.Platforms.x86
 					return X86Instruction.Mov.R_M_U8;
 				else if (IsChar(dest))
 					return X86Instruction.Mov.R_M_16;
-			    else
+				else
 					return X86Instruction.Mov.R_M;
 			}
 
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) 
-            {
+			if ((dest is MemoryOperand) && (src is RegisterOperand)) {
 				if (IsByte(dest))
 					return X86Instruction.Mov.M_R_U8;
 				else if (IsChar(dest))
-                    return X86Instruction.Mov.M_R_16;
+					return X86Instruction.Mov.M_R_16;
 				else
 					return X86Instruction.Mov.M_R;
 			}
@@ -794,8 +794,18 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Cmp(Operand dest, Operand src)
 		{
-			if ((dest is MemoryOperand) && (src is RegisterOperand)) return X86Instruction.Cmp.M_R;
-			if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Instruction.Cmp.R_M;
+			if ((dest is MemoryOperand) && (src is RegisterOperand))
+				if (IsByte(dest))
+					return X86Instruction.Cmp.M_R_8;
+				else
+					return X86Instruction.Cmp.M_R;
+
+			if ((dest is RegisterOperand) && (src is MemoryOperand))
+				if (IsByte(src))
+					return X86Instruction.Cmp.R_M_8;
+				else
+					return X86Instruction.Cmp.R_M;
+
 			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Instruction.Cmp.R_R;
 			if ((dest is MemoryOperand) && (src is ConstantOperand)) return X86Instruction.Cmp.M_C;
 			if ((dest is RegisterOperand) && (src is ConstantOperand)) return X86Instruction.Cmp.R_C;
@@ -1379,75 +1389,75 @@ namespace Mosa.Platforms.x86
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="op"></param>
-        /// <returns></returns>
-        private static bool IsByte(Operand op)
-        {
-            return IsSByte(op) || IsUByte(op);
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="op"></param>
+		/// <returns></returns>
+		private static bool IsByte(Operand op)
+		{
+			return IsSByte(op) || IsUByte(op);
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="op"></param>
-        /// <returns></returns>
-        private static bool IsSByte(Operand op)
-        {
-            return (op.Type.Type == CilElementType.I1);
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="op"></param>
+		/// <returns></returns>
+		private static bool IsSByte(Operand op)
+		{
+			return (op.Type.Type == CilElementType.I1);
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="op"></param>
-        /// <returns></returns>
-        private static bool IsUByte(Operand op)
-        {
-            return (op.Type.Type == CilElementType.U1);
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="op"></param>
+		/// <returns></returns>
+		private static bool IsUByte(Operand op)
+		{
+			return (op.Type.Type == CilElementType.U1);
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="op"></param>
-        /// <returns></returns>
-        private static bool IsShort(Operand op)
-        {
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="op"></param>
+		/// <returns></returns>
+		private static bool IsShort(Operand op)
+		{
 			return IsSShort(op) || IsUShort(op);
-        }
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="op"></param>
-        /// <returns></returns>
-        private static bool IsSShort(Operand op)
-        {
-            return (op.Type.Type == CilElementType.I2);
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="op"></param>
+		/// <returns></returns>
+		private static bool IsSShort(Operand op)
+		{
+			return (op.Type.Type == CilElementType.I2);
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="op"></param>
-        /// <returns></returns>
-        private static bool IsUShort(Operand op)
-        {
-            return (op.Type.Type == CilElementType.U2);
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="op"></param>
+		/// <returns></returns>
+		private static bool IsUShort(Operand op)
+		{
+			return (op.Type.Type == CilElementType.U2);
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="op"></param>
-        /// <returns></returns>
-        private static bool IsChar(Operand op)
-        {
-            return (op.Type.Type == CilElementType.Char || IsUShort(op));
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="op"></param>
+		/// <returns></returns>
+		private static bool IsChar(Operand op)
+		{
+			return (op.Type.Type == CilElementType.Char || IsUShort(op));
+		}
 	}
 }
 
