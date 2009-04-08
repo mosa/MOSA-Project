@@ -23,6 +23,15 @@ namespace Mosa.Platforms.x86
 		#region X86Intructions
 
 #pragma warning disable 1591
+        /// <summary>
+        /// This class contains OpCodes for every x86 asm instruction
+        /// used by the x86 backend.
+        /// 
+        /// Note: When 16 bit register/memory usage is needed, 
+        ///       the opcode for 32 bit is used, prefixed by 0x66.
+        ///       This forces the CPU to fall back to 16 bit register/memory
+        ///       usage.
+        /// </summary>
 		public static class X86Instruction
 		{
 			public static class Add
