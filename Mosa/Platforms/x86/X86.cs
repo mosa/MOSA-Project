@@ -23,15 +23,15 @@ namespace Mosa.Platforms.x86
 		#region X86Intructions
 
 #pragma warning disable 1591
-        /// <summary>
-        /// This class contains OpCodes for every x86 asm instruction
-        /// used by the x86 backend.
-        /// 
-        /// Note: When 16 bit register/memory usage is needed, 
-        ///       the opcode for 32 bit is used, prefixed by 0x66.
-        ///       This forces the CPU to fall back to 16 bit register/memory
-        ///       usage.
-        /// </summary>
+		/// <summary>
+		/// This class contains OpCodes for every x86 asm instruction
+		/// used by the x86 backend.
+		/// 
+		/// Note: When 16 bit register/memory usage is needed, 
+		///       the opcode for 32 bit is used, prefixed by 0x66.
+		///       This forces the CPU to fall back to 16 bit register/memory
+		///       usage.
+		/// </summary>
 		public static class X86Instruction
 		{
 			public static class Add
@@ -156,8 +156,9 @@ namespace Mosa.Platforms.x86
 			}
 			public static class Not
 			{
-				public static OpCode R = new OpCode(new byte[] { 0xF7 }, 2);
-				public static OpCode M = new OpCode(new byte[] { 0xF7 }, 2);
+				public static OpCode MR_8 = new OpCode(new byte[] { 0xF6 }, 2);
+				public static OpCode MR_16 = new OpCode(new byte[] { 0x66, 0xF7 }, 2);
+				public static OpCode MR = new OpCode(new byte[] { 0xF7 }, 2);
 			}
 			public static class Cmp
 			{
@@ -168,6 +169,8 @@ namespace Mosa.Platforms.x86
 				public static OpCode R_C = new OpCode(new byte[] { 0x81 }, 7);
 				public static OpCode M_R_8 = new OpCode(new byte[] { 0x38 });
 				public static OpCode R_M_8 = new OpCode(new byte[] { 0x3A });
+				public static OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x39 });
+				public static OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x3B });
 			}
 			public static class Cmpxchg
 			{
@@ -790,8 +793,14 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static OpCode Not(Operand dest)
 		{
-			if (dest is RegisterOperand) return X86Instruction.Not.R;
-			if (dest is MemoryOperand) return X86Instruction.Not.M;
+			if ((dest is RegisterOperand) || (dest is MemoryOperand))
+				if (IsByte(dest))
+					return X86Instruction.Not.MR_8;
+				else if (IsChar(dest))
+					return X86Instruction.Not.MR_16;
+				else
+					return X86Instruction.Not.MR;
+
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
@@ -807,13 +816,19 @@ namespace Mosa.Platforms.x86
 				if (IsByte(dest))
 					return X86Instruction.Cmp.M_R_8;
 				else
-					return X86Instruction.Cmp.M_R;
+					if (IsChar(dest))
+						return X86Instruction.Cmp.M_R_16;
+					else
+						return X86Instruction.Cmp.M_R;
 
 			if ((dest is RegisterOperand) && (src is MemoryOperand))
 				if (IsByte(src))
 					return X86Instruction.Cmp.R_M_8;
 				else
-					return X86Instruction.Cmp.R_M;
+					if (IsChar(src))
+						return X86Instruction.Cmp.R_M_16;
+					else
+						return X86Instruction.Cmp.R_M;
 
 			if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Instruction.Cmp.R_R;
 			if ((dest is MemoryOperand) && (src is ConstantOperand)) return X86Instruction.Cmp.M_C;
