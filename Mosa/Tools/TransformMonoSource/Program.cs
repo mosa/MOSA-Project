@@ -17,6 +17,11 @@ namespace Mosa.Tools.TransformMonoSource
 	class Program
 	{
 
+		/// <summary>
+		/// Mains the specified args.
+		/// </summary>
+		/// <param name="args">The args.</param>
+		/// <returns></returns>
 		static int Main(string[] args)
 		{
 			Console.WriteLine("TransformMonoSource v0.1 [www.mosa-project.org]");
@@ -34,11 +39,10 @@ namespace Mosa.Tools.TransformMonoSource
 			try {
 				List<string> files = new List<string>();
 
-				FindFiles(args[1], string.Empty, ref files);
+				FindFiles(args[0], string.Empty, ref files);
 
 				foreach (string file in files)
-					Process(args[1], file, args[2]);
-
+					Process(args[0], file, args[1]);
 			}
 			catch (Exception e) {
 				Console.WriteLine("Error: " + e.ToString());
@@ -64,17 +68,35 @@ namespace Mosa.Tools.TransformMonoSource
 		static void Process(string root, string filename, string dest)
 		{
 			string[] lines = File.ReadAllLines(Path.Combine(root, filename));
-			List<string> other = new List<string>();
+			List<string> other = new List<string>();	
+			string classname = string.Empty;
+			int classline = -1;
 
-			for (int l = 0; l < lines.Length; l++) {
-				if (lines[l].Contains(" extern ")) {
+			for (int l = 0; l < lines.Length; l++) {				
+				string line = lines[l];
+
+				int comment = lines[l].IndexOf("//");
+				if (comment > 0)
+					line = line.Substring(0, comment);
+
+				int colon = lines[l].IndexOf(":");
+
+				if (line.Contains(" extern ")) {
 					l += SplitLines(ref lines, ref other, l, ";");
+					AddPartialToClassName(ref lines, classline);
 				}
-				else if (lines[l].Contains(" DllImport ") && !lines[l].Contains(":")) {
+				else if (line.Contains(" DllImport ") && (colon > 0)) {
 					l += SplitLines(ref lines, ref other, l, "]");
+					AddPartialToClassName(ref lines, classline);
 				}
-				else if (lines[l].Contains("MethodImplOptions.InternalCall")) {
+				else if (line.Contains("MethodImplOptions.InternalCall")) {
 					l += SplitLines(ref lines, ref other, l, "]");
+					AddPartialToClassName(ref lines, classline);
+				}
+				else if (line.Contains(" class ") || (line.Contains("\tclass ")) || (line.StartsWith("class ")) ||
+						line.Contains(" struct ") || (line.Contains("\tstruct ")) || (line.StartsWith("struct "))) {
+						classname = lines[l];
+						classline = l;
 				}
 			}
 
@@ -114,6 +136,22 @@ namespace Mosa.Tools.TransformMonoSource
 				return 0;
 
 			return 1 + SplitLines(ref lines, ref other, at + 1, end);
+		}
+
+		static void AddPartialToClassName(ref string[] lines, int line)
+		{
+			if (line < 0)
+				return;
+
+			if (lines[line].Contains(" partial "))
+				return;
+
+			int insert = lines[line].IndexOf("class ");
+			if (insert < 0)
+				insert = lines[line].IndexOf("struct ");
+
+			lines[line] = lines[line].Insert(insert, " partial");
+			return;
 		}
 
 		static void CreateSubDirectories(string root, string directory)
