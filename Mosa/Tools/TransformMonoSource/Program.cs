@@ -71,7 +71,9 @@ namespace Mosa.Tools.TransformMonoSource
 						
 			SortedDictionary<int, int> methods = new SortedDictionary<int, int>();
 			List<int> classes = new List<int>();
-			
+			List<int> namespaces = new List<int>();
+			List<int> usings = new List<int>();
+
 			// Analysis File
 			for (int l = 0; l < lines.Length; l++) {
 				string line = lines[l];
@@ -82,7 +84,7 @@ namespace Mosa.Tools.TransformMonoSource
 
 				int colon = lines[l].IndexOf(":");
 
-				if (line.Contains(" extern ")) {
+				if ((line.Contains(" extern ") || (line.Contains("\textern ")) || (line.StartsWith("extern "))) && !line.Contains(" alias ")) {
 					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
 					int cnt = SplitLines(lines, l, ";", true);
 					methods.Add(l, cnt + 1);
@@ -100,6 +102,12 @@ namespace Mosa.Tools.TransformMonoSource
 					methods.Add(l, cnt + 1);
 					l += cnt;
 				}
+				else if (line.StartsWith("using ") && line.Contains(";")) {
+					usings.Add(l);
+				}
+				else if (line.StartsWith("namespace ")) {
+					namespaces.Add(l);
+				}
 				else if (line.Contains(" class ") || (line.Contains("\tclass ")) || (line.StartsWith("class ")) ||
 						line.Contains(" struct ") || (line.Contains("\tstruct ")) || (line.StartsWith("struct "))) {
 					classes.Add(l);
@@ -115,6 +123,49 @@ namespace Mosa.Tools.TransformMonoSource
 				List<string> other = new List<string>();
 
 				Console.WriteLine(partialFile);
+
+				// write using lines
+				foreach (int i in usings)
+					other.Add(lines[i].Trim(new char[] { '\t', ';', ' ' }) + ";");
+
+				other.Add(string.Empty);
+
+				// write namespace
+				if (namespaces.Count != 1)
+					return;
+
+				other.Add(lines[namespaces[0]].Trim(new char[] { '\t', ';', ' ' }));
+				other.Add("{");
+
+				// write methods stubs
+				foreach (KeyValuePair<int, int> section in methods) {
+					for (int i = 0; i < section.Value; i++) {
+						string line = lines[section.Key + i];
+
+						if (line.Contains("MethodImplOptions.InternalCall"))
+							continue;
+
+						line = line.Replace(" extern ", " ");
+						line = line.Trim(new char[] { '\t', ' ' });
+
+						bool semicolon = line.Contains(";");
+
+						if (semicolon)
+							line = line.Replace(";", string.Empty);
+
+						if (!string.IsNullOrEmpty(line))
+							other.Add("\t"+line);
+
+						if (semicolon) {
+							other.Add("\t{");
+							other.Add("\t\tthrow new Exception(\"The method or operation is not implemented.\");");
+							other.Add("\t}");
+						}
+					}
+					other.Add(string.Empty);
+				}
+
+				other.Add("}");
 
 				using (TextWriter writer = new StreamWriter(Path.Combine(dest, partialFile))) {
 					foreach (string line in other)
