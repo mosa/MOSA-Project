@@ -16,7 +16,6 @@ namespace Mosa.Tools.TransformMonoSource
 {
 	class Program
 	{
-
 		/// <summary>
 		/// Mains the specified args.
 		/// </summary>
@@ -67,51 +66,54 @@ namespace Mosa.Tools.TransformMonoSource
 
 		static void Process(string root, string filename, string dest)
 		{
+			// Load file into string array
 			string[] lines = File.ReadAllLines(Path.Combine(root, filename));
-			List<string> other = new List<string>();	
-			string classname = string.Empty;
-			int classline = -1;
-
-			for (int l = 0; l < lines.Length; l++) {				
+						
+			SortedDictionary<int, int> methods = new SortedDictionary<int, int>();
+			List<int> classes = new List<int>();
+			
+			// Analysis File
+			for (int l = 0; l < lines.Length; l++) {
 				string line = lines[l];
 
-				int comment = lines[l].IndexOf("//");
+				int comment = line.IndexOf("//");
 				if (comment > 0)
 					line = line.Substring(0, comment);
 
 				int colon = lines[l].IndexOf(":");
 
 				if (line.Contains(" extern ")) {
-					l += SplitLines(ref lines, ref other, l, ";");
-					AddPartialToClassName(ref lines, classline);
+					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
+					int cnt = SplitLines(lines, l, ";", true);
+					methods.Add(l, cnt + 1);
+					l += cnt;
 				}
 				else if (line.Contains(" DllImport ") && (colon > 0)) {
-					l += SplitLines(ref lines, ref other, l, "]");
-					AddPartialToClassName(ref lines, classline);
+					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
+					int cnt = SplitLines(lines, l, "]", false);
+					methods.Add(l, cnt + 1);
+					l += cnt;
 				}
 				else if (line.Contains("MethodImplOptions.InternalCall")) {
-					l += SplitLines(ref lines, ref other, l, "]");
-					AddPartialToClassName(ref lines, classline);
+					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
+					int cnt = SplitLines(lines, l, "]", false);
+					methods.Add(l, cnt + 1);
+					l += cnt;
 				}
 				else if (line.Contains(" class ") || (line.Contains("\tclass ")) || (line.StartsWith("class ")) ||
 						line.Contains(" struct ") || (line.Contains("\tstruct ")) || (line.StartsWith("struct "))) {
-						classname = lines[l];
-						classline = l;
+					classes.Add(l);
 				}
 			}
 
-			string partialFile = Path.Combine(dest, filename.Insert(filename.Length - 2, "Partial."));
-
+			// Create all directories
 			CreateSubDirectories(dest, Path.GetDirectoryName(filename));
 
-			using (TextWriter writer = new StreamWriter(Path.Combine(dest, filename))) {
-				foreach (string line in lines)
-					if (line != null)
-						writer.WriteLine(line);
-				writer.Close();
-			}
+			// Create partial file
+			if (methods.Count != 0) {
+				string partialFile = Path.Combine(dest, filename.Insert(filename.Length - 2, "Partial."));
+				List<string> other = new List<string>();
 
-			if (other.Count != 0) {
 				Console.WriteLine(partialFile);
 
 				using (TextWriter writer = new StreamWriter(Path.Combine(dest, partialFile))) {
@@ -122,20 +124,36 @@ namespace Mosa.Tools.TransformMonoSource
 				}
 			}
 
+			// Insert partial
+			foreach (int i in classes)
+				AddPartialToClassName(ref lines, i);
+
+			// Insert comments
+			foreach (KeyValuePair<int, int> section in methods)
+				for (int i = 0; i < section.Value; i++)
+					lines[section.Key + i] = @"//" + lines[section.Key + i];
+
+			// Write modified source files
+			using (TextWriter writer = new StreamWriter(Path.Combine(dest, filename))) {
+				foreach (string line in lines)
+					if (line != null)
+						writer.WriteLine(line);
+				writer.Close();
+			}
+
 			return;
 		}
 
-		static int SplitLines(ref string[] lines, ref List<string> other, int at, string end)
+		static int SplitLines(string[] lines, int at, string end, bool bracket)
 		{
-			string line = lines[at];
+			if (bracket)
+				if (lines[at].Contains("{"))
+					end = "}";
 
-			other.Add(line);
-			lines[at] = null;
-
-			if (line.Contains(end))
+			if (lines[at].Contains(end))
 				return 0;
 
-			return 1 + SplitLines(ref lines, ref other, at + 1, end);
+			return 1 + SplitLines(lines, at + 1, end, false);
 		}
 
 		static void AddPartialToClassName(ref string[] lines, int line)
@@ -147,11 +165,47 @@ namespace Mosa.Tools.TransformMonoSource
 				return;
 
 			int insert = lines[line].IndexOf("class ");
+
 			if (insert < 0)
 				insert = lines[line].IndexOf("struct ");
 
-			lines[line] = lines[line].Insert(insert, " partial");
-			return;
+			lines[line] = lines[line].Insert(insert, "partial ");
+		}
+
+		static string GetDeclaration(string[] lines, int line)
+		{
+			// yes, poor parsing approach but it works
+			string declare = lines[line];
+
+			int insert = declare.IndexOf("class ");
+			int after = 6;
+			string obj = "class";
+
+			if (insert < 0) {
+				insert = declare.IndexOf("struct ");
+				obj = "struct";
+				after = 7;
+			}
+
+			string type = string.Empty;
+
+			if (declare.IndexOf("public ") >= 0)
+				type = "public ";
+			else if (declare.IndexOf("protected ") >= 0)
+				type = "protected ";
+			else if (declare.IndexOf("private ") >= 0)
+				type = "private ";
+
+			string name = declare.Substring(insert + after);
+			int end = name.Length;
+			int at = name.IndexOf(":");
+			if (at > 0) end = at;
+			at = name.IndexOf(" ");
+			if ((at > 0) && (at < end)) end = at;
+
+			name = name.Substring(0, end);
+
+			return type + obj + " " + name;
 		}
 
 		static void CreateSubDirectories(string root, string directory)
