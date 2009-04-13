@@ -82,9 +82,8 @@ namespace Mosa.Runtime.CompilerFramework
             if (null == blockProvider)
                 throw new InvalidOperationException(@"Dominance calculation requires basic blocks.");
 
-            List<BasicBlock> blocks = blockProvider.Blocks;
             CalculateDominance(blockProvider);
-            CalculateDominanceFrontier(blocks);
+            CalculateDominanceFrontier(blockProvider.Blocks);
         }
 
         /// <summary>
