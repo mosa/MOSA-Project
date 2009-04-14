@@ -70,6 +70,7 @@ namespace Mosa.Tools.TransformMonoSource
 			string[] lines = File.ReadAllLines(Path.Combine(root, filename));
 						
 			SortedDictionary<int, int> methods = new SortedDictionary<int, int>();
+			Dictionary<int, int> method2class = new Dictionary<int, int>();
 			List<int> classes = new List<int>();
 			List<int> namespaces = new List<int>();
 			List<int> usings = new List<int>();
@@ -88,18 +89,21 @@ namespace Mosa.Tools.TransformMonoSource
 					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
 					int cnt = SplitLines(lines, l, ";", true);
 					methods.Add(l, cnt + 1);
+					method2class.Add(l, classes[classes.Count - 1]);
 					l += cnt;
 				}
 				else if (line.Contains(" DllImport ") && (colon > 0)) {
 					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
 					int cnt = SplitLines(lines, l, "]", false);
 					methods.Add(l, cnt + 1);
+					method2class.Add(l, classes[classes.Count - 1]);
 					l += cnt;
 				}
 				else if (line.Contains("MethodImplOptions.InternalCall")) {
 					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
 					int cnt = SplitLines(lines, l, "]", false);
 					methods.Add(l, cnt + 1);
+					method2class.Add(l, classes[classes.Count - 1]);
 					l += cnt;
 				}
 				else if (line.StartsWith("using ") && line.Contains(";")) {
@@ -132,18 +136,33 @@ namespace Mosa.Tools.TransformMonoSource
 
 				// write namespace
 				if (namespaces.Count != 1)
-					return;
+					return; // problem
 
 				other.Add(lines[namespaces[0]].Trim(new char[] { '\t', ';', ' ' }));
 				other.Add("{");
 
+				int lastClassline = -1;
+
 				// write methods stubs
 				foreach (KeyValuePair<int, int> section in methods) {
+					string tabs = "\t\t";
+
 					for (int i = 0; i < section.Value; i++) {
 						string line = lines[section.Key + i];
 
 						if (line.Contains("MethodImplOptions.InternalCall"))
 							continue;
+
+						if (lastClassline != method2class[section.Key]) {
+							if (lastClassline > 0)
+								other.Add("\t}");
+
+							lastClassline = method2class[section.Key];
+
+							other.Add("\t" + GetDeclaration(lines, lastClassline));
+
+							other.Add("\t{");
+						}
 
 						line = line.Replace(" extern ", " ");
 						line = line.Trim(new char[] { '\t', ' ' });
@@ -153,17 +172,27 @@ namespace Mosa.Tools.TransformMonoSource
 						if (semicolon)
 							line = line.Replace(";", string.Empty);
 
+						if ((line == "get") || (line == "set"))
+							tabs = "\t\t\t";
+
 						if (!string.IsNullOrEmpty(line))
-							other.Add("\t"+line);
+							other.Add(tabs + line);
 
 						if (semicolon) {
-							other.Add("\t{");
-							other.Add("\t\tthrow new Exception(\"The method or operation is not implemented.\");");
-							other.Add("\t}");
-						}
+							other.Add(tabs + "{");
+							other.Add(tabs + "\tthrow new Exception(\"The method or operation is not implemented.\");");
+							other.Add(tabs + "}");
+
+							tabs = "\t\t";
+						}												
 					}
-					other.Add(string.Empty);
+
+					if (!string.IsNullOrEmpty(other[other.Count - 1]))
+						other.Add(string.Empty);
 				}
+
+				if (lastClassline > 0)
+					other.Add("\t}");
 
 				other.Add("}");
 
@@ -273,5 +302,6 @@ namespace Mosa.Tools.TransformMonoSource
 
 			Directory.CreateDirectory(current);
 		}
+
 	}
 }
