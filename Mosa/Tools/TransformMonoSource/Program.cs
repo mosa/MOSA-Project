@@ -175,8 +175,18 @@ namespace Mosa.Tools.TransformMonoSource
 						if ((line == "get") || (line == "set"))
 							tabs = "\t\t\t";
 
-						if (!string.IsNullOrEmpty(line))
+						if (!string.IsNullOrEmpty(line)) {
+							// Strip internal and extern method attributes
+							line = line.Replace(" internal ", " ").Replace(" extern ", " ");
+
+							if (line.StartsWith("internal "))
+								line = line.Substring(9);
+
+							if (line.StartsWith("extern "))
+								line = line.Substring(7);
+
 							other.Add(tabs + line);
+						}
 
 						if (semicolon) {
 							other.Add(tabs + "{");
