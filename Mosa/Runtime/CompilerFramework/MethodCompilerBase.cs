@@ -1,25 +1,28 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
- */
-
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-
-using Mosa.Runtime.Loader;
-using Mosa.Runtime.Vm;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Linker;
+// -----------------------------------------------------------------------------------------------------------
+// <copyright file="MethodCompilerBase.cs" company="(C) 2008-2009 MOSA - The Managed Operating System Alliance">
+//  
+// (c) 2008-2009 MOSA - The Managed Operating System Alliance
+// 
+// Licensed under the terms of the New BSD License.
+//  
+// Authors:
+//   Michael Ruck (mailto:sharpos@michaelruck.de)
+//   
+// </copyright>
+// -----------------------------------------------------------------------------------------------------------
 
 namespace Mosa.Runtime.CompilerFramework
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using Linker;
+    using Loader;
+    using Metadata;
+    using Metadata.Signatures;
+    using Vm;
+
     /// <summary>
     /// Base class of a method compiler.
     /// </summary>
@@ -31,130 +34,137 @@ namespace Mosa.Runtime.CompilerFramework
     /// created by invoking CreateMethodCompiler on a specific compiler
     /// instance.
     /// </remarks>
-    public class MethodCompilerBase : CompilerBase<IMethodCompilerStage>, IMethodCompiler, IDisposable
+    public class MethodCompilerBase : CompilerBase<IMethodCompilerStage>,
+                                      IMethodCompiler,
+                                      IDisposable
     {
-        #region Data members
+        /// <summary>
+        /// Holds a list of operands, which represent method parameters.
+        /// </summary>
+        private readonly List<Operand> parameters;
 
         /// <summary>
         /// The architecture of the compilation target.
         /// </summary>
-        private IArchitecture _architecture;
+        private IArchitecture architecture;
 
         /// <summary>
         /// Holds the linker used to resolve external symbols.
         /// </summary>
-        private IAssemblyLinker _linker;
-
-        /// <summary>
-        /// Optional signature of stack local variables.
-        /// </summary>
-        private LocalVariableSignature _localsSig;
+        private IAssemblyLinker linker;
 
         /// <summary>
         /// Holds a list of operands, which represent local variables.
         /// </summary>
-        private List<Operand> _locals;
+        private List<Operand> locals;
+
+        /// <summary>
+        /// Optional signature of stack local variables.
+        /// </summary>
+        private LocalVariableSignature localsSig;
 
         /// <summary>
         /// The method definition being compiled.
         /// </summary>
-        private RuntimeMethod _method;
+        private RuntimeMethod method;
 
         /// <summary>
         /// The metadata module, that contains the method.
         /// </summary>
-        private IMetadataModule _module;
+        private IMetadataModule module;
 
         /// <summary>
         /// Holds the next free stack slot index.
         /// </summary>
-        private int _nextStackSlot;
-
-        /// <summary>
-        /// Holds a list of operands, which represent method parameters.
-        /// </summary>
-        private List<Operand> _parameters;
+        private int nextStackSlot;
 
         /// <summary>
         /// Holds the type, which owns the method.
         /// </summary>
-        private RuntimeType _type;
-
-        #endregion // Data members
-
-        #region Construction
+        private RuntimeType type;
 
         /// <summary>
-        /// Initializes a new instance of <see cref="MethodCompilerBase"/>.
+        /// Initializes a new instance of the <see cref="MethodCompilerBase"/> class.
         /// </summary>
         /// <param name="linker">The linker.</param>
         /// <param name="architecture">The target compilation architecture.</param>
         /// <param name="module">The metadata module, that contains the type.</param>
         /// <param name="type">The type, which owns the method to compile.</param>
         /// <param name="method">The method to compile by this instance.</param>
-        protected MethodCompilerBase(IAssemblyLinker linker, IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method)
+        protected MethodCompilerBase(
+            IAssemblyLinker linker,
+            IArchitecture architecture,
+            IMetadataModule module,
+            RuntimeType type,
+            RuntimeMethod method)
         {
             if (null == architecture)
+            {
                 throw new ArgumentNullException(@"architecture");
-            if (null == linker)
-                throw new ArgumentNullException(@"linker");
+            }
 
-            _architecture = architecture;
-            _linker = linker;
-            _method = method;
-            _module = module;
-            _parameters = new List<Operand>(new Operand[_method.Parameters.Count]);
-            _type = type;
-            _nextStackSlot = 0;
+            if (null == linker)
+            {
+                throw new ArgumentNullException(@"linker");
+            }
+
+            this.architecture = architecture;
+            this.linker = linker;
+            this.method = method;
+            this.module = module;
+            this.parameters = new List<Operand>(new Operand[this.method.Parameters.Count]);
+            this.type = type;
+            this.nextStackSlot = 0;
         }
 
-        #endregion // Construction
-
-        #region Properties
-
         /// <summary>
-        /// Retrieves the architecture to compile for.
+        /// Gets the architecture to compile for.
         /// </summary>
         public IArchitecture Architecture
         {
-            get { return _architecture; }
+            get { return this.architecture; }
         }
 
         /// <summary>
-        /// Retrieves the assembly, which contains the method.
+        /// Gets the assembly, which contains the method.
         /// </summary>
         public IMetadataModule Assembly
         {
-            get { return _module; }
+            get { return this.module; }
         }
 
         /// <summary>
-        /// Retrieves the linker used to resolve external symbols.
+        /// Gets the linker used to resolve external symbols.
         /// </summary>
         public IAssemblyLinker Linker
         {
-            get { return _linker; }
+            get { return this.linker; }
         }
 
         /// <summary>
-        /// Retrieves the method implementation being compiled.
+        /// Gets the method implementation being compiled.
         /// </summary>
         public RuntimeMethod Method
         {
-            get { return _method; }
+            get { return this.method; }
         }
 
         /// <summary>
-        /// Holds the owner type of the method.
+        /// Gets the owner type of the method.
         /// </summary>
         public RuntimeType Type
         {
-            get { return _type; }
+            get { return this.type; }
         }
 
-        #endregion // Properties
-
-        #region Methods
+        /// <summary>
+        /// Requests a stream to emit native instructions to.
+        /// </summary>
+        /// <returns>A stream object, which can be used to store emitted instructions.</returns>
+        public virtual Stream RequestCodeStream()
+        {
+            return this.linker.Allocate(this.method, SectionKind.Text, 0, 0);
+        }
 
         /// <summary>
         /// Compiles the method referenced by this method compiler.
@@ -162,31 +172,8 @@ namespace Mosa.Runtime.CompilerFramework
         public void Compile()
         {
             this.BeginCompile();
-            this.Pipeline.Execute(delegate(IMethodCompilerStage stage)
-            {
-                stage.Run(this);
-            });
+            this.Pipeline.Execute(delegate(IMethodCompilerStage stage) { stage.Run(this); });
             this.EndCompile();
-        }
-
-        /// <summary>
-        /// Called before the method compiler begins compiling the method.
-        /// </summary>
-        protected virtual void BeginCompile() { }
-
-        /// <summary>
-        /// Called after the method compiler has finished compiling the method.
-        /// </summary>
-        protected virtual void EndCompile() { }
-
-        /// <summary>
-        /// Creates a new temporary local variable operand.
-        /// </summary>
-        /// <param name="type">The signature type of the temporary.</param>
-        /// <returns>An operand, which represents the temporary.</returns>
-        public Operand CreateTemporary(SigType type)
-        {
-            return new LocalVariableOperand(_architecture.StackFrameRegister, @"T_{0}", _nextStackSlot++, type);
         }
 
         /// <summary>
@@ -198,12 +185,53 @@ namespace Mosa.Runtime.CompilerFramework
         {
             if (type.Type != CilElementType.I8 && type.Type != CilElementType.U8)
             {
-                return _architecture.CreateResultOperand(type, _nextStackSlot, _nextStackSlot++);
+                return this.architecture.CreateResultOperand(type, this.nextStackSlot, this.nextStackSlot++);
             }
             else
             {
-                return CreateTemporary(type);
+                return this.CreateTemporary(type);
             }
+        }
+
+        /// <summary>
+        /// Creates a new temporary local variable operand.
+        /// </summary>
+        /// <param name="type">The signature type of the temporary.</param>
+        /// <returns>An operand, which represents the temporary.</returns>
+        public Operand CreateTemporary(SigType type)
+        {
+            int stackSlot = this.nextStackSlot++;
+            return new LocalVariableOperand(
+                this.architecture.StackFrameRegister, String.Format(@"T_{0}", stackSlot), stackSlot, type);
+        }
+
+        /// <summary>
+        /// Führt anwendungsspezifische Aufgaben durch, die mit der Freigabe, der Zurückgabe oder dem Zurücksetzen von nicht verwalteten Ressourcen zusammenhängen.
+        /// </summary>
+        public void Dispose()
+        {
+            if (null == this._pipeline)
+            {
+                throw new ObjectDisposedException(@"MethodCompilerBase");
+            }
+
+            foreach (IMethodCompilerStage mcs in this._pipeline)
+            {
+                IDisposable d = mcs as IDisposable;
+                if (null != d)
+                {
+                    d.Dispose();
+                }
+            }
+
+            this._pipeline.Clear();
+            this._pipeline = null;
+
+            this.architecture = null;
+            this.linker = null;
+            this.method = null;
+            this.module = null;
+            this.type = null;
         }
 
         /// <summary>
@@ -212,7 +240,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>A stream, which represents the IL of the method.</returns>
         public Stream GetInstructionStream()
         {
-            return _method.Module.GetInstructionStream(_method.Rva);
+            return this.method.Module.GetInstructionStream(this.method.Rva);
         }
 
         /// <summary>
@@ -227,19 +255,24 @@ namespace Mosa.Runtime.CompilerFramework
             // which represent the same memory location. If we need to move a variable in an optimization
             // stage to a different memory location, it should actually be a new one so sharing object
             // only saves runtime space/perf.
-            Debug.Assert(null != _localsSig, @"Method doesn't have locals.");
-            Debug.Assert(idx <= _localsSig.Types.Length, @"Invalid local index requested.");
-            if (null == _localsSig || _localsSig.Types.Length <= idx)
+            Debug.Assert(null != this.localsSig, @"Method doesn't have locals.");
+            Debug.Assert(idx <= this.localsSig.Types.Length, @"Invalid local index requested.");
+            if (null == this.localsSig || this.localsSig.Types.Length <= idx)
+            {
                 throw new ArgumentOutOfRangeException(@"index", idx, @"Invalid parameter index");
+            }
 
             Operand local = null;
-            if (_locals.Count > idx)
-                local = _locals[idx];
+            if (this.locals.Count > idx)
+            {
+                local = this.locals[idx];
+            }
 
             if (null == local)
             {
-                local = new LocalVariableOperand(_architecture.StackFrameRegister, String.Format("L_{0}", idx), idx, _localsSig.Types[idx]);
-                _locals[idx] = local;
+                local = new LocalVariableOperand(
+                    this.architecture.StackFrameRegister, String.Format("L_{0}", idx), idx, this.localsSig.Types[idx]);
+                this.locals[idx] = local;
             }
 
             return local;
@@ -257,12 +290,15 @@ namespace Mosa.Runtime.CompilerFramework
             // which represent the same memory location. If we need to move a variable in an optimization
             // stage to a different memory location, it should actually be a new one so sharing object
             // only saves runtime space/perf.
-            MethodSignature sig = _method.Signature;
+            MethodSignature sig = this.method.Signature;
             if (true == sig.HasThis || true == sig.HasExplicitThis)
             {
                 if (0 == idx)
                 {
-                    return new ParameterOperand(_architecture.StackFrameRegister, new RuntimeParameter(_method.Module, @"this", 0, ParameterAttributes.In), new ClassSigType((TokenTypes)_type.Token));
+                    return new ParameterOperand(
+                        this.architecture.StackFrameRegister,
+                        new RuntimeParameter(this.method.Module, @"this", 0, ParameterAttributes.In),
+                        new ClassSigType((TokenTypes) this.type.Token));
                 }
                 else
                 {
@@ -272,32 +308,28 @@ namespace Mosa.Runtime.CompilerFramework
             }
 
             // A normal argument, decode it...
-            IList<RuntimeParameter> parameters = _method.Parameters;
+            IList<RuntimeParameter> parameters = this.method.Parameters;
             Debug.Assert(null != parameters, @"Method doesn't have arguments.");
             Debug.Assert(idx < parameters.Count, @"Invalid argument index requested.");
             if (null == parameters || parameters.Count <= idx)
+            {
                 throw new ArgumentOutOfRangeException(@"index", idx, @"Invalid parameter index");
+            }
 
             Operand param = null;
-            if (_parameters.Count > idx)
-                param = _parameters[idx];
+            if (this.parameters.Count > idx)
+            {
+                param = this.parameters[idx];
+            }
 
             if (null == param)
             {
-                param = new ParameterOperand(_architecture.StackFrameRegister, parameters[idx], sig.Parameters[idx]);
-                _parameters[idx] = param;
+                param = new ParameterOperand(
+                    this.architecture.StackFrameRegister, parameters[idx], sig.Parameters[idx]);
+                this.parameters[idx] = param;
             }
 
             return param;
-        }
-
-        /// <summary>
-        /// Requests a stream to emit native instructions to.
-        /// </summary>
-        /// <returns>A stream object, which can be used to store emitted instructions.</returns>
-        public virtual Stream RequestCodeStream()
-        {
-            return _linker.Allocate(this._method, SectionKind.Text, 0, 0);
         }
 
         /// <summary>
@@ -307,44 +339,27 @@ namespace Mosa.Runtime.CompilerFramework
         public void SetLocalVariableSignature(LocalVariableSignature localVariableSignature)
         {
             if (null == localVariableSignature)
-                throw new ArgumentNullException(@"localVariableSignature");
-
-            _localsSig = localVariableSignature;
-            _locals = new List<Operand>(new Operand[_localsSig.Types.Length]);
-            _nextStackSlot = _locals.Count + 1;
-        }
-
-        #endregion // Methods
-
-        #region IDisposable Members
-
-        /// <summary>
-        /// Führt anwendungsspezifische Aufgaben durch, die mit der Freigabe, der Zurückgabe oder dem Zurücksetzen von nicht verwalteten Ressourcen zusammenhängen.
-        /// </summary>
-        public void Dispose()
-        {
-            if (null == _pipeline)
-                throw new ObjectDisposedException(@"MethodCompilerBase");
-
-            foreach (IMethodCompilerStage mcs in _pipeline)
             {
-                IDisposable d = mcs as IDisposable;
-                if (null != d)
-                {
-                    d.Dispose();
-                }
+                throw new ArgumentNullException(@"localVariableSignature");
             }
 
-            _pipeline.Clear();
-            _pipeline = null;
-
-            _architecture = null;
-            _linker = null;
-            _method = null;
-            _module = null;
-            _type = null;
+            this.localsSig = localVariableSignature;
+            this.locals = new List<Operand>(new Operand[this.localsSig.Types.Length]);
+            this.nextStackSlot = this.locals.Count + 1;
         }
 
-        #endregion // IDisposable Members
+        /// <summary>
+        /// Called before the method compiler begins compiling the method.
+        /// </summary>
+        protected virtual void BeginCompile()
+        {
+        }
+
+        /// <summary>
+        /// Called after the method compiler has finished compiling the method.
+        /// </summary>
+        protected virtual void EndCompile()
+        {
+        }
     }
 }
