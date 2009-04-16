@@ -68,7 +68,7 @@ namespace Mosa.Tools.TransformMonoSource
 		{
 			// Load file into string array
 			string[] lines = File.ReadAllLines(Path.Combine(root, filename));
-						
+
 			SortedDictionary<int, int> methods = new SortedDictionary<int, int>();
 			Dictionary<int, int> method2class = new Dictionary<int, int>();
 			List<int> classes = new List<int>();
@@ -81,7 +81,7 @@ namespace Mosa.Tools.TransformMonoSource
 
 				int comment = line.IndexOf("//");
 				if (comment > 0)
-					line = line.Substring(0, comment);
+					line = line.Substring(0, comment + 2);
 
 				int colon = lines[l].IndexOf(":");
 
@@ -93,6 +93,13 @@ namespace Mosa.Tools.TransformMonoSource
 					l += cnt;
 				}
 				else if (line.Contains(" DllImport ") && (colon > 0)) {
+					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
+					int cnt = SplitLines(lines, l, "]", false);
+					methods.Add(l, cnt + 1);
+					method2class.Add(l, classes[classes.Count - 1]);
+					l += cnt;
+				}
+				else if (line.Contains("[DllImport")) {
 					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
 					int cnt = SplitLines(lines, l, "]", false);
 					methods.Add(l, cnt + 1);
@@ -114,6 +121,10 @@ namespace Mosa.Tools.TransformMonoSource
 				}
 				else if (line.Contains(" class ") || (line.Contains("\tclass ")) || (line.StartsWith("class ")) ||
 						line.Contains(" struct ") || (line.Contains("\tstruct ")) || (line.StartsWith("struct "))) {
+
+					if (line.Contains("\""))
+						continue;
+
 					classes.Add(l);
 				}
 			}
@@ -138,7 +149,7 @@ namespace Mosa.Tools.TransformMonoSource
 				if (namespaces.Count != 1)
 					return; // problem
 
-				other.Add(lines[namespaces[0]].Trim(new char[] { '\t', ';', ' ' }));
+				other.Add(lines[namespaces[0]].Trim(new char[] { '\t', ';', ' ', '{' }));
 				other.Add("{");
 
 				int lastClassline = -1;
@@ -151,6 +162,9 @@ namespace Mosa.Tools.TransformMonoSource
 						string line = lines[section.Key + i];
 
 						if (line.Contains("MethodImplOptions.InternalCall"))
+							continue;
+
+						if (line.Contains("[DllImport"))
 							continue;
 
 						if (lastClassline != method2class[section.Key]) {
@@ -190,11 +204,11 @@ namespace Mosa.Tools.TransformMonoSource
 
 						if (semicolon) {
 							other.Add(tabs + "{");
-							other.Add(tabs + "\tthrow new Exception(\"The method or operation is not implemented.\");");
+							other.Add(tabs + "\tthrow new System.Exception(\"The method or operation is not implemented.\");");
 							other.Add(tabs + "}");
 
 							tabs = "\t\t";
-						}												
+						}
 					}
 
 					if (!string.IsNullOrEmpty(other[other.Count - 1]))
@@ -262,40 +276,50 @@ namespace Mosa.Tools.TransformMonoSource
 			lines[line] = lines[line].Insert(insert, "partial ");
 		}
 
+		/// <summary>
+		/// Gets the declaration.
+		/// </summary>
+		/// <param name="lines">The lines.</param>
+		/// <param name="line">The line.</param>
+		/// <returns></returns>
 		static string GetDeclaration(string[] lines, int line)
 		{
 			// yes, poor parsing approach but it works
-			string declare = lines[line];
+			string declare = lines[line].Trim(new char[] { '\t', ' ' });
 
+			// Determine class or struct
 			int insert = declare.IndexOf("class ");
-			int after = 6;
 			string obj = "class";
 
 			if (insert < 0) {
 				insert = declare.IndexOf("struct ");
 				obj = "struct";
-				after = 7;
 			}
 
-			string type = string.Empty;
+			// Determine attribute (public, private, protected)
+			string attribute = string.Empty;
 
 			if (declare.IndexOf("public ") >= 0)
-				type = "public ";
+				attribute = "public";
 			else if (declare.IndexOf("protected ") >= 0)
-				type = "protected ";
+				attribute = "protected";
 			else if (declare.IndexOf("private ") >= 0)
-				type = "private ";
+				attribute = "private";
 
-			string name = declare.Substring(insert + after);
+			// Determine if abstract
+			if ((declare.Contains(" abstract ")) || (declare.StartsWith("abstract ")))
+				obj = obj + " abstract";
+
+			// Get class/struct name
+			string name = declare.Substring(insert + obj.Length + 1);
 			int end = name.Length;
 			int at = name.IndexOf(":");
 			if (at > 0) end = at;
 			at = name.IndexOf(" ");
 			if ((at > 0) && (at < end)) end = at;
-
 			name = name.Substring(0, end);
 
-			return type + obj + " " + name;
+			return attribute + " partial " + obj + " " + name;
 		}
 
 		static void CreateSubDirectories(string root, string directory)
