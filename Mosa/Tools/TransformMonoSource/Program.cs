@@ -16,6 +16,45 @@ namespace Mosa.Tools.TransformMonoSource
 {
 	class Program
 	{
+		class ClassNode
+		{
+			public int Start;
+			public int End;
+			public List<ClassNode> Children = new List<ClassNode>();
+			public List<MethodNode> Methods = new List<MethodNode>();
+			public ClassNode Parent;
+			public bool Partial = false;
+
+			public ClassNode()
+			{
+				this.Parent = this; // trick!
+				this.Start = int.MinValue;
+				this.End = int.MaxValue;
+			}
+
+			public ClassNode(ClassNode parent, int start, int end)
+			{
+				this.Parent = parent;
+				this.Start = start;
+				this.End = end;
+			}
+
+		}
+
+		class MethodNode
+		{
+			public ClassNode ClassNode;
+			public int Start;
+			public int Count;
+
+			public MethodNode(ClassNode classNode, int start, int count)
+			{
+				this.ClassNode = classNode;
+				this.Start = start;
+				this.Count = count;
+			}
+		}
+
 		/// <summary>
 		/// Mains the specified args.
 		/// </summary>
@@ -69,13 +108,18 @@ namespace Mosa.Tools.TransformMonoSource
 			// Load file into string array
 			string[] lines = File.ReadAllLines(Path.Combine(root, filename));
 
-			SortedDictionary<int, int> methods = new SortedDictionary<int, int>();
-			Dictionary<int, int> method2class = new Dictionary<int, int>();
-			List<int> classes = new List<int>();
+			ClassNode rootNode = new ClassNode();
+			List<ClassNode> classNodes = new List<ClassNode>();
+			List<MethodNode> methodNodes = new List<MethodNode>();
+
 			List<int> namespaces = new List<int>();
 			List<int> usings = new List<int>();
 
-			// Analysis File
+			ClassNode currentNode = rootNode;
+
+			// TODO: handle #if/#else/#endif in source
+
+			// Analyze File
 			for (int l = 0; l < lines.Length; l++) {
 				string line = lines[l];
 
@@ -86,31 +130,31 @@ namespace Mosa.Tools.TransformMonoSource
 				int colon = lines[l].IndexOf(":");
 
 				if ((line.Contains(" extern ") || (line.Contains("\textern ")) || (line.StartsWith("extern "))) && !line.Contains(" alias ")) {
-					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
-					int cnt = SplitLines(lines, l, ";", true);
-					methods.Add(l, cnt + 1);
-					method2class.Add(l, classes[classes.Count - 1]);
+					int cnt = GetNumberOfMethodDeclarationLines(lines, l, ";", true);
+					MethodNode node = new MethodNode(currentNode, l, cnt + 1);
+					methodNodes.Add(node);
+					currentNode.Methods.Add(node);
 					l += cnt;
 				}
 				else if (line.Contains(" DllImport ") && (colon > 0)) {
-					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
-					int cnt = SplitLines(lines, l, "]", false);
-					methods.Add(l, cnt + 1);
-					method2class.Add(l, classes[classes.Count - 1]);
+					int cnt = GetNumberOfMethodDeclarationLines(lines, l, "]", false);
+					MethodNode node = new MethodNode(currentNode, l, cnt + 1);
+					methodNodes.Add(node);
+					currentNode.Methods.Add(node);
 					l += cnt;
 				}
 				else if (line.Contains("[DllImport")) {
-					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
-					int cnt = SplitLines(lines, l, "]", false);
-					methods.Add(l, cnt + 1);
-					method2class.Add(l, classes[classes.Count - 1]);
+					int cnt = GetNumberOfMethodDeclarationLines(lines, l, "]", false);
+					MethodNode node = new MethodNode(currentNode, l, cnt + 1);
+					methodNodes.Add(node);
+					currentNode.Methods.Add(node);
 					l += cnt;
 				}
 				else if (line.Contains("MethodImplOptions.InternalCall")) {
-					AddPartialToClassName(ref lines, classes[classes.Count - 1]);
-					int cnt = SplitLines(lines, l, "]", false);
-					methods.Add(l, cnt + 1);
-					method2class.Add(l, classes[classes.Count - 1]);
+					int cnt = GetNumberOfMethodDeclarationLines(lines, l, "]", false);
+					MethodNode node = new MethodNode(currentNode, l, cnt + 1);
+					methodNodes.Add(node);
+					currentNode.Methods.Add(node);
 					l += cnt;
 				}
 				else if (line.StartsWith("using ") && line.Contains(";")) {
@@ -121,107 +165,76 @@ namespace Mosa.Tools.TransformMonoSource
 				}
 				else if (line.Contains(" class ") || (line.Contains("\tclass ")) || (line.StartsWith("class ")) ||
 						line.Contains(" struct ") || (line.Contains("\tstruct ")) || (line.StartsWith("struct "))) {
-
+					// Attempt to include keywords in quotes
 					if (line.Contains("\""))
 						continue;
 
-					classes.Add(l);
+					// TODO: Search backwards for the start of the class definition (might not be on the same line as class keyword)
+					// TODO: Search forwards for the end of the class definition (again, might be on another line)
+					// TODO: Handle #if NET_2_0 / #else / #endif 
+					// NOW: Assuming only one line
+
+					// Find the last line of the class
+					int end = GetEndOfScope(lines, l);
+
+					// Go up to parent
+					while (l > currentNode.Parent.End)
+						currentNode = currentNode.Parent;
+
+					// Child
+					ClassNode child = new ClassNode(currentNode, l, end);
+					classNodes.Add(child);
+					currentNode.Children.Add(child);
+					currentNode = child;
 				}
 			}
 
 			// Create all directories
 			CreateSubDirectories(dest, Path.GetDirectoryName(filename));
 
+			// Mark all partial nodes
+			foreach (ClassNode node in classNodes) {
+				if (node.Methods.Count != 0)
+					node.Partial = true;
+
+				if (node.Partial) {
+					ClassNode upNode = node;
+
+					do {
+						upNode.Parent.Partial = true;
+						upNode = upNode.Parent;
+					}
+					while (upNode != upNode.Parent);
+				}
+			}
+
 			// Create partial file
-			if (methods.Count != 0) {
+			if (methodNodes.Count != 0) {
 				string partialFile = Path.Combine(dest, filename.Insert(filename.Length - 2, "Partial."));
-				List<string> other = new List<string>();
+				List<string> output = new List<string>();
 
 				Console.WriteLine(partialFile);
 
-				// write using lines
+				// Write "using" lines
 				foreach (int i in usings)
-					other.Add(lines[i].Trim(new char[] { '\t', ';', ' ' }) + ";");
+					output.Add(lines[i].Trim(new char[] { '\t', ';', ' ' }) + ";");
 
-				other.Add(string.Empty);
+				output.Add(string.Empty);
 
-				// write namespace
+				// Write "namespace" lines
 				if (namespaces.Count != 1)
-					return; // problem
+					return; // problem, more than one namespace
 
-				other.Add(lines[namespaces[0]].Trim(new char[] { '\t', ';', ' ', '{' }));
-				other.Add("{");
+				output.Add(lines[namespaces[0]].Trim(new char[] { '\t', ';', ' ', '{' }));
+				output.Add("{");
 
-				int lastClassline = -1;
+				foreach (ClassNode child in rootNode.Children)
+					WriteClass(lines, child, output, 0);
 
-				// write methods stubs
-				foreach (KeyValuePair<int, int> section in methods) {
-					string tabs = "\t\t";
-
-					for (int i = 0; i < section.Value; i++) {
-						string line = lines[section.Key + i];
-
-						if (line.Contains("MethodImplOptions.InternalCall"))
-							continue;
-
-						if (line.Contains("[DllImport"))
-							continue;
-
-						if (lastClassline != method2class[section.Key]) {
-							if (lastClassline > 0)
-								other.Add("\t}");
-
-							lastClassline = method2class[section.Key];
-
-							other.Add("\t" + GetDeclaration(lines, lastClassline));
-
-							other.Add("\t{");
-						}
-
-						line = line.Replace(" extern ", " ");
-						line = line.Trim(new char[] { '\t', ' ' });
-
-						bool semicolon = line.Contains(";");
-
-						if (semicolon)
-							line = line.Replace(";", string.Empty);
-
-						if ((line == "get") || (line == "set"))
-							tabs = "\t\t\t";
-
-						if (!string.IsNullOrEmpty(line)) {
-							// Strip internal and extern method attributes
-							line = line.Replace(" internal ", " ").Replace(" extern ", " ");
-
-							if (line.StartsWith("internal "))
-								line = line.Substring(9);
-
-							if (line.StartsWith("extern "))
-								line = line.Substring(7);
-
-							other.Add(tabs + line);
-						}
-
-						if (semicolon) {
-							other.Add(tabs + "{");
-							other.Add(tabs + "\tthrow new System.Exception(\"The method or operation is not implemented.\");");
-							other.Add(tabs + "}");
-
-							tabs = "\t\t";
-						}
-					}
-
-					if (!string.IsNullOrEmpty(other[other.Count - 1]))
-						other.Add(string.Empty);
-				}
-
-				if (lastClassline > 0)
-					other.Add("\t}");
-
-				other.Add("}");
+				output.Add("}");
 
 				using (TextWriter writer = new StreamWriter(Path.Combine(dest, partialFile))) {
-					foreach (string line in other)
+					foreach (string line in output)
 						if (line != null)
 							writer.WriteLine(line);
 					writer.Close();
@@ -229,26 +242,93 @@ namespace Mosa.Tools.TransformMonoSource
 			}
 
 			// Insert partial
-			foreach (int i in classes)
-				AddPartialToClassName(ref lines, i);
+			foreach (ClassNode classNode in classNodes)
+				AddPartialToClassName(ref lines, classNode.Start);	// TODO: Pass start/end lines numbers
 
 			// Insert comments
-			foreach (KeyValuePair<int, int> section in methods)
-				for (int i = 0; i < section.Value; i++)
-					lines[section.Key + i] = @"//" + lines[section.Key + i];
+			foreach (MethodNode method in methodNodes)
+				for (int i = 0; i < method.Count; i++)
+					lines[method.Start + i] = @"//" + lines[method.Start + i];
 
 			// Write modified source files
 			using (TextWriter writer = new StreamWriter(Path.Combine(dest, filename))) {
 				foreach (string line in lines)
 					if (line != null)
 						writer.WriteLine(line);
+
 				writer.Close();
 			}
 
 			return;
 		}
 
-		static int SplitLines(string[] lines, int at, string end, bool bracket)
+		static void WriteClass(string[] lines, ClassNode currentNode, List<string> output, int depth)
+		{
+			if (!currentNode.Partial)
+				return;
+
+			string tabs = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t".Substring(0, depth + 1);
+
+			// Write class declaration
+			output.Add(tabs + GetDeclaration(lines, currentNode.Start));
+			output.Add(tabs + "{");
+
+			// Write method declarations
+			foreach (MethodNode method in currentNode.Methods) {
+				string extra = string.Empty;
+
+				for (int i = 0; i < method.Count; i++) {
+					string line = lines[method.Start + i];
+
+					if (line.Contains("MethodImplOptions.InternalCall"))
+						continue;
+
+					if (line.Contains("[DllImport"))
+						continue;
+
+					line = line.Replace(" extern ", " ");
+					line = line.Trim(new char[] { '\t', ' ' });
+
+					bool semicolon = line.Contains(";");
+
+					if (semicolon)
+						line = line.Replace(";", string.Empty);
+
+					if ((line == "get") || (line == "set"))
+						extra = "\t";
+
+					if (!string.IsNullOrEmpty(line)) {
+						// Strip internal and extern method attributes
+						line = line.Replace(" internal ", " ").Replace(" extern ", " ");
+
+						if (line.StartsWith("internal "))
+							line = line.Substring(9);
+
+						if (line.StartsWith("extern "))
+							line = line.Substring(7);
+
+						output.Add(tabs + "\t" + line);
+					}
+
+					if (semicolon) {
+						output.Add(tabs + extra + "\t{");
+						output.Add(tabs + extra + "\t\tthrow new System.Exception(\"The method or operation is not implemented.\");");
+						output.Add(tabs + extra + "\t}");
+						output.Add(string.Empty);
+						extra = string.Empty;
+					}
+				}
+			}
+
+			output.Add(string.Empty);
+
+			foreach (ClassNode child in currentNode.Children)
+				WriteClass(lines, child, output, depth + 1);
+
+			output.Add(tabs + "}");
+		}
+
+		static int GetNumberOfMethodDeclarationLines(string[] lines, int at, string end, bool bracket)
 		{
 			if (bracket)
 				if (lines[at].Contains("{"))
@@ -257,7 +337,7 @@ namespace Mosa.Tools.TransformMonoSource
 			if (lines[at].Contains(end))
 				return 0;
 
-			return 1 + SplitLines(lines, at + 1, end, false);
+			return 1 + GetNumberOfMethodDeclarationLines(lines, at + 1, end, false);
 		}
 
 		static void AddPartialToClassName(ref string[] lines, int line)
@@ -300,15 +380,11 @@ namespace Mosa.Tools.TransformMonoSource
 			string attribute = string.Empty;
 
 			if (declare.IndexOf("public ") >= 0)
-				attribute = "public";
+				attribute = "public ";
 			else if (declare.IndexOf("protected ") >= 0)
-				attribute = "protected";
+				attribute = "protected ";
 			else if (declare.IndexOf("private ") >= 0)
-				attribute = "private";
-
-			// Determine if abstract
-			if ((declare.Contains(" abstract ")) || (declare.StartsWith("abstract ")))
-				obj = obj + " abstract";
+				attribute = "private ";
 
 			// Get class/struct name
 			string name = declare.Substring(insert + obj.Length + 1);
@@ -319,7 +395,11 @@ namespace Mosa.Tools.TransformMonoSource
 			if ((at > 0) && (at < end)) end = at;
 			name = name.Substring(0, end);
 
-			return attribute + " partial " + obj + " " + name;
+			// Determine if abstract
+			if ((declare.Contains(" abstract ")) || (declare.StartsWith("abstract ")))
+				obj = obj + " abstract";
+
+			return attribute + "partial " + obj + " " + name;
 		}
 
 		static void CreateSubDirectories(string root, string directory)
@@ -335,6 +415,30 @@ namespace Mosa.Tools.TransformMonoSource
 				CreateSubDirectories(root, parent);
 
 			Directory.CreateDirectory(current);
+		}
+
+		static int GetEndOfScope(string[] lines, int at)
+		{
+			bool first = false;
+
+			int open = 0;
+			int close = 0;
+
+			for (; at < lines.Length; at++) {
+				foreach (char c in lines[at])
+					if (c == '{')
+						open++;
+					else if (c == '}')
+						close++;
+
+				if ((open > 0) & (!first))
+					first = true;
+
+				if ((first) && (open <= close))
+					return at;
+			}
+
+			return at;
 		}
 
 	}
