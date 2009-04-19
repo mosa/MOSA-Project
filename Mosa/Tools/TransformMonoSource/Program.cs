@@ -24,6 +24,7 @@ namespace Mosa.Tools.TransformMonoSource
 			public List<MethodNode> Methods = new List<MethodNode>();
 			public ClassNode Parent;
 			public bool Partial = false;
+			public string Name = string.Empty;
 
 			public ClassNode()
 			{
@@ -38,7 +39,6 @@ namespace Mosa.Tools.TransformMonoSource
 				this.Start = start;
 				this.End = end;
 			}
-
 		}
 
 		class MethodNode
@@ -189,58 +189,33 @@ namespace Mosa.Tools.TransformMonoSource
 				}
 			}
 
-			// Create all directories
-			CreateSubDirectories(dest, Path.GetDirectoryName(filename));
-
 			// Mark all partial nodes
-			foreach (ClassNode node in classNodes) {
-				if (node.Methods.Count != 0)
-					node.Partial = true;
-
-				if (node.Partial) {
+			foreach (ClassNode node in classNodes)
+				if (node.Methods.Count != 0) {
 					ClassNode upNode = node;
-
 					do {
 						upNode.Parent.Partial = true;
 						upNode = upNode.Parent;
 					}
 					while (upNode != upNode.Parent);
 				}
-			}
+
+			// Create all directories
+			CreateSubDirectories(dest, Path.GetDirectoryName(filename));
 
 			// Create partial file
 			if (methodNodes.Count != 0) {
 				string partialFile = Path.Combine(dest, filename.Insert(filename.Length - 2, "Partial."));
-				List<string> output = new List<string>();
-
 				Console.WriteLine(partialFile);
-
-				// Write "using" lines
-				foreach (int i in usings)
-					output.Add(lines[i].Trim(new char[] { '\t', ';', ' ' }) + ";");
-
-				output.Add(string.Empty);
-
-				// Write "namespace" lines
-				if (namespaces.Count != 1)
-					return; // problem, more than one namespace
-
-				output.Add(lines[namespaces[0]].Trim(new char[] { '\t', ';', ' ', '{' }));
-				output.Add("{");
-
-				foreach (ClassNode child in rootNode.Children)
-					WriteClass(lines, child, output, 0);
-
-				output.Add("}");
-
-				using (TextWriter writer = new StreamWriter(Path.Combine(dest, partialFile))) {
-					foreach (string line in output)
-						if (line != null)
-							writer.WriteLine(line);
-					writer.Close();
-				}
+				CreatePartialFile(lines, rootNode, usings, namespaces, Path.Combine(dest, partialFile));
 			}
 
+			// Modify source file
+			CreateModifiedFile(lines, classNodes, methodNodes, Path.Combine(dest, filename));
+		}
+
+		static void CreateModifiedFile(string[] lines, List<ClassNode> classNodes, List<MethodNode> methodNodes, string filename)
+		{
 			// Insert partial
 			foreach (ClassNode classNode in classNodes)
 				AddPartialToClassName(ref lines, classNode.Start);	// TODO: Pass start/end lines numbers
@@ -251,15 +226,43 @@ namespace Mosa.Tools.TransformMonoSource
 					lines[method.Start + i] = @"//" + lines[method.Start + i];
 
 			// Write modified source files
-			using (TextWriter writer = new StreamWriter(Path.Combine(dest, filename))) {
+			using (TextWriter writer = new StreamWriter(filename)) {
 				foreach (string line in lines)
 					if (line != null)
 						writer.WriteLine(line);
 
 				writer.Close();
 			}
+		}
 
-			return;
+		static void CreatePartialFile(string[] lines, ClassNode rootNode, List<int> usings, List<int> namespaces, string filename)
+		{
+			List<string> output = new List<string>();
+
+			// Write "using" lines
+			foreach (int i in usings)
+				output.Add(lines[i].Trim(new char[] { '\t', ';', ' ' }) + ";");
+
+			output.Add(string.Empty);
+
+			// Write "namespace" lines
+			if (namespaces.Count != 1)
+				return; // problem, more than one namespace
+
+			output.Add(lines[namespaces[0]].Trim(new char[] { '\t', ';', ' ', '{' }));
+			output.Add("{");
+
+			foreach (ClassNode child in rootNode.Children)
+				WriteClass(lines, child, output, 0);
+
+			output.Add("}");
+
+			using (TextWriter writer = new StreamWriter(filename)) {
+				foreach (string line in output)
+					if (line != null)
+						writer.WriteLine(line);
+				writer.Close();
+			}
 		}
 
 		static void WriteClass(string[] lines, ClassNode currentNode, List<string> output, int depth)
