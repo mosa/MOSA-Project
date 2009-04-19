@@ -20,6 +20,7 @@ namespace Mosa.Tools.TransformMonoSource
 		{
 			public int Start;
 			public int End;
+			public int Declare;
 			public List<ClassNode> Children = new List<ClassNode>();
 			public List<MethodNode> Methods = new List<MethodNode>();
 			public ClassNode Parent;
@@ -33,11 +34,12 @@ namespace Mosa.Tools.TransformMonoSource
 				this.End = int.MaxValue;
 			}
 
-			public ClassNode(ClassNode parent, int start, int end)
+			public ClassNode(ClassNode parent, int start, int end, int declare)
 			{
 				this.Parent = parent;
 				this.Start = start;
 				this.End = end;
+				this.Declare = declare;
 			}
 		}
 
@@ -165,33 +167,44 @@ namespace Mosa.Tools.TransformMonoSource
 				}
 				else if (line.Contains(" class ") || (line.Contains("\tclass ")) || (line.StartsWith("class ")) ||
 						line.Contains(" struct ") || (line.Contains("\tstruct ")) || (line.StartsWith("struct "))) {
+
 					// Attempt to include keywords in quotes
 					if (line.Contains("\""))
 						continue;
 
-					// TODO: Search backwards for the start of the class definition (might not be on the same line as class keyword)
 					// TODO: Search forwards for the end of the class definition (again, might be on another line)
 					// TODO: Handle #if NET_2_0 / #else / #endif 
 					// NOW: Assuming only one line
+
+					string className = GetClassName(lines, l);
+
+					// Attempt to handle #else class definitions
+					if (className == currentNode.Name)
+						continue;
+
+					// Search backwards for the start of the class definition (might not be on the same line as class keyword)
+					int start = GetPreviousOpen(lines, l);
 
 					// Find the last line of the class
 					int end = GetEndOfScope(lines, l);
 
 					// Go up to parent
-					while (l > currentNode.Parent.End)
+					while (l > currentNode.End)
 						currentNode = currentNode.Parent;
 
 					// Child
-					ClassNode child = new ClassNode(currentNode, l, end);
+					ClassNode child = new ClassNode(currentNode, start, end, l);
 					classNodes.Add(child);
 					currentNode.Children.Add(child);
 					currentNode = child;
+					child.Name = className;
 				}
 			}
 
 			// Mark all partial nodes
 			foreach (ClassNode node in classNodes)
 				if (node.Methods.Count != 0) {
+					node.Partial = true;
 					ClassNode upNode = node;
 					do {
 						upNode.Parent.Partial = true;
@@ -218,7 +231,7 @@ namespace Mosa.Tools.TransformMonoSource
 		{
 			// Insert partial
 			foreach (ClassNode classNode in classNodes)
-				AddPartialToClassName(ref lines, classNode.Start);	// TODO: Pass start/end lines numbers
+				AddPartialToClassName(ref lines, classNode.Declare);	// TODO: Pass start/end lines numbers
 
 			// Insert comments
 			foreach (MethodNode method in methodNodes)
@@ -273,7 +286,7 @@ namespace Mosa.Tools.TransformMonoSource
 			string tabs = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t".Substring(0, depth + 1);
 
 			// Write class declaration
-			output.Add(tabs + GetDeclaration(lines, currentNode.Start));
+			output.Add(tabs + GetDeclaration(lines, currentNode.Declare));
 			output.Add(tabs + "{");
 
 			// Write method declarations
@@ -359,6 +372,27 @@ namespace Mosa.Tools.TransformMonoSource
 			lines[line] = lines[line].Insert(insert, "partial ");
 		}
 
+		static string GetClassName(string[] lines, int line)
+		{
+			string declare = lines[line].Trim(new char[] { '\t', ' ' });
+
+			// Determine class or struct
+			int insert = declare.IndexOf("class ") + 5;
+
+			if (insert < 5)
+				insert = declare.IndexOf("struct ") + 6;
+
+			// Get class/struct name
+			string name = declare.Substring(insert + 1);
+			int end = name.Length;
+			int at = name.IndexOf(":");
+			if (at > 0) end = at;
+			at = name.IndexOf(" ");
+			if ((at > 0) && (at < end)) end = at;
+
+			return name.Substring(0, end);
+		}
+
 		/// <summary>
 		/// Gets the declaration.
 		/// </summary>
@@ -367,17 +401,13 @@ namespace Mosa.Tools.TransformMonoSource
 		/// <returns></returns>
 		static string GetDeclaration(string[] lines, int line)
 		{
-			// yes, poor parsing approach but it works
 			string declare = lines[line].Trim(new char[] { '\t', ' ' });
 
-			// Determine class or struct
-			int insert = declare.IndexOf("class ");
-			string obj = "class";
+			// Get Name
+			string name = GetClassName(lines, line);
 
-			if (insert < 0) {
-				insert = declare.IndexOf("struct ");
-				obj = "struct";
-			}
+			// Determine class or struct
+			string obj = (declare.Contains("struct ")) ? "struct" : "class";
 
 			// Determine attribute (public, private, protected)
 			string attribute = string.Empty;
@@ -388,15 +418,6 @@ namespace Mosa.Tools.TransformMonoSource
 				attribute = "protected ";
 			else if (declare.IndexOf("private ") >= 0)
 				attribute = "private ";
-
-			// Get class/struct name
-			string name = declare.Substring(insert + obj.Length + 1);
-			int end = name.Length;
-			int at = name.IndexOf(":");
-			if (at > 0) end = at;
-			at = name.IndexOf(" ");
-			if ((at > 0) && (at < end)) end = at;
-			name = name.Substring(0, end);
 
 			// Determine if abstract
 			if ((declare.Contains(" abstract ")) || (declare.StartsWith("abstract ")))
@@ -442,6 +463,17 @@ namespace Mosa.Tools.TransformMonoSource
 			}
 
 			return at;
+		}
+
+		static int GetPreviousOpen(string[] lines, int at)
+		{
+			for (; at >= 0; at--) {
+				foreach (char c in lines[at])
+					if (c == '{')
+						return at;
+			}
+
+			return 0;
 		}
 
 	}
