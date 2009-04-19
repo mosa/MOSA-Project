@@ -26,6 +26,7 @@ namespace Mosa.Tools.TransformMonoSource
 			public ClassNode Parent;
 			public bool Partial = false;
 			public string Name = string.Empty;
+			public List<int> OtherDeclare = new List<int>();
 
 			public ClassNode()
 			{
@@ -46,14 +47,16 @@ namespace Mosa.Tools.TransformMonoSource
 		class MethodNode
 		{
 			public ClassNode ClassNode;
+			public int Declare;
 			public int Start;
-			public int Count;
+			public int End;
 
-			public MethodNode(ClassNode classNode, int start, int count)
+			public MethodNode(ClassNode classNode, int start, int end, int declare)
 			{
 				this.ClassNode = classNode;
+				this.Declare = declare;
 				this.Start = start;
-				this.Count = count;
+				this.End = end;
 			}
 		}
 
@@ -119,51 +122,29 @@ namespace Mosa.Tools.TransformMonoSource
 
 			ClassNode currentNode = rootNode;
 
-			// TODO: handle #if/#else/#endif in source
-
 			// Analyze File
-			for (int l = 0; l < lines.Length; l++) {
-				string line = lines[l];
+			for (int linenbr = 0; linenbr < lines.Length; linenbr++) {
+				string line = lines[linenbr];
 
 				int comment = line.IndexOf("//");
 				if (comment > 0)
 					line = line.Substring(0, comment + 2);
 
-				int colon = lines[l].IndexOf(":");
+				int colon = lines[linenbr].IndexOf(":");
+				int skip = 0;
 
 				if ((line.Contains(" extern ") || (line.Contains("\textern ")) || (line.StartsWith("extern "))) && !line.Contains(" alias ")) {
-					int cnt = GetNumberOfMethodDeclarationLines(lines, l, ";", true);
-					MethodNode node = new MethodNode(currentNode, l, cnt + 1);
+					int start = GetPreviousBlockEnd(lines, linenbr);
+					skip = GetNumberOfMethodDeclarationLines(lines, linenbr, false);
+					MethodNode node = new MethodNode(currentNode, start, linenbr + skip, linenbr);
 					methodNodes.Add(node);
 					currentNode.Methods.Add(node);
-					l += cnt;
-				}
-				else if (line.Contains(" DllImport ") && (colon > 0)) {
-					int cnt = GetNumberOfMethodDeclarationLines(lines, l, "]", false);
-					MethodNode node = new MethodNode(currentNode, l, cnt + 1);
-					methodNodes.Add(node);
-					currentNode.Methods.Add(node);
-					l += cnt;
-				}
-				else if (line.Contains("[DllImport")) {
-					int cnt = GetNumberOfMethodDeclarationLines(lines, l, "]", false);
-					MethodNode node = new MethodNode(currentNode, l, cnt + 1);
-					methodNodes.Add(node);
-					currentNode.Methods.Add(node);
-					l += cnt;
-				}
-				else if (line.Contains("MethodImplOptions.InternalCall")) {
-					int cnt = GetNumberOfMethodDeclarationLines(lines, l, "]", false);
-					MethodNode node = new MethodNode(currentNode, l, cnt + 1);
-					methodNodes.Add(node);
-					currentNode.Methods.Add(node);
-					l += cnt;
 				}
 				else if (line.StartsWith("using ") && line.Contains(";")) {
-					usings.Add(l);
+					usings.Add(linenbr);
 				}
 				else if (line.StartsWith("namespace ")) {
-					namespaces.Add(l);
+					namespaces.Add(linenbr);
 				}
 				else if (line.Contains(" class ") || (line.Contains("\tclass ")) || (line.StartsWith("class ")) ||
 						line.Contains(" struct ") || (line.Contains("\tstruct ")) || (line.StartsWith("struct "))) {
@@ -172,33 +153,32 @@ namespace Mosa.Tools.TransformMonoSource
 					if (line.Contains("\""))
 						continue;
 
-					// TODO: Search forwards for the end of the class definition (again, might be on another line)
-					// TODO: Handle #if NET_2_0 / #else / #endif 
-					// NOW: Assuming only one line
-
-					string className = GetClassName(lines, l);
+					string className = GetClassName(lines, linenbr);
 
 					// Attempt to handle #else class definitions
-					if (className == currentNode.Name)
+					if (className == currentNode.Name) {
+						currentNode.OtherDeclare.Add(linenbr);
 						continue;
+					}
 
 					// Search backwards for the start of the class definition (might not be on the same line as class keyword)
-					int start = GetPreviousOpen(lines, l);
+					int start = GetPreviousBlockEnd(lines, linenbr);
 
 					// Find the last line of the class
-					int end = GetEndOfScope(lines, l);
+					int end = GetEndOfScope(lines, linenbr);
 
 					// Go up to parent
-					while (l > currentNode.End)
+					while (linenbr > currentNode.End)
 						currentNode = currentNode.Parent;
 
 					// Child
-					ClassNode child = new ClassNode(currentNode, start, end, l);
+					ClassNode child = new ClassNode(currentNode, start, end, linenbr);
 					classNodes.Add(child);
 					currentNode.Children.Add(child);
 					currentNode = child;
 					child.Name = className;
 				}
+				linenbr = linenbr + skip;
 			}
 
 			// Mark all partial nodes
@@ -230,13 +210,23 @@ namespace Mosa.Tools.TransformMonoSource
 		static void CreateModifiedFile(string[] lines, List<ClassNode> classNodes, List<MethodNode> methodNodes, string filename)
 		{
 			// Insert partial
-			foreach (ClassNode classNode in classNodes)
-				AddPartialToClassName(ref lines, classNode.Declare);	// TODO: Pass start/end lines numbers
+			foreach (ClassNode classNode in classNodes) {
+				AddPartialToClassName(ref lines, classNode.Declare);
+
+				foreach (int line in classNode.OtherDeclare)
+					AddPartialToClassName(ref lines, line);
+			}
 
 			// Insert comments
 			foreach (MethodNode method in methodNodes)
-				for (int i = 0; i < method.Count; i++)
-					lines[method.Start + i] = @"//" + lines[method.Start + i];
+				for (int i = method.Start; i <= method.End; i++) {
+					string trim = lines[i].Trim(new char[] { '\t', ' ' });
+
+					if ((!string.IsNullOrEmpty(trim))
+						&& (!trim.StartsWith("#"))
+						&& (!trim.StartsWith("//")))
+						lines[i] = @"//" + lines[i];
+				}
 
 			// Write modified source files
 			using (TextWriter writer = new StreamWriter(filename)) {
@@ -293,13 +283,15 @@ namespace Mosa.Tools.TransformMonoSource
 			foreach (MethodNode method in currentNode.Methods) {
 				string extra = string.Empty;
 
-				for (int i = 0; i < method.Count; i++) {
-					string line = lines[method.Start + i];
+				for (int i = method.Declare; i <= method.End; i++) {
+					string line = lines[i];
 
-					if (line.Contains("MethodImplOptions.InternalCall"))
+					string trim = line.TrimStart(new char[] { '\t', ' ' });
+
+					if ((trim.StartsWith("[")) && (trim.EndsWith("]")))
 						continue;
 
-					if (line.Contains("[DllImport"))
+					if (trim.StartsWith("//"))
 						continue;
 
 					line = line.Replace(" extern ", " ");
@@ -323,14 +315,13 @@ namespace Mosa.Tools.TransformMonoSource
 						if (line.StartsWith("extern "))
 							line = line.Substring(7);
 
-						output.Add(tabs + "\t" + line);
+						output.Add(tabs + extra + "\t" + line);
 					}
 
 					if (semicolon) {
 						output.Add(tabs + extra + "\t{");
 						output.Add(tabs + extra + "\t\tthrow new System.Exception(\"The method or operation is not implemented.\");");
 						output.Add(tabs + extra + "\t}");
-						output.Add(string.Empty);
 						extra = string.Empty;
 					}
 				}
@@ -344,16 +335,20 @@ namespace Mosa.Tools.TransformMonoSource
 			output.Add(tabs + "}");
 		}
 
-		static int GetNumberOfMethodDeclarationLines(string[] lines, int at, string end, bool bracket)
+		static int GetNumberOfMethodDeclarationLines(string[] lines, int at, bool bracket)
 		{
+			if (lines[at].Contains("{"))
+				bracket = true;
+
 			if (bracket)
-				if (lines[at].Contains("{"))
-					end = "}";
+				if (lines[at].Contains("}"))
+					return 0;
 
-			if (lines[at].Contains(end))
-				return 0;
+			if (!bracket)
+				if (lines[at].Contains(";"))
+					return 0;
 
-			return 1 + GetNumberOfMethodDeclarationLines(lines, at + 1, end, false);
+			return 1 + GetNumberOfMethodDeclarationLines(lines, at + 1, bracket);
 		}
 
 		static void AddPartialToClassName(ref string[] lines, int line)
@@ -420,8 +415,8 @@ namespace Mosa.Tools.TransformMonoSource
 				attribute = "private ";
 
 			// Determine if abstract
-			if ((declare.Contains(" abstract ")) || (declare.StartsWith("abstract ")))
-				obj = obj + " abstract";
+//			if ((declare.Contains(" abstract ")) || (declare.StartsWith("abstract ")))
+//				obj = obj + " abstract";
 
 			return attribute + "partial " + obj + " " + name;
 		}
@@ -465,12 +460,12 @@ namespace Mosa.Tools.TransformMonoSource
 			return at;
 		}
 
-		static int GetPreviousOpen(string[] lines, int at)
+		static int GetPreviousBlockEnd(string[] lines, int at)
 		{
-			for (; at >= 0; at--) {
+			for (at--; at >= 0; at--) {
 				foreach (char c in lines[at])
-					if (c == '{')
-						return at;
+					if ((c == '{') || (c == ';') || (c == '}'))
+						return at + 1;
 			}
 
 			return 0;
