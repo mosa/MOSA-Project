@@ -44,9 +44,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlugGen.Console", "Tools\Pl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlugGen.Core", "Tools\PlugGen.Core\PlugGen.Core.csproj", "{1306E901-47C2-4654-A7B5-9CB1BBC4064D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.CreateProjects", "Tools\Mono\CreateProjects\Mosa.Tools.Mono.CreateProjects.csproj", "{1F0DA5CC-50AD-4068-AFB3-48A94BB40911}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.TransformSource", "Tools\Mono\TransformSource\Mosa.Tools.Mono.TransformSource.csproj", "{A2D45DAF-36FC-4B88-9652-6EBC1E6C83DC}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 22
+		SccNumberOfProjects = 24
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs01.codeplex.com/
 		SccProjectUniqueName0 = System\\Mosa.System.csproj
@@ -159,6 +163,16 @@ Global
 		SccAuxPath21 = https://tfs01.codeplex.com
 		SccLocalPath21 = Tools\\PlugGen.Core
 		SccProvider21 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName22 = Tools\\Mono\\CreateProjects\\Mosa.Tools.Mono.CreateProjects.csproj
+		SccProjectName22 = Tools/Mono/CreateProjects
+		SccAuxPath22 = https://tfs01.codeplex.com
+		SccLocalPath22 = Tools\\Mono\\CreateProjects
+		SccProvider22 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName23 = Tools\\Mono\\TransformSource\\Mosa.Tools.Mono.TransformSource.csproj
+		SccProjectName23 = Tools/Mono/TransformSource
+		SccAuxPath23 = https://tfs01.codeplex.com
+		SccLocalPath23 = Tools\\Mono\\TransformSource
+		SccProvider23 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -253,6 +267,14 @@ Global
 		{1306E901-47C2-4654-A7B5-9CB1BBC4064D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1306E901-47C2-4654-A7B5-9CB1BBC4064D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1306E901-47C2-4654-A7B5-9CB1BBC4064D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F0DA5CC-50AD-4068-AFB3-48A94BB40911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F0DA5CC-50AD-4068-AFB3-48A94BB40911}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F0DA5CC-50AD-4068-AFB3-48A94BB40911}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F0DA5CC-50AD-4068-AFB3-48A94BB40911}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2D45DAF-36FC-4B88-9652-6EBC1E6C83DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2D45DAF-36FC-4B88-9652-6EBC1E6C83DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2D45DAF-36FC-4B88-9652-6EBC1E6C83DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2D45DAF-36FC-4B88-9652-6EBC1E6C83DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
