@@ -5,28 +5,29 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{BE9A5A27-22C4-4664-A8BD-388B30B5972C}</ProjectGuid>
+    <ProjectGuid>{A2D45DAF-36FC-4B88-9652-6EBC1E6C83DC}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Tools.MakeBootImage</RootNamespace>
-    <AssemblyName>Mosa.Tools.MakeBootImage</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>Mosa.Tools.Mono.TransformSource</RootNamespace>
+    <AssemblyName>Mosa.Tools.Mono.TransformSource</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <StartupObject>Mosa.Tools.MakeBootImage.Program</StartupObject>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
+    <OutputPath>..\..\..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>Mosa.Tools.MakeBootImage.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\bin\Mosa.Tools.Mono.TransformSource.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,38 +36,14 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>Mosa.MakeBootImage.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\Mosa.Tools.Mono.TransformSource.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\ClassLib\Mosa.ClassLib.csproj">
-      <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
-      <Name>Mosa.ClassLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\DeviceDrivers\Mosa.DeviceDrivers.csproj">
-      <Project>{4DBD4C50-BEC5-48D9-B471-9FB0A7F69999}</Project>
-      <Name>Mosa.DeviceDrivers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\DeviceSystem\Mosa.DeviceSystem.csproj">
-      <Project>{6509477A-7360-4937-A1B9-26FED0A75CDA}</Project>
-      <Name>Mosa.DeviceSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\EmulatedDevices\Mosa.EmulatedDevices.csproj">
-      <Project>{4BCC3783-8374-4E44-A843-22C0C5624C92}</Project>
-      <Name>Mosa.EmulatedDevices</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\FileSystem\Mosa.FileSystem.csproj">
-      <Project>{D89972FD-A930-4D0C-B393-1895E78FAFAB}</Project>
-      <Name>Mosa.FileSystem</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

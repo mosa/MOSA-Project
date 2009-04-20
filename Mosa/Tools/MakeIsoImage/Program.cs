@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Mosa.MakeIsoImage
+namespace Mosa.Tools.MakeIsoImage
 {
     class Program
     {

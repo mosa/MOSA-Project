@@ -12,7 +12,7 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 
-namespace Mosa.Tools.TransformMonoSource
+namespace Mosa.Tools.Mono.TransformSource
 {
 	class Program
 	{
@@ -451,12 +451,6 @@ namespace Mosa.Tools.TransformMonoSource
 			return tokens[GetClassOrStructLocacation(tokens) + 1];
 		}
 
-		/// <summary>
-		/// Gets the declaration.
-		/// </summary>
-		/// <param name="lines">The lines.</param>
-		/// <param name="line">The line.</param>
-		/// <returns></returns>
 		static string GetDeclaration(string[] lines, int start, int declare)
 		{
 			List<string> tokens = GetDeclarationTokens(lines, start, declare);
@@ -465,8 +459,6 @@ namespace Mosa.Tools.TransformMonoSource
 
 			// Determine attribute (public, private, protected)
 			string attribute = string.Empty;
-			bool foundstatic = false;
-			bool foundsealed = false;
 
 			for (int i = 0; i < line; i++) {
 				string token = tokens[i];
@@ -478,8 +470,6 @@ namespace Mosa.Tools.TransformMonoSource
 					case "private": accept = true; break;
 					case "protected": accept = true; break;
 					case "unsafe": accept = true; break;
-					case "static": foundstatic = true; break;
-					case "sealed": foundsealed = true; break;
 					default: break;
 				}
 
@@ -487,12 +477,6 @@ namespace Mosa.Tools.TransformMonoSource
 					if (!attribute.Contains(token))
 						attribute = attribute + " " + token;
 			}
-
-			// prefer sealed over static
-			//if (foundsealed)
-			//    attribute = "sealed " + attribute;
-			//else if (foundstatic)
-			//    attribute = "static " + attribute;
 
 			return attribute.Trim() + " partial " + tokens[line] + " " + tokens[line + 1];
 		}

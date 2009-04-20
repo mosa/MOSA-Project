@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Mosa.Tools.TransformMonoSource")]
+[assembly: AssemblyTitle("Mosa.Tools.Mono.CreateProjects")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Mosa.Tools.TransformMonoSource")]
+[assembly: AssemblyProduct("Mosa.Tools.Mono.CreateProjects")]
 [assembly: AssemblyCopyright("Copyright ©  2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("64966aa2-dba1-4638-8809-76f503ce4c86")]
+[assembly: Guid("7e578019-08bb-43b5-9449-9fd92bbbcb4d")]
 
 // Version information for an assembly consists of the following four values:
 //

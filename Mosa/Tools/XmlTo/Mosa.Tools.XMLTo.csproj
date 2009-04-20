@@ -8,8 +8,8 @@
     <ProjectGuid>{0647E3DC-6386-4457-AFAC-CEF32F7E031E}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XmlTo</RootNamespace>
-    <AssemblyName>XmlTo</AssemblyName>
+    <RootNamespace>Mosa.Tools.XmlTo</RootNamespace>
+    <AssemblyName>Mosa.Tools.XmlTo</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
