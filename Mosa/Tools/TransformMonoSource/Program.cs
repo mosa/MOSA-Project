@@ -16,6 +16,8 @@ namespace Mosa.Tools.TransformMonoSource
 {
 	class Program
 	{
+		static List<string> notes = new List<string>();
+
 		class ClassNode
 		{
 			public int Start;
@@ -97,9 +99,9 @@ namespace Mosa.Tools.TransformMonoSource
 
 		static void FindFiles(string root, string directory, ref List<string> files)
 		{
-			foreach (string file in Directory.GetFiles(Path.Combine(root, directory), "*.cs", SearchOption.TopDirectoryOnly)) {
+			foreach (string file in Directory.GetFiles(Path.Combine(root, directory), "*.cs", SearchOption.TopDirectoryOnly)) 
+				//if (file.Contains("MemberInfo.cs"))	// DEBUG
 				files.Add(Path.Combine(directory, Path.GetFileName(file)));
-			}
 
 			foreach (string dir in Directory.GetDirectories(Path.Combine(root, directory), "*.*", SearchOption.TopDirectoryOnly)) {
 				if (dir.Contains(".svn"))
@@ -110,6 +112,8 @@ namespace Mosa.Tools.TransformMonoSource
 
 		static void Process(string root, string filename, string dest)
 		{
+			Console.WriteLine(filename);
+
 			// Load file into string array
 			string[] lines = File.ReadAllLines(Path.Combine(root, filename));
 
@@ -122,28 +126,63 @@ namespace Mosa.Tools.TransformMonoSource
 
 			ClassNode currentNode = rootNode;
 
+			bool incomment = false;
 			// Analyze File
 			for (int linenbr = 0; linenbr < lines.Length; linenbr++) {
 				string line = lines[linenbr];
+				int comment = -1;
 
-				int comment = line.IndexOf("//");
-				if (comment > 0)
-					line = line.Substring(0, comment + 2);
+				if (incomment) {
+					comment = line.IndexOf("*/");
 
-				int colon = lines[linenbr].IndexOf(":");
+					if (comment < 0)
+						continue;
+
+					incomment = false;
+					line = line.Substring(comment + 2);
+				}
+
+				comment = line.IndexOf("//");
+				if (comment >= 0)
+					line = line.Substring(0, comment);
+
+				// strip /* comments */
+				while (true) {
+					comment = line.IndexOf("/*");
+
+					if (comment < 0)
+						break;
+
+					int endcomment = line.IndexOf("*/");
+
+					if (endcomment < 0) {
+						incomment = true;
+						line = string.Empty;
+						break;
+					}
+
+					line = line.Substring(0, comment) + line.Substring(endcomment + 2);
+				}
+
 				int skip = 0;
+				string trim = line.Trim(new char[] { '\t', ' ' });
 
-				if ((line.Contains(" extern ") || (line.Contains("\textern ")) || (line.StartsWith("extern "))) && !line.Contains(" alias ")) {
+				if (string.IsNullOrEmpty(line))
+					continue;
+				else if (trim.StartsWith("#")) {
+					continue;
+				}
+				else if ((line.Contains(" extern ") || (line.Contains("\textern ")) || (line.StartsWith("extern "))) && !line.Contains(" alias ")) {
 					int start = GetPreviousBlockEnd(lines, linenbr);
 					skip = GetNumberOfMethodDeclarationLines(lines, linenbr, false);
 					MethodNode node = new MethodNode(currentNode, start, linenbr + skip, linenbr);
 					methodNodes.Add(node);
 					currentNode.Methods.Add(node);
 				}
-				else if (line.StartsWith("using ") && line.Contains(";")) {
+				else if (trim.StartsWith("using ") && line.Contains(";")) {
 					usings.Add(linenbr);
 				}
-				else if (line.StartsWith("namespace ")) {
+				else if (trim.StartsWith("namespace ")) {
 					namespaces.Add(linenbr);
 				}
 				else if (line.Contains(" class ") || (line.Contains("\tclass ")) || (line.StartsWith("class ")) ||
@@ -153,16 +192,16 @@ namespace Mosa.Tools.TransformMonoSource
 					if (line.Contains("\""))
 						continue;
 
-					string className = GetClassName(lines, linenbr);
+					// Search backwards for the start of the class definition (might not be on the same line as class keyword)
+					int start = GetPreviousBlockEnd(lines, linenbr);
+
+					string className = GetClassName(lines, start, linenbr);
 
 					// Attempt to handle #else class definitions
 					if (className == currentNode.Name) {
 						currentNode.OtherDeclare.Add(linenbr);
 						continue;
 					}
-
-					// Search backwards for the start of the class definition (might not be on the same line as class keyword)
-					int start = GetPreviousBlockEnd(lines, linenbr);
 
 					// Find the last line of the class
 					int end = GetEndOfScope(lines, linenbr);
@@ -199,7 +238,7 @@ namespace Mosa.Tools.TransformMonoSource
 			// Create partial file
 			if (methodNodes.Count != 0) {
 				string partialFile = Path.Combine(dest, filename.Insert(filename.Length - 2, "Partial."));
-				Console.WriteLine(partialFile);
+				//Console.WriteLine(partialFile);
 				CreatePartialFile(lines, rootNode, usings, namespaces, Path.Combine(dest, partialFile));
 			}
 
@@ -276,7 +315,7 @@ namespace Mosa.Tools.TransformMonoSource
 			string tabs = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t".Substring(0, depth + 1);
 
 			// Write class declaration
-			output.Add(tabs + GetDeclaration(lines, currentNode.Declare));
+			output.Add(tabs + GetDeclaration(lines, currentNode.Start, currentNode.Declare));
 			output.Add(tabs + "{");
 
 			// Write method declarations
@@ -294,7 +333,10 @@ namespace Mosa.Tools.TransformMonoSource
 					if (trim.StartsWith("//"))
 						continue;
 
+					line = " " + line.Replace("\t", " ");
 					line = line.Replace(" extern ", " ");
+					//line = line.Replace(" virtual ", " ");
+					//line = line.Replace(" internal ", " ");
 					line = line.Trim(new char[] { '\t', ' ' });
 
 					bool semicolon = line.Contains(";");
@@ -306,15 +348,6 @@ namespace Mosa.Tools.TransformMonoSource
 						extra = "\t";
 
 					if (!string.IsNullOrEmpty(line)) {
-						// Strip internal and extern method attributes
-						line = line.Replace(" internal ", " ").Replace(" extern ", " ");
-
-						if (line.StartsWith("internal "))
-							line = line.Substring(9);
-
-						if (line.StartsWith("extern "))
-							line = line.Substring(7);
-
 						output.Add(tabs + extra + "\t" + line);
 					}
 
@@ -367,25 +400,55 @@ namespace Mosa.Tools.TransformMonoSource
 			lines[line] = lines[line].Insert(insert, "partial ");
 		}
 
-		static string GetClassName(string[] lines, int line)
+		static List<string> GetDeclarationTokens(string[] lines, int start, int declare)
 		{
-			string declare = lines[line].Trim(new char[] { '\t', ' ' });
+			List<string> tokens = new List<string>();
 
-			// Determine class or struct
-			int insert = declare.IndexOf("class ") + 5;
+			for (int i = start; i <= declare; i++) {
+				string line = lines[i].Trim(new char[] { '\t', ' ' });
 
-			if (insert < 5)
-				insert = declare.IndexOf("struct ") + 6;
+				if (line.StartsWith("#"))
+					continue;
 
-			// Get class/struct name
-			string name = declare.Substring(insert + 1);
-			int end = name.Length;
-			int at = name.IndexOf(":");
-			if (at > 0) end = at;
-			at = name.IndexOf(" ");
-			if ((at > 0) && (at < end)) end = at;
+				int comment = line.IndexOf("//");
+				if (comment >= 0)
+					line = line.Substring(0, comment);
 
-			return name.Substring(0, end);
+				// strip []
+				while (true) {
+					int bracketstart = line.IndexOf("[");
+
+					if (bracketstart < 0)
+						break;
+
+					int bracketend = line.IndexOf("]");
+
+					if (bracketend < 0) {
+						line = string.Empty;
+						break;
+					}
+
+					line = line.Substring(0, bracketstart) + line.Substring(bracketend + 1);
+				}
+
+				if (line.Length == 0)
+					continue;
+
+				string[] parsed = line.Split(new char[] { '\t', ' ', ':' });
+
+				foreach (string token in parsed)
+					if (!string.IsNullOrEmpty(token))
+						tokens.Add(token);
+			}
+
+			return tokens;
+		}
+
+		static string GetClassName(string[] lines, int start, int declare)
+		{
+			List<string> tokens = GetDeclarationTokens(lines, start, declare);
+
+			return tokens[GetClassOrStructLocacation(tokens) + 1];
 		}
 
 		/// <summary>
@@ -394,31 +457,53 @@ namespace Mosa.Tools.TransformMonoSource
 		/// <param name="lines">The lines.</param>
 		/// <param name="line">The line.</param>
 		/// <returns></returns>
-		static string GetDeclaration(string[] lines, int line)
+		static string GetDeclaration(string[] lines, int start, int declare)
 		{
-			string declare = lines[line].Trim(new char[] { '\t', ' ' });
+			List<string> tokens = GetDeclarationTokens(lines, start, declare);
 
-			// Get Name
-			string name = GetClassName(lines, line);
-
-			// Determine class or struct
-			string obj = (declare.Contains("struct ")) ? "struct" : "class";
+			int line = GetClassOrStructLocacation(tokens);
 
 			// Determine attribute (public, private, protected)
 			string attribute = string.Empty;
+			bool foundstatic = false;
+			bool foundsealed = false;
 
-			if (declare.IndexOf("public ") >= 0)
-				attribute = "public ";
-			else if (declare.IndexOf("protected ") >= 0)
-				attribute = "protected ";
-			else if (declare.IndexOf("private ") >= 0)
-				attribute = "private ";
+			for (int i = 0; i < line; i++) {
+				string token = tokens[i];
 
-			// Determine if abstract
-//			if ((declare.Contains(" abstract ")) || (declare.StartsWith("abstract ")))
-//				obj = obj + " abstract";
+				bool accept = false;
 
-			return attribute + "partial " + obj + " " + name;
+				switch (token) {
+					case "public": accept = true; break;
+					case "private": accept = true; break;
+					case "protected": accept = true; break;
+					case "unsafe": accept = true; break;
+					case "static": foundstatic = true; break;
+					case "sealed": foundsealed = true; break;
+					default: break;
+				}
+
+				if (accept)
+					if (!attribute.Contains(token))
+						attribute = attribute + " " + token;
+			}
+
+			// prefer sealed over static
+			//if (foundsealed)
+			//    attribute = "sealed " + attribute;
+			//else if (foundstatic)
+			//    attribute = "static " + attribute;
+
+			return attribute.Trim() + " partial " + tokens[line] + " " + tokens[line + 1];
+		}
+
+		static int GetClassOrStructLocacation(List<string> tokens)
+		{
+			for (int i = 0; i < tokens.Count; i++)
+				if ((tokens[i].Equals("class")) || (tokens[i].Equals("struct")))
+					return i;
+
+			return -1;
 		}
 
 		static void CreateSubDirectories(string root, string directory)
