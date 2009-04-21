@@ -69,7 +69,7 @@ namespace Mosa.Tools.Mono.TransformSource
 		/// <returns></returns>
 		static int Main(string[] args)
 		{
-			Console.WriteLine("TransformMonoSource v0.1 [www.mosa-project.org]");
+			Console.WriteLine("TransformSource v0.1 [www.mosa-project.org]");
 			Console.WriteLine("Copyright 2009. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
@@ -99,7 +99,7 @@ namespace Mosa.Tools.Mono.TransformSource
 
 		static void FindFiles(string root, string directory, ref List<string> files)
 		{
-			foreach (string file in Directory.GetFiles(Path.Combine(root, directory), "*.cs", SearchOption.TopDirectoryOnly)) 
+			foreach (string file in Directory.GetFiles(Path.Combine(root, directory), "*.cs", SearchOption.TopDirectoryOnly))
 				//if (file.Contains("MemberInfo.cs"))	// DEBUG
 				files.Add(Path.Combine(directory, Path.GetFileName(file)));
 
@@ -256,16 +256,40 @@ namespace Mosa.Tools.Mono.TransformSource
 					AddPartialToClassName(ref lines, line);
 			}
 
-			// Insert comments
-			foreach (MethodNode method in methodNodes)
-				for (int i = method.Start; i <= method.End; i++) {
-					string trim = lines[i].Trim(new char[] { '\t', ' ' });
+			foreach (MethodNode method in methodNodes) {
+				while (true) {
+					string line = lines[method.Start].Trim(new char[] { '\t', ' ' });
 
-					if ((!string.IsNullOrEmpty(trim))
-						&& (!trim.StartsWith("#"))
-						&& (!trim.StartsWith("//")))
-						lines[i] = @"//" + lines[i];
+					if ((string.IsNullOrEmpty(line)) || line.StartsWith("#pragma") || line.StartsWith("#endif")) {
+						method.Start++;
+
+						if (method.Start == method.End)
+							break;
+					}
+
+					break;
+
 				}
+
+				while (true) {
+					string line = lines[method.End].Trim(new char[] { '\t', ' ' });
+
+					if ((string.IsNullOrEmpty(line)) || line.StartsWith("#pragma")) {
+						method.End--;
+
+						if (method.Start == method.End)
+							break;
+					}
+
+					break;
+				}
+			}
+
+			// Insert comments
+			foreach (MethodNode method in methodNodes) {
+				lines[method.Start] = "#if !MOSAPROJECT\n" + lines[method.Start];
+				lines[method.End] = lines[method.End] + "\n#endif";
+			}
 
 			// Write modified source files
 			using (TextWriter writer = new StreamWriter(filename)) {
@@ -280,6 +304,9 @@ namespace Mosa.Tools.Mono.TransformSource
 		static void CreatePartialFile(string[] lines, ClassNode rootNode, List<int> usings, List<int> namespaces, string filename)
 		{
 			List<string> output = new List<string>();
+
+			output.Add("#if MOSAPROJECT");
+			output.Add("");
 
 			// Write "using" lines
 			foreach (int i in usings)
@@ -298,6 +325,9 @@ namespace Mosa.Tools.Mono.TransformSource
 				WriteClass(lines, child, output, 0);
 
 			output.Add("}");
+
+			output.Add("");
+			output.Add("#endif");
 
 			using (TextWriter writer = new StreamWriter(filename)) {
 				foreach (string line in output)
@@ -335,8 +365,6 @@ namespace Mosa.Tools.Mono.TransformSource
 
 					line = " " + line.Replace("\t", " ");
 					line = line.Replace(" extern ", " ");
-					//line = line.Replace(" virtual ", " ");
-					//line = line.Replace(" internal ", " ");
 					line = line.Trim(new char[] { '\t', ' ' });
 
 					bool semicolon = line.Contains(";");
@@ -397,7 +425,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			if (insert < 0)
 				insert = lines[line].IndexOf("struct ");
 
-			lines[line] = lines[line].Insert(insert, "partial ");
+			lines[line] = lines[line].Insert(insert, "\n#if MOSAPROJECT\n\tpartial\n#endif\n");
 		}
 
 		static List<string> GetDeclarationTokens(string[] lines, int start, int declare)
@@ -532,6 +560,9 @@ namespace Mosa.Tools.Mono.TransformSource
 		static int GetPreviousBlockEnd(string[] lines, int at)
 		{
 			for (at--; at >= 0; at--) {
+				if ((lines[at].Contains("#endregion")) || (lines[at].Contains("#region")))
+					return at + 1;
+
 				foreach (char c in lines[at])
 					if ((c == '{') || (c == ';') || (c == '}'))
 						return at + 1;

@@ -23,7 +23,7 @@ namespace Mosa.Tools.Mono.CreateProjects
 
 		static int Main(string[] args)
 		{
-			Console.WriteLine("CreateMonoProjects v0.1 [www.mosa-project.org]");
+			Console.WriteLine("CreateProjects v0.1 [www.mosa-project.org]");
 			Console.WriteLine("Copyright 2009. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
