@@ -73,7 +73,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			Console.WriteLine("Copyright 2009. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
-			Console.WriteLine("Usage: TransformMonoSource <source directory> <destination directory>");
+			Console.WriteLine("Usage: TransformSource <source directory> <destination directory>");
 			Console.WriteLine();
 
 			if (args.Length < 2) {
@@ -100,8 +100,8 @@ namespace Mosa.Tools.Mono.TransformSource
 		static void FindFiles(string root, string directory, ref List<string> files)
 		{
 			foreach (string file in Directory.GetFiles(Path.Combine(root, directory), "*.cs", SearchOption.TopDirectoryOnly))
-				//if (file.Contains("MemberInfo.cs"))	// DEBUG
-				files.Add(Path.Combine(directory, Path.GetFileName(file)));
+				//if (file.Contains("MonoMethod.cs"))	// DEBUG
+					files.Add(Path.Combine(directory, Path.GetFileName(file)));
 
 			foreach (string dir in Directory.GetDirectories(Path.Combine(root, directory), "*.*", SearchOption.TopDirectoryOnly)) {
 				if (dir.Contains(".svn"))
@@ -164,6 +164,9 @@ namespace Mosa.Tools.Mono.TransformSource
 					line = line.Substring(0, comment) + line.Substring(endcomment + 2);
 				}
 
+				if (incomment)
+					continue;
+
 				int skip = 0;
 				string trim = line.Trim(new char[] { '\t', ' ' });
 
@@ -217,7 +220,13 @@ namespace Mosa.Tools.Mono.TransformSource
 					currentNode = child;
 					child.Name = className;
 				}
+
 				linenbr = linenbr + skip;
+
+				// Go up to parent
+				while (linenbr >= currentNode.End)
+					currentNode = currentNode.Parent;
+
 			}
 
 			// Mark all partial nodes
@@ -378,6 +387,7 @@ namespace Mosa.Tools.Mono.TransformSource
 						continue;
 
 					line = " " + line.Replace("\t", " ");
+					line = line.Replace(" virtual ", " ");
 					line = line.Replace(" extern ", " ");
 					line = line.Trim(new char[] { '\t', ' ' });
 
@@ -445,6 +455,7 @@ namespace Mosa.Tools.Mono.TransformSource
 		static List<string> GetDeclarationTokens(string[] lines, int start, int declare)
 		{
 			List<string> tokens = new List<string>();
+			bool incomment = false;
 
 			for (int i = start; i <= declare; i++) {
 				string line = lines[i].Trim(new char[] { '\t', ' ' });
@@ -479,7 +490,13 @@ namespace Mosa.Tools.Mono.TransformSource
 				string[] parsed = line.Split(new char[] { '\t', ' ', ':' });
 
 				foreach (string token in parsed)
-					if (!string.IsNullOrEmpty(token))
+					if (incomment) {
+						if (token.Contains("*/"))
+							incomment = false;
+					}
+					else if (token.Contains("/*"))
+						incomment = true;
+					else if (!string.IsNullOrEmpty(token))
 						tokens.Add(token);
 			}
 
