@@ -172,7 +172,7 @@ namespace Mosa.Tools.Mono.TransformSource
 				else if (trim.StartsWith("#")) {
 					continue;
 				}
-				else if ((line.Contains(" extern ") || (line.Contains("\textern ")) || (line.StartsWith("extern "))) && !line.Contains(" alias ")) {
+				else if ((trim.Contains(" extern ") || (trim.Contains("\textern ")) || (trim.StartsWith("extern "))) && !trim.Contains(" alias ")) {
 					int start = GetPreviousBlockEnd(lines, linenbr);
 					skip = GetNumberOfMethodDeclarationLines(lines, linenbr, false);
 					MethodNode node = new MethodNode(currentNode, start, linenbr + skip, linenbr);
@@ -257,24 +257,38 @@ namespace Mosa.Tools.Mono.TransformSource
 			}
 
 			foreach (MethodNode method in methodNodes) {
-				while (true) {
-					string line = lines[method.Start].Trim(new char[] { '\t', ' ' });
+				int start = method.Declare;
+				int cnt = 0;
 
-					if ((string.IsNullOrEmpty(line)) || line.StartsWith("#pragma") || line.StartsWith("#endif")) {
-						method.Start++;
+				for (int at = method.Declare; at >= method.Start; at--) {
+					string line = lines[at].Trim(new char[] { '\t', ' ' });
 
-						if (method.Start == method.End)
+					if (string.IsNullOrEmpty(line) || line.StartsWith("//"))
+						continue;
+					else if (line.StartsWith("#endif"))
+						cnt++;
+					else if (line.StartsWith("#if")) {
+						if (cnt < 0)
 							break;
+						if (cnt > 0) start = at;
+						cnt--;
 					}
-
-					break;
-
+					else if (line.StartsWith("#endregion"))
+						break;	// should be the end
+					else if (line.StartsWith("#region"))
+						break;	// should be the end
+					else if (line.StartsWith("#"))
+						continue;
+					else
+						start = at;
 				}
+
+				method.Start = start;
 
 				while (true) {
 					string line = lines[method.End].Trim(new char[] { '\t', ' ' });
 
-					if ((string.IsNullOrEmpty(line)) || line.StartsWith("#pragma")) {
+					if ((string.IsNullOrEmpty(line)) || line.StartsWith("#") || line.StartsWith("//")) {
 						method.End--;
 
 						if (method.Start == method.End)
