@@ -100,7 +100,7 @@ namespace Mosa.Tools.Mono.TransformSource
 		static void FindFiles(string root, string directory, ref List<string> files)
 		{
 			foreach (string file in Directory.GetFiles(Path.Combine(root, directory), "*.cs", SearchOption.TopDirectoryOnly))
-				//if (file.Contains("MonoMethod.cs"))	// DEBUG
+				if (file.Contains("\\Assembly.cs"))	// DEBUG
 					files.Add(Path.Combine(directory, Path.GetFileName(file)));
 
 			foreach (string dir in Directory.GetDirectories(Path.Combine(root, directory), "*.*", SearchOption.TopDirectoryOnly)) {
@@ -129,72 +129,36 @@ namespace Mosa.Tools.Mono.TransformSource
 			bool incomment = false;
 			// Analyze File
 			for (int linenbr = 0; linenbr < lines.Length; linenbr++) {
-				string line = lines[linenbr];
-				int comment = -1;
 
-				if (incomment) {
-					comment = line.IndexOf("*/");
-
-					if (comment < 0)
-						continue;
-
-					incomment = false;
-					line = line.Substring(comment + 2);
-				}
-
-				comment = line.IndexOf("//");
-				if (comment >= 0)
-					line = line.Substring(0, comment);
-
-				// strip /* comments */
-				while (true) {
-					comment = line.IndexOf("/*");
-
-					if (comment < 0)
-						break;
-
-					int endcomment = line.IndexOf("*/");
-
-					if (endcomment < 0) {
-						incomment = true;
-						line = string.Empty;
-						break;
-					}
-
-					line = line.Substring(0, comment) + line.Substring(endcomment + 2);
-				}
+				string trim = GetLine(lines, linenbr, ref incomment).Replace('\t', ' ');
 
 				if (incomment)
 					continue;
 
-				int skip = 0;
-				string trim = line.Trim(new char[] { '\t', ' ' });
+				trim = StripWithInDoubleQuotes(trim);
 
-				if (string.IsNullOrEmpty(line))
+				int skip = 0;
+
+				if (string.IsNullOrEmpty(trim))
 					continue;
-				else if (trim.StartsWith("#")) {
+				else if (trim.StartsWith("#"))
 					continue;
-				}
-				else if ((trim.Contains(" extern ") || (trim.Contains("\textern ")) || (trim.StartsWith("extern "))) && !trim.Contains(" alias ")) {
+				else if ((trim.StartsWith("extern ") || (trim.Contains(" extern "))) && !trim.Contains(" alias ")) {
 					int start = GetPreviousBlockEnd(lines, linenbr);
 					skip = GetNumberOfMethodDeclarationLines(lines, linenbr, false);
 					MethodNode node = new MethodNode(currentNode, start, linenbr + skip, linenbr);
 					methodNodes.Add(node);
 					currentNode.Methods.Add(node);
 				}
-				else if (trim.StartsWith("using ") && line.Contains(";")) {
+				else if (trim.StartsWith("using ") && trim.Contains(";")) {
 					usings.Add(linenbr);
 				}
 				else if (trim.StartsWith("namespace ")) {
 					namespaces.Add(linenbr);
 				}
-				else if (line.Contains(" class ") || (line.Contains("\tclass ")) || (line.StartsWith("class ")) ||
-						line.Contains(" struct ") || (line.Contains("\tstruct ")) || (line.StartsWith("struct "))) {
-
-					// Attempt to include keywords in quotes
-					if (line.Contains("\""))
-						continue;
-
+				else if (trim.Contains(" class ") || (trim.StartsWith("class ")) ||
+						trim.Contains(" struct ") || (trim.StartsWith("struct "))) {
+					
 					// Search backwards for the start of the class definition (might not be on the same line as class keyword)
 					int start = GetPreviousBlockEnd(lines, linenbr);
 
@@ -270,7 +234,7 @@ namespace Mosa.Tools.Mono.TransformSource
 				int cnt = 0;
 
 				for (int at = method.Declare; at >= method.Start; at--) {
-					string line = lines[at].Trim(new char[] { '\t', ' ' });
+					string line = lines[at].Trim(trimchars);
 
 					if (string.IsNullOrEmpty(line) || line.StartsWith("//"))
 						continue;
@@ -295,7 +259,7 @@ namespace Mosa.Tools.Mono.TransformSource
 				method.Start = start;
 
 				while (true) {
-					string line = lines[method.End].Trim(new char[] { '\t', ' ' });
+					string line = lines[method.End].Trim(trimchars);
 
 					if ((string.IsNullOrEmpty(line)) || line.StartsWith("#") || line.StartsWith("//")) {
 						method.End--;
@@ -378,7 +342,7 @@ namespace Mosa.Tools.Mono.TransformSource
 				for (int i = method.Declare; i <= method.End; i++) {
 					string line = lines[i];
 
-					string trim = line.TrimStart(new char[] { '\t', ' ' });
+					string trim = line.TrimStart(trimchars);
 
 					if ((trim.StartsWith("[")) && (trim.EndsWith("]")))
 						continue;
@@ -387,7 +351,7 @@ namespace Mosa.Tools.Mono.TransformSource
 						continue;
 
 					line = " " + line.Replace("\t", " ");
-					line = line.Replace(" virtual ", " ");
+					//line = line.Replace(" virtual ", " ");
 					line = line.Replace(" extern ", " ");
 					line = line.Trim(new char[] { '\t', ' ' });
 
@@ -458,14 +422,13 @@ namespace Mosa.Tools.Mono.TransformSource
 			bool incomment = false;
 
 			for (int i = start; i <= declare; i++) {
-				string line = lines[i].Trim(new char[] { '\t', ' ' });
+				string line = GetLine(lines, i, ref incomment);
+
+				if (incomment)
+					continue;
 
 				if (line.StartsWith("#"))
 					continue;
-
-				int comment = line.IndexOf("//");
-				if (comment >= 0)
-					line = line.Substring(0, comment);
 
 				// strip []
 				while (true) {
@@ -490,13 +453,7 @@ namespace Mosa.Tools.Mono.TransformSource
 				string[] parsed = line.Split(new char[] { '\t', ' ', ':' });
 
 				foreach (string token in parsed)
-					if (incomment) {
-						if (token.Contains("*/"))
-							incomment = false;
-					}
-					else if (token.Contains("/*"))
-						incomment = true;
-					else if (!string.IsNullOrEmpty(token))
+					if (!string.IsNullOrEmpty(token))
 						tokens.Add(token);
 			}
 
@@ -507,14 +464,14 @@ namespace Mosa.Tools.Mono.TransformSource
 		{
 			List<string> tokens = GetDeclarationTokens(lines, start, declare);
 
-			return tokens[GetClassOrStructLocacation(tokens) + 1];
+			return tokens[GetClassOrStructLocation(tokens) + 1];
 		}
 
 		static string GetDeclaration(string[] lines, int start, int declare)
 		{
 			List<string> tokens = GetDeclarationTokens(lines, start, declare);
 
-			int line = GetClassOrStructLocacation(tokens);
+			int line = GetClassOrStructLocation(tokens);
 
 			// Determine attribute (public, private, protected)
 			string attribute = string.Empty;
@@ -540,7 +497,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			return attribute.Trim() + " partial " + tokens[line] + " " + tokens[line + 1];
 		}
 
-		static int GetClassOrStructLocacation(List<string> tokens)
+		static int GetClassOrStructLocation(List<string> tokens)
 		{
 			for (int i = 0; i < tokens.Count; i++)
 				if ((tokens[i].Equals("class")) || (tokens[i].Equals("struct")))
@@ -571,8 +528,17 @@ namespace Mosa.Tools.Mono.TransformSource
 			int open = 0;
 			int close = 0;
 
+			bool incomment = false;
+
 			for (; at < lines.Length; at++) {
-				foreach (char c in lines[at])
+				string line = GetLine(lines, at, ref incomment).Replace("'{'", string.Empty).Replace("'}'", string.Empty);
+
+				line = StripWithInDoubleQuotes(line);
+
+				if (incomment)
+					continue;
+
+				foreach (char c in line)
 					if (c == '{')
 						open++;
 					else if (c == '}')
@@ -602,5 +568,123 @@ namespace Mosa.Tools.Mono.TransformSource
 			return 0;
 		}
 
+		static string GetLine(string[] lines, int linenbr, ref bool incomment)
+		{
+			string line = StripDoubleComment(lines[linenbr]);
+			int comment = -1;
+
+			if (incomment) {
+				comment = line.IndexOf("*/");
+
+				if (comment < 0)
+					return string.Empty;
+
+				incomment = false;
+				line = line.Substring(comment + 2);
+			}
+
+			// strip /* comments */
+			while (true) {
+				comment = line.IndexOf("/*");
+
+				if (comment < 0)
+					break;
+
+				int endcomment = line.IndexOf("*/");
+
+				if (endcomment < 0) {
+					incomment = true;
+					line = string.Empty;
+					break;
+				}
+
+				line = line.Substring(0, comment) + line.Substring(endcomment + 2);
+			}
+
+			if (incomment)
+				return string.Empty;
+
+			return line.Trim(trimchars);
+		}
+
+		static char[] trimchars = { ' ', '\t' };
+
+		static string StripDoubleComment(string line)
+		{
+			if (!line.Contains("//"))
+				return line;
+
+			bool inquotes = false;
+			bool inescape = false;
+			bool first = false;
+
+			for(int i=0;i<line.Length;i++)
+			{
+				char c = line[i];
+
+				if (inescape)
+				{
+					inescape = false;
+					continue;
+				}
+
+				if (c == '"')
+					if (!inquotes)
+						inquotes = true;
+					else
+						inquotes = false;
+
+				if ((inquotes) && (c == '\\'))
+					inescape = true;
+
+				if (!inquotes)
+					if (c == '/')
+						if (first)
+							return line.Substring(0, i - 1);
+						else
+						{
+							first = true;
+							continue;
+						}
+			
+				first = false;
+			}
+
+			return line;
+		}
+
+		static string StripWithInDoubleQuotes(string line)
+		{
+			if (!line.Contains("\""))
+				return line;
+
+			StringBuilder newline = new StringBuilder(line.Length);
+
+			bool inquotes = false;
+			bool inescape = false;
+
+			foreach (char c in line) {
+				if (inescape) {
+					inescape = false;
+					continue;
+				}
+
+				if (c == '"')
+					if (!inquotes)
+						inquotes = true;
+					else {
+						newline.Append(c);
+						inquotes = false;
+					}
+
+				if ((inquotes) && (c == '\\'))
+					inescape = true;
+
+				if (!inquotes)
+					newline.Append(c);
+			}
+
+			return newline.ToString();
+		}
 	}
 }
