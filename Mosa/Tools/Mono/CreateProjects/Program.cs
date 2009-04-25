@@ -1,12 +1,11 @@
 ﻿/*
-* (c) 2008 MOSA - The Managed Operating System Alliance
+* (c) 2009 MOSA - The Managed Operating System Alliance
 *
 * Licensed under the terms of the New BSD License.
 *
 * Authors:
 *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
-
 
 using System;
 using System.IO;
@@ -15,8 +14,16 @@ using System.Text;
 
 namespace Mosa.Tools.Mono.CreateProjects
 {
+	/// <summary>
+	/// Program class for Mono.CreateProjects
+	/// </summary>
 	internal class Program
 	{
+		/// <summary>
+		/// Main method
+		/// </summary>
+		/// <param name="args">The args.</param>
+		/// <returns></returns>
 		private static int Main(string[] args)
 		{
 			Console.WriteLine("CreateProjects v0.1 [www.mosa-project.org]");
@@ -47,6 +54,12 @@ namespace Mosa.Tools.Mono.CreateProjects
 			return 0;
 		}
 
+		/// <summary>
+		/// Finds the files.
+		/// </summary>
+		/// <param name="root">The root.</param>
+		/// <param name="directory">The directory.</param>
+		/// <param name="files">The files.</param>
 		private static void FindFiles(string root, string directory, ref List<string> files)
 		{
 			foreach (
@@ -61,6 +74,12 @@ namespace Mosa.Tools.Mono.CreateProjects
 			}
 		}
 
+		/// <summary>
+		/// Processes the specified root.
+		/// </summary>
+		/// <param name="root">The root.</param>
+		/// <param name="dest">The dest.</param>
+		/// <param name="full">The full.</param>
 		private static void Process(string root, string dest, string full)
 		{
 			Library library = CreateLibrary(root, full);
@@ -82,6 +101,12 @@ namespace Mosa.Tools.Mono.CreateProjects
 			}
 		}
 
+		/// <summary>
+		/// Creates the library.
+		/// </summary>
+		/// <param name="root">The root.</param>
+		/// <param name="full">The full.</param>
+		/// <returns></returns>
 		private static Library CreateLibrary(string root, string full)
 		{
 			string filename = Path.GetFileName(full);
@@ -102,6 +127,11 @@ namespace Mosa.Tools.Mono.CreateProjects
 			return library;
 		}
 
+		/// <summary>
+		/// Adds the partial files.
+		/// </summary>
+		/// <param name="library">The library.</param>
+		/// <param name="dest">The dest.</param>
 		private static void AddPartialFiles(Library library, string dest)
 		{
 			for (int i = library.Files.Count - 1; i > 0; i--) {
@@ -112,6 +142,11 @@ namespace Mosa.Tools.Mono.CreateProjects
 			}
 		}
 
+		/// <summary>
+		/// Creates the project.
+		/// </summary>
+		/// <param name="library">The library.</param>
+		/// <returns></returns>
 		private static List<string> CreateProject(Library library)
 		{
 			List<string> project = new List<string>();
@@ -138,7 +173,7 @@ namespace Mosa.Tools.Mono.CreateProjects
 			project.Add("\t\t<DebugType>full</DebugType>");
 			project.Add("\t\t<Optimize>false</Optimize>");
 			project.Add("\t\t<OutputPath>bin\\Debug\\</OutputPath>");
-			project.Add("\t\t<DefineConstants>TRACE;DEBUG;NET_2_0 NET_1_1 INSIDE_CORLIB</DefineConstants>");
+			project.Add("\t\t<DefineConstants>TRACE;DEBUG;NET_2_0 NET_1_1 INSIDE_CORLIB MOSAPROJECT</DefineConstants>");
 			project.Add("\t\t<ErrorReport>prompt</ErrorReport>");
 			project.Add("\t\t<WarningLevel>4</WarningLevel>");
 			project.Add("\t\t<AllowUnsafeBlocks>true</AllowUnsafeBlocks>");
@@ -169,6 +204,9 @@ namespace Mosa.Tools.Mono.CreateProjects
 
 		#region Nested type: Library
 
+		/// <summary>
+		/// Library Class
+		/// </summary>
 		public class Library
 		{
 			public string DLL;
