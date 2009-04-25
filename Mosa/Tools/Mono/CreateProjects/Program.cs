@@ -1,33 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region
+
+using System;
 using System.IO;
+
+#endregion
 
 namespace Mosa.Tools.Mono.CreateProjects
 {
-	class Program
+	internal class Program
 	{
-		public class Library
-		{
-			public string Name;
-			public string DLL;
-			public string Path;
-			public List<string> Files = new List<string>();
-
-			public Library(string name, string dll, string path)
-			{
-				this.Name = name;
-				this.DLL = dll;
-				this.Path = path;
-			}
-		}
-
-		static int Main(string[] args)
+		private static int Main(string[] args)
 		{
 			Console.WriteLine("CreateProjects v0.1 [www.mosa-project.org]");
 			Console.WriteLine("Copyright 2009. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
-			Console.WriteLine("Usage: CreateMonoProjects <source directory> <destination directory>");
+			Console.WriteLine("Usage: CreateProjects <source directory> <destination directory>");
 			Console.WriteLine();
 
 			if (args.Length < 2) {
@@ -51,9 +39,10 @@ namespace Mosa.Tools.Mono.CreateProjects
 			return 0;
 		}
 
-		static void FindFiles(string root, string directory, ref List<string> files)
+		private static void FindFiles(string root, string directory, ref List<string> files)
 		{
-			foreach (string file in Directory.GetFiles(Path.Combine(root, directory), "*.dll.sources", SearchOption.TopDirectoryOnly)) {
+			foreach (
+				string file in Directory.GetFiles(Path.Combine(root, directory), "*.dll.sources", SearchOption.TopDirectoryOnly)) {
 				files.Add(Path.Combine(directory, Path.GetFileName(file)));
 			}
 
@@ -64,7 +53,7 @@ namespace Mosa.Tools.Mono.CreateProjects
 			}
 		}
 
-		static void Process(string root, string dest, string full)
+		private static void Process(string root, string dest, string full)
 		{
 			Library library = CreateLibrary(root, full);
 
@@ -85,7 +74,7 @@ namespace Mosa.Tools.Mono.CreateProjects
 			}
 		}
 
-		static Library CreateLibrary(string root, string full)
+		private static Library CreateLibrary(string root, string full)
 		{
 			string filename = Path.GetFileName(full);
 
@@ -105,7 +94,7 @@ namespace Mosa.Tools.Mono.CreateProjects
 			return library;
 		}
 
-		static void AddPartialFiles(Library library, string dest)
+		private static void AddPartialFiles(Library library, string dest)
 		{
 			for (int i = library.Files.Count - 1; i > 0; i--) {
 				string partial = library.Files[i].Insert(library.Files[i].Length - 2, "Partial.");
@@ -115,12 +104,13 @@ namespace Mosa.Tools.Mono.CreateProjects
 			}
 		}
 
-		static List<string> CreateProject(Library library)
+		private static List<string> CreateProject(Library library)
 		{
 			List<string> project = new List<string>();
 
 			project.Add("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-			project.Add("<Project ToolsVersion=\"3.5\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">");
+			project.Add(
+				"<Project ToolsVersion=\"3.5\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">");
 			project.Add("\t<PropertyGroup>");
 			project.Add("\t\t<Configuration Condition=\" '$(Configuration)' == '' \">Debug</Configuration>");
 			project.Add("\t\t<Platform Condition=\" '$(Platform)' == '' \">AnyCPU</Platform>");
@@ -168,5 +158,24 @@ namespace Mosa.Tools.Mono.CreateProjects
 
 			return project;
 		}
+
+		#region Nested type: Library
+
+		public class Library
+		{
+			public string DLL;
+			public List<string> Files = new List<string>();
+			public string Name;
+			public string Path;
+
+			public Library(string name, string dll, string path)
+			{
+				Name = name;
+				DLL = dll;
+				Path = path;
+			}
+		}
+
+		#endregion
 	}
 }

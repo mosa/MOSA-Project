@@ -7,67 +7,26 @@
 *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
+#region
+
 using System;
 using System.IO;
-using System.Text;
-using System.Collections.Generic;
+
+#endregion
 
 namespace Mosa.Tools.Mono.TransformSource
 {
-	class Program
+	internal class Program
 	{
-		static List<string> notes = new List<string>();
-
-		class ClassNode
-		{
-			public int Start;
-			public int End;
-			public int Declare;
-			public List<ClassNode> Children = new List<ClassNode>();
-			public List<MethodNode> Methods = new List<MethodNode>();
-			public ClassNode Parent;
-			public bool Partial = false;
-			public string Name = string.Empty;
-			public List<int> OtherDeclare = new List<int>();
-
-			public ClassNode()
-			{
-				this.Parent = this; // trick!
-				this.Start = int.MinValue;
-				this.End = int.MaxValue;
-			}
-
-			public ClassNode(ClassNode parent, int start, int end, int declare)
-			{
-				this.Parent = parent;
-				this.Start = start;
-				this.End = end;
-				this.Declare = declare;
-			}
-		}
-
-		class MethodNode
-		{
-			public ClassNode ClassNode;
-			public int Declare;
-			public int Start;
-			public int End;
-
-			public MethodNode(ClassNode classNode, int start, int end, int declare)
-			{
-				this.ClassNode = classNode;
-				this.Declare = declare;
-				this.Start = start;
-				this.End = end;
-			}
-		}
+		private static readonly char[] trimchars = {' ', '\t'};
+		private static List<string> notes = new List<string>();
 
 		/// <summary>
 		/// Mains the specified args.
 		/// </summary>
 		/// <param name="args">The args.</param>
 		/// <returns></returns>
-		static int Main(string[] args)
+		private static int Main(string[] args)
 		{
 			Console.WriteLine("TransformSource v0.1 [www.mosa-project.org]");
 			Console.WriteLine("Copyright 2009. New BSD License.");
@@ -90,17 +49,17 @@ namespace Mosa.Tools.Mono.TransformSource
 					Process(args[0], file, args[1]);
 			}
 			catch (Exception e) {
-				Console.WriteLine("Error: " + e.ToString());
+				Console.WriteLine("Error: " + e);
 				return -1;
 			}
 
 			return 0;
 		}
 
-		static void FindFiles(string root, string directory, ref List<string> files)
+		private static void FindFiles(string root, string directory, ref List<string> files)
 		{
 			foreach (string file in Directory.GetFiles(Path.Combine(root, directory), "*.cs", SearchOption.TopDirectoryOnly))
-				if (file.Contains("\\Assembly.cs"))	// DEBUG
+				if (file.Contains("\\Assembly.cs")) // DEBUG
 					files.Add(Path.Combine(directory, Path.GetFileName(file)));
 
 			foreach (string dir in Directory.GetDirectories(Path.Combine(root, directory), "*.*", SearchOption.TopDirectoryOnly)) {
@@ -110,7 +69,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			}
 		}
 
-		static void Process(string root, string filename, string dest)
+		private static void Process(string root, string filename, string dest)
 		{
 			Console.WriteLine(filename);
 
@@ -129,7 +88,6 @@ namespace Mosa.Tools.Mono.TransformSource
 			bool incomment = false;
 			// Analyze File
 			for (int linenbr = 0; linenbr < lines.Length; linenbr++) {
-
 				string trim = GetLine(lines, linenbr, ref incomment).Replace('\t', ' ');
 
 				if (incomment)
@@ -157,8 +115,7 @@ namespace Mosa.Tools.Mono.TransformSource
 					namespaces.Add(linenbr);
 				}
 				else if (trim.Contains(" class ") || (trim.StartsWith("class ")) ||
-						trim.Contains(" struct ") || (trim.StartsWith("struct "))) {
-					
+				         trim.Contains(" struct ") || (trim.StartsWith("struct "))) {
 					// Search backwards for the start of the class definition (might not be on the same line as class keyword)
 					int start = GetPreviousBlockEnd(lines, linenbr);
 
@@ -190,7 +147,6 @@ namespace Mosa.Tools.Mono.TransformSource
 				// Go up to parent
 				while (linenbr >= currentNode.End)
 					currentNode = currentNode.Parent;
-
 			}
 
 			// Mark all partial nodes
@@ -201,8 +157,7 @@ namespace Mosa.Tools.Mono.TransformSource
 					do {
 						upNode.Parent.Partial = true;
 						upNode = upNode.Parent;
-					}
-					while (upNode != upNode.Parent);
+					} while (upNode != upNode.Parent);
 				}
 
 			// Create all directories
@@ -219,7 +174,8 @@ namespace Mosa.Tools.Mono.TransformSource
 			CreateModifiedFile(lines, classNodes, methodNodes, Path.Combine(dest, filename));
 		}
 
-		static void CreateModifiedFile(string[] lines, List<ClassNode> classNodes, List<MethodNode> methodNodes, string filename)
+		private static void CreateModifiedFile(string[] lines, List<ClassNode> classNodes, List<MethodNode> methodNodes,
+		                                       string filename)
 		{
 			// Insert partial
 			foreach (ClassNode classNode in classNodes) {
@@ -247,9 +203,9 @@ namespace Mosa.Tools.Mono.TransformSource
 						cnt--;
 					}
 					else if (line.StartsWith("#endregion"))
-						break;	// should be the end
+						break; // should be the end
 					else if (line.StartsWith("#region"))
-						break;	// should be the end
+						break; // should be the end
 					else if (line.StartsWith("#"))
 						continue;
 					else
@@ -288,7 +244,8 @@ namespace Mosa.Tools.Mono.TransformSource
 			}
 		}
 
-		static void CreatePartialFile(string[] lines, ClassNode rootNode, List<int> usings, List<int> namespaces, string filename)
+		private static void CreatePartialFile(string[] lines, ClassNode rootNode, List<int> usings, List<int> namespaces,
+		                                      string filename)
 		{
 			List<string> output = new List<string>();
 
@@ -297,7 +254,7 @@ namespace Mosa.Tools.Mono.TransformSource
 
 			// Write "using" lines
 			foreach (int i in usings)
-				output.Add(lines[i].Trim(new char[] { '\t', ';', ' ' }) + ";");
+				output.Add(lines[i].Trim(new[] {'\t', ';', ' '}) + ";");
 
 			output.Add(string.Empty);
 
@@ -305,7 +262,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			if (namespaces.Count != 1)
 				return; // problem, more than one namespace
 
-			output.Add(lines[namespaces[0]].Trim(new char[] { '\t', ';', ' ', '{' }));
+			output.Add(lines[namespaces[0]].Trim(new[] {'\t', ';', ' ', '{'}));
 			output.Add("{");
 
 			foreach (ClassNode child in rootNode.Children)
@@ -324,7 +281,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			}
 		}
 
-		static void WriteClass(string[] lines, ClassNode currentNode, List<string> output, int depth)
+		private static void WriteClass(string[] lines, ClassNode currentNode, List<string> output, int depth)
 		{
 			if (!currentNode.Partial)
 				return;
@@ -353,7 +310,7 @@ namespace Mosa.Tools.Mono.TransformSource
 					line = " " + line.Replace("\t", " ");
 					//line = line.Replace(" virtual ", " ");
 					line = line.Replace(" extern ", " ");
-					line = line.Trim(new char[] { '\t', ' ' });
+					line = line.Trim(new[] {'\t', ' '});
 
 					bool semicolon = line.Contains(";");
 
@@ -384,7 +341,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			output.Add(tabs + "}");
 		}
 
-		static int GetNumberOfMethodDeclarationLines(string[] lines, int at, bool bracket)
+		private static int GetNumberOfMethodDeclarationLines(string[] lines, int at, bool bracket)
 		{
 			if (lines[at].Contains("{"))
 				bracket = true;
@@ -400,7 +357,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			return 1 + GetNumberOfMethodDeclarationLines(lines, at + 1, bracket);
 		}
 
-		static void AddPartialToClassName(ref string[] lines, int line)
+		private static void AddPartialToClassName(ref string[] lines, int line)
 		{
 			if (line < 0)
 				return;
@@ -416,7 +373,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			lines[line] = lines[line].Insert(insert, "\n#if MOSAPROJECT\n\tpartial\n#endif\n");
 		}
 
-		static List<string> GetDeclarationTokens(string[] lines, int start, int declare)
+		private static List<string> GetDeclarationTokens(string[] lines, int start, int declare)
 		{
 			List<string> tokens = new List<string>();
 			bool incomment = false;
@@ -450,7 +407,7 @@ namespace Mosa.Tools.Mono.TransformSource
 				if (line.Length == 0)
 					continue;
 
-				string[] parsed = line.Split(new char[] { '\t', ' ', ':' });
+				string[] parsed = line.Split(new[] {'\t', ' ', ':'});
 
 				foreach (string token in parsed)
 					if (!string.IsNullOrEmpty(token))
@@ -460,14 +417,14 @@ namespace Mosa.Tools.Mono.TransformSource
 			return tokens;
 		}
 
-		static string GetClassName(string[] lines, int start, int declare)
+		private static string GetClassName(string[] lines, int start, int declare)
 		{
 			List<string> tokens = GetDeclarationTokens(lines, start, declare);
 
 			return tokens[GetClassOrStructLocation(tokens) + 1];
 		}
 
-		static string GetDeclaration(string[] lines, int start, int declare)
+		private static string GetDeclaration(string[] lines, int start, int declare)
 		{
 			List<string> tokens = GetDeclarationTokens(lines, start, declare);
 
@@ -482,11 +439,20 @@ namespace Mosa.Tools.Mono.TransformSource
 				bool accept = false;
 
 				switch (token) {
-					case "public": accept = true; break;
-					case "private": accept = true; break;
-					case "protected": accept = true; break;
-					case "unsafe": accept = true; break;
-					default: break;
+					case "public":
+						accept = true;
+						break;
+					case "private":
+						accept = true;
+						break;
+					case "protected":
+						accept = true;
+						break;
+					case "unsafe":
+						accept = true;
+						break;
+					default:
+						break;
 				}
 
 				if (accept)
@@ -497,7 +463,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			return attribute.Trim() + " partial " + tokens[line] + " " + tokens[line + 1];
 		}
 
-		static int GetClassOrStructLocation(List<string> tokens)
+		private static int GetClassOrStructLocation(List<string> tokens)
 		{
 			for (int i = 0; i < tokens.Count; i++)
 				if ((tokens[i].Equals("class")) || (tokens[i].Equals("struct")))
@@ -506,7 +472,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			return -1;
 		}
 
-		static void CreateSubDirectories(string root, string directory)
+		private static void CreateSubDirectories(string root, string directory)
 		{
 			string current = Path.Combine(root, directory);
 
@@ -521,7 +487,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			Directory.CreateDirectory(current);
 		}
 
-		static int GetEndOfScope(string[] lines, int at)
+		private static int GetEndOfScope(string[] lines, int at)
 		{
 			bool first = false;
 
@@ -554,7 +520,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			return at;
 		}
 
-		static int GetPreviousBlockEnd(string[] lines, int at)
+		private static int GetPreviousBlockEnd(string[] lines, int at)
 		{
 			for (at--; at >= 0; at--) {
 				if ((lines[at].Contains("#endregion")) || (lines[at].Contains("#region")))
@@ -568,7 +534,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			return 0;
 		}
 
-		static string GetLine(string[] lines, int linenbr, ref bool incomment)
+		private static string GetLine(string[] lines, int linenbr, ref bool incomment)
 		{
 			string line = StripDoubleComment(lines[linenbr]);
 			int comment = -1;
@@ -607,9 +573,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			return line.Trim(trimchars);
 		}
 
-		static char[] trimchars = { ' ', '\t' };
-
-		static string StripDoubleComment(string line)
+		private static string StripDoubleComment(string line)
 		{
 			if (!line.Contains("//"))
 				return line;
@@ -618,12 +582,10 @@ namespace Mosa.Tools.Mono.TransformSource
 			bool inescape = false;
 			bool first = false;
 
-			for(int i=0;i<line.Length;i++)
-			{
+			for (int i = 0; i < line.Length; i++) {
 				char c = line[i];
 
-				if (inescape)
-				{
+				if (inescape) {
 					inescape = false;
 					continue;
 				}
@@ -641,19 +603,18 @@ namespace Mosa.Tools.Mono.TransformSource
 					if (c == '/')
 						if (first)
 							return line.Substring(0, i - 1);
-						else
-						{
+						else {
 							first = true;
 							continue;
 						}
-			
+
 				first = false;
 			}
 
 			return line;
 		}
 
-		static string StripWithInDoubleQuotes(string line)
+		private static string StripWithInDoubleQuotes(string line)
 		{
 			if (!line.Contains("\""))
 				return line;
@@ -686,5 +647,57 @@ namespace Mosa.Tools.Mono.TransformSource
 
 			return newline.ToString();
 		}
+
+		#region Nested type: ClassNode
+
+		private class ClassNode
+		{
+			public readonly List<ClassNode> Children = new List<ClassNode>();
+			public readonly int Declare;
+			public readonly int End;
+			public readonly List<MethodNode> Methods = new List<MethodNode>();
+			public readonly List<int> OtherDeclare = new List<int>();
+			public readonly ClassNode Parent;
+			public readonly int Start;
+			public string Name = string.Empty;
+			public bool Partial;
+
+			public ClassNode()
+			{
+				Parent = this; // trick!
+				Start = int.MinValue;
+				End = int.MaxValue;
+			}
+
+			public ClassNode(ClassNode parent, int start, int end, int declare)
+			{
+				Parent = parent;
+				Start = start;
+				End = end;
+				Declare = declare;
+			}
+		}
+
+		#endregion
+
+		#region Nested type: MethodNode
+
+		private class MethodNode
+		{
+			public readonly int Declare;
+			public ClassNode ClassNode;
+			public int End;
+			public int Start;
+
+			public MethodNode(ClassNode classNode, int start, int end, int declare)
+			{
+				ClassNode = classNode;
+				Declare = declare;
+				Start = start;
+				End = end;
+			}
+		}
+
+		#endregion
 	}
 }
