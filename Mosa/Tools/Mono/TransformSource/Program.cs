@@ -57,7 +57,7 @@ namespace Mosa.Tools.Mono.TransformSource
 		private static void FindFiles(string root, string directory, ref List<string> files)
 		{
 			foreach (string file in Directory.GetFiles(Path.Combine(root, directory), "*.cs", SearchOption.TopDirectoryOnly))
-				if (file.Contains("\\Assembly.cs")) // DEBUG
+				//if (file.Contains("\\Assembly.cs")) // DEBUG
 					files.Add(Path.Combine(directory, Path.GetFileName(file)));
 
 			foreach (string dir in Directory.GetDirectories(Path.Combine(root, directory), "*.*", SearchOption.TopDirectoryOnly)) {
