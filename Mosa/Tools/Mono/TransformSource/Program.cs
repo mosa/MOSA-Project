@@ -7,12 +7,10 @@
 *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
-#region
-
 using System;
 using System.IO;
-
-#endregion
+using System.Collections.Generic;
+using System.Text;
 
 namespace Mosa.Tools.Mono.TransformSource
 {
