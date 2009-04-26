@@ -162,8 +162,8 @@ namespace Mosa.Tools.Mono.CreateProjects
 			project.Add("\t\t<ProjectGuid>{" + Guid.NewGuid().ToString() + "}</ProjectGuid>");
 			project.Add("\t\t<OutputType>Library</OutputType>");
 			project.Add("\t\t<AppDesignerFolder>Properties</AppDesignerFolder>");
-			project.Add("\t\t<RootNamespace>Mono</RootNamespace>");
-			project.Add("\t\t<AssemblyName>Mono</AssemblyName>");
+			project.Add("\t\t<RootNamespace>"+library.Name+"</RootNamespace>");
+			project.Add("\t\t<AssemblyName>" + library.Name + "</AssemblyName>");
 			project.Add("\t\t<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>");
 			project.Add("\t\t<FileAlignment>512</FileAlignment>");
 			project.Add("\t\t<NoStdLib>True</NoStdLib>");

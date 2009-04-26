@@ -19,7 +19,11 @@ namespace Mosa.Tools.Mono.TransformSource
 	/// </summary>
 	internal class Program
 	{
-		private static readonly char[] trimchars = {' ', '\t'};
+		private static readonly char[] trimchars = { ' ', '\t' };
+		private static readonly char[] trimchars2 = { '\t', ';', ' ' };
+		private static readonly char[] trimchars3 = { '\t', ';', ' ', '{' };
+		private static readonly char[] trimchars4 = { ' ', '\t', ':' };
+
 		private static List<string> notes = new List<string>();
 
 		/// <summary>
@@ -67,7 +71,7 @@ namespace Mosa.Tools.Mono.TransformSource
 		{
 			foreach (string file in Directory.GetFiles(Path.Combine(root, directory), "*.cs", SearchOption.TopDirectoryOnly))
 				//if (file.Contains("\\Assembly.cs")) // DEBUG
-					files.Add(Path.Combine(directory, Path.GetFileName(file)));
+				files.Add(Path.Combine(directory, Path.GetFileName(file)));
 
 			foreach (string dir in Directory.GetDirectories(Path.Combine(root, directory), "*.*", SearchOption.TopDirectoryOnly)) {
 				if (dir.Contains(".svn"))
@@ -128,7 +132,7 @@ namespace Mosa.Tools.Mono.TransformSource
 					namespaces.Add(linenbr);
 				}
 				else if (trim.Contains(" class ") || (trim.StartsWith("class ")) ||
-				         trim.Contains(" struct ") || (trim.StartsWith("struct "))) {
+						 trim.Contains(" struct ") || (trim.StartsWith("struct "))) {
 					// Search backwards for the start of the class definition (might not be on the same line as class keyword)
 					int start = GetPreviousBlockEnd(lines, linenbr);
 
@@ -195,7 +199,7 @@ namespace Mosa.Tools.Mono.TransformSource
 		/// <param name="methodNodes">The method nodes.</param>
 		/// <param name="filename">The filename.</param>
 		private static void CreateModifiedFile(string[] lines, List<ClassNode> classNodes, List<MethodNode> methodNodes,
-		                                       string filename)
+											   string filename)
 		{
 			// Insert partial
 			foreach (ClassNode classNode in classNodes) {
@@ -226,6 +230,8 @@ namespace Mosa.Tools.Mono.TransformSource
 						break; // should be the end
 					else if (line.StartsWith("#region"))
 						break; // should be the end
+					else if (line.StartsWith("#else") && (cnt == 0))
+						break;
 					else if (line.StartsWith("#"))
 						continue;
 					else
@@ -248,11 +254,15 @@ namespace Mosa.Tools.Mono.TransformSource
 				}
 			}
 
-			// Insert comments
+			// Insert conditions
 			foreach (MethodNode method in methodNodes) {
 				lines[method.Start] = "#if !MOSAPROJECT\n" + lines[method.Start];
 				lines[method.End] = lines[method.End] + "\n#endif";
 			}
+
+			for (int i = 0; i < lines.Length; i++)
+				if (lines[i].StartsWith("[assembly: AssemblyKeyFile("))
+					lines[i] = "#if !MOSAPROJECT\n" + lines[i] + "\n#endif";
 
 			// Write modified source files
 			using (TextWriter writer = new StreamWriter(filename)) {
@@ -273,7 +283,7 @@ namespace Mosa.Tools.Mono.TransformSource
 		/// <param name="namespaces">The namespaces.</param>
 		/// <param name="filename">The filename.</param>
 		private static void CreatePartialFile(string[] lines, ClassNode rootNode, List<int> usings, List<int> namespaces,
-		                                      string filename)
+											  string filename)
 		{
 			List<string> output = new List<string>();
 
@@ -282,14 +292,14 @@ namespace Mosa.Tools.Mono.TransformSource
 
 			// Write "using" lines
 			foreach (int i in usings)
-			    output.Add(lines[i].Trim(new[] {'\t', ';', ' '}) + ";");
+				output.Add(lines[i].Trim(trimchars2) + ";");
 			output.Add(string.Empty);
 
 			// Write "namespace" lines
 			if (namespaces.Count != 1)
 				return; // problem, more than one namespace
 
-			output.Add(lines[namespaces[0]].Trim(new[] {'\t', ';', ' ', '{'}));
+			output.Add(lines[namespaces[0]].Trim(trimchars3));
 			output.Add("{");
 
 			foreach (ClassNode child in rootNode.Children)
@@ -341,10 +351,10 @@ namespace Mosa.Tools.Mono.TransformSource
 					if (trim.StartsWith("//"))
 						continue;
 
+					line = StripDLLBrackets(line);
 					line = " " + line.Replace("\t", " ");
-					// line = line.Replace(" virtual ", " ");
 					line = line.Replace(" extern ", " ");
-					line = line.Trim(new[] {'\t', ' '});
+					line = line.Trim(trimchars);
 
 					bool semicolon = line.Contains(";");
 
@@ -408,7 +418,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			if (line < 0)
 				return;
 
-			if (lines[line].Contains(" partial "))
+			if ((lines[line].Contains(" partial ")) || (lines[line].Contains("\tpartial ")) || (lines[line].Contains("\tpartial\t")))
 				return;
 
 			int insert = lines[line].IndexOf("class ");
@@ -440,27 +450,12 @@ namespace Mosa.Tools.Mono.TransformSource
 				if (line.StartsWith("#"))
 					continue;
 
-				// strip []
-				while (true) {
-					int bracketstart = line.IndexOf("[");
+				line = StripBrackets(line);
 
-					if (bracketstart < 0)
-						break;
-
-					int bracketend = line.IndexOf("]");
-
-					if (bracketend < 0) {
-						line = string.Empty;
-						break;
-					}
-
-					line = line.Substring(0, bracketstart) + line.Substring(bracketend + 1);
-				}
-
-				if (line.Length == 0)
+				if (string.IsNullOrEmpty(line))
 					continue;
 
-				string[] parsed = line.Split(new[] {'\t', ' ', ':'});
+				string[] parsed = line.Split(trimchars4);
 
 				foreach (string token in parsed)
 					if (!string.IsNullOrEmpty(token))
@@ -754,6 +749,57 @@ namespace Mosa.Tools.Mono.TransformSource
 			return newline.ToString();
 		}
 
+		/// <summary>
+		/// Strips the brackets.
+		/// </summary>
+		/// <param name="line">The line.</param>
+		/// <returns></returns>
+		private static string StripBrackets(string line)
+		{
+			while (true) {
+				int bracketstart = line.IndexOf("[");
+
+				if (bracketstart < 0)
+					break;
+
+				int bracketend = line.IndexOf("]");
+
+				if (bracketend < 0) {
+					line = string.Empty;
+					break;
+				}
+
+				line = line.Substring(0, bracketstart) + line.Substring(bracketend + 1);
+			}
+
+			return line;
+		}
+
+		/// <summary>
+		/// Strips the DLL brackets.
+		/// </summary>
+		/// <param name="line">The line.</param>
+		/// <returns></returns>
+		private static string StripDLLBrackets(string line)
+		{
+			while (true) {
+				int bracketstart = line.IndexOf("[DllImport");
+
+				if (bracketstart < 0)
+					break;
+
+				int bracketend = line.IndexOf("]");
+
+				if (bracketend < 0) {
+					line = string.Empty;
+					break;
+				}
+
+				line = line.Substring(0, bracketstart) + line.Substring(bracketend + 1);
+			}
+
+			return line;
+		}
 		#region Nested type: ClassNode
 
 		/// <summary>
