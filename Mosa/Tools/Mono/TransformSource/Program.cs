@@ -70,7 +70,7 @@ namespace Mosa.Tools.Mono.TransformSource
 		private static void FindFiles(string root, string directory, ref List<string> files)
 		{
 			foreach (string file in Directory.GetFiles(Path.Combine(root, directory), "*.cs", SearchOption.TopDirectoryOnly))
-				//if (file.Contains("\\Assembly.cs")) // DEBUG
+				//if (file.Contains("AssemblyInfo.cs")) // DEBUG
 				files.Add(Path.Combine(directory, Path.GetFileName(file)));
 
 			foreach (string dir in Directory.GetDirectories(Path.Combine(root, directory), "*.*", SearchOption.TopDirectoryOnly)) {
@@ -261,7 +261,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			}
 
 			for (int i = 0; i < lines.Length; i++)
-				if (lines[i].StartsWith("[assembly: AssemblyKeyFile("))
+				if (lines[i].Contains("[assembly: AssemblyKeyFile"))
 					lines[i] = "#if !MOSAPROJECT\n" + lines[i] + "\n#endif";
 
 			// Write modified source files
