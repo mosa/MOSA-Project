@@ -11,3 +11,7 @@ bochs
 7zip
 - LGPL License
 - http://7-zip.org/
+
+syslinux
+- GNU License
+- http://syslinux.zytor.com/
