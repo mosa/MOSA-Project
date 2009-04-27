@@ -15,3 +15,7 @@ bochs
 syslinux
 - GNU License
 - http://syslinux.zytor.com/
+
+wget
+- GNU License
+- http://www.gnu.org/software/wget
