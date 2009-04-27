@@ -8,6 +8,6 @@ bochs
 - LGPL License
 - http://bochs.sourceforge.net/
 
-syslinux
-- GPL License
-- http://syslinux.zytor.com/wiki/index.php/The_Syslinux_Project
+7z
+- LGPL License + unRAR restriction 
+- http://7-zip.org/
