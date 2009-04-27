@@ -90,7 +90,7 @@ namespace Mosa.Tools.Mono.CreateProjects
 
 			List<string> project = CreateProject(library);
 
-			string projectfile = Path.Combine(dest, Path.Combine(dest, library.Name + ".csproj"));
+			string projectfile = Path.Combine(dest, library.Name + ".csproj");
 
 			using (TextWriter writer = new StreamWriter(projectfile)) {
 				foreach (string line in project)
