@@ -1,12 +1,13 @@
 
 Echo "#### Compile the Solution First!!! ####"
 
-if not exist output mkdir output
+if not exist build mkdir build
 
-del /q /f Kernel\hello.exe
+del /q /f build\hello.exe
 
-cd output
+cd build
 
-..\..\..\Mosa\bin\mosacl.exe -a=x86 -f=PE --pe-file-alignment=4096 --map=hello.map -b=mb0.7 -o ..\Kernel\hello.exe ..\..\..\Mosa\Bin\Mosa.HelloWorld.exe
+..\..\..\Mosa\bin\mosacl.exe -a=x86 -f=PE --pe-file-alignment=4096 --map=hello.map -b=mb0.7 -o ..\build\hello.exe ..\..\..\Mosa\Bin\Mosa.HelloWorld.exe
 
 cd ..
+

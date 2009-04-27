@@ -184,7 +184,7 @@ namespace Mosa.Tools.Mono.TransformSource
 			if (methodNodes.Count != 0) {
 				string partialFile = Path.Combine(dest, filename.Insert(filename.Length - 2, "Partial."));
 				//Console.WriteLine(partialFile);
-				CreatePartialFile(lines, rootNode, usings, namespaces, Path.Combine(dest, partialFile));
+				CreatePartialFile(lines, rootNode, usings, namespaces, partialFile);
 			}
 
 			// Modify source file

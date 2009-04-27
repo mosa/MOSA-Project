@@ -14,7 +14,7 @@ priority.grabbed = "normal"
 priority.ungrabbed = "normal"
 
 scsi0:0.present = "TRUE"
-scsi0:0.fileName = "bootimage.vhd"
+scsi0:0.fileName = "..\build\bootimage.vhd"
 
 scsi0:0.redo = ""
 uuid.location = "56 4d e7 2a dc 32 ba 37-f3 5a d2 f4 c3 74 71 d2"

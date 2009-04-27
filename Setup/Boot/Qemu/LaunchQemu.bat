@@ -1,3 +1,3 @@
-start ..\..\..\Tools\qemu\qemu.exe -hda bootimage.img -L ..\..\..\Tools\qemu
+start ..\..\..\Tools\qemu\qemu.exe -hda ..\build\bootimage.img -L ..\..\..\Tools\qemu
 
 
