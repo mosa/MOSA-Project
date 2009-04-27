@@ -54,8 +54,8 @@ namespace Mosa.Tools.Mono.TransformSource
 					Process(args[0], file, args[1]);
 			}
 			catch (Exception e) {
-				Console.WriteLine("Error: " + e);
-				return -1;
+			    Console.WriteLine("Error: " + e);
+			    return -1;
 			}
 
 			return 0;
@@ -421,10 +421,10 @@ namespace Mosa.Tools.Mono.TransformSource
 			if ((lines[line].Contains(" partial ")) || (lines[line].Contains("\tpartial ")) || (lines[line].Contains("\tpartial\t")))
 				return;
 
-			int insert = lines[line].IndexOf("class ");
+			int insert = lines[line].Replace('\t',' ').IndexOf("class ");
 
 			if (insert < 0)
-				insert = lines[line].IndexOf("struct ");
+				insert = lines[line].Replace('\t', ' ').IndexOf("struct ");
 
 			lines[line] = lines[line].Insert(insert, "\n#if MOSAPROJECT\n\tpartial\n#endif\n");
 		}
