@@ -8,6 +8,6 @@ bochs
 - LGPL License
 - http://bochs.sourceforge.net/
 
-7z
-- LGPL License + unRAR restriction 
+7zip
+- LGPL License
 - http://7-zip.org/
