@@ -8,15 +8,15 @@
     <ProjectGuid>{BE9A5A27-22C4-4664-A8BD-388B30B5972C}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Tools.MakeBootImage</RootNamespace>
-    <AssemblyName>Mosa.Tools.MakeBootImage</AssemblyName>
+    <RootNamespace>Mosa.Tools.CreateBootImage</RootNamespace>
+    <AssemblyName>Mosa.Tools.CreateBootImage</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <StartupObject>Mosa.Tools.MakeBootImage.Program</StartupObject>
+    <StartupObject>Mosa.Tools.CreateBootImage.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,7 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>Mosa.Tools.MakeBootImage.XML</DocumentationFile>
+    <DocumentationFile>Mosa.Tools.CreateBootImage.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

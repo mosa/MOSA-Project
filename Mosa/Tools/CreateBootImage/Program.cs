@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
 
-namespace Mosa.Tools.MakeBootImage
+namespace Mosa.Tools.CreateBootImage
 {
 	/// <summary>
 	/// 
@@ -34,7 +34,7 @@ namespace Mosa.Tools.MakeBootImage
 			Console.WriteLine("Copyright 2009. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
-			Console.WriteLine("Usage: MakeImageBoot <boot.config file> <image name>");
+			Console.WriteLine("Usage: CreateBootImage <boot.config file> <image name>");
 			Console.WriteLine();
 			
 			string mbrFilename = string.Empty;
