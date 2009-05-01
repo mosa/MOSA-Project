@@ -212,7 +212,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		public void EnableDevice()
 		{
-			CommandRegister = (ushort)(CommandRegister | (((ioPortRegionCount > 0) ? PCICommand.IO : 0) | PCICommand.Master | ((memoryRegionCount > 0) ? PCICommand.Memort : 0)));
+            CommandRegister = (ushort)(CommandRegister | (((ioPortRegionCount > 0) ? PCICommand.IO : (ushort)0) | PCICommand.Master | ((memoryRegionCount > 0) ? PCICommand.Memort : (ushort)0)));
 		}
 
 		/// <summary>
