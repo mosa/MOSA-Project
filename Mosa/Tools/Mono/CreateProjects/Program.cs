@@ -34,7 +34,7 @@ namespace Mosa.Tools.Mono.CreateProjects
 			Console.WriteLine();
 
 			if (args.Length < 2) {
-				Console.WriteLine("ERROR: Missing arguments");
+				Console.Error.WriteLine("ERROR: Missing arguments");
 				return -1;
 			}
 
@@ -47,7 +47,7 @@ namespace Mosa.Tools.Mono.CreateProjects
 					Process(args[0], args[1], file);
 			}
 			catch (Exception e) {
-				Console.WriteLine("Error: " + e.ToString());
+				Console.Error.WriteLine("Error: " + e.ToString());
 				return -1;
 			}
 
@@ -86,8 +86,6 @@ namespace Mosa.Tools.Mono.CreateProjects
 
 			Console.WriteLine(library.Name);
 
-			AddPartialFiles(library, dest);
-
 			List<string> project = CreateProject(library);
 
 			string projectfile = Path.Combine(dest, library.Name + ".csproj");
@@ -125,21 +123,6 @@ namespace Mosa.Tools.Mono.CreateProjects
 					library.Files.Add(Path.Combine(path, line.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)));
 
 			return library;
-		}
-
-		/// <summary>
-		/// Adds the partial files.
-		/// </summary>
-		/// <param name="library">The library.</param>
-		/// <param name="dest">The dest.</param>
-		private static void AddPartialFiles(Library library, string dest)
-		{
-			for (int i = library.Files.Count - 1; i > 0; i--) {
-				string partial = library.Files[i].Insert(library.Files[i].Length - 2, "Partial.");
-
-				if (File.Exists(Path.Combine(dest, partial)))
-					library.Files.Add(partial);
-			}
 		}
 
 		/// <summary>

@@ -24,7 +24,7 @@ namespace Mosa.Tools.CreatePCIList
 			Console.WriteLine();
 
 			if (args.Length < 2) {
-				Console.WriteLine("ERROR: Missing arguments");
+				Console.Error.WriteLine("ERROR: Missing arguments");
 				return -1;
 			}
 
@@ -155,7 +155,7 @@ namespace Mosa.Tools.CreatePCIList
 				}
 			}
 			catch (Exception e) {
-				Console.WriteLine("Error: " + e.ToString());
+				Console.Error.WriteLine("Error: " + e.ToString());
 				return -1;
 			}
 

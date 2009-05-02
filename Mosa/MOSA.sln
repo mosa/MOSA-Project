@@ -76,9 +76,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.TransformSo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.CreateBootImage", "Tools\CreateBootImage\Mosa.Tools.CreateBootImage.csproj", "{BE9A5A27-22C4-4664-A8BD-388B30B5972C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.UpdateProject", "Tools\Mono\UpdateProject\Mosa.Tools.Mono.UpdateProject.csproj", "{099AFBAF-F63B-40CC-BB37-3B2F07DF2C8D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 26
+		SccNumberOfProjects = 27
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs01.codeplex.com/
 		SccLocalPath0 = .
@@ -182,6 +184,10 @@ Global
 		SccProjectTopLevelParentUniqueName25 = MOSA.sln
 		SccProjectName25 = Tools/CreateBootImage
 		SccLocalPath25 = Tools\\CreateBootImage
+		SccProjectUniqueName26 = Tools\\Mono\\UpdateProject\\Mosa.Tools.Mono.UpdateProject.csproj
+		SccProjectTopLevelParentUniqueName26 = MOSA.sln
+		SccProjectName26 = Tools/Mono/UpdateProject
+		SccLocalPath26 = Tools\\Mono\\UpdateProject
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -288,6 +294,10 @@ Global
 		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{099AFBAF-F63B-40CC-BB37-3B2F07DF2C8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{099AFBAF-F63B-40CC-BB37-3B2F07DF2C8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{099AFBAF-F63B-40CC-BB37-3B2F07DF2C8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{099AFBAF-F63B-40CC-BB37-3B2F07DF2C8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -324,5 +334,6 @@ Global
 		{34060993-5BE4-4D96-816C-BCB0AE103398} = {EAB23306-B052-4F8B-A99B-491B07B6E7A8}
 		{1F0DA5CC-50AD-4068-AFB3-48A94BB40911} = {30F29437-8AC3-44F2-89FA-3C35804CC2A8}
 		{A2D45DAF-36FC-4B88-9652-6EBC1E6C83DC} = {30F29437-8AC3-44F2-89FA-3C35804CC2A8}
+		{099AFBAF-F63B-40CC-BB37-3B2F07DF2C8D} = {30F29437-8AC3-44F2-89FA-3C35804CC2A8}
 	EndGlobalSection
 EndGlobal

@@ -294,10 +294,9 @@ namespace Mosa.Tools.CreateBootImage
 				}
 
 				Console.WriteLine("Completed!");
-
 			}
 			catch (Exception e) {
-				Console.WriteLine("Error: " + e.ToString());
+				Console.Error.WriteLine("Error: " + e.ToString());
 				return -1;
 			}
 

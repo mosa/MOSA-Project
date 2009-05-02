@@ -203,10 +203,13 @@ namespace Mosa.Tools.Mono.TransformSource
 		{
 			// Insert partial
 			foreach (ClassNode classNode in classNodes) {
-				AddPartialToClassName(ref lines, classNode.Declare);
+				if (classNode.Partial)
+				{
+					AddPartialToClassName(ref lines, classNode.Declare);
 
-				foreach (int line in classNode.OtherDeclare)
-					AddPartialToClassName(ref lines, line);
+					foreach (int line in classNode.OtherDeclare)
+						AddPartialToClassName(ref lines, line);
+				}
 			}
 
 			foreach (MethodNode method in methodNodes) {

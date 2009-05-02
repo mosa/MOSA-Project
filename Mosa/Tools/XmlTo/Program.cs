@@ -27,7 +27,7 @@ namespace Mosa.Tools.XmlTo
 
 			if (args.Length < 3)
 			 {
-				Console.WriteLine("ERROR: Missing arguments");
+				Console.Error.WriteLine("ERROR: Missing arguments");
 				return -1;
 			}
 
@@ -41,7 +41,7 @@ namespace Mosa.Tools.XmlTo
 				return 0;
 			}
 			catch (Exception e) {
-				Console.WriteLine("Exception: {0}", e.ToString());
+				Console.Error.WriteLine("Exception: {0}", e.ToString());
 				return -1;
 			}
 
