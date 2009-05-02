@@ -1,3 +1,4 @@
+mkdir Bin
 gmcs -lib:Bin -target:library -out:./Bin/Mosa.ClassLib.dll ClassLib/*.cs -nowarn:0414,0103,0219,0169,0162,0168
 gmcs -lib:Bin -target:library -out:Bin/Mosa.DeviceSystem.dll -d:MONO -reference:Mosa.ClassLib.dll DeviceSystem/*.cs DeviceSystem/PCI/*.cs -nowarn:0414,0103,0219,0169,0162,0168
 gmcs -lib:Bin -target:library -out:Bin/Mosa.DeviceDrivers.dll -reference:Mosa.ClassLib.dll -reference:Mosa.DeviceSystem.dll DeviceDrivers/*.cs DeviceDrivers/ISA/*.cs DeviceDrivers/PCI/*.cs DeviceDrivers/ScanCodeMap/*.cs -nowarn:0414,0103,0219,0169,0162,0168
