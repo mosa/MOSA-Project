@@ -10,4 +10,4 @@ copy Patches\Parser.cs build\class\System.XML\System.Xml.XPath
 copy Patches\PatternParser.cs build\class\System.XML\System.Xml.XPath
 copy Patches\PatternTokenizer.cs build\class\System.XML\System.Xml.XPath
 
-CALL "Patches\Scripts\PatchSource-%1.bat"
+CALL "Scripts\PatchSource-%1.bat" "%1"
