@@ -8,8 +8,8 @@
     <ProjectGuid>{59C6CA03-8473-47BA-B074-242257D2B910}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Tools.Mono.TransformProjectFiles</RootNamespace>
-    <AssemblyName>Mosa.Tools.Mono.TransformProjectFiles</AssemblyName>
+    <RootNamespace>Mosa.Tools.Mono.UpdateProject</RootNamespace>
+    <AssemblyName>Mosa.Tools.Mono.UpdateProject</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -27,7 +27,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\bin\Mosa.Tools.Mono.TransformProjectFiles.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\bin\Mosa.Tools.Mono.UpdateProject.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,15 +36,18 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Mosa.Tools.Mono.TransformProjectFiles.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Mosa.Tools.Mono.UpdateProject.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Add.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transform.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

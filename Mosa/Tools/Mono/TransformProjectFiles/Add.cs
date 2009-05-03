@@ -20,43 +20,13 @@ namespace Mosa.Tools.Mono.UpdateProject
 	/// <summary>
 	/// Program class for Mono.UpdateProject
 	/// </summary>
-	internal class Program
-	{
-		/// <summary>
-		/// Main method
-		/// </summary>
-		/// <param name="args">The args.</param>
-		/// <returns></returns>
-		private static int Main(string[] args)
-		{
-			Console.WriteLine("UpdateProject v0.1 [www.mosa-project.org]");
-			Console.WriteLine("Copyright 2009. New BSD License.");
-			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
-			Console.WriteLine();
-			Console.WriteLine("Usage: UpdateProject <project file>");
-			Console.WriteLine();
-
-			if (args.Length < 1) {
-				Console.Error.WriteLine("ERROR: Missing arguments");
-				return -1;
-			}
-
-			try {
-				Process(args[0]);
-			}
-			catch (Exception e) {
-				Console.Error.WriteLine("Error: " + e.ToString());
-				return -1;
-			}
-
-			return 0;
-		}
-
+	internal class Add
+	{		
 		/// <summary>
 		/// Processes the specified file.
 		/// </summary>
 		/// <param name="file">The source.</param>
-		private static void Process(string file)
+		internal static void Process(string file)
 		{
 			string root = Path.GetDirectoryName(file);
 
@@ -76,8 +46,7 @@ namespace Mosa.Tools.Mono.UpdateProject
 						if ((attribute.Value.EndsWith(".cs")) && ((!attribute.Value.Contains(".Partial.")))) {
 							string partialfile = attribute.Value.Insert(attribute.Value.Length - 2, "Partial."); ;
 
-							if (File.Exists(Path.Combine(root, partialfile)))
-							{
+							if (File.Exists(Path.Combine(root, partialfile))) {
 								XmlNode newCompileNode = xmlDocument.CreateElement("Compile", string.Empty);
 								XmlAttribute newCompileNodeAttribute = xmlDocument.CreateAttribute("Include");
 								newCompileNodeAttribute.Value = partialfile;
@@ -97,7 +66,7 @@ namespace Mosa.Tools.Mono.UpdateProject
 			mem.Seek(0, SeekOrigin.Begin);
 			StreamReader reader = new StreamReader(mem);
 
-			File.WriteAllText(file, reader.ReadToEnd().Replace("xmlns=\"\" ", string.Empty));			
+			File.WriteAllText(file, reader.ReadToEnd().Replace("xmlns=\"\" ", string.Empty));
 		}
 
 	}
