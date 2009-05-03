@@ -30,7 +30,7 @@ namespace Mosa.Tools.CreateBootImage
 		/// <returns></returns>
 		static int Main(string[] args)
 		{
-			Console.WriteLine("MakeImageBoot v0.1 [www.mosa-project.org]");
+			Console.WriteLine("MakeImageBoot v1.0 [www.mosa-project.org]");
 			Console.WriteLine("Copyright 2009. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
@@ -53,7 +53,7 @@ namespace Mosa.Tools.CreateBootImage
 				valid = System.IO.File.Exists(args[0]);
 
 			if (valid) {
-				Console.WriteLine("ERROR: Missing arguments");
+				Console.Error.WriteLine("ERROR: Missing arguments");
 				return -1;
 			}
 
