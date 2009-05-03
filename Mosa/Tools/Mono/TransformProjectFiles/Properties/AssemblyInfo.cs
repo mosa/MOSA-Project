@@ -14,11 +14,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Mosa.Tools.Mono.TransformSource")]
+[assembly: AssemblyTitle("Mosa.Tools.Mono.TransformProjectFiles")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Mosa.Tools.Mono.TransformSource")]
+[assembly: AssemblyProduct("Mosa.Tools.Mono.TransformProjectFiles")]
 [assembly: AssemblyCopyright("Copyright ©  2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

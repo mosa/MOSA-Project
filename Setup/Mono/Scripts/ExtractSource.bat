@@ -5,10 +5,9 @@ if exist "src\mono-%1.tar" goto next
 
 :next
 
-if exist "src\mono-%1" goto end
+del /Q /F /S "build\mono-%1" > NUL
+rd /Q /S "build\mono-%1"
 
-del /Q /F /S "src\mono-%1" > NUL
-
-..\..\Tools\7Zip\7za.exe x -y -osrc "src\mono-%1.tar" -ir!*.cs -ir!*.sources -x!docs -x!samples -x!tools -x!mono > NUL
+..\..\Tools\7Zip\7za.exe x -y -obuild "src\mono-%1.tar" -ir!*.cs -ir!*.sources -x!docs -x!samples -x!tools -x!mono > NUL
 
 :end

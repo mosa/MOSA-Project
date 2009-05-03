@@ -1,0 +1,5 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartArguments>X:\MosaTF\trunk\Setup\Mono\ProjectFiles\corlib2.csproj X:\MosaTF\trunk\Setup\Mono\ProjectFiles\corlib2.csproj.txt</StartArguments>
+  </PropertyGroup>
+</Project>

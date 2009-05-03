@@ -11,11 +11,13 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
+using System.Xml.XPath;
 
-namespace Mosa.Tools.Mono.TransformSource
+namespace Mosa.Tools.Mono.TransformProjectFiles
 {
 	/// <summary>
-	/// Program class for Mono.TransformSource 
+	/// Program class for Mosa.Tools.Mono.TransformProjectFiles
 	/// </summary>
 	internal class Program
 	{
@@ -26,72 +28,73 @@ namespace Mosa.Tools.Mono.TransformSource
 
 		private static List<string> notes = new List<string>();
 
-		/// <summary>
-		/// Mains the specified args.
-		/// </summary>
-		/// <param name="args">The command line arguments</param>
-		/// <returns>Zero on success</returns>
 		private static int Main(string[] args)
 		{
-			Console.WriteLine("TransformSource v0.1 [www.mosa-project.org]");
+			Console.WriteLine("TransformProjectFiles v0.1 [www.mosa-project.org]");
 			Console.WriteLine("Copyright 2009. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
-			Console.WriteLine("Usage: TransformSource <source directory> <destination directory>");
+			Console.WriteLine("Usage: TransformProjectFiles <project file>");
 			Console.WriteLine();
 
-			if (args.Length < 2) {
+			if (args.Length < 1) {
 				Console.WriteLine("ERROR: Missing arguments");
 				return -1;
 			}
 
 			try {
-				List<string> files = new List<string>();
-
-				FindFiles(args[0], string.Empty, ref files);
+				List<string> files = GetProjectFiles(args[0]);
 
 				foreach (string file in files)
-					Process(args[0], file, args[1]);
+					Process(file, Path.GetDirectoryName(args[0]));
 			}
 			catch (Exception e) {
-			    Console.WriteLine("Error: " + e);
-			    return -1;
+				Console.WriteLine("Error: " + e);
+				return -1;
 			}
 
 			return 0;
 		}
 
 		/// <summary>
-		/// Finds the files.
+		/// Gets the project filenames.
 		/// </summary>
-		/// <param name="root">The root.</param>
-		/// <param name="directory">The directory.</param>
-		/// <param name="files">The files.</param>
-		private static void FindFiles(string root, string directory, ref List<string> files)
+		/// <param name="file">The file.</param>
+		/// <returns></returns>
+		static private List<string> GetProjectFiles(string file)
 		{
-			foreach (string file in Directory.GetFiles(Path.Combine(root, directory), "*.cs", SearchOption.TopDirectoryOnly))
-				//if (file.Contains("AssemblyInfo.cs")) // DEBUG
-				files.Add(Path.Combine(directory, Path.GetFileName(file)));
+			List<string> list = new List<string>();
 
-			foreach (string dir in Directory.GetDirectories(Path.Combine(root, directory), "*.*", SearchOption.TopDirectoryOnly)) {
-				if (dir.Contains(".svn"))
-					continue;
-				FindFiles(root, Path.Combine(directory, Path.GetFileName(dir)), ref files);
-			}
+			XmlDocument xmlDocument = new XmlDocument();
+			xmlDocument.Load(file);
+
+			XmlNamespaceManager mgr = new XmlNamespaceManager(xmlDocument.NameTable);
+			mgr.AddNamespace("x", "http://schemas.microsoft.com/developer/msbuild/2003");
+
+			XmlNodeList compileNodes = xmlDocument.SelectNodes("/x:Project/x:ItemGroup/x:Compile", mgr);
+			foreach (XmlNode compileNode in compileNodes)
+				foreach (XmlNode attribute in compileNode.Attributes)
+					if (attribute.Name.Equals("Include"))
+						if ((attribute.Value.EndsWith(".cs")) && ((!attribute.Value.Contains(".Partial."))))
+							list.Add(attribute.Value);
+
+			return list;
 		}
 
 		/// <summary>
 		/// Processes the specified root.
 		/// </summary>
+		/// <param name="file">The filename.</param>
 		/// <param name="root">The root.</param>
-		/// <param name="filename">The filename.</param>
-		/// <param name="dest">The dest.</param>
-		private static void Process(string root, string filename, string dest)
+		private static void Process(string file, string root)
 		{
-			Console.WriteLine(filename);
+			Console.WriteLine(file);
+
+			if (!File.Exists(Path.Combine(root, file)))
+				return;
 
 			// Load file into string array
-			string[] lines = File.ReadAllLines(Path.Combine(root, filename));
+			string[] lines = File.ReadAllLines(Path.Combine(root, file));
 
 			ClassNode rootNode = new ClassNode();
 			List<ClassNode> classNodes = new List<ClassNode>();
@@ -105,6 +108,9 @@ namespace Mosa.Tools.Mono.TransformSource
 			bool incomment = false;
 			// Analyze File
 			for (int linenbr = 0; linenbr < lines.Length; linenbr++) {
+				if (lines[linenbr].StartsWith("#if MOSAPROJECT"))
+					return; // abort... already done
+
 				string trim = GetLine(lines, linenbr, ref incomment).Replace('\t', ' ');
 
 				if (incomment)
@@ -177,18 +183,15 @@ namespace Mosa.Tools.Mono.TransformSource
 					} while (upNode != upNode.Parent);
 				}
 
-			// Create all directories
-			CreateSubDirectories(dest, Path.GetDirectoryName(filename));
-
 			// Create partial file
 			if (methodNodes.Count != 0) {
-				string partialFile = Path.Combine(dest, filename.Insert(filename.Length - 2, "Partial."));
+				string partialFile = Path.Combine(root, file.Insert(file.Length - 2, "Partial."));
 				//Console.WriteLine(partialFile);
 				CreatePartialFile(lines, rootNode, usings, namespaces, partialFile);
 			}
 
 			// Modify source file
-			CreateModifiedFile(lines, classNodes, methodNodes, Path.Combine(dest, filename));
+			CreateModifiedFile(lines, classNodes, methodNodes, Path.Combine(root, file));
 		}
 
 		/// <summary>
@@ -540,26 +543,6 @@ namespace Mosa.Tools.Mono.TransformSource
 					return i;
 
 			return -1;
-		}
-
-		/// <summary>
-		/// Creates the sub directories.
-		/// </summary>
-		/// <param name="root">The root.</param>
-		/// <param name="directory">The directory.</param>
-		private static void CreateSubDirectories(string root, string directory)
-		{
-			string current = Path.Combine(root, directory);
-
-			if (Directory.Exists(current))
-				return;
-
-			string parent = Path.GetDirectoryName(directory);
-
-			if (!string.IsNullOrEmpty(parent))
-				CreateSubDirectories(root, parent);
-
-			Directory.CreateDirectory(current);
 		}
 
 		/// <summary>
