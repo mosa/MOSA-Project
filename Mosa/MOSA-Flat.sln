@@ -32,8 +32,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.EmulatedDevices", "Emu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.EmulatedKernel", "EmulatedKernel\Mosa.EmulatedKernel.csproj", "{A6C1F330-B858-44DE-89E6-C89D2B80DA62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.MakeBootImage", "Tools\MakeBootImage\Mosa.Tools.MakeBootImage.csproj", "{BE9A5A27-22C4-4664-A8BD-388B30B5972C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.MakeIsoImage", "Tools\MakeIsoImage\Mosa.Tools.MakeIsoImage.csproj", "{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pictor", "Pictor\Pictor.csproj", "{1D756AD8-07A2-44F3-9A69-B6573A339CB4}"
@@ -44,13 +42,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlugGen.Console", "Tools\Pl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlugGen.Core", "Tools\PlugGen.Core\PlugGen.Core.csproj", "{1306E901-47C2-4654-A7B5-9CB1BBC4064D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.CreateProjects", "Tools\Mono\CreateProjects\Mosa.Tools.Mono.CreateProjects.csproj", "{1F0DA5CC-50AD-4068-AFB3-48A94BB40911}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.UpdateProject", "Tools\Mono\UpdateProject\Mosa.Tools.Mono.UpdateProject.csproj", "{59C6CA03-8473-47BA-B074-242257D2B910}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.TransformSource", "Tools\Mono\TransformSource\Mosa.Tools.Mono.TransformSource.csproj", "{A2D45DAF-36FC-4B88-9652-6EBC1E6C83DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.CreateBootImage", "Tools\CreateBootImage\Mosa.Tools.CreateBootImage.csproj", "{BE9A5A27-22C4-4664-A8BD-388B30B5972C}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 24
+		SccNumberOfProjects = 23
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs01.codeplex.com/
 		SccProjectUniqueName0 = System\\Mosa.System.csproj
@@ -133,46 +131,41 @@ Global
 		SccAuxPath15 = https://tfs01.codeplex.com
 		SccLocalPath15 = EmulatedKernel
 		SccProvider15 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName16 = Tools\\MakeBootImage\\Mosa.Tools.MakeBootImage.csproj
-		SccProjectName16 = Tools/MakeBootImage
+		SccProjectUniqueName16 = Tools\\MakeIsoImage\\Mosa.Tools.MakeIsoImage.csproj
+		SccProjectName16 = Tools/MakeIsoImage
 		SccAuxPath16 = https://tfs01.codeplex.com
-		SccLocalPath16 = Tools\\MakeBootImage
+		SccLocalPath16 = Tools\\MakeIsoImage
 		SccProvider16 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName17 = Tools\\MakeIsoImage\\Mosa.Tools.MakeIsoImage.csproj
-		SccProjectName17 = Tools/MakeIsoImage
+		SccProjectUniqueName17 = Pictor\\Pictor.csproj
+		SccProjectName17 = Pictor
 		SccAuxPath17 = https://tfs01.codeplex.com
-		SccLocalPath17 = Tools\\MakeIsoImage
+		SccLocalPath17 = Pictor
 		SccProvider17 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName18 = Pictor\\Pictor.csproj
-		SccProjectName18 = Pictor
+		SccProjectUniqueName18 = Pictor.UI\\Pictor.UI.csproj
+		SccProjectName18 = Pictor.UI
 		SccAuxPath18 = https://tfs01.codeplex.com
-		SccLocalPath18 = Pictor
+		SccLocalPath18 = Pictor.UI
 		SccProvider18 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName19 = Pictor.UI\\Pictor.UI.csproj
-		SccProjectName19 = Pictor.UI
+		SccProjectUniqueName19 = Tools\\PlugGen.Console\\PlugGen.Console.csproj
+		SccProjectName19 = Tools/PlugGen.Console
 		SccAuxPath19 = https://tfs01.codeplex.com
-		SccLocalPath19 = Pictor.UI
+		SccLocalPath19 = Tools\\PlugGen.Console
 		SccProvider19 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName20 = Tools\\PlugGen.Console\\PlugGen.Console.csproj
-		SccProjectName20 = Tools/PlugGen.Console
+		SccProjectUniqueName20 = Tools\\PlugGen.Core\\PlugGen.Core.csproj
+		SccProjectName20 = Tools/PlugGen.Core
 		SccAuxPath20 = https://tfs01.codeplex.com
-		SccLocalPath20 = Tools\\PlugGen.Console
+		SccLocalPath20 = Tools\\PlugGen.Core
 		SccProvider20 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName21 = Tools\\PlugGen.Core\\PlugGen.Core.csproj
-		SccProjectName21 = Tools/PlugGen.Core
+		SccProjectUniqueName21 = Tools\\Mono\\UpdateProject\\Mosa.Tools.Mono.UpdateProject.csproj
+		SccProjectName21 = Tools/Mono/UpdateProject
 		SccAuxPath21 = https://tfs01.codeplex.com
-		SccLocalPath21 = Tools\\PlugGen.Core
+		SccLocalPath21 = Tools\\Mono\\UpdateProject
 		SccProvider21 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName22 = Tools\\Mono\\CreateProjects\\Mosa.Tools.Mono.CreateProjects.csproj
-		SccProjectName22 = Tools/Mono/CreateProjects
+		SccProjectUniqueName22 = Tools\\CreateBootImage\\Mosa.Tools.CreateBootImage.csproj
+		SccProjectName22 = Tools/CreateBootImage
 		SccAuxPath22 = https://tfs01.codeplex.com
-		SccLocalPath22 = Tools\\Mono\\CreateProjects
+		SccLocalPath22 = Tools\\CreateBootImage
 		SccProvider22 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName23 = Tools\\Mono\\TransformSource\\Mosa.Tools.Mono.TransformSource.csproj
-		SccProjectName23 = Tools/Mono/TransformSource
-		SccAuxPath23 = https://tfs01.codeplex.com
-		SccLocalPath23 = Tools\\Mono\\TransformSource
-		SccProvider23 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -243,10 +236,6 @@ Global
 		{A6C1F330-B858-44DE-89E6-C89D2B80DA62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6C1F330-B858-44DE-89E6-C89D2B80DA62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6C1F330-B858-44DE-89E6-C89D2B80DA62}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -267,14 +256,14 @@ Global
 		{1306E901-47C2-4654-A7B5-9CB1BBC4064D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1306E901-47C2-4654-A7B5-9CB1BBC4064D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1306E901-47C2-4654-A7B5-9CB1BBC4064D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F0DA5CC-50AD-4068-AFB3-48A94BB40911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F0DA5CC-50AD-4068-AFB3-48A94BB40911}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F0DA5CC-50AD-4068-AFB3-48A94BB40911}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F0DA5CC-50AD-4068-AFB3-48A94BB40911}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A2D45DAF-36FC-4B88-9652-6EBC1E6C83DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A2D45DAF-36FC-4B88-9652-6EBC1E6C83DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A2D45DAF-36FC-4B88-9652-6EBC1E6C83DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A2D45DAF-36FC-4B88-9652-6EBC1E6C83DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59C6CA03-8473-47BA-B074-242257D2B910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59C6CA03-8473-47BA-B074-242257D2B910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59C6CA03-8473-47BA-B074-242257D2B910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59C6CA03-8473-47BA-B074-242257D2B910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE9A5A27-22C4-4664-A8BD-388B30B5972C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
