@@ -72,7 +72,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mono", "Mono", "{30F29437-8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.CreateBootImage", "Tools\CreateBootImage\Mosa.Tools.CreateBootImage.csproj", "{BE9A5A27-22C4-4664-A8BD-388B30B5972C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.UpdateProject", "Tools\Mono\TransformProjectFiles\Mosa.Tools.Mono.UpdateProject.csproj", "{59C6CA03-8473-47BA-B074-242257D2B910}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.UpdateProject", "Tools\Mono\UpdateProject\Mosa.Tools.Mono.UpdateProject.csproj", "{59C6CA03-8473-47BA-B074-242257D2B910}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -172,10 +172,10 @@ Global
 		SccProjectTopLevelParentUniqueName23 = MOSA.sln
 		SccProjectName23 = Tools/CreateBootImage
 		SccLocalPath23 = Tools\\CreateBootImage
-		SccProjectUniqueName24 = Tools\\Mono\\TransformProjectFiles\\Mosa.Tools.Mono.UpdateProject.csproj
+		SccProjectUniqueName24 = Tools\\Mono\\UpdateProject\\Mosa.Tools.Mono.UpdateProject.csproj
 		SccProjectTopLevelParentUniqueName24 = MOSA.sln
-		SccProjectName24 = Tools/Mono/TransformProjectFiles
-		SccLocalPath24 = Tools\\Mono\\TransformProjectFiles
+		SccProjectName24 = Tools/Mono/UpdateProject
+		SccLocalPath24 = Tools\\Mono\\UpdateProject
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
