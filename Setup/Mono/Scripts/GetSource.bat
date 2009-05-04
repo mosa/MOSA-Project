@@ -1,5 +1,7 @@
 if exist "src\mono-%1.tar.bz2" goto end
 
+mkdir src
+
 if not exist "..\..\..\patches\mono\mono-%1.tar.bz2" goto next
 
 copy "..\..\..\patches\mono\mono-%1.tar.bz2" "src\mono-%1.tar.bz2"
