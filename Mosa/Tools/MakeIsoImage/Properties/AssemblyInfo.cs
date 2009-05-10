@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Mosa.MakeIsoImage")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Westpark Communications")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Mosa.MakeIsoImage")]
-[assembly: AssemblyCopyright("Copyright © Westpark Communications 2009")]
+[assembly: AssemblyCopyright("Copyright © 2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
