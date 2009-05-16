@@ -935,9 +935,15 @@ namespace Mosa.Platforms.x86
 
 		void ICodeEmitter.IDiv(Operand dest, Operand src)
 		{
+            if (dest is ConstantOperand)
+            {
+                Operand newdst = new RegisterOperand(src.Type, GeneralPurposeRegister.EAX);
+                Emit(newdst, dest, X86.Move(newdst, dest));
+                dest = newdst;
+            }
 			if (src is ConstantOperand) {
 				Operand newsrc = new RegisterOperand(src.Type, GeneralPurposeRegister.ECX);
-				Emit(newsrc, src, X86.Move(dest, src));
+                Emit(newsrc, src, X86.Move(newsrc, src));
 				src = newsrc;
 			}
 			Emit(src, null, X86.Idiv(dest, src));
