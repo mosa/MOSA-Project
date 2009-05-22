@@ -1,0 +1,5 @@
+default 0
+#timeout 5
+
+title MOSA Live Disk
+kernel /boot/hello.exe

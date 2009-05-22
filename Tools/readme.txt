@@ -19,3 +19,7 @@ syslinux
 wget
 - GNU License
 - http://www.gnu.org/software/wget
+
+grub
+- GNU License
+- http://www.gnu.org/software/grub/
