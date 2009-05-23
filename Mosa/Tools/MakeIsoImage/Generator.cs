@@ -145,8 +145,10 @@ namespace Mosa.Tools.MakeIsoImage
 
 			// TODO FIXME - create smaller reusable buffer and read fixed-size chunks at a time...
 			byte[] b = new byte[bytes];
-			if (bytes != f.fileInfo.OpenRead().Read(b, 0, bytes)) {
-				throw new Exception("number of bytes read from file != reported length of file: " + f.fileInfo.Name);
+
+			using (FileStream stream = f.fileInfo.OpenRead()) {
+				if (bytes != stream.Read(b, 0, bytes))
+					throw new Exception("number of bytes read from file != reported length of file: " + f.fileInfo.Name);
 			}
 
 			if (f.BootInfoTable) {
