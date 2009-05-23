@@ -138,8 +138,10 @@ namespace Mosa.Tools.MakeIsoImage
 
 			this.generator = new Generator(this.pedantic);
 			GenerateIso(); // 1st pass to calculate offsets
-			this.generator.ResetWithFileStream(File.OpenWrite(isoFileName));
-			GenerateIso(); // 2nd pass to actually write the data
+			using (FileStream stream = File.OpenWrite(isoFileName)) {
+				this.generator.ResetWithFileStream(stream);
+				GenerateIso(); // 2nd pass to actually write the data
+			}
 		}
 
 		private IsoFolder isoRoot;
@@ -228,7 +230,7 @@ namespace Mosa.Tools.MakeIsoImage
 
 			GenPrimaryVolumeDescriptor();
 
-			if (this.boot != null) 
+			if (this.boot != null)
 				GenBootRecordDescriptor(); // Boot Record MUST be right after PVD ( see El Torito section 2.0 )
 
 			// TODO FIXME - generate any other needed Volume Descriptors here
@@ -236,7 +238,7 @@ namespace Mosa.Tools.MakeIsoImage
 
 			// END Volume Descriptors
 
-			if (this.boot != null) 
+			if (this.boot != null)
 				GenBootCatalog(this.boot);
 
 			GenPathTables();
@@ -388,8 +390,8 @@ namespace Mosa.Tools.MakeIsoImage
 			if ((b_di.Length & 1) != 0)
 				di.Byte(0, 9 + b_di.Length); // optional padding if LEN_DI is odd
 
-			foreach (KeyValuePair<string, IsoEntry> it in thisFolder.entries) 
-				if (it.Value.IsFolder) 
+			foreach (KeyValuePair<string, IsoEntry> it in thisFolder.entries)
+				if (it.Value.IsFolder)
 					GenPathTableEx(thisFolder, (IsoFolder)it.Value, lsb);
 		}
 
@@ -440,10 +442,10 @@ namespace Mosa.Tools.MakeIsoImage
 
 		private void GenFiles(IsoFolder thisFolder)
 		{
-			foreach (KeyValuePair<string, IsoEntry> it in thisFolder.entries) 
-				if (it.Value.IsFile) 
-					GenFile((IsoFile)it.Value);				
-				else 
+			foreach (KeyValuePair<string, IsoEntry> it in thisFolder.entries)
+				if (it.Value.IsFile)
+					GenFile((IsoFile)it.Value);
+				else
 					GenFiles((IsoFolder)it.Value);
 		}
 
@@ -546,7 +548,7 @@ namespace Mosa.Tools.MakeIsoImage
 		{
 			MemoryStream m = new MemoryStream();
 			bool dots = (name == "." || name == "..");
-			
+
 			if (!secondPass) {
 				if (root) {
 					susp_base_sp(m);
@@ -555,7 +557,7 @@ namespace Mosa.Tools.MakeIsoImage
 				if (e.RrFlags != 0)
 					susp_rr_rr(m, e);
 			}
-			
+
 			// TODO FIXME - write and generate susp_rr_tf() - timestamps...
 			if (dots)
 				name = "";
