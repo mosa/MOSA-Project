@@ -8,4 +8,3 @@ copy build\hello.exe build\iso\boot
 
 ..\..\Mosa\bin\Mosa.MakeIsoImage.exe -label mosa -boot ..\..\Tools\grub\stage2_eltorito -boot-info-table -boot-load-size 4 build\bootimage.iso build\iso
 
-pause
