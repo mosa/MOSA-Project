@@ -65,9 +65,9 @@ namespace Mosa.Platforms.x86
             string fileName = this._compiler.Method.Name;
             fileName = fileName.Replace('<', '_').Replace('$', '_').Replace('>', '_');
             FileInfo t = new FileInfo(fileName + ".asm");
-            StreamWriter textwriter = t.CreateText();
+            //StreamWriter textwriter = t.CreateText();
             MultiplexingCodeEmitter mce = new MultiplexingCodeEmitter();
-            mce.Emitters.Add(new AsmCodeEmitter(textwriter));
+            //mce.Emitters.Add(new AsmCodeEmitter(textwriter));
             mce.Emitters.Add(new MachineCodeEmitter(_compiler, _codeStream, _compiler.Linker));
             _emitter = mce;
 
@@ -142,6 +142,7 @@ namespace Mosa.Platforms.x86
         {
             // FIXME: Expand divisions to cdq/x86 div pairs in IRToX86TransformationStage
             _emitter.Cdq();
+            //_emitter.Xor(new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX), new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
             _emitter.IDiv(instruction.Operand0, instruction.Operand1);
         }
 
@@ -1651,6 +1652,7 @@ namespace Mosa.Platforms.x86
                 case CilElementType.U2: goto case CilElementType.I1;
                 case CilElementType.U4: goto case CilElementType.I1;
                 case CilElementType.U8: goto case CilElementType.I8;
+                case CilElementType.Char: goto case CilElementType.I2;
 
                 default:
                     throw new NotSupportedException();

@@ -381,11 +381,34 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<Context>.Rem(IL.RemInstruction instruction, Context ctx)
         {
+            BasicBlock nextBlock;
+            BasicBlock[] blocks = CreateBlocks(ctx, instruction, 1, out nextBlock);
+
+            Instruction extend, div;
+            if (IsUnsigned(instruction.First.Type.Type))
+                extend = new IR.ZeroExtendedMoveInstruction(new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX), new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX));
+            else
+                extend = new IR.SignExtendedMoveInstruction(new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX), new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX));
+
+            if (IsUnsigned(instruction.First.Type.Type) && IsUnsigned(instruction.Second.Type.Type))    
+                div = new x86.Instructions.UDivInstruction(instruction.First, instruction.Second);
+            else
+                div = new x86.Instructions.DivInstruction(instruction.First, instruction.Second);
+
             Replace(ctx, new Instruction[] {
                 new x86.Instructions.MoveInstruction(new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX), instruction.First),
-                new x86.Instructions.DivInstruction(instruction.First, instruction.Second),
-                new x86.Instructions.MoveInstruction(instruction.Results[0], new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EDX))
+                extend,
+                div,
+                new x86.Instructions.MoveInstruction(instruction.Results[0], new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EDX)),
+                //new x86.Instructions.CmpInstruction(instruction.First, new ConstantOperand(new SigType(CilElementType.I4), 0)),
+                //new IR.BranchInstruction(IR.ConditionCode.LessThan, blocks[0].Label),
+                new IR.JmpInstruction(nextBlock.Label)
             });
+
+            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+            });
+
+            LinkBlocks(ctx.Block, nextBlock);
         }
 
         #endregion // IILVisitor<Context> Members
@@ -1385,6 +1408,63 @@ namespace Mosa.Platforms.x86
                 instruction,
                 _architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax)
             });
+        }
+
+        private BasicBlock[] CreateBlocks(Context ctx, Instruction instruction, int blocks, out BasicBlock nextBlock)
+        {
+            BasicBlock[] result;
+            int label = _blocks.Count + 0x10000000;
+
+            // Is there a statement after the instruction?
+            if (ctx.Index + 1 < ctx.Block.Instructions.Count)
+            {
+                nextBlock = ctx.Block.Split(ctx.Index + 1, label++);
+            }
+            else if (0 != ctx.Block.NextBlocks.Count)
+            {
+                nextBlock = ctx.Block.NextBlocks[0];
+                UnlinkBlocks(ctx.Block, nextBlock);
+            }
+            else
+            {
+                nextBlock = null;
+            }
+
+            // Allocate the block array
+            result = new BasicBlock[blocks];
+            for (int index = 0; index < blocks; index++)
+                result[index] = new BasicBlock(label++);
+            _blocks.InsertRange(_currentBlock + 1, result);
+            if (null != nextBlock)
+                _blocks.Insert(_currentBlock + blocks + 1, nextBlock);
+
+            return result;
+        }
+
+        private void LinkBlocks(BasicBlock from, BasicBlock to)
+        {
+            Debug.Assert(false == from.NextBlocks.Contains(to), @"A link already exists?");
+            Debug.Assert(false == to.PreviousBlocks.Contains(from), @"A link already exists?");
+            from.NextBlocks.Add(to);
+            to.PreviousBlocks.Add(from);
+        }
+
+        private void UnlinkBlocks(BasicBlock from, BasicBlock to)
+        {
+            Debug.Assert(true == from.NextBlocks.Contains(to), @"Link doesn't exist?");
+            Debug.Assert(true == to.PreviousBlocks.Contains(from), @"Link doesn't exist?");
+            from.NextBlocks.Remove(to);
+            to.PreviousBlocks.Remove(from);
+        }
+
+        private bool IsUnsigned(CilElementType type)
+        {
+            return (type == CilElementType.U ||
+                    type == CilElementType.U1 ||
+                    type == CilElementType.U2 ||
+                    type == CilElementType.U4 ||
+                    type == CilElementType.U8 ||
+                    type == CilElementType.Char);
         }
 
         #endregion // Internals

@@ -34,7 +34,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 //new ConstantFoldingStage(),
                 new CilToIrTransformationStage(),
                 //InstructionLogger.Instance,
-                InstructionStatisticsStage.Instance,
+                //InstructionStatisticsStage.Instance,
                 new DominanceCalculationStage(),
                 //InstructionLogger.Instance,
                 //new EnterSSA(),
@@ -77,7 +77,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             }
 
             base.EndCompile();
-            InstructionStatisticsStage.Instance.PrintStatistics();
+            //InstructionStatisticsStage.Instance.PrintStatistics();
         }
     }
 }
