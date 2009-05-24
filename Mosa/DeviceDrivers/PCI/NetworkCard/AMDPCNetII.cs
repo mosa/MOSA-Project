@@ -21,7 +21,7 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 	/// <summary>
 	/// AMDPCNet Network Chip
 	/// </summary>
-	[PCIDeviceDriver(VendorID = 0x1022, DeviceID = 0x2000, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[PCIDeviceDriver(VendorID = 0x1022, DeviceID = 0x2000, Platforms = PlatformArchitecture.X86AndX64)]
 	[DeviceDriverPhysicalMemory(MemorySize = 7 * 4, MemoryAlignment = 4, RestrictUnder4G = true)]
 	[DeviceDriverPhysicalMemory(MemorySize = 80 * 4, MemoryAlignment = 16, RestrictUnder4G = true)]
 	[DeviceDriverPhysicalMemory(MemorySize = 80 * 4, MemoryAlignment = 16, RestrictUnder4G = true)]
@@ -133,7 +133,7 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 		public override DeviceDriverStartStatus Start()
 		{
 			// Enable the card
-			hardwareResources.PCIDeviceResource.EnableDevice();
+			hardwareResources.DeviceResource.EnableDevice();
 
 			// Do a 32-bit write to set 32-bit mode
 			rdp.Write32(0);

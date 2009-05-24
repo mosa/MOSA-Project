@@ -82,7 +82,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the PCI base addresses.
 		/// </summary>
 		/// <value>The PCI base addresses.</value>
-		PCIBaseAddress[] PCIBaseAddresses { get; }
+		BaseAddress[] BaseAddresses { get; }
 
 		/// <summary>
 		/// Sets the no driver found.

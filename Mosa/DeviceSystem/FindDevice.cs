@@ -26,7 +26,7 @@ namespace Mosa.DeviceSystem
             /// <summary>
             /// 
             /// </summary>
-			private IDevice parent;
+			private readonly IDevice parent;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="WithParent"/> class.

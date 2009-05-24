@@ -24,8 +24,8 @@ namespace Mosa.DeviceDrivers.ISA
     /// <summary>
     /// Floppy Disk Controller (FDC) Device Driver
     /// </summary>
-	[ISADeviceDriver(AutoLoad = false, BasePort = 0x03F0, PortRange = 8, IRQ = 6, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	[ISADeviceDriver(AutoLoad = false, BasePort = 0x0370, PortRange = 8, IRQ = 5, ForceOption = "fdc2", Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[ISADeviceDriver(AutoLoad = false, BasePort = 0x03F0, PortRange = 8, IRQ = 6, Platforms = PlatformArchitecture.X86AndX64)]
+	[ISADeviceDriver(AutoLoad = false, BasePort = 0x0370, PortRange = 8, IRQ = 5, ForceOption = "fdc2", Platforms = PlatformArchitecture.X86AndX64)]
 	public class FloppyDiskController : HardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
 	{
 

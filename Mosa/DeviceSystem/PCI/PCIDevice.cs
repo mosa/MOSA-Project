@@ -14,7 +14,7 @@ namespace Mosa.DeviceSystem.PCI
 	/// <summary>
 	/// 
 	/// </summary>
-	public class PCIDevice : Device, IDevice, IPCIDevice, IPCIDeviceResource
+	public class PCIDevice : Device, IDevice, IPCIDevice, IDeviceResource
 	{
 		#region PCICommand
 
@@ -55,7 +55,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// <summary>
 		/// 
 		/// </summary>
-		protected PCIBaseAddress[] pciBaseAddresses;
+		protected BaseAddress[] baseAddresses;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -131,7 +131,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the base addresses.
 		/// </summary>
 		/// <value>The base addresses.</value>
-		public PCIBaseAddress[] PCIBaseAddresses { get { return pciBaseAddresses; } }
+		public BaseAddress[] BaseAddresses { get { return this.baseAddresses; } }
 
 		/// <summary>
 		/// Create a new PCIDevice instance
@@ -152,7 +152,7 @@ namespace Mosa.DeviceSystem.PCI
 			this.function = fun;
 
 			ioPortRegionCount = memoryRegionCount = 0;
-			this.pciBaseAddresses = new PCIBaseAddress[8];
+			this.baseAddresses = new BaseAddress[8];
 
 			for (byte i = 0; i < 6; i++) {
 				uint address = pciController.ReadConfig32(bus, slot, fun, (byte)(16 + (i * 4)));
@@ -167,23 +167,23 @@ namespace Mosa.DeviceSystem.PCI
 					HAL.EnableAllInterrupts();
 
 					if (address % 2 == 1)
-						pciBaseAddresses[i] = new PCIBaseAddress(PCIAddressType.IO, address & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
+						this.baseAddresses[i] = new BaseAddress(AddressType.IO, address & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
 					else
-						pciBaseAddresses[i] = new PCIBaseAddress(PCIAddressType.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
+						this.baseAddresses[i] = new BaseAddress(AddressType.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
 				}
 			}
 
 			if ((ClassCode == 0x03) && (SubClassCode == 0x00) && (ProgIF == 0x00)) {
 				// Special case for generic VGA
-				pciBaseAddresses[6] = new PCIBaseAddress(PCIAddressType.Memory, 0xA0000, 0x1FFFF, false);
-				pciBaseAddresses[7] = new PCIBaseAddress(PCIAddressType.IO, 0x3B0, 0x0F, false);
+				this.baseAddresses[6] = new BaseAddress(AddressType.Memory, 0xA0000, 0x1FFFF, false);
+				this.baseAddresses[7] = new BaseAddress(AddressType.IO, 0x3B0, 0x0F, false);
 			}
 
-			foreach (PCIBaseAddress baseAddress in pciBaseAddresses)
+			foreach (BaseAddress baseAddress in this.baseAddresses)
 				if (baseAddress != null)
 					switch (baseAddress.Region) {
-						case PCIAddressType.IO: ioPortRegionCount++; break;
-						case PCIAddressType.Memory: memoryRegionCount++; break;
+						case AddressType.IO: ioPortRegionCount++; break;
+						case AddressType.Memory: memoryRegionCount++; break;
 					}
 		}
 

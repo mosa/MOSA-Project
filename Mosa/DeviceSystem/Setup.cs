@@ -46,7 +46,7 @@ namespace Mosa.DeviceSystem
 		static public void Initialize()
 		{
 			// Create the Device Driver Manager
-			deviceDriverRegistry = new DeviceDriverRegistry(PlatformArchitecture.x86);
+			deviceDriverRegistry = new DeviceDriverRegistry(PlatformArchitecture.X86);
 
 			// Create Resource Manager
 			resourceManager = new ResourceManager();
@@ -96,10 +96,10 @@ namespace Mosa.DeviceSystem
 			LinkedList<IIOPortRegion> ioPortRegions = new LinkedList<IIOPortRegion>();
 			LinkedList<IMemoryRegion> memoryRegions = new LinkedList<IMemoryRegion>();
 
-			foreach (PCIBaseAddress pciBaseAddress in pciDevice.PCIBaseAddresses)
+			foreach (BaseAddress pciBaseAddress in pciDevice.BaseAddresses)
 				switch (pciBaseAddress.Region) {
-					case PCIAddressType.IO: ioPortRegions.Add(new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size)); break;
-					case PCIAddressType.Memory: memoryRegions.Add(new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size)); break;
+					case AddressType.IO: ioPortRegions.Add(new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size)); break;
+					case AddressType.Memory: memoryRegions.Add(new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size)); break;
 					default: break;
 				}
 
@@ -109,7 +109,7 @@ namespace Mosa.DeviceSystem
 					memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
 				}
 
-			HardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions.ToArray(), memoryRegions.ToArray(), new InterruptHandler(resourceManager.InterruptManager, pciDevice.IRQ, hardwareDevice), pciDevice as IPCIDeviceResource);
+			HardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions.ToArray(), memoryRegions.ToArray(), new InterruptHandler(resourceManager.InterruptManager, pciDevice.IRQ, hardwareDevice), pciDevice as IDeviceResource);
 
 			if (resourceManager.ClaimResources(hardwareResources)) {
 				hardwareResources.EnableIRQ();

@@ -14,7 +14,7 @@ namespace Mosa.DeviceSystem.PCI
 	/// <summary>
 	/// 
 	/// </summary>
-	public interface IPCIDeviceResource
+	public interface IDeviceResource
 	{
 		/// <summary>
 		/// Gets or sets the status register.

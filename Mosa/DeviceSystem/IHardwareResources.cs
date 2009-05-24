@@ -77,7 +77,7 @@ namespace Mosa.DeviceSystem
 		/// Gets the PCI device resource.
 		/// </summary>
 		/// <value>The PCI device resource.</value>
-		IPCIDeviceResource PCIDeviceResource { get; }
+		IDeviceResource DeviceResource { get; }
 	}
 
 }

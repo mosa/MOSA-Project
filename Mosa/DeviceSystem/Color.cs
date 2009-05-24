@@ -34,7 +34,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		public static Color Transparent = new Color(0, 0, 0, 0);
+		public static readonly Color Transparent = new Color(0, 0, 0, 0);
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Color"/> struct.

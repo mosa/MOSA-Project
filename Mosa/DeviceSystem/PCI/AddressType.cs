@@ -14,7 +14,7 @@ namespace Mosa.DeviceSystem.PCI
 	/// <summary>
 	/// Type of PCI address region
 	/// </summary>
-	public enum PCIAddressType
+	public enum AddressType
 	{
 		/// <summary>
 		/// Port IO Address Region

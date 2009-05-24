@@ -23,15 +23,15 @@ namespace Mosa.DeviceSystem
         /// <summary>
         /// 
         /// </summary>
-		x86 = 1,
+		X86 = 1,
         /// <summary>
         /// 
         /// </summary>
-		x64 = 2,
+		X64 = 2,
 
         /// <summary>
         /// 
         /// </summary>
-		Both_x86_and_x64 = PlatformArchitecture.x86 | PlatformArchitecture.x64,
+		X86AndX64 = PlatformArchitecture.X86 | PlatformArchitecture.X64,
 	}
 }

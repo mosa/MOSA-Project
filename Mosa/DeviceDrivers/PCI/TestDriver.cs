@@ -16,9 +16,9 @@ namespace Mosa.DeviceDrivers.PCI
 	/// <summary>
 	/// PCI Test Driver
 	/// </summary>
-	[PCIDeviceDriver(VendorID = 0xABCD, DeviceID = 0x1000, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	[PCIDeviceDriver(VendorID = 0xABCD, DeviceID = 0x2000, Platforms = PlatformArchitecture.Both_x86_and_x64)]
-	[PCIDeviceDriver(ClassCode = 0xFFFF, SubClassCode = 0xFF, Platforms = PlatformArchitecture.Both_x86_and_x64)]
+	[PCIDeviceDriver(VendorID = 0xABCD, DeviceID = 0x1000, Platforms = PlatformArchitecture.X86AndX64)]
+	[PCIDeviceDriver(VendorID = 0xABCD, DeviceID = 0x2000, Platforms = PlatformArchitecture.X86AndX64)]
+	[PCIDeviceDriver(ClassCode = 0xFFFF, SubClassCode = 0xFF, Platforms = PlatformArchitecture.X86AndX64)]
 	public class TestDriver : HardwareDevice, IHardwareDevice
 	{
 		/// <summary>

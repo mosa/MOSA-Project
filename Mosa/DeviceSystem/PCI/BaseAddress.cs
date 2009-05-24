@@ -14,7 +14,7 @@ namespace Mosa.DeviceSystem.PCI
     /// <summary>
     /// 
     /// </summary>
-	public class PCIBaseAddress
+	public class BaseAddress
 	{
         /// <summary>
         /// 
@@ -27,7 +27,7 @@ namespace Mosa.DeviceSystem.PCI
         /// <summary>
         /// 
         /// </summary>
-		protected PCIAddressType region;
+		protected AddressType region;
         /// <summary>
         /// 
         /// </summary>
@@ -49,22 +49,22 @@ namespace Mosa.DeviceSystem.PCI
         /// Gets the region.
         /// </summary>
         /// <value>The region.</value>		
-		public PCIAddressType Region { get { return region; } }
+		public AddressType Region { get { return region; } }
 
 		/// <summary>
-		/// Gets a value indicating whether this <see cref="PCIBaseAddress"/> is prefetchable.
+		/// Gets a value indicating whether this <see cref="BaseAddress"/> is prefetchable.
 		/// </summary>
 		/// <value><c>true</c> if prefetchable; otherwise, <c>false</c>.</value>
 		public bool Prefetchable { get { return prefetchable; } }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PCIBaseAddress"/> class.
+		/// Initializes a new instance of the <see cref="BaseAddress"/> class.
 		/// </summary>
 		/// <param name="region">The region.</param>
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <param name="prefetchable">if set to <c>true</c> [prefetchable].</param>
-		public PCIBaseAddress(PCIAddressType region, uint address, uint size, bool prefetchable)
+		public BaseAddress(AddressType region, uint address, uint size, bool prefetchable)
 		{
 			this.region = region;
 			this.address = address;
@@ -80,10 +80,10 @@ namespace Mosa.DeviceSystem.PCI
 		/// </returns>
 		public override string ToString()
 		{
-			if (region == PCIAddressType.Undefined)
+			if (region == AddressType.Undefined)
 				return string.Empty;
 
-			if (region == PCIAddressType.IO)
+			if (region == AddressType.IO)
 				return "I/O Port at 0x" + address.ToString("X") + " [size=" + size.ToString() + "]";
 
 			if (prefetchable)

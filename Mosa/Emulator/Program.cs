@@ -192,7 +192,7 @@ namespace Mosa.Emulator
 					//					screen.Write("  ");
 					//					screen.WriteLine(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID, pciDevice.SubDeviceID, pciDevice.SubVendorID));
 
-					foreach (PCIBaseAddress address in pciDevice.PCIBaseAddresses) {
+					foreach (BaseAddress address in pciDevice.BaseAddresses) {
 						if (address == null)
 							continue;
 
@@ -201,7 +201,7 @@ namespace Mosa.Emulator
 
 						screen.Write("    ");
 
-						if (address.Region == PCIAddressType.IO)
+						if (address.Region == AddressType.IO)
 							screen.Write("I/O Port at 0x");
 						else
 							screen.Write("Memory at 0x");

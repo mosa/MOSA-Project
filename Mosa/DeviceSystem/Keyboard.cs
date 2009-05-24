@@ -222,7 +222,7 @@ namespace Mosa.DeviceSystem
 		/// <value>
 		/// 	<c>true</c> if [any control key is pressed]; otherwise, <c>false</c>.
 		/// </value>
-		public bool Control { get { return rightControl | leftControl; } set { leftControl = true; rightControl = false; } }
+		public bool Control { get { return rightControl | leftControl; } set { leftControl = value; rightControl = false; } }
 
 		/// <summary>
 		/// Gets a value indicating whether [any alt key is pressed].
@@ -230,7 +230,7 @@ namespace Mosa.DeviceSystem
 		/// <value>
 		/// 	<c>true</c> if [any alt key is pressed]; otherwise, <c>false</c>.
 		/// </value>
-		public bool Alt { get { return rightAlt | leftAlt; } set { leftAlt = true; rightAlt = false; } }
+		public bool Alt { get { return rightAlt | leftAlt; } set { leftAlt = value; rightAlt = false; } }
 
 		/// <summary>
 		/// Gets a value indicating whether [any shift key is pressed].
@@ -238,6 +238,6 @@ namespace Mosa.DeviceSystem
 		/// <value>
 		/// 	<c>true</c> if [any shift key is pressed]; otherwise, <c>false</c>.
 		/// </value>
-		public bool Shift { get { return rightShift | leftShift; } set { leftShift = true; rightShift = false; } }
+		public bool Shift { get { return rightShift | leftShift; } set { leftShift = value; rightShift = false; } }
 	}
 }
