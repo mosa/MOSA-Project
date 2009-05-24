@@ -26,7 +26,7 @@ namespace Mosa.Platforms.x86.Instructions
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DivInstruction"/> class.
+        /// Initializes a new instance of the <see cref="UDivInstruction"/> class.
         /// </summary>
         /// <param name="destination">The destination operand.</param>
         /// <param name="source">The source operand.</param>
