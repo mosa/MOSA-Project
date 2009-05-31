@@ -62,16 +62,15 @@ namespace Mosa.Platforms.x86
 
         protected override void BeginGenerate()
         {
-            string fileName = this._compiler.Method.Name;
-            fileName = fileName.Replace('<', '_').Replace('$', '_').Replace('>', '_');
-            FileInfo t = new FileInfo(fileName + ".asm");
+			//string fileName = this._compiler.Method.Name;
+			//fileName = fileName.Replace('<', '_').Replace('$', '_').Replace('>', '_');
+			//FileInfo t = new FileInfo(fileName + ".asm");
             //StreamWriter textwriter = t.CreateText();
-            MultiplexingCodeEmitter mce = new MultiplexingCodeEmitter();
+			//MultiplexingCodeEmitter mce = new MultiplexingCodeEmitter();
             //mce.Emitters.Add(new AsmCodeEmitter(textwriter));
-            mce.Emitters.Add(new MachineCodeEmitter(_compiler, _codeStream, _compiler.Linker));
-            _emitter = mce;
-
-            //_emitter = new MachineCodeEmitter(_codeStream);
+			//mce.Emitters.Add(new MachineCodeEmitter(_compiler, _codeStream, _compiler.Linker));
+			//_emitter = mce;
+        	_emitter = new MachineCodeEmitter(_compiler, _codeStream, _compiler.Linker);
         }
 
         protected override void EndGenerate()
@@ -330,8 +329,6 @@ namespace Mosa.Platforms.x86
         	  Operand function = instruction.Operand0;
               MemoryOperand dst = instruction.Results[0] as MemoryOperand;
         	  
-        	  bool x = false;
-        	  Debug.Assert(x, "CPUID: " + dst.Type.ToString() + " :: " + function.Type.ToString());
               _emitter.CpuId(dst, function);
         }
         
@@ -380,9 +377,7 @@ namespace Mosa.Platforms.x86
             Operand src = instruction.Operand0;
             Operand dst = instruction.Results[0];// as RegisterOperand;
 
-            bool x = false;
-            Debug.Assert(x, "OUT: " + dst.Type.ToString() + " :: " + src.Type.ToString());
-            _emitter.Mov(new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.EDX), dst);
+			_emitter.Mov(new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.EDX), dst);
             _emitter.Out(new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.EAX), new RegisterOperand(dst.Type, GeneralPurposeRegister.EDX));
             _emitter.Mov(dst, new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.EAX));
         }

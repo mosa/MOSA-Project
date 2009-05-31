@@ -332,11 +332,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The value.</param>
 		void ICodeEmitter.Out(Operand dest, Operand src)
 		{
-			byte[] out8 = new byte[] { 0xEE };
-			bool x = false;
-			Debug.Assert(x, dest.Type.ToString() + " :: " + src.Type.ToString());
 			if (dest.Type.Type == CilElementType.I1 || dest.Type.Type == CilElementType.U1)
-				Emit(out8, null, null, null);
+				Emit(new byte[] { 0xEE }, null, null, null);
 			else
 				Emit(dest, src, X86.Out32(dest, src));
 		}
@@ -348,9 +345,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The SRC.</param>
 		void ICodeEmitter.Add(Operand dest, Operand src)
 		{
-			//if (src is RegisterOperand)
-			//    if ((src as RegisterOperand) != (new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX)))
-			//        throw new NotSupportedException("Register has to be EAX");
 			Emit(dest, src, X86.Add(dest, src));
 		}
 
