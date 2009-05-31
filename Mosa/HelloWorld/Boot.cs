@@ -7,13 +7,6 @@ namespace Mosa.HelloWorld
 	public static class Boot
 	{
 		/// <summary>
-		/// Initializes the <see cref="Boot"/> class.
-		/// </summary>
-		static Boot()
-		{
-		}
-
-		/// <summary>
 		/// Mains this instance.
 		/// </summary>
 		public static void Main()
@@ -121,7 +114,7 @@ namespace Mosa.HelloWorld
 		/// <param name="chr">The character.</param>
 		/// <param name="color">The color.</param>
 		/// <param name="address">The address.</param>
-		public unsafe static void WriteChar(char chr, byte color, byte* address)
+		private unsafe static void WriteChar(char chr, byte color, byte* address)
 		{
 			*address = (byte) chr;
 			*(address + 1) = color;
