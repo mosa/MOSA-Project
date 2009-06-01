@@ -470,96 +470,77 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="compiler">The compiler to populate.</param>
         /// <param name="header">The method header.</param>
-        private void Decode(IMethodCompiler compiler, ref MethodHeader header)
-        {
-            // Instruction object decoded for an IL instruction
-            ILInstruction instruction = null;
-            // The opcode
-            OpCode op;
-            // ILInstruction offset
-            int instOffset;
-            // Start of the code stream
-            long codeStart = _codeReader.BaseStream.Position;
-            // End of the code stream
-            long codeEnd = _codeReader.BaseStream.Position + header.codeSize;
-            // AssemblyCompiler target architecture (which fortunately has a vote in IR instruction representation)
-            IArchitecture architecture = compiler.Architecture;
-            // Branch instruction to patch offsets
-            IBranchInstruction branch = null;
-            // Prefix instruction
-            PrefixInstruction prefix = null;
-            // Operand stack for IL instructions
-            Stack<Operand> ilStack = new Stack<Operand>();
-            // Operand array
-            Operand[] ops;
-            int opCount;
-            // Loop index
-            int i;
+		private void Decode(IMethodCompiler compiler, ref MethodHeader header)
+		{
+			// Start of the code stream
+			long codeStart = _codeReader.BaseStream.Position;
 
-            while (codeEnd != _codeReader.BaseStream.Position)
-            {
-                // Determine the instruction offset
-                instOffset = (int)(_codeReader.BaseStream.Position - codeStart);
+			// End of the code stream
+			long codeEnd = _codeReader.BaseStream.Position + header.codeSize;
 
-                // Read the next opcode from the stream
-                op = (OpCode)_codeReader.ReadByte();
-                if (OpCode.Extop == op)
-                    op = (OpCode)(0x100 | _codeReader.ReadByte());
+			// Prefix instruction
+			PrefixInstruction prefix = null;
 
-                // Create and initialize the corresponding instruction
-                instruction = CreateInstruction(op);
-                instruction.Decode(this);
-                instruction.Offset = instOffset;
-                instruction.Prefix = prefix;
+			// Operand stack for IL instructions
+			Stack<Operand> ilStack = new Stack<Operand>();
 
-                // Assign the operands of the instruction from the IL stack
-                //ops = instruction.Operands;
-                opCount = instruction.Operands.Length;
-                while (0 != opCount--)
-                {
-                    if (null == instruction.Operands[opCount])
-                    {
-                        instruction.SetOperand(opCount, ilStack.Pop());
-                    }
-                }
+			while (codeEnd != _codeReader.BaseStream.Position) {
+				// Determine the instruction offset
+				int instOffset = (int)(_codeReader.BaseStream.Position - codeStart);
 
-                // Validate the instruction
-                instruction.Validate(_compiler);
+				// Read the next opcode from the stream
+				OpCode op = (OpCode)_codeReader.ReadByte();
+				if (OpCode.Extop == op)
+					op = (OpCode)(0x100 | _codeReader.ReadByte());
 
-                // Push the result operands on the IL stack
-                ops = instruction.Results;
-                if (null != ops && true == instruction.PushResult && 0 != ops.Length)
-                {
-                    foreach (Operand operand in ops)
-                        ilStack.Push(operand);
-                }
+				// Create and initialize the corresponding instruction
+				ILInstruction instruction = CreateInstruction(op);
+				instruction.Decode(this);
+				instruction.Offset = instOffset;
+				instruction.Prefix = prefix;
 
-                // Do we need to patch branch targets?
-                branch = instruction as IBranchInstruction;
-                if (null != branch)
-                {
-                    int pc = (int)(_codeReader.BaseStream.Position - codeStart);
-                    int[] targets = branch.BranchTargets;
-                    for (i = 0; i < targets.Length; i++)
-                    {
-                        targets[i] += pc;
-                    }
-                }
+				// Assign the operands of the instruction from the IL stack
+				for (int opCount = instruction.Operands.Length-1; opCount >= 0; opCount--)
+					if (instruction.Operands[opCount] == null)
+						instruction.SetOperand(opCount, ilStack.Pop());
 
-                // Add the instruction to the current block
-                prefix = instruction as PrefixInstruction;
-                if (null == prefix)
-                    _instructions.Add(instruction);
-            }
+				Console.Write(op.ToString() + " |  " + instruction.Operands.Length.ToString() + "  | " + (instruction.PushResult ? instruction.Results.Length.ToString() : "0"));
 
-            Debug.Assert(0 == ilStack.Count, @"IL stack not empty.");
+				// Validate the instruction
+				instruction.Validate(_compiler);
 
-            // Not necessary anymore, we've removed the TemporaryOperand usage
-            // RemoveTemporaries();
-            
-            // Breaks the basic block analysis
-            //RemoveDeadInstructions();
-        }
+				// Push the result operands on the IL stack
+				Operand[] ops = instruction.Results;
+				if (ops != null && instruction.PushResult && ops.Length != 0)
+					foreach (Operand operand in ops)
+						ilStack.Push(operand);
+
+				Console.WriteLine(" | " + ilStack.Count.ToString());
+
+				// Do we need to patch branch targets?
+				IBranchInstruction branch = instruction as IBranchInstruction;
+				if (branch != null) {
+					int pc = (int)(_codeReader.BaseStream.Position - codeStart);
+					int[] targets = branch.BranchTargets;
+
+					for (int i = 0; i < targets.Length; i++)
+						targets[i] += pc;
+				}
+
+				// Add the instruction to the current block
+				prefix = instruction as PrefixInstruction;
+				if (prefix == null)
+					_instructions.Add(instruction);
+			}
+
+			Debug.Assert(0 == ilStack.Count, @"IL stack not empty.");
+
+			// Not necessary anymore, we've removed the TemporaryOperand usage
+			// RemoveTemporaries();
+
+			// Breaks the basic block analysis
+			//RemoveDeadInstructions();
+		}
 
         /// <summary>
         /// Creates an appropriate instruction for the opcode.

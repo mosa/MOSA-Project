@@ -33,6 +33,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
         #region Methods
 
+		/// <summary>
+		/// Starg has a result, but doesn't push it on the stack.
+		/// </summary>
+		public override bool PushResult
+		{
+			get { return false; }
+		}
+
         /// <summary>
         /// Allows the instruction to decode any immediate operands.
         /// </summary>

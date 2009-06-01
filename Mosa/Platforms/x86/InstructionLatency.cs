@@ -61,7 +61,9 @@ namespace Mosa.Platforms.x86
         {
             if (latencies.ContainsKey(instruction.GetType()))
                 return latencies[instruction.GetType()];
-            throw new NotSupportedException("No known latency available.");
+
+        	return 0;	// FIXME: the throw slows down the compile
+			//throw new NotSupportedException("No known latency available.");
         }
 
         /// <summary>
