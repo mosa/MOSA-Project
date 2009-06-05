@@ -47,6 +47,7 @@ namespace Mosa.Tools.Compiler
 				new ILDecodingStage(),
                 //InstructionLogger.Instance,
                 new BasicBlockBuilderStage(),
+				new OperandDeterminationStage(),
                 //InstructionLogger.Instance,
                 //new ConstantFoldingStage(),
                 new CilToIrTransformationStage(),
@@ -66,7 +67,7 @@ namespace Mosa.Tools.Compiler
                 //InstructionLogger.Instance,
                 new StackLayoutStage(),
 				//new BlockReductionStage(),
-				//new LoopAwareBlockOrderingStage(),
+				//new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderingStage(),
 				//new BasicBlockOrderStage(),				
             });

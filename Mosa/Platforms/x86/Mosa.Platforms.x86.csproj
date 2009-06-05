@@ -90,9 +90,6 @@
     <Compile Include="ArchitectureFeatureFlags.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AsmCodeEmitter.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CodeGenerationStage.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -133,9 +130,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MMXRegister.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MultiplexingCodeEmitter.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Native.cs">

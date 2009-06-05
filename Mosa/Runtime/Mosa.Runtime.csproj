@@ -85,11 +85,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompilerFramework\BasicBlockOrderStage.cs" />
+    <Compile Include="CompilerFramework\OperandDeterminationStage.cs" />
     <Compile Include="CompilerFramework\StackRegisterAllocator.cs" />
     <Compile Include="CompilerFramework\StrengthReductionStage.cs" />
     <Compile Include="CompilerFramework\IBasicBlockOrder.cs" />
-    <Compile Include="CompilerFramework\SimpleTraceBlockOrderingStage.cs" />
-    <Compile Include="CompilerFramework\LoopAwareBlockOrderingStage.cs" />
+    <Compile Include="CompilerFramework\SimpleTraceBlockOrderStage.cs" />
+    <Compile Include="CompilerFramework\LoopAwareBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\LocalCSE.cs" />
     <Compile Include="CompilerFramework\IMethodCompiler.cs" />
     <Compile Include="IJitService.cs">

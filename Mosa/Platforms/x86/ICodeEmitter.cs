@@ -23,11 +23,9 @@ namespace Mosa.Platforms.x86
     /// Interface of x86 code emitters.
     /// </summary>
     /// <remarks>
-    /// A code emitter emits the actual code to reflect specific x86 instructions. There's a set of emitters
-    /// available: An <see cref="AsmCodeEmitter"/>, that emits raw assembly text that can be assembled by
-    /// NASM, a <see cref="MachineCodeEmitter"/> that emits the raw opcode bytes into a stream of the
-    /// respective x86 instructions and the <see cref="MultiplexingCodeEmitter"/>, that allows the use of
-    /// multiple emitters at the same time.
+    /// A code emitter emits the actual code to reflect specific x86 instructions. 
+    /// <see cref="MachineCodeEmitter"/> that emits the raw opcode bytes into a stream of the
+    /// respective x86 instructions.
     /// </remarks>
     public interface ICodeEmitter : IDisposable
     {

@@ -15,9 +15,9 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// SimpleTraceBlockOrderingStage reorders blocks to optimize loops and reduce the distance of jumps and branches.
+	/// The Simple Trace Block Order Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class SimpleTraceBlockOrderingStage : IMethodCompilerStage, IBasicBlockOrder
+	public class SimpleTraceBlockOrderStage : IMethodCompilerStage, IBasicBlockOrder
 	{
 		#region Data members
 
@@ -49,7 +49,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The name of the compilation stage.</value>
 		public string Name
 		{
-			get { return @"Simple Trace Block Ordering"; }
+			get { return @"Simple Trace Block Order"; }
 		}
 
 		/// <summary>
@@ -102,7 +102,7 @@ namespace Mosa.Runtime.CompilerFramework
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 
 			if (blockProvider == null)
-				throw new InvalidOperationException(@"Simple Trace Block Ordering stage requires basic blocks.");
+				throw new InvalidOperationException(@"Simple Trace Block Order stage requires basic blocks.");
 
 			blocks = blockProvider.Blocks;
 

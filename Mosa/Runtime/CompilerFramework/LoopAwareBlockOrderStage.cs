@@ -15,9 +15,9 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// LoopAwareBlockOrderingStage reorders blocks to optimize loops and reduce the distance of jumps and branches.
+	/// The Loop Aware Block Ordering Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class LoopAwareBlockOrderingStage : IMethodCompilerStage, IBasicBlockOrder
+	public class LoopAwareBlockOrderStage : IMethodCompilerStage, IBasicBlockOrder
 	{
 		#region Data members
 
@@ -57,7 +57,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The name of the compilation stage.</value>
 		public string Name
 		{
-			get { return @"Loop Aware Block Ordering"; }
+			get { return @"Loop Aware Block Order"; }
 		}
 
 		/// <summary>
@@ -110,7 +110,7 @@ namespace Mosa.Runtime.CompilerFramework
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 
 			if (blockProvider == null)
-				throw new InvalidOperationException(@"Loop Aware Block Ordering stage requires basic blocks.");
+				throw new InvalidOperationException(@"Loop Aware Block Order stage requires basic blocks.");
 			
 			blocks = blockProvider.Blocks;
 

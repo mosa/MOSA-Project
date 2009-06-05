@@ -21,22 +21,22 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework.IL
 {
-    /// <summary>
-    /// Represents the IL decoding compilation stage.
-    /// </summary>
-    /// <remarks>
-    /// The IL decoding stage takes a stream of bytes and decodes the
-    /// instructions represented into an MSIL based intermediate 
-    /// representation. The instructions are grouped into basic blocks
-    /// for easier local optimizations in later compiler stages.
-    /// </remarks>
-    public sealed partial class ILDecodingStage : IMethodCompilerStage, IInstructionsProvider, IInstructionDecoder
-    {
-        private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
+	/// <summary>
+	/// Represents the IL decoding compilation stage.
+	/// </summary>
+	/// <remarks>
+	/// The IL decoding stage takes a stream of bytes and decodes the
+	/// instructions represented into an MSIL based intermediate 
+	/// representation. The instructions are grouped into basic blocks
+	/// for easier local optimizations in later compiler stages.
+	/// </remarks>
+	public sealed partial class ILDecodingStage : IMethodCompilerStage, IInstructionsProvider, IInstructionDecoder
+	{
+		private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
 
-        #region Static data
+		#region Static data
 
-        private static readonly Dictionary<OpCode, Type> s_opcodeMap = new Dictionary<OpCode,Type>{
+		private static readonly Dictionary<OpCode, Type> opcodeMap = new Dictionary<OpCode, Type>{
             /* 0x000 */ { OpCode.Nop,               typeof(NopInstruction) },
             /* 0x001 */ { OpCode.Break,             typeof(BreakInstruction) },
             /* 0x002 */ { OpCode.Ldarg_0,           typeof(LdargInstruction) },
@@ -73,7 +73,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             /* 0x021 */ { OpCode.Ldc_i8,            typeof(LdcInstruction) },
             /* 0x022 */ { OpCode.Ldc_r4,            typeof(LdcInstruction) },
             /* 0x023 */ { OpCode.Ldc_r8,            typeof(LdcInstruction) },
-            /* 0x24 is undefined */
+            /* 0x024 is undefined */
             /* 0x025 */ { OpCode.Dup,               typeof(DupInstruction) },
             /* 0x026 */ { OpCode.Pop,               typeof(PopInstruction) },
             /* 0x027 */ { OpCode.Jmp,               typeof(JumpInstruction) },
@@ -268,208 +268,200 @@ namespace Mosa.Runtime.CompilerFramework.IL
             /* 0x11E */ { OpCode.PreReadOnly,       typeof(PrefixInstruction) }
         };
 
-        #endregion // Static data
+		#endregion // Static data
 
-        #region Data members
+		#region Data members
 
-        /// <summary>
-        /// The reader used to process the code stream.
-        /// </summary>
-        private BinaryReader _codeReader;
+		/// <summary>
+		/// The reader used to process the code stream.
+		/// </summary>
+		private BinaryReader _codeReader;
 
-        /// <summary>
-        /// The current compiler context.
-        /// </summary>
-        private IMethodCompiler _compiler;
+		/// <summary>
+		/// The current compiler context.
+		/// </summary>
+		private IMethodCompiler _compiler;
 
-        /// <summary>
-        /// The method implementation of the currently compiled method.
-        /// </summary>
-        private RuntimeMethod _method;
+		/// <summary>
+		/// The method implementation of the currently compiled method.
+		/// </summary>
+		private RuntimeMethod _method;
 
-        /// <summary>
-        /// List of instructions decoded by the decoder.
-        /// </summary>
-        private List<Instruction> _instructions = new List<Instruction>();
+		/// <summary>
+		/// List of instructions decoded by the decoder.
+		/// </summary>
+		private List<Instruction> _instructions = new List<Instruction>();
 
-        #endregion // Data members
+		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// The instruction factory used to emit instructions.
-        /// </summary>
-        public ILDecodingStage()
-        {
-        }
+		/// <summary>
+		/// The instruction factory used to emit instructions.
+		/// </summary>
+		public ILDecodingStage()
+		{
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        // <summary>
-        // Returns the binary reader to access the code stream.
-        // </summary>
-        // <value></value>
-        //public BinaryReader CodeReader
-        //{
-        //    get { return _codeReader; }
-        //}
+		// <summary>
+		// Returns the binary reader to access the code stream.
+		// </summary>
+		// <value></value>
+		//public BinaryReader CodeReader
+		//{
+		//    get { return _codeReader; }
+		//}
 
-        #endregion // Properties
+		#endregion // Properties
 
-        #region IMethodCompilerStage Members
+		#region IMethodCompilerStage Members
 
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value>The name of the compilation stage.</value>
-        public string Name
-        {
-            get { return @"CIL decoder"; }
-        }
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		public string Name
+		{
+			get { return @"CIL decoder"; }
+		}
 
-        /// <summary>
-        /// Performs stage specific processing on the compiler context.
-        /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(IMethodCompiler compiler)
-        {
-            // The size of the code in bytes
-            MethodHeader header = new MethodHeader();
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		/// <param name="compiler">The compiler context to perform processing in.</param>
+		public void Run(IMethodCompiler compiler)
+		{
+			// The size of the code in bytes
+			MethodHeader header = new MethodHeader();
 
-            // Check preconditions
-            if (null == compiler)
-                throw new ArgumentNullException(@"compiler");
+			// Check preconditions
+			if (null == compiler)
+				throw new ArgumentNullException(@"compiler");
 
-            //Debug.WriteLine(@"Decoding " + compiler.Type.ToString() + "." + compiler.Method.ToString());
+			//Debug.WriteLine(@"Decoding " + compiler.Type.ToString() + "." + compiler.Method.ToString());
 
-            using (Stream code = compiler.GetInstructionStream())
-            using (BinaryReader reader = new BinaryReader(code))
-            {
-                _compiler = compiler;
-                _method = compiler.Method;
-                _codeReader = reader;
+			using (Stream code = compiler.GetInstructionStream())
+			using (BinaryReader reader = new BinaryReader(code)) {
+				_compiler = compiler;
+				_method = compiler.Method;
+				_codeReader = reader;
 
-                ReadMethodHeader(reader, ref header);
-                //Debug.WriteLine("Decoding " + compiler.Method.ToString());
+				ReadMethodHeader(reader, ref header);
+				//Debug.WriteLine("Decoding " + compiler.Method.ToString());
 
-                if (0 != header.localsSignature)
-                {
-                    StandAloneSigRow row;
-                    IMetadataProvider md = _method.Module.Metadata;
-                    md.Read(header.localsSignature, out row);
-                    compiler.SetLocalVariableSignature(LocalVariableSignature.Parse(md, row.SignatureBlobIdx));
-                }
+				if (0 != header.localsSignature) {
+					StandAloneSigRow row;
+					IMetadataProvider md = _method.Module.Metadata;
+					md.Read(header.localsSignature, out row);
+					compiler.SetLocalVariableSignature(LocalVariableSignature.Parse(md, row.SignatureBlobIdx));
+				}
 
-                /* Decode the instructions */
-                Decode(compiler, ref header);
+				/* Decode the instructions */
+				Decode(compiler, ref header);
 
-                // When we leave, the operand stack must only contain the locals...
-                //Debug.Assert(_operandStack.Count == _method.Locals.Count);
-                _codeReader = null;
-                _compiler = null;
-            }
-        }
+				// When we leave, the operand stack must only contain the locals...
+				//Debug.Assert(_operandStack.Count == _method.Locals.Count);
+				_codeReader = null;
+				_compiler = null;
+			}
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pipeline"></param>
-        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
-        {
-            pipeline.Add(this);
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="pipeline"></param>
+		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		{
+			pipeline.Add(this);
+		}
 
-        #endregion // IMethodCompilerStage Members
+		#endregion // IMethodCompilerStage Members
 
-        #region Internals
+		#region Internals
 
-        /// <summary>
-        /// Reads the method header from the instruction stream.
-        /// </summary>
-        /// <param name="reader">The reader used to decode the instruction stream.</param>
-        /// <param name="header">The method header structure to populate.</param>
-        private void ReadMethodHeader(BinaryReader reader, ref MethodHeader header)
-        {
-            header.flags = (MethodFlags)reader.ReadByte();
-            switch (header.flags & MethodFlags.HeaderMask)
-            {
-                case MethodFlags.TinyFormat:
-                    header.codeSize = ((uint)(header.flags & MethodFlags.TinyCodeSizeMask) >> 2);
-                    header.flags &= MethodFlags.HeaderMask;
-                    break;
+		/// <summary>
+		/// Reads the method header from the instruction stream.
+		/// </summary>
+		/// <param name="reader">The reader used to decode the instruction stream.</param>
+		/// <param name="header">The method header structure to populate.</param>
+		private void ReadMethodHeader(BinaryReader reader, ref MethodHeader header)
+		{
+			header.flags = (MethodFlags)reader.ReadByte();
+			switch (header.flags & MethodFlags.HeaderMask) {
+				case MethodFlags.TinyFormat:
+					header.codeSize = ((uint)(header.flags & MethodFlags.TinyCodeSizeMask) >> 2);
+					header.flags &= MethodFlags.HeaderMask;
+					break;
 
-                case MethodFlags.FatFormat:
-                    header.flags = (MethodFlags)(reader.ReadByte() << 8 | (byte)header.flags);
-                    if (MethodFlags.ValidHeader != (header.flags & MethodFlags.HeaderSizeMask))
-                        throw new InvalidDataException(@"Invalid method header.");
-                    header.maxStack = reader.ReadUInt16();
-                    header.codeSize = reader.ReadUInt32();
-                    header.localsSignature = (TokenTypes)reader.ReadUInt32();
-                    break;
+				case MethodFlags.FatFormat:
+					header.flags = (MethodFlags)(reader.ReadByte() << 8 | (byte)header.flags);
+					if (MethodFlags.ValidHeader != (header.flags & MethodFlags.HeaderSizeMask))
+						throw new InvalidDataException(@"Invalid method header.");
+					header.maxStack = reader.ReadUInt16();
+					header.codeSize = reader.ReadUInt32();
+					header.localsSignature = (TokenTypes)reader.ReadUInt32();
+					break;
 
-                default:
-                    throw new InvalidDataException(@"Invalid method header.");
-            }
+				default:
+					throw new InvalidDataException(@"Invalid method header.");
+			}
 
-            // Are there sections following the code?
-            if (MethodFlags.MoreSections == (header.flags & MethodFlags.MoreSections))
-            {
-                // Yes, seek to them and process those sections
-                long codepos = reader.BaseStream.Position;
+			// Are there sections following the code?
+			if (MethodFlags.MoreSections == (header.flags & MethodFlags.MoreSections)) {
+				// Yes, seek to them and process those sections
+				long codepos = reader.BaseStream.Position;
 
-                // Seek to the end of the code...
-                long dataSectPos = codepos + header.codeSize;
-                if (0 != (dataSectPos & 3))
-                    dataSectPos += (4 - (dataSectPos % 4));
-                reader.BaseStream.Position = dataSectPos;
+				// Seek to the end of the code...
+				long dataSectPos = codepos + header.codeSize;
+				if (0 != (dataSectPos & 3))
+					dataSectPos += (4 - (dataSectPos % 4));
+				reader.BaseStream.Position = dataSectPos;
 
-                // Read all headers, so the IL decoder knows how to handle these...
-                byte flags;
-                int length, blocks;
-                bool isFat;
-                EhClause clause = new EhClause();
+				// Read all headers, so the IL decoder knows how to handle these...
+				byte flags;
+				int length, blocks;
+				bool isFat;
+				EhClause clause = new EhClause();
 
-                do
-                {
-                    flags = reader.ReadByte();
-                    isFat = (0x40 == (flags & 0x40));
-                    if (true == isFat)
-                    {
-                        byte[] buffer = new byte[4];
-                        reader.Read(buffer, 0, 3);
-                        length = LittleEndianBitConverter.GetInt32(buffer, 0);
-                        blocks = (length - 4) / 24;
-                    }
-                    else
-                    {
-                        length = reader.ReadByte();
-                        blocks = (length - 4) / 12;
+				do {
+					flags = reader.ReadByte();
+					isFat = (0x40 == (flags & 0x40));
+					if (true == isFat) {
+						byte[] buffer = new byte[4];
+						reader.Read(buffer, 0, 3);
+						length = LittleEndianBitConverter.GetInt32(buffer, 0);
+						blocks = (length - 4) / 24;
+					}
+					else {
+						length = reader.ReadByte();
+						blocks = (length - 4) / 12;
 
-                        /* Read & skip the padding. */
-                        reader.ReadInt16();
-                    }
+						/* Read & skip the padding. */
+						reader.ReadInt16();
+					}
 
-                    Debug.Assert(0x01 == (flags & 0x3F), @"Unsupported method datta section.");
-                    // Read the clause
-                    for (int i = 0; i < blocks; i++)
-                    {
-                        clause.Read(reader, isFat);
-                        // FIXME: Create proper basic blocks for each item in the clause
-                    }
-                }
-                while (0x80 == (flags & 0x80));
+					Debug.Assert(0x01 == (flags & 0x3F), @"Unsupported method datta section.");
+					// Read the clause
+					for (int i = 0; i < blocks; i++) {
+						clause.Read(reader, isFat);
+						// FIXME: Create proper basic blocks for each item in the clause
+					}
+				}
+				while (0x80 == (flags & 0x80));
 
-                reader.BaseStream.Position = codepos;
-            }
-        }
+				reader.BaseStream.Position = codepos;
+			}
+		}
 
-        /// <summary>
-        /// Decodes the instruction stream of the reader and populates the compiler.
-        /// </summary>
-        /// <param name="compiler">The compiler to populate.</param>
-        /// <param name="header">The method header.</param>
+		/// <summary>
+		/// Decodes the instruction stream of the reader and populates the compiler.
+		/// </summary>
+		/// <param name="compiler">The compiler to populate.</param>
+		/// <param name="header">The method header.</param>
 		private void Decode(IMethodCompiler compiler, ref MethodHeader header)
 		{
 			// Start of the code stream
@@ -499,24 +491,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
 				instruction.Offset = instOffset;
 				instruction.Prefix = prefix;
 
-				// Assign the operands of the instruction from the IL stack
-				for (int opCount = instruction.Operands.Length-1; opCount >= 0; opCount--)
-					if (instruction.Operands[opCount] == null)
-						instruction.SetOperand(opCount, ilStack.Pop());
-
-				Console.Write(op.ToString() + " |  " + instruction.Operands.Length.ToString() + "  | " + (instruction.PushResult ? instruction.Results.Length.ToString() : "0"));
-
-				// Validate the instruction
-				instruction.Validate(_compiler);
-
-				// Push the result operands on the IL stack
-				Operand[] ops = instruction.Results;
-				if (ops != null && instruction.PushResult && ops.Length != 0)
-					foreach (Operand operand in ops)
-						ilStack.Push(operand);
-
-				Console.WriteLine(" | " + ilStack.Count.ToString());
-
 				// Do we need to patch branch targets?
 				IBranchInstruction branch = instruction as IBranchInstruction;
 				if (branch != null) {
@@ -527,13 +501,15 @@ namespace Mosa.Runtime.CompilerFramework.IL
 						targets[i] += pc;
 				}
 
+				Console.WriteLine(instOffset.ToString() + " : " + instruction.ToString());
+
 				// Add the instruction to the current block
 				prefix = instruction as PrefixInstruction;
 				if (prefix == null)
 					_instructions.Add(instruction);
 			}
 
-			Debug.Assert(0 == ilStack.Count, @"IL stack not empty.");
+			// Debug.Assert(0 == ilStack.Count, @"IL stack not empty.");
 
 			// Not necessary anymore, we've removed the TemporaryOperand usage
 			// RemoveTemporaries();
@@ -542,187 +518,185 @@ namespace Mosa.Runtime.CompilerFramework.IL
 			//RemoveDeadInstructions();
 		}
 
-        /// <summary>
-        /// Creates an appropriate instruction for the opcode.
-        /// </summary>
-        /// <param name="op">The IL opcode to create an instruction for.</param>
-        /// <returns>An instance  of ILInstruction, that represents the opcode.</returns>
-        private ILInstruction CreateInstruction(OpCode op)
-        {
-            ILInstruction result = null;
-            Type instructionType = null;
-            if (false == s_opcodeMap.TryGetValue(op, out instructionType))
-                throw new InvalidProgramException();
+		/// <summary>
+		/// Creates an appropriate instruction for the opcode.
+		/// </summary>
+		/// <param name="op">The IL opcode to create an instruction for.</param>
+		/// <returns>An instance  of ILInstruction, that represents the opcode.</returns>
+		private ILInstruction CreateInstruction(OpCode op)
+		{
+			ILInstruction result = null;
+			Type instructionType = null;
+			if (false == opcodeMap.TryGetValue(op, out instructionType))
+				throw new InvalidProgramException();
 
-            result = _compiler.Architecture.CreateInstruction(instructionType, op) as ILInstruction;
-            if (null == result)
-                throw new InvalidOperationException(@"Architecture created invalid IL instruction type.");
-            Debug.Assert(instructionType.IsAssignableFrom(result.GetType()), @"Wrong instruction type returned by the architecture!");
-            return result;
-        }
+			result = _compiler.Architecture.CreateInstruction(instructionType, op) as ILInstruction;
+			if (null == result)
+				throw new InvalidOperationException(@"Architecture created invalid IL instruction type.");
+			Debug.Assert(instructionType.IsAssignableFrom(result.GetType()), @"Wrong instruction type returned by the architecture!");
+			return result;
+		}
 
-        /// <summary>
-        /// Removes dead instructions from the instruction list.
-        /// </summary>
-        private void RemoveDeadInstructions()
-        {
-            // Iterate all blocks
-            for (int index = 0; index < _instructions.Count; index++)
-            {
-                if (true == _instructions[index].Ignore)
-                {
-                    _instructions.RemoveAt(index--);
-                }
-            }
-        }
+		/// <summary>
+		/// Removes dead instructions from the instruction list.
+		/// </summary>
+		private void RemoveDeadInstructions()
+		{
+			// Iterate all blocks
+			for (int index = 0; index < _instructions.Count; index++) {
+				if (true == _instructions[index].Ignore) {
+					_instructions.RemoveAt(index--);
+				}
+			}
+		}
 
-        #endregion // Internals
+		#endregion // Internals
 
-        #region IInstructionsProvider members
+		#region IInstructionsProvider members
 
-        /// <summary>
-        /// Gets a list of instructions in intermediate representation.
-        /// </summary>
-        /// <value></value>
-        List<Instruction> IInstructionsProvider.Instructions
-        {
-            get { return _instructions; }
-        }
+		/// <summary>
+		/// Gets a list of instructions in intermediate representation.
+		/// </summary>
+		/// <value></value>
+		List<Instruction> IInstructionsProvider.Instructions
+		{
+			get { return _instructions; }
+		}
 
-        /// <summary>
-        /// Gibt einen Enumerator zurück, der die Auflistung durchläuft.
-        /// </summary>
-        /// <returns>
-        /// Ein <see cref="T:System.Collections.Generic.IEnumerator`1"/>, der zum Durchlaufen der Auflistung verwendet werden kann.
-        /// </returns>
-        public IEnumerator<Instruction> GetEnumerator()
-        {
-            return _instructions.GetEnumerator();
-        }
+		/// <summary>
+		/// Gibt einen Enumerator zurück, der die Auflistung durchläuft.
+		/// </summary>
+		/// <returns>
+		/// Ein <see cref="T:System.Collections.Generic.IEnumerator`1"/>, der zum Durchlaufen der Auflistung verwendet werden kann.
+		/// </returns>
+		public IEnumerator<Instruction> GetEnumerator()
+		{
+			return _instructions.GetEnumerator();
+		}
 
-        /// <summary>
-        /// Gibt einen Enumerator zurück, der eine Auflistung durchläuft.
-        /// </summary>
-        /// <returns>
-        /// Ein <see cref="T:System.Collections.IEnumerator"/>-Objekt, das zum Durchlaufen der Auflistung verwendet werden kann.
-        /// </returns>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return _instructions.GetEnumerator();
-        }
+		/// <summary>
+		/// Gibt einen Enumerator zurück, der eine Auflistung durchläuft.
+		/// </summary>
+		/// <returns>
+		/// Ein <see cref="T:System.Collections.IEnumerator"/>-Objekt, das zum Durchlaufen der Auflistung verwendet werden kann.
+		/// </returns>
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return _instructions.GetEnumerator();
+		}
 
-        #endregion //  IInstructionsProvider members
+		#endregion //  IInstructionsProvider members
 
-        #region IInstructionDecoder Members
+		#region IInstructionDecoder Members
 
-        /// <summary>
-        /// Gets the compiler, that is currently executing.
-        /// </summary>
-        /// <value></value>
-        IMethodCompiler IInstructionDecoder.Compiler
-        {
-            get { return _compiler; }
-        }
+		/// <summary>
+		/// Gets the compiler, that is currently executing.
+		/// </summary>
+		/// <value></value>
+		IMethodCompiler IInstructionDecoder.Compiler
+		{
+			get { return _compiler; }
+		}
 
-        /// <summary>
-        /// Gets the RuntimeMethod being compiled.
-        /// </summary>
-        /// <value></value>
-        RuntimeMethod IInstructionDecoder.Method
-        {
-            get { return _method; }
-        }
+		/// <summary>
+		/// Gets the RuntimeMethod being compiled.
+		/// </summary>
+		/// <value></value>
+		RuntimeMethod IInstructionDecoder.Method
+		{
+			get { return _method; }
+		}
 
-        /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
-        /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
-        void IInstructionDecoder.Decode(out byte value)
-        {
-            value = _codeReader.ReadByte();
-        }
+		/// <summary>
+		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// </summary>
+		/// <param name="value">Receives the decoded value from the instruction stream.</param>
+		void IInstructionDecoder.Decode(out byte value)
+		{
+			value = _codeReader.ReadByte();
+		}
 
-        /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
-        /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
-        void IInstructionDecoder.Decode(out sbyte value)
-        {
-            value = _codeReader.ReadSByte();
-        }
+		/// <summary>
+		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// </summary>
+		/// <param name="value">Receives the decoded value from the instruction stream.</param>
+		void IInstructionDecoder.Decode(out sbyte value)
+		{
+			value = _codeReader.ReadSByte();
+		}
 
-        /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
-        /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
-        void IInstructionDecoder.Decode(out short value)
-        {
-            value = _codeReader.ReadInt16();
-        }
+		/// <summary>
+		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// </summary>
+		/// <param name="value">Receives the decoded value from the instruction stream.</param>
+		void IInstructionDecoder.Decode(out short value)
+		{
+			value = _codeReader.ReadInt16();
+		}
 
-        /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
-        /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
-        void IInstructionDecoder.Decode(out ushort value)
-        {
-            value = _codeReader.ReadUInt16();
-        }
+		/// <summary>
+		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// </summary>
+		/// <param name="value">Receives the decoded value from the instruction stream.</param>
+		void IInstructionDecoder.Decode(out ushort value)
+		{
+			value = _codeReader.ReadUInt16();
+		}
 
-        /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
-        /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
-        void IInstructionDecoder.Decode(out int value)
-        {
-            value = _codeReader.ReadInt32();
-        }
+		/// <summary>
+		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// </summary>
+		/// <param name="value">Receives the decoded value from the instruction stream.</param>
+		void IInstructionDecoder.Decode(out int value)
+		{
+			value = _codeReader.ReadInt32();
+		}
 
-        /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
-        /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
-        void IInstructionDecoder.Decode(out uint value)
-        {
-            value = _codeReader.ReadUInt32();
-        }
+		/// <summary>
+		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// </summary>
+		/// <param name="value">Receives the decoded value from the instruction stream.</param>
+		void IInstructionDecoder.Decode(out uint value)
+		{
+			value = _codeReader.ReadUInt32();
+		}
 
-        /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
-        /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
-        void IInstructionDecoder.Decode(out long value)
-        {
-            value = _codeReader.ReadInt64();
-        }
+		/// <summary>
+		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// </summary>
+		/// <param name="value">Receives the decoded value from the instruction stream.</param>
+		void IInstructionDecoder.Decode(out long value)
+		{
+			value = _codeReader.ReadInt64();
+		}
 
-        /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
-        /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
-        void IInstructionDecoder.Decode(out float value)
-        {
-            value = _codeReader.ReadSingle();
-        }
+		/// <summary>
+		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// </summary>
+		/// <param name="value">Receives the decoded value from the instruction stream.</param>
+		void IInstructionDecoder.Decode(out float value)
+		{
+			value = _codeReader.ReadSingle();
+		}
 
-        /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
-        /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
-        void IInstructionDecoder.Decode(out double value)
-        {
-            value = _codeReader.ReadDouble();
-        }
+		/// <summary>
+		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// </summary>
+		/// <param name="value">Receives the decoded value from the instruction stream.</param>
+		void IInstructionDecoder.Decode(out double value)
+		{
+			value = _codeReader.ReadDouble();
+		}
 
-        /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
-        /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
-        void IInstructionDecoder.Decode(out TokenTypes value)
-        {
-             value = (TokenTypes)_codeReader.ReadInt32();
-        }
+		/// <summary>
+		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// </summary>
+		/// <param name="value">Receives the decoded value from the instruction stream.</param>
+		void IInstructionDecoder.Decode(out TokenTypes value)
+		{
+			value = (TokenTypes)_codeReader.ReadInt32();
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }
