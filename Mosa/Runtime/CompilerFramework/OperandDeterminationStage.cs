@@ -95,10 +95,8 @@ namespace Mosa.Runtime.CompilerFramework
 					List<Operand> currentStack = new List<Operand>();
 
 					// Dump Block
-					Console.WriteLine();
-					Console.WriteLine("Current: " + block.Index.ToString() + ":" + block.Label.ToString() + " - Stack In: " + stack.Count.ToString());
-					//					for (int i = 0; i < block.Instructions.Count; i++)
-					//						Console.WriteLine(i.ToString() + ": " + block.Instructions[i].ToString());
+					//Console.WriteLine();
+					//Console.WriteLine("Current: " + block.Index.ToString() + ":" + block.Label.ToString() + " - Stack In: " + stack.Count.ToString());
 
 					// Copy stack (yeah, yeah, slow - hopefully this can be optimized later)
 					foreach (Operand operand in stack)
@@ -108,12 +106,12 @@ namespace Mosa.Runtime.CompilerFramework
 						//foreach (Instruction instruction in block.Instructions) {
 						Instruction instruction = block.Instructions[i];
 
-						Console.Write((block.Label + i).ToString("x") + ": " + block.Instructions[i].ToString());
+						//Console.Write((block.Label + i).ToString("x") + ": " + block.Instructions[i].ToString());
 
 						if (!(instruction is ILInstruction))
 							continue;
 
-						Console.Write("  (" + currentStack.Count.ToString() + ":");
+						//Console.Write("  (" + currentStack.Count.ToString() + ":");
 
 						// Assign the operands of the instruction from the IL stack
 						for (int opCount = instruction.Operands.Length - 1; opCount >= 0; opCount--)
@@ -126,7 +124,7 @@ namespace Mosa.Runtime.CompilerFramework
 						// Validate the instruction
 						instruction.Validate(compiler);
 
-						Console.WriteLine(instruction.Operands.Length.ToString() + "/" + ((instruction as ILInstruction).PushResult ? instruction.Results.Length.ToString() : "0") + ")");
+						//Console.WriteLine(instruction.Operands.Length.ToString() + "/" + ((instruction as ILInstruction).PushResult ? instruction.Results.Length.ToString() : "0") + ")");
 
 						// Push the result operands on the IL stack
 						Operand[] ops = instruction.Results;
@@ -137,17 +135,17 @@ namespace Mosa.Runtime.CompilerFramework
 
 					workArray.Set(block.Index, true);
 
-					Console.WriteLine(block.Index.ToString() + ":" + block.Label.ToString() + " - Stack Out: " + currentStack.Count.ToString());
+					//Console.WriteLine(block.Index.ToString() + ":" + block.Label.ToString() + " - Stack Out: " + currentStack.Count.ToString());
 
 					foreach (BasicBlock nextBlock in block.NextBlocks) {
-						Console.WriteLine("Next Block: " + nextBlock.Index.ToString() + ":" + nextBlock.Label.ToString());
+						//Console.WriteLine("Next Block: " + nextBlock.Index.ToString() + ":" + nextBlock.Label.ToString());
 						if (!workArray.Get(nextBlock.Index)) {
 							workList.Push(nextBlock);
 							workListStack.Push(currentStack);
 						}
 					}
 
-					Console.WriteLine();
+					//Console.WriteLine();
 				}
 			}
 		}

@@ -501,7 +501,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 						targets[i] += pc;
 				}
 
-				Console.WriteLine(instOffset.ToString() + " : " + instruction.ToString());
+				//Console.WriteLine(instOffset.ToString() + " : " + instruction.ToString());
 
 				// Add the instruction to the current block
 				prefix = instruction as PrefixInstruction;

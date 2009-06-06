@@ -187,6 +187,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			// Calculate the length of the instruction range
 			int length = _instructions.Count - index;
+			
 			// Create a new basic block
 			BasicBlock result = new BasicBlock(_instructions.GetRange(index, length), label);
 

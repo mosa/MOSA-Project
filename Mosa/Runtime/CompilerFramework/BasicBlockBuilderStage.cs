@@ -4,6 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
@@ -16,323 +17,283 @@ using Mosa.Runtime.CompilerFramework.IL;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    /// <summary>
-    /// This compilation stage is used by method compilers after the
-    /// IL decoding stage to build basic blocks out of the instruction list.
-    /// </summary>
-    public sealed class BasicBlockBuilderStage : IMethodCompilerStage, IBasicBlockProvider
-    {
-        #region Data members
+	/// <summary>
+	/// This compilation stage is used by method compilers after the
+	/// IL decoding stage to build basic blocks out of the instruction list.
+	/// </summary>
+	public sealed class BasicBlockBuilderStage : IMethodCompilerStage, IBasicBlockProvider
+	{
+		#region Data members
 
-        /// <summary>
-        /// List of basic blocks found during decoding.
-        /// </summary>
-        private List<BasicBlock> _basicBlocks;
+		/// <summary>
+		/// List of basic blocks found during decoding.
+		/// </summary>
+		private List<BasicBlock> basicBlocks;
 
-        /// <summary>
-        /// List of scheduled blocks.
-        /// </summary>
-        private List<BasicBlock> _scheduledBlocks;
+		/// <summary>
+		/// List of leaders
+		/// </summary>
+		private SortedDictionary<int, BasicBlock> leaders;
 
-        #endregion // Data members
+		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BasicBlockBuilderStage"/> class.
-        /// </summary>
-        public BasicBlockBuilderStage()
-        {
-            _basicBlocks = new List<BasicBlock>();
-            _scheduledBlocks = new List<BasicBlock>();
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BasicBlockBuilderStage"/> class.
+		/// </summary>
+		public BasicBlockBuilderStage()
+		{
+			basicBlocks = new List<BasicBlock>();
+			leaders = new SortedDictionary<int, BasicBlock>();
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region IMethodCompilerStage members
+		#region IMethodCompilerStage members
 
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value></value>
-        public string Name
-        {
-            get { return @"Basic Block Builder"; }
-        }
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value></value>
+		public string Name
+		{
+			get { return @"Basic Block Builder"; }
+		}
 
-        /// <summary>
-        /// Performs stage specific processing on the compiler context.
-        /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(IMethodCompiler compiler)
-        {
-            // Epilogue and current basic block
-            BasicBlock currentBlock = null, epilogue;
-            // Retrieve the instruction provider
-            IInstructionsProvider ip = (IInstructionsProvider)compiler.GetPreviousStage(typeof(IInstructionsProvider));
-            // Architecture
-            IArchitecture arch = compiler.Architecture;
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		/// <param name="compiler">The compiler context to perform processing in.</param>
+		public void Run(IMethodCompiler compiler)
+		{
+			// Retrieve the instruction provider
+			IInstructionsProvider ip = (IInstructionsProvider)compiler.GetPreviousStage(typeof(IInstructionsProvider));
 
-            // Add the epilogue block
-            epilogue = new BasicBlock(Int32.MaxValue);
-            _basicBlocks.Add(epilogue);
+			// Architecture
+			IArchitecture arch = compiler.Architecture;
 
-            // Start with a prologue block...
-            currentBlock = new BasicBlock(-1);
-            _basicBlocks.Add(currentBlock);
-            // Add a jump instruction to the first block from the prologue
-            ip.Instructions.Insert(0, arch.CreateInstruction(typeof(IL.BranchInstruction), OpCode.Br, new int[] { 0 }));
-            for (int idx = 0; idx < ip.Instructions.Count; idx++)
-            {
-                // Retrieve the instruction
-                Instruction instruction = ip.Instructions[idx];
+			AddLeader(0);
 
-                // Is this the next scheduled block?
-                if (0 != _scheduledBlocks.Count && instruction.Offset == _scheduledBlocks[0].Label)
-                {
-                    BasicBlock nextBlock = _scheduledBlocks[0];
-                    _scheduledBlocks.RemoveAt(0);
+			for (int index = 0; index < ip.Instructions.Count; index++) {
+				// Retrieve the instruction
+				Instruction instruction = ip.Instructions[index];
 
-                    // Add an unconditional branch to the next block to the current block
-                    if (null != currentBlock)
-                    {
-                        BranchInstruction dummyBranch = new BranchInstruction(OpCode.Br_s, new int[] { nextBlock.Label });
-                        currentBlock.Instructions.Add(dummyBranch);
+				// Does this instruction end a block?
+				switch (instruction.FlowControl) {
+					case FlowControl.Break: goto case FlowControl.Next;
+					case FlowControl.Call: goto case FlowControl.Next;
+					case FlowControl.Next: break;
 
-                        // Link the blocks
-                        LinkBlocks(currentBlock, nextBlock);
-                    }
+					case FlowControl.Return:
+						if (index + 1 < ip.Instructions.Count)
+							AddLeader(ip.Instructions[index + 1].Offset);
+						break;
 
-                    // Done, stack should match...
-                    currentBlock = nextBlock;
-                }
+					case FlowControl.Switch:
+						// Switch may fall through
+						if (index + 1 < ip.Instructions.Count)
+							AddLeader(ip.Instructions[index + 1].Offset);
+						goto case FlowControl.ConditionalBranch;
 
-                // Create a new block, if we need it.
-                if (null == currentBlock)
-                    currentBlock = FindOrCreateBlock(null, instruction.Offset);
-                Debug.Assert(null != currentBlock);
+					case FlowControl.Branch: goto case FlowControl.ConditionalBranch;
 
-                // Does this instruction end a block?
-                switch (instruction.FlowControl)
-                {
-                    case FlowControl.Break: goto case FlowControl.Next;
-                    case FlowControl.Call: goto case FlowControl.Next;
-                    case FlowControl.Next:
-                        // Add the instruction to the current block
-                        currentBlock.Instructions.Add(instruction);
-                        break;
+					case FlowControl.ConditionalBranch:
+						// Conditional branch with multiple targets
+						foreach (int target in (instruction as IBranchInstruction).BranchTargets)
+							AddLeader(target);
+						goto case FlowControl.Throw;
 
-                    case FlowControl.Return:
-                        // Replace this one by a jump to the method epilogue
-                        //BranchInstruction jmp = (BranchInstruction)arch.CreateInstruction(typeof(BranchInstruction), new object[] { OpCode.Br, Int32.MaxValue } );
-                        //jmp.BranchTargets = new int[] { Int32.MaxValue };
-                        //jmp.Offset = instruction.Offset;
-                        LinkBlocks(currentBlock, epilogue);
-                        currentBlock.Instructions.Add(instruction);
-                        currentBlock = null;
-                        break;
+					case FlowControl.Throw:
+						// End the block, start a new one on the next statement
+						if (index + 1 < ip.Instructions.Count)
+							AddLeader(ip.Instructions[index + 1].Offset);
+						break;
 
-                    case FlowControl.Switch:
-                        // Switch may fall through
-                        int fallThrough = -1;
-                        if (idx + 1 < ip.Instructions.Count)
-                            fallThrough = ip.Instructions[idx + 1].Offset;
-                        ScheduleBranchTargets(currentBlock, (IBranchInstruction)instruction, fallThrough);
-                        goto case FlowControl.Throw;
+					default:
+						Debug.Assert(false);
+						break;
+				}
+			}
 
-                    case FlowControl.Branch: goto case FlowControl.ConditionalBranch;
-                    case FlowControl.ConditionalBranch:
-                        ScheduleBranchTargets(currentBlock, (IBranchInstruction)instruction, -1);
-                        goto case FlowControl.Throw;
+			basicBlocks.Capacity = leaders.Count + 2;
 
-                    case FlowControl.Throw:
-                        // End the block, start a new one on the next statement
-                        currentBlock.Instructions.Add(instruction);
-                        currentBlock = null;
-                        break;
+			// Start with a prologue block...
+			BasicBlock prologue = new BasicBlock(-1);
+			prologue.Index = 0;
+			basicBlocks.Add(prologue);
 
-                    default:
-                        Debug.Assert(false);
-                        break;
-                }
-            }
-            
-            // Sort the blocks by their label order
-            _basicBlocks.Sort(delegate(BasicBlock left, BasicBlock right)
-            {
-                return (left.Label - right.Label);
-            });
+			// Add a jump instruction to the first block from the prologue
+			prologue.Instructions.Insert(0, arch.CreateInstruction(typeof(IL.BranchInstruction), OpCode.Br, new int[] { 0 }));
 
-            // Number the blocks
-            int blockIdx = 0;
-            foreach (BasicBlock block in _basicBlocks)
-                block.Index = blockIdx++;
-        }
+			// Create the epilogue block
+			BasicBlock epilogue = new BasicBlock(Int32.MaxValue);
+			epilogue.Index = leaders.Count + 1;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pipeline"></param>
-        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
-        {
-            pipeline.InsertBefore<CilToIrTransformationStage>(this);
-        }
+			// Add epilogue block to leaders (helps with loop below)
+			leaders.Add(epilogue.Label, epilogue);
 
-        /// <summary>
-        /// Schedules the branch targets of the branch instruction.
-        /// </summary>
-        /// <param name="currentBlock">The currently processed basic block.</param>
-        /// <param name="branch">The branch instruction, whose targets need to be scheduled.</param>
-        /// <param name="fallThrough">Specifies the next instruction offset, if the branch falls through - otherwise -1.</param>
-        private void ScheduleBranchTargets(BasicBlock currentBlock, IBranchInstruction branch, int fallThrough)
-        {
-            List<int> targets = new List<int>(branch.BranchTargets);
-            if (-1 != fallThrough)
-                targets.Add(fallThrough);
+			// Link prologue block to the first leader
+			LinkBlocks(prologue, leaders[0]);
 
-            foreach (int target in targets)
-            {
-                BasicBlock newBlock = FindOrCreateBlock(currentBlock, target);
-                if (target > branch.Offset)
-                {
-                    // Check for a forward branch, schedule the block
-                    bool blockExists = false;
-                    int index = _scheduledBlocks.FindIndex((Predicate<BasicBlock>)delegate(BasicBlock match)
-                    {
-                        blockExists = (match.Label == target);
-                        return (match.Label > target);
-                    });
+			// Insert instructions into basic blocks
+			KeyValuePair<int, BasicBlock> current = new KeyValuePair<int, BasicBlock>(-1, null);
+			int blockIndex = 0;
+			int lastInstructionIndex = 0;
 
-                    // Schedule a new block...
-                    if (false == blockExists)
-                    {
-                        if (-1 == index)
-                            _scheduledBlocks.Add(newBlock);
-                        else
-                            _scheduledBlocks.Insert(index, newBlock);
-                    }
-                }
-            }
-        }
+			foreach (KeyValuePair<int, BasicBlock> next in leaders) {
+				if (current.Key != -1) {
+					// Insert block into list of basic blocks
+					basicBlocks.Add(current.Value);
 
-        /// <summary>
-        /// Finds the or create block.
-        /// </summary>
-        /// <param name="caller">The caller.</param>
-        /// <param name="label">The label.</param>
-        /// <returns></returns>
-        private BasicBlock FindOrCreateBlock(BasicBlock caller, int label)
-        {
-            // Return value
-            BasicBlock result;
-            // Flag, if we need to split an existing block
-            int split = -1;
+					// Insert instructions into basic block
+					while ((lastInstructionIndex < ip.Instructions.Count) && (ip.Instructions[lastInstructionIndex].Offset < next.Value.Label))
+						current.Value.Instructions.Add(ip.Instructions[lastInstructionIndex++]);
 
-            // Attempt a lookup on the label
-            result = _basicBlocks.Find((Predicate<BasicBlock>)delegate(BasicBlock match)
-            {
-                bool b = (match.Label == label);
-                if (false == b)
-                {
-                    // Check if we need to split this block...
-                    List<Instruction> instructions = match.Instructions;
-                    if (0 != instructions.Count && instructions[0].Offset < label && label <= instructions[instructions.Count - 1].Offset)
-                    {
-                        split = instructions.FindIndex((Predicate<Instruction>)delegate(Instruction inst)
-                        {
-                            return (inst.Offset == label);
-                        });
-                        b = (split != -1);
-                    }
-                }
+					current.Value.Index = ++blockIndex;
 
-                return b;
-            });
+					Instruction lastInstruction = ip.Instructions[lastInstructionIndex - 1];
 
-            // Did we find one?
-            if (null == result)
-            {
-                // No, create a new block
-                result = new BasicBlock(label);
+					switch (lastInstruction.FlowControl) {
+						case FlowControl.Break: goto case FlowControl.Next;
+						case FlowControl.Call: goto case FlowControl.Next;
+						case FlowControl.Next:
+							// Insert unconditional branch to next basic block
+							BranchInstruction branch = new BranchInstruction(OpCode.Br_s, new int[] { next.Key });
+							current.Value.Instructions.Add(branch);
+							LinkBlocks(current.Value, leaders[next.Key]);
+							break;
 
-                // Add the block to the list
-                _basicBlocks.Add(result);
-            }
-            else if (-1 != split)
-            {
-                result = result.Split(split, label);
-                _basicBlocks.Add(result);
-            }
+						case FlowControl.Return:
+							// Insert unconditional branch to epilogue block
+							LinkBlocks(current.Value, epilogue);
+							break;
 
-            // Hook the blocks
-            if (null != caller)
-                LinkBlocks(caller, result);
+						case FlowControl.Switch:
+							// Switch may fall through
+							if (next.Key < ip.Instructions.Count)
+								LinkBlocks(current.Value, leaders[ip.Instructions[next.Key].Offset]);
+							goto case FlowControl.ConditionalBranch;
 
-            return result;
-        }
+						case FlowControl.Branch: goto case FlowControl.ConditionalBranch;
 
-        /// <summary>
-        /// Links the blocks.
-        /// </summary>
-        /// <param name="caller">The caller.</param>
-        /// <param name="callee">The callee.</param>
-        private void LinkBlocks(BasicBlock caller, BasicBlock callee)
-        {
-            // Chain the blocks together
-            callee.PreviousBlocks.Add(caller);
-            caller.NextBlocks.Add(callee);
-        }
+						case FlowControl.ConditionalBranch:
+							// Conditional branch with multiple targets
+							foreach (int target in (lastInstruction as IBranchInstruction).BranchTargets)
+								LinkBlocks(current.Value, leaders[target]);
+							goto case FlowControl.Throw;
 
-        #endregion // IMethodCompilerStage members
+						case FlowControl.Throw:
+							// End the block, start a new one on the next statement
+							break;
 
-        #region IBasicBlockProvider members
+						default:
+							Debug.Assert(false);
+							break;
+					}
 
-        /// <summary>
-        /// Gets the basic blocks.
-        /// </summary>
-        /// <value>The basic blocks.</value>
-        public List<BasicBlock> Blocks
-        {
-            get { return _basicBlocks; }
-        }
+				}
 
-        /// <summary>
-        /// Retrieves a basic block from its label.
-        /// </summary>
-        /// <param name="label">The label of the basic block.</param>
-        /// <returns>
-        /// The basic block with the given label or null.
-        /// </returns>
-        public BasicBlock FromLabel(int label)
-        {
-            return _basicBlocks.Find(delegate(BasicBlock block)
-            {
-                return (label == block.Label);
-            });
-        }
+				current = next;
+			}
 
-        /// <summary>
-        /// Gibt einen Enumerator zurück, der die Auflistung durchläuft.
-        /// </summary>
-        /// <returns>
-        /// Ein <see cref="T:System.Collections.Generic.IEnumerator`1"/>, der zum Durchlaufen der Auflistung verwendet werden kann.
-        /// </returns>
-        public IEnumerator<BasicBlock> GetEnumerator()
-        {
-            return _basicBlocks.GetEnumerator();
-        }
+			// Add the epilogue block
+			basicBlocks.Add(epilogue);
 
-        /// <summary>
-        /// Gibt einen Enumerator zurück, der eine Auflistung durchläuft.
-        /// </summary>
-        /// <returns>
-        /// Ein <see cref="T:System.Collections.IEnumerator"/>-Objekt, das zum Durchlaufen der Auflistung verwendet werden kann.
-        /// </returns>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return _basicBlocks.GetEnumerator();
-        }
+			// Sort the blocks by their label order
+			//this.basicBlocks.Sort(delegate(BasicBlock left, BasicBlock right)
+			//{
+			//    return (left.Label - right.Label);
+			//});
 
-        #endregion // IBasicBlockProvider members
-    }
+
+			// Number the blocks
+			//int blockIdx = 0;
+			//foreach (BasicBlock block in this.basicBlocks)
+			//    block.Index = blockIdx++;
+		}
+
+		/// <summary>
+		/// Adds the leader.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		public void AddLeader(int index)
+		{
+			if (!leaders.ContainsKey(index))
+				leaders.Add(index, new BasicBlock(index));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="pipeline"></param>
+		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		{
+			pipeline.InsertBefore<CilToIrTransformationStage>(this);
+		}
+
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="caller">The caller.</param>
+		/// <param name="callee">The callee.</param>
+		private void LinkBlocks(BasicBlock caller, BasicBlock callee)
+		{
+			// Chain the blocks together
+			callee.PreviousBlocks.Add(caller);
+			caller.NextBlocks.Add(callee);
+		}
+
+		#endregion // IMethodCompilerStage members
+
+		#region IBasicBlockProvider members
+
+		/// <summary>
+		/// Gets the basic blocks.
+		/// </summary>
+		/// <value>The basic blocks.</value>
+		public List<BasicBlock> Blocks
+		{
+			get { return this.basicBlocks; }
+		}
+
+		/// <summary>
+		/// Retrieves a basic block from its label.
+		/// </summary>
+		/// <param name="label">The label of the basic block.</param>
+		/// <returns>
+		/// The basic block with the given label or null.
+		/// </returns>
+		public BasicBlock FromLabel(int label)
+		{
+			return this.basicBlocks.Find(delegate(BasicBlock block)
+			{
+				return (label == block.Label);
+			});
+		}
+
+		/// <summary>
+		/// Gibt einen Enumerator zurück, der die Auflistung durchläuft.
+		/// </summary>
+		/// <returns>
+		/// Ein <see cref="T:System.Collections.Generic.IEnumerator`1"/>, der zum Durchlaufen der Auflistung verwendet werden kann.
+		/// </returns>
+		public IEnumerator<BasicBlock> GetEnumerator()
+		{
+			return this.basicBlocks.GetEnumerator();
+		}
+
+		/// <summary>
+		/// Gibt einen Enumerator zurück, der eine Auflistung durchläuft.
+		/// </summary>
+		/// <returns>
+		/// Ein <see cref="T:System.Collections.IEnumerator"/>-Objekt, das zum Durchlaufen der Auflistung verwendet werden kann.
+		/// </returns>
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return this.basicBlocks.GetEnumerator();
+		}
+
+		#endregion // IBasicBlockProvider members
+	}
 }
