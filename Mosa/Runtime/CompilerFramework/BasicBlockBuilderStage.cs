@@ -90,12 +90,7 @@ namespace Mosa.Runtime.CompilerFramework
 							AddLeader(ip.Instructions[index + 1].Offset);
 						break;
 
-					case FlowControl.Switch:
-						// Switch may fall through
-						if (index + 1 < ip.Instructions.Count)
-							AddLeader(ip.Instructions[index + 1].Offset);
-						goto case FlowControl.ConditionalBranch;
-
+					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.Branch: goto case FlowControl.ConditionalBranch;
 
 					case FlowControl.ConditionalBranch:
@@ -172,7 +167,7 @@ namespace Mosa.Runtime.CompilerFramework
 						case FlowControl.Switch:
 							// Switch may fall through
 							if (next.Key < ip.Instructions.Count)
-								LinkBlocks(current.Value, leaders[ip.Instructions[next.Key].Offset]);
+								LinkBlocks(current.Value, leaders[next.Key]);
 							goto case FlowControl.ConditionalBranch;
 
 						case FlowControl.Branch: goto case FlowControl.ConditionalBranch;
@@ -199,18 +194,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Add the epilogue block
 			basicBlocks.Add(epilogue);
-
-			// Sort the blocks by their label order
-			//this.basicBlocks.Sort(delegate(BasicBlock left, BasicBlock right)
-			//{
-			//    return (left.Label - right.Label);
-			//});
-
-
-			// Number the blocks
-			//int blockIdx = 0;
-			//foreach (BasicBlock block in this.basicBlocks)
-			//    block.Index = blockIdx++;
 		}
 
 		/// <summary>
