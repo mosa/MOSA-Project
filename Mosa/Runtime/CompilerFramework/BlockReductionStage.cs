@@ -296,7 +296,6 @@ namespace Mosa.Runtime.CompilerFramework
 			if ((block.PreviousBlocks.Count == 1) && (block.NextBlocks.Count == 1))
 				if (block.NextBlocks[0] == block)
 					if (block.PreviousBlocks[0] == block) {
-
 						block.Instructions.Clear();
 						block.NextBlocks.Clear();
 						block.PreviousBlocks.Clear();
