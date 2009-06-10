@@ -86,7 +86,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Initializes a new instance of <see cref="BasicBlock"/>.
 		/// </summary>
 		/// <param name="instructions">The instructions of the basic block.</param>
-        /// <param name="label">The label of the newly created block.</param>
+		/// <param name="label">The label of the newly created block.</param>
 		private BasicBlock(List<Instruction> instructions, int label) :
 			this()
 		{
@@ -98,29 +98,29 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#region Properties
 
-        /// <summary>
-        /// Gets/Sets the index of the basic block.
-        /// </summary>
-        /// <value>The index.</value>
+		/// <summary>
+		/// Gets/Sets the index of the basic block.
+		/// </summary>
+		/// <value>The index.</value>
 		public int Index
 		{
 			get { return _index; }
 			set { _index = value; }
 		}
 
-        /// <summary>
-        /// Retrieves the instruction list, which belongs to the block.
-        /// </summary>
-        /// <value>The instructions.</value>
+		/// <summary>
+		/// Retrieves the instruction list, which belongs to the block.
+		/// </summary>
+		/// <value>The instructions.</value>
 		public List<Instruction> Instructions
 		{
 			get { return _instructions; }
 		}
 
-        /// <summary>
-        /// Retrieves the label, which uniquely identifies this block.
-        /// </summary>
-        /// <value>The label.</value>
+		/// <summary>
+		/// Retrieves the label, which uniquely identifies this block.
+		/// </summary>
+		/// <value>The label.</value>
 		public int Label
 		{
 			get { return _label; }
@@ -178,16 +178,25 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Methods
 
 		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <returns>The code as a string value.</returns>
+		public override string ToString()
+		{
+			return Label.ToString();
+		}
+
+		/// <summary>
 		/// Splits the basic block at the given instruction index.
 		/// </summary>
 		/// <param name="index">The index of the first instruction of the block to create.</param>
-        /// <param name="label">The label of the new block.</param>
+		/// <param name="label">The label of the new block.</param>
 		/// <returns>The new block with instructions starting at index.</returns>
 		public BasicBlock Split(int index, int label)
 		{
 			// Calculate the length of the instruction range
 			int length = _instructions.Count - index;
-			
+
 			// Create a new basic block
 			BasicBlock result = new BasicBlock(_instructions.GetRange(index, length), label);
 

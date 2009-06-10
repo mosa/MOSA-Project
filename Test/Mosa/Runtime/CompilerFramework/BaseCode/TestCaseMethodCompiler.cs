@@ -49,8 +49,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 //InstructionLogger.Instance,
 				new StackLayoutStage(),
 				//new LoopAwareBlockOrderStage(),
-				//new SimpleTraceBlockOrderStage(),
-				//new BasicBlockOrderStage()	
+				new SimpleTraceBlockOrderStage(),
+				new BasicBlockOrderStage()	
             });
         }
 

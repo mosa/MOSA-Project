@@ -133,12 +133,15 @@ namespace Mosa.Runtime.CompilerFramework
 			while (workList.Count != 0) {
 				BasicBlock block = workList.Pop();
 
-				referencedBlocks.Set(block.Index, true);
-				orderedBlocks[orderBlockCnt++] = block.Index;
+				if (!referencedBlocks.Get(block.Index)) {
 
-				foreach (BasicBlock successor in block.NextBlocks)
-					if (!referencedBlocks.Get(successor.Index))
-						workList.Push(successor);
+					referencedBlocks.Set(block.Index, true);
+					orderedBlocks[orderBlockCnt++] = block.Index;
+
+					foreach (BasicBlock successor in block.NextBlocks)
+						if (!referencedBlocks.Get(successor.Index))
+							workList.Push(successor);
+				}
 			}
 
 			// Place unreferenced blocks at the end of the list
