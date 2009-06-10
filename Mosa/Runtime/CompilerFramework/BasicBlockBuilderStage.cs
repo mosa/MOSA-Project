@@ -166,8 +166,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 						case FlowControl.Switch:
 							// Switch may fall through
-							if (next.Key < ip.Instructions.Count)
-								LinkBlocks(current.Value, leaders[next.Key]);
 							goto case FlowControl.ConditionalBranch;
 
 						case FlowControl.Branch: goto case FlowControl.ConditionalBranch;

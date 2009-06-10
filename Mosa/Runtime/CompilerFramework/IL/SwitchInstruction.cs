@@ -67,13 +67,11 @@ namespace Mosa.Runtime.CompilerFramework.IL
             decoder.Decode(out count);
 
 			// Create an array for the branch targets
-			_branchTargets = new int[count];
+			_branchTargets = new int[count + 1];
 
 			// Populate the array
 			for (uint i = 0; i < count; i++)
-			{
                 decoder.Decode(out _branchTargets[i]);
-			}
         }
 
         /// <summary>

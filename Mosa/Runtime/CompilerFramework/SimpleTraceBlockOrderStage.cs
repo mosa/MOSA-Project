@@ -25,19 +25,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// 
 		/// </summary>
 		protected IArchitecture arch;
-
 		/// <summary>
 		/// 
 		/// </summary>
-		private List<BasicBlock> blocks;
+		protected List<BasicBlock> blocks;
 		/// <summary>
 		/// 
 		/// </summary>
-		private BasicBlock firstBlock;
+		protected BasicBlock firstBlock;
 		/// <summary>
 		/// 
 		/// </summary>
-		private int[] orderedBlocks;
+		protected int[] orderedBlocks;
 
 		#endregion // Data members
 
@@ -146,12 +145,6 @@ namespace Mosa.Runtime.CompilerFramework
 			for (int i = 0; i < blocks.Count; i++)
 				if (!referencedBlocks.Get(i))
 					orderedBlocks[orderBlockCnt++] = i;
-
-			//// Reorder the block list
-			//for (int i = 0; i < orderBlockCnt; i++)
-			//    blocks[orderedBlocks[i]].Index = i;
-
-			//blocks.Sort(BasicBlock.CompareBlocksByIndex);
 		}
 
 		/// <summary>

@@ -867,12 +867,12 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<int>.Switch(IL.SwitchInstruction instruction, int arg)
         {
-            for (int i = 0; i < instruction.BranchTargets.Length; i++)
+            for (int i = 0; i < instruction.BranchTargets.Length - 1; i++)
             {
                 _emitter.Cmp(instruction.Operands[0], new ConstantOperand(new SigType(CilElementType.I), i));
                 _emitter.Je(instruction.BranchTargets[i]);
             }
-            //throw new NotImplementedException();
+			_emitter.Jmp(instruction.BranchTargets[instruction.BranchTargets.Length - 1]);
         }
 
         void IL.IILVisitor<int>.Add(IL.AddInstruction instruction, int arg)
