@@ -1410,6 +1410,7 @@ namespace Mosa.Platforms.x86
             });
         }
 
+		// BUGGY
         private BasicBlock[] CreateBlocks(Context ctx, Instruction instruction, int blocks, out BasicBlock nextBlock)
         {
             BasicBlock[] result;
