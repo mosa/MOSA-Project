@@ -966,7 +966,6 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(eax, op1L),
                 new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 64)),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label),
-				new IR.JmpInstruction(blocks[0].Label),
             });
 
 			// small_shift:
