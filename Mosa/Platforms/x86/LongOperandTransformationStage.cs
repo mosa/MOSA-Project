@@ -1571,8 +1571,6 @@ namespace Mosa.Platforms.x86
 				ctx.Block.Instructions.Add(new IR.JmpInstruction(label));
 			}
 
-			ctx.Block.NextBlocks.Add(nextBlock);
-
 			return nextBlock;
 		}
 
@@ -1584,7 +1582,7 @@ namespace Mosa.Platforms.x86
 		private void ExpandBinaryBranch(Context ctx, IL.BinaryBranchInstruction instruction)
 		{
 			BasicBlock[] blocks = CreateEmptyBlocks(3);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[2]);
+			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
 			SigType U4 = new SigType(CilElementType.U4);
