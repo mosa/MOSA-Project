@@ -219,7 +219,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandDiv(Context ctx, IL.DivInstruction instruction)
 		{
-			BasicBlock[] blocks = CreateEmptyBlocks(7);
+			BasicBlock[] blocks = CreateEmptyBlocks(8);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -251,14 +251,14 @@ namespace Mosa.Platforms.x86
 			// sbb     eax,0
 			// mov     HIWORD(DVND),eax ; save positive value
 			// mov     LOWORD(DVND),edx
-			Replace(ctx, new Instruction[] {
+			blocks[0].Instructions.AddRange(new Instruction[] {
                 new IR.PushInstruction(edi),
                 new IR.PushInstruction(esi),
                 new IR.PushInstruction(ebx),
                 new Instructions.LogicalXorInstruction(edi, edi),
                 new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalOrInstruction(eax, eax),
-                new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[0].Label),
+                new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[1].Label),
                 new Instructions.IncInstruction(edi),
                 new Instructions.MoveInstruction(edx, op1L),
                 new Instructions.NegInstruction(eax),
@@ -280,10 +280,10 @@ namespace Mosa.Platforms.x86
 			// sbb     eax,0
 			// mov     HIWORD(DVSR),eax ; save positive value
 			// mov     LOWORD(DVSR),edx
-			blocks[0].Instructions.AddRange(new Instruction[] {
+			blocks[1].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(eax, op2H),
                 new Instructions.LogicalOrInstruction(eax, eax),
-                new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[1].Label),
+                new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[2].Label),
                 new Instructions.IncInstruction(edi),
                 new Instructions.MoveInstruction(edx, op2L),
                 new Instructions.NegInstruction(eax),
@@ -291,7 +291,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.SbbInstruction(eax, new ConstantOperand(I4, 0)),
                 new Instructions.MoveInstruction(op2H, eax),
                 new Instructions.MoveInstruction(op2L, edx),
-				new IR.JmpInstruction(blocks[1].Label),
+				new IR.JmpInstruction(blocks[2].Label),
             });
 
 			// L2:
@@ -315,9 +315,9 @@ namespace Mosa.Platforms.x86
 			// div     ecx             ; eax <- low order bits of quotient
 			// mov     edx,ebx         ; edx:eax <- quotient
 			// jmp     short L4        ; set sign, restore stack and return
-			blocks[1].Instructions.AddRange(new Instruction[] {
+			blocks[2].Instructions.AddRange(new Instruction[] {
                 new Instructions.LogicalOrInstruction(eax, eax),
-                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[2].Label),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[3].Label),
                 new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalXorInstruction(edx, edx),
@@ -326,7 +326,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(eax, op1L),
                 new Instructions.UDivInstruction(eax, ecx),
                 new Instructions.MoveInstruction(edx, ebx),
-                new IR.JmpInstruction(blocks[6].Label)
+                new IR.JmpInstruction(blocks[7].Label)
             });
 			;
 			// Here we do it the hard way.  Remember, eax contains the high word of DVSR
@@ -336,7 +336,7 @@ namespace Mosa.Platforms.x86
 			//        mov     ecx,LOWORD(DVSR)
 			//        mov     edx,HIWORD(DVND) ; edx:eax <- dividend
 			//        mov     eax,LOWORD(DVND)
-			blocks[2].Instructions.AddRange(new Instruction[] {
+			blocks[3].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(ebx, eax),
                 new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(edx, op1H),
@@ -369,13 +369,13 @@ namespace Mosa.Platforms.x86
 			// mul     esi             ; QUOT * LOWORD(DVSR)
 			// add     edx,ecx         ; EDX:EAX = QUOT * DVSR
 			// jc      short L6        ; carry means Quotient is off by 1
-			blocks[3].Instructions.AddRange(new Instruction[] {
+			blocks[4].Instructions.AddRange(new Instruction[] {
                 new Instructions.ShrInstruction(ebx, new ConstantOperand(U1, 1)),
                 new Instructions.RcrInstruction(ecx, new ConstantOperand(U1, 1)), // RCR
                 new Instructions.ShrInstruction(edx, new ConstantOperand(U1, 1)),
                 new Instructions.RcrInstruction(eax, new ConstantOperand(U1, 1)),
                 new Instructions.LogicalOrInstruction(ebx, ebx),
-                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[3].Label),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[4].Label),
                 new Instructions.UDivInstruction(eax, ecx),
                 new Instructions.MoveInstruction(esi, eax),
                 new x86.Instructions.MulInstruction(eax, op2H),
@@ -385,25 +385,25 @@ namespace Mosa.Platforms.x86
                 new x86.Instructions.MulInstruction(eax, esi),
                 //new IL.MulInstruction(IL.OpCode.Mul, eax, eax, esi),
                 new Instructions.AddInstruction(edx, ecx),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[4].Label),
-                new Instructions.CmpInstruction(edx, op1H),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[4].Label),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[5].Label),
+                new Instructions.CmpInstruction(edx, op1H),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[5].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[6].Label),
                 new Instructions.CmpInstruction(eax, op1L),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[5].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[6].Label),
             });
 
 			// L6:
-			blocks[4].Instructions.AddRange(new Instruction[] {
+			blocks[5].Instructions.AddRange(new Instruction[] {
                 new Instructions.DecInstruction(esi),
-				new IR.JmpInstruction(blocks[5].Label),
+				new IR.JmpInstruction(blocks[6].Label),
             });
 
 			// L7:
-			blocks[5].Instructions.AddRange(new Instruction[] {
+			blocks[6].Instructions.AddRange(new Instruction[] {
                 new Instructions.LogicalXorInstruction(edx, edx),
                 new Instructions.MoveInstruction(eax, esi),
-				new IR.JmpInstruction(blocks[6].Label),
+				new IR.JmpInstruction(blocks[7].Label),
             });
 
 			;
@@ -416,7 +416,7 @@ namespace Mosa.Platforms.x86
 			//        neg     edx             ; otherwise, negate the result
 			//        neg     eax
 			//        sbb     edx,0
-			blocks[6].Instructions.InsertRange(0, new Instruction[] {
+			blocks[7].Instructions.AddRange(new Instruction[] {
                 new Instructions.DecInstruction(edi),
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, nextBlock.Label),
                 new Instructions.NegInstruction(edx),
@@ -432,6 +432,8 @@ namespace Mosa.Platforms.x86
                 new IR.PopInstruction(esi),
                 new IR.PopInstruction(edi),
             });
+
+            Remove(ctx);
 
 			// Link the created blocks together
 			LinkBlocks(ctx.Block, blocks[0]);
@@ -697,7 +699,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandUDiv(Context ctx, IR.UDivInstruction instruction)
 		{
-			BasicBlock[] blocks = CreateEmptyBlocks(7);
+			BasicBlock[] blocks = CreateEmptyBlocks(5);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -715,13 +717,13 @@ namespace Mosa.Platforms.x86
 			RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
 			RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
 
-			Replace(ctx, new Instruction[] {
+			blocks[0].Instructions.AddRange(new Instruction[] {
                 new IR.PushInstruction(edi),
                 new IR.PushInstruction(esi),
                 new IR.PushInstruction(ebx),
                 new Instructions.MoveInstruction(eax, op2H),
                 new Instructions.LogicalOrInstruction(eax, eax),
-                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[0].Label),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[1].Label),
                 new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalXorInstruction(edx, edx),
@@ -734,7 +736,7 @@ namespace Mosa.Platforms.x86
             });
 
 			// L1
-			blocks[0].Instructions.AddRange(new Instruction[] {
+			blocks[1].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(ecx, eax),
                 new Instructions.MoveInstruction(ebx, op2L),
                 new Instructions.MoveInstruction(edx, op1H),
@@ -743,13 +745,13 @@ namespace Mosa.Platforms.x86
 			});
 
 			// L3
-			blocks[1].Instructions.AddRange(new Instruction[] {
+			blocks[2].Instructions.AddRange(new Instruction[] {
                 new Instructions.ShrInstruction(ecx, new ConstantOperand(U1, 1)),
                 new Instructions.RcrInstruction(ebx, new ConstantOperand(U1, 1)), // RCR
                 new Instructions.ShrInstruction(edx, new ConstantOperand(U1, 1)),
                 new Instructions.RcrInstruction(eax, new ConstantOperand(U1, 1)),
                 new Instructions.LogicalOrInstruction(ecx, ecx),
-                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[1].Label),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[2].Label),
                 new Instructions.UDivInstruction(eax, ebx),
                 new Instructions.MoveInstruction(esi, eax),
                 new IL.MulInstruction(IL.OpCode.Mul, eax, eax, op2H),
@@ -757,23 +759,23 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(eax, op2L),
                 new IL.MulInstruction(IL.OpCode.Mul, eax, eax, esi),
                 new Instructions.AddInstruction(edx, ecx),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[2].Label),
-                new Instructions.CmpInstruction(edx, op1H),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[2].Label),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[3].Label),
+                new Instructions.CmpInstruction(edx, op1H),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[3].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[4].Label),
                 new Instructions.CmpInstruction(eax, op1L),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[3].Label),
-				new IR.JmpInstruction(blocks[4].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[4].Label),
+				new IR.JmpInstruction(blocks[3].Label),
             });
 
 			// L4:
-			blocks[2].Instructions.AddRange(new Instruction[] {
+			blocks[3].Instructions.AddRange(new Instruction[] {
                 new Instructions.DecInstruction(esi),
-				new IR.JmpInstruction(blocks[3].Label),
+				new IR.JmpInstruction(blocks[4].Label),
 			});
 
 			// L5
-			blocks[3].Instructions.AddRange(new Instruction[] {
+			blocks[4].Instructions.AddRange(new Instruction[] {
                 new Instructions.LogicalXorInstruction(edx, edx),
                 new Instructions.MoveInstruction(eax, esi),
 				new IR.JmpInstruction(nextBlock.Label),
@@ -787,6 +789,8 @@ namespace Mosa.Platforms.x86
                 new IR.PopInstruction(esi),
                 new IR.PopInstruction(edi),
             });
+
+            Remove(ctx);
 
 			// Link the created blocks together
 			LinkBlocks(ctx.Block, blocks[0]);
@@ -1639,7 +1643,6 @@ namespace Mosa.Platforms.x86
                     new IR.BranchInstruction(IR.ConditionCode.Equal, blocks[1].Label),
                     // Branch if check already gave results
                     new IR.BranchInstruction(GetHighCondition(code), blocks[3].Label),
-					new IR.JmpInstruction(blocks[1].Label),
                 });
 				blocks[1].Instructions.AddRange(new Instruction[] {
                     // Compare low dwords
@@ -1649,10 +1652,10 @@ namespace Mosa.Platforms.x86
                     new IR.JmpInstruction(blocks[3].Label),
                 });
 				blocks[2].Instructions.AddRange(new Instruction[] {
-                    new IR.JmpInstruction(targets[0]),
+                    new IR.JmpInstruction(targets[1]),
                 });
 				blocks[3].Instructions.AddRange(new Instruction[] {
-                    new IR.JmpInstruction(targets[1]),
+                    new IR.JmpInstruction(targets[2]),
                 });
 			}
 			else {
@@ -1680,8 +1683,8 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[1], blocks[3]);
 			LinkBlocks(blocks[2], blocks[3]);
+			LinkBlocks(blocks[1], blocks[3]);
 		}
 
 		/// <summary>
