@@ -333,6 +333,7 @@ namespace Mosa.Platforms.x86
                 new Instructions.SbbInstruction(eax, new ConstantOperand(I4, 0)),
                 new Instructions.MoveInstruction(op1H, eax),
                 new Instructions.MoveInstruction(op1L, edx),
+				new IR.JmpInstruction(blocks[1].Label),
             });
 
 			// L1:
@@ -752,14 +753,15 @@ namespace Mosa.Platforms.x86
 			LinkBlocks(ctx.Block, blocks[0]);
 			LinkBlocks(blocks[0], blocks[1]);
 			LinkBlocks(blocks[1], blocks[6]);
-			LinkBlocks(blocks[1], nextBlock);
 			LinkBlocks(blocks[1], blocks[2]);
+			LinkBlocks(blocks[1], nextBlock);
 			LinkBlocks(blocks[2], blocks[3]);
 			LinkBlocks(blocks[3], blocks[3]);
 			LinkBlocks(blocks[3], blocks[4]);
 			LinkBlocks(blocks[3], blocks[5]);
 			LinkBlocks(blocks[4], blocks[5]);
 			LinkBlocks(blocks[5], blocks[6]);
+			LinkBlocks(blocks[5], nextBlock);
 			LinkBlocks(blocks[6], nextBlock);
 		}
 
@@ -864,14 +866,14 @@ namespace Mosa.Platforms.x86
             Remove(ctx);
 
 			// Link the created blocks together
-			LinkBlocks(ctx.Block, blocks[0]);
-			LinkBlocks(ctx.Block, nextBlock);
 			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[1], blocks[1]);
+			LinkBlocks(blocks[0], nextBlock);
 			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[1], blocks[3]);
+			LinkBlocks(blocks[2], blocks[2]);
 			LinkBlocks(blocks[2], blocks[3]);
-			LinkBlocks(blocks[3], nextBlock);
+			LinkBlocks(blocks[2], blocks[4]);
+			LinkBlocks(blocks[3], blocks[4]);
+			LinkBlocks(blocks[4], nextBlock);
 		}
 
 		/// <summary>
@@ -990,14 +992,14 @@ namespace Mosa.Platforms.x86
             Remove(ctx);
 
 			// Link the created blocks together
-			LinkBlocks(ctx.Block, blocks[0]);
-			LinkBlocks(ctx.Block, nextBlock);
 			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[1], blocks[1]);
+			LinkBlocks(blocks[0], nextBlock);
 			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[1], blocks[3]);
+			LinkBlocks(blocks[2], blocks[2]);
 			LinkBlocks(blocks[2], blocks[3]);
-			LinkBlocks(blocks[3], nextBlock);
+			LinkBlocks(blocks[2], blocks[4]);
+			LinkBlocks(blocks[3], blocks[4]);
+			LinkBlocks(blocks[4], nextBlock);
 		}
 
 		/// <summary>
@@ -1082,8 +1084,8 @@ namespace Mosa.Platforms.x86
             });
 
 			// Link the created blocks together
-			LinkBlocks(ctx.Block, blocks[0]);
 			LinkBlocks(ctx.Block, blocks[2]);
+			LinkBlocks(ctx.Block, blocks[0]);
 			LinkBlocks(blocks[0], blocks[1]);
 			LinkBlocks(blocks[0], nextBlock);
 			LinkBlocks(blocks[1], nextBlock);
@@ -1805,19 +1807,6 @@ namespace Mosa.Platforms.x86
 			Debug.Assert(false == to.PreviousBlocks.Contains(from), @"A link already exists?");
 			from.NextBlocks.Add(to);
 			to.PreviousBlocks.Add(from);
-		}
-
-		/// <summary>
-		/// Unlinks the blocks.
-		/// </summary>
-		/// <param name="from">The block, who used to issue the jump.</param>
-		/// <param name="to">The block, where the jump was going to.</param>
-		private void UnlinkBlocks(BasicBlock from, BasicBlock to)
-		{
-			Debug.Assert(true == from.NextBlocks.Contains(to), @"Link doesn't exist?");
-			Debug.Assert(true == to.PreviousBlocks.Contains(from), @"Link doesn't exist?");
-			from.NextBlocks.Remove(to);
-			to.PreviousBlocks.Remove(from);
 		}
 
 		/// <summary>
