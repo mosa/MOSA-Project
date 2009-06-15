@@ -61,6 +61,73 @@ namespace Mosa.Platforms.x86
 
 		#endregion // IMethodCompilerStage Members
 
+		#region Block Operations
+
+
+		/// <summary>
+		/// Create an empty block.
+		/// </summary>
+		/// <returns></returns>
+		private BasicBlock CreateEmptyBlock()
+		{
+			BasicBlock block = new BasicBlock(_blocks.Count + 0x10000000);
+			block.Index = _blocks.Count;
+			_blocks.Add(block);
+			return block;
+		}
+
+		/// <summary>
+		/// Creates empty blocks.
+		/// </summary>
+		/// <param name="blocks">The blocks.</param>
+		/// <returns></returns>
+		private BasicBlock[] CreateEmptyBlocks(int blocks)
+		{
+			// Allocate the block array
+			BasicBlock[] result = new BasicBlock[blocks];
+
+			for (int index = 0; index < blocks; index++)
+				result[index] = CreateEmptyBlock();
+
+			return result;
+		}
+
+		/// <summary>
+		/// Splits the block.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="instruction">The instruction index to split on.</param>
+		/// <param name="insert">The insert to be called after the split.</param>
+		/// <returns></returns>
+		private BasicBlock SplitBlock(Context ctx, Instruction instruction, BasicBlock insert)
+		{
+			int label = _blocks.Count + 0x10000000;
+
+			BasicBlock nextBlock = ctx.Block.Split(ctx.Index + 1, label);
+			nextBlock.Index = _blocks.Count - 1;
+			_blocks.Add(nextBlock);
+
+			foreach (BasicBlock block in ctx.Block.NextBlocks)
+				nextBlock.NextBlocks.Add(block);
+
+			ctx.Block.NextBlocks.Clear();
+
+			if (insert != null) {
+				ctx.Block.NextBlocks.Add(insert);
+				insert.PreviousBlocks.Add(ctx.Block);
+				ctx.Block.Instructions.Add(new IR.JmpInstruction(insert.Label));
+			}
+			else {
+				ctx.Block.NextBlocks.Add(nextBlock);
+				nextBlock.PreviousBlocks.Add(ctx.Block);
+				ctx.Block.Instructions.Add(new IR.JmpInstruction(label));
+			}
+
+			return nextBlock;
+		}
+
+		#endregion
+
 		#region Utility Methods
 
 		/// <summary>
@@ -441,12 +508,16 @@ namespace Mosa.Platforms.x86
 			LinkBlocks(blocks[1], blocks[6]);
 			LinkBlocks(blocks[1], blocks[2]);
 			LinkBlocks(blocks[2], blocks[3]);
+			LinkBlocks(blocks[2], blocks[7]);
 			LinkBlocks(blocks[3], blocks[3]);
 			LinkBlocks(blocks[3], blocks[4]);
 			LinkBlocks(blocks[3], blocks[5]);
+			LinkBlocks(blocks[4], blocks[4]); 
 			LinkBlocks(blocks[4], blocks[5]);
+			LinkBlocks(blocks[4], blocks[6]);
 			LinkBlocks(blocks[5], blocks[6]);
-			LinkBlocks(blocks[6], nextBlock);
+			LinkBlocks(blocks[6], blocks[7]);
+			LinkBlocks(blocks[7], nextBlock);
 		}
 
 		/// <summary>
@@ -1520,74 +1591,20 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Create an empty block.
-		/// </summary>
-		/// <returns></returns>
-		private BasicBlock CreateEmptyBlock()
-		{
-			BasicBlock block = new BasicBlock(_blocks.Count + 0x10000000);
-			block.Index = _blocks.Count;
-			_blocks.Add(block);
-			return block;
-		}
-
-		/// <summary>
-		/// Creates empty blocks.
-		/// </summary>
-		/// <param name="blocks">The blocks.</param>
-		/// <returns></returns>
-		private BasicBlock[] CreateEmptyBlocks(int blocks)
-		{
-			// Allocate the block array
-			BasicBlock[] result = new BasicBlock[blocks];
-
-			for (int index = 0; index < blocks; index++)
-				result[index] = CreateEmptyBlock();
-
-			return result;
-		}
-
-		/// <summary>
-		/// Splits the block.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="instruction">The instruction index to split on.</param>
-		/// <param name="insert">The insert to be called after the split.</param>
-		/// <returns></returns>
-		private BasicBlock SplitBlock(Context ctx, Instruction instruction, BasicBlock insert)
-		{
-			int label = _blocks.Count + 0x10000000;
-
-			BasicBlock nextBlock = ctx.Block.Split(ctx.Index + 1, label);
-			nextBlock.Index = _blocks.Count - 1;
-			_blocks.Add(nextBlock);
-
-			foreach (BasicBlock block in ctx.Block.NextBlocks)
-				nextBlock.NextBlocks.Add(block);
-
-			ctx.Block.NextBlocks.Clear();
-
-			if (insert != null) {
-				ctx.Block.NextBlocks.Add(insert);
-				insert.PreviousBlocks.Add(ctx.Block);
-				ctx.Block.Instructions.Add(new IR.JmpInstruction(insert.Label));
-			}
-			else {
-				ctx.Block.NextBlocks.Add(nextBlock);
-				nextBlock.PreviousBlocks.Add(ctx.Block);
-				ctx.Block.Instructions.Add(new IR.JmpInstruction(label));
-			}
-
-			return nextBlock;
-		}
-
-		/// <summary>
 		/// Expands the binary branch instruction for 64-bits.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandBinaryBranch(Context ctx, IL.BinaryBranchInstruction instruction)
 		{
+			Debug.Assert(instruction.BranchTargets.Length == 2);
+
+			int[] targets = instruction.BranchTargets;
+
+			BasicBlock[] targetBlocks = new BasicBlock[2];
+			targetBlocks[0] = (ctx.Block.NextBlocks[0].Index == targetBlocks[0].Index) ? targetBlocks[0] : targetBlocks[1];
+			targetBlocks[1] = (ctx.Block.NextBlocks[1].Index == targetBlocks[1].Index) ? targetBlocks[1] : targetBlocks[0];
+
 			BasicBlock[] blocks = CreateEmptyBlocks(1);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
@@ -1598,8 +1615,6 @@ namespace Mosa.Platforms.x86
             Operand op1H, op1L, op2H, op2L;
             SplitLongOperand(instruction.Operands[0], out op1L, out op1H);
             SplitLongOperand(instruction.Operands[1], out op2L, out op2H);
-
-            int[] targets = instruction.BranchTargets;
 
             IR.ConditionCode code;
 
@@ -1649,6 +1664,9 @@ namespace Mosa.Platforms.x86
                     new IR.BranchInstruction(code, targets[0]),
                     new IR.JmpInstruction(targets[1]),
                 });
+
+				LinkBlocks(blocks[0], targetBlocks[1]);
+				LinkBlocks(blocks[0], targetBlocks[0]);
             }
             else
             {
@@ -1659,7 +1677,10 @@ namespace Mosa.Platforms.x86
                     new IR.BranchInstruction(code, nextBlock.Label),
                     new IR.JmpInstruction(targets[1]),
                 });
-            }
+				LinkBlocks(blocks[0], targetBlocks[1]);
+			}
+
+			LinkBlocks(blocks[0], nextBlock);
 
             nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 // Compare low dwords
@@ -1670,9 +1691,6 @@ namespace Mosa.Platforms.x86
             });
 
             Remove(ctx);
-
-            LinkBlocks(ctx.Block, blocks[0]);
-            LinkBlocks(blocks[0], nextBlock);
 		}
 
 		/// <summary>
