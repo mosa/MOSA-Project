@@ -1581,7 +1581,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandBinaryBranch(Context ctx, IL.BinaryBranchInstruction instruction)
 		{
-			BasicBlock[] blocks = CreateEmptyBlocks(3);
+			BasicBlock[] blocks = CreateEmptyBlocks(4);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -1631,66 +1631,56 @@ namespace Mosa.Platforms.x86
 
 			IR.ConditionCode conditionHigh = GetHighCondition(code);
 
-			/*Replace(ctx, new Instruction[] {
-				new Instructions.CmpInstruction(op1H, op2H),
-				new IR.BranchInstruction(conditionHigh, targets[1]),
-				new Instructions.CmpInstruction(op1L, op2L),
-				new IR.BranchInstruction(conditionLow, targets[1]),
-				new IR.JmpInstruction(targets[0])
-			});*/
-
 			// I8 is stored LO-HI in x86 LE
-			Instruction[] instructions = null;
-
 			if (code != Mosa.Runtime.CompilerFramework.IR.ConditionCode.Equal) {
-				instructions = new Instruction[] {
+				blocks[0].Instructions.AddRange(new Instruction[] {
                     // Compare high dwords
                     new Instructions.CmpInstruction(op1H, op2H),
-                    new IR.BranchInstruction(IR.ConditionCode.Equal, blocks[0].Label),
+                    new IR.BranchInstruction(IR.ConditionCode.Equal, blocks[1].Label),
                     // Branch if check already gave results
-                    new IR.BranchInstruction(GetHighCondition(code), blocks[2].Label),
-                };
-				blocks[0].Instructions.AddRange(new Instruction[] {
+                    new IR.BranchInstruction(GetHighCondition(code), blocks[3].Label),
+                });
+				blocks[1].Instructions.AddRange(new Instruction[] {
                     // Compare low dwords
                     new Instructions.CmpInstruction(op1L, op2L),
                     // Set the unsigned result...
-                    new IR.BranchInstruction(code, blocks[1].Label),
-                    new IR.JmpInstruction(blocks[2].Label),
-                });
-				blocks[1].Instructions.AddRange(new Instruction[] {
-                    new IR.JmpInstruction(targets[0]),
+                    new IR.BranchInstruction(code, blocks[2].Label),
+                    new IR.JmpInstruction(blocks[3].Label),
                 });
 				blocks[2].Instructions.AddRange(new Instruction[] {
                     new IR.JmpInstruction(targets[1]),
+                });
+				blocks[3].Instructions.AddRange(new Instruction[] {
+                    new IR.JmpInstruction(targets[2]),
                 });
 			}
 			else {
-				instructions = new Instruction[] {
+				blocks[0].Instructions.AddRange(new Instruction[] {
                     // Compare high dwords
                     new Instructions.CmpInstruction(op1H, op2H),
                     // Branch if check already gave results
-                    new IR.BranchInstruction(GetHighCondition(code), blocks[2].Label),
-                };
-				blocks[0].Instructions.AddRange(new Instruction[] {
+                    new IR.BranchInstruction(GetHighCondition(code), blocks[3].Label),
+                });
+				blocks[1].Instructions.AddRange(new Instruction[] {
                     // Compare low dwords
                     new Instructions.CmpInstruction(op1L, op2L),
                     // Set the unsigned result...
-                    new IR.BranchInstruction(code, blocks[1].Label),
-                    new IR.JmpInstruction(blocks[2].Label),
-                });
-				blocks[1].Instructions.AddRange(new Instruction[] {
-                    new IR.JmpInstruction(targets[0]),
+                    new IR.BranchInstruction(code, blocks[2].Label),
+                    new IR.JmpInstruction(blocks[3].Label),
                 });
 				blocks[2].Instructions.AddRange(new Instruction[] {
+                    new IR.JmpInstruction(targets[0]),
+                });
+				blocks[3].Instructions.AddRange(new Instruction[] {
                     new IR.JmpInstruction(targets[1]),
                 });
 			}
 
-			Replace(ctx, instructions);
+			Remove(ctx);
 
-			LinkBlocks(blocks[0], blocks[1]);
 			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[0], blocks[2]);
+			LinkBlocks(blocks[2], blocks[3]);
+			LinkBlocks(blocks[1], blocks[3]);
 		}
 
 		/// <summary>
