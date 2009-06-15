@@ -1639,6 +1639,7 @@ namespace Mosa.Platforms.x86
                     new IR.BranchInstruction(IR.ConditionCode.Equal, blocks[1].Label),
                     // Branch if check already gave results
                     new IR.BranchInstruction(GetHighCondition(code), blocks[3].Label),
+					new IR.JmpInstruction(blocks[1].Label),
                 });
 				blocks[1].Instructions.AddRange(new Instruction[] {
                     // Compare low dwords
@@ -1648,10 +1649,10 @@ namespace Mosa.Platforms.x86
                     new IR.JmpInstruction(blocks[3].Label),
                 });
 				blocks[2].Instructions.AddRange(new Instruction[] {
-                    new IR.JmpInstruction(targets[1]),
+                    new IR.JmpInstruction(targets[0]),
                 });
 				blocks[3].Instructions.AddRange(new Instruction[] {
-                    new IR.JmpInstruction(targets[2]),
+                    new IR.JmpInstruction(targets[1]),
                 });
 			}
 			else {
@@ -1679,8 +1680,8 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[2], blocks[3]);
 			LinkBlocks(blocks[1], blocks[3]);
+			LinkBlocks(blocks[2], blocks[3]);
 		}
 
 		/// <summary>
