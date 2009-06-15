@@ -810,7 +810,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandURem(Context ctx, IR.URemInstruction instruction)
 		{
-			BasicBlock[] blocks = CreateEmptyBlocks(3);
+			BasicBlock[] blocks = CreateEmptyBlocks(5);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -841,13 +841,13 @@ namespace Mosa.Platforms.x86
 			//sbb     eax,0
 			//mov     HIWORD(DVND),eax ; save positive value
 			//mov     LOWORD(DVND),edx
-			Replace(ctx, new Instruction[] {
+			blocks[0].Instructions.AddRange(new Instruction[] {
                 new IR.PushInstruction(edi),
                 new IR.PushInstruction(esi),
                 new IR.PushInstruction(ebx),
                 new Instructions.MoveInstruction(eax, op2H),
                 new Instructions.LogicalOrInstruction(eax, eax),
-                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[0].Label),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[1].Label),
                 new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalXorInstruction(edx, edx),
@@ -856,49 +856,50 @@ namespace Mosa.Platforms.x86
                 new Instructions.UDivInstruction(eax, ecx),
                 new Instructions.MoveInstruction(eax, edx),
                 new Instructions.LogicalXorInstruction(edx, edx),
+                new IR.JmpInstruction(nextBlock.Label),
             });
 
 			// L1:
-			blocks[0].Instructions.AddRange(new Instruction[] {
+			blocks[1].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(ecx, eax),
                 new Instructions.MoveInstruction(ebx, op2L),
                 new Instructions.MoveInstruction(edx, op1H),
                 new Instructions.MoveInstruction(eax, op1L),
-				new IR.JmpInstruction(blocks[1].Label),
+				new IR.JmpInstruction(blocks[2].Label),
 			});
 
 			// L3:
-			blocks[1].Instructions.AddRange(new Instruction[] {
+			blocks[2].Instructions.AddRange(new Instruction[] {
                 new Instructions.ShrInstruction(ecx, new ConstantOperand(U1, 1)),
                 new Instructions.RcrInstruction(ebx, new ConstantOperand(U1, 1)), // RCR
                 new Instructions.ShrInstruction(edx, new ConstantOperand(U1, 1)),
                 new Instructions.RcrInstruction(eax, new ConstantOperand(U1, 1)),
                 new Instructions.LogicalOrInstruction(ecx, ecx),
-                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[1].Label),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[2].Label),
                 new Instructions.UDivInstruction(eax, ebx),
                 new Instructions.MoveInstruction(ecx, eax),
                 new Instructions.MulInstruction(eax, op2H),
                 new Instructions.Intrinsics.XchgInstruction(ecx, eax),
                 new Instructions.MulInstruction(eax, op2L),
                 new Instructions.AddInstruction(edx, ecx),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[2].Label),
-                new Instructions.CmpInstruction(edx, op1H),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[2].Label),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[3].Label),
+                new Instructions.CmpInstruction(edx, op1H),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[3].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[4].Label),
                 new Instructions.CmpInstruction(eax, op1L),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[3].Label),
-				new IR.JmpInstruction(blocks[2].Label),
-            });
-
-			// L4:
-			blocks[2].Instructions.AddRange(new Instruction[] {
-                new Instructions.SubInstruction(eax, op2L),
-                new Instructions.SbbInstruction(edx, op2H),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[4].Label),
 				new IR.JmpInstruction(blocks[3].Label),
             });
 
-			// L5:
+			// L4:
 			blocks[3].Instructions.AddRange(new Instruction[] {
+                new Instructions.SubInstruction(eax, op2L),
+                new Instructions.SbbInstruction(edx, op2H),
+				new IR.JmpInstruction(blocks[4].Label),
+            });
+
+			// L5:
+			blocks[4].Instructions.AddRange(new Instruction[] {
                 new Instructions.SubInstruction(eax, op1L),
                 new Instructions.SbbInstruction(edx, op1H),
                 new Instructions.NegInstruction(edx),
@@ -914,6 +915,8 @@ namespace Mosa.Platforms.x86
                 new IR.PopInstruction(esi),
                 new IR.PopInstruction(edi),
             });
+
+            Remove(ctx);
 
 			// Link the created blocks together
 			LinkBlocks(ctx.Block, blocks[0]);
