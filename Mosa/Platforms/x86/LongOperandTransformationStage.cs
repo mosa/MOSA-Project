@@ -1118,85 +1118,87 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandShiftRight(Context ctx, IR.ShiftRightInstruction instruction)
 		{
-			BasicBlock[] blocks = CreateEmptyBlocks(3);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+            BasicBlock[] blocks = CreateEmptyBlocks(4);
+            BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
-			SigType I4 = new SigType(CilElementType.I4);
-			MemoryOperand op0 = instruction.Operand0 as MemoryOperand;
-			MemoryOperand op1 = instruction.Operand1 as MemoryOperand;
-			Operand count = instruction.Operand2;
-			Debug.Assert(op0 != null && op1 != null, @"Shl Int64 operands not in memory.");
+            SigType I4 = new SigType(CilElementType.I4);
+            SigType I1 = new SigType(CilElementType.I1);
+            SigType U1 = new SigType(CilElementType.U1);
+            Operand count = instruction.Operand2;
 
-			Operand op0H, op1H, op0L, op1L;
-			SplitLongOperand(instruction.Operand0, out op0L, out op0H);
-			SplitLongOperand(instruction.Operand1, out op1L, out op1H);
-			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
-			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
+            Operand op0H, op1H, op0L, op1L;
+            SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+            RegisterOperand ecx = new RegisterOperand(U1, GeneralPurposeRegister.ECX);
 
-			// ; existing code from the block
-			// cmp count, 64
-			// jae clear
-			Replace(ctx, new Instruction[] {
+            RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
+
+            // Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
+            // depends only on the high order bit of edx).
+            blocks[0].Instructions.AddRange(new Instruction[] {
                 new IR.PushInstruction(ecx),
+                new IR.LogicalAndInstruction(count, count, new ConstantOperand(I4, 0x3F)),
                 new Instructions.MoveInstruction(ecx, count),
                 new Instructions.MoveInstruction(edx, op1H),
                 new Instructions.MoveInstruction(eax, op1L),
                 new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 64)),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label)
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[3].Label),
+                new IR.JmpInstruction(blocks[1].Label),
             });
 
-			// small_shift:
-			// cmp count, 32
-			// jae large_shift
-			// shrd eax,edx,cl
-			// sar edx,cl
-			// jmp done
-			blocks[0].Instructions.AddRange(new Instruction[] {
+            blocks[1].Instructions.AddRange(new Instruction[] {
                 new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 32)),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[1].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label),
                 new Instructions.ShrdInstruction(eax, edx, ecx),
-                new Instructions.ShrInstruction(edx, ecx),
+                new Instructions.SarInstruction(edx, ecx),
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
-			// large_shift:
-			// mov     eax,edx
-			// sar     edx,31
-			// and     count,31
-			// sar eax,count
-			// jmp done
-			blocks[1].Instructions.AddRange(new Instruction[] {
+            // Handle shifts of between 32 and 63 bits
+            // MORE32:
+            blocks[2].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(eax, edx),
-                new Instructions.LogicalXorInstruction(edx, edx),
+                new IR.PushInstruction(ecx),
+                new Instructions.MoveInstruction(ecx, new ConstantOperand(I1, (sbyte)0x1F)),
+                new Instructions.SarInstruction(edx, ecx),
+                new IR.PopInstruction(ecx),
                 new Instructions.LogicalAndInstruction(ecx, new ConstantOperand(I4, 0x1F)),
-                new Instructions.ShrInstruction(eax, ecx),
+                new IR.PushInstruction(ecx),
+                new Instructions.MoveInstruction(ecx, new ConstantOperand(I1, (sbyte)0x1F)),
+                new Instructions.SarInstruction(eax, ecx),
+                new IR.PopInstruction(ecx),
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
-			// clear:
-			// mov opH, 0
-			// mov opL, 0
-			blocks[2].Instructions.AddRange(new Instruction[] {
-                new Instructions.LogicalXorInstruction(edx, edx),
-                new Instructions.LogicalXorInstruction(eax, eax),
+            // Return double precision 0 or -1, depending on the sign of edx
+            // RETSIGN:
+            blocks[3].Instructions.AddRange(new Instruction[] {
+                new Instructions.SarInstruction(edx, new ConstantOperand(I1, (sbyte)0x1F)),
+                new Instructions.MoveInstruction(eax, edx),
 				new IR.JmpInstruction(nextBlock.Label),
             });
 
-			// done:
-			// ; remaining code from current basic block
-			nextBlock.Instructions.InsertRange(0, new Instruction[] {
+            // done:
+            // ; remaining code from current basic block
+            nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 new Instructions.MoveInstruction(op0H, edx),
                 new Instructions.MoveInstruction(op0L, eax),
                 new IR.PopInstruction(ecx)
             });
 
-			// Link the created blocks together
-			LinkBlocks(ctx.Block, blocks[2]);
-			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[0], nextBlock);
-			LinkBlocks(blocks[1], nextBlock);
-			LinkBlocks(blocks[2], nextBlock);
+            Remove(ctx);
+
+            // Link the created blocks together
+            LinkBlocks(ctx.Block, blocks[0]);
+            LinkBlocks(blocks[0], blocks[1]);
+            LinkBlocks(blocks[0], blocks[3]);
+            LinkBlocks(blocks[1], blocks[2]);
+            LinkBlocks(blocks[1], nextBlock);
+            LinkBlocks(blocks[2], nextBlock);
+            LinkBlocks(blocks[2], nextBlock);
+            LinkBlocks(blocks[3], nextBlock);
 		}
 
 		/// <summary>
