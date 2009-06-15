@@ -63,6 +63,18 @@ namespace Mosa.Platforms.x86
 
 		#region Block Operations
 
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="from">The block issuing the jump.</param>
+		/// <param name="to">The block, where from is jumping to.</param>
+		private void LinkBlocks(BasicBlock from, BasicBlock to)
+		{
+			Debug.Assert(false == from.NextBlocks.Contains(to), @"A link already exists?");
+			Debug.Assert(false == to.PreviousBlocks.Contains(from), @"A link already exists?");
+			from.NextBlocks.Add(to);
+			to.PreviousBlocks.Add(from);
+		}
 
 		/// <summary>
 		/// Create an empty block.
@@ -504,7 +516,6 @@ namespace Mosa.Platforms.x86
             Remove(ctx);
 
 			// Link the created blocks together
-			LinkBlocks(ctx.Block, blocks[0]);
 			LinkBlocks(blocks[0], blocks[1]);
 			LinkBlocks(blocks[1], blocks[6]);
 			LinkBlocks(blocks[1], blocks[2]);
@@ -750,7 +761,6 @@ namespace Mosa.Platforms.x86
             });
 
 			// Link the created blocks together
-			LinkBlocks(ctx.Block, blocks[0]);
 			LinkBlocks(blocks[0], blocks[1]);
 			LinkBlocks(blocks[1], blocks[6]);
 			LinkBlocks(blocks[1], blocks[2]);
@@ -1085,7 +1095,6 @@ namespace Mosa.Platforms.x86
 
 			// Link the created blocks together
 			LinkBlocks(ctx.Block, blocks[2]);
-			LinkBlocks(ctx.Block, blocks[0]);
 			LinkBlocks(blocks[0], blocks[1]);
 			LinkBlocks(blocks[0], nextBlock);
 			LinkBlocks(blocks[1], nextBlock);
@@ -1174,7 +1183,6 @@ namespace Mosa.Platforms.x86
             });
 
 			// Link the created blocks together
-			LinkBlocks(ctx.Block, blocks[0]);
 			LinkBlocks(ctx.Block, blocks[2]);
 			LinkBlocks(blocks[0], blocks[1]);
 			LinkBlocks(blocks[0], nextBlock);
@@ -1263,7 +1271,6 @@ namespace Mosa.Platforms.x86
             });
 
 			// Link the created blocks together
-			LinkBlocks(ctx.Block, blocks[0]);
 			LinkBlocks(ctx.Block, blocks[2]);
 			LinkBlocks(blocks[0], blocks[1]);
 			LinkBlocks(blocks[0], nextBlock);
@@ -1696,9 +1703,9 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the high condition.
 		/// </summary>
-		/// <param name="code"></param>
+		/// <param name="code">The code.</param>
 		/// <returns></returns>
 		private Mosa.Runtime.CompilerFramework.IR.ConditionCode GetHighCondition(Mosa.Runtime.CompilerFramework.IR.ConditionCode code)
 		{
@@ -1712,8 +1719,6 @@ namespace Mosa.Platforms.x86
 				default: return code;
 			}
 		}
-
-
 
 		/// <summary>
 		/// Expands the binary comparison instruction for 64-bits.
@@ -1740,23 +1745,21 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(op2, out op2L, out op2H);
 
 			// Create an additional block to split the comparison
-			BasicBlock[] blocks = CreateEmptyBlocks(3);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[1]);
+			BasicBlock[] blocks = CreateEmptyBlocks(1);
+			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			Debug.Assert(nextBlock != null, @"No follower block?");
-			IR.BranchInstruction branch = new IR.BranchInstruction(IR.ConditionCode.NotEqual, nextBlock.Label);
 
 			// I8 is stored LO-HI in x86 LE
-			Instruction[] instructions = new Instruction[] {
+			Replace(ctx, new Instruction[] {
                 // Compare high dwords
                 new Instructions.CmpInstruction(op1H, op2H),
                 // Set the condition code
                 new SetccInstruction(op0, instruction.ConditionCode),
                 // Branch if check already gave results
-                branch,
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, nextBlock.Label),
 				new IR.JmpInstruction(blocks[0].Label),
-            };
-			Replace(ctx, instructions);
+            });
 
 			blocks[0].Instructions.AddRange(new Instruction[] {
                 // Compare low dwords
@@ -1767,7 +1770,6 @@ namespace Mosa.Platforms.x86
             });
 
 			LinkBlocks(ctx.Block, nextBlock);
-			LinkBlocks(ctx.Block, blocks[0]);
 			LinkBlocks(blocks[0], nextBlock);
 		}
 
@@ -1794,19 +1796,6 @@ namespace Mosa.Platforms.x86
 					throw new NotSupportedException();
 			}
 			return cc;
-		}
-
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="from">The block issuing the jump.</param>
-		/// <param name="to">The block, where from is jumping to.</param>
-		private void LinkBlocks(BasicBlock from, BasicBlock to)
-		{
-			Debug.Assert(false == from.NextBlocks.Contains(to), @"A link already exists?");
-			Debug.Assert(false == to.PreviousBlocks.Contains(from), @"A link already exists?");
-			from.NextBlocks.Add(to);
-			to.PreviousBlocks.Add(from);
 		}
 
 		/// <summary>
