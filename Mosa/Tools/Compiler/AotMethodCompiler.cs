@@ -50,7 +50,6 @@ namespace Mosa.Tools.Compiler
 				new OperandDeterminationStage(),
                 //InstructionLogger.Instance,
                 //new ConstantFoldingStage(),
-				//new BlockReductionStage(),
                 new CilToIrTransformationStage(),
                 //InstructionLogger.Instance,
                 InstructionStatisticsStage.Instance,
@@ -65,9 +64,10 @@ namespace Mosa.Tools.Compiler
                 //InstructionLogger.Instance,
                 //new LeaveSSA(),
                 //InstructionLogger.Instance,
+				//new BlockReductionStage(),
                 new StackLayoutStage(),
-				//new LoopAwareBlockOrderStage(),
-				new SimpleTraceBlockOrderStage(),
+				new LoopAwareBlockOrderStage(),
+				//new SimpleTraceBlockOrderStage(),
 				new BasicBlockOrderStage(),				
             });
         }

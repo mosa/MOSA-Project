@@ -33,7 +33,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 				new OperandDeterminationStage(),
                 //InstructionLogger.Instance,
                 //new ConstantFoldingStage(),
-				//new BlockReductionStage(),
                 new CilToIrTransformationStage(),
                 //InstructionLogger.Instance,
                 //InstructionStatisticsStage.Instance,
@@ -47,9 +46,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 //InstructionLogger.Instance,
                 //new LeaveSSA(),
                 //InstructionLogger.Instance,
+				//new BlockReductionStage(),
 				new StackLayoutStage(),
-				//new LoopAwareBlockOrderStage(),
-				new SimpleTraceBlockOrderStage(),
+				new LoopAwareBlockOrderStage(),
+				//new SimpleTraceBlockOrderStage(),
 				new BasicBlockOrderStage()	
             });
         }

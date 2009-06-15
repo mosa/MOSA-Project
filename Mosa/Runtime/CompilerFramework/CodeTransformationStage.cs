@@ -209,5 +209,85 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         #endregion // Methods
+
+		#region Block Operations
+
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="from">The block issuing the jump.</param>
+		/// <param name="to">The block, where from is jumping to.</param>
+		protected void LinkBlocks(BasicBlock from, BasicBlock to)
+		{
+			Debug.Assert(false == from.NextBlocks.Contains(to), @"A link already exists?");
+			Debug.Assert(false == to.PreviousBlocks.Contains(from), @"A link already exists?");
+			from.NextBlocks.Add(to);
+			to.PreviousBlocks.Add(from);
+		}
+
+		/// <summary>
+		/// Create an empty block.
+		/// </summary>
+		/// <returns></returns>
+		protected BasicBlock CreateEmptyBlock()
+		{
+			BasicBlock block = new BasicBlock(_blocks.Count + 0x10000000);
+			block.Index = _blocks.Count;
+			_blocks.Add(block);
+			return block;
+		}
+
+		/// <summary>
+		/// Creates empty blocks.
+		/// </summary>
+		/// <param name="blocks">The blocks.</param>
+		/// <returns></returns>
+		protected BasicBlock[] CreateEmptyBlocks(int blocks)
+		{
+			// Allocate the block array
+			BasicBlock[] result = new BasicBlock[blocks];
+
+			for (int index = 0; index < blocks; index++)
+				result[index] = CreateEmptyBlock();
+
+			return result;
+		}
+
+		/// <summary>
+		/// Splits the block.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="instruction">The instruction index to split on.</param>
+		/// <param name="insert">The insert to be called after the split.</param>
+		/// <returns></returns>
+		protected BasicBlock SplitBlock(Context ctx, Instruction instruction, BasicBlock insert)
+		{
+			int label = _blocks.Count + 0x10000000;
+
+			BasicBlock nextBlock = ctx.Block.Split(ctx.Index + 1, label);
+			nextBlock.Index = _blocks.Count - 1;
+			_blocks.Add(nextBlock);
+
+			foreach (BasicBlock block in ctx.Block.NextBlocks)
+				nextBlock.NextBlocks.Add(block);
+
+			ctx.Block.NextBlocks.Clear();
+
+			if (insert != null) {
+				ctx.Block.NextBlocks.Add(insert);
+				insert.PreviousBlocks.Add(ctx.Block);
+				ctx.Block.Instructions.Add(new IR.JmpInstruction(insert.Label));
+			}
+			else {
+				ctx.Block.NextBlocks.Add(nextBlock);
+				nextBlock.PreviousBlocks.Add(ctx.Block);
+				ctx.Block.Instructions.Add(new IR.JmpInstruction(label));
+			}
+
+			return nextBlock;
+		}
+
+		#endregion
+
     }
 }
