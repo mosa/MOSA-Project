@@ -41,6 +41,7 @@ namespace Mosa.Platforms.x86
         void SseMul(SseMulInstruction mulInstruction, ArgType arg);
         void SseDiv(SseDivInstruction mulInstruction, ArgType arg);
         void Sar(SarInstruction shiftInstruction, ArgType arg);
+        void Sal(SalInstruction shiftInstruction, ArgType arg);
         void Shl(ShlInstruction shiftInstruction, ArgType arg);
         void Shr(ShrInstruction shiftInstruction, ArgType arg);
         void Rcr(RcrInstruction rotateInstruction, ArgType arg);

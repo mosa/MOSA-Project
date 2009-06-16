@@ -252,16 +252,42 @@ namespace Mosa.Platforms.x86
             }
             else if (8 == size && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
             {
-                MemoryOperand op = operand as MemoryOperand;
-                Debug.Assert(op != null, @"Int64 return value not MemoryOperand.");
-
                 SigType I4 = new SigType(CilElementType.I4);
-                MemoryOperand opL = new MemoryOperand(I4, op.Base, op.Offset);
-                MemoryOperand opH = new MemoryOperand(I4, op.Base, new IntPtr(op.Offset.ToInt64() + 4));
+                SigType U4 = new SigType(CilElementType.U4);
+
+                // Is it a constant operand?
+                ConstantOperand cop = operand as ConstantOperand;
+                Operand opL, opH;
+
+                if (cop != null)
+                {
+                    long value = (long)cop.Value;
+                    opL = new ConstantOperand(I4, (int)(value & 0xFFFFFFFF));
+                    opH = new ConstantOperand(I4, (int)((value >> 32) & 0xFFFFFFFF));
+                }
+                else
+                {
+                    // No, could be a member or a plain memory operand
+                    MemberOperand memberOp = operand as MemberOperand;
+                    if (memberOp != null)
+                    {
+                        // We need to keep the member reference, otherwise the linker can't fixup
+                        // the member address.
+                        opL = new MemberOperand(memberOp.Member, I4, memberOp.Offset);
+                        opH = new MemberOperand(memberOp.Member, I4, new IntPtr(memberOp.Offset.ToInt64() + 4));
+                    }
+                    else
+                    {
+                        // Plain memory, we can handle it here
+                        MemoryOperand mop = (MemoryOperand)operand;
+                        opL = new MemoryOperand(I4, mop.Base, mop.Offset);
+                        opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
+                    }
+                }
 
                 // Like Win32: EDX:EAX
                 return new Instruction[] { 
-                    new Instructions.MoveInstruction(new RegisterOperand(I4, GeneralPurposeRegister.EAX), opL),
+                    new Instructions.MoveInstruction(new RegisterOperand(U4, GeneralPurposeRegister.EAX), opL),
                     new Instructions.MoveInstruction(new RegisterOperand(I4, GeneralPurposeRegister.EDX), opH),
                 };
             }

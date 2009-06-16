@@ -695,7 +695,7 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
                 // int 3
-                //_architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
+                _architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
                 // Uncomment this line to enable breakpoints within Bochs
                 _architecture.CreateInstruction(typeof(Instructions.Intrinsics.BochsDebug), null),
                 // push ebp
@@ -1025,6 +1025,10 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Sar(Instructions.SarInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Sal(Instructions.SalInstruction instruction, Context ctx)
         {
         }
 

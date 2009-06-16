@@ -169,6 +169,11 @@ namespace Mosa.Platforms.x86
             _emitter.Sar(instruction.Operand0, instruction.Operand1);
         }
 
+        void IX86InstructionVisitor<int>.Sal(SalInstruction instruction, int arg)
+        {
+            _emitter.Sal(instruction.Operand0, instruction.Operand1);
+        }
+
         void IX86InstructionVisitor<int>.Cdq(CdqInstruction instruction, int arg)
         {
             _emitter.Cdq();

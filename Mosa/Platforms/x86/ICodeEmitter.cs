@@ -413,6 +413,13 @@ namespace Mosa.Platforms.x86
         void Sar(Operand op1, Operand op2);
 
         /// <summary>
+        /// Shifts the value in the register op1 by op2 bits to the left, keeping the sign of the original value.
+        /// </summary>
+        /// <param name="op1">The first operand and destination of the instruction.</param>
+        /// <param name="op2">The second operand.</param>
+        void Sal(Operand op1, Operand op2);
+
+        /// <summary>
         /// Shifts the value in register op1 by op2 bits to the left
         /// </summary>
         /// <param name="op1">The first operand and destination of the instruction.</param>

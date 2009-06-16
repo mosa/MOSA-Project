@@ -864,6 +864,17 @@ namespace Mosa.Platforms.x86
 			Emit(dest, src, X86.Sar(dest, src));
 		}
 
+        void ICodeEmitter.Sal(Operand dest, Operand src)
+        {
+            Debug.Assert(src is RegisterOperand || src is ConstantOperand, @"Wrong second operand for sar.");
+            if (src is RegisterOperand)
+            {
+                Debug.Assert(((RegisterOperand)src).Register == GeneralPurposeRegister.ECX, @"Wrong source register for sar.");
+                src = null;
+            }
+            Emit(dest, src, X86.Sal(dest, src));
+        }
+
 		void ICodeEmitter.Shl(Operand dest, Operand src)
 		{
 			// We force the shl reg, ecx notion
