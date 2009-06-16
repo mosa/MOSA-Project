@@ -725,9 +725,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0f, 0f)]
+        [Row(true, 13.9f, 13.9f)]
+        [Row(true, 11.91262f, 11.91262f)]
+        [Row(false, 11.91262f, 11.91263f)]
         [Row(false, -17f, 42f)]
-        [Row(true, float.MaxValue, float.MaxValue)]
-        [Row(false, float.MinValue, float.MaxValue)]
+        [Row(false, Single.MinValue, Single.MaxValue)]
         [Test, Author("boddlnagg")]
         public void CeqConstantR4Right(bool result, float a, float b)
         {
@@ -743,9 +745,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0f, 0f)]
-        [Row(false, -17f, 42.5f)]
-        [Row(true, float.MaxValue, float.MaxValue)]
-        [Row(false, float.MinValue, float.MaxValue)]
+        [Row(true, 13.9f, 13.9f)]
+        [Row(true, 11.91262f, 11.91262f)]
+        [Row(false, 11.91262f, 11.91263f)]
+        [Row(false, -17f, 42f)]
+        [Row(false, Single.MinValue, Single.MaxValue)]
         [Test, Author("boddlnagg")]
         public void CeqConstantR4Left(bool result, float a, float b)
         {
