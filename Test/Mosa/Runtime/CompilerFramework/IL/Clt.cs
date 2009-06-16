@@ -618,14 +618,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="b">The second value to compare.</param>
         [Row(0.0f, 0.0f)]
         [Row(1.0f, 1.0f)]
-        [Row(Single.MinValue, Single.MinValue + 10)]
-        [Row(Single.MaxValue, Single.MaxValue)]
+        [Row(Single.MinValue, Single.MinValue + 10.0f)]
+        [Row(Single.MaxValue - 0.5f, Single.MaxValue)]
         [Row(0.0f, Single.MinValue)]
         [Row(0.0f, Single.MaxValue)]
-        [Row(0.0f, 1.0f)]
+        [Row(1.0f, 3.0f)]
         [Row(Single.MinValue, 0.0f)]
         [Row(Single.MaxValue, 0.0f)]
-        [Row(1.0f, 0.0f)]
+        [Row(0.0f, 1.0f)]
         [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
         public void CltR4(float a, float b)
         {
@@ -639,10 +639,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(0f, 0f)]
-        [Row(-17f, 42f)]
-        [Row(float.MaxValue, float.MaxValue)]
-        [Row(float.MinValue, float.MaxValue)]
+        [Row(0.0f, 0.0f)]
+        [Row(1.0f, 1.0f)]
+        [Row(Single.MinValue, Single.MinValue + 10.0f)]
+        [Row(Single.MaxValue - 0.5f, Single.MaxValue)]
+        [Row(0.0f, Single.MinValue)]
+        [Row(0.0f, Single.MaxValue)]
+        [Row(1.0f, 3.0f)]
+        [Row(Single.MinValue, 0.0f)]
+        [Row(Single.MaxValue, 0.0f)]
+        [Row(0.0f, 1.0f)]
         [Test, Author("boddlnagg")]
         public void CltConstantR4Right(float a, float b)
         {
@@ -656,10 +662,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(0f, 0f)]
-        [Row(-17f, 42.5f)]
-        [Row(float.MaxValue, float.MaxValue)]
-        [Row(float.MinValue, float.MaxValue)]
+        [Row(0.0f, 0.0f)]
+        [Row(1.0f, 1.0f)]
+        [Row(Single.MinValue, Single.MinValue + 10.0f)]
+        [Row(Single.MaxValue - 0.5f, Single.MaxValue)]
+        [Row(0.0f, Single.MinValue)]
+        [Row(0.0f, Single.MaxValue)]
+        [Row(1.0f, 3.0f)]
+        [Row(Single.MinValue, 0.0f)]
+        [Row(Single.MaxValue, 0.0f)]
+        [Row(0.0f, 1.0f)]
         [Test, Author("boddlnagg")]
         public void CltConstantR4Left(float a, float b)
         {

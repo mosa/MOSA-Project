@@ -17,12 +17,14 @@ using Gallio.Framework;
 using MbUnit.Framework;
 using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
+[assembly: DegreeOfParallelism(2)]
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
     /// <summary>
     /// Testcase for the AddInstruction
     /// </summary>
     [TestFixture]
+    [Parallelizable]
     public class Add : CodeDomTestRunner
     {        
         private static string CreateTestCode(string name, string typeIn, string typeOut)

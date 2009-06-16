@@ -81,7 +81,7 @@ namespace Mosa.Platforms.x86
 			ConstantOperand cop = op as ConstantOperand;
 			if (cop != null) {
 				long value = (long)cop.Value;
-				opL = new ConstantOperand(I4, (int)(value & 0xFFFFFFFF));
+                opL = new ConstantOperand(I4, (int)(value & 0xFFFFFFFF));
 				opH = new ConstantOperand(I4, (int)((value >> 32) & 0xFFFFFFFF));
 			}
 			else {
@@ -91,12 +91,12 @@ namespace Mosa.Platforms.x86
 					// We need to keep the member reference, otherwise the linker can't fixup
 					// the member address.
 					opL = new MemberOperand(memberOp.Member, I4, memberOp.Offset);
-					opH = new MemberOperand(memberOp.Member, I4, new IntPtr(memberOp.Offset.ToInt64() + 4));
+                    opH = new MemberOperand(memberOp.Member, I4, new IntPtr(memberOp.Offset.ToInt64() + 4));
 				}
 				else {
 					// Plain memory, we can handle it here
 					MemoryOperand mop = (MemoryOperand)op;
-					opL = new MemoryOperand(I4, mop.Base, mop.Offset);
+                    opL = new MemoryOperand(I4, mop.Base, mop.Offset);
 					opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
 				}
 			}
@@ -1670,32 +1670,49 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(op2, out op2L, out op2H);
 
 			// Create an additional block to split the comparison
-			BasicBlock[] blocks = CreateEmptyBlocks(1);
+			BasicBlock[] blocks = CreateEmptyBlocks(4);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			Debug.Assert(nextBlock != null, @"No follower block?");
 
-			// I8 is stored LO-HI in x86 LE
-			Replace(ctx, new Instruction[] {
-                // Compare high dwords
-                new Instructions.CmpInstruction(op1H, op2H),
-                // Set the condition code
-                new SetccInstruction(op0, instruction.ConditionCode),
-                // Branch if check already gave results
-                new IR.BranchInstruction(IR.ConditionCode.NotEqual, nextBlock.Label),
-				new IR.JmpInstruction(blocks[0].Label),
-            });
+            blocks[0].Instructions.AddRange(new Instruction[] {
+                    // Compare high dwords
+                    new Instructions.CmpInstruction(op1H, op2H),
+                    new IR.BranchInstruction(IR.ConditionCode.Equal, blocks[1].Label),
+                    // Branch if check already gave results
+                    new IR.BranchInstruction(instruction.ConditionCode, blocks[2].Label),
+                    new IR.JmpInstruction(blocks[3].Label),
+                });
 
-			blocks[0].Instructions.AddRange(new Instruction[] {
+            blocks[1].Instructions.AddRange(new Instruction[] {
                 // Compare low dwords
                 new Instructions.CmpInstruction(op1L, op2L),
                 // Set the unsigned result...
-                new SetccInstruction(op0, GetUnsignedConditionCode(instruction.ConditionCode)),
-				new IR.JmpInstruction(nextBlock.Label),
+                new IR.BranchInstruction(GetUnsignedConditionCode(instruction.ConditionCode), blocks[2].Label),
+				new IR.JmpInstruction(blocks[3].Label),
             });
 
-			LinkBlocks(ctx.Block, nextBlock);
-			LinkBlocks(blocks[0], nextBlock);
+            // Success
+            blocks[2].Instructions.AddRange(new Instruction[] {
+                new IR.MoveInstruction(op0, new ConstantOperand(I4, 1)),
+                new IR.JmpInstruction(nextBlock.Label),
+            });
+
+            // Failed
+            blocks[3].Instructions.AddRange(new Instruction[] {
+                new IR.MoveInstruction(op0, new ConstantOperand(I4, 0)),
+                new IR.JmpInstruction(nextBlock.Label),
+            });
+
+            Remove(ctx);
+
+			LinkBlocks(ctx.Block, blocks[0]);
+			LinkBlocks(blocks[0], blocks[1]);
+            LinkBlocks(blocks[0], blocks[2]);
+            LinkBlocks(blocks[1], blocks[2]);
+            LinkBlocks(blocks[1], blocks[3]);
+            LinkBlocks(blocks[2], nextBlock);
+            LinkBlocks(blocks[3], nextBlock);
 		}
 
 		/// <summary>

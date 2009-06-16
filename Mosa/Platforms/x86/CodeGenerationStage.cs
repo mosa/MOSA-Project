@@ -181,7 +181,23 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.Cmp(CmpInstruction instruction, int arg)
         {
-            _emitter.Cmp(instruction.Operand0, instruction.Operand1);
+            Operand op0 = instruction.Operand0;
+            Operand op1 = instruction.Operand1;
+            bool constant = op0 is ConstantOperand;
+
+            if (constant)
+            {
+                RegisterOperand ebx = new RegisterOperand(op0.Type, GeneralPurposeRegister.EBX);
+                _emitter.Push(ebx);
+                _emitter.Mov(ebx, op0);
+                op0 = ebx;
+            }
+            _emitter.Cmp(op0, op1);
+            if (constant)
+            {
+                RegisterOperand ebx = new RegisterOperand(op0.Type, GeneralPurposeRegister.EBX);
+                _emitter.Pop(ebx);
+            }
         }
 
         void IX86InstructionVisitor<int>.Setcc(SetccInstruction instruction, int arg)
@@ -1420,7 +1436,16 @@ namespace Mosa.Platforms.x86
         {
             Operand op0 = instruction.Operand0;
             _emitter.Cmp(instruction.Operand1, instruction.Operand2);
-            _emitter.Setcc(op0, instruction.ConditionCode);
+
+            System.IO.StreamWriter w = new StreamWriter("types.txt", true);
+            w.WriteLine("{0}\t\t{1}", instruction.Operand1.Type.Type.ToString(), instruction.Operand2.Type.Type.ToString());
+            w.Flush();
+            w.Close();
+
+            if (X86.IsUnsigned(instruction.Operand1) || X86.IsUnsigned(instruction.Operand2))
+                _emitter.Setcc(op0, GetUnsignedConditionCode(instruction.ConditionCode));
+            else
+                _emitter.Setcc(op0, instruction.ConditionCode);
 
             // Extend the result to 32-bits
             if (op0 is RegisterOperand)
@@ -1652,5 +1677,31 @@ namespace Mosa.Platforms.x86
         }
 
         #endregion // IIRVisitor Members
+
+        /// <summary>
+        /// Gets the unsigned condition code.
+        /// </summary>
+        /// <param name="conditionCode">The condition code to get an unsigned form from.</param>
+        /// <returns>The unsigned form of the given condition code.</returns>
+        private IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
+        {
+            IR.ConditionCode cc = conditionCode;
+            switch (conditionCode)
+            {
+                case IR.ConditionCode.Equal: break;
+                case IR.ConditionCode.NotEqual: break;
+                case IR.ConditionCode.GreaterOrEqual: cc = IR.ConditionCode.UnsignedGreaterOrEqual; break;
+                case IR.ConditionCode.GreaterThan: cc = IR.ConditionCode.UnsignedGreaterThan; break;
+                case IR.ConditionCode.LessOrEqual: cc = IR.ConditionCode.UnsignedLessOrEqual; break;
+                case IR.ConditionCode.LessThan: cc = IR.ConditionCode.UnsignedLessThan; break;
+                case IR.ConditionCode.UnsignedGreaterOrEqual: break;
+                case IR.ConditionCode.UnsignedGreaterThan: break;
+                case IR.ConditionCode.UnsignedLessOrEqual: break;
+                case IR.ConditionCode.UnsignedLessThan: break;
+                default:
+                    throw new NotSupportedException();
+            }
+            return cc;
+        }
     }
 }

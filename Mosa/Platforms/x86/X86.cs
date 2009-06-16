@@ -1455,6 +1455,26 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="op"></param>
         /// <returns></returns>
+        public static bool IsUnsigned(Operand op)
+        {
+            return IsUByte(op) || IsUShort(op) || IsUInt(op) || IsChar(op);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
+        public static bool IsSigned(Operand op)
+        {
+            return IsByte(op) || IsShort(op) || IsInt(op);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
         private static bool IsByte(Operand op)
         {
             return IsSByte(op) || IsUByte(op);
@@ -1518,6 +1538,26 @@ namespace Mosa.Platforms.x86
         private static bool IsChar(Operand op)
         {
             return (op.Type.Type == CilElementType.Char || IsUShort(op));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
+        private static bool IsInt(Operand op)
+        {
+            return (op.Type.Type == CilElementType.I4);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <returns></returns>
+        private static bool IsUInt(Operand op)
+        {
+            return (op.Type.Type == CilElementType.U4);
         }
     }
 }

@@ -347,8 +347,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="b">The second value to compare.</param>
         [Row(0, 0)]
         [Row(-17, 42)]
-        [Row(long.MinValue, long.MinValue)]
+        [Row(long.MinValue + 1, long.MinValue)]
         [Row(long.MinValue, long.MaxValue)]
+        [Row(12377513, 1237751)]
+        [Row(42, 17)]
+        [Row(long.MaxValue, long.MinValue)]
         [Test, Author("boddlnagg")]
         public void CgtConstantI8Right(long a, long b)
         {
@@ -364,8 +367,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="b">The second value to compare.</param>
         [Row(0, 0)]
         [Row(-17, 42)]
-        [Row(long.MinValue, long.MinValue)]
+        [Row(long.MinValue + 1, long.MinValue)]
         [Row(long.MinValue, long.MaxValue)]
+        [Row(12377513, 1237751)]
+        [Row(42, 17)]
+        [Row(long.MaxValue, long.MinValue)]
         [Test, Author("boddlnagg")]
         public void CgtConstantI8Left(long a, long b)
         {
@@ -640,10 +646,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(0f, 0f)]
-        [Row(-17f, 42f)]
-        [Row(float.MaxValue, float.MaxValue)]
-        [Row(float.MinValue, float.MaxValue)]
+        [Row(0.0f, 0.0f)]
+        [Row(1.0f, 1.0f)]
+        [Row(Single.MinValue, Single.MinValue + 10)]
+        [Row(0.0f, Single.MinValue)]
+        [Row(0.0f, Single.MaxValue)]
+        [Row(3.0f, 1.0f)]
+        [Row(Single.MinValue, 0.0f)]
+        [Row(Single.MaxValue, 0.0f)]
+        [Row(1.0f, 0.0f)]
         [Test, Author("boddlnagg")]
         public void CgtConstantR4Right(float a, float b)
         {
