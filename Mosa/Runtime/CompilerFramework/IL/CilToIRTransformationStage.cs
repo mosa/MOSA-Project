@@ -268,7 +268,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         void IILVisitor<Context>.Neg(NegInstruction instruction, Context ctx)
         {
             Replace(ctx, new Instruction[] { 
-                //_architecture.CreateInstruction(typeof(IR.MoveInstruction), instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, (byte)0)),
+                //_architecture.CreateInstruction(typeof(IL.BinaryLogicInstruction), OpCode.Xor, instruction.Results[0], instruction.Results[0]),
                 _architecture.CreateInstruction(typeof(IL.SubInstruction), OpCode.Sub, instruction.Results[0], instruction.Operands[0]) 
             });
         }
@@ -477,7 +477,23 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <returns>True if the store is truncating, otherwise false.</returns>
         private bool IsTruncating(Operand dest, Operand source)
         {
-            return false;
+            CilElementType cetDest = dest.Type.Type;
+            CilElementType cetSource = source.Type.Type;
+
+            if (cetDest == CilElementType.I4 || cetDest == CilElementType.U4)
+            {
+                return (cetSource == CilElementType.I8 || cetSource == CilElementType.U8);
+            }
+            else if (cetDest == CilElementType.I2 || cetDest == CilElementType.U2 || cetDest == CilElementType.Char)
+            {
+                return (cetSource == CilElementType.I8 || cetSource == CilElementType.U8 || cetSource == CilElementType.I4 || cetSource == CilElementType.U4);
+            }
+            else if (cetDest == CilElementType.I1 || cetDest == CilElementType.U1)
+            {
+                return (cetSource == CilElementType.I8 || cetSource == CilElementType.U8 || cetSource == CilElementType.I4 || cetSource == CilElementType.U4 || cetSource == CilElementType.I2 || cetSource == CilElementType.U2 || cetSource == CilElementType.U2);
+            }
+            else
+                return false;
         }
 
         /// <summary>
@@ -505,7 +521,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         {
             bool result = false;
             CilElementType cet = source.Type.Type;
-            if (cet == CilElementType.U1 || cet == CilElementType.U2)
+            if (cet == CilElementType.U1 || cet == CilElementType.U2 || cet == CilElementType.Char)
             {
                 result = true;
             }
@@ -1064,6 +1080,11 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 // Replace it with a truncating move...
                 // FIXME: Implement proper truncation as specified in the CIL spec
                 Debug.Assert(false);
+                if (IsSignExtending(store.Source))
+                    Replace(ctx, _architecture.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), store.Destination, store.Source));
+                else
+                    Replace(ctx, _architecture.CreateInstruction(typeof(IR.ZeroExtendedMoveInstruction), store.Destination, store.Source));
+                return;
             }
             else if (1 == store.Source.Definitions.Count && 1 == store.Source.Uses.Count)
             {

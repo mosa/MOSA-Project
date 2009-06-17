@@ -101,6 +101,7 @@ namespace Mosa.Platforms.x86
             public static class Sub
             {
                 public static OpCode O_C = new OpCode(new byte[] { 0x81 }, 5);
+                public static OpCode O_C_16 = new OpCode(new byte[] { 0x66, 0x81 }, 5);
                 public static OpCode R_O = new OpCode(new byte[] { 0x2B });
                 public static OpCode R_O_16 = new OpCode(new byte[] { 0x66, 0x2B });
                 public static OpCode M_R = new OpCode(new byte[] { 0x29 });
@@ -669,7 +670,12 @@ namespace Mosa.Platforms.x86
         public static OpCode Sub(Operand dest, Operand src)
         {
             if ((dest is Operand) && (src is ConstantOperand))
-                return X86Instruction.Sub.O_C;
+            {
+                if (IsChar(dest) || IsShort(dest))
+                    return X86Instruction.Sub.O_C_16;
+                else
+                    return X86Instruction.Sub.O_C;
+            }
 
             if ((dest is RegisterOperand) && (src is Operand))
             {
@@ -841,7 +847,7 @@ namespace Mosa.Platforms.x86
                 if (IsByte(src))
                     return X86Instruction.Cmp.R_M_8;
                 else
-                    if (IsChar(src))
+                    if (IsChar(src) || IsShort(src))
                         return X86Instruction.Cmp.R_M_16;
                     else
                         return X86Instruction.Cmp.R_M;

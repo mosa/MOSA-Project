@@ -955,8 +955,9 @@ namespace Mosa.Platforms.x86
 
 		void ICodeEmitter.Mov(Operand dest, Operand src)
 		{
-			if (dest is ConstantOperand)
-				throw new ArgumentException(@"Destination can't be constant.", @"dest");
+            if (dest is ConstantOperand)
+                return;//throw new ArgumentException(@"Destination can't be constant.", @"dest");
+
 
 			// Check that we're not dealing with floatingpoint values
 			if (dest.StackType != StackTypeCode.F && src.StackType != StackTypeCode.F) {

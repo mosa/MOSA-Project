@@ -1244,13 +1244,26 @@ namespace Mosa.Platforms.x86
             }
             else
             {*/
-                RegisterOperand ecx = new RegisterOperand(_architecture.NativeType, GeneralPurposeRegister.ECX);
+
+            if (ops[0].Type.Type == CilElementType.Char)
+            {
+                RegisterOperand ecx = new RegisterOperand(ops[1].Type, GeneralPurposeRegister.ECX);
                 Replace(ctx, new Instruction[] {
                     _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
                     _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
-                    _architecture.CreateInstruction(replacementType, opRes, ecx)
+                    _architecture.CreateInstruction(replacementType, opRes, ecx),
+                    _architecture.CreateInstruction(typeof(Instructions.LogicalAndInstruction), opRes, new ConstantOperand(new SigType(CilElementType.I4), 0xFFFF))
                 });
-            //}
+            }
+            else
+            {
+                RegisterOperand ecx = new RegisterOperand(ops[1].Type, GeneralPurposeRegister.ECX);
+                Replace(ctx, new Instruction[] {
+                    _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
+                    _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
+                    _architecture.CreateInstruction(replacementType, opRes, ecx),
+                });
+            }
         }
 
         /// <summary>

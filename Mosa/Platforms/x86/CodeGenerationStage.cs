@@ -183,6 +183,12 @@ namespace Mosa.Platforms.x86
         {
             Operand op0 = instruction.Operand0;
             Operand op1 = instruction.Operand1;
+
+            System.IO.StreamWriter w = new StreamWriter("sub_compare.txt", true);
+            w.WriteLine("{0} == {1}", op0.ToString(), op1.ToString());
+            w.Flush();
+            w.Close();
+
             bool constant = op0 is ConstantOperand;
 
             if (constant)
@@ -1436,11 +1442,6 @@ namespace Mosa.Platforms.x86
         {
             Operand op0 = instruction.Operand0;
             _emitter.Cmp(instruction.Operand1, instruction.Operand2);
-
-            System.IO.StreamWriter w = new StreamWriter("types.txt", true);
-            w.WriteLine("{0}\t\t{1}", instruction.Operand1.Type.Type.ToString(), instruction.Operand2.Type.Type.ToString());
-            w.Flush();
-            w.Close();
 
             if (X86.IsUnsigned(instruction.Operand1) || X86.IsUnsigned(instruction.Operand2))
                 _emitter.Setcc(op0, GetUnsignedConditionCode(instruction.ConditionCode));
