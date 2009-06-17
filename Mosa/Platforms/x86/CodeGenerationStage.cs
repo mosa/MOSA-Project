@@ -1441,12 +1441,19 @@ namespace Mosa.Platforms.x86
         void IR.IIRVisitor<int>.Visit(IR.IntegerCompareInstruction instruction, int arg)
         {
             Operand op0 = instruction.Operand0;
-            _emitter.Cmp(instruction.Operand1, instruction.Operand2);
 
             if (X86.IsUnsigned(instruction.Operand1) || X86.IsUnsigned(instruction.Operand2))
+            {
+                _emitter.Cmp(instruction.Operand1, instruction.Operand2);
                 _emitter.Setcc(op0, GetUnsignedConditionCode(instruction.ConditionCode));
+            }
             else
+            {
+                RegisterOperand ebx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
+                _emitter.Movsx(ebx, instruction.Operand2);
+                _emitter.Cmp(instruction.Operand1, ebx);
                 _emitter.Setcc(op0, instruction.ConditionCode);
+            }
 
             // Extend the result to 32-bits
             if (op0 is RegisterOperand)
