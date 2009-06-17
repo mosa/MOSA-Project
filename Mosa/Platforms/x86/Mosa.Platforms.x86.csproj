@@ -96,6 +96,7 @@
     <Compile Include="ConstantRemovalStage.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Instructions\SalInstruction.cs" />
     <Compile Include="OpCode.cs" />
     <Compile Include="X86.cs" />
     <Compile Include="DefaultCallingConvention.cs">
