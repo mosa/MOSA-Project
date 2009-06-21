@@ -146,5 +146,18 @@ namespace Mosa.HelloWorld
 			Row = y;
 			Skip(count);
 		}
+
+		/// <summary>
+		/// Writes the string.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		public static unsafe void Write(byte* str)
+		{
+			while (*str != 0)
+			{
+				Write(*str);
+				str++;
+			}
+		}
 	}
 }

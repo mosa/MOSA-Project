@@ -52,6 +52,8 @@ namespace Mosa.HelloWorld
 			Screen.Write('a');
 			Screen.Write('k');
 			Screen.Write('e');
+			Screen.Color = 0x0A;
+			Screen.Write('\'');
 			Screen.NextLine();
 
 			Screen.Color = 0x07;
