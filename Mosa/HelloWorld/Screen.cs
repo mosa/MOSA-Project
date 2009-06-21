@@ -145,10 +145,14 @@ namespace Mosa.HelloWorld
 			int y = Row;
 
 			for (int i = 0; i < count; i++) {
+				uint digit = val % digits;
 				Column = x;
 				Row = y;
 				Skip(count - 1 - i);
-				Write((char)('0' + (val % digits)));
+				if (digit < 10)
+					Write((char)('0' + digit));
+				else
+					Write((char)('A' + digit - 10));
 				val /= digits;
 			}
 
