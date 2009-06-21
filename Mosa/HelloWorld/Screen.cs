@@ -122,11 +122,21 @@ namespace Mosa.HelloWorld
 		/// <param name="val">The val.</param>
 		public static void Write(uint val)
 		{
+			Write(val, 10);
+		}
+
+		/// <summary>
+		/// Writes the specified value.
+		/// </summary>
+		/// <param name="val">The val.</param>
+		/// <param name="digits">The digits.</param>
+		public static void Write(uint val, byte digits)
+		{
 			int count = 0;
 			uint temp = val;
 
 			do {
-				temp /= 10;
+				temp /= digits;
 				count++;
 			}
 			while (temp != 0);
@@ -138,8 +148,8 @@ namespace Mosa.HelloWorld
 				Column = x;
 				Row = y;
 				Skip(count - 1 - i);
-				Write((char)('0' + (val % 10)));
-				val /= 10;
+				Write((char)('0' + (val % digits)));
+				val /= digits;
 			}
 
 			Column = x;
@@ -153,8 +163,7 @@ namespace Mosa.HelloWorld
 		/// <param name="str">The string.</param>
 		public static unsafe void Write(byte* str)
 		{
-			while (*str != 0)
-			{
+			while (*str != 0) {
 				Write(*str);
 				str++;
 			}
