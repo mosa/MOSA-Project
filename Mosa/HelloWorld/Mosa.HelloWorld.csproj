@@ -79,6 +79,7 @@
     <Compile Include="Boot.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Screen.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

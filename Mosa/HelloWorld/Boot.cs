@@ -12,144 +12,129 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Boot
 	{
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private static uint counter = 0;
+
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>
 		public static void Main()
 		{
-			unsafe {
+			Screen.Clear();
 
-				// Clear the screen
-				for (byte* i = (byte*)0xB8000; i < (byte*)0xB8FA0; i = i + 2)
-					WriteChar(' ', 0x0A, i);
+			Screen.Color = 0x0A;
+			Screen.Write('M');
+			Screen.Write('O');
+			Screen.Write('S');
+			Screen.Write('A');
+			Screen.Write(' ');
+			Screen.Write('O');
+			Screen.Write('S');
+			Screen.Write(' ');
+			Screen.Write('V');
+			Screen.Write('e');
+			Screen.Write('r');
+			Screen.Write('s');
+			Screen.Write('i');
+			Screen.Write('o');
+			Screen.Write('n');
+			Screen.Write(' ');
+			Screen.Write('0');
+			Screen.Write('.');
+			Screen.Write('1');
+			Screen.Write(' ');
+			Screen.Write('\'');
+			Screen.Color = 0x0C;
+			Screen.Write('W');
+			Screen.Write('a');
+			Screen.Write('k');
+			Screen.Write('e');
+			Screen.NextLine();
 
-				byte* index = (byte*)(0xB8000);
-				WriteChar('M', 0x0A, index); index = index + 2;
-				WriteChar('O', 0x0A, index); index = index + 2;
-				WriteChar('S', 0x0A, index); index = index + 2;
-				WriteChar('A', 0x0A, index); index = index + 2;
-				WriteChar(' ', 0x0A, index); index = index + 2;
-				WriteChar('O', 0x0A, index); index = index + 2;
-				WriteChar('S', 0x0A, index); index = index + 2;
-				WriteChar(' ', 0x0A, index); index = index + 2;
-				WriteChar('V', 0x0A, index); index = index + 2;
-				WriteChar('e', 0x0A, index); index = index + 2;
-				WriteChar('r', 0x0A, index); index = index + 2;
-				WriteChar('s', 0x0A, index); index = index + 2;
-				WriteChar('i', 0x0A, index); index = index + 2;
-				WriteChar('o', 0x0A, index); index = index + 2;
-				WriteChar('n', 0x0A, index); index = index + 2;
-				WriteChar(' ', 0x0A, index); index = index + 2;
-				WriteChar('0', 0x0A, index); index = index + 2;
-				WriteChar('.', 0x0A, index); index = index + 2;
-				WriteChar('1', 0x0A, index); index = index + 2;
-				WriteChar(' ', 0x0A, index); index = index + 2;
-				WriteChar('\'', 0x0A, index); index = index + 2;
-				WriteChar('W', 0x0C, index); index = index + 2;
-				WriteChar('a', 0x0C, index); index = index + 2;
-				WriteChar('k', 0x0C, index); index = index + 2;
-				WriteChar('e', 0x0C, index); index = index + 2;
-				WriteChar('\'', 0x0A, index); index = index + 2;
-				WriteChar(' ', 0x0A, index);
+			Screen.Color = 0x07;
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.Write('-');
+			Screen.NextLine();
 
-				index = (byte*)(0xB80A0);
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index); index = index + 2;
-				WriteChar('-', 0x07, index);
+			Screen.Color = 0x0E;
+			Screen.Write('C');
+			Screen.Write('o');
+			Screen.Write('p');
+			Screen.Write('y');
+			Screen.Write('r');
+			Screen.Write('i');
+			Screen.Write('g');
+			Screen.Write('h');
+			Screen.Write('t');
+			Screen.Write(' ');
+			Screen.Write('2');
+			Screen.Write('0');
+			Screen.Write('0');
+			Screen.Write('8');
+			Screen.Write('-');
+			Screen.Write('2');
+			Screen.Write('0');
+			Screen.Write('0');
+			Screen.Write('9');
+			Screen.Write('.');
 
-				index = (byte*)(0xB8140);
-				WriteChar('C', 0x0E, index); index = index + 2;
-				WriteChar('o', 0x0E, index); index = index + 2;
-				WriteChar('p', 0x0E, index); index = index + 2;
-				WriteChar('y', 0x0E, index); index = index + 2;
-				WriteChar('r', 0x0E, index); index = index + 2;
-				WriteChar('i', 0x0E, index); index = index + 2;
-				WriteChar('g', 0x0E, index); index = index + 2;
-				WriteChar('h', 0x0E, index); index = index + 2;
-				WriteChar('t', 0x0E, index); index = index + 2;
-				WriteChar(' ', 0x0E, index); index = index + 2;
-				WriteChar('2', 0x0A, index); index = index + 2;
-				WriteChar('0', 0x0A, index); index = index + 2;
-				WriteChar('0', 0x0A, index); index = index + 2;
-				WriteChar('8', 0x0A, index); index = index + 2;
-				WriteChar('-', 0x0A, index); index = index + 2;
-				WriteChar('2', 0x0A, index); index = index + 2;
-				WriteChar('0', 0x0A, index); index = index + 2;
-				WriteChar('0', 0x0A, index); index = index + 2;
-				WriteChar('9', 0x0A, index); index = index + 2;
-				WriteChar('.', 0x0A, index);
-
-				uint cnt = 0;
-
-				index = (byte*)(0xB8036);
-				while (true) {
-					WriteChar('-', 0x0A, index);
-					WriteChar('\\', 0x0B, index);
-					WriteChar('|', 0x0C, index);
-					WriteChar('/', 0x09, index);
-					Write(cnt++, 0x09, (byte*)(0xB8140 + 0x140));
-				}
+			while (true) {
+				Screen.Row = 0;
+				Screen.Column = 27;
+				Screen.Color = 0x0A;
+				Screen.Write('-');
+				Screen.Column = 27;
+				Screen.Color = 0x0B;
+				Screen.Write('\\');
+				Screen.Column = 27;
+				Screen.Color = 0x0C;
+				Screen.Write('|');
+				Screen.Column = 27;
+				Screen.Color = 0x09;
+				Screen.Write('/');
+				DisplayCounter();
 			}
 		}
 
 		/// <summary>
-		/// Writes the character.
+		/// Displays the counter.
 		/// </summary>
-		/// <param name="chr">The character.</param>
-		/// <param name="color">The color.</param>
-		/// <param name="address">The address.</param>
-		private unsafe static void WriteChar(char chr, byte color, byte* address)
+		private static void DisplayCounter()
 		{
-			*address = (byte)chr;
-			*(address + 1) = color;
+			Screen.Row = 5;
+			Screen.Column = 0;
+			Screen.Color = 0x09;
+			Screen.Write(counter++);
 		}
 
-		/// <summary>
-		/// Writes the specified value.
-		/// </summary>
-		/// <param name="val">The val.</param>
-		/// <param name="color">The color.</param>
-		/// <param name="address">The address.</param>
-		private unsafe static void Write(uint val, byte color, byte* address)
-		{
-			int count = 0;
-			uint temp = val;
-
-			do {
-				temp /= 10;
-				count++;
-			}
-			while (temp != 0);
-
-			for (int i = 0; i < count; i++) {
-				WriteChar((char)('0' + (val % 10)), color, address + (2 * (count - 1 - i)));
-				val /= 10;
-			}
-		}
 	}
 }

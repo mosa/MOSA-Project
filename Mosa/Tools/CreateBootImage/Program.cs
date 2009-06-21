@@ -43,6 +43,7 @@ namespace Mosa.Tools.CreateBootImage
 			ImageFormat imageFormat = ImageFormat.VHD;
 			bool mbrOption = true;
 			bool patchSyslinuxOption = false;
+			bool floppyMedia = false;
 			uint blockCount = 1024 * 1024 / 512;
 			FileSystem fileSystem = FileSystem.FAT12;
 			List<IncludeFile> includeFiles = new List<IncludeFile>();
@@ -86,6 +87,7 @@ namespace Mosa.Tools.CreateBootImage
 							else includeFiles.Add(new IncludeFile(parts[1])); break;
 						case "-blocks": blockCount = Convert.ToUInt32(parts[1]); break;
 						case "-volume": volumeLabel = parts[1]; break;
+						case "-floppy": floppyMedia = true; break;
 						default: break;
 					}
 				}
@@ -163,7 +165,7 @@ namespace Mosa.Tools.CreateBootImage
 					default: break;
 				}
 
-				fatSettings.FloppyMedia = false;
+				fatSettings.FloppyMedia = floppyMedia;
 				fatSettings.VolumeLabel = volumeLabel;
 				fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };
 				fatSettings.SectorsPerTrack = diskGeometry.SectorsPerTrack;
@@ -171,7 +173,6 @@ namespace Mosa.Tools.CreateBootImage
 				fatSettings.HiddenSectors = diskGeometry.SectorsPerTrack;
 				if (!string.IsNullOrEmpty(fatcodeFilename))
 					fatSettings.OSBootCode = ReadFile(fatcodeFilename);
-				fatSettings.FloppyMedia = false;
 
 				// Create FAT file system
 				FatFileSystem fat = new FatFileSystem(partitionDevice);
