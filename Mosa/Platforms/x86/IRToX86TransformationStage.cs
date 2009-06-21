@@ -697,7 +697,7 @@ namespace Mosa.Platforms.x86
                 // int 3
                 //_architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
                 // Uncomment this line to enable breakpoints within Bochs
-                //_architecture.CreateInstruction(typeof(Instructions.Intrinsics.BochsDebug), null),
+                _architecture.CreateInstruction(typeof(Instructions.Intrinsics.BochsDebug), null),
                 // push ebp
                 _architecture.CreateInstruction(typeof(IR.PushInstruction), ebp),
                 // mov ebp, esp
@@ -1303,26 +1303,13 @@ namespace Mosa.Platforms.x86
             else if (ops[0] is MemoryOperand && ops[1] is MemoryOperand)
             {
                 // Load op1 into EAX and then do the comparison...
-                if (IsUnsigned(ops[0].Type.Type))
-                {
-                    RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
-                    Instruction[] results = new Instruction[] {
-                                new IR.ZeroExtendedMoveInstruction(eax, ops[0]),
-                                instruction,
+                RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+                Instruction[] results = new Instruction[] {
+                                new Instructions.MoveInstruction(eax, ops[0]),
+                                instruction
                             };
-                    instruction.SetOperand(0, eax);
-                    Replace(ctx, results);
-                }
-                else
-                {
-                    RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-                    Instruction[] results = new Instruction[] {
-                                new IR.SignExtendedMoveInstruction(eax, ops[0]),
-                                instruction,
-                            };
-                    instruction.SetOperand(0, eax);
-                    Replace(ctx, results);
-                }
+                instruction.SetOperand(0, eax);
+                Replace(ctx, results);
             }
 
             ThreeTwoAddressConversion(ctx, instruction, null);

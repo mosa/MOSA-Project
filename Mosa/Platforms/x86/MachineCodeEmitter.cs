@@ -1020,7 +1020,7 @@ namespace Mosa.Platforms.x86
 					break;
 
 				default:
-					Emit(dest, src, X86.Movsx16(dest, src));
+					Emit(dest, src, X86.Move(dest, src));
 
 					break;
 			}
