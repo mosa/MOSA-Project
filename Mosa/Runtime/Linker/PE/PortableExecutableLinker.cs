@@ -49,6 +49,11 @@ namespace Mosa.Runtime.Linker.PE
         /// </summary>
         private IMAGE_NT_HEADERS ntHeaders;
 
+		///// <summary>
+		///// Holds the CLI header.
+		///// </summary>
+		//private CLI_HEADER cilHeader;
+
         /// <summary>
         /// Holds the file alignment used for this PE file.
         /// </summary>
@@ -456,8 +461,16 @@ namespace Mosa.Runtime.Linker.PE
             this.ntHeaders.OptionalHeader.DataDirectory = new IMAGE_DATA_DIRECTORY[IMAGE_OPTIONAL_HEADER.IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
 
             // Populate the CIL data directory (FIXME)
+			// TODO: Point to CLI Header
             this.ntHeaders.OptionalHeader.DataDirectory[14].VirtualAddress = 0;
             this.ntHeaders.OptionalHeader.DataDirectory[14].Size = 0;
+
+			//CLI_HEADER cilHeader;
+			//cilHeader.Cb = 0x48;
+			//cilHeader.MajorRuntimeVersion = 2;
+			//cilHeader.MinorRuntimeVersion = 0;
+			//cilHeader.Flags = RuntimeImageFlags.ILOnly;
+			//cilHeader.EntryPointToken = 0x06000001; // FIXME: ??
 
             this.ntHeaders.Write(writer);
 

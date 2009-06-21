@@ -298,11 +298,13 @@ namespace Mosa.Tools.Compiler
 				// Create the compiler
 				using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, assemblyModule)) {
 					aot.Pipeline.AddRange(new IAssemblyCompilerStage[] {
+                        bootFormatStage,
                         new TypeLayoutStage(),
                         new MethodCompilerBuilderStage(),
-                        bootFormatStage,
                         new MethodCompilerRunnerStage(),
                         new TypeInitializers.TypeInitializerSchedulerStage(),
+						new CilHeaderBuilderStage(),
+						new MetadataBuilderStage(),
                         new ObjectFileLayoutStage(),
                         linkerStage,
                         mapFileWrapper

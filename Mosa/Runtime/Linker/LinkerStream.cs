@@ -437,7 +437,7 @@ namespace Mosa.Runtime.Linker
                 throw new ObjectDisposedException(@"LinkerStream");
 
             // Check that we're not writing past the end of our stream
-            if (0 != this.length && this.Position + 1 < this.Length)
+            if (0 != this.length && this.Position + 1 > this.Length)
                 throw new IOException(@"Can't fit value in the remaining space for the current symbol.");
 
             this.stream.WriteByte(value);

@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -140,6 +140,7 @@
     <Compile Include="MockMemoryPageManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CilHeaderBuilderStage.cs" />
     <Compile Include="Options.cs">
       <SubType>Code</SubType>
     </Compile>
