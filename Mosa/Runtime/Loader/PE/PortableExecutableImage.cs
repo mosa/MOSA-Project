@@ -49,12 +49,12 @@ namespace Mosa.Runtime.Loader.PE
         private BinaryReader _assemblyReader;
 
         /// <summary>
-        /// The DOS header of the SharpOS.Runtime.Loader.PE image.
+        /// The DOS header of the Mosa.Runtime.Loader.PE image.
         /// </summary>
         private IMAGE_DOS_HEADER _dosHeader;
 
         /// <summary>
-        /// The SharpOS.Runtime.Loader.PE file header.
+		/// The Mosa.Runtime.Loader.PE file header.
         /// </summary>
         private IMAGE_NT_HEADERS _ntHeader;
 
@@ -64,7 +64,7 @@ namespace Mosa.Runtime.Loader.PE
         private CLI_HEADER _cliHeader;
 
         /// <summary>
-        /// Sections in the SharpOS.Runtime.Loader.PE file.
+		/// Sections in the Mosa.Runtime.Loader.PE file.
         /// </summary>
         private IMAGE_SECTION_HEADER[] _sections;
 
