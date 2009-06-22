@@ -15,9 +15,11 @@ using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
+using Mosa.Runtime.Linker.PE;
 
 namespace Mosa.Tools.Compiler
 {
+	
 
 	/// <summary>
 	///  Writes the cil header into the generated binary.
@@ -29,6 +31,8 @@ namespace Mosa.Tools.Compiler
 		#endregion // Constants
 
 		#region Data members
+
+		private CLI_HEADER _cliHeader;
 
 		#endregion // Data members
 
@@ -61,6 +65,12 @@ namespace Mosa.Tools.Compiler
 			IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
 			Debug.Assert(linker != null, @"No linker??");
 
+			_cliHeader.Cb = 0x48;
+			_cliHeader.MajorRuntimeVersion = 2;
+			_cliHeader.MinorRuntimeVersion = 0;
+			_cliHeader.Flags = RuntimeImageFlags.ILOnly;
+			_cliHeader.EntryPointToken = 0x06000001; // FIXME: ??
+
 			WriteCilHeader(compiler, linker);
 		}
 
@@ -75,14 +85,9 @@ namespace Mosa.Tools.Compiler
 		/// <param name="linker">The linker.</param>
 		private void WriteCilHeader(AssemblyCompiler compiler, IAssemblyLinker linker)
 		{
-			int length = 0x250 - 0x208;
-			using (Stream stream = linker.Allocate(CILHeaderSymbolName, SectionKind.Text, length, 4))
+			using (Stream stream = linker.Allocate(CILHeaderSymbolName, SectionKind.Text, CLI_HEADER.Length, 4))
 			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII)) {
-				// TODO: Output CIL Header
-
-				// HACK
-				for (int i = 0; i < length; i++)
-					bw.Write((byte)0);
+				_cliHeader.Write(bw);
 			}
 		}
 

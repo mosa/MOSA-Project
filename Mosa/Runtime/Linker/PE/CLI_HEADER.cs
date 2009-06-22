@@ -21,6 +21,11 @@ namespace Mosa.Runtime.Linker.PE
     {
 		#region Constants
 
+		/// <summary>
+		/// Size of the CLI Header
+		/// </summary>
+    	public static int Length = 0x250 - 0x208; 
+
 		#endregion // Constants
 
 		#region Data members
@@ -97,18 +102,38 @@ namespace Mosa.Runtime.Linker.PE
         /// <param name="reader">The reader.</param>
 		public void Read(BinaryReader reader)
 		{
-			this.Cb = reader.ReadUInt32();
-			this.MajorRuntimeVersion = reader.ReadUInt16();
-			this.MinorRuntimeVersion = reader.ReadUInt16();
-			this.Metadata.Read(reader);
-			this.Flags = (RuntimeImageFlags)reader.ReadUInt32();
-			this.EntryPointToken = reader.ReadUInt32();
-			this.Resources.Read(reader);
-			this.StrongNameSignature.Read(reader);
-			this.CodeManagerTable.Read(reader);
-			this.VTableFixups.Read(reader);
-			this.ExportAddressTableJumps.Read(reader);
-			this.ManagedNativeHeader.Read(reader);
+			Cb = reader.ReadUInt32();
+			MajorRuntimeVersion = reader.ReadUInt16();
+			MinorRuntimeVersion = reader.ReadUInt16();
+			Metadata.Read(reader);
+			Flags = (RuntimeImageFlags)reader.ReadUInt32();
+			EntryPointToken = reader.ReadUInt32();
+			Resources.Read(reader);
+			StrongNameSignature.Read(reader);
+			CodeManagerTable.Read(reader);
+			VTableFixups.Read(reader);
+			ExportAddressTableJumps.Read(reader);
+			ManagedNativeHeader.Read(reader);
+		}
+
+		/// <summary>
+		/// Writes the header to the given binary writer.
+		/// </summary>
+		/// <param name="writer">The binary writer to write to.</param>
+		public void Write(BinaryWriter writer)
+		{
+			writer.Write(Cb);
+			writer.Write(MajorRuntimeVersion);
+			writer.Write(MinorRuntimeVersion);
+			Metadata.Write(writer);
+			writer.Write((uint)Flags);
+			writer.Write(EntryPointToken);
+			Resources.Write(writer);
+			StrongNameSignature.Write(writer);
+			CodeManagerTable.Write(writer);
+			VTableFixups.Write(writer);
+			ExportAddressTableJumps.Write(writer);
+			ManagedNativeHeader.Write(writer);
 		}
 
 		#endregion // Methods

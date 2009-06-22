@@ -208,45 +208,45 @@ namespace Mosa.Runtime.Linker.PE
         /// <param name="reader">The reader.</param>
 		public void Read(BinaryReader reader)
 		{
-			this.Magic = reader.ReadUInt16();
+			Magic = reader.ReadUInt16();
 			if (IMAGE_OPTIONAL_HEADER_MAGIC != Magic)
 				throw new BadImageFormatException();
 
-            this.MajorLinkerVersion = reader.ReadByte();
-            this.MinorLinkerVersion = reader.ReadByte();
-            this.SizeOfCode = reader.ReadUInt32();
-            this.SizeOfInitializedData = reader.ReadUInt32();
-            this.SizeOfUninitializedData = reader.ReadUInt32();
-            this.AddressOfEntryPoint = reader.ReadUInt32();
-            this.BaseOfCode = reader.ReadUInt32();
-            this.BaseOfData = reader.ReadUInt32();
+            MajorLinkerVersion = reader.ReadByte();
+            MinorLinkerVersion = reader.ReadByte();
+            SizeOfCode = reader.ReadUInt32();
+            SizeOfInitializedData = reader.ReadUInt32();
+            SizeOfUninitializedData = reader.ReadUInt32();
+            AddressOfEntryPoint = reader.ReadUInt32();
+            BaseOfCode = reader.ReadUInt32();
+            BaseOfData = reader.ReadUInt32();
 
-            this.ImageBase = reader.ReadUInt32();
-            this.SectionAlignment = reader.ReadUInt32();
-            this.FileAlignment = reader.ReadUInt32();
-            this.MajorOperatingSystemVersion = reader.ReadUInt16();
-            this.MinorOperatingSystemVersion = reader.ReadUInt16();
-            this.MajorImageVersion = reader.ReadUInt16();
-            this.MinorImageVersion = reader.ReadUInt16();
-            this.MajorSubsystemVersion = reader.ReadUInt16();
-            this.MinorSubsystemVersion = reader.ReadUInt16();
-            this.Win32VersionValue = reader.ReadUInt32();
-            this.SizeOfImage = reader.ReadUInt32();
-            this.SizeOfHeaders = reader.ReadUInt32();
-            this.CheckSum = reader.ReadUInt32();
-            this.Subsystem = reader.ReadUInt16();
-            this.DllCharacteristics = reader.ReadUInt16();
-            this.SizeOfStackReserve = reader.ReadUInt32();
-            this.SizeOfStackCommit = reader.ReadUInt32();
-            this.SizeOfHeapReserve = reader.ReadUInt32();
-            this.SizeOfHeapCommit = reader.ReadUInt32();
-            this.LoaderFlags = reader.ReadUInt32();
-            this.NumberOfRvaAndSizes = reader.ReadUInt32();
+            ImageBase = reader.ReadUInt32();
+            SectionAlignment = reader.ReadUInt32();
+            FileAlignment = reader.ReadUInt32();
+            MajorOperatingSystemVersion = reader.ReadUInt16();
+            MinorOperatingSystemVersion = reader.ReadUInt16();
+            MajorImageVersion = reader.ReadUInt16();
+            MinorImageVersion = reader.ReadUInt16();
+            MajorSubsystemVersion = reader.ReadUInt16();
+            MinorSubsystemVersion = reader.ReadUInt16();
+            Win32VersionValue = reader.ReadUInt32();
+            SizeOfImage = reader.ReadUInt32();
+            SizeOfHeaders = reader.ReadUInt32();
+            CheckSum = reader.ReadUInt32();
+            Subsystem = reader.ReadUInt16();
+            DllCharacteristics = reader.ReadUInt16();
+            SizeOfStackReserve = reader.ReadUInt32();
+            SizeOfStackCommit = reader.ReadUInt32();
+            SizeOfHeapReserve = reader.ReadUInt32();
+            SizeOfHeapCommit = reader.ReadUInt32();
+            LoaderFlags = reader.ReadUInt32();
+            NumberOfRvaAndSizes = reader.ReadUInt32();
 
-            this.DataDirectory = new IMAGE_DATA_DIRECTORY[NumberOfRvaAndSizes];
-			for (int i = 0; i < this.NumberOfRvaAndSizes; i++)
+            DataDirectory = new IMAGE_DATA_DIRECTORY[NumberOfRvaAndSizes];
+			for (int i = 0; i < NumberOfRvaAndSizes; i++)
 			{
-                this.DataDirectory[i].Read(reader);
+                DataDirectory[i].Read(reader);
 			}
 		}
 
@@ -259,40 +259,39 @@ namespace Mosa.Runtime.Linker.PE
             if (writer == null)
                 throw new ArgumentNullException(@"writer");
 
-            writer.Write(this.Magic);
+            writer.Write(Magic);
+            writer.Write(MajorLinkerVersion);
+            writer.Write(MinorLinkerVersion);
+            writer.Write(SizeOfCode);
+            writer.Write(SizeOfInitializedData);
+            writer.Write(SizeOfUninitializedData);
+            writer.Write(AddressOfEntryPoint);
+            writer.Write(BaseOfCode);
+            writer.Write(BaseOfData);
 
-            writer.Write(this.MajorLinkerVersion);
-            writer.Write(this.MinorLinkerVersion);
-            writer.Write(this.SizeOfCode);
-            writer.Write(this.SizeOfInitializedData);
-            writer.Write(this.SizeOfUninitializedData);
-            writer.Write(this.AddressOfEntryPoint);
-            writer.Write(this.BaseOfCode);
-            writer.Write(this.BaseOfData);
+            writer.Write(ImageBase);
+            writer.Write(SectionAlignment);
+            writer.Write(FileAlignment);
+            writer.Write(MajorOperatingSystemVersion);
+            writer.Write(MinorOperatingSystemVersion);
+            writer.Write(MajorImageVersion);
+            writer.Write(MinorImageVersion);
+            writer.Write(MajorSubsystemVersion);
+            writer.Write(MinorSubsystemVersion);
+            writer.Write(Win32VersionValue);
+            writer.Write(SizeOfImage);
+            writer.Write(SizeOfHeaders);
+            writer.Write(CheckSum);
+            writer.Write(Subsystem);
+            writer.Write(DllCharacteristics);
+            writer.Write(SizeOfStackReserve);
+            writer.Write(SizeOfStackCommit);
+            writer.Write(SizeOfHeapReserve);
+            writer.Write(SizeOfHeapCommit);
+            writer.Write(LoaderFlags);
+            writer.Write(NumberOfRvaAndSizes);
 
-            writer.Write(this.ImageBase);
-            writer.Write(this.SectionAlignment);
-            writer.Write(this.FileAlignment);
-            writer.Write(this.MajorOperatingSystemVersion);
-            writer.Write(this.MinorOperatingSystemVersion);
-            writer.Write(this.MajorImageVersion);
-            writer.Write(this.MinorImageVersion);
-            writer.Write(this.MajorSubsystemVersion);
-            writer.Write(this.MinorSubsystemVersion);
-            writer.Write(this.Win32VersionValue);
-            writer.Write(this.SizeOfImage);
-            writer.Write(this.SizeOfHeaders);
-            writer.Write(this.CheckSum);
-            writer.Write(this.Subsystem);
-            writer.Write(this.DllCharacteristics);
-            writer.Write(this.SizeOfStackReserve);
-            writer.Write(this.SizeOfStackCommit);
-            writer.Write(this.SizeOfHeapReserve);
-            writer.Write(this.SizeOfHeapCommit);
-            writer.Write(this.LoaderFlags);
-            writer.Write(this.NumberOfRvaAndSizes);
-
-            foreach (IMAGE_DATA_DIRECTORY dd in this.DataDirectory)
+            foreach (IMAGE_DATA_DIRECTORY dd in DataDirectory)
                 dd.Write(writer);
         }
 

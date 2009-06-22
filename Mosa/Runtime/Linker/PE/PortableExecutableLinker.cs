@@ -465,13 +465,6 @@ namespace Mosa.Runtime.Linker.PE
             this.ntHeaders.OptionalHeader.DataDirectory[14].VirtualAddress = 0;
             this.ntHeaders.OptionalHeader.DataDirectory[14].Size = 0;
 
-			//CLI_HEADER cilHeader;
-			//cilHeader.Cb = 0x48;
-			//cilHeader.MajorRuntimeVersion = 2;
-			//cilHeader.MinorRuntimeVersion = 0;
-			//cilHeader.Flags = RuntimeImageFlags.ILOnly;
-			//cilHeader.EntryPointToken = 0x06000001; // FIXME: ??
-
             this.ntHeaders.Write(writer);
 
             // Write the section headers

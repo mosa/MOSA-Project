@@ -198,39 +198,39 @@ namespace Mosa.Runtime.Linker.PE
 		/// </summary>
 		public void Read(BinaryReader reader)
 		{
-            this.e_magic = reader.ReadUInt16();
-            this.e_cblp = reader.ReadUInt16();
-            this.e_cp = reader.ReadUInt16();
-            this.e_crlc = reader.ReadUInt16();
-            this.e_cparhdr = reader.ReadUInt16();
-            this.e_minalloc = reader.ReadUInt16();
-            this.e_maxalloc = reader.ReadUInt16();
-            this.e_ss = reader.ReadUInt16();
-            this.e_sp = reader.ReadUInt16();
-            this.e_csum = reader.ReadUInt16();
-            this.e_ip = reader.ReadUInt16();
-            this.e_cs = reader.ReadUInt16();
-            this.e_lfarlc = reader.ReadUInt16();
-            this.e_ovno = reader.ReadUInt16();
-            this.e_res00 = reader.ReadUInt16();
-            this.e_res01 = reader.ReadUInt16();
-            this.e_res02 = reader.ReadUInt16();
-            this.e_res03 = reader.ReadUInt16();
-            this.e_oemid = reader.ReadUInt16();
-            this.e_oeminfo = reader.ReadUInt16();
-            this.e_res20 = reader.ReadUInt16();
-            this.e_res21 = reader.ReadUInt16();
-            this.e_res22 = reader.ReadUInt16();
-            this.e_res23 = reader.ReadUInt16();
-            this.e_res24 = reader.ReadUInt16();
-            this.e_res25 = reader.ReadUInt16();
-            this.e_res26 = reader.ReadUInt16();
-            this.e_res27 = reader.ReadUInt16();
-            this.e_res28 = reader.ReadUInt16();
-            this.e_res29 = reader.ReadUInt16();
-            this.e_lfanew = reader.ReadUInt32();
+            e_magic = reader.ReadUInt16();
+            e_cblp = reader.ReadUInt16();
+            e_cp = reader.ReadUInt16();
+            e_crlc = reader.ReadUInt16();
+            e_cparhdr = reader.ReadUInt16();
+            e_minalloc = reader.ReadUInt16();
+            e_maxalloc = reader.ReadUInt16();
+            e_ss = reader.ReadUInt16();
+            e_sp = reader.ReadUInt16();
+            e_csum = reader.ReadUInt16();
+            e_ip = reader.ReadUInt16();
+            e_cs = reader.ReadUInt16();
+            e_lfarlc = reader.ReadUInt16();
+            e_ovno = reader.ReadUInt16();
+            e_res00 = reader.ReadUInt16();
+            e_res01 = reader.ReadUInt16();
+            e_res02 = reader.ReadUInt16();
+            e_res03 = reader.ReadUInt16();
+            e_oemid = reader.ReadUInt16();
+            e_oeminfo = reader.ReadUInt16();
+            e_res20 = reader.ReadUInt16();
+            e_res21 = reader.ReadUInt16();
+            e_res22 = reader.ReadUInt16();
+            e_res23 = reader.ReadUInt16();
+            e_res24 = reader.ReadUInt16();
+            e_res25 = reader.ReadUInt16();
+            e_res26 = reader.ReadUInt16();
+            e_res27 = reader.ReadUInt16();
+            e_res28 = reader.ReadUInt16();
+            e_res29 = reader.ReadUInt16();
+            e_lfanew = reader.ReadUInt32();
 
-            if (DOS_HEADER_MAGIC != this.e_magic)
+            if (DOS_HEADER_MAGIC != e_magic)
 				throw new BadImageFormatException();
 		}
 
@@ -240,37 +240,37 @@ namespace Mosa.Runtime.Linker.PE
         /// <param name="writer">The binary writer to write to.</param>
         public void Write(BinaryWriter writer)
         {
-            writer.Write(this.e_magic);
-            writer.Write(this.e_cblp);
-            writer.Write(this.e_cp);
-            writer.Write(this.e_crlc);
-            writer.Write(this.e_cparhdr);
-            writer.Write(this.e_minalloc);
-            writer.Write(this.e_maxalloc);
-            writer.Write(this.e_ss);
-            writer.Write(this.e_sp);
-            writer.Write(this.e_csum);
-            writer.Write(this.e_ip);
-            writer.Write(this.e_cs);
-            writer.Write(this.e_lfarlc);
-            writer.Write(this.e_ovno);
-            writer.Write(this.e_res00);
-            writer.Write(this.e_res01);
-            writer.Write(this.e_res02);
-            writer.Write(this.e_res03);
-            writer.Write(this.e_oemid);
-            writer.Write(this.e_oeminfo);
-            writer.Write(this.e_res20);
-            writer.Write(this.e_res21);
-            writer.Write(this.e_res22);
-            writer.Write(this.e_res23);
-            writer.Write(this.e_res24);
-            writer.Write(this.e_res25);
-            writer.Write(this.e_res26);
-            writer.Write(this.e_res27);
-            writer.Write(this.e_res28);
-            writer.Write(this.e_res29);
-            writer.Write(this.e_lfanew);
+            writer.Write(e_magic);
+            writer.Write(e_cblp);
+            writer.Write(e_cp);
+            writer.Write(e_crlc);
+            writer.Write(e_cparhdr);
+            writer.Write(e_minalloc);
+            writer.Write(e_maxalloc);
+            writer.Write(e_ss);
+            writer.Write(e_sp);
+            writer.Write(e_csum);
+            writer.Write(e_ip);
+            writer.Write(e_cs);
+            writer.Write(e_lfarlc);
+            writer.Write(e_ovno);
+            writer.Write(e_res00);
+            writer.Write(e_res01);
+            writer.Write(e_res02);
+            writer.Write(e_res03);
+            writer.Write(e_oemid);
+            writer.Write(e_oeminfo);
+            writer.Write(e_res20);
+            writer.Write(e_res21);
+            writer.Write(e_res22);
+            writer.Write(e_res23);
+            writer.Write(e_res24);
+            writer.Write(e_res25);
+            writer.Write(e_res26);
+            writer.Write(e_res27);
+            writer.Write(e_res28);
+            writer.Write(e_res29);
+            writer.Write(e_lfanew);
         }
 
 		#endregion // Methods
