@@ -104,10 +104,10 @@ namespace Mosa.Runtime.Linker
         /// <param name="linker">The assembly linker.</param>
         private void EmitSymbols(IAssemblyLinker linker)
         {
-            this.writer.WriteLine("Offset           Virtual          Symbol");
+			this.writer.WriteLine("Offset           Virtual          Length           Symbol");
             foreach (LinkerSymbol symbol in linker.Symbols)
             {
-                this.writer.WriteLine("{0:x16} {1:x16} {2}", symbol.Offset, symbol.VirtualAddress.ToInt64(), symbol.Name);
+				this.writer.WriteLine("{0:x16} {1:x16} {2:x16} {3}", symbol.Offset, symbol.VirtualAddress.ToInt64(), symbol.Length, symbol.Name);
             }
 
             LinkerSymbol entryPoint = linker.EntryPoint;
