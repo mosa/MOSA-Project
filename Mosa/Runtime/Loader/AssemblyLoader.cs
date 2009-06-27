@@ -85,19 +85,15 @@ namespace Mosa.Runtime.Loader
         {
             IMetadataModule result = null;
 
-            if (false == File.Exists(file))
+            if (!File.Exists(file))
             {
-                if (false == Path.IsPathRooted(file))
-                {
+                if (!Path.IsPathRooted(file))
                     file = String.Format(@"{0}{1}{2}", Environment.CurrentDirectory, Path.DirectorySeparatorChar, file);
-                }
                 else
-                {
                     return null;
-                }
             }
 
-            if (true == File.Exists(file))
+            if (File.Exists(file))
             {
                 result = PortableExecutableImage.Load(_loadedImages.Count, new FileStream(file, FileMode.Open, FileAccess.Read));
                 if (null != result)

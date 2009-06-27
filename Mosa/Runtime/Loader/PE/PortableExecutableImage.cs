@@ -73,6 +73,11 @@ namespace Mosa.Runtime.Loader.PE
         /// </summary>
         private IMetadataProvider _metadataRoot;
 
+		/// <summary>
+		/// Metadata of the assembly
+		/// </summary>
+		private byte[] _metadata;
+
         #endregion // Data members
 
         #region Construction
@@ -100,9 +105,7 @@ namespace Mosa.Runtime.Loader.PE
 
             _sections = new IMAGE_SECTION_HEADER[_ntHeader.FileHeader.NumberOfSections];
             for (int i = 0; i < _ntHeader.FileHeader.NumberOfSections; i++)
-            {
                 _sections[i].Read(_assemblyReader);
-            }
 
             long position = ResolveVirtualAddress(_ntHeader.OptionalHeader.DataDirectory[CLI_HEADER_DATA_DIRECTORY].VirtualAddress);
             _assemblyReader.BaseStream.Seek(position, SeekOrigin.Begin);
@@ -111,10 +114,10 @@ namespace Mosa.Runtime.Loader.PE
             // Load the provider...
             position = ResolveVirtualAddress(_cliHeader.Metadata.VirtualAddress);
             _assemblyReader.BaseStream.Position = position;
-            byte[] metadata = _assemblyReader.ReadBytes(_cliHeader.Metadata.Size);
+            _metadata = _assemblyReader.ReadBytes(_cliHeader.Metadata.Size);
 
             MetadataRoot mdr = new MetadataRoot(this);
-            mdr.Initialize(metadata);
+            mdr.Initialize(_metadata);
             _metadataRoot = mdr;
         }
 
@@ -188,6 +191,18 @@ namespace Mosa.Runtime.Loader.PE
                 return ModuleType.Executable;
             }
         }
+
+		/// <summary>
+		/// Provides access to the metadata binary array.
+		/// </summary>
+		/// <value></value>
+		public byte[] MetadataBinary
+		{
+			get
+			{
+				return _metadata;
+			}
+		}
 
         #endregion // Properties
 

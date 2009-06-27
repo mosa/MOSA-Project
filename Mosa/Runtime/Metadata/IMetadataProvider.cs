@@ -31,6 +31,11 @@ namespace Mosa.Runtime.Metadata
         /// </summary>
         IMetadataModule Assembly { get; }
 
+		/// <summary>
+		/// Retrieves the metadata binary byte array .
+		/// </summary>	
+		byte[] Metadata { get; }
+
         /// <summary>
         /// Returns the number of rows for the specified provider table.
         /// </summary>
