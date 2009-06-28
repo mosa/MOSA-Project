@@ -19,7 +19,7 @@ namespace Mosa.Tools.XmlTo
 		static int Main(string[] args)
 		{
 			Console.WriteLine("XMLTo v0.1 [www.mosa-project.org]");
-			Console.WriteLine("Copyright 2009. New BSD License.");
+			Console.WriteLine("Copyright 2009 by the MOSA Project. Licensed under the New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 			Console.WriteLine("Usage: XMLTo <xml file> <xsl file> <output file>");

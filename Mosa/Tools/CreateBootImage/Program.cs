@@ -31,7 +31,7 @@ namespace Mosa.Tools.CreateBootImage
 		static int Main(string[] args)
 		{
 			Console.WriteLine("MakeImageBoot v1.0 [www.mosa-project.org]");
-			Console.WriteLine("Copyright 2009. New BSD License.");
+			Console.WriteLine("Copyright 2009 by the MOSA Project. Licensed under the New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 			Console.WriteLine("Usage: CreateBootImage <boot.config file> <image name>");

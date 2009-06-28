@@ -1,9 +1,7 @@
 /*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
- * Licensed under the terms of the New BSD License
- * with restrictions to the license beneath, concering
- * the use of the CommandLine assembly.
+ * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
@@ -157,7 +155,8 @@ namespace Mosa.Tools.Compiler
 		{
 			// always print header with version information
 			Console.WriteLine("MOSA AOT Compiler, Version 0.1 'Wake'");
-			Console.WriteLine("(C) 2008 by the MOSA Project, Licensed under the new BSD license.");
+			Console.WriteLine("Copyright 2009 by the MOSA Project. Licensed under the New BSD License.");
+			Console.WriteLine("Copyright (C) 2008 Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();
 
 			try {

@@ -1,9 +1,7 @@
 /*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
- * Licensed under the terms of the New BSD License
- * with restrictions to the license beneath, concering
- * the use of the CommandLine assembly.
+ * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
