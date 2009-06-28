@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -68,7 +69,7 @@ namespace Mosa.Tools.Compiler
 			_cliHeader.EntryPointToken = 0x06000001; // FIXME: ??
 
 			LinkerSymbol metadata = linker.GetSymbol(Mosa.Runtime.Metadata.Symbol.Name);
-			_cliHeader.Metadata.VirtualAddress = (uint)metadata.VirtualAddress.ToInt32();
+			_cliHeader.Metadata.VirtualAddress = (uint)(linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + metadata.SectionAddress);
 			_cliHeader.Metadata.Size = (int)metadata.Length;
 
 			WriteCilHeader(compiler, linker);

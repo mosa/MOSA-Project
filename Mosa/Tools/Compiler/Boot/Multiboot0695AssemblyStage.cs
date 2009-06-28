@@ -188,7 +188,7 @@ namespace Mosa.Tools.Compiler.Boot
             {
                 // flags - multiboot flags
                 uint flags = /*HEADER_MB_FLAG_VIDEO_MODES_REQUIRED | */HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
-                // The multiboot header checksum (fucked up!)
+                // The multiboot header checksum 
                 uint csum = 0;
                 // header_addr is the load virtualAddress of the multiboot header
                 uint header_addr = 0;

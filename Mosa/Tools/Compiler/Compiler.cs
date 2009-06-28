@@ -302,9 +302,9 @@ namespace Mosa.Tools.Compiler
                         new MethodCompilerBuilderStage(),
                         new MethodCompilerRunnerStage(),
                         new TypeInitializers.TypeInitializerSchedulerStage(),
-                        new ObjectFileLayoutStage(),
 						new MetadataBuilderStage(),
 						new CilHeaderBuilderStage(),
+                        new ObjectFileLayoutStage(),
                         linkerStage,
                         mapFileWrapper
                     });
