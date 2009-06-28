@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -48,8 +49,6 @@ namespace Mosa.Tools.Compiler
 			get { return @"Metadata Builder Stage"; }
 		}
 
-		private const string MetadataSymbolName = @".cil.metadata";
-
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
@@ -88,7 +87,7 @@ namespace Mosa.Tools.Compiler
 			 */
 
 			// Metadata is in the .text section in order to make it relocatable everywhere.
-			using (Stream stream = linker.Allocate(MetadataSymbolName, SectionKind.Text, module.Metadata.Metadata.Length, 0))
+			using (Stream stream = linker.Allocate(Mosa.Runtime.Metadata.Symbol.Name, SectionKind.Text, module.Metadata.Metadata.Length, 0))
 
 			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII)) {
 				bw.Write(module.Metadata.Metadata);

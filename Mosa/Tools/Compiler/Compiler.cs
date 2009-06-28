@@ -303,9 +303,9 @@ namespace Mosa.Tools.Compiler
                         new MethodCompilerBuilderStage(),
                         new MethodCompilerRunnerStage(),
                         new TypeInitializers.TypeInitializerSchedulerStage(),
-						new CilHeaderBuilderStage(),
-						new MetadataBuilderStage(),
                         new ObjectFileLayoutStage(),
+						new MetadataBuilderStage(),
+						new CilHeaderBuilderStage(),
                         linkerStage,
                         mapFileWrapper
                     });

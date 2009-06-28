@@ -5,7 +5,8 @@
  *
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
- */
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+*/
 
 using System;
 using System.Collections.Generic;
@@ -275,9 +276,9 @@ namespace Mosa.Runtime.Loader.PE
 
         #region IDisposable Members
 
-        /// <summary>
-        /// Führt anwendungsspezifische Aufgaben durch, die mit der Freigabe, der Zurückgabe oder dem Zurücksetzen von nicht verwalteten Ressourcen zusammenhängen.
-        /// </summary>
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
         void IDisposable.Dispose()
         {
             if (null != _assemblyReader)

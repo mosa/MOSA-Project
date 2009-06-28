@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -326,9 +327,9 @@ namespace Mosa.Runtime.Linker.PE
                     writer.Flush();
 
                     // Write the checksum to the file
-                    this.ntHeaders.OptionalHeader.CheckSum = CalculateChecksum(this.OutputFile);
+                    ntHeaders.OptionalHeader.CheckSum = CalculateChecksum(this.OutputFile);
                     fs.Position = this.dosHeader.e_lfanew;
-                    this.ntHeaders.Write(writer);
+                    ntHeaders.Write(writer);
                 }
             }
         }
@@ -412,60 +413,59 @@ namespace Mosa.Runtime.Linker.PE
         private void WritePEHeader(BinaryWriter writer)
         {
             // Write the PE signature and headers
-            this.ntHeaders.Signature = IMAGE_NT_HEADERS.PE_SIGNATURE;
+            ntHeaders.Signature = IMAGE_NT_HEADERS.PE_SIGNATURE;
 
             // Prepare the file header
-            this.ntHeaders.FileHeader.Machine = IMAGE_FILE_HEADER.IMAGE_FILE_MACHINE_I386;
-            this.ntHeaders.FileHeader.NumberOfSections = CountSections();
-            this.ntHeaders.FileHeader.TimeDateStamp = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
-            this.ntHeaders.FileHeader.PointerToSymbolTable = 0;
-            this.ntHeaders.FileHeader.NumberOfSymbols = 0;
-            this.ntHeaders.FileHeader.SizeOfOptionalHeader = 0x00E0;
-            this.ntHeaders.FileHeader.Characteristics = 0x010E; // FIXME: Use an enum here
+            ntHeaders.FileHeader.Machine = IMAGE_FILE_HEADER.IMAGE_FILE_MACHINE_I386;
+            ntHeaders.FileHeader.NumberOfSections = CountSections();
+            ntHeaders.FileHeader.TimeDateStamp = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+            ntHeaders.FileHeader.PointerToSymbolTable = 0;
+            ntHeaders.FileHeader.NumberOfSymbols = 0;
+            ntHeaders.FileHeader.SizeOfOptionalHeader = 0x00E0;
+            ntHeaders.FileHeader.Characteristics = 0x010E; // FIXME: Use an enum here
 
             // Prepare the "optional" headers
-            this.ntHeaders.OptionalHeader.Magic = IMAGE_OPTIONAL_HEADER.IMAGE_OPTIONAL_HEADER_MAGIC;
-            this.ntHeaders.OptionalHeader.MajorLinkerVersion = 6;
-            this.ntHeaders.OptionalHeader.MinorLinkerVersion = 0;
-            this.ntHeaders.OptionalHeader.SizeOfCode = AlignValue(GetSectionLength(SectionKind.Text), this.sectionAlignment);
-            this.ntHeaders.OptionalHeader.SizeOfInitializedData = AlignValue(GetSectionLength(SectionKind.Data) + GetSectionLength(SectionKind.ROData), this.sectionAlignment);
-            this.ntHeaders.OptionalHeader.SizeOfUninitializedData = AlignValue(GetSectionLength(SectionKind.BSS), this.sectionAlignment);
-            this.ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(this.EntryPoint.VirtualAddress.ToInt64() - this.BaseAddress);
-            this.ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSectionAddress(SectionKind.Text) - this.BaseAddress);
+            ntHeaders.OptionalHeader.Magic = IMAGE_OPTIONAL_HEADER.IMAGE_OPTIONAL_HEADER_MAGIC;
+            ntHeaders.OptionalHeader.MajorLinkerVersion = 6;
+            ntHeaders.OptionalHeader.MinorLinkerVersion = 0;
+            ntHeaders.OptionalHeader.SizeOfCode = AlignValue(GetSectionLength(SectionKind.Text), this.sectionAlignment);
+            ntHeaders.OptionalHeader.SizeOfInitializedData = AlignValue(GetSectionLength(SectionKind.Data) + GetSectionLength(SectionKind.ROData), this.sectionAlignment);
+            ntHeaders.OptionalHeader.SizeOfUninitializedData = AlignValue(GetSectionLength(SectionKind.BSS), this.sectionAlignment);
+            ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(this.EntryPoint.VirtualAddress.ToInt64() - this.BaseAddress);
+            ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSectionAddress(SectionKind.Text) - this.BaseAddress);
 
             long sectionAddress = GetSectionAddress(SectionKind.Data);
             if (sectionAddress != 0)
-                this.ntHeaders.OptionalHeader.BaseOfData = (uint)(sectionAddress - this.BaseAddress);
+                ntHeaders.OptionalHeader.BaseOfData = (uint)(sectionAddress - this.BaseAddress);
 
-            this.ntHeaders.OptionalHeader.ImageBase = (uint)this.BaseAddress; // FIXME: Linker Script/cmdline
-            this.ntHeaders.OptionalHeader.SectionAlignment = this.sectionAlignment; // FIXME: Linker Script/cmdline
-            this.ntHeaders.OptionalHeader.FileAlignment = this.fileAlignment; // FIXME: Linker Script/cmdline
-            this.ntHeaders.OptionalHeader.MajorOperatingSystemVersion = 4;
-            this.ntHeaders.OptionalHeader.MinorOperatingSystemVersion = 0;
-            this.ntHeaders.OptionalHeader.MajorImageVersion = 0;
-            this.ntHeaders.OptionalHeader.MinorImageVersion = 0;
-            this.ntHeaders.OptionalHeader.MajorSubsystemVersion = 4;
-            this.ntHeaders.OptionalHeader.MinorSubsystemVersion = 0;
-            this.ntHeaders.OptionalHeader.Win32VersionValue = 0;
-            this.ntHeaders.OptionalHeader.SizeOfImage = CalculateSizeOfImage();
-            this.ntHeaders.OptionalHeader.SizeOfHeaders = this.fileAlignment; // FIXME: Use the full header size
-            this.ntHeaders.OptionalHeader.CheckSum = 0;
-            this.ntHeaders.OptionalHeader.Subsystem = 0x03;
-            this.ntHeaders.OptionalHeader.DllCharacteristics = 0x0540;
-            this.ntHeaders.OptionalHeader.SizeOfStackReserve = 0x100000;
-            this.ntHeaders.OptionalHeader.SizeOfStackCommit = 0x1000;
-            this.ntHeaders.OptionalHeader.SizeOfHeapReserve = 0x100000;
-            this.ntHeaders.OptionalHeader.SizeOfHeapCommit = 0x1000;
-            this.ntHeaders.OptionalHeader.LoaderFlags = 0;
-            this.ntHeaders.OptionalHeader.NumberOfRvaAndSizes = IMAGE_OPTIONAL_HEADER.IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
-            this.ntHeaders.OptionalHeader.DataDirectory = new IMAGE_DATA_DIRECTORY[IMAGE_OPTIONAL_HEADER.IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
+            ntHeaders.OptionalHeader.ImageBase = (uint)this.BaseAddress; // FIXME: Linker Script/cmdline
+            ntHeaders.OptionalHeader.SectionAlignment = this.sectionAlignment; // FIXME: Linker Script/cmdline
+            ntHeaders.OptionalHeader.FileAlignment = this.fileAlignment; // FIXME: Linker Script/cmdline
+            ntHeaders.OptionalHeader.MajorOperatingSystemVersion = 4;
+            ntHeaders.OptionalHeader.MinorOperatingSystemVersion = 0;
+            ntHeaders.OptionalHeader.MajorImageVersion = 0;
+            ntHeaders.OptionalHeader.MinorImageVersion = 0;
+            ntHeaders.OptionalHeader.MajorSubsystemVersion = 4;
+            ntHeaders.OptionalHeader.MinorSubsystemVersion = 0;
+            ntHeaders.OptionalHeader.Win32VersionValue = 0;
+            ntHeaders.OptionalHeader.SizeOfImage = CalculateSizeOfImage();
+            ntHeaders.OptionalHeader.SizeOfHeaders = this.fileAlignment; // FIXME: Use the full header size
+            ntHeaders.OptionalHeader.CheckSum = 0;
+            ntHeaders.OptionalHeader.Subsystem = 0x03;
+            ntHeaders.OptionalHeader.DllCharacteristics = 0x0540;
+            ntHeaders.OptionalHeader.SizeOfStackReserve = 0x100000;
+            ntHeaders.OptionalHeader.SizeOfStackCommit = 0x1000;
+            ntHeaders.OptionalHeader.SizeOfHeapReserve = 0x100000;
+            ntHeaders.OptionalHeader.SizeOfHeapCommit = 0x1000;
+            ntHeaders.OptionalHeader.LoaderFlags = 0;
+            ntHeaders.OptionalHeader.NumberOfRvaAndSizes = IMAGE_OPTIONAL_HEADER.IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
+            ntHeaders.OptionalHeader.DataDirectory = new IMAGE_DATA_DIRECTORY[IMAGE_OPTIONAL_HEADER.IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
 
-            // Populate the CIL data directory (FIXME)
-			// TODO: Point to CLI Header
-            this.ntHeaders.OptionalHeader.DataDirectory[14].VirtualAddress = 0;
-            this.ntHeaders.OptionalHeader.DataDirectory[14].Size = 0;
-
-            this.ntHeaders.Write(writer);
+            // Populate the CIL data directory 
+			ntHeaders.OptionalHeader.DataDirectory[14].VirtualAddress = (uint) GetSymbol(PE.CLI_HEADER.SymbolName).VirtualAddress.ToInt32(); 
+			ntHeaders.OptionalHeader.DataDirectory[14].Size = PE.CLI_HEADER.Length;
+        	
+			ntHeaders.Write(writer);
 
             // Write the section headers
             uint address = this.fileAlignment;

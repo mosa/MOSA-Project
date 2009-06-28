@@ -19,8 +19,6 @@ using Mosa.Runtime.Linker.PE;
 
 namespace Mosa.Tools.Compiler
 {
-	
-
 	/// <summary>
 	///  Writes the cil header into the generated binary.
 	/// </summary>
@@ -51,8 +49,6 @@ namespace Mosa.Tools.Compiler
 			get { return @"CILHeaderStage"; }
 		}
 
-		private const string CILHeaderSymbolName = @".cil.header";
-
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
@@ -71,6 +67,10 @@ namespace Mosa.Tools.Compiler
 			_cliHeader.Flags = RuntimeImageFlags.ILOnly;
 			_cliHeader.EntryPointToken = 0x06000001; // FIXME: ??
 
+			LinkerSymbol metadata = linker.GetSymbol(Mosa.Runtime.Metadata.Symbol.Name);
+			_cliHeader.Metadata.VirtualAddress = (uint)metadata.VirtualAddress.ToInt32();
+			_cliHeader.Metadata.Size = (int)metadata.Length;
+
 			WriteCilHeader(compiler, linker);
 		}
 
@@ -85,7 +85,7 @@ namespace Mosa.Tools.Compiler
 		/// <param name="linker">The linker.</param>
 		private void WriteCilHeader(AssemblyCompiler compiler, IAssemblyLinker linker)
 		{
-			using (Stream stream = linker.Allocate(CILHeaderSymbolName, SectionKind.Text, CLI_HEADER.Length, 4))
+			using (Stream stream = linker.Allocate(CLI_HEADER.SymbolName, SectionKind.Text, CLI_HEADER.Length, 4))
 			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII)) {
 				_cliHeader.Write(bw);
 			}

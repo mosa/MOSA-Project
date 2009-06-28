@@ -25,7 +25,12 @@ namespace Mosa.Runtime.Linker.PE
 		/// <summary>
 		/// Size of the CLI Header
 		/// </summary>
-    	public static int Length = 0x250 - 0x208; 
+    	public static int Length = 0x250 - 0x208;
+		
+		/// <summary>
+		/// Name for symbol
+		/// </summary>
+		public const string SymbolName = @".cil.header";
 
 		#endregion // Constants
 
