@@ -110,8 +110,7 @@ namespace Mosa.HelloWorld
 			Screen.Write('.');
 
 			while (true) {
-				Screen.Row = 0;
-				Screen.Column = 27;
+                Screen.SetCursor(27, 0);
 				Screen.Color = 0x0A;
 				Screen.Write('-');
 				Screen.Column = 27;
@@ -132,8 +131,7 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		private static void DisplayCounter()
 		{
-			Screen.Row = 5;
-			Screen.Column = 0;
+            Screen.SetCursor(0, 5);
 			Screen.Color = 0x09;
 			Screen.Write(counter++);
 		}

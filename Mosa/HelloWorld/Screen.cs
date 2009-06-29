@@ -116,6 +116,17 @@ namespace Mosa.HelloWorld
 			GotoTop();
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public static void SetCursor(int x, int y)
+        {
+            Column = x;
+            Row = y;
+        }
+
 		/// <summary>
 		/// Writes the specified value.
 		/// </summary>

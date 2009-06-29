@@ -1079,7 +1079,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             {
                 // Replace it with a truncating move...
                 // FIXME: Implement proper truncation as specified in the CIL spec
-                Debug.Assert(false);
+                //Debug.Assert(false);
                 if (IsSignExtending(store.Source))
                     Replace(ctx, _architecture.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), store.Destination, store.Source));
                 else

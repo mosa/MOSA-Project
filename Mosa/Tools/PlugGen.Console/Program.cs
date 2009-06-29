@@ -29,7 +29,7 @@ namespace PlugGen.Console
             {
                 typeof(Microsoft.CSharp.CSharpCodeProvider),
                 typeof(Microsoft.VisualBasic.VBCodeProvider),
-                typeof(Microsoft.VisualC.VSCodeProvider)
+                //typeof(Microsoft.VisualC.VSCodeProvider)
             };
 
             System.Console.Write("Loading assembly...");
