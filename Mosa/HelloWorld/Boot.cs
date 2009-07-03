@@ -141,6 +141,14 @@ namespace Mosa.HelloWorld
 				Screen.Write(':');
 				Screen.Write(' ');
 				Screen.Write(Multiboot.GetMemoryMapLengthLow(index), 16, 8);
+				Screen.Write(' ');
+				Screen.Write('T');
+				Screen.Write('Y');
+				Screen.Write('P');
+				Screen.Write('E');
+				Screen.Write(':');
+				Screen.Write(' ');
+				Screen.Write(Multiboot.GetMemoryMapType(index), 16, 8);
 				Screen.NextLine();
 			}
 

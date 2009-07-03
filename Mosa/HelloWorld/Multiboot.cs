@@ -50,7 +50,7 @@ namespace Mosa.Kernel.Memory.X86
 
 			Mosa.HelloWorld.Screen.Row = 3;
 			for (uint i = 0; i < 80; i = i + 4) {
-				Mosa.HelloWorld.Screen.Column = 55;
+				Mosa.HelloWorld.Screen.Column = 65;
 				Mosa.HelloWorld.Screen.Write(i, 10, 2);
 				Mosa.HelloWorld.Screen.Write(':');
 				Mosa.HelloWorld.Screen.Write(' ');
@@ -68,7 +68,7 @@ namespace Mosa.Kernel.Memory.X86
 
 			Mosa.HelloWorld.Screen.Row = 3;
 			for (uint i = 0; i < 80; i = i + 4) {
-				Mosa.HelloWorld.Screen.Column = 35;
+				Mosa.HelloWorld.Screen.Column = 45;
 				Mosa.HelloWorld.Screen.Write(i, 10, 2);
 				Mosa.HelloWorld.Screen.Write(':');
 				Mosa.HelloWorld.Screen.Write(' ');
@@ -297,7 +297,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <returns></returns>
 		public static uint GetMemoryMapType(uint index)
 		{
-			return Memory.Get32(GetMemoryMapIndexLocation(index) + 16);
+			return Memory.Get32(GetMemoryMapIndexLocation(index) + 20);
 		}
 
 		/// <summary>
