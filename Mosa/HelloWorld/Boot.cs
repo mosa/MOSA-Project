@@ -131,6 +131,7 @@ namespace Mosa.HelloWorld
 			//Screen.Write(Multiboot.MemoryMapLength, 16, 8);
 
 			Screen.NextLine();
+			Screen.NextLine();
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
 				Screen.Write(Multiboot.GetMemoryMapBaseLow(index), 16, 8);
 				Screen.Write(' ');
