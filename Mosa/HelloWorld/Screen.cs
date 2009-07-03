@@ -116,16 +116,16 @@ namespace Mosa.HelloWorld
 			GotoTop();
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public static void SetCursor(int x, int y)
-        {
-            Column = x;
-            Row = y;
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		public static void SetCursor(int x, int y)
+		{
+			Column = x;
+			Row = y;
+		}
 
 		/// <summary>
 		/// Writes the specified value.
@@ -133,7 +133,7 @@ namespace Mosa.HelloWorld
 		/// <param name="val">The val.</param>
 		public static void Write(uint val)
 		{
-			Write(val, 10);
+			Write(val, 10, -1);
 		}
 
 		/// <summary>
@@ -141,7 +141,8 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		/// <param name="val">The val.</param>
 		/// <param name="digits">The digits.</param>
-		public static void Write(uint val, byte digits)
+		/// <param name="size">The size.</param>
+		public static void Write(uint val, byte digits, int size)
 		{
 			int count = 0;
 			uint temp = val;
@@ -149,8 +150,10 @@ namespace Mosa.HelloWorld
 			do {
 				temp /= digits;
 				count++;
-			}
-			while (temp != 0);
+			} while (temp != 0);
+
+			if (size != -1)
+				count = size;
 
 			int x = Column;
 			int y = Row;

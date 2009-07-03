@@ -302,6 +302,7 @@ namespace Mosa.Tools.Compiler
                         new MethodCompilerBuilderStage(),
                         new MethodCompilerRunnerStage(),
                         new TypeInitializers.TypeInitializerSchedulerStage(),
+						bootFormatStage,
 						new MetadataBuilderStage(),
 						new CilHeaderBuilderStage(),
                         new ObjectFileLayoutStage(),

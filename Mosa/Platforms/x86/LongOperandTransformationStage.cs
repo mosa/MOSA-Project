@@ -1706,7 +1706,7 @@ namespace Mosa.Platforms.x86
 
             Remove(ctx);
 
-			LinkBlocks(ctx.Block, blocks[0]);
+			//LinkBlocks(ctx.Block, blocks[0]);
 			LinkBlocks(blocks[0], blocks[1]);
             LinkBlocks(blocks[0], blocks[2]);
             LinkBlocks(blocks[1], blocks[2]);

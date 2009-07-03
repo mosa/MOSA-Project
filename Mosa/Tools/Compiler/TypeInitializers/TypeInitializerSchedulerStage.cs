@@ -34,6 +34,11 @@ namespace Mosa.Tools.Compiler.TypeInitializers
         /// </summary>
         private List<Instruction> instructions;
 
+		/// <summary>
+		/// Holds the method for the type initalizer
+		/// </summary>
+    	private CompilerGeneratedMethod _method;
+
         #endregion // Data Members
 
         #region Construction
@@ -48,10 +53,26 @@ namespace Mosa.Tools.Compiler.TypeInitializers
         }
 
         #endregion // Construction
+		
+		#region Properties
 
-        #region Methods
+		/// <summary>
+		/// Gets the intializer method.
+		/// </summary>
+		/// <value>The method.</value>
+    	public CompilerGeneratedMethod Method
+    	{
+    		get
+			{
+				return _method;
+			}
+    	}
 
-        /// <summary>
+		#endregion
+
+		#region Methods
+
+		/// <summary>
         /// Schedules the specified method for invocation in the main.
         /// </summary>
         /// <param name="method">The method.</param>
@@ -88,11 +109,11 @@ namespace Mosa.Tools.Compiler.TypeInitializers
                     new EpilogueInstruction(0)
                 });
 
-                CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", this.instructions);
+				_method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", this.instructions);
 
                 // FIXME: Set the assembly initializer method as the entry point
-                IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
-                linker.EntryPoint = linker.GetSymbol(method);
+                //IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
+				//linker.EntryPoint = linker.GetSymbol(_method);
             }
         }
 

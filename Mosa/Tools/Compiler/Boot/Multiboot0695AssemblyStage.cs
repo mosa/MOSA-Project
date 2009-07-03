@@ -13,6 +13,7 @@ using System.Linq;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
@@ -20,9 +21,17 @@ using Mosa.Runtime.Linker;
 using NDesk.Options;
 using Mosa.Runtime.Linker.Elf32;
 using Mosa.Runtime.Linker.Elf64;
+using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
+
+using Mosa.Platforms.x86;
+using Mosa.Platforms.x86.Instructions;
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Tools.Compiler.TypeInitializers;
 
 namespace Mosa.Tools.Compiler.Boot
 {
+	using Runtime.Metadata;
+
 	/*
 	 * FIXME:
 	 * - Allow video mode options to be controlled by the command line
@@ -101,6 +110,16 @@ namespace Mosa.Tools.Compiler.Boot
 		/// </summary>
 		private uint videoDepth;
 
+		/// <summary>
+		/// Holds a list of cctors call instructions.
+		/// </summary>
+		private List<Instruction> instructions;
+
+		/// <summary>
+		/// Holds true if the second stage is reached
+		/// </summary>
+		private bool secondStage;
+
 		#endregion // Data members
 
 		#region Construction
@@ -114,6 +133,8 @@ namespace Mosa.Tools.Compiler.Boot
 			videoWidth = 80;
 			videoHeight = 25;
 			videoDepth = 0;
+			instructions = new List<Instruction>();
+			secondStage = false;
 		}
 
 		#endregion // Construction
@@ -141,8 +162,37 @@ namespace Mosa.Tools.Compiler.Boot
 			IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
 			Debug.Assert(linker != null, @"No linker??");
 
-			IntPtr entryPoint = WriteMultibootEntryPoint(linker);
-			WriteMultibootHeader(compiler, linker, entryPoint);
+			if (!secondStage) {
+				IntPtr entryPoint = WriteMultibootEntryPoint(linker);
+				WriteMultibootHeader(compiler, linker, entryPoint);
+				secondStage = true;
+			}
+			else {
+				TypeInitializerSchedulerStage typeInitializerSchedulerStage = compiler.Pipeline.Find<TypeInitializerSchedulerStage>();
+
+				SigType I4 = new SigType(CilElementType.I4);
+
+				ConstantOperand table = new ConstantOperand(I4, 0x100000);
+
+				RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
+				RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+				RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
+
+				MemoryOperand m1 = new MemoryOperand(I4, ecx.Register, new IntPtr(0x0));
+				MemoryOperand m2 = new MemoryOperand(I4, ecx.Register, new IntPtr(0x4));
+
+				instructions.AddRange(
+					new Instruction[] {
+					new Mosa.Runtime.CompilerFramework.IR.MoveInstruction(ecx, table),
+					new Mosa.Runtime.CompilerFramework.IR.MoveInstruction(m1, eax),
+					new Mosa.Runtime.CompilerFramework.IR.MoveInstruction(m2, ebx),
+					new Mosa.Runtime.CompilerFramework.IR.CallInstruction(typeInitializerSchedulerStage.Method)
+					}
+				);
+
+				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"MultibootInit", instructions);
+				linker.EntryPoint = linker.GetSymbol(method);
+			}
 		}
 
 		#endregion // IAssemblyCompilerStage Members
@@ -226,9 +276,9 @@ namespace Mosa.Tools.Compiler.Boot
 				bw.Write(load_end_addr);
 				bw.Write(bss_end_addr);
 
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, linker.CreateSymbolName(compiler.Assembly.EntryPoint), IntPtr.Zero);
-				//bw.Write(entry_point);
-
+				// HACK: Symbol has been hacked. What's the correct way to do this?
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", IntPtr.Zero);
+				
 				bw.Write(videoMode);
 				bw.Write(videoWidth);
 				bw.Write(videoHeight);
