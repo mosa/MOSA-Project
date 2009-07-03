@@ -196,7 +196,7 @@ namespace Mosa.Kernel.Memory.X86
 
 			while (location < (MemoryMapStart + MemoryMapLength)) {
 				memoryMapCount++;
-				location = Memory.Get32(location - 4) + location;
+				location = Memory.Get32(location) + location;
 			}
 		}
 
@@ -210,7 +210,7 @@ namespace Mosa.Kernel.Memory.X86
 			uint location = MemoryMapStart;
 
 			for (int i = 0; i < index; i++)
-				location = location + Memory.Get32(location - 4);
+				location = location + Memory.Get32(location);
 
 			return location;
 		}

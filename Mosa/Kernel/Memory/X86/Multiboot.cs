@@ -18,11 +18,28 @@ namespace Mosa.Kernel.Memory.X86
 		/// Location of the Multiboot Structure 
 		/// </summary>
 		private static uint MultibootStructure = 0x0;
-		
+
 		/// <summary>
 		/// Magic value that indicates that kernel was loaded by a Multiboot-compliant boot loader 
 		/// </summary>
 		public const uint MultibootMagic = 0x2BADB002;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private static uint memoryMapCount = 0;
+
+		/// <summary>
+		/// Gets the memory map count.
+		/// </summary>
+		/// <value>The memory map count.</value>
+		public static uint MemoryMapCount
+		{
+			get
+			{
+				return memoryMapCount;
+			}
+		}
 
 		/// <summary>
 		/// Sets the multiboot location, if given the proper magic value
@@ -33,6 +50,8 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			if (magic == MultibootMagic)
 				MultibootStructure = address;
+
+			CountMemoryMap();
 		}
 
 		/// <summary>
@@ -42,6 +61,7 @@ namespace Mosa.Kernel.Memory.X86
 		public static void SetMultibootLocation(uint address)
 		{
 			MultibootStructure = address;
+			CountMemoryMap();
 		}
 
 		/// <summary>
@@ -52,20 +72,21 @@ namespace Mosa.Kernel.Memory.X86
 		/// </returns>
 		public static bool IsMultiboot()
 		{
-			return (MultibootStructure != 0x0);
+			if (MultibootStructure == 0x0)
+				return false;
+			else
+				return true;
 		}
 
 		/// <summary>
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public static byte Flags
+		public static uint Flags
 		{
 			get
 			{
-				if (MultibootStructure == 0) return 0;
-
-				return Memory.Get8(MultibootStructure);
+				return Memory.Get32(MultibootStructure + 0);
 			}
 		}
 
@@ -166,6 +187,20 @@ namespace Mosa.Kernel.Memory.X86
 		}
 
 		/// <summary>
+		/// Counts the memory map.
+		/// </summary>
+		private static void CountMemoryMap()
+		{
+			memoryMapCount = 0;
+			uint location = MemoryMapStart;
+
+			while (location < (MemoryMapStart + MemoryMapLength)) {
+				memoryMapCount++;
+				location = Memory.Get32(location) + location;
+			}
+		}
+
+		/// <summary>
 		/// Gets the memory map index location.
 		/// </summary>
 		/// <param name="index">The index.</param>
@@ -174,8 +209,8 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			uint location = MemoryMapStart;
 
-			for (uint i = 0; i < index; i++)
-				location = location + Memory.Get32(location - 4);
+			for (int i = 0; i < index; i++)
+				location = location + Memory.Get32(location);
 
 			return location;
 		}
@@ -187,7 +222,17 @@ namespace Mosa.Kernel.Memory.X86
 		/// <returns></returns>
 		public static ulong GetMemoryMapBase(uint index)
 		{
-			return Memory.Get64(GetMemoryMapIndexLocation(index) + 0);
+			return Memory.Get64(GetMemoryMapIndexLocation(index));
+		}
+
+		/// <summary>
+		/// Gets the memory map base.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public static uint GetMemoryMapBaseLow(uint index)
+		{
+			return Memory.Get32(GetMemoryMapIndexLocation(index));
 		}
 
 		/// <summary>
@@ -201,13 +246,23 @@ namespace Mosa.Kernel.Memory.X86
 		}
 
 		/// <summary>
+		/// Gets the length of the memory map.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public static uint GetMemoryMapLengthLow(uint index)
+		{
+			return Memory.Get32(GetMemoryMapIndexLocation(index) + 8);
+		}
+
+		/// <summary>
 		/// Gets the type of the memory map.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static ulong GetMemoryMapType(uint index)
+		public static uint GetMemoryMapType(uint index)
 		{
-			return Memory.Get64(GetMemoryMapIndexLocation(index) + 16);
+			return Memory.Get32(GetMemoryMapIndexLocation(index) + 16);
 		}
 
 		/// <summary>
@@ -281,7 +336,6 @@ namespace Mosa.Kernel.Memory.X86
 				return Memory.Get32(MultibootStructure + 72);
 			}
 		}
-
 
 		/// <summary>
 		/// Gets the VBE mode info.
