@@ -42,6 +42,41 @@ namespace Mosa.Kernel.Memory.X86
 		}
 
 		/// <summary>
+		/// Dumps this instance.
+		/// </summary>
+		public static void Dump()
+		{
+			uint location = MultibootStructure;
+
+			Mosa.HelloWorld.Screen.Row = 3;
+			for (uint i = 0; i < 80; i = i + 4) {
+				Mosa.HelloWorld.Screen.Column = 55;
+				Mosa.HelloWorld.Screen.Write(i, 10, 2);
+				Mosa.HelloWorld.Screen.Write(':');
+				Mosa.HelloWorld.Screen.Write(' ');
+				Mosa.HelloWorld.Screen.Write(Memory.Get32(location + i), 16, 8);
+				Mosa.HelloWorld.Screen.NextLine();
+			}
+		}
+
+		/// <summary>
+		/// Dumps this instance.
+		/// </summary>
+		public static void Dump2()
+		{
+			uint location = MemoryMapStart;
+
+			Mosa.HelloWorld.Screen.Row = 3;
+			for (uint i = 0; i < 80; i = i + 4) {
+				Mosa.HelloWorld.Screen.Column = 35;
+				Mosa.HelloWorld.Screen.Write(i, 10, 2);
+				Mosa.HelloWorld.Screen.Write(':');
+				Mosa.HelloWorld.Screen.Write(' ');
+				Mosa.HelloWorld.Screen.Write(Memory.Get32(location + i), 16, 8);
+				Mosa.HelloWorld.Screen.NextLine();
+			}
+		}
+		/// <summary>
 		/// Sets the multiboot location, if given the proper magic value
 		/// </summary>
 		/// <param name="address">The address.</param>
@@ -222,7 +257,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <returns></returns>
 		public static ulong GetMemoryMapBase(uint index)
 		{
-			return Memory.Get64(GetMemoryMapIndexLocation(index));
+			return Memory.Get64(GetMemoryMapIndexLocation(index) + 4);
 		}
 
 		/// <summary>
@@ -232,7 +267,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <returns></returns>
 		public static uint GetMemoryMapBaseLow(uint index)
 		{
-			return Memory.Get32(GetMemoryMapIndexLocation(index));
+			return Memory.Get32(GetMemoryMapIndexLocation(index) + 4);
 		}
 
 		/// <summary>
@@ -242,7 +277,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <returns></returns>
 		public static ulong GetMemoryMapLength(uint index)
 		{
-			return Memory.Get64(GetMemoryMapIndexLocation(index) + 8);
+			return Memory.Get64(GetMemoryMapIndexLocation(index) + 12);
 		}
 
 		/// <summary>
@@ -252,7 +287,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <returns></returns>
 		public static uint GetMemoryMapLengthLow(uint index)
 		{
-			return Memory.Get32(GetMemoryMapIndexLocation(index) + 8);
+			return Memory.Get32(GetMemoryMapIndexLocation(index) + 12);
 		}
 
 		/// <summary>

@@ -4,6 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  */
+using Mosa.Kernel.Memory.X86;
 
 namespace Mosa.HelloWorld
 {
@@ -109,8 +110,44 @@ namespace Mosa.HelloWorld
 			Screen.Write('9');
 			Screen.Write('.');
 
+			Screen.SetCursor(0, 7);
+			Screen.Write(Memory.Get32(0x100000), 16, 8);
+			Screen.NextLine();
+			Screen.Write(Memory.Get32(0x100004), 16, 8);
+
+			Multiboot.SetMultibootLocation(Memory.Get32(0x100004), Memory.Get32(0x100000));
+			//Screen.NextLine();
+			//Screen.Write(Multiboot.Flags, 2, 32);
+			//Screen.NextLine();
+			//Screen.Write(Multiboot.MemoryLower, 16, 8);
+			//Screen.Write(' ');
+			//Screen.Write('T');
+			//Screen.Write('O');
+			//Screen.Write(' ');
+			//Screen.Write(Multiboot.MemoryUpper, 16, 8);
+			//Screen.NextLine();
+			//Screen.Write(Multiboot.MemoryMapCount, 16, 8);
+			//Screen.NextLine();
+			//Screen.Write(Multiboot.MemoryMapLength, 16, 8);
+			//Screen.NextLine();
+
+			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
+				Screen.Write(Multiboot.GetMemoryMapBaseLow(index), 16, 8);
+				Screen.Write(' ');
+				Screen.Write('L');
+				Screen.Write('E');
+				Screen.Write('N');
+				Screen.Write(':');
+				Screen.Write(' ');
+				Screen.Write(Multiboot.GetMemoryMapLengthLow(index), 16, 8);
+				Screen.NextLine();
+			}
+
+			Multiboot.Dump();
+			Multiboot.Dump2();
+
 			while (true) {
-                Screen.SetCursor(27, 0);
+				Screen.SetCursor(27, 0);
 				Screen.Color = 0x0A;
 				Screen.Write('-');
 				Screen.Column = 27;
@@ -131,7 +168,7 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		private static void DisplayCounter()
 		{
-            Screen.SetCursor(0, 5);
+			Screen.SetCursor(0, 5);
 			Screen.Color = 0x09;
 			Screen.Write(counter++);
 		}
