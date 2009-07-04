@@ -1337,6 +1337,7 @@ namespace Mosa.Platforms.x86
 
 				case CilElementType.U2: goto case CilElementType.U1;
 
+                case CilElementType.I4: goto case CilElementType.U4;
 				case CilElementType.U4:
 					instructions = new Instruction[] {
                         new IR.MoveInstruction(eax, op1),
