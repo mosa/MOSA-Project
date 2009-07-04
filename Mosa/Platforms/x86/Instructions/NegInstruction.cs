@@ -31,7 +31,7 @@ namespace Mosa.Platforms.x86.Instructions
         public NegInstruction(Operand op) :
             base(op)
         {
-            Debug.Assert(op is ConstantOperand, @"Operand is not constant.");
+            Debug.Assert(!(op is ConstantOperand), @"Operand is not constant.");
         }
 
         #endregion // Construction
