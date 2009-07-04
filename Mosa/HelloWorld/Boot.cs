@@ -116,31 +116,32 @@ namespace Mosa.HelloWorld
 			Screen.Write(Memory.Get32(0x100004), 16, 8);
 
 			Multiboot.SetMultibootLocation(Memory.Get32(0x100004), Memory.Get32(0x100000));
-			//Screen.NextLine();
-			//Screen.Write(Multiboot.Flags, 2, 32);
-			//Screen.NextLine();
-			//Screen.Write(Multiboot.MemoryLower, 16, 8);
-			//Screen.Write(' ');
-			//Screen.Write('T');
-			//Screen.Write('O');
-			//Screen.Write(' ');
-			//Screen.Write(Multiboot.MemoryUpper, 16, 8);
-			//Screen.NextLine();
-			//Screen.Write(Multiboot.MemoryMapCount, 16, 8);
-			//Screen.NextLine();
-			//Screen.Write(Multiboot.MemoryMapLength, 16, 8);
+			Screen.NextLine();
+			Screen.Write(Multiboot.Flags, 2, 32);
+			Screen.NextLine();
 
 			Screen.NextLine();
+			Screen.Write((Multiboot.MemoryLower + Multiboot.MemoryUpper) / 1024, 10, 8);
+			Screen.Write(' ');
+			Screen.Write('M');
+			Screen.Write('B');
 			Screen.NextLine();
+			Screen.Write(Multiboot.MemoryLower + Multiboot.MemoryUpper, 10, 8);
+			Screen.Write(' ');
+			Screen.Write('K');
+			Screen.Write('B');
+			Screen.NextLine();
+
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
 				Screen.Write(Multiboot.GetMemoryMapBaseLow(index), 16, 8);
 				Screen.Write(' ');
-				Screen.Write('L');
-				Screen.Write('E');
-				Screen.Write('N');
-				Screen.Write(':');
+				Screen.Write('-');
 				Screen.Write(' ');
+				Screen.Write(Multiboot.GetMemoryMapBaseLow(index) + Multiboot.GetMemoryMapLengthLow(index), 16, 8);
+				Screen.Write(' ');
+				Screen.Write('(');
 				Screen.Write(Multiboot.GetMemoryMapLengthLow(index), 16, 8);
+				Screen.Write(')');
 				Screen.Write(' ');
 				Screen.Write('T');
 				Screen.Write('Y');
@@ -153,7 +154,7 @@ namespace Mosa.HelloWorld
 			}
 
 			Multiboot.Dump();
-			Multiboot.Dump2();
+			//Multiboot.Dump2();
 
 			while (true) {
 				Screen.SetCursor(27, 0);

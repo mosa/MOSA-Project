@@ -61,9 +61,9 @@ namespace Mosa.HelloWorld
 		/// Skips the specified skip.
 		/// </summary>
 		/// <param name="skip">The skip.</param>
-		private static void Skip(int skip)
+		private static void Skip(uint skip)
 		{
-			for (int i = 0; i < skip; i++)
+			for (uint i = 0; i < skip; i++)
 				Next();
 		}
 
@@ -144,7 +144,7 @@ namespace Mosa.HelloWorld
 		/// <param name="size">The size.</param>
 		public static void Write(uint val, byte digits, int size)
 		{
-			int count = 0;
+			uint count = 0;
 			uint temp = val;
 
 			do {
@@ -153,16 +153,16 @@ namespace Mosa.HelloWorld
 			} while (temp != 0);
 
 			if (size != -1)
-				count = size;
+				count = (uint) size;
 
 			int x = Column;
 			int y = Row;
 
-			for (int i = 0; i < count; i++) {
+			for (uint i = 0; i < count; i++) {
 				uint digit = val % digits;
 				Column = x;
 				Row = y;
-				Skip(count - 1 - i);
+				Skip((uint)(count - 1 - i));
 				if (digit < 10)
 					Write((char)('0' + digit));
 				else

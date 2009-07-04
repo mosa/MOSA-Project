@@ -271,6 +271,16 @@ namespace Mosa.Kernel.Memory.X86
 		}
 
 		/// <summary>
+		/// Gets the memory map base.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public static uint GetMemoryMapBaseHigh(uint index)
+		{
+			return Memory.Get32(GetMemoryMapIndexLocation(index) + 8);
+		}
+
+		/// <summary>
 		/// Gets the length of the memory map.
 		/// </summary>
 		/// <param name="index">The index.</param>
@@ -288,6 +298,16 @@ namespace Mosa.Kernel.Memory.X86
 		public static uint GetMemoryMapLengthLow(uint index)
 		{
 			return Memory.Get32(GetMemoryMapIndexLocation(index) + 12);
+		}
+
+		/// <summary>
+		/// Gets the length of the memory map.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public static uint GetMemoryMapLengthHigh(uint index)
+		{
+			return Memory.Get32(GetMemoryMapIndexLocation(index) + 16);
 		}
 
 		/// <summary>
