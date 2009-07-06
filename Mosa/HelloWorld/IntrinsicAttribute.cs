@@ -21,5 +21,12 @@ namespace Mosa.Runtime.CompilerFramework
 		public IntrinsicAttribute()
 		{
 		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="IntrinsicAttribute"/> class.
+		/// </summary>
+		public IntrinsicAttribute(Type architecture, Type instructionType)
+		{
+		}
 	}
 }
