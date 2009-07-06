@@ -1033,10 +1033,10 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The source register.</param>
 		void ICodeEmitter.Movzx(Operand dest, Operand src)
 		{
-			if (!(dest is RegisterOperand))
+			if (dest is ConstantOperand)
 				throw new ArgumentException(@"Destination must be RegisterOperand.", @"dest");
-			if (src is ConstantOperand)
-				throw new ArgumentException(@"Source must not be ConstantOperand.", @"src");
+			//			if (src is ConstantOperand)
+			//				throw new ArgumentException(@"Source must not be ConstantOperand.", @"src");
 
 			switch (src.Type.Type) {
 				case CilElementType.I1: goto case CilElementType.U1;
