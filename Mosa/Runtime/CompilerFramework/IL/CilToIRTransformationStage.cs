@@ -969,7 +969,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // The replacement instruction
             Instruction replacement = null;
 
-            if (true == rm.IsDefined(rt))
+            if (rm.IsDefined(rt))
             {
                 // FIXME: Change this to a GetCustomAttributes call, once we can do that :)
                 foreach (RuntimeAttribute ra in rm.CustomAttributes)

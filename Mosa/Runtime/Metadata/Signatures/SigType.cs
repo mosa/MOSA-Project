@@ -454,7 +454,8 @@ namespace Mosa.Runtime.Metadata.Signatures
                 case CilElementType.String:
                     return "string";
                 case CilElementType.ValueType:
-                    throw new NotImplementedException();
+					return "valuetype";	// FIXME: HACK?
+					//throw new NotImplementedException();
                 case CilElementType.Class:
                     throw new NotImplementedException();
                 case CilElementType.Var:
@@ -472,7 +473,8 @@ namespace Mosa.Runtime.Metadata.Signatures
                 case CilElementType.FunctionPtr:
                     throw new NotImplementedException();
                 case CilElementType.Object:
-                    throw new NotImplementedException();
+					return "object";	// FIXME: HACK?
+                    //throw new NotImplementedException();
                 case CilElementType.SZArray:
                     throw new NotImplementedException();
                 case CilElementType.MVar:

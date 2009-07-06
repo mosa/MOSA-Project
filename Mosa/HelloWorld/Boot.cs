@@ -156,6 +156,10 @@ namespace Mosa.HelloWorld
 			Multiboot.Dump();
 			//Multiboot.Dump2();
 
+			//unsafe {
+			//    Port.Out8((byte*)0, 0);
+			//}
+
 			while (true) {
 				Screen.SetCursor(27, 0);
 				Screen.Color = 0x0A;

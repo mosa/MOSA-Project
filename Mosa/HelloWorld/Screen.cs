@@ -159,10 +159,10 @@ namespace Mosa.HelloWorld
 			int y = Row;
 
 			for (uint i = 0; i < count; i++) {
-				uint digit = val % digits;
+				uint digit = (uint) (val % digits);
 				Column = x;
 				Row = y;
-				Skip((uint)(count - 1 - i));
+				Skip(count - 1 - i);
 				if (digit < 10)
 					Write((char)('0' + digit));
 				else
