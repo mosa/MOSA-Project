@@ -48,12 +48,14 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			uint location = MultibootStructure;
 
-			Mosa.HelloWorld.Screen.Row = 3;
+			Mosa.HelloWorld.Screen.Row = 4;
 			for (uint i = 0; i < 80; i = i + 4) {
-				Mosa.HelloWorld.Screen.Column = 65;
+				Mosa.HelloWorld.Screen.Column = 53;
+                Mosa.HelloWorld.Screen.Color = 0x0F;
 				Mosa.HelloWorld.Screen.Write(i, 10, 2);
 				Mosa.HelloWorld.Screen.Write(':');
 				Mosa.HelloWorld.Screen.Write(' ');
+                Mosa.HelloWorld.Screen.Color = 0x07;
 				Mosa.HelloWorld.Screen.Write(Memory.Get32(location + i), 16, 8);
 				Mosa.HelloWorld.Screen.NextLine();
 			}
