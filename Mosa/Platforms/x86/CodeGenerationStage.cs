@@ -129,6 +129,16 @@ namespace Mosa.Platforms.x86
                 _emitter.Mul(instruction.Operand0, instruction.Operand1);
         }
 
+        void IX86InstructionVisitor<int>.DirectMultiplication(Instructions.DirectMultiplicationInstruction instruction, int arg)
+        {
+            _emitter.DirectMultiplication(instruction.Operand0);
+        }
+
+        void IX86InstructionVisitor<int>.DirectDivision(Instructions.DirectDivisionInstruction instruction, int arg)
+        {
+            _emitter.DirectDivision(instruction.Operand0);
+        }
+
         void IX86InstructionVisitor<int>.Div(DivInstruction instruction, int arg)
         {
             // FIXME: Expand divisions to cdq/x86 div pairs in IRToX86TransformationStage

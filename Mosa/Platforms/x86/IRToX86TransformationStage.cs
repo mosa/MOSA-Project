@@ -893,6 +893,14 @@ namespace Mosa.Platforms.x86
  */
         }
 
+        void IX86InstructionVisitor<Context>.DirectMultiplication(Instructions.DirectMultiplicationInstruction instruction, Context ctx)
+        { 
+        }
+
+        void IX86InstructionVisitor<Context>.DirectDivision(Instructions.DirectDivisionInstruction instruction, Context ctx)
+        {
+        }
+
         void IX86InstructionVisitor<Context>.Div(Instructions.DivInstruction instruction, Context ctx)
         {
         }

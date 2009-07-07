@@ -356,6 +356,18 @@ namespace Mosa.Platforms.x86
         void Mul(Operand op1, Operand op2);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        void DirectMultiplication(Operand op);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        void DirectDivision(Operand op);
+
+        /// <summary>
         /// Monitor Wait
         /// </summary>
         void Mwait();

@@ -74,15 +74,15 @@ namespace Mosa.Platforms.x86
 		{
 			Debug.Assert(op is MemoryOperand || op is ConstantOperand, @"Long operand not memory or constant.");
 
-			SigType I4 = new SigType(CilElementType.I4);
+            SigType HighType = (op.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
 			SigType U4 = new SigType(CilElementType.U4);
 
 			// Is it a constant operand?
 			ConstantOperand cop = op as ConstantOperand;
 			if (cop != null) {
 				long value = (long)cop.Value;
-                opL = new ConstantOperand(I4, (int)(value & 0xFFFFFFFF));
-				opH = new ConstantOperand(I4, (int)((value >> 32) & 0xFFFFFFFF));
+                opL = new ConstantOperand(U4, (int)(value & 0xFFFFFFFF));
+                opH = new ConstantOperand(HighType, (int)((value >> 32) & 0xFFFFFFFF));
 			}
 			else {
 				// No, could be a member or a plain memory operand
@@ -90,14 +90,14 @@ namespace Mosa.Platforms.x86
 				if (memberOp != null) {
 					// We need to keep the member reference, otherwise the linker can't fixup
 					// the member address.
-					opL = new MemberOperand(memberOp.Member, I4, memberOp.Offset);
-                    opH = new MemberOperand(memberOp.Member, I4, new IntPtr(memberOp.Offset.ToInt64() + 4));
+					opL = new MemberOperand(memberOp.Member, U4, memberOp.Offset);
+                    opH = new MemberOperand(memberOp.Member, HighType, new IntPtr(memberOp.Offset.ToInt64() + 4));
 				}
 				else {
 					// Plain memory, we can handle it here
 					MemoryOperand mop = (MemoryOperand)op;
-                    opL = new MemoryOperand(I4, mop.Base, mop.Offset);
-					opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
+                    opL = new MemoryOperand(U4, mop.Base, mop.Offset);
+                    opH = new MemoryOperand(HighType, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
 				}
 			}
 		}
@@ -322,10 +322,10 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalXorInstruction(edx, edx),
-                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.DirectDivisionInstruction(ecx),
                 new Instructions.MoveInstruction(ebx, eax),
                 new Instructions.MoveInstruction(eax, op1L),
-                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.DirectDivisionInstruction(ecx),
                 new Instructions.MoveInstruction(edx, ebx),
                 new IR.JmpInstruction(blocks[7].Label)
             });
@@ -377,13 +377,13 @@ namespace Mosa.Platforms.x86
                 new Instructions.RcrInstruction(eax, new ConstantOperand(U1, 1)),
                 new Instructions.LogicalOrInstruction(ebx, ebx),
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[4].Label),
-                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.DirectDivisionInstruction(ecx),
                 new Instructions.MoveInstruction(esi, eax),
-                new x86.Instructions.MulInstruction(eax, op2H),
+                new Instructions.DirectMultiplicationInstruction(op2H),
                 //new IL.MulInstruction(IL.OpCode.Mul, eax, eax, op2H),
                 new Instructions.MoveInstruction(ecx, eax),
                 new Instructions.MoveInstruction(eax, op2L),
-                new x86.Instructions.MulInstruction(eax, esi),
+                new Instructions.DirectMultiplicationInstruction(esi),
                 //new IL.MulInstruction(IL.OpCode.Mul, eax, eax, esi),
                 new Instructions.AddInstruction(edx, ecx),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[5].Label),
@@ -559,9 +559,9 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalXorInstruction(edx, edx),
-                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.DirectDivisionInstruction(ecx),
                 new Instructions.MoveInstruction(eax, op1L),
-                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.DirectDivisionInstruction(ecx),
                 new Instructions.MoveInstruction(eax, edx),
                 new Instructions.LogicalXorInstruction(edx, edx),
                 new Instructions.DecInstruction(edi),
@@ -627,11 +627,11 @@ namespace Mosa.Platforms.x86
                 new Instructions.RcrInstruction(eax, new ConstantOperand(U1, 1)),
                 new Instructions.LogicalOrInstruction(ebx, ebx),
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[4].Label),
-                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.DirectDivisionInstruction(ecx),
                 new Instructions.MoveInstruction(ecx, eax),
-                new IL.MulInstruction(IL.OpCode.Mul, eax, eax, op2H),
+                new Instructions.DirectMultiplicationInstruction(op2H),
                 new Instructions.Intrinsics.XchgInstruction(ecx, eax),
-                new IL.MulInstruction(IL.OpCode.Mul, eax, eax, op2L),
+                new Instructions.DirectMultiplicationInstruction(op2L),
                 new Instructions.AddInstruction(edx, ecx),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[5].Label),
                 new Instructions.CmpInstruction(edx, op1H),
@@ -730,14 +730,14 @@ namespace Mosa.Platforms.x86
                 new IR.PushInstruction(ebx),
                 new Instructions.MoveInstruction(eax, op2H),
                 new Instructions.LogicalOrInstruction(eax, eax),
-                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[1].Label),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[1].Label), // JNZ
                 new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalXorInstruction(edx, edx),
-                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.DirectDivisionInstruction(ecx),
                 new Instructions.MoveInstruction(ebx, eax),
                 new Instructions.MoveInstruction(eax, op1L),
-                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.DirectDivisionInstruction(ecx),
                 new Instructions.MoveInstruction(edx, ebx),
                 new IR.JmpInstruction(nextBlock.Label),
             });
@@ -758,13 +758,13 @@ namespace Mosa.Platforms.x86
                 new Instructions.ShrInstruction(edx, new ConstantOperand(U1, 1)),
                 new Instructions.RcrInstruction(eax, new ConstantOperand(U1, 1)),
                 new Instructions.LogicalOrInstruction(ecx, ecx),
-                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[2].Label),
-                new Instructions.UDivInstruction(eax, ebx),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[2].Label), // JNZ
+                new Instructions.DirectDivisionInstruction(ebx),
                 new Instructions.MoveInstruction(esi, eax),
-                new IL.MulInstruction(IL.OpCode.Mul, eax, eax, op2H),
+                new Instructions.DirectMultiplicationInstruction(op2H),
                 new Instructions.MoveInstruction(ecx, eax),
                 new Instructions.MoveInstruction(eax, op2L),
-                new IL.MulInstruction(IL.OpCode.Mul, eax, eax, esi),
+                new Instructions.DirectMultiplicationInstruction(esi),
                 new Instructions.AddInstruction(edx, ecx),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[3].Label),
                 new Instructions.CmpInstruction(edx, op1H),
@@ -858,9 +858,9 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalXorInstruction(edx, edx),
-                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.DirectDivisionInstruction(ecx),
                 new Instructions.MoveInstruction(eax, op1L),
-                new Instructions.UDivInstruction(eax, ecx),
+                new Instructions.DirectDivisionInstruction(ecx),
                 new Instructions.MoveInstruction(eax, edx),
                 new Instructions.LogicalXorInstruction(edx, edx),
                 new IR.JmpInstruction(nextBlock.Label),
@@ -883,11 +883,11 @@ namespace Mosa.Platforms.x86
                 new Instructions.RcrInstruction(eax, new ConstantOperand(U1, 1)),
                 new Instructions.LogicalOrInstruction(ecx, ecx),
                 new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[2].Label),
-                new Instructions.UDivInstruction(eax, ebx),
+                new Instructions.DirectDivisionInstruction(ebx),
                 new Instructions.MoveInstruction(ecx, eax),
-                new Instructions.MulInstruction(eax, op2H),
+                new Instructions.DirectMultiplicationInstruction(op2H),
                 new Instructions.Intrinsics.XchgInstruction(ecx, eax),
-                new Instructions.MulInstruction(eax, op2L),
+                new Instructions.DirectMultiplicationInstruction(op2L),
                 new Instructions.AddInstruction(edx, ecx),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[3].Label),
                 new Instructions.CmpInstruction(edx, op1H),
@@ -2293,6 +2293,14 @@ namespace Mosa.Platforms.x86
 		void IX86InstructionVisitor<Context>.Mul(MulInstruction mulInstruction, Context arg)
 		{
 		}
+
+        void IX86InstructionVisitor<Context>.DirectMultiplication(Instructions.DirectMultiplicationInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.DirectDivision(Instructions.DirectDivisionInstruction instruction, Context arg)
+        {
+        }
 
 		void IX86InstructionVisitor<Context>.Div(DivInstruction divInstruction, Context arg)
 		{

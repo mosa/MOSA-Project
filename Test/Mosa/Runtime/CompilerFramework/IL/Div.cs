@@ -35,6 +35,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     }
                 }";
         }
+
+        private static string CreateTestCodeWithReturn(string name, string typeIn, string typeOut)
+        {
+            return @"
+                static class Test
+                {
+                    static " + typeOut + " " + name + "(" + typeOut + " expect, " + typeIn + " a, " + typeIn + @" b)
+                    {
+                        return (a / b);
+                    }
+                }";
+        }
   
         private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
         {
@@ -721,6 +733,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="b"></param>
         /// <returns></returns>
         delegate bool U8_U8_U8(ulong expect, ulong a, ulong b);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expect"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        delegate ulong U8_U8_U8_Return(ulong expect, ulong a, ulong b);
         /// <summary>
         /// 
         /// </summary>
@@ -759,8 +780,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void DivU8(ulong a, ulong b)
         {
-            CodeSource = CreateTestCode("DivU8", "ulong", "ulong");
-            Assert.IsTrue((bool)Run<U8_U8_U8>("", "Test", "DivU8", (ulong)(a / b), a, b));
+            CodeSource = CreateTestCodeWithReturn("DivU8", "ulong", "ulong");
+            Assert.AreEqual((ulong)(a / b), Run<U8_U8_U8_Return>("", "Test", "DivU8", (ulong)(a / b), a, b));
         }
         #endregion
 

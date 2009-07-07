@@ -797,6 +797,24 @@ namespace Mosa.Platforms.x86
 			Emit(src, null, X86.Mul(dest, src));
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        void ICodeEmitter.DirectMultiplication(Operand op)
+        {
+            Emit(op, null, X86.Mul(null, op));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        void ICodeEmitter.DirectDivision(Operand op)
+        {
+            Emit(op, null, X86.Div(null, op));
+        }
+
 		/// <summary>
 		/// Monitor Wait
 		/// </summary>

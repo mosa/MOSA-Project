@@ -883,6 +883,7 @@ namespace Mosa.Platforms.x86
         /// <returns></returns>
         public static OpCode Mul(Operand dest, Operand src)
         {
+            if (null == dest) return X86Instruction.Mul.R;
             if (dest is RegisterOperand) return X86Instruction.Mul.R;
             if (dest is MemoryOperand) return X86Instruction.Mul.M;
             throw new ArgumentException(@"No opcode for operand type.");
