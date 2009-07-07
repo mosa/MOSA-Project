@@ -857,6 +857,11 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<Context>.Cvtss2sd(Instructions.Cvtss2sdInstruction instruction, Context ctx)
         {
+            if (instruction.Operand1 is ConstantOperand)
+            {
+                Instruction[] insts = new Instruction[] { new Instructions.Cvtss2sdInstruction(instruction.Operand0, EmitConstant(instruction.Operand1)) };
+                Replace(ctx, insts);
+            }
         }
 
         void IX86InstructionVisitor<Context>.Cvtsd2ss(Instructions.Cvtsd2ssInstruction instruction, Context ctx)

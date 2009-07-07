@@ -450,7 +450,18 @@ namespace Mosa.Platforms.x86
 
 		void ICodeEmitter.Cvtss2sd(Operand op1, Operand op2)
 		{
-			Emit(op1, op2, X86.Cvtss2sd(op1, op2));
+            System.IO.StreamWriter w = new StreamWriter("cvtss2sd.txt", true);
+            w.WriteLine("{0}, {1}", op1.GetType(), op2.GetType());
+            w.Flush();
+            w.Close();
+            Operand op = new RegisterOperand(op2.Type, SSE2Register.XMM2);
+            if (!(op1 is RegisterOperand))
+            {
+                Emit(op, op2, X86.Cvtss2sd(op, op2));
+                Emit(op1, op, X86.Movsd(op1, op));
+            }
+            else
+			    Emit(op1, op2, X86.Cvtss2sd(op1, op2));
 		}
 
 		void ICodeEmitter.Cvtsi2ss(Operand op1, Operand op2)

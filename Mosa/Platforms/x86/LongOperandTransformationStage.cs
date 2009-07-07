@@ -81,8 +81,11 @@ namespace Mosa.Platforms.x86
 			ConstantOperand cop = op as ConstantOperand;
 			if (cop != null) {
 				long value = (long)cop.Value;
-                opL = new ConstantOperand(U4, (int)(value & 0xFFFFFFFF));
-                opH = new ConstantOperand(HighType, (int)((value >> 32) & 0xFFFFFFFF));
+                opL = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
+                if (HighType.Type == CilElementType.I4)
+                    opH = new ConstantOperand(HighType, (int)(value >> 32));
+                else
+                    opH = new ConstantOperand(HighType, (uint)(value >> 32));
 			}
 			else {
 				// No, could be a member or a plain memory operand
