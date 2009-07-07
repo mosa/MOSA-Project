@@ -1339,6 +1339,7 @@ namespace Mosa.Platforms.x86
         /// <returns></returns>
         public static OpCode Divsd(Operand dest, Operand src)
         {
+            if ((dest is RegisterOperand) && (src is LabelOperand)) return X86Instruction.Divsd.R_M;
             if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Instruction.Divsd.R_R;
             if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Instruction.Divsd.R_M;
             throw new ArgumentException(@"No opcode for operand type.");

@@ -36,6 +36,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     }
                 }";
         }
+
+        private static string CreateTestCodeWithReturn(string name, string typeIn, string typeOut)
+        {
+            return @"
+                static class Test
+                {
+                    static " + typeOut + " " + name + "(" + typeOut + " expect, " + typeIn + " a, " + typeIn + @" b)
+                    {
+                        return (a % b);
+                    }
+                }";
+        }
   
         private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
         {
@@ -722,6 +734,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="b"></param>
         /// <returns></returns>
         delegate bool I8_I8_I8(long expect, long a, long b);
+        delegate long I8_I8_I8_Return(long expect, long a, long b);
         /// <summary>
         /// 
         /// </summary>
@@ -782,8 +795,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void RemI8(long a, long b)
         {
-            CodeSource = CreateTestCode("RemI8", "long", "long");
-            Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "RemI8", (long)(a % b), a, b));
+            CodeSource = CreateTestCodeWithReturn("RemI8", "long", "long");
+            Assert.AreEqual((long)(a % b), (long)Run<I8_I8_I8_Return>("", "Test", "RemI8", (long)(a % b), a, b));
         }
         
         delegate bool I8_Constant_I8(long expect, long x);

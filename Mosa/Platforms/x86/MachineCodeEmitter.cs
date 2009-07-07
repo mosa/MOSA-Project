@@ -450,18 +450,7 @@ namespace Mosa.Platforms.x86
 
 		void ICodeEmitter.Cvtss2sd(Operand op1, Operand op2)
 		{
-            System.IO.StreamWriter w = new StreamWriter("cvtss2sd.txt", true);
-            w.WriteLine("{0}, {1}", op1.GetType(), op2.GetType());
-            w.Flush();
-            w.Close();
-            Operand op = new RegisterOperand(op2.Type, SSE2Register.XMM2);
-            if (!(op1 is RegisterOperand))
-            {
-                Emit(op, op2, X86.Cvtss2sd(op, op2));
-                Emit(op1, op, X86.Movsd(op1, op));
-            }
-            else
-			    Emit(op1, op2, X86.Cvtss2sd(op1, op2));
+            Emit(op1, op2, X86.Cvtss2sd(op1, op2));
 		}
 
 		void ICodeEmitter.Cvtsi2ss(Operand op1, Operand op2)
@@ -878,6 +867,10 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The SRC.</param>
 		void ICodeEmitter.SseDiv(Operand dest, Operand src)
 		{
+            System.IO.StreamWriter w = new StreamWriter("ssediv.txt", true);
+            w.WriteLine("{0}, {1}", dest.GetType(), src.GetType());
+            w.Flush();
+            w.Close();
 			CheckAndConvertR4(ref src);
 			Emit(dest, src, X86.Divsd(dest, src));
 		}
@@ -927,7 +920,7 @@ namespace Mosa.Platforms.x86
 			// HACK: For some reason shld isn't emitted properly if we do
 			// Emit(dst, src, count, X86.Shld). It is emitted backwards, if
 			// we turn this around the following way - it works.
-			Emit(src, dest, count, X86.Shrd(dest,src,count));
+			Emit(src, dest, count, X86.Shld(dest, src, count));
 		}
 
 		void ICodeEmitter.Shr(Operand dest, Operand src)

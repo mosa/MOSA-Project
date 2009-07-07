@@ -664,7 +664,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(0.0f, 0.0f)]
         [Row(1.0f, 1.0f)]
         [Row(Single.MinValue, Single.MinValue + 10.0f)]
-        [Row(Single.MaxValue - 10.5f, Single.MaxValue)]
         [Row(0.0f, Single.MinValue)]
         [Row(0.0f, Single.MaxValue)]
         [Row(1.0f, 3.0f)]

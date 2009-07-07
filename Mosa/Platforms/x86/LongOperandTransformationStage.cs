@@ -474,12 +474,12 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(instruction.Results[0], out op0L, out op0H);
 			SplitLongOperand(instruction.First, out op1L, out op1H);
 			SplitLongOperand(instruction.Second, out op2L, out op2H);
-			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-			RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
-			RegisterOperand edx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
-			RegisterOperand ecx = new RegisterOperand(U4, GeneralPurposeRegister.ECX);
-			RegisterOperand edi = new RegisterOperand(I4, GeneralPurposeRegister.EDI);
-			RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
+			RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
+            RegisterOperand ebx = new RegisterOperand(U4, GeneralPurposeRegister.EBX);
+            RegisterOperand edx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
+            RegisterOperand ecx = new RegisterOperand(U4, GeneralPurposeRegister.ECX);
+            RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
+            RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
 
 			// Determine sign of the result (edi = 0 if result is positive, non-zero
 			// otherwise) and make operands positive.
@@ -1061,10 +1061,10 @@ namespace Mosa.Platforms.x86
             });
 
             blocks[1].Instructions.AddRange(new Instruction[] {
-                new Instructions.CmpInstruction(ecx, new ConstantOperand(U1, 32)),
+                new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 32)),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label),
-                new Instructions.ShldInstruction(edx, eax, ecx),
-                new Instructions.ShlInstruction(eax, ecx),
+                new Instructions.ShldInstruction(edx, eax, cl),
+                new Instructions.ShlInstruction(eax, cl),
                 new IR.JmpInstruction(nextBlock.Label)
             });
 

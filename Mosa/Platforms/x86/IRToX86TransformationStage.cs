@@ -374,6 +374,8 @@ namespace Mosa.Platforms.x86
             Type replType = typeof(x86.Instructions.DivInstruction);
             if (instruction.First.StackType == StackTypeCode.F || instruction.Second.StackType == StackTypeCode.F)
             {
+                if (instruction.Second is ConstantOperand)
+                    instruction.Second = EmitConstant(instruction.Second);
                 replType = typeof(x86.Instructions.SseDivInstruction);
             }
             ThreeTwoAddressConversion(ctx, instruction, replType);
