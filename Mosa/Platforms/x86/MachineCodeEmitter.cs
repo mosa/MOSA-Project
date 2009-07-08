@@ -1310,8 +1310,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The source operand of the instruction.</param>
 		void ICodeEmitter.Xchg(Operand dest, Operand src)
 		{
-			byte[] code = { 0x66 };
-			Emit(code, null, null, null);
+			/*byte[] code = { 0x66 };
+			Emit(code, null, null, null);*/
 			Emit(dest, src, X86.Xchg(dest, src));
 		}
 
