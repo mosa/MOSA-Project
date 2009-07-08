@@ -372,6 +372,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <returns></returns>
         delegate bool I8_I8(long expect, long a);
+        delegate long I8_I8_R(long expect, long a);
         /// <summary>
         /// 
         /// </summary>
@@ -391,7 +392,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void SwitchI8(long a)
         {
             CodeSource = @"static class Test { 
-                static bool SwitchI8(long expect, long a) { return expect == Switch_Target(a); } 
+                static long SwitchI8(long expect, long a) { return Switch_Target(a); } 
                 static long Switch_Target(long a)
                 {
                     switch(a)
@@ -426,7 +427,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     }
                 }
             }";
-            Assert.IsTrue((bool)Run<I8_I8>("", "Test", "SwitchI8", a, a));
+            Assert.AreEqual(a, (long)Run<I8_I8_R>("", "Test", "SwitchI8", a, a));
         }
 
         /// <summary>

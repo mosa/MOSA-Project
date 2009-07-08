@@ -994,10 +994,14 @@ namespace Mosa.Platforms.x86
 			}
 			// We are dealing with floating point values
 			else {
-				if (src.Type.Type == CilElementType.R4)
-					Emit(dest, src, X86.Movss(dest, src));
-				else
-					Emit(dest, src, X86.Movsd(dest, src));
+                if (src.Type.Type == CilElementType.R4)
+                {
+                    //RegisterOperand xmm3 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM3);
+                    //Emit(xmm3, src, X86.Cvtss2sd(xmm3, src));
+                    Emit(dest, src, X86.Movsd(dest, src));
+                }
+                else
+                    Emit(dest, src, X86.Movsd(dest, src));
 			}
 		}
 

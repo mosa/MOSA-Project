@@ -132,11 +132,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(long.MinValue)]
+        [Row(int.MinValue)]
         [Row(-1)]
         [Row(0)]
         [Row(1)]
-        [Row(long.MaxValue)]
+        [Row(int.MaxValue)]
         [Test, Author("illuminus", "illuminus86@gmail.com")]
         public unsafe void DereffedVoidPtrAssign_I8(long a)
         {

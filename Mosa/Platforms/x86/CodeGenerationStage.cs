@@ -131,7 +131,18 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.DirectMultiplication(Instructions.DirectMultiplicationInstruction instruction, int arg)
         {
-            _emitter.DirectMultiplication(instruction.Operand0);
+            if (instruction.Operand0 is ConstantOperand)
+            {
+                RegisterOperand ebx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
+                _emitter.Push(ebx);
+                _emitter.Mov(ebx, instruction.Operand0);
+                _emitter.DirectMultiplication(ebx);
+                _emitter.Pop(ebx);
+            }
+            else
+            {
+                _emitter.DirectMultiplication(instruction.Operand0);
+            }
         }
 
         void IX86InstructionVisitor<int>.DirectDivision(Instructions.DirectDivisionInstruction instruction, int arg)
@@ -1569,6 +1580,10 @@ namespace Mosa.Platforms.x86
                         throw new NotSupportedException();
                 }
             }
+            /*else if (src.Type.Type == CilElementType.R4 && dst.Type.Type == CilElementType.R4 && dst is RegisterOperand)
+            {
+                _emitter.Cvtss2sd(dst, src);
+            }*/
             else if (src.Type.Type == CilElementType.R4 && dst.Type.Type == CilElementType.R4)
             {
                 _emitter.Movss(dst, src);

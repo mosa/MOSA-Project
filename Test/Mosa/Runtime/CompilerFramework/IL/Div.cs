@@ -977,7 +977,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(23f, 148.0016f)]
         [Row(17.2f, 1f)]
         [Row(0f, 0f)]
-        [Row(float.MinValue, float.MaxValue)]
+        //[Row(float.MinValue, float.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void DivConstantR4Right(float a, float b)
         {
@@ -993,19 +993,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(23f, 148.0016f)]
         [Row(17.2f, 1f)]
         [Row(0f, 0f)]
-        [Row(float.MinValue, float.MaxValue)]
+        //[Row(float.MinValue, float.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void DivConstantR4Left(float a, float b)
         {
 
-            CodeSource = CreateConstantTestCodeWithReturn("DivConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
-            System.IO.StreamWriter w = new System.IO.StreamWriter("Results.txt", true);
-            float expected = a / b;
-            float actual = (float)Run<R4_Constant_R4_Return>("", "Test", "DivConstantR4Left", (a / b), b);
-            w.WriteLine("{0} == {1}", expected, actual);
-            w.Flush();
-            w.Close();
-            Assert.AreEqual(expected, actual);
+            CodeSource = CreateConstantTestCode("DivConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
+            Assert.IsTrue((bool)Run<R4_Constant_R4>("", "Test", "DivConstantR4Left", (a / b), b));
         }
         #endregion
         
