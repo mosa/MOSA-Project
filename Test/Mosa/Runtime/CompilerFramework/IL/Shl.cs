@@ -71,6 +71,36 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                 throw new NotSupportedException();
             }
         }
+
+        private static string CreateConstantTestCodeWithReturn(string name, string typeIn, string typeOut, string constLeft, string constRight)
+        {
+            if (String.IsNullOrEmpty(constRight))
+            {
+                return @"
+                    static class Test
+                    {
+                        static " + typeOut + " " + name + "(" + typeOut + " expect, " + typeIn + @" x)
+                        {
+                            return (" + constLeft + @" << x);
+                        }
+                    }";
+            }
+            else if (String.IsNullOrEmpty(constLeft))
+            {
+                return @"
+                    static class Test
+                    {
+                        static " + typeOut + " " + name + "(" + typeOut + " expect, " + typeIn + @" x)
+                        {
+                            return (x << " + constRight + @");
+                        }
+                    }";
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
         
         #region C
         /// <summary>
@@ -98,6 +128,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         }
         
         delegate bool C_Constant_C([MarshalAs(UnmanagedType.U2)]char expect, [MarshalAs(UnmanagedType.U2)]char x);
+        delegate int C_Constant_C_Return([MarshalAs(UnmanagedType.U2)]char expect, [MarshalAs(UnmanagedType.U2)]char x);
 
         /// <summary>
         /// 
@@ -125,8 +156,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void ShlConstantCLeft(char a, char b)
         {
-            CodeSource = CreateConstantTestCode("ShlConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
-            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "ShlConstantCLeft", (char)(a << b), b));
+            CodeSource = CreateConstantTestCodeWithReturn("ShlConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
+            Assert.AreEqual((char)(a << b), (int)Run<C_Constant_C_Return>("", "Test", "ShlConstantCLeft", (char)(a << b), b));
         }
         #endregion
         

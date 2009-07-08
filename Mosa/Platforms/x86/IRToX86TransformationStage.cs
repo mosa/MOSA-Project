@@ -372,13 +372,11 @@ namespace Mosa.Platforms.x86
         void IL.IILVisitor<Context>.Div(IL.DivInstruction instruction, Context ctx)
         {
             Type replType = typeof(x86.Instructions.DivInstruction);
-            if (instruction.First.StackType == StackTypeCode.F || instruction.Second.StackType == StackTypeCode.F)
+            if (instruction.First.StackType == StackTypeCode.F)
             {
-                if (instruction.Second is ConstantOperand)
-                    instruction.Second = EmitConstant(instruction.Second);
                 replType = typeof(x86.Instructions.SseDivInstruction);
             }
-            ThreeTwoAddressConversion(ctx, instruction, replType);
+            HandleNonCommutativeOperation(ctx, instruction, replType);
         }
 
         void IL.IILVisitor<Context>.Rem(IL.RemInstruction instruction, Context ctx)
@@ -649,7 +647,7 @@ namespace Mosa.Platforms.x86
             {
                 List<Instruction> replacements = new List<Instruction>();
                 RegisterOperand rop;
-                if (op0.StackType == StackTypeCode.F)
+                if (op0.StackType == StackTypeCode.F || op1.StackType == StackTypeCode.F)
                 {
                     rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
                 }
@@ -1417,7 +1415,7 @@ namespace Mosa.Platforms.x86
             Operand opRes = instruction.Results[0];
             Operand op1 = instruction.Operands[0];
             Operand op2 = instruction.Operands[1];
-            RegisterOperand eax = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
+            RegisterOperand eax = new RegisterOperand(opRes.Type, opRes.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : (Register)GeneralPurposeRegister.EAX);
 
             if (null != replacementType)
             {

@@ -867,10 +867,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The SRC.</param>
 		void ICodeEmitter.SseDiv(Operand dest, Operand src)
 		{
-            System.IO.StreamWriter w = new StreamWriter("ssediv.txt", true);
-            w.WriteLine("{0}, {1}", dest.GetType(), src.GetType());
-            w.Flush();
-            w.Close();
+            CheckAndConvertR4(ref dest);
 			CheckAndConvertR4(ref src);
 			Emit(dest, src, X86.Divsd(dest, src));
 		}
@@ -910,7 +907,9 @@ namespace Mosa.Platforms.x86
             }
             else
             {
+                ConstantOperand max = new ConstantOperand(new SigType(CilElementType.I4), 31);
                 Emit(ecx, src, X86.Move(ecx, src));
+                Emit(ecx, max, X86.And(ecx, max));
                 Emit(dest, null, X86.Shl(dest, src));
             }
 		}

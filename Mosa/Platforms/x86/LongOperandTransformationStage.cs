@@ -80,12 +80,18 @@ namespace Mosa.Platforms.x86
 			// Is it a constant operand?
 			ConstantOperand cop = op as ConstantOperand;
 			if (cop != null) {
-				long value = (long)cop.Value;
-                opL = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
                 if (HighType.Type == CilElementType.I4)
+                {
+                    long value = (long)cop.Value;
+                    opL = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
                     opH = new ConstantOperand(HighType, (int)(value >> 32));
+                }
                 else
+                {
+                    ulong value = (ulong)cop.Value;
+                    opL = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
                     opH = new ConstantOperand(HighType, (uint)(value >> 32));
+                }
 			}
 			else {
 				// No, could be a member or a plain memory operand
@@ -192,6 +198,9 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandMul(Context ctx, IL.MulInstruction instruction)
 		{
+            BasicBlock[] blocks = CreateEmptyBlocks(3);
+            BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+
 			MemoryOperand op0 = instruction.Results[0] as MemoryOperand;
 			MemoryOperand op1 = instruction.Operands[0] as MemoryOperand;
 			MemoryOperand op2 = instruction.Operands[1] as MemoryOperand;
@@ -205,14 +214,53 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(instruction.Second, out op2L, out op2H);
 
 			// op0 = EDX:EAX, op1 = A, op2 = B
-			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
-			Replace(ctx, new Instruction[] {
+			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+            RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
+            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+			/*Replace(ctx, new Instruction[] {
                 new IL.MulInstruction(IL.OpCode.Mul, op0H, op1H, op2L),
                 new IL.MulInstruction(IL.OpCode.Mul, op0L, op1L, op2H),
                 new IL.AddInstruction(IL.OpCode.Add, op0H, op0H, op0L),
                 new IL.MulInstruction(IL.OpCode.Mul, op0L, op1L, op2L),
                 new AddInstruction(op0H, edx)
+            });*/
+            blocks[0].Instructions.AddRange(new Instruction[] {
+                new IR.MoveInstruction(eax, op1H),
+                new IR.MoveInstruction(ecx, op2H),
+                new Instructions.LogicalOrInstruction(ecx, eax),
+                new IR.MoveInstruction(ecx, op2L),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[1].Label),
+                new IR.MoveInstruction(eax, op1L),
+                new Instructions.DirectMultiplicationInstruction(ecx),
+                new IR.JmpInstruction(nextBlock.Label),
             });
+
+            blocks[1].Instructions.AddRange(new Instruction[] {
+                new IR.PushInstruction(ebx),
+                new Instructions.DirectMultiplicationInstruction(ecx),
+                new IR.MoveInstruction(ebx, eax),
+                new IR.MoveInstruction(eax, op1L),
+                new Instructions.DirectMultiplicationInstruction(op2H),
+                new Instructions.AddInstruction(ebx, eax),
+                new IR.MoveInstruction(eax, op1L),
+                new Instructions.DirectMultiplicationInstruction(ecx),
+                new Instructions.AddInstruction(edx, ebx),
+                new IR.PopInstruction(ebx),
+                new IR.JmpInstruction(nextBlock.Label),
+            });
+
+            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+                new IR.MoveInstruction(op0L, eax),
+                new IR.MoveInstruction(op0H, edx),
+            });
+
+            Remove(ctx);
+
+            // Link the created blocks together
+            LinkBlocks(blocks[0], blocks[1]);
+            LinkBlocks(blocks[0], nextBlock);
+            LinkBlocks(blocks[1], nextBlock);
 		}
 
 		/// <summary>
@@ -232,8 +280,8 @@ namespace Mosa.Platforms.x86
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			SplitLongOperand(instruction.Results[0], out op0L, out op0H);
-			SplitLongOperand(instruction.First, out op1L, out op1H);
-			SplitLongOperand(instruction.Second, out op2L, out op2H);
+			SplitLongOperand(instruction.First,      out op1L, out op1H);
+			SplitLongOperand(instruction.Second,     out op2L, out op2H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
@@ -474,12 +522,12 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(instruction.Results[0], out op0L, out op0H);
 			SplitLongOperand(instruction.First, out op1L, out op1H);
 			SplitLongOperand(instruction.Second, out op2L, out op2H);
-			RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
-            RegisterOperand ebx = new RegisterOperand(U4, GeneralPurposeRegister.EBX);
-            RegisterOperand edx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
-            RegisterOperand ecx = new RegisterOperand(U4, GeneralPurposeRegister.ECX);
-            RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
-            RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
+			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+            RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
+            RegisterOperand edi = new RegisterOperand(I4, GeneralPurposeRegister.EDI);
+            RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
 
 			// Determine sign of the result (edi = 0 if result is positive, non-zero
 			// otherwise) and make operands positive.
@@ -1465,8 +1513,8 @@ namespace Mosa.Platforms.x86
 			Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
 			SigType I4 = new SigType(CilElementType.I4);
-			MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
-			MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            Operand op0L, op0H;
+            SplitLongOperand(op0, out op0L, out op0H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
@@ -1491,15 +1539,16 @@ namespace Mosa.Platforms.x86
 			Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
 			SigType I4 = new SigType(CilElementType.I4);
-			MemoryOperand op1L = new MemoryOperand(I4, op1.Base, op1.Offset);
-			MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
+            SigType U4 = new SigType(CilElementType.U4);
+            Operand op1L, op1H;
+            SplitLongOperand(op1, out op1L, out op1H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
 			Replace(ctx, new Instruction[] {
                 new x86.Instructions.MoveInstruction(edx, op0),
                 new x86.Instructions.MoveInstruction(eax, op1L),
-                new x86.Instructions.MoveInstruction(new MemoryOperand(I4, GeneralPurposeRegister.EDX, IntPtr.Zero), eax),
+                new x86.Instructions.MoveInstruction(new MemoryOperand(U4, GeneralPurposeRegister.EDX, IntPtr.Zero), eax),
                 new x86.Instructions.MoveInstruction(eax, op1H),
                 new x86.Instructions.MoveInstruction(new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(4)), eax),
             });
