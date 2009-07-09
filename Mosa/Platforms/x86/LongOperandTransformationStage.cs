@@ -72,6 +72,13 @@ namespace Mosa.Platforms.x86
 		/// <exception cref="T:System.ArgumentException"><paramref name="op"/> is not a ConstantOperand and not a MemoryOperand.</exception>
 		public static void SplitLongOperand(Operand op, out Operand opL, out Operand opH)
 		{
+            if (op.Type.Type != CilElementType.I8 && op.Type.Type != CilElementType.U8)
+            {
+                opL = op;
+                opH = new ConstantOperand(new SigType(CilElementType.I4), (int)0);
+                return;
+            }
+
 			Debug.Assert(op is MemoryOperand || op is ConstantOperand, @"Long operand not memory or constant.");
 
             SigType HighType = (op.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
@@ -1352,13 +1359,23 @@ namespace Mosa.Platforms.x86
 		private void ExpandMove(Context ctx, IR.MoveInstruction instruction)
 		{
 			Operand op0L, op0H, op1L, op1H;
-			SplitLongOperand(instruction.Operand0, out op0L, out op0H);
-			SplitLongOperand(instruction.Operand1, out op1L, out op1H);
 
-			Replace(ctx, new Instruction[] {
-                new IR.MoveInstruction(op0L, op1L),
-                new IR.MoveInstruction(op0H, op1H)
-            });
+            if (instruction.Operand0.StackType == StackTypeCode.Int64)
+            {
+                SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+                SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+                Replace(ctx, new Instruction[] {
+                    new IR.MoveInstruction(op0L, op1L),
+                    new IR.MoveInstruction(op0H, op1H)
+                });
+            }
+            else
+            {
+                SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+                Replace(ctx, new Instruction[] {
+                    new IR.MoveInstruction(instruction.Operand0, op1L),
+                });
+            }
 		}
 
 		/// <summary>
@@ -2009,7 +2026,7 @@ namespace Mosa.Platforms.x86
 		void IR.IIRVisitor<Context>.Visit(IR.MoveInstruction instruction, Context arg)
 		{
 			Operand op0 = instruction.Operands[0];
-			if (op0.StackType == StackTypeCode.Int64)
+            if (op0.StackType == StackTypeCode.Int64)
 				ExpandMove(arg, instruction);
 		}
 

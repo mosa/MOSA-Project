@@ -254,6 +254,7 @@ namespace Mosa.Platforms.x86
             {
                 SigType I4 = new SigType(CilElementType.I4);
                 SigType U4 = new SigType(CilElementType.U4);
+                SigType HighType = operand.Type.Type == CilElementType.I8 ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
 
                 // Is it a constant operand?
                 ConstantOperand cop = operand as ConstantOperand;
@@ -262,8 +263,11 @@ namespace Mosa.Platforms.x86
                 if (cop != null)
                 {
                     long value = (long)cop.Value;
-                    opL = new ConstantOperand(I4, (int)(value & 0xFFFFFFFF));
-                    opH = new ConstantOperand(I4, (int)((value >> 32) & 0xFFFFFFFF));
+                    opL = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
+                    if (HighType.Type == CilElementType.I8)
+                        opH = new ConstantOperand(HighType, (int)((value >> 32) & 0xFFFFFFFF));
+                    else
+                        opH = new ConstantOperand(HighType, (uint)((value >> 32) & 0xFFFFFFFF));
                 }
                 else
                 {
@@ -273,15 +277,15 @@ namespace Mosa.Platforms.x86
                     {
                         // We need to keep the member reference, otherwise the linker can't fixup
                         // the member address.
-                        opL = new MemberOperand(memberOp.Member, I4, memberOp.Offset);
-                        opH = new MemberOperand(memberOp.Member, I4, new IntPtr(memberOp.Offset.ToInt64() + 4));
+                        opL = new MemberOperand(memberOp.Member, U4, memberOp.Offset);
+                        opH = new MemberOperand(memberOp.Member, HighType, new IntPtr(memberOp.Offset.ToInt64() + 4));
                     }
                     else
                     {
                         // Plain memory, we can handle it here
                         MemoryOperand mop = (MemoryOperand)operand;
-                        opL = new MemoryOperand(I4, mop.Base, mop.Offset);
-                        opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
+                        opL = new MemoryOperand(U4, mop.Base, mop.Offset);
+                        opH = new MemoryOperand(HighType, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
                     }
                 }
 

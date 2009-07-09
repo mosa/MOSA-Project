@@ -146,6 +146,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="b"></param>
         /// <returns></returns>
         delegate bool I4_I1_I1(sbyte expect, sbyte a, sbyte b);
+        delegate int I4_I1_I1_Return(sbyte expect, sbyte a, sbyte b);
         /// <summary>
         /// 
         /// </summary>
@@ -206,8 +207,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void RemI1(sbyte a, sbyte b)
         {
-            CodeSource = CreateTestCode("RemI1", "sbyte", "sbyte");
-            Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "RemI1", (sbyte)(a % b), a, b));
+            CodeSource = CreateTestCodeWithReturn("RemI1", "sbyte", "int");
+            Assert.AreEqual(a % b, Run<I4_I1_I1_Return>("", "Test", "RemI1", (sbyte)(a % b), a, b));
         }
         
         delegate bool I1_Constant_I1(sbyte expect, sbyte x); 

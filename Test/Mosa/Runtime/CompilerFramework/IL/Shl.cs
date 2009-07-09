@@ -41,6 +41,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     }
                 }";
         }
+
+        private static string CreateTestCodeWithReturn(string name, string typeInA, string typeInB, string typeOut)
+        {
+            return @"
+                static class Test
+                {
+                    static " + typeOut + " " + name + "(" + typeOut + " expect, " + typeInA + " a, " + typeInB + @" b)
+                    {
+                        return (a << b);
+                    }
+                }";
+        }
         
         private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
         {
@@ -123,7 +135,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void ShlC(char a, char b)
         {
-            CodeSource = CreateTestCode("AddC", "char", "char");
+            CodeSource = CreateTestCode("AddC", "char", "int");
             Assert.IsTrue((bool)Run<C_C_C>("", "Test", "AddC", (a << b), a, b));
         }
         

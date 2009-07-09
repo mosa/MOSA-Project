@@ -164,7 +164,7 @@ namespace Mosa.Platforms.x86
 		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags features)
 		{
 			if (features == ArchitectureFeatureFlags.AutoDetect) {
-				features = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE;
+				features = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
 			}
 
 			return new Architecture(features);

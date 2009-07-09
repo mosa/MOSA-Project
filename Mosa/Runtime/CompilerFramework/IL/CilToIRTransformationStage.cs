@@ -821,7 +821,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             Operand src = instruction.Operands[0];
             ConvType ctDest = ConvTypeFromCilType(dest.Type.Type);
             ConvType ctSrc = ConvTypeFromCilType(src.Type.Type);
-            int mask = 0;
+            uint mask = 0;
 
             Type extension = null;
             Type type = s_convTable[(int)ctDest][(int)ctSrc];
@@ -841,7 +841,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     break;
 
                 case ConvType.I4:
-                    mask = -1;
+                    mask = 0xFFFFFFFF;
                     src = TruncateI8(src);
                     break;
 
@@ -859,7 +859,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     break;
 
                 case ConvType.U4:
-                    mask = -1;
+                    mask = 0xFFFFFFFF;
                     break;
 
                 case ConvType.U8:
@@ -890,7 +890,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 Debug.Assert(0 != mask, @"Conversion is an AND, but no mask given.");
 
                 // If source type is I8, we're always only working on the lower half
-                src = TruncateI8(src);
+                Operand nsrc = TruncateI8(src);
 
                 // Mixed type conversion + truncation...
                 List<Instruction> instructions = new List<Instruction>();
@@ -898,14 +898,17 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 {
                     // Mixed type conversion, e.g. R4 -> I2
                     instructions.AddRange(new Instruction[] {
-                        _architecture.CreateInstruction(type, dest, src),
-                        _architecture.CreateInstruction(typeof(LogicalAndInstruction), dest, dest, new ConstantOperand(new SigType(CilElementType.I4), mask))
+                        _architecture.CreateInstruction(type, dest, nsrc),
+                        _architecture.CreateInstruction(typeof(LogicalAndInstruction), dest, dest, new ConstantOperand(new SigType(CilElementType.U4), mask))
                     });
                 }
                 else
                 {
                     // Single type truncation/extension, e.g. I4->I2 or alike
-                    instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.I4), mask)));
+                    if (src.Type.Type == CilElementType.I8 || src.Type.Type == CilElementType.U8)
+                        instructions.Add(_architecture.CreateInstruction(typeof(IR.MoveInstruction), dest, src));
+                    else
+                        instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.U4), mask)));
                 }
 
                 // Do we have to extend/truncate the result?
@@ -930,23 +933,24 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <returns>The truncated operand.</returns>
         private Operand TruncateI8(Operand op)
         {
+            Operand res = op;
             if (op.Type.Type == CilElementType.I8 || op.Type.Type == CilElementType.U8)
             {
                 if (op is RegisterOperand)
                 {
-                    op = new RegisterOperand(new SigType(CilElementType.I4), ((RegisterOperand)op).Register);
+                    res = new RegisterOperand(new SigType(CilElementType.I4), ((RegisterOperand)op).Register);
                 }
                 else if (op is MemoryOperand)
                 {
                     MemoryOperand mop = ((MemoryOperand)op);
-                    op = new MemoryOperand(new SigType(CilElementType.I4), mop.Base, mop.Offset);
+                    res = new MemoryOperand(new SigType(CilElementType.I4), mop.Base, new IntPtr(-0x10));
                 }
                 else
                 {
                     throw new NotSupportedException();
                 }
             }
-            return op;
+            return res;
         }
 
         /// <summary>

@@ -679,7 +679,7 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.PrologueInstruction instruction, Context ctx)
         {
-            SigType I = new SigType(CilElementType.I);
+            SigType I = new SigType(CilElementType.I4);
             RegisterOperand eax = new RegisterOperand(I, GeneralPurposeRegister.EAX);
             RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
             RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
@@ -1316,7 +1316,8 @@ namespace Mosa.Platforms.x86
             else if (ops[0] is MemoryOperand && ops[1] is MemoryOperand)
             {
                 // Load op1 into EAX and then do the comparison...
-                RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+                //RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+                RegisterOperand eax = new RegisterOperand(ops[0].Type, GeneralPurposeRegister.EAX);
                 Instruction[] results = new Instruction[] {
                                 new Instructions.MoveInstruction(eax, ops[0]),
                                 instruction
