@@ -1265,7 +1265,7 @@ namespace Mosa.Platforms.x86
                     _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
                     _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
                     _architecture.CreateInstruction(replacementType, opRes, ecx),
-                    _architecture.CreateInstruction(typeof(Instructions.LogicalAndInstruction), opRes, new ConstantOperand(new SigType(CilElementType.I4), 0xFFFF))
+                    //_architecture.CreateInstruction(typeof(Instructions.LogicalAndInstruction), opRes, new ConstantOperand(new SigType(CilElementType.I4), 0xFFFF))
                 });
             }
             else

@@ -133,7 +133,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             Assert.IsTrue((bool)Run<C_C_C>("", "Test", "DivC", (char)(a / b), a, b));
         }
         
-        delegate bool C_Constant_C([MarshalAs(UnmanagedType.U2)]char expect, char x);
+        delegate bool C_Constant_C(int expect, char x);
 
         /// <summary>
         /// 
@@ -146,8 +146,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void DivConstantCRight(char a, char b)
         {
-            CodeSource = CreateConstantTestCode("DivConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
-            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "DivConstantCRight", (char)(a / b), a));
+            CodeSource = CreateConstantTestCode("DivConstantCRight", "char", "int", null, "'" + b.ToString() + "'");
+            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "DivConstantCRight", (a / b), a));
         }
         
         /// <summary>
@@ -161,7 +161,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void DivConstantCLeft(char a, char b)
         {
-            CodeSource = CreateConstantTestCode("DivConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
+            CodeSource = CreateConstantTestCode("DivConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
             Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "DivConstantCLeft", (char)(a / b), b));
         }
         #endregion
