@@ -78,7 +78,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <returns></returns>
-		public unsafe static ulong Get64(uint location)
+		public unsafe static ulong Get64(ulong location)
 		{
 			ulong* at = (ulong*)location;
 			return *at;

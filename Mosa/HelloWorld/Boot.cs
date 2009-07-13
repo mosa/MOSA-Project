@@ -26,7 +26,7 @@ namespace Mosa.HelloWorld
 		{
 			Screen.Clear();
 
-			Screen.Color = 0x0A;
+            Screen.Color = 0x0E;
 			Screen.Write('M');
 			Screen.Write('O');
 			Screen.Write('S');
@@ -53,7 +53,7 @@ namespace Mosa.HelloWorld
 			Screen.Write('a');
 			Screen.Write('k');
 			Screen.Write('e');
-			Screen.Color = 0x0A;
+            Screen.Color = 0x0E;
 			Screen.Write('\'');
             Screen.Write(' ');
             Screen.Write(' ');
@@ -285,7 +285,16 @@ namespace Mosa.HelloWorld
             Screen.Write('m');
             Screen.Write('p');
             Screen.Color = 0x0F;
-            for (int index = 2; index < 25; index++)
+
+            Screen.Row = 23;
+            for (int index = 0; index < 80; index++)
+            {
+                Screen.Column = index;
+                Screen.Write((char)205);
+            }
+
+
+            for (int index = 2; index < 24; index++)
             {
                 Screen.Column = 51;
                 Screen.Row = index;
@@ -293,6 +302,8 @@ namespace Mosa.HelloWorld
                 Screen.Color = 0x0F;
                 if (index == 7)
                     Screen.Write((char)185);
+                else if (index == 23)
+                    Screen.Write((char)202);
                 else
                     Screen.Write((char)186);
             }
@@ -303,6 +314,29 @@ namespace Mosa.HelloWorld
 			//unsafe {
 			//    Port.Out8((byte*)0, 0);
 			//}
+
+            Screen.SetCursor(29, 24);
+            Screen.Color = 0x0E;
+            Screen.Write('w');
+            Screen.Write('w');
+            Screen.Write('w');
+            Screen.Write('.');
+            Screen.Write('m');
+            Screen.Write('o');
+            Screen.Write('s');
+            Screen.Write('a');
+            Screen.Write('-');
+            Screen.Write('p');
+            Screen.Write('r');
+            Screen.Write('o');
+            Screen.Write('j');
+            Screen.Write('e');
+            Screen.Write('c');
+            Screen.Write('t');
+            Screen.Write('.');
+            Screen.Write('o');
+            Screen.Write('r');
+            Screen.Write('g');
 
 			while (true) {
 				Screen.SetCursor(27, 0);

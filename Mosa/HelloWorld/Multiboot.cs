@@ -49,14 +49,14 @@ namespace Mosa.Kernel.Memory.X86
 			uint location = MultibootStructure;
 
 			Mosa.HelloWorld.Screen.Row = 4;
-			for (uint i = 0; i < 80; i = i + 4) {
+			for (uint i = 0; i < 80; i = i + 8) {
 				Mosa.HelloWorld.Screen.Column = 53;
                 Mosa.HelloWorld.Screen.Color = 0x0F;
 				Mosa.HelloWorld.Screen.Write(i, 10, 2);
 				Mosa.HelloWorld.Screen.Write(':');
 				Mosa.HelloWorld.Screen.Write(' ');
                 Mosa.HelloWorld.Screen.Color = 0x07;
-				Mosa.HelloWorld.Screen.Write(Memory.Get32(location + i), 16, 8);
+				Mosa.HelloWorld.Screen.Write(Memory.Get64(location + i), 16, 16);
 				Mosa.HelloWorld.Screen.NextLine();
 			}
 		}
@@ -242,14 +242,14 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		private static uint GetMemoryMapIndexLocation(uint index)
+        private static ulong GetMemoryMapIndexLocation(ulong index)
 		{
-			uint location = MemoryMapStart;
+            ulong location = MemoryMapStart;
 
-			for (int i = 0; i < index; i++)
-				location = location + Memory.Get32(location) + 4;
+			for (uint i = 0; i < index; i++)
+				location = location + Memory.Get64(location) + 4;
 
-			return location;
+			return (ulong)location;
 		}
 
 		/// <summary>
@@ -257,7 +257,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static ulong GetMemoryMapBase(uint index)
+        public static ulong GetMemoryMapBase(ulong index)
 		{
 			return Memory.Get64(GetMemoryMapIndexLocation(index) + 4);
 		}
@@ -267,9 +267,9 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static uint GetMemoryMapBaseLow(uint index)
+        public static ulong GetMemoryMapBaseLow(ulong index)
 		{
-			return Memory.Get32(GetMemoryMapIndexLocation(index) + 4);
+			return Memory.Get64(GetMemoryMapIndexLocation(index) + 4);
 		}
 
 		/// <summary>
@@ -277,9 +277,9 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static uint GetMemoryMapBaseHigh(uint index)
+        public static ulong GetMemoryMapBaseHigh(ulong index)
 		{
-			return Memory.Get32(GetMemoryMapIndexLocation(index) + 8);
+			return Memory.Get64(GetMemoryMapIndexLocation(index) + 8);
 		}
 
 		/// <summary>
@@ -297,9 +297,9 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static uint GetMemoryMapLengthLow(uint index)
+        public static ulong GetMemoryMapLengthLow(ulong index)
 		{
-			return Memory.Get32(GetMemoryMapIndexLocation(index) + 12);
+			return Memory.Get64(GetMemoryMapIndexLocation(index) + 12);
 		}
 
 		/// <summary>
@@ -307,9 +307,9 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static uint GetMemoryMapLengthHigh(uint index)
+        public static ulong GetMemoryMapLengthHigh(ulong index)
 		{
-			return Memory.Get32(GetMemoryMapIndexLocation(index) + 16);
+			return Memory.Get64(GetMemoryMapIndexLocation(index) + 16);
 		}
 
 		/// <summary>
@@ -317,9 +317,9 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static uint GetMemoryMapType(uint index)
+        public static ulong GetMemoryMapType(uint index)
 		{
-			return Memory.Get32(GetMemoryMapIndexLocation(index) + 20);
+			return Memory.Get64(GetMemoryMapIndexLocation((uint)index) + 20);
 		}
 
 		/// <summary>
