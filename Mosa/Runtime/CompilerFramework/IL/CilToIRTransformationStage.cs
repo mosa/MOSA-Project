@@ -905,7 +905,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 {
                     // Single type truncation/extension, e.g. I4->I2 or alike
                     if (src.Type.Type == CilElementType.I8 || src.Type.Type == CilElementType.U8)
+                    {
                         instructions.Add(_architecture.CreateInstruction(typeof(IR.MoveInstruction), dest, src));
+                        instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.U4), mask)));
+                    }
                     else
                         instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.U4), mask)));
                 }

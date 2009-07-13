@@ -28,7 +28,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="expect"></param>
         /// <param name="a"></param>
         /// <returns></returns>
-        delegate bool I1_I1(sbyte expect, sbyte a);
+        delegate sbyte I1_I1(sbyte expect, sbyte a);
         /// <summary>
         /// 
         /// </summary>
@@ -44,7 +44,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void SwitchI1(sbyte a)
         {
             CodeSource = @"static class Test { 
-                static bool SwitchI1(sbyte expect, sbyte a) { return expect == Switch_Target(a); } 
+                static sbyte SwitchI1(sbyte expect, sbyte a) { return Switch_Target(a); } 
                 static sbyte Switch_Target(sbyte a)
                 {
                     switch(a)
@@ -79,7 +79,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     }
                 }
             }";
-            Assert.IsTrue((bool)Run<I1_I1>("", "Test", "SwitchI1", a, a));
+            Assert.AreEqual(a, Run<I1_I1>("", "Test", "SwitchI1", a, a));
         }
 
         /// <summary>

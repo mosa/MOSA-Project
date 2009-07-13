@@ -372,7 +372,9 @@ namespace Mosa.Platforms.x86
         void IL.IILVisitor<Context>.Div(IL.DivInstruction instruction, Context ctx)
         {
             Type replType = typeof(x86.Instructions.DivInstruction);
-            if (instruction.First.StackType == StackTypeCode.F)
+            if (IsUnsigned(instruction.First.Type.Type) || IsUnsigned(instruction.Second.Type.Type))
+                replType = typeof(x86.Instructions.UDivInstruction);
+            else if (instruction.First.StackType == StackTypeCode.F)
             {
                 replType = typeof(x86.Instructions.SseDivInstruction);
             }

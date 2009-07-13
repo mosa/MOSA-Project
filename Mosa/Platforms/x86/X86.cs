@@ -835,16 +835,16 @@ namespace Mosa.Platforms.x86
         public static OpCode Cmp(Operand dest, Operand src)
         {
             if ((dest is MemoryOperand) && (src is RegisterOperand))
-                if (IsByte(dest))
+                if (IsByte(dest) || IsByte(src))
                     return X86Instruction.Cmp.M_R_8;
                 else
-                    if (IsChar(dest))
+                    if (IsChar(dest) || IsChar(src))
                         return X86Instruction.Cmp.M_R_16;
                     else
                         return X86Instruction.Cmp.M_R;
 
             if ((dest is RegisterOperand) && (src is MemoryOperand))
-                if (IsByte(src))
+                if (IsByte(src) || IsByte(dest))
                     return X86Instruction.Cmp.R_M_8;
                 else
                     if (IsChar(src) || IsShort(src))
@@ -855,7 +855,7 @@ namespace Mosa.Platforms.x86
             if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Instruction.Cmp.R_R;
             if ((dest is MemoryOperand) && (src is ConstantOperand)) return X86Instruction.Cmp.M_C;
             if ((dest is RegisterOperand) && (src is ConstantOperand))
-                if (IsByte(src))
+                if (IsByte(src) || IsByte(dest))
                     return X86Instruction.Cmp.R_C_8;
                 else
                     return X86Instruction.Cmp.R_C;

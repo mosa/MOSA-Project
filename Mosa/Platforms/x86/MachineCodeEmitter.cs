@@ -1546,7 +1546,20 @@ namespace Mosa.Platforms.x86
 				ConstantOperand co = (ConstantOperand)op;
 				switch (op.Type.Type) {
 					case CilElementType.I:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToInt32(co.Value));
+                        System.IO.StreamWriter w = new StreamWriter("Value.txt", true);
+                        w.Write("{0}", co.Value.ToString());
+                        w.Flush();
+                        try
+                        {
+                            imm = LittleEndianBitConverter.GetBytes(Convert.ToInt32(co.Value));
+                        }
+                        catch (OverflowException)
+                        {
+                            imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt32(co.Value));
+                        }
+                        w.WriteLine("  [ OK ]");
+                        w.Flush();
+                        w.Close();
 						break;
 
 					case CilElementType.I1:
