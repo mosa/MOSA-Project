@@ -414,7 +414,7 @@ namespace Mosa.Platforms.x86
 		void ICodeEmitter.Cmp(Operand op1, Operand op2)
 		{
             Operand opTmp = op1;
-            if (op1 is LocalVariableOperand && op2 is LocalVariableOperand)
+            if (op1 is MemoryOperand && op2 is MemoryOperand)
             {
                 opTmp = new RegisterOperand(opTmp.Type, GeneralPurposeRegister.EDX);
                 Emit(opTmp, op1, X86.Move(opTmp, op1));

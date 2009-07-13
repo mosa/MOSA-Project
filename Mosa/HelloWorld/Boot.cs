@@ -248,15 +248,15 @@ namespace Mosa.HelloWorld
 
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
                 Screen.Color = 0x0F;
-				Screen.Write(Multiboot.GetMemoryMapBaseLow(index), 16, 8);
+				Screen.Write(Multiboot.GetMemoryMapBaseLow(index), 16, 10);
 				Screen.Write(' ');
 				Screen.Write('-');
 				Screen.Write(' ');
-				Screen.Write(Multiboot.GetMemoryMapBaseLow(index) + Multiboot.GetMemoryMapLengthLow(index), 16, 8);
+                Screen.Write(Multiboot.GetMemoryMapBaseLow(index) + Multiboot.GetMemoryMapLengthLow(index), 16, 10);
 				Screen.Write(' ');
 				Screen.Write('(');
                 Screen.Color = 0x07;
-				Screen.Write(Multiboot.GetMemoryMapLengthLow(index), 16, 8);
+                Screen.Write(Multiboot.GetMemoryMapLengthLow(index), 16, 10);
                 Screen.Color = 0x0F;
 				Screen.Write(')');
 				Screen.Write(' ');
@@ -267,7 +267,7 @@ namespace Mosa.HelloWorld
 				Screen.Write('e');
 				Screen.Write(':');
 				Screen.Write(' ');
-				Screen.Write(Multiboot.GetMemoryMapType(index), 16, 8);
+				Screen.Write(Multiboot.GetMemoryMapType(index), 16, 1);
 				Screen.NextLine();
 			}
 

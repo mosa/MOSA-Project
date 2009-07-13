@@ -142,10 +142,10 @@ namespace Mosa.HelloWorld
 		/// <param name="val">The val.</param>
 		/// <param name="digits">The digits.</param>
 		/// <param name="size">The size.</param>
-		public static void Write(uint val, byte digits, int size)
+		public static void Write(ulong val, byte digits, int size)
 		{
 			uint count = 0;
-			uint temp = val;
+            ulong temp = val;
 
 			do {
 				temp /= digits;

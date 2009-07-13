@@ -842,7 +842,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
                 case ConvType.I4:
                     mask = 0xFFFFFFFF;
-                    src = TruncateI8(src);
                     break;
 
                 case ConvType.I8:
