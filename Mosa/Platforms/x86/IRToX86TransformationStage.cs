@@ -606,7 +606,8 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.LoadInstruction instruction, Context ctx)
         {
-            RegisterOperand eax = new RegisterOperand(_architecture.NativeType, GeneralPurposeRegister.EAX);
+            //RegisterOperand eax = new RegisterOperand(_architecture.NativeType, GeneralPurposeRegister.EAX);
+            RegisterOperand eax = new RegisterOperand(instruction.Operands[0].Type, GeneralPurposeRegister.EAX);
             Replace(ctx, new Instruction[] {
                 new x86.Instructions.MoveInstruction(eax, instruction.Operands[0]),
                 new x86.Instructions.MoveInstruction(eax, new MemoryOperand(instruction.Results[0].Type, GeneralPurposeRegister.EAX, IntPtr.Zero)),

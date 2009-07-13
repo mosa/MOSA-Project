@@ -141,14 +141,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(0, 'a')]
-        [Row('-', '.')]
+        //[Row(0, 'a')]
+        //[Row('-', '.')]
         [Row('a', 'Z')]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void DivConstantCRight(char a, char b)
         {
-            CodeSource = CreateConstantTestCode("DivConstantCRight", "char", "int", null, "'" + b.ToString() + "'");
-            Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "DivConstantCRight", (a / b), a));
+            CodeSource = CreateConstantTestCodeWithReturn("DivConstantCRight", "char", "int", null, "'" + b.ToString() + "'");
+            Assert.AreEqual(a / b, Run<C_Constant_C_Return>("", "Test", "DivConstantCRight", (a / b), a));
         }
         
         /// <summary>
@@ -156,8 +156,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        //[Row('a', 0, ExpectedException = typeof(DivideByZeroException))]
-        //[Row('-', '.')]
+        [Row('a', 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row('-', '.')]
         [Row((char)97, (char)90)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void DivConstantCLeft(char a, char b)
