@@ -414,9 +414,12 @@ namespace Mosa.Platforms.x86
 		void ICodeEmitter.Cmp(Operand op1, Operand op2)
 		{
             Operand opTmp = op1;
+            bool flag = false;
             if (op1 is MemoryOperand && op2 is MemoryOperand)
             {
+                flag = true;
                 opTmp = new RegisterOperand(opTmp.Type, GeneralPurposeRegister.EDX);
+                (this as ICodeEmitter).Push(opTmp);
                 Emit(opTmp, op1, X86.Move(opTmp, op1));
             }
 			// Swap if needed
@@ -426,6 +429,9 @@ namespace Mosa.Platforms.x86
 				op2 = tmp;
 			}
             Emit(opTmp, op2, X86.Cmp(opTmp, op2));
+
+            if (flag)
+                (this as ICodeEmitter).Pop(opTmp);
 		}
 
 		/// <summary>

@@ -1045,6 +1045,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
 /* FIXME: This is only valid with reg alloc!
             Type type = null;
 
+            load = load as LoadInstruction;
+
             // Is this a sign or zero-extending move?
             if (true == IsSignExtending(load.Source))
             {
@@ -1059,7 +1061,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (null == type)
             {
                 // No, we can safely drop the load instruction and can rewire the operands.
-                if (1 == load.Destination.Definitions.Count && 1 == load.Destination.Uses.Count)
+                /*if (1 == load.Destination.Definitions.Count && 1 == load.Destination.Uses.Count)
                 {
                     load.Destination.Replace(load.Source);
                     Remove(ctx);
@@ -1069,8 +1071,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             else
             {
                 Replace(ctx, _architecture.CreateInstruction(type, load.Destination, load.Source));
-            }
-*/
+            }*/
         }
 
         /// <summary>

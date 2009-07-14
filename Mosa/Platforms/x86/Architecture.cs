@@ -309,7 +309,6 @@ namespace Mosa.Platforms.x86
 					size = alignment = 4; // FIXME: HACK!
 					break;
 				//  throw new NotSupportedException();
-
 				default:
 					size = alignment = 4;
 					break;

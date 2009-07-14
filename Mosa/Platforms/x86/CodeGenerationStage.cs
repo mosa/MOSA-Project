@@ -205,11 +205,6 @@ namespace Mosa.Platforms.x86
             Operand op0 = instruction.Operand0;
             Operand op1 = instruction.Operand1;
 
-            System.IO.StreamWriter w = new StreamWriter("sub_compare.txt", true);
-            w.WriteLine("{0} == {1}", op0.ToString(), op1.ToString());
-            w.Flush();
-            w.Close();
-
             bool constant = op0 is ConstantOperand;
 
             if (constant)
