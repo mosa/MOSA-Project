@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4735B5A9-DFCA-46BF-BE1D-2059E95C3DEB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.Xml</RootNamespace>
+    <AssemblyName>System.Xml</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NoStdLib>True</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET_2_0 NET_1_1 INSIDE_CORLIB MOSAPROJECT</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoStdLib>True</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NET_2_0 NET_1_1 INSIDE_CORLIB</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoStdLib>True</NoStdLib>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="System.XML\Assembly\AssemblyInfo.cs" />
+    <Compile Include="System.XML\..\..\build\common\Consts.cs" />
+    <Compile Include="System.XML\..\..\build\common\Locale.cs" />
+    <Compile Include="System.XML\Mono.Xml.Schema\XmlSchemaValidatingReader.cs" />
+    <Compile Include="System.XML\Mono.Xml.Schema\XsdIdentityPath.cs" />
+    <Compile Include="System.XML\Mono.Xml.Schema\XsdIdentityState.cs" />
+    <Compile Include="System.XML\Mono.Xml.Schema\XsdKeyTable.cs" />
+    <Compile Include="System.XML\Mono.Xml.Schema\XsdParticleValidationState.cs" />
+    <Compile Include="System.XML\Mono.Xml.Schema\XsdValidatingReader.cs" />
+    <Compile Include="System.XML\Mono.Xml.Schema\XsdWildcard.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\DTMXPathDocument.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\DTMXPathDocumentBuilder.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\DTMXPathDocumentWriter.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\DTMXPathNavigator.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\DTMXPathNode.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\DTMXPathDocument2.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\DTMXPathDocumentBuilder2.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\DTMXPathDocumentWriter2.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\DTMXPathNavigator2.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\DTMXPathNode2.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\IdPattern.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\KeyPattern.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\LocationPathPattern.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\Pattern.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\UnionPattern.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\XPathEditableDocument.cs" />
+    <Compile Include="System.XML\Mono.Xml.XPath\XPathNavigatorReader.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslApplyImports.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslApplyTemplates.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslAttribute.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslAvt.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslCallTemplate.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslChoose.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslComment.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslCompiledElement.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslCopy.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslCopyOf.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslElement.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslFallback.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslForEach.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslIf.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslLiteralElement.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslMessage.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslNotSupportedOperation.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslNumber.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslOperation.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslProcessingInstruction.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslTemplateContent.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslText.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslValueOf.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl.Operations\XslVariable.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\Attribute.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\Compiler.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\Debug.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\Emitter.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\GenericOutputter.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\HtmlEmitter.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\MSXslScriptManager.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\Outputter.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\ScriptCompilerInfo.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\TextEmitter.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\TextOutputter.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\XmlWriterEmitter.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\XslAttributeSet.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\XslDecimalFormat.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\XslKey.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\XslOutput.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\XslSortEvaluator.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\XslStylesheet.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\XslTemplate.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\XslTransformProcessor.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\XsltCompiledContext.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\XsltDebuggerWrapper.cs" />
+    <Compile Include="System.XML\Mono.Xml.Xsl\XslFunctions.cs" />
+    <Compile Include="System.XML\Mono.Xml\IHasXmlParserContext.cs" />
+    <Compile Include="System.XML\Mono.Xml\IHasXmlSchemaInfo.cs" />
+    <Compile Include="System.XML\Mono.Xml\SubtreeXmlReader.cs" />
+    <Compile Include="System.XML\Mono.Xml\XmlFilterReader.cs" />
+    <Compile Include="System.XML\Mono.Xml\XmlNodeWriter.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\Parser.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\PatternParser.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\PatternTokenizer.cs" />
+    <Compile Include="System.XML\System.Xml\ConformanceLevel.cs" />
+    <Compile Include="System.XML\System.Xml\DTDAutomata.cs" />
+    <Compile Include="System.XML\System.Xml\DTDObjectModel.cs" />
+    <Compile Include="System.XML\System.Xml\DTDReader.cs" />
+    <Compile Include="System.XML\System.Xml\DTDValidatingReader2.cs" />
+    <Compile Include="System.XML\System.Xml\EntityResolvingXmlReader.cs" />
+    <Compile Include="System.XML\System.Xml\EntityHandling.cs" />
+    <Compile Include="System.XML\System.Xml\Formatting.cs" />
+    <Compile Include="System.XML\System.Xml\IHasXmlNode.cs" />
+    <Compile Include="System.XML\System.Xml\IXmlLineInfo.cs" />
+    <Compile Include="System.XML\System.Xml\IHasXmlChildNode.cs" />
+    <Compile Include="System.XML\System.Xml\IXmlNamespaceResolver.cs" />
+    <Compile Include="System.XML\System.Xml\MonoFIXAttribute.cs" />
+    <Compile Include="System.XML\System.Xml\NameTable.cs" />
+    <Compile Include="System.XML\System.Xml\NewLineHandling.cs" />
+    <Compile Include="System.XML\System.Xml\ReadState.cs" />
+    <Compile Include="System.XML\..\..\build\common\MonoTODOAttribute.cs" />
+    <Compile Include="System.XML\System.Xml\ValidationType.cs" />
+    <Compile Include="System.XML\System.Xml\WhitespaceHandling.cs" />
+    <Compile Include="System.XML\System.Xml\WriteState.cs" />
+    <Compile Include="System.XML\System.Xml\XmlEntity.cs" />
+    <Compile Include="System.XML\System.Xml\XmlAttribute.cs" />
+    <Compile Include="System.XML\System.Xml\XmlAttributeCollection.cs" />
+    <Compile Include="System.XML\System.Xml\XmlCDataSection.cs" />
+    <Compile Include="System.XML\System.Xml\XmlConstructs.cs" />
+    <Compile Include="System.XML\System.Xml\XmlChar.cs" />
+    <Compile Include="System.XML\System.Xml\XmlCharacterData.cs" />
+    <Compile Include="System.XML\System.Xml\XmlComment.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNotation.cs" />
+    <Compile Include="System.XML\System.Xml\XmlDeclaration.cs" />
+    <Compile Include="System.XML\System.Xml\XmlDocument.cs" />
+    <Compile Include="System.XML\System.Xml\XmlDocumentFragment.cs" />
+    <Compile Include="System.XML\System.Xml\XmlDocumentNavigator.cs" />
+    <Compile Include="System.XML\System.Xml\XmlDocumentType.cs" />
+    <Compile Include="System.XML\System.Xml\XmlElement.cs" />
+    <Compile Include="System.XML\System.Xml\XmlEntityReference.cs" />
+    <Compile Include="System.XML\System.Xml\XmlException.cs" />
+    <Compile Include="System.XML\System.Xml\XmlImplementation.cs" />
+    <Compile Include="System.XML\System.Xml\XmlConvert.cs" />
+    <Compile Include="System.XML\System.Xml\XmlDateTimeSerializationMode.cs" />
+    <Compile Include="System.XML\System.Xml\XmlLinkedNode.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNameEntry.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNameEntryCache.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNameTable.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNamedNodeMap.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNamespaceScope.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNamespaceManager.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNode.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNodeChangedAction.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNodeChangedEventArgs.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNodeChangedEventHandler.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNodeList.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNodeListChildren.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNodeArrayList.cs" />
+    <Compile Include="System.XML\System.Xml\XmlIteratorNodeList.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNodeOrder.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNodeReader2.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNodeReaderImpl.cs" />
+    <Compile Include="System.XML\System.Xml\XmlNodeType.cs" />
+    <Compile Include="System.XML\System.Xml\XmlOutputMethod.cs" />
+    <Compile Include="System.XML\System.Xml\XmlParserContext.cs" />
+    <Compile Include="System.XML\System.Xml\XmlProcessingInstruction.cs" />
+    <Compile Include="System.XML\System.Xml\XmlQualifiedName.cs" />
+    <Compile Include="System.XML\System.Xml\XmlReader.cs" />
+    <Compile Include="System.XML\System.Xml\XmlReaderBinarySupport.cs" />
+    <Compile Include="System.XML\System.Xml\XmlReaderSettings.cs" />
+    <Compile Include="System.XML\System.Xml\XmlResolver.cs" />
+    <Compile Include="System.XML\System.Xml\XmlSecureResolver.cs" />
+    <Compile Include="System.XML\System.Xml\XmlSignificantWhitespace.cs" />
+    <Compile Include="System.XML\System.Xml\XmlSpace.cs" />
+    <Compile Include="System.XML\System.Xml\XmlText.cs" />
+    <Compile Include="System.XML\System.Xml\XmlTextReader.cs" />
+    <Compile Include="System.XML\System.Xml\XmlTextReader2.cs" />
+    <Compile Include="System.XML\System.Xml\XmlTokenizedType.cs" />
+    <Compile Include="System.XML\System.Xml\XmlUrlResolver.cs" />
+    <Compile Include="System.XML\System.Xml\XmlValidatingReader.cs" />
+    <Compile Include="System.XML\System.Xml\XmlWhitespace.cs" />
+    <Compile Include="System.XML\System.Xml\XmlWriter.cs" />
+    <Compile Include="System.XML\System.Xml\XmlWriterSettings.cs" />
+    <Compile Include="System.XML\System.Xml\XmlTextWriter2.cs" />
+    <Compile Include="System.XML\System.Xml\XmlInputStream.cs" />
+    <Compile Include="System.XML\System.Xml\XmlParserInput.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\IXPathNavigable.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XPathNavigator.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XPathExpression.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XPathItem.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XPathNamespaceScope.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XPathNodeIterator.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XPathResultType.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XPathNodeType.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XmlDataType.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XmlSortOrder.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XmlCaseOrder.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XPathDocument.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XPathException.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\XPathComparer.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\DefaultContext.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\Expression.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\Iterator.cs" />
+    <Compile Include="System.XML\System.Xml.XPath\Tokenizer.cs" />
+    <Compile Include="System.XML\System.Xml.Xsl\IXsltContextFunction.cs" />
+    <Compile Include="System.XML\System.Xml.Xsl\IXsltContextVariable.cs" />
+    <Compile Include="System.XML\System.Xml.Xsl\XslCompiledTransform.cs" />
+    <Compile Include="System.XML\System.Xml.Xsl\XslTransform.cs" />
+    <Compile Include="System.XML\System.Xml.Xsl\XsltArgumentList.cs" />
+    <Compile Include="System.XML\System.Xml.Xsl\XsltCompileException.cs" />
+    <Compile Include="System.XML\System.Xml.Xsl\XsltContext.cs" />
+    <Compile Include="System.XML\System.Xml.Xsl\XsltException.cs" />
+    <Compile Include="System.XML\System.Xml.Xsl\XsltMessageEncounteredEventArgs.cs" />
+    <Compile Include="System.XML\System.Xml.Xsl\XsltMessageEncounteredEventHandler.cs" />
+    <Compile Include="System.XML\System.Xml.Xsl\XsltSettings.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\BuiltInDatatype.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\IXmlSchemaInfo.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\SchemaDataValueType.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\ValidationEventArgs.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlAtomicValue.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchema.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaAll.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaAnnotated.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaAnnotation.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaAny.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaAnyAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaAppInfo.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaAttributeGroup.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaAttributeGroupRef.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaChoice.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaCollection.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaCollectionEnumerator.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaCompilationSettings.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaComplexContent.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaComplexContentExtension.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaComplexContentRestriction.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaComplexType.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaContent.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaContentModel.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaContentProcessing.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaContentType.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaDatatype.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaDatatypeVariety.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaDerivationMethod.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaDocumentation.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaElement.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaEnumerationFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaException.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaExternal.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaForm.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaFractionDigitsFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaGroup.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaGroupBase.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaGroupRef.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaIdentityConstraint.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaImport.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaInclude.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaInference.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaInferenceException.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaInfo.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaKey.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaKeyref.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaLengthFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaMaxExclusiveFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaMaxInclusiveFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaMaxLengthFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaMinExclusiveFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaMinInclusiveFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaMinLengthFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaNotation.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaNumericFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaObject.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaObjectCollection.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaObjectEnumerator.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaObjectTable.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaParticle.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaPatternFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaRedefine.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaSet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaSequence.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaSerializer.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaSimpleContent.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaSimpleContentExtension.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaSimpleContentRestriction.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaSimpleType.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaSimpleTypeContent.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaSimpleTypeList.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaSimpleTypeRestriction.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaSimpleTypeUnion.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaTotalDigitsFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaType.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaUnique.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaUse.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaValidator.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaValidity.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaValidationException.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaWhiteSpaceFacet.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaXPath.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSeverityType.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\ValidationHandler.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaUtil.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaReader.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlSchemaValidationFlags.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlTypeCode.cs" />
+    <Compile Include="System.XML\System.Xml.Schema\XmlValueGetter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\IXmlTextParser.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\CodeExporter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\CodeGenerationOptions.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\CodeIdentifier.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\CodeIdentifiers.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\IXmlSerializable.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\ImportContext.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\KeyHelper.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\MapCodeGenerator.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\ReflectionHelper.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SchemaImporter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SchemaTypes.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SerializationCodeGenerator.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SerializationCodeGeneratorConfiguration.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SerializationSource.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapAttributeAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapAttributeOverrides.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapAttributes.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapCodeExporter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapElementAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapEnumAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapIgnoreAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapIncludeAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapSchemaImporter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapSchemaExporter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapSchemaMember.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapReflectionImporter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\SoapTypeAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\TypeData.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\TypeMember.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\TypeTranslator.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\UnreferencedObjectEventArgs.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\UnreferencedObjectEventHandler.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlAnyAttributeAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlAnyElementAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlAnyElementAttributes.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlArrayAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlArrayItemAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlArrayItemAttributes.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlAttributeAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlAttributeEventArgs.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlAttributeEventHandler.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlAttributeOverrides.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlAttributes.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlCodeExporter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlChoiceIdentifierAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlCustomFormatter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlDeserializationEvents.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlElementAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlElementAttributes.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlElementEventArgs.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlEnumAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlIgnoreAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlIncludeAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlMemberMapping.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlMembersMapping.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlMapping.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlMappingAccess.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlNamespaceDeclarationsAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlNodeEventArgs.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlReflectionImporter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlReflectionMember.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlRootAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSchemaEnumerator.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSchemaExporter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSchemaImporter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSchemaProviderAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSchemas.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializationCollectionFixupCallback.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializationFixupCallback.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializationGeneratedCode.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializationReadCallback.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializationReader.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializationReaderInterpreter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializationWriteCallback.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializationWriter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializationWriterInterpreter.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializer.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializerAssemblyAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializerFactory.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializerImplementation.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializerNamespaces.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlSerializerVersionAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlTextAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlTypeAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlTypeMapElementInfo.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlTypeMapMember.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlTypeMapMemberAttribute.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlTypeMapMemberElement.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlTypeMapMemberNamespaces.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlTypeMapping.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlElementEventHandler.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization\XmlNodeEventHandler.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization.Advanced\SchemaImporterExtension.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization.Advanced\SchemaImporterExtensionCollection.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization.Configuration\DateTimeSerializationSection.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization.Configuration\SchemaImporterExtensionElement.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization.Configuration\SchemaImporterExtensionElementCollection.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization.Configuration\SchemaImporterExtensionsSection.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization.Configuration\SerializationSectionGroup.cs" />
+    <Compile Include="System.XML\System.Xml.Serialization.Configuration\XmlSerializerSection.cs" />
+    <Compile Include="System.XML\System.Xml\XQueryConvert.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="corlib.csproj">
+      <Project>{CCAC769C-C291-4C2F-BABE-24CB2F3C8134}</Project>
+      <Name>corlib</Name>
+    </ProjectReference>
+    <ProjectReference Include="System.csproj">
+      <Project>{56D595BD-3722-4086-B533-18C7EE3132BF}</Project>
+      <Name>System</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

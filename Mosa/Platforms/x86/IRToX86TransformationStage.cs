@@ -838,10 +838,20 @@ namespace Mosa.Platforms.x86
             if ((op0 is MemoryOperand && op1 is MemoryOperand) || (op0 is ConstantOperand && op1 is ConstantOperand))
             {
                 RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
-                Replace(ctx, new Instruction[] {
-                    new IR.MoveInstruction(eax, op0),
-                    instruction
-                });
+                if (IsUnsigned(op0.Type.Type))
+                {
+                    Replace(ctx, new Instruction[] {
+                        new IR.MoveInstruction(eax, op0),
+                        instruction
+                    });
+                }
+                else
+                {
+                    Replace(ctx, new Instruction[] {
+                        new IR.SignExtendedMoveInstruction(eax, op0),
+                        instruction
+                    });
+                }
                 instruction.SetResult(0, eax);
             }
         }

@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "corlib", "corlib.csproj", "{CCAC769C-C291-4C2F-BABE-24CB2F3C8134}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System", "System.csproj", "{56D595BD-3722-4086-B533-18C7EE3132BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Xml", "System.Xml.csproj", "{4735B5A9-DFCA-46BF-BE1D-2059E95C3DEB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CCAC769C-C291-4C2F-BABE-24CB2F3C8134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCAC769C-C291-4C2F-BABE-24CB2F3C8134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCAC769C-C291-4C2F-BABE-24CB2F3C8134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCAC769C-C291-4C2F-BABE-24CB2F3C8134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56D595BD-3722-4086-B533-18C7EE3132BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56D595BD-3722-4086-B533-18C7EE3132BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56D595BD-3722-4086-B533-18C7EE3132BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56D595BD-3722-4086-B533-18C7EE3132BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4735B5A9-DFCA-46BF-BE1D-2059E95C3DEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4735B5A9-DFCA-46BF-BE1D-2059E95C3DEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4735B5A9-DFCA-46BF-BE1D-2059E95C3DEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4735B5A9-DFCA-46BF-BE1D-2059E95C3DEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
