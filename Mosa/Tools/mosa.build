@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0103,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="${project::get-base-directory()}/../Bin" overwrite="false"/>
+	
+	<!-- CreateBootImage tool -->
+	<target name="createbootimage">
+	    <csc target="exe" output="${outputDirectory}/Mosa.Tools.CreateBootImage.exe" debug="${debug}">
+		<sources>
+			<include name="CreateBootImage/**/*.cs"/>
+		</sources>
+		
+		<references>
+			<include name="${outputDirectory}/Mosa.ClassLib.dll"/>
+			<include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
+			<include name="${outputDirectory}/Mosa.DeviceDrivers.dll"/>
+			<include name="${outputDirectory}/Mosa.FileSystem.dll"/>
+			<include name="${outputDirectory}/Mosa.EmulatedDevices.dll"/>
+		</references>
+		
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+	    </csc>
+	</target>
+	
+	<!-- mosacl tool -->
+	<target name="mosacl">
+	    <csc target="exe" output="${outputDirectory}/mosacl.exe" debug="${debug}" unsafe="true">
+		<sources>
+			<include name="Compiler/**/*.cs"/>
+		</sources>
+		
+		<references>
+			<include name="${outputDirectory}/Mosa.Kernel.dll"/>
+			<include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
+			<include name="${outputDirectory}/Mosa.Runtime.dll"/>
+			<include name="System.dll"/>
+			<include name="System.Core.dll"/>
+			<include name="System.Data.dll"/>
+			<include name="System.Xml.dll"/>
+		</references>
+		
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+	    </csc>
+	</target>
+
+	<!-- Main build target -->
+	<target name="build" depends="createbootimage, mosacl"/>
+	
+</project>
