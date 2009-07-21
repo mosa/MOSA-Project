@@ -89,9 +89,9 @@ namespace Mosa.Runtime.Loader
 			provider.Read(assemblyRef.NameIdx, out name);
 
 			result = GetLoadedAssembly(name);
-			if (null == result)
+			if (result == null)
 				result = DoLoadAssembly(name + ".dll");
-			if (null == result)
+			if (result == null)
 				throw new TypeLoadException();
 
 			return result;
@@ -106,24 +106,10 @@ namespace Mosa.Runtime.Loader
 		/// </returns>
 		public IMetadataModule Load(string file)
 		{
-			IMetadataModule result = null;
-
-			// FIXME
-			//if (!File.Exists(file))
-				// throw new System.IO.FileNotFoundException();
-
-			if (File.Exists(file)) {
-				result = PortableExecutableImage.Load(_loadedImages.Count, new FileStream(file, FileMode.Open, FileAccess.Read));
-				if (null != result) {
-					lock (_loadedImages) {
-						_loadedImages.Add(result);
-					}
-
-					_typeLoader.AssemblyLoaded(result);
-				}
-			}
-
-			return result;
+			if (Path.IsPathRooted(file) == false)
+				return DoLoadAssembly(Path.GetFileName(file));
+			else
+				return LoadAssembly(file);
 		}
 
 		/// <summary>
@@ -141,6 +127,23 @@ namespace Mosa.Runtime.Loader
 
 		#region Internals
 
+		private IMetadataModule LoadAssembly(string file)
+		{
+			if (!File.Exists(file))
+				return null;
+
+			IMetadataModule result = PortableExecutableImage.Load(_loadedImages.Count, new FileStream(file, FileMode.Open, FileAccess.Read));
+			if (null != result) {
+				lock (_loadedImages) {
+					_loadedImages.Add(result);
+				}
+
+				_typeLoader.AssemblyLoaded(result);
+			}
+
+			return result;
+		}
+
 		private IMetadataModule GetLoadedAssembly(string name)
 		{
 			IMetadataModule result = null;
@@ -156,12 +159,18 @@ namespace Mosa.Runtime.Loader
 		private IMetadataModule DoLoadAssembly(string name)
 		{
 			IMetadataModule result = DoLoadAssemblyFromPaths(name, _privatePaths);
-			if (null == result)
+			if (result == null)
 				result = DoLoadAssemblyFromPaths(name, _searchPath);
 
 			return result;
 		}
 
+		/// <summary>
+		/// Does the load assembly from paths.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="paths">The paths.</param>
+		/// <returns></returns>
 		private IMetadataModule DoLoadAssemblyFromPaths(string name, IEnumerable<string> paths)
 		{
 			IMetadataModule result = null;
@@ -170,8 +179,8 @@ namespace Mosa.Runtime.Loader
 			foreach (string path in paths) {
 				fullName = Path.Combine(path, name);
 				try {
-					result = (this as IAssemblyLoader).Load(fullName);
-					if (null != result)
+					result = LoadAssembly(fullName);
+					if (result != null)
 						break;
 				}
 				catch {

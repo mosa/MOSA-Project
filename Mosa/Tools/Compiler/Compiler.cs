@@ -234,7 +234,7 @@ namespace Mosa.Tools.Compiler
 				foreach (FileInfo assembly in this.inputFiles) {
 					
 					string path = Path.GetDirectoryName(assembly.FullName);
-					if (paths.Contains(path) == false)
+					if (!paths.Contains(path))
 						paths.Add(path);
 				}
 
