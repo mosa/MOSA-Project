@@ -15,9 +15,9 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// 
+    /// Container class used to define the pipeline of a compiler.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of the stages of the compiler.</typeparam>
     public sealed class CompilerPipeline<T> : IEnumerable<T> where T: class
     {
         #region Data members
@@ -37,7 +37,7 @@ namespace Mosa.Runtime.CompilerFramework
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CompilerPipeline&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="CompilerPipeline{T}"/> class.
         /// </summary>
         public CompilerPipeline()
         {

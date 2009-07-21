@@ -106,7 +106,7 @@ namespace Mosa.Runtime.CompilerFramework
             workList.Push(firstBlock);
             workArray = new BitArray(blocks.Count);
 
-            IMethodCompilerStage previousStage = compiler.GetPreviousStage() as IMethodCompilerStage;
+            IMethodCompilerStage previousStage = compiler.GetPreviousStage<IMethodCompilerStage>();
             dotFile.WriteLine("digraph " + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + "_FlowGraph {");
             dotFile.WriteLine("label = \"Method: " + compiler.Method.Name + "(" + compiler.Method.Signature + ") after " + previousStage.Name + "\";");
             dotFile.WriteLine("graph [rankdir = \"TB\"];");

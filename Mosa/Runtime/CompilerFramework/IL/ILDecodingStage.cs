@@ -473,9 +473,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
 			// Prefix instruction
 			PrefixInstruction prefix = null;
 
-			// Operand stack for IL instructions
-			Stack<Operand> ilStack = new Stack<Operand>();
-
 			while (codeEnd != _codeReader.BaseStream.Position) {
 				// Determine the instruction offset
 				int instOffset = (int)(_codeReader.BaseStream.Position - codeStart);

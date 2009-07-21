@@ -336,6 +336,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="blockProvider">The block provider.</param>
         private void CaptureLiveRanges(IMethodCompiler compiler, IBasicBlockProvider blockProvider)
         {
+/*			
             // Start live ranges for the parameters of the method
             int paramIdx = 0;
             foreach (RuntimeParameter rp in compiler.Method.Parameters)
@@ -377,6 +378,7 @@ namespace Mosa.Runtime.CompilerFramework
                     }
                 }
             }
+*/           
         }
 
         /// <summary>

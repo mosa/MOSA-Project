@@ -254,7 +254,6 @@ namespace Mosa.Runtime.Vm
             module.Metadata.Read(typeRef.ResolutionScopeIdx, out arr);
             IAssemblyLoader loader = RuntimeBase.Instance.AssemblyLoader;
             IMetadataModule dependency = loader.Resolve(module.Metadata, arr);
-            ITypeSystem ts = (ITypeSystem)this;
 
             for (int i = GetModuleOffset(dependency).TypeOffset; i < _types.Length; i++)
             {
@@ -400,7 +399,6 @@ namespace Mosa.Runtime.Vm
                         string nameString;
                         scope.Metadata.Read(row.NameStringIdx, out nameString);
                         MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(scope.Metadata, row.SignatureBlobIdx);
-                        List<RuntimeMethod> methods = new List<RuntimeMethod>(type.Methods);
                         foreach (RuntimeMethod method in type.Methods)
                         {
                             if (method.Name != nameString)

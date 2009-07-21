@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -375,7 +375,7 @@ namespace Mosa.Runtime.CompilerFramework
                         result = (int)(((uint)(instruction.Operand1 as ConstantOperand).Value) | ((uint)(instruction.Operand2 as ConstantOperand).Value));
                         break;
                     case Mosa.Runtime.Metadata.CilElementType.I1:
-                        result = ((sbyte)(instruction.Operand1 as ConstantOperand).Value) | ((sbyte)(instruction.Operand2 as ConstantOperand).Value);
+                        result = (sbyte)(((uint)(sbyte)(instruction.Operand1 as ConstantOperand).Value) | ((uint)(sbyte)(instruction.Operand2 as ConstantOperand).Value));
                         break;
                     case Mosa.Runtime.Metadata.CilElementType.I2:
                         result = ((short)(instruction.Operand1 as ConstantOperand).Value) | ((short)(instruction.Operand2 as ConstantOperand).Value);
@@ -475,7 +475,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// </summary>
         /// <param name="pipeline"></param>
-        new void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
         {
             pipeline.InsertBefore<IL.CilToIrTransformationStage>(this);
         }

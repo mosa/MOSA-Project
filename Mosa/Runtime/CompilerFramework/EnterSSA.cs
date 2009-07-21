@@ -375,7 +375,6 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>A new StackOperand.</returns>
         private StackOperand RedefineOperand(StackOperand cur)
         {
-            int idx = -(cur.Offset.ToInt32() / 4);
             string name = cur.Name;
             if (0 == cur.Version)
                 name = String.Format(@"T_{0}", name);

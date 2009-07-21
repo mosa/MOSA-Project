@@ -48,7 +48,7 @@ namespace Mosa.Runtime.Vm
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ReadOnlyRuntimeListView&lt;ItemType&gt;"/> class.
+        /// Initializes a new instance of the <see cref="ReadOnlyRuntimeListView{ItemType}"/> class.
         /// </summary>
         /// <param name="firstField">The index of the first _stackFrameIndex. May not be negative.</param>
         /// <param name="count">The number of fields in the list. Must be larger than zero.</param>

@@ -43,11 +43,6 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         private CompilerPipeline<IAssemblyCompilerStage> _pipeline;
 
-        /// <summary>
-        /// Compilation schedule.
-        /// </summary>
-        private Queue<MethodCompilerBase> _schedule;
-
 		#endregion // Data members
 
 		#region Construction
@@ -66,7 +61,6 @@ namespace Mosa.Runtime.CompilerFramework
             _architecture = architecture;
             _assembly = assembly;
             _pipeline = new CompilerPipeline<IAssemblyCompilerStage>();
-            _schedule = new Queue<MethodCompilerBase>();
 		}
 
 		#endregion // Construction

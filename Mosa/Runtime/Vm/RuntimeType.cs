@@ -297,7 +297,6 @@ namespace Mosa.Runtime.Vm
             if (c == null)
                 throw new ArgumentNullException(@"c");
 
-            RuntimeType[] types = RuntimeBase.Instance.TypeLoader.Types;
             RuntimeType baseType = this.BaseType;
             while (baseType != null)
             {

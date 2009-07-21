@@ -40,15 +40,6 @@ namespace Mosa.Runtime.CompilerFramework
 
         #endregion // Constant data members
 
-        #region Static data members
-
-        /// <summary>
-        /// Holds the id of the next virtual register.
-        /// </summary>
-        private static int _vregs = 1;
-
-        #endregion // Static data members
-
         #region Data members
 
         /// <summary>
@@ -115,7 +106,6 @@ namespace Mosa.Runtime.CompilerFramework
         protected Instruction(int operandCount, int resultCount)
         {
             // To avoid errors caused by warnings
-            int x = _vregs;
             _ignore = false;
             _offset = 0;
             _operands = new Operand[operandCount];

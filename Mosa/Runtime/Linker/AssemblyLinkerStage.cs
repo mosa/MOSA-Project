@@ -458,7 +458,7 @@ namespace Mosa.Runtime.Linker
                 if (declaringType != null)
                 {
                     string declaringTypeSymbolName = CreateSymbolName(declaringType);
-                    name = String.Format("{0}.{1}", CreateSymbolName(declaringType), symbol.Name);
+                    name = String.Format("{0}.{1}", declaringTypeSymbolName, symbol.Name);
                 }
                 else
                 {

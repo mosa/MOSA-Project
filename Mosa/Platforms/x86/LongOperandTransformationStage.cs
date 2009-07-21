@@ -59,6 +59,14 @@ namespace Mosa.Platforms.x86
 			get { return @"LongArithmeticTransformationStage"; }
 		}
 
+        /// <summary>
+        /// Adds this stage to the given pipeline.
+        /// </summary>
+        /// <param name="pipeline">The pipeline to add this stage to.</param>
+        public sealed override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		{
+		}
+
 		#endregion // IMethodCompilerStage Members
 
 		#region Utility Methods

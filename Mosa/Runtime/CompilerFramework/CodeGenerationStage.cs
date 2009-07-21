@@ -42,7 +42,7 @@ namespace Mosa.Runtime.CompilerFramework
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CodeGenerationStage&lt;ContextType&gt;"/> class.
+        /// Initializes a new instance of the <see cref="CodeGenerationStage{ContextType}"/> class.
         /// </summary>
         protected CodeGenerationStage()
         {

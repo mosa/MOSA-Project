@@ -91,7 +91,9 @@ namespace Mosa.DeviceSystem
 			}
 
 			IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
-			PCIDeviceDriverAttribute attribute = deviceDriver.Attribute as PCIDeviceDriverAttribute;
+
+			// MR 07/21/09: Commenting out, causes mono xbuild to fail on MacOS X
+			// PCIDeviceDriverAttribute attribute = deviceDriver.Attribute as PCIDeviceDriverAttribute;
 
 			LinkedList<IIOPortRegion> ioPortRegions = new LinkedList<IIOPortRegion>();
 			LinkedList<IMemoryRegion> memoryRegions = new LinkedList<IMemoryRegion>();

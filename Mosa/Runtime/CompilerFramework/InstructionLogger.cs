@@ -61,8 +61,7 @@ namespace Mosa.Runtime.CompilerFramework
             // Previous stage
             IMethodCompilerStage prevStage = compiler.GetPreviousStage<IMethodCompilerStage>();
             // Line number
-            int line = 0, index = 1;
-            StringBuilder text = new StringBuilder();
+            int index = 1;
 
             Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", compiler.Method, prevStage.Name));
 
@@ -74,7 +73,6 @@ namespace Mosa.Runtime.CompilerFramework
                 {
                     Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
                     Debug.Indent();
-                    line = block.Label;
                     LogInstructions(block.Instructions);
                     Debug.Unindent();
                     index++;
