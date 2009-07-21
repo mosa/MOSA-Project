@@ -5,6 +5,7 @@
  *
  */
 using Mosa.Kernel.Memory.X86;
+//using Mosa.Platforms.x86;
 
 namespace Mosa.HelloWorld
 {
@@ -312,7 +313,7 @@ namespace Mosa.HelloWorld
 			//Multiboot.Dump2();
 
 			//unsafe {
-			//    Port.Out8((byte*)0, 0);
+			//    Native.Out8((byte*)0, 0);
 			//}
 
             Screen.SetCursor(29, 24);

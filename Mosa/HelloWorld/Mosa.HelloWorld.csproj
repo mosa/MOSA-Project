@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -45,7 +45,7 @@
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
-    <NoStdLib>true</NoStdLib>
+    <NoStdLib>false</NoStdLib>
     <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -62,58 +62,22 @@
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
-    <NoStdLib>true</NoStdLib>
+    <NoStdLib>false</NoStdLib>
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="System\Attribute.cs" />
-    <Compile Include="System\AttributeTarget.cs" />
-    <Compile Include="System\AttributeUsageAttribute.cs" />
     <Compile Include="Boot.cs" />
-    <Compile Include="Port.cs" />
-    <Compile Include="IntrinsicAttribute.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Multiboot.cs" />
     <Compile Include="Screen.cs" />
-    <Compile Include="System\Collections\IEnumerable.cs" />
-    <Compile Include="System\Collections\IEnumerator.cs" />
-    <Compile Include="System\Delegate.cs" />
-    <Compile Include="System\Exception.cs" />
-    <Compile Include="System\IDisposable.cs" />
-    <Compile Include="System\MulticastDelegate.cs" />
-    <Compile Include="System\ParamArrayAttribute.cs" />
-    <Compile Include="System\Primitives\Array.cs" />
-    <Compile Include="System\Primitives\Boolean.cs" />
-    <Compile Include="System\Primitives\Byte.cs" />
-    <Compile Include="System\Primitives\Char.cs" />
-    <Compile Include="System\Primitives\Double.cs" />
-    <Compile Include="System\Primitives\Enum.cs" />
-    <Compile Include="System\Primitives\Int16.cs" />
-    <Compile Include="System\Primitives\Int32.cs" />
-    <Compile Include="System\Primitives\Int64.cs" />
-    <Compile Include="System\Primitives\IntPtr.cs" />
-    <Compile Include="System\Primitives\Object.cs" />
-    <Compile Include="System\Primitives\SByte.cs" />
-    <Compile Include="System\Primitives\Single.cs" />
-    <Compile Include="System\Primitives\String.cs" />
-    <Compile Include="System\Primitives\UInt16.cs" />
-    <Compile Include="System\Primitives\UInt32.cs" />
-    <Compile Include="System\Primitives\UInt64.cs" />
-    <Compile Include="System\Primitives\UIntPtr.cs" />
-    <Compile Include="System\Primitives\ValueType.cs" />
-    <Compile Include="System\Primitives\Void.cs" />
-    <Compile Include="System\Reflection\DefaultMemberAttribute.cs" />
-    <Compile Include="System\RuntimeFieldHandle.cs" />
-    <Compile Include="System\RuntimeTypeHandle.cs" />
-    <Compile Include="System\Runtime\InteropServices\OutAttribute.cs" />
-    <Compile Include="System\Type.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="System\Collections\Generic\" />
-    <Folder Include="System\IO\" />
-    <Folder Include="System\Runtime\CompilerServices\" />
+    <ProjectReference Include="..\Platforms\x86\Mosa.Platforms.x86.csproj">
+      <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
+      <Name>Mosa.Platforms.x86</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
