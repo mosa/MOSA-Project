@@ -19,154 +19,169 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.Loader
 {
-    /// <summary>
-    /// Provides a default implementation of the IAssemblyLoader interface.
-    /// </summary>
-    public class AssemblyLoader : IAssemblyLoader
-    {
-        #region Data members
+	/// <summary>
+	/// Provides a default implementation of the IAssemblyLoader interface.
+	/// </summary>
+	public class AssemblyLoader : IAssemblyLoader
+	{
+		#region Data members
 
-        private string[] _searchPath;
-        private List<string> _privatePaths = new List<string>();
-        private List<IMetadataModule> _loadedImages = new List<IMetadataModule>();
-        private ITypeSystem _typeLoader;
+		private string[] _searchPath;
+		private List<string> _privatePaths = new List<string>();
+		private List<IMetadataModule> _loadedImages = new List<IMetadataModule>();
+		private ITypeSystem _typeLoader;
 
-        #endregion // Data members
+		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
-        /// </summary>
-        /// <param name="typeLoader">The type loader.</param>
-        public AssemblyLoader(ITypeSystem typeLoader)
-        {
-            // HACK: I can't figure out an easier way to get the framework dir right now...
-            string frameworkDir = Path.GetDirectoryName(typeof(System.Object).Assembly.Location);
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
+		/// </summary>
+		/// <param name="typeLoader">The type loader.</param>
+		public AssemblyLoader(ITypeSystem typeLoader)
+		{
+			// HACK: I can't figure out an easier way to get the framework dir right now...
+			string frameworkDir = Path.GetDirectoryName(typeof(System.Object).Assembly.Location);
 
-            _searchPath = new string[] {
+			_searchPath = new string[] {
                 AppDomain.CurrentDomain.BaseDirectory,
                 frameworkDir
             };
 
-            _typeLoader = typeLoader;
-        }
+			_typeLoader = typeLoader;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region IAssemblyLoader Members
+		#region IAssemblyLoader Members
 
-        IEnumerable<IMetadataModule> IAssemblyLoader.Modules
-        {
-            get { return _loadedImages; }
-        }
+		/// <summary>
+		/// Gets an enumerable collection of loaded modules.
+		/// </summary>
+		/// <value></value>
+		public IEnumerable<IMetadataModule> Modules
+		{
+			get { return _loadedImages; }
+		}
 
-        void IAssemblyLoader.AppendPrivatePath(string path)
-        {
-            _privatePaths.Add(path);
-        }
+		/// <summary>
+		/// Appends the given path to the assembly search path.
+		/// </summary>
+		/// <param name="path">The path to append to the assembly search path.</param>
+		public void AppendPrivatePath(string path)
+		{
+			_privatePaths.Add(path);
+		}
 
-        IMetadataModule IAssemblyLoader.Resolve(IMetadataProvider provider, AssemblyRefRow assemblyRef)
-        {
-            IMetadataModule result = null;
-            string name;
-            provider.Read(assemblyRef.NameIdx, out name);
+		/// <summary>
+		/// Resolves the given assembly reference and loads the associated IMetadataModule.
+		/// </summary>
+		/// <param name="provider">The metadata provider, which contained the assembly reference.</param>
+		/// <param name="assemblyRef">The assembly reference to resolve.</param>
+		/// <returns>
+		/// An instance of IMetadataModule representing the resolved assembly.
+		/// </returns>
+		public IMetadataModule Resolve(IMetadataProvider provider, AssemblyRefRow assemblyRef)
+		{
+			IMetadataModule result = null;
+			string name;
+			provider.Read(assemblyRef.NameIdx, out name);
 
-            result = GetLoadedAssembly(name);
-            if (null == result)
-                result = DoLoadAssembly(name + ".dll");
-            if (null == result)
-                throw new TypeLoadException();
+			result = GetLoadedAssembly(name);
+			if (null == result)
+				result = DoLoadAssembly(name + ".dll");
+			if (null == result)
+				throw new TypeLoadException();
 
-            return result;
-        }
+			return result;
+		}
 
-        IMetadataModule IAssemblyLoader.Load(string file)
-        {
-            IMetadataModule result = null;
+		/// <summary>
+		/// Loads the named assembly.
+		/// </summary>
+		/// <param name="file">The file path of the assembly to load.</param>
+		/// <returns>
+		/// The assembly image of the loaded assembly.
+		/// </returns>
+		public IMetadataModule Load(string file)
+		{
+			IMetadataModule result = null;
 
-            if (!File.Exists(file))
-            {
-                if (!Path.IsPathRooted(file))
-                    file = String.Format(@"{0}{1}{2}", Environment.CurrentDirectory, Path.DirectorySeparatorChar, file);
-                else
-                    return null;
-            }
+			// FIXME
+			//if (!File.Exists(file))
+				// throw new System.IO.FileNotFoundException();
 
-            if (File.Exists(file))
-            {
-                result = PortableExecutableImage.Load(_loadedImages.Count, new FileStream(file, FileMode.Open, FileAccess.Read));
-                if (null != result)
-                {
-                    lock (_loadedImages)
-                    {
-                        _loadedImages.Add(result);
-                    }
+			if (File.Exists(file)) {
+				result = PortableExecutableImage.Load(_loadedImages.Count, new FileStream(file, FileMode.Open, FileAccess.Read));
+				if (null != result) {
+					lock (_loadedImages) {
+						_loadedImages.Add(result);
+					}
 
-                    _typeLoader.AssemblyLoaded(result);
-                }
-            }
+					_typeLoader.AssemblyLoaded(result);
+				}
+			}
 
-            return result;
-        }
+			return result;
+		}
 
-        void IAssemblyLoader.Unload(IMetadataModule module)
-        {
-            IDisposable disp = module as IDisposable;
-            if (null != disp)
-                disp.Dispose();
-        }
+		/// <summary>
+		/// Unloads the given module.
+		/// </summary>
+		/// <param name="module">The module to unload.</param>
+		public void Unload(IMetadataModule module)
+		{
+			IDisposable disp = module as IDisposable;
+			if (null != disp)
+				disp.Dispose();
+		}
 
-        #endregion // IAssemblyLoader Members
+		#endregion // IAssemblyLoader Members
 
-        #region Internals
+		#region Internals
 
-        private IMetadataModule GetLoadedAssembly(string name)
-        {
-            IMetadataModule result = null;
-            foreach (IMetadataModule image in _loadedImages)
-            {
-                if (true == name.Equals(image.Name))
-                {
-                    result = image;
-                    break;
-                }
-            }
-            return result;
-        }
+		private IMetadataModule GetLoadedAssembly(string name)
+		{
+			IMetadataModule result = null;
+			foreach (IMetadataModule image in _loadedImages) {
+				if (true == name.Equals(image.Name)) {
+					result = image;
+					break;
+				}
+			}
+			return result;
+		}
 
-        private IMetadataModule DoLoadAssembly(string name)
-        {
-            IMetadataModule result = DoLoadAssemblyFromPaths(name, _privatePaths);
-            if (null == result)
-                result = DoLoadAssemblyFromPaths(name, _searchPath);
+		private IMetadataModule DoLoadAssembly(string name)
+		{
+			IMetadataModule result = DoLoadAssemblyFromPaths(name, _privatePaths);
+			if (null == result)
+				result = DoLoadAssemblyFromPaths(name, _searchPath);
 
-            return result;
-        }
+			return result;
+		}
 
-        private IMetadataModule DoLoadAssemblyFromPaths(string name, IEnumerable<string> paths)
-        {
-            IMetadataModule result = null;
-            string fullName;
+		private IMetadataModule DoLoadAssemblyFromPaths(string name, IEnumerable<string> paths)
+		{
+			IMetadataModule result = null;
+			string fullName;
 
-            foreach (string path in paths)
-            {
-                fullName = Path.Combine(path, name);
-                try
-                {
-                    result = (this as IAssemblyLoader).Load(fullName);
-                    if (null != result)
-                        break;
-                }
-                catch
-                {
-                    /* Failed to load assembly there... */
-                }
-            }
+			foreach (string path in paths) {
+				fullName = Path.Combine(path, name);
+				try {
+					result = (this as IAssemblyLoader).Load(fullName);
+					if (null != result)
+						break;
+				}
+				catch {
+					/* Failed to load assembly there... */
+				}
+			}
 
-            return result;
-        }
+			return result;
+		}
 
-        #endregion // Internals
-    }
+		#endregion // Internals
+	}
 }

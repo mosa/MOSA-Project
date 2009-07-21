@@ -232,6 +232,7 @@ namespace Mosa.Tools.Compiler
 				// Append the paths of the folder to the loader path
 				List<string> paths = new List<string>();
 				foreach (FileInfo assembly in this.inputFiles) {
+					
 					string path = Path.GetDirectoryName(assembly.FullName);
 					if (paths.Contains(path) == false)
 						paths.Add(path);
