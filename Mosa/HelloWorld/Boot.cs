@@ -5,7 +5,7 @@
  *
  */
 using Mosa.Kernel.Memory.X86;
-//using Mosa.Platforms.x86;
+using Mosa.Platforms.x86;
 
 namespace Mosa.HelloWorld
 {
@@ -312,10 +312,6 @@ namespace Mosa.HelloWorld
 			Multiboot.Dump();
 			//Multiboot.Dump2();
 
-			//unsafe {
-			//    Native.Out8((byte*)0, 0);
-			//}
-
             Screen.SetCursor(29, 24);
             Screen.Color = 0x0E;
             Screen.Write('w');
@@ -349,8 +345,20 @@ namespace Mosa.HelloWorld
 				Screen.Write('|');
 				Screen.Column = 27;
 				Screen.Write('/');
-				//DisplayCounter();
+				DisplaySeconds();
 			}
+		}
+
+		/// <summary>
+		/// Displays the seconds.
+		/// </summary>
+		private unsafe static void DisplaySeconds()
+		{
+			 	Native.Out8((byte*)0x70, 0);
+				byte second = Native.In8((byte*)0x71);
+
+				Screen.SetCursor(55, 24);
+				Screen.Write(second, 16, 2);
 		}
 
 		/// <summary>

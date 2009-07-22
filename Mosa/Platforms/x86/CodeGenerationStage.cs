@@ -272,8 +272,6 @@ namespace Mosa.Platforms.x86
             Operand src = instruction.Operand0;
             Operand dst = instruction.Results[0];// as RegisterOperand;
 
-            bool x = false;
-            Debug.Assert(x, "IN: " + dst.Type.ToString() + " :: " + src.Type.ToString());
             _emitter.Mov(new RegisterOperand(src.Type, GeneralPurposeRegister.EDX), src);
             _emitter.In(new RegisterOperand(dst.Type, GeneralPurposeRegister.EAX), new RegisterOperand(src.Type, GeneralPurposeRegister.EDX));
             _emitter.Mov(dst, new RegisterOperand(dst.Type, GeneralPurposeRegister.EAX));

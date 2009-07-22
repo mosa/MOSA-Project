@@ -1017,14 +1017,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 }
             }
 
-            if (null == replacement)
-            {
+            if (replacement == null)
                 ProcessInvokeInstruction(instruction, ctx);
-            }
             else
-            {
                 Replace(ctx, replacement);
-            }
         }
 
         /// <summary>
