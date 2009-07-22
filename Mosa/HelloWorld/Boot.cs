@@ -357,7 +357,17 @@ namespace Mosa.HelloWorld
 			 	Native.Out8((byte*)0x70, 0);
 				byte second = Native.In8((byte*)0x71);
 
-				Screen.SetCursor(55, 24);
+				Native.Out8((byte*)0x70, 2);
+				byte minute = Native.In8((byte*)0x71);
+
+				Native.Out8((byte*)0x70, 4);
+				byte hour = Native.In8((byte*)0x71);
+
+				Screen.SetCursor(71, 24);
+				Screen.Write(hour, 16, 2);
+				Screen.Write(':');
+				Screen.Write(minute, 16, 2);
+				Screen.Write(':');
 				Screen.Write(second, 16, 2);
 		}
 
