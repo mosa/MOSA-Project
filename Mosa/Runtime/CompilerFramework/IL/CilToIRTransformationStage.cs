@@ -992,7 +992,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     {
                         // Get the intrinsic attribute
                         IntrinsicAttribute ia = (IntrinsicAttribute)ra.GetAttribute();
-                        if (true == ia.Architecture.IsInstanceOfType(_architecture))
+                        if (ia.Architecture.IsInstanceOfType(_architecture))
                         {
                             // Found a replacement for the call...
                             try
