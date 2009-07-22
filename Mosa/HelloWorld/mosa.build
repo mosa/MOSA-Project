@@ -19,6 +19,7 @@
 		
 		<references>
 			<include name="System.dll"/>
+			<include name="Platforms.x86"/>
 		</references>
 		
 		<!-- supress warnings -->
