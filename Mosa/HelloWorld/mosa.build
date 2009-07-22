@@ -19,7 +19,7 @@
 		
 		<references>
 			<include name="System.dll"/>
-			<include name="Platforms.x86"/>
+			<include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
 		</references>
 		
 		<!-- supress warnings -->
