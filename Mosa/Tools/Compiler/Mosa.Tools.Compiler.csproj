@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>10.0.20506</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -83,6 +83,8 @@
       <Name>Mosa.Runtime</Name>
     </ProjectReference>
     <Compile Include="ConstantFoldingWrapper.cs" />
+    <Compile Include="Metadata\MetadataBuilderStage.cs" />
+    <Compile Include="Metadata\MetadataStreamHeader.cs" />
     <Compile Include="MethodCompilerStageWrapper.cs" />
     <Compile Include="RegisterAllocatorSelector.cs" />
     <Compile Include="AotCompiler.cs">
