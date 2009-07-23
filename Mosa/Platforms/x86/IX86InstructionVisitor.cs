@@ -158,7 +158,13 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         /// <param name="arg">The arguments</param>
         void Neg(NegInstruction instruction, ArgType arg);
-        /// <summary>
+		/// <summary>
+		/// No operation
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="arg">The arguments</param>
+		void Nop(NopInstruction instruction, ArgType arg);
+		/// <summary>
         /// Output to port
         /// </summary>
         /// <param name="instruction">The instruction.</param>

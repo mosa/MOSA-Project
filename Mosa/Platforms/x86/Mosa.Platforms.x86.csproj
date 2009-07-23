@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -87,6 +87,7 @@
     </Compile>
     <Compile Include="Instructions\DirectDivision.cs" />
     <Compile Include="Instructions\DirectMultiplication.cs" />
+    <Compile Include="Instructions\Intrinsics\NopInstruction.cs" />
     <Compile Include="Instructions\SalInstruction.cs" />
     <Compile Include="OpCode.cs" />
     <Compile Include="X86.cs" />

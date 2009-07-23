@@ -132,6 +132,12 @@ namespace Mosa.Platforms.x86
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
         public static unsafe void Out32(uint* address, uint value) { ThrowPlatformNotSupported(); }
 
+		/// <summary>
+		/// Wraps the x86 out instruction to write to a nop instruction.
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.NopInstruction))]
+		public static unsafe void Nop() { ThrowPlatformNotSupported(); }
+
         /// <summary>
         /// Wraps the x86 hlt instruction.
         /// </summary>

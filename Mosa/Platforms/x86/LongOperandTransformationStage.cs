@@ -2573,6 +2573,10 @@ namespace Mosa.Platforms.x86
 		{
 		}
 
+		void IX86InstructionVisitor<Context>.Nop(NopInstruction instruction, Context arg)
+		{
+		}
+
 		void IX86InstructionVisitor<Context>.In(InInstruction instruction, Context arg)
 		{
 		}

@@ -393,6 +393,11 @@ namespace Mosa.Platforms.x86
             _emitter.Hlt();
         }
 
+		void IX86InstructionVisitor<int>.Nop(NopInstruction instruction, int arg)
+		{
+			_emitter.Nop();
+		}
+
         /// <summary>
         /// Locks
         /// </summary>
