@@ -199,9 +199,8 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Reads in from the port at src and stores into dest
         /// </summary>
-        /// <param name="dest">The destination operand</param>
         /// <param name="src">The source operand</param>
-        void In(Operand dest, Operand src);
+        void In(Operand src);
 
         /// <summary>
         /// Emits a raise interrupt instruction.

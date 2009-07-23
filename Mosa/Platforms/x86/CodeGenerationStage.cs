@@ -269,12 +269,15 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.In(InInstruction instruction, int arg)
         {
-            Operand src = instruction.Operand0;
-            Operand dst = instruction.Results[0];// as RegisterOperand;
+            Operand src = instruction.Operand1;
+            Operand result = instruction.Results[0];
 
-            _emitter.Mov(new RegisterOperand(src.Type, GeneralPurposeRegister.EDX), src);
-            _emitter.In(new RegisterOperand(dst.Type, GeneralPurposeRegister.EAX), new RegisterOperand(src.Type, GeneralPurposeRegister.EDX));
-            _emitter.Mov(dst, new RegisterOperand(dst.Type, GeneralPurposeRegister.EAX));
+            RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+            RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
+           
+            _emitter.Mov(edx, src);
+            _emitter.In(edx);
+            _emitter.Mov(result, eax);
         }
 
         /// <summary>
@@ -407,12 +410,15 @@ namespace Mosa.Platforms.x86
         /// <param name="arg">The arguments</param>
         void IX86InstructionVisitor<int>.Out(OutInstruction instruction, int arg)
         {
-            Operand src = instruction.Operand0;
-            Operand dst = instruction.Results[0];// as RegisterOperand;
+            Operand dst = instruction.Operand0;
+            Operand src = instruction.Operand1;
 
-			_emitter.Mov(new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.EDX), dst);
-            _emitter.Out(new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.EAX), new RegisterOperand(dst.Type, GeneralPurposeRegister.EDX));
-            _emitter.Mov(dst, new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.EAX));
+            RegisterOperand eax = new RegisterOperand(src.Type, GeneralPurposeRegister.EAX);
+            RegisterOperand edx = new RegisterOperand(dst.Type, GeneralPurposeRegister.EDX);
+
+            _emitter.Mov(eax, src);
+            _emitter.Mov(edx, dst);
+            _emitter.Out(edx, eax);
         }
 
         /// <summary>
@@ -739,7 +745,7 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<int>.Pop(IL.PopInstruction instruction, int arg)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         void IL.IILVisitor<int>.Jmp(IL.JumpInstruction instruction, int arg)

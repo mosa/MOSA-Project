@@ -36,10 +36,10 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         /// <summary>
         /// Initializes a new instance of the <see cref="InInstruction"/> class.
         /// </summary>
-        /// <param name="destination">The destination operand.</param>
+        /// <param name="dest">The dest operand.</param>
         /// <param name="source">The source operand.</param>
-        public InInstruction(Operand destination, Operand source) :
-            base(destination, source)
+        public InInstruction(Operand dest, Operand source) :
+            base(dest, source)
         {
         }
 
@@ -55,7 +55,7 @@ namespace Mosa.Platforms.x86.Instructions.Intrinsics
         /// </returns>
         public override string ToString()
         {
-            return String.Format(@"x86 in {0}, {1} ", this.Operand0, this.Operand1);
+            return String.Format(@"x86 in eax, {0} ", this.Operand0);
         }
 
         /// <summary>

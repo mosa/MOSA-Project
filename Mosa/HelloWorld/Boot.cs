@@ -233,7 +233,7 @@ namespace Mosa.HelloWorld
             }
             Screen.NextLine();
 
-            Screen.Color = 0x03;
+            Screen.Color = 0x0A;
             Screen.Write('M');
             Screen.Write('e');
             Screen.Write('m');
@@ -336,15 +336,6 @@ namespace Mosa.HelloWorld
             Screen.Write('g');
 
 			while (true) {
-				Screen.SetCursor(27, 0);
-				Screen.Color = 0x0F;
-				Screen.Write('-');
-				Screen.Column = 27;
-				Screen.Write('\\');
-				Screen.Column = 27;
-				Screen.Write('|');
-				Screen.Column = 27;
-				Screen.Write('/');
 				DisplaySeconds();
 			}
 		}
@@ -352,24 +343,74 @@ namespace Mosa.HelloWorld
 		/// <summary>
 		/// Displays the seconds.
 		/// </summary>
-		private unsafe static void DisplaySeconds()
-		{
-			 	Native.Out8((byte*)0x70, 0);
-				byte second = Native.In8((byte*)0x71);
+        private unsafe static void DisplaySeconds()
+        {
+            Native.Out8(0x70, 10);
+            byte updateInProgress = Native.In8(0x71);
 
-				Native.Out8((byte*)0x70, 2);
-				byte minute = Native.In8((byte*)0x71);
+            while (updateInProgress == 0x80)
+            {
+                Native.Out8(0x70, 10);
+                updateInProgress = Native.In8(0x71);
+            }
 
-				Native.Out8((byte*)0x70, 4);
-				byte hour = Native.In8((byte*)0x71);
 
-				Screen.SetCursor(71, 24);
-				Screen.Write(hour, 16, 2);
-				Screen.Write(':');
-				Screen.Write(minute, 16, 2);
-				Screen.Write(':');
-				Screen.Write(second, 16, 2);
-		}
+
+            Native.Out8(0x70, 0);
+            byte second = (byte)(Native.In8(0x71) % 60);
+
+            Native.Out8(0x70, 2);
+            byte minute = Native.In8(0x71);
+
+            Native.Out8(0x70, 4);
+            byte hour = Native.In8(0x71);
+
+            Native.Out8(0x70, 7);
+            byte day = (byte)(Native.In8(0x71) % 60);
+
+            Native.Out8(0x70, 8);
+            byte month = Native.In8(0x71);
+
+            Native.Out8(0x70, 9);
+            byte year = Native.In8(0x71);
+
+            Screen.SetCursor(52, 24);
+            Screen.Color = 0x0A;
+            Screen.Write('T');
+            Screen.Write('i');
+            Screen.Write('m');
+            Screen.Write('e');
+            Screen.Write(':');
+            Screen.Write(' ');
+
+            Screen.Color = 0x0F;
+            Screen.Write(hour, 10, 2);
+            Screen.Color = 0x07;
+            Screen.Write(':');
+            Screen.Color = 0x0F;
+            Screen.Write(minute, 10, 2);
+            Screen.Color = 0x07;
+            Screen.Write(':');
+            Screen.Color = 0x0F;
+            Screen.Write(second, 10, 2);
+            Screen.Write(' ');
+            Screen.Color = 0x07;
+            Screen.Write('(');
+            Screen.Color = 0x0F;
+            Screen.Write(month, 10, 2);
+            Screen.Color = 0x07;
+            Screen.Write('/');
+            Screen.Color = 0x0F;
+            Screen.Write(day, 10, 2);
+            Screen.Color = 0x07;
+            Screen.Write('/');
+            Screen.Color = 0x0F;
+            Screen.Write('2');
+            Screen.Write('0');
+            Screen.Write(year, 10, 2);
+            Screen.Color = 0x07;
+            Screen.Write(')');
+        }
 
 		/// <summary>
 		/// Displays the counter.

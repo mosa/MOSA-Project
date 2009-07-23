@@ -100,7 +100,7 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 in instruction to read from an 8-bit port.
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InInstruction))]
-        public static unsafe byte In8(byte *address) { ThrowPlatformNotSupported(); return 0; }
+        public static unsafe byte In8(byte address) { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// Wraps the x86 in instruction to read from a 16-bit port.
@@ -118,7 +118,7 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 out instruction to write to an 8-bit port.
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
-        public static unsafe void Out8(byte* address, byte value) { ThrowPlatformNotSupported(); }
+        public static unsafe void Out8(byte address, byte value) { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 out instruction to write to a 16-bit port.

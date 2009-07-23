@@ -332,10 +332,10 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The value.</param>
 		void ICodeEmitter.Out(Operand dest, Operand src)
 		{
-			if (dest.Type.Type == CilElementType.I1 || dest.Type.Type == CilElementType.U1)
+            if (src.Type.Type == CilElementType.I1 || src.Type.Type == CilElementType.U1)
 				Emit(new byte[] { 0xEE }, null, null, null);
 			else
-				Emit(dest, src, X86.Out32(dest, src));
+				Emit(new byte[] { 0xEE }, null, null, null);
 		}
 
 		/// <summary>
@@ -517,15 +517,11 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Reads in from the port at src and stores into dest
 		/// </summary>
-		/// <param name="dest">The destination operand</param>
 		/// <param name="src">The source operand</param>
-		void ICodeEmitter.In(Operand dest, Operand src)
+		void ICodeEmitter.In(Operand src)
 		{
-			byte[] in8 = new byte[] { 0xED };
-			if (dest.Type.Type == CilElementType.I1 || dest.Type.Type == CilElementType.U1)
-				Emit(in8, null, null, null);
-			else
-				Emit(dest, src, X86.In32(dest, src));
+            byte[] in32 = new byte[] { 0xEC };
+		    Emit(in32, null, null, null);
 		}
 
 		/// <summary>
