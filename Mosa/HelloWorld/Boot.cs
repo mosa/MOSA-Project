@@ -331,41 +331,19 @@ namespace Mosa.HelloWorld
 			Screen.Write('r');
 			Screen.Write('g');
 
-			while (true) {
-				DisplaySeconds();
-			}
+			CMOS.InitializeClock();
+
+			while (true) 
+				DisplayTime();
 		}
 
 		/// <summary>
 		/// Displays the seconds.
 		/// </summary>
-		private unsafe static void DisplaySeconds()
+		private unsafe static void DisplayTime()
 		{
-			byte updateInProgress = 0;
-
-			while (0x80 == updateInProgress) {
-				Native.Out8(0x70, 10);
-				updateInProgress = Native.In8(0x71);
-			}
-
-			Native.Out8(0x70, 0);
-			byte second = (byte)(Native.In8(0x71));
-
-			Native.Out8(0x70, 2);
-			byte minute = Native.In8(0x71);
-
-			Native.Out8(0x70, 4);
-			byte hour = Native.In8(0x71);
-
-			Native.Out8(0x70, 7);
-			byte day = (byte)(Native.In8(0x71));
-
-			Native.Out8(0x70, 8);
-			byte month = Native.In8(0x71);
-
-			Native.Out8(0x70, 9);
-			byte year = Native.In8(0x71);
-
+			//while (0x80 == CMOS.Get(0x0A)) ;
+			
 			Screen.SetCursor(52, 24);
 			Screen.Color = 0x0A;
 			Screen.Write('T');
@@ -376,30 +354,30 @@ namespace Mosa.HelloWorld
 			Screen.Write(' ');
 
 			Screen.Color = 0x0F;
-			Screen.Write(hour, 16, 2);
+			Screen.Write(CMOS.Hour, 10, 2);
 			Screen.Color = 0x07;
 			Screen.Write(':');
 			Screen.Color = 0x0F;
-			Screen.Write(minute, 16, 2);
+			Screen.Write(CMOS.Minute, 10, 2);
 			Screen.Color = 0x07;
 			Screen.Write(':');
 			Screen.Color = 0x0F;
-			Screen.Write(second, 16, 2);
+			Screen.Write(CMOS.Second, 10, 2);
 			Screen.Write(' ');
 			Screen.Color = 0x07;
 			Screen.Write('(');
 			Screen.Color = 0x0F;
-			Screen.Write(month, 16, 2);
+			Screen.Write(CMOS.Month, 10, 2);
 			Screen.Color = 0x07;
 			Screen.Write('/');
 			Screen.Color = 0x0F;
-			Screen.Write(day, 16, 2);
+			Screen.Write(CMOS.Day, 10, 2);
 			Screen.Color = 0x07;
 			Screen.Write('/');
 			Screen.Color = 0x0F;
 			Screen.Write('2');
 			Screen.Write('0');
-			Screen.Write(year, 16, 2);
+			Screen.Write(CMOS.Year, 10, 2);
 			Screen.Color = 0x07;
 			Screen.Write(')');
 		}
