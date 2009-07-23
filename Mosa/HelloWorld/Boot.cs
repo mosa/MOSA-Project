@@ -27,7 +27,7 @@ namespace Mosa.HelloWorld
 		{
 			Screen.Clear();
 
-            Screen.Color = 0x0E;
+			Screen.Color = 0x0E;
 			Screen.Write('M');
 			Screen.Write('O');
 			Screen.Write('S');
@@ -54,42 +54,42 @@ namespace Mosa.HelloWorld
 			Screen.Write('a');
 			Screen.Write('k');
 			Screen.Write('e');
-            Screen.Color = 0x0E;
+			Screen.Color = 0x0E;
 			Screen.Write('\'');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
 			Screen.Color = 0x0E;
 			Screen.Write('C');
 			Screen.Write('o');
@@ -110,158 +110,156 @@ namespace Mosa.HelloWorld
 			Screen.Write('0');
 			Screen.Write('0');
 			Screen.Write('9');
-            Screen.NextLine();
-            
-            Screen.Color = 0x0F;
-            for (uint index = 0; index < 80; index++)
-            {
-                if (index == 51)
-                    Screen.Write((char)203);
-                else
-                    Screen.Write((char)205);
-            }
-            Screen.NextLine();
+			Screen.NextLine();
+
+			Screen.Color = 0x0F;
+			for (uint index = 0; index < 80; index++) {
+				if (index == 51)
+					Screen.Write((char)203);
+				else
+					Screen.Write((char)205);
+			}
+			Screen.NextLine();
 
 			Screen.SetCursor(0, 2);
-            Screen.Color = 0x0A;
-            Screen.Write('M');
-            Screen.Write('u');
-            Screen.Write('l');
-            Screen.Write('t');
-            Screen.Write('i');
-            Screen.Write('b');
-            Screen.Write('o');
-            Screen.Write('o');
-            Screen.Write('t');
-            Screen.Write('a');
-            Screen.Write('d');
-            Screen.Write('d');
-            Screen.Write('r');
-            Screen.Write('e');
-            Screen.Write('s');
-            Screen.Write('s');
-            Screen.Write(':');
-            Screen.Write(' ');
-            Screen.Color = 0x07;
-            Screen.Write(Memory.Get32(0x100000), 16, 8);
+			Screen.Color = 0x0A;
+			Screen.Write('M');
+			Screen.Write('u');
+			Screen.Write('l');
+			Screen.Write('t');
+			Screen.Write('i');
+			Screen.Write('b');
+			Screen.Write('o');
+			Screen.Write('o');
+			Screen.Write('t');
+			Screen.Write('a');
+			Screen.Write('d');
+			Screen.Write('d');
+			Screen.Write('r');
+			Screen.Write('e');
+			Screen.Write('s');
+			Screen.Write('s');
+			Screen.Write(':');
+			Screen.Write(' ');
+			Screen.Color = 0x07;
+			Screen.Write(Memory.Get32(0x100000), 16, 8);
 			Screen.NextLine();
-            Screen.Color = 0x0A;
-            Screen.Write('M');
-            Screen.Write('a');
-            Screen.Write('g');
-            Screen.Write('i');
-            Screen.Write('c');
-            Screen.Write(' ');
-            Screen.Write('n');
-            Screen.Write('u');
-            Screen.Write('m');
-            Screen.Write('b');
-            Screen.Write('e');
-            Screen.Write('r');
-            Screen.Write(':');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Color = 0x07;
+			Screen.Color = 0x0A;
+			Screen.Write('M');
+			Screen.Write('a');
+			Screen.Write('g');
+			Screen.Write('i');
+			Screen.Write('c');
+			Screen.Write(' ');
+			Screen.Write('n');
+			Screen.Write('u');
+			Screen.Write('m');
+			Screen.Write('b');
+			Screen.Write('e');
+			Screen.Write('r');
+			Screen.Write(':');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Color = 0x07;
 			Screen.Write(Memory.Get32(0x100004), 16, 8);
 
 			Multiboot.SetMultibootLocation(Memory.Get32(0x100004), Memory.Get32(0x100000));
 			Screen.NextLine();
-            Screen.Color = 0x0A;
-            Screen.Write('M');
-            Screen.Write('u');
-            Screen.Write('l');
-            Screen.Write('t');
-            Screen.Write('i');
-            Screen.Write('b');
-            Screen.Write('o');
-            Screen.Write('o');
-            Screen.Write('t');
-            Screen.Write('-');
-            Screen.Write('F');
-            Screen.Write('l');
-            Screen.Write('a');
-            Screen.Write('g');
-            Screen.Write('s');
-            Screen.Write(':');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Color = 0x07;
+			Screen.Color = 0x0A;
+			Screen.Write('M');
+			Screen.Write('u');
+			Screen.Write('l');
+			Screen.Write('t');
+			Screen.Write('i');
+			Screen.Write('b');
+			Screen.Write('o');
+			Screen.Write('o');
+			Screen.Write('t');
+			Screen.Write('-');
+			Screen.Write('F');
+			Screen.Write('l');
+			Screen.Write('a');
+			Screen.Write('g');
+			Screen.Write('s');
+			Screen.Write(':');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Color = 0x07;
 			Screen.Write(Multiboot.Flags, 2, 32);
 			Screen.NextLine();
 			Screen.NextLine();
 
-            Screen.Color = 0x0A;
-            Screen.Write('S');
-            Screen.Write('i');
-            Screen.Write('z');
-            Screen.Write('e');
-            Screen.Write(' ');
-            Screen.Write('o');
-            Screen.Write('f');
-            Screen.Write(' ');
-            Screen.Write('M');
-            Screen.Write('e');
-            Screen.Write('m');
-            Screen.Write('o');
-            Screen.Write('r');
-            Screen.Write('y');
-            Screen.Write(':');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Color = 0x07;
+			Screen.Color = 0x0A;
+			Screen.Write('S');
+			Screen.Write('i');
+			Screen.Write('z');
+			Screen.Write('e');
+			Screen.Write(' ');
+			Screen.Write('o');
+			Screen.Write('f');
+			Screen.Write(' ');
+			Screen.Write('M');
+			Screen.Write('e');
+			Screen.Write('m');
+			Screen.Write('o');
+			Screen.Write('r');
+			Screen.Write('y');
+			Screen.Write(':');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Color = 0x07;
 			Screen.Write((Multiboot.MemoryLower + Multiboot.MemoryUpper) / 1024, 10, -1);
 			Screen.Write(' ');
 			Screen.Write('M');
 			Screen.Write('B');
-            Screen.Write(' ');
-            Screen.Write('(');
+			Screen.Write(' ');
+			Screen.Write('(');
 			Screen.Write(Multiboot.MemoryLower + Multiboot.MemoryUpper, 10, -1);
 			Screen.Write(' ');
 			Screen.Write('K');
 			Screen.Write('B');
-            Screen.Write(')');
+			Screen.Write(')');
 			Screen.NextLine();
 
-            Screen.Color = 0x0F;
-            for (uint index = 0; index < 51; index++)
-            {
-                Screen.Write((char)205);
-            }
-            Screen.NextLine();
+			Screen.Color = 0x0F;
+			for (uint index = 0; index < 51; index++) {
+				Screen.Write((char)205);
+			}
+			Screen.NextLine();
 
-            Screen.Color = 0x0A;
-            Screen.Write('M');
-            Screen.Write('e');
-            Screen.Write('m');
-            Screen.Write('o');
-            Screen.Write('r');
-            Screen.Write('y');
-            Screen.Write('-');
-            Screen.Write('M');
-            Screen.Write('a');
-            Screen.Write('p');
-            Screen.Write(':');
-            Screen.NextLine();
+			Screen.Color = 0x0A;
+			Screen.Write('M');
+			Screen.Write('e');
+			Screen.Write('m');
+			Screen.Write('o');
+			Screen.Write('r');
+			Screen.Write('y');
+			Screen.Write('-');
+			Screen.Write('M');
+			Screen.Write('a');
+			Screen.Write('p');
+			Screen.Write(':');
+			Screen.NextLine();
 
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
-                Screen.Color = 0x0F;
+				Screen.Color = 0x0F;
 				Screen.Write(Multiboot.GetMemoryMapBaseLow(index), 16, 10);
 				Screen.Write(' ');
 				Screen.Write('-');
 				Screen.Write(' ');
-                Screen.Write(Multiboot.GetMemoryMapBaseLow(index) + Multiboot.GetMemoryMapLengthLow(index), 16, 10);
+				Screen.Write(Multiboot.GetMemoryMapBaseLow(index) + Multiboot.GetMemoryMapLengthLow(index), 16, 10);
 				Screen.Write(' ');
 				Screen.Write('(');
-                Screen.Color = 0x07;
-                Screen.Write(Multiboot.GetMemoryMapLengthLow(index), 16, 10);
-                Screen.Color = 0x0F;
+				Screen.Color = 0x07;
+				Screen.Write(Multiboot.GetMemoryMapLengthLow(index), 16, 10);
+				Screen.Color = 0x0F;
 				Screen.Write(')');
 				Screen.Write(' ');
-                Screen.Color = 0x07;
+				Screen.Color = 0x07;
 				Screen.Write('T');
 				Screen.Write('y');
 				Screen.Write('p');
@@ -272,68 +270,66 @@ namespace Mosa.HelloWorld
 				Screen.NextLine();
 			}
 
-            Screen.Column = 53;
-            Screen.Row    = 2;
-            Screen.Color  = 0x0A;
-            Screen.Write('M');
-            Screen.Write('e');
-            Screen.Write('m');
-            Screen.Write('o');
-            Screen.Write('r');
-            Screen.Write('y');
-            Screen.Write('d');
-            Screen.Write('u');
-            Screen.Write('m');
-            Screen.Write('p');
-            Screen.Color = 0x0F;
+			Screen.Column = 53;
+			Screen.Row = 2;
+			Screen.Color = 0x0A;
+			Screen.Write('M');
+			Screen.Write('e');
+			Screen.Write('m');
+			Screen.Write('o');
+			Screen.Write('r');
+			Screen.Write('y');
+			Screen.Write('d');
+			Screen.Write('u');
+			Screen.Write('m');
+			Screen.Write('p');
+			Screen.Color = 0x0F;
 
-            Screen.Row = 23;
-            for (int index = 0; index < 80; index++)
-            {
-                Screen.Column = index;
-                Screen.Write((char)205);
-            }
+			Screen.Row = 23;
+			for (int index = 0; index < 80; index++) {
+				Screen.Column = index;
+				Screen.Write((char)205);
+			}
 
 
-            for (int index = 2; index < 24; index++)
-            {
-                Screen.Column = 51;
-                Screen.Row = index;
+			for (int index = 2; index < 24; index++) {
+				Screen.Column = 51;
+				Screen.Row = index;
 
-                Screen.Color = 0x0F;
-                if (index == 7)
-                    Screen.Write((char)185);
-                else if (index == 23)
-                    Screen.Write((char)202);
-                else
-                    Screen.Write((char)186);
-            }
+				Screen.Color = 0x0F;
+				if (index == 7)
+					Screen.Write((char)185);
+				else if (index == 23)
+					Screen.Write((char)202);
+				else
+					Screen.Write((char)186);
+			}
 
 			Multiboot.Dump();
 			//Multiboot.Dump2();
 
-            Screen.SetCursor(29, 24);
-            Screen.Color = 0x0E;
-            Screen.Write('w');
-            Screen.Write('w');
-            Screen.Write('w');
-            Screen.Write('.');
-            Screen.Write('m');
-            Screen.Write('o');
-            Screen.Write('s');
-            Screen.Write('a');
-            Screen.Write('-');
-            Screen.Write('p');
-            Screen.Write('r');
-            Screen.Write('o');
-            Screen.Write('j');
-            Screen.Write('e');
-            Screen.Write('c');
-            Screen.Write('t');
-            Screen.Write('.');
-            Screen.Write('o');
-            Screen.Write('r');
-            Screen.Write('g');
+			Screen.SetCursor(29, 24);
+			Screen.Color = 0x0E;
+			Screen.Write('w');
+			Screen.Write('w');
+			Screen.Write('w');
+			Screen.Write('.');
+			Screen.Write('m');
+			Screen.Write('o');
+			Screen.Write('s');
+			Screen.Write('a');
+			Screen.Write('-');
+			Screen.Write('p');
+			Screen.Write('r');
+			Screen.Write('o');
+			Screen.Write('j');
+			Screen.Write('e');
+			Screen.Write('c');
+			Screen.Write('t');
+			Screen.Write('.');
+			Screen.Write('o');
+			Screen.Write('r');
+			Screen.Write('g');
 
 			while (true) {
 				DisplaySeconds();
@@ -343,71 +339,70 @@ namespace Mosa.HelloWorld
 		/// <summary>
 		/// Displays the seconds.
 		/// </summary>
-        private unsafe static void DisplaySeconds()
-        {
-            byte updateInProgress = 0;
+		private unsafe static void DisplaySeconds()
+		{
+			byte updateInProgress = 0;
 
-            while (0x80 == updateInProgress)
-            {
-                Native.Out8(0x70, 10);
-                updateInProgress = Native.In8(0x71);
-            }
+			while (0x80 == updateInProgress) {
+				Native.Out8(0x70, 10);
+				updateInProgress = Native.In8(0x71);
+			}
 
-            Native.Out8(0x70, 0);
-            byte second = (byte)(Native.In8(0x71) % 60);
+			Native.Out8(0x70, 0);
+			byte second = (byte)(Native.In8(0x71));
 
-            Native.Out8(0x70, 2);
-            byte minute = Native.In8(0x71);
+			Native.Out8(0x70, 2);
+			byte minute = Native.In8(0x71);
 
-            Native.Out8(0x70, 4);
-            byte hour = Native.In8(0x71);
+			Native.Out8(0x70, 4);
+			byte hour = Native.In8(0x71);
 
-            Native.Out8(0x70, 7);
-            byte day = (byte)(Native.In8(0x71) % 60);
+			Native.Out8(0x70, 7);
+			byte day = (byte)(Native.In8(0x71));
 
-            Native.Out8(0x70, 8);
-            byte month = Native.In8(0x71);
+			Native.Out8(0x70, 8);
+			byte month = Native.In8(0x71);
 
-            Native.Out8(0x70, 9);
-            byte year = Native.In8(0x71);
+			Native.Out8(0x70, 9);
+			byte year = Native.In8(0x71);
 
-            Screen.SetCursor(52, 24);
-            Screen.Color = 0x0A;
-            Screen.Write('T');
-            Screen.Write('i');
-            Screen.Write('m');
-            Screen.Write('e');
-            Screen.Write(':');
-            Screen.Write(' ');
+			Screen.SetCursor(52, 24);
+			Screen.Color = 0x0A;
+			Screen.Write('T');
+			Screen.Write('i');
+			Screen.Write('m');
+			Screen.Write('e');
+			Screen.Write(':');
+			Screen.Write(' ');
 
-            Screen.Color = 0x0F;
-            Screen.Write(hour, 16, 2);
-            Screen.Color = 0x07;
-            Screen.Write(':');
-            Screen.Color = 0x0F;
-            Screen.Write(minute, 16, 2);
-            Screen.Color = 0x07;
-            Screen.Write(':');
-            Screen.Color = 0x0F;
-            Screen.Write(second, 16, 2);
-            Screen.Write(' ');
-            Screen.Color = 0x07;
-            Screen.Write('(');
-            Screen.Color = 0x0F;
-            Screen.Write(month, 16, 2);
-            Screen.Color = 0x07;
-            Screen.Write('/');
-            Screen.Color = 0x0F;
-            Screen.Write(day, 16, 2);
-            Screen.Color = 0x07;
-            Screen.Write('/');
-            Screen.Color = 0x0F;
-            Screen.Write('2');
-            Screen.Write('0');
-            Screen.Write(year, 16, 2);
-            Screen.Color = 0x07;
-            Screen.Write(')');
-        }
+			Screen.Color = 0x0F;
+			Screen.Write(hour, 16, 2);
+			Screen.Color = 0x07;
+			Screen.Write(':');
+			Screen.Color = 0x0F;
+			Screen.Write(minute, 16, 2);
+			Screen.Color = 0x07;
+			Screen.Write(':');
+			Screen.Color = 0x0F;
+			Screen.Write(second, 16, 2);
+			Screen.Write(' ');
+			Screen.Color = 0x07;
+			Screen.Write('(');
+			Screen.Color = 0x0F;
+			Screen.Write(month, 16, 2);
+			Screen.Color = 0x07;
+			Screen.Write('/');
+			Screen.Color = 0x0F;
+			Screen.Write(day, 16, 2);
+			Screen.Color = 0x07;
+			Screen.Write('/');
+			Screen.Color = 0x0F;
+			Screen.Write('2');
+			Screen.Write('0');
+			Screen.Write(year, 16, 2);
+			Screen.Color = 0x07;
+			Screen.Write(')');
+		}
 
 		/// <summary>
 		/// Displays the counter.
