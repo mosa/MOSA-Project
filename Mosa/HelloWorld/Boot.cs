@@ -345,16 +345,13 @@ namespace Mosa.HelloWorld
 		/// </summary>
         private unsafe static void DisplaySeconds()
         {
-            Native.Out8(0x70, 10);
-            byte updateInProgress = Native.In8(0x71);
+            byte updateInProgress = 0;
 
-            while (updateInProgress == 0x80)
+            while (0x80 == updateInProgress)
             {
                 Native.Out8(0x70, 10);
                 updateInProgress = Native.In8(0x71);
             }
-
-
 
             Native.Out8(0x70, 0);
             byte second = (byte)(Native.In8(0x71) % 60);
@@ -384,30 +381,30 @@ namespace Mosa.HelloWorld
             Screen.Write(' ');
 
             Screen.Color = 0x0F;
-            Screen.Write(hour, 10, 2);
+            Screen.Write(hour, 16, 2);
             Screen.Color = 0x07;
             Screen.Write(':');
             Screen.Color = 0x0F;
-            Screen.Write(minute, 10, 2);
+            Screen.Write(minute, 16, 2);
             Screen.Color = 0x07;
             Screen.Write(':');
             Screen.Color = 0x0F;
-            Screen.Write(second, 10, 2);
+            Screen.Write(second, 16, 2);
             Screen.Write(' ');
             Screen.Color = 0x07;
             Screen.Write('(');
             Screen.Color = 0x0F;
-            Screen.Write(month, 10, 2);
+            Screen.Write(month, 16, 2);
             Screen.Color = 0x07;
             Screen.Write('/');
             Screen.Color = 0x0F;
-            Screen.Write(day, 10, 2);
+            Screen.Write(day, 16, 2);
             Screen.Color = 0x07;
             Screen.Write('/');
             Screen.Color = 0x0F;
             Screen.Write('2');
             Screen.Write('0');
-            Screen.Write(year, 10, 2);
+            Screen.Write(year, 16, 2);
             Screen.Color = 0x07;
             Screen.Write(')');
         }
