@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Linker;
 using System.IO;
 using Mosa.Runtime.Loader;
@@ -33,6 +34,26 @@ namespace Mosa.Tools.Compiler.Metadata
         /// Holds the signature of the metadata.
         /// </summary>
         private const int METADATA_SIGNATURE = 0x424A5342;
+
+        /// <summary>
+        /// Holds the major metadata version number according ECMA-335.
+        /// </summary>
+        private const int METADATA_MAJOR_VERSION = 1;
+
+        /// <summary>
+        /// Holds the minor metadata version according to ECMA-335.
+        /// </summary>
+        private const int METADATA_MINOR_VERSION = 1;
+
+        /// <summary>
+        /// The value of reseved metadata fields.
+        /// </summary>
+        private const int RESERVED_VALUE = 0;
+
+        /// <summary>
+        /// The value of metadata flags written by this stage.
+        /// </summary>
+        private const int METADATA_FLAGS = 0;
 
         /// <summary>
         /// The version string emitted by this stage in the metadata root header.
@@ -78,7 +99,17 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <summary>
         /// This stage emits 6 metadata streams.
         /// </summary>
-        private static readonly int METADATA_STREAMS = 6;
+        private const int METADATA_STREAMS = 6;
+
+        /// <summary>
+        /// The maximum length of a metadata stream name in ASCII characters (bytes)
+        /// </summary>
+        private const int MAX_METADATA_STREAM_NAME_LENGTH_IN_BYTES = 32;
+
+        /// <summary>
+        /// The size of the fixed metadata table header.
+        /// </summary>
+        private const int METADATA_TABLE_HEADER_SIZE = 24;
 
         /// <summary>
         /// Contains the names of the metadata streams emitted by this stage.
@@ -94,6 +125,11 @@ namespace Mosa.Tools.Compiler.Metadata
         };
 
         /// <summary>
+        /// Holds the source metadata to emit in the target module.
+        /// </summary>
+        private IMetadataProvider metadataSource;
+
+        /// <summary>
         /// The stream, where the metadata is emitted to.
         /// </summary>
         private Stream metadataStream;
@@ -107,6 +143,11 @@ namespace Mosa.Tools.Compiler.Metadata
         /// Holds the position of the metadata root header in the metadata stream.
         /// </summary>
         private long metadataRootHeaderPosition;
+
+        /// <summary>
+        /// Holds the position of the metadata table header.
+        /// </summary>
+        private long metadataTableHeaderPosition;
 
         /// <summary>
         /// Holds positional information about each metadata stream.
@@ -161,6 +202,7 @@ namespace Mosa.Tools.Compiler.Metadata
 
             this.metadataStream = this.AllocateMetadataStream(linker);
             this.metadataWriter = new BinaryWriter(this.metadataStream, Encoding.UTF8);
+            this.metadataSource = compiler.Metadata;
         }
 
         /// <summary>
@@ -171,6 +213,7 @@ namespace Mosa.Tools.Compiler.Metadata
             this.metadataWriter.Close();
             this.metadataWriter = null;
             this.metadataStream = null;
+            this.metadataSource = null;
         }
 
         /// <summary>
@@ -200,7 +243,7 @@ namespace Mosa.Tools.Compiler.Metadata
         {
             this.ReserveSpaceForMetadataRoot();
             this.WriteHeaps();
-            this.WriteMetadataTables();
+            this.WriteTableStream();
             this.WriteMosaTables();
             this.WriteMetadataRoot();
         }
@@ -235,8 +278,7 @@ namespace Mosa.Tools.Compiler.Metadata
         {
             const int metadataHeaderLength = 20;
 
-            // HACK: Assume the length of the metadata version string doesn't change when the name is converted to UTF-8.
-            int length = metadataHeaderLength + MetadataVersion.Length;
+            int length = metadataHeaderLength + Encoding.UTF8.GetBytes(MetadataVersion).Length;
             int padding = MetadataVersion.Length % 4;
             if (padding != 0)
             {
@@ -248,8 +290,7 @@ namespace Mosa.Tools.Compiler.Metadata
 
             foreach (string streamName in MetadataStreamNames)
             {
-                // HACK: Assume the length of the streamName doesn't change when the name is converted to ASCII.
-                int streamNameLength = Math.Min(streamName.Length, 32);
+                int streamNameLength = Math.Min(Encoding.ASCII.GetBytes(streamName).Length, 32);
                 padding = streamNameLength % 4;
                 if (padding != 0)
                 {
@@ -277,14 +318,19 @@ namespace Mosa.Tools.Compiler.Metadata
         /// </summary>
         private void WriteMetadataRootHeader()
         {
+            byte[] metadataVersion = Encoding.UTF8.GetBytes(MetadataVersion);
+            int paddedMetadataVersionLength = metadataVersion.Length;
+            int padding = 4 - (paddedMetadataVersionLength % 4);
+            paddedMetadataVersionLength += padding;
+
             this.metadataWriter.Write(METADATA_SIGNATURE);
-            this.metadataWriter.Write(1);
-            this.metadataWriter.Write(1);
-            this.metadataWriter.Write(0);
-            this.metadataWriter.Write(MetadataVersion.Length);
-            this.metadataWriter.Write(Encoding.UTF8.GetBytes(MetadataVersion));
-            this.metadataWriter.Write(23);
-            this.metadataWriter.Write(0);
+            this.metadataWriter.Write(METADATA_MAJOR_VERSION);
+            this.metadataWriter.Write(METADATA_MINOR_VERSION);
+            this.metadataWriter.Write(RESERVED_VALUE);
+            this.metadataWriter.Write(paddedMetadataVersionLength);
+            this.metadataWriter.Write(metadataVersion);
+            this.metadataWriter.Write(new byte[padding]);
+            this.metadataWriter.Write(METADATA_FLAGS);
             this.metadataWriter.Write(METADATA_STREAMS);
         }
 
@@ -293,6 +339,40 @@ namespace Mosa.Tools.Compiler.Metadata
         /// </summary>
         private void WriteStreamHeaders()
         {
+            int index = 0;
+            foreach (MetadataStreamPosition streamPosition in this.metadataStreamPositions)
+            {
+                this.metadataWriter.Write((uint)streamPosition.Position);
+                this.metadataWriter.Write((uint)streamPosition.Size);
+
+                byte[] streamName = Encoding.ASCII.GetBytes(MetadataStreamNames[index++]);
+                int nameLength = Math.Min(streamName.Length, MAX_METADATA_STREAM_NAME_LENGTH_IN_BYTES);
+                int padding = MAX_METADATA_STREAM_NAME_LENGTH_IN_BYTES - nameLength;
+
+                this.metadataWriter.Write(streamName, 0, nameLength);
+                if (padding != 0)
+                {
+                    this.metadataWriter.Write(new byte[padding]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Hook function, which is called before a stream is being written.
+        /// </summary>
+        /// <param name="streamIndex">Index of the stream.</param>
+        private void StartWritingStream(int streamIndex)
+        {
+            this.metadataStreamPositions[streamIndex].Position = this.metadataStream.Position;
+        }
+
+        /// <summary>
+        /// Hook function, which is called after writing the stream has completed.
+        /// </summary>
+        /// <param name="streamIndex">Index of the stream.</param>
+        private void StoppedWritingStream(int streamIndex)
+        {
+            this.metadataStreamPositions[streamIndex].Size = this.metadataStream.Position - this.metadataStreamPositions[streamIndex].Position;
         }
 
         /// <summary>
@@ -300,6 +380,23 @@ namespace Mosa.Tools.Compiler.Metadata
         /// </summary>
         private void WriteStringsHeap()
         {
+            // Notify that we're starting to write a stream
+            this.StartWritingStream(STRING_STREAM);
+
+            const byte zero = 0;
+            string value;
+            TokenTypes lastToken = this.metadataSource.GetMaxTokenValue(TokenTypes.String);
+            for (TokenTypes token = TokenTypes.String; token < lastToken; token++)
+            {
+                this.metadataSource.Read(token, out value);
+
+                byte[] valueInUtf8Format = Encoding.UTF8.GetBytes(value);
+                this.metadataWriter.Write(valueInUtf8Format);
+                this.metadataWriter.Write(zero);
+            }
+
+            // Notify that we've completed writing the stream
+            this.StoppedWritingStream(STRING_STREAM);
         }
 
         /// <summary>
@@ -307,6 +404,11 @@ namespace Mosa.Tools.Compiler.Metadata
         /// </summary>
         private void WriteUserStringHeap()
         {
+            // Notify that we're starting to write a stream
+            this.StartWritingStream(USER_STRING_STREAM);
+
+            // Notify that we've completed writing the stream
+            this.StoppedWritingStream(USER_STRING_STREAM);
         }
 
         /// <summary>
@@ -314,6 +416,11 @@ namespace Mosa.Tools.Compiler.Metadata
         /// </summary>
         private void WriteBlobHeap()
         {
+            // Notify that we're starting to write a stream
+            this.StartWritingStream(BLOB_STREAM);
+
+            // Notify that we've completed writing the stream
+            this.StoppedWritingStream(BLOB_STREAM);
         }
 
         /// <summary>
@@ -321,10 +428,57 @@ namespace Mosa.Tools.Compiler.Metadata
         /// </summary>
         private void WriteGuidHeap()
         {
+            // Notify that we're starting to write a stream
+            this.StartWritingStream(GUID_STREAM);
+
+            Guid value;
+            TokenTypes lastToken = this.metadataSource.GetMaxTokenValue(TokenTypes.Guid);
+            for (TokenTypes token = TokenTypes.Guid; token < lastToken; token++)
+            {
+                this.metadataSource.Read(token, out value);
+                this.metadataWriter.Write(value.ToByteArray());
+            }
+
+            // Notify that we've completed writing the stream
+            this.StoppedWritingStream(GUID_STREAM);
         }
 
         /// <summary>
         /// Writes the default metadata tables.
+        /// </summary>
+        private void WriteTableStream()
+        {
+            // Notify that we're starting to write a stream
+            this.StartWritingStream(TABLE_STREAM);
+
+            this.SkipMetadataTableHeaderSpace();
+            this.WriteMetadataTables();
+            this.WriteMetadataTableHeader();
+
+            // Notify that we've completed writing the stream
+            this.StoppedWritingStream(TABLE_STREAM);
+        }
+
+        /// <summary>
+        /// Skips the space of the metadata table header.
+        /// </summary>
+        private void SkipMetadataTableHeaderSpace()
+        {
+            this.metadataTableHeaderPosition = this.metadataStream.Position;
+            this.metadataWriter.Write(new byte[METADATA_TABLE_HEADER_SIZE]);
+        }
+
+        /// <summary>
+        /// Writes the metadata table header.
+        /// </summary>
+        private void WriteMetadataTableHeader()
+        {
+            this.metadataStream.Position = this.metadataTableHeaderPosition;
+
+        }
+
+        /// <summary>
+        /// Writes the metadata tables.
         /// </summary>
         private void WriteMetadataTables()
         {
@@ -335,6 +489,9 @@ namespace Mosa.Tools.Compiler.Metadata
         /// </summary>
         private void WriteMosaTables()
         {
+            // Notify that we're starting to write a stream
+            this.StartWritingStream(MOSA_STREAM);
+
             // I'm not sure if this will really need multiple tables, but
             // for future extensibility we should do it. We must record
             // the following information in this stream:
@@ -347,6 +504,9 @@ namespace Mosa.Tools.Compiler.Metadata
             //    compiled ahead of time. The token is any one of MethodDef, MethodRef
             //    or MethodSpec.
             // something else?
+
+            // Notify that we've completed writing the stream
+            this.StoppedWritingStream(MOSA_STREAM);
         }
     }
 }
