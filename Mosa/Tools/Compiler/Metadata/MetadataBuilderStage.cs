@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2009 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Linker;
 using System.IO;
 using Mosa.Runtime.Loader;
@@ -28,7 +29,7 @@ namespace Mosa.Tools.Compiler.Metadata
     /// an additional metadata heap, which contains tables similar to the CLI metadata tables. This additional
     /// heap maps the compiled code to the CLI metadata.
     /// </remarks>
-    sealed class MetadataBuilderStage : IAssemblyCompilerStage
+    public sealed partial class MetadataBuilderStage : IAssemblyCompilerStage
     {
         /// <summary>
         /// Holds the signature of the metadata.
@@ -153,6 +154,11 @@ namespace Mosa.Tools.Compiler.Metadata
         /// Holds positional information about each metadata stream.
         /// </summary>
         private MetadataStreamPosition[] metadataStreamPositions;
+
+        /// <summary>
+        /// Holds the size flags for the heaps.
+        /// </summary>
+        private int heapSizes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetadataBuilderStage"/> class.
@@ -407,6 +413,18 @@ namespace Mosa.Tools.Compiler.Metadata
             // Notify that we're starting to write a stream
             this.StartWritingStream(USER_STRING_STREAM);
 
+            string value;
+            TokenTypes lastToken = this.metadataSource.GetMaxTokenValue(TokenTypes.UserString);
+            for (TokenTypes token = TokenTypes.UserString; token < lastToken; token++)
+            {
+                this.metadataSource.Read(token, out value);
+
+                // Convert the user string to a UTF-16 BLOB
+                byte[] blob = new byte[Encoding.Unicode.GetByteCount(value) + 1];
+                Encoding.Unicode.GetBytes(value, 0, value.Length, blob, 0);
+                this.WriteBlobRow(blob);
+            }
+
             // Notify that we've completed writing the stream
             this.StoppedWritingStream(USER_STRING_STREAM);
         }
@@ -419,8 +437,46 @@ namespace Mosa.Tools.Compiler.Metadata
             // Notify that we're starting to write a stream
             this.StartWritingStream(BLOB_STREAM);
 
+            byte[] value;
+            TokenTypes lastToken = this.metadataSource.GetMaxTokenValue(TokenTypes.Blob);
+            for (TokenTypes token = TokenTypes.Blob; token < lastToken; token++)
+            {
+                this.metadataSource.Read(token, out value);
+                this.WriteBlobRow(value);
+            }
+
             // Notify that we've completed writing the stream
             this.StoppedWritingStream(BLOB_STREAM);
+        }
+
+        /// <summary>
+        /// Writes the BLOB row.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        private void WriteBlobRow(byte[] value)
+        {
+            this.WriteBlobLength(value.Length);
+            this.metadataWriter.Write(value);
+        }
+
+        /// <summary>
+        /// Writes the length of the BLOB.
+        /// </summary>
+        /// <param name="length">The length.</param>
+        private void WriteBlobLength(int length)
+        {
+            if (length <= 0x7F)
+            {
+                this.metadataWriter.Write((byte)length);
+            }
+            else if (length <= 0x0CFF)
+            {
+                this.metadataWriter.Write((ushort)(length | 0x8000));
+            }
+            else if (length <= 0x1FFFFFFF)
+            {
+                this.metadataWriter.Write((uint)length | (uint)0xC0000000);
+            }
         }
 
         /// <summary>
@@ -452,11 +508,36 @@ namespace Mosa.Tools.Compiler.Metadata
             this.StartWritingStream(TABLE_STREAM);
 
             this.SkipMetadataTableHeaderSpace();
+            this.heapSizes = this.CalculateHeapSizes();
             this.WriteMetadataTables();
             this.WriteMetadataTableHeader();
 
             // Notify that we've completed writing the stream
             this.StoppedWritingStream(TABLE_STREAM);
+        }
+
+        /// <summary>
+        /// Calculates the heap sizes.
+        /// </summary>
+        /// <returns>The calculated heap size.</returns>
+        private byte CalculateHeapSizes()
+        {
+            byte result = 0;
+
+            if (this.metadataStreamPositions[STRING_STREAM].Size > 0xFFFF)
+            {
+                result |= 1;
+            }
+            if (this.metadataStreamPositions[GUID_STREAM].Size > 0xFFFF)
+            {
+                result |= 2;
+            }
+            if (this.metadataStreamPositions[BLOB_STREAM].Size > 0xFFFF)
+            {
+                result |= 4;
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -474,7 +555,6 @@ namespace Mosa.Tools.Compiler.Metadata
         private void WriteMetadataTableHeader()
         {
             this.metadataStream.Position = this.metadataTableHeaderPosition;
-
         }
 
         /// <summary>
@@ -482,6 +562,81 @@ namespace Mosa.Tools.Compiler.Metadata
         /// </summary>
         private void WriteMetadataTables()
         {
+            // Invoke all metadata table handlers in order of definition
+            foreach (Action<IMetadataProvider, MetadataBuilderStage> tableHandler in MetadataTableHandlers)
+            {
+                tableHandler(this.metadataSource, this);
+            }
+        }
+
+        /// <summary>
+        /// Writes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        private void Write(byte value)
+        {
+            this.metadataWriter.Write(value);
+        }
+
+        /// <summary>
+        /// Writes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        private void Write(ushort value)
+        {
+            this.metadataWriter.Write(value);
+        }
+
+        /// <summary>
+        /// Writes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        private void Write(uint value)
+        {
+            this.metadataWriter.Write(value);
+        }
+
+        /// <summary>
+        /// Writes the specified token.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        private void Write(TokenTypes token)
+        {
+            switch (token & TokenTypes.TableMask)
+            {
+                case TokenTypes.String:
+                    this.WriteVariableToken(token, (this.heapSizes & 1) == 1);
+                    break;
+
+                case TokenTypes.Guid:
+                    this.WriteVariableToken(token, (this.heapSizes & 2) == 2);
+                    break;
+
+                case TokenTypes.Blob:
+                    this.WriteVariableToken(token, (this.heapSizes & 4) == 4);
+                    break;
+
+                default:
+                    this.metadataWriter.Write((uint)token);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Writes the variable token.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="wide">if set to <c>true</c> the token is emitted using 4 bytes, otherwise only 2.</param>
+        private void WriteVariableToken(TokenTypes token,bool wide)
+        {
+            if (wide == true)
+            {
+                this.metadataWriter.Write((uint)token);
+            }
+            else
+            {
+                this.metadataWriter.Write((ushort)token);
+            }
         }
 
         /// <summary>

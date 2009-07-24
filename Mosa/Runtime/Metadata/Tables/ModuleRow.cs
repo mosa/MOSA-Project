@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <summary>
         /// 
         /// </summary>
-        private short _generation;
+        private ushort _generation;
 
         /// <summary>
         /// 
@@ -57,7 +57,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <param name="mvidGuidIdx">The mvid GUID idx.</param>
         /// <param name="encIdGuidIdx">The enc id GUID idx.</param>
         /// <param name="encBaseIdGuidIdx">The enc base id GUID idx.</param>
-        public ModuleRow(short generation, 
+        public ModuleRow(ushort generation, 
                             TokenTypes nameStringIdx, 
                             TokenTypes mvidGuidIdx, 
                             TokenTypes encIdGuidIdx, 
@@ -96,7 +96,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// Gets the generation.
         /// </summary>
         /// <value>The generation.</value>
-        public short Generation
+        public ushort Generation
         {
             get { return _generation; }
         }

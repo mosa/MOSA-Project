@@ -394,7 +394,7 @@ namespace Mosa.Runtime.Metadata {
             using (BinaryReader reader = CreateReaderForToken(token))
             {
                 result = new ModuleRow(
-                    reader.ReadInt16(),
+                    reader.ReadUInt16(),
                     ReadIndexValue(reader, IndexType.StringHeap),
                     ReadIndexValue(reader, IndexType.GuidHeap),
                     ReadIndexValue(reader, IndexType.GuidHeap),
