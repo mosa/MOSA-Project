@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using MbUnit.Framework;
 
@@ -28,7 +29,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="expect"></param>
         /// <param name="a"></param>
         /// <returns></returns>
-        delegate sbyte I1_I1(sbyte expect, sbyte a);
+        delegate sbyte I1_I1([MarshalAs(UnmanagedType.I1)]sbyte expect, [MarshalAs(UnmanagedType.I1)]sbyte a);
         /// <summary>
         /// 
         /// </summary>

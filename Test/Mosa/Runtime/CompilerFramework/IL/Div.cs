@@ -134,7 +134,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         }
         
         delegate bool C_Constant_C(int expect, char x);
-        delegate int C_Constant_C_Return(int expect, char x);
+        delegate int C_Constant_C_Return(int expect, [MarshalAs(UnmanagedType.U2)]char x);
 
         /// <summary>
         /// 
