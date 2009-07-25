@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Kernel.Memory.X86
+namespace Mosa.HelloWorld
 {
 	/// <summary>
 	/// Static class of helpful memory functions
@@ -42,42 +42,58 @@ namespace Mosa.Kernel.Memory.X86
 		}
 
 		/// <summary>
-		/// Dumps this instance.
+		/// Dumps multiboot info.
 		/// </summary>
-		public static void Dump()
+		public static void Dump(int row, int col)
 		{
 			uint location = MultibootStructure;
 
-			Mosa.HelloWorld.Screen.Row = 4;
+			Screen.Row = row;
+			Screen.Column = col;
+			Screen.Color = 0x0A;
+			Screen.Write('M');
+			Screen.Write('e');
+			Screen.Write('m');
+			Screen.Write('o');
+			Screen.Write('r');
+			Screen.Write('y');
+			Screen.Write('d');
+			Screen.Write('u');
+			Screen.Write('m');
+			Screen.Write('p');
+			Screen.NextLine();
+			Screen.NextLine();
+
 			for (uint i = 0; i < 80; i = i + 8) {
-				Mosa.HelloWorld.Screen.Column = 53;
-                Mosa.HelloWorld.Screen.Color = 0x0F;
-				Mosa.HelloWorld.Screen.Write(i, 10, 2);
-				Mosa.HelloWorld.Screen.Write(':');
-				Mosa.HelloWorld.Screen.Write(' ');
-                Mosa.HelloWorld.Screen.Color = 0x07;
-				Mosa.HelloWorld.Screen.Write(Memory.Get64(location + i), 16, 16);
-				Mosa.HelloWorld.Screen.NextLine();
+				Screen.Column = col;
+                Screen.Color = 0x0F;
+				Screen.Write(i, 10, 2);
+				Screen.Write(':');
+				Screen.Write(' ');
+                Screen.Color = 0x07;
+				Screen.Write(Memory.Get64(location + i), 16, 16);
+				Screen.NextLine();
 			}
 		}
 
 		/// <summary>
 		/// Dumps this instance.
 		/// </summary>
-		public static void Dump2()
+		public static void Dump2(int row, int col)
 		{
 			uint location = MemoryMapStart;
 
-			Mosa.HelloWorld.Screen.Row = 3;
+			Screen.Row = row;
 			for (uint i = 0; i < 80; i = i + 4) {
-				Mosa.HelloWorld.Screen.Column = 45;
-				Mosa.HelloWorld.Screen.Write(i, 10, 2);
-				Mosa.HelloWorld.Screen.Write(':');
-				Mosa.HelloWorld.Screen.Write(' ');
-				Mosa.HelloWorld.Screen.Write(Memory.Get32(location + i), 16, 8);
-				Mosa.HelloWorld.Screen.NextLine();
+				Screen.Column = col;
+				Screen.Write(i, 10, 2);
+				Screen.Write(':');
+				Screen.Write(' ');
+				Screen.Write(Memory.Get32(location + i), 16, 8);
+				Screen.NextLine();
 			}
 		}
+
 		/// <summary>
 		/// Sets the multiboot location, if given the proper magic value
 		/// </summary>

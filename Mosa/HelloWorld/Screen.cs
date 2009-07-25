@@ -117,14 +117,14 @@ namespace Mosa.HelloWorld
 		}
 
 		/// <summary>
-		/// 
+		/// Sets the cursor.
 		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		public static void SetCursor(int x, int y)
+		/// <param name="row">The row.</param>
+		/// <param name="col">The col.</param>
+		public static void SetCursor(int row, int col)
 		{
-			Column = x;
-			Row = y;
+			Row = row;
+			Column = col;
 		}
 
 		/// <summary>

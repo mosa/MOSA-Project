@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Kernel.Memory.X86
+namespace Mosa.HelloWorld
 {
 	/// <summary>
 	/// Static class of helpful memory functions

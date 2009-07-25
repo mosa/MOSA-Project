@@ -4,7 +4,6 @@
  * Licensed under the terms of the New BSD License.
  *
  */
-using Mosa.Kernel.Memory.X86;
 using Mosa.Platforms.x86;
 
 namespace Mosa.HelloWorld
@@ -59,14 +58,6 @@ namespace Mosa.HelloWorld
 		}
 
 		/// <summary>
-		/// Initializes the clock.
-		/// </summary>
-		public static void InitializeClock()
-		{
-			Set(0x0B, 0x06);
-		}
-
-		/// <summary>
 		/// Gets the second.
 		/// </summary>
 		/// <value>The second.</value>
@@ -101,6 +92,41 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		/// <value>The day.</value>
 		public static byte Day { get { return Get(7); } }
+
+		/// <summary>
+		/// Gets the BCD.
+		/// </summary>
+		/// <value>The BCD.</value>
+		public static bool BCD { get { return (Get(0x0B) & 0x04) == 0x00; } }
+
+		/// <summary>
+		/// Dump multiboot info.
+		/// </summary>
+		public static void Dump(int row, int col)
+		{
+			Screen.Row = row;
+			Screen.Column = col;
+			Screen.Color = 0x0A;
+			Screen.Write('C');
+			Screen.Write('M');
+			Screen.Write('O');
+			Screen.Write('S');
+			Screen.Write(':');
+			Screen.NextLine();
+
+			for (byte i = 0; i < 19; i++) {
+				Screen.Column = col;
+				Screen.Color = 0x0F;
+				Screen.Write(i, 16, 2);
+				Screen.Write(':');
+				Screen.Write(' ');
+				Screen.Write(Get(i), 16, 2);
+				Screen.Write(' ');
+				Screen.Color = 0x07;
+				Screen.Write(Get(i), 10, 3);
+				Screen.NextLine();
+			}
+		}
 
 	}
 }

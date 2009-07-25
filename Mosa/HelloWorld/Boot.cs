@@ -4,8 +4,6 @@
  * Licensed under the terms of the New BSD License.
  *
  */
-using Mosa.Kernel.Memory.X86;
-using Mosa.Platforms.x86;
 
 namespace Mosa.HelloWorld
 {
@@ -121,7 +119,7 @@ namespace Mosa.HelloWorld
 			}
 			Screen.NextLine();
 
-			Screen.SetCursor(0, 2);
+			Screen.SetCursor(2, 0);
 			Screen.Color = 0x0A;
 			Screen.Write('M');
 			Screen.Write('u');
@@ -270,27 +268,14 @@ namespace Mosa.HelloWorld
 				Screen.NextLine();
 			}
 
-			Screen.Column = 53;
-			Screen.Row = 2;
-			Screen.Color = 0x0A;
-			Screen.Write('M');
-			Screen.Write('e');
-			Screen.Write('m');
-			Screen.Write('o');
-			Screen.Write('r');
-			Screen.Write('y');
-			Screen.Write('d');
-			Screen.Write('u');
-			Screen.Write('m');
-			Screen.Write('p');
-			Screen.Color = 0x0F;
+
+			//Multiboot.Dump(4,53);
 
 			Screen.Row = 23;
 			for (int index = 0; index < 80; index++) {
 				Screen.Column = index;
 				Screen.Write((char)205);
 			}
-
 
 			for (int index = 2; index < 24; index++) {
 				Screen.Column = 51;
@@ -305,10 +290,7 @@ namespace Mosa.HelloWorld
 					Screen.Write((char)186);
 			}
 
-			Multiboot.Dump();
-			//Multiboot.Dump2();
-
-			Screen.SetCursor(29, 24);
+			Screen.SetCursor(24, 29);
 			Screen.Color = 0x0E;
 			Screen.Write('w');
 			Screen.Write('w');
@@ -331,10 +313,10 @@ namespace Mosa.HelloWorld
 			Screen.Write('r');
 			Screen.Write('g');
 
-			CMOS.InitializeClock();
-
-			while (true) 
+			while (true) {
+				CMOS.Dump(2, 53);
 				DisplayTime();
+			}
 		}
 
 		/// <summary>
@@ -343,8 +325,8 @@ namespace Mosa.HelloWorld
 		private unsafe static void DisplayTime()
 		{
 			//while (0x80 == CMOS.Get(0x0A)) ;
-			
-			Screen.SetCursor(52, 24);
+
+			Screen.SetCursor(24, 52);
 			Screen.Color = 0x0A;
 			Screen.Write('T');
 			Screen.Write('i');
@@ -353,31 +335,36 @@ namespace Mosa.HelloWorld
 			Screen.Write(':');
 			Screen.Write(' ');
 
+			byte bcd = 10;
+
+			if (CMOS.BCD)
+				bcd = 16;
+
 			Screen.Color = 0x0F;
-			Screen.Write(CMOS.Hour, 10, 2);
+			Screen.Write(CMOS.Hour, bcd, 2);
 			Screen.Color = 0x07;
 			Screen.Write(':');
 			Screen.Color = 0x0F;
-			Screen.Write(CMOS.Minute, 10, 2);
+			Screen.Write(CMOS.Minute, bcd, 2);
 			Screen.Color = 0x07;
 			Screen.Write(':');
 			Screen.Color = 0x0F;
-			Screen.Write(CMOS.Second, 10, 2);
+			Screen.Write(CMOS.Second, bcd, 2);
 			Screen.Write(' ');
 			Screen.Color = 0x07;
 			Screen.Write('(');
 			Screen.Color = 0x0F;
-			Screen.Write(CMOS.Month, 10, 2);
+			Screen.Write(CMOS.Month, bcd, 2);
 			Screen.Color = 0x07;
 			Screen.Write('/');
 			Screen.Color = 0x0F;
-			Screen.Write(CMOS.Day, 10, 2);
+			Screen.Write(CMOS.Day, bcd, 2);
 			Screen.Color = 0x07;
 			Screen.Write('/');
 			Screen.Color = 0x0F;
 			Screen.Write('2');
 			Screen.Write('0');
-			Screen.Write(CMOS.Year, 10, 2);
+			Screen.Write(CMOS.Year, bcd, 2);
 			Screen.Color = 0x07;
 			Screen.Write(')');
 		}
@@ -387,7 +374,7 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		private static void DisplayCounter()
 		{
-			Screen.SetCursor(0, 5);
+			Screen.SetCursor(5, 0);
 			Screen.Color = 0x09;
 			Screen.Write(counter++);
 		}
