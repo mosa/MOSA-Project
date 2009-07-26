@@ -22,6 +22,51 @@ namespace Mosa.Tools.Compiler.Metadata
     public sealed partial class MetadataBuilderStage
     {
         /// <summary>
+        /// Holds the token types of all tables supported.
+        /// </summary>
+        private static readonly TokenTypes[] MetadataTableTokens = new[]
+        {
+            TokenTypes.Module,
+            TokenTypes.TypeRef,
+            TokenTypes.TypeDef,
+            TokenTypes.Field,
+            TokenTypes.MethodDef,
+            TokenTypes.Param,
+            TokenTypes.InterfaceImpl,
+            TokenTypes.MemberRef,
+            TokenTypes.Constant,
+            TokenTypes.CustomAttribute,
+            TokenTypes.FieldMarshal,
+            TokenTypes.DeclSecurity,
+            TokenTypes.ClassLayout,
+            TokenTypes.FieldLayout,
+            TokenTypes.StandAloneSig,
+            TokenTypes.EventMap,
+            TokenTypes.Event,
+            TokenTypes.PropertyMap,
+            TokenTypes.Property,
+            TokenTypes.MethodSemantics,
+            TokenTypes.MethodImpl,
+            TokenTypes.ModuleRef,
+            TokenTypes.TypeSpec,
+            TokenTypes.ImplMap,
+            TokenTypes.FieldRVA,
+            TokenTypes.Assembly,
+            TokenTypes.AssemblyProcessor,
+            TokenTypes.AssemblyOS,
+            TokenTypes.AssemblyRef,
+            TokenTypes.AssemblyRefProcessor,
+            TokenTypes.AssemblyRefOS,
+            TokenTypes.File,
+            TokenTypes.ExportedType,
+            TokenTypes.ManifestResource,
+            TokenTypes.NestedClass,
+            TokenTypes.GenericParam,
+            TokenTypes.MethodSpec,
+            TokenTypes.GenericParamConstraint
+        };
+
+        /// <summary>
         /// Holds all metadata table handlers in order of execution.
         /// </summary>
         private static readonly Action<IMetadataProvider, MetadataBuilderStage>[] MetadataTableHandlers = new Action<IMetadataProvider, MetadataBuilderStage>[]

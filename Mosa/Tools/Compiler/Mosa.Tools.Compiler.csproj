@@ -85,6 +85,7 @@
     <Compile Include="ConstantFoldingWrapper.cs" />
     <Compile Include="Metadata\MetadataBuilderStage.cs" />
     <Compile Include="Metadata\MetadataStreamHeader.cs" />
+    <Compile Include="Metadata\MetadataTableCodedIndexWriter.cs" />
     <Compile Include="Metadata\MetadataTableWriter.cs" />
     <Compile Include="MethodCompilerStageWrapper.cs" />
     <Compile Include="RegisterAllocatorSelector.cs" />

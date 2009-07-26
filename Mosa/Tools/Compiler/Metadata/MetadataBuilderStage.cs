@@ -113,6 +113,16 @@ namespace Mosa.Tools.Compiler.Metadata
         private const int METADATA_TABLE_HEADER_SIZE = 24;
 
         /// <summary>
+        /// Holds the major version of the metadata table schema.
+        /// </summary>
+        private const byte METADATA_TABLE_SCHEMA_MAJOR_VERSION = 2;
+
+        /// <summary>
+        /// Holds the minor version of the metadata table schema.
+        /// </summary>
+        private const byte METADATA_TABLE_SCHEMA_MINOR_VERSION = 0;
+
+        /// <summary>
         /// Contains the names of the metadata streams emitted by this stage.
         /// </summary>
         private static readonly string[] MetadataStreamNames = new string[] 
@@ -146,19 +156,14 @@ namespace Mosa.Tools.Compiler.Metadata
         private long metadataRootHeaderPosition;
 
         /// <summary>
-        /// Holds the position of the metadata table header.
+        /// Holds the heap size bitmask.
         /// </summary>
-        private long metadataTableHeaderPosition;
+        private int heapSizes;
 
         /// <summary>
         /// Holds positional information about each metadata stream.
         /// </summary>
         private MetadataStreamPosition[] metadataStreamPositions;
-
-        /// <summary>
-        /// Holds the size flags for the heaps.
-        /// </summary>
-        private int heapSizes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetadataBuilderStage"/> class.
@@ -507,10 +512,8 @@ namespace Mosa.Tools.Compiler.Metadata
             // Notify that we're starting to write a stream
             this.StartWritingStream(TABLE_STREAM);
 
-            this.SkipMetadataTableHeaderSpace();
-            this.heapSizes = this.CalculateHeapSizes();
-            this.WriteMetadataTables();
             this.WriteMetadataTableHeader();
+            this.WriteMetadataTables();
 
             // Notify that we've completed writing the stream
             this.StoppedWritingStream(TABLE_STREAM);
@@ -541,20 +544,67 @@ namespace Mosa.Tools.Compiler.Metadata
         }
 
         /// <summary>
-        /// Skips the space of the metadata table header.
+        /// Writes the metadata table header.
         /// </summary>
-        private void SkipMetadataTableHeaderSpace()
+        private ulong WriteMetadataTableHeader()
         {
-            this.metadataTableHeaderPosition = this.metadataStream.Position;
-            this.metadataWriter.Write(new byte[METADATA_TABLE_HEADER_SIZE]);
+            this.metadataWriter.Write(RESERVED_VALUE);
+            this.metadataWriter.Write(METADATA_TABLE_SCHEMA_MAJOR_VERSION);
+            this.metadataWriter.Write(METADATA_TABLE_SCHEMA_MINOR_VERSION);
+
+            this.heapSizes = this.CalculateHeapSizes();
+            this.metadataWriter.Write(this.heapSizes);
+            this.metadataWriter.Write((byte)RESERVED_VALUE);
+
+            ulong availableTables = this.BuildAvailableTableBitMask();
+            this.metadataWriter.Write(availableTables);
+
+            // HACK: Indicate that all tables are sorted. This may not be
+            // true however for our metadata source. We need some API on
+            // IMetadataSource to determine if the tables are sorted or
+            // not. An alternative would be to decorate IMetadataSource
+            // with a sorting IMetadataSource.
+            this.metadataWriter.Write(availableTables);
+
+            this.WriteTableRowCounts(availableTables);
+
+            return availableTables;
         }
 
         /// <summary>
-        /// Writes the metadata table header.
+        /// Builds a bit mask, where each bit set to one indicates that the table exists in the stream.
         /// </summary>
-        private void WriteMetadataTableHeader()
+        /// <returns>The bit mask, that indicates available tables.</returns>
+        private ulong BuildAvailableTableBitMask()
         {
-            this.metadataStream.Position = this.metadataTableHeaderPosition;
+            ulong availableTables = 0;
+            foreach (TokenTypes table in MetadataTableTokens)
+            {
+                TokenTypes lastToken = this.metadataSource.GetMaxTokenValue(table);
+                if (lastToken != table)
+                {
+                    // The table has some rows in it - it is available.
+                    availableTables |= (1U << ((int)table >> 24));
+                }
+            }
+            return availableTables;
+        }
+
+        /// <summary>
+        /// Writes the table row counts.
+        /// </summary>
+        /// <param name="availableTables">The available tables.</param>
+        private void WriteTableRowCounts(ulong availableTables)
+        {
+            for (int table = 0; table < ((int)TokenTypes.MaxTable >> 24); table++)
+            {
+                if ((availableTables & (ulong)(1 << table)) != 0)
+                {
+                    TokenTypes lastToken = this.metadataSource.GetMaxTokenValue((TokenTypes)(table << 24));
+                    int count = ((int)lastToken - table);
+                    this.metadataWriter.Write(count);
+                }
+            }
         }
 
         /// <summary>
@@ -617,8 +667,7 @@ namespace Mosa.Tools.Compiler.Metadata
                     break;
 
                 default:
-                    this.metadataWriter.Write((uint)token);
-                    break;
+                    throw new NotSupportedException(@"The given token type is not supported by this method.");
             }
         }
 
@@ -627,7 +676,7 @@ namespace Mosa.Tools.Compiler.Metadata
         /// </summary>
         /// <param name="token">The token.</param>
         /// <param name="wide">if set to <c>true</c> the token is emitted using 4 bytes, otherwise only 2.</param>
-        private void WriteVariableToken(TokenTypes token,bool wide)
+        private void WriteVariableToken(TokenTypes token, bool wide)
         {
             if (wide == true)
             {
