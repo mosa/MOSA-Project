@@ -140,7 +140,8 @@ namespace Mosa.HelloWorld
 			Screen.Write(':');
 			Screen.Write(' ');
 			Screen.Color = 0x07;
-			Screen.Write(Memory.Get32(0x100000), 16, 8);
+			Screen.Write(Memory.Get32(0x200004), 16, 8);
+
 			Screen.NextLine();
 			Screen.Color = 0x0A;
 			Screen.Write('M');
@@ -162,9 +163,10 @@ namespace Mosa.HelloWorld
 			Screen.Write(' ');
 			Screen.Write(' ');
 			Screen.Color = 0x07;
-			Screen.Write(Memory.Get32(0x100004), 16, 8);
+			Screen.Write(Memory.Get32(0x200000), 16, 8);
 
-			Multiboot.SetMultibootLocation(Memory.Get32(0x100004), Memory.Get32(0x100000));
+			Multiboot.SetMultibootLocation(Memory.Get32(0x200004), Memory.Get32(0x200000));
+
 			Screen.NextLine();
 			Screen.Color = 0x0A;
 			Screen.Write('M');

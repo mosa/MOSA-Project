@@ -172,7 +172,7 @@ namespace Mosa.Tools.Compiler.Boot
 
 				SigType I4 = new SigType(CilElementType.I4);
 
-				ConstantOperand table = new ConstantOperand(I4, 0x100000);
+				ConstantOperand table = new ConstantOperand(I4, 0x200000);
 
 				RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 				RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
