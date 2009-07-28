@@ -189,7 +189,7 @@ namespace Mosa.Runtime.Loader.PE
 					break;
 
 				case TokenTypes.Guid: // Guid heap size
-					result = TokenTypes.Guid | (TokenTypes)((Heap)_streams[(int)HeapType.Guid]).Size;
+					result = TokenTypes.Guid | (TokenTypes)(((Heap)_streams[(int)HeapType.Guid]).Size / 16);
 					break;
 
 				default:
@@ -199,41 +199,54 @@ namespace Mosa.Runtime.Loader.PE
 			return result;
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out string result)
+		TokenTypes IMetadataProvider.Read(TokenTypes token, out string result)
 		{
-			if (TokenTypes.String == (TokenTypes.TableMask & token)) {
+            if ((TokenTypes.TableMask & token) == TokenTypes.String) 
+            {
 				StringHeap sheap = (StringHeap)_streams[(int)HeapType.String];
-				result = sheap.ReadString(token);
+				result = sheap.ReadString(ref token);
 			}
-			else if (TokenTypes.UserString == (TokenTypes.TableMask & token)) {
+            else if ((TokenTypes.TableMask & token) == TokenTypes.UserString)
+            {
 				UserStringHeap usheap = (UserStringHeap)_streams[(int)HeapType.UserString];
-				result = usheap.ReadString(token);
+				result = usheap.ReadString(ref token);
 			}
-			else {
+			else 
+            {
 				throw new ArgumentException(@"Invalid token for a string.", @"token");
 			}
+
+            return token;
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out Guid result)
+		TokenTypes IMetadataProvider.Read(TokenTypes token, out Guid result)
 		{
-			if (TokenTypes.Guid == (TokenTypes.TableMask & token)) {
+            if ((TokenTypes.TableMask & token) == TokenTypes.Guid)
+            {
 				GuidHeap gheap = (GuidHeap)_streams[(int)HeapType.Guid];
-				result = gheap.ReadGuid(token);
+				result = gheap.ReadGuid(ref token);
 			}
-			else {
+			else 
+            {
 				throw new ArgumentException(@"Invalid token for a guid.", @"token");
 			}
+
+            return token;
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out byte[] result)
+		TokenTypes IMetadataProvider.Read(TokenTypes token, out byte[] result)
 		{
-			if (TokenTypes.Blob == (TokenTypes.TableMask & token)) {
+			if (TokenTypes.Blob == (TokenTypes.TableMask & token)) 
+            {
 				BlobHeap bheap = (BlobHeap)_streams[(int)HeapType.Blob];
-				result = bheap.ReadBlob(token);
+				result = bheap.ReadBlob(ref token);
 			}
-			else {
+			else 
+            {
 				throw new ArgumentException(@"Invalid token for a blob.", @"token");
 			}
+
+            return token;
 		}
 
 		void IMetadataProvider.Read(TokenTypes token, out ModuleRow result)

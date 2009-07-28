@@ -112,25 +112,38 @@ namespace Mosa.Tools.Compiler.Metadata
         };
 
         /// <summary>
+        /// Writes an entire metadata table.
+        /// </summary>
+        /// <param name="table">The token of the table to write.</param>
+        /// <param name="metadataSource">The metadata source.</param>
+        /// <param name="writer">The writer lambda.</param>
+        private static void WriteTable(TokenTypes table, IMetadataProvider metadataSource, Action<TokenTypes> writer)
+        {
+            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
+            for (TokenTypes token = table + 1; token <= lastToken; token++)
+            {
+                writer(token);
+            }
+        }
+
+        /// <summary>
         /// Writes the module table.
         /// </summary>
         /// <param name="metadataSource">The metadata source.</param>
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteModuleTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.Module;
             ModuleRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.Module, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
-
                 metadataWriter.Write(row.Generation);
                 metadataWriter.Write(row.NameStringIdx);
                 metadataWriter.Write(row.MvidGuidIdx);
                 metadataWriter.Write(row.EncIdGuidIdx);
                 metadataWriter.Write(row.EncBaseIdGuidIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -140,17 +153,16 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteTypeRefTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.TypeRef;
             TypeRefRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.TypeRef, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
-                metadataWriter.Write(row.ResolutionScopeIdx);
+                metadataWriter.WriteResolutionScopeIndex(row.ResolutionScopeIdx);
                 metadataWriter.Write(row.TypeNameIdx);
                 metadataWriter.Write(row.TypeNamespaceIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -160,20 +172,19 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteTypeDefTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.TypeDef;
             TypeDefRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.TypeDef, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((uint)row.Flags);
                 metadataWriter.Write(row.TypeNameIdx);
                 metadataWriter.Write(row.TypeNamespaceIdx);
-                metadataWriter.Write(row.Extends);
+                metadataWriter.WriteTypeDefOrRefIndex(row.Extends);
                 metadataWriter.Write(row.FieldList);
                 metadataWriter.Write(row.MethodList);
-            }
+            });
         }
 
         /// <summary>
@@ -183,17 +194,16 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteFieldTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.Field;
             FieldRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.Field, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((ushort)row.Flags);
                 metadataWriter.Write(row.NameStringIdx);
                 metadataWriter.Write(row.SignatureBlobIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -203,10 +213,9 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteMethodDefTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.MethodDef;
             MethodDefRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.MethodDef, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
@@ -216,7 +225,7 @@ namespace Mosa.Tools.Compiler.Metadata
                 metadataWriter.Write(row.NameStringIdx);
                 metadataWriter.Write(row.SignatureBlobIdx);
                 metadataWriter.Write(row.ParamList);
-            }
+            });
         }
 
         /// <summary>
@@ -226,17 +235,16 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteParamTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.Param;
             ParamRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.Param, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((ushort)row.Flags);
                 metadataWriter.Write((ushort)row.Sequence);
                 metadataWriter.Write(row.NameIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -246,16 +254,15 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteInterfaceImplTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.InterfaceImpl;
             InterfaceImplRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.InterfaceImpl, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.ClassTableIdx);
-                metadataWriter.Write(row.InterfaceTableIdx);
-            }
+                metadataWriter.WriteTypeDefOrRefIndex(row.InterfaceTableIdx);
+            });
         }
 
         /// <summary>
@@ -265,17 +272,16 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteMemberRefTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.MemberRef;
             MemberRefRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.MemberRef, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
-                metadataWriter.Write(row.ClassTableIdx);
+                metadataWriter.WriteMemberRefParentIndex(row.ClassTableIdx);
                 metadataWriter.Write(row.NameStringIdx);
                 metadataWriter.Write(row.SignatureBlobIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -285,18 +291,17 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteConstantTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.Constant;
             ConstantRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.Constant, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((byte)row.Type);
                 metadataWriter.Write((byte)0);
-                metadataWriter.Write(row.Parent);
+                metadataWriter.WriteHasConstantIndex(row.Parent);
                 metadataWriter.Write(row.ValueBlobIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -306,17 +311,16 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteCustomAttributeTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.CustomAttribute;
             CustomAttributeRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.CustomAttribute, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
-                metadataWriter.Write(row.ParentTableIdx);
-                metadataWriter.Write(row.TypeIdx);
+                metadataWriter.WriteHasCustomAttributeIndex(row.ParentTableIdx);
+                metadataWriter.WriteCustomAttributeTypeIndex(row.TypeIdx);
                 metadataWriter.Write(row.ValueBlobIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -326,16 +330,15 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteFieldMarshalTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.FieldMarshal;
             FieldMarshalRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.FieldMarshal, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
-                metadataWriter.Write(row.ParentTableIdx);
+                metadataWriter.WriteHasFieldMarshalIndex(row.ParentTableIdx);
                 metadataWriter.Write(row.NativeTypeBlobIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -345,17 +348,16 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteDeclSecurityTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.DeclSecurity;
             DeclSecurityRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.DeclSecurity, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((ushort)row.Action);
-                metadataWriter.Write(row.ParentTableIdx);
+                metadataWriter.WriteHasDeclSecurityIndex(row.ParentTableIdx);
                 metadataWriter.Write(row.PermissionSetBlobIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -365,17 +367,16 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteClassLayoutTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.ClassLayout;
             ClassLayoutRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.ClassLayout, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((ushort)row.PackingSize);
                 metadataWriter.Write((uint)row.ClassSize);
                 metadataWriter.Write(row.ParentTypeDefIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -385,16 +386,15 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteFieldLayoutTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.FieldLayout;
             FieldLayoutRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.FieldLayout, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.Offset);
                 metadataWriter.Write(row.Field);
-            }
+            });
         }
 
         /// <summary>
@@ -404,15 +404,14 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteStandaloneSigTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.StandAloneSig;
             StandAloneSigRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.StandAloneSig, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.SignatureBlobIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -422,16 +421,15 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteEventMapTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.EventMap;
             EventMapRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.EventMap, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.TypeDefTableIdx);
                 metadataWriter.Write(row.EventListTableIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -441,17 +439,16 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteEventTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.Event;
             EventRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.Event, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((ushort)row.Flags);
                 metadataWriter.Write(row.NameStringIdx);
-                metadataWriter.Write(row.EventTypeTableIdx);
-            }
+                metadataWriter.WriteTypeDefOrRefIndex(row.EventTypeTableIdx);
+            });
         }
 
         /// <summary>
@@ -461,16 +458,15 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WritePropertyMapTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.PropertyMap;
             PropertyMapRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.PropertyMap, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.ParentTableIdx);
                 metadataWriter.Write(row.PropertyTableIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -480,17 +476,16 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WritePropertyTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.Property;
             PropertyRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.Property, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((ushort)row.Flags);
                 metadataWriter.Write(row.NameStringIdx);
                 metadataWriter.Write(row.TypeBlobIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -500,17 +495,15 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteMethodSemanticsTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.MethodSemantics;
             MethodSemanticsRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+            WriteTable(TokenTypes.MethodSemantics, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((ushort)row.Semantics);
                 metadataWriter.Write(row.MethodTableIdx);
-                metadataWriter.Write(row.AssociationTableIdx);
-            }
+                metadataWriter.WriteHasSemanticsIndex(row.AssociationTableIdx);
+            });
         }
 
         /// <summary>
@@ -520,17 +513,16 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteMethodImplTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.MethodImpl;
             MethodImplRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.MethodImpl, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.ClassTableIdx);
-                metadataWriter.Write(row.MethodBodyTableIdx);
-                metadataWriter.Write(row.MethodDeclarationTableIdx);
-            }
+                metadataWriter.WriteMethodDefOrRefIndex(row.MethodBodyTableIdx);
+                metadataWriter.WriteMethodDefOrRefIndex(row.MethodDeclarationTableIdx);
+            });
         }
 
         /// <summary>
@@ -540,15 +532,14 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteModuleRefTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.ModuleRef;
             ModuleRefRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.ModuleRef, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.NameStringIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -558,15 +549,14 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteTypeSpecTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.TypeSpec;
             TypeSpecRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.TypeSpec, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.SignatureBlobIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -576,18 +566,17 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteImplMapTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.ImplMap;
             ImplMapRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.ImplMap, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((ushort)row.MappingFlags);
-                metadataWriter.Write(row.MemberForwardedTableIdx);
+                metadataWriter.WriteMemberForwardedIndex(row.MemberForwardedTableIdx);
                 metadataWriter.Write(row.ImportNameStringIdx);
                 metadataWriter.Write(row.ImportScopeTableIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -597,16 +586,15 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteFieldRVATable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.FieldRVA;
             FieldRVARow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.FieldRVA, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.Rva);
                 metadataWriter.Write(row.FieldTableIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -616,10 +604,9 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteAssemblyTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.Assembly;
             AssemblyRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.Assembly, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
@@ -632,7 +619,7 @@ namespace Mosa.Tools.Compiler.Metadata
                 metadataWriter.Write(row.PublicKeyIdx);
                 metadataWriter.Write(row.NameIdx);
                 metadataWriter.Write(row.CultureIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -642,15 +629,14 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteAssemblyProcessorTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.AssemblyProcessor;
             AssemblyProcessorRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.AssemblyProcessor, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.Processor);
-            }
+            });
         }
 
         /// <summary>
@@ -660,17 +646,16 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteAssemblyOSTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.AssemblyOS;
             AssemblyOSRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.AssemblyOS, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((uint)row.PlatformId);
                 metadataWriter.Write((uint)row.MajorVersion);
                 metadataWriter.Write((uint)row.MinorVersion);
-            }
+            });
         }
 
         /// <summary>
@@ -680,10 +665,9 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteAssemblyRefTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.AssemblyRef;
             AssemblyRefRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.AssemblyRef, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
@@ -697,7 +681,7 @@ namespace Mosa.Tools.Compiler.Metadata
                 metadataWriter.Write(row.NameIdx);
                 metadataWriter.Write(row.CultureIdx);
                 metadataWriter.Write(row.HashValueIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -707,16 +691,15 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteAssemblyRefProcessorTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.AssemblyRefProcessor;
             AssemblyRefProcessorRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.AssemblyRefProcessor, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.Processor);
                 metadataWriter.Write(row.AssemblyRef);
-            }
+            });
         }
 
         /// <summary>
@@ -726,10 +709,9 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteAssemblyRefOSTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.AssemblyRefOS;
             AssemblyRefOSRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.AssemblyRefOS, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
@@ -737,7 +719,7 @@ namespace Mosa.Tools.Compiler.Metadata
                 metadataWriter.Write(row.MajorVersion);
                 metadataWriter.Write(row.MinorVersion);
                 metadataWriter.Write(row.AssemblyRefIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -747,17 +729,16 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteFileTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.File;
             FileRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.File, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((uint)row.Flags);
                 metadataWriter.Write(row.NameStringIdx);
                 metadataWriter.Write(row.HashValueBlobIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -767,10 +748,9 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteExportedTypeTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.ExportedType;
             ExportedTypeRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.ExportedType, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
@@ -778,8 +758,8 @@ namespace Mosa.Tools.Compiler.Metadata
                 metadataWriter.Write(row.TypeDefTableIdx);
                 metadataWriter.Write(row.TypeNameStringIdx);
                 metadataWriter.Write(row.TypeNamespaceStringIdx);
-                metadataWriter.Write(row.ImplementationTableIdx);
-            }
+                metadataWriter.WriteImplementationIndex(row.ImplementationTableIdx);
+            });
         }
 
         /// <summary>
@@ -789,13 +769,17 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteManifestResourceTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.ManifestResource;
             ManifestResourceRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.ManifestResource, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
-            }
+
+                metadataWriter.Write(row.Offset);
+                metadataWriter.Write((uint)row.Flags);
+                metadataWriter.Write(row.NameStringIdx);
+                metadataWriter.WriteImplementationIndex(row.ImplementationTableIdx);
+            });
         }
 
         /// <summary>
@@ -805,16 +789,15 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteNestedClassTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.NestedClass;
             NestedClassRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.NestedClass, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.NestedClassTableIdx);
                 metadataWriter.Write(row.EnclosingClassTableIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -824,18 +807,17 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteGenericParamTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.GenericParam;
             GenericParamRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.GenericParam, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write((ushort)row.Number);
                 metadataWriter.Write((ushort)row.Flags);
-                metadataWriter.Write(row.OwnerTableIdx);
+                metadataWriter.WriteTypeOrMethodDefIndex(row.OwnerTableIdx);
                 metadataWriter.Write(row.NameStringIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -845,16 +827,15 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteMethodSpecTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.MethodSpec;
             MethodSpecRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.MethodSpec, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
-                metadataWriter.Write(row.MethodTableIdx);
+                metadataWriter.WriteMethodDefOrRefIndex(row.MethodTableIdx);
                 metadataWriter.Write(row.InstantiationBlobIdx);
-            }
+            });
         }
 
         /// <summary>
@@ -864,16 +845,15 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <param name="metadataWriter">The metadata writer.</param>
         private static void WriteGenericParamConstraintTable(IMetadataProvider metadataSource, MetadataBuilderStage metadataWriter)
         {
-            const TokenTypes table = TokenTypes.GenericParamConstraint;
             GenericParamConstraintRow row;
-            TokenTypes lastToken = metadataSource.GetMaxTokenValue(table);
-            for (TokenTypes token = table; token < lastToken; token++)
+
+            WriteTable(TokenTypes.GenericParamConstraint, metadataSource, token =>
             {
                 metadataSource.Read(token, out row);
 
                 metadataWriter.Write(row.OwnerTableIdx);
-                metadataWriter.Write(row.ConstraintTableIdx);
-            }
+                metadataWriter.WriteTypeDefOrRefIndex(row.ConstraintTableIdx);
+            });
         }
     }
 }

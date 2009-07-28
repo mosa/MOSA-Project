@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata {
 		/// </summary>
         /// <param name="token">The offset into the heap, where the string starts.</param>
 		/// <returns>The string at the given offset.</returns>
-		public string ReadString(TokenTypes token)
+		public string ReadString(ref TokenTypes token)
 		{
             Debug.Assert((TokenTypes.TableMask & token) == TokenTypes.UserString);
             if ((TokenTypes.TableMask & token) != TokenTypes.UserString)
@@ -48,14 +48,18 @@ namespace Mosa.Runtime.Metadata {
 
             int offset = (int)(token & TokenTypes.RowIndexMask);
 			// Argument checks
-			if (0 == offset)
-				return String.Empty;
+            if (0 == offset)
+            {
+                token += 1;
+                return String.Empty;
+            }
 
 			// Validate the offset & calculate the real offset
 			int realOffset = ValidateOffset(offset);
 			int length = CalculatePrefixLength(ref realOffset);
 			Debug.Assert(1 == (length & 1));
-			if (0 == length)
+            token = (TokenTypes)((int)TokenTypes.UserString | realOffset + length - this._offset);
+            if (0 == length)
 				return String.Empty;
 			byte[] buffer = this.Buffer;
 			return Encoding.Unicode.GetString(buffer, realOffset, length-1);

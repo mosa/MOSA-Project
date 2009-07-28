@@ -39,12 +39,12 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <summary>
         /// Holds the major metadata version number according ECMA-335.
         /// </summary>
-        private const int METADATA_MAJOR_VERSION = 1;
+        private const ushort METADATA_MAJOR_VERSION = 1;
 
         /// <summary>
         /// Holds the minor metadata version according to ECMA-335.
         /// </summary>
-        private const int METADATA_MINOR_VERSION = 1;
+        private const ushort METADATA_MINOR_VERSION = 1;
 
         /// <summary>
         /// The value of reseved metadata fields.
@@ -54,7 +54,7 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <summary>
         /// The value of metadata flags written by this stage.
         /// </summary>
-        private const int METADATA_FLAGS = 0;
+        private const ushort METADATA_FLAGS = 0;
 
         /// <summary>
         /// The version string emitted by this stage in the metadata root header.
@@ -100,7 +100,7 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <summary>
         /// This stage emits 6 metadata streams.
         /// </summary>
-        private const int METADATA_STREAMS = 6;
+        private const ushort METADATA_STREAMS = 6;
 
         /// <summary>
         /// The maximum length of a metadata stream name in ASCII characters (bytes)
@@ -287,10 +287,11 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <returns>The length of the metadata header.</returns>
         private int CalculateMetadataHeaderLength()
         {
-            const int metadataHeaderLength = 20;
+            const int metadataHeaderLength = 16;
 
-            int length = metadataHeaderLength + Encoding.UTF8.GetBytes(MetadataVersion).Length;
-            int padding = MetadataVersion.Length % 4;
+            int versionLength = Encoding.UTF8.GetBytes(MetadataVersion).Length;
+            int length = metadataHeaderLength + versionLength;
+            int padding = versionLength % 4;
             if (padding != 0)
             {
                 padding = 4 - padding;
@@ -301,14 +302,15 @@ namespace Mosa.Tools.Compiler.Metadata
 
             foreach (string streamName in MetadataStreamNames)
             {
-                int streamNameLength = Math.Min(Encoding.ASCII.GetBytes(streamName).Length, 32);
+                int nameLength = Encoding.ASCII.GetBytes(streamName).Length;
+                int streamNameLength = Math.Min(nameLength + 1, 32);
                 padding = streamNameLength % 4;
                 if (padding != 0)
                 {
                     padding = 4 - padding;
                 }
 
-                length += 4 + 4 + streamNameLength + padding;
+                length += (4 + 4 + streamNameLength + padding);
             }
 
             return length;
@@ -357,10 +359,15 @@ namespace Mosa.Tools.Compiler.Metadata
                 this.metadataWriter.Write((uint)streamPosition.Size);
 
                 byte[] streamName = Encoding.ASCII.GetBytes(MetadataStreamNames[index++]);
-                int nameLength = Math.Min(streamName.Length, MAX_METADATA_STREAM_NAME_LENGTH_IN_BYTES);
-                int padding = MAX_METADATA_STREAM_NAME_LENGTH_IN_BYTES - nameLength;
+                int nameLength = Math.Min(streamName.Length + 1, MAX_METADATA_STREAM_NAME_LENGTH_IN_BYTES);
+                int padding = nameLength % 4;
+                if (padding != 0)
+                {
+                    padding = 4 - padding;
+                }
 
-                this.metadataWriter.Write(streamName, 0, nameLength);
+                this.metadataWriter.Write(streamName, 0, nameLength - 1);
+                this.metadataWriter.Write((byte)0);
                 if (padding != 0)
                 {
                     this.metadataWriter.Write(new byte[padding]);
@@ -404,6 +411,8 @@ namespace Mosa.Tools.Compiler.Metadata
                 byte[] valueInUtf8Format = Encoding.UTF8.GetBytes(value);
                 this.metadataWriter.Write(valueInUtf8Format);
                 this.metadataWriter.Write(zero);
+
+                token += valueInUtf8Format.Length;
             }
 
             // Notify that we've completed writing the stream
@@ -420,14 +429,13 @@ namespace Mosa.Tools.Compiler.Metadata
 
             string value;
             TokenTypes lastToken = this.metadataSource.GetMaxTokenValue(TokenTypes.UserString);
-            for (TokenTypes token = TokenTypes.UserString; token < lastToken; token++)
+            for (TokenTypes token = TokenTypes.UserString; token < lastToken; )
             {
-                this.metadataSource.Read(token, out value);
+                token = this.metadataSource.Read(token, out value);
 
                 // Convert the user string to a UTF-16 BLOB
                 byte[] blob = new byte[Encoding.Unicode.GetByteCount(value) + 1];
                 Encoding.Unicode.GetBytes(value, 0, value.Length, blob, 0);
-                this.WriteBlobRow(blob);
             }
 
             // Notify that we've completed writing the stream
@@ -444,9 +452,9 @@ namespace Mosa.Tools.Compiler.Metadata
 
             byte[] value;
             TokenTypes lastToken = this.metadataSource.GetMaxTokenValue(TokenTypes.Blob);
-            for (TokenTypes token = TokenTypes.Blob; token < lastToken; token++)
+            for (TokenTypes token = TokenTypes.Blob; token < lastToken; )
             {
-                this.metadataSource.Read(token, out value);
+                token = this.metadataSource.Read(token, out value);
                 this.WriteBlobRow(value);
             }
 
@@ -458,30 +466,38 @@ namespace Mosa.Tools.Compiler.Metadata
         /// Writes the BLOB row.
         /// </summary>
         /// <param name="value">The value.</param>
-        private void WriteBlobRow(byte[] value)
+        /// <returns>The number of bytes written.</returns>
+        private int WriteBlobRow(byte[] value)
         {
-            this.WriteBlobLength(value.Length);
+            int size = this.WriteBlobLength(value.Length);
             this.metadataWriter.Write(value);
+            return size + value.Length;
         }
 
         /// <summary>
         /// Writes the length of the BLOB.
         /// </summary>
         /// <param name="length">The length.</param>
-        private void WriteBlobLength(int length)
+        /// <returns>The number of bytes written.</returns>
+        private int WriteBlobLength(int length)
         {
             if (length <= 0x7F)
             {
                 this.metadataWriter.Write((byte)length);
+                return 1;
             }
             else if (length <= 0x0CFF)
             {
                 this.metadataWriter.Write((ushort)(length | 0x8000));
+                return 2;
             }
             else if (length <= 0x1FFFFFFF)
             {
                 this.metadataWriter.Write((uint)length | (uint)0xC0000000);
+                return 4;
             }
+
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -667,7 +683,8 @@ namespace Mosa.Tools.Compiler.Metadata
                     break;
 
                 default:
-                    throw new NotSupportedException(@"The given token type is not supported by this method.");
+                    this.WriteVariableToken(token, true);
+                    break;
             }
         }
 

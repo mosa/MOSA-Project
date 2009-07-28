@@ -20,6 +20,7 @@ namespace Mosa.Tools.Compiler.Metadata
 
     using Mosa.Runtime.Metadata;
     using Mosa.Runtime.Metadata.Tables;
+    using System.Diagnostics;
 
     /// <summary>
     /// Contains methods to write coded index values.
@@ -29,22 +30,33 @@ namespace Mosa.Tools.Compiler.Metadata
         private void WriteIndex(TokenTypes token, TokenTypes[] tables)
         {
             int bits = (int)Math.Log(tables.Length, 2);
-            int encodingWidthBoundary = (int)Math.Pow(2, 16 - bits);
-            int tableIndex = 0;
+            int encodingWidthBoundary = (int)Math.Pow(2, 17 - bits) - 1;
+            int tableIndex = -1;
             bool wide = false;
 
+            int index = 0;
             foreach (TokenTypes table in tables)
             {
-                TokenTypes lastToken = this.metadataSource.GetMaxTokenValue(table);
-                if (lastToken - token > encodingWidthBoundary)
+                if (table != TokenTypes.MaxTable)
                 {
-                    wide = true;
-                    break;
+                    TokenTypes lastToken = this.metadataSource.GetMaxTokenValue(table);
+                    if (lastToken - token > encodingWidthBoundary)
+                    {
+                        wide = true;
+                    }
+
+                    if ((TokenTypes.TableMask & token) == table)
+                    {
+                        tableIndex = index;
+                    }
                 }
+
+                index++;
             }
 
             // Encode the token
-            uint encodedToken = (uint)((int)token << bits | tableIndex);
+            Debug.Assert(tableIndex != -1, @"Failed to find indexed table.");
+            uint encodedToken = (uint)((int)(TokenTypes.RowIndexMask & token) << bits | tableIndex);
 
             if (wide == true)
             {

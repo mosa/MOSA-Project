@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata {
         /// </summary>
         /// <param name="token">The token.</param>
         /// <returns></returns>
-        public string ReadString(TokenTypes token)
+        public string ReadString(ref TokenTypes token)
         {
             Debug.Assert((TokenTypes.TableMask & token) == TokenTypes.String);
             if ((TokenTypes.TableMask & token) != TokenTypes.String)
@@ -55,6 +55,7 @@ namespace Mosa.Runtime.Metadata {
             int realOffset = ValidateOffset(offset);
             byte[] buffer = this.Buffer;
             int endOffset = Array.IndexOf<byte>(buffer, 0, realOffset);
+            token = (TokenTypes)((int)TokenTypes.String | endOffset - this._offset);
             return Encoding.UTF8.GetString(buffer, realOffset, endOffset - realOffset);
         }
 

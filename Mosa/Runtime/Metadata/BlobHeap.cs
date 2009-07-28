@@ -41,7 +41,7 @@ namespace Mosa.Runtime.Metadata {
 		/// </summary>
 		/// <param name="token">The token where the blob begins.</param>
 		/// <returns>A byte array, which represents the blob at the specified location.</returns>
-		public byte[] ReadBlob(TokenTypes token)
+		public byte[] ReadBlob(ref TokenTypes token)
 		{
             Debug.Assert((TokenTypes.TableMask & token) == TokenTypes.Blob);
             if ((TokenTypes.TableMask & token) != TokenTypes.Blob)
@@ -49,14 +49,18 @@ namespace Mosa.Runtime.Metadata {
 
             // Argument checks
             int offset = (int)(token & TokenTypes.RowIndexMask);
-			if (0 == offset)
-				return new byte[0];
+            if (0 == offset)
+            {
+                token += 1;
+                return new byte[0];
+            }
 
 			// Validate the offset & calculate the real offset
 			int realOffset = ValidateOffset(offset);
 			int length = CalculatePrefixLength(ref realOffset);
 			byte[] result = new byte[length];
 			Array.Copy(this.Buffer, realOffset, result, 0, length);
+            token = (TokenTypes)((int)TokenTypes.Blob | (realOffset + length - this._offset));
             return result;
 		}
 

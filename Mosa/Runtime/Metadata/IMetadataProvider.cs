@@ -48,21 +48,21 @@ namespace Mosa.Runtime.Metadata
         /// </summary>
         /// <param name="token">The token of the string to read.</param>
         /// <param name="result">Receives the read string.</param>
-        void Read(TokenTypes token, out string result);
+        TokenTypes Read(TokenTypes token, out string result);
 
         /// <summary>
         /// Reads a guid heap entry.
         /// </summary>
         /// <param name="token">The token of the guid heap entry to read.</param>
         /// <param name="guid">Receives the read guid.</param>
-        void Read(TokenTypes token, out Guid guid);
+        TokenTypes Read(TokenTypes token, out Guid guid);
 
         /// <summary>
         /// Reads a blob heap entry.
         /// </summary>
         /// <param name="token">The token of the blob heap entry to read.</param>
         /// <param name="blob">Receives the read blob.</param>
-        void Read(TokenTypes token, out byte[] blob);
+        TokenTypes Read(TokenTypes token, out byte[] blob);
 
         /// <summary>
         /// Reads a module row from provider.
