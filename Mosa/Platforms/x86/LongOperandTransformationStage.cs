@@ -2585,6 +2585,10 @@ namespace Mosa.Platforms.x86
 		{
 		}
 
+        void IX86InstructionVisitor<Context>.Invlpg(Instructions.Intrinsics.InvlpgInstruction instruction, Context ctx)
+        {
+        }
+
 		void IX86InstructionVisitor<Context>.Jns(JnsBranchInstruction instruction, Context arg)
 		{
 		}
@@ -2704,6 +2708,22 @@ namespace Mosa.Platforms.x86
 		void IX86InstructionVisitor<Context>.CpuId(CpuIdInstruction instruction, Context arg)
 		{
 		}
+
+        void IX86InstructionVisitor<Context>.CpuIdEax(CpuIdEaxInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.CpuIdEbx(CpuIdEbxInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.CpuIdEcx(CpuIdEcxInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.CpuIdEdx(CpuIdEdxInstruction instruction, Context arg)
+        {
+        }
 
 		void IX86InstructionVisitor<Context>.BochsDebug(BochsDebug instruction, Context arg)
 		{

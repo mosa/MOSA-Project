@@ -98,12 +98,22 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         /// <param name="arg">The arguments</param>
         void CpuId(CpuIdInstruction instruction, ArgType arg);
+        void CpuIdEax(CpuIdEaxInstruction instruction, ArgType arg);
+        void CpuIdEbx(CpuIdEbxInstruction instruction, ArgType arg);
+        void CpuIdEcx(CpuIdEcxInstruction instruction, ArgType arg);
+        void CpuIdEdx(CpuIdEdxInstruction instruction, ArgType arg);
         /// <summary>
         /// Halts the machine
         /// </summary>
         /// <param name="instruction">The instruction.</param>
         /// <param name="arg">The arguments</param>
         void Hlt(HltInstruction instruction, ArgType arg);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="instruction"></param>
+        /// <param name="arg"></param>
+        void Invlpg(InvlpgInstruction instruction, ArgType arg);
         /// <summary>
         /// Read in from port
         /// </summary>

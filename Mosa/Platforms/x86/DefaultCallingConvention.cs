@@ -219,7 +219,7 @@ namespace Mosa.Platforms.x86
         {
             int result = (true == hasThis ? -4 : 0);
             int size, alignment;
-            // FIXME: This will not work for an instance method with the first arg being a fp value
+            
             foreach (Operand op in instruction.Operands)
             {
                 this.architecture.GetTypeRequirements(op.Type, out size, out alignment);
@@ -242,7 +242,7 @@ namespace Mosa.Platforms.x86
             this.architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
             // FIXME: Do not issue a move, if the operand is already the destination register
-            if (4 == size || 2 == size || 1 == size)
+            if (4 == size)
             {
                 return new Instruction[] { this.architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand) };
             }
@@ -254,12 +254,15 @@ namespace Mosa.Platforms.x86
             {
                 SigType I4 = new SigType(CilElementType.I4);
                 SigType U4 = new SigType(CilElementType.U4);
+
+                // Store if the operand is signed or unsigned by storing the type
                 SigType HighType = operand.Type.Type == CilElementType.I8 ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
 
                 // Is it a constant operand?
                 ConstantOperand cop = operand as ConstantOperand;
                 Operand opL, opH;
 
+                // If it's constant
                 if (cop != null)
                 {
                     long value = (long)cop.Value;

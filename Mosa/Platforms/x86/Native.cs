@@ -145,10 +145,40 @@ namespace Mosa.Platforms.x86
         public static void Hlt() { ThrowPlatformNotSupported(); }
 
         /// <summary>
+        /// 
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InvlpgInstruction))]
+        public static void Invlpg() { ThrowPlatformNotSupported(); }
+
+        /// <summary>
         /// Wraps the x86 CPUID instruction.
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CpuIdInstruction))]
-        public static unsafe char* CpuId(uint function) { ThrowPlatformNotSupported(); return null; }
+        public static unsafe byte* CpuId(uint function) { ThrowPlatformNotSupported(); return null; }
+
+        /// <summary>
+        /// Wraps the x86 CPUID instruction.
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CpuIdEaxInstruction))]
+        public static int CpuIdEax(uint function) { ThrowPlatformNotSupported(); return 0; }
+
+        /// <summary>
+        /// Wraps the x86 CPUID instruction.
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CpuIdEbxInstruction))]
+        public static int CpuIdEbx(uint function) { ThrowPlatformNotSupported(); return 0; }
+
+        /// <summary>
+        /// Wraps the x86 CPUID instruction.
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CpuIdEcxInstruction))]
+        public static int CpuIdEcx(uint function) { ThrowPlatformNotSupported(); return 0; }
+
+        /// <summary>
+        /// Wraps the x86 CPUID instruction.
+        /// </summary>
+        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CpuIdEdxInstruction))]
+        public static int CpuIdEdx(uint function) { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// 

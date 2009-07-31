@@ -879,13 +879,13 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     break;
 
                 case ConvType.I:
-                    break;
+                    goto case ConvType.I4;
 
                 case ConvType.U:
-                    break;
+                    goto case ConvType.U4;
 
                 case ConvType.Ptr:
-                    break;
+                    goto case ConvType.I4;
 
                 default:
                     Debug.Assert(false);
@@ -915,7 +915,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     if (src.Type.Type == CilElementType.I8 || src.Type.Type == CilElementType.U8)
                     {
                         instructions.Add(_architecture.CreateInstruction(typeof(IR.MoveInstruction), dest, src));
-                        instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.U4), mask)));
+                        //instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.U4), mask)));
                     }
                     else
                         instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.U4), mask)));

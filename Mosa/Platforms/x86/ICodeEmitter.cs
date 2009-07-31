@@ -224,6 +224,12 @@ namespace Mosa.Platforms.x86
         void Invd();
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        void Invlpg(Operand op);
+
+        /// <summary>
         /// Returns from an interrupt.
         /// </summary>
         void Iretd();

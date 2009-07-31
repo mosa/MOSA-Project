@@ -222,7 +222,7 @@ namespace Mosa.Platforms.x86
                 {
                     new LongOperandTransformationStage(),
                     new IRToX86TransformationStage(),
-                    new InstructionSchedulingStage(),
+                    //new InstructionSchedulingStage(),
                     InstructionLogger.Instance,
                     ////new SimpleRegisterAllocator(),
                     ////InstructionLogger.Instance,

@@ -497,13 +497,11 @@ namespace Mosa.Platforms.x86
 		/// <param name="function">The CPUID function to execute</param>
 		void ICodeEmitter.CpuId(Operand dst, Operand function)
 		{
-			MemoryOperand mopdst = dst as MemoryOperand;
-			((ICodeEmitter)this).Mov(new RegisterOperand(function.Type, GeneralPurposeRegister.EAX), function);
-			Emit(new byte[] { 0x0F, 0xA2 }, null, null, null);
-			((ICodeEmitter)this).Mov(mopdst, new RegisterOperand(mopdst.Type, GeneralPurposeRegister.EAX));
-			((ICodeEmitter)this).Mov(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 4)), new RegisterOperand(dst.Type, GeneralPurposeRegister.EBX));
-			((ICodeEmitter)this).Mov(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 8)), new RegisterOperand(dst.Type, GeneralPurposeRegister.ECX));
-			((ICodeEmitter)this).Mov(new MemoryOperand(mopdst.Type, mopdst.Base, new IntPtr(mopdst.Offset.ToInt64() + 12)), new RegisterOperand(dst.Type, GeneralPurposeRegister.EDX));
+			// Move argument into eax
+            ((ICodeEmitter)this).Mov(new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX), function);
+
+            // Call CPUID
+            Emit(new byte[] { 0x0F, 0xA2 }, null, null, null);
 		}
 
 		/// <summary>
@@ -581,6 +579,15 @@ namespace Mosa.Platforms.x86
 		{
 			Emit(new byte[] { 0x0F, 0x08 }, null, null, null);
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        void ICodeEmitter.Invlpg(Operand op)
+        {
+            Emit(new byte[] { 0x0F, 0x01 }, 7, op, null);
+        }
 
 		/// <summary>
 		/// Returns from an interrupt.

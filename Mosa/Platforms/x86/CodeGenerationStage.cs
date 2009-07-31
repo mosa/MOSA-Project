@@ -88,6 +88,14 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.Add(AddInstruction instruction, int arg)
         {
+            if (instruction.Operand0.Type.Type == CilElementType.Ptr)
+            {
+                System.IO.StreamWriter w = new StreamWriter("add_operands.txt", true);
+                MemoryOperand op2 = instruction.Operand1 as MemoryOperand;
+                w.WriteLine("{0}, {1} Offset {2}", instruction.Operand0.Type, instruction.Operand1.Type, op2.Offset);
+                w.Flush();
+                w.Close();
+            }
             _emitter.Add(instruction.Operand0, instruction.Operand1);
         }
 
@@ -363,9 +371,38 @@ namespace Mosa.Platforms.x86
         void IX86InstructionVisitor<int>.CpuId(CpuIdInstruction instruction, int arg)
         {
         	  Operand function = instruction.Operand0;
-              MemoryOperand dst = instruction.Results[0] as MemoryOperand;
-        	  
-              _emitter.CpuId(dst, function);
+              Operand dst = instruction.Operand1;
+              //Operand foo = instruction.Results[0] as MemoryOperand;
+              instruction.SetResult(0, instruction.Operand1);
+              _emitter.CpuId(instruction.Results[0], function);
+        }
+
+        void IX86InstructionVisitor<int>.CpuIdEax(CpuIdEaxInstruction instruction, int arg)
+        {
+            RegisterOperand reg = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+            _emitter.CpuId(reg, instruction.Operand0);
+            _emitter.Mov(instruction.Operand1, reg);
+        }
+
+        void IX86InstructionVisitor<int>.CpuIdEbx(CpuIdEbxInstruction instruction, int arg)
+        {
+            RegisterOperand reg = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
+            _emitter.CpuId(reg, instruction.Operand0);
+            _emitter.Mov(instruction.Operand1, reg);
+        }
+
+        void IX86InstructionVisitor<int>.CpuIdEcx(CpuIdEcxInstruction instruction, int arg)
+        {
+            RegisterOperand reg = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.ECX);
+            _emitter.CpuId(reg, instruction.Operand0);
+            _emitter.Mov(instruction.Operand1, reg);
+        }
+
+        void IX86InstructionVisitor<int>.CpuIdEdx(CpuIdEdxInstruction instruction, int arg)
+        {
+            RegisterOperand reg = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
+            _emitter.CpuId(reg, instruction.Operand0);
+            _emitter.Mov(instruction.Operand1, reg);
         }
         
         void IX86InstructionVisitor<int>.Cvtsi2sd(Cvtsi2sdInstruction instruction, int arg)
@@ -592,6 +629,11 @@ namespace Mosa.Platforms.x86
                 case 4: _emitter.IntO(); break;
                 default: _emitter.Int(value); break;
             }
+        }
+
+        void IX86InstructionVisitor<int>.Invlpg(InvlpgInstruction instruction, int ctx)
+        {
+            _emitter.Invlpg(instruction.Operand0);
         }
 
         void IX86InstructionVisitor<int>.Dec(DecInstruction instruction, int arg)

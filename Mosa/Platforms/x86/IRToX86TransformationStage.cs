@@ -735,7 +735,7 @@ namespace Mosa.Platforms.x86
                 _architecture.CreateInstruction(typeof(IR.MoveInstruction), new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, _compiler.Method.Token)),
             });
 
-            // Do not save EDX for int64 return values
+            // Do not save EDX for non-int64 return values
             if (_compiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
                 _compiler.Method.Signature.ReturnType.Type != CilElementType.U8)
             {
@@ -790,7 +790,7 @@ namespace Mosa.Platforms.x86
             Replace(ctx, new Instruction[] {
                 new x86.Instructions.MoveInstruction(eax, instruction.Results[0]),
                 new x86.Instructions.MoveInstruction(edx, instruction.Operands[0]),
-                new x86.Instructions.MoveInstruction(new MemoryOperand(instruction.Operands[0].Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx)
+                new x86.Instructions.MoveInstruction(new MemoryOperand(instruction.Results[0].Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx)
             });
         }
 
@@ -944,6 +944,10 @@ namespace Mosa.Platforms.x86
         }
 
         void IX86InstructionVisitor<Context>.Int(Instructions.IntInstruction instruction, Context ctx)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.Invlpg(Instructions.Intrinsics.InvlpgInstruction instruction, Context ctx)
         {
         }
 
@@ -1131,6 +1135,22 @@ namespace Mosa.Platforms.x86
         }
         
         void IX86InstructionVisitor<Context>.CpuId(Instructions.Intrinsics.CpuIdInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.CpuIdEax(Instructions.Intrinsics.CpuIdEaxInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.CpuIdEbx(Instructions.Intrinsics.CpuIdEbxInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.CpuIdEcx(Instructions.Intrinsics.CpuIdEcxInstruction instruction, Context arg)
+        {
+        }
+
+        void IX86InstructionVisitor<Context>.CpuIdEdx(Instructions.Intrinsics.CpuIdEdxInstruction instruction, Context arg)
         {
         }
 
