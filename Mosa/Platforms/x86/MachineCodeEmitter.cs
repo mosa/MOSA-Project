@@ -934,7 +934,7 @@ namespace Mosa.Platforms.x86
 		void ICodeEmitter.Shr(Operand dest, Operand src)
 		{
 			// Write the opcode byte
-			Debug.Assert(dest is RegisterOperand);
+			//Debug.Assert(dest is RegisterOperand);
 			// FIXME: Make sure the constant is emitted as a single-byte opcode
             RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I1), GeneralPurposeRegister.ECX);
 
