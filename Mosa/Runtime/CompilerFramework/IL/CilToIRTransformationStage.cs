@@ -879,13 +879,13 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     break;
 
                 case ConvType.I:
-                    goto case ConvType.I4;
+                    break;
 
                 case ConvType.U:
-                    goto case ConvType.U4;
+                    break;
 
                 case ConvType.Ptr:
-                    goto case ConvType.I4;
+                    break;
 
                 default:
                     Debug.Assert(false);
@@ -905,7 +905,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 {
                     // Mixed type conversion, e.g. R4 -> I2
                     instructions.AddRange(new Instruction[] {
-                        _architecture.CreateInstruction(type, dest, nsrc),
+                        _architecture.CreateInstruction(type, dest, src),
                         _architecture.CreateInstruction(typeof(LogicalAndInstruction), dest, dest, new ConstantOperand(new SigType(CilElementType.U4), mask))
                     });
                 }
@@ -915,7 +915,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     if (src.Type.Type == CilElementType.I8 || src.Type.Type == CilElementType.U8)
                     {
                         instructions.Add(_architecture.CreateInstruction(typeof(IR.MoveInstruction), dest, src));
-                        //instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.U4), mask)));
+                        instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.U4), mask)));
                     }
                     else
                         instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.U4), mask)));

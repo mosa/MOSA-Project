@@ -242,7 +242,7 @@ namespace Mosa.Platforms.x86
             this.architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
             // FIXME: Do not issue a move, if the operand is already the destination register
-            if (4 == size)
+            if (4 == size || 2 == size || 1 == size)
             {
                 return new Instruction[] { this.architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand) };
             }

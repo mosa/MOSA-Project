@@ -790,7 +790,7 @@ namespace Mosa.Platforms.x86
             Replace(ctx, new Instruction[] {
                 new x86.Instructions.MoveInstruction(eax, instruction.Results[0]),
                 new x86.Instructions.MoveInstruction(edx, instruction.Operands[0]),
-                new x86.Instructions.MoveInstruction(new MemoryOperand(instruction.Results[0].Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx)
+                new x86.Instructions.MoveInstruction(new MemoryOperand(instruction.Operands[0].Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx)
             });
         }
 

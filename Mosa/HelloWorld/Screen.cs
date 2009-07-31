@@ -153,14 +153,14 @@ namespace Mosa.HelloWorld
 			} while (temp != 0);
 
 			if (size != -1)
-				count = (uint) size;
+				count = (uint)size;
 
 			int x = Column;
 			int y = Row;
 
 			for (uint i = 0; i < count; i++) {
 				uint digit = (uint) (val % digits);
-				Column = x;
+				Column = x; 
 				Row = y;
 				Skip(count - 1 - i);
 				if (digit < 10)
