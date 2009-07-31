@@ -4,6 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  */
+
 using Mosa.Platforms.x86;
 
 namespace Mosa.HelloWorld

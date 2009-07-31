@@ -106,13 +106,13 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 in instruction to read from a 16-bit port.
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InInstruction))]
-        public static unsafe ushort In16(ushort* address) { ThrowPlatformNotSupported(); return 0; }
+        public static unsafe ushort In16(ushort address) { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// Wraps the x86 in instruction to read from a 32-bit port.
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InInstruction))]
-        public static unsafe uint In32(uint* address) { ThrowPlatformNotSupported(); return 0; }
+        public static unsafe uint In32(uint address) { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// Wraps the x86 out instruction to write to an 8-bit port.
@@ -124,13 +124,13 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 out instruction to write to a 16-bit port.
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
-        public static unsafe void Out16(ushort* address, ushort value) { ThrowPlatformNotSupported(); }
+        public static unsafe void Out16(ushort address, ushort value) { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 out instruction to write to a 32-bit port.
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
-        public static unsafe void Out32(uint* address, uint value) { ThrowPlatformNotSupported(); }
+        public static unsafe void Out32(uint address, uint value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a nop instruction.
@@ -148,7 +148,7 @@ namespace Mosa.Platforms.x86
         /// 
         /// </summary>
         [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InvlpgInstruction))]
-        public static void Invlpg() { ThrowPlatformNotSupported(); }
+		public static void Invlpg(uint address) { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 CPUID instruction.

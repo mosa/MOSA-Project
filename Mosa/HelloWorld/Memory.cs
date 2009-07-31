@@ -7,7 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.HelloWorld
+using Mosa.Platforms.x86;
+
+namespace Mosa.Kernel.Memory.X86
 {
 	/// <summary>
 	/// Static class of helpful memory functions
@@ -87,20 +89,10 @@ namespace Mosa.HelloWorld
 		/// <summary>
 		/// Flushes the Translation Lookaside Buffer (TLB).
 		/// </summary>
-		public static void FlushTLB()
-		{
-			// TODO
-			// Native.Invlpg(x)?
-		}
-
-		/// <summary>
-		/// Flushes the Translation Lookaside Buffer (TLB).
-		/// </summary>
 		/// <param name="address">The address.</param>
 		public static void FlushTLB(uint address)
 		{
-			// TODO
-			// Native.Invlpg(Address)?
+			Native.Invlpg(address);
 		}
 	}
 }
