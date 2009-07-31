@@ -221,7 +221,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
         /// <returns>The metadata module, which represents the loaded assembly.</returns>
         private IMetadataModule RunMosaCompiler(string assemblyFile)
         {
-            File.Copy(assemblyFile, @"C:\\test.dll", true);
             IMetadataModule rtModule = RuntimeBase.Instance.AssemblyLoader.Load(
                 typeof(RuntimeBase).Module.FullyQualifiedName
             );
