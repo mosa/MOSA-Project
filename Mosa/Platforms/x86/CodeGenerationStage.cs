@@ -88,14 +88,6 @@ namespace Mosa.Platforms.x86
 
         void IX86InstructionVisitor<int>.Add(AddInstruction instruction, int arg)
         {
-            if (instruction.Operand0.Type.Type == CilElementType.Ptr)
-            {
-                System.IO.StreamWriter w = new StreamWriter("add_operands.txt", true);
-                MemoryOperand op2 = instruction.Operand1 as MemoryOperand;
-                w.WriteLine("{0}, {1} Offset {2}", instruction.Operand0.Type, instruction.Operand1.Type, op2.Offset);
-                w.Flush();
-                w.Close();
-            }
             _emitter.Add(instruction.Operand0, instruction.Operand1);
         }
 

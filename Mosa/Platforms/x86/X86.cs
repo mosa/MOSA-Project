@@ -1252,10 +1252,6 @@ namespace Mosa.Platforms.x86
         /// <returns></returns>
         public static OpCode Cvttss2si(Operand dest, Operand src)
         {
-            System.IO.StreamWriter w = new System.IO.StreamWriter("cvtsd2si.txt", true);
-            w.WriteLine("{0} :: {1}", dest.Type.Type, src.Type.Type);
-            w.Flush();
-            w.Close();
             if ((dest is RegisterOperand) && (src is RegisterOperand)) return X86Instruction.Cvttss2si.R_R;
             if ((dest is RegisterOperand) && (src is MemoryOperand)) return X86Instruction.Cvttss2si.R_M;
             throw new ArgumentException(@"No opcode for operand type.");
