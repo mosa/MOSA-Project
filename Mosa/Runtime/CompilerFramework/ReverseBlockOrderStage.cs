@@ -15,9 +15,9 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// The Simple Trace Block Order Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
+	/// The Reserver Block Order Stage reorders blocks in reverse order. This stage is for testing use only.
 	/// </summary>
-	public class SimpleTraceBlockOrderStage : IMethodCompilerStage, IBasicBlockOrder
+	public class ReverseBlockOrderStage : IMethodCompilerStage, IBasicBlockOrder
 	{
 		#region Data members
 
@@ -87,37 +87,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private void DetermineBlockOrder()
 		{
-			// Create bit array of refereced blocks (by index)
-			BitArray referencedBlocks = new BitArray(blocks.Count, false);
-
 			// Allocate list of ordered blocks
 			orderedBlocks = new int[blocks.Count];
-			int orderBlockCnt = 0;
 
-			// Create sorted worklist
-			Stack<BasicBlock> workList = new Stack<BasicBlock>();
+			Debug.Assert(firstBlock.Index == 0);
+			orderedBlocks[0] = firstBlock.Index;
+			int orderBlockCnt = 1;
 
-			// Start worklist with first block
-			workList.Push(firstBlock);
-
-			while (workList.Count != 0) {
-				BasicBlock block = workList.Pop();
-
-				if (!referencedBlocks.Get(block.Index)) {
-
-					referencedBlocks.Set(block.Index, true);
-					orderedBlocks[orderBlockCnt++] = block.Index;
-
-					foreach (BasicBlock successor in block.NextBlocks)
-						if (!referencedBlocks.Get(successor.Index))
-							workList.Push(successor);
-				}
-			}
-
-			// Place unreferenced blocks at the end of the list
-			for (int i = 0; i < blocks.Count; i++)
-				if (!referencedBlocks.Get(i))
-					orderedBlocks[orderBlockCnt++] = i;
+			for (int i = blocks.Count - 1; i > 0; i--)
+				orderedBlocks[orderBlockCnt++] = i;
 		}
 
 		/// <summary>

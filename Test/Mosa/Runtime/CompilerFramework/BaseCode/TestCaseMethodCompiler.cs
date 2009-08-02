@@ -36,7 +36,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 new CilToIrTransformationStage(),
                 //InstructionLogger.Instance,
                 //InstructionStatisticsStage.Instance,
-                new DominanceCalculationStage(),
+                //new DominanceCalculationStage(),
                 //InstructionLogger.Instance,
                 //new EnterSSA(),
                 //InstructionLogger.Instance,
@@ -48,8 +48,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 //InstructionLogger.Instance,
 				//new BlockReductionStage(),
 				new StackLayoutStage(),
-				new LoopAwareBlockOrderStage(),
+				//new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
+				new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
 				new BasicBlockOrderStage()	
             });
         }

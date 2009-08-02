@@ -229,24 +229,40 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="nextBlock">The next block.</param>
 		protected void LinkBlocks(BasicBlock[] blocks, BasicBlock currentBlock, BasicBlock nextBlock)
 		{
-			// create label to block dictionary
+			// Create label to block dictionary
 			Dictionary<int, BasicBlock> blockLabels = new Dictionary<int, BasicBlock>();
-			blockLabels.Add(currentBlock.Label, currentBlock);
-			blockLabels.Add(nextBlock.Label, nextBlock);
 
 			foreach (BasicBlock block in blocks)
 				blockLabels.Add(block.Label, block);
-			
-			// update newly updated blocks
+
+			if (nextBlock != null) {
+				foreach (BasicBlock block in nextBlock.NextBlocks)
+					if (!blockLabels.ContainsKey(block.Label))
+						blockLabels.Add(block.Label, block);
+
+				if (!blockLabels.ContainsKey(nextBlock.Label))
+					blockLabels.Add(nextBlock.Label, nextBlock);
+			}
+
+			if (currentBlock != null) {
+				foreach (BasicBlock block in currentBlock.NextBlocks)
+					if (!blockLabels.ContainsKey(block.Label))
+						blockLabels.Add(block.Label, block);
+
+				if (!blockLabels.ContainsKey(currentBlock.Label))
+					blockLabels.Add(currentBlock.Label, currentBlock);
+			}
+
+			// Update block links
 			foreach (BasicBlock block in blocks)
 				foreach (Instruction instruction in block.Instructions)
 					if (instruction is IBranchInstruction)
 						foreach (int label in (instruction as IBranchInstruction).BranchTargets) {
 							BasicBlock next = blockLabels[label];
-							if (!block.NextBlocks.Contains(next)) {
+							if (!block.NextBlocks.Contains(next))
 								block.NextBlocks.Add(next);
+							if (!next.PreviousBlocks.Contains(block))
 								next.PreviousBlocks.Add(block);
-							}
 						}
 		}
 

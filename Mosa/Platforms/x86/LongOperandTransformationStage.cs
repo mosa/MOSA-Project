@@ -1745,7 +1745,7 @@ namespace Mosa.Platforms.x86
 
 			int[] targets = instruction.BranchTargets;
 
-			BasicBlock[] blocks = CreateEmptyBlocks(1);
+			BasicBlock[] blocks = CreateEmptyBlocks(2);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -1793,15 +1793,19 @@ namespace Mosa.Platforms.x86
 			IR.ConditionCode conditionHigh = GetHighCondition(code);
 
 			blocks[0].Instructions.AddRange(new Instruction[] {
-                    // Compare high dwords
-                    new Instructions.CmpInstruction(op1H, op2H),
-                    new IR.BranchInstruction(IR.ConditionCode.Equal, nextBlock.Label),
-                    // Branch if check already gave results
-                    new IR.BranchInstruction(code, targets[0]),
-                    new IR.JmpInstruction(targets[1]),
-                });
+                // Compare high dwords
+                new Instructions.CmpInstruction(op1H, op2H),
+                new IR.BranchInstruction(IR.ConditionCode.Equal, nextBlock.Label),
+                new IR.JmpInstruction(blocks[1].Label),
+			});
 
-			LinkBlocks(blocks[0], nextBlock);
+			blocks[1].Instructions.AddRange(new Instruction[] {
+				// Branch if check already gave results
+                new IR.BranchInstruction(code, targets[0]),
+                new IR.JmpInstruction(targets[1]),
+            });
+
+			LinkBlocks(blocks, ctx.Block, nextBlock);
 
 			nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 // Compare low dwords
