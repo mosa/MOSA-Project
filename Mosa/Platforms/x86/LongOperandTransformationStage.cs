@@ -268,10 +268,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created blocks together
-			LinkBlocks(blocks[0], blocks[2]);
-			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[1], nextBlock);
-			LinkBlocks(blocks[2], nextBlock);
+			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
 		/// <summary>
@@ -538,31 +535,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created blocks together
-			LinkBlocks(blocks[0], blocks[2]);
-			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[2], blocks[4]);
-			LinkBlocks(blocks[2], blocks[3]);
-			LinkBlocks(blocks[3], blocks[4]);
-			LinkBlocks(blocks[4], blocks[6]);
-			LinkBlocks(blocks[4], blocks[5]);
-			LinkBlocks(blocks[5], blocks[14]);
-			LinkBlocks(blocks[6], blocks[7]);
-			LinkBlocks(blocks[7], blocks[7]);
-			LinkBlocks(blocks[7], blocks[8]);
-			LinkBlocks(blocks[8], blocks[12]);
-			LinkBlocks(blocks[8], blocks[9]);
-			LinkBlocks(blocks[9], blocks[12]);
-			LinkBlocks(blocks[9], blocks[10]);
-			LinkBlocks(blocks[10], blocks[13]);
-			LinkBlocks(blocks[10], blocks[11]);
-			LinkBlocks(blocks[11], blocks[13]);
-			LinkBlocks(blocks[11], blocks[12]);
-			LinkBlocks(blocks[12], blocks[13]);
-			LinkBlocks(blocks[13], blocks[14]);
-			LinkBlocks(blocks[14], nextBlock);
-			LinkBlocks(blocks[14], blocks[9]);
-			LinkBlocks(blocks[15], nextBlock);
+			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
 		/// <summary>
@@ -797,18 +770,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created blocks together
-			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[1], blocks[6]);
-			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[1], nextBlock);
-			LinkBlocks(blocks[2], blocks[3]);
-			LinkBlocks(blocks[3], blocks[3]);
-			LinkBlocks(blocks[3], blocks[4]);
-			LinkBlocks(blocks[3], blocks[5]);
-			LinkBlocks(blocks[4], blocks[5]);
-			LinkBlocks(blocks[5], blocks[6]);
-			LinkBlocks(blocks[5], nextBlock);
-			LinkBlocks(blocks[6], nextBlock);
+			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
 		/// <summary>
@@ -912,14 +874,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created blocks together
-			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[0], nextBlock);
-			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[2], blocks[2]);
-			LinkBlocks(blocks[2], blocks[3]);
-			LinkBlocks(blocks[2], blocks[4]);
-			LinkBlocks(blocks[3], blocks[4]);
-			LinkBlocks(blocks[4], nextBlock);
+			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
 		/// <summary>
@@ -1038,14 +993,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created blocks together
-			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[0], nextBlock);
-			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[2], blocks[2]);
-			LinkBlocks(blocks[2], blocks[3]);
-			LinkBlocks(blocks[2], blocks[4]);
-			LinkBlocks(blocks[3], blocks[4]);
-			LinkBlocks(blocks[4], nextBlock);
+			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
 		/// <summary>
@@ -1122,14 +1070,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created blocks together
-			LinkBlocks(ctx.Block, blocks[0]);
-			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[0], blocks[3]);
-			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[1], nextBlock);
-			LinkBlocks(blocks[2], nextBlock);
-			LinkBlocks(blocks[2], nextBlock);
-			LinkBlocks(blocks[3], nextBlock);
+			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
 		/// <summary>
@@ -1206,14 +1147,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created blocks together
-			LinkBlocks(ctx.Block, blocks[0]);
-			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[0], blocks[3]);
-			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[1], nextBlock);
-			LinkBlocks(blocks[2], nextBlock);
-			LinkBlocks(blocks[2], nextBlock);
-			LinkBlocks(blocks[3], nextBlock);
+			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
 		/// <summary>
@@ -1309,14 +1243,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created blocks together
-			LinkBlocks(ctx.Block, blocks[0]);
-			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[0], blocks[4]);
-			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[1], blocks[3]);
-			LinkBlocks(blocks[2], nextBlock);
-			LinkBlocks(blocks[3], nextBlock);
-			LinkBlocks(blocks[4], nextBlock);
+			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
 		/// <summary>
@@ -1658,13 +1585,8 @@ namespace Mosa.Platforms.x86
 
 			int[] targets = instruction.BranchTargets;
 
-			/*BasicBlock[] targetBlocks = new BasicBlock[2];
-			targetBlocks[0] = (ctx.Block.NextBlocks[0].Index == targetBlocks[0].Index) ? targetBlocks[0] : targetBlocks[1];
-			targetBlocks[1] = (ctx.Block.NextBlocks[1].Index == targetBlocks[1].Index) ? targetBlocks[1] : targetBlocks[0];*/
-
 			BasicBlock[] blocks = CreateEmptyBlocks(1);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
-
 
 			SigType I4 = new SigType(CilElementType.I4);
 			SigType U4 = new SigType(CilElementType.U4);
@@ -1675,9 +1597,6 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(instruction.Operands[0], out op1L, out op1H);
 			SplitLongOperand(instruction.Operands[1], out op2L, out op2H);
 			IR.ConditionCode code;
-
-
-
 
 			switch (instruction.Code) {
 				// Signed
@@ -1724,9 +1643,6 @@ namespace Mosa.Platforms.x86
                     new IR.BranchInstruction(code, targets[0]),
                     new IR.JmpInstruction(targets[1]),
                 });
-
-				//LinkBlocks(blocks[0], targetBlocks[1]);
-				//LinkBlocks(blocks[0], targetBlocks[0]);
 			}
 			else {
 				blocks[0].Instructions.AddRange(new Instruction[] {
@@ -1737,12 +1653,9 @@ namespace Mosa.Platforms.x86
                     new IR.BranchInstruction(code, targets[0]),
                     new IR.JmpInstruction(targets[1]),
                 });
-				//LinkBlocks(blocks[0], targetBlocks[1]);
 			}
 
-
 			LinkBlocks(blocks[0], nextBlock);
-
 
 			nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 // Compare low dwords
@@ -1813,8 +1726,7 @@ namespace Mosa.Platforms.x86
 
 			IR.ConditionCode conditionHigh = GetHighCondition(code);
 
-			if (code != Mosa.Runtime.CompilerFramework.IR.ConditionCode.Equal) {
-				blocks[0].Instructions.AddRange(new Instruction[] {
+			blocks[0].Instructions.AddRange(new Instruction[] {
                     // Compare high dwords
                     new Instructions.CmpInstruction(op1H, op2H),
                     new IR.BranchInstruction(IR.ConditionCode.Equal, nextBlock.Label),
@@ -1822,17 +1734,6 @@ namespace Mosa.Platforms.x86
                     new IR.BranchInstruction(code, targets[0]),
                     new IR.JmpInstruction(targets[1]),
                 });
-			}
-			else {
-				blocks[0].Instructions.AddRange(new Instruction[] {
-                    // Compare high dwords
-                    new Instructions.CmpInstruction(op1H, op2H),
-                    // Branch if check already gave results
-                    new IR.BranchInstruction(IR.ConditionCode.Equal, nextBlock.Label),
-                    new IR.BranchInstruction(code, targets[0]),
-                    new IR.JmpInstruction(targets[1]),
-                });
-			}
 
 			LinkBlocks(blocks[0], nextBlock);
 
@@ -1926,15 +1827,7 @@ namespace Mosa.Platforms.x86
 
 			Remove(ctx);
 
-			//LinkBlocks(ctx.Block, blocks[0]);
-			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[0], blocks[2]);
-			LinkBlocks(blocks[1], blocks[3]);
-			LinkBlocks(blocks[1], blocks[4]);
-			LinkBlocks(blocks[2], blocks[3]);
-			LinkBlocks(blocks[2], blocks[4]);
-			LinkBlocks(blocks[3], nextBlock);
-			LinkBlocks(blocks[4], nextBlock);
+			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
 		/// <summary>
