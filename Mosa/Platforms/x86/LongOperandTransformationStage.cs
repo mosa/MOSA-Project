@@ -1152,7 +1152,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandShiftLeft(Context ctx, IR.ShiftLeftInstruction instruction)
 		{
-			BasicBlock[] blocks = CreateEmptyBlocks(4);
+			BasicBlock[] blocks = CreateEmptyBlocks(5);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -1178,21 +1178,25 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(edx, op1H),
                 new Instructions.MoveInstruction(eax, op1L),
                 new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 64)),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[3].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[4].Label),
                 new IR.JmpInstruction(blocks[1].Label),
             });
 
 			blocks[1].Instructions.AddRange(new Instruction[] {
                 new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 32)),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label),
-                new Instructions.ShldInstruction(edx, eax, cl),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[3].Label),
+                new IR.JmpInstruction(blocks[2].Label),
+            });
+
+			blocks[2].Instructions.AddRange(new Instruction[] {
+				new Instructions.ShldInstruction(edx, eax, cl),
                 new Instructions.ShlInstruction(eax, cl),
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
 			// Handle shifts of between 32 and 63 bits
 			// MORE32:
-			blocks[2].Instructions.AddRange(new Instruction[] {
+			blocks[3].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(edx, eax),
                 new Instructions.LogicalXorInstruction(eax, eax),
                 new Instructions.LogicalAndInstruction(ecx, new ConstantOperand(I4, 0x1F)),
@@ -1202,7 +1206,7 @@ namespace Mosa.Platforms.x86
 
 			// Return double precision 0 or -1, depending on the sign of edx
 			// RETZERO:
-			blocks[3].Instructions.AddRange(new Instruction[] {
+			blocks[4].Instructions.AddRange(new Instruction[] {
                 new Instructions.LogicalXorInstruction(eax, eax),
                 new Instructions.LogicalXorInstruction(edx, edx),
 				new IR.JmpInstruction(nextBlock.Label),
@@ -1663,7 +1667,6 @@ namespace Mosa.Platforms.x86
 			SigType I4 = new SigType(CilElementType.I4);
 			SigType U4 = new SigType(CilElementType.U4);
 			SigType U1 = new SigType(CilElementType.U1);
-
 
 			Operand op1H, op1L, op2H, op2L;
 			SplitLongOperand(instruction.Operands[0], out op1L, out op1H);
