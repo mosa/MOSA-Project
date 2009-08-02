@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6509477A-7360-4937-A1B9-26FED0A75CDA}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Mosa.DeviceSystem</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>
+    </AppDesignerFolder>
+    <RootNamespace>Mosa.DeviceSystem</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>Mosa.DeviceSystem.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>Mosa.DeviceSystem.xml</DocumentationFile>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLib\Mosa.ClassLib.csproj">
+      <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
+      <Name>Mosa.ClassLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Color.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ColorPalette.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CHS.cs" />
+    <Compile Include="NetworkDevicePacketBuffer.cs" />
+    <Compile Include="INetworkDevice.cs" />
+    <Compile Include="DeviceDriverPhysicalMemoryAttribute.cs" />
+    <Compile Include="IOPortRegister.cs" />
+    <Compile Include="MACAddress.cs" />
+    <Compile Include="DeviceDriver.cs" />
+    <Compile Include="ISADeviceDriverAttribute.cs" />
+    <Compile Include="DiskControllerManager.cs" />
+    <Compile Include="PCIDeviceDriverAttribute.cs" />
+    <Compile Include="GUIDPartitionTable.cs" />
+    <Compile Include="PartitionType.cs" />
+    <Compile Include="PCIControllerManager.cs" />
+    <Compile Include="PCI\IDeviceResource.cs" />
+    <Compile Include="PCI\IPCIDevice.cs" />
+    <Compile Include="PCI\PCIDevice.cs" />
+    <Compile Include="VDI.cs" />
+    <Compile Include="DiskGeometry.cs" />
+    <Compile Include="PartitionManager.cs" />
+    <Compile Include="Device.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DeviceDriverRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DeviceDriverStartStatus.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DeviceManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DeviceStatus.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DiskDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FindDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FrameBuffer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FrameBuffer16bpp.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FrameBuffer24bpp.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FrameBuffer32bpp.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FrameBuffer8bpp.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GenericPartition.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HAL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HardwareDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HardwareResources.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDeviceDriverAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDeviceManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDiskControllerDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDiskDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDMAChannel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IFindDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IFrameBuffer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IHardwareAbstraction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IHardwareDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IHardwareResources.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IInterruptHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IIOPortRegion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IIOPorts.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IKeyboard.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IKeyboardDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IMemory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IMemoryRegion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InterruptHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InterruptManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IOPortRegion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IOPortResources.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IPartitionDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IPCIController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IPixelGraphicsDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IPixelPaletteGraphicsDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IResourceManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IScanCodeMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ISerialDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITextDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITextScreen.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Key.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Keyboard.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="KeyEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="KeyType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MasterBootBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MemoryRegion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MemoryResources.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PartitionDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PixelPaletteGraphicsAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PlatformArchitecture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ResourceManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Setup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SpinLock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TextScreen.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VGAFont.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PCI\AddressType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PCI\BaseAddress.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PCI\ClassCodeTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PCI\DeviceTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PCI\SubClassCodeTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VHD.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

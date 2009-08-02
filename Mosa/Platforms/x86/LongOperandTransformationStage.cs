@@ -1223,7 +1223,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandShiftRight(Context ctx, IR.ShiftRightInstruction instruction)
 		{
-			BasicBlock[] blocks = CreateEmptyBlocks(4);
+			BasicBlock[] blocks = CreateEmptyBlocks(5);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -1258,13 +1258,17 @@ namespace Mosa.Platforms.x86
                 new IR.PushInstruction(ecx),
                 new IR.PushInstruction(ecx),
                 new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 64)),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[3].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[4].Label),
                 new IR.JmpInstruction(blocks[1].Label),
             });
 
 			blocks[1].Instructions.AddRange(new Instruction[] {
                 new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 32)),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[3].Label),
+	            new IR.JmpInstruction(blocks[2].Label)
+    		});
+
+			blocks[2].Instructions.AddRange(new Instruction[] {
                 new Instructions.ShrdInstruction(eax, edx, ecx),
                 new Instructions.SarInstruction(edx, ecx),
                 new IR.JmpInstruction(nextBlock.Label)
@@ -1272,7 +1276,7 @@ namespace Mosa.Platforms.x86
 
 			// Handle shifts of between 32 and 63 bits
 			// MORE32:
-			blocks[2].Instructions.AddRange(new Instruction[] {
+			blocks[3].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(eax, edx),
                 new IR.PushInstruction(ecx),
                 new Instructions.MoveInstruction(ecx, new ConstantOperand(I1, (sbyte)0x1F)),
@@ -1288,7 +1292,7 @@ namespace Mosa.Platforms.x86
 
 			// Return double precision 0 or -1, depending on the sign of edx
 			// RETSIGN:
-			blocks[3].Instructions.AddRange(new Instruction[] {
+			blocks[4].Instructions.AddRange(new Instruction[] {
                 new Instructions.SarInstruction(edx, new ConstantOperand(I1, (sbyte)0x1F)),
                 new Instructions.MoveInstruction(eax, edx),
 				new IR.JmpInstruction(nextBlock.Label),
@@ -1307,12 +1311,12 @@ namespace Mosa.Platforms.x86
 			// Link the created blocks together
 			LinkBlocks(ctx.Block, blocks[0]);
 			LinkBlocks(blocks[0], blocks[1]);
-			LinkBlocks(blocks[0], blocks[3]);
+			LinkBlocks(blocks[0], blocks[4]);
 			LinkBlocks(blocks[1], blocks[2]);
-			LinkBlocks(blocks[1], nextBlock);
-			LinkBlocks(blocks[2], nextBlock);
+			LinkBlocks(blocks[1], blocks[3]);
 			LinkBlocks(blocks[2], nextBlock);
 			LinkBlocks(blocks[3], nextBlock);
+			LinkBlocks(blocks[4], nextBlock);
 		}
 
 		/// <summary>
