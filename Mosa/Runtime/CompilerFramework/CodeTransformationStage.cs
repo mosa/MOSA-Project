@@ -223,6 +223,16 @@ namespace Mosa.Runtime.CompilerFramework
 			to.PreviousBlocks.Add(from);
 		}
 
+		//protected void LinkNewBlocks(BasicBlock[] blocks)
+		//{
+		//    foreach (BasicBlock block in blocks) {
+		//        Instruction last = block.LastInstruction;
+
+		//        if (last as IBranchInstruction)
+		//            LinkBlocks(block, (last as IBranchInstruction).BranchTargets
+		//    }
+		//}
+
 		/// <summary>
 		/// Create an empty block.
 		/// </summary>

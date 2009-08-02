@@ -59,11 +59,11 @@ namespace Mosa.Platforms.x86
 			get { return @"LongArithmeticTransformationStage"; }
 		}
 
-        /// <summary>
-        /// Adds this stage to the given pipeline.
-        /// </summary>
-        /// <param name="pipeline">The pipeline to add this stage to.</param>
-        public sealed override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		/// <summary>
+		/// Adds this stage to the given pipeline.
+		/// </summary>
+		/// <param name="pipeline">The pipeline to add this stage to.</param>
+		public sealed override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
 		}
 
@@ -80,52 +80,45 @@ namespace Mosa.Platforms.x86
 		/// <exception cref="T:System.ArgumentException"><paramref name="op"/> is not a ConstantOperand and not a MemoryOperand.</exception>
 		public static void SplitLongOperand(Operand op, out Operand opL, out Operand opH)
 		{
-            if (op.Type.Type != CilElementType.I8 && op.Type.Type != CilElementType.U8)
-            {
-                opL = op;
-                opH = new ConstantOperand(new SigType(CilElementType.I4), (int)0);
-                return;
-            }
+			if (op.Type.Type != CilElementType.I8 && op.Type.Type != CilElementType.U8) {
+				opL = op;
+				opH = new ConstantOperand(new SigType(CilElementType.I4), (int)0);
+				return;
+			}
 
 			Debug.Assert(op is MemoryOperand || op is ConstantOperand, @"Long operand not memory or constant.");
 
-            SigType HighType = (op.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
+			SigType HighType = (op.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
 			SigType U4 = new SigType(CilElementType.U4);
 
 			// Is it a constant operand?
 			ConstantOperand cop = op as ConstantOperand;
-			if (cop != null) 
-            {
-                if (HighType.Type == CilElementType.I4)
-                {
-                    long value = (long)cop.Value;
-                    opL = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
-                    opH = new ConstantOperand(HighType, (int)(value >> 32));
-                }
-                else
-                {
-                    ulong value = (ulong)cop.Value;
-                    opL = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
-                    opH = new ConstantOperand(HighType, (uint)(value >> 32));
-                }
+			if (cop != null) {
+				if (HighType.Type == CilElementType.I4) {
+					long value = (long)cop.Value;
+					opL = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
+					opH = new ConstantOperand(HighType, (int)(value >> 32));
+				}
+				else {
+					ulong value = (ulong)cop.Value;
+					opL = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
+					opH = new ConstantOperand(HighType, (uint)(value >> 32));
+				}
 			}
-			else 
-            {
+			else {
 				// No, could be a member or a plain memory operand
 				MemberOperand memberOp = op as MemberOperand;
-				if (memberOp != null) 
-                {
+				if (memberOp != null) {
 					// We need to keep the member reference, otherwise the linker can't fixup
 					// the member address.
 					opL = new MemberOperand(memberOp.Member, U4, memberOp.Offset);
-                    opH = new MemberOperand(memberOp.Member, HighType, new IntPtr(memberOp.Offset.ToInt64() + 4));
+					opH = new MemberOperand(memberOp.Member, HighType, new IntPtr(memberOp.Offset.ToInt64() + 4));
 				}
-				else 
-                {
+				else {
 					// Plain memory, we can handle it here
 					MemoryOperand mop = (MemoryOperand)op;
-                    opL = new MemoryOperand(U4, mop.Base, mop.Offset);
-                    opH = new MemoryOperand(HighType, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
+					opL = new MemoryOperand(U4, mop.Base, mop.Offset);
+					opH = new MemoryOperand(HighType, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
 				}
 			}
 		}
@@ -217,8 +210,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandMul(Context ctx, IL.MulInstruction instruction)
 		{
-            BasicBlock[] blocks = CreateEmptyBlocks(3);
-            BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock[] blocks = CreateEmptyBlocks(4);
+			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			MemoryOperand op0 = instruction.Results[0] as MemoryOperand;
 			MemoryOperand op1 = instruction.Operands[0] as MemoryOperand;
@@ -234,28 +227,26 @@ namespace Mosa.Platforms.x86
 
 			// op0 = EDX:EAX, op1 = A, op2 = B
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-            RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
-            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
-            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
-			/*Replace(ctx, new Instruction[] {
-                new IL.MulInstruction(IL.OpCode.Mul, op0H, op1H, op2L),
-                new IL.MulInstruction(IL.OpCode.Mul, op0L, op1L, op2H),
-                new IL.AddInstruction(IL.OpCode.Add, op0H, op0H, op0L),
-                new IL.MulInstruction(IL.OpCode.Mul, op0L, op1L, op2L),
-                new AddInstruction(op0H, edx)
-            });*/
-            blocks[0].Instructions.AddRange(new Instruction[] {
+			RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
+			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
+			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+
+			blocks[0].Instructions.AddRange(new Instruction[] {
                 new IR.MoveInstruction(eax, op1H),
                 new IR.MoveInstruction(ecx, op2H),
                 new Instructions.LogicalOrInstruction(ecx, eax),
                 new IR.MoveInstruction(ecx, op2L),
-                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[1].Label),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[2].Label),
+                new IR.JmpInstruction(blocks[1].Label),
+            });
+
+			blocks[1].Instructions.AddRange(new Instruction[] {
                 new IR.MoveInstruction(eax, op1L),
                 new Instructions.DirectMultiplicationInstruction(ecx),
                 new IR.JmpInstruction(nextBlock.Label),
             });
 
-            blocks[1].Instructions.AddRange(new Instruction[] {
+			blocks[2].Instructions.AddRange(new Instruction[] {
                 new IR.PushInstruction(ebx),
                 new Instructions.DirectMultiplicationInstruction(ecx),
                 new IR.MoveInstruction(ebx, eax),
@@ -269,17 +260,18 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(nextBlock.Label),
             });
 
-            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+			nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 new IR.MoveInstruction(op0L, eax),
                 new IR.MoveInstruction(op0H, edx),
             });
 
-            Remove(ctx);
+			Remove(ctx);
 
-            // Link the created blocks together
-            LinkBlocks(blocks[0], blocks[1]);
-            LinkBlocks(blocks[0], nextBlock);
-            LinkBlocks(blocks[1], nextBlock);
+			// Link the created blocks together
+			LinkBlocks(blocks[0], blocks[2]);
+			LinkBlocks(blocks[0], blocks[1]);
+			LinkBlocks(blocks[1], nextBlock);
+			LinkBlocks(blocks[2], nextBlock);
 		}
 
 		/// <summary>
@@ -299,8 +291,8 @@ namespace Mosa.Platforms.x86
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			SplitLongOperand(instruction.Results[0], out op0L, out op0H);
-			SplitLongOperand(instruction.First,      out op1L, out op1H);
-			SplitLongOperand(instruction.Second,     out op2L, out op2H);
+			SplitLongOperand(instruction.First, out op1L, out op1H);
+			SplitLongOperand(instruction.Second, out op2L, out op2H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
@@ -308,12 +300,12 @@ namespace Mosa.Platforms.x86
 			RegisterOperand edi = new RegisterOperand(I4, GeneralPurposeRegister.EDI);
 			RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
 
-            RegisterOperand ueax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
-            RegisterOperand uebx = new RegisterOperand(U4, GeneralPurposeRegister.EBX);
-            RegisterOperand uedx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
-            RegisterOperand uecx = new RegisterOperand(U4, GeneralPurposeRegister.ECX);
-            RegisterOperand uedi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
-            RegisterOperand uesi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
+			RegisterOperand ueax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
+			RegisterOperand uebx = new RegisterOperand(U4, GeneralPurposeRegister.EBX);
+			RegisterOperand uedx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
+			RegisterOperand uecx = new RegisterOperand(U4, GeneralPurposeRegister.ECX);
+			RegisterOperand uedi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
+			RegisterOperand uesi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
 
 			// ; Determine sign of the result (edi = 0 if result is positive, non-zero
 			// ; otherwise) and make operands positive.
@@ -509,7 +501,7 @@ namespace Mosa.Platforms.x86
                 new IR.PopInstruction(edi),
             });
 
-            Remove(ctx);
+			Remove(ctx);
 
 			// Link the created blocks together
 			LinkBlocks(blocks[0], blocks[1]);
@@ -520,7 +512,7 @@ namespace Mosa.Platforms.x86
 			LinkBlocks(blocks[3], blocks[3]);
 			LinkBlocks(blocks[3], blocks[4]);
 			LinkBlocks(blocks[3], blocks[5]);
-			LinkBlocks(blocks[4], blocks[4]); 
+			LinkBlocks(blocks[4], blocks[4]);
 			LinkBlocks(blocks[4], blocks[5]);
 			LinkBlocks(blocks[4], blocks[6]);
 			LinkBlocks(blocks[5], blocks[6]);
@@ -547,11 +539,11 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(instruction.First, out op1L, out op1H);
 			SplitLongOperand(instruction.Second, out op2L, out op2H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-            RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
-            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
-            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
-            RegisterOperand edi = new RegisterOperand(I4, GeneralPurposeRegister.EDI);
-            RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
+			RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
+			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
+			RegisterOperand edi = new RegisterOperand(I4, GeneralPurposeRegister.EDI);
+			RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
 
 			// Determine sign of the result (edi = 0 if result is positive, non-zero
 			// otherwise) and make operands positive.
@@ -757,7 +749,7 @@ namespace Mosa.Platforms.x86
                 new IR.PopInstruction(edi),
             });
 
-            Remove(ctx);
+			Remove(ctx);
 
 			// Link the created blocks together
 			LinkBlocks(blocks[0], blocks[1]);
@@ -872,7 +864,7 @@ namespace Mosa.Platforms.x86
                 new IR.PopInstruction(edi),
             });
 
-            Remove(ctx);
+			Remove(ctx);
 
 			// Link the created blocks together
 			LinkBlocks(blocks[0], blocks[1]);
@@ -998,7 +990,7 @@ namespace Mosa.Platforms.x86
                 new IR.PopInstruction(edi),
             });
 
-            Remove(ctx);
+			Remove(ctx);
 
 			// Link the created blocks together
 			LinkBlocks(blocks[0], blocks[1]);
@@ -1018,26 +1010,26 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandArithmeticShiftRight(Context ctx, IR.ArithmeticShiftRightInstruction instruction)
 		{
-            BasicBlock[] blocks = CreateEmptyBlocks(4);
-            BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock[] blocks = CreateEmptyBlocks(4);
+			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
-            SigType I4 = new SigType(CilElementType.I4);
-            SigType I1 = new SigType(CilElementType.I1);
-            SigType U1 = new SigType(CilElementType.U1);
-            Operand count = instruction.Operand2;
+			SigType I4 = new SigType(CilElementType.I4);
+			SigType I1 = new SigType(CilElementType.I1);
+			SigType U1 = new SigType(CilElementType.U1);
+			Operand count = instruction.Operand2;
 
-            Operand op0H, op1H, op0L, op1L;
-            SplitLongOperand(instruction.Operand0, out op0L, out op0H);
-            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
-            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
-            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
+			Operand op0H, op1H, op0L, op1L;
+			SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+			SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 
-            RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
+			RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
 
-            // Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
-            // depends only on the high order bit of edx).
-            blocks[0].Instructions.AddRange(new Instruction[] {
+			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
+			// depends only on the high order bit of edx).
+			blocks[0].Instructions.AddRange(new Instruction[] {
                 new IR.PushInstruction(ecx),
                 new IR.LogicalAndInstruction(count, count, new ConstantOperand(I4, 0x3F)),
                 new Instructions.MoveInstruction(ecx, count),
@@ -1048,7 +1040,7 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(blocks[1].Label),
             });
 
-            blocks[1].Instructions.AddRange(new Instruction[] {
+			blocks[1].Instructions.AddRange(new Instruction[] {
                 new Instructions.CmpInstruction(ecx, new ConstantOperand(U1, 32)),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label),
                 new Instructions.ShrdInstruction(eax, edx, ecx),
@@ -1056,9 +1048,9 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
-            // Handle shifts of between 32 and 63 bits
-            // MORE32:
-            blocks[2].Instructions.AddRange(new Instruction[] {
+			// Handle shifts of between 32 and 63 bits
+			// MORE32:
+			blocks[2].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(eax, edx),
                 new Instructions.SarInstruction(edx, new ConstantOperand(U1, (sbyte)0x1F)),
                 new Instructions.LogicalAndInstruction(ecx, new ConstantOperand(I4, 0x1F)),
@@ -1066,33 +1058,33 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
-            // Return double precision 0 or -1, depending on the sign of edx
-            // RETSIGN:
-            blocks[3].Instructions.AddRange(new Instruction[] {
+			// Return double precision 0 or -1, depending on the sign of edx
+			// RETSIGN:
+			blocks[3].Instructions.AddRange(new Instruction[] {
                 new Instructions.SarInstruction(edx, new ConstantOperand(U1, (sbyte)0x1F)),
                 new Instructions.MoveInstruction(eax, edx),
 				new IR.JmpInstruction(nextBlock.Label),
             });
 
-            // done:
-            // ; remaining code from current basic block
-            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+			// done:
+			// ; remaining code from current basic block
+			nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 new Instructions.MoveInstruction(op0H, edx),
                 new Instructions.MoveInstruction(op0L, eax),
                 new IR.PopInstruction(ecx)
             });
 
-            Remove(ctx);
+			Remove(ctx);
 
-            // Link the created blocks together
-            LinkBlocks(ctx.Block, blocks[0]);
-            LinkBlocks(blocks[0], blocks[1]);
-            LinkBlocks(blocks[0], blocks[3]);
-            LinkBlocks(blocks[1], blocks[2]);
-            LinkBlocks(blocks[1], nextBlock);
-            LinkBlocks(blocks[2], nextBlock);
-            LinkBlocks(blocks[2], nextBlock);
-            LinkBlocks(blocks[3], nextBlock);
+			// Link the created blocks together
+			LinkBlocks(ctx.Block, blocks[0]);
+			LinkBlocks(blocks[0], blocks[1]);
+			LinkBlocks(blocks[0], blocks[3]);
+			LinkBlocks(blocks[1], blocks[2]);
+			LinkBlocks(blocks[1], nextBlock);
+			LinkBlocks(blocks[2], nextBlock);
+			LinkBlocks(blocks[2], nextBlock);
+			LinkBlocks(blocks[3], nextBlock);
 		}
 
 		/// <summary>
@@ -1102,26 +1094,26 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandShiftLeft(Context ctx, IR.ShiftLeftInstruction instruction)
 		{
-            BasicBlock[] blocks = CreateEmptyBlocks(4);
-            BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock[] blocks = CreateEmptyBlocks(4);
+			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
-            SigType I4 = new SigType(CilElementType.I4);
-            SigType I1 = new SigType(CilElementType.I1);
-            SigType U1 = new SigType(CilElementType.U1);
-            Operand count = instruction.Operand2;
+			SigType I4 = new SigType(CilElementType.I4);
+			SigType I1 = new SigType(CilElementType.I1);
+			SigType U1 = new SigType(CilElementType.U1);
+			Operand count = instruction.Operand2;
 
-            Operand op0H, op1H, op0L, op1L;
-            SplitLongOperand(instruction.Operand0, out op0L, out op0H);
-            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
-            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
-            RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
+			Operand op0H, op1H, op0L, op1L;
+			SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+			SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 
-            RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
+			RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
 
-            // Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
-            // depends only on the high order bit of edx).
-            blocks[0].Instructions.AddRange(new Instruction[] {
+			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
+			// depends only on the high order bit of edx).
+			blocks[0].Instructions.AddRange(new Instruction[] {
                 new IR.PushInstruction(ecx),
                 new IR.LogicalAndInstruction(count, count, new ConstantOperand(I4, 0x3F)),
                 new Instructions.MoveInstruction(ecx, count),
@@ -1132,7 +1124,7 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(blocks[1].Label),
             });
 
-            blocks[1].Instructions.AddRange(new Instruction[] {
+			blocks[1].Instructions.AddRange(new Instruction[] {
                 new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 32)),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label),
                 new Instructions.ShldInstruction(edx, eax, cl),
@@ -1140,9 +1132,9 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
-            // Handle shifts of between 32 and 63 bits
-            // MORE32:
-            blocks[2].Instructions.AddRange(new Instruction[] {
+			// Handle shifts of between 32 and 63 bits
+			// MORE32:
+			blocks[2].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(edx, eax),
                 new Instructions.LogicalXorInstruction(eax, eax),
                 new Instructions.LogicalAndInstruction(ecx, new ConstantOperand(I4, 0x1F)),
@@ -1150,33 +1142,33 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
-            // Return double precision 0 or -1, depending on the sign of edx
-            // RETZERO:
-            blocks[3].Instructions.AddRange(new Instruction[] {
+			// Return double precision 0 or -1, depending on the sign of edx
+			// RETZERO:
+			blocks[3].Instructions.AddRange(new Instruction[] {
                 new Instructions.LogicalXorInstruction(eax, eax),
                 new Instructions.LogicalXorInstruction(edx, edx),
 				new IR.JmpInstruction(nextBlock.Label),
             });
 
-            // done:
-            // ; remaining code from current basic block
-            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+			// done:
+			// ; remaining code from current basic block
+			nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 new Instructions.MoveInstruction(op0H, edx),
                 new Instructions.MoveInstruction(op0L, eax),
                 new IR.PopInstruction(ecx)
             });
 
-            Remove(ctx);
+			Remove(ctx);
 
-            // Link the created blocks together
-            LinkBlocks(ctx.Block, blocks[0]);
-            LinkBlocks(blocks[0], blocks[1]);
-            LinkBlocks(blocks[0], blocks[3]);
-            LinkBlocks(blocks[1], blocks[2]);
-            LinkBlocks(blocks[1], nextBlock);
-            LinkBlocks(blocks[2], nextBlock);
-            LinkBlocks(blocks[2], nextBlock);
-            LinkBlocks(blocks[3], nextBlock);
+			// Link the created blocks together
+			LinkBlocks(ctx.Block, blocks[0]);
+			LinkBlocks(blocks[0], blocks[1]);
+			LinkBlocks(blocks[0], blocks[3]);
+			LinkBlocks(blocks[1], blocks[2]);
+			LinkBlocks(blocks[1], nextBlock);
+			LinkBlocks(blocks[2], nextBlock);
+			LinkBlocks(blocks[2], nextBlock);
+			LinkBlocks(blocks[3], nextBlock);
 		}
 
 		/// <summary>
@@ -1186,26 +1178,26 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandShiftRight(Context ctx, IR.ShiftRightInstruction instruction)
 		{
-            BasicBlock[] blocks = CreateEmptyBlocks(4);
-            BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock[] blocks = CreateEmptyBlocks(4);
+			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
-            SigType I4 = new SigType(CilElementType.I4);
-            SigType I1 = new SigType(CilElementType.I1);
-            SigType U1 = new SigType(CilElementType.U1);
-            Operand count = instruction.Operand2;
+			SigType I4 = new SigType(CilElementType.I4);
+			SigType I1 = new SigType(CilElementType.I1);
+			SigType U1 = new SigType(CilElementType.U1);
+			Operand count = instruction.Operand2;
 
-            Operand op0H, op1H, op0L, op1L;
-            SplitLongOperand(instruction.Operand0, out op0L, out op0H);
-            SplitLongOperand(instruction.Operand1, out op1L, out op1H);
-            RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
-            RegisterOperand ecx = new RegisterOperand(U1, GeneralPurposeRegister.ECX);
+			Operand op0H, op1H, op0L, op1L;
+			SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+			SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
+			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+			RegisterOperand ecx = new RegisterOperand(U1, GeneralPurposeRegister.ECX);
 
-            RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
+			RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
 
-            // Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
-            // depends only on the high order bit of edx).
-            blocks[0].Instructions.AddRange(new Instruction[] {
+			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
+			// depends only on the high order bit of edx).
+			blocks[0].Instructions.AddRange(new Instruction[] {
                 new IR.PushInstruction(ecx),
                 new IR.LogicalAndInstruction(count, count, new ConstantOperand(I4, 0x3F)),
                 new Instructions.MoveInstruction(ecx, count),
@@ -1225,7 +1217,7 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(blocks[1].Label),
             });
 
-            blocks[1].Instructions.AddRange(new Instruction[] {
+			blocks[1].Instructions.AddRange(new Instruction[] {
                 new Instructions.CmpInstruction(ecx, new ConstantOperand(I4, 32)),
                 new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterOrEqual, blocks[2].Label),
                 new Instructions.ShrdInstruction(eax, edx, ecx),
@@ -1233,9 +1225,9 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
-            // Handle shifts of between 32 and 63 bits
-            // MORE32:
-            blocks[2].Instructions.AddRange(new Instruction[] {
+			// Handle shifts of between 32 and 63 bits
+			// MORE32:
+			blocks[2].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(eax, edx),
                 new IR.PushInstruction(ecx),
                 new Instructions.MoveInstruction(ecx, new ConstantOperand(I1, (sbyte)0x1F)),
@@ -1249,33 +1241,33 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
-            // Return double precision 0 or -1, depending on the sign of edx
-            // RETSIGN:
-            blocks[3].Instructions.AddRange(new Instruction[] {
+			// Return double precision 0 or -1, depending on the sign of edx
+			// RETSIGN:
+			blocks[3].Instructions.AddRange(new Instruction[] {
                 new Instructions.SarInstruction(edx, new ConstantOperand(I1, (sbyte)0x1F)),
                 new Instructions.MoveInstruction(eax, edx),
 				new IR.JmpInstruction(nextBlock.Label),
             });
 
-            // done:
-            // ; remaining code from current basic block
-            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+			// done:
+			// ; remaining code from current basic block
+			nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 new Instructions.MoveInstruction(op0H, edx),
                 new Instructions.MoveInstruction(op0L, eax),
                 new IR.PopInstruction(ecx)
             });
 
-            Remove(ctx);
+			Remove(ctx);
 
-            // Link the created blocks together
-            LinkBlocks(ctx.Block, blocks[0]);
-            LinkBlocks(blocks[0], blocks[1]);
-            LinkBlocks(blocks[0], blocks[3]);
-            LinkBlocks(blocks[1], blocks[2]);
-            LinkBlocks(blocks[1], nextBlock);
-            LinkBlocks(blocks[2], nextBlock);
-            LinkBlocks(blocks[2], nextBlock);
-            LinkBlocks(blocks[3], nextBlock);
+			// Link the created blocks together
+			LinkBlocks(ctx.Block, blocks[0]);
+			LinkBlocks(blocks[0], blocks[1]);
+			LinkBlocks(blocks[0], blocks[3]);
+			LinkBlocks(blocks[1], blocks[2]);
+			LinkBlocks(blocks[1], nextBlock);
+			LinkBlocks(blocks[2], nextBlock);
+			LinkBlocks(blocks[2], nextBlock);
+			LinkBlocks(blocks[3], nextBlock);
 		}
 
 		/// <summary>
@@ -1368,22 +1360,20 @@ namespace Mosa.Platforms.x86
 		{
 			Operand op0L, op0H, op1L, op1H;
 
-            if (instruction.Operand0.StackType == StackTypeCode.Int64)
-            {
-                SplitLongOperand(instruction.Operand0, out op0L, out op0H);
-                SplitLongOperand(instruction.Operand1, out op1L, out op1H);
-                Replace(ctx, new Instruction[] {
+			if (instruction.Operand0.StackType == StackTypeCode.Int64) {
+				SplitLongOperand(instruction.Operand0, out op0L, out op0H);
+				SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+				Replace(ctx, new Instruction[] {
                     new IR.MoveInstruction(op0L, op1L),
                     new IR.MoveInstruction(op0H, op1H)
                 });
-            }
-            else
-            {
-                SplitLongOperand(instruction.Operand1, out op1L, out op1H);
-                Replace(ctx, new Instruction[] {
+			}
+			else {
+				SplitLongOperand(instruction.Operand1, out op1L, out op1H);
+				Replace(ctx, new Instruction[] {
                     new IR.MoveInstruction(instruction.Operand0, op1L),
                 });
-            }
+			}
 		}
 
 		/// <summary>
@@ -1422,14 +1412,14 @@ namespace Mosa.Platforms.x86
 
 				case CilElementType.U2: goto case CilElementType.U1;
 
-                case CilElementType.I4:
-                    instructions = new Instruction[] {
+				case CilElementType.I4:
+					instructions = new Instruction[] {
                         new IR.ZeroExtendedMoveInstruction(eax, op1),
                         new LogicalXorInstruction(edx, edx),
                         new MoveInstruction(op0L, eax),
                         new MoveInstruction(op0H, edx)
                     };
-                    break;
+					break;
 				case CilElementType.U4:
 					instructions = new Instruction[] {
                         new IR.MoveInstruction(eax, op1),
@@ -1547,8 +1537,8 @@ namespace Mosa.Platforms.x86
 			Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
 			SigType I4 = new SigType(CilElementType.I4);
-            Operand op0L, op0H;
-            SplitLongOperand(op0, out op0L, out op0H);
+			Operand op0L, op0H;
+			SplitLongOperand(op0, out op0L, out op0H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
@@ -1573,9 +1563,9 @@ namespace Mosa.Platforms.x86
 			Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
 			SigType I4 = new SigType(CilElementType.I4);
-            SigType U4 = new SigType(CilElementType.U4);
-            Operand op1L, op1H;
-            SplitLongOperand(op1, out op1L, out op1H);
+			SigType U4 = new SigType(CilElementType.U4);
+			Operand op1L, op1H;
+			SplitLongOperand(op1, out op1L, out op1H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
@@ -1615,79 +1605,82 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandUnaryBranch(Context ctx, IL.UnaryBranchInstruction instruction)
 		{
-            Debug.Assert(instruction.BranchTargets.Length == 2);
+			Debug.Assert(instruction.BranchTargets.Length == 2);
 
-            int[] targets = instruction.BranchTargets;
+			int[] targets = instruction.BranchTargets;
 
-            /*BasicBlock[] targetBlocks = new BasicBlock[2];
-            targetBlocks[0] = (ctx.Block.NextBlocks[0].Index == targetBlocks[0].Index) ? targetBlocks[0] : targetBlocks[1];
-            targetBlocks[1] = (ctx.Block.NextBlocks[1].Index == targetBlocks[1].Index) ? targetBlocks[1] : targetBlocks[0];*/
+			/*BasicBlock[] targetBlocks = new BasicBlock[2];
+			targetBlocks[0] = (ctx.Block.NextBlocks[0].Index == targetBlocks[0].Index) ? targetBlocks[0] : targetBlocks[1];
+			targetBlocks[1] = (ctx.Block.NextBlocks[1].Index == targetBlocks[1].Index) ? targetBlocks[1] : targetBlocks[0];*/
 
-            BasicBlock[] blocks = CreateEmptyBlocks(1);
-            BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock[] blocks = CreateEmptyBlocks(1);
+			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
-            SigType I4 = new SigType(CilElementType.I4);
-            SigType U4 = new SigType(CilElementType.U4);
-            SigType U1 = new SigType(CilElementType.U1);
 
-            Operand op1H, op1L, op2H, op2L;
-            SplitLongOperand(instruction.Operands[0], out op1L, out op1H);
-            SplitLongOperand(instruction.Operands[1], out op2L, out op2H);
-            IR.ConditionCode code;
+			SigType I4 = new SigType(CilElementType.I4);
+			SigType U4 = new SigType(CilElementType.U4);
+			SigType U1 = new SigType(CilElementType.U1);
 
-            switch (instruction.Code)
-            {
-                // Signed
-                case IL.OpCode.Beq_s: code = IR.ConditionCode.Equal; break;
-                case IL.OpCode.Bge_s: code = IR.ConditionCode.GreaterOrEqual; break;
-                case IL.OpCode.Bgt_s: code = IR.ConditionCode.GreaterThan; break;
-                case IL.OpCode.Ble_s: code = IR.ConditionCode.LessOrEqual; break;
-                case IL.OpCode.Blt_s: code = IR.ConditionCode.LessThan; break;
 
-                // Unsigned
-                case IL.OpCode.Bne_un_s: code = IR.ConditionCode.NotEqual; break;
-                case IL.OpCode.Bge_un_s: code = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-                case IL.OpCode.Bgt_un_s: code = IR.ConditionCode.UnsignedGreaterThan; break;
-                case IL.OpCode.Ble_un_s: code = IR.ConditionCode.UnsignedLessOrEqual; break;
-                case IL.OpCode.Blt_un_s: code = IR.ConditionCode.UnsignedLessThan; break;
+			Operand op1H, op1L, op2H, op2L;
+			SplitLongOperand(instruction.Operands[0], out op1L, out op1H);
+			SplitLongOperand(instruction.Operands[1], out op2L, out op2H);
+			IR.ConditionCode code;
 
-                // Long form signed
-                case IL.OpCode.Beq: goto case IL.OpCode.Beq_s;
-                case IL.OpCode.Bge: goto case IL.OpCode.Bge_s;
-                case IL.OpCode.Bgt: goto case IL.OpCode.Bgt_s;
-                case IL.OpCode.Ble: goto case IL.OpCode.Ble_s;
-                case IL.OpCode.Blt: goto case IL.OpCode.Blt_s;
 
-                // Long form unsigned
-                case IL.OpCode.Bne_un: goto case IL.OpCode.Bne_un_s;
-                case IL.OpCode.Bge_un: goto case IL.OpCode.Bge_un_s;
-                case IL.OpCode.Bgt_un: goto case IL.OpCode.Bgt_un_s;
-                case IL.OpCode.Ble_un: goto case IL.OpCode.Ble_un_s;
-                case IL.OpCode.Blt_un: goto case IL.OpCode.Blt_un_s;
 
-                default:
-                    throw new NotImplementedException();
-            }
 
-            IR.ConditionCode conditionHigh = GetHighCondition(code);
+			switch (instruction.Code) {
+				// Signed
+				case IL.OpCode.Beq_s: code = IR.ConditionCode.Equal; break;
+				case IL.OpCode.Bge_s: code = IR.ConditionCode.GreaterOrEqual; break;
+				case IL.OpCode.Bgt_s: code = IR.ConditionCode.GreaterThan; break;
+				case IL.OpCode.Ble_s: code = IR.ConditionCode.LessOrEqual; break;
+				case IL.OpCode.Blt_s: code = IR.ConditionCode.LessThan; break;
 
-            if (code != Mosa.Runtime.CompilerFramework.IR.ConditionCode.Equal)
-            {
-                blocks[0].Instructions.AddRange(new Instruction[] {
+				// Unsigned
+				case IL.OpCode.Bne_un_s: code = IR.ConditionCode.NotEqual; break;
+				case IL.OpCode.Bge_un_s: code = IR.ConditionCode.UnsignedGreaterOrEqual; break;
+				case IL.OpCode.Bgt_un_s: code = IR.ConditionCode.UnsignedGreaterThan; break;
+				case IL.OpCode.Ble_un_s: code = IR.ConditionCode.UnsignedLessOrEqual; break;
+				case IL.OpCode.Blt_un_s: code = IR.ConditionCode.UnsignedLessThan; break;
+
+				// Long form signed
+				case IL.OpCode.Beq: goto case IL.OpCode.Beq_s;
+				case IL.OpCode.Bge: goto case IL.OpCode.Bge_s;
+				case IL.OpCode.Bgt: goto case IL.OpCode.Bgt_s;
+				case IL.OpCode.Ble: goto case IL.OpCode.Ble_s;
+				case IL.OpCode.Blt: goto case IL.OpCode.Blt_s;
+
+				// Long form unsigned
+				case IL.OpCode.Bne_un: goto case IL.OpCode.Bne_un_s;
+				case IL.OpCode.Bge_un: goto case IL.OpCode.Bge_un_s;
+				case IL.OpCode.Bgt_un: goto case IL.OpCode.Bgt_un_s;
+				case IL.OpCode.Ble_un: goto case IL.OpCode.Ble_un_s;
+				case IL.OpCode.Blt_un: goto case IL.OpCode.Blt_un_s;
+
+				default:
+					throw new NotImplementedException();
+			}
+
+			IR.ConditionCode conditionHigh = GetHighCondition(code);
+
+			if (code != Mosa.Runtime.CompilerFramework.IR.ConditionCode.Equal) {
+				blocks[0].Instructions.AddRange(new Instruction[] {
                     // Compare high dwords
                     new Instructions.CmpInstruction(op1H, op2H),
+
                     new IR.BranchInstruction(IR.ConditionCode.Equal, nextBlock.Label),
                     // Branch if check already gave results
                     new IR.BranchInstruction(code, targets[0]),
                     new IR.JmpInstruction(targets[1]),
                 });
 
-                //LinkBlocks(blocks[0], targetBlocks[1]);
-                //LinkBlocks(blocks[0], targetBlocks[0]);
-            }
-            else
-            {
-                blocks[0].Instructions.AddRange(new Instruction[] {
+				//LinkBlocks(blocks[0], targetBlocks[1]);
+				//LinkBlocks(blocks[0], targetBlocks[0]);
+			}
+			else {
+				blocks[0].Instructions.AddRange(new Instruction[] {
                     // Compare high dwords
                     new Instructions.CmpInstruction(op1H, op2H),
                     // Branch if check already gave results
@@ -1695,12 +1688,14 @@ namespace Mosa.Platforms.x86
                     new IR.BranchInstruction(code, targets[0]),
                     new IR.JmpInstruction(targets[1]),
                 });
-                //LinkBlocks(blocks[0], targetBlocks[1]);
-            }
+				//LinkBlocks(blocks[0], targetBlocks[1]);
+			}
 
-            LinkBlocks(blocks[0], nextBlock);
 
-            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+			LinkBlocks(blocks[0], nextBlock);
+
+
+			nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 // Compare low dwords
                 new Instructions.CmpInstruction(op1L, op2L),
                 // Set the unsigned result...
@@ -1708,7 +1703,7 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(targets[1]),
             });
 
-            Remove(ctx);
+			Remove(ctx);
 		}
 
 		/// <summary>
@@ -1722,61 +1717,55 @@ namespace Mosa.Platforms.x86
 
 			int[] targets = instruction.BranchTargets;
 
-			/*BasicBlock[] targetBlocks = new BasicBlock[2];
-			targetBlocks[0] = (ctx.Block.NextBlocks[0].Index == targetBlocks[0].Index) ? targetBlocks[0] : targetBlocks[1];
-			targetBlocks[1] = (ctx.Block.NextBlocks[1].Index == targetBlocks[1].Index) ? targetBlocks[1] : targetBlocks[0];*/
-
 			BasicBlock[] blocks = CreateEmptyBlocks(1);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
-            SigType I4 = new SigType(CilElementType.I4);
-            SigType U4 = new SigType(CilElementType.U4);
-            SigType U1 = new SigType(CilElementType.U1);
+			SigType I4 = new SigType(CilElementType.I4);
+			SigType U4 = new SigType(CilElementType.U4);
+			SigType U1 = new SigType(CilElementType.U1);
 
-            Operand op1H, op1L, op2H, op2L;
-            SplitLongOperand(instruction.Operands[0], out op1L, out op1H);
-            SplitLongOperand(instruction.Operands[1], out op2L, out op2H);
-            IR.ConditionCode code;
+			Operand op1H, op1L, op2H, op2L;
+			SplitLongOperand(instruction.Operands[0], out op1L, out op1H);
+			SplitLongOperand(instruction.Operands[1], out op2L, out op2H);
+			IR.ConditionCode code;
 
-            switch (instruction.Code)
-            {
-                // Signed
-                case IL.OpCode.Beq_s: code = IR.ConditionCode.Equal; break;
-                case IL.OpCode.Bge_s: code = IR.ConditionCode.GreaterOrEqual; break;
-                case IL.OpCode.Bgt_s: code = IR.ConditionCode.GreaterThan; break;
-                case IL.OpCode.Ble_s: code = IR.ConditionCode.LessOrEqual; break;
-                case IL.OpCode.Blt_s: code = IR.ConditionCode.LessThan; break;
+			switch (instruction.Code) {
+				// Signed
+				case IL.OpCode.Beq_s: code = IR.ConditionCode.Equal; break;
+				case IL.OpCode.Bge_s: code = IR.ConditionCode.GreaterOrEqual; break;
+				case IL.OpCode.Bgt_s: code = IR.ConditionCode.GreaterThan; break;
+				case IL.OpCode.Ble_s: code = IR.ConditionCode.LessOrEqual; break;
+				case IL.OpCode.Blt_s: code = IR.ConditionCode.LessThan; break;
 
-                // Unsigned
-                case IL.OpCode.Bne_un_s: code = IR.ConditionCode.NotEqual; break;
-                case IL.OpCode.Bge_un_s: code = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-                case IL.OpCode.Bgt_un_s: code = IR.ConditionCode.UnsignedGreaterThan; break;
-                case IL.OpCode.Ble_un_s: code = IR.ConditionCode.UnsignedLessOrEqual; break;
-                case IL.OpCode.Blt_un_s: code = IR.ConditionCode.UnsignedLessThan; break;
+				// Unsigned
+				case IL.OpCode.Bne_un_s: code = IR.ConditionCode.NotEqual; break;
+				case IL.OpCode.Bge_un_s: code = IR.ConditionCode.UnsignedGreaterOrEqual; break;
+				case IL.OpCode.Bgt_un_s: code = IR.ConditionCode.UnsignedGreaterThan; break;
+				case IL.OpCode.Ble_un_s: code = IR.ConditionCode.UnsignedLessOrEqual; break;
+				case IL.OpCode.Blt_un_s: code = IR.ConditionCode.UnsignedLessThan; break;
 
-                // Long form signed
-                case IL.OpCode.Beq: goto case IL.OpCode.Beq_s;
-                case IL.OpCode.Bge: goto case IL.OpCode.Bge_s;
-                case IL.OpCode.Bgt: goto case IL.OpCode.Bgt_s;
-                case IL.OpCode.Ble: goto case IL.OpCode.Ble_s;
-                case IL.OpCode.Blt: goto case IL.OpCode.Blt_s;
+				// Long form signed
+				case IL.OpCode.Beq: goto case IL.OpCode.Beq_s;
+				case IL.OpCode.Bge: goto case IL.OpCode.Bge_s;
+				case IL.OpCode.Bgt: goto case IL.OpCode.Bgt_s;
+				case IL.OpCode.Ble: goto case IL.OpCode.Ble_s;
+				case IL.OpCode.Blt: goto case IL.OpCode.Blt_s;
 
-                // Long form unsigned
-                case IL.OpCode.Bne_un: goto case IL.OpCode.Bne_un_s;
-                case IL.OpCode.Bge_un: goto case IL.OpCode.Bge_un_s;
-                case IL.OpCode.Bgt_un: goto case IL.OpCode.Bgt_un_s;
-                case IL.OpCode.Ble_un: goto case IL.OpCode.Ble_un_s;
-                case IL.OpCode.Blt_un: goto case IL.OpCode.Blt_un_s;
+				// Long form unsigned
+				case IL.OpCode.Bne_un: goto case IL.OpCode.Bne_un_s;
+				case IL.OpCode.Bge_un: goto case IL.OpCode.Bge_un_s;
+				case IL.OpCode.Bgt_un: goto case IL.OpCode.Bgt_un_s;
+				case IL.OpCode.Ble_un: goto case IL.OpCode.Ble_un_s;
+				case IL.OpCode.Blt_un: goto case IL.OpCode.Blt_un_s;
 
-                default:
-                    throw new NotImplementedException();
-            }
+				default:
+					throw new NotImplementedException();
+			}
 
-            IR.ConditionCode conditionHigh = GetHighCondition(code);
+			IR.ConditionCode conditionHigh = GetHighCondition(code);
 
-            if (code != Mosa.Runtime.CompilerFramework.IR.ConditionCode.Equal)
-            {
-                blocks[0].Instructions.AddRange(new Instruction[] {
+			if (code != Mosa.Runtime.CompilerFramework.IR.ConditionCode.Equal) {
+				blocks[0].Instructions.AddRange(new Instruction[] {
                     // Compare high dwords
                     new Instructions.CmpInstruction(op1H, op2H),
                     new IR.BranchInstruction(IR.ConditionCode.Equal, nextBlock.Label),
@@ -1784,13 +1773,9 @@ namespace Mosa.Platforms.x86
                     new IR.BranchInstruction(code, targets[0]),
                     new IR.JmpInstruction(targets[1]),
                 });
-
-				//LinkBlocks(blocks[0], targetBlocks[1]);
-				//LinkBlocks(blocks[0], targetBlocks[0]);
-            }
-            else
-            {
-                blocks[0].Instructions.AddRange(new Instruction[] {
+			}
+			else {
+				blocks[0].Instructions.AddRange(new Instruction[] {
                     // Compare high dwords
                     new Instructions.CmpInstruction(op1H, op2H),
                     // Branch if check already gave results
@@ -1798,12 +1783,11 @@ namespace Mosa.Platforms.x86
                     new IR.BranchInstruction(code, targets[0]),
                     new IR.JmpInstruction(targets[1]),
                 });
-				//LinkBlocks(blocks[0], targetBlocks[1]);
 			}
 
 			LinkBlocks(blocks[0], nextBlock);
 
-            nextBlock.Instructions.InsertRange(0, new Instruction[] {
+			nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 // Compare low dwords
                 new Instructions.CmpInstruction(op1L, op2L),
                 // Set the unsigned result...
@@ -1811,7 +1795,7 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(targets[1]),
             });
 
-            Remove(ctx);
+			Remove(ctx);
 		}
 
 		/// <summary>
@@ -1847,59 +1831,61 @@ namespace Mosa.Platforms.x86
 			Debug.Assert(op0 is MemoryOperand || op0 is RegisterOperand, @"IntegerCompareInstruction result not memory and not register!");
 
 			SigType I4 = new SigType(CilElementType.I4), U4 = new SigType(CilElementType.U4);
-			/*MemoryOperand op1L = new MemoryOperand(U4, op1.Base, op1.Offset);
-			MemoryOperand op2L = new MemoryOperand(U4, op2.Base, op2.Offset);
-			MemoryOperand op1H = new MemoryOperand(I4, op1.Base, new IntPtr(op1.Offset.ToInt64() + 4));
-			MemoryOperand op2H = new MemoryOperand(I4, op2.Base, new IntPtr(op2.Offset.ToInt64() + 4));*/
 
 			Operand op1L, op1H, op2L, op2H;
 			SplitLongOperand(op1, out op1L, out op1H);
 			SplitLongOperand(op2, out op2L, out op2H);
 
 			// Create an additional block to split the comparison
-			BasicBlock[] blocks = CreateEmptyBlocks(4);
+			BasicBlock[] blocks = CreateEmptyBlocks(5);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			Debug.Assert(nextBlock != null, @"No follower block?");
 
-            blocks[0].Instructions.AddRange(new Instruction[] {
+			blocks[0].Instructions.AddRange(new Instruction[] {
                     // Compare high dwords
                     new Instructions.CmpInstruction(op1H, op2H),
-                    new IR.BranchInstruction(IR.ConditionCode.Equal, blocks[1].Label),
-                    // Branch if check already gave results
-                    new IR.BranchInstruction(instruction.ConditionCode, blocks[2].Label),
-                    new IR.JmpInstruction(blocks[3].Label),
+                    new IR.BranchInstruction(IR.ConditionCode.Equal, blocks[2].Label),
+                    new IR.JmpInstruction(blocks[1].Label),
                 });
 
-            blocks[1].Instructions.AddRange(new Instruction[] {
+			blocks[1].Instructions.AddRange(new Instruction[] {
+                    // Branch if check already gave results
+                    new IR.BranchInstruction(instruction.ConditionCode, blocks[3].Label),
+                    new IR.JmpInstruction(blocks[4].Label),
+                });
+
+			blocks[2].Instructions.AddRange(new Instruction[] {
                 // Compare low dwords
                 new Instructions.CmpInstruction(op1L, op2L),
                 // Set the unsigned result...
-                new IR.BranchInstruction(GetUnsignedConditionCode(instruction.ConditionCode), blocks[2].Label),
-				new IR.JmpInstruction(blocks[3].Label),
+                new IR.BranchInstruction(GetUnsignedConditionCode(instruction.ConditionCode), blocks[3].Label),
+				new IR.JmpInstruction(blocks[4].Label),
             });
 
-            // Success
-            blocks[2].Instructions.AddRange(new Instruction[] {
+			// Success
+			blocks[3].Instructions.AddRange(new Instruction[] {
                 new IR.MoveInstruction(op0, new ConstantOperand(I4, 1)),
                 new IR.JmpInstruction(nextBlock.Label),
             });
 
-            // Failed
-            blocks[3].Instructions.AddRange(new Instruction[] {
+			// Failed
+			blocks[4].Instructions.AddRange(new Instruction[] {
                 new IR.MoveInstruction(op0, new ConstantOperand(I4, 0)),
                 new IR.JmpInstruction(nextBlock.Label),
             });
 
-            Remove(ctx);
+			Remove(ctx);
 
 			//LinkBlocks(ctx.Block, blocks[0]);
 			LinkBlocks(blocks[0], blocks[1]);
-            LinkBlocks(blocks[0], blocks[2]);
-            LinkBlocks(blocks[1], blocks[2]);
-            LinkBlocks(blocks[1], blocks[3]);
-            LinkBlocks(blocks[2], nextBlock);
-            LinkBlocks(blocks[3], nextBlock);
+			LinkBlocks(blocks[0], blocks[2]);
+			LinkBlocks(blocks[1], blocks[3]);
+			LinkBlocks(blocks[1], blocks[4]);
+			LinkBlocks(blocks[2], blocks[3]);
+			LinkBlocks(blocks[2], blocks[4]);
+			LinkBlocks(blocks[3], nextBlock);
+			LinkBlocks(blocks[4], nextBlock);
 		}
 
 		/// <summary>
@@ -2034,7 +2020,7 @@ namespace Mosa.Platforms.x86
 		void IR.IIRVisitor<Context>.Visit(IR.MoveInstruction instruction, Context arg)
 		{
 			Operand op0 = instruction.Operands[0];
-            if (op0.StackType == StackTypeCode.Int64)
+			if (op0.StackType == StackTypeCode.Int64)
 				ExpandMove(arg, instruction);
 		}
 
@@ -2473,13 +2459,13 @@ namespace Mosa.Platforms.x86
 		{
 		}
 
-        void IX86InstructionVisitor<Context>.DirectMultiplication(Instructions.DirectMultiplicationInstruction instruction, Context ctx)
-        {
-        }
+		void IX86InstructionVisitor<Context>.DirectMultiplication(Instructions.DirectMultiplicationInstruction instruction, Context ctx)
+		{
+		}
 
-        void IX86InstructionVisitor<Context>.DirectDivision(Instructions.DirectDivisionInstruction instruction, Context arg)
-        {
-        }
+		void IX86InstructionVisitor<Context>.DirectDivision(Instructions.DirectDivisionInstruction instruction, Context arg)
+		{
+		}
 
 		void IX86InstructionVisitor<Context>.Div(DivInstruction divInstruction, Context arg)
 		{
@@ -2505,9 +2491,9 @@ namespace Mosa.Platforms.x86
 		{
 		}
 
-        void IX86InstructionVisitor<Context>.Sal(SalInstruction shiftInstruction, Context arg)
-        {
-        }
+		void IX86InstructionVisitor<Context>.Sal(SalInstruction shiftInstruction, Context arg)
+		{
+		}
 
 		void IX86InstructionVisitor<Context>.Shl(ShlInstruction shiftInstruction, Context arg)
 		{
@@ -2585,9 +2571,9 @@ namespace Mosa.Platforms.x86
 		{
 		}
 
-        void IX86InstructionVisitor<Context>.Invlpg(Instructions.Intrinsics.InvlpgInstruction instruction, Context ctx)
-        {
-        }
+		void IX86InstructionVisitor<Context>.Invlpg(Instructions.Intrinsics.InvlpgInstruction instruction, Context ctx)
+		{
+		}
 
 		void IX86InstructionVisitor<Context>.Jns(JnsBranchInstruction instruction, Context arg)
 		{
@@ -2709,21 +2695,21 @@ namespace Mosa.Platforms.x86
 		{
 		}
 
-        void IX86InstructionVisitor<Context>.CpuIdEax(CpuIdEaxInstruction instruction, Context arg)
-        {
-        }
+		void IX86InstructionVisitor<Context>.CpuIdEax(CpuIdEaxInstruction instruction, Context arg)
+		{
+		}
 
-        void IX86InstructionVisitor<Context>.CpuIdEbx(CpuIdEbxInstruction instruction, Context arg)
-        {
-        }
+		void IX86InstructionVisitor<Context>.CpuIdEbx(CpuIdEbxInstruction instruction, Context arg)
+		{
+		}
 
-        void IX86InstructionVisitor<Context>.CpuIdEcx(CpuIdEcxInstruction instruction, Context arg)
-        {
-        }
+		void IX86InstructionVisitor<Context>.CpuIdEcx(CpuIdEcxInstruction instruction, Context arg)
+		{
+		}
 
-        void IX86InstructionVisitor<Context>.CpuIdEdx(CpuIdEdxInstruction instruction, Context arg)
-        {
-        }
+		void IX86InstructionVisitor<Context>.CpuIdEdx(CpuIdEdxInstruction instruction, Context arg)
+		{
+		}
 
 		void IX86InstructionVisitor<Context>.BochsDebug(BochsDebug instruction, Context arg)
 		{

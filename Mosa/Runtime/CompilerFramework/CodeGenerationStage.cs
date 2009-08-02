@@ -116,21 +116,18 @@ namespace Mosa.Runtime.CompilerFramework
 
             // Retrieve the latest basic block decoder
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)_compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-            Debug.Assert(null != blockProvider, @"Code generation requires a basic block provider.");
-            if (null == blockProvider)
+            Debug.Assert(blockProvider != null, @"Code generation requires a basic block provider.");
+            if (blockProvider == null)
                 throw new InvalidOperationException(@"Code generation requires a basic block provider.");
 
             foreach (BasicBlock block in blockProvider)
             {
                 BlockStart(block);
                 foreach (Instruction instruction in block.Instructions)
-                {
-                    if (false == instruction.Ignore)
-                    {
+                    if (!instruction.Ignore)
                         instruction.Visit<ContextType>(this, ct);
-                    }
-                }
-                BlockEnd(block);
+ 
+				BlockEnd(block);
             }
         }
 
