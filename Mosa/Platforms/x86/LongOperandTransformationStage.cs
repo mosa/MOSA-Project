@@ -545,7 +545,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private void ExpandRem(Context ctx, IL.RemInstruction instruction)
 		{
-			BasicBlock[] blocks = CreateEmptyBlocks(8);
+			BasicBlock[] blocks = CreateEmptyBlocks(15);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -583,15 +583,19 @@ namespace Mosa.Platforms.x86
                 new Instructions.LogicalXorInstruction(edi, edi),
                 new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalOrInstruction(eax, eax),
-                new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[1].Label),
-                new Instructions.IncInstruction(edi),
+                new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[2].Label),
+				new IR.JmpInstruction(blocks[1].Label),		
+            });
+
+			blocks[1].Instructions.AddRange(new Instruction[] {
+				new Instructions.IncInstruction(edi),
                 new Instructions.MoveInstruction(edx, op1L),
                 new Instructions.NegInstruction(eax),
                 new Instructions.NegInstruction(edx),
                 new Instructions.SbbInstruction(eax, new ConstantOperand(I4, 0)),
                 new Instructions.MoveInstruction(op1H, eax),
                 new Instructions.MoveInstruction(op1L, edx),		
-				new IR.JmpInstruction(blocks[1].Label),		
+				new IR.JmpInstruction(blocks[2].Label),		
             });
 
 			// L1:
@@ -605,17 +609,21 @@ namespace Mosa.Platforms.x86
 			// sbb     eax,0
 			// mov     HIWORD(DVSR),eax ; save positive value
 			// mov     LOWORD(DVSR),edx
-			blocks[1].Instructions.AddRange(new Instruction[] {
+			blocks[2].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(eax, op2H),
                 new Instructions.LogicalOrInstruction(eax, eax),
-                new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[2].Label),
+                new IR.BranchInstruction(IR.ConditionCode.GreaterOrEqual, blocks[4].Label),
+				new IR.JmpInstruction(blocks[3].Label),		
+            });
+
+			blocks[3].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(edx, op2L),
                 new Instructions.NegInstruction(eax),
                 new Instructions.NegInstruction(edx),
                 new Instructions.SbbInstruction(eax, new ConstantOperand(I4, 0)),
                 new Instructions.MoveInstruction(op2H, eax),
                 new Instructions.MoveInstruction(op2L, edx),
-				new IR.JmpInstruction(blocks[2].Label),
+				new IR.JmpInstruction(blocks[4].Label),
 			});
 
 			// L2:
@@ -638,10 +646,14 @@ namespace Mosa.Platforms.x86
 			// div     ecx             ; eax <- low order bits of quotient
 			// mov     edx,ebx         ; edx:eax <- quotient
 			// jmp     short L4        ; set sign, restore stack and return
-			blocks[2].Instructions.AddRange(new Instruction[] {
+			blocks[4].Instructions.AddRange(new Instruction[] {
                 new Instructions.LogicalOrInstruction(eax, eax),
-                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[3].Label),
-                new Instructions.MoveInstruction(ecx, op2L),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[6].Label),
+				new IR.JmpInstruction(blocks[5].Label),		
+            });
+
+			blocks[5].Instructions.AddRange(new Instruction[] {
+				new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(eax, op1H),
                 new Instructions.LogicalXorInstruction(edx, edx),
                 new Instructions.DirectDivisionInstruction(ecx),
@@ -650,10 +662,10 @@ namespace Mosa.Platforms.x86
                 new Instructions.MoveInstruction(eax, edx),
                 new Instructions.LogicalXorInstruction(edx, edx),
                 new Instructions.DecInstruction(edi),
-                new Instructions.JnsBranchInstruction(blocks[7].Label),
+                new Instructions.JnsBranchInstruction(blocks[14].Label),
                 new IR.JmpInstruction(nextBlock.Label),
             });
-			;
+
 			// Here we do it the hard way.  Remember, eax contains the high word of DVSR
 			//
 			// L3:
@@ -661,12 +673,12 @@ namespace Mosa.Platforms.x86
 			//        mov     ecx,LOWORD(DVSR)
 			//        mov     edx,HIWORD(DVND) ; edx:eax <- dividend
 			//        mov     eax,LOWORD(DVND)
-			blocks[3].Instructions.AddRange(new Instruction[] {
+			blocks[6].Instructions.AddRange(new Instruction[] {
                 new Instructions.MoveInstruction(ebx, eax),
                 new Instructions.MoveInstruction(ecx, op2L),
                 new Instructions.MoveInstruction(edx, op1H),
                 new Instructions.MoveInstruction(eax, op1L),
-				new IR.JmpInstruction(blocks[4].Label),
+				new IR.JmpInstruction(blocks[7].Label),
             });
 
 			// L5:
@@ -705,33 +717,49 @@ namespace Mosa.Platforms.x86
 			//  cmp     eax,LOWORD(DVND) ; hi words are equal, compare lo words
 			//  jbe     short L7        ; if less or equal we are ok, else subtract
 
-			blocks[4].Instructions.AddRange(new Instruction[] {
+			blocks[7].Instructions.AddRange(new Instruction[] {
                 new Instructions.ShrInstruction(ebx, new ConstantOperand(U1, 1)),
                 new Instructions.RcrInstruction(ecx, new ConstantOperand(U1, 1)), // RCR
                 new Instructions.ShrInstruction(edx, new ConstantOperand(U1, 1)),
                 new Instructions.RcrInstruction(eax, new ConstantOperand(U1, 1)),
                 new Instructions.LogicalOrInstruction(ebx, ebx),
-                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[4].Label),
+                new IR.BranchInstruction(IR.ConditionCode.NotEqual, blocks[7].Label),
+				new IR.JmpInstruction(blocks[8].Label),		
+            });
+
+			blocks[8].Instructions.AddRange(new Instruction[] {
                 new Instructions.DirectDivisionInstruction(ecx),
                 new Instructions.MoveInstruction(ecx, eax),
                 new Instructions.DirectMultiplicationInstruction(op2H),
                 new Instructions.Intrinsics.XchgInstruction(ecx, eax),
                 new Instructions.DirectMultiplicationInstruction(op2L),
                 new Instructions.AddInstruction(edx, ecx),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[5].Label),
-                new Instructions.CmpInstruction(edx, op1H),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[5].Label),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[6].Label),
-                new Instructions.CmpInstruction(eax, op1L),
-                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[6].Label),
-                new IR.JmpInstruction(blocks[5].Label),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[12].Label),
+				new IR.JmpInstruction(blocks[9].Label),		
+            });
+
+			blocks[9].Instructions.AddRange(new Instruction[] {
+				new Instructions.CmpInstruction(edx, op1H),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedGreaterThan, blocks[12].Label),
+				new IR.JmpInstruction(blocks[10].Label),		
+            });
+
+			blocks[10].Instructions.AddRange(new Instruction[] {
+				new IR.BranchInstruction(IR.ConditionCode.UnsignedLessThan, blocks[13].Label),
+				new IR.JmpInstruction(blocks[11].Label),		
+            });
+
+			blocks[11].Instructions.AddRange(new Instruction[] {
+				new Instructions.CmpInstruction(eax, op1L),
+                new IR.BranchInstruction(IR.ConditionCode.UnsignedLessOrEqual, blocks[13].Label),
+				new IR.JmpInstruction(blocks[12].Label),
             });
 
 			// L6:
-			blocks[5].Instructions.AddRange(new Instruction[] {
+			blocks[12].Instructions.AddRange(new Instruction[] {
                 new Instructions.SubInstruction(eax, op2L),
                 new Instructions.SbbInstruction(edx, op2H),
-                new IR.JmpInstruction(blocks[6].Label),
+                new IR.JmpInstruction(blocks[13].Label),
             });
 
 			// L7:
@@ -740,19 +768,19 @@ namespace Mosa.Platforms.x86
 			// Since the result is already in a register, we will do the subtract in the
 			// opposite direction and negate the result if necessary.
 			//
-			blocks[6].Instructions.AddRange(new Instruction[] {
+			blocks[13].Instructions.AddRange(new Instruction[] {
                 new Instructions.SubInstruction(eax, op1L),
                 new Instructions.SbbInstruction(edx, op1H),
                 new Instructions.DecInstruction(edi),
                 new Instructions.JnsBranchInstruction(nextBlock.Label),
-                new IR.JmpInstruction(blocks[7].Label),
+                new IR.JmpInstruction(blocks[14].Label),
             });
 
 			// L4:
 			//        neg     edx             ; otherwise, negate the result
 			//        neg     eax
 			//        sbb     edx,0
-			blocks[7].Instructions.InsertRange(0, new Instruction[] {
+			blocks[14].Instructions.InsertRange(0, new Instruction[] {
                 new Instructions.NegInstruction(edx),
                 new Instructions.NegInstruction(eax),
                 new Instructions.SbbInstruction(edx, new ConstantOperand(I4, 0)),
