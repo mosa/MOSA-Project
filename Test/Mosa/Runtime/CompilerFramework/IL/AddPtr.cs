@@ -672,7 +672,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             double* pa = (double*)a;
             this.CodeSource = CreateTestCode("long", "double*", "double*");
             this.UnsafeCode = true;
-            Assert.AreEqual((int)(b + pa), (int)Run<I4_I4_I4>("", "Test", "AddPtr", b, a));
+            Assert.AreEqual((int)(b + pa), (int)Run<I4_I8_I4>("", "Test", "AddPtr", b, a));
         }
         
         /// <summary>

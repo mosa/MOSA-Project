@@ -46,6 +46,8 @@ namespace Mosa.Runtime.CompilerFramework
         [VmCall(VmCall.Memset)]
         public unsafe static void Memcpy(byte* destination, byte* source, int count)
         {
+            for (int i = 0; i < count; ++i)
+                *destination++ = *source++;
         }
     }
 }
