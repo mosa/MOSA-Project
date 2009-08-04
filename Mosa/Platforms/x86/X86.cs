@@ -64,6 +64,7 @@ namespace Mosa.Platforms.x86
                 public static OpCode M_C_16 = new OpCode(new byte[] { 0x66, 0xC7 }, 0);
                 public static OpCode R_R = new OpCode(new byte[] { 0x8B });
                 public static OpCode R_R_16 = new OpCode(new byte[] { 0x66, 0x8B });
+                public static OpCode R_R_U8 = new OpCode(new byte[] { 0x88 });
                 public static OpCode R_M = new OpCode(new byte[] { 0x8B }); // Move r/m32 to R32
                 public static OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x8B });
                 public static OpCode M_R = new OpCode(new byte[] { 0x89 });
@@ -440,15 +441,17 @@ namespace Mosa.Platforms.x86
                 return X86Instruction.Add.R_R;
 
             if ((dest is RegisterOperand) && (src is MemoryOperand))
-                if (IsUByte(dest))
+                /*if (IsUByte(dest))
                     return X86Instruction.Add.R_M_U8;
-                else
+                else*/
                     return X86Instruction.Add.R_M;
 
             if ((dest is MemoryOperand) && (src is RegisterOperand))
-                if (IsUByte(dest))
+                /*if (IsByte(dest) || IsByte(src))
                     return X86Instruction.Add.M_R_U8;
-                else
+                else if (IsChar(dest) || IsChar(src) || IsShort(dest) || IsShort(src))
+                    return X86Instruction.Add.M_R_U8;
+                else*/
                     return X86Instruction.Add.M_R;
 
             throw new ArgumentException(@"No opcode for operand type.");
@@ -516,23 +519,25 @@ namespace Mosa.Platforms.x86
         {
             if ((dest is RegisterOperand) && (src is ConstantOperand))
             {
-                if (IsChar(src))
+                /*if (IsChar(src))
                     return X86Instruction.Mov.R_C_16;
-                else
+                else*/
                     return X86Instruction.Mov.R_C;
             }
 
             if ((dest is MemoryOperand) && (src is ConstantOperand))
             {
-                if (IsChar(src))
+                /*if (IsChar(src) || IsChar(dest))
                     return X86Instruction.Mov.M_C_16;
-                else
+                else*/
                     return X86Instruction.Mov.M_C;
             }
 
             if ((dest is RegisterOperand) && (src is RegisterOperand))
             {
-                if (IsChar(src))
+                if (IsByte(src) || IsByte(dest))
+                    return X86Instruction.Mov.R_R_U8;
+                if (IsChar(src) || IsChar(dest) || IsShort(src) || IsShort(dest))
                     return X86Instruction.Mov.R_R_16;
                 else
                     return X86Instruction.Mov.R_R;
@@ -542,7 +547,7 @@ namespace Mosa.Platforms.x86
             {
                 if (IsByte(dest))
                     return X86Instruction.Mov.R_M_U8;
-                else if (IsChar(dest))
+                else if (IsChar(dest) || IsShort(dest))
                     return X86Instruction.Mov.R_M_16;
                 else
                     return X86Instruction.Mov.R_M;
@@ -552,7 +557,7 @@ namespace Mosa.Platforms.x86
             {
                 if (IsByte(dest))
                     return X86Instruction.Mov.M_R_U8;
-                else if (IsChar(dest))
+                else if (IsChar(dest) || IsShort(dest))
                     return X86Instruction.Mov.M_R_16;
                 else
                     return X86Instruction.Mov.M_R;
@@ -671,17 +676,17 @@ namespace Mosa.Platforms.x86
         {
             if ((dest is Operand) && (src is ConstantOperand))
             {
-                if (IsChar(dest) || IsShort(dest))
+                /*if (IsChar(dest) || IsShort(dest))
                     return X86Instruction.Sub.O_C_16;
-                else
+                else*/
                     return X86Instruction.Sub.O_C;
             }
 
             if ((dest is RegisterOperand) && (src is Operand))
             {
-                if (src.Type.Type == CilElementType.Char || dest.Type.Type == CilElementType.Char)
+                /*if (src.Type.Type == CilElementType.Char || dest.Type.Type == CilElementType.Char)
                     return X86Instruction.Sub.R_O_16;
-                else
+                else*/
                     return X86Instruction.Sub.R_O;
             }
 
@@ -1471,7 +1476,7 @@ namespace Mosa.Platforms.x86
         /// <returns></returns>
         public static bool IsSigned(Operand op)
         {
-            return IsByte(op) || IsShort(op) || IsInt(op);
+            return IsSByte(op) || IsSShort(op) || IsInt(op);
         }
 
         /// <summary>

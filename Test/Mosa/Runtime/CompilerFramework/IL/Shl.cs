@@ -434,6 +434,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="b"></param>
         /// <returns></returns>
         delegate bool I8_I8_I4(long expect, long a, int b);
+        delegate long I8_I8_I4_R(long expect, long a, int b);
         /// <summary>
         /// 
         /// </summary>
@@ -446,8 +447,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ShlI8(long a, int b)
         {
-            CodeSource = CreateTestCode("ShlI8", "long", "int", "long");
-            Assert.IsTrue((bool)Run<I8_I8_I4>("", "Test", "ShlI8", (a << b), a, b));
+            CodeSource = CreateTestCodeWithReturn("ShlI8", "long", "int", "long");
+            Assert.AreEqual((a << b), Run<I8_I8_I4_R>("", "Test", "ShlI8", (a << b), a, b));
         }
         
         delegate bool I8_Constant_I8(long expect, long x);

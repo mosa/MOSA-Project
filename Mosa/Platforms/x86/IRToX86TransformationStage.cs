@@ -843,21 +843,25 @@ namespace Mosa.Platforms.x86
             Operand op0 = instruction.Operand0;
             Operand op1 = instruction.Operand1;
 
-            if ((op0 is MemoryOperand && op1 is MemoryOperand) || (op0 is ConstantOperand && op1 is ConstantOperand))
+            if ((op0 is MemoryOperand && op1 is MemoryOperand) || (op0 is ConstantOperand && op1 is ConstantOperand) || op1 is ConstantOperand)
             {
                 RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
-                if (IsUnsigned(op0.Type.Type))
+                if (X86.IsSigned(op0))
                 {
                     Replace(ctx, new Instruction[] {
-                        new IR.MoveInstruction(eax, op0),
-                        instruction
+                        new IR.PushInstruction(eax),
+                        new IR.SignExtendedMoveInstruction(eax, op0),
+                        instruction,
+                        new IR.PopInstruction(eax),
                     });
                 }
                 else
                 {
                     Replace(ctx, new Instruction[] {
-                        new IR.SignExtendedMoveInstruction(eax, op0),
-                        instruction
+                        new IR.PushInstruction(eax),
+                        new IR.MoveInstruction(eax, op0),
+                        instruction,
+                        new IR.PopInstruction(eax),
                     });
                 }
                 instruction.SetResult(0, eax);
@@ -1462,6 +1466,8 @@ namespace Mosa.Platforms.x86
             Operand op1 = instruction.Operands[0];
             Operand op2 = instruction.Operands[1];
             RegisterOperand eax = new RegisterOperand(opRes.Type, opRes.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : (Register)GeneralPurposeRegister.EAX);
+            RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
+            RegisterOperand eaxS = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
 
             if (null != replacementType)
             {
@@ -1473,11 +1479,30 @@ namespace Mosa.Platforms.x86
                 instruction.SetOperand(0, eax);
             }
 
-            Replace(ctx, new Instruction[] {
-                _architecture.CreateInstruction(typeof(IR.MoveInstruction), eax, op1),
-                instruction,
-                _architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax)
-            });
+            if (X86.IsSigned(op1) && !(op1 is ConstantOperand))
+            {
+                Replace(ctx, new Instruction[] {
+                    _architecture.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), eaxL, op1),
+                    instruction,
+                    _architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
+                });
+            }
+            else if (X86.IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F)
+            {
+                Replace(ctx, new Instruction[] {
+                    _architecture.CreateInstruction(typeof(IR.ZeroExtendedMoveInstruction), eaxL, op1),
+                    instruction,
+                    _architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
+                });
+            }
+            else
+            {
+                Replace(ctx, new Instruction[] {
+                    _architecture.CreateInstruction(typeof(IR.MoveInstruction), eax, op1),
+                    instruction,
+                    _architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax)
+                });
+            }
         }
 
         private bool IsUnsigned(CilElementType type)

@@ -414,11 +414,13 @@ namespace Mosa.Platforms.x86
 		void ICodeEmitter.Cmp(Operand op1, Operand op2)
 		{
             Operand opTmp = op1;
+
             bool flag = false;
             if (op1 is MemoryOperand && op2 is MemoryOperand)
             {
                 flag = true;
                 opTmp = new RegisterOperand(opTmp.Type, GeneralPurposeRegister.EDX);
+
                 (this as ICodeEmitter).Push(opTmp);
                 Emit(opTmp, op1, X86.Move(opTmp, op1));
             }
@@ -428,6 +430,14 @@ namespace Mosa.Platforms.x86
                 opTmp = op2;
 				op2 = tmp;
 			}
+
+            if (!(op1 is RegisterOperand) && op2 is ConstantOperand && X86.IsSigned(opTmp) && X86.IsSigned(op2))
+            {
+                RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+                (this as ICodeEmitter).Movsx(eax, opTmp);
+                opTmp = eax;
+            }
+          
             Emit(opTmp, op2, X86.Cmp(opTmp, op2));
 
             if (flag)
@@ -1578,6 +1588,8 @@ namespace Mosa.Platforms.x86
                         //imm = LittleEndianBitConverter.GetBytes(Convert.ToByte(co.Value));
                         imm = new byte[1] { Convert.ToByte(co.Value) };
                         break; 
+                    case CilElementType.Char:
+                        goto case CilElementType.U2;
 					case CilElementType.U2:
                         imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt16(co.Value));
                         break;
