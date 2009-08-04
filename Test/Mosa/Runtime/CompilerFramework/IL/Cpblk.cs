@@ -31,6 +31,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         public void Test_Cpblk()
         {
             this.Generator = new GenerateIL(Cpblk.GenerateCpblk);
+
+            this.References = new string[] {
+                @"Mosa.Runtime.dll",
+                @"Mosa.Platforms.x86.dll"
+            };
+
             Run<I4_I4>(@"", @"Cpblk", @"TestCpblk", 0, 0);
         }
     }

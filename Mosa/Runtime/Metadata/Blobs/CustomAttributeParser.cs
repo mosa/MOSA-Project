@@ -241,8 +241,15 @@ namespace Mosa.Runtime.Metadata.Blobs
 
 				case CilElementType.Class: {
 						string typeName = ParseSerString(reader);
-						result = Type.GetType(typeName + ", " + module.Name);
-						//result = Type.GetType(typeName);
+                        string[] type = typeName.Split(',');
+                        if (type.Length > 1)
+                        {
+                            result = Type.GetType(typeName);
+                        }
+                        else
+                        {
+                            result = Type.GetType(typeName + ", " + module.Name);
+                        }
 					}
 					break;
 

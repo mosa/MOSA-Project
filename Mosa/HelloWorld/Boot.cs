@@ -28,7 +28,7 @@ namespace Mosa.HelloWorld
 			Multiboot.SetMultibootLocation(Memory.Get32(0x200004), Memory.Get32(0x200000));
 			Screen.SetCursor(24, 1);
 			Screen.Write('.');
-			//PageFrameAllocator.Setup();
+			PageFrameAllocator.Setup();
 			Screen.Write('.');
 			
 			Screen.SetCursor(24, 2);
@@ -397,9 +397,39 @@ namespace Mosa.HelloWorld
 			#endregion
 
 			Screen.NextLine();
-			Screen.Write(PageFrameAllocator.TotalPages);
+            Screen.Color = 0x0A;
+            Screen.Write('T');
+            Screen.Write('o');
+            Screen.Write('t');
+            Screen.Write('a');
+            Screen.Write('l');
+            Screen.Write(' ');
+            Screen.Write('P');
+            Screen.Write('a');
+            Screen.Write('g');
+            Screen.Write('e');
+            Screen.Write('s');
+            Screen.Write(':');
+            Screen.Write(' ');
+            Screen.Color = 0x0F;
+			Screen.Write(PageFrameAllocator.TotalPages, 10, -1);
 			Screen.NextLine();
-			Screen.Write(PageFrameAllocator.TotalPagesInUse);
+            Screen.Color = 0x0A;
+            Screen.Write('P');
+            Screen.Write('a');
+            Screen.Write('g');
+            Screen.Write('e');
+            Screen.Write('s');
+            Screen.Write(' ');
+            Screen.Write('U');
+            Screen.Write('s');
+            Screen.Write('e');
+            Screen.Write('d');
+            Screen.Write(':');
+            Screen.Write(' ');
+            Screen.Write(' ');
+            Screen.Color = 0x0F;
+			Screen.Write(PageFrameAllocator.TotalPagesInUse, 10, -1);
 
 			//Multiboot.Dump(4,53);
 
@@ -416,6 +446,8 @@ namespace Mosa.HelloWorld
 				Screen.Color = 0x0F;
 				if (index == 7)
 					Screen.Write((char)185);
+                else if (index == 15)
+                    Screen.Write((char)185);
 				else if (index == 23)
 					Screen.Write((char)202);
 				else
