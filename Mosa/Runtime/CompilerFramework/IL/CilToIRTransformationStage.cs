@@ -27,7 +27,6 @@ namespace Mosa.Runtime.CompilerFramework.IL
     /// </remarks>
     public sealed class CilToIrTransformationStage : 
         CodeTransformationStage,
-        IInstructionVisitor<CodeTransformationStage.Context>,
         IILVisitor<CodeTransformationStage.Context>
     {
         #region Construction
@@ -830,25 +829,22 @@ namespace Mosa.Runtime.CompilerFramework.IL
         {
             Operand dest = instruction.Results[0];
             Operand src = instruction.Operands[0];
-            ConvType ctDest = ConvTypeFromCilType(dest.Type.Type);
-            ConvType ctSrc = ConvTypeFromCilType(src.Type.Type);
-            uint mask = 0;
 
-            Type extension = null;
-            Type type = s_convTable[(int)ctDest][(int)ctSrc];
-            if (null == type)
-                throw new NotSupportedException();
+            CheckAndConvertInstruction(ctx, dest, src);
+        }
 
-            switch (ctDest)
+        private void ComputeExtensionTypeAndMask(ConvType destinationType, ref Type extensionType, ref uint mask)
+        {
+            switch (destinationType)
             {
                 case ConvType.I1:
                     mask = 0xFF;
-                    extension = typeof(IR.SignExtendedMoveInstruction);
+                    extensionType = typeof(IR.SignExtendedMoveInstruction);
                     break;
 
                 case ConvType.I2:
                     mask = 0xFFFF;
-                    extension = typeof(IR.SignExtendedMoveInstruction);
+                    extensionType = typeof(IR.SignExtendedMoveInstruction);
                     break;
 
                 case ConvType.I4:
@@ -860,12 +856,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
                 case ConvType.U1:
                     mask = 0xFF;
-                    extension = typeof(IR.ZeroExtendedMoveInstruction);
+                    extensionType = typeof(IR.ZeroExtendedMoveInstruction);
                     break;
 
                 case ConvType.U2:
                     mask = 0xFFFF;
-                    extension = typeof(IR.ZeroExtendedMoveInstruction);
+                    extensionType = typeof(IR.ZeroExtendedMoveInstruction);
                     break;
 
                 case ConvType.U4:
@@ -894,51 +890,72 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     Debug.Assert(false);
                     throw new NotSupportedException();
             }
+        }
+
+        private void ProcessMixedTypeConversion(List<Instruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
+        {
+            instructionList.AddRange(new Instruction[] {
+                _architecture.CreateInstruction(type, destinationOperand, sourceOperand),
+                _architecture.CreateInstruction(typeof(LogicalAndInstruction), destinationOperand, destinationOperand, new ConstantOperand(new SigType(CilElementType.U4), mask))
+            });
+        }
+
+        private void ProcessSingleTypeTruncation(List<Instruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
+        {
+            if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
+            {
+                instructionList.Add(_architecture.CreateInstruction(typeof(IR.MoveInstruction), destinationOperand, sourceOperand));
+                instructionList.Add(_architecture.CreateInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask)));
+            }
+            else
+                instructionList.Add(_architecture.CreateInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask)));
+        }
+
+        private void ExtendAndTruncateResult(List<Instruction> instructionList, Type extensionType, Operand destinationOperand)
+        {
+            if (null != extensionType && destinationOperand is RegisterOperand)
+            {
+                RegisterOperand resultOperand = new RegisterOperand(new SigType(CilElementType.I4), ((RegisterOperand)destinationOperand).Register);
+                instructionList.Add(_architecture.CreateInstruction(extensionType, resultOperand, destinationOperand));
+            }
+        }
+
+        private void CheckAndConvertInstruction(Context context, Operand destinationOperand, Operand sourceOperand)
+        {
+            uint mask = 0;
+            Type extension = null;
+            ConvType ctDest = ConvTypeFromCilType(destinationOperand.Type.Type);
+            ConvType ctSrc = ConvTypeFromCilType(sourceOperand.Type.Type);
+
+            Type type = s_convTable[(int)ctDest][(int)ctSrc];
+            if (null == type)
+                throw new NotSupportedException();
+
+            ComputeExtensionTypeAndMask(ctDest, ref extension, ref mask);
 
             if (type == typeof(IR.LogicalAndInstruction) || 0 != mask)
             {
                 Debug.Assert(0 != mask, @"Conversion is an AND, but no mask given.");
 
-                // If source type is I8, we're always only working on the lower half
-                Operand nsrc = TruncateI8(src);
-
-                // Mixed type conversion + truncation...
                 List<Instruction> instructions = new List<Instruction>();
                 if (type != typeof(IR.LogicalAndInstruction))
                 {
-                    // Mixed type conversion, e.g. R4 -> I2
-                    instructions.AddRange(new Instruction[] {
-                        _architecture.CreateInstruction(type, dest, src),
-                        _architecture.CreateInstruction(typeof(LogicalAndInstruction), dest, dest, new ConstantOperand(new SigType(CilElementType.U4), mask))
-                    });
+                    ProcessMixedTypeConversion(instructions, type, mask, destinationOperand, sourceOperand);
                 }
                 else
                 {
-                    // Single type truncation/extension, e.g. I4->I2 or alike
-                    if (src.Type.Type == CilElementType.I8 || src.Type.Type == CilElementType.U8)
-                    {
-                        instructions.Add(_architecture.CreateInstruction(typeof(IR.MoveInstruction), dest, src));
-                        instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.U4), mask)));
-                    }
-                    else
-                        instructions.Add(_architecture.CreateInstruction(type, dest, src, new ConstantOperand(new SigType(CilElementType.U4), mask)));
+                    ProcessSingleTypeTruncation(instructions, type, mask, destinationOperand, sourceOperand);
                 }
 
-                // Do we have to extend/truncate the result?
-                if (null != extension && dest is RegisterOperand)
-                {
-                    RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.I4), ((RegisterOperand)dest).Register);
-                    instructions.Add(_architecture.CreateInstruction(extension, rop, dest));
-                }
+                ExtendAndTruncateResult(instructions, extension, destinationOperand);
 
-                Replace(ctx, instructions);
+                Replace(context, instructions);
             }
             else
             {
-                Replace(ctx, _architecture.CreateInstruction(type, dest, src));
+                Replace(context, _architecture.CreateInstruction(type, destinationOperand, sourceOperand));
             }
         }
-
         /// <summary>
         /// Truncates I8 operands to I4 operands, as a conversion down to smaller types is always truncating.
         /// </summary>

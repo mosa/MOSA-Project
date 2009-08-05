@@ -95,12 +95,6 @@ namespace Mosa.Platforms.x86
                 SplitFromNonConstantOperand(operand, out operandLow, out operandHigh);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="operand"></param>
-        /// <param name="operandLow"></param>
-        /// <param name="operandHigh"></param>
         private static void SplitFromConstantOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 	    {
             SigType HighType = (operand.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
@@ -122,12 +116,6 @@ namespace Mosa.Platforms.x86
             }
 	    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="operand"></param>
-        /// <param name="operandLow"></param>
-        /// <param name="operandHigh"></param>
         private static void SplitFromNonConstantOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
         {
             SigType HighType = (operand.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
@@ -252,7 +240,6 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(instruction.First, out op1L, out op1H);
 			SplitLongOperand(instruction.Second, out op2L, out op2H);
 
-			// op0 = EDX:EAX, op1 = A, op2 = B
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
 			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
