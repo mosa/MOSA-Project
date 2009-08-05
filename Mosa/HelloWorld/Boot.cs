@@ -14,7 +14,6 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Boot
 	{
-
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>
@@ -538,18 +537,22 @@ namespace Mosa.HelloWorld
 		private static void PrintBrand(uint param)
 		{
 			int identifier = Platforms.x86.Native.CpuIdEax(param);
+            if (identifier != 0x20202020)
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
 			identifier = Platforms.x86.Native.CpuIdEbx(param);
+            if (identifier != 0x20202020)
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
 			identifier = Platforms.x86.Native.CpuIdEcx(param);
+            if (identifier != 0x20202020)
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
 			identifier = Platforms.x86.Native.CpuIdEdx(param);
+            if (identifier != 0x20202020)
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 		}
