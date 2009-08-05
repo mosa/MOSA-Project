@@ -11,9 +11,7 @@
 */
 
 using System;
-
 using Mosa.Runtime.CompilerFramework;
-using IL = Mosa.Runtime.CompilerFramework.IL;
 
 namespace Mosa.Platforms.x86
 {

@@ -42,7 +42,6 @@ namespace Mosa.Platforms.x86
         /// <param name="methodCompiler">The method compiler.</param>
         public void Run(IMethodCompiler methodCompiler)
         {
-            // Retrieve the latest basic block decoder
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)methodCompiler.GetPreviousStage(typeof(IBasicBlockProvider));
 
             if (null == blockProvider)
@@ -71,13 +70,7 @@ namespace Mosa.Platforms.x86
         {
             foreach (Instruction instruction in block.Instructions)
             {
-                try
-                {
-                    byte latency = InstructionLatency.GetLatency(instruction);
-                }
-                catch (NotSupportedException)
-                {
-                }
+                sbyte latency = InstructionLatency.GetLatency(instruction);
             }
         }
     }

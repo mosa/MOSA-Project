@@ -76,29 +76,29 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// The position that the code stream starts.
 		/// </summary>
-		private long _codeStreamBasePosition;
+		private readonly long _codeStreamBasePosition;
 
 		/// <summary>
 		/// List of labels that were emitted.
 		/// </summary>
-		private Dictionary<int, long> _labels = new Dictionary<int, long>();
+		private readonly Dictionary<int, long> _labels = new Dictionary<int, long>();
 
 		/// <summary>
 		/// Holds the linker used to resolve externals.
 		/// </summary>
-		private IAssemblyLinker _linker;
+		private readonly IAssemblyLinker _linker;
 
 		/// <summary>
 		/// List of literal patches we need to perform.
 		/// </summary>
-		private List<Patch> _literals = new List<Patch>();
+		private readonly List<Patch> _literals = new List<Patch>();
 
 		/// <summary>
 		/// Patches we need to perform.
 		/// </summary>
-		private List<Patch> _patches = new List<Patch>();
+		private readonly List<Patch> _patches = new List<Patch>();
 
-		#endregion // Data members
+		#endregion
 
 		#region Construction
 
@@ -1699,53 +1699,53 @@ namespace Mosa.Platforms.x86
 
 		void ICodeEmitter.Setcc(Operand destination, IR.ConditionCode code)
 		{
-			byte[] byte_code;
+			byte[] byteCode;
 
 			switch (code) {
 				case IR.ConditionCode.Equal:
-					byte_code = new byte[] { 0x0F, 0x94 };
+					byteCode = new byte[] { 0x0F, 0x94 };
 					break;
 
 				case IR.ConditionCode.LessThan:
-					byte_code = new byte[] { 0x0F, 0x9C };
+					byteCode = new byte[] { 0x0F, 0x9C };
 					break;
 
 				case IR.ConditionCode.LessOrEqual:
-					byte_code = new byte[] { 0x0F, 0x9E };
+					byteCode = new byte[] { 0x0F, 0x9E };
 					break;
 
 				case IR.ConditionCode.GreaterOrEqual:
-					byte_code = new byte[] { 0x0F, 0x9D };
+					byteCode = new byte[] { 0x0F, 0x9D };
 					break;
 
 				case IR.ConditionCode.GreaterThan:
-					byte_code = new byte[] { 0x0F, 0x9F };
+					byteCode = new byte[] { 0x0F, 0x9F };
 					break;
 
 				case IR.ConditionCode.NotEqual:
-					byte_code = new byte[] { 0x0F, 0x95 };
+					byteCode = new byte[] { 0x0F, 0x95 };
 					break;
 
 				case IR.ConditionCode.UnsignedGreaterOrEqual:
-					byte_code = new byte[] { 0x0F, 0x93 };
+					byteCode = new byte[] { 0x0F, 0x93 };
 					break;
 
 				case IR.ConditionCode.UnsignedGreaterThan:
-					byte_code = new byte[] { 0x0F, 0x97 };
+					byteCode = new byte[] { 0x0F, 0x97 };
 					break;
 
 				case IR.ConditionCode.UnsignedLessOrEqual:
-					byte_code = new byte[] { 0x0F, 0x96 };
+					byteCode = new byte[] { 0x0F, 0x96 };
 					break;
 
 				case IR.ConditionCode.UnsignedLessThan:
-					byte_code = new byte[] { 0x0F, 0x92 };
+					byteCode = new byte[] { 0x0F, 0x92 };
 					break;
 
 				default:
 					throw new NotSupportedException();
 			}
-			Emit(byte_code, null, destination, null);
+			Emit(byteCode, null, destination, null);
 		}
 
 		void ICodeEmitter.Comisd(Operand op1, Operand op2)
@@ -1775,14 +1775,14 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The operand to check</param>
 		private void CheckAndConvertR4(ref Operand src)
 		{
-			if (!(src is RegisterOperand) && src.Type.Type == CilElementType.R4) {
-				// First, convert it to double precision
-				RegisterOperand dest = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
-				Emit(dest, src, X86.Cvtss2sd(dest,src));
+		    if ((src is RegisterOperand) || src.Type.Type != CilElementType.R4) return;
 
-				// New Operand is a Registeroperand
-				src = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
-			}
+		    // First, convert it to double precision
+		    RegisterOperand dest = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
+		    Emit(dest, src, X86.Cvtss2sd(dest,src));
+
+		    // New Operand is a Registeroperand
+		    src = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
 		}
 		#endregion // Code Generation
 	}

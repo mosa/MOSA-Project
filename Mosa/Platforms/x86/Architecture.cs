@@ -44,18 +44,6 @@ namespace Mosa.Platforms.x86
             GeneralPurposeRegister.EBX,
             GeneralPurposeRegister.ESI,
             GeneralPurposeRegister.EDI,
-            ////////////////////////////////////////////////////////
-            // 64-bit integral registers
-            ////////////////////////////////////////////////////////
-            // We don't have a real use for the MMX registers yet. :(
-            ////MMXRegister.MM0,
-            ////MMXRegister.MM1,
-            ////MMXRegister.MM2,
-            ////MMXRegister.MM3,
-            ////MMXRegister.MM4,
-            ////MMXRegister.MM5,
-            ////MMXRegister.MM6,
-            ////MMXRegister.MM7,
 
             ////////////////////////////////////////////////////////
             // 128-bit floating point registers
@@ -75,7 +63,6 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		private static readonly Dictionary<Type, Type> Constraints = new Dictionary<Type, Type>()
         {
-            ////{ typeof(x86.Instructions.IntInstruction), typeof(IntConstraint) },
             { typeof(AddInstruction), typeof(GPRConstraint) },
             { typeof(AdcInstruction), typeof(GPRConstraint) },
             { typeof(DivInstruction), typeof(DivConstraint) },
@@ -91,40 +78,17 @@ namespace Mosa.Platforms.x86
         };
 
 		/// <summary>
-		/// Remaps specific IL intermediate representation types to more x86 specific ones.
-		/// </summary>
-		private static readonly Dictionary<Type, Type> IrTypes = new Dictionary<Type, Type>
-		{
-			/*
-						{ typeof(IL.AddInstruction), typeof(x86.AddInstruction) },
-						{ typeof(IL.SubInstruction), typeof(x86.SubInstruction) },
-						{ typeof(IL.MulInstruction), typeof(x86.MulInstruction) },
-						{ typeof(IL.DivInstruction), typeof(x86.DivInstruction) },
-						{ typeof(IL.ShiftInstruction), typeof(x86.ShiftInstruction) },
-
-						{ typeof(IR.EpilogueInstruction), typeof(x86.EpilogueInstruction) },
-						{ typeof(IR.LiteralInstruction), typeof(x86.LiteralInstruction) },
-						{ typeof(IR.LogicalAndInstruction), typeof(x86.LogicalAndInstruction) },
-						{ typeof(IR.LogicalOrInstruction), typeof(x86.LogicalOrInstruction) },
-						{ typeof(IR.LogicalXorInstruction), typeof(x86.LogicalXorInstruction) },
-						{ typeof(IR.LogicalNotInstruction), typeof(x86.LogicalNotInstruction) },
-						{ typeof(IR.MoveInstruction), typeof(x86.MoveInstruction) },
-						{ typeof(IR.PrologueInstruction), typeof(x86.PrologueInstruction) },
-			 */
-		};
-
-		/// <summary>
 		/// Specifies the architecture features to use in generated code.
 		/// </summary>
-		private ArchitectureFeatureFlags features;
+		private ArchitectureFeatureFlags architectureFeatures;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Architecture"/> class.
 		/// </summary>
-		/// <param name="features">The features this architecture supports.</param>
-		protected Architecture(ArchitectureFeatureFlags features)
+        /// <param name="architectureFeatures">The features this architecture supports.</param>
+        protected Architecture(ArchitectureFeatureFlags architectureFeatures)
 		{
-			this.features = features;
+			this.architectureFeatures = architectureFeatures;
 		}
 
 		/// <summary>
@@ -156,76 +120,56 @@ namespace Mosa.Platforms.x86
 		/// Factory method for the Architecture class.
 		/// </summary>
 		/// <returns>The created architecture instance.</returns>
-		/// <param name="features">The features available in the architecture and code generation.</param>
+        /// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
 		/// <remarks>
 		/// This method creates an instance of an appropriate architecture class, which supports the specific
 		/// architecture features.
 		/// </remarks>
-		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags features)
+		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
-			if (features == ArchitectureFeatureFlags.AutoDetect) {
-				features = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
+            if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
+            {
+                architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
 			}
 
-			return new Architecture(features);
-		}
-
-		/// <summary>
-		/// Creates a new instruction instance.
-		/// </summary>
-		/// <param name="instructionType">The instruction type to create.</param>
-		/// <param name="args">Arguments to pass to the instruction ctor.</param>
-		/// <returns>A new instance of the requested instruction or a derived type.</returns>
-		public override Instruction CreateInstruction(Type instructionType, params object[] args)
-		{
-			// Make sure we use x86 specific override classes, if there's one defined.
-			Type replType = null;
-			if (true == IrTypes.TryGetValue(instructionType, out replType)) {
-				return (Instruction)Activator.CreateInstance(replType, args, null);
-			}
-			else {
-				return base.CreateInstruction(instructionType, args);
-			}
+            return new Architecture(architectureFeatures);
 		}
 
 		/// <summary>
 		/// Creates a new result operand of the requested type.
 		/// </summary>
-		/// <param name="type">The type requested.</param>
-		/// <param name="label">The label of the instruction requesting the operand.</param>
-		/// <param name="index">The stack index of the operand.</param>
+        /// <param name="signatureType">The type requested.</param>
+        /// <param name="instructionLabel">The label of the instruction requesting the operand.</param>
+        /// <param name="operandStackIndex">The stack index of the operand.</param>
 		/// <returns>A new operand usable as a result operand.</returns>
-		public override Operand CreateResultOperand(SigType type, int label, int index)
+		public override Operand CreateResultOperand(SigType signatureType, int instructionLabel, int operandStackIndex)
 		{
-			return new RegisterOperand(type, GeneralPurposeRegister.EAX);
+            return new RegisterOperand(signatureType, GeneralPurposeRegister.EAX);
 		}
 
 		/// <summary>
 		/// Extends the assembly compiler pipeline with x86 specific stages.
 		/// </summary>
-		/// <param name="assemblyPipeline">The assembly compiler pipeline to extend.</param>
-		public override void ExtendAssemblyCompilerPipeline(CompilerPipeline<IAssemblyCompilerStage> assemblyPipeline)
+        /// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
+		public override void ExtendAssemblyCompilerPipeline(CompilerPipeline<IAssemblyCompilerStage> assemblyCompilerPipeline)
 		{
 		}
 
 		/// <summary>
 		/// Extends the method compiler pipeline with x86 specific stages.
 		/// </summary>
-		/// <param name="methodPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(CompilerPipeline<IMethodCompilerStage> methodPipeline)
+        /// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
+		public override void ExtendMethodCompilerPipeline(CompilerPipeline<IMethodCompilerStage> methodCompilerPipeline)
 		{
 			// FIXME: Create a specific code generator instance using requested feature flags.
 			// FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
 			// and packed operations available with MMX/SSE extensions
-			methodPipeline.AddRange(
+            methodCompilerPipeline.AddRange(
 				new IMethodCompilerStage[]
                 {
                     new LongOperandTransformationStage(),
                     new IRToX86TransformationStage(),
-                    //new InstructionSchedulingStage(),
                     InstructionLogger.Instance,
-                    ////new SimpleRegisterAllocator(),
-                    ////InstructionLogger.Instance,
                     new CodeGenerator()
                 });
 		}
@@ -233,33 +177,19 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Retrieves a calling convention object for the requested calling convention.
 		/// </summary>
-		/// <param name="cc">One of the defined calling conventions.</param>
+        /// <param name="callingConvention">One of the defined calling conventions.</param>
 		/// <returns>An instance of <see cref="ICallingConvention"/>.</returns>
 		/// <exception cref="System.NotSupportedException"><paramref name="cc"/> is not a supported calling convention.</exception>
-		public override ICallingConvention GetCallingConvention(CallingConvention cc)
+		public override ICallingConvention GetCallingConvention(CallingConvention callingConvention)
 		{
-			switch (cc) {
+            switch (callingConvention)
+            {
 				case CallingConvention.Default:
 					return new DefaultCallingConvention(this);
 
 				default:
 					throw new NotSupportedException();
 			}
-		}
-
-		/// <summary>
-		/// Retrieves the object file builders of this architecture.
-		/// </summary>
-		/// <returns>An array of supported object file builders.</returns>
-		[Obsolete]
-		public override ObjectFileBuilderBase[] GetObjectFileBuilders()
-		{
-			return new ObjectFileBuilderBase[]
-            {
-                /*new Elf32ObjectFileBuilder(
-                    Elf32MachineKind.I386
-                )*/
-            };
 		}
 
 		/// <summary>
@@ -270,7 +200,9 @@ namespace Mosa.Platforms.x86
 		public override IRegisterConstraint GetRegisterConstraint(Instruction instruction)
 		{
 			Type constraintType = null;
-			if (Constraints.TryGetValue(instruction.GetType(), out constraintType) == true) {
+
+			if (Constraints.TryGetValue(instruction.GetType(), out constraintType)) 
+            {
 				return (IRegisterConstraint)Activator.CreateInstance(constraintType);
 			}
 
@@ -280,37 +212,37 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
-		/// <param name="type">The signature type.</param>
-		/// <param name="size">Receives the memory size of the type.</param>
+        /// <param name="signatureType">The signature type.</param>
+        /// <param name="memorySize">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(SigType type, out int size, out int alignment)
+		public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
 		{
-			if (null == type) {
+            if (null == signatureType)
+            {
 				throw new ArgumentNullException(@"type");
 			}
 
-			switch (type.Type) {
-				// TODO ROOTNODE
+            switch (signatureType.Type)
+            {
 				case CilElementType.R4:
-					size = alignment = 4;
+					memorySize = alignment = 4;
 					break;
 				case CilElementType.R8:
 					// Default alignment and size are 4
-					size = alignment = 8;
+					memorySize = alignment = 8;
 					break;
 
 				case CilElementType.I8:
 					goto case CilElementType.U8;
 				case CilElementType.U8:
-					size = alignment = 8;
+					memorySize = alignment = 8;
 					break;
 
 				case CilElementType.ValueType:
-					size = alignment = 4; // FIXME: HACK!
+					memorySize = alignment = 4; // FIXME: HACK!
 					break;
-				//  throw new NotSupportedException();
 				default:
-					size = alignment = 4;
+					memorySize = alignment = 4;
 					break;
 			}
 		}

@@ -54,7 +54,7 @@ namespace Mosa.Platforms.x86
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public sealed override string Name
+		public override string Name
 		{
 			get { return @"LongArithmeticTransformationStage"; }
 		}
@@ -74,56 +74,84 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Splits the long operand into its high and low parts.
 		/// </summary>
-		/// <param name="op">The operand to split.</param>
-		/// <param name="opL">The low operand.</param>
-		/// <param name="opH">The high operand.</param>
-		/// <exception cref="T:System.ArgumentException"><paramref name="op"/> is not a ConstantOperand and not a MemoryOperand.</exception>
-		public static void SplitLongOperand(Operand op, out Operand opL, out Operand opH)
+		/// <param name="operand">The operand to split.</param>
+		/// <param name="operandLow">The low operand.</param>
+		/// <param name="operandHigh">The high operand.</param>
+		/// <exception cref="T:System.ArgumentException"><paramref name="operand"/> is not a ConstantOperand and not a MemoryOperand.</exception>
+		public static void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
-			if (op.Type.Type != CilElementType.I8 && op.Type.Type != CilElementType.U8) {
-				opL = op;
-				opH = new ConstantOperand(new SigType(CilElementType.I4), (int)0);
+			if (operand.Type.Type != CilElementType.I8 && operand.Type.Type != CilElementType.U8) 
+            {
+				operandLow = operand;
+				operandHigh = new ConstantOperand(new SigType(CilElementType.I4), (int)0);
 				return;
 			}
 
-			Debug.Assert(op is MemoryOperand || op is ConstantOperand, @"Long operand not memory or constant.");
+			Debug.Assert(operand is MemoryOperand || operand is ConstantOperand, @"Long operand not memory or constant.");
 
-			SigType HighType = (op.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
-			SigType U4 = new SigType(CilElementType.U4);
-
-			// Is it a constant operand?
-			ConstantOperand cop = op as ConstantOperand;
-			if (cop != null) {
-				if (HighType.Type == CilElementType.I4) {
-					long value = (long)cop.Value;
-					opL = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
-					opH = new ConstantOperand(HighType, (int)(value >> 32));
-				}
-				else {
-					ulong value = (ulong)cop.Value;
-					opL = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
-					opH = new ConstantOperand(HighType, (uint)(value >> 32));
-				}
-			}
-			else {
-				// No, could be a member or a plain memory operand
-				MemberOperand memberOp = op as MemberOperand;
-				if (memberOp != null) {
-					// We need to keep the member reference, otherwise the linker can't fixup
-					// the member address.
-					opL = new MemberOperand(memberOp.Member, U4, memberOp.Offset);
-					opH = new MemberOperand(memberOp.Member, HighType, new IntPtr(memberOp.Offset.ToInt64() + 4));
-				}
-				else {
-					// Plain memory, we can handle it here
-					MemoryOperand mop = (MemoryOperand)op;
-					opL = new MemoryOperand(U4, mop.Base, mop.Offset);
-					opH = new MemoryOperand(HighType, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
-				}
-			}
+            if (operand is ConstantOperand)
+                SplitFromConstantOperand(operand, out operandLow, out operandHigh);
+			else 
+                SplitFromNonConstantOperand(operand, out operandLow, out operandHigh);
 		}
 
-		/// <summary>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operand"></param>
+        /// <param name="operandLow"></param>
+        /// <param name="operandHigh"></param>
+        private static void SplitFromConstantOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+	    {
+            SigType HighType = (operand.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
+            SigType U4 = new SigType(CilElementType.U4);
+
+            ConstantOperand constantOperand = operand as ConstantOperand;
+
+            if (HighType.Type == CilElementType.I4)
+            {
+                long value = (long)constantOperand.Value;
+                operandLow = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
+                operandHigh = new ConstantOperand(HighType, (int)(value >> 32));
+            }
+            else
+            {
+                ulong value = (ulong)constantOperand.Value;
+                operandLow = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
+                operandHigh = new ConstantOperand(HighType, (uint)(value >> 32));
+            }
+	    }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operand"></param>
+        /// <param name="operandLow"></param>
+        /// <param name="operandHigh"></param>
+        private static void SplitFromNonConstantOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+        {
+            SigType HighType = (operand.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
+            SigType U4 = new SigType(CilElementType.U4);
+
+            // No, could be a member or a plain memory operand
+            MemberOperand memberOperand = operand as MemberOperand;
+            if (memberOperand != null)
+            {
+                // We need to keep the member reference, otherwise the linker can't fixup
+                // the member address.
+                operandLow = new MemberOperand(memberOperand.Member, U4, memberOperand.Offset);
+                operandHigh = new MemberOperand(memberOperand.Member, HighType, new IntPtr(memberOperand.Offset.ToInt64() + 4));
+            }
+            else
+            {
+                // Plain memory, we can handle it here
+                MemoryOperand memoryOperand = (MemoryOperand)operand;
+                operandLow = new MemoryOperand(U4, memoryOperand.Base, memoryOperand.Offset);
+                operandHigh = new MemoryOperand(HighType, memoryOperand.Base, new IntPtr(memoryOperand.Offset.ToInt64() + 4));
+            }
+        }
+
+	    /// <summary>
 		/// Expands the add instruction for 64-bit operands.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -219,8 +247,7 @@ namespace Mosa.Platforms.x86
 			Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to 64 bit multiplication are not MemoryOperands.");
 
 			SigType I4 = new SigType(CilElementType.I4);
-			SigType U4 = new SigType(CilElementType.U4);
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
+		    Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			SplitLongOperand(instruction.Results[0], out op0L, out op0H);
 			SplitLongOperand(instruction.First, out op1L, out op1H);
 			SplitLongOperand(instruction.Second, out op2L, out op2H);
@@ -283,8 +310,7 @@ namespace Mosa.Platforms.x86
 
 			SigType I4 = new SigType(CilElementType.I4);
 			SigType U4 = new SigType(CilElementType.U4);
-			SigType I1 = new SigType(CilElementType.I1);
-			SigType U1 = new SigType(CilElementType.U1);
+		    SigType U1 = new SigType(CilElementType.U1);
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			SplitLongOperand(instruction.Results[0], out op0L, out op0H);
@@ -549,8 +575,7 @@ namespace Mosa.Platforms.x86
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
-			SigType U4 = new SigType(CilElementType.U4);
-			SigType U1 = new SigType(CilElementType.U1);
+		    SigType U1 = new SigType(CilElementType.U1);
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			SplitLongOperand(instruction.Results[0], out op0L, out op0H);
@@ -811,8 +836,7 @@ namespace Mosa.Platforms.x86
 			BasicBlock[] blocks = CreateEmptyBlocks(10);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
-			SigType I4 = new SigType(CilElementType.I4);
-			SigType U4 = new SigType(CilElementType.U4);
+		    SigType U4 = new SigType(CilElementType.U4);
 			SigType U1 = new SigType(CilElementType.U1);
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
@@ -935,8 +959,7 @@ namespace Mosa.Platforms.x86
 			BasicBlock[] blocks = CreateEmptyBlocks(10);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
-			SigType I4 = new SigType(CilElementType.I4);
-			SigType U4 = new SigType(CilElementType.U4);
+		    SigType U4 = new SigType(CilElementType.U4);
 			SigType U1 = new SigType(CilElementType.U1);
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
@@ -1075,8 +1098,7 @@ namespace Mosa.Platforms.x86
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
-			SigType I1 = new SigType(CilElementType.I1);
-			SigType U1 = new SigType(CilElementType.U1);
+		    SigType U1 = new SigType(CilElementType.U1);
 			Operand count = instruction.Operand2;
 
 			Operand op0H, op1H, op0L, op1L;
@@ -1156,9 +1178,7 @@ namespace Mosa.Platforms.x86
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
-			SigType I1 = new SigType(CilElementType.I1);
-			SigType U1 = new SigType(CilElementType.U1);
-			Operand count = instruction.Operand2;
+		    Operand count = instruction.Operand2;
 
 			Operand op0H, op1H, op0L, op1L;
 			SplitLongOperand(instruction.Operand0, out op0L, out op0H);
@@ -1279,15 +1299,15 @@ namespace Mosa.Platforms.x86
     		});
 
 			blocks[2].Instructions.AddRange(new Instruction[] {
-                new Instructions.ShrdInstruction(eax, edx, ecx),
-                new Instructions.SarInstruction(edx, ecx),
+                new ShrdInstruction(eax, edx, ecx),
+                new SarInstruction(edx, ecx),
                 new IR.JmpInstruction(nextBlock.Label)
             });
 
 			// Handle shifts of between 32 and 63 bits
 			// MORE32:
 			blocks[3].Instructions.AddRange(new Instruction[] {
-                new Instructions.MoveInstruction(eax, edx),
+                new MoveInstruction(eax, edx),
                 new IR.PushInstruction(ecx),
                 new Instructions.MoveInstruction(ecx, new ConstantOperand(I1, (sbyte)0x1F)),
                 new Instructions.SarInstruction(edx, ecx),
@@ -1664,11 +1684,7 @@ namespace Mosa.Platforms.x86
 			BasicBlock[] blocks = CreateEmptyBlocks(2);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
-			SigType I4 = new SigType(CilElementType.I4);
-			SigType U4 = new SigType(CilElementType.U4);
-			SigType U1 = new SigType(CilElementType.U1);
-
-			Operand op1H, op1L, op2H, op2L;
+		    Operand op1H, op1L, op2H, op2L;
 			SplitLongOperand(instruction.Operands[0], out op1L, out op1H);
 			SplitLongOperand(instruction.Operands[1], out op2L, out op2H);
 			IR.ConditionCode code;
@@ -1748,11 +1764,7 @@ namespace Mosa.Platforms.x86
 			BasicBlock[] blocks = CreateEmptyBlocks(2);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
-			SigType I4 = new SigType(CilElementType.I4);
-			SigType U4 = new SigType(CilElementType.U4);
-			SigType U1 = new SigType(CilElementType.U1);
-
-			Operand op1H, op1L, op2H, op2L;
+		    Operand op1H, op1L, op2H, op2L;
 			SplitLongOperand(instruction.Operands[0], out op1L, out op1H);
 			SplitLongOperand(instruction.Operands[1], out op2L, out op2H);
 			IR.ConditionCode code;
@@ -1823,15 +1835,15 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="code">The code.</param>
 		/// <returns></returns>
-		private Mosa.Runtime.CompilerFramework.IR.ConditionCode GetHighCondition(Mosa.Runtime.CompilerFramework.IR.ConditionCode code)
+		private static IR.ConditionCode GetHighCondition(IR.ConditionCode code)
 		{
 			switch (code) {
-				case Mosa.Runtime.CompilerFramework.IR.ConditionCode.Equal: return Mosa.Runtime.CompilerFramework.IR.ConditionCode.NotEqual;
-				case Mosa.Runtime.CompilerFramework.IR.ConditionCode.GreaterOrEqual: return Mosa.Runtime.CompilerFramework.IR.ConditionCode.LessThan;
-				case Mosa.Runtime.CompilerFramework.IR.ConditionCode.GreaterThan: return Mosa.Runtime.CompilerFramework.IR.ConditionCode.LessThan;
-				case Mosa.Runtime.CompilerFramework.IR.ConditionCode.LessOrEqual: return Mosa.Runtime.CompilerFramework.IR.ConditionCode.GreaterThan;
-				case Mosa.Runtime.CompilerFramework.IR.ConditionCode.LessThan: return Mosa.Runtime.CompilerFramework.IR.ConditionCode.GreaterThan;
-				case Mosa.Runtime.CompilerFramework.IR.ConditionCode.NotEqual: return Mosa.Runtime.CompilerFramework.IR.ConditionCode.Equal;
+				case IR.ConditionCode.Equal: return IR.ConditionCode.NotEqual;
+				case IR.ConditionCode.GreaterOrEqual: return IR.ConditionCode.LessThan;
+				case IR.ConditionCode.GreaterThan: return IR.ConditionCode.LessThan;
+				case IR.ConditionCode.LessOrEqual: return IR.ConditionCode.GreaterThan;
+				case IR.ConditionCode.LessThan: return IR.ConditionCode.GreaterThan;
+				case IR.ConditionCode.NotEqual: return IR.ConditionCode.Equal;
 				default: return code;
 			}
 		}
@@ -1905,7 +1917,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="conditionCode">The condition code to get an unsigned form from.</param>
 		/// <returns>The unsigned form of the given condition code.</returns>
-		private IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
+		private static IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
 		{
 			IR.ConditionCode cc = conditionCode;
 			switch (conditionCode) {

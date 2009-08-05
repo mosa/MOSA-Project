@@ -19,19 +19,19 @@ namespace Mosa.Platforms.x86
 {
     /// <summary>
     /// Latency table used by the InstructionSchedulingStage.
-    /// Contains the latencies for Intel Core Single / Core Duo CPU's.
-    /// Older chipsets contain longer latencies, so by using shorter latencies
+    /// Contains the Latencies for Intel Core Single / Core Duo CPU's.
+    /// Older chipsets contain longer Latencies, so by using shorter Latencies
     /// we don't screw up things.
     /// </summary>
     public sealed class InstructionLatency
     {
         /// <summary>
-        /// Contains the latencies for the usual instructions most widely used
+        /// Contains the Latencies for the usual instructions most widely used
         /// in a standard x86 program.
-        /// The latencies are given in byte, as it seems a latency of > 255 should
+        /// The Latencies are given in byte, as it seems a latency of > 255 should
         /// not occur in any x86 CPU.
         /// </summary>
-        private static Dictionary<Type, byte> latencies = new Dictionary<Type, byte>()
+        private static readonly Dictionary<Type, sbyte> Latencies = new Dictionary<Type, sbyte>()
         {
             { typeof(x86.Instructions.AdcInstruction),  1 },
             { typeof(x86.Instructions.SbbInstruction),  1 },
@@ -57,13 +57,12 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="instruction">Instruction to retrieve latency for</param>
         /// <returns>The matching latency.</returns>
-        public static byte GetLatency(Instruction instruction)
+        public static sbyte GetLatency(Instruction instruction)
         {
-            if (latencies.ContainsKey(instruction.GetType()))
-                return latencies[instruction.GetType()];
+            if (Latencies.ContainsKey(instruction.GetType()))
+                return Latencies[instruction.GetType()];
 
-        	return 0;	// FIXME: the throw slows down the compile
-			//throw new NotSupportedException("No known latency available.");
+        	return -1;
         }
 
         /// <summary>
@@ -71,11 +70,11 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="instruction"></param>
         /// <returns></returns>
-        public static byte GetLatency(Type instruction)
+        public static sbyte GetLatency(Type instruction)
         {
-            if (latencies.ContainsKey(instruction))
-                return latencies[instruction];
-            throw new NotSupportedException("No known latency available.");
+            if (Latencies.ContainsKey(instruction))
+                return Latencies[instruction];
+            return -1;
         }
     }
 }

@@ -73,31 +73,16 @@ namespace Mosa.Platforms.x86
             RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
             bool moveThis = instruction.InvokeTarget.Signature.HasThis;
             int stackSize = CalculateStackSizeForParameters(instruction, moveThis);
+
             if (0 != stackSize)
             {
                 instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.SubInstruction), esp, new ConstantOperand(I, stackSize)));
                 instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.MoveInstruction), new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp));
 
-                Stack<Operand> ops = new Stack<Operand>(instruction.Operands.Length);
-                int thisArg = 1;
-                foreach (Operand op in instruction.Operands)
-                {
-                    if (true == moveThis && 1 == thisArg)
-                    {
-                        thisArg = 0;
-                        continue;
-                    }
-                    ops.Push(op);
-                }
+                Stack<Operand> operandStack = GetOperandStackFromInstruction(instruction, moveThis);
 
-                int space = stackSize, size, alignment;
-                while (0 != ops.Count)
-                {
-                    Operand op = ops.Pop();
-                    this.architecture.GetTypeRequirements(op.Type, out size, out alignment);
-                    space -= size;
-                    Push(instructions, op, space);
-                }
+                int space = stackSize;
+                CalculateRemainingSpace(instructions, operandStack, ref space);   
             }
 
             if (true == moveThis)
@@ -105,7 +90,9 @@ namespace Mosa.Platforms.x86
                 RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
                 instructions.Add(this.architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, instruction.Operands[0]));
             }
+
             instructions.Add(this.architecture.CreateInstruction(typeof(CallInstruction), instruction.InvokeTarget));
+
             if (0 != stackSize)
             {
                 instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.AddInstruction), esp, new ConstantOperand(I, stackSize)));
@@ -115,30 +102,93 @@ namespace Mosa.Platforms.x86
             {
                 if (instruction.Results[0].StackType == StackTypeCode.Int64)
                 {
-                    MemoryOperand mop = instruction.Results[0] as MemoryOperand;
-                    SigType I4 = new SigType(CilElementType.I4);
-                    MemoryOperand opL = new MemoryOperand(I4, mop.Base, mop.Offset);
-                    MemoryOperand opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
-                    RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-                    RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
-
-                    // Move the return value to the memory operand destined for it
-                    instructions.AddRange(new Instruction[] {
-                        new Instructions.MoveInstruction(opL, eax),
-                        new Instructions.MoveInstruction(opH, edx)
-                    });
+                    MoveReturnValueTo64Bit(instruction.Results[0], instructions);
                 }
                 else
                 {
-                    Operand result = instruction.Results[0];
-                    RegisterOperand eax = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
-
-                    // Small results are in EAX
-                    instructions.Add(new Instructions.MoveInstruction(result, eax));
+                    MoveReturnValueTo32Bit(instruction.Results[0], instructions);
                 }
             }
 
             return instructions;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="instruction"></param>
+        /// <param name="moveThis"></param>
+        private Stack<Operand> GetOperandStackFromInstruction(Instruction instruction, bool moveThis)
+        {
+            Stack<Operand> operandStack = new Stack<Operand>(instruction.Operands.Length);
+            int thisArg = 1;
+
+            foreach (Operand operand in instruction.Operands)
+            {
+                if (true == moveThis && 1 == thisArg)
+                {
+                    thisArg = 0;
+                    continue;
+                }
+                operandStack.Push(operand);
+            }
+
+            return operandStack;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="instructionList"></param>
+        /// <param name="operandStack"></param>
+        /// <param name="space"></param>
+        private void CalculateRemainingSpace(List<Instruction> instructionList, Stack<Operand> operandStack, ref int space)
+        {
+            while (0 != operandStack.Count)
+            {
+                Operand operand = operandStack.Pop();
+                int size, alignment;
+
+                this.architecture.GetTypeRequirements(operand.Type, out size, out alignment);
+                space -= size;
+                Push(instructionList, operand, space);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="resultOperand"></param>
+        /// <param name="instructionList"></param>
+        private void MoveReturnValueTo32Bit(Operand resultOperand, List<Instruction> instructionList)
+        {
+            RegisterOperand eax = new RegisterOperand(resultOperand.Type, GeneralPurposeRegister.EAX);
+
+            instructionList.Add(new Instructions.MoveInstruction(resultOperand, eax));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="resultOperand"></param>
+        /// <param name="instructionList"></param>
+        private void MoveReturnValueTo64Bit(Operand resultOperand, List<Instruction> instructionList)
+        {
+            SigType I4 = new SigType(CilElementType.I4);
+            SigType U4 = new SigType(CilElementType.U4);
+            MemoryOperand memoryOperand = resultOperand as MemoryOperand;
+
+            if (memoryOperand == null) return;
+
+            MemoryOperand opL = new MemoryOperand(U4, memoryOperand.Base, memoryOperand.Offset);
+            MemoryOperand opH = new MemoryOperand(I4, memoryOperand.Base, new IntPtr(memoryOperand.Offset.ToInt64() + 4));
+            RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
+            RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
+
+            instructionList.AddRange(new Instruction[] {
+                new Instructions.MoveInstruction(opL, eax),
+                new Instructions.MoveInstruction(opH, edx)
+            });
         }
 
         /// <summary>
@@ -217,7 +267,7 @@ namespace Mosa.Platforms.x86
         /// <returns></returns>
         private int CalculateStackSizeForParameters(IL.InvokeInstruction instruction, bool hasThis)
         {
-            int result = (true == hasThis ? -4 : 0);
+            int result = (hasThis ? -4 : 0);
             int size, alignment;
             
             foreach (Operand op in instruction.Operands)

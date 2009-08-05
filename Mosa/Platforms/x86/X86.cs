@@ -674,24 +674,20 @@ namespace Mosa.Platforms.x86
         /// <returns></returns>
         public static OpCode Sub(Operand dest, Operand src)
         {
-            if ((dest is Operand) && (src is ConstantOperand))
+            if (src is ConstantOperand)
             {
-                /*if (IsChar(dest) || IsShort(dest))
-                    return X86Instruction.Sub.O_C_16;
-                else*/
-                    return X86Instruction.Sub.O_C;
+                return X86Instruction.Sub.O_C;
             }
 
-            if ((dest is RegisterOperand) && (src is Operand))
+            if (dest is RegisterOperand)
             {
-                /*if (src.Type.Type == CilElementType.Char || dest.Type.Type == CilElementType.Char)
-                    return X86Instruction.Sub.R_O_16;
-                else*/
-                    return X86Instruction.Sub.R_O;
+                return X86Instruction.Sub.R_O;
             }
 
             if ((dest is MemoryOperand) && (src is RegisterOperand))
+            {
                 return X86Instruction.Sub.M_R;
+            }
 
             throw new ArgumentException(@"No opcode for operand type.");
         }

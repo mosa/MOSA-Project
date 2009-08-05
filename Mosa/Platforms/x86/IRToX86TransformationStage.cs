@@ -380,7 +380,7 @@ namespace Mosa.Platforms.x86
         void IL.IILVisitor<Context>.Div(IL.DivInstruction instruction, Context ctx)
         {
             Type replType = typeof(x86.Instructions.DivInstruction);
-            if (IsUnsigned(instruction.First.Type.Type) || IsUnsigned(instruction.Second.Type.Type))
+            if (X86.IsUnsigned(instruction.First) || X86.IsUnsigned(instruction.Second))
                 replType = typeof(x86.Instructions.UDivInstruction);
             else if (instruction.First.StackType == StackTypeCode.F)
             {
@@ -394,12 +394,12 @@ namespace Mosa.Platforms.x86
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, null);
 			
             Instruction extend, div;
-            if (IsUnsigned(instruction.First.Type.Type))
+            if (X86.IsUnsigned(instruction.First))
                 extend = new IR.ZeroExtendedMoveInstruction(new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX), new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX));
             else
                 extend = new IR.SignExtendedMoveInstruction(new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX), new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX));
 
-            if (IsUnsigned(instruction.First.Type.Type) && IsUnsigned(instruction.Second.Type.Type))    
+            if (X86.IsUnsigned(instruction.First) && X86.IsUnsigned(instruction.Second))    
                 div = new x86.Instructions.UDivInstruction(instruction.First, instruction.Second);
             else
                 div = new x86.Instructions.DivInstruction(instruction.First, instruction.Second);
@@ -625,25 +625,21 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.LogicalAndInstruction instruction, Context ctx)
         {
-            // Three -> Two conversion
             ThreeTwoAddressConversion(ctx, instruction, typeof(x86.Instructions.LogicalAndInstruction));
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.LogicalOrInstruction instruction, Context ctx)
         {
-            // Three -> Two conversion
             ThreeTwoAddressConversion(ctx, instruction, typeof(x86.Instructions.LogicalOrInstruction));
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.LogicalXorInstruction instruction, Context ctx)
         {
-            // Three -> Two conversion
             ThreeTwoAddressConversion(ctx, instruction, typeof(x86.Instructions.LogicalXorInstruction));
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.LogicalNotInstruction instruction, Context ctx)
         {
-            // Two -> One conversion
             TwoOneAddressConversion(ctx, instruction, typeof(x86.Instructions.LogicalNotInstruction));
         }
 
@@ -654,30 +650,29 @@ namespace Mosa.Platforms.x86
             Operand op1 = instruction.Operand1;
             op1 = EmitConstant(op1);
 
-            if (op0 is MemoryOperand && op1 is MemoryOperand)
+            if (!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) return;
+
+            List<Instruction> replacements = new List<Instruction>();
+            RegisterOperand rop;
+            if (op0.StackType == StackTypeCode.F || op1.StackType == StackTypeCode.F)
             {
-                List<Instruction> replacements = new List<Instruction>();
-                RegisterOperand rop;
-                if (op0.StackType == StackTypeCode.F || op1.StackType == StackTypeCode.F)
-                {
-                    rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
-                }
-                else if (op0.StackType == StackTypeCode.Int64)
-                {
-                    rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
-                }
-                else
-                {
-                    rop = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
-                }
-
-                replacements.AddRange(new Instruction[] {
-                    new Instructions.MoveInstruction(rop, op1),
-                    new Instructions.MoveInstruction(op0, rop)
-                });
-
-                Replace(ctx, replacements.ToArray());
+                rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
             }
+            else if (op0.StackType == StackTypeCode.Int64)
+            {
+                rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
+            }
+            else
+            {
+                rop = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
+            }
+
+            replacements.AddRange(new Instruction[] {
+                                                        new Instructions.MoveInstruction(rop, op1),
+                                                        new Instructions.MoveInstruction(op0, rop)
+                                                    });
+
+            Replace(ctx, replacements.ToArray());
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.PhiInstruction instruction, Context ctx)
@@ -807,11 +802,6 @@ namespace Mosa.Platforms.x86
                 new x86.Instructions.UDivInstruction(instruction.Operand1, instruction.Operand2),
                 new x86.Instructions.MoveInstruction(instruction.Operand0, new RegisterOperand(instruction.Operand0.Type, GeneralPurposeRegister.EDX))
             });
-            //throw new NotImplementedException();
-/*
-            Type replType = typeof(x86.Instructions.URemInstruction);
-            ThreeTwoAddressConversion(ctx, instruction, replType);
-  */
         }
 
         void IR.IIRVisitor<Context>.Visit(IR.ZeroExtendedMoveInstruction instruction, Context ctx)
@@ -843,29 +833,30 @@ namespace Mosa.Platforms.x86
             Operand op0 = instruction.Operand0;
             Operand op1 = instruction.Operand1;
 
-            if ((op0 is MemoryOperand && op1 is MemoryOperand) || (op0 is ConstantOperand && op1 is ConstantOperand) || op1 is ConstantOperand)
+            if (((!(op0 is MemoryOperand)   || !(op1 is MemoryOperand)) &&
+                 (!(op0 is ConstantOperand) || !(op1 is ConstantOperand))) && !(op1 is ConstantOperand)) 
+                return;
+
+            RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
+            if (X86.IsSigned(op0))
             {
-                RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
-                if (X86.IsSigned(op0))
-                {
-                    Replace(ctx, new Instruction[] {
-                        new IR.PushInstruction(eax),
-                        new IR.SignExtendedMoveInstruction(eax, op0),
-                        instruction,
-                        new IR.PopInstruction(eax),
-                    });
-                }
-                else
-                {
-                    Replace(ctx, new Instruction[] {
-                        new IR.PushInstruction(eax),
-                        new IR.MoveInstruction(eax, op0),
-                        instruction,
-                        new IR.PopInstruction(eax),
-                    });
-                }
-                instruction.SetResult(0, eax);
+                Replace(ctx, new Instruction[] {
+                                                   new IR.PushInstruction(eax),
+                                                   new IR.SignExtendedMoveInstruction(eax, op0),
+                                                   instruction,
+                                                   new IR.PopInstruction(eax),
+                                               });
             }
+            else
+            {
+                Replace(ctx, new Instruction[] {
+                                                   new IR.PushInstruction(eax),
+                                                   new IR.MoveInstruction(eax, op0),
+                                                   instruction,
+                                                   new IR.PopInstruction(eax),
+                                               });
+            }
+            instruction.SetResult(0, eax);
         }
 
         void IX86InstructionVisitor<Context>.CmpXchg(Instructions.Intrinsics.CmpXchgInstruction instruction, Context ctx)
@@ -1353,19 +1344,15 @@ namespace Mosa.Platforms.x86
 
         private void HandleComparisonInstruction<InstType>(Context ctx, InstType instruction) where InstType: Instruction, IR.IConditionalInstruction
         {
-            //IL.ILInstruction inst = (IL.ILInstruction)instruction;
             Operand[] ops = instruction.Operands;
             EmitConstants(ops);
 
             if (ops[0] is MemoryOperand && ops[1] is RegisterOperand)
             {
-                // Swap operands & optionally negate condition...
                 SwapComparisonOperands(instruction, ops[0], ops[1]);
             }
             else if (ops[0] is MemoryOperand && ops[1] is MemoryOperand)
             {
-                // Load op1 into EAX and then do the comparison...
-                //RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
                 RegisterOperand eax = new RegisterOperand(ops[0].Type, GeneralPurposeRegister.EAX);
                 Instruction[] results = new Instruction[] {
                                 new Instructions.MoveInstruction(eax, ops[0]),
@@ -1465,6 +1452,8 @@ namespace Mosa.Platforms.x86
             Operand opRes = instruction.Results[0];
             Operand op1 = instruction.Operands[0];
             Operand op2 = instruction.Operands[1];
+
+            // Create registers for different data types
             RegisterOperand eax = new RegisterOperand(opRes.Type, opRes.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : (Register)GeneralPurposeRegister.EAX);
             RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
             RegisterOperand eaxS = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
@@ -1479,14 +1468,17 @@ namespace Mosa.Platforms.x86
                 instruction.SetOperand(0, eax);
             }
 
+            // Check if we have to sign-extend the operand that's being loaded
             if (X86.IsSigned(op1) && !(op1 is ConstantOperand))
             {
+                // Signextend it
                 Replace(ctx, new Instruction[] {
                     _architecture.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), eaxL, op1),
                     instruction,
                     _architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
                 });
             }
+            // Check if the operand has to be zero-extended
             else if (X86.IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F)
             {
                 Replace(ctx, new Instruction[] {
@@ -1495,6 +1487,7 @@ namespace Mosa.Platforms.x86
                     _architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
                 });
             }
+            // In any other case: Just load it
             else
             {
                 Replace(ctx, new Instruction[] {
@@ -1504,17 +1497,6 @@ namespace Mosa.Platforms.x86
                 });
             }
         }
-
-        private bool IsUnsigned(CilElementType type)
-        {
-            return (type == CilElementType.U ||
-                    type == CilElementType.U1 ||
-                    type == CilElementType.U2 ||
-                    type == CilElementType.U4 ||
-                    type == CilElementType.U8 ||
-                    type == CilElementType.Char);
-        }
-
         #endregion // Internals
     }
 }
