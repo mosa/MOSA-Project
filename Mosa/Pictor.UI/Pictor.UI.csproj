@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.20506</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{79BA50A4-B1A8-45E0-B6C2-65FDC165C147}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -78,7 +78,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Pictor\Pictor.csproj">
       <Project>{1D756AD8-07A2-44F3-9A69-B6573A339CB4}</Project>
-      <Name>Pictor</Name>
+      <Name>Pictor %28Pictor\Pictor%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

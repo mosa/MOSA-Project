@@ -24,7 +24,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		protected BasicBlock firstBlock;
+		protected BasicBlock prologue;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected BasicBlock epilogue;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -69,8 +74,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 			List<BasicBlock> blocks = blockProvider.Blocks;
 
-			// Retreive the first block
-			firstBlock = blockProvider.FromLabel(-1);
+			// Retreive the prologue and epilogue blocks
+			prologue = blockProvider.FromLabel(-1);
+			epilogue = blockProvider.FromLabel(Int32.MaxValue);
 
 			// Architecture
 			arch = compiler.Architecture;
@@ -79,6 +85,7 @@ namespace Mosa.Runtime.CompilerFramework
 			workArray = new BitArray(blocks.Count);
 			workList = new Stack<BasicBlock>();
 
+			// Pass One
 			// Iterate all blocks, remove and/or combine blocks
 			// Loop backwards to improve performance and reduce looping
 			for (int i = blocks.Count - 1; i >= 0; i--) {
@@ -88,7 +95,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				workArray.Set(block.Index, false);
 			}
-
+			
 			// Pass Two
 			while (workList.Count != 0) {
 				BasicBlock block = workList.Pop();
@@ -136,10 +143,10 @@ namespace Mosa.Runtime.CompilerFramework
 				changed = true;
 
 			//if (TryToRemoveEmptyBlock(block))
-			//	changed = true;
+			// 	changed = true;
 
-			if (TryToHoistBranch(block))
-				changed = true;
+			//if (TryToHoistBranch(block))
+			//	changed = true;
 
 			return changed;
 		}
@@ -185,7 +192,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (self)
 				MarkBlockForReview(block);
 		}
-
+		
 		/// <summary>
 		/// Tries to remove unused blocks.
 		/// </summary>
@@ -193,14 +200,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected bool TryToRemoveUnreferencedBlock(BasicBlock block)
 		{
-			if ((block.PreviousBlocks.Count == 0) && (block != firstBlock) && (block.Instructions.Count != 0)) {
+			if ((block.PreviousBlocks.Count == 0) && (block != prologue) && (block != epilogue) && (block.Instructions.Count != 0)) {
 
 				//Mark blocks for review in second pass
 				MarkBlocksForReview(block.NextBlocks);
 
-				foreach (BasicBlock nextblock in block.NextBlocks) {
+				foreach (BasicBlock nextblock in block.NextBlocks) 
 					while (nextblock.PreviousBlocks.Remove(block)) ;
-				}
 
 				block.Instructions.Clear();
 				block.NextBlocks.Clear();
@@ -238,6 +244,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 					// Add JUMP instruction to the next block
 					block.Instructions.Add(instruction);
+
+					// Remove duplicate next block
+					block.NextBlocks.RemoveAt(1);
 
 					return true;
 				}
@@ -311,9 +320,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected bool TryToRemoveEmptyBlock(BasicBlock block)
 		{
-			if ((block.Instructions.Count == 1) && (block != firstBlock)) {
+			if ((block.Instructions.Count == 1) && (block != prologue) && (block != epilogue) && (block.NextBlocks.Count != 0)) {
 				// Sanity check, a block with one instruction (which should be a JUMP) can only have one branch
-				Debug.Assert(block.NextBlocks.Count == 1);
+				//Debug.Assert(block.NextBlocks.Count == 1);
 
 				// Mark blocks for review in second pass
 				MarkRelatedBlocksForReview(block, false);
@@ -364,10 +373,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected bool TryToCombineBlocks(BasicBlock block)
 		{
-			if (block.NextBlocks.Count == 1) {
-				if (block.NextBlocks[0].PreviousBlocks.Count == 1) {
+			if ((block.NextBlocks.Count == 1) && (block != prologue))  {
+				if ((block.NextBlocks[0].PreviousBlocks.Count == 1) && (block.NextBlocks[0] != epilogue)) {
 					// Merge next block into current block
-
 					BasicBlock nextBlock = block.NextBlocks[0];
 
 					// Sanity check
@@ -375,9 +383,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 					// Sanity check
 					Debug.Assert(block.LastInstruction is IBranchInstruction);
-
-					// Sanity check
-					//Debug.Assert(nextBlock.LastInstruction is IBranchInstruction);
 
 					// Mark blocks for review in second pass
 					MarkRelatedBlocksForReview(block, false);
@@ -391,7 +396,7 @@ namespace Mosa.Runtime.CompilerFramework
 						block.Instructions.Add(instruction);
 					}
 
-					// Copy next block list from next block to the current block
+					// Copy block list from next block to the current block
 					block.NextBlocks.Clear();
 					foreach (BasicBlock next in nextBlock.NextBlocks) {
 						if (!block.NextBlocks.Contains(next))
@@ -410,6 +415,9 @@ namespace Mosa.Runtime.CompilerFramework
 					nextBlock.PreviousBlocks.Clear();
 					nextBlock.NextBlocks.Clear();
 
+					//if (!(block.LastInstruction is IBranchInstruction))
+					//	Console.WriteLine();
+
 					// Sanity check
 					//Debug.Assert(block.LastInstruction is IBranchInstruction);
 
@@ -427,8 +435,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected bool TryToHoistBranch(BasicBlock block)
 		{
-			if (block.NextBlocks.Count == 1) {
-				if (block.NextBlocks[0].Instructions.Count == 1) {
+			if ((block.NextBlocks.Count == 1) && (block != prologue)) {
+				if ((block.NextBlocks[0].Instructions.Count == 1) && (block.NextBlocks[0] != epilogue)) {
 					// Copy instruction from next block into current block
 
 					// Sanity check, last instruction must have an IBranchInstruction interface

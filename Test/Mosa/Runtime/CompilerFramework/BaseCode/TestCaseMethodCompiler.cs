@@ -46,11 +46,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 //InstructionLogger.Instance,
                 //new LeaveSSA(),
                 //InstructionLogger.Instance,
-				//new BlockReductionStage(),
 				new StackLayoutStage(),
-				//new LoopAwareBlockOrderStage(),
+				new BlockReductionStage(),
+				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
-				new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
+				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
 				new BasicBlockOrderStage()	
             });
         }

@@ -18,6 +18,8 @@ namespace Mosa.Kernel.Memory.X86
 		private const uint StartLocation = 1024 * 1024 * 16;
 		// Reserve memory up to 24Mb
 		private const uint ReserveMemory = 1024 * 1024 * 24;
+		// Maximum Memory Usage (4Gb)
+		private const uint MaximumMemory = 0xFFFFFFFF;
 
 		// Start of memory map
 		private static uint map;
@@ -50,7 +52,7 @@ namespace Mosa.Kernel.Memory.X86
 				uint value = (uint)Multiboot.GetMemoryMapType(index);
 
 				if (value == 1)
-					AddFreeMemory((uint)Multiboot.GetMemoryMapBase(index), (uint)Multiboot.GetMemoryMapLength(index));
+					AddFreeMemory(Multiboot.GetMemoryMapBase(index), Multiboot.GetMemoryMapLength(index));
 			}
 		}
 
@@ -59,11 +61,20 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		/// <param name="start">The start.</param>
 		/// <param name="size">The size.</param>
-		public static void AddFreeMemory(uint start, uint size)
+		public static void AddFreeMemory(ulong start, ulong size)
 		{
+			if (start > MaximumMemory)
+				return;
+
+			if ((start + size) > MaximumMemory)
+				size = MaximumMemory - start;
+
+			if (size < PageSize)
+				return;
+
 			// Normalize 
 			uint normstart = (uint)((start + PageSize - 1) & ~(PageSize - 1));
-			uint normsize = size - (normstart - start);
+			uint normsize = (uint)(size - (normstart - start));
 
 			// Adjust if memory below is reserved
 			if (normstart < ReserveMemory) {
