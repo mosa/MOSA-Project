@@ -99,13 +99,6 @@ namespace Mosa.Runtime.CompilerFramework
         public abstract ICallingConvention GetCallingConvention(CallingConvention cc);
 
         /// <summary>
-        /// Gets object file builders for this architecture
-        /// </summary>
-        /// <returns>A list of ObjectFileBuilders</returns>
-        [Obsolete]
-        public abstract ObjectFileBuilderBase[] GetObjectFileBuilders();
-
-        /// <summary>
         /// Retrieves a register constraint description object.
         /// </summary>
         /// <param name="instruction">The instruction to retrieve the register constraint description for.</param>

@@ -102,12 +102,6 @@ namespace Mosa.Runtime.CompilerFramework
         Operand CreateResultOperand(SigType type, int label, int index);
 
         /// <summary>
-        /// Gets object file builders for this architecture
-        /// </summary>
-        /// <returns>A list of ObjectFileBuilders</returns>
-        ObjectFileBuilderBase[] GetObjectFileBuilders();
-
-        /// <summary>
         /// Gets the type memory requirements.
         /// </summary>
         /// <param name="type">The signature type.</param>

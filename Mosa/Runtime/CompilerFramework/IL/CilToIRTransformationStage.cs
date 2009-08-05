@@ -573,6 +573,9 @@ namespace Mosa.Runtime.CompilerFramework.IL
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private enum ConvType
         {
             I1 = 0,
