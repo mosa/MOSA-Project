@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -81,7 +79,7 @@ namespace Mosa.Runtime.CompilerFramework
         public override bool Equals(Operand other)
         {
             MemoryOperand mop = other as MemoryOperand;
-            return (null != mop && mop.Type == this.Type && mop.Offset == this.Offset && mop.Base == this.Base);
+            return (null != mop && mop.Type == Type && mop.Offset == Offset && mop.Base == Base);
         }
 
         #endregion // Operand Overrides

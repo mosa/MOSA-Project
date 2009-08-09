@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         #region Data members
 
         /// <summary>
-        /// Holds the blocks (incoming edges) of a value.
+        /// Holds the Blocks (incoming edges) of a value.
         /// </summary>
         private List<BasicBlock> _blocks = new List<BasicBlock>();
 
@@ -58,9 +58,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
         }
 
         /// <summary>
-        /// Removes the list of blocks, that corresponds to incoming edges of the operands.
+        /// Removes the list of Blocks, that corresponds to incoming edges of the operands.
         /// </summary>
-        /// <value>The blocks.</value>
+        /// <value>The Blocks.</value>
         public List<BasicBlock> Blocks
         {
             get { return _blocks; }

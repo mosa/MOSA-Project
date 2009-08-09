@@ -7,11 +7,6 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 
@@ -76,7 +71,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns></returns>
         public override object Clone()
         {
-            return new ParameterOperand(base.Base, _parameter, _type);
+            return new ParameterOperand(Base, _parameter, _type);
         }
         
         #endregion // StackOperand overrides

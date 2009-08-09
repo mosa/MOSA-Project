@@ -11,22 +11,20 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework.IL;
 
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
 	/// This compilation stage is used by method compilers after the
-	/// IL decoding stage to build basic blocks out of the instruction list.
+	/// IL decoding stage to build basic Blocks out of the instruction list.
 	/// </summary>
 	public sealed class BasicBlockBuilderStage : IMethodCompilerStage, IBasicBlockProvider
 	{
 		#region Data members
 
 		/// <summary>
-		/// List of basic blocks found during decoding.
+		/// List of basic Blocks found during decoding.
 		/// </summary>
 		private List<BasicBlock> basicBlocks;
 
@@ -119,7 +117,7 @@ namespace Mosa.Runtime.CompilerFramework
 			basicBlocks.Add(prologue);
 
 			// Add a jump instruction to the first block from the prologue
-			prologue.Instructions.Insert(0, arch.CreateInstruction(typeof(IL.BranchInstruction), OpCode.Br, new int[] { 0 }));
+			prologue.Instructions.Insert(0, arch.CreateInstruction(typeof(BranchInstruction), OpCode.Br, new int[] { 0 }));
 
 			// Create the epilogue block
 			BasicBlock epilogue = new BasicBlock(Int32.MaxValue);
@@ -131,14 +129,14 @@ namespace Mosa.Runtime.CompilerFramework
 			// Link prologue block to the first leader
 			LinkBlocks(prologue, leaders[0]);
 
-			// Insert instructions into basic blocks
+			// Insert instructions into basic Blocks
 			KeyValuePair<int, BasicBlock> current = new KeyValuePair<int, BasicBlock>(-1, null);
 			int blockIndex = 0;
 			int lastInstructionIndex = 0;
 
 			foreach (KeyValuePair<int, BasicBlock> next in leaders) {
 				if (current.Key != -1) {
-					// Insert block into list of basic blocks
+					// Insert block into list of basic Blocks
 					basicBlocks.Add(current.Value);
 
 					// Insert instructions into basic block
@@ -154,7 +152,7 @@ namespace Mosa.Runtime.CompilerFramework
 						case FlowControl.Call: goto case FlowControl.Next;
 						case FlowControl.Next:
 							// Insert unconditional branch to next basic block
-							BranchInstruction branch = new BranchInstruction(OpCode.Br_s, new int[] { next.Key });
+							BranchInstruction branch = new BranchInstruction(OpCode.Br_s, new[] { next.Key });
 							current.Value.Instructions.Add(branch);
 							LinkBlocks(current.Value, leaders[next.Key]);
 							break;
@@ -214,13 +212,13 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Links the blocks.
+		/// Links the Blocks.
 		/// </summary>
 		/// <param name="caller">The caller.</param>
 		/// <param name="callee">The callee.</param>
 		private void LinkBlocks(BasicBlock caller, BasicBlock callee)
 		{
-			// Chain the blocks together
+			// Chain the Blocks together
 			callee.PreviousBlocks.Add(caller);
 			caller.NextBlocks.Add(callee);
 		}
@@ -230,12 +228,12 @@ namespace Mosa.Runtime.CompilerFramework
 		#region IBasicBlockProvider members
 
 		/// <summary>
-		/// Gets the basic blocks.
+		/// Gets the basic Blocks.
 		/// </summary>
-		/// <value>The basic blocks.</value>
+		/// <value>The basic Blocks.</value>
 		public List<BasicBlock> Blocks
 		{
-			get { return this.basicBlocks; }
+			get { return basicBlocks; }
 		}
 
 		/// <summary>
@@ -247,7 +245,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		public BasicBlock FromLabel(int label)
 		{
-			return this.basicBlocks.Find(delegate(BasicBlock block)
+			return basicBlocks.Find(delegate(BasicBlock block)
 			{
 				return (label == block.Label);
 			});
@@ -261,7 +259,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		public IEnumerator<BasicBlock> GetEnumerator()
 		{
-			return this.basicBlocks.GetEnumerator();
+			return basicBlocks.GetEnumerator();
 		}
 
 		/// <summary>
@@ -272,7 +270,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
-			return this.basicBlocks.GetEnumerator();
+			return basicBlocks.GetEnumerator();
 		}
 
 		#endregion // IBasicBlockProvider members

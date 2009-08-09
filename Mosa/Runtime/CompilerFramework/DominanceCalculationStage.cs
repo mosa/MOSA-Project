@@ -15,7 +15,7 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// Performs dominance calculations on basic blocks built by a previous compilation stage.
+    /// Performs dominance calculations on basic Blocks built by a previous compilation stage.
     /// </summary>
     /// <remarks>
     /// The stage exposes the IDominanceProvider interface for other compilation stages to allow
@@ -34,12 +34,12 @@ namespace Mosa.Runtime.CompilerFramework
         private BasicBlock[] _doms;
 
         /// <summary>
-        /// Holds the dominance frontier blocks.
+        /// Holds the dominance frontier Blocks.
         /// </summary>
         private BasicBlock[] _domFrontier;
 
         /// <summary>
-        /// Holds the dominance frontier of individual blocks.
+        /// Holds the dominance frontier of individual Blocks.
         /// </summary>
         private BasicBlock[][] _domFrontierOfBlock;
 
@@ -77,10 +77,10 @@ namespace Mosa.Runtime.CompilerFramework
             if (null == compiler)
                 throw new ArgumentNullException(@"compiler");
 
-            // Retrieve the basic blocks
+            // Retrieve the basic Blocks
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
             if (null == blockProvider)
-                throw new InvalidOperationException(@"Dominance calculation requires basic blocks.");
+                throw new InvalidOperationException(@"Dominance calculation requires basic Blocks.");
 
             CalculateDominance(blockProvider);
             CalculateDominanceFrontier(blockProvider.Blocks);
@@ -96,7 +96,7 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Calculates the immediate dominance of all blocks in the block provider.
+        /// Calculates the immediate dominance of all Blocks in the block provider.
         /// </summary>
         /// <param name="blockProvider">The block provider to calculate with.</param>
         private void CalculateDominance(IBasicBlockProvider blockProvider)
@@ -141,9 +141,9 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Calculates the dominance frontier of all blocks in the block list.
+        /// Calculates the dominance frontier of all Blocks in the block list.
         /// </summary>
-        /// <param name="blocks">The list of basic blocks.</param>
+        /// <param name="blocks">The list of basic Blocks.</param>
         private void CalculateDominanceFrontier(List<BasicBlock> blocks)
         {
             List<BasicBlock> domFrontier = new List<BasicBlock>();
@@ -244,7 +244,7 @@ namespace Mosa.Runtime.CompilerFramework
         #region Internals
 
         /// <summary>
-        /// Retrieves the highest common immediate dominator of the two given blocks.
+        /// Retrieves the highest common immediate dominator of the two given Blocks.
         /// </summary>
         /// <param name="b1">The first basic block.</param>
         /// <param name="b2">The second basic block.</param>
@@ -271,7 +271,7 @@ namespace Mosa.Runtime.CompilerFramework
             int idx = 0;
             Queue<BasicBlock> workList = new Queue<BasicBlock>(blocks.Count);
 
-            // Add next blocks
+            // Add next Blocks
             foreach (BasicBlock next in NextBlocks(blockProvider, blocks[0]))
                 workList.Enqueue(next);
 

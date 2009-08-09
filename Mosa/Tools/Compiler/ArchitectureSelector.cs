@@ -40,7 +40,7 @@ namespace Mosa.Tools.Compiler
 
                 case "x64":
                 default:
-                    throw new OptionException(String.Format("Unknown or unsupported architecture {0}.", architecture), "arch");
+                    throw new OptionException(String.Format("Unknown or unsupported architecture {0}.", architecture), "Architecture");
             }
         }
         
@@ -51,7 +51,7 @@ namespace Mosa.Tools.Compiler
         public void AddOptions(OptionSet optionSet)
         {
             optionSet.Add(
-                "a|arch=",
+                "a|Architecture=",
                 "Select one of the MOSA architectures to compile for [{x86}].",
                 delegate(string arch)
                 {

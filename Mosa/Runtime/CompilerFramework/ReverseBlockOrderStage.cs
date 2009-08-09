@@ -8,14 +8,13 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// The Reserver Block Order Stage reorders blocks in reverse order. This stage is for testing use only.
+	/// The Reserver Block Order Stage reorders Blocks in reverse order. This stage is for testing use only.
 	/// </summary>
 	public class ReverseBlockOrderStage : IMethodCompilerStage, IBasicBlockOrder
 	{
@@ -24,15 +23,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		protected IArchitecture arch;
+		protected IArchitecture Architecture;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected List<BasicBlock> blocks;
+		protected List<BasicBlock> Blocks;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected BasicBlock firstBlock;
+		protected BasicBlock FirstBlock;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -52,9 +51,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the ordered blocks.
+		/// Gets the ordered Blocks.
 		/// </summary>
-		/// <value>The ordered blocks.</value>
+		/// <value>The ordered Blocks.</value>
 		public int[] OrderedBlocks { get { return orderedBlocks; } }
 
 		#endregion // Properties
@@ -71,12 +70,12 @@ namespace Mosa.Runtime.CompilerFramework
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 
 			if (blockProvider == null)
-				throw new InvalidOperationException(@"Simple Trace Block Order stage requires basic blocks.");
+				throw new InvalidOperationException(@"Simple Trace Block Order stage requires basic Blocks.");
 
-			blocks = blockProvider.Blocks;
+			Blocks = blockProvider.Blocks;
 
 			// Retreive the first block
-			firstBlock = blockProvider.FromLabel(-1);
+			FirstBlock = blockProvider.FromLabel(-1);
 
 			// Determines the block order
 			DetermineBlockOrder();
@@ -87,14 +86,14 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private void DetermineBlockOrder()
 		{
-			// Allocate list of ordered blocks
-			orderedBlocks = new int[blocks.Count];
+			// Allocate list of ordered Blocks
+			orderedBlocks = new int[Blocks.Count];
 
-			Debug.Assert(firstBlock.Index == 0);
-			orderedBlocks[0] = firstBlock.Index;
+			Debug.Assert(FirstBlock.Index == 0);
+			orderedBlocks[0] = FirstBlock.Index;
 			int orderBlockCnt = 1;
 
-			for (int i = blocks.Count - 1; i > 0; i--)
+			for (int i = Blocks.Count - 1; i > 0; i--)
 				orderedBlocks[orderBlockCnt++] = i;
 		}
 

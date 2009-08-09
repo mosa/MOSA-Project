@@ -70,23 +70,23 @@ namespace Mosa.Runtime.CompilerFramework
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 
 			if (blockProvider == null)
-				throw new InvalidOperationException(@"Block Reduction stage requires basic blocks.");
+				throw new InvalidOperationException(@"Block Reduction stage requires basic Blocks.");
 
 			List<BasicBlock> blocks = blockProvider.Blocks;
 
-			// Retreive the prologue and epilogue blocks
+			// Retreive the prologue and epilogue Blocks
 			prologue = blockProvider.FromLabel(-1);
 			epilogue = blockProvider.FromLabel(Int32.MaxValue);
 
 			// Architecture
 			arch = compiler.Architecture;
 
-			// Contains a list of blocks which need to be review during the second pass
+			// Contains a list of Blocks which need to be review during the second pass
 			workArray = new BitArray(blocks.Count);
 			workList = new Stack<BasicBlock>();
 
 			// Pass One
-			// Iterate all blocks, remove and/or combine blocks
+			// Iterate all Blocks, remove and/or combine Blocks
 			// Loop backwards to improve performance and reduce looping
 			for (int i = blocks.Count - 1; i >= 0; i--) {
 				BasicBlock block = blocks[i];
@@ -164,9 +164,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Marks the blocks for review.
+		/// Marks the Blocks for review.
 		/// </summary>
-		/// <param name="blocks">The blocks.</param>
+		/// <param name="blocks">The Blocks.</param>
 		protected void MarkBlocksForReview(List<BasicBlock> blocks)
 		{
 			foreach (BasicBlock block in blocks)
@@ -174,7 +174,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Marks the related blocks for review.
+		/// Marks the related Blocks for review.
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <param name="self">if set to <c>true</c> [self].</param>
@@ -194,7 +194,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 		
 		/// <summary>
-		/// Tries to remove unused blocks.
+		/// Tries to remove unused Blocks.
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <returns></returns>
@@ -202,7 +202,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			if ((block.PreviousBlocks.Count == 0) && (block != prologue) && (block != epilogue) && (block.Instructions.Count != 0)) {
 
-				//Mark blocks for review in second pass
+				//Mark Blocks for review in second pass
 				MarkBlocksForReview(block.NextBlocks);
 
 				foreach (BasicBlock nextblock in block.NextBlocks) 
@@ -226,7 +226,7 @@ namespace Mosa.Runtime.CompilerFramework
 				if (block.NextBlocks[0] == block.NextBlocks[1]) {
 					// Replace conditional branch instruction with an unconditional jump instruction
 
-					// Mark blocks for review in second pass
+					// Mark Blocks for review in second pass
 					MarkRelatedBlocksForReview(block, true);
 
 					// Remove last instruction of this block
@@ -268,7 +268,7 @@ namespace Mosa.Runtime.CompilerFramework
 					if (lastInstruction.BranchTargets[0] == lastInstruction.BranchTargets[1]) {
 						// Replace conditional branch instruction with an unconditional jump instruction
 
-						// Mark blocks for review in second pass
+						// Mark Blocks for review in second pass
 						MarkRelatedBlocksForReview(block, true);
 
 						// Remove last instruction of this block
@@ -324,7 +324,7 @@ namespace Mosa.Runtime.CompilerFramework
 				// Sanity check, a block with one instruction (which should be a JUMP) can only have one branch
 				//Debug.Assert(block.NextBlocks.Count == 1);
 
-				// Mark blocks for review in second pass
+				// Mark Blocks for review in second pass
 				MarkRelatedBlocksForReview(block, false);
 
 				foreach (BasicBlock previousBlock in block.PreviousBlocks) {
@@ -349,12 +349,12 @@ namespace Mosa.Runtime.CompilerFramework
 							lastInstruction.BranchTargets[i] = block.NextBlocks[0].Label;
 					}
 
-					// Add the previous block to the next blocks
+					// Add the previous block to the next Blocks
 					if (!block.NextBlocks[0].PreviousBlocks.Contains(previousBlock))
 						block.NextBlocks[0].PreviousBlocks.Add(previousBlock);
 				}
 
-				// Remove this block from all the next blocks
+				// Remove this block from all the next Blocks
 				while (block.NextBlocks[0].PreviousBlocks.Remove(block)) ;
 
 				// Clear out this block
@@ -367,7 +367,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Tries to combine blocks.
+		/// Tries to combine Blocks.
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <returns></returns>
@@ -384,7 +384,7 @@ namespace Mosa.Runtime.CompilerFramework
 					// Sanity check
 					Debug.Assert(block.LastInstruction is IBranchInstruction);
 
-					// Mark blocks for review in second pass
+					// Mark Blocks for review in second pass
 					MarkRelatedBlocksForReview(block, false);
 
 					// Remove last instruction of current block
@@ -442,7 +442,7 @@ namespace Mosa.Runtime.CompilerFramework
 					// Sanity check, last instruction must have an IBranchInstruction interface
 					Debug.Assert(block.NextBlocks[0].LastInstruction is IBranchInstruction);
 
-					// Mark blocks for review in second pass
+					// Mark Blocks for review in second pass
 					MarkRelatedBlocksForReview(block, true);
 
 					// Remove last instruction of this block

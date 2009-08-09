@@ -50,7 +50,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 				new BlockReductionStage(),
 				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
-				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
+				//new ReverseBlockOrderStage(),  // reverse all the basic Blocks and see if it breaks anything
 				new BasicBlockOrderStage()	
             });
         }

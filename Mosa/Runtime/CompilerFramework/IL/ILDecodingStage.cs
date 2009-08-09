@@ -27,7 +27,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 	/// <remarks>
 	/// The IL decoding stage takes a stream of bytes and decodes the
 	/// instructions represented into an MSIL based intermediate 
-	/// representation. The instructions are grouped into basic blocks
+	/// representation. The instructions are grouped into basic Blocks
 	/// for easier local optimizations in later compiler stages.
 	/// </remarks>
 	public sealed partial class ILDecodingStage : IMethodCompilerStage, IInstructionsProvider, IInstructionDecoder
@@ -448,7 +448,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 					// Read the clause
 					for (int i = 0; i < blocks; i++) {
 						clause.Read(reader, isFat);
-						// FIXME: Create proper basic blocks for each item in the clause
+						// FIXME: Create proper basic Blocks for each item in the clause
 					}
 				}
 				while (0x80 == (flags & 0x80));
@@ -539,7 +539,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 		/// </summary>
 		private void RemoveDeadInstructions()
 		{
-			// Iterate all blocks
+			// Iterate all Blocks
 			for (int index = 0; index < _instructions.Count; index++) {
 				if (true == _instructions[index].Ignore) {
 					_instructions.RemoveAt(index--);

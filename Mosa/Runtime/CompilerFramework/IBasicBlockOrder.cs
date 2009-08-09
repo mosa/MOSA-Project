@@ -19,9 +19,9 @@ namespace Mosa.Runtime.CompilerFramework
 	public interface IBasicBlockOrder
 	{
 		/// <summary>
-		/// Gets the ordered blocks.
+		/// Gets the ordered Blocks.
 		/// </summary>
-		/// <value>The ordered blocks.</value>
+		/// <value>The ordered Blocks.</value>
 		int[] OrderedBlocks { get; }
 	}
 }

@@ -57,7 +57,7 @@ namespace Mosa.Runtime.CompilerFramework
         {
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
             if (null == blockProvider)
-                throw new InvalidOperationException(@"SSA Conversion requires basic blocks.");
+                throw new InvalidOperationException(@"SSA Conversion requires basic Blocks.");
 
             bool remove = false;
 

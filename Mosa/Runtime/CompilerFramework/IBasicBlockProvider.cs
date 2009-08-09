@@ -14,15 +14,15 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// Allows downlevel compilation stages to access basic blocks and the raw instruction stream
+    /// Allows downlevel compilation stages to access basic Blocks and the raw instruction stream
     /// determined by a previous compilation stage.
     /// </summary>
     public interface IBasicBlockProvider : IEnumerable<BasicBlock>
     {
         /// <summary>
-        /// Gets the basic blocks.
+        /// Gets the basic Blocks.
         /// </summary>
-        /// <value>The basic blocks.</value>
+        /// <value>The basic Blocks.</value>
         List<BasicBlock> Blocks { get; }
 
         /// <summary>

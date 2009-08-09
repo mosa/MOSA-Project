@@ -25,29 +25,29 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		protected IArchitecture arch;
+		protected IArchitecture Architecture;
 		/// <summary>
 		/// 
 		/// </summary>
-		private List<BasicBlock> blocks;
+		private List<BasicBlock> _blocks;
 		/// <summary>
 		/// 
 		/// </summary>
-		private BasicBlock firstBlock;
+		private BasicBlock _firstBlock;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected BitArray workArray;
+		protected BitArray WorkArray;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected Stack<BasicBlock> workList;
+		protected Stack<BasicBlock> WorkList;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected Stack<List<Operand>> workListStack;
+		protected Stack<List<Operand>> WorkListStack;
 
-		#endregion // Data members
+		#endregion
 
 		#region Properties
 
@@ -60,7 +60,7 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return @"Operand Determination Stage"; }
 		}
 
-		#endregion // Properties
+		#endregion 
 
 		#region IMethodCompilerStage Members
 
@@ -74,89 +74,103 @@ namespace Mosa.Runtime.CompilerFramework
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 
 			if (blockProvider == null)
-				throw new InvalidOperationException(@"Operand Determination stage requires basic blocks.");
+				throw new InvalidOperationException(@"Operand Determination stage requires basic _blocks.");
 
-			blocks = blockProvider.Blocks;
+			_blocks = blockProvider.Blocks;
+            _firstBlock = blockProvider.FromLabel(-1);
 
-			// Retreive the first block
-			firstBlock = blockProvider.FromLabel(-1);
+            InitializeWorkItems();
 
-			workList = new Stack<BasicBlock>();
-			workListStack = new Stack<List<Operand>>();
-			workList.Push(firstBlock);
-			workListStack.Push(new List<Operand>());
-			workArray = new BitArray(blocks.Count);
+			while (WorkList.Count != 0) {
+				BasicBlock block = WorkList.Pop();
+				List<Operand> stack = WorkListStack.Pop();
 
-			while (workList.Count != 0) {
-				BasicBlock block = workList.Pop();
-				List<Operand> stack = workListStack.Pop();
+				if (!WorkArray.Get(block.Index)) {
+				    List<Operand> currentStack = GetCurrentStack(stack);
 
-				if (!workArray.Get(block.Index)) {
-					List<Operand> currentStack = new List<Operand>();
-
-					// Dump Block
-					//Console.WriteLine();
-					//Console.WriteLine("Current: " + block.Index.ToString() + ":" + block.Label.ToString() + " - Stack In: " + stack.Count.ToString());
-
-					// Copy stack (yeah, yeah, slow - hopefully this can be optimized later)
-					foreach (Operand operand in stack)
-						currentStack.Add(operand);
-
-					for (int i = 0; i < block.Instructions.Count; i++) {
-						//foreach (Instruction instruction in block.Instructions) {
-						Instruction instruction = block.Instructions[i];
-
-						//Console.Write((block.Label + i).ToString("x") + ": " + block.Instructions[i].ToString());
-
-						if (!(instruction is ILInstruction))
-							continue;
-
-						//Console.Write("  (" + currentStack.Count.ToString() + ":");
-
-						// Assign the operands of the instruction from the IL stack
-						for (int opCount = instruction.Operands.Length - 1; opCount >= 0; opCount--)
-							if (instruction.Operands[opCount] == null) {
-								Operand operand = currentStack[currentStack.Count - 1];
-								currentStack.RemoveAt(currentStack.Count - 1);
-								instruction.SetOperand(opCount, operand);
-							}
-
-						// Validate the instruction
-						instruction.Validate(compiler);
-
-						//Console.WriteLine(instruction.Operands.Length.ToString() + "/" + ((instruction as ILInstruction).PushResult ? instruction.Results.Length.ToString() : "0") + ")");
-
-						// Push the result operands on the IL stack
-						Operand[] ops = instruction.Results;
-						if (ops != null && (instruction as ILInstruction).PushResult && ops.Length != 0)
-							foreach (Operand operand in ops)
-								currentStack.Add(operand);
-					}
-
-					workArray.Set(block.Index, true);
-
-					//Console.WriteLine(block.Index.ToString() + ":" + block.Label.ToString() + " - Stack Out: " + currentStack.Count.ToString());
-
-					foreach (BasicBlock nextBlock in block.NextBlocks) {
-						//Console.WriteLine("Next Block: " + nextBlock.Index.ToString() + ":" + nextBlock.Label.ToString());
-						if (!workArray.Get(nextBlock.Index)) {
-							workList.Push(nextBlock);
-							workListStack.Push(currentStack);
-						}
-					}
-
-					//Console.WriteLine();
+				    ProcessInstructions(block, currentStack, compiler);
+					WorkArray.Set(block.Index, true);
+				    UpdateWorkList(block, currentStack);
 				}
 			}
 		}
 
-		/// <summary>
+        private void InitializeWorkItems()
+        {
+            WorkList = new Stack<BasicBlock>();
+            WorkListStack = new Stack<List<Operand>>();
+            WorkList.Push(_firstBlock);
+            WorkListStack.Push(new List<Operand>());
+            WorkArray = new BitArray(_blocks.Count);
+        }
+
+        private static List<Operand> GetCurrentStack(IList<Operand> stack)
+        {
+            List<Operand> currentStack = new List<Operand>();
+            foreach (Operand operand in stack)
+                currentStack.Add(operand);
+            return currentStack;
+        }
+
+        private void ProcessInstructions(BasicBlock block, IList<Operand> currentStack, IMethodCompiler compiler)
+        {
+            for (int i = 0; i < block.Instructions.Count; i++)
+            {
+                Instruction instruction = block.Instructions[i];
+
+                if (!(instruction is ILInstruction))
+                    continue;
+
+                AssignOperandsFromILStack(instruction, currentStack);
+                instruction.Validate(compiler);
+                PushResultOperands(instruction, currentStack);
+            }
+        }
+
+        private static void AssignOperandsFromILStack(Instruction instruction, IList<Operand> currentStack)
+        {
+            for (int opCount = instruction.Operands.Length - 1; opCount >= 0; --opCount)
+            {
+                if (instruction.Operands[opCount] == null)
+                {
+                    Operand operand = currentStack[currentStack.Count - 1];
+                    currentStack.RemoveAt(currentStack.Count - 1);
+                    instruction.SetOperand(opCount, operand);
+                }
+            }
+        }
+
+        private static void PushResultOperands(Instruction instruction, IList<Operand> currentStack)
+        {
+            Operand[] ops = instruction.Results;
+            if (ops != null && (instruction as ILInstruction).PushResult && ops.Length != 0)
+            {
+                foreach (Operand operand in ops)
+                {
+                    currentStack.Add(operand);
+                }
+            }
+        }
+
+        private void UpdateWorkList(BasicBlock block, List<Operand> currentStack)
+        {
+            foreach (BasicBlock nextBlock in block.NextBlocks)
+            {
+                if (!WorkArray.Get(nextBlock.Index))
+                {
+                    WorkList.Push(nextBlock);
+                    WorkListStack.Push(currentStack);
+                }
+            }
+        }
+
+	    /// <summary>
 		/// Adds to pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline.</param>
 		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertBefore<IL.CilToIrTransformationStage>(this);
+			pipeline.InsertBefore<CilToIrTransformationStage>(this);
 		}
 
 		#endregion // Methods

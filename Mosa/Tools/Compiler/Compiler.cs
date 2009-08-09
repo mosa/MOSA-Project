@@ -80,7 +80,7 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		public Compiler()
 		{
-			usageString = "Usage: mosacl -o outputfile --arch=[x86] --format=[ELF32|ELF64|PE] {--boot=[mb0.7]} {additional options} inputfiles";
+			usageString = "Usage: mosacl -o outputfile --Architecture=[x86] --format=[ELF32|ELF64|PE] {--boot=[mb0.7]} {additional options} inputfiles";
 			optionSet = new OptionSet();
 			inputFiles = new List<FileInfo>();
 
@@ -182,7 +182,7 @@ namespace Mosa.Tools.Compiler
 
 				// Check for missing options
 				if (!linkerStage.IsConfigured) {
-					throw new OptionException("No binary format specified.", "arch");
+					throw new OptionException("No binary format specified.", "Architecture");
 				}
 
 				if (String.IsNullOrEmpty(this.linkerStage.OutputFile)) {
@@ -190,7 +190,7 @@ namespace Mosa.Tools.Compiler
 				}
 
 				if (!architectureSelector.IsConfigured) {
-					throw new OptionException("No architecture specified.", "arch");
+					throw new OptionException("No architecture specified.", "Architecture");
 				}
 			}
 			catch (OptionException e) {

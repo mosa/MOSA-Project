@@ -121,7 +121,7 @@ namespace Mosa.Runtime.CompilerFramework
             // Retrieve the basic block provider
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
             if (null == blockProvider)
-                throw new InvalidOperationException(@"Instruction stream must have been split to basic blocks.");
+                throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
 
             foreach (BasicBlock block in blockProvider.Blocks)
                 EliminateCommonSubexpressions(block);
@@ -182,10 +182,10 @@ namespace Mosa.Runtime.CompilerFramework
                                     switch (aeb.Operator)
                                     {
                                         case Operation.Add:
-                                            inst = new IL.AddInstruction(Mosa.Runtime.CompilerFramework.IL.OpCode.Add, temp, aeb.Operand1, aeb.Operand2);
+                                            inst = new IL.AddInstruction(IL.OpCode.Add, temp, aeb.Operand1, aeb.Operand2);
                                             break;
                                         case Operation.Mul:
-                                            inst = new IL.MulInstruction(Mosa.Runtime.CompilerFramework.IL.OpCode.Mul, temp, aeb.Operand1, aeb.Operand2);
+                                            inst = new IL.MulInstruction(IL.OpCode.Mul, temp, aeb.Operand1, aeb.Operand2);
                                             break;
                                         default:
                                             break;

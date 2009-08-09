@@ -25,14 +25,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Holds the native type of the architecture.
         /// </summary>
-        private SigType nativeType;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BasicArchitecture"/> class.
-        /// </summary>
-        protected BasicArchitecture()
-        {
-        }
+        private SigType _nativeType;
 
         /// <summary>
         /// Gets the width of a native integer in bits.
@@ -56,17 +49,17 @@ namespace Mosa.Runtime.CompilerFramework
         {
             get
             {
-                if (null == this.nativeType)
+                if (null == _nativeType)
                 {
-                    int bits = this.NativeIntegerSize;
+                    int bits = NativeIntegerSize;
                     switch (bits)
                     {
                     case 32:
-                        this.nativeType = new SigType(CilElementType.I4);
+                        _nativeType = new SigType(CilElementType.I4);
                         break;
 
                     case 64:
-                        this.nativeType = new SigType(CilElementType.I8);
+                        _nativeType = new SigType(CilElementType.I8);
                         break;
 
                     default:
@@ -74,7 +67,7 @@ namespace Mosa.Runtime.CompilerFramework
                     }
                 }
 
-                return this.nativeType;
+                return _nativeType;
             }
         }
 
@@ -138,7 +131,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </returns>
         public virtual Operand CreateResultOperand(SigType type, int label, int index)
         {
-            return new TemporaryOperand(label, type, this.StackFrameRegister, index);
+            return new TemporaryOperand(label, type, StackFrameRegister, index);
         }
     }
 }

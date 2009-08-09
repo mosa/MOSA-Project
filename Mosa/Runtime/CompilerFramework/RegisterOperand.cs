@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -76,7 +74,7 @@ namespace Mosa.Runtime.CompilerFramework
         public override bool Equals(Operand other)
         {
             RegisterOperand rop = other as RegisterOperand;
-            return (null != rop && true == Object.ReferenceEquals(rop.Register, this.Register));
+            return (null != rop && ReferenceEquals(rop.Register, Register));
         }
 
         /// <summary>

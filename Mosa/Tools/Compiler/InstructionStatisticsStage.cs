@@ -80,7 +80,7 @@ namespace Mosa.Runtime.CompilerFramework
                 throw new ArgumentNullException(@"compiler");
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
             if (null == blockProvider)
-                throw new InvalidOperationException(@"Instruction stream must have been split to basic blocks.");
+                throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
 
             CodeTransformationStage.Context ctx = new CodeTransformationStage.Context();
             for (int currentBlock = 0; currentBlock < blockProvider.Blocks.Count; currentBlock++)

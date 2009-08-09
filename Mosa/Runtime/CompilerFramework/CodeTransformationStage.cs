@@ -70,7 +70,7 @@ namespace Mosa.Runtime.CompilerFramework
 		protected IArchitecture _architecture;
 
 		/// <summary>
-		/// Holds the list of basic blocks.
+		/// Holds the list of basic Blocks.
 		/// </summary>
 		protected List<BasicBlock> _blocks;
 
@@ -115,7 +115,7 @@ namespace Mosa.Runtime.CompilerFramework
 				throw new ArgumentNullException(@"compiler");
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 			if (null == blockProvider)
-				throw new InvalidOperationException(@"Instruction stream must have been split to basic blocks.");
+				throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
 
 			// Save the architecture & compiler
 			_architecture = compiler.Architecture;
@@ -209,7 +209,7 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Block Operations
 
 		/// <summary>
-		/// Links the blocks.
+		/// Links the Blocks.
 		/// </summary>
 		/// <param name="from">The block issuing the jump.</param>
 		/// <param name="to">The block, where from is jumping to.</param>
@@ -222,9 +222,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Links the new blocks.
+		/// Links the new Blocks.
 		/// </summary>
-		/// <param name="blocks">The blocks.</param>
+		/// <param name="blocks">The Blocks.</param>
 		/// <param name="currentBlock">The current block.</param>
 		/// <param name="nextBlock">The next block.</param>
 		protected void LinkBlocks(BasicBlock[] blocks, BasicBlock currentBlock, BasicBlock nextBlock)
@@ -279,9 +279,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Creates empty blocks.
+		/// Creates empty Blocks.
 		/// </summary>
-		/// <param name="blocks">The blocks.</param>
+		/// <param name="blocks">The Blocks.</param>
 		/// <returns></returns>
 		protected BasicBlock[] CreateEmptyBlocks(int blocks)
 		{

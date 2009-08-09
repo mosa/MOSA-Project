@@ -7,9 +7,6 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-
-using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -38,17 +35,17 @@ namespace Mosa.Runtime.CompilerFramework
 		private int _label;
 
 		/// <summary>
-		/// Links this block to all blocks invoked by the final branch instruction.
+		/// Links this block to all Blocks invoked by the final branch instruction.
 		/// </summary>
 		/// <remarks>
-		/// Usually there are two blocks in this list: The branch destination and
+		/// Usually there are two Blocks in this list: The branch destination and
 		/// the immediately following block. If the final branch instruction is a
-		/// switch, there are potentially more blocks in this list.
+		/// switch, there are potentially more Blocks in this list.
 		/// </remarks>
 		private List<BasicBlock> _nextBlocks;
 
 		/// <summary>
-		/// A list of all blocks, whose final branch instruction refers to this block.
+		/// A list of all Blocks, whose final branch instruction refers to this block.
 		/// </summary>
 		private List<BasicBlock> _previousBlocks;
 
@@ -127,7 +124,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Returns a list of all blocks, which are potential branch targets
+		/// Returns a list of all Blocks, which are potential branch targets
 		/// of the last instruction in this block.
 		/// </summary>
 		public List<BasicBlock> NextBlocks
@@ -136,7 +133,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Returns a list of all blocks, which branch to this block.
+		/// Returns a list of all Blocks, which branch to this block.
 		/// </summary>
 		public List<BasicBlock> PreviousBlocks
 		{
@@ -166,10 +163,9 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			get
 			{
-				if (_instructions.Count == 0)
+			    if (_instructions.Count == 0)
 					return null;
-				else
-					return _instructions[_instructions.Count - 1];
+			    return _instructions[_instructions.Count - 1];
 			}
 		}
 

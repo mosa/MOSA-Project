@@ -46,7 +46,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="index">Holds the variable index.</param>
 		/// <param name="type">The type of the variable.</param>
 		public LocalVariableOperand(Register register, string name, int index, SigType type)
-			: base(type, register, -index) // HACK: Redo this with arch support!
+			: base(type, register, -index) // HACK: Redo this with Architecture support!
 		{
 			_name = name;
 		}

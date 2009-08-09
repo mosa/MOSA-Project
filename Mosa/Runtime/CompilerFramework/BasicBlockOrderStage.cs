@@ -53,27 +53,27 @@ namespace Mosa.Runtime.CompilerFramework
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 
 			if (blockProvider == null)
-				throw new InvalidOperationException(@"Basic Block Order stage requires basic blocks.");
+				throw new InvalidOperationException(@"Basic Block Order stage requires basic Blocks.");
 
-			// Order the blocks based on loop depth
+			// Order the Blocks based on loop depth
 			IBasicBlockOrder orderProvider = (IBasicBlockOrder)compiler.GetPreviousStage(typeof(IBasicBlockOrder));
 
 			if (orderProvider == null)
-				throw new InvalidOperationException(@"Basic Block Order stage requires ordered blocks.");
+				throw new InvalidOperationException(@"Basic Block Order stage requires ordered Blocks.");
 
-			// Get list of blocks
+			// Get list of Blocks
 			List<BasicBlock> blocks = blockProvider.Blocks;
 
 			// Set the new indexes of each block
 			for (int i = 0; i < blocks.Count; i++)
 				blocks[orderProvider.OrderedBlocks[i]].Index = i;
 
-			// Sort the blocks based on new index values
+			// Sort the Blocks based on new index values
 			blocks.Sort(CompareBlocksByIndex);
 		}
 
 		/// <summary>
-		/// Compares two blocks by their index.
+		/// Compares two Blocks by their index.
 		/// </summary>
 		/// <param name="a">A.</param>
 		/// <param name="b">The b.</param>

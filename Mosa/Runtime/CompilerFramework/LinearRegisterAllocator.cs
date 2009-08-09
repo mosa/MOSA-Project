@@ -116,7 +116,7 @@ namespace Mosa.Runtime.CompilerFramework
             // Retrieve the basic block provider
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
             if (null == blockProvider)
-                throw new InvalidOperationException(@"Instruction stream must have been split to basic blocks.");
+                throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
 
             // 1st Pass: Number all instructions in the order of appearance
             NumberInstructions(blockProvider);

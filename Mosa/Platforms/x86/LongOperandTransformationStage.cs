@@ -281,7 +281,7 @@ namespace Mosa.Platforms.x86
 
 			Remove(ctx);
 
-			// Link the created blocks together
+			// Link the created Blocks together
 			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
@@ -547,7 +547,7 @@ namespace Mosa.Platforms.x86
 
 			Remove(ctx);
 
-			// Link the created blocks together
+			// Link the created Blocks together
 			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
@@ -809,7 +809,7 @@ namespace Mosa.Platforms.x86
 
 			Remove(ctx);
 
-			// Link the created blocks together
+			// Link the created Blocks together
 			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
@@ -932,7 +932,7 @@ namespace Mosa.Platforms.x86
 
 			Remove(ctx);
 
-			// Link the created blocks together
+			// Link the created Blocks together
 			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
@@ -1070,7 +1070,7 @@ namespace Mosa.Platforms.x86
 
 			Remove(ctx);
 
-			// Link the created blocks together
+			// Link the created Blocks together
 			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
@@ -1150,7 +1150,7 @@ namespace Mosa.Platforms.x86
 
 			Remove(ctx);
 
-			// Link the created blocks together
+			// Link the created Blocks together
 			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
@@ -1229,7 +1229,7 @@ namespace Mosa.Platforms.x86
 
 			Remove(ctx);
 
-			// Link the created blocks together
+			// Link the created Blocks together
 			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 
@@ -1325,7 +1325,7 @@ namespace Mosa.Platforms.x86
 
 			Remove(ctx);
 
-			// Link the created blocks together
+			// Link the created Blocks together
 			LinkBlocks(blocks, ctx.Block, nextBlock);
 		}
 

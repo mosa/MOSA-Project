@@ -85,7 +85,7 @@ namespace Mosa.Runtime.CompilerFramework
             ICallingConvention cc = methodCompiler.Architecture.GetCallingConvention(methodCompiler.Method.Signature.CallingConvention);
             Debug.Assert(null != cc, @"Failed to retrieve the calling convention of the method.");
 
-            // Is the method split into basic blocks?
+            // Is the method split into basic Blocks?
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)methodCompiler.GetPreviousStage(typeof(IBasicBlockProvider));
             if (null == blockProvider)
             {
@@ -103,11 +103,11 @@ namespace Mosa.Runtime.CompilerFramework
             }
             else
             {
-                // Iterate all blocks and collect locals from all blocks
+                // Iterate all Blocks and collect locals from all Blocks
                 foreach (BasicBlock block in blockProvider)
                     CollectLocalVariables(locals, block.Instructions);
 
-                // Retrieve the default blocks.
+                // Retrieve the default Blocks.
                 prologueBlock = blockProvider.FromLabel(-1).Instructions;
                 epilogueBlock = blockProvider.FromLabel(Int32.MaxValue).Instructions;
             }
@@ -168,7 +168,7 @@ namespace Mosa.Runtime.CompilerFramework
                 foreach (Operand op in i.Results)
                 {
                     // The instruction list may not be in SSA form, so we have to check existence again here unfortunately.
-                    // FIXME: Allow us to detect the state of blocks
+                    // FIXME: Allow us to detect the state of Blocks
                     LocalVariableOperand lvop = op as LocalVariableOperand;
                     if (null != lvop && false == locals.Contains(lvop))
                         locals.Add(lvop);

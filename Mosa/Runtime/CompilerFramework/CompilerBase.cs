@@ -8,22 +8,20 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
     /// Base class providing methods common to all compiler classes.
     /// </summary>
-    public abstract class CompilerBase<PipelineType> where PipelineType: class
+    public abstract class CompilerBase<TPipelineType> where TPipelineType: class
     {
         #region Data members
 
         /// <summary>
         /// Holds the pipeline of the compiler.
         /// </summary>
-        protected CompilerPipeline<PipelineType> _pipeline;
+        protected CompilerPipeline<TPipelineType> _pipeline;
 
         #endregion // Data members
 
@@ -34,7 +32,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         protected CompilerBase()
         {
-            _pipeline = new CompilerPipeline<PipelineType>();
+            _pipeline = new CompilerPipeline<TPipelineType>();
         }
 
         #endregion // Construction
@@ -44,7 +42,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Provides access to the pipeline of this compiler.
         /// </summary>
-        public CompilerPipeline<PipelineType> Pipeline
+        public CompilerPipeline<TPipelineType> Pipeline
         {
             get { return _pipeline; }
         }
@@ -73,12 +71,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// </remarks>
         public object GetPreviousStage(Type stageType)
         {
-            PipelineType result = null;
+            TPipelineType result = null;
 
             for (int stage = _pipeline.CurrentStage - 1; -1 != stage; stage--)
             {
-                PipelineType temp = _pipeline[stage];
-                if (true == stageType.IsInstanceOfType(temp))
+                TPipelineType temp = _pipeline[stage];
+                if (stageType.IsInstanceOfType(temp))
                 {
                     result = temp;
                     break;

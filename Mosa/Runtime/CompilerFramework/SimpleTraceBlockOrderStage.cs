@@ -15,7 +15,7 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// The Simple Trace Block Order Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
+	/// The Simple Trace Block Order Stage reorders Blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
 	public class SimpleTraceBlockOrderStage : IMethodCompilerStage, IBasicBlockOrder
 	{
@@ -52,9 +52,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the ordered blocks.
+		/// Gets the ordered Blocks.
 		/// </summary>
-		/// <value>The ordered blocks.</value>
+		/// <value>The ordered Blocks.</value>
 		public int[] OrderedBlocks { get { return orderedBlocks; } }
 
 		#endregion // Properties
@@ -71,7 +71,7 @@ namespace Mosa.Runtime.CompilerFramework
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 
 			if (blockProvider == null)
-				throw new InvalidOperationException(@"Simple Trace Block Order stage requires basic blocks.");
+				throw new InvalidOperationException(@"Simple Trace Block Order stage requires basic Blocks.");
 
 			blocks = blockProvider.Blocks;
 
@@ -87,10 +87,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private void DetermineBlockOrder()
 		{
-			// Create bit array of refereced blocks (by index)
+			// Create bit array of refereced Blocks (by index)
 			BitArray referencedBlocks = new BitArray(blocks.Count, false);
 
-			// Allocate list of ordered blocks
+			// Allocate list of ordered Blocks
 			orderedBlocks = new int[blocks.Count];
 			int orderBlockCnt = 0;
 
@@ -114,7 +114,7 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 			}
 
-			// Place unreferenced blocks at the end of the list
+			// Place unreferenced Blocks at the end of the list
 			for (int i = 0; i < blocks.Count; i++)
 				if (!referencedBlocks.Get(i))
 					orderedBlocks[orderBlockCnt++] = i;

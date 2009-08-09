@@ -24,10 +24,10 @@ namespace Mosa.Runtime.CompilerFramework
     using Vm;
 
     /// <summary>
-    /// Base class of a method compiler.
+    /// Base class of a _method compiler.
     /// </summary>
     /// <remarks>
-    /// A method compiler is responsible for compiling a single function
+    /// A _method compiler is responsible for compiling a single function
     /// of an object. There are various classes derived from MethodCompilerBase,
     /// which provide specific features, such as jit compilation, runtime
     /// optimized jitting and others. MethodCompilerBase instances are ussually
@@ -39,58 +39,58 @@ namespace Mosa.Runtime.CompilerFramework
                                       IDisposable
     {
         /// <summary>
-        /// Holds a list of operands, which represent method parameters.
+        /// Holds a list of operands, which represent _method _parameters.
         /// </summary>
-        private readonly List<Operand> parameters;
+        private readonly List<Operand> _parameters;
 
         /// <summary>
-        /// The architecture of the compilation target.
+        /// The _architecture of the compilation target.
         /// </summary>
-        private IArchitecture architecture;
+        private IArchitecture _architecture;
 
         /// <summary>
-        /// Holds the linker used to resolve external symbols.
+        /// Holds the _linker used to resolve external symbols.
         /// </summary>
-        private IAssemblyLinker linker;
+        private IAssemblyLinker _linker;
 
         /// <summary>
         /// Holds a list of operands, which represent local variables.
         /// </summary>
-        private List<Operand> locals;
+        private List<Operand> _locals;
 
         /// <summary>
         /// Optional signature of stack local variables.
         /// </summary>
-        private LocalVariableSignature localsSig;
+        private LocalVariableSignature _localsSig;
 
         /// <summary>
-        /// The method definition being compiled.
+        /// The _method definition being compiled.
         /// </summary>
-        private RuntimeMethod method;
+        private RuntimeMethod _method;
 
         /// <summary>
-        /// The metadata module, that contains the method.
+        /// The metadata _module, that contains the _method.
         /// </summary>
-        private IMetadataModule module;
+        private IMetadataModule _module;
 
         /// <summary>
         /// Holds the next free stack slot index.
         /// </summary>
-        private int nextStackSlot;
+        private int _nextStackSlot;
 
         /// <summary>
-        /// Holds the type, which owns the method.
+        /// Holds the _type, which owns the _method.
         /// </summary>
-        private RuntimeType type;
+        private RuntimeType _type;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MethodCompilerBase"/> class.
         /// </summary>
-        /// <param name="linker">The linker.</param>
-        /// <param name="architecture">The target compilation architecture.</param>
-        /// <param name="module">The metadata module, that contains the type.</param>
-        /// <param name="type">The type, which owns the method to compile.</param>
-        /// <param name="method">The method to compile by this instance.</param>
+        /// <param name="linker">The _linker.</param>
+        /// <param name="architecture">The target compilation _architecture.</param>
+        /// <param name="module">The metadata _module, that contains the _type.</param>
+        /// <param name="type">The _type, which owns the _method to compile.</param>
+        /// <param name="method">The _method to compile by this instance.</param>
         protected MethodCompilerBase(
             IAssemblyLinker linker,
             IArchitecture architecture,
@@ -108,53 +108,53 @@ namespace Mosa.Runtime.CompilerFramework
                 throw new ArgumentNullException(@"linker");
             }
 
-            this.architecture = architecture;
-            this.linker = linker;
-            this.method = method;
-            this.module = module;
-            this.parameters = new List<Operand>(new Operand[this.method.Parameters.Count]);
-            this.type = type;
-            this.nextStackSlot = 0;
+            _architecture = architecture;
+            _linker = linker;
+            _method = method;
+            _module = module;
+            _parameters = new List<Operand>(new Operand[_method.Parameters.Count]);
+            _type = type;
+            _nextStackSlot = 0;
         }
 
         /// <summary>
-        /// Gets the architecture to compile for.
+        /// Gets the _architecture to compile for.
         /// </summary>
         public IArchitecture Architecture
         {
-            get { return this.architecture; }
+            get { return _architecture; }
         }
 
         /// <summary>
-        /// Gets the assembly, which contains the method.
+        /// Gets the assembly, which contains the _method.
         /// </summary>
         public IMetadataModule Assembly
         {
-            get { return this.module; }
+            get { return _module; }
         }
 
         /// <summary>
-        /// Gets the linker used to resolve external symbols.
+        /// Gets the _linker used to resolve external symbols.
         /// </summary>
         public IAssemblyLinker Linker
         {
-            get { return this.linker; }
+            get { return _linker; }
         }
 
         /// <summary>
-        /// Gets the method implementation being compiled.
+        /// Gets the _method implementation being compiled.
         /// </summary>
         public RuntimeMethod Method
         {
-            get { return this.method; }
+            get { return _method; }
         }
 
         /// <summary>
-        /// Gets the owner type of the method.
+        /// Gets the owner _type of the _method.
         /// </summary>
         public RuntimeType Type
         {
-            get { return this.type; }
+            get { return _type; }
         }
 
         /// <summary>
@@ -163,46 +163,43 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>A stream object, which can be used to store emitted instructions.</returns>
         public virtual Stream RequestCodeStream()
         {
-            return this.linker.Allocate(this.method, SectionKind.Text, 0, 0);
+            return _linker.Allocate(_method, SectionKind.Text, 0, 0);
         }
 
         /// <summary>
-        /// Compiles the method referenced by this method compiler.
+        /// Compiles the _method referenced by this _method compiler.
         /// </summary>
         public void Compile()
         {
-            this.BeginCompile();
-            this.Pipeline.Execute(delegate(IMethodCompilerStage stage) { stage.Run(this); });
-            this.EndCompile();
+            BeginCompile();
+            Pipeline.Execute(delegate(IMethodCompilerStage stage) { stage.Run(this); });
+            EndCompile();
         }
 
         /// <summary>
         /// Creates a result operand for an instruction.
         /// </summary>
-        /// <param name="type">The signature type of the operand to be created.</param>
+        /// <param name="type">The signature _type of the operand to be created.</param>
         /// <returns>A new temporary result operand.</returns>
         public Operand CreateResultOperand(SigType type)
         {
             if (type.Type != CilElementType.I8 && type.Type != CilElementType.U8)
             {
-                return this.architecture.CreateResultOperand(type, this.nextStackSlot, this.nextStackSlot++);
+                return _architecture.CreateResultOperand(type, _nextStackSlot, _nextStackSlot++);
             }
-            else
-            {
-                return this.CreateTemporary(type);
-            }
+            return CreateTemporary(type);
         }
 
         /// <summary>
         /// Creates a new temporary local variable operand.
         /// </summary>
-        /// <param name="type">The signature type of the temporary.</param>
+        /// <param name="type">The signature _type of the temporary.</param>
         /// <returns>An operand, which represents the temporary.</returns>
         public Operand CreateTemporary(SigType type)
         {
-            int stackSlot = this.nextStackSlot++;
+            int stackSlot = _nextStackSlot++;
             return new LocalVariableOperand(
-                this.architecture.StackFrameRegister, String.Format(@"T_{0}", stackSlot), stackSlot, type);
+                _architecture.StackFrameRegister, String.Format(@"T_{0}", stackSlot), stackSlot, type);
         }
 
         /// <summary>
@@ -210,12 +207,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         public void Dispose()
         {
-            if (null == this._pipeline)
+            if (null == _pipeline)
             {
                 throw new ObjectDisposedException(@"MethodCompilerBase");
             }
 
-            foreach (IMethodCompilerStage mcs in this._pipeline)
+            foreach (IMethodCompilerStage mcs in _pipeline)
             {
                 IDisposable d = mcs as IDisposable;
                 if (null != d)
@@ -224,55 +221,55 @@ namespace Mosa.Runtime.CompilerFramework
                 }
             }
 
-            this._pipeline.Clear();
-            this._pipeline = null;
+            _pipeline.Clear();
+            _pipeline = null;
 
-            this.architecture = null;
-            this.linker = null;
-            this.method = null;
-            this.module = null;
-            this.type = null;
+            _architecture = null;
+            _linker = null;
+            _method = null;
+            _module = null;
+            _type = null;
         }
 
         /// <summary>
-        /// Provides access to the instructions of the method.
+        /// Provides access to the instructions of the _method.
         /// </summary>
-        /// <returns>A stream, which represents the IL of the method.</returns>
+        /// <returns>A stream, which represents the IL of the _method.</returns>
         public Stream GetInstructionStream()
         {
-            return this.method.Module.GetInstructionStream(this.method.Rva);
+            return _method.Module.GetInstructionStream(_method.Rva);
         }
 
         /// <summary>
         /// Retrieves the local stack operand at the specified <paramref name="index"/>.
         /// </summary>
-        /// <param name="idx">The index of the stack operand to retrieve.</param>
+        /// <param name="index">The index of the stack operand to retrieve.</param>
         /// <returns>The operand at the specified index.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
-        public Operand GetLocalOperand(int idx)
+        public Operand GetLocalOperand(int index)
         {
             // HACK: Returning a new instance here breaks object identity. We should reuse operands,
             // which represent the same memory location. If we need to move a variable in an optimization
             // stage to a different memory location, it should actually be a new one so sharing object
             // only saves runtime space/perf.
-            Debug.Assert(null != this.localsSig, @"Method doesn't have locals.");
-            Debug.Assert(idx <= this.localsSig.Types.Length, @"Invalid local index requested.");
-            if (null == this.localsSig || this.localsSig.Types.Length <= idx)
+            Debug.Assert(null != _localsSig, @"Method doesn't have _locals.");
+            Debug.Assert(index <= _localsSig.Types.Length, @"Invalid local index requested.");
+            if (null == _localsSig || _localsSig.Types.Length <= index)
             {
-                throw new ArgumentOutOfRangeException(@"index", idx, @"Invalid parameter index");
+                throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
             }
 
             Operand local = null;
-            if (this.locals.Count > idx)
+            if (_locals.Count > index)
             {
-                local = this.locals[idx];
+                local = _locals[index];
             }
 
             if (null == local)
             {
                 local = new LocalVariableOperand(
-                    this.architecture.StackFrameRegister, String.Format("L_{0}", idx), idx, this.localsSig.Types[idx]);
-                this.locals[idx] = local;
+                    _architecture.StackFrameRegister, String.Format("L_{0}", index), index, _localsSig.Types[index]);
+                _locals[index] = local;
             }
 
             return local;
@@ -281,61 +278,58 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Retrieves the parameter operand at the specified <paramref name="index"/>.
         /// </summary>
-        /// <param name="idx">The index of the parameter operand to retrieve.</param>
+        /// <param name="index">The index of the parameter operand to retrieve.</param>
         /// <returns>The operand at the specified index.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
-        public Operand GetParameterOperand(int idx)
+        public Operand GetParameterOperand(int index)
         {
             // HACK: Returning a new instance here breaks object identity. We should reuse operands,
             // which represent the same memory location. If we need to move a variable in an optimization
             // stage to a different memory location, it should actually be a new one so sharing object
             // only saves runtime space/perf.
-            MethodSignature sig = this.method.Signature;
-            if (true == sig.HasThis || true == sig.HasExplicitThis)
+            MethodSignature sig = _method.Signature;
+            if (sig.HasThis || sig.HasExplicitThis)
             {
-                if (0 == idx)
+                if (0 == index)
                 {
                     return new ParameterOperand(
-                        this.architecture.StackFrameRegister,
-                        new RuntimeParameter(this.method.Module, @"this", 0, ParameterAttributes.In),
-                        new ClassSigType((TokenTypes) this.type.Token));
+                        _architecture.StackFrameRegister,
+                        new RuntimeParameter(_method.Module, @"this", 0, ParameterAttributes.In),
+                        new ClassSigType((TokenTypes) _type.Token));
                 }
-                else
-                {
-                    // Decrement the index, as the caller actually wants a real parameter
-                    idx--;
-                }
+                // Decrement the index, as the caller actually wants a real parameter
+                index--;
             }
 
             // A normal argument, decode it...
-            IList<RuntimeParameter> parameters = this.method.Parameters;
+            IList<RuntimeParameter> parameters = _method.Parameters;
             Debug.Assert(null != parameters, @"Method doesn't have arguments.");
-            Debug.Assert(idx < parameters.Count, @"Invalid argument index requested.");
-            if (null == parameters || parameters.Count <= idx)
+            Debug.Assert(index < parameters.Count, @"Invalid argument index requested.");
+            if (null == parameters || parameters.Count <= index)
             {
-                throw new ArgumentOutOfRangeException(@"index", idx, @"Invalid parameter index");
+                throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
             }
 
             Operand param = null;
-            if (this.parameters.Count > idx)
+            if (_parameters.Count > index)
             {
-                param = this.parameters[idx];
+                param = _parameters[index];
             }
 
             if (null == param)
             {
                 param = new ParameterOperand(
-                    this.architecture.StackFrameRegister, parameters[idx], sig.Parameters[idx]);
-                this.parameters[idx] = param;
+                    _architecture.StackFrameRegister, parameters[index], sig.Parameters[index]);
+                _parameters[index] = param;
             }
 
             return param;
         }
 
         /// <summary>
-        /// Sets the signature of local variables in the method.
+        /// Sets the signature of local variables in the _method.
         /// </summary>
-        /// <param name="localVariableSignature">The local variable signature of the method.</param>
+        /// <param name="localVariableSignature">The local variable signature of the _method.</param>
         public void SetLocalVariableSignature(LocalVariableSignature localVariableSignature)
         {
             if (null == localVariableSignature)
@@ -343,20 +337,20 @@ namespace Mosa.Runtime.CompilerFramework
                 throw new ArgumentNullException(@"localVariableSignature");
             }
 
-            this.localsSig = localVariableSignature;
-            this.locals = new List<Operand>(new Operand[this.localsSig.Types.Length]);
-            this.nextStackSlot = this.locals.Count + 1;
+            _localsSig = localVariableSignature;
+            _locals = new List<Operand>(new Operand[_localsSig.Types.Length]);
+            _nextStackSlot = _locals.Count + 1;
         }
 
         /// <summary>
-        /// Called before the method compiler begins compiling the method.
+        /// Called before the _method compiler begins compiling the _method.
         /// </summary>
         protected virtual void BeginCompile()
         {
         }
 
         /// <summary>
-        /// Called after the method compiler has finished compiling the method.
+        /// Called after the _method compiler has finished compiling the _method.
         /// </summary>
         protected virtual void EndCompile()
         {

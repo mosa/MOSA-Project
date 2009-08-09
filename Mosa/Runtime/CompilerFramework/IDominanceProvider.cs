@@ -33,16 +33,16 @@ namespace Mosa.Runtime.CompilerFramework
         BasicBlock[] GetDominators(BasicBlock block);
 
         /// <summary>
-        /// Retrieves the blocks which are in the dominance frontier of any other block.
+        /// Retrieves the Blocks which are in the dominance frontier of any other block.
         /// </summary>
-        /// <returns>All blocks which are in a dominance frontier of another block.</returns>
+        /// <returns>All Blocks which are in a dominance frontier of another block.</returns>
         BasicBlock[] GetDominanceFrontier();
 
         /// <summary>
         /// Retrieves the dominance frontier of the given block.
         /// </summary>
         /// <param name="block">The block to return the dominance frontier of.</param>
-        /// <returns>An array of blocks, which represent the dominance frontier.</returns>
+        /// <returns>An array of Blocks, which represent the dominance frontier.</returns>
         BasicBlock[] GetDominanceFrontierOfBlock(BasicBlock block);
     }
 }

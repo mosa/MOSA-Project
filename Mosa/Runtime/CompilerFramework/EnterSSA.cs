@@ -68,7 +68,7 @@ namespace Mosa.Runtime.CompilerFramework
         private IMethodCompiler _compiler;
 
         /// <summary>
-        /// Holds the dominance frontier blocks of the stage.
+        /// Holds the dominance frontier Blocks of the stage.
         /// </summary>
         private BasicBlock[] _dominanceFrontierBlocks;
 
@@ -120,7 +120,7 @@ namespace Mosa.Runtime.CompilerFramework
             // Retrieve the basic block provider
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
             if (null == blockProvider)
-                throw new InvalidOperationException(@"SSA Conversion requires basic blocks.");
+                throw new InvalidOperationException(@"SSA Conversion requires basic Blocks.");
             _dominanceProvider = (IDominanceProvider)compiler.GetPreviousStage(typeof(IDominanceProvider));
             Debug.Assert(null != _dominanceProvider, @"SSA Conversion requires a dominance provider.");
             if (null == _dominanceProvider)
@@ -132,7 +132,7 @@ namespace Mosa.Runtime.CompilerFramework
 
             // Allocate space for live outs
             _liveness = new IDictionary<StackOperand,StackOperand>[blocks.Count];
-            // Retrieve the dominance frontier blocks
+            // Retrieve the dominance frontier Blocks
             _dominanceFrontierBlocks = _dominanceProvider.GetDominanceFrontier();
 
             // Add ref/out parameters to the epilogue block to have uses there...

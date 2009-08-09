@@ -199,7 +199,7 @@ namespace Mosa.Runtime.CompilerFramework
                 foreach (Operand r in def.Results)
                 {
                     // Is this the operand?
-                    if (true == Object.ReferenceEquals(r, this))
+                    if (ReferenceEquals(r, this))
                         def.SetResult(opIdx, replacement);
                     
                     opIdx++;
@@ -213,7 +213,7 @@ namespace Mosa.Runtime.CompilerFramework
                 foreach (Operand r in instr.Operands)
                 {
                     // Is this the operand?
-                    if (true == Object.ReferenceEquals(r, this))
+                    if (ReferenceEquals(r, this))
                         instr.SetOperand(opIdx, replacement);
 
                     opIdx++;

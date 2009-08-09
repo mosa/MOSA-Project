@@ -8,14 +8,9 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
-using Mosa.Runtime.Linker;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -134,14 +129,14 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </remarks>
 		protected void Compile()
 		{
-            this.BeginCompile();
+            BeginCompile();
 
-            this.Pipeline.Execute(delegate(IAssemblyCompilerStage stage)
+            Pipeline.Execute(delegate(IAssemblyCompilerStage stage)
             {
                 stage.Run(this);
             });
 
-            this.EndCompile();
+            EndCompile();
         }
 
         /// <summary>

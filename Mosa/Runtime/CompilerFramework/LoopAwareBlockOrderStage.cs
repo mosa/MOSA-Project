@@ -15,7 +15,7 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// The Loop Aware Block Ordering Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
+	/// The Loop Aware Block Ordering Stage reorders Blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
 	public class LoopAwareBlockOrderStage : IMethodCompilerStage, IBasicBlockOrder
 	{
@@ -61,9 +61,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the ordered blocks.
+		/// Gets the ordered Blocks.
 		/// </summary>
-		/// <value>The ordered blocks.</value>
+		/// <value>The ordered Blocks.</value>
 		public int[] OrderedBlocks { get { return orderedBlocks; } }
 
 		#endregion // Properties
@@ -73,7 +73,7 @@ namespace Mosa.Runtime.CompilerFramework
 		#region ConnectedBlocks class
 
 		/// <summary>
-		/// Pair of two blocks; from/to 
+		/// Pair of two Blocks; from/to 
 		/// </summary>
 		protected struct ConnectedBlocks
 		{
@@ -110,7 +110,7 @@ namespace Mosa.Runtime.CompilerFramework
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 
 			if (blockProvider == null)
-				throw new InvalidOperationException(@"Loop Aware Block Order stage requires basic blocks.");
+				throw new InvalidOperationException(@"Loop Aware Block Order stage requires basic Blocks.");
 			
 			blocks = blockProvider.Blocks;
 
@@ -120,13 +120,13 @@ namespace Mosa.Runtime.CompilerFramework
 			// Create list for loops
 			loops = new List<ConnectedBlocks>();
 
-			// Create dictionary for the depth of basic blocks
+			// Create dictionary for the depth of basic Blocks
 			loopDepths = new Dictionary<BasicBlock, int>(blocks.Count);
 
 			// Deteremine Loop Depths
 			DetermineLoopDepths();
 
-			// Order the blocks based on loop depth
+			// Order the Blocks based on loop depth
 			DetermineBlockOrder();
 		}
 
@@ -177,10 +177,10 @@ namespace Mosa.Runtime.CompilerFramework
 					queue.Enqueue(new ConnectedBlocks(at.to, successor));
 			}
 
-			// Create two-dimensional bit set of blocks belonging to loops
+			// Create two-dimensional bit set of Blocks belonging to loops
 			BitArray bitSet = new BitArray(loopHeaderIndexes.Count * blocks.Count, false);
 
-			// Create stack of blocks for next step of iterations
+			// Create stack of Blocks for next step of iterations
 			Stack<BasicBlock> stack = new Stack<BasicBlock>();
 
 			// Second set of iterations
@@ -304,11 +304,11 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (ConnectedBlocks connecterBlock in loops)
 				forwardBranches[connecterBlock.to.Index]--;
 
-			// Allocate list of ordered blocks
+			// Allocate list of ordered Blocks
 			orderedBlocks = new int[blocks.Count];
 			int orderBlockCnt = 0;
 
-			// Create bit array of refereced blocks (by index)
+			// Create bit array of refereced Blocks (by index)
 			BitArray referencedBlocks = new BitArray(blocks.Count, false);
 
 			// Create sorted worklist
@@ -336,7 +336,7 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 			}
 
-			// Place unreferenced blocks at the end of the list
+			// Place unreferenced Blocks at the end of the list
 			for (int i = 0; i < blocks.Count; i++)
 				if (!referencedBlocks.Get(i))
 					orderedBlocks[orderBlockCnt++] = i;			

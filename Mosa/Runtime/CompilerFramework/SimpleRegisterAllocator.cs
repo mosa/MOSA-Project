@@ -91,7 +91,7 @@ namespace Mosa.Runtime.CompilerFramework
             Debug.Assert(0 != _activeOperands.Length, @"No registers in the architecture?");
             _activeOpLastUse = new int[_registerSet.Length];
 
-            // Iterate basic blocks
+            // Iterate basic Blocks
             foreach (BasicBlock block in blockProvider)
             {
                 // Iterate all instructions in the block

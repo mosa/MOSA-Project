@@ -111,7 +111,7 @@ namespace Mosa.Runtime.CompilerFramework
             // Prepare the registers used for the evaluation stack
             this.PrepareEvaluationStack(compiler.Architecture);
 
-            // Enumerate the basic blocks and process the instructions in each of them
+            // Enumerate the basic Blocks and process the instructions in each of them
             IBasicBlockProvider blockProvider = compiler.GetPreviousStage<IBasicBlockProvider>();
             foreach (BasicBlock block in blockProvider)
             {

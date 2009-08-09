@@ -410,7 +410,7 @@ namespace Mosa.Platforms.x86
                 div,
                 new x86.Instructions.MoveInstruction(instruction.Results[0], new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EDX)),
                 //new x86.Instructions.CmpInstruction(instruction.First, new ConstantOperand(new SigType(CilElementType.I4), 0)),
-                //new IR.BranchInstruction(IR.ConditionCode.LessThan, blocks[0].Label),
+                //new IR.BranchInstruction(IR.ConditionCode.LessThan, Blocks[0].Label),
                 //new IR.JmpInstruction(nextBlock.Label)
             });
         }

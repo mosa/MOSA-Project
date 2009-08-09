@@ -85,7 +85,7 @@ namespace Mosa.Platforms.x86
             List<Instruction> literals = new List<Instruction>();
             IArchitecture arch = methodCompiler.Architecture;
 
-            // Is the method split into basic blocks?
+            // Is the method split into basic Blocks?
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)methodCompiler.GetPreviousStage(typeof(IBasicBlockProvider));
             if (null == blockProvider)
             {
@@ -100,7 +100,7 @@ namespace Mosa.Platforms.x86
             {
                 BasicBlock epilogue = blockProvider.FromLabel(Int32.MaxValue);
 
-                // Iterate all blocks and collect locals from all blocks
+                // Iterate all Blocks and collect locals from all Blocks
                 foreach (BasicBlock block in blockProvider)
                     ProcessInstructions(arch, block.Instructions, literals);
 
