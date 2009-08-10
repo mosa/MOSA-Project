@@ -8,10 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Vm;
 using Mosa.Kernel.Memory;
 using Mosa.Runtime.Loader;
@@ -29,7 +25,7 @@ namespace Mosa.Runtime {
         /// <summary>
         /// Holds the static instance of the runtime.
         /// </summary>
-        private static RuntimeBase s_instance = null;        
+        private static RuntimeBase _instance = null;        
 
         #endregion // Static data members
 
@@ -40,7 +36,7 @@ namespace Mosa.Runtime {
         /// </summary>
         protected RuntimeBase()
         {
-            s_instance = this;
+            _instance = this;
         }
 
         #endregion // Construction
@@ -91,10 +87,10 @@ namespace Mosa.Runtime {
         {
             get
             {
-                if (null == s_instance)
+                if (null == _instance)
                     throw new InvalidOperationException(@"Don't have a runtime.");
 
-                return s_instance;
+                return _instance;
             }
         }
 
@@ -123,7 +119,7 @@ namespace Mosa.Runtime {
         /// <returns>The boxed value type.</returns>
         [VmCall(VmCall.Box)]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static object Box(System.ValueType valueType);
+        public extern static object Box(ValueType valueType);
 
         /// <summary>
         /// This function performs the cast operation and type checking.
@@ -191,7 +187,7 @@ namespace Mosa.Runtime {
         /// <param name="valueType">The value type to unbox.</param>
         [VmCall(VmCall.Unbox)]
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static void Unbox(object obj, System.ValueType valueType);
+        public extern static void Unbox(object obj, ValueType valueType);
 
         #endregion // Internal Call Prototypes
 
@@ -202,11 +198,11 @@ namespace Mosa.Runtime {
         /// </summary>
         public void Dispose()
         {
-            IAssemblyLoader al = this.AssemblyLoader;
+            IAssemblyLoader al = AssemblyLoader;
             foreach (IMetadataModule module in al.Modules)
                 al.Unload(module);
 
-            s_instance = null;
+            _instance = null;
         }
 
         #endregion // IDisposable Members

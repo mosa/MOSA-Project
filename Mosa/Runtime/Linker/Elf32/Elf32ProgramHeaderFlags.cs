@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,6 +7,7 @@ namespace Mosa.Runtime.Linker.Elf32
     /// <summary>
     /// 
     /// </summary>
+    [Flags]
     public enum Elf32ProgramHeaderFlags : uint
     {
         /// <summary>

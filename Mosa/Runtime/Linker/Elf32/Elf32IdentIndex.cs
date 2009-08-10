@@ -7,10 +7,6 @@
  *  Simon "Kintaro" Wollwage (<mailto:kintaro@think-in-co.de>)
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Mosa.Runtime.Linker.Elf32
 {
     /// <summary>
@@ -56,6 +52,6 @@ namespace Mosa.Runtime.Linker.Elf32
         /// <summary>
         /// Size of Ident[]
         /// </summary>
-        nIdent      = 0x10,
+        NIdent      = 0x10,
     }
 }

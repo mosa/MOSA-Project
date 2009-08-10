@@ -7,36 +7,29 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-
-using Mosa.Runtime.Loader;
-using Mosa.Runtime.Vm;
-using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
     /// MethodCompilationStageComposite composes several MethodCompilerStages into 
-    /// one sage and forwards calls to the stage to multiple stages.
+    /// one sage and forwards calls to the stage to multiple _stages.
     /// </summary>
     public class MethodCompilationStageComposite : IMethodCompilerStage
     {
         /// <summary>
-        /// List of stages
+        /// List of _stages
         /// </summary>
-        private List<IMethodCompilerStage> stages;
+        private List<IMethodCompilerStage> _stages;
 
         /// <summary>
         /// List-Accessor
         /// </summary>
-        /// <value>The stages.</value>
+        /// <value>The _stages.</value>
         public List<IMethodCompilerStage> Stages
         {
-            get { return stages; }
-            set { stages = value; }
+            get { return _stages; }
+            set { _stages = value; }
         }
         /// <summary>
         /// 
@@ -46,12 +39,12 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Takes the enumeration and copies all stages into the list
+        /// Takes the enumeration and copies all _stages into the list
         /// </summary>
         /// <param name="stages"></param>
         public MethodCompilationStageComposite(IEnumerable<IMethodCompilerStage> stages)
         {
-            // Walk through enumeration and copy stages
+            // Walk through enumeration and copy _stages
             foreach (IMethodCompilerStage stage in stages)
             {
                 Stages.Add(stage);

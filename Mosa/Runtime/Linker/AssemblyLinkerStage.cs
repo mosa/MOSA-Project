@@ -37,22 +37,22 @@ namespace Mosa.Runtime.Linker
         /// <summary>
         /// Holds the entry point of the compiled binary.
         /// </summary>
-        private LinkerSymbol entryPoint;
+        private LinkerSymbol _entryPoint;
 
         /// <summary>
         /// Holds all unresolved link requests.
         /// </summary>
-        private Dictionary<string, List<LinkRequest>> _linkRequests;
+        private readonly Dictionary<string, List<LinkRequest>> _linkRequests;
 
         /// <summary>
         /// Holds the output file of the linker.
         /// </summary>
-        private string outputFile;
+        private string _outputFile;
 
         /// <summary>
         /// A dictionary containing all symbol seen in the assembly.
         /// </summary>
-        private Dictionary<string, LinkerSymbol> symbols;
+        private readonly Dictionary<string, LinkerSymbol> _symbols;
 
         #endregion // Data members
 
@@ -65,7 +65,7 @@ namespace Mosa.Runtime.Linker
         {
             this.baseAddress = 0x00400000; // Use the Win32 default for now, FIXME
             _linkRequests = new Dictionary<string, List<LinkRequest>>();
-            this.symbols = new Dictionary<string, LinkerSymbol>();
+            this._symbols = new Dictionary<string, LinkerSymbol>();
         }
 
         #endregion // Construction
@@ -100,9 +100,9 @@ namespace Mosa.Runtime.Linker
                 }
             }
 
-            Debug.Assert(0 == _linkRequests.Count, @"AssemblyLinker has found unresolved symbols.");
+            Debug.Assert(0 == _linkRequests.Count, @"AssemblyLinker has found unresolved _symbols.");
             if (0 != _linkRequests.Count)
-                throw new LinkerException(@"Unresolved symbols.");
+                throw new LinkerException(@"Unresolved _symbols.");
         }
 
         #endregion // IAssemblyCompilerStage Members
@@ -138,8 +138,8 @@ namespace Mosa.Runtime.Linker
         /// <value>The entry point symbol.</value>
         public LinkerSymbol EntryPoint
         {
-            get { return this.entryPoint; }
-            set { this.entryPoint = value; }
+            get { return this._entryPoint; }
+            set { this._entryPoint = value; }
         }
 
         /// <summary>
@@ -157,10 +157,10 @@ namespace Mosa.Runtime.Linker
         /// <value>The output file.</value>
         public string OutputFile
         {
-            get { return this.outputFile; }
+            get { return this._outputFile; }
             set
             {
-                this.outputFile = value;
+                this._outputFile = value;
             }
         }
 
@@ -183,12 +183,12 @@ namespace Mosa.Runtime.Linker
         }
 
         /// <summary>
-        /// Retrieves the collection of symbols known by the linker.
+        /// Retrieves the collection of _symbols known by the linker.
         /// </summary>
         /// <value>The symbol collection.</value>
         public ICollection<LinkerSymbol> Symbols
         {
-            get { return this.symbols.Values; }
+            get { return this._symbols.Values; }
         }
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace Mosa.Runtime.Linker
                 LinkerSymbol symbol = new LinkerSymbol(name, section, stream.Position);
 
                 // Save the symbol for later use
-                this.symbols.Add(symbol.Name, symbol);
+                this._symbols.Add(symbol.Name, symbol);
 
                 // Wrap the stream to catch premature disposal
                 stream = new LinkerStream(symbol, stream, size);
@@ -299,7 +299,7 @@ namespace Mosa.Runtime.Linker
                 throw new ArgumentNullException(@"symbolName");
 
             LinkerSymbol result;
-            if (false == this.symbols.TryGetValue(symbolName, out result))
+            if (false == this._symbols.TryGetValue(symbolName, out result))
                 throw new ArgumentException(@"Symbol not compiled.", @"member");
 
             return result;
@@ -540,7 +540,7 @@ namespace Mosa.Runtime.Linker
         {
             virtualAddress = 0;
             LinkerSymbol linkerSymbol;
-            if (true == this.symbols.TryGetValue(symbol, out linkerSymbol))
+            if (true == this._symbols.TryGetValue(symbol, out linkerSymbol))
             {
                 virtualAddress = linkerSymbol.VirtualAddress.ToInt64();
             }

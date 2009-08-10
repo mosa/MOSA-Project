@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Runtime.Linker.Elf32
 {
@@ -93,7 +91,7 @@ namespace Mosa.Runtime.Linker.Elf32
         /// <summary>
         /// 
         /// </summary>
-        public static readonly byte[] MagicNumber = new byte[4] { (byte)0x7F, (byte)'E', (byte)'L', (byte)'F' };
+        public static readonly byte[] MagicNumber = new byte[] { 0x7F, (byte)'E', (byte)'L', (byte)'F' };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Elf32Header"/> class.
@@ -197,12 +195,12 @@ namespace Mosa.Runtime.Linker.Elf32
             Console.WriteLine("--------------");
             Console.WriteLine();
             Console.WriteLine("Magic number equals 0x7F454C46: Yes");
-            Console.WriteLine("Ident class:                    {0} ({1})", ((Elf32IdentClass)Ident[4]).ToString(), ((Elf32IdentClass)Ident[4]).ToString("x"));
-            Console.WriteLine("Ident data:                     {0} ({1})", ((Elf32IdentData)Ident[4]).ToString(), ((Elf32IdentData)Ident[4]).ToString("x"));
-            Console.WriteLine("FileType:                       {0}", Type.ToString());
-            Console.WriteLine("Machine:                        {0}", Machine.ToString());
-            Console.WriteLine("Version:                        {0}", Version.ToString());
-            Console.WriteLine("Entry VirtualAddress:                  0x{0}", EntryAddress.ToString("x"));
+            Console.WriteLine("Ident class:                    {0} ({1})", ((Elf32IdentClass)Ident[4]), ((Elf32IdentClass)Ident[4]).ToString("x"));
+            Console.WriteLine("Ident data:                     {0} ({1})", ((Elf32IdentData)Ident[4]), ((Elf32IdentData)Ident[4]).ToString("x"));
+            Console.WriteLine("FileType:                       {0}", Type);
+            Console.WriteLine("Machine:                        {0}", Machine);
+            Console.WriteLine("Version:                        {0}", Version);
+            Console.WriteLine("Entry VirtualAddress:           0x{0}", EntryAddress.ToString("x"));
             Console.WriteLine("ProgramHeaderOffset:            0x{0}", ProgramHeaderOffset.ToString("x"));
             Console.WriteLine("SectionHeaderOffset:            0x{0}", SectionHeaderOffset.ToString("x"));
             Console.WriteLine("Flags:                          0x{0}", Flags.ToString("x"));
