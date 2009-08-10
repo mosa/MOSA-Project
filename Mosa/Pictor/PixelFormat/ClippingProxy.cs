@@ -371,7 +371,7 @@ namespace Pictor.PixelFormat
                                RGBA_Bytes* colors, byte* covers)
         {
             throw new System.NotImplementedException();
-            //BlendHorizontalColorSpan(x, y, len, Colors, covers, cover_full);
+            //BlendHorizontalColorSpan(x, y, len, Colors, covers, CoverFull);
         }
 
         public override unsafe void BlendHorizontalColorSpan(int x, int y, uint in_len, RGBA_Bytes* colors, byte* covers, byte cover)
@@ -523,7 +523,7 @@ namespace Pictor.PixelFormat
         //template<class SrcPixelFormatRenderer>
         public void blend_from(rendering_buffer src)
         {
-            blend_from(src, 0, 0, 0, Pictor::cover_full)
+            blend_from(src, 0, 0, 0, Pictor::CoverFull)
 
         }
 
@@ -600,7 +600,7 @@ namespace Pictor.PixelFormat
         public void blend_from_color(rendering_buffer src, 
                               IColorType Color)
         {
-            blend_from_color(src, Color, h0, 0, 0, Pictor::cover_full)
+            blend_from_color(src, Color, h0, 0, 0, Pictor::CoverFull)
         }
         public void blend_from_color(rendering_buffer src, 
                               IColorType Color,
@@ -677,7 +677,7 @@ namespace Pictor.PixelFormat
         //template<class SrcPixelFormatRenderer>
         public void blend_from_lut(rendering_buffer src, IColorType color_lut)
         {
-            blend_from_lut(rendering_buffer src, IColorType color_lut, 0, 0, 0, Pictor::cover_full);
+            blend_from_lut(rendering_buffer src, IColorType color_lut, 0, 0, 0, Pictor::CoverFull);
         }
         public void blend_from_lut(rendering_buffer src, 
                             IColorType color_lut,

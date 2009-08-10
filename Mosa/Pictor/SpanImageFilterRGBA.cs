@@ -462,8 +462,8 @@ namespace Pictor
             //typedef typename color_type::calc_type calc_type;
             enum base_scale_e
             {
-                base_shift = 8, //color_type::base_shift,
-                base_mask  = 255,//color_type::base_mask
+                BaseShift = 8, //color_type::BaseShift,
+                BaseMask  = 255,//color_type::BaseMask
             };
 
             //--------------------------------------------------------------------
@@ -552,7 +552,7 @@ namespace Pictor
                     fg[2] >>= Shift;
                     fg[3] >>= Shift;
 
-                    if(fg[OrderA] > base_mask)         fg[OrderA] = base_mask;
+                    if(fg[OrderA] > BaseMask)         fg[OrderA] = BaseMask;
                     if(fg[OrderR] > fg[OrderA]) fg[OrderR] = fg[OrderA];
                     if(fg[OrderG] > fg[OrderA]) fg[OrderG] = fg[OrderA];
                     if(fg[OrderB] > fg[OrderA]) fg[OrderB] = fg[OrderA];
@@ -583,8 +583,8 @@ namespace Pictor
             //typedef typename color_type::calc_type calc_type;
             enum base_scale_e
             {
-                base_shift = 8, //color_type::base_shift,
-                base_mask  = 255,//color_type::base_mask
+                BaseShift = 8, //color_type::BaseShift,
+                BaseMask  = 255,//color_type::BaseMask
             };
 
             //--------------------------------------------------------------------
@@ -669,7 +669,7 @@ namespace Pictor
                     if(fg[2] < 0) fg[2] = 0;
                     if(fg[3] < 0) fg[3] = 0;
 
-                    if(fg[OrderA] > base_mask)         fg[OrderA] = base_mask;
+                    if(fg[OrderA] > BaseMask)         fg[OrderA] = BaseMask;
                     if(fg[OrderR] > fg[OrderA]) fg[OrderR] = fg[OrderA];
                     if(fg[OrderG] > fg[OrderA]) fg[OrderG] = fg[OrderA];
                     if(fg[OrderB] > fg[OrderA]) fg[OrderB] = fg[OrderA];
@@ -697,8 +697,8 @@ namespace Pictor
             //typedef typename color_type::long_type long_type;
             enum base_scale_e
             {
-                base_shift      = 8, //color_type::base_shift,
-                base_mask       = 255,//color_type::base_mask,
+                BaseShift      = 8, //color_type::BaseShift,
+                BaseMask       = 255,//color_type::BaseMask,
                 downscale_shift = Shift
             };
 
@@ -784,7 +784,7 @@ namespace Pictor
                     if(fg[2] < 0) fg[2] = 0;
                     if(fg[3] < 0) fg[3] = 0;
 
-                    if(fg[OrderA] > base_mask)         fg[OrderA] = base_mask;
+                    if(fg[OrderA] > BaseMask)         fg[OrderA] = BaseMask;
                     if(fg[OrderR] > fg[OrderA]) fg[OrderR] = fg[OrderA];
                     if(fg[OrderG] > fg[OrderA]) fg[OrderG] = fg[OrderA];
                     if(fg[OrderB] > fg[OrderA]) fg[OrderB] = fg[OrderA];

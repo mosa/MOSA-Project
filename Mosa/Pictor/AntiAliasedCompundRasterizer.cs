@@ -12,74 +12,87 @@ using Pictor.VertexSource;
 
 namespace Pictor
 {
-    //===========================================================ELayerOrder
+    ///<summary>
+    ///</summary>
     public enum ELayerOrder
     {
-        layer_unsorted, //------layer_unsorted
-        layer_direct,   //------layer_direct
-        layer_inverse   //------layer_inverse
+        ///<summary>
+        ///</summary>
+        LayerUnsorted,
+        ///<summary>
+        ///</summary>
+        LayerDirect,
+        ///<summary>
+        ///</summary>
+        LayerInverse
     };
 
 
-    //==================================================AntiAliasedCompundRasterizer
-    //template<class Clip=rasterizer_sl_clip_int> 
+    /// <summary>
+    /// 
+    /// </summary>
     sealed public class AntiAliasedCompundRasterizer : IRasterizer
     {
-        AntiAliasedRasterizerCells m_Rasterizer;
-        IVectorClipper              m_VectorClipper;
-        Basics.FillingRule         m_filling_rule;
-        ELayerOrder          m_layer_order;
-        VectorPOD<StyleInfo> m_styles;  // Active Styles
-        VectorPOD<uint>   m_ast;     // Active Style Table (unique values)
-        VectorPOD<byte>      m_asm;     // Active Style Mask 
-        VectorPOD<AntiAliasingCell>  m_cells;
-        VectorPOD<byte> m_cover_buf;
-        VectorPOD<uint>  m_master_alpha;
+        readonly AntiAliasedRasterizerCells _rasterizer;
+        readonly IVectorClipper _vectorClipper;
+        Basics.FillingRule _fillingRule;
+        ELayerOrder _layerOrder;
+        readonly VectorPOD<StyleInfo> _activeStyles;
+        readonly VectorPOD<uint> _activeStyleTable;
+        readonly VectorPOD<byte> _activeStyleMask;
+        readonly VectorPOD<AntiAliasingCell> _cells;
+        readonly VectorPOD<byte> _coverBuffer;
+        readonly VectorPOD<uint> _masterAlpha;
 
-        int        m_min_style;
-        int        m_max_style;
-        int m_start_x;
-        int m_start_y;
-        int        m_scan_y;
-        int        m_sl_start;
-        uint   m_sl_len;
+        int _minStyle;
+        int _maxStyle;
+        int _startX;
+        int _startY;
+        int _scanY;
+        int _scanlineStart;
+        uint _scanlineLength;
 
-        struct StyleInfo 
-        { 
-            internal uint start_cell;
-            internal uint num_cells;
-            internal int last_x;
+        struct StyleInfo
+        {
+            internal uint StartCell;
+            internal uint NumCells;
+            internal int LastX;
         };
 
-        private const int aa_shift  = 8;
-        private const int aa_scale  = 1 << aa_shift;
-        private const int aa_mask   = aa_scale - 1;
-        private const int aa_scale2 = aa_scale * 2;
-        private const int aa_mask2 = aa_scale2 - 1;
+        private const int AaShift = 8;
+        private const int AntiAliasingScale = 1 << AaShift;
+        private const int AntiAliasingMask = AntiAliasingScale - 1;
+        private const int AntiAliasingScale2 = AntiAliasingScale * 2;
+        private const int AntiAliasingMask2 = AntiAliasingScale2 - 1;
 
-        private const int poly_subpixel_shift = (int)Basics.PolySubpixelScale.Shift;
+        private const int PolygonSubpixelShift = (int)Basics.PolySubpixelScale.Shift;
 
+        ///<summary>
+        ///</summary>
         public AntiAliasedCompundRasterizer()
         {
-            m_Rasterizer = new AntiAliasedRasterizerCells();
-            m_VectorClipper = new VectorClipper_DoClip();
-            m_filling_rule = Basics.FillingRule.NonZero;
-            m_layer_order = ELayerOrder.layer_direct;
-            m_styles = new VectorPOD<StyleInfo>();  // Active Styles
-            m_ast = new VectorPOD<uint>();     // Active Style Table (unique values)
-            m_asm = new VectorPOD<byte>();     // Active Style Mask 
-            m_cells = new VectorPOD<AntiAliasingCell>();
-            m_cover_buf = new VectorPOD<byte>();
-            m_master_alpha = new VectorPOD<uint>();
-            m_min_style = (0x7FFFFFFF);
-            m_max_style=(-0x7FFFFFFF);
-            m_start_x=(0);
-            m_start_y=(0);
-            m_scan_y=(0x7FFFFFFF);
-            m_sl_start=(0);
-            m_sl_len=(0);
+            _rasterizer = new AntiAliasedRasterizerCells();
+            _vectorClipper = new VectorClipper_DoClip();
+            _fillingRule = Basics.FillingRule.NonZero;
+            _layerOrder = ELayerOrder.LayerDirect;
+            _activeStyles = new VectorPOD<StyleInfo>(); 
+            _activeStyleTable = new VectorPOD<uint>();  
+            _activeStyleMask = new VectorPOD<byte>();   
+            _cells = new VectorPOD<AntiAliasingCell>();
+            _coverBuffer = new VectorPOD<byte>();
+            _masterAlpha = new VectorPOD<uint>();
+            _minStyle = (0x7FFFFFFF);
+            _maxStyle = (-0x7FFFFFFF);
+            _startX = (0);
+            _startY = (0);
+            _scanY = (0x7FFFFFFF);
+            _scanlineStart = (0);
+            _scanlineLength = (0);
         }
 
+        ///<summary>
+        ///</summary>
+        ///<exception cref="NotImplementedException"></exception>
         public IGammaFunction Gamma
         {
             set
@@ -88,45 +101,46 @@ namespace Pictor
             }
         }
 
-
-        public void Reset() 
-        { 
-            m_Rasterizer.Reset(); 
-            m_min_style =  0x7FFFFFFF;
-            m_max_style = -0x7FFFFFFF;
-            m_scan_y    =  0x7FFFFFFF;
-            m_sl_start  =  0;
-            m_sl_len    = 0;
+        ///<summary>
+        ///</summary>
+        public void Reset()
+        {
+            _rasterizer.Reset();
+            _minStyle = 0x7FFFFFFF;
+            _maxStyle = -0x7FFFFFFF;
+            _scanY = 0x7FFFFFFF;
+            _scanlineStart = 0;
+            _scanlineLength = 0;
         }
 
         Basics.FillingRule FillingRule
         {
             set
             {
-                m_filling_rule = value;
+                _fillingRule = value;
             }
         }
 
         ELayerOrder LayerOrder
         {
-            set 
+            set
             {
-                m_layer_order = value; 
+                _layerOrder = value;
             }
         }
 
-        void ClipBox(double x1, double y1, 
+        void ClipBox(double x1, double y1,
                                                     double x2, double y2)
         {
             Reset();
-            m_VectorClipper.ClipBox(m_VectorClipper.UpScale(x1), m_VectorClipper.UpScale(y1),
-                               m_VectorClipper.UpScale(x2), m_VectorClipper.UpScale(y2));
+            _vectorClipper.ClipBox(_vectorClipper.UpScale(x1), _vectorClipper.UpScale(y1),
+                               _vectorClipper.UpScale(x2), _vectorClipper.UpScale(y2));
         }
 
         void ResetClipping()
         {
             Reset();
-            m_VectorClipper.ResetClipping();
+            _vectorClipper.ResetClipping();
         }
 
         public void Styles(int left, int right)
@@ -135,133 +149,152 @@ namespace Pictor
             cell.Initial();
             cell.left = (short)left;
             cell.right = (short)right;
-            m_Rasterizer.Style(cell);
-            if(left  >= 0 && left  < m_min_style) m_min_style = left;
-            if(left  >= 0 && left  > m_max_style) m_max_style = left;
-            if(right >= 0 && right < m_min_style) m_min_style = right;
-            if(right >= 0 && right > m_max_style) m_max_style = right;
+            _rasterizer.Style(cell);
+            if (left >= 0 && left < _minStyle) _minStyle = left;
+            if (left >= 0 && left > _maxStyle) _maxStyle = left;
+            if (right >= 0 && right < _minStyle) _minStyle = right;
+            if (right >= 0 && right > _maxStyle) _maxStyle = right;
         }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
         public void MoveTo(int x, int y)
         {
-            if(m_Rasterizer.IsSorted) Reset();
-            m_VectorClipper.MoveTo(m_start_x = m_VectorClipper.DownScale(x),
-                              m_start_y = m_VectorClipper.DownScale(y));
+            if (_rasterizer.IsSorted) Reset();
+            _vectorClipper.MoveTo(_startX = _vectorClipper.DownScale(x),
+                              _startY = _vectorClipper.DownScale(y));
         }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
         public void LineTo(int x, int y)
         {
-            m_VectorClipper.LineTo(m_Rasterizer, 
-                              m_VectorClipper.DownScale(x),
-                              m_VectorClipper.DownScale(y));
+            _vectorClipper.LineTo(_rasterizer,
+                              _vectorClipper.DownScale(x),
+                              _vectorClipper.DownScale(y));
         }
 
-        public void MoveToD(double x, double y) 
-        { 
-            if(m_Rasterizer.IsSorted) Reset();
-            m_VectorClipper.MoveTo(m_start_x = m_VectorClipper.UpScale(x),
-                              m_start_y = m_VectorClipper.UpScale(y)); 
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
+        public void MoveToD(double x, double y)
+        {
+            if (_rasterizer.IsSorted) Reset();
+            _vectorClipper.MoveTo(_startX = _vectorClipper.UpScale(x),
+                              _startY = _vectorClipper.UpScale(y));
         }
 
-        public void LineToD(double x, double y) 
-        { 
-            m_VectorClipper.LineTo(m_Rasterizer, 
-                              m_VectorClipper.UpScale(x),
-                              m_VectorClipper.UpScale(y)); 
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
+        public void LineToD(double x, double y)
+        {
+            _vectorClipper.LineTo(_rasterizer,
+                              _vectorClipper.UpScale(x),
+                              _vectorClipper.UpScale(y));
         }
 
         void AddVertex(double x, double y, uint cmd)
         {
-            if(Path.IsMoveTo(cmd)) 
+            if (Path.IsMoveTo(cmd))
             {
                 MoveToD(x, y);
             }
-            else 
-            if(Path.IsVertex(cmd))
+            else if (Path.IsVertex(cmd))
             {
                 LineToD(x, y);
             }
-            else
-            if(Path.IsClose(cmd))
+            else if (Path.IsClose(cmd))
             {
-                m_VectorClipper.LineTo(m_Rasterizer, m_start_x, m_start_y);
+                _vectorClipper.LineTo(_rasterizer, _startX, _startY);
             }
         }
 
         void Edge(int x1, int y1, int x2, int y2)
         {
-            if(m_Rasterizer.IsSorted) Reset();
-            m_VectorClipper.MoveTo(m_VectorClipper.DownScale(x1), m_VectorClipper.DownScale(y1));
-            m_VectorClipper.LineTo(m_Rasterizer, 
-                              m_VectorClipper.DownScale(x2),
-                              m_VectorClipper.DownScale(y2));
+            if (_rasterizer.IsSorted) Reset();
+            _vectorClipper.MoveTo(_vectorClipper.DownScale(x1), _vectorClipper.DownScale(y1));
+            _vectorClipper.LineTo(_rasterizer,
+                              _vectorClipper.DownScale(x2),
+                              _vectorClipper.DownScale(y2));
         }
-        
-        void EdgeD(double x1, double y1, 
+
+        void EdgeD(double x1, double y1,
                                                   double x2, double y2)
         {
-            if(m_Rasterizer.IsSorted) Reset();
-            m_VectorClipper.MoveTo(m_VectorClipper.UpScale(x1), m_VectorClipper.UpScale(y1)); 
-            m_VectorClipper.LineTo(m_Rasterizer, 
-                              m_VectorClipper.UpScale(x2),
-                              m_VectorClipper.UpScale(y2)); 
+            if (_rasterizer.IsSorted) Reset();
+            _vectorClipper.MoveTo(_vectorClipper.UpScale(x1), _vectorClipper.UpScale(y1));
+            _vectorClipper.LineTo(_rasterizer,
+                              _vectorClipper.UpScale(x2),
+                              _vectorClipper.UpScale(y2));
         }
 
         void Sort()
         {
-            m_Rasterizer.SortCells();
+            _rasterizer.SortCells();
         }
 
+        ///<summary>
+        ///</summary>
+        ///<returns></returns>
         public bool RewindScanlines()
         {
-            m_Rasterizer.SortCells();
-            if(m_Rasterizer.TotalCells == 0) 
+            _rasterizer.SortCells();
+            if (_rasterizer.TotalCells == 0)
             {
                 return false;
             }
-            if(m_max_style < m_min_style)
+            if (_maxStyle < _minStyle)
             {
                 return false;
             }
-            m_scan_y = m_Rasterizer.MinY();
-            m_styles.Allocate((uint)(m_max_style - m_min_style + 2), 128);
-            allocate_master_alpha();
+            _scanY = _rasterizer.MinY();
+            _activeStyles.Allocate((uint)(_maxStyle - _minStyle + 2), 128);
+            AllocateMasterAlpha();
             return true;
         }
 
-        // Returns the number of Styles
+        ///<summary>
+        ///</summary>
+        ///<returns></returns>
+        ///<exception cref="NotImplementedException"></exception>
         public uint SweepStyles()
         {
-            for(;;)
+            for (; ; )
             {
-                if(m_scan_y > m_Rasterizer.MaxY()) return 0;
-                int num_cells = (int)m_Rasterizer.ScanlineNumCells((uint)m_scan_y);
+                if (_scanY > _rasterizer.MaxY()) return 0;
+                int numCells = (int)_rasterizer.ScanlineNumCells((uint)_scanY);
                 AntiAliasingCell[] cells;
-                uint cellOffset = 0;
-                int curCellOffset;
-                m_Rasterizer.ScanlineCells((uint)m_scan_y, out cells, out cellOffset);
-                uint num_styles = (uint)(m_max_style - m_min_style + 2);
-                uint style_id;
+                uint cellOffset;
+                _rasterizer.ScanlineCells((uint)_scanY, out cells, out cellOffset);
+                uint numStyles = (uint)(_maxStyle - _minStyle + 2);
                 int styleOffset = 0;
 
-                m_cells.Allocate((uint)num_cells * 2, 256); // Each cell can have two Styles
-                m_ast.Capacity(num_styles, 64);
-                m_asm.Allocate((num_styles + 7) >> 3, 8);
-                m_asm.Zero();
+                _cells.Allocate((uint)numCells * 2, 256); // Each cell can have two Styles
+                _activeStyleTable.Capacity(numStyles, 64);
+                _activeStyleMask.Allocate((numStyles + 7) >> 3, 8);
+                _activeStyleMask.Zero();
 
-                if(num_cells > 0)
+                if (numCells > 0)
                 {
                     // Pre-Add zero (for no-fill Style, that is, -1).
                     // We need that to ensure that the "-1 Style" would go first.
-                    m_asm.Array[0] |= 1; 
-                    m_ast.Add(0);
-                    m_styles.Array[styleOffset].start_cell = 0;
-                    m_styles.Array[styleOffset].num_cells = 0;
-                    m_styles.Array[styleOffset].last_x = -0x7FFFFFFF;
+                    _activeStyleMask.Array[0] |= 1;
+                    _activeStyleTable.Add(0);
+                    _activeStyles.Array[styleOffset].StartCell = 0;
+                    _activeStyles.Array[styleOffset].NumCells = 0;
+                    _activeStyles.Array[styleOffset].LastX = -0x7FFFFFFF;
 
-                    m_sl_start = cells[0].x;
-                    m_sl_len   = (uint)(cells[num_cells-1].x - m_sl_start + 1);
-                    while(num_cells-- != 0)
+                    _scanlineStart = cells[0].x;
+                    _scanlineLength = (uint)(cells[numCells - 1].x - _scanlineStart + 1);
+                    int curCellOffset;
+                    while (numCells-- != 0)
                     {
                         curCellOffset = (int)cellOffset++;
                         AddStyle(cells[curCellOffset].left);
@@ -269,30 +302,30 @@ namespace Pictor
                     }
 
                     // Convert the Y-histogram into the array of starting indexes
-                    uint i;
-                    uint start_cell = 0;
-                    StyleInfo[] stylesArray = m_styles.Array;
-                    for(i = 0; i < m_ast.Size(); i++)
+                    uint i = 0u;
+                    uint startCell = 0;
+                    StyleInfo[] stylesArray = _activeStyles.Array;
+                    int indexToModify = (int)_activeStyleTable[i];
+                    for (i = 0; i < _activeStyleTable.Size(); i++)
                     {
-                        int IndexToModify = (int)m_ast[i];
-                        uint v = stylesArray[IndexToModify].start_cell;
-                        stylesArray[IndexToModify].start_cell = start_cell;
-                        start_cell += v;
+                        uint v = stylesArray[indexToModify].StartCell;
+                        stylesArray[indexToModify].StartCell = startCell;
+                        startCell += v;
                     }
 
-                    num_cells = (int)m_Rasterizer.ScanlineNumCells((uint)m_scan_y);
-                    m_Rasterizer.ScanlineCells((uint)m_scan_y, out cells, out cellOffset);
+                    numCells = (int)_rasterizer.ScanlineNumCells((uint)_scanY);
+                    _rasterizer.ScanlineCells((uint)_scanY, out cells, out cellOffset);
 
-                    while(num_cells-- > 0)
+                    while (numCells-- > 0)
                     {
-                        curCellOffset = (int)cellOffset++;
-                        style_id = (uint)((cells[curCellOffset].left < 0) ? 0 :
-                                    cells[curCellOffset].left - m_min_style + 1);
+                        curCellOffset = (int)cellOffset;
+                        uint styleId = (uint)((cells[curCellOffset].left < 0) ? 0 :
+                                                                                       cells[curCellOffset].left - _minStyle + 1);
 
-                        styleOffset = (int)style_id;
-                        if (cells[curCellOffset].x == stylesArray[styleOffset].last_x)
+                        styleOffset = (int)styleId;
+                        if (cells[curCellOffset].x == stylesArray[styleOffset].LastX)
                         {
-                            cellOffset = stylesArray[styleOffset].start_cell + stylesArray[styleOffset].num_cells - 1;
+                            cellOffset = stylesArray[styleOffset].StartCell + stylesArray[styleOffset].NumCells - 1;
                             unchecked
                             {
                                 cells[cellOffset].area += cells[curCellOffset].area;
@@ -301,21 +334,21 @@ namespace Pictor
                         }
                         else
                         {
-                            cellOffset = stylesArray[styleOffset].start_cell + stylesArray[styleOffset].num_cells;
+                            cellOffset = stylesArray[styleOffset].StartCell + stylesArray[styleOffset].NumCells;
                             cells[cellOffset].x = cells[curCellOffset].x;
                             cells[cellOffset].area = cells[curCellOffset].area;
                             cells[cellOffset].cover = cells[curCellOffset].cover;
-                            stylesArray[styleOffset].last_x = cells[curCellOffset].x;
-                            stylesArray[styleOffset].num_cells++;
+                            stylesArray[styleOffset].LastX = cells[curCellOffset].x;
+                            stylesArray[styleOffset].NumCells++;
                         }
 
-                        style_id = (uint)((cells[curCellOffset].right < 0) ? 0 :
-                                    cells[curCellOffset].right - m_min_style + 1);
+                        styleId = (uint)((cells[curCellOffset].right < 0) ? 0 :
+                                    cells[curCellOffset].right - _minStyle + 1);
 
-                        styleOffset = (int)style_id;
-                        if (cells[curCellOffset].x == stylesArray[styleOffset].last_x)
+                        styleOffset = (int)styleId;
+                        if (cells[curCellOffset].x == stylesArray[styleOffset].LastX)
                         {
-                            cellOffset = stylesArray[styleOffset].start_cell + stylesArray[styleOffset].num_cells - 1;
+                            cellOffset = stylesArray[styleOffset].StartCell + stylesArray[styleOffset].NumCells - 1;
                             unchecked
                             {
                                 cells[cellOffset].area -= cells[curCellOffset].area;
@@ -324,77 +357,81 @@ namespace Pictor
                         }
                         else
                         {
-                            cellOffset = stylesArray[styleOffset].start_cell + stylesArray[styleOffset].num_cells;
+                            cellOffset = stylesArray[styleOffset].StartCell + stylesArray[styleOffset].NumCells;
                             cells[cellOffset].x = cells[curCellOffset].x;
                             cells[cellOffset].area = -cells[curCellOffset].area;
                             cells[cellOffset].cover = -cells[curCellOffset].cover;
-                            stylesArray[styleOffset].last_x = cells[curCellOffset].x;
-                            stylesArray[styleOffset].num_cells++;
+                            stylesArray[styleOffset].LastX = cells[curCellOffset].x;
+                            stylesArray[styleOffset].NumCells++;
                         }
                     }
                 }
-                if(m_ast.Size() > 1) break;
-                ++m_scan_y;
+                if (_activeStyleTable.Size() > 1) break;
+                ++_scanY;
             }
-            ++m_scan_y;
+            ++_scanY;
 
-            if (m_layer_order != ELayerOrder.layer_unsorted)
+            if (_layerOrder != ELayerOrder.LayerUnsorted)
             {
-                VectorPOD_RangeAdaptor ra = new VectorPOD_RangeAdaptor(m_ast, 1, m_ast.Size() - 1);
-                if (m_layer_order == ELayerOrder.layer_direct)
+                VectorPOD_RangeAdaptor ra = new VectorPOD_RangeAdaptor(_activeStyleTable, 1, _activeStyleTable.Size() - 1);
+                if (_layerOrder == ELayerOrder.LayerDirect)
                 {
-                    QuickSortRangeAdaptorUint m_QSorter = new QuickSortRangeAdaptorUint();
-                    m_QSorter.Sort(ra);
+                    QuickSortRangeAdaptorUint mQSorter = new QuickSortRangeAdaptorUint();
+                    mQSorter.Sort(ra);
                     //quick_sort(ra, uint_greater);
                 }
                 else
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                     //QuickSortRangeAdaptorUint m_QSorter = new QuickSortRangeAdaptorUint();
                     //m_QSorter.Sort(ra);
                     //quick_sort(ra, uint_less);
                 }
             }
 
-            return m_ast.Size() - 1;
+            return _activeStyleTable.Size() - 1;
         }
 
         // Returns Style ID depending of the existing Style index
-        public uint Style(uint style_idx)
+        ///<summary>
+        ///</summary>
+        ///<param name="styleIndex"></param>
+        ///<returns></returns>
+        public uint Style(uint styleIndex)
         {
-            return m_ast[style_idx + 1] + (uint)m_min_style - 1;
+            return _activeStyleTable[styleIndex + 1] + (uint)_minStyle - 1;
         }
 
         bool NavigateScanline(int y)
         {
-            m_Rasterizer.SortCells();
-            if(m_Rasterizer.TotalCells == 0) 
+            _rasterizer.SortCells();
+            if (_rasterizer.TotalCells == 0)
             {
                 return false;
             }
-            if(m_max_style < m_min_style)
+            if (_maxStyle < _minStyle)
             {
                 return false;
             }
-            if(y < m_Rasterizer.MinY() || y > m_Rasterizer.MaxY()) 
+            if (y < _rasterizer.MinY() || y > _rasterizer.MaxY())
             {
                 return false;
             }
-            m_scan_y = y;
-            m_styles.Allocate((uint)(m_max_style - m_min_style + 2), 128);
-            allocate_master_alpha();
+            _scanY = y;
+            _activeStyles.Allocate((uint)(_maxStyle - _minStyle + 2), 128);
+            AllocateMasterAlpha();
             return true;
         }
-        
+
         bool HitTest(int tx, int ty)
         {
-            if(!NavigateScanline(ty)) 
+            if (!NavigateScanline(ty))
             {
                 return false;
             }
 
-            uint num_styles = SweepStyles(); 
-            if(num_styles <= 0)
+            uint numStyles = SweepStyles();
+            if (numStyles <= 0)
             {
                 return false;
             }
@@ -406,102 +443,154 @@ namespace Pictor
 
         byte[] AllocateCoverBuffer(uint len)
         {
-            m_cover_buf.Allocate(len, 256);
-            return m_cover_buf.Array;
+            _coverBuffer.Allocate(len, 256);
+            return _coverBuffer.Array;
         }
 
         void MasterAlpha(int style, double alpha)
         {
-            if(style >= 0)
+            if (style >= 0)
             {
-                while((int)m_master_alpha.Size() <= style)
+                while ((int)_masterAlpha.Size() <= style)
                 {
-                    m_master_alpha.Add(aa_mask);
+                    _masterAlpha.Add(AntiAliasingMask);
                 }
-                m_master_alpha.Array[style] = Basics.UnsignedRound(alpha * aa_mask);
+                _masterAlpha.Array[style] = Basics.UnsignedRound(alpha * AntiAliasingMask);
             }
         }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="vs"></param>
         public void AddPath(IVertexSource vs)
         {
             AddPath(vs, 0);
         }
 
-        public void AddPath(IVertexSource vs, uint path_id)
+        ///<summary>
+        ///</summary>
+        ///<param name="vs"></param>
+        ///<param name="pathId"></param>
+        public void AddPath(IVertexSource vs, uint pathId)
         {
             double x;
             double y;
 
             uint cmd;
-            vs.Rewind(path_id);
-            if(m_Rasterizer.IsSorted) Reset();
-            while(!Path.IsStop(cmd = vs.Vertex(out x, out y)))
+            vs.Rewind(pathId);
+            if (_rasterizer.IsSorted) Reset();
+            while (!Path.IsStop(cmd = vs.Vertex(out x, out y)))
             {
                 AddVertex(x, y, cmd);
             }
         }
 
-        public int MinX()     { return m_Rasterizer.MinX(); }
-        public int MinY() { return m_Rasterizer.MinY(); }
-        public int MaxX() { return m_Rasterizer.MaxX(); }
-        public int MaxY() { return m_Rasterizer.MaxY(); }
-        public int MinStyle() { return m_min_style; }
-        public int MaxStyle() { return m_max_style; }
+        ///<summary>
+        ///</summary>
+        ///<returns></returns>
+        public int MinX() { return _rasterizer.MinX(); }
+        ///<summary>
+        ///</summary>
+        ///<returns></returns>
+        public int MinY() { return _rasterizer.MinY(); }
+        ///<summary>
+        ///</summary>
+        ///<returns></returns>
+        public int MaxX() { return _rasterizer.MaxX(); }
+        ///<summary>
+        ///</summary>
+        ///<returns></returns>
+        public int MaxY() { return _rasterizer.MaxY(); }
+        ///<summary>
+        ///</summary>
+        ///<returns></returns>
+        public int MinStyle() { return _minStyle; }
+        ///<summary>
+        ///</summary>
+        ///<returns></returns>
+        public int MaxStyle() { return _maxStyle; }
 
-        public int ScanlineStart() { return m_sl_start; }
-        public uint ScanlineLength() { return m_sl_len; }
+        ///<summary>
+        ///</summary>
+        ///<returns></returns>
+        public int ScanlineStart() { return _scanlineStart; }
+        ///<summary>
+        ///</summary>
+        ///<returns></returns>
+        public uint ScanlineLength() { return _scanlineLength; }
 
-        public uint CalculateAlpha(int area, uint master_alpha)
+        ///<summary>
+        ///</summary>
+        ///<param name="area"></param>
+        ///<returns></returns>
+        public uint CalculateAlpha(int area)
         {
-            int cover = area >> (poly_subpixel_shift*2 + 1 - aa_shift);
-            if(cover < 0) cover = -cover;
-            if (m_filling_rule == Basics.FillingRule.EvenOdd)
+            return CalculateAlpha(area, 0u);
+        }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="area"></param>
+        ///<param name="masterAlpha"></param>
+        ///<returns></returns>
+        public uint CalculateAlpha(int area, uint masterAlpha)
+        {
+            int cover = area >> (PolygonSubpixelShift * 2 + 1 - AaShift);
+            if (cover < 0) cover = -cover;
+            if (_fillingRule == Basics.FillingRule.EvenOdd)
             {
-                cover &= aa_mask2;
-                if(cover > aa_scale)
+                cover &= AntiAliasingMask2;
+                if (cover > AntiAliasingScale)
                 {
-                    cover = aa_scale2 - cover;
+                    cover = AntiAliasingScale2 - cover;
                 }
             }
-            if(cover > aa_mask) cover = aa_mask;
-            return (uint)((cover * master_alpha + aa_mask) >> aa_shift);
+            if (cover > AntiAliasingMask) cover = AntiAliasingMask;
+            return (uint)((cover * masterAlpha + AntiAliasingMask) >> AaShift);
         }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="sl"></param>
+        ///<returns></returns>
+        ///<exception cref="NotImplementedException"></exception>
         public bool SweepScanline(IScanline sl)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        // Sweeps one scanline with one Style index. The Style ID can be 
-        // determined by calling Style(). 
-        //template<class Scanline> 
-        public bool SweepScanline(IScanline sl, int style_idx)
+        ///<summary>
+        ///</summary>
+        ///<param name="sl"></param>
+        ///<param name="styleIdx"></param>
+        ///<returns></returns>
+        public bool SweepScanline(IScanline sl, int styleIdx)
         {
-            int scan_y = m_scan_y - 1;
-            if(scan_y > m_Rasterizer.MaxY()) return false;
+            int scanY = _scanY - 1;
+            if (scanY > _rasterizer.MaxY()) return false;
 
             sl.ResetSpans();
 
-            uint master_alpha = aa_mask;
+            uint masterAlpha = AntiAliasingMask;
 
-            if(style_idx < 0) 
+            if (styleIdx < 0)
             {
-                style_idx = 0;
+                styleIdx = 0;
             }
-            else 
+            else
             {
-                style_idx++;
-                master_alpha = m_master_alpha[(uint)(m_ast[(uint)style_idx] + m_min_style - 1)];
+                styleIdx++;
+                masterAlpha = _masterAlpha[(uint)(_activeStyleTable[(uint)styleIdx] + _minStyle - 1)];
             }
 
-            StyleInfo st = m_styles[m_ast[style_idx]];
+            StyleInfo st = _activeStyles[_activeStyleTable[styleIdx]];
 
-            int num_cells = (int)st.num_cells;
-            uint CellOffset = st.start_cell;
-            AntiAliasingCell cell = m_cells[CellOffset];
+            int numCells = (int)st.NumCells;
+            uint cellOffset = st.StartCell;
+            AntiAliasingCell cell = _cells[cellOffset];
 
             int cover = 0;
-            while(num_cells-- != 0)
+            while (numCells-- != 0)
             {
                 uint alpha;
                 int x = cell.x;
@@ -509,57 +598,57 @@ namespace Pictor
 
                 cover += cell.cover;
 
-                cell = m_cells[++CellOffset];
+                cell = _cells[++cellOffset];
 
-                if(area != 0)
+                if (area != 0)
                 {
-                    alpha = CalculateAlpha((cover << (poly_subpixel_shift + 1)) - area,
-                                            master_alpha);
+                    alpha = CalculateAlpha((cover << (PolygonSubpixelShift + 1)) - area,
+                                            masterAlpha);
                     sl.AddCell(x, alpha);
                     x++;
                 }
 
-                if(num_cells != 0 && cell.x > x)
+                if (numCells == 0 || cell.x <= x) 
+                    continue;
+
+                alpha = CalculateAlpha(cover << (PolygonSubpixelShift + 1),
+                                       masterAlpha);
+                if (alpha != 0)
                 {
-                    alpha = CalculateAlpha(cover << (poly_subpixel_shift + 1),
-                                            master_alpha);
-                    if(alpha != 0)
-                    {
-                        sl.AddSpan(x, cell.x - x, alpha);
-                    }
+                    sl.AddSpan(x, cell.x - x, alpha);
                 }
             }
 
-            if(sl.NumberOfSpans == 0) return false;
-            sl.Finalize(scan_y);
+            if (sl.NumberOfSpans == 0) return false;
+            sl.Finalize(scanY);
             return true;
         }
 
-        private void AddStyle(int style_id)
+        private void AddStyle(int styleId)
         {
-            if(style_id < 0) style_id  = 0;
-            else             style_id -= m_min_style - 1;
+            if (styleId < 0) styleId = 0;
+            else styleId -= _minStyle - 1;
 
-            uint nbyte = (uint)((int)style_id >> 3);
-            uint mask = (uint)(1 << (style_id & 7));
+            uint nbyte = (uint)((int)styleId >> 3);
+            uint mask = (uint)(1 << (styleId & 7));
 
-            StyleInfo[] stylesArray = m_styles.Array;
-            if((m_asm[nbyte] & mask) == 0)
+            StyleInfo[] stylesArray = _activeStyles.Array;
+            if ((_activeStyleMask[nbyte] & mask) == 0)
             {
-                m_ast.Add((uint)style_id);
-                m_asm.Array[nbyte] |= (byte)mask;
-                stylesArray[style_id].start_cell = 0;
-                stylesArray[style_id].num_cells = 0;
-                stylesArray[style_id].last_x = -0x7FFFFFFF;
+                _activeStyleTable.Add((uint)styleId);
+                _activeStyleMask.Array[nbyte] |= (byte)mask;
+                stylesArray[styleId].StartCell = 0;
+                stylesArray[styleId].NumCells = 0;
+                stylesArray[styleId].LastX = -0x7FFFFFFF;
             }
-            ++stylesArray[style_id].start_cell;
+            ++stylesArray[styleId].StartCell;
         }
 
-        private void allocate_master_alpha()
+        private void AllocateMasterAlpha()
         {
-            while((int)m_master_alpha.Size() <= m_max_style)
+            while ((int)_masterAlpha.Size() <= _maxStyle)
             {
-                m_master_alpha.Add(aa_mask);
+                _masterAlpha.Add(AntiAliasingMask);
             }
         }
     };

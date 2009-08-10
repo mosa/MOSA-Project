@@ -61,20 +61,20 @@ namespace Pictor.PixelFormat
         typedef ColorT color_type;
         typedef typename color_type::value_type value_type;
         typedef typename color_type::calc_type calc_type;
-        enum base_scale_e { base_shift = color_type::base_shift };
+        enum base_scale_e { BaseShift = color_type::BaseShift };
 
         static void BlendPixel(value_type* p, uint cv,
                                          uint alpha, uint cover)
         {
-            alpha = color_type::base_mask - alpha;
-            cover = (cover + 1) << (base_shift - 8);
-            *p = (value_type)((*p * alpha + cv * cover) >> base_shift);
+            alpha = color_type::BaseMask - alpha;
+            cover = (cover + 1) << (BaseShift - 8);
+            *p = (value_type)((*p * alpha + cv * cover) >> BaseShift);
         }
 
         static void BlendPixel(value_type* p, uint cv,
                                          uint alpha)
         {
-            *p = (value_type)(((*p * (color_type::base_mask - alpha)) >> base_shift) + cv);
+            *p = (value_type)(((*p * (color_type::BaseMask - alpha)) >> BaseShift) + cv);
         }
     };
     
@@ -646,7 +646,7 @@ namespace Pictor.PixelFormat
                                             (byte*)m_rbuf.RowPointer(xdst, ydst, len) + xdst;
                                         do 
                                         {
-                                            CopyOrBlendPixel(pdst, Color, (*psrc * cover + base_mask) >> base_shift);
+                                            CopyOrBlendPixel(pdst, Color, (*psrc * cover + BaseMask) >> BaseShift);
                                             ++psrc;
                                             ++pdst;
                                         }

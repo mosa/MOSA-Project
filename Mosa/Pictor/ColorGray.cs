@@ -152,22 +152,22 @@ namespace Pictor
             uint cv, ca;
             if(cover == cover_mask)
             {
-                if (c.a == base_mask) 
+                if (c.a == BaseMask) 
                 {
                     *this = c;
                 }
                 else
                 {
-                    cv = v + c.v; v = (cv > (uint)(base_mask)) ? (uint)(base_mask) : cv;
-                    ca = a + c.a; a = (ca > (uint)(base_mask)) ? (uint)(base_mask) : ca;
+                    cv = v + c.v; v = (cv > (uint)(BaseMask)) ? (uint)(BaseMask) : cv;
+                    ca = a + c.a; a = (ca > (uint)(BaseMask)) ? (uint)(BaseMask) : ca;
                 }
             }
             else
             {
-                cv = v + ((c.v * cover + cover_mask/2) >> cover_shift);
-                ca = a + ((c.a * cover + cover_mask/2) >> cover_shift);
-                v = (cv > (uint)(base_mask)) ? (uint)(base_mask) : cv;
-                a = (ca > (uint)(base_mask)) ? (uint)(base_mask) : ca;
+                cv = v + ((c.v * cover + cover_mask/2) >> CoverShift);
+                ca = a + ((c.a * cover + cover_mask/2) >> CoverShift);
+                v = (cv > (uint)(BaseMask)) ? (uint)(BaseMask) : cv;
+                a = (ca > (uint)(BaseMask)) ? (uint)(BaseMask) : ca;
             }
         }
          */
@@ -176,7 +176,7 @@ namespace Pictor
         //static Gray8 no_color() { return Gray8(0,0); }
 
         /*
-        static Gray8 gray8_pre(uint v, uint a = Gray8.base_mask)
+        static Gray8 gray8_pre(uint v, uint a = Gray8.BaseMask)
         {
             return Gray8(v,a).PreMultiply();
         }

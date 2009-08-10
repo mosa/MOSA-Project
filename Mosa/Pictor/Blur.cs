@@ -62,7 +62,7 @@ namespace Pictor
     {
         //private pod_vector<color_type> m_buf;
         //private pod_vector<color_type> m_stack;
-        uint base_mask = 255;
+        uint BaseMask = 255;
 
         enum order_e 
         { 
@@ -97,7 +97,7 @@ namespace Pictor
             uint div_sum = (Radius + 1) * (Radius + 1);
             uint mul_sum = 0;
             uint shr_sum = 0;
-            uint max_val = base_mask;
+            uint max_val = BaseMask;
 
             if(max_val <= 255 && Radius < 255)
             {

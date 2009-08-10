@@ -8,53 +8,102 @@
  */
 namespace Pictor.VertexSource
 {
-    //------------------------------------------------------------NullMarkers
+    ///<summary>
+    ///</summary>
     public struct NullMarkers : IMarkers
     {
+        ///<summary>
+        ///</summary>
         public void RemoveAll() { }
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
+        ///<param name="unknown"></param>
         public void AddVertex(double x, double y, uint unknown) { }
-        public void prepare_src() { }
+        ///<summary>
+        ///</summary>
+        public void PrepareSource() { }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="unknown"></param>
         public void Rewind(uint unknown) { }
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
+        ///<returns></returns>
         public uint Vertex(ref double x, ref double y) { return (uint)Path.EPathCommands.Stop; }
     };
 
-
-    //------------------------------------------------------conv_adaptor_vcgen
-    public class conv_adaptor_vcgen
+    ///<summary>
+    ///</summary>
+    public class ConverterAdaptorVcgen
     {
         private enum EStatus
         {
-            initial,
-            accumulate,
-            generate
+            Initial,
+            Accumulate,
+            Generate
         };
 
-        public conv_adaptor_vcgen(IVertexSource source, IGenerator generator)
+        private readonly IGenerator _generator;
+        private readonly IMarkers _markers;
+        private IVertexSource _source;
+        private EStatus _status;
+        private uint _lastCommand;
+        private double _startX;
+        private double _startY;
+
+        ///<summary>
+        ///</summary>
+        ///<param name="source"></param>
+        ///<param name="generator"></param>
+        public ConverterAdaptorVcgen(IVertexSource source, IGenerator generator)
         {
-            m_markers = new NullMarkers();
-            m_source = source;
-            m_generator = generator;
-            m_status = EStatus.initial;
+            _markers = new NullMarkers();
+            _source = source;
+            _generator = generator;
+            _status = EStatus.Initial;
         }
 
-        public conv_adaptor_vcgen(IVertexSource source, IGenerator generator, IMarkers markers)
+        ///<summary>
+        ///</summary>
+        ///<param name="source"></param>
+        ///<param name="generator"></param>
+        ///<param name="markers"></param>
+        public ConverterAdaptorVcgen(IVertexSource source, IGenerator generator, IMarkers markers)
             : this(source, generator)
         {
-            m_markers = markers;
+            _markers = markers;
         }
-        void Attach(IVertexSource source) { m_source = source; }
+        void Attach(IVertexSource source) { _source = source; }
 
-        protected IGenerator Generator() { return m_generator; }
+        protected IGenerator Generator
+        {
+            get { return _generator; }
+        }
 
-        IMarkers markers() { return m_markers; }
+        private IMarkers Markers
+        {
+            get { return _markers; }
+        }
 
-        public void Rewind(uint path_id) 
+        ///<summary>
+        ///</summary>
+        ///<param name="pathId"></param>
+        public void Rewind(uint pathId) 
         { 
-            m_source.Rewind(path_id);
-            m_status = EStatus.initial;
+            _source.Rewind(pathId);
+            _status = EStatus.Initial;
         }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
+        ///<returns></returns>
         public uint Vertex(out double x, out double y)
         {
             x = 0;
@@ -63,76 +112,75 @@ namespace Pictor.VertexSource
             bool done = false;
             while(!done)
             {
-                switch(m_status)
+                switch(_status)
                 {
-                    case EStatus.initial:
-                    m_markers.RemoveAll();
-                    m_last_cmd = m_source.Vertex(out m_start_x, out m_start_y);
-                    m_status = EStatus.accumulate;
-                    goto case EStatus.accumulate;
+                    case EStatus.Initial:
+                        Initial();
+                        goto case EStatus.Accumulate;
 
-                case EStatus.accumulate:
-                    if(Path.IsStop(m_last_cmd)) return (uint)Path.EPathCommands.Stop;
+                case EStatus.Accumulate:
+                        if (Path.IsStop(_lastCommand)) return (uint)Path.EPathCommands.Stop;
+                        Accumulate(ref cmd, ref x, ref y);
+                        goto case EStatus.Generate;
 
-                    m_generator.RemoveAll();
-                    m_generator.AddVertex(m_start_x, m_start_y, (uint)Path.EPathCommands.MoveTo);
-                    m_markers.AddVertex(m_start_x, m_start_y, (uint)Path.EPathCommands.MoveTo);
-
-                    for(;;)
-                    {
-                        cmd = m_source.Vertex(out x, out y);
-                        //DebugFile.Print("x=" + x.ToString() + " y=" + y.ToString() + "\n");
-                        if (Path.IsVertex(cmd))
+                case EStatus.Generate:
+                        cmd = _generator.Vertex(ref x, ref y);
+                        if (Path.IsStop(cmd))
                         {
-                            m_last_cmd = cmd;
-                            if(Path.IsMoveTo(cmd))
-                            {
-                                m_start_x = x;
-                                m_start_y = y;
-                                break;
-                            }
-                            m_generator.AddVertex(x, y, cmd);
-                            m_markers.AddVertex(x, y, (uint)Path.EPathCommands.LineTo);
+                            _status = EStatus.Accumulate;
+                            break;
                         }
-                        else
-                        {
-                            if(Path.IsStop(cmd))
-                            {
-                                m_last_cmd = (uint)Path.EPathCommands.Stop;
-                                break;
-                            }
-                            if(Path.IsEndPoly(cmd))
-                            {
-                                m_generator.AddVertex(x, y, cmd);
-                                break;
-                            }
-                        }
-                    }
-                    m_generator.Rewind(0);
-                    m_status = EStatus.generate;
-                    goto case EStatus.generate;
-
-                case EStatus.generate:
-                    cmd = m_generator.Vertex(ref x, ref y);
-                    //DebugFile.Print("x=" + x.ToString() + " y=" + y.ToString() + "\n");
-                    if (Path.IsStop(cmd))
-                    {
-                        m_status = EStatus.accumulate;
-                        break;
-                    }
-                    done = true;
+                        done = true;
                     break;
                 }
             }
             return cmd;
         }
 
-        private IVertexSource  m_source;
-        private IGenerator     m_generator;
-        private IMarkers       m_markers;
-        private EStatus        m_status;
-        private uint m_last_cmd;
-        private double        m_start_x;
-        private double        m_start_y;
+        private void Initial()
+        {
+            _markers.RemoveAll();
+            _lastCommand = _source.Vertex(out _startX, out _startY);
+            _status = EStatus.Accumulate;
+        }
+
+        private void Accumulate(ref uint cmd, ref double x, ref double y)
+        {
+            _generator.RemoveAll();
+            _generator.AddVertex(_startX, _startY, (uint)Path.EPathCommands.MoveTo);
+            _markers.AddVertex(_startX, _startY, (uint)Path.EPathCommands.MoveTo);
+
+            for (; ; )
+            {
+                cmd = _source.Vertex(out x, out y);
+                if (Path.IsVertex(cmd))
+                {
+                    _lastCommand = cmd;
+                    if (Path.IsMoveTo(cmd))
+                    {
+                        _startX = x;
+                        _startY = y;
+                        break;
+                    }
+                    _generator.AddVertex(x, y, cmd);
+                    _markers.AddVertex(x, y, (uint)Path.EPathCommands.LineTo);
+                }
+                else
+                {
+                    if (Path.IsStop(cmd))
+                    {
+                        _lastCommand = (uint)Path.EPathCommands.Stop;
+                        break;
+                    }
+                    if (Path.IsEndPoly(cmd))
+                    {
+                        _generator.AddVertex(x, y, cmd);
+                        break;
+                    }
+                }
+            }
+            _generator.Rewind(0);
+            _status = EStatus.Generate;
+        }
     };
 }

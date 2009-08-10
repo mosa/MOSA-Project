@@ -23,35 +23,35 @@ namespace Pictor.PixelFormat
         //--------------------------------------------------------------------
         public override uint Width 
         { 
-            get { return m_pixf.Height; } 
+            get { return PixelFormat.Height; } 
         }
         public override uint Height
         {
-            get { return m_pixf.Width; }
+            get { return PixelFormat.Width; }
         }
 
         //--------------------------------------------------------------------
         public override RGBA_Bytes Pixel(int x, int y)
         {
-            return m_pixf.Pixel(y, x);
+            return PixelFormat.Pixel(y, x);
         }
 
         //--------------------------------------------------------------------
         unsafe public override void CopyPixel(int x, int y, byte* c)
         {
-            m_pixf.CopyPixel(y, x, c);
+            PixelFormat.CopyPixel(y, x, c);
         }
 
         //--------------------------------------------------------------------
         public override void BlendPixel(int x, int y, RGBA_Bytes c, byte cover)
         {
-            m_pixf.BlendPixel(y, x, c, cover);
+            PixelFormat.BlendPixel(y, x, c, cover);
         }
 
         //--------------------------------------------------------------------
         public override void CopyHorizontalLine(int x, int y, uint len, RGBA_Bytes c)
         {
-            m_pixf.CopyVerticalLine(y, x, len, c);
+            PixelFormat.CopyVerticalLine(y, x, len, c);
         }
 
         //--------------------------------------------------------------------
@@ -59,19 +59,19 @@ namespace Pictor.PixelFormat
                                    uint len,
                                    RGBA_Bytes c)
         {
-            m_pixf.CopyHorizontalLine(y, x, len, c);
+            PixelFormat.CopyHorizontalLine(y, x, len, c);
         }
 
         //--------------------------------------------------------------------
         public override void BlendHorizontalLine(int x1, int y,int x2, RGBA_Bytes c, byte cover)
         {
-            m_pixf.BlendVerticalLine(y, x1, x2, c, cover);
+            PixelFormat.BlendVerticalLine(y, x1, x2, c, cover);
         }
 
         //--------------------------------------------------------------------
         public override void BlendVerticalLine(int x, int y1, int y2, RGBA_Bytes c, byte cover)
         {
-            m_pixf.BlendHorizontalLine(y1, x, y2, c, cover);
+            PixelFormat.BlendHorizontalLine(y1, x, y2, c, cover);
         }
 
         //--------------------------------------------------------------------
@@ -80,7 +80,7 @@ namespace Pictor.PixelFormat
                                           RGBA_Bytes c,
                                           byte* covers)
         {
-            m_pixf.BlendSolidVerticalSpan(y, x, len, c, covers);
+            PixelFormat.BlendSolidVerticalSpan(y, x, len, c, covers);
         }
 
         //--------------------------------------------------------------------
@@ -89,29 +89,29 @@ namespace Pictor.PixelFormat
                                           RGBA_Bytes c,
                                           byte* covers)
         {
-            m_pixf.BlendSolidHorizontalSpan(y, x, len, c, covers);
+            PixelFormat.BlendSolidHorizontalSpan(y, x, len, c, covers);
         }
 
         public unsafe override void CopyHorizontalColorSpan(int x, int y, uint len, RGBA_Bytes* colors)
         {
-            m_pixf.CopyVerticalColorSpan(y, x, len, colors);
+            PixelFormat.CopyVerticalColorSpan(y, x, len, colors);
         }
 
         public unsafe override void CopyVerticalColorSpan(int x, int y, uint len, RGBA_Bytes* colors)
         {
-            m_pixf.CopyHorizontalColorSpan(y, x, len, colors);
+            PixelFormat.CopyHorizontalColorSpan(y, x, len, colors);
         }
 
         //--------------------------------------------------------------------
         unsafe public override void BlendHorizontalColorSpan(int x, int y, uint len, RGBA_Bytes* colors, byte* covers, byte cover)
         {
-            m_pixf.BlendVerticalColorSpan(y, x, len, colors, covers, cover);
+            PixelFormat.BlendVerticalColorSpan(y, x, len, colors, covers, cover);
         }
 
         //--------------------------------------------------------------------
         unsafe public override void BlendVerticalColorSpan(int x, int y, uint len, RGBA_Bytes* colors, byte* covers, byte cover)
         {
-            m_pixf.BlendHorizontalColorSpan(y, x, len, colors, covers, cover);
+            PixelFormat.BlendHorizontalColorSpan(y, x, len, colors, covers, cover);
         }
     };
 }

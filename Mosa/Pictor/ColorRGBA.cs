@@ -273,11 +273,11 @@ namespace Pictor
         public const int cover_shift = 8;
         public const int cover_size  = 1 << cover_shift;  //----cover_size 
         public const int cover_mask  = cover_size - 1;    //----cover_mask 
-        //public const int cover_none  = 0,                 //----cover_none 
-        //public const int cover_full  = cover_mask         //----cover_full 
+        //public const int CoverNone  = 0,                 //----CoverNone 
+        //public const int CoverFull  = cover_mask         //----CoverFull 
 
-        public const int base_shift = 8;
-        public const uint base_scale = (uint)(1 << base_shift);
+        public const int BaseShift = 8;
+        public const uint base_scale = (uint)(1 << BaseShift);
         public const uint base_mask = base_scale - 1;
 
         public byte m_R;
@@ -383,10 +383,10 @@ namespace Pictor
         {
             RGBA_Bytes ret = new RGBA_Bytes();
             uint ik = Basics.UnsignedRound(k * base_scale);
-            ret.R_Byte = (byte)((uint)(R_Byte) + ((((uint)(c.R_Byte) - R_Byte) * ik) >> base_shift));
-            ret.G_Byte = (byte)((uint)(G_Byte) + ((((uint)(c.G_Byte) - G_Byte) * ik) >> base_shift));
-            ret.B_Byte = (byte)((uint)(B_Byte) + ((((uint)(c.B_Byte) - B_Byte) * ik) >> base_shift));
-            ret.A_Byte = (byte)((uint)(A_Byte) + ((((uint)(c.A_Byte) - A_Byte) * ik) >> base_shift));
+            ret.R_Byte = (byte)((uint)(R_Byte) + ((((uint)(c.R_Byte) - R_Byte) * ik) >> BaseShift));
+            ret.G_Byte = (byte)((uint)(G_Byte) + ((((uint)(c.G_Byte) - G_Byte) * ik) >> BaseShift));
+            ret.B_Byte = (byte)((uint)(B_Byte) + ((((uint)(c.B_Byte) - B_Byte) * ik) >> BaseShift));
+            ret.A_Byte = (byte)((uint)(A_Byte) + ((((uint)(c.A_Byte) - A_Byte) * ik) >> BaseShift));
             return ret;
         }
 

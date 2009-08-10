@@ -623,8 +623,8 @@ namespace Pictor
         typedef typename color_type::long_type long_type;
         enum base_scale_e
         {
-            base_shift      = 8,//color_type::base_shift,
-            base_mask       = 255,//color_type::base_mask,
+            BaseShift      = 8,//color_type::BaseShift,
+            BaseMask       = 255,//color_type::BaseMask,
             downscale_shift = Shift
         };
 
@@ -708,14 +708,14 @@ namespace Pictor
                 if(fg[1] < 0) fg[1] = 0;
                 if(fg[2] < 0) fg[2] = 0;
 
-                if(fg[order_type::R] > base_mask) fg[order_type::R] = base_mask;
-                if(fg[order_type::G] > base_mask) fg[order_type::G] = base_mask;
-                if(fg[order_type::B] > base_mask) fg[order_type::B] = base_mask;
+                if(fg[order_type::R] > BaseMask) fg[order_type::R] = BaseMask;
+                if(fg[order_type::G] > BaseMask) fg[order_type::G] = BaseMask;
+                if(fg[order_type::B] > BaseMask) fg[order_type::B] = BaseMask;
 
                 Span->r = (value_type)fg[order_type::R];
                 Span->g = (value_type)fg[order_type::G];
                 Span->b = (value_type)fg[order_type::B];
-                Span->a = base_mask;
+                Span->a = BaseMask;
 
                 ++Span;
                 ++base_type::Interpolator();

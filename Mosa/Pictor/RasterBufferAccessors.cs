@@ -140,19 +140,19 @@ namespace Pictor
 
             image_accessor_no_clip() {}
             explicit image_accessor_no_clip(pixfmt_type& pixf) : 
-                m_pixf(&pixf) 
+                PixelFormat(&pixf) 
             {}
 
             void Attach(pixfmt_type& pixf)
             {
-                m_pixf = &pixf;
+                PixelFormat = &pixf;
             }
 
             byte* Span(int x, int y, uint)
             {
                 m_x = x;
                 m_y = y;
-                return m_pix_ptr = m_pixf->PixelPointer(x, y);
+                return m_pix_ptr = PixelFormat->PixelPointer(x, y);
             }
 
             byte* NextX()
@@ -163,11 +163,11 @@ namespace Pictor
             byte* NextY()
             {
                 ++m_y;
-                return m_pix_ptr = m_pixf->PixelPointer(m_x, m_y);
+                return m_pix_ptr = PixelFormat->PixelPointer(m_x, m_y);
             }
 
         private:
-            pixfmt_type* m_pixf;
+            pixfmt_type* PixelFormat;
             int                m_x, m_y;
             byte*       m_pix_ptr;
         };
@@ -272,20 +272,20 @@ namespace Pictor
 
             image_accessor_wrap() {}
             explicit image_accessor_wrap(pixfmt_type& pixf) : 
-                m_pixf(&pixf), 
+                PixelFormat(&pixf), 
                 m_wrap_x(pixf.Width()), 
                 m_wrap_y(pixf.Height())
             {}
 
             void Attach(pixfmt_type& pixf)
             {
-                m_pixf = &pixf;
+                PixelFormat = &pixf;
             }
 
             byte* Span(int x, int y, uint)
             {
                 m_x = x;
-                m_row_ptr = m_pixf->RowPointer(m_wrap_y(y));
+                m_row_ptr = PixelFormat->RowPointer(m_wrap_y(y));
                 return m_row_ptr + m_wrap_x(x) * pix_width;
             }
 
@@ -297,12 +297,12 @@ namespace Pictor
 
             byte* NextY()
             {
-                m_row_ptr = m_pixf->RowPointer(++m_wrap_y);
+                m_row_ptr = PixelFormat->RowPointer(++m_wrap_y);
                 return m_row_ptr + m_wrap_x(m_x) * pix_width;
             }
 
         private:
-            pixfmt_type* m_pixf;
+            pixfmt_type* PixelFormat;
             byte*       m_row_ptr;
             int                m_x;
             WrapX              m_wrap_x;

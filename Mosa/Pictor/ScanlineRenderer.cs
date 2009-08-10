@@ -721,7 +721,7 @@ namespace Pictor
                                               -Span->len : 
                                                Span->len), 
                                Color, 
-                               cover_full);
+                               CoverFull);
             if(--NumberOfSpans == 0) break;
             ++Span;
         }
@@ -761,7 +761,7 @@ namespace Pictor
                                                       -Span->len : 
                                                        Span->len), 
                                        ren_color, 
-                                       cover_full);
+                                       CoverFull);
                     if(--NumberOfSpans == 0) break;
                     ++Span;
                 }
@@ -819,7 +819,7 @@ namespace Pictor
             if(len < 0) len = -len;
             typename BaseRenderer::color_type* Colors = alloc.Allocate(len);
             span_gen.Generate(Colors, x, y, len);
-            ren.BlendHorizontalColorSpan(x, y, len, Colors, 0, cover_full); 
+            ren.BlendHorizontalColorSpan(x, y, len, Colors, 0, CoverFull); 
             if(--NumberOfSpans == 0) break;
             ++Span;
         }
@@ -997,9 +997,9 @@ namespace Pictor
                                         do
                                         {
                                             cover = *src_covers;
-                                            if(*dst_covers + cover > cover_full)
+                                            if(*dst_covers + cover > CoverFull)
                                             {
-                                                cover = cover_full - *dst_covers;
+                                                cover = CoverFull - *dst_covers;
                                             }
                                             if(cover)
                                             {
@@ -1034,9 +1034,9 @@ namespace Pictor
                                         do
                                         {
                                             cover = *src_covers;
-                                            if(*dst_covers + cover > cover_full)
+                                            if(*dst_covers + cover > CoverFull)
                                             {
-                                                cover = cover_full - *dst_covers;
+                                                cover = CoverFull - *dst_covers;
                                             }
                                             if(cover)
                                             {
@@ -1060,7 +1060,7 @@ namespace Pictor
                                               sl_len,
                                               mix_buffer + sl_start - MinX,
                                               0,
-                                              cover_full);
+                                              CoverFull);
                     } //if(sl_len)
                 } //if(num_styles == 1) ... else
             } //while((num_styles = ras.SweepStyles()) > 0)

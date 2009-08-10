@@ -6,186 +6,250 @@
  * Authors:
  *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  */
-using System;
 
-namespace Pictor
+namespace Pictor.PixelFormat
 {
+    ///<summary>
+    ///</summary>
     public interface IAlphaMask
     {
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
+        ///<returns></returns>
         byte Pixel(int x, int y);
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
+        ///<param name="val"></param>
+        ///<returns></returns>
         byte CombinePixel(int x, int y, byte val);
-        unsafe void FillHorizontalSpan(int x, int y, byte* dst, int num_pix);
-        unsafe void FillVerticalSpan(int x, int y, byte* dst, int num_pix);
-        unsafe void CombineHorizontalSpanFullCover(int x, int y, byte* dst, int num_pix);
-        unsafe void CombineHorizontalSpan(int x, int y, byte* dst, int num_pix);
-        unsafe void CombineVerticalSpan(int x, int y, byte* dst, int num_pix);
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
+        ///<param name="dst"></param>
+        ///<param name="numPixel"></param>
+        unsafe void FillHorizontalSpan(int x, int y, byte* dst, int numPixel);
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
+        ///<param name="dst"></param>
+        ///<param name="numPixel"></param>
+        unsafe void FillVerticalSpan(int x, int y, byte* dst, int numPixel);
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
+        ///<param name="dst"></param>
+        ///<param name="numPixel"></param>
+        unsafe void CombineHorizontalSpanFullCover(int x, int y, byte* dst, int numPixel);
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
+        ///<param name="dst"></param>
+        ///<param name="numPixel"></param>
+        unsafe void CombineHorizontalSpan(int x, int y, byte* dst, int numPixel);
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
+        ///<param name="dst"></param>
+        ///<param name="numPixel"></param>
+        unsafe void CombineVerticalSpan(int x, int y, byte* dst, int numPixel);
     };
 
+    ///<summary>
+    ///</summary>
     public sealed class AlphaMaskByteUnclipped : IAlphaMask
     {
-        RasterBuffer m_rbuf;
-        uint m_Step;
-        uint m_Offset;
+        RasterBuffer _rasterBuffer;
+        readonly uint _step;
+        readonly uint _offset;
 
-        public static int cover_shift = 8;
-        public static int cover_none = 0;
-        public static int cover_full = 255;
+        ///<summary>
+        ///</summary>
+        public static int CoverShift = 8;
+        ///<summary>
+        ///</summary>
+        public static int CoverNone = 0;
+        ///<summary>
+        ///</summary>
+        public static int CoverFull = 255;
 
-        public AlphaMaskByteUnclipped(RasterBuffer rbuf, uint Step, uint Offset)
+        ///<summary>
+        ///</summary>
+        ///<param name="rbuf"></param>
+        ///<param name="step"></param>
+        ///<param name="offset"></param>
+        public AlphaMaskByteUnclipped(RasterBuffer rbuf, uint step, uint offset)
         {
-            m_Step = Step;
-            m_Offset = Offset;
-            m_rbuf = rbuf;
+            _step = step;
+            _offset = offset;
+            _rasterBuffer = rbuf;
         }
 
-        public void Attach(RasterBuffer rbuf) { m_rbuf = rbuf; }
+        ///<summary>
+        ///</summary>
+        ///<param name="rbuf"></param>
+        public void Attach(RasterBuffer rbuf) { _rasterBuffer = rbuf; }
 
-        //--------------------------------------------------------------------
         public byte Pixel(int x, int y)
         {
             unsafe
             {
-                return *(m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset);
+                return *(_rasterBuffer.GetPixelPointer(y) + x * _step + _offset);
             }
         }
 
-        //--------------------------------------------------------------------
         public byte CombinePixel(int x, int y, byte val)
         {
             unsafe
             {
-                return (byte)((cover_full + val * *(m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset)) >> cover_shift);
+                return (byte)((CoverFull + val * *(_rasterBuffer.GetPixelPointer(y) + x * _step + _offset)) >> CoverShift);
             }
         }
 
-
-        //--------------------------------------------------------------------
-        public unsafe void FillHorizontalSpan(int x, int y, byte* dst, int num_pix)
+        public unsafe void FillHorizontalSpan(int x, int y, byte* dst, int numPixel)
         {
-            byte* mask = m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset;
+            byte* mask = _rasterBuffer.GetPixelPointer(y) + x * _step + _offset;
             do
             {
                 *dst++ = *mask;
-                mask += m_Step;
+                mask += _step;
             }
-            while (--num_pix != 0);
+            while (--numPixel != 0);
         }
 
-        public unsafe void CombineHorizontalSpanFullCover(int x, int y, byte* dst, int num_pix)
+        public unsafe void CombineHorizontalSpanFullCover(int x, int y, byte* dst, int numPixel)
         {
-            byte* mask = m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset;
+            byte* mask = _rasterBuffer.GetPixelPointer(y) + x * _step + _offset;
             do
             {
                 *dst = *mask;
                 ++dst;
-                mask += m_Step;
+                mask += _step;
             }
-            while (--num_pix != 0);
+            while (--numPixel != 0);
         }
 
-        //--------------------------------------------------------------------
-        public unsafe void CombineHorizontalSpan(int x, int y, byte* dst, int num_pix)
+        public unsafe void CombineHorizontalSpan(int x, int y, byte* dst, int numPixel)
         {
-            byte* mask = m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset;
+            byte* mask = _rasterBuffer.GetPixelPointer(y) + x * _step + _offset;
             do
             {
-                *dst = (byte)((cover_full + (*dst) * (*mask)) >> cover_shift);
+                *dst = (byte)((CoverFull + (*dst) * (*mask)) >> CoverShift);
                 ++dst;
-                mask += m_Step;
+                mask += _step;
             }
-            while (--num_pix != 0);
+            while (--numPixel != 0);
         }
 
-
-        //--------------------------------------------------------------------
-        public unsafe void FillVerticalSpan(int x, int y, byte* dst, int num_pix)
+        public unsafe void FillVerticalSpan(int x, int y, byte* dst, int numPixel)
         {
-            byte* mask = m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset;
+            byte* mask = _rasterBuffer.GetPixelPointer(y) + x * _step + _offset;
             do
             {
                 *dst++ = *mask;
-                mask += m_rbuf.StrideInBytes();
+                mask += _rasterBuffer.StrideInBytes();
             }
-            while (--num_pix != 0);
+            while (--numPixel != 0);
         }
 
-
-        //--------------------------------------------------------------------
-        public unsafe void CombineVerticalSpan(int x, int y, byte* dst, int num_pix)
+        public unsafe void CombineVerticalSpan(int x, int y, byte* dst, int numPixel)
         {
-            byte* mask = m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset;
+            byte* mask = _rasterBuffer.GetPixelPointer(y) + x * _step + _offset;
             do
             {
-                *dst = (byte)((cover_full + (*dst) * (*mask)) >> cover_shift);
+                *dst = (byte)((CoverFull + (*dst) * (*mask)) >> CoverShift);
                 ++dst;
-                mask += m_rbuf.StrideInBytes();
+                mask += _rasterBuffer.StrideInBytes();
             }
-            while (--num_pix != 0);
+            while (--numPixel != 0);
         }
     };
 
+    ///<summary>
+    ///</summary>
     public sealed class AlphaMaskByteClipped : IAlphaMask
     {
-        RasterBuffer m_rbuf;
-        uint m_Step;
-        uint m_Offset;
+        RasterBuffer _rasterBuffer;
+        readonly uint _step;
+        readonly uint _offset;
 
-        public static int cover_shift = 8;
-        public static int cover_none = 0;
-        public static int cover_full = 255;
+        ///<summary>
+        ///</summary>
+        public static int CoverShift = 8;
+        ///<summary>
+        ///</summary>
+        public static int CoverNone = 0;
+        ///<summary>
+        ///</summary>
+        public static int CoverFull = 255;
 
-        public AlphaMaskByteClipped(RasterBuffer rbuf, uint Step, uint Offset)
+        ///<summary>
+        ///</summary>
+        ///<param name="rbuf"></param>
+        ///<param name="step"></param>
+        ///<param name="offset"></param>
+        public AlphaMaskByteClipped(RasterBuffer rbuf, uint step, uint offset)
         {
-            m_Step = Step;
-            m_Offset = Offset;
-            m_rbuf = rbuf;
+            _step = step;
+            _offset = offset;
+            _rasterBuffer = rbuf;
         }
 
-        public void Attach(RasterBuffer rbuf) { m_rbuf = rbuf; }
+        ///<summary>
+        ///</summary>
+        ///<param name="rbuf"></param>
+        public void Attach(RasterBuffer rbuf)
+        {
+            _rasterBuffer = rbuf;
+        }
 
-
-        //--------------------------------------------------------------------
         public byte Pixel(int x, int y)
         {
             if (x >= 0 && y >= 0 &&
-               x < (int)m_rbuf.Width() &&
-               y < (int)m_rbuf.Height())
+                x < (int)_rasterBuffer.Width() &&
+                y < (int)_rasterBuffer.Height())
             {
                 unsafe
                 {
-                    return *(m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset);
+                    return *(_rasterBuffer.GetPixelPointer(y) + x * _step + _offset);
                 }
             }
             return 0;
         }
 
-        //--------------------------------------------------------------------
         public byte CombinePixel(int x, int y, byte val)
         {
             if (x >= 0 && y >= 0 &&
-               x < (int)m_rbuf.Width() &&
-               y < (int)m_rbuf.Height())
+                x < (int)_rasterBuffer.Width() &&
+                y < (int)_rasterBuffer.Height())
             {
                 unsafe
                 {
-                    return (byte)((cover_full + val * *(m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset)) >> cover_shift);
+                    return (byte)((CoverFull + val * *(_rasterBuffer.GetPixelPointer(y) + x * _step + _offset)) >> CoverShift);
                 }
             }
             return 0;
         }
 
-        //--------------------------------------------------------------------
-        public unsafe void FillHorizontalSpan(int x, int y, byte* dst, int num_pix)
+        public unsafe void FillHorizontalSpan(int x, int y, byte* dst, int numPixel)
         {
-            int xmax = (int)m_rbuf.Width() - 1;
-            int ymax = (int)m_rbuf.Height() - 1;
+            int xmax = (int)_rasterBuffer.Width() - 1;
+            int ymax = (int)_rasterBuffer.Height() - 1;
 
-            int count = num_pix;
+            int count = numPixel;
             byte* covers = dst;
 
             if (y < 0 || y > ymax)
             {
-                Basics.MemClear(dst, num_pix);
+                Basics.MemClear(dst, numPixel);
                 return;
             }
 
@@ -194,7 +258,7 @@ namespace Pictor
                 count += x;
                 if (count <= 0)
                 {
-                    Basics.MemClear(dst, num_pix);
+                    Basics.MemClear(dst, numPixel);
                     return;
                 }
                 Basics.MemClear(covers, -x);
@@ -208,33 +272,32 @@ namespace Pictor
                 count -= rest;
                 if (count <= 0)
                 {
-                    Basics.MemClear(dst, num_pix);
+                    Basics.MemClear(dst, numPixel);
                     return;
                 }
                 Basics.MemClear(covers + count, rest);
             }
 
-            byte* mask = m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset;
+            byte* mask = _rasterBuffer.GetPixelPointer(y) + x * _step + _offset;
             do
             {
                 *covers++ = *(mask);
-                mask += m_Step;
+                mask += _step;
             }
             while (--count != 0);
         }
 
-
-        public unsafe void CombineHorizontalSpanFullCover(int x, int y, byte* dst, int num_pix)
+        public unsafe void CombineHorizontalSpanFullCover(int x, int y, byte* dst, int numPixel)
         {
-            int xmax = (int)m_rbuf.Width() - 1;
-            int ymax = (int)m_rbuf.Height() - 1;
+            int xmax = (int)_rasterBuffer.Width() - 1;
+            int ymax = (int)_rasterBuffer.Height() - 1;
 
-            int count = num_pix;
+            int count = numPixel;
             byte* covers = dst;
 
             if (y < 0 || y > ymax)
             {
-                Basics.MemClear(dst, num_pix);
+                Basics.MemClear(dst, numPixel);
                 return;
             }
 
@@ -243,7 +306,7 @@ namespace Pictor
                 count += x;
                 if (count <= 0)
                 {
-                    Basics.MemClear(dst, num_pix);
+                    Basics.MemClear(dst, numPixel);
                     return;
                 }
                 Basics.MemClear(covers, -x);
@@ -257,34 +320,33 @@ namespace Pictor
                 count -= rest;
                 if (count <= 0)
                 {
-                    Basics.MemClear(dst, num_pix);
+                    Basics.MemClear(dst, numPixel);
                     return;
                 }
                 Basics.MemClear(covers + count, rest);
             }
 
-            byte* mask = m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset;
+            byte* mask = _rasterBuffer.GetPixelPointer(y) + x * _step + _offset;
             do
             {
                 *covers = *mask;
                 ++covers;
-                mask += m_Step;
+                mask += _step;
             }
             while (--count != 0);
         }
 
-        //--------------------------------------------------------------------
-        public unsafe void CombineHorizontalSpan(int x, int y, byte* dst, int num_pix)
+        public unsafe void CombineHorizontalSpan(int x, int y, byte* dst, int numPixel)
         {
-            int xmax = (int)m_rbuf.Width() - 1;
-            int ymax = (int)m_rbuf.Height() - 1;
+            int xmax = (int)_rasterBuffer.Width() - 1;
+            int ymax = (int)_rasterBuffer.Height() - 1;
 
-            int count = num_pix;
+            int count = numPixel;
             byte* covers = dst;
 
             if (y < 0 || y > ymax)
             {
-                Basics.MemClear(dst, num_pix);
+                Basics.MemClear(dst, numPixel);
                 return;
             }
 
@@ -293,7 +355,7 @@ namespace Pictor
                 count += x;
                 if (count <= 0)
                 {
-                    Basics.MemClear(dst, num_pix);
+                    Basics.MemClear(dst, numPixel);
                     return;
                 }
                 Basics.MemClear(covers, -x);
@@ -307,36 +369,35 @@ namespace Pictor
                 count -= rest;
                 if (count <= 0)
                 {
-                    Basics.MemClear(dst, num_pix);
+                    Basics.MemClear(dst, numPixel);
                     return;
                 }
                 Basics.MemClear(covers + count, rest);
             }
 
-            byte* mask = m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset;
+            byte* mask = _rasterBuffer.GetPixelPointer(y) + x * _step + _offset;
             do
             {
-                *covers = (byte)((cover_full + (*covers) *
-                                       *mask) >>
-                                       cover_shift);
+                *covers = (byte)((CoverFull + (*covers) *
+                                               *mask) >>
+                                 CoverShift);
                 ++covers;
-                mask += m_Step;
+                mask += _step;
             }
             while (--count != 0);
         }
 
-        //--------------------------------------------------------------------
-        public unsafe void FillVerticalSpan(int x, int y, byte* dst, int num_pix)
+        public unsafe void FillVerticalSpan(int x, int y, byte* dst, int numPixel)
         {
-            int xmax = (int)m_rbuf.Width() - 1;
-            int ymax = (int)m_rbuf.Height() - 1;
+            int xmax = (int)_rasterBuffer.Width() - 1;
+            int ymax = (int)_rasterBuffer.Height() - 1;
 
-            int count = num_pix;
+            int count = numPixel;
             byte* covers = dst;
 
             if (x < 0 || x > xmax)
             {
-                Basics.MemClear(dst, num_pix);
+                Basics.MemClear(dst, numPixel);
                 return;
             }
 
@@ -345,7 +406,7 @@ namespace Pictor
                 count += y;
                 if (count <= 0)
                 {
-                    Basics.MemClear(dst, num_pix);
+                    Basics.MemClear(dst, numPixel);
                     return;
                 }
                 Basics.MemClear(covers, -y);
@@ -359,33 +420,32 @@ namespace Pictor
                 count -= rest;
                 if (count <= 0)
                 {
-                    Basics.MemClear(dst, num_pix);
+                    Basics.MemClear(dst, numPixel);
                     return;
                 }
                 Basics.MemClear(covers + count, rest);
             }
 
-            byte* mask = m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset;
+            byte* mask = _rasterBuffer.GetPixelPointer(y) + x * _step + _offset;
             do
             {
                 *covers++ = *mask;
-                mask += m_rbuf.StrideInBytes();
+                mask += _rasterBuffer.StrideInBytes();
             }
             while (--count != 0);
         }
 
-        //--------------------------------------------------------------------
-        public unsafe void CombineVerticalSpan(int x, int y, byte* dst, int num_pix)
+        public unsafe void CombineVerticalSpan(int x, int y, byte* dst, int numPixel)
         {
-            int xmax = (int)m_rbuf.Width() - 1;
-            int ymax = (int)m_rbuf.Height() - 1;
+            int xmax = (int)_rasterBuffer.Width() - 1;
+            int ymax = (int)_rasterBuffer.Height() - 1;
 
-            int count = num_pix;
+            int count = numPixel;
             byte* covers = dst;
 
             if (x < 0 || x > xmax)
             {
-                Basics.MemClear(dst, num_pix);
+                Basics.MemClear(dst, numPixel);
                 return;
             }
 
@@ -394,7 +454,7 @@ namespace Pictor
                 count += y;
                 if (count <= 0)
                 {
-                    Basics.MemClear(dst, num_pix);
+                    Basics.MemClear(dst, numPixel);
                     return;
                 }
                 Basics.MemClear(covers, -y);
@@ -408,18 +468,18 @@ namespace Pictor
                 count -= rest;
                 if (count <= 0)
                 {
-                    Basics.MemClear(dst, num_pix);
+                    Basics.MemClear(dst, numPixel);
                     return;
                 }
                 Basics.MemClear(covers + count, rest);
             }
 
-            byte* mask = m_rbuf.GetPixelPointer(y) + x * m_Step + m_Offset;
+            byte* mask = _rasterBuffer.GetPixelPointer(y) + x * _step + _offset;
             do
             {
-                *covers = (byte)((cover_full + (*covers) * (*mask)) >> cover_shift);
+                *covers = (byte)((CoverFull + (*covers) * (*mask)) >> CoverShift);
                 ++covers;
-                mask += m_rbuf.StrideInBytes();
+                mask += _rasterBuffer.StrideInBytes();
             }
             while (--count != 0);
         }

@@ -10,29 +10,32 @@ using System;
 
 namespace Pictor.Transform
 {
-
-    //==========================================================trans_bilinear
     public sealed class Bilinear : ITransform
     {
-        double[,] m_mtx = new double[4,2];
-        bool   m_valid;
+        readonly double[,] _matrix = new double[4,2];
+        bool   _valid;
 
-        //--------------------------------------------------------------------
         public Bilinear()
         {
-            m_valid=(false);
+            _valid=(false);
         }
 
-        //--------------------------------------------------------------------
-        // Arbitrary quadrangle transformations
+        ///<summary>
+        ///</summary>
+        ///<param name="src"></param>
+        ///<param name="dst"></param>
         public Bilinear(double[] src, double[] dst) 
         {
             quad_to_quad(src, dst);
         }
 
-
-        //--------------------------------------------------------------------
-        // Direct transformations 
+        ///<summary>
+        ///</summary>
+        ///<param name="x1"></param>
+        ///<param name="y1"></param>
+        ///<param name="x2"></param>
+        ///<param name="y2"></param>
+        ///<param name="quad"></param>
         public Bilinear(double x1, double y1, double x2, double y2, double[] quad)
         {
             rect_to_quad(x1, y1, x2, y2, quad);
@@ -68,7 +71,7 @@ namespace Pictor.Transform
                 right[i,0] = dst[ix];
                 right[i,1] = dst[iy];
             }
-            m_valid = EquationSimulator.Solve(left, right, m_mtx);
+            _valid = EquationSimulator.Solve(left, right, _matrix);
         }
 
 
@@ -101,7 +104,7 @@ namespace Pictor.Transform
 
         //--------------------------------------------------------------------
         // Check if the equations were solved successfully
-        public bool is_valid() { return m_valid; }
+        public bool is_valid() { return _valid; }
 
         //--------------------------------------------------------------------
         // Transform a point (x, y)
@@ -110,8 +113,8 @@ namespace Pictor.Transform
             double tx = x;
             double ty = y;
             double xy = tx * ty;
-            x = m_mtx[0,0] + m_mtx[1,0] * xy + m_mtx[2,0] * tx + m_mtx[3,0] * ty;
-            y = m_mtx[0,1] + m_mtx[1,1] * xy + m_mtx[2,1] * tx + m_mtx[3,1] * ty;
+            x = _matrix[0,0] + _matrix[1,0] * xy + _matrix[2,0] * tx + _matrix[3,0] * ty;
+            y = _matrix[0,1] + _matrix[1,1] * xy + _matrix[2,1] * tx + _matrix[3,1] * ty;
         }
 
 
@@ -144,7 +147,7 @@ namespace Pictor.Transform
 
         public iterator_x begin(double x, double y, double step)
         {
-            return new iterator_x(x, y, step, m_mtx);
+            return new iterator_x(x, y, step, _matrix);
         }
     };
 }

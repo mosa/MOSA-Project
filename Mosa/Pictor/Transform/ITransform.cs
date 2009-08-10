@@ -6,12 +6,17 @@
  * Authors:
  *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
  */
-using Pictor.Transform;
 
 namespace Pictor.Transform
 {
+    ///<summary>
+    ///</summary>
     public interface ITransform
     {
+        ///<summary>
+        ///</summary>
+        ///<param name="x"></param>
+        ///<param name="y"></param>
         void Transform(ref double x, ref double y);
     };
 }
