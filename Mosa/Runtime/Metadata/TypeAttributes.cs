@@ -16,6 +16,7 @@ namespace Mosa.Runtime.Metadata
     /// <summary>
     /// 
     /// </summary>
+    [Flags]
     public enum TypeAttributes
     {
         /// <summary>

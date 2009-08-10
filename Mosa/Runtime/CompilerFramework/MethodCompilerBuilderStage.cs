@@ -7,13 +7,8 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-
-using Mosa.Runtime.Loader;
-using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -25,9 +20,9 @@ namespace Mosa.Runtime.CompilerFramework
     {
         #region Data members
 
-        private List<MethodCompilerBase> _methodCompilers = new List<MethodCompilerBase>();
+        private readonly List<MethodCompilerBase> _methodCompilers = new List<MethodCompilerBase>();
 
-        #endregion // Data members
+        #endregion
 
         #region IAssemblyCompilerStage members
 
@@ -42,28 +37,20 @@ namespace Mosa.Runtime.CompilerFramework
             ReadOnlyRuntimeTypeListView types = RuntimeBase.Instance.TypeLoader.GetTypesFromModule(compiler.Assembly);
             foreach (RuntimeType type in types)
             {
-                //_currentType = new MetadataTypeDefinition(metadata, typeToken);
-                //Debug.WriteLine(String.Format("Type: {0}", _currentType));
-
                 // Do not compile generic types
                 if (type.IsGeneric)
                 {
                     continue;
                 }
 
-                // Iterate all methods in the type
                 foreach (RuntimeMethod method in type.Methods)
                 {
-                    //Debug.WriteLine("Checking method: " + type.ToString() + "." + method.Name);
-
-                    // Is this a generic method?
-                    if (true == method.IsGeneric)
+                    if (method.IsGeneric)
                         continue;
 
-                    // Is this a native method?
-                    if (0 == method.Rva)
+                    if (method.IsNative)
                     {
-                        Debug.WriteLine("Skipping native method: " + type.ToString() + "." + method.Name);
+                        Debug.WriteLine("Skipping native method: " + type + "." + method.Name);
                         Debug.WriteLine("Method will not be available in compiled image.");
                         continue;
                     }
@@ -87,7 +74,7 @@ namespace Mosa.Runtime.CompilerFramework
             _methodCompilers.Add(mcb);
         }
 
-        #endregion // IAssemblyCompilerStage members
+        #endregion
 
         IEnumerable<MethodCompilerBase> IMethodCompilerBuilder.Scheduled
         {

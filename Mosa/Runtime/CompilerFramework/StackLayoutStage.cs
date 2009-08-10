@@ -206,11 +206,16 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns></returns>
         private static int LayoutVariables(IEnumerable<StackOperand> locals, ICallingConvention cc, int offsetOfFirst, int direction)
         {
-            int offset = offsetOfFirst, thisOffset;
-            int size, alignment, padding;
+            int offset = offsetOfFirst;
+
             foreach (StackOperand lvo in locals)
             {
                 // Does the offset fit the alignment requirement?
+                int alignment;
+                int size;
+                int padding;
+                int thisOffset;
+
                 cc.GetStackRequirements(lvo, out size, out alignment);
                 if (1 == direction)
                 {

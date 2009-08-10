@@ -94,6 +94,14 @@ namespace Mosa.Runtime.Vm
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public bool IsNative
+        {
+            get { return 0 == Rva; }
+        }
+
+        /// <summary>
         /// Gets the method implementation attributes.
         /// </summary>
         /// <value>The impl attributes.</value>

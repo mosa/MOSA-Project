@@ -25,32 +25,21 @@ namespace Mosa.Runtime.CompilerFramework
         #region Data members
 
         /// <summary>
-        /// Holds the architecture during compilation.
+        /// Holds the _architecture during compilation.
         /// </summary>
-        private IArchitecture architecture;
+        private IArchitecture _architecture;
 
         /// <summary>
-        /// Holds the assembly compiler.
+        /// Holds the assembly _compiler.
         /// </summary>
-        private AssemblyCompiler compiler;
+        private AssemblyCompiler _compiler;
 
         /// <summary>
         /// Holds the current type system during compilation.
         /// </summary>
-        private ITypeSystem typeSystem;
+        private ITypeSystem _typeSystem;
 
         #endregion // Data members
-
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TypeLayoutStage"/> class.
-        /// </summary>
-        public TypeLayoutStage()
-        {
-        }
-
-        #endregion // Construction
 
         #region IAssemblyCompilerStage members
 
@@ -61,15 +50,15 @@ namespace Mosa.Runtime.CompilerFramework
 
         void IAssemblyCompilerStage.Run(AssemblyCompiler compiler)
         {
-            // Save the compiler
-            this.compiler = compiler;
-            // The compilation target architecture
-            this.architecture = compiler.Architecture;
+            // Save the _compiler
+            _compiler = compiler;
+            // The compilation target _architecture
+            _architecture = compiler.Architecture;
             // The type system
-            this.typeSystem = RuntimeBase.Instance.TypeLoader;
+            _typeSystem = RuntimeBase.Instance.TypeLoader;
 
             // Enumerate all types and do an appropriate type layout
-            ReadOnlyRuntimeTypeListView types = this.typeSystem.GetTypesFromModule(compiler.Assembly);
+            ReadOnlyRuntimeTypeListView types = _typeSystem.GetTypesFromModule(compiler.Assembly);
             foreach (RuntimeType type in types)
             {
                 switch (type.Attributes & TypeAttributes.LayoutMask)
@@ -96,7 +85,6 @@ namespace Mosa.Runtime.CompilerFramework
             Debug.Assert(type != null, @"No type given.");
 
             // Receives the size/alignment
-            int size, alignment;
             int packingSize = type.Pack;
             // Instance size
             int typeSize = 0;
@@ -114,7 +102,9 @@ namespace Mosa.Runtime.CompilerFramework
                 }
                 else
                 {
-                    this.architecture.GetTypeRequirements(field.Type, out size, out alignment);
+                    int size;
+                    int alignment;
+                    _architecture.GetTypeRequirements(field.Type, out size, out alignment);
 
                     // Pad the field in the type
                     if (0 != packingSize)
@@ -166,10 +156,10 @@ namespace Mosa.Runtime.CompilerFramework
 
             // Determine the size of the type & alignment requirements
             int size, alignment;
-            this.architecture.GetTypeRequirements(field.Type, out size, out alignment);
+            _architecture.GetTypeRequirements(field.Type, out size, out alignment);
 
             // Retrieve the linker
-            IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
+            IAssemblyLinker linker = _compiler.Pipeline.Find<IAssemblyLinker>();
             // The linker section to move this field into
             SectionKind section;
             // Does this field have an RVA?
@@ -184,25 +174,33 @@ namespace Mosa.Runtime.CompilerFramework
                 section = SectionKind.BSS;
             }
 
-            // Allocate space in the respective section
+            AllocateSpace(linker, field, section, size, alignment);
+        }
+
+        private void AllocateSpace(IAssemblyLinker linker, RuntimeField field, SectionKind section, int size, int alignment)
+        {
             using (Stream stream = linker.Allocate(field, section, size, alignment))
             {
                 if (IntPtr.Zero != field.RVA)
-                {
-                    // Initialize the static value from the RVA
-                    using (Stream source = compiler.Assembly.GetDataSection(field.RVA.ToInt64()))
-                    {
-                        byte[] data = new byte[size];
-                        source.Read(data, 0, size);
-                        stream.Write(data, 0, size);
-                    }
-                }
+                    InitializeStaticValueFromRVA(stream, size, field);
                 else
-                {
-                    // Write dummy bytes...
-                    stream.Write(new byte[size], 0, size);
-                }
+                    WriteDummyBytes(stream, size);
             }
+        }
+
+        private void InitializeStaticValueFromRVA(Stream stream, int size, RuntimeField field)
+        {
+            using (Stream source = _compiler.Assembly.GetDataSection(field.RVA.ToInt64()))
+            {
+                byte[] data = new byte[size];
+                source.Read(data, 0, size);
+                stream.Write(data, 0, size);
+            }
+        }
+
+        private static void WriteDummyBytes(Stream stream, int size)
+        {
+            stream.Write(new byte[size], 0, size);
         }
 
         #endregion // IAssemblyCompilerStage members
