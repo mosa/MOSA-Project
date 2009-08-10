@@ -10,90 +10,91 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Runtime.CompilerFramework.IL;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-	/// <summary>
-	/// The Operand Determination Stage determines the operands for each instructions.
-	/// </summary>
-	public class OperandDeterminationStage : IMethodCompilerStage
-	{
-		#region Data members
+    /// <summary>
+    /// The Operand Determination Stage determines the operands for each instructions.
+    /// </summary>
+    public class OperandDeterminationStage : IMethodCompilerStage
+    {
+        #region Data members
 
-		/// <summary>
-		/// 
-		/// </summary>
-		protected IArchitecture Architecture;
-		/// <summary>
-		/// 
-		/// </summary>
-		private List<BasicBlock> _blocks;
-		/// <summary>
-		/// 
-		/// </summary>
-		private BasicBlock _firstBlock;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected BitArray WorkArray;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected Stack<BasicBlock> WorkList;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected Stack<List<Operand>> WorkListStack;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected IArchitecture Architecture;
+        /// <summary>
+        /// 
+        /// </summary>
+        private List<BasicBlock> _blocks;
+        /// <summary>
+        /// 
+        /// </summary>
+        private BasicBlock _firstBlock;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected BitArray WorkArray;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected Stack<BasicBlock> WorkList;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected Stack<List<Operand>> WorkListStack;
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public string Name
-		{
-			get { return @"Operand Determination Stage"; }
-		}
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+        public string Name
+        {
+            get { return @"Operand Determination Stage"; }
+        }
 
-		#endregion 
+        #endregion
 
-		#region IMethodCompilerStage Members
+        #region IMethodCompilerStage Members
 
-		/// <summary>
-		/// Runs the specified compiler.
-		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		public void Run(IMethodCompiler compiler)
-		{
-			// Retrieve the basic block provider
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
+        /// <summary>
+        /// Runs the specified compiler.
+        /// </summary>
+        /// <param name="compiler">The compiler.</param>
+        public void Run(IMethodCompiler compiler)
+        {
+            // Retrieve the basic block provider
+            IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 
-			if (blockProvider == null)
-				throw new InvalidOperationException(@"Operand Determination stage requires basic _blocks.");
+            if (blockProvider == null)
+                throw new InvalidOperationException(@"Operand Determination stage requires basic Blocks.");
 
-			_blocks = blockProvider.Blocks;
+            _blocks = blockProvider.Blocks;
             _firstBlock = blockProvider.FromLabel(-1);
 
             InitializeWorkItems();
 
-			while (WorkList.Count != 0) {
-				BasicBlock block = WorkList.Pop();
-				List<Operand> stack = WorkListStack.Pop();
+            while (WorkList.Count != 0)
+            {
+                BasicBlock block = WorkList.Pop();
+                List<Operand> stack = WorkListStack.Pop();
 
-				if (!WorkArray.Get(block.Index)) {
-				    List<Operand> currentStack = GetCurrentStack(stack);
+                if (!WorkArray.Get(block.Index))
+                {
+                    List<Operand> currentStack = GetCurrentStack(stack);
 
-				    ProcessInstructions(block, currentStack, compiler);
-					WorkArray.Set(block.Index, true);
-				    UpdateWorkList(block, currentStack);
-				}
-			}
-		}
+                    ProcessInstructions(block, currentStack, compiler);
+                    WorkArray.Set(block.Index, true);
+                    UpdateWorkList(block, currentStack);
+                }
+            }
+        }
 
         private void InitializeWorkItems()
         {
@@ -164,15 +165,15 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
-	    /// <summary>
-		/// Adds to pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline.</param>
-		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
-		{
-			pipeline.InsertBefore<CilToIrTransformationStage>(this);
-		}
+        /// <summary>
+        /// Adds to pipeline.
+        /// </summary>
+        /// <param name="pipeline">The pipeline.</param>
+        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        {
+            pipeline.InsertBefore<CilToIrTransformationStage>(this);
+        }
 
-		#endregion // Methods
-	}
+        #endregion // Methods
+    }
 }

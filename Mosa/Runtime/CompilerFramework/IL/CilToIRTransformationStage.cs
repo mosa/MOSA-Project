@@ -232,7 +232,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     throw new NotSupportedException();
             }
 
-            Instruction result = _architecture.CreateInstruction(type, instruction.Results[0], instruction.First, instruction.Second);
+            Instruction result = Architecture.CreateInstruction(type, instruction.Results[0], instruction.First, instruction.Second);
             Replace(ctx, result);
         }
 
@@ -257,20 +257,20 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     throw new NotSupportedException();
             }
 
-            Instruction result = _architecture.CreateInstruction(replType, instruction.Results[0], instruction.First, instruction.Second);
+            Instruction result = Architecture.CreateInstruction(replType, instruction.Results[0], instruction.First, instruction.Second);
             Replace(ctx, result);
         }
 
         void IILVisitor<Context>.Neg(NegInstruction instruction, Context ctx)
         {
             Replace(ctx, new[] {
-                _architecture.CreateInstruction(typeof(SubInstruction), OpCode.Sub, instruction.Results[0], instruction.Operands[0]) 
+                Architecture.CreateInstruction(typeof(SubInstruction), OpCode.Sub, instruction.Results[0], instruction.Operands[0]) 
             });
         }
 
         void IILVisitor<Context>.Not(NotInstruction instruction, Context ctx)
         {
-            Replace(ctx, _architecture.CreateInstruction(typeof(LogicalNotInstruction), instruction.Results[0], instruction.Operands[0]));
+            Replace(ctx, Architecture.CreateInstruction(typeof(LogicalNotInstruction), instruction.Results[0], instruction.Operands[0]));
         }
 
         void IILVisitor<Context>.Conversion(ConversionInstruction instruction, Context ctx)
@@ -838,7 +838,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
             else
             {
-                Replace(context, _architecture.CreateInstruction(type, destinationOperand, sourceOperand));
+                Replace(context, Architecture.CreateInstruction(type, destinationOperand, sourceOperand));
             }
         }
 
@@ -904,8 +904,8 @@ namespace Mosa.Runtime.CompilerFramework.IL
         private void ProcessMixedTypeConversion(List<Instruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
         {
             instructionList.AddRange(new[] {
-                _architecture.CreateInstruction(type, destinationOperand, sourceOperand),
-                _architecture.CreateInstruction(typeof(LogicalAndInstruction), destinationOperand, destinationOperand, new ConstantOperand(new SigType(CilElementType.U4), mask))
+                Architecture.CreateInstruction(type, destinationOperand, sourceOperand),
+                Architecture.CreateInstruction(typeof(LogicalAndInstruction), destinationOperand, destinationOperand, new ConstantOperand(new SigType(CilElementType.U4), mask))
             });
         }
 
@@ -913,11 +913,11 @@ namespace Mosa.Runtime.CompilerFramework.IL
         {
             if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
             {
-                instructionList.Add(_architecture.CreateInstruction(typeof(IR.MoveInstruction), destinationOperand, sourceOperand));
-                instructionList.Add(_architecture.CreateInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask)));
+                instructionList.Add(Architecture.CreateInstruction(typeof(IR.MoveInstruction), destinationOperand, sourceOperand));
+                instructionList.Add(Architecture.CreateInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask)));
             }
             else
-                instructionList.Add(_architecture.CreateInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask)));
+                instructionList.Add(Architecture.CreateInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask)));
         }
 
         private void ExtendAndTruncateResult(List<Instruction> instructionList, Type extensionType, Operand destinationOperand)
@@ -925,7 +925,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             if (null != extensionType && destinationOperand is RegisterOperand)
             {
                 RegisterOperand resultOperand = new RegisterOperand(new SigType(CilElementType.I4), ((RegisterOperand)destinationOperand).Register);
-                instructionList.Add(_architecture.CreateInstruction(extensionType, resultOperand, destinationOperand));
+                instructionList.Add(Architecture.CreateInstruction(extensionType, resultOperand, destinationOperand));
             }
         }
 
@@ -958,7 +958,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     {
                         // Get the intrinsic attribute
                         IntrinsicAttribute ia = (IntrinsicAttribute)ra.GetAttribute();
-                        if (ia.Architecture.IsInstanceOfType(_architecture))
+                        if (ia.Architecture.IsInstanceOfType(Architecture))
                         {
                             // Found a replacement for the call...
                             try
@@ -1040,7 +1040,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
             else
             {
-                Replace(ctx, _architecture.CreateInstruction(type, load.Destination, load.Source));
+                Replace(ctx, Architecture.CreateInstruction(type, load.Destination, load.Source));
             }*/
         }
 
@@ -1058,9 +1058,9 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 // FIXME: Implement proper truncation as specified in the CIL spec
                 //Debug.Assert(false);
                 if (IsSignExtending(store.Source))
-                    Replace(ctx, _architecture.CreateInstruction(typeof(SignExtendedMoveInstruction), store.Destination, store.Source));
+                    Replace(ctx, Architecture.CreateInstruction(typeof(SignExtendedMoveInstruction), store.Destination, store.Source));
                 else
-                    Replace(ctx, _architecture.CreateInstruction(typeof(ZeroExtendedMoveInstruction), store.Destination, store.Source));
+                    Replace(ctx, Architecture.CreateInstruction(typeof(ZeroExtendedMoveInstruction), store.Destination, store.Source));
                 return;
             }
             if (1 == store.Source.Definitions.Count && 1 == store.Source.Uses.Count)
@@ -1070,7 +1070,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 return;
             }
 
-            Replace(ctx, _architecture.CreateInstruction(typeof(MoveInstruction), store.Destination, store.Source));
+            Replace(ctx, Architecture.CreateInstruction(typeof(MoveInstruction), store.Destination, store.Source));
         }
 
 
@@ -1109,7 +1109,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
             // Transform the opcode with an internal call
             CallInstruction call = new CallInstruction(OpCode.Call);
-            call.SetInvokeTarget(_compiler, callTarget);
+            call.SetInvokeTarget(Compiler, callTarget);
 
             int i = 0;
             foreach (Operand op in instruction.Operands)

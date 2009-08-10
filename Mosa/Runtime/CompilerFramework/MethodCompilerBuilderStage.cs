@@ -39,9 +39,7 @@ namespace Mosa.Runtime.CompilerFramework
             {
                 // Do not compile generic types
                 if (type.IsGeneric)
-                {
                     continue;
-                }
 
                 foreach (RuntimeMethod method in type.Methods)
                 {

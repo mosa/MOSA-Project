@@ -10,7 +10,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Runtime.Vm
 {
@@ -20,8 +19,8 @@ namespace Mosa.Runtime.Vm
     /// <remarks>
     /// This list is a read-only view of the this.Items list.
     /// </remarks>
-    public abstract class ReadOnlyRuntimeListView<ItemType> :
-        IList<ItemType>, IList where ItemType: IEquatable<ItemType>
+    public abstract class ReadOnlyRuntimeListView<TItemType> :
+        IList<TItemType>, IList where TItemType: IEquatable<TItemType>
     {
         #region Data members
 
@@ -48,7 +47,7 @@ namespace Mosa.Runtime.Vm
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ReadOnlyRuntimeListView{ItemType}"/> class.
+        /// Initializes a new instance of the <see cref="ReadOnlyRuntimeListView{TItemType}"/> class.
         /// </summary>
         /// <param name="firstField">The index of the first _stackFrameIndex. May not be negative.</param>
         /// <param name="count">The number of fields in the list. Must be larger than zero.</param>
@@ -70,42 +69,42 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Retrieves the items of the list.
         /// </summary>
-        protected abstract ItemType[] Items { get; }
+        protected abstract TItemType[] Items { get; }
 
         #endregion // Properties
 
-        #region IList<ItemType> Members
+        #region IList<TItemType> Members
 
-        int IList<ItemType>.IndexOf(ItemType item)
+        int IList<TItemType>.IndexOf(TItemType item)
         {
-            ItemType[] items = this.Items;
+            TItemType[] items = Items;
             for (int i = 0; i < _count; i++)
             {
-                if (true == item.Equals(items[_firstItem + i]))
+                if (item.Equals(items[_firstItem + i]))
                     return i;
             }
 
             return -1;
         }
 
-        void IList<ItemType>.Insert(int index, ItemType item)
+        void IList<TItemType>.Insert(int index, TItemType item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<ItemType>.RemoveAt(int index)
+        void IList<TItemType>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        ItemType IList<ItemType>.this[int index]
+        TItemType IList<TItemType>.this[int index]
         {
             get
             {
                 if (0 > index || index >= _count)
                     throw new ArgumentOutOfRangeException(@"index");
 
-                return this.Items[_firstItem + index];
+                return Items[_firstItem + index];
             }
             set
             {
@@ -113,68 +112,68 @@ namespace Mosa.Runtime.Vm
             }
         }
 
-        #endregion // IList<ItemType> Members
+        #endregion // IList<TItemType> Members
 
-        #region ICollection<ItemType> Members
+        #region ICollection<TItemType> Members
 
-        void ICollection<ItemType>.Add(ItemType item)
+        void ICollection<TItemType>.Add(TItemType item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<ItemType>.Clear()
+        void ICollection<TItemType>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<ItemType>.Contains(ItemType item)
+        bool ICollection<TItemType>.Contains(TItemType item)
         {
-            ItemType[] items = this.Items;
+            TItemType[] items = Items;
             for (int i = 0; i < _count; i++)
             {
-                if (true == item.Equals(items[_firstItem + i]))
+                if (item.Equals(items[_firstItem + i]))
                     return true;
             }
 
             return false;
         }
 
-        void ICollection<ItemType>.CopyTo(ItemType[] array, int arrayIndex)
+        void ICollection<TItemType>.CopyTo(TItemType[] array, int arrayIndex)
         {
             if (null == array)
                 throw new ArgumentNullException(@"array");
             if (arrayIndex + _count > array.Length)
                 throw new ArgumentException(@"Insufficient array space.");
 
-            ItemType[] items = this.Items;
+            TItemType[] items = Items;
             for (int i = 0; i < _count; i++)
             {
                 array[arrayIndex+i] = items[_firstItem + i];
             }
         }
 
-        int ICollection<ItemType>.Count
+        int ICollection<TItemType>.Count
         {
             get { return _count; }
         }
 
-        bool ICollection<ItemType>.IsReadOnly
+        bool ICollection<TItemType>.IsReadOnly
         {
             get { return true; }
         }
 
-        bool ICollection<ItemType>.Remove(ItemType item)
+        bool ICollection<TItemType>.Remove(TItemType item)
         {
             throw new NotSupportedException();
         }
 
         #endregion // ICollection<RuntimeField> Members
 
-        #region IEnumerable<ItemType> Members
+        #region IEnumerable<TItemType> Members
 
-        IEnumerator<ItemType> IEnumerable<ItemType>.GetEnumerator()
+        IEnumerator<TItemType> IEnumerable<TItemType>.GetEnumerator()
         {
-            ItemType[] items = this.Items;
+            TItemType[] items = Items;
             for (int i = 0; i < _count; i++)
             {
                 yield return items[_firstItem + i];
@@ -187,7 +186,7 @@ namespace Mosa.Runtime.Vm
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            ItemType[] items = this.Items;
+            TItemType[] items = Items;
             for (int i = 0; i < _count; i++)
             {
                 yield return items[_firstItem + i];
@@ -212,14 +211,14 @@ namespace Mosa.Runtime.Vm
         {
             if (null == value)
                 throw new ArgumentNullException(@"value");
-            if (!(value is ItemType))
+            if (!(value is TItemType))
                 throw new ArgumentException(@"Wrong value type.", @"value");
 
-            ItemType item = (ItemType)value;
-            ItemType[] items = this.Items;
+            TItemType item = (TItemType)value;
+            TItemType[] items = Items;
             for (int i = 0; i < _count; i++)
             {
-                if (true == item.Equals(items[_firstItem + i]))
+                if (item.Equals(items[_firstItem + i]))
                     return true;
             }
 
@@ -230,14 +229,14 @@ namespace Mosa.Runtime.Vm
         {
             if (null == value)
                 throw new ArgumentNullException(@"value");
-            if (!(value is ItemType))
+            if (!(value is TItemType))
                 throw new ArgumentException(@"Wrong value type.", @"value");
 
-            ItemType item = (ItemType)value;
-            ItemType[] items = this.Items;
+            TItemType item = (TItemType)value;
+            TItemType[] items = Items;
             for (int i = 0; i < _count; i++)
             {
-                if (true == item.Equals(items[_firstItem + i]))
+                if (item.Equals(items[_firstItem + i]))
                     return i;
             }
 
@@ -273,7 +272,7 @@ namespace Mosa.Runtime.Vm
         {
             get
             {
-                return this.Items[_firstItem + index];
+                return Items[_firstItem + index];
             }
             set
             {
@@ -292,8 +291,8 @@ namespace Mosa.Runtime.Vm
             if (index + _count > array.Length)
                 throw new ArgumentException(@"Insufficient array space.");
 
-            ItemType[] results = array as ItemType[];
-            ItemType[] items = this.Items;
+            TItemType[] results = array as TItemType[];
+            TItemType[] items = Items;
             if (null == results)
                 throw new ArgumentException(@"Wrong array type.");
             for (int i = 0; i < _count; i++)
@@ -309,12 +308,12 @@ namespace Mosa.Runtime.Vm
 
         bool ICollection.IsSynchronized
         {
-            get { return this.Items.IsSynchronized; }
+            get { return Items.IsSynchronized; }
         }
 
         object ICollection.SyncRoot
         {
-            get { return this.Items.SyncRoot; }
+            get { return Items.SyncRoot; }
         }
 
         #endregion // ICollection Members

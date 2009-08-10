@@ -25,12 +25,12 @@ namespace Mosa.Runtime.CompilerFramework
         #region Data members
 
         /// <summary>
-        /// Holds the _architecture during compilation.
+        /// Holds the Architecture during compilation.
         /// </summary>
         private IArchitecture _architecture;
 
         /// <summary>
-        /// Holds the assembly _compiler.
+        /// Holds the assembly Compiler.
         /// </summary>
         private AssemblyCompiler _compiler;
 
@@ -50,9 +50,9 @@ namespace Mosa.Runtime.CompilerFramework
 
         void IAssemblyCompilerStage.Run(AssemblyCompiler compiler)
         {
-            // Save the _compiler
+            // Save the Compiler
             _compiler = compiler;
-            // The compilation target _architecture
+            // The compilation target Architecture
             _architecture = compiler.Architecture;
             // The type system
             _typeSystem = RuntimeBase.Instance.TypeLoader;

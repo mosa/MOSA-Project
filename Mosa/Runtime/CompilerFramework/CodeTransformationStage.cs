@@ -10,7 +10,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -67,35 +66,24 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// The architecture of the compilation process.
 		/// </summary>
-		protected IArchitecture _architecture;
+		protected IArchitecture Architecture;
 
 		/// <summary>
 		/// Holds the list of basic Blocks.
 		/// </summary>
-		protected List<BasicBlock> _blocks;
+		protected List<BasicBlock> Blocks;
 
 		/// <summary>
 		/// Holds the executing method compiler.
 		/// </summary>
-		protected IMethodCompiler _compiler;
+		protected IMethodCompiler Compiler;
 
 		/// <summary>
 		/// Holds the current block.
 		/// </summary>
-		protected int _currentBlock;
+		protected int CurrentBlock;
 
 		#endregion // Data members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CodeTransformationStage"/> class.
-		/// </summary>
-		protected CodeTransformationStage()
-		{
-		}
-
-		#endregion // Construction
 
 		#region IMethodCompilerStage Members
 
@@ -118,13 +106,13 @@ namespace Mosa.Runtime.CompilerFramework
 				throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
 
 			// Save the architecture & compiler
-			_architecture = compiler.Architecture;
-			_compiler = compiler;
-			_blocks = blockProvider.Blocks;
+			Architecture = compiler.Architecture;
+			Compiler = compiler;
+			Blocks = blockProvider.Blocks;
 
 			Context ctx = new Context();
-			for (_currentBlock = 0; _currentBlock < _blocks.Count; _currentBlock++) {
-				BasicBlock block = _blocks[_currentBlock];
+			for (CurrentBlock = 0; CurrentBlock < Blocks.Count; CurrentBlock++) {
+				BasicBlock block = Blocks[CurrentBlock];
 				ctx.Block = block;
 				for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++) {
 					block.Instructions[ctx.Index].Visit(this, ctx);
@@ -149,7 +137,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="arg">A visitation context argument.</param>
 		public virtual void Visit(Instruction instruction, Context arg)
 		{
-			Trace.WriteLine(String.Format(@"Unknown instruction {0} has visited stage {1}.", instruction.GetType().FullName, this.Name));
+			Trace.WriteLine(String.Format(@"Unknown instruction {0} has visited stage {1}.", instruction.GetType().FullName, Name));
 			throw new NotSupportedException();
 		}
 
@@ -272,9 +260,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected BasicBlock CreateEmptyBlock()
 		{
-			BasicBlock block = new BasicBlock(_blocks.Count + 0x10000000);
-			block.Index = _blocks.Count;
-			_blocks.Add(block);
+			BasicBlock block = new BasicBlock(Blocks.Count + 0x10000000);
+			block.Index = Blocks.Count;
+			Blocks.Add(block);
 			return block;
 		}
 
@@ -303,11 +291,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected BasicBlock SplitBlock(Context ctx, Instruction instruction, BasicBlock insert)
 		{
-			int label = _blocks.Count + 0x10000000;
+			int label = Blocks.Count + 0x10000000;
 
 			BasicBlock nextBlock = ctx.Block.Split(ctx.Index + 1, label);
-			nextBlock.Index = _blocks.Count - 1;
-			_blocks.Add(nextBlock);
+			nextBlock.Index = Blocks.Count - 1;
+			Blocks.Add(nextBlock);
 
 			foreach (BasicBlock block in ctx.Block.NextBlocks)
 				nextBlock.NextBlocks.Add(block);

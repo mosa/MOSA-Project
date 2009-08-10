@@ -451,29 +451,29 @@ namespace Mosa.Platforms.x86
             RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
             RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 
-            if (_compiler.Method.Signature.ReturnType.Type == CilElementType.I8 ||
-                _compiler.Method.Signature.ReturnType.Type == CilElementType.U8)
+            if (Compiler.Method.Signature.ReturnType.Type == CilElementType.I8 ||
+                Compiler.Method.Signature.ReturnType.Type == CilElementType.U8)
             {
                 Replace(ctx, new Instruction[] {
                     // add esp, -localsSize
-                    _architecture.CreateInstruction(typeof(Instructions.AddInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
+                    Architecture.CreateInstruction(typeof(Instructions.AddInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
                     // pop ebp
-                    _architecture.CreateInstruction(typeof(IR.PopInstruction), ebp),
+                    Architecture.CreateInstruction(typeof(IR.PopInstruction), ebp),
                     // ret
-                    _architecture.CreateInstruction(typeof(IR.ReturnInstruction))
+                    Architecture.CreateInstruction(typeof(IR.ReturnInstruction))
                 });
             }
             else
             {
                 Replace(ctx, new Instruction[] {
                     // pop edx
-                    _architecture.CreateInstruction(typeof(IR.PopInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)),
+                    Architecture.CreateInstruction(typeof(IR.PopInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)),
                     // add esp, -localsSize
-                    _architecture.CreateInstruction(typeof(Instructions.AddInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
+                    Architecture.CreateInstruction(typeof(Instructions.AddInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
                     // pop ebp
-                    _architecture.CreateInstruction(typeof(IR.PopInstruction), ebp),
+                    Architecture.CreateInstruction(typeof(IR.PopInstruction), ebp),
                     // ret
-                    _architecture.CreateInstruction(typeof(IR.ReturnInstruction))
+                    Architecture.CreateInstruction(typeof(IR.ReturnInstruction))
                 });
             }
         }
@@ -614,7 +614,7 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.LoadInstruction instruction, Context ctx)
         {
-            //RegisterOperand eax = new RegisterOperand(_architecture.NativeType, GeneralPurposeRegister.EAX);
+            //RegisterOperand eax = new RegisterOperand(Architecture.NativeType, GeneralPurposeRegister.EAX);
             RegisterOperand eax = new RegisterOperand(instruction.Operands[0].Type, GeneralPurposeRegister.EAX);
             Replace(ctx, new Instruction[] {
                 new x86.Instructions.MoveInstruction(eax, instruction.Operands[0]),
@@ -701,15 +701,15 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
                 // int 3
-                //_architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
+                //Architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
                 // Uncomment this line to enable breakpoints within Bochs
-                _architecture.CreateInstruction(typeof(Instructions.Intrinsics.BochsDebug), null),
+                Architecture.CreateInstruction(typeof(Instructions.Intrinsics.BochsDebug), null),
                 // push ebp
-                _architecture.CreateInstruction(typeof(IR.PushInstruction), ebp),
+                Architecture.CreateInstruction(typeof(IR.PushInstruction), ebp),
                 // mov ebp, esp
-                _architecture.CreateInstruction(typeof(IR.MoveInstruction), ebp, esp),
+                Architecture.CreateInstruction(typeof(IR.MoveInstruction), ebp, esp),
                 // sub esp, localsSize
-                _architecture.CreateInstruction(typeof(Instructions.SubInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
+                Architecture.CreateInstruction(typeof(Instructions.SubInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
                 // Initialize all locals to zero
                 new IR.PushInstruction(edi),
                 new IR.MoveInstruction(edi, esp),
@@ -727,15 +727,15 @@ namespace Mosa.Platforms.x86
                  * the possibility to identify roots into the managed heap. 
                  */
                 // mov [ebp-4], token
-                _architecture.CreateInstruction(typeof(IR.MoveInstruction), new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, _compiler.Method.Token)),
+                Architecture.CreateInstruction(typeof(IR.MoveInstruction), new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, Compiler.Method.Token)),
             });
 
             // Do not save EDX for non-int64 return values
-            if (_compiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
-                _compiler.Method.Signature.ReturnType.Type != CilElementType.U8)
+            if (Compiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
+                Compiler.Method.Signature.ReturnType.Type != CilElementType.U8)
             {
                 // push edx
-                prologue.Add(_architecture.CreateInstruction(typeof(IR.PushInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)));
+                prologue.Add(Architecture.CreateInstruction(typeof(IR.PushInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)));
             }
 
             Replace(ctx, prologue);
@@ -747,8 +747,8 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.ReturnInstruction instruction, Context ctx)
         {
-            ICallingConvention cc = _architecture.GetCallingConvention(_compiler.Method.Signature.CallingConvention);
-            IL.BranchInstruction br = (IL.BranchInstruction)_architecture.CreateInstruction(typeof(IL.BranchInstruction), IL.OpCode.Br, new int[] { Int32.MaxValue });
+            ICallingConvention cc = Architecture.GetCallingConvention(Compiler.Method.Signature.CallingConvention);
+            IL.BranchInstruction br = (IL.BranchInstruction)Architecture.CreateInstruction(typeof(IL.BranchInstruction), IL.OpCode.Br, new int[] { Int32.MaxValue });
             if (null != instruction.Operand0)
             {
                 List<Instruction> instructions = new List<Instruction>();
@@ -897,7 +897,7 @@ namespace Mosa.Platforms.x86
 /*
             if (instruction.First.StackType == StackTypeCode.F || instruction.Second.StackType == StackTypeCode.F)
             {
-                Replace(ctx, _architecture.CreateInstruction(typeof(x86.SseMulInstruction), IL.OpCode.Mul, new Operand[] { instruction.First, instruction.Second, instruction.Results[0] }));
+                Replace(ctx, Architecture.CreateInstruction(typeof(x86.SseMulInstruction), IL.OpCode.Mul, new Operand[] { instruction.First, instruction.Second, instruction.Results[0] }));
             }
             // FIXME
             // Waiting for ConstantPropagation to get shift/optimization to work.
@@ -908,7 +908,7 @@ namespace Mosa.Platforms.x86
                 if ((x & (x - 1)) == 0)
                 {
                     ConstantOperand shift = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.I4), (int)System.Math.Log(x, 2));
-                    Replace(ctx, _architecture.CreateInstruction(typeof(x86.ShiftInstruction), IL.OpCode.Shl, new Operand[] { instruction.First, shift }));
+                    Replace(ctx, Architecture.CreateInstruction(typeof(x86.ShiftInstruction), IL.OpCode.Shl, new Operand[] { instruction.First, shift }));
                 }
             }
  */
@@ -1191,10 +1191,10 @@ namespace Mosa.Platforms.x86
             if (cop != null && cop.StackType == StackTypeCode.F)
             {
                 int size, alignment;
-                this._architecture.GetTypeRequirements(cop.Type, out size, out alignment);
+                this.Architecture.GetTypeRequirements(cop.Type, out size, out alignment);
                 
                 string name = String.Format("C_{0}", Guid.NewGuid());
-                using (Stream stream = this._compiler.Linker.Allocate(name, SectionKind.ROData, size, alignment))
+                using (Stream stream = this.Compiler.Linker.Allocate(name, SectionKind.ROData, size, alignment))
                 {
                     byte[] buffer;
 
@@ -1291,8 +1291,8 @@ namespace Mosa.Platforms.x86
             if (ops[1] is ConstantOperand)
             {
                 Replace(ctx, new Instruction[] {
-                    _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
-                    _architecture.CreateInstruction(replacementType, opRes, ops[1])
+                    Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
+                    Architecture.CreateInstruction(replacementType, opRes, ops[1])
                 });
             }
             else
@@ -1302,19 +1302,19 @@ namespace Mosa.Platforms.x86
             {
                 RegisterOperand ecx = new RegisterOperand(ops[1].Type, GeneralPurposeRegister.ECX);
                 Replace(ctx, new Instruction[] {
-                    _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
-                    _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
-                    _architecture.CreateInstruction(replacementType, opRes, ecx),
-                    //_architecture.CreateInstruction(typeof(Instructions.LogicalAndInstruction), opRes, new ConstantOperand(new SigType(CilElementType.I4), 0xFFFF))
+                    Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
+                    Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
+                    Architecture.CreateInstruction(replacementType, opRes, ecx),
+                    //Architecture.CreateInstruction(typeof(Instructions.LogicalAndInstruction), opRes, new ConstantOperand(new SigType(CilElementType.I4), 0xFFFF))
                 });
             }
             else
             {
                 RegisterOperand ecx = new RegisterOperand(ops[1].Type, GeneralPurposeRegister.ECX);
                 Replace(ctx, new Instruction[] {
-                    _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
-                    _architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
-                    _architecture.CreateInstruction(replacementType, opRes, ecx),
+                    Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
+                    Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
+                    Architecture.CreateInstruction(replacementType, opRes, ecx),
                 });
             }
         }
@@ -1326,7 +1326,7 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The transformation context.</param>
         private void HandleInvokeInstruction(IL.InvokeInstruction instruction, Context ctx)
         {
-            ICallingConvention cc = _architecture.GetCallingConvention(instruction.InvokeTarget.Signature.CallingConvention);
+            ICallingConvention cc = Architecture.GetCallingConvention(instruction.InvokeTarget.Signature.CallingConvention);
             Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
             object result = cc.Expand(instruction);
             if (result is List<Instruction>)
@@ -1435,9 +1435,9 @@ namespace Mosa.Platforms.x86
 
             instruction.SetResult(0, eax);
             Replace(ctx, new Instruction[] {
-                _architecture.CreateInstruction(typeof(IR.MoveInstruction), eax, instruction.Operands[0]),
+                Architecture.CreateInstruction(typeof(IR.MoveInstruction), eax, instruction.Operands[0]),
                 instruction,
-                _architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
+                Architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
             });
         }
 
@@ -1460,7 +1460,7 @@ namespace Mosa.Platforms.x86
 
             if (null != replacementType)
             {
-                instruction = _architecture.CreateInstruction(replacementType, eax, op2);
+                instruction = Architecture.CreateInstruction(replacementType, eax, op2);
             }
             else
             {
@@ -1473,27 +1473,27 @@ namespace Mosa.Platforms.x86
             {
                 // Signextend it
                 Replace(ctx, new Instruction[] {
-                    _architecture.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), eaxL, op1),
+                    Architecture.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), eaxL, op1),
                     instruction,
-                    _architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
+                    Architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
                 });
             }
             // Check if the operand has to be zero-extended
             else if (X86.IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F)
             {
                 Replace(ctx, new Instruction[] {
-                    _architecture.CreateInstruction(typeof(IR.ZeroExtendedMoveInstruction), eaxL, op1),
+                    Architecture.CreateInstruction(typeof(IR.ZeroExtendedMoveInstruction), eaxL, op1),
                     instruction,
-                    _architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
+                    Architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
                 });
             }
             // In any other case: Just load it
             else
             {
                 Replace(ctx, new Instruction[] {
-                    _architecture.CreateInstruction(typeof(IR.MoveInstruction), eax, op1),
+                    Architecture.CreateInstruction(typeof(IR.MoveInstruction), eax, op1),
                     instruction,
-                    _architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax)
+                    Architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax)
                 });
             }
         }

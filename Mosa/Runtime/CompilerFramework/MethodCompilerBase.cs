@@ -44,7 +44,7 @@ namespace Mosa.Runtime.CompilerFramework
         private readonly List<Operand> _parameters;
 
         /// <summary>
-        /// The _architecture of the compilation target.
+        /// The Architecture of the compilation target.
         /// </summary>
         private IArchitecture _architecture;
 
@@ -87,7 +87,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// Initializes a new instance of the <see cref="MethodCompilerBase"/> class.
         /// </summary>
         /// <param name="linker">The _linker.</param>
-        /// <param name="architecture">The target compilation _architecture.</param>
+        /// <param name="architecture">The target compilation Architecture.</param>
         /// <param name="module">The metadata _module, that contains the _type.</param>
         /// <param name="type">The _type, which owns the _method to compile.</param>
         /// <param name="method">The _method to compile by this instance.</param>
@@ -118,7 +118,7 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Gets the _architecture to compile for.
+        /// Gets the Architecture to compile for.
         /// </summary>
         public IArchitecture Architecture
         {

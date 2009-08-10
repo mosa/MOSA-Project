@@ -8,9 +8,7 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -24,7 +22,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		protected IArchitecture arch;
+		protected IArchitecture Architecture;
 
 		#endregion // Data members
 
