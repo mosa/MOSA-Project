@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,7 +49,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
         public IEnumerator<CvLine> GetEnumerator()
         {
             // These are fields from a line number table structure
-            // header: The header of the line number table - always 0x000000F2
+            // _header: The _header of the line number table - always 0x000000F2
             // nextBlockOffset: The number of bytes to skip to get to the next block (skip after reading nextBlockOffset!)
             // start: The function start address whose line number information is provided.
             // seg: The segment of the function
@@ -66,7 +66,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
                 do
                 {
                     header = reader.ReadInt32();
-                    //Debug.Assert(header == 0x000000F2, @"CvLineEnumerator: Header magic invalid for PDB v7.00");
+                    //Debug.Assert(_header == 0x000000F2, @"CvLineEnumerator: Header magic invalid for PDB v7.00");
                     if (header != 0x000000F2)
                         // Skip this, assume no line numbers
                         yield break;
@@ -82,7 +82,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
                         fileOffset = reader.ReadInt32();
                         numberOfLines = reader.ReadInt32();
                         sizeOfLines = reader.ReadInt32();
-                        Debug.WriteLine(String.Format("Line numbers table header: size={0}, fileOffset={1}, numberOfLines={2}, sizeOfLines={3}, address={4:x4}:{5:x8}", size, fileOffset, numberOfLines, sizeOfLines, seg, start));
+                        Debug.WriteLine(String.Format("Line numbers table _header: size={0}, fileOffset={1}, numberOfLines={2}, sizeOfLines={3}, address={4:x4}:{5:x8}", size, fileOffset, numberOfLines, sizeOfLines, seg, start));
 
                         int[] startCol = new int[numberOfLines], endCol = new int[numberOfLines];
                         long pos = reader.BaseStream.Position;

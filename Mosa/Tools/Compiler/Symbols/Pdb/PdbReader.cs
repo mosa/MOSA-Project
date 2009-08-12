@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +15,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
         #region Data Members
 
         /// <summary>
-        /// Holds the header of the PDB file.
+        /// Holds the _header of the PDB file.
         /// </summary>
         private PdbFileHeader header;
 
@@ -56,7 +56,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
             this.stream = stream;
             this.reader = new BinaryReader(stream);
 
-            // Read the file header
+            // Read the file _header
             if (PdbFileHeader.Read(this.reader, out this.header) == false)
                 throw new InvalidDataException(@"Not a Microsoft program database v7.0 file.");
 
@@ -139,7 +139,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
             {
 			    using (BinaryReader reader = new BinaryReader(GetStream(3)))
 			    {
-                    // Read the symbol header
+                    // Read the symbol _header
 					PdbSymbolHeader header;
                     if (PdbSymbolHeader.Read(reader, out header) == true)
                     {
@@ -170,7 +170,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 			{
 				using (BinaryReader reader = new BinaryReader(GetStream(3)))
 				{
-                    // Read the symbol header
+                    // Read the symbol _header
 					PdbSymbolHeader header;
                     if (PdbSymbolHeader.Read(reader, out header) == true)
                     {

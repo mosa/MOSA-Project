@@ -22,10 +22,10 @@ namespace Mosa.Runtime.Linker.Elf32.Sections
         /// Initializes a new instance of the <see cref="Elf32DataSection"/> class.
         /// </summary>
         public Elf32DataSection()
-            : base(Mosa.Runtime.Linker.SectionKind.Data, @".data", IntPtr.Zero)
+            : base(SectionKind.Data, @".data", IntPtr.Zero)
         {
-            header.Type = Elf32SectionType.ProgBits;
-            header.Flags = Elf32SectionAttribute.Alloc | Elf32SectionAttribute.Write;
+            _header.Type = Elf32SectionType.ProgBits;
+            _header.Flags = Elf32SectionAttribute.Alloc | Elf32SectionAttribute.Write;
         }
     }
 }

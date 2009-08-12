@@ -8,11 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-
-using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -228,9 +224,9 @@ namespace Mosa.Runtime.CompilerFramework
                     }
                 }
                 if (0 != operands)
-                    Array.Resize<Operand>(ref _operands, operands);
+                    Array.Resize(ref _operands, operands);
                 else
-                    _operands = Instruction.NoOperands;
+                    _operands = NoOperands;
             }
 
             if (results != _results.Length)
@@ -246,9 +242,9 @@ namespace Mosa.Runtime.CompilerFramework
                 }
 
                 if (0 != results)
-                    Array.Resize<Operand>(ref _results, results);
+                    Array.Resize(ref _results, results);
                 else
-                    _results = Instruction.NoOperands;
+                    _results = NoOperands;
             }
         }
 
@@ -318,11 +314,11 @@ namespace Mosa.Runtime.CompilerFramework
                 throw new ArgumentNullException(@"compiler");
             if (null == operands)
                 throw new ArgumentNullException(@"value");
-            if (Instruction.NoOperands == _results)
+            if (NoOperands == _results)
                 throw new InvalidOperationException(@"ILInstruction does not take operands or hasn't been decoded yet.");
             if (operands.Length != _results.Length)
                 throw new ArgumentException(@"Can't change operand count of an instruction.", @"value");
-            if (true == IsAnyOperandMuted(operands, _results))
+            if (IsAnyOperandMuted(operands, _results))
                 throw new ArgumentException(@"Operands can't change type.", @"value");
 
             _operands = operands;
@@ -345,8 +341,8 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="visitor">The visitor object.</param>
         /// <param name="arg">A visitor specific context argument.</param>
-        /// <typeparam name="ArgType">An additional visitor context argument.</typeparam>
-        public virtual void Visit<ArgType>(IInstructionVisitor<ArgType> visitor, ArgType arg)
+        /// <typeparam name="TArgType">An additional visitor context argument.</typeparam>
+        public virtual void Visit<TArgType>(IInstructionVisitor<TArgType> visitor, TArgType arg)
         {
             visitor.Visit(this, arg);
         }

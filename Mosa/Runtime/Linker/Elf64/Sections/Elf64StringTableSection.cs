@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -58,7 +58,7 @@ namespace Mosa.Runtime.Linker.Elf64.Sections
         }
 
         /// <summary>
-        /// Writes the header.
+        /// Writes the _header.
         /// </summary>
         /// <param name="writer">The writer.</param>
         public override void WriteHeader(System.IO.BinaryWriter writer)

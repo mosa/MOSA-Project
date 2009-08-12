@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
 
@@ -89,17 +88,6 @@ namespace Mosa.Runtime.CompilerFramework
 
         #endregion // Data members
 
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EnterSSA"/> class.
-        /// </summary>
-        public EnterSSA()
-        {
-        }
-
-        #endregion // Construction
-
         #region IMethodCompilerStage Members
 
         /// <summary>
@@ -147,7 +135,7 @@ namespace Mosa.Runtime.CompilerFramework
              */
             IDictionary<StackOperand, StackOperand> liveIn = new Dictionary<StackOperand, StackOperand>(s_comparer);
             int i = 0;
-            if (true == compiler.Method.Signature.HasThis)
+            if (compiler.Method.Signature.HasThis)
             {
                 StackOperand param = (StackOperand)compiler.GetParameterOperand(0);
                 liveIn.Add(param, param);
@@ -173,7 +161,7 @@ namespace Mosa.Runtime.CompilerFramework
                 bool schedule = TransformToSsaForm(block, workItem.caller, workItem.liveIn, out liveIn);
                 _liveness[block.Index] = liveIn;
 
-                if (true == schedule)
+                if (schedule)
                 {
                     // Add all branch targets to the work list
                     foreach (BasicBlock next in block.NextBlocks)
@@ -216,7 +204,7 @@ namespace Mosa.Runtime.CompilerFramework
                 StackOperand paramOp = (StackOperand)compiler.GetParameterOperand(rp.Position-1);
 
                 // Only add a PHI if the runtime parameter is out or ref...
-                if (true == rp.IsOut || (paramOp.Type is RefSigType || paramOp.Type is PtrSigType))
+                if (rp.IsOut || (paramOp.Type is RefSigType || paramOp.Type is PtrSigType))
                 {
                     epilogue.Instructions.Insert(0, new IR.PhiInstruction(paramOp));
 
@@ -245,31 +233,28 @@ namespace Mosa.Runtime.CompilerFramework
 
                 return false;
             }
-            else
+            // Is this a dominance frontier block?
+            if (-1 != Array.IndexOf(_dominanceFrontierBlocks, block))
             {
-                // Is this a dominance frontier block?
-                if (-1 != Array.IndexOf<BasicBlock>(_dominanceFrontierBlocks, block))
+                InsertPhiInstructions(block, caller, liveIn);
+            }
+
+            // Create a new live out dictionary
+            if (null != liveIn)
+                liveOut = new Dictionary<StackOperand, StackOperand>(liveIn, s_comparer);
+            else
+                liveOut = new Dictionary<StackOperand, StackOperand>(s_comparer);
+
+            // Iterate each instruction in the block
+            foreach (Instruction instruction in block.Instructions)
+            {
+                // Replace all operands with their current SSA version
+                UpdateUses(instruction, liveOut);
+
+                // Is this an instruction we ignore?
+                if (false == instruction.Ignore)
                 {
-                    InsertPhiInstructions(block, caller, liveIn);
-                }
-
-                // Create a new live out dictionary
-                if (null != liveIn)
-                    liveOut = new Dictionary<StackOperand, StackOperand>(liveIn, s_comparer);
-                else
-                    liveOut = new Dictionary<StackOperand, StackOperand>(s_comparer);
-
-                // Iterate each instruction in the block
-                foreach (Instruction instruction in block.Instructions)
-                {
-                    // Replace all operands with their current SSA version
-                    UpdateUses(instruction, liveOut);
-
-                    // Is this an instruction we ignore?
-                    if (false == instruction.Ignore)
-                    {
-                        RenameStackOperands(instruction, liveOut);
-                    }
+                    RenameStackOperands(instruction, liveOut);
                 }
             }
 
@@ -309,7 +294,7 @@ namespace Mosa.Runtime.CompilerFramework
             for (int opIdx = 0; opIdx < ops.Length; opIdx++)
             {
                 // Is this a stack operand?
-                StackOperand op = ops[opIdx] as StackOperand, ssa = null;
+                StackOperand op = ops[opIdx] as StackOperand, ssa;
                 if (null != op)
                 {
                     if (false == liveOut.TryGetValue(op, out ssa))
@@ -319,7 +304,7 @@ namespace Mosa.Runtime.CompilerFramework
                     liveOut[op] = ssa;
                     instruction.SetResult(opIdx, ssa);
 
-                    if (true == TRACING.TraceInfo)
+                    if (TRACING.TraceInfo)
                         Trace.WriteLine(String.Format("\tStore to {0} redefined as {1}", op, ssa));
                 }
             }
@@ -331,17 +316,17 @@ namespace Mosa.Runtime.CompilerFramework
             for (int opIdx = 0; opIdx < ops.Length; opIdx++)
             {
                 // Is this a stack operand?
-                StackOperand op = ops[opIdx] as StackOperand, ssa = null;
+                StackOperand op = ops[opIdx] as StackOperand, ssa;
                 if (null != op)
                 {
                     // Determine the most recent version
-                    Debug.Assert(true == liveOut.TryGetValue(op, out ssa), @"Stack operand not in live variable list.");
+                    Debug.Assert(liveOut.TryGetValue(op, out ssa), @"Stack operand not in live variable list.");
                     ssa = liveOut[op];
 
                     // Replace the use with the most recent version
                     instruction.SetOperand(opIdx, ssa);
 
-                    if (TRACING.TraceInfo == true)
+                    if (TRACING.TraceInfo)
                         Trace.WriteLine(String.Format(@"\tUse {0} has been replaced with {1}", op, ssa));
                 }
             }
@@ -378,7 +363,7 @@ namespace Mosa.Runtime.CompilerFramework
             string name = cur.Name;
             if (0 == cur.Version)
                 name = String.Format(@"T_{0}", name);
-            StackOperand op = this._compiler.CreateTemporary(cur.Type) as StackOperand;
+            StackOperand op = _compiler.CreateTemporary(cur.Type) as StackOperand;
             //StackOperand op = new LocalVariableOperand(cur.Base, name, idx, cur.Type);
             op.Version = ++_ssaVersion;
             return op;

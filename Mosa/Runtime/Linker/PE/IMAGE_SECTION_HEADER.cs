@@ -15,7 +15,7 @@ using System.IO;
 namespace Mosa.Runtime.Linker.PE
 {
     /// <summary>
-    /// The header of a section in a portable executable image.
+    /// The _header of a section in a portable executable image.
     /// </summary>
 	public struct IMAGE_SECTION_HEADER
     {

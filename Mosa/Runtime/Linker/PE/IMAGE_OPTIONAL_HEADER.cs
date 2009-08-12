@@ -15,7 +15,7 @@ using System.IO;
 namespace Mosa.Runtime.Linker.PE
 {
     /// <summary>
-    /// Structure of the optional header in a portable executable file.
+    /// Structure of the optional _header in a portable executable file.
     /// </summary>
 	public struct IMAGE_OPTIONAL_HEADER 
     {	
@@ -27,7 +27,7 @@ namespace Mosa.Runtime.Linker.PE
 		public const int IMAGE_NUMBEROF_DIRECTORY_ENTRIES = 16;
 
         /// <summary>
-        /// The magic value at the start of the optional header.
+        /// The magic value at the start of the optional _header.
         /// </summary>
         public const ushort IMAGE_OPTIONAL_HEADER_MAGIC = 0x10b;
 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Linker.PE
 		//
 
         /// <summary>
-        /// Holds the magic value of the optional header.
+        /// Holds the magic value of the optional _header.
         /// </summary>
 		public ushort Magic;
 
@@ -194,7 +194,7 @@ namespace Mosa.Runtime.Linker.PE
 		public uint NumberOfRvaAndSizes;
 
         /// <summary>
-        /// Array of data directories after the optional header.
+        /// Array of data directories after the optional _header.
         /// </summary>
 		public IMAGE_DATA_DIRECTORY[] DataDirectory;
 
@@ -203,7 +203,7 @@ namespace Mosa.Runtime.Linker.PE
 		#region Methods
 
         /// <summary>
-        /// Loads the header from the reader.
+        /// Loads the _header from the reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
 		public void Read(BinaryReader reader)

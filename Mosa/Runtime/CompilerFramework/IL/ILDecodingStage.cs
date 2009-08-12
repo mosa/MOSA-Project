@@ -384,10 +384,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 		#region Internals
 
 		/// <summary>
-		/// Reads the method header from the instruction stream.
+		/// Reads the method _header from the instruction stream.
 		/// </summary>
 		/// <param name="reader">The reader used to decode the instruction stream.</param>
-		/// <param name="header">The method header structure to populate.</param>
+		/// <param name="header">The method _header structure to populate.</param>
 		private void ReadMethodHeader(BinaryReader reader, ref MethodHeader header)
 		{
 			header.flags = (MethodFlags)reader.ReadByte();
@@ -400,14 +400,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
 				case MethodFlags.FatFormat:
 					header.flags = (MethodFlags)(reader.ReadByte() << 8 | (byte)header.flags);
 					if (MethodFlags.ValidHeader != (header.flags & MethodFlags.HeaderSizeMask))
-						throw new InvalidDataException(@"Invalid method header.");
+						throw new InvalidDataException(@"Invalid method _header.");
 					header.maxStack = reader.ReadUInt16();
 					header.codeSize = reader.ReadUInt32();
 					header.localsSignature = (TokenTypes)reader.ReadUInt32();
 					break;
 
 				default:
-					throw new InvalidDataException(@"Invalid method header.");
+					throw new InvalidDataException(@"Invalid method _header.");
 			}
 
 			// Are there sections following the code?
@@ -461,7 +461,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 		/// Decodes the instruction stream of the reader and populates the compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler to populate.</param>
-		/// <param name="header">The method header.</param>
+		/// <param name="header">The method _header.</param>
 		private void Decode(IMethodCompiler compiler, ref MethodHeader header)
 		{
 			// Start of the code stream

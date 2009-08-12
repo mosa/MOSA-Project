@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Runtime.Linker.Elf32.Sections
 {
@@ -22,10 +20,10 @@ namespace Mosa.Runtime.Linker.Elf32.Sections
         /// Initializes a new instance of the <see cref="Elf32CodeSection"/> class.
         /// </summary>
         public Elf32CodeSection()
-            : base(Mosa.Runtime.Linker.SectionKind.Text, @".text", IntPtr.Zero)
+            : base(SectionKind.Text, @".text", IntPtr.Zero)
         {
-            header.Type = Elf32SectionType.ProgBits;
-            header.Flags = Elf32SectionAttribute.AllocExecute;
+            _header.Type = Elf32SectionType.ProgBits;
+            _header.Flags = Elf32SectionAttribute.AllocExecute;
         }
     }
 }

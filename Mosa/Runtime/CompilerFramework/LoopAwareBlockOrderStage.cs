@@ -143,7 +143,7 @@ namespace Mosa.Runtime.CompilerFramework
 			BitArray visited = new BitArray(blocks.Count, false);
 			BitArray active = new BitArray(blocks.Count, false);
 
-			// Create dictionary for loop header index assignments
+			// Create dictionary for loop _header index assignments
 			Dictionary<BasicBlock, int> loopHeaderIndexes = new Dictionary<BasicBlock, int>();
 
 			while (queue.Count != 0) {
@@ -151,7 +151,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				if (active.Get(at.to.Index)) {
 					// Found a loop -
-					//     the loop-header block is in at.to 
+					//     the loop-_header block is in at.to 
 					// and the loop-end is in at.from
 
 					// Add loop-end to list

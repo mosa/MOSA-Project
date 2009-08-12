@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,14 +8,14 @@ using System.Diagnostics;
 namespace Mosa.Tools.Compiler.Symbols.Pdb
 {
     /// <summary>
-    /// Represents the header of PDB files.
+    /// Represents the _header of PDB files.
     /// </summary>
     public struct PdbFileHeader
     {
         #region Constants
 
         /// <summary>
-        /// Specifies the length of the PDB signature in the file header.
+        /// Specifies the length of the PDB signature in the file _header.
         /// </summary>
         private const int PdbSignatureLength = 0x20;
 
@@ -73,10 +73,10 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
         #region Methods
 
         /// <summary>
-        /// Reads the PDB file header from the given reader.
+        /// Reads the PDB file _header from the given reader.
         /// </summary>
         /// <param name="reader">The reader to read from.</param>
-        /// <param name="header">The header to populate.</param>
+        /// <param name="header">The _header to populate.</param>
         /// <returns><c>true</c> if reading was successful, otherwise <c>false</c>.</returns>
         public static bool Read(BinaryReader reader, out PdbFileHeader header)
         {

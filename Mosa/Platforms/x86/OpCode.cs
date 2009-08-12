@@ -7,18 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Linker;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
-using IR = Mosa.Runtime.CompilerFramework.IR;
-
 namespace Mosa.Platforms.x86
 {
 	/// <summary>
@@ -43,8 +31,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="regField">Additonal parameter field</param>
 		public OpCode(byte[] code, byte? regField)
 		{
-			this.Code = code;
-			this.RegField = regField;
+			Code = code;
+			RegField = regField;
 		}
 
 		/// <summary>
@@ -53,8 +41,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="code">The corresponding opcodes</param>
 		public OpCode(byte[] code)
 		{
-			this.Code = code;
-			this.RegField = null;
+			Code = code;
+			RegField = null;
 		}
 	}
 }

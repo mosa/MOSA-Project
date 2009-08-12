@@ -7,8 +7,6 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-using System;
-
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>

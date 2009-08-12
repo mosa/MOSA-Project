@@ -47,7 +47,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <value>The call target.</value>
         public CompilerSupportFunction SupportFunction
         {
-            get { return this.supportFunction; }
+            get { return supportFunction; }
         }
 
         #endregion // Properties
@@ -61,10 +61,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>
         /// 	<c>true</c> if they match; otherwise <c>false</c>.
         /// </returns>
-        public sealed override bool Match(Vm.InternalCallImplAttribute call)
+        public override bool Match(Vm.InternalCallImplAttribute call)
         {
             CompilerSupportAttribute csa = call as CompilerSupportAttribute;
-            return (null != csa && csa.SupportFunction == this.supportFunction);
+            return (null != csa && csa.SupportFunction == supportFunction);
         }
 
         #endregion // InternalCallImplAttribute Overrides

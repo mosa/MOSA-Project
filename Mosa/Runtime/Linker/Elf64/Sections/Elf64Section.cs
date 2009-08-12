@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -56,9 +56,9 @@ namespace Mosa.Runtime.Linker.Elf64.Sections
         }
 
         /// <summary>
-        /// Gets the header.
+        /// Gets the _header.
         /// </summary>
-        /// <value>The header.</value>
+        /// <value>The _header.</value>
         public Elf64SectionHeader Header
         {
             get
@@ -127,7 +127,7 @@ namespace Mosa.Runtime.Linker.Elf64.Sections
         }
 
         /// <summary>
-        /// Writes the header.
+        /// Writes the _header.
         /// </summary>
         /// <param name="writer">The writer.</param>
         public virtual void WriteHeader(System.IO.BinaryWriter writer)

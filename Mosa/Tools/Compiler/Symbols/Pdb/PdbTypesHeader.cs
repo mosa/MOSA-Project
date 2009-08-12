@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,7 +37,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
         /// Reads the specified reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <param name="header">The header.</param>
+        /// <param name="header">The _header.</param>
         /// <returns></returns>
         public static bool Read(BinaryReader reader, out PdbTypesHeader header)
         {

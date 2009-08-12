@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Runtime.Linker.Elf32.Sections
 {
@@ -34,18 +32,18 @@ namespace Mosa.Runtime.Linker.Elf32.Sections
         /// Initializes a new instance of the <see cref="Elf32CodeSection"/> class.
         /// </summary>
         public Elf32NullSection()
-            : base(Mosa.Runtime.Linker.SectionKind.Text, @"", IntPtr.Zero)
+            : base(SectionKind.Text, @"", IntPtr.Zero)
         {
-            header.Name = 0;
-            header.Type = Elf32SectionType.Null;
-            header.Flags = (Elf32SectionAttribute)0;
-            header.Address = 0;
-            header.Offset = 0;
-            header.Size = 0;
-            header.Link = 0;
-            header.Info = 0;
-            header.AddressAlignment = 0;
-            header.EntrySize = 0;
+            _header.Name = 0;
+            _header.Type = Elf32SectionType.Null;
+            _header.Flags = 0;
+            _header.Address = 0;
+            _header.Offset = 0;
+            _header.Size = 0;
+            _header.Link = 0;
+            _header.Info = 0;
+            _header.AddressAlignment = 0;
+            _header.EntrySize = 0;
         }
 
         /// <summary>

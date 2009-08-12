@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -694,7 +694,7 @@ namespace Mosa.Platforms.x86
             Debug.Assert((instruction.StackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 
             List<Instruction> prologue = new List<Instruction>(new Instruction[] {
-                /* If you want to stop at the header of an emitted function, just uncomment
+                /* If you want to stop at the _header of an emitted function, just uncomment
                  * the following line. It will issue a breakpoint instruction. Note that if
                  * you debug using visual studio you must enable unmanaged code debugging, 
                  * otherwise the function will never return and the breakpoint will never

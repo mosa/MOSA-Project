@@ -13,7 +13,7 @@ using System.IO;
 namespace Mosa.Runtime.Linker.PE
 {
     /// <summary>
-    /// Structure of the COFF file header at the start of a portable executable file.
+    /// Structure of the COFF file _header at the start of a portable executable file.
     /// </summary>
 	public struct IMAGE_FILE_HEADER
     {
@@ -59,7 +59,7 @@ namespace Mosa.Runtime.Linker.PE
 		public uint NumberOfSymbols;
 
         /// <summary>
-        /// The size of the optional header.
+        /// The size of the optional _header.
         /// </summary>
 		public ushort SizeOfOptionalHeader;
 
@@ -73,7 +73,7 @@ namespace Mosa.Runtime.Linker.PE
 		#region Methods
 
 		/// <summary>
-		/// Loads and validates the image file header.
+		/// Loads and validates the image file _header.
 		/// </summary>
 		/// <param name="reader">The reader, to read from.</param>
 		public void Read(BinaryReader reader)

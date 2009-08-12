@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
@@ -22,20 +20,8 @@ namespace Mosa.Runtime.CompilerFramework
 	public sealed class ConstantOperand : Operand
     {
 		#region Static data members
-/*
-		public static Constant MinusOne = new Constant(TypeReference.Int32, -1);
-		public static Constant Zero = new Constant(TypeReference.Int32, 0);
-		public static Constant One = new Constant(TypeReference.Int32, 1);
-		public static Constant Two = new Constant(TypeReference.Int32, 2);
-		public static Constant Three = new Constant(TypeReference.Int32, 3);
-		public static Constant Four = new Constant(TypeReference.Int32, 4);
-		public static Constant Five = new Constant(TypeReference.Int32, 5);
-		public static Constant Six = new Constant(TypeReference.Int32, 6);
-		public static Constant Seven = new Constant(TypeReference.Int32, 7);
-		public static Constant Eight = new Constant(TypeReference.Int32, 8);
-		public static Constant Null = new Constant(TypeReference.Object, null);
-*/
-        private static SigType s_object;
+
+        private static SigType _sObject;
 
 		#endregion // Static data members
 
@@ -93,10 +79,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>A new instance of <see cref="ConstantOperand"/>, that represents the null value.</returns>
         public static ConstantOperand GetNull()
         {
-            if (null == s_object)
-                s_object = new SigType(CilElementType.Object);
+            if (null == _sObject)
+                _sObject = new SigType(CilElementType.Object);
 
-            return new ConstantOperand(s_object, null);
+            return new ConstantOperand(_sObject, null);
         }
 
         #endregion // Methods
@@ -111,7 +97,7 @@ namespace Mosa.Runtime.CompilerFramework
         public override bool Equals(Operand other)
         {
             ConstantOperand cop = other as ConstantOperand;
-            return (null != cop && null != cop.Value && null != this.Value && cop.Value.Equals(this.Value));
+            return (null != cop && null != cop.Value && null != Value && cop.Value.Equals(Value));
         }
 
         /// <summary>

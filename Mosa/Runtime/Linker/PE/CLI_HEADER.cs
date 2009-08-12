@@ -16,7 +16,7 @@ using System.IO;
 namespace Mosa.Runtime.Linker.PE
 {
     /// <summary>
-    /// The CLI header embedded into a portable executable file.
+    /// The CLI _header embedded into a portable executable file.
     /// </summary>
 	public struct CLI_HEADER 
     {
@@ -30,14 +30,14 @@ namespace Mosa.Runtime.Linker.PE
 		/// <summary>
 		/// Name for symbol
 		/// </summary>
-		public const string SymbolName = @".cil.header";
+		public const string SymbolName = @".cil._header";
 
 		#endregion // Constants
 
 		#region Data members
 
         /// <summary>
-        /// The size of the CLI header in bytes.
+        /// The size of the CLI _header in bytes.
         /// </summary>
 		public uint Cb;
 
@@ -92,7 +92,7 @@ namespace Mosa.Runtime.Linker.PE
         public IMAGE_DATA_DIRECTORY ExportAddressTableJumps;
 
         /// <summary>
-        /// The data directory of the managed native header.
+        /// The data directory of the managed native _header.
         /// </summary>
         public IMAGE_DATA_DIRECTORY ManagedNativeHeader;
 
@@ -123,7 +123,7 @@ namespace Mosa.Runtime.Linker.PE
 		}
 
 		/// <summary>
-		/// Writes the header to the given binary writer.
+		/// Writes the _header to the given binary writer.
 		/// </summary>
 		/// <param name="writer">The binary writer to write to.</param>
 		public void Write(BinaryWriter writer)

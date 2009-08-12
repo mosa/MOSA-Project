@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -44,17 +43,6 @@ namespace Mosa.Runtime.CompilerFramework
         private BasicBlock[][] _domFrontierOfBlock;
 
         #endregion // Data members
-
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of <see cref="DominanceCalculationStage"/>.
-        /// </summary>
-        public DominanceCalculationStage()
-        {
-        }
-
-        #endregion // Construction
 
         #region IMethodCompilerStage Members
 
@@ -113,7 +101,7 @@ namespace Mosa.Runtime.CompilerFramework
             _doms[0] = blocks[0];
 
             // Calculate the dominance
-            while (true == changed)
+            while (changed)
             {
                 changed = false;
                 foreach (BasicBlock b in revPostOrder)
@@ -130,7 +118,7 @@ namespace Mosa.Runtime.CompilerFramework
                                 idom = Intersect(p, idom);
                         }
 
-                        if (false == Object.ReferenceEquals(_doms[b.Index], idom))
+                        if (false == ReferenceEquals(_doms[b.Index], idom))
                         {
                             _doms[b.Index] = idom;
                             changed = true;
@@ -155,7 +143,7 @@ namespace Mosa.Runtime.CompilerFramework
                     foreach (BasicBlock p in b.PreviousBlocks)
                     {
                         BasicBlock runner = p;
-                        while (null != runner && false == Object.ReferenceEquals(runner, _doms[b.Index]))
+                        while (null != runner && false == ReferenceEquals(runner, _doms[b.Index]))
                         {
                             List<BasicBlock> runnerFrontier = domFrontiers[runner.Index];
                             if (null == runnerFrontier)
@@ -255,7 +243,7 @@ namespace Mosa.Runtime.CompilerFramework
 
             while (f2 != null && f1 != null && f1.Index != f2.Index)
             {
-                while (f2 != null && f1 != null && f1.Index > f2.Index)
+                while (f1 != null && f1.Index > f2.Index)
                     f1 = _doms[f1.Index];
 
                 while (f2 != null && f1 != null && f2.Index > f1.Index)

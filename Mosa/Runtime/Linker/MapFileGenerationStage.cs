@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -65,7 +65,7 @@ namespace Mosa.Runtime.Linker
             // Retrieve the linker
             IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
 
-            // Emit map file header
+            // Emit map file _header
             this.writer.WriteLine(linker.OutputFile);
             this.writer.WriteLine();
             this.writer.WriteLine("Timestamp is {0}", linker.TimeStamp);

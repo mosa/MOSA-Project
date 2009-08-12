@@ -96,7 +96,7 @@ namespace Mosa.Tools.Compiler
 				delegate(string v)
 				{
 					if (v != null) {
-						// only show header and exit
+						// only show _header and exit
 						Environment.Exit(0);
 					}
 				});
@@ -153,7 +153,7 @@ namespace Mosa.Tools.Compiler
 		/// <param name="args">The command line arguments.</param>
 		public void Run(string[] args)
 		{
-			// always print header with version information
+			// always print _header with version information
 			Console.WriteLine("MOSA AOT Compiler, Version 0.1 'Wake'");
 			Console.WriteLine("Copyright 2009 by the MOSA Project. Licensed under the New BSD License.");
 			Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");

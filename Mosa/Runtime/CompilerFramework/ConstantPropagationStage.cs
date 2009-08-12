@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -27,17 +26,6 @@ namespace Mosa.Runtime.CompilerFramework
     /// </remarks>
     public sealed class ConstantPropagationStage : IMethodCompilerStage
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of <see cref="ConstantPropagationStage"/>.
-        /// </summary>
-        public ConstantPropagationStage()
-        {
-        }
-
-        #endregion // Construction
-
         #region IMethodCompilerStage Members
 
         /// <summary>
@@ -102,7 +90,7 @@ namespace Mosa.Runtime.CompilerFramework
                     }
 
                     // Shall we remove this instruction?
-                    if (true == remove)
+                    if (remove)
                     {
                         instructions.RemoveAt(i);
                         i--;

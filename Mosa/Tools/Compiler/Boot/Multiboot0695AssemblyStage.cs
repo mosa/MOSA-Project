@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -42,13 +42,13 @@ namespace Mosa.Tools.Compiler.Boot
 	 */
 
 	/// <summary>
-	/// Writes a multiboot v0.6.95 header into the generated binary.
+	/// Writes a multiboot v0.6.95 _header into the generated binary.
 	/// </summary>
 	/// <remarks>
-	/// This assembly compiler stage writes a multiboot header into the
+	/// This assembly compiler stage writes a multiboot _header into the
 	/// the data section of the binary file and also creates a multiboot
 	/// compliant entry point into the binary.<para/>
-	/// The header and entry point written by this stage is compliant with
+	/// The _header and entry point written by this stage is compliant with
 	/// the specification at 
 	/// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.
 	/// </remarks>
@@ -57,7 +57,7 @@ namespace Mosa.Tools.Compiler.Boot
 		#region Constants
 
 		/// <summary>
-		/// Magic value in the multiboot header.
+		/// Magic value in the multiboot _header.
 		/// </summary>
 		private const uint HEADER_MB_MAGIC = 0x1BADB002U;
 
@@ -81,8 +81,8 @@ namespace Mosa.Tools.Compiler.Boot
 
 		/// <summary>
 		/// Multiboot flag, which indicates a non-elf binary to boot and that
-		/// settings for the executable file should be read from the boot header
-		/// instead of the executable header.
+		/// settings for the executable file should be read from the boot _header
+		/// instead of the executable _header.
 		/// </summary>
 		private const uint HEADER_MB_FLAG_NON_ELF_BINARY = 0x00010000U;
 
@@ -221,25 +221,25 @@ namespace Mosa.Tools.Compiler.Boot
 			return IntPtr.Zero;
 		}
 
-		private const string MultibootHeaderSymbolName = @"<$>mosa-multiboot-header";
+		private const string MultibootHeaderSymbolName = @"<$>mosa-multiboot-_header";
 
 		/// <summary>
-		/// Writes the multiboot header.
+		/// Writes the multiboot _header.
 		/// </summary>
 		/// <param name="compiler">The assembly compiler.</param>
 		/// <param name="linker">The linker.</param>
 		/// <param name="entryPoint">The virtualAddress of the multiboot compliant entry point.</param>
 		private void WriteMultibootHeader(AssemblyCompiler compiler, IAssemblyLinker linker, IntPtr entryPoint)
 		{
-			// HACK: According to the multiboot specification this header must be within the first 8K of the
+			// HACK: According to the multiboot specification this _header must be within the first 8K of the
 			// kernel binary. Since the text section is always first, this should take care of the problem.
 			using (Stream stream = linker.Allocate(MultibootHeaderSymbolName, SectionKind.Text, 64, 4))
 			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII)) {
 				// flags - multiboot flags
 				uint flags = /*HEADER_MB_FLAG_VIDEO_MODES_REQUIRED | */HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
-				// The multiboot header checksum 
+				// The multiboot _header checksum 
 				uint csum = 0;
-				// header_addr is the load virtualAddress of the multiboot header
+				// header_addr is the load virtualAddress of the multiboot _header
 				uint header_addr = 0;
 				// load_addr is the base virtualAddress of the binary in memory
 				uint load_addr = 0;

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2009 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -57,10 +57,10 @@ namespace Mosa.Tools.Compiler.Metadata
         private const ushort METADATA_FLAGS = 0;
 
         /// <summary>
-        /// The version string emitted by this stage in the metadata root header.
+        /// The version string emitted by this stage in the metadata root _header.
         /// </summary>
         /// <remarks>
-        /// According to ECMA-335, Partition II, §24.2.1 we have to use a vendor specific version string.
+        /// According to ECMA-335, Partition II, �24.2.1 we have to use a vendor specific version string.
         /// We may not use the Standard CLI 2005 or Standard CLI 2002 to identify our AOT'd binaries. The
         /// MOSA loader identifies MOSA CLI 2009 as being equivalent to Standard CLI 2005 with an additional
         /// metadata stream providing AOT data to link native code to the methods in the metadata.
@@ -108,7 +108,7 @@ namespace Mosa.Tools.Compiler.Metadata
         private const int MAX_METADATA_STREAM_NAME_LENGTH_IN_BYTES = 32;
 
         /// <summary>
-        /// The size of the fixed metadata table header.
+        /// The size of the fixed metadata table _header.
         /// </summary>
         private const int METADATA_TABLE_HEADER_SIZE = 24;
 
@@ -151,7 +151,7 @@ namespace Mosa.Tools.Compiler.Metadata
         private BinaryWriter metadataWriter;
 
         /// <summary>
-        /// Holds the position of the metadata root header in the metadata stream.
+        /// Holds the position of the metadata root _header in the metadata stream.
         /// </summary>
         private long metadataRootHeaderPosition;
 
@@ -282,9 +282,9 @@ namespace Mosa.Tools.Compiler.Metadata
         }
 
         /// <summary>
-        /// Calculates the length of the metadata header.
+        /// Calculates the length of the metadata _header.
         /// </summary>
-        /// <returns>The length of the metadata header.</returns>
+        /// <returns>The length of the metadata _header.</returns>
         private int CalculateMetadataHeaderLength()
         {
             const int metadataHeaderLength = 16;
@@ -327,7 +327,7 @@ namespace Mosa.Tools.Compiler.Metadata
         }
 
         /// <summary>
-        /// Writes the metadata root header.
+        /// Writes the metadata root _header.
         /// </summary>
         private void WriteMetadataRootHeader()
         {
@@ -560,7 +560,7 @@ namespace Mosa.Tools.Compiler.Metadata
         }
 
         /// <summary>
-        /// Writes the metadata table header.
+        /// Writes the metadata table _header.
         /// </summary>
         private ulong WriteMetadataTableHeader()
         {

@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Runtime.Linker.Elf32.Sections
 {
@@ -22,10 +20,10 @@ namespace Mosa.Runtime.Linker.Elf32.Sections
         /// Initializes a new instance of the <see cref="Elf32RoDataSection"/> class.
         /// </summary>
         public Elf32RoDataSection()
-            : base(Mosa.Runtime.Linker.SectionKind.ROData, @".rodata", IntPtr.Zero)
+            : base(SectionKind.ROData, @".rodata", IntPtr.Zero)
         {
-            header.Type = Elf32SectionType.ProgBits;
-            header.Flags = Elf32SectionAttribute.Alloc;
+            _header.Type = Elf32SectionType.ProgBits;
+            _header.Flags = Elf32SectionAttribute.Alloc;
         }
     }
 }

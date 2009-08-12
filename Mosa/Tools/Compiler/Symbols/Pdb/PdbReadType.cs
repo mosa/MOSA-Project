@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -88,7 +88,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
             {
                 int version = reader.ReadInt32();
                 if (version != 4)
-                    throw new InvalidDataException(@"PDB symbol table has unsupported header.");
+                    throw new InvalidDataException(@"PDB symbol table has unsupported _header.");
 
                 return reader;
             }

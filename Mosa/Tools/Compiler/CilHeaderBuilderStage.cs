@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -21,7 +21,7 @@ using Mosa.Runtime.Linker.PE;
 namespace Mosa.Tools.Compiler
 {
 	/// <summary>
-	///  Writes the cil header into the generated binary.
+	///  Writes the cil _header into the generated binary.
 	/// </summary>
 	public sealed class CilHeaderBuilderStage : IAssemblyCompilerStage
 	{
@@ -80,7 +80,7 @@ namespace Mosa.Tools.Compiler
 		#region Internals
 
 		/// <summary>
-		/// Writes the Cil header.
+		/// Writes the Cil _header.
 		/// </summary>
 		/// <param name="compiler">The assembly compiler.</param>
 		/// <param name="linker">The linker.</param>

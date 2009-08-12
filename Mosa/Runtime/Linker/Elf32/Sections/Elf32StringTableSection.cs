@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -41,8 +41,8 @@ namespace Mosa.Runtime.Linker.Elf32.Sections
         public Elf32StringTableSection()
             : base(Mosa.Runtime.Linker.SectionKind.Text, @".shstrtab", IntPtr.Zero)
         {
-            header.Type = Elf32SectionType.StringTable;
-            header.Flags = (Elf32SectionAttribute)0;
+            _header.Type = Elf32SectionType.StringTable;
+            _header.Flags = (Elf32SectionAttribute)0;
         }
 
         /// <summary>
@@ -51,14 +51,14 @@ namespace Mosa.Runtime.Linker.Elf32.Sections
         /// <param name="writer">The writer.</param>
         public override void Write(System.IO.BinaryWriter writer)
         {
-            header.Offset = (uint)writer.BaseStream.Position;
+            _header.Offset = (uint)writer.BaseStream.Position;
             byte initial = (byte)'\0';
             writer.Write(initial);
             writer.Write(stringTable.ToArray());
         }
 
         /// <summary>
-        /// Writes the header.
+        /// Writes the _header.
         /// </summary>
         /// <param name="writer">The writer.</param>
         public override void WriteHeader(System.IO.BinaryWriter writer)

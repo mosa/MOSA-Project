@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -41,7 +41,7 @@ namespace Mosa.Runtime.Linker.PE
 		#region Data members
 
 		/// <summary>
-		/// Holds the DOS header of the generated PE file.
+		/// Holds the DOS _header of the generated PE file.
 		/// </summary>
 		private IMAGE_DOS_HEADER dosHeader;
 
@@ -51,7 +51,7 @@ namespace Mosa.Runtime.Linker.PE
 		private IMAGE_NT_HEADERS ntHeaders;
 
 		///// <summary>
-		///// Holds the CLI header.
+		///// Holds the CLI _header.
 		///// </summary>
 		//private CLI_HEADER cilHeader;
 
@@ -369,13 +369,13 @@ namespace Mosa.Runtime.Linker.PE
 		}
 
 		/// <summary>
-		/// Writes the dos header of the PE file.
+		/// Writes the dos _header of the PE file.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
 		private void WriteDosHeader(BinaryWriter writer)
 		{
 			/*
-			 * This code block generates the default DOS header of a PE image.
+			 * This code block generates the default DOS _header of a PE image.
 			 * These constants are not further documented here, please consult
 			 * MSDN for their meaning.
 			 */
@@ -401,7 +401,7 @@ namespace Mosa.Runtime.Linker.PE
 		}
 
 		/// <summary>
-		/// Writes the PE header.
+		/// Writes the PE _header.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
 		private void WritePEHeader(BinaryWriter writer)
@@ -409,7 +409,7 @@ namespace Mosa.Runtime.Linker.PE
 			// Write the PE signature and headers
 			ntHeaders.Signature = IMAGE_NT_HEADERS.PE_SIGNATURE;
 
-			// Prepare the file header
+			// Prepare the file _header
 			ntHeaders.FileHeader.Machine = IMAGE_FILE_HEADER.IMAGE_FILE_MACHINE_I386;
 			ntHeaders.FileHeader.NumberOfSections = CountSections();
 			ntHeaders.FileHeader.TimeDateStamp = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
@@ -443,7 +443,7 @@ namespace Mosa.Runtime.Linker.PE
 			ntHeaders.OptionalHeader.MinorSubsystemVersion = 0;
 			ntHeaders.OptionalHeader.Win32VersionValue = 0;
 			ntHeaders.OptionalHeader.SizeOfImage = CalculateSizeOfImage();
-			ntHeaders.OptionalHeader.SizeOfHeaders = this.fileAlignment; // FIXME: Use the full header size
+			ntHeaders.OptionalHeader.SizeOfHeaders = this.fileAlignment; // FIXME: Use the full _header size
 			ntHeaders.OptionalHeader.CheckSum = 0;
 			ntHeaders.OptionalHeader.Subsystem = 0x03;
 			ntHeaders.OptionalHeader.DllCharacteristics = 0x0540;
