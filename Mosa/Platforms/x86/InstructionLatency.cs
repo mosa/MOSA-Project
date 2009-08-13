@@ -9,11 +9,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using IR = Mosa.Runtime.CompilerFramework.IR;
-using IL = Mosa.Runtime.CompilerFramework.IL;
 
 namespace Mosa.Platforms.x86
 {
@@ -33,23 +29,23 @@ namespace Mosa.Platforms.x86
         /// </summary>
         private static readonly Dictionary<Type, sbyte> Latencies = new Dictionary<Type, sbyte>()
         {
-            { typeof(x86.Instructions.AdcInstruction),  1 },
-            { typeof(x86.Instructions.SbbInstruction),  1 },
-            { typeof(x86.Instructions.AddInstruction),  1 },
-            { typeof(x86.Instructions.SubInstruction),  2 },
-            { typeof(x86.Instructions.Intrinsics.CliInstruction), 11 },
-            { typeof(x86.Instructions.MulInstruction),  4 },
-            { typeof(x86.Instructions.DivInstruction), 22 },
-            { typeof(x86.Instructions.Intrinsics.PushInstruction), 3 },
-            { typeof(x86.Instructions.Intrinsics.XchgInstruction), 2 },
-            { typeof(x86.Instructions.SetccInstruction), 1 },
-            { typeof(x86.Instructions.DecInstruction), 1 },
-            { typeof(x86.Instructions.IncInstruction), 1 },
-            { typeof(x86.Instructions.CmpInstruction), 1 },
-            { typeof(x86.Instructions.SseAddInstruction),   3 },
-            { typeof(x86.Instructions.SseSubInstruction),   3 },
-            { typeof(x86.Instructions.SseDivInstruction),  32 },
-            { typeof(x86.Instructions.SseMulInstruction),   5 },
+            { typeof(Instructions.AdcInstruction),  1 },
+            { typeof(Instructions.SbbInstruction),  1 },
+            { typeof(Instructions.AddInstruction),  1 },
+            { typeof(Instructions.SubInstruction),  2 },
+            { typeof(Instructions.Intrinsics.CliInstruction), 11 },
+            { typeof(Instructions.MulInstruction),  4 },
+            { typeof(Instructions.DivInstruction), 22 },
+            { typeof(Instructions.Intrinsics.PushInstruction), 3 },
+            { typeof(Instructions.Intrinsics.XchgInstruction), 2 },
+            { typeof(Instructions.SetccInstruction), 1 },
+            { typeof(Instructions.DecInstruction), 1 },
+            { typeof(Instructions.IncInstruction), 1 },
+            { typeof(Instructions.CmpInstruction), 1 },
+            { typeof(Instructions.SseAddInstruction),   3 },
+            { typeof(Instructions.SseSubInstruction),   3 },
+            { typeof(Instructions.SseDivInstruction),  32 },
+            { typeof(Instructions.SseMulInstruction),   5 },
         };
 
         /// <summary>

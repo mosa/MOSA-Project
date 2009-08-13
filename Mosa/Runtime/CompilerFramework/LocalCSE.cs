@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -28,23 +27,23 @@ namespace Mosa.Runtime.CompilerFramework
             /// <summary>
             /// 
             /// </summary>
-            public int Position;
+            public readonly int Position;
             /// <summary>
             /// 
             /// </summary>
-            public Operand Operand1;
+            public readonly Operand Operand1;
             /// <summary>
             /// 
             /// </summary>
-            public Operation Operator;
+            public readonly Operation Operator;
             /// <summary>
             /// 
             /// </summary>
-            public Operand Operand2;
+            public readonly Operand Operand2;
             /// <summary>
             /// 
             /// </summary>
-            public Operand Var;
+            public readonly Operand Var;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="AEBinExp"/> struct.
@@ -131,22 +130,20 @@ namespace Mosa.Runtime.CompilerFramework
         /// Eliminates the common subexpressions.
         /// </summary>
         /// <param name="block">The block.</param>
-        private void EliminateCommonSubexpressions(BasicBlock block)
+        private static void EliminateCommonSubexpressions(BasicBlock block)
         {
             List<AEBinExp> AEB = new List<AEBinExp>();
-            List<AEBinExp> tmp = new List<AEBinExp>();
+            List<AEBinExp> tmp;
 
-            AEBinExp aeb = new AEBinExp();
+            AEBinExp aeb;
             Instruction instruction;
 
             int i = 0;
-            int position = 0;
-            bool found = false;
 
-            while (i <= block.Instructions.Count)
+            while (i < block.Instructions.Count)
             {
                 instruction = block.Instructions[i];
-                found = false;
+                bool found = false;
                 RegisterOperand temp = null;
 
                 if (instruction is IL.ArithmeticInstruction)
@@ -164,7 +161,7 @@ namespace Mosa.Runtime.CompilerFramework
                             // in AEB, including commutativity
                             if (IsCommutative(instruction))
                             {
-                                position = aeb.Position;
+                                int position = aeb.Position;
                                 found = true;
 
                                 // If no variable in tuple, create a new temporary and
@@ -187,12 +184,22 @@ namespace Mosa.Runtime.CompilerFramework
                                         case Operation.Mul:
                                             inst = new IL.MulInstruction(IL.OpCode.Mul, temp, aeb.Operand1, aeb.Operand2);
                                             break;
+                                        case Operation.Or:
+                                            inst = new IL.BinaryLogicInstruction(IL.OpCode.Or);
+                                            inst.SetResult(0, temp);
+                                            inst.SetOperand(0, aeb.Operand1);
+                                            inst.SetOperand(1, aeb.Operand2);
+                                            break;
+                                        case Operation.Xor:
+                                            inst = new IL.BinaryLogicInstruction(IL.OpCode.Xor);
+                                            inst.SetResult(0, temp);
+                                            inst.SetOperand(0, aeb.Operand1);
+                                            inst.SetOperand(1, aeb.Operand2);
+                                            break;
                                         default:
                                             break;
                                     }
                                     block.Instructions.Insert(position, inst);
-
-                                    Renumber(AEB, position);
 
                                     ++position;
                                     ++i;
@@ -242,22 +249,13 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Renumbers the specified list.
-        /// </summary>
-        /// <param name="list">The list.</param>
-        /// <param name="position">The position.</param>
-        private void Renumber(List<AEBinExp> list, int position)
-        {
-        }
-
-        /// <summary>
         /// Determines whether the specified instruction is commutative.
         /// </summary>
         /// <param name="instruction">The instruction.</param>
         /// <returns>
         /// 	<c>true</c> if the specified instruction is commutative; otherwise, <c>false</c>.
         /// </returns>
-        private bool IsCommutative(Instruction instruction)
+        private static bool IsCommutative(Instruction instruction)
         {
             return (instruction is IL.AddInstruction) ||
                    (instruction is IL.MulInstruction) ||

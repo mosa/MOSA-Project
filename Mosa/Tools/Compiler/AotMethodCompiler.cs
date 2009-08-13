@@ -42,18 +42,17 @@ namespace Mosa.Tools.Compiler
         public AotMethodCompiler(AotCompiler compiler, RuntimeType type, RuntimeMethod method)
             : base(compiler.Pipeline.Find<IAssemblyLinker>(), compiler.Architecture, compiler.Assembly, type, method)
         {
-            this.aotCompiler = compiler;
-            this.Pipeline.AddRange(new IMethodCompilerStage[] {
+            aotCompiler = compiler;
+            Pipeline.AddRange(new IMethodCompilerStage[] {
 				new ILDecodingStage(),
                 //InstructionLogger.Instance,
                 new BasicBlockBuilderStage(),
 				new OperandDeterminationStage(),
                 //InstructionLogger.Instance,
-                //new ConstantFoldingStage(),
                 new CilToIrTransformationStage(),
                 //InstructionLogger.Instance,
                 //InstructionStatisticsStage.Instance,
-                //new DominanceCalculationStage(),
+                new DominanceCalculationStage(),
                 //InstructionLogger.Instance,
                 //new EnterSSA(),
                 //InstructionLogger.Instance,
@@ -69,8 +68,9 @@ namespace Mosa.Tools.Compiler
 				//InstructionLogger.Instance,
 				new BlockReductionStage(),
 				new LoopAwareBlockOrderStage(),
-				//new SimpleTraceBlockOrderStage(),
-				new BasicBlockOrderStage(),				
+				new SimpleTraceBlockOrderStage(),
+				new BasicBlockOrderStage(),		
+		        new LocalCSE(),
             });
         }
 

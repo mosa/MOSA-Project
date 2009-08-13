@@ -22,7 +22,7 @@ namespace Mosa.Platforms.x86
 	using Runtime.CompilerFramework;
 	using Runtime.Metadata;
 	using Runtime.Metadata.Signatures;
-	using MoveInstruction = Mosa.Runtime.CompilerFramework.IR.MoveInstruction;
+	using MoveInstruction = Runtime.CompilerFramework.IR.MoveInstruction;
 
 	/// <summary>
 	/// This class provides a common base class for architecture
@@ -199,14 +199,14 @@ namespace Mosa.Platforms.x86
 		/// <returns>An object specifying the register constraints or null, if there are no constraints.</returns>
 		public override IRegisterConstraint GetRegisterConstraint(Instruction instruction)
 		{
-			Type constraintType = null;
+			Type constraintType;
 
 			if (Constraints.TryGetValue(instruction.GetType(), out constraintType)) 
             {
 				return (IRegisterConstraint)Activator.CreateInstance(constraintType);
 			}
-
-			return null;
+		
+		    return null;
 		}
 
 		/// <summary>

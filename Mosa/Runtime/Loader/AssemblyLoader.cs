@@ -10,8 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-
 using Mosa.Runtime.Loader.PE;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
@@ -44,7 +42,7 @@ namespace Mosa.Runtime.Loader
 			// HACK: I can't figure out an easier way to get the framework dir right now...
 			string frameworkDir = Path.GetDirectoryName(typeof(System.Object).Assembly.Location);
 
-			_searchPath = new string[] {
+			_searchPath = new[] {
                 AppDomain.CurrentDomain.BaseDirectory,
                 frameworkDir
             };
@@ -84,14 +82,11 @@ namespace Mosa.Runtime.Loader
 		/// </returns>
 		public IMetadataModule Resolve(IMetadataProvider provider, AssemblyRefRow assemblyRef)
 		{
-			IMetadataModule result = null;
-			string name;
+		    string name;
 			provider.Read(assemblyRef.NameIdx, out name);
 
-			result = GetLoadedAssembly(name);
-			if (result == null)
-				result = DoLoadAssembly(name + ".dll");
-			if (result == null)
+			IMetadataModule result = GetLoadedAssembly(name) ?? DoLoadAssembly(name + ".dll");
+		    if (result == null)
 				throw new TypeLoadException();
 
 			return result;
@@ -106,13 +101,12 @@ namespace Mosa.Runtime.Loader
 		/// </returns>
 		public IMetadataModule Load(string file)
 		{
-			if (Path.IsPathRooted(file) == false)
+		    if (Path.IsPathRooted(file) == false)
 				return DoLoadAssembly(Path.GetFileName(file));
-			else
-				return LoadAssembly(file);
+		    return LoadAssembly(file);
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Unloads the given module.
 		/// </summary>
 		/// <param name="module">The module to unload.</param>
@@ -148,7 +142,7 @@ namespace Mosa.Runtime.Loader
 		{
 			IMetadataModule result = null;
 			foreach (IMetadataModule image in _loadedImages) {
-				if (true == name.Equals(image.Name)) {
+				if (name.Equals(image.Name)) {
 					result = image;
 					break;
 				}

@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="CompilerFramework\BasicBlockBuilderStage.cs" />
     <Compile Include="CompilerFramework\BasicBlockOrderStage.cs" />
+    <Compile Include="CompilerFramework\FlowGraphVisualizationStage.cs" />
     <Compile Include="CompilerFramework\ReverseBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\OperandDeterminationStage.cs" />
     <Compile Include="CompilerFramework\StackRegisterAllocator.cs" />

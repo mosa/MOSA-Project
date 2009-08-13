@@ -51,7 +51,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),  // reverse all the basic Blocks and see if it breaks anything
-				new BasicBlockOrderStage()	
+				new BasicBlockOrderStage(),
+                new LocalCSE()
             });
         }
 

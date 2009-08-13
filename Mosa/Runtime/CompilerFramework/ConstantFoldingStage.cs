@@ -315,15 +315,15 @@ namespace Mosa.Runtime.CompilerFramework
                 int result = 0;
                 switch (instruction.Results[0].Type.Type)
                 {
-                    case Mosa.Runtime.Metadata.CilElementType.Char:
-                        goto case Mosa.Runtime.Metadata.CilElementType.U2;
-                    case Mosa.Runtime.Metadata.CilElementType.U1:
+                    case Metadata.CilElementType.Char:
+                        goto case Metadata.CilElementType.U2;
+                    case Metadata.CilElementType.U1:
                         result = ((byte)(instruction.Operand1 as ConstantOperand).Value) & ((byte)(instruction.Operand2 as ConstantOperand).Value);
                         break;
-                    case Mosa.Runtime.Metadata.CilElementType.U2:
+                    case Metadata.CilElementType.U2:
                         result = ((ushort)(instruction.Operand1 as ConstantOperand).Value) & ((ushort)(instruction.Operand2 as ConstantOperand).Value);
                         break;
-                    case Mosa.Runtime.Metadata.CilElementType.U4:
+                    case Metadata.CilElementType.U4:
                         result = (int)(((uint)(instruction.Operand1 as ConstantOperand).Value) & ((uint)(instruction.Operand2 as ConstantOperand).Value));
                         break;
                     case Mosa.Runtime.Metadata.CilElementType.I1:

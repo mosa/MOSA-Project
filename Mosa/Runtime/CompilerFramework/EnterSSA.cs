@@ -266,7 +266,7 @@ namespace Mosa.Runtime.CompilerFramework
             foreach (Instruction instruction in block.Instructions)
             {
                 IR.PhiInstruction phi = instruction as IR.PhiInstruction;
-                if (null != phi)
+                if (null != phi && liveIn.ContainsKey(phi.Result))
                 {
                     StackOperand value = liveIn[phi.Result];
                     if (false == phi.Contains(value) && phi.Result.Version != value.Version)

@@ -11,13 +11,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
-using System.Runtime.CompilerServices;
 using Mosa.Runtime.Metadata.Runtime;
 
 namespace Mosa.Runtime.Vm
