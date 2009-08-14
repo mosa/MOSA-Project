@@ -75,7 +75,7 @@ namespace Mosa.Runtime.Linker.PE
 		/// <summary>
 		/// Loads and validates the image file _header.
 		/// </summary>
-		/// <param name="reader">The reader, to read from.</param>
+		/// <param name="reader">The reader, to read From.</param>
 		public void Read(BinaryReader reader)
 		{
 			this.Machine = reader.ReadUInt16();

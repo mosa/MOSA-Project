@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2009 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -139,11 +139,11 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Writes bytes from the given byte array to the underlying stream,
+        /// Writes bytes From the given byte array to the underlying stream,
         /// using the given source index and length for the source array
         /// </summary>
         /// <param name="buffer">An array of bytes containing the bytes to be written</param>
-        /// <param name="index">The index within the source byte array to begin reading from</param>
+        /// <param name="index">The index within the source byte array to begin reading From</param>
         /// <param name="count">The number of bytes within the source byte array to use</param>
         public override void Write(byte[] buffer, int index, int count)
         {
@@ -169,12 +169,12 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Writes characters from the given character array to the stream, in their
+        /// Writes characters From the given character array to the stream, in their
         /// binary format
         /// </summary>
         /// <param name="chars">The character array containing the characters to write</param>
         /// <param name="index">The starting index of the characters to write</param>
-        /// <param name="count">The number of characters from the source array to write</param>
+        /// <param name="count">The number of characters From the source array to write</param>
         public override void Write(char[] chars, int index, int count)
         {
             base.Write(this.AssumedEffectiveEncoding.GetBytes(chars, index, count));

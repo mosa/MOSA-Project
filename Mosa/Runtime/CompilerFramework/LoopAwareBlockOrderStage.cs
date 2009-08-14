@@ -10,7 +10,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -73,7 +72,7 @@ namespace Mosa.Runtime.CompilerFramework
 		#region ConnectedBlocks class
 
 		/// <summary>
-		/// Pair of two Blocks; from/to 
+		/// Pair of two Blocks; From/to 
 		/// </summary>
 		protected struct ConnectedBlocks
 		{
@@ -84,7 +83,7 @@ namespace Mosa.Runtime.CompilerFramework
 			/// <summary>
 			/// Succssor Block
 			/// </summary>
-			public BasicBlock from;
+			public BasicBlock From;
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="ConnectedBlocks"/> struct.
@@ -94,7 +93,7 @@ namespace Mosa.Runtime.CompilerFramework
 			public ConnectedBlocks(BasicBlock from, BasicBlock to)
 			{
 				this.to = to;
-				this.from = from;
+				this.From = from;
 			}
 		}
 
@@ -152,7 +151,7 @@ namespace Mosa.Runtime.CompilerFramework
 				if (active.Get(at.to.Index)) {
 					// Found a loop -
 					//     the loop-_header block is in at.to 
-					// and the loop-end is in at.from
+					// and the loop-end is in at.From
 
 					// Add loop-end to list
 					loops.Add(at);
@@ -164,12 +163,11 @@ namespace Mosa.Runtime.CompilerFramework
 					// and continue iteration
 					continue;
 				}
-				else {
-					// Mark as active
-					active.Set(at.to.Index, true);
-				}
+			
+                // Mark as active
+			    active.Set(at.to.Index, true);
 
-				// Mark as visited
+			    // Mark as visited
 				visited.Set(at.to.Index, true);
 
 				// Add successors to queue
@@ -193,7 +191,7 @@ namespace Mosa.Runtime.CompilerFramework
 				//Console.WriteLine(index.ToString() + " : B" + loop.to.Index.ToString());
 
 				// Add loop-end to stack
-				stack.Push(loop.from);
+				stack.Push(loop.From);
 
 				// Clear visit flag
 				visited = new BitArray(blocks.Count, false);
@@ -271,19 +269,15 @@ namespace Mosa.Runtime.CompilerFramework
 			/// </returns>
 			public int CompareTo(Priority other)
 			{
-				if (Depth > other.Depth)
+			    if (Depth > other.Depth)
 					return 1;
-				else
-					if (Depth < other.Depth)
-						return -1;
-					else
-						if (Order > other.Order)
-							return 1;
-						else
-							if (Order < other.Order)
-								return -1;
-							else
-								return 0;
+			    if (Depth < other.Depth)
+			        return -1;
+			    if (Order > other.Order)
+			        return 1;
+			    if (Order < other.Order)
+			        return -1;
+			    return 0;
 			}
 		}
 		#endregion

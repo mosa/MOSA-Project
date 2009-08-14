@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.CompilerFramework.IR;
@@ -202,7 +202,7 @@ namespace Mosa.Runtime.CompilerFramework
             {
                 if (instr.Offset <= lr.Start)
                 {
-                    // A use on instr.Offset == lr.Start is one from a previous definition!!
+                    // A use on instr.Offset == lr.Start is one From a previous definition!!
                 }
                 else if (instr.Offset <= lr.End)
                 {
@@ -245,7 +245,7 @@ namespace Mosa.Runtime.CompilerFramework
                     mi = CreateMoveInstruction(rop, current.Op);
                     current.Block.Instructions.Insert(current.Start++, mi);
 
-                    // Remove this live range from the active list
+                    // Remove this live range From the active list
                     active.Remove(lr);
 
                     lr.Start = PickNextUse(lr.Op, current.Start, lr.End);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -8,8 +7,16 @@ namespace Mosa.Runtime.CompilerFramework
     /// This stage just saves statistics about the code we're compiling, for example
     /// ratio of IL to IR code, number of compiled instructions, etc.
     /// </summary>
-    public class InstructionStatisticsStage : IInstructionVisitor<int>, IMethodCompilerStage
+    public class InstructionStatisticsStage : IMethodCompilerStage
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        private static DateTime _start;
+        /// <summary>
+        /// 
+        /// </summary>
+        private static DateTime _end;
         /// <summary>
         /// A reference to the running instance of this stage
         /// </summary>
@@ -18,18 +25,22 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Every instructiontype is stored here to be able to count the number of compiled instructiontypes.
         /// </summary>
-        private Dictionary<Type, int> disjointInstructions = new Dictionary<Type,int>();
+        private readonly Dictionary<Type, int> _disjointInstructions = new Dictionary<Type,int>();
 
         /// <summary>
         /// Every namespace is stored here to be able to iterate over all used
-        /// namespaces (IL, IR, x86, etc)
+        /// _namespaces (IL, IR, x86, etc)
         /// </summary>
-        private Dictionary<string, int> namespaces = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _namespaces = new Dictionary<string, int>();
 
         /// <summary>
         /// Total number of compiled instructions.
         /// </summary>
-        private uint numberOfInstructions = 0;
+        private uint _numberOfInstructions;
+        /// <summary>
+        /// 
+        /// </summary>
+        private uint _numberOfMethods;
 
         /// <summary>
         /// Retrieves the name of the compilation stage.
@@ -45,18 +56,18 @@ namespace Mosa.Runtime.CompilerFramework
         public void Visit(Instruction instruction, int arg)
         {
             // Count disjoint instructions
-            if (disjointInstructions.ContainsKey(instruction.GetType()))
-                ++disjointInstructions[instruction.GetType()];
+            if (_disjointInstructions.ContainsKey(instruction.GetType()))
+                ++_disjointInstructions[instruction.GetType()];
             else
-                disjointInstructions.Add(instruction.GetType(), 1);
+                _disjointInstructions.Add(instruction.GetType(), 1);
 
-            // Count namespaces
-            if (namespaces.ContainsKey(instruction.GetType().Namespace))
-                ++namespaces[instruction.GetType().Namespace];
+            // Count _namespaces
+            if (_namespaces.ContainsKey(instruction.GetType().Namespace))
+                ++_namespaces[instruction.GetType().Namespace];
             else
-                namespaces.Add(instruction.GetType().Namespace, 1);
+                _namespaces.Add(instruction.GetType().Namespace, 1);
 
-            ++numberOfInstructions;
+            ++_numberOfInstructions;
         }
 
         /// <summary>
@@ -82,6 +93,8 @@ namespace Mosa.Runtime.CompilerFramework
             if (null == blockProvider)
                 throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
 
+            ++_numberOfMethods;
+
             CodeTransformationStage.Context ctx = new CodeTransformationStage.Context();
             for (int currentBlock = 0; currentBlock < blockProvider.Blocks.Count; currentBlock++)
             {
@@ -89,7 +102,7 @@ namespace Mosa.Runtime.CompilerFramework
                 ctx.Block = block;
                 for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++)
                 {
-                    block.Instructions[ctx.Index].Visit(this, 0);
+                    Visit(block.Instructions[ctx.Index], 0);
                 }
             }
         }
@@ -102,22 +115,41 @@ namespace Mosa.Runtime.CompilerFramework
             System.IO.StreamWriter writer = System.IO.File.CreateText("statistics.txt");
             writer.WriteLine("Instruction statistics:");
             writer.WriteLine("-----------------------");
-            writer.WriteLine("  - Total number of instructions:\t\t\t {0}", numberOfInstructions);
-            writer.WriteLine("  - Number of disjoint instructions:\t\t\t {0}", disjointInstructions.Count);
-            writer.WriteLine("  - Ratio of disjoint instructions to total number:\t {0}", string.Format("{0:.00}%", ((double)disjointInstructions.Count / (double)numberOfInstructions)).Substring(1));
+            writer.WriteLine("  - Total number of methods:\t\t\t {0}", _numberOfMethods);
+            writer.WriteLine("  - Total number of instructions:\t\t\t {0}", _numberOfInstructions);
+            writer.WriteLine("  - Number of disjoint instructions:\t\t\t {0}", _disjointInstructions.Count);
+            writer.WriteLine("  - Ratio of disjoint instructions to total number:\t {0}", string.Format("{0:.00}%", ((double)_disjointInstructions.Count / (double)_numberOfInstructions)).Substring(1));
             writer.WriteLine();
             writer.WriteLine("Namespace statistics:");
             writer.WriteLine("---------------------");
             writer.WriteLine("  - Number of instructions visited in namespace:");
-            foreach (string name in namespaces.Keys)
+            foreach (string name in _namespaces.Keys)
             {
                 string n = name.Substring(name.LastIndexOf('.') + 1, name.Length - name.LastIndexOf('.') - 1);
-                string percentage = string.Format("{0:.00}%", ((double)namespaces[name] / (double)numberOfInstructions));
-                writer.WriteLine("    + {0}\t: {1}\t[{2}]", n, namespaces[name], percentage.Substring(1));
+                string percentage = string.Format("{00:.00}%", (double)((double)_namespaces[name] / (double)_numberOfInstructions) * 100);
+                writer.WriteLine("    + {0}\t: {1}\t[{2}]", n, _namespaces[name], percentage.Substring(1));
             }
+            writer.WriteLine();
+            writer.WriteLine("Compilation time: {0}", _end - _start);
 
 
             writer.Close();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Start()
+        {
+            _start = DateTime.Now;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void End()
+        {
+            _end = DateTime.Now;
         }
     }
 }

@@ -17,7 +17,7 @@ using Mosa.Runtime.Metadata.Signatures;
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// A temporary stack local operand used to capture results from CIL operations.
+    /// A temporary stack local operand used to capture results From CIL operations.
     /// </summary>
     /// <remarks>
     /// Temporaries have a stack slot assigned to them however these, see VariableOperand and

@@ -28,7 +28,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// </summary>
     /// <remarks>
     /// A _method compiler is responsible for compiling a single function
-    /// of an object. There are various classes derived from MethodCompilerBase,
+    /// of an object. There are various classes derived From MethodCompilerBase,
     /// which provide specific features, such as jit compilation, runtime
     /// optimized jitting and others. MethodCompilerBase instances are ussually
     /// created by invoking CreateMethodCompiler on a specific compiler

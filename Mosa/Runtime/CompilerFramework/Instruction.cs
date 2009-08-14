@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -49,7 +49,7 @@ namespace Mosa.Runtime.CompilerFramework
         protected bool _ignore;
 
         /// <summary>
-        /// IL offset of the instruction from the start of the method.
+        /// IL offset of the instruction From the start of the method.
         /// </summary>
         protected int _offset;
 
@@ -145,7 +145,7 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Gets or sets the offset of the instruction from the start of the method.
+        /// Gets or sets the offset of the instruction From the start of the method.
         /// </summary>
         /// <remarks>
         /// Offsets are used by branch instructions to define their target. During basic block

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -45,12 +45,12 @@ namespace Mosa.Runtime.CompilerFramework
         Instruction[] MoveReturnValue(Operand operand);
 
         /// <summary>
-        /// Retrieves the offset of the first local variable from the stack frame start.
+        /// Retrieves the offset of the first local variable From the stack frame start.
         /// </summary>
         int OffsetOfFirstLocal { get; }
 
         /// <summary>
-        /// Retrieves the offset of the first parameter from the stack frame start.
+        /// Retrieves the offset of the first parameter From the stack frame start.
         /// </summary>
         int OffsetOfFirstParameter { get; }
     }

@@ -103,7 +103,7 @@ namespace Mosa.Runtime.Linker.PE
 		#region Methods
 
         /// <summary>
-        /// Loads the CLI_HEADER from the reader.
+        /// Loads the CLI_HEADER From the reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
 		public void Read(BinaryReader reader)

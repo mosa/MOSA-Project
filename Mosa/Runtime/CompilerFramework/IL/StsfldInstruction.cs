@@ -86,14 +86,14 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
         /// <remarks>
         /// This method is used by instructions to retrieve immediate operands
-        /// from the instruction stream.
+        /// From the instruction stream.
         /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             // Decode the base class
             base.Decode(decoder);
 
-            // Read the field from the code
+            // Read the field From the code
             TokenTypes token;
             decoder.Decode(out token);
             this.field = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);

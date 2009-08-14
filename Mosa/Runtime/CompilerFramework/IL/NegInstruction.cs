@@ -22,7 +22,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         #region Data members
 
         /// <summary>
-        /// Holds the typecode validation table from ISO/IEC 23271:2006 (E),
+        /// Holds the typecode validation table From ISO/IEC 23271:2006 (E),
         /// Partition III, §1.5, Table 3.
         /// </summary>
         private static StackTypeCode[] _typeCodes = new StackTypeCode[] {

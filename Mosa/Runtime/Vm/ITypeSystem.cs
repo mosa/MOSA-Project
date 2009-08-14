@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -20,7 +20,7 @@ namespace Mosa.Runtime.Vm
     /// </summary>
     /// <remarks>
     /// The type system is responsible for loading assembly metadata and building
-    /// runtime accessible management structures from those.
+    /// runtime accessible management structures From those.
     /// </remarks>
     public interface ITypeSystem
     {
@@ -57,7 +57,7 @@ namespace Mosa.Runtime.Vm
         void AssemblyLoaded(IMetadataModule module);
 
         /// <summary>
-        /// Gets the types from module.
+        /// Gets the types From module.
         /// </summary>
         /// <param name="module">The module.</param>
         /// <returns></returns>
@@ -71,7 +71,7 @@ namespace Mosa.Runtime.Vm
         ModuleOffsets GetModuleOffset(IMetadataModule module);
 
         /// <summary>
-        /// Finds the type index from token.
+        /// Finds the type index From token.
         /// </summary>
         /// <param name="module">The module.</param>
         /// <param name="token">The token.</param>

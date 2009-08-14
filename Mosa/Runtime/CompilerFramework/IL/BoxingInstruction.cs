@@ -41,7 +41,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
         /// <remarks>
         /// This method is used by instructions to retrieve immediate operands
-        /// from the instruction stream.
+        /// From the instruction stream.
         /// </remarks>
         public sealed override void Decode(IInstructionDecoder decoder)
         {

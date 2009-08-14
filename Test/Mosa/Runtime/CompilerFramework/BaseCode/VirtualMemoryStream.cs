@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -44,7 +44,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// Initializes a new <see cref="VirtualMemoryStream"/> and allocates the requested amount of virtual memory to back it.
         /// </summary>
         /// <param name="pageManager"></param>
-        /// <param name="allocationSize">The number of bytes to allocate from virtual memory.</param>
+        /// <param name="allocationSize">The number of bytes to allocate From virtual memory.</param>
         public unsafe VirtualMemoryStream(IMemoryPageManager pageManager, uint allocationSize)
         {
             _memory = pageManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.Execute);

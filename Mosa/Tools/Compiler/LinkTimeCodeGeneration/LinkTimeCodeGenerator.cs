@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -57,7 +57,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
             }
 
             // Create the method
-            // HACK: <$> prevents the method from being called from CIL
+            // HACK: <$> prevents the method From being called From CIL
             CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, "<$>" + methodName, type);
             type.Methods.Add(method);
 

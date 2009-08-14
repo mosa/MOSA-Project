@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -16,10 +16,10 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework.IR
 {
     /// <summary>
-    /// Loads a value from a memory pointer.
+    /// Loads a value From a memory pointer.
     /// </summary>
     /// <remarks>
-    /// The load instruction is used to load a value from
+    /// The load instruction is used to load a value From
     /// a memory pointer. The types must be compatible.
     /// </remarks>
     public sealed class LoadInstruction : TwoOperandInstruction

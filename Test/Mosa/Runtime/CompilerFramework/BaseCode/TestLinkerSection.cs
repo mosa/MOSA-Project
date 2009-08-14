@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -47,7 +47,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         #region Methods
 
         /// <summary>
-        /// Allocates a stream of the specified size from the section.
+        /// Allocates a stream of the specified size From the section.
         /// </summary>
         /// <param name="size">The size.</param>
         /// <param name="alignment">The alignment.</param>

@@ -137,7 +137,7 @@ namespace Mosa.Runtime.Vm
             AdjustMetadataSpace(md, TokenTypes.MethodSpec, ref _methods);
             AdjustMetadataSpace(md, TokenTypes.TypeSpec, ref _types);
 
-            // Load all types from the assembly into the type array
+            // Load all types From the assembly into the type array
             LoadTypes(module, modOffset);
             // LoadTypeSpecs(module, modOffset.TypeOffset);
             // LoadMethods(module, modOffset.MethodOffset);
@@ -148,7 +148,7 @@ namespace Mosa.Runtime.Vm
         }
 
         /// <summary>
-        /// Gets the types from module.
+        /// Gets the types From module.
         /// </summary>
         /// <param name="module">The module.</param>
         /// <returns></returns>
@@ -179,7 +179,7 @@ namespace Mosa.Runtime.Vm
         }
 
         /// <summary>
-        /// Finds the type index from token.
+        /// Finds the type index From token.
         /// </summary>
         /// <param name="module">The module.</param>
         /// <param name="token">The token.</param>
@@ -211,7 +211,7 @@ namespace Mosa.Runtime.Vm
                                 break;
 
                             case TokenTypes.ModuleRef:
-                                // FIXME: Use the type from the referenced module
+                                // FIXME: Use the type From the referenced module
                                 result = -4;
                                 break;
 
@@ -512,9 +512,9 @@ namespace Mosa.Runtime.Vm
         private RuntimeType rtCallTypeAttribute = null;
 
         /// <summary>
-        /// Loads all types from the given metadata module.
+        /// Loads all types From the given metadata module.
         /// </summary>
-        /// <param name="module">The metadata module to load the types from.</param>
+        /// <param name="module">The metadata module to load the types From.</param>
         /// <param name="moduleOffsets">The offsets into the metadata arrays, of the current module.</param>
         private void LoadTypes(IMetadataModule module, ModuleOffsets moduleOffsets)
         {
@@ -588,13 +588,13 @@ namespace Mosa.Runtime.Vm
         }
 
         /// <summary>
-        /// Loads all methods from the given metadata module.
+        /// Loads all methods From the given metadata module.
         /// </summary>
-        /// <param name="module">The metadata module to load methods from.</param>
+        /// <param name="module">The metadata module to load methods From.</param>
         /// <param name="declaringType">The type, which declared the method.</param>
         /// <param name="first">The first method token to load.</param>
         /// <param name="last">The last method token to load (non-inclusive.)</param>
-        /// <param name="offset">The offset into the method table to start loading methods from.</param>
+        /// <param name="offset">The offset into the method table to start loading methods From.</param>
         private void LoadMethods(IMetadataModule module, RuntimeType declaringType, TokenTypes first, TokenTypes last, ref int offset)
         {
             IMetadataProvider md = module.Metadata;
@@ -624,10 +624,10 @@ namespace Mosa.Runtime.Vm
         }
 
         /// <summary>
-        /// Loads all parameters from the given metadata module.
+        /// Loads all parameters From the given metadata module.
         /// </summary>
-        /// <param name="module">The metadata module to load methods from.</param>
-        /// <param name="offset">The offset into the parameter table to start loading methods from.</param>
+        /// <param name="module">The metadata module to load methods From.</param>
+        /// <param name="offset">The offset into the parameter table to start loading methods From.</param>
         private void LoadParameters(IMetadataModule module, int offset)
         {
             IMetadataProvider md = module.Metadata;
@@ -731,7 +731,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Loads all generic parameter definitions of generic methods and types.
         /// </summary>
-        /// <param name="module">The metadata module to load generic parameters from.</param>
+        /// <param name="module">The metadata module to load generic parameters From.</param>
         /// <param name="typeOffset"></param>
         /// <param name="methodOffset">The module offsets structure.</param>
         private void LoadGenerics(IMetadataModule module, int typeOffset, int methodOffset)
@@ -800,9 +800,9 @@ namespace Mosa.Runtime.Vm
         }
 
         /// <summary>
-        /// Loads all custom attributes from the assembly.
+        /// Loads all custom attributes From the assembly.
         /// </summary>
-        /// <param name="module">The module to load attributes from.</param>
+        /// <param name="module">The module to load attributes From.</param>
         /// <param name="modOffset">The module offset.</param>
         private void LoadCustomAttributes(IMetadataModule module, ModuleOffsets modOffset)
         {

@@ -56,11 +56,14 @@ namespace Mosa.Tools.Compiler
         /// </remarks>
         public void Run()
         {
+            InstructionStatisticsStage.Instance.Start();
             // Build the default assembly compiler pipeline
             this.Architecture.ExtendAssemblyCompilerPipeline(this.Pipeline);
 
             // Run the compiler
             base.Compile();
+            InstructionStatisticsStage.Instance.End();
+            InstructionStatisticsStage.Instance.PrintStatistics();
         }
 
         /// <summary>

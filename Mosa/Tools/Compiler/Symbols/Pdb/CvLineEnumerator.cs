@@ -48,7 +48,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 
         public IEnumerator<CvLine> GetEnumerator()
         {
-            // These are fields from a line number table structure
+            // These are fields From a line number table structure
             // _header: The _header of the line number table - always 0x000000F2
             // nextBlockOffset: The number of bytes to skip to get to the next block (skip after reading nextBlockOffset!)
             // start: The function start address whose line number information is provided.

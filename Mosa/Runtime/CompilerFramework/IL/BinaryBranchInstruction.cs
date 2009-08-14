@@ -81,7 +81,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
         /// <remarks>
         /// This method is used by instructions to retrieve immediate operands
-        /// from the instruction stream.
+        /// From the instruction stream.
         /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
 		{
@@ -93,7 +93,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 
 			// Read the branch target
 			// Is this a short branch target?
-            // FIXME: Remove unary branch instructions from this list.
+            // FIXME: Remove unary branch instructions From this list.
 			if (_code == OpCode.Beq_s || _code == OpCode.Bge_s || _code == OpCode.Bge_un_s || _code == OpCode.Bgt_s ||
 				_code == OpCode.Bgt_un_s || _code == OpCode.Ble_s || _code == OpCode.Ble_un_s || _code == OpCode.Blt_s ||
 				_code == OpCode.Blt_un_s || _code == OpCode.Bne_un_s)

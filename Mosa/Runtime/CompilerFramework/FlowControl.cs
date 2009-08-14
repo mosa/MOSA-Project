@@ -45,7 +45,7 @@ namespace Mosa.Runtime.CompilerFramework
         Break = 0x10,
 
         /// <summary>
-        /// The instruction returns from the method.
+        /// The instruction returns From the method.
         /// </summary>
         Return = 0x20,
 

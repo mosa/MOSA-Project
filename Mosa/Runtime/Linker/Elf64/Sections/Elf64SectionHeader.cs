@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Linker.Elf64.Sections
         /// </summary>
         public uint Address;
         /// <summary>
-        /// This member's value gives the byte offset from the beginning of the file to 
+        /// This member's value gives the byte offset From the beginning of the file to 
         /// the first byte in the section. One section type, NoBits,occupies no 
         /// space in the file, and its Offset member locates 
         /// the conceptual placement in the file. 

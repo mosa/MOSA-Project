@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// </summary>
     /// <remarks>
     /// Constant propagation has a couple of advantages: First of all it removes
-    /// a local variable from the stack and secondly it reduces the register pressure
+    /// a local variable From the stack and secondly it reduces the register pressure
     /// on systems with only a small number of registers (x86).
     /// <para/>
     /// It is only safe to use this stage on an instruction stream in SSA form.

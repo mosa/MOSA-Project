@@ -107,7 +107,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// <summary>
         /// Allocates a symbol of the given name in the specified section.
         /// </summary>
-        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="section">The executable section to allocate From.</param>
         /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
         /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
         /// <returns>
@@ -123,7 +123,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// Allocates a symbol of the given name in the specified section.
         /// </summary>
         /// <param name="name">The name of the symbol.</param>
-        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="section">The executable section to allocate From.</param>
         /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
         /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
         /// <returns>
@@ -151,7 +151,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// Allocates memory in the specified section.
         /// </summary>
         /// <param name="member">The metadata member to allocate space for.</param>
-        /// <param name="section">The executable section to allocate from.</param>
+        /// <param name="section">The executable section to allocate From.</param>
         /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
         /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
         /// <returns>
@@ -252,7 +252,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         public override void Run(AssemblyCompiler compiler)
         {
             // Adjust the symbol addresses
-            // __grover, 01/02/2009: Copied from ObjectFileLayoutStage
+            // __grover, 01/02/2009: Copied From ObjectFileLayoutStage
             foreach (LinkerSymbol symbol in this.Symbols)
             {
                 LinkerSection ls = GetSection(symbol.Section);

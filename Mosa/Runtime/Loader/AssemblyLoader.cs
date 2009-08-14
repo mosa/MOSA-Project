@@ -160,7 +160,7 @@ namespace Mosa.Runtime.Loader
 		}
 
 		/// <summary>
-		/// Does the load assembly from paths.
+		/// Does the load assembly From paths.
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <param name="paths">The paths.</param>

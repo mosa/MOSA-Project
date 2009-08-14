@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="member">The member to reference.</param>
         /// <param name="type">The type of data held in the operand.</param>
-        /// <param name="offset">The offset from the base register or absolute address to retrieve.</param>
+        /// <param name="offset">The offset From the base register or absolute address to retrieve.</param>
         public MemberOperand(RuntimeMember member, SigType type, IntPtr offset) :
             base(type, null, offset)
         {

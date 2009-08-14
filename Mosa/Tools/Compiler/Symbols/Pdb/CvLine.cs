@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -80,7 +80,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
         }
 
         /// <summary>
-        /// Gets the offset from the function start.
+        /// Gets the offset From the function start.
         /// </summary>
         /// <value>The offset.</value>
         public int Offset

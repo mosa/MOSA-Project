@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +14,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
         /// <summary>
         /// Reads a variable length C-style zero-terminated string.
         /// </summary>
-        /// <param name="reader">The reader to read the string from.</param>
+        /// <param name="reader">The reader to read the string From.</param>
         /// <returns>The read string.</returns>
         /// <exception cref="System.ArgumentNullException"><paramref name="reader"/> is null.</exception>
         public static string ReadString(BinaryReader reader)
@@ -25,7 +25,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
         /// <summary>
         /// Reads a variable length C-style zero-terminated string.
         /// </summary>
-        /// <param name="reader">The reader to read the string from.</param>
+        /// <param name="reader">The reader to read the string From.</param>
         /// <param name="encoding">Specifies the encoding of the string to read.</param>
         /// <returns>The read string.</returns>
         /// <exception cref="System.ArgumentNullException"><paramref name="reader"/> or <paramref name="encoding"/> is null.</exception>
@@ -44,7 +44,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 
             do
             {
-                // Read additional bytes from the buffer
+                // Read additional bytes From the buffer
                 reader.Read(chars, offset, size - oldSize);
 
                 // Determine the index of the \0

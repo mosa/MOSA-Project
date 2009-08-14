@@ -287,9 +287,9 @@ namespace Mosa.Runtime.Metadata {
 		}
 
 		/// <summary>
-		/// Read and decode an index value from the reader.
+		/// Read and decode an index value From the reader.
 		/// </summary>
-		/// <param name="reader">The reader to read from.</param>
+		/// <param name="reader">The reader to read From.</param>
 		/// <param name="index">The index type to read.</param>
 		/// <returns>The index value.</returns>
         private TokenTypes ReadIndexValue(BinaryReader reader, IndexType index)
@@ -332,9 +332,9 @@ namespace Mosa.Runtime.Metadata {
 		}
 
 		/// <summary>
-		/// Read and decode an index value from the reader.
+		/// Read and decode an index value From the reader.
 		/// </summary>
-		/// <param name="reader">The reader to read from.</param>
+		/// <param name="reader">The reader to read From.</param>
 		/// <param name="table">The index type to read.</param>
 		/// <returns>The index value.</returns>
         private TokenTypes ReadIndexValue(BinaryReader reader, TokenTypes table)

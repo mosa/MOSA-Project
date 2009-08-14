@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
@@ -321,7 +321,7 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Allocates a free register from the given register set.
+        /// Allocates a free register From the given register set.
         /// </summary>
         /// <param name="regs">The regs.</param>
         /// <param name="op">The res.</param>
@@ -343,23 +343,23 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Spills a register from the given register set.
+        /// Spills a register From the given register set.
         /// </summary>
         /// <param name="block">The block to insert the spill in.</param>
         /// <param name="idx">The index of the instruction, before which to place the spill.</param>
         /// <param name="type">The signature type of the resulting operand.</param>
         /// <param name="regs">The instruction compatible subset of the register set.</param>
-        /// <returns>A register from the given set.</returns>
+        /// <returns>A register From the given set.</returns>
         private RegisterOperand SpillRegister(BasicBlock block, int idx, SigType type, Register[] regs)
         {
-            // FIXME: Find the oldest reg from the set. Always use the oldest one.
+            // FIXME: Find the oldest reg From the set. Always use the oldest one.
             KeyValuePair<Register, int>[] lastUses = new KeyValuePair<Register, int>[regs.Length];
             foreach (Register reg in regs)
             {
                 lastUses[idx++] = new KeyValuePair<Register, int>(reg, _activeOpLastUse[reg.Index]);
             }
 
-            // Sort the last uses from oldest -> newest
+            // Sort the last uses From oldest -> newest
             Array.Sort<KeyValuePair<Register, int>>(lastUses, delegate(KeyValuePair<Register, int> a, KeyValuePair<Register, int> b)
             {
                 return b.Value - a.Value;

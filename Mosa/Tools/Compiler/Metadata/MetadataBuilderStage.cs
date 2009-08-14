@@ -238,7 +238,7 @@ namespace Mosa.Tools.Compiler.Metadata
         }
 
         /// <summary>
-        /// Retrieves the assembly linker from compiler.
+        /// Retrieves the assembly linker From compiler.
         /// </summary>
         /// <param name="compiler">The compiler.</param>
         /// <returns>The retrieved assembly linker.</returns>

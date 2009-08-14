@@ -70,7 +70,8 @@ namespace Mosa.Tools.Compiler
 				new LoopAwareBlockOrderStage(),
 				new SimpleTraceBlockOrderStage(),
 				new BasicBlockOrderStage(),		
-		        new LocalCSE(),
+                InstructionStatisticsStage.Instance,
+		        //new LocalCSE(),
             });
         }
 
@@ -85,15 +86,13 @@ namespace Mosa.Tools.Compiler
         {
             // If we're compiling a type initializer, run it immediately.
             MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
-            if ((this.Method.Attributes & attrs) == attrs && this.Method.Name == ".cctor")
+            if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
             {
-                TypeInitializers.TypeInitializerSchedulerStage tiss = this.aotCompiler.Pipeline.Find<TypeInitializers.TypeInitializerSchedulerStage>();
-                tiss.Schedule(this.Method);
+                TypeInitializers.TypeInitializerSchedulerStage tiss = aotCompiler.Pipeline.Find<TypeInitializers.TypeInitializerSchedulerStage>();
+                tiss.Schedule(Method);
             }
 
             base.EndCompile();
-
-            InstructionStatisticsStage.Instance.PrintStatistics();
         }
 
         #endregion // MethodCompilerBase Overrides

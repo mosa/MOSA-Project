@@ -60,7 +60,7 @@ namespace Mosa.Runtime.CompilerFramework
                         {
                             Operand op = phi.Operands[i];
 
-                            // HACK: Remove phi from the operand use list
+                            // HACK: Remove phi From the operand use list
                             op.Uses.Remove(phi);
 
                             if (false == Object.ReferenceEquals(res, op))
@@ -111,7 +111,7 @@ namespace Mosa.Runtime.CompilerFramework
                         phi.Ignore = true;
                         //block.Instructions.RemoveAt(0);
 
-                        // HACK: Remove phi from the operand def list
+                        // HACK: Remove phi From the operand def list
                         res.Definitions.Remove(phi);
                     }
                 }

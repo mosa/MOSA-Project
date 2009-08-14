@@ -9,8 +9,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -20,8 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public sealed class StrengthReductionStage : CodeTransformationStage, IMethodCompilerStage, 
 		IL.IILVisitor<CodeTransformationStage.Context>, 
-		IR.IIRVisitor<CodeTransformationStage.Context>, 
-		IInstructionVisitor<CodeTransformationStage.Context>
+		IR.IIRVisitor<CodeTransformationStage.Context>
 	{
 
 		/// <summary>
@@ -32,33 +29,33 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>
 		/// 	<c>true</c> if the value is zero; otherwise, <c>false</c>.
 		/// </returns>
-		private bool IsValueZero(Mosa.Runtime.Metadata.CilElementType cilElementType, ConstantOperand constantOperand)
+		private static bool IsValueZero(Metadata.CilElementType cilElementType, ConstantOperand constantOperand)
 		{
 			switch (cilElementType) {
-				case Mosa.Runtime.Metadata.CilElementType.Char:
-					goto case Mosa.Runtime.Metadata.CilElementType.U2;
-				case Mosa.Runtime.Metadata.CilElementType.U1:
+				case Metadata.CilElementType.Char:
+					goto case Metadata.CilElementType.U2;
+				case Metadata.CilElementType.U1:
 					return (byte)(constantOperand.Value) == 0;
-				case Mosa.Runtime.Metadata.CilElementType.U2:
+				case Metadata.CilElementType.U2:
 					return (ushort)(constantOperand.Value) == 0;
-				case Mosa.Runtime.Metadata.CilElementType.U4:
+				case Metadata.CilElementType.U4:
 					return (int)(constantOperand.Value) == 0;
-				case Mosa.Runtime.Metadata.CilElementType.I1:
+				case Metadata.CilElementType.I1:
 					return (sbyte)(constantOperand.Value) == 0;
-				case Mosa.Runtime.Metadata.CilElementType.I2:
+				case Metadata.CilElementType.I2:
 					return (short)(constantOperand.Value) == 0;
-				case Mosa.Runtime.Metadata.CilElementType.I4:
+				case Metadata.CilElementType.I4:
 					return (int)(constantOperand.Value) == 0;
-				case Mosa.Runtime.Metadata.CilElementType.R4:
+				case Metadata.CilElementType.R4:
 					return (float)(constantOperand.Value) == 0;
-				case Mosa.Runtime.Metadata.CilElementType.R8:
+				case Metadata.CilElementType.R8:
 					return (double)(constantOperand.Value) == 0;
-				case Mosa.Runtime.Metadata.CilElementType.I:
-					goto case Mosa.Runtime.Metadata.CilElementType.I4;
-				case Mosa.Runtime.Metadata.CilElementType.U:
-					goto case Mosa.Runtime.Metadata.CilElementType.U4;
+				case Metadata.CilElementType.I:
+					goto case Metadata.CilElementType.I4;
+				case Metadata.CilElementType.U:
+					goto case Metadata.CilElementType.U4;
 				default:
-					goto case Mosa.Runtime.Metadata.CilElementType.I4;
+					goto case Metadata.CilElementType.I4;
 			}
 		}
 
@@ -70,33 +67,33 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>
 		/// 	<c>true</c> if the value is one; otherwise, <c>false</c>.
 		/// </returns>
-		private bool IsValueOne(Mosa.Runtime.Metadata.CilElementType cilElementType, ConstantOperand constantOperand)
+		private static bool IsValueOne(Metadata.CilElementType cilElementType, ConstantOperand constantOperand)
 		{
 			switch (cilElementType) {
-				case Mosa.Runtime.Metadata.CilElementType.Char:
-					goto case Mosa.Runtime.Metadata.CilElementType.U2;
-				case Mosa.Runtime.Metadata.CilElementType.U1:
+				case Metadata.CilElementType.Char:
+					goto case Metadata.CilElementType.U2;
+				case Metadata.CilElementType.U1:
 					return (byte)(constantOperand.Value) == 1;
-				case Mosa.Runtime.Metadata.CilElementType.U2:
+				case Metadata.CilElementType.U2:
 					return (ushort)(constantOperand.Value) == 1;
-				case Mosa.Runtime.Metadata.CilElementType.U4:
+				case Metadata.CilElementType.U4:
 					return (int)(constantOperand.Value) == 1;
-				case Mosa.Runtime.Metadata.CilElementType.I1:
+				case Metadata.CilElementType.I1:
 					return (sbyte)(constantOperand.Value) == 1;
-				case Mosa.Runtime.Metadata.CilElementType.I2:
+				case Metadata.CilElementType.I2:
 					return (short)(constantOperand.Value) == 1;
-				case Mosa.Runtime.Metadata.CilElementType.I4:
+				case Metadata.CilElementType.I4:
 					return (int)(constantOperand.Value) == 1;
-				case Mosa.Runtime.Metadata.CilElementType.R4:
+				case Metadata.CilElementType.R4:
 					return (float)(constantOperand.Value) == 1;
-				case Mosa.Runtime.Metadata.CilElementType.R8:
+				case Metadata.CilElementType.R8:
 					return (double)(constantOperand.Value) == 1;
-				case Mosa.Runtime.Metadata.CilElementType.I:
-					goto case Mosa.Runtime.Metadata.CilElementType.I4;
-				case Mosa.Runtime.Metadata.CilElementType.U:
-					goto case Mosa.Runtime.Metadata.CilElementType.U4;
+				case Metadata.CilElementType.I:
+					goto case Metadata.CilElementType.I4;
+				case Metadata.CilElementType.U:
+					goto case Metadata.CilElementType.U4;
 				default:
-					goto case Mosa.Runtime.Metadata.CilElementType.I4;
+					goto case Metadata.CilElementType.I4;
 			}
 		}
 
@@ -105,7 +102,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The context.</param>
-		void IL.IILVisitor<CodeTransformationStage.Context>.Mul(IL.MulInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Mul(IL.MulInstruction instruction, Context ctx)
 		{
 			bool multiplyByZero = false;
 
@@ -118,9 +115,9 @@ namespace Mosa.Runtime.CompilerFramework
 					multiplyByZero = true;
 
 			if (multiplyByZero) {
-				if (instruction.Results[0].Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
+				if (instruction.Results[0].Type.Type == Metadata.CilElementType.R4)
 					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, 0)));
-				else if (instruction.Results[0].Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
+				else if (instruction.Results[0].Type.Type == Metadata.CilElementType.R8)
 					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, 0)));
 				else
 					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, 0)));
@@ -148,7 +145,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The context.</param>
-		void IL.IILVisitor<CodeTransformationStage.Context>.Div(IL.DivInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Div(IL.DivInstruction instruction, Context ctx)
 		{
 
 		}
@@ -158,12 +155,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The CTX.</param>
-		void IL.IILVisitor<CodeTransformationStage.Context>.Rem(IL.RemInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Rem(IL.RemInstruction instruction, Context ctx)
 		{
 
 		}
 
-		void IInstructionVisitor<CodeTransformationStage.Context>.Visit(Instruction instruction, CodeTransformationStage.Context ctx)
+		void IInstructionVisitor<Context>.Visit(Instruction instruction, Context ctx)
 		{
 		}
 
@@ -172,7 +169,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The context.</param>
-		void IL.IILVisitor<CodeTransformationStage.Context>.Add(IL.AddInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Add(IL.AddInstruction instruction, Context ctx)
 		{
 
 		}
@@ -182,7 +179,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The context.</param>
-		void IL.IILVisitor<CodeTransformationStage.Context>.Sub(IL.SubInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Sub(IL.SubInstruction instruction, Context ctx)
 		{
 
 		}
@@ -192,12 +189,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.LogicalAndInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.LogicalAndInstruction instruction, Context ctx)
 		{
 
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.LogicalNotInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.LogicalNotInstruction instruction, Context ctx)
 		{
 
 		}
@@ -207,7 +204,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.LogicalOrInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.LogicalOrInstruction instruction, Context ctx)
 		{
 
 		}
@@ -217,7 +214,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.LogicalXorInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.LogicalXorInstruction instruction, Context ctx)
 		{
 		}
 
@@ -244,7 +241,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (null == blockProvider)
 				throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
 
-			CodeTransformationStage.Context ctx = new CodeTransformationStage.Context();
+			Context ctx = new Context();
 
 			foreach (BasicBlock block in blockProvider.Blocks) {
 				ctx.Block = block;
@@ -265,373 +262,373 @@ namespace Mosa.Runtime.CompilerFramework
 
 
 		#region Non-Folding
-		void IL.IILVisitor<CodeTransformationStage.Context>.Nop(IL.NopInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Nop(IL.NopInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Break(IL.BreakInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Break(IL.BreakInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldarg(IL.LdargInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldarg(IL.LdargInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldarga(IL.LdargaInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldarga(IL.LdargaInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldloc(IL.LdlocInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldloc(IL.LdlocInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldloca(IL.LdlocaInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldloca(IL.LdlocaInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldc(IL.LdcInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldc(IL.LdcInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldobj(IL.LdobjInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldobj(IL.LdobjInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldstr(IL.LdstrInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldstr(IL.LdstrInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldfld(IL.LdfldInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldfld(IL.LdfldInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldflda(IL.LdfldaInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldflda(IL.LdfldaInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldsfld(IL.LdsfldInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldsfld(IL.LdsfldInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldsflda(IL.LdsfldaInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldsflda(IL.LdsfldaInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldftn(IL.LdftnInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldftn(IL.LdftnInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldvirtftn(IL.LdvirtftnInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldvirtftn(IL.LdvirtftnInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldtoken(IL.LdtokenInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldtoken(IL.LdtokenInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Stloc(IL.StlocInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Stloc(IL.StlocInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Starg(IL.StargInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Starg(IL.StargInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Stobj(IL.StobjInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Stobj(IL.StobjInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Stfld(IL.StfldInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Stfld(IL.StfldInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Stsfld(IL.StsfldInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Stsfld(IL.StsfldInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Dup(IL.DupInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Dup(IL.DupInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Pop(IL.PopInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Pop(IL.PopInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Jmp(IL.JumpInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Jmp(IL.JumpInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Call(IL.CallInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Call(IL.CallInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Calli(IL.CalliInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Calli(IL.CalliInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ret(IL.ReturnInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ret(IL.ReturnInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Branch(IL.BranchInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Branch(IL.BranchInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.UnaryBranch(IL.UnaryBranchInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.UnaryBranch(IL.UnaryBranchInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.BinaryBranch(IL.BinaryBranchInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.BinaryBranch(IL.BinaryBranchInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Switch(IL.SwitchInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Switch(IL.SwitchInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.BinaryLogic(IL.BinaryLogicInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.BinaryLogic(IL.BinaryLogicInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Shift(IL.ShiftInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Shift(IL.ShiftInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Neg(IL.NegInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Neg(IL.NegInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Not(IL.NotInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Not(IL.NotInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Conversion(IL.ConversionInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Conversion(IL.ConversionInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Callvirt(IL.CallvirtInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Callvirt(IL.CallvirtInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Cpobj(IL.CpobjInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Cpobj(IL.CpobjInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Newobj(IL.NewobjInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Newobj(IL.NewobjInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Castclass(IL.CastclassInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Castclass(IL.CastclassInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Isinst(IL.IsInstInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Isinst(IL.IsInstInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Unbox(IL.UnboxInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Unbox(IL.UnboxInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Throw(IL.ThrowInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Throw(IL.ThrowInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Box(IL.BoxInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Box(IL.BoxInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Newarr(IL.NewarrInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Newarr(IL.NewarrInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldlen(IL.LdlenInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldlen(IL.LdlenInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldelema(IL.LdelemaInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldelema(IL.LdelemaInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Ldelem(IL.LdelemInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Ldelem(IL.LdelemInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Stelem(IL.StelemInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Stelem(IL.StelemInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.UnboxAny(IL.UnboxAnyInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.UnboxAny(IL.UnboxAnyInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Refanyval(IL.RefanyvalInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Refanyval(IL.RefanyvalInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.UnaryArithmetic(IL.UnaryArithmeticInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.UnaryArithmetic(IL.UnaryArithmeticInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Mkrefany(IL.MkrefanyInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Mkrefany(IL.MkrefanyInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.ArithmeticOverflow(IL.ArithmeticOverflowInstruction instruction, CodeTransformationStage.Context ctx)
+	    public void ArithmeticOverflow(IL.ArithmeticOverflowInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Endfinally(IL.EndfinallyInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Endfinally(IL.EndfinallyInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Leave(IL.LeaveInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Leave(IL.LeaveInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Arglist(IL.ArglistInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Arglist(IL.ArglistInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.BinaryComparison(IL.BinaryComparisonInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.BinaryComparison(IL.BinaryComparisonInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Localalloc(IL.LocalallocInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Localalloc(IL.LocalallocInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Endfilter(IL.EndfilterInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Endfilter(IL.EndfilterInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.InitObj(IL.InitObjInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.InitObj(IL.InitObjInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Cpblk(IL.CpblkInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Cpblk(IL.CpblkInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Initblk(IL.InitblkInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Initblk(IL.InitblkInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Prefix(IL.PrefixInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Prefix(IL.PrefixInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Rethrow(IL.RethrowInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Rethrow(IL.RethrowInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Sizeof(IL.SizeofInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Sizeof(IL.SizeofInstruction instruction, Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<CodeTransformationStage.Context>.Refanytype(IL.RefanytypeInstruction instruction, CodeTransformationStage.Context ctx)
+		void IL.IILVisitor<Context>.Refanytype(IL.RefanytypeInstruction instruction, Context ctx)
 		{
 		}
 		#endregion
 
 		#region IR
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.AddressOfInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.AddressOfInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.ArithmeticShiftRightInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.ArithmeticShiftRightInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.BranchInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.BranchInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.CallInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.CallInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.EpilogueInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.EpilogueInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.FloatingPointCompareInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.FloatingPointCompareInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.FloatingPointToIntegerConversionInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.FloatingPointToIntegerConversionInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.IntegerCompareInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.IntegerCompareInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.IntegerToFloatingPointConversionInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.IntegerToFloatingPointConversionInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.JmpInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.JmpInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.LiteralInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.LiteralInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.LoadInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.LoadInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.PhiInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.PhiInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.PopInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.PopInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.PrologueInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.PrologueInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.PushInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.PushInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.MoveInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.MoveInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.ReturnInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.ReturnInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.ShiftLeftInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.ShiftLeftInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.ShiftRightInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.ShiftRightInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.SignExtendedMoveInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.SignExtendedMoveInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.StoreInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.StoreInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.UDivInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.UDivInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.URemInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.URemInstruction instruction, Context ctx)
 		{
 		}
 
-		void IR.IIRVisitor<CodeTransformationStage.Context>.Visit(IR.ZeroExtendedMoveInstruction instruction, Context ctx)
+		void IR.IIRVisitor<Context>.Visit(IR.ZeroExtendedMoveInstruction instruction, Context ctx)
 		{
 		}
 		#endregion

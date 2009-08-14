@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Mosa.Kernel.Memory;
 
 namespace Mosa.Tools.Compiler

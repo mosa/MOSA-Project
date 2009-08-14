@@ -99,7 +99,7 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Retrieves the stack type from a sig type.
+        /// Retrieves the stack type From a sig type.
         /// </summary>
         /// <param name="type">The signature type to convert to a stack type code.</param>
         /// <returns>The equivalent stack type code.</returns>
@@ -141,7 +141,7 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Sigs the type of the type from stack.
+        /// Sigs the type of the type From stack.
         /// </summary>
         /// <param name="typeCode">The type code.</param>
         /// <returns></returns>

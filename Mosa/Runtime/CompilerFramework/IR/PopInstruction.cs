@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -14,7 +14,7 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.IR
 {
     /// <summary>
-    /// Intermediate representation of a pop operation, that removes the topmost element from the stack and
+    /// Intermediate representation of a pop operation, that removes the topmost element From the stack and
     /// places it in the destination operand.
     /// </summary>
     public class PopInstruction : Instruction

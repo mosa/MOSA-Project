@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -38,7 +38,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="type">The type of data held in the operand.</param>
         /// <param name="base">The base register, if this is an indirect access.</param>
-        /// <param name="offset">The offset from the base register or absolute address to retrieve.</param>
+        /// <param name="offset">The offset From the base register or absolute address to retrieve.</param>
         public MemoryOperand(SigType type, Register @base, IntPtr offset) :
             base(type)
         {
@@ -59,7 +59,7 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Retrieves the offset from the base register, or the absolute address if base is null.
+        /// Retrieves the offset From the base register, or the absolute address if base is null.
         /// </summary>
         public IntPtr Offset
         {

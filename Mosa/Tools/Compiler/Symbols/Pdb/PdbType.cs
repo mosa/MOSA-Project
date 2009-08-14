@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,7 +34,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
         /// <summary>
         /// Initializes a new instance of the <see cref="PdbType"/> class.
         /// </summary>
-        /// <param name="reader">The reader to initialize from.</param>
+        /// <param name="reader">The reader to initialize From.</param>
         protected PdbType(BinaryReader reader)
         {
             this.unknown1 = reader.ReadInt32();

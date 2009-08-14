@@ -116,7 +116,7 @@ namespace Mosa.Runtime.CompilerFramework
 			prologue.Index = 0;
 			basicBlocks.Add(prologue);
 
-			// Add a jump instruction to the first block from the prologue
+			// Add a jump instruction to the first block From the prologue
 			prologue.Instructions.Insert(0, arch.CreateInstruction(typeof(BranchInstruction), OpCode.Br, new[] { 0 }));
 
 			// Create the epilogue block
@@ -237,7 +237,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Retrieves a basic block from its label.
+		/// Retrieves a basic block From its label.
 		/// </summary>
 		/// <param name="label">The label of the basic block.</param>
 		/// <returns>

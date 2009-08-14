@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
     /// Represents a basic jump instruction.
     /// </summary>
     /// <remarks>
-    /// Other more complex method invocation instructions derive from this class, specifically the CallInstruction,
+    /// Other more complex method invocation instructions derive From this class, specifically the CallInstruction,
     /// the CalliInstruction and CallvirtInstruction classes. They share the features provided by the JumpInstruction.
     /// </remarks>
     public class JumpInstruction : InvokeInstruction

@@ -71,7 +71,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Initializes a new instance of <see cref="BasicBlock"/>.
 		/// </summary>
-		/// <param name="label">The label of the block (IL instruction offset from the method start.)</param>
+		/// <param name="label">The label of the block (IL instruction offset From the method start.)</param>
 		public BasicBlock(int label) :
 			this()
 		{
@@ -196,7 +196,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Create a new basic block
 			BasicBlock result = new BasicBlock(_instructions.GetRange(index, length), label);
 
-			// Remove the range of instructions from this block
+			// Remove the range of instructions From this block
 			_instructions.RemoveRange(index, length);
 
 			return result;

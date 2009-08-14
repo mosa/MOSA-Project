@@ -153,7 +153,7 @@ namespace Mosa.Runtime.CompilerFramework
             // Iterate until the worklist is empty
             while (0 != workList.Count)
             {
-                // Remove the block from the queue
+                // Remove the block From the queue
                 WorkItem workItem = workList.Dequeue();
 
                 // Transform the block

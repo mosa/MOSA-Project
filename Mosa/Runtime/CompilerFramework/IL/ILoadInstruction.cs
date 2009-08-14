@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,7 +9,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
     /// </summary>
     /// <remarks>
     /// This interface is used by <see cref="CilToIrTransformationStage"/> to drop 
-    /// load instructions from the instruction stream. It uses the interface to determine
+    /// load instructions From the instruction stream. It uses the interface to determine
     /// the appropriate operands to replace/remove.
     /// </remarks>
     public interface ILoadInstruction

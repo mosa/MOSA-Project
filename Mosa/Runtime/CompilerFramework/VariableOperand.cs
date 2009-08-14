@@ -7,11 +7,6 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -70,7 +65,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns></returns>
         public override object Clone()
         {
-            return new LocalVariableOperand(this.Base, _name, -(base.Offset.ToInt32()/4), this.Type);
+            return new LocalVariableOperand(Base, _name, -(Offset.ToInt32()/4), Type);
         }
 
         #endregion // StackOperand overrides

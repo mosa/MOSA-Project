@@ -86,12 +86,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
         /// <remarks>
         /// This method is used by instructions to retrieve immediate operands
-        /// from the instruction stream.
+        /// From the instruction stream.
         /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
             /*
-             * HACK: We need to remove the this parameter from the operand list, as it
+             * HACK: We need to remove the this parameter From the operand list, as it
              * is not available yet. It is implicitly created by newobj and appropriately
              * passed. So we do as if it doesn't exist. Upon instruction expansion a call
              * to the allocator is inserted and its result is the this pointer passed. This

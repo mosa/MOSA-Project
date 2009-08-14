@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -292,7 +292,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             /* FIXME:
              * 
              * - Newobj is actually three things at once:
-             *   - Find the type from the token
+             *   - Find the type From the token
              *   - Allocate memory for the found type
              *   - Invoke the ctor with the arguments
              * - We're rewriting it exactly as specified above, e.g. first we find

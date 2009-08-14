@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -60,7 +60,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 			// The blob data
 			byte[] blob = null;
 
-			// Try to load the blob from the module
+			// Try to load the blob From the module
 			module.Metadata.Read(attributeBlob, out blob);
 			if (null != blob) {
 				if (0 != blob.Length) {
@@ -121,7 +121,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 		/// Parses a fixed argument in an attribute blob definition.
 		/// </summary>
 		/// <param name="module">The metadata module, which contains the attribute blob.</param>
-		/// <param name="reader">The binary reader to read it from.</param>
+		/// <param name="reader">The binary reader to read it From.</param>
 		/// <param name="sigType">The signature type of the value to read.</param>
 		/// <returns></returns>
 		private static object ParseFixedArg(IMetadataModule module, BinaryReader reader, SigType sigType)
@@ -143,7 +143,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 		/// Parses an SZArray attribute value.
 		/// </summary>
 		/// <param name="module">The metadata module, which contains the attribute blob.</param>
-		/// <param name="reader">The binary reader used to read from the attribute blob.</param>
+		/// <param name="reader">The binary reader used to read From the attribute blob.</param>
 		/// <param name="sigType">Type of the SZArray.</param>
 		/// <returns>An Array, which represents the SZArray definition.</returns>
 		private static object ParseSZArrayArg(IMetadataModule module, BinaryReader reader, SZArraySigType sigType)
@@ -172,9 +172,9 @@ namespace Mosa.Runtime.Metadata.Blobs
 		/// Parses an elementary field, parameter or property definition.
 		/// </summary>
 		/// <param name="module">The metadata module, which contains the attribute blob.</param>
-		/// <param name="reader">The binary reader to read data from.</param>
+		/// <param name="reader">The binary reader to read data From.</param>
 		/// <param name="sigType">The signature type of the field, parameter or property to read.</param>
-		/// <returns>An object, which represents the value read from the attribute blob.</returns>
+		/// <returns>An object, which represents the value read From the attribute blob.</returns>
 		/// <exception cref="System.NotSupportedException"><paramref name="sigType"/> is not yet supported.</exception>
 		private static object ParseElem(IMetadataModule module, BinaryReader reader, SigType sigType)
 		{
@@ -286,7 +286,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 		/// <summary>
 		/// Parses a string definition for an attribute field, parameter or property definition.
 		/// </summary>
-		/// <param name="reader">The binary reader to read from.</param>
+		/// <param name="reader">The binary reader to read From.</param>
 		/// <returns>A string, which represents the value read.</returns>
 		private static string ParseSerString(BinaryReader reader)
 		{
@@ -303,7 +303,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 		}
 
 		/// <summary>
-		/// Gets the type from the signature type.
+		/// Gets the type From the signature type.
 		/// </summary>
 		/// <param name="sigType">The signature type.</param>
 		/// <returns>The System.Type represented by the signature type.</returns>

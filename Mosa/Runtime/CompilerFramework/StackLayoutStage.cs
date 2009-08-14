@@ -103,7 +103,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
             else
             {
-                // Iterate all Blocks and collect locals from all Blocks
+                // Iterate all Blocks and collect locals From all Blocks
                 foreach (BasicBlock block in blockProvider)
                     CollectLocalVariables(locals, block.Instructions);
 

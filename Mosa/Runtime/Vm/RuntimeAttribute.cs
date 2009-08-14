@@ -59,7 +59,7 @@ namespace Mosa.Runtime.Vm
         /// Populates the <see cref="RuntimeAttribute"/> with the values in <paramref name="car"/>.
         /// </summary>
         /// <param name="module">The metadata module, which defines the attribute.</param>
-        /// <param name="car">The custom attribute row from metadata.</param>
+        /// <param name="car">The custom attribute row From metadata.</param>
         public RuntimeAttribute(IMetadataModule module, CustomAttributeRow car)
         {
             _attribute = null;

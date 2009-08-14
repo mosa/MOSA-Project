@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 // <copyright file="StackRegisterAllocator.cs" company="(C) 2008-2009 MOSA - The Managed Operating System Alliance">
 //  
 // (c) 2008-2009 MOSA - The Managed Operating System Alliance
@@ -123,7 +123,7 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Pops the operands of an instruction from the evaluation stack.
+        /// Pops the operands of an instruction From the evaluation stack.
         /// </summary>
         /// <param name="instruction">The instruction.</param>
         /// <returns>The number of operands popped.</returns>
@@ -197,7 +197,7 @@ namespace Mosa.Runtime.CompilerFramework
                 return;
             }
 
-            // If the instruction has operands, these are popped from the IL stack.
+            // If the instruction has operands, these are popped From the IL stack.
             int pops = this.PopOperands(instruction);
 
             // If an instruction has a result, it is pushed onto the evaluation stack.
@@ -233,7 +233,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Synchronizes the eval stack after an instruction.
         /// </summary>
-        /// <param name="entries">The number of stack entries to retrieve from the processor stack.</param>
+        /// <param name="entries">The number of stack entries to retrieve From the processor stack.</param>
         private void SyncEvalStack(int entries)
         {
         }

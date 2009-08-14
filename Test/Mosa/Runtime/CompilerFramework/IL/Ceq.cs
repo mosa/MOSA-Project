@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -91,7 +91,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for boolean operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, true, true)]
@@ -109,7 +109,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for boolean operands with right value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, true, true)]
@@ -127,7 +127,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for boolean operands with left value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, true, true)]
@@ -147,7 +147,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for char operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -165,7 +165,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for char operands with right value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(false, 0, 'a')]
@@ -182,7 +182,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for char operands with left value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(false, 'a', 0)]
@@ -201,7 +201,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I1 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -225,7 +225,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I1 operands with right value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -243,7 +243,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I1 operands with left value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -263,7 +263,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I2 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -287,7 +287,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I2 operands with right value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -305,7 +305,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I2 operands with left value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -325,7 +325,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I4 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -349,7 +349,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I2 operands with right value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -367,7 +367,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I2 operands with left value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -387,7 +387,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I8 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0L, 0L)]
@@ -411,7 +411,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I8 operands with right value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -429,7 +429,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for I8 operands with left value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -449,7 +449,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for U1 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -473,7 +473,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for U1 operands with right value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -491,7 +491,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for U1 operands with left value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -511,7 +511,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for U2 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -535,7 +535,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for U2 operands with right value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -553,7 +553,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for U2 operands with left value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -573,7 +573,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for U4 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -597,7 +597,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for U4 operands with right value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -615,7 +615,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for U4 operands with left value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -635,7 +635,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for U4 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -659,7 +659,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for U8 operands with right value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -677,7 +677,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for U8 operands with left value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0, 0)]
@@ -697,7 +697,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for R4 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0.0f, 0.0f)]
@@ -721,7 +721,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for R4 operands with right value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0f, 0f)]
@@ -741,7 +741,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for R4 operands with left value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0f, 0f)]
@@ -763,7 +763,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for R8 operands.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0.0, 0.0)]
@@ -787,7 +787,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for R8 operands with right value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0.0, 0.0)]
@@ -805,7 +805,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests support for the ceq IL operation for R8 operands with left value constant.
         /// </summary>
-        /// <param name="result">The expected return value from the compiled code.</param>
+        /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
         [Row(true, 0.0, 0.0)]

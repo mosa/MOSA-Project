@@ -146,7 +146,7 @@ namespace Mosa.Runtime {
 		public extern static bool IsInstanceOfType(object obj, UIntPtr typeHandle);
 
         /// <summary>
-        /// Copies bytes from the source to destination.
+        /// Copies bytes From the source to destination.
         /// </summary>
         /// <param name="destination">The destination.</param>
         /// <param name="source">The source.</param>

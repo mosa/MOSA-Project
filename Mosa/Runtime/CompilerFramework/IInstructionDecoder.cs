@@ -28,63 +28,63 @@ namespace Mosa.Runtime.CompilerFramework
         RuntimeMethod Method { get; }
 
         /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// Decodes <paramref name="value"/> From the instruction stream.
         /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
+        /// <param name="value">Receives the decoded value From the instruction stream.</param>
         void Decode(out byte value);
 
         /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// Decodes <paramref name="value"/> From the instruction stream.
         /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
+        /// <param name="value">Receives the decoded value From the instruction stream.</param>
         void Decode(out sbyte value);
 
         /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// Decodes <paramref name="value"/> From the instruction stream.
         /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
+        /// <param name="value">Receives the decoded value From the instruction stream.</param>
         void Decode(out short value);
 
         /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// Decodes <paramref name="value"/> From the instruction stream.
         /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
+        /// <param name="value">Receives the decoded value From the instruction stream.</param>
         void Decode(out ushort value);
 
         /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// Decodes <paramref name="value"/> From the instruction stream.
         /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
+        /// <param name="value">Receives the decoded value From the instruction stream.</param>
         void Decode(out int value);
 
         /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// Decodes <paramref name="value"/> From the instruction stream.
         /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
+        /// <param name="value">Receives the decoded value From the instruction stream.</param>
         void Decode(out uint value);
 
         /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// Decodes <paramref name="value"/> From the instruction stream.
         /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
+        /// <param name="value">Receives the decoded value From the instruction stream.</param>
         void Decode(out long value);
 
         /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// Decodes <paramref name="value"/> From the instruction stream.
         /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
+        /// <param name="value">Receives the decoded value From the instruction stream.</param>
         void Decode(out float value);
 
         /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// Decodes <paramref name="value"/> From the instruction stream.
         /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
+        /// <param name="value">Receives the decoded value From the instruction stream.</param>
         void Decode(out double value);
 
         /// <summary>
-        /// Decodes <paramref name="value"/> from the instruction stream.
+        /// Decodes <paramref name="value"/> From the instruction stream.
         /// </summary>
-        /// <param name="value">Receives the decoded value from the instruction stream.</param>
+        /// <param name="value">Receives the decoded value From the instruction stream.</param>
         void Decode(out TokenTypes value);
     }
 }

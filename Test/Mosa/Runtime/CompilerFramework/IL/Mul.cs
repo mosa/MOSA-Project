@@ -482,7 +482,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         [Row(23, 21)]
-        //[Row(23, 148)] FIXME: Uncommenting this crashes the testrunner
+        [Row(23, 148)]
         [Row(17, 1)]
         [Row(0, 0)]
         [Row(ushort.MinValue, ushort.MaxValue)]
@@ -499,7 +499,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         [Row(23, 21)]
-        //[Row(23, 148)] FIXME: Uncommenting this crashes the testrunner
+        [Row(23, 148)] 
         [Row(17, 1)]
         [Row(0, 0)]
         [Row(ushort.MinValue, ushort.MaxValue)]
@@ -591,7 +591,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         [Row(-23, 21)]
-        //[Row(-23, 148)] FIXME: Uncommenting this crashes the testrunner
+        [Row(-23, 148)] 
         [Row(17, 1)]
         [Row(0, 0)]
         [Row(int.MinValue, int.MaxValue)]
@@ -608,7 +608,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         [Row(-23, 21)]
-        //[Row(-23, 148)] FIXME: Uncommenting this crashes the testrunner
+        [Row(-23, 148)]
         [Row(17, 1)]
         [Row(0, 0)]
         [Row(int.MinValue, int.MaxValue)]
@@ -678,7 +678,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         [Row(23, 21)]
-        //[Row(23, 148)] FIXME: Uncommenting this crashes the testrunner
+        [Row(23, 148)]
         [Row(17, 1)]
         [Row(0, 0)]
         [Row(uint.MinValue, uint.MaxValue)]
@@ -695,7 +695,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         [Row(23, 21)]
-        //[Row(23, 148)] FIXME: Uncommenting this crashes the testrunner
+        [Row(23, 148)] 
         [Row(17, 1)]
         [Row(0, 0)]
         [Row(uint.MinValue, uint.MaxValue)]

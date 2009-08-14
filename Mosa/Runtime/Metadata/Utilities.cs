@@ -61,7 +61,7 @@ namespace Mosa.Runtime.Metadata
         /// Reads an (optional) custom modifier
         /// </summary>
         /// <param name="provider">The provider.</param>
-        /// <param name="buffer">The buffer to read the modifier from.</param>
+        /// <param name="buffer">The buffer to read the modifier From.</param>
         /// <param name="index">The start index, where the modifier is expected.</param>
         /// <returns></returns>
         public static bool ReadCustomMod(IMetadataProvider provider, byte[] buffer, ref int index)

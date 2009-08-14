@@ -81,7 +81,7 @@ namespace Mosa.Tools.Compiler.Boot
 
 		/// <summary>
 		/// Multiboot flag, which indicates a non-elf binary to boot and that
-		/// settings for the executable file should be read from the boot _header
+		/// settings for the executable file should be read From the boot _header
 		/// instead of the executable _header.
 		/// </summary>
 		private const uint HEADER_MB_FLAG_NON_ELF_BINARY = 0x00010000U;
@@ -243,7 +243,7 @@ namespace Mosa.Tools.Compiler.Boot
 				uint header_addr = 0;
 				// load_addr is the base virtualAddress of the binary in memory
 				uint load_addr = 0;
-				// load_end_addr holds the virtualAddress past the last byte to load from the image
+				// load_end_addr holds the virtualAddress past the last byte to load From the image
 				uint load_end_addr = 0;
 				// bss_end_addr is the virtualAddress of the last byte to be zeroed out
 				uint bss_end_addr = 0;

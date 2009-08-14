@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
     /// </summary>
     /// <remarks>
     /// This interface is used by <see cref="CilToIrTransformationStage"/> to drop 
-    /// store instructions from the instruction stream. It uses the interface to determine
+    /// store instructions From the instruction stream. It uses the interface to determine
     /// the appropriate operands to replace/remove.
     /// </remarks>
     public interface IStoreInstruction

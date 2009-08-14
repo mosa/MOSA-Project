@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -146,7 +146,7 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Methods
 
 		/// <summary>
-		/// Removes the current instruction from the instruction stream.
+		/// Removes the current instruction From the instruction stream.
 		/// </summary>
 		/// <param name="ctx">The context of the instruction to remove.</param>
 		protected void Remove(Context ctx)
@@ -200,7 +200,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Links the Blocks.
 		/// </summary>
 		/// <param name="from">The block issuing the jump.</param>
-		/// <param name="to">The block, where from is jumping to.</param>
+		/// <param name="to">The block, where From is jumping to.</param>
 		protected void LinkBlocks(BasicBlock from, BasicBlock to)
 		{
 			Debug.Assert(false == from.NextBlocks.Contains(to), @"A link already exists?");

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -15,7 +15,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// Used to mark specific language elements as architecture specific code.
     /// </summary>
     /// <remarks>
-    /// Adding this attribute will exclude the language element from compilation, 
+    /// Adding this attribute will exclude the language element From compilation, 
     /// if it the compilation architecture does not match the named architecture type.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Class|AttributeTargets.Struct|AttributeTargets.Method|AttributeTargets.Property|AttributeTargets.Field|AttributeTargets.Enum|AttributeTargets.Delegate|AttributeTargets.Constructor|AttributeTargets.Assembly|AttributeTargets.Event|AttributeTargets.Interface|AttributeTargets.Module)]

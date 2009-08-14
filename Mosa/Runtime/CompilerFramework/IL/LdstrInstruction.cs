@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Initializes the arithmetic instruction.
         /// </summary>
-        /// <param name="decoder">The decoder to initialize from.</param>
+        /// <param name="decoder">The decoder to initialize From.</param>
         public override void Decode(IInstructionDecoder decoder)
         {
             // Decode base classes first

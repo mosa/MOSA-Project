@@ -76,7 +76,7 @@ namespace Mosa.Runtime.Linker.PE
 		#region Methods
 
         /// <summary>
-        /// Loads IMAGE_SECTION_HEADER from the reader.
+        /// Loads IMAGE_SECTION_HEADER From the reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
 		public void Read(BinaryReader reader)

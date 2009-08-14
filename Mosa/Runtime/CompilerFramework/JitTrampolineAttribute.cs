@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework {
 	/// <remarks>
 	/// The marked method is called in place of actual methods, which were not yet
 	/// jitted to the native platform. Usually this attribute is applied to a method
-	/// in the used Runtime along with a naked attribute, which prevents the method from
+	/// in the used Runtime along with a naked attribute, which prevents the method From
 	/// having its own stack frame.
 	/// <para/>
 	/// The method, which was marked with the attribute must be static.

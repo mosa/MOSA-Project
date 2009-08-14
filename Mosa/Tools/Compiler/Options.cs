@@ -60,8 +60,8 @@
 // used (i.e. the separate values should be distinct arguments), then "{}"
 // should be used as the separator.
 //
-// Options are extracted either from the current option by looking for
-// the option name followed by an '=' or ':', or is taken from the
+// Options are extracted either From the current option by looking for
+// the option name followed by an '=' or ':', or is taken From the
 // following option IFF:
 //  - The current option does not contain a '=' or a ':'
 //  - The current option requires a value (i.e. not a Option type of ':')
@@ -74,7 +74,7 @@
 //   - '-' is used to start the option group
 //   - all of the bundled options are a single character
 //   - at most one of the bundled options accepts a value, and the value
-//     provided starts from the next character to the end of the string.
+//     provided starts From the next character to the end of the string.
 //
 // This allows specifying '-a -b -c' as '-abc', and specifying '-D name=value'
 // as '-Dname=value'.
@@ -82,7 +82,7 @@
 // Option processing is disabled by specifying "--".  All options after "--"
 // are returned by OptionSet.Parse() unchanged and unprocessed.
 //
-// Unprocessed options are returned from OptionSet.Parse().
+// Unprocessed options are returned From OptionSet.Parse().
 //
 // Examples:
 //  int verbose = 0;

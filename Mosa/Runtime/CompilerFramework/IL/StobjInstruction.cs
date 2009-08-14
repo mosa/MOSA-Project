@@ -91,7 +91,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
         /// <remarks>
         /// This method is used by instructions to retrieve immediate operands
-        /// from the instruction stream.
+        /// From the instruction stream.
         /// </remarks>
         public override void Decode(IInstructionDecoder decoder)
         {
@@ -101,7 +101,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Do we have a type?
             if (null == _valueType)
             {
-                // No, retrieve a type reference from the immediate argument
+                // No, retrieve a type reference From the immediate argument
                 TokenTypes token;
                 decoder.Decode(out token);
                 throw new NotImplementedException();

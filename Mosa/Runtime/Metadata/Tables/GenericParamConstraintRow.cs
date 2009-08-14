@@ -72,11 +72,11 @@ namespace Mosa.Runtime.Metadata.Tables
         #region Methods
 
         /// <summary>
-        /// Loads a <see cref="Mosa.Runtime.Metadata.TokenTypes.GenericParamConstraint"/> from the given table heap.
+        /// Loads a <see cref="Mosa.Runtime.Metadata.TokenTypes.GenericParamConstraint"/> From the given table heap.
         /// </summary>
         /// <param name="provider">The <see cref="Mosa.Runtime.Metadata.IMetadataProvider"/>, which contains the row.</param>
-        /// <param name="reader">The reader to read the row from.</param>
-        /// <param name="table">The table token type to read from.</param>
+        /// <param name="reader">The reader to read the row From.</param>
+        /// <param name="table">The table token type to read From.</param>
         public void Load(IMetadataProvider provider, BinaryReader reader, TokenTypes table)
 		{
 			if (table != TokenTypes.GenericParamConstraint)

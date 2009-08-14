@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -34,7 +34,7 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Copies bytes from the source to destination.
+        /// Copies bytes From the source to destination.
         /// </summary>
         /// <param name="destination">The destination.</param>
         /// <param name="source">The source.</param>

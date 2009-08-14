@@ -36,7 +36,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 		Debug = 0x02,
 
         /// <summary>
-        /// Used to mark operations, which can safely be removed from the code stream (they're replaced by nops in the first pass and
+        /// Used to mark operations, which can safely be removed From the code stream (they're replaced by nops in the first pass and
         /// dropped in later stages, if they're not a branch target.)
         /// </summary>
         Drop = 0x04,

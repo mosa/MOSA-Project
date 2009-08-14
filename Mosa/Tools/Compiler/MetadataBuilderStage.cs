@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
@@ -26,17 +25,6 @@ namespace Mosa.Tools.Compiler
 		#region Data Members
 
 		#endregion // Data Members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MetadataBuilderStage"/> class.
-		/// </summary>
-		public MetadataBuilderStage()
-		{
-		}
-
-		#endregion // Construction
 
 		#region IAssemblyCompilerStage Members
 
@@ -60,7 +48,7 @@ namespace Mosa.Tools.Compiler
 				throw new InvalidOperationException(@"Can't run without a linker.");
 
 			// FIXME: Retrieve the compilation target assembly
-			// HACK: Using Metadata from source assembly, rather than re-create it from scratch from the target assembly
+			// HACK: Using Metadata From source assembly, rather than re-create it From scratch From the target assembly
 			IMetadataModule module = compiler.Assembly;
 
 			ExportCilMetadata(module, linker);
@@ -83,11 +71,11 @@ namespace Mosa.Tools.Compiler
 			 * - Write metadata root
 			 * - Write the CIL tables (modified)
 			 * - Write the MOSA tables (new)
-			 * - Write the strings, guid and blob heap (unchanged from original module)
+			 * - Write the strings, guid and blob heap (unchanged From original module)
 			 */
 
 			// Metadata is in the .text section in order to make it relocatable everywhere.
-			using (Stream stream = linker.Allocate(Mosa.Runtime.Metadata.Symbol.Name, SectionKind.Text, module.Metadata.Metadata.Length, 0))
+			using (Stream stream = linker.Allocate(Runtime.Metadata.Symbol.Name, SectionKind.Text, module.Metadata.Metadata.Length, 0))
 
 			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII)) {
 				bw.Write(module.Metadata.Metadata);

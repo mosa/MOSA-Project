@@ -307,7 +307,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Row(23, 21)]
         [Row(17, 1)]
         [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        //[Row(byte.MinValue, byte.MaxValue)] FIXME: Uncommenting this lets the test runner freeze
+        [Row(byte.MinValue, byte.MaxValue)]
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void RemConstantU1Right(byte a, byte b)
         {
