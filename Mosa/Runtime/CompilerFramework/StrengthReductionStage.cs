@@ -474,6 +474,11 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 		}
 
+		/// <summary>
+		/// Arithmetics the overflow.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The CTX.</param>
 	    public void ArithmeticOverflow(IL.ArithmeticOverflowInstruction instruction, Context ctx)
 		{
 		}
