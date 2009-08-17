@@ -1671,39 +1671,15 @@ namespace Mosa.Platforms.x86
 			BasicBlock[] blocks = CreateEmptyBlocks(2);
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
 
-		    Operand op1H, op1L, op2H, op2L;
+		    	Operand op1H, op1L, op2H, op2L;
 			SplitLongOperand(instruction.Operands[0], out op1L, out op1H);
-			SplitLongOperand(instruction.Operands[1], out op2L, out op2H);
+			SplitLongOperand(new ConstantOperand(new SigType(CilElementType.I4), (int)0), out op2L, out op2H);
 			IR.ConditionCode code;
 
 			switch (instruction.Code) {
 				// Signed
-				case IL.OpCode.Beq_s: code = IR.ConditionCode.Equal; break;
-				case IL.OpCode.Bge_s: code = IR.ConditionCode.GreaterOrEqual; break;
-				case IL.OpCode.Bgt_s: code = IR.ConditionCode.GreaterThan; break;
-				case IL.OpCode.Ble_s: code = IR.ConditionCode.LessOrEqual; break;
-				case IL.OpCode.Blt_s: code = IR.ConditionCode.LessThan; break;
-
-				// Unsigned
-				case IL.OpCode.Bne_un_s: code = IR.ConditionCode.NotEqual; break;
-				case IL.OpCode.Bge_un_s: code = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-				case IL.OpCode.Bgt_un_s: code = IR.ConditionCode.UnsignedGreaterThan; break;
-				case IL.OpCode.Ble_un_s: code = IR.ConditionCode.UnsignedLessOrEqual; break;
-				case IL.OpCode.Blt_un_s: code = IR.ConditionCode.UnsignedLessThan; break;
-
-				// Long form signed
-				case IL.OpCode.Beq: goto case IL.OpCode.Beq_s;
-				case IL.OpCode.Bge: goto case IL.OpCode.Bge_s;
-				case IL.OpCode.Bgt: goto case IL.OpCode.Bgt_s;
-				case IL.OpCode.Ble: goto case IL.OpCode.Ble_s;
-				case IL.OpCode.Blt: goto case IL.OpCode.Blt_s;
-
-				// Long form unsigned
-				case IL.OpCode.Bne_un: goto case IL.OpCode.Bne_un_s;
-				case IL.OpCode.Bge_un: goto case IL.OpCode.Bge_un_s;
-				case IL.OpCode.Bgt_un: goto case IL.OpCode.Bgt_un_s;
-				case IL.OpCode.Ble_un: goto case IL.OpCode.Ble_un_s;
-				case IL.OpCode.Blt_un: goto case IL.OpCode.Blt_un_s;
+				case IL.OpCode.Brfalse: code = IR.ConditionCode.Equal; break;
+				case IL.OpCode.Brtrue: code = IR.ConditionCode.NotEqual; break;
 
 				default:
 					throw new NotImplementedException();
@@ -1733,6 +1709,9 @@ namespace Mosa.Platforms.x86
                 new IR.BranchInstruction(code, targets[0]),
                 new IR.JmpInstruction(targets[1]),
             });
+			LinkBlocks(blocks, blocks[0], blocks[1]);
+			LinkBlocks(blocks, blocks[0], nextBlock);
+			LinkBlocks(blocks, blocks[1], nextBlock);
 
 			Remove(ctx);
 		}
