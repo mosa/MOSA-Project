@@ -422,6 +422,18 @@ namespace Mosa.Tools.Compiler.Linkers
 
         #endregion // IAssemblyLinker Members
 
+        /// <summary>
+        /// Gets the underlying implementation instance
+        /// </summary>
+        public IAssemblyLinker Implementation
+        {
+            get
+            {
+                CheckImplementation();
+                return this.implementation;
+            }
+        }
+
         #region Internals
 
         /// <summary>
