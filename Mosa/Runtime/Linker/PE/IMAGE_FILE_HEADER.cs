@@ -23,6 +23,11 @@ namespace Mosa.Runtime.Linker.PE
         /// The PE machine type for I386.
         /// </summary>
 		public const ushort IMAGE_FILE_MACHINE_I386 = 0x014c;
+		
+		/// <summary>
+		/// The PE machine type for AMD64.
+		/// </summary>
+		public const ushort IMAGE_FILE_MACHINE_AMD64 = 0x8664;
 
         /// <summary>
         /// Characteristic flag, which indicates the file is a DLL.
@@ -86,7 +91,8 @@ namespace Mosa.Runtime.Linker.PE
             this.SizeOfOptionalHeader = reader.ReadUInt16();
             this.Characteristics = reader.ReadUInt16();
 
-            if (this.Machine != IMAGE_FILE_MACHINE_I386)
+            if (this.Machine != IMAGE_FILE_MACHINE_I386
+                && this.Machine != IMAGE_FILE_MACHINE_AMD64)
 				throw new BadImageFormatException(@"Unknown machine identifier type.");
 		}
 
