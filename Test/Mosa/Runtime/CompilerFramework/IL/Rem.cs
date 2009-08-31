@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using MbUnit.Framework;
+using NUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
@@ -93,11 +93,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(17, 128)]
-        [Row('a', 'Z')]
-        [Row(char.MinValue, char.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(17, 128)]
+        [TestCase('a', 'Z')]
+        [TestCase(char.MinValue, char.MaxValue)]
+        [Test]
         public void RemC(char a, char b)
         {
             CodeSource = CreateTestCode("RemC", "char", "char");
@@ -111,10 +111,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(0, 'a')]
-        [Row('-', '.')]
-        [Row('a', 'Z')]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 'a')]
+        [TestCase('-', '.')]
+        [TestCase('a', 'Z')]
+        [Test]
         public void RemConstantCRight(char a, char b)
         {
             CodeSource = CreateConstantTestCode("RemConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
@@ -126,10 +126,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row('a', 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row('-', '.')]
-        [Row('a', 'Z')]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase('a', 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase('-', '.')]
+        [TestCase('a', 'Z')]
+        [Test]
         public void RemConstantCLeft(char a, char b)
         {
             CodeSource = CreateConstantTestCode("RemConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
@@ -152,59 +152,59 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(-17, -2)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(1, -2)]
+        [TestCase(-1, 2)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(-17, -2)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
+        [TestCase(-2, 1)]
+        [TestCase(2, -1)]
+        [TestCase(-2, -17)]
         // (MinValue, X) Cases
-        [Row(sbyte.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(sbyte.MinValue, 1)]
-        [Row(sbyte.MinValue, 17)]
-        [Row(sbyte.MinValue, 123)]
-        [Row(sbyte.MinValue, -0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(sbyte.MinValue, -1)]
-        [Row(sbyte.MinValue, -17)]
-        [Row(sbyte.MinValue, -123)]
+        [TestCase(sbyte.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(sbyte.MinValue, 1)]
+        [TestCase(sbyte.MinValue, 17)]
+        [TestCase(sbyte.MinValue, 123)]
+        [TestCase(sbyte.MinValue, -0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(sbyte.MinValue, -1)]
+        [TestCase(sbyte.MinValue, -17)]
+        [TestCase(sbyte.MinValue, -123)]
         // (MaxValue, X) Cases
-        [Row(sbyte.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(sbyte.MaxValue, 1)]
-        [Row(sbyte.MaxValue, 17)]
-        [Row(sbyte.MaxValue, 123)]
-        [Row(sbyte.MaxValue, -0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(sbyte.MaxValue, -1)]
-        [Row(sbyte.MaxValue, -17)]
-        [Row(sbyte.MaxValue, -123)]
+        [TestCase(sbyte.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(sbyte.MaxValue, 1)]
+        [TestCase(sbyte.MaxValue, 17)]
+        [TestCase(sbyte.MaxValue, 123)]
+        [TestCase(sbyte.MaxValue, -0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(sbyte.MaxValue, -1)]
+        [TestCase(sbyte.MaxValue, -17)]
+        [TestCase(sbyte.MaxValue, -123)]
         // (X, MinValue) Cases
-        [Row(0, sbyte.MinValue)]
-        [Row(1, sbyte.MinValue)]
-        [Row(17, sbyte.MinValue)]
-        [Row(123, sbyte.MinValue)]
-        [Row(-0, sbyte.MinValue)]
-        [Row(-1, sbyte.MinValue)]
-        [Row(-17, sbyte.MinValue)]
-        [Row(-123, sbyte.MinValue)]
+        [TestCase(0, sbyte.MinValue)]
+        [TestCase(1, sbyte.MinValue)]
+        [TestCase(17, sbyte.MinValue)]
+        [TestCase(123, sbyte.MinValue)]
+        [TestCase(-0, sbyte.MinValue)]
+        [TestCase(-1, sbyte.MinValue)]
+        [TestCase(-17, sbyte.MinValue)]
+        [TestCase(-123, sbyte.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, sbyte.MaxValue)]
-        [Row(1, sbyte.MaxValue)]
-        [Row(17, sbyte.MaxValue)]
-        [Row(123, sbyte.MaxValue)]
-        [Row(-0, sbyte.MaxValue)]
-        [Row(-1, sbyte.MaxValue)]
-        [Row(-17, sbyte.MaxValue)]
-        [Row(-123, sbyte.MaxValue)]
+        [TestCase(0, sbyte.MaxValue)]
+        [TestCase(1, sbyte.MaxValue)]
+        [TestCase(17, sbyte.MaxValue)]
+        [TestCase(123, sbyte.MaxValue)]
+        [TestCase(-0, sbyte.MaxValue)]
+        [TestCase(-1, sbyte.MaxValue)]
+        [TestCase(-17, sbyte.MaxValue)]
+        [TestCase(-123, sbyte.MaxValue)]
         // Extremvaluecases
-        [Row(sbyte.MinValue, sbyte.MaxValue)]
-        [Row(sbyte.MaxValue, sbyte.MinValue)]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(sbyte.MinValue, sbyte.MaxValue)]
+        [TestCase(sbyte.MaxValue, sbyte.MinValue)]
+        [TestCase(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Test]
         public void RemI1(sbyte a, sbyte b)
         {
             CodeSource = CreateTestCodeWithReturn("RemI1", "sbyte", "int");
@@ -218,11 +218,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(2, -17)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(2, -17)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(sbyte.MinValue, sbyte.MaxValue)]
+        [Test]
         public void RemConstantI1Right(sbyte a, sbyte b)
         {
             CodeSource = CreateConstantTestCode("RemConstantI1Right", "sbyte", "sbyte", null, b.ToString());
@@ -234,11 +234,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(2, -17)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(2, -17)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(sbyte.MinValue, sbyte.MaxValue)]
+        [Test]
         public void RemConstantI1Left(sbyte a, sbyte b)
         {
             CodeSource = CreateConstantTestCode("RemConstantI1Left", "sbyte", "sbyte", a.ToString(), null);
@@ -260,37 +260,37 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
         // (MinValue, X) Cases
-        [Row(byte.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(byte.MinValue, 1)]
-        [Row(byte.MinValue, 17)]
-        [Row(byte.MinValue, 123)]
+        [TestCase(byte.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(byte.MinValue, 1)]
+        [TestCase(byte.MinValue, 17)]
+        [TestCase(byte.MinValue, 123)]
         // (MaxValue, X) Cases
-        [Row(byte.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(byte.MaxValue, 1)]
-        [Row(byte.MaxValue, 17)]
-        [Row(byte.MaxValue, 123)]
+        [TestCase(byte.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(byte.MaxValue, 1)]
+        [TestCase(byte.MaxValue, 17)]
+        [TestCase(byte.MaxValue, 123)]
         // (X, MinValue) Cases
-        [Row(0, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(17, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(123, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(0, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(1, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(17, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(123, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
         // (X, MaxValue) Cases
-        [Row(0, byte.MaxValue)]
-        [Row(1, byte.MaxValue)]
-        [Row(17, byte.MaxValue)]
-        [Row(123, byte.MaxValue)]
+        [TestCase(0, byte.MaxValue)]
+        [TestCase(1, byte.MaxValue)]
+        [TestCase(17, byte.MaxValue)]
+        [TestCase(123, byte.MaxValue)]
         // Extremvaluecases
-        [Row(byte.MinValue, byte.MaxValue)]
-        [Row(byte.MaxValue, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(byte.MinValue, byte.MaxValue)]
+        [TestCase(byte.MaxValue, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Test]
         public void RemU1(byte a, byte b)
         {
             CodeSource = CreateTestCode("RemU1", "byte", "byte");
@@ -304,11 +304,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(17, 1)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(byte.MinValue, byte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(byte.MinValue, byte.MaxValue)]
+        [Test]
         public void RemConstantU1Right(byte a, byte b)
         {
             CodeSource = CreateConstantTestCode("RemConstantU1Right", "byte", "byte", null, b.ToString());
@@ -320,11 +320,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(17, 1)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(byte.MinValue, byte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(byte.MinValue, byte.MaxValue)]
+        [Test]
         public void RemConstantU1Left(byte a, byte b)
         {
             CodeSource = CreateConstantTestCode("RemConstantU1Left", "byte", "byte", a.ToString(), null);
@@ -346,59 +346,59 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(-17, -2)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(1, -2)]
+        [TestCase(-1, 2)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(-17, -2)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
+        [TestCase(-2, 1)]
+        [TestCase(2, -1)]
+        [TestCase(-2, -17)]
         // (MinValue, X) Cases
-        [Row(short.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(short.MinValue, 1)]
-        [Row(short.MinValue, 17)]
-        [Row(short.MinValue, 123)]
-        [Row(short.MinValue, -0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(short.MinValue, -1)]
-        [Row(short.MinValue, -17)]
-        [Row(short.MinValue, -123)]
+        [TestCase(short.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(short.MinValue, 1)]
+        [TestCase(short.MinValue, 17)]
+        [TestCase(short.MinValue, 123)]
+        [TestCase(short.MinValue, -0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(short.MinValue, -1)]
+        [TestCase(short.MinValue, -17)]
+        [TestCase(short.MinValue, -123)]
         // (MaxValue, X) Cases
-        [Row(short.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(short.MaxValue, 1)]
-        [Row(short.MaxValue, 17)]
-        [Row(short.MaxValue, 123)]
-        [Row(short.MaxValue, -0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(short.MaxValue, -1)]
-        [Row(short.MaxValue, -17)]
-        [Row(short.MaxValue, -123)]
+        [TestCase(short.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(short.MaxValue, 1)]
+        [TestCase(short.MaxValue, 17)]
+        [TestCase(short.MaxValue, 123)]
+        [TestCase(short.MaxValue, -0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(short.MaxValue, -1)]
+        [TestCase(short.MaxValue, -17)]
+        [TestCase(short.MaxValue, -123)]
         // (X, MinValue) Cases
-        [Row(0, short.MinValue)]
-        [Row(1, short.MinValue)]
-        [Row(17, short.MinValue)]
-        [Row(123, short.MinValue)]
-        [Row(-0, short.MinValue)]
-        [Row(-1, short.MinValue)]
-        [Row(-17, short.MinValue)]
-        [Row(-123, short.MinValue)]
+        [TestCase(0, short.MinValue)]
+        [TestCase(1, short.MinValue)]
+        [TestCase(17, short.MinValue)]
+        [TestCase(123, short.MinValue)]
+        [TestCase(-0, short.MinValue)]
+        [TestCase(-1, short.MinValue)]
+        [TestCase(-17, short.MinValue)]
+        [TestCase(-123, short.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, short.MaxValue)]
-        [Row(1, short.MaxValue)]
-        [Row(17, short.MaxValue)]
-        [Row(123, short.MaxValue)]
-        [Row(-0, short.MaxValue)]
-        [Row(-1, short.MaxValue)]
-        [Row(-17, short.MaxValue)]
-        [Row(-123, short.MaxValue)]
+        [TestCase(0, short.MaxValue)]
+        [TestCase(1, short.MaxValue)]
+        [TestCase(17, short.MaxValue)]
+        [TestCase(123, short.MaxValue)]
+        [TestCase(-0, short.MaxValue)]
+        [TestCase(-1, short.MaxValue)]
+        [TestCase(-17, short.MaxValue)]
+        [TestCase(-123, short.MaxValue)]
         // Extremvaluecases
-        [Row(short.MinValue, short.MaxValue)]
-        [Row(short.MaxValue, short.MinValue)]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(short.MinValue, short.MaxValue)]
+        [TestCase(short.MaxValue, short.MinValue)]
+        [TestCase(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Test]
         public void RemI2(short a, short b)
         {
             CodeSource = CreateTestCode("RemI2", "short", "short");
@@ -412,11 +412,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 21)]
-        [Row(17, 1)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(short.MinValue, short.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 21)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(short.MinValue, short.MaxValue)]
+        [Test]
         public void RemConstantI2Right(short a, short b)
         {
             CodeSource = CreateConstantTestCode("RemConstantI2Right", "short", "short", null, b.ToString());
@@ -428,11 +428,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 21)]
-        [Row(17, 1)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(short.MinValue, short.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 21)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(short.MinValue, short.MaxValue)]
+        [Test]
         public void RemConstantI2Left(short a, short b)
         {
             CodeSource = CreateConstantTestCode("RemConstantI2Left", "short", "short", a.ToString(), null);
@@ -454,37 +454,37 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
         // (MinValue, X) Cases
-        [Row(ushort.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(ushort.MinValue, 1)]
-        [Row(ushort.MinValue, 17)]
-        [Row(ushort.MinValue, 123)]
+        [TestCase(ushort.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(ushort.MinValue, 1)]
+        [TestCase(ushort.MinValue, 17)]
+        [TestCase(ushort.MinValue, 123)]
         // (MaxValue, X) Cases
-        [Row(ushort.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(ushort.MaxValue, 1)]
-        [Row(ushort.MaxValue, 17)]
-        [Row(ushort.MaxValue, 123)]
+        [TestCase(ushort.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(ushort.MaxValue, 1)]
+        [TestCase(ushort.MaxValue, 17)]
+        [TestCase(ushort.MaxValue, 123)]
         // (X, MinValue) Cases
-        [Row(0, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(17, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(123, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(0, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(1, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(17, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(123, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
         // (X, MaxValue) Cases
-        [Row(0, ushort.MaxValue)]
-        [Row(1, ushort.MaxValue)]
-        [Row(17, ushort.MaxValue)]
-        [Row(123, ushort.MaxValue)]
+        [TestCase(0, ushort.MaxValue)]
+        [TestCase(1, ushort.MaxValue)]
+        [TestCase(17, ushort.MaxValue)]
+        [TestCase(123, ushort.MaxValue)]
         // Extremvaluecases
-        [Row(ushort.MinValue, ushort.MaxValue)]
-        [Row(ushort.MaxValue, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(ushort.MinValue, ushort.MaxValue)]
+        [TestCase(ushort.MaxValue, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Test]
         public void RemU2(ushort a, ushort b)
         {
             CodeSource = CreateTestCode("RemU2", "ushort", "ushort");
@@ -498,12 +498,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(148, 23)]
-        [Row(17, 1)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(ushort.MinValue, ushort.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(148, 23)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(ushort.MinValue, ushort.MaxValue)]
+        [Test]
         public void RemConstantU2Right(ushort a, ushort b)
         {
             CodeSource = CreateConstantTestCode("RemConstantU2Right", "ushort", "ushort", null, b.ToString());
@@ -515,12 +515,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(148, 23)]
-        [Row(17, 1)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(ushort.MinValue, ushort.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(148, 23)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(ushort.MinValue, ushort.MaxValue)]
+        [Test]
         public void RemConstantU2Left(ushort a, ushort b)
         {
             CodeSource = CreateConstantTestCode("RemConstantU2Left", "ushort", "ushort", a.ToString(), null);
@@ -542,59 +542,59 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(-17, -2)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(1, -2)]
+        [TestCase(-1, 2)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(-17, -2)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
+        [TestCase(-2, 1)]
+        [TestCase(2, -1)]
+        [TestCase(-2, -17)]
         // (MinValue, X) Cases
-        [Row(int.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(int.MinValue, 1)]
-        [Row(int.MinValue, 17)]
-        [Row(int.MinValue, 123)]
-        [Row(int.MinValue, -0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(int.MinValue, -1, ExpectedException = typeof(OverflowException))]
-        [Row(int.MinValue, -17)]
-        [Row(int.MinValue, -123)]
+        [TestCase(int.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(int.MinValue, 1)]
+        [TestCase(int.MinValue, 17)]
+        [TestCase(int.MinValue, 123)]
+        [TestCase(int.MinValue, -0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(int.MinValue, -1, ExpectedException = typeof(OverflowException))]
+        [TestCase(int.MinValue, -17)]
+        [TestCase(int.MinValue, -123)]
         // (MaxValue, X) Cases
-        [Row(int.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(int.MaxValue, 1)]
-        [Row(int.MaxValue, 17)]
-        [Row(int.MaxValue, 123)]
-        [Row(int.MaxValue, -0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(int.MaxValue, -1)]
-        [Row(int.MaxValue, -17)]
-        [Row(int.MaxValue, -123)]
+        [TestCase(int.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(int.MaxValue, 1)]
+        [TestCase(int.MaxValue, 17)]
+        [TestCase(int.MaxValue, 123)]
+        [TestCase(int.MaxValue, -0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(int.MaxValue, -1)]
+        [TestCase(int.MaxValue, -17)]
+        [TestCase(int.MaxValue, -123)]
         // (X, MinValue) Cases
-        [Row(0, int.MinValue)]
-        [Row(1, int.MinValue)]
-        [Row(17, int.MinValue)]
-        [Row(123, int.MinValue)]
-        [Row(-0, int.MinValue)]
-        [Row(-1, int.MinValue)]
-        [Row(-17, int.MinValue)]
-        [Row(-123, int.MinValue)]
+        [TestCase(0, int.MinValue)]
+        [TestCase(1, int.MinValue)]
+        [TestCase(17, int.MinValue)]
+        [TestCase(123, int.MinValue)]
+        [TestCase(-0, int.MinValue)]
+        [TestCase(-1, int.MinValue)]
+        [TestCase(-17, int.MinValue)]
+        [TestCase(-123, int.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, int.MaxValue)]
-        [Row(1, int.MaxValue)]
-        [Row(17, int.MaxValue)]
-        [Row(123, int.MaxValue)]
-        [Row(-0, int.MaxValue)]
-        [Row(-1, int.MaxValue)]
-        [Row(-17, int.MaxValue)]
-        [Row(-123, int.MaxValue)]
+        [TestCase(0, int.MaxValue)]
+        [TestCase(1, int.MaxValue)]
+        [TestCase(17, int.MaxValue)]
+        [TestCase(123, int.MaxValue)]
+        [TestCase(-0, int.MaxValue)]
+        [TestCase(-1, int.MaxValue)]
+        [TestCase(-17, int.MaxValue)]
+        [TestCase(-123, int.MaxValue)]
         // Extremvaluecases
-        [Row(int.MinValue, int.MaxValue)]
-        [Row(int.MaxValue, int.MinValue)]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(int.MinValue, int.MaxValue)]
+        [TestCase(int.MaxValue, int.MinValue)]
+        [TestCase(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Test]
         public void RemI4(int a, int b)
         {
             CodeSource = CreateTestCode("RemI4", "int", "int");
@@ -608,12 +608,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 21)]
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(int.MinValue, int.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 21)]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(int.MinValue, int.MaxValue)]
+        [Test]
         public void RemConstantI4Right(int a, int b)
         {
             CodeSource = CreateConstantTestCode("RemConstantI4Right", "int", "int", null, b.ToString());
@@ -625,12 +625,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 21)]
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(int.MinValue, int.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 21)]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(int.MinValue, int.MaxValue)]
+        [Test]
         public void RemConstantI4Left(int a, int b)
         {
             CodeSource = CreateConstantTestCode("RemConstantI4Left", "int", "int", a.ToString(), null);
@@ -652,37 +652,37 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
         // (MinValue, X) Cases
-        [Row(uint.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(uint.MinValue, 1)]
-        [Row(uint.MinValue, 17)]
-        [Row(uint.MinValue, 123)]
+        [TestCase(uint.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(uint.MinValue, 1)]
+        [TestCase(uint.MinValue, 17)]
+        [TestCase(uint.MinValue, 123)]
         // (MaxValue, X) Cases
-        [Row(uint.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(uint.MaxValue, 1)]
-        [Row(uint.MaxValue, 17)]
-        [Row(uint.MaxValue, 123)]
+        [TestCase(uint.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(uint.MaxValue, 1)]
+        [TestCase(uint.MaxValue, 17)]
+        [TestCase(uint.MaxValue, 123)]
         // (X, MinValue) Cases
-        [Row(0, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(17, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(123, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(0, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(1, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(17, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(123, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
         // (X, MaxValue) Cases
-        [Row(0, uint.MaxValue)]
-        [Row(1, uint.MaxValue)]
-        [Row(17, uint.MaxValue)]
-        [Row(123, uint.MaxValue)]
+        [TestCase(0, uint.MaxValue)]
+        [TestCase(1, uint.MaxValue)]
+        [TestCase(17, uint.MaxValue)]
+        [TestCase(123, uint.MaxValue)]
         // Extremvaluecases
-        [Row(uint.MinValue, uint.MaxValue)]
-        [Row(uint.MaxValue, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(uint.MinValue, uint.MaxValue)]
+        [TestCase(uint.MaxValue, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Test]
         public void RemU4(uint a, uint b)
         {
             CodeSource = CreateTestCode("RemU4", "uint", "uint");
@@ -696,12 +696,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(123, uint.MaxValue)]
-        [Row(uint.MinValue, uint.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(123, uint.MaxValue)]
+        [TestCase(uint.MinValue, uint.MaxValue)]
+        [Test]
         public void RemConstantU4Right(uint a, uint b)
         {
             CodeSource = CreateConstantTestCode("RemConstantU4Right", "uint", "uint", null, b.ToString());
@@ -713,12 +713,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(123, uint.MaxValue)]
-        [Row(uint.MinValue, uint.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(123, uint.MaxValue)]
+        [TestCase(uint.MinValue, uint.MaxValue)]
+        [Test]
         public void RemConstantU4Left(uint a, uint b)
         {
             CodeSource = CreateConstantTestCode("RemConstantU4Left", "uint", "uint", a.ToString(), null);
@@ -741,59 +741,59 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(-17, -2)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(1, -2)]
+        [TestCase(-1, 2)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(-17, -2)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
+        [TestCase(-2, 1)]
+        [TestCase(2, -1)]
+        [TestCase(-2, -17)]
         // (MinValue, X) Cases
-        [Row(long.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(long.MinValue, 1)]
-        [Row(long.MinValue, 17)]
-        [Row(long.MinValue, 123)]
-        [Row(long.MinValue, -0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(long.MinValue, -1, ExpectedException = typeof(OverflowException))]
-        [Row(long.MinValue, -17)]
-        [Row(long.MinValue, -123)]
+        [TestCase(long.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(long.MinValue, 1)]
+        [TestCase(long.MinValue, 17)]
+        [TestCase(long.MinValue, 123)]
+        [TestCase(long.MinValue, -0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(long.MinValue, -1, ExpectedException = typeof(OverflowException))]
+        [TestCase(long.MinValue, -17)]
+        [TestCase(long.MinValue, -123)]
         // (MaxValue, X) Cases
-        [Row(long.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(long.MaxValue, 1)]
-        [Row(long.MaxValue, 17)]
-        [Row(long.MaxValue, 123)]
-        [Row(long.MaxValue, -0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(long.MaxValue, -1)]
-        [Row(long.MaxValue, -17)]
-        [Row(long.MaxValue, -123)]
+        [TestCase(long.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(long.MaxValue, 1)]
+        [TestCase(long.MaxValue, 17)]
+        [TestCase(long.MaxValue, 123)]
+        [TestCase(long.MaxValue, -0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(long.MaxValue, -1)]
+        [TestCase(long.MaxValue, -17)]
+        [TestCase(long.MaxValue, -123)]
         // (X, MinValue) Cases
-        [Row(0, long.MinValue)]
-        [Row(1, long.MinValue)]
-        [Row(17, long.MinValue)]
-        [Row(123, long.MinValue)]
-        [Row(-0, long.MinValue)]
-        [Row(-1, long.MinValue)]
-        [Row(-17, long.MinValue)]
-        [Row(-123, long.MinValue)]
+        [TestCase(0, long.MinValue)]
+        [TestCase(1, long.MinValue)]
+        [TestCase(17, long.MinValue)]
+        [TestCase(123, long.MinValue)]
+        [TestCase(-0, long.MinValue)]
+        [TestCase(-1, long.MinValue)]
+        [TestCase(-17, long.MinValue)]
+        [TestCase(-123, long.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, long.MaxValue)]
-        [Row(1, long.MaxValue)]
-        [Row(17, long.MaxValue)]
-        [Row(123, long.MaxValue)]
-        [Row(-0, long.MaxValue)]
-        [Row(-1, long.MaxValue)]
-        [Row(-17, long.MaxValue)]
-        [Row(-123, long.MaxValue)]
+        [TestCase(0, long.MaxValue)]
+        [TestCase(1, long.MaxValue)]
+        [TestCase(17, long.MaxValue)]
+        [TestCase(123, long.MaxValue)]
+        [TestCase(-0, long.MaxValue)]
+        [TestCase(-1, long.MaxValue)]
+        [TestCase(-17, long.MaxValue)]
+        [TestCase(-123, long.MaxValue)]
         // Extremvaluecases
-        [Row(long.MinValue, long.MaxValue)]
-        [Row(long.MaxValue, long.MinValue)]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(long.MinValue, long.MaxValue)]
+        [TestCase(long.MaxValue, long.MinValue)]
+        [TestCase(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Test]
         public void RemI8(long a, long b)
         {
             CodeSource = CreateTestCodeWithReturn("RemI8", "long", "long");
@@ -807,11 +807,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(long.MinValue, long.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(long.MinValue, long.MaxValue)]
+        [Test]
         public void RemConstantI8Right(long a, long b)
         {
             CodeSource = CreateConstantTestCode("RemConstantI8Right", "long", "long", null, b.ToString());
@@ -823,11 +823,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(long.MinValue, long.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(long.MinValue, long.MaxValue)]
+        [Test]
         public void RemConstantI8Left(long a, long b)
         {
             CodeSource = CreateConstantTestCode("RemConstantI8Left", "long", "long", a.ToString(), null);
@@ -849,37 +849,37 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
         // (MinValue, X) Cases
-        [Row(ulong.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(ulong.MinValue, 1)]
-        [Row(ulong.MinValue, 17)]
-        [Row(ulong.MinValue, 123)]
+        [TestCase(ulong.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(ulong.MinValue, 1)]
+        [TestCase(ulong.MinValue, 17)]
+        [TestCase(ulong.MinValue, 123)]
         // (MaxValue, X) Cases
-        [Row(ulong.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(ulong.MaxValue, 1)]
-        [Row(ulong.MaxValue, 17)]
-        [Row(ulong.MaxValue, 123)]
+        [TestCase(ulong.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(ulong.MaxValue, 1)]
+        [TestCase(ulong.MaxValue, 17)]
+        [TestCase(ulong.MaxValue, 123)]
         // (X, MinValue) Cases
-        [Row(0, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(17, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(123, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(0, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(1, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(17, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(123, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
         // (X, MaxValue) Cases
-        [Row(0, ulong.MaxValue)]
-        [Row(1, ulong.MaxValue)]
-        [Row(17, ulong.MaxValue)]
-        [Row(123, ulong.MaxValue)]
+        [TestCase(0, ulong.MaxValue)]
+        [TestCase(1, ulong.MaxValue)]
+        [TestCase(17, ulong.MaxValue)]
+        [TestCase(123, ulong.MaxValue)]
         // Extremvaluecases
-        [Row(ulong.MinValue, ulong.MaxValue)]
-        [Row(ulong.MaxValue, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(ulong.MinValue, ulong.MaxValue)]
+        [TestCase(ulong.MaxValue, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Test]
         public void RemU8(ulong a, ulong b)
         {
             CodeSource = CreateTestCode("RemU8", "ulong", "ulong");
@@ -893,11 +893,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(ulong.MinValue, ulong.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(ulong.MinValue, ulong.MaxValue)]
+        [Test]
         public void RemConstantU8Right(ulong a, ulong b)
         {
             CodeSource = CreateConstantTestCode("RemConstantU8Right", "ulong", "ulong", null, b.ToString());
@@ -909,11 +909,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(ulong.MinValue, ulong.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0, ExpectedException = typeof(DivideByZeroException))]
+        [TestCase(ulong.MinValue, ulong.MaxValue)]
+        [Test]
         public void RemConstantU8Left(ulong a, ulong b)
         {
             CodeSource = CreateConstantTestCode("RemConstantU8Left", "ulong", "ulong", a.ToString(), null);

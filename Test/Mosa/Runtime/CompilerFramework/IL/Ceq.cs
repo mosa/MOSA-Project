@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using MbUnit.Framework;
+using NUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
@@ -94,11 +94,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, true, true)]
-        [Row(true, false, false)]
-        [Row(false, true, false)]
-        [Row(false, false, true)]
-        [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+        [TestCase(true, true, true)]
+        [TestCase(true, false, false)]
+        [TestCase(false, true, false)]
+        [TestCase(false, false, true)]
+        [Test]
         public void CeqB(bool result, bool a, bool b)
         {
             this.CodeSource = s_testCode.Replace("t1", "bool").Replace("t2", "bool");
@@ -112,11 +112,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, true, true)]
-        [Row(true, false, false)]
-        [Row(false, true, false)]
-        [Row(false, false, true)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, true, true)]
+        [TestCase(true, false, false)]
+        [TestCase(false, true, false)]
+        [TestCase(false, false, true)]
+        [Test]
         public void CeqConstantBRight(bool result, bool a, bool b)
         {
             this.CodeSource = CreateConstantTestCode("bool", null, b.ToString().ToLower());
@@ -130,11 +130,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, true, true)]
-        [Row(true, false, false)]
-        [Row(false, true, false)]
-        [Row(false, false, true)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, true, true)]
+        [TestCase(true, false, false)]
+        [TestCase(false, true, false)]
+        [TestCase(false, false, true)]
+        [Test]
         public void CeqConstantBLeft(bool result, bool a, bool b)
         {
             this.CodeSource = CreateConstantTestCode("bool", a.ToString().ToLower(), null);
@@ -150,11 +150,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, 'a', 'Z')]
-        [Row(true, 'a', 'a')]
-        [Row(false, 0, 128)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, 'a', 'Z')]
+        [TestCase(true, 'a', 'a')]
+        [TestCase(false, 0, 128)]
+        [Test]
         public void CeqC(bool result, char a, char b)
         {
             this.CodeSource = s_testCode.Replace("t1", "char").Replace("t2", "char");
@@ -168,10 +168,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(false, 0, 'a')]
-        [Row(false, '-', '.')]
-        [Row(true, 'a', 'a')]
-        [Test, Author("boddlnagg")]
+        [TestCase(false, 0, 'a')]
+        [TestCase(false, '-', '.')]
+        [TestCase(true, 'a', 'a')]
+        [Test]
         public void CeqConstantCRight(bool result, char a, char b)
         {
             this.CodeSource = CreateConstantTestCode("char", null, "'" + b.ToString() + "'");
@@ -185,10 +185,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(false, 'a', 0)]
-        [Row(false, '-', '.')]
-        [Row(true, 'a', 'a')]
-        [Test, Author("boddlnagg")]
+        [TestCase(false, 'a', 0)]
+        [TestCase(false, '-', '.')]
+        [TestCase(true, 'a', 'a')]
+        [Test]
         public void CeqConstantCLeft(bool result, char a, char b)
         {
             this.CodeSource = CreateConstantTestCode("char", "'" + a.ToString() + "'", null);
@@ -204,17 +204,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(true, 1, 1)]
-        [Row(true, SByte.MinValue, SByte.MinValue)]
-        [Row(true, SByte.MaxValue, SByte.MaxValue)]
-        [Row(false, 0, SByte.MinValue)]
-        [Row(false, 0, SByte.MaxValue)]
-        [Row(false, 0, 1)]
-        [Row(false, SByte.MinValue, 0)]
-        [Row(false, SByte.MaxValue, 0)]
-        [Row(false, 1, 0)]
-        [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+        [TestCase(true, 0, 0)]
+        [TestCase(true, 1, 1)]
+        [TestCase(true, SByte.MinValue, SByte.MinValue)]
+        [TestCase(true, SByte.MaxValue, SByte.MaxValue)]
+        [TestCase(false, 0, SByte.MinValue)]
+        [TestCase(false, 0, SByte.MaxValue)]
+        [TestCase(false, 0, 1)]
+        [TestCase(false, SByte.MinValue, 0)]
+        [TestCase(false, SByte.MaxValue, 0)]
+        [TestCase(false, 1, 0)]
+        [Test]
         public void CeqI1(bool result, sbyte a, sbyte b)
         {
             this.CodeSource = s_testCode.Replace("t1", "sbyte").Replace("t2", "sbyte");
@@ -228,11 +228,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, -17, 42)]
-        [Row(true, sbyte.MinValue, sbyte.MinValue)]
-        [Row(false, sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, -17, 42)]
+        [TestCase(true, sbyte.MinValue, sbyte.MinValue)]
+        [TestCase(false, sbyte.MinValue, sbyte.MaxValue)]
+        [Test]
         public void CeqConstantI1Right(bool result, sbyte a, sbyte b)
         {
             this.CodeSource = CreateConstantTestCode("sbyte", null, b.ToString());
@@ -246,11 +246,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, -17, 42)]
-        [Row(true, sbyte.MinValue, sbyte.MinValue)]
-        [Row(false, sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, -17, 42)]
+        [TestCase(true, sbyte.MinValue, sbyte.MinValue)]
+        [TestCase(false, sbyte.MinValue, sbyte.MaxValue)]
+        [Test]
         public void CeqConstantI1Left(bool result, sbyte a, sbyte b)
         {
             this.CodeSource = CreateConstantTestCode("sbyte", a.ToString(), null);
@@ -266,17 +266,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(true, 1, 1)]
-        [Row(true, Int16.MinValue, Int16.MinValue)]
-        [Row(true, Int16.MaxValue, Int16.MaxValue)]
-        [Row(false, 0, Int16.MinValue)]
-        [Row(false, 0, Int16.MaxValue)]
-        [Row(false, 0, 1)]
-        [Row(false, Int16.MinValue, 0)]
-        [Row(false, Int16.MaxValue, 0)]
-        [Row(false, 1, 0)]
-        [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+        [TestCase(true, 0, 0)]
+        [TestCase(true, 1, 1)]
+        [TestCase(true, Int16.MinValue, Int16.MinValue)]
+        [TestCase(true, Int16.MaxValue, Int16.MaxValue)]
+        [TestCase(false, 0, Int16.MinValue)]
+        [TestCase(false, 0, Int16.MaxValue)]
+        [TestCase(false, 0, 1)]
+        [TestCase(false, Int16.MinValue, 0)]
+        [TestCase(false, Int16.MaxValue, 0)]
+        [TestCase(false, 1, 0)]
+        [Test]
         public void CeqI2(bool result, short a, short b)
         {
             this.CodeSource = s_testCode.Replace("t1", "short").Replace("t2", "short");
@@ -290,11 +290,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, -17, 42)]
-        [Row(true, short.MinValue, short.MinValue)]
-        [Row(false, short.MinValue, short.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, -17, 42)]
+        [TestCase(true, short.MinValue, short.MinValue)]
+        [TestCase(false, short.MinValue, short.MaxValue)]
+        [Test]
         public void CeqConstantI2Right(bool result, short a, short b)
         {
             this.CodeSource = CreateConstantTestCode("short", null, b.ToString());
@@ -308,11 +308,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, -17, 42)]
-        [Row(true, short.MinValue, short.MinValue)]
-        [Row(false, short.MinValue, short.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, -17, 42)]
+        [TestCase(true, short.MinValue, short.MinValue)]
+        [TestCase(false, short.MinValue, short.MaxValue)]
+        [Test]
         public void CeqConstantI2Left(bool result, short a, short b)
         {
             this.CodeSource = CreateConstantTestCode("short", a.ToString(), null);
@@ -328,17 +328,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(true, 1, 1)]
-        [Row(true, Int32.MinValue, Int32.MinValue)]
-        [Row(true, Int32.MaxValue, Int32.MaxValue)]
-        [Row(false, 0, Int32.MinValue)]
-        [Row(false, 0, Int32.MaxValue)]
-        [Row(false, 0, 1)]
-        [Row(false, Int32.MinValue, 0)]
-        [Row(false, Int32.MaxValue, 0)]
-        [Row(false, 1, 0)]
-        [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+        [TestCase(true, 0, 0)]
+        [TestCase(true, 1, 1)]
+        [TestCase(true, Int32.MinValue, Int32.MinValue)]
+        [TestCase(true, Int32.MaxValue, Int32.MaxValue)]
+        [TestCase(false, 0, Int32.MinValue)]
+        [TestCase(false, 0, Int32.MaxValue)]
+        [TestCase(false, 0, 1)]
+        [TestCase(false, Int32.MinValue, 0)]
+        [TestCase(false, Int32.MaxValue, 0)]
+        [TestCase(false, 1, 0)]
+        [Test]
         public void CeqI4(bool result, int a, int b)
         {
             this.CodeSource = s_testCode.Replace("t1", "int").Replace("t2", "int");
@@ -352,11 +352,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, -17, 42)]
-        [Row(true, int.MinValue, int.MinValue)]
-        [Row(false, int.MinValue, int.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, -17, 42)]
+        [TestCase(true, int.MinValue, int.MinValue)]
+        [TestCase(false, int.MinValue, int.MaxValue)]
+        [Test]
         public void CeqConstantI4Right(bool result, int a, int b)
         {
             this.CodeSource = CreateConstantTestCode("int", null, b.ToString());
@@ -370,11 +370,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, -17, 42)]
-        [Row(true, int.MinValue, int.MinValue)]
-        [Row(false, int.MinValue, int.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, -17, 42)]
+        [TestCase(true, int.MinValue, int.MinValue)]
+        [TestCase(false, int.MinValue, int.MaxValue)]
+        [Test]
         public void CeqConstantI4Left(bool result, int a, int b)
         {
             this.CodeSource = CreateConstantTestCode("int", a.ToString(), null);
@@ -390,17 +390,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0L, 0L)]
-        [Row(true, 1L, 1L)]
-        [Row(true, Int64.MinValue, Int64.MinValue)]
-        [Row(true, Int64.MaxValue, Int64.MaxValue)]
-        [Row(false, 0L, Int64.MinValue)]
-        [Row(false, 0L, Int64.MaxValue)]
-        [Row(false, 0L, 1L)]
-        [Row(false, Int64.MinValue, 0L)]
-        [Row(false, Int64.MaxValue, 0L)]
-        [Row(false, 1L, 0L)]
-        [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+        [TestCase(true, 0L, 0L)]
+        [TestCase(true, 1L, 1L)]
+        [TestCase(true, Int64.MinValue, Int64.MinValue)]
+        [TestCase(true, Int64.MaxValue, Int64.MaxValue)]
+        [TestCase(false, 0L, Int64.MinValue)]
+        [TestCase(false, 0L, Int64.MaxValue)]
+        [TestCase(false, 0L, 1L)]
+        [TestCase(false, Int64.MinValue, 0L)]
+        [TestCase(false, Int64.MaxValue, 0L)]
+        [TestCase(false, 1L, 0L)]
+        [Test]
         public void CeqI8(bool result, long a, long b)
         {
             this.CodeSource = s_testCode.Replace("t1", "long").Replace("t2", "long");
@@ -414,11 +414,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, -17, 42)]
-        [Row(true, long.MinValue, long.MinValue)]
-        [Row(false, long.MinValue, long.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, -17, 42)]
+        [TestCase(true, long.MinValue, long.MinValue)]
+        [TestCase(false, long.MinValue, long.MaxValue)]
+        [Test]
         public void CeqConstantI8Right(bool result, long a, long b)
         {
             this.CodeSource = CreateConstantTestCode("long", null, b.ToString());
@@ -432,11 +432,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, -17, 42)]
-        [Row(true, long.MinValue, long.MinValue)]
-        [Row(false, long.MinValue, long.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, -17, 42)]
+        [TestCase(true, long.MinValue, long.MinValue)]
+        [TestCase(false, long.MinValue, long.MaxValue)]
+        [Test]
         public void CeqConstantI8Left(bool result, long a, long b)
         {
             this.CodeSource = CreateConstantTestCode("long", a.ToString(), null);
@@ -452,17 +452,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(true, 1, 1)]
-        [Row(true, Byte.MinValue, Byte.MinValue)]
-        [Row(true, Byte.MaxValue, Byte.MaxValue)]
-        [Row(false, 1, Byte.MinValue)]
-        [Row(false, 0, Byte.MaxValue)]
-        [Row(false, 0, 1)]
-        [Row(false, Byte.MinValue, 1)]
-        [Row(false, Byte.MaxValue, 0)]
-        [Row(false, 1, 0)]
-        [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+        [TestCase(true, 0, 0)]
+        [TestCase(true, 1, 1)]
+        [TestCase(true, Byte.MinValue, Byte.MinValue)]
+        [TestCase(true, Byte.MaxValue, Byte.MaxValue)]
+        [TestCase(false, 1, Byte.MinValue)]
+        [TestCase(false, 0, Byte.MaxValue)]
+        [TestCase(false, 0, 1)]
+        [TestCase(false, Byte.MinValue, 1)]
+        [TestCase(false, Byte.MaxValue, 0)]
+        [TestCase(false, 1, 0)]
+        [Test]
         public void CeqU1(bool result, byte a, byte b)
         {
             this.CodeSource = s_testCode.Replace("t1", "byte").Replace("t2", "byte");
@@ -476,11 +476,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, 17, 142)]
-        [Row(true, byte.MaxValue, byte.MaxValue)]
-        [Row(false, byte.MinValue, byte.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, 17, 142)]
+        [TestCase(true, byte.MaxValue, byte.MaxValue)]
+        [TestCase(false, byte.MinValue, byte.MaxValue)]
+        [Test]
         public void CeqConstantU1Right(bool result, byte a, byte b)
         {
             this.CodeSource = CreateConstantTestCode("byte", null, b.ToString());
@@ -494,11 +494,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, 17, 142)]
-        [Row(true, byte.MaxValue, byte.MaxValue)]
-        [Row(false, byte.MinValue, byte.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, 17, 142)]
+        [TestCase(true, byte.MaxValue, byte.MaxValue)]
+        [TestCase(false, byte.MinValue, byte.MaxValue)]
+        [Test]
         public void CeqConstantU1Left(bool result, byte a, byte b)
         {
             this.CodeSource = CreateConstantTestCode("byte", a.ToString(), null);
@@ -514,17 +514,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(true, 1, 1)]
-        [Row(true, UInt16.MinValue, UInt16.MinValue)]
-        [Row(true, UInt16.MaxValue, UInt16.MaxValue)]
-        [Row(false, 1, UInt16.MinValue)]
-        [Row(false, 0, UInt16.MaxValue)]
-        [Row(false, 0, 1)]
-        [Row(false, UInt16.MinValue, 2)]
-        [Row(false, UInt16.MaxValue, 0)]
-        [Row(false, 1, 0)]
-        [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+        [TestCase(true, 0, 0)]
+        [TestCase(true, 1, 1)]
+        [TestCase(true, UInt16.MinValue, UInt16.MinValue)]
+        [TestCase(true, UInt16.MaxValue, UInt16.MaxValue)]
+        [TestCase(false, 1, UInt16.MinValue)]
+        [TestCase(false, 0, UInt16.MaxValue)]
+        [TestCase(false, 0, 1)]
+        [TestCase(false, UInt16.MinValue, 2)]
+        [TestCase(false, UInt16.MaxValue, 0)]
+        [TestCase(false, 1, 0)]
+        [Test]
         public void CeqU2(bool result, ushort a, ushort b)
         {
             this.CodeSource = s_testCode.Replace("t1", "ushort").Replace("t2", "ushort");
@@ -538,11 +538,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, 17, 142)]
-        [Row(true, ushort.MaxValue, ushort.MaxValue)]
-        [Row(false, ushort.MinValue, ushort.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, 17, 142)]
+        [TestCase(true, ushort.MaxValue, ushort.MaxValue)]
+        [TestCase(false, ushort.MinValue, ushort.MaxValue)]
+        [Test]
         public void CeqConstantU2Right(bool result, ushort a, ushort b)
         {
             this.CodeSource = CreateConstantTestCode("ushort", null, b.ToString());
@@ -556,11 +556,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, 17, 142)]
-        [Row(true, ushort.MaxValue, ushort.MaxValue)]
-        [Row(false, ushort.MinValue, ushort.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, 17, 142)]
+        [TestCase(true, ushort.MaxValue, ushort.MaxValue)]
+        [TestCase(false, ushort.MinValue, ushort.MaxValue)]
+        [Test]
         public void CeqConstantU2Left(bool result, ushort a, ushort b)
         {
             this.CodeSource = CreateConstantTestCode("ushort", a.ToString(), null);
@@ -576,17 +576,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(true, 1, 1)]
-        [Row(true, UInt32.MinValue, UInt32.MinValue)]
-        [Row(true, UInt32.MaxValue, UInt32.MaxValue)]
-        [Row(false, 1, UInt32.MinValue)]
-        [Row(false, 0, UInt32.MaxValue)]
-        [Row(false, 0, 1)]
-        [Row(false, UInt32.MinValue, 1)]
-        [Row(false, UInt32.MaxValue, 0)]
-        [Row(false, 1, 0)]
-        [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+        [TestCase(true, 0, 0)]
+        [TestCase(true, 1, 1)]
+        [TestCase(true, UInt32.MinValue, UInt32.MinValue)]
+        [TestCase(true, UInt32.MaxValue, UInt32.MaxValue)]
+        [TestCase(false, 1, UInt32.MinValue)]
+        [TestCase(false, 0, UInt32.MaxValue)]
+        [TestCase(false, 0, 1)]
+        [TestCase(false, UInt32.MinValue, 1)]
+        [TestCase(false, UInt32.MaxValue, 0)]
+        [TestCase(false, 1, 0)]
+        [Test]
         public void CeqU4(bool result, uint a, uint b)
         {
             this.CodeSource = s_testCode.Replace("t1", "uint").Replace("t2", "uint");
@@ -600,11 +600,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, 17, 142)]
-        [Row(true, uint.MaxValue, uint.MaxValue)]
-        [Row(false, uint.MinValue, uint.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, 17, 142)]
+        [TestCase(true, uint.MaxValue, uint.MaxValue)]
+        [TestCase(false, uint.MinValue, uint.MaxValue)]
+        [Test]
         public void CeqConstantU4Right(bool result, uint a, uint b)
         {
             this.CodeSource = CreateConstantTestCode("uint", null, b.ToString());
@@ -618,11 +618,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, 17, 142)]
-        [Row(true, uint.MaxValue, uint.MaxValue)]
-        [Row(false, uint.MinValue, uint.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, 17, 142)]
+        [TestCase(true, uint.MaxValue, uint.MaxValue)]
+        [TestCase(false, uint.MinValue, uint.MaxValue)]
+        [Test]
         public void CeqConstantU4Left(bool result, uint a, uint b)
         {
             this.CodeSource = CreateConstantTestCode("uint", a.ToString(), null);
@@ -638,17 +638,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(true, 1, 1)]
-        [Row(true, UInt64.MinValue, UInt64.MinValue)]
-        [Row(true, UInt64.MaxValue, UInt64.MaxValue)]
-        [Row(false, 1, UInt64.MinValue)]
-        [Row(false, 0, UInt64.MaxValue)]
-        [Row(false, 0, 1)]
-        [Row(false, UInt64.MinValue, 1)]
-        [Row(false, UInt64.MaxValue, 0)]
-        [Row(false, 1, 0)]
-        [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+        [TestCase(true, 0, 0)]
+        [TestCase(true, 1, 1)]
+        [TestCase(true, UInt64.MinValue, UInt64.MinValue)]
+        [TestCase(true, UInt64.MaxValue, UInt64.MaxValue)]
+        [TestCase(false, 1, UInt64.MinValue)]
+        [TestCase(false, 0, UInt64.MaxValue)]
+        [TestCase(false, 0, 1)]
+        [TestCase(false, UInt64.MinValue, 1)]
+        [TestCase(false, UInt64.MaxValue, 0)]
+        [TestCase(false, 1, 0)]
+        [Test]
         public void CeqU8(bool result, ulong a, ulong b)
         {
             this.CodeSource = s_testCode.Replace("t1", "ulong").Replace("t2", "ulong");
@@ -662,11 +662,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, 17, 142)]
-        [Row(true, ulong.MaxValue, ulong.MaxValue)]
-        [Row(false, ulong.MinValue, ulong.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, 17, 142)]
+        [TestCase(true, ulong.MaxValue, ulong.MaxValue)]
+        [TestCase(false, ulong.MinValue, ulong.MaxValue)]
+        [Test]
         public void CeqConstantU8Right(bool result, ulong a, ulong b)
         {
             this.CodeSource = CreateConstantTestCode("ulong", null, b.ToString());
@@ -680,11 +680,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0, 0)]
-        [Row(false, 17, 142)]
-        [Row(true, ulong.MaxValue, ulong.MaxValue)]
-        [Row(false, ulong.MinValue, ulong.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0, 0)]
+        [TestCase(false, 17, 142)]
+        [TestCase(true, ulong.MaxValue, ulong.MaxValue)]
+        [TestCase(false, ulong.MinValue, ulong.MaxValue)]
+        [Test]
         public void CeqConstantU8Left(bool result, ulong a, ulong b)
         {
             this.CodeSource = CreateConstantTestCode("ulong", a.ToString(), null);
@@ -700,17 +700,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0.0f, 0.0f)]
-        [Row(true, 1.0f, 1.0f)]
-        [Row(true, Single.MinValue, Single.MinValue)]
-        [Row(true, Single.MaxValue, Single.MaxValue)]
-        [Row(false, 0.0f, Single.MinValue)]
-        [Row(false, 0.0f, Single.MaxValue)]
-        [Row(false, 0.0f, 1.0f)]
-        [Row(false, Single.MinValue, 0.0f)]
-        [Row(false, Single.MaxValue, 0.0f)]
-        [Row(false, 1.0f, 0.0f)]
-        [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+        [TestCase(true, 0.0f, 0.0f)]
+        [TestCase(true, 1.0f, 1.0f)]
+        [TestCase(true, Single.MinValue, Single.MinValue)]
+        [TestCase(true, Single.MaxValue, Single.MaxValue)]
+        [TestCase(false, 0.0f, Single.MinValue)]
+        [TestCase(false, 0.0f, Single.MaxValue)]
+        [TestCase(false, 0.0f, 1.0f)]
+        [TestCase(false, Single.MinValue, 0.0f)]
+        [TestCase(false, Single.MaxValue, 0.0f)]
+        [TestCase(false, 1.0f, 0.0f)]
+        [Test]
         public void CeqR4(bool result, float a, float b)
         {
             this.CodeSource = s_testCode.Replace("t1", "float").Replace("t2", "float");
@@ -724,13 +724,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0f, 0f)]
-        [Row(true, 13.9f, 13.9f)]
-        [Row(true, 11.91262f, 11.91262f)]
-        [Row(false, 11.91262f, 11.91263f)]
-        [Row(false, -17f, 42f)]
-        [Row(false, Single.MinValue, Single.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0f, 0f)]
+        [TestCase(true, 13.9f, 13.9f)]
+        [TestCase(true, 11.91262f, 11.91262f)]
+        [TestCase(false, 11.91262f, 11.91263f)]
+        [TestCase(false, -17f, 42f)]
+        [TestCase(false, Single.MinValue, Single.MaxValue)]
+        [Test]
         public void CeqConstantR4Right(bool result, float a, float b)
         {
             this.CodeSource = CreateConstantTestCode("float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture)+"f");
@@ -744,13 +744,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0f, 0f)]
-        [Row(true, 13.9f, 13.9f)]
-        [Row(true, 11.91262f, 11.91262f)]
-        [Row(false, 11.91262f, 11.91263f)]
-        [Row(false, -17f, 42f)]
-        [Row(false, Single.MinValue, Single.MaxValue)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0f, 0f)]
+        [TestCase(true, 13.9f, 13.9f)]
+        [TestCase(true, 11.91262f, 11.91262f)]
+        [TestCase(false, 11.91262f, 11.91263f)]
+        [TestCase(false, -17f, 42f)]
+        [TestCase(false, Single.MinValue, Single.MaxValue)]
+        [Test]
         public void CeqConstantR4Left(bool result, float a, float b)
         {
             this.CodeSource = CreateConstantTestCode("float", a.ToString(System.Globalization.CultureInfo.InvariantCulture)+"f", null);
@@ -766,17 +766,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0.0, 0.0)]
-        [Row(true, 1.0, 1.0)]
-        [Row(true, Double.MinValue, Double.MinValue)]
-        [Row(true, Double.MaxValue, Double.MaxValue)]
-        [Row(false, 0.0, Double.MinValue)]
-        [Row(false, 0.0, Double.MaxValue)]
-        [Row(false, 0.0, 1.0)]
-        [Row(false, Double.MinValue, 0.0)]
-        [Row(false, Double.MaxValue, 0.0)]
-        [Row(false, 1.0, 0.0)]
-        [Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+        [TestCase(true, 0.0, 0.0)]
+        [TestCase(true, 1.0, 1.0)]
+        [TestCase(true, Double.MinValue, Double.MinValue)]
+        [TestCase(true, Double.MaxValue, Double.MaxValue)]
+        [TestCase(false, 0.0, Double.MinValue)]
+        [TestCase(false, 0.0, Double.MaxValue)]
+        [TestCase(false, 0.0, 1.0)]
+        [TestCase(false, Double.MinValue, 0.0)]
+        [TestCase(false, Double.MaxValue, 0.0)]
+        [TestCase(false, 1.0, 0.0)]
+        [Test]
         public void CeqR8(bool result, double a, double b)
         {
             this.CodeSource = s_testCode.Replace("t1", "double").Replace("t2", "double");
@@ -790,11 +790,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0.0, 0.0)]
-        [Row(false, -17.0, 42.5)]
-        [Row(true, 1.79769313486231E+308, 1.79769313486231E+308)]
-        [Row(false, -1.79769313486231E+308, 1.79769313486231E+308)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0.0, 0.0)]
+        [TestCase(false, -17.0, 42.5)]
+        [TestCase(true, 1.79769313486231E+308, 1.79769313486231E+308)]
+        [TestCase(false, -1.79769313486231E+308, 1.79769313486231E+308)]
+        [Test]
         public void CeqConstantR8Right(bool result, double a, double b)
         {
             this.CodeSource = CreateConstantTestCode("double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
@@ -808,11 +808,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [Row(true, 0.0, 0.0)]
-        [Row(false, -17.0, 42.5)]
-        [Row(true, 1.79769313486231E+308, 1.79769313486231E+308)]
-        [Row(false, -1.79769313486231E+308, 1.79769313486231E+308)]
-        [Test, Author("boddlnagg")]
+        [TestCase(true, 0.0, 0.0)]
+        [TestCase(false, -17.0, 42.5)]
+        [TestCase(true, 1.79769313486231E+308, 1.79769313486231E+308)]
+        [TestCase(false, -1.79769313486231E+308, 1.79769313486231E+308)]
+        [Test]
         public void CeqConstantR8Left(bool result, double a, double b)
         {
             this.CodeSource = CreateConstantTestCode("double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);

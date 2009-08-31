@@ -13,7 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MbUnit.Framework;
+using NUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
@@ -31,8 +31,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Checks support for ldloca on I1 operands.
         /// </summary>
         /// <param name="value">The value to check.</param>
-        [Column(0, 1, SByte.MinValue, SByte.MaxValue, SByte.MinValue + 1, SByte.MaxValue - 1)]
-        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(SByte.MinValue)]
+        [TestCase(SByte.MaxValue)]
+        [TestCase(SByte.MinValue + 1)]
+        [TestCase(SByte.MaxValue - 1)]
+        [Test]
         public void LdlocaI1_CheckValue(sbyte value)
         {
             CodeSource = @"
@@ -59,8 +64,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Checks support for ldloca on I2 operands.
         /// </summary>
         /// <param name="value">The value to check.</param>
-        [Column(0, 1, Int16.MinValue, Int16.MaxValue, Int16.MinValue + 1, Int16.MaxValue - 1)]
-        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(Int16.MinValue)]
+        [TestCase(Int16.MaxValue)]
+        [TestCase(Int16.MinValue + 1)]
+        [TestCase(Int16.MaxValue - 1)]
+        [Test]
         public void LdlocaI2_CheckValue(short value)
         {
             CodeSource = @"
@@ -87,8 +97,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Checks support for ldloca on I4 operands.
         /// </summary>
         /// <param name="value">The value to check.</param>
-        [ Column(0, 1, Int32.MinValue, Int32.MaxValue, Int32.MinValue + 1, Int32.MaxValue-1) ]
-        [ Test, Author(@"grover", @"sharpos@michaelruck.de") ]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(Int32.MinValue)]
+        [TestCase(Int32.MaxValue)]
+        [TestCase(Int32.MinValue + 1)]
+        [TestCase(Int32.MaxValue - 1)]
+        [ Test ]
         public void LdlocaI4_CheckValue(int value)
         {
             CodeSource = @"
@@ -115,8 +130,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Checks support for ldloca on I8 operands.
         /// </summary>
         /// <param name="value">The value to check.</param>
-        [Column(0, 1, Int64.MinValue, Int64.MaxValue, Int64.MinValue + 1, Int64.MaxValue - 1)]
-        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(Int64.MinValue)]
+        [TestCase(Int64.MaxValue)]
+        [TestCase(Int64.MinValue + 1)]
+        [TestCase(Int64.MaxValue - 1)]
+        [Test]
         public void LdlocaI8_CheckValue(long value)
         {
             CodeSource = @"
@@ -143,8 +163,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Checks support for ldloca on U1 operands.
         /// </summary>
         /// <param name="value">The value to check.</param>
-        [Column(0, 1, Byte.MinValue, Byte.MaxValue, Byte.MinValue + 1, Byte.MaxValue - 1)]
-        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(Byte.MinValue)]
+        [TestCase(Byte.MaxValue)]
+        [TestCase(Byte.MinValue + 1)]
+        [TestCase(Byte.MaxValue - 1)]
+        [Test]
         public void LdlocaU1_CheckValue(byte value)
         {
             CodeSource = @"
@@ -171,8 +196,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Checks support for ldloca on U2 operands.
         /// </summary>
         /// <param name="value">The value to check.</param>
-        [Column(0, 1, UInt16.MinValue, UInt16.MaxValue, UInt16.MinValue + 1, UInt16.MaxValue - 1)]
-        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(UInt16.MinValue)]
+        [TestCase(UInt16.MaxValue)]
+        [TestCase(UInt16.MinValue + 1)]
+        [TestCase(UInt16.MaxValue - 1)]
+        [Test]
         public void LdlocaU2_CheckValue(ushort value)
         {
             CodeSource = @"
@@ -199,8 +229,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Checks support for ldloca on U4 operands.
         /// </summary>
         /// <param name="value">The value to check.</param>
-        [Column(0, 1, UInt32.MinValue, UInt32.MaxValue, UInt32.MinValue + 1, UInt32.MaxValue - 1)]
-        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(UInt32.MinValue)]
+        [TestCase(UInt32.MaxValue)]
+        [TestCase(UInt32.MinValue + 1)]
+        [TestCase(UInt32.MaxValue - 1)]
+        [Test]
         public void LdlocaU4_CheckValue(uint value)
         {
             CodeSource = @"
@@ -227,8 +262,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Checks support for ldloca on U8 operands.
         /// </summary>
         /// <param name="value">The value to check.</param>
-        [Column(0, 1, UInt64.MinValue, UInt64.MaxValue, UInt64.MinValue + 1, UInt64.MaxValue - 1)]
-        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(UInt64.MinValue)]
+        [TestCase(UInt64.MaxValue)]
+        [TestCase(UInt64.MinValue + 1)]
+        [TestCase(UInt64.MaxValue - 1)]
+        [Test]
         public void LdlocaU8_CheckValue(ulong value)
         {
             CodeSource = @"
@@ -255,8 +295,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Checks support for ldloca on R4 operands.
         /// </summary>
         /// <param name="value">The value to check.</param>
-        [Column(0, 1, Single.MinValue, Single.MaxValue, Single.MinValue + 1, Single.MaxValue - 1)]
-        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(Single.MinValue)]
+        [TestCase(Single.MaxValue)]
+        [TestCase(Single.MinValue + 1)]
+        [TestCase(Single.MaxValue - 1)]
+        [Test]
         public void LdlocaR4_CheckValue(float value)
         {
             CodeSource = @"
@@ -283,8 +328,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Checks support for ldloca on R8 operands.
         /// </summary>
         /// <param name="value">The value to check.</param>
-        [Column(0, 1, Double.MinValue, Double.MaxValue, Double.MinValue + 1, Double.MaxValue - 1)]
-        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(Double.MinValue)]
+        [TestCase(Double.MaxValue)]
+        [TestCase(Double.MinValue + 1)]
+        [TestCase(Double.MaxValue - 1)]
+        [Test]
         public void LdlocaR8_CheckValue(double value)
         {
             CodeSource = @"

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using MbUnit.Framework;
+using NUnit.Framework;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -47,11 +47,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the boolean type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Row(true)]
-        //[Row(false)]
+        [TestCase(true)]
+        //[TestCase(false)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StaticFieldInitB(bool value)
         {
             RunTestCode<B_B, bool>(s_testCode.Replace("type", "bool").Replace("s_value", value.ToString().ToLower()), value);
@@ -61,15 +61,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the char type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Row(Char.MinValue)]
-        [Row(Char.MaxValue)]
-        [Row('a')]
-        [Row('z')]
-        [Row('0')]
-        [Row('9')]
+        [TestCase(Char.MinValue)]
+        [TestCase(Char.MaxValue)]
+        [TestCase('a')]
+        [TestCase('z')]
+        [TestCase('0')]
+        [TestCase('9')]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StaticFieldInitC(char value)
         {
             RunTestCode<B_C, char>(s_testCode.Replace("type", "char").Replace("s_value", "'\\u" + ((int)value).ToString("x4") + "'"), value);
@@ -79,10 +79,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the sbyte type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(SByte.MaxValue, SByte.MinValue, (sbyte)0, (sbyte)1, (sbyte)-1)]
+        [TestCase(SByte.MaxValue)]
+        [TestCase(SByte.MinValue)]
+        [TestCase((sbyte)0)]
+        [TestCase((sbyte)1)]
+        [TestCase((sbyte)-1)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StaticFieldInitI1(sbyte value)
         {
             RunTestCode<B_I1, sbyte>(s_testCode.Replace("type", "sbyte").Replace("s_value", "(sbyte)" + value.ToString()), value);
@@ -92,10 +96,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the short type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(Int16.MaxValue, Int16.MinValue, (short)0, (short)1, (short)-1)]
+        [TestCase(Int16.MaxValue)]
+        [TestCase(Int16.MinValue)]
+        [TestCase((short)0)]
+        [TestCase((short)1)]
+        [TestCase((short)-1)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StaticFieldInitI2(short value)
         {
             RunTestCode<B_I2, short>(s_testCode.Replace("type", "short").Replace("s_value", "(short)" + value.ToString()), value);
@@ -105,10 +113,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the int type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(Int32.MaxValue, Int32.MinValue, 0, 1, -1)]
+        [TestCase(Int32.MaxValue)]
+        [TestCase(Int32.MinValue)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(-1)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StaticFieldInitI4(int value)
         {
             RunTestCode<B_I4, int>(s_testCode.Replace("type", "int").Replace("s_value", value.ToString()), value);
@@ -118,10 +130,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the long type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(Int64.MaxValue/*, Int64.MinValue, 0L, 1L, -1L*/)]
+        [TestCase(Int64.MaxValue/*, Int64.MinValue, 0L, 1L, -1L*/)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StaticFieldInitI8(long value)
         {
             RunTestCode<B_I8, long>(s_testCode.Replace("type", "long").Replace("s_value", value.ToString() + "L"), value);
@@ -131,10 +143,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the byte type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(Byte.MaxValue, Byte.MinValue, (byte)0U, (byte)1U, (byte)0xFFU)]
+        [TestCase(Byte.MaxValue)]
+        [TestCase(Byte.MinValue)]
+        [TestCase((byte)0U)]
+        [TestCase((byte)1U)]
+        [TestCase((byte)0xFFU)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StaticFieldInitU1(byte value)
         {
             RunTestCode<B_U1, byte>(s_testCode.Replace("type", "byte").Replace("s_value", "(byte)" + value.ToString() + "U"), value);
@@ -144,10 +160,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the ushort type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(UInt16.MaxValue, UInt16.MinValue, (ushort)0U, (ushort)1U, (ushort)0xFFFFU)]
+        [TestCase(UInt16.MaxValue)]
+        [TestCase(UInt16.MinValue)]
+        [TestCase((ushort)0U)]
+        [TestCase((ushort)1U)]
+        [TestCase((ushort)0xFFFFU)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StaticFieldInitU2(ushort value)
         {
             RunTestCode<B_U2, ushort>(s_testCode.Replace("type", "ushort").Replace("s_value", "(ushort)" + value.ToString() + "U"), value);
@@ -157,10 +177,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the uint type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(UInt32.MaxValue, UInt32.MinValue, 0U, 1U, 0xFFFFFFFFU)]
+        [TestCase(UInt32.MaxValue)]
+        [TestCase(UInt32.MinValue)]
+        [TestCase(0U)]
+        [TestCase(1U)]
+        [TestCase(0xFFFFFFFFU)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StaticFieldInitU4(uint value)
         {
             RunTestCode<B_U4, uint>(s_testCode.Replace("type", "uint").Replace("s_value", value.ToString() + "U"), value);
@@ -170,10 +194,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the ulong type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(UInt64.MaxValue, UInt64.MinValue, 0UL, 1UL, 0xFFFFFFFFFFFFFFFFUL)]
+        [TestCase(UInt64.MaxValue)]
+        [TestCase(UInt64.MinValue)]
+        [TestCase(0UL)]
+        [TestCase(1UL)]
+        [TestCase(0xFFFFFFFFFFFFFFFFUL)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StaticFieldInitU8(ulong value)
         {
             RunTestCode<B_U8, ulong>(s_testCode.Replace("type", "ulong").Replace("s_value", value.ToString() + "UL"), value);
@@ -183,10 +211,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the float type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(/*Single.MaxValue, Single.MinValue, 0.0f, 1.0f,*/ Single.NaN, Single.NegativeInfinity, Single.PositiveInfinity, Single.Epsilon)]
+        [TestCase(/*Single.MaxValue, Single.MinValue, 0.0f, 1.0f,*/ Single.NaN)]
+        [TestCase(Single.NegativeInfinity)]
+        [TestCase(Single.PositiveInfinity)]
+        [TestCase(Single.Epsilon)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StaticFieldInitR4(float value)
         {
             string sValue = value.ToString("R", CultureInfo.InvariantCulture) + "f";
@@ -204,10 +235,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the StaticFieldInit for the double type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(Double.MaxValue, Double.MinValue, 0.0, 1.0, Double.NaN, Double.NegativeInfinity, Double.PositiveInfinity, Double.Epsilon)]
+        [TestCase(Double.MaxValue)]
+        [TestCase(Double.MinValue)]
+        [TestCase(0.0)]
+        [TestCase(1.0)]
+        [TestCase(Double.NaN)]
+        [TestCase(Double.NegativeInfinity)]
+        [TestCase(Double.PositiveInfinity)]
+        [TestCase(Double.Epsilon)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StaticFieldInitR8(double value)
         {
             string sValue = value.ToString("R", CultureInfo.InvariantCulture);

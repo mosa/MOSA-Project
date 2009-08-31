@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using MbUnit.Framework;
+using NUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
@@ -34,14 +34,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(1)]
-        [Row(23)]
-        [Row(-1)]
-        [Row(0)]
+        [TestCase(1)]
+        [TestCase(23)]
+        [TestCase(-1)]
+        [TestCase(0)]
         // And reverse
-        [Row(2)]
-        [Row(-2)]       
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(2)]
+        [TestCase(-2)]       
+        [Test]
         public void SwitchI1(sbyte a)
         {
             CodeSource = @"static class Test { 
@@ -94,12 +94,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(1)]
-        [Row(23)]
-        [Row(0)]
+        [TestCase(1)]
+        [TestCase(23)]
+        [TestCase(0)]
         // And reverse
-        [Row(2)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(2)]
+        [Test]
         public void SwitchU1(byte a)
         {
             CodeSource = @"static class Test { 
@@ -143,18 +143,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(1)]
-        [Row(23)]
-        [Row(-1)]
-        [Row(0)]
+        [TestCase(1)]
+        [TestCase(23)]
+        [TestCase(-1)]
+        [TestCase(0)]
         // And reverse
-        [Row(2)]
-        [Row(-2)]
+        [TestCase(2)]
+        [TestCase(-2)]
         // (MinValue, X) Cases
-        [Row(short.MinValue)]
+        [TestCase(short.MinValue)]
         // (MaxValue, X) Cases
-        [Row(short.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(short.MaxValue)]
+        [Test]
         public void SwitchI2(short a)
         {
             CodeSource = @"static class Test { 
@@ -207,16 +207,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(1)]
-        [Row(23)]
-        [Row(0)]
+        [TestCase(1)]
+        [TestCase(23)]
+        [TestCase(0)]
         // And reverse
-        [Row(2)]
+        [TestCase(2)]
         // (MinValue, X) Cases
-        [Row(ushort.MinValue)]
+        [TestCase(ushort.MinValue)]
         // (MaxValue, X) Cases
-        [Row(ushort.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(ushort.MaxValue)]
+        [Test]
         public void SwitchU2(ushort a)
         {
             CodeSource = @"static class Test { 
@@ -260,18 +260,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(1)]
-        [Row(23)]
-        [Row(-1)]
-        [Row(0)]
+        [TestCase(1)]
+        [TestCase(23)]
+        [TestCase(-1)]
+        [TestCase(0)]
         // And reverse
-        [Row(2)]
-        [Row(-2)]
+        [TestCase(2)]
+        [TestCase(-2)]
         // (MinValue, X) Cases
-        [Row(int.MinValue)]
+        [TestCase(int.MinValue)]
         // (MaxValue, X) Cases
-        [Row(int.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(int.MaxValue)]
+        [Test]
         public void SwitchI4(int a)
         {
             CodeSource = @"static class Test { 
@@ -324,16 +324,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(1)]
-        [Row(23)]
-        [Row(0)]
+        [TestCase(1)]
+        [TestCase(23)]
+        [TestCase(0)]
         // And reverse
-        [Row(2)]
+        [TestCase(2)]
         // (MinValue, X) Cases
-        [Row(uint.MinValue)]
+        [TestCase(uint.MinValue)]
         // (MaxValue, X) Cases
-        [Row(uint.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(uint.MaxValue)]
+        [Test]
         public void SwitchU4(uint a)
         {
             CodeSource = @"static class Test { 
@@ -378,18 +378,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(1)]
-        [Row(23)]
-        [Row(-1)]
-        [Row(0)]
+        [TestCase(1)]
+        [TestCase(23)]
+        [TestCase(-1)]
+        [TestCase(0)]
         // And reverse
-        [Row(2)]
-        [Row(-2)]
+        [TestCase(2)]
+        [TestCase(-2)]
         // (MinValue, X) Cases
-        [Row(long.MinValue)]
+        [TestCase(long.MinValue)]
         // (MaxValue, X) Cases
-        [Row(long.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(long.MaxValue)]
+        [Test]
         public void SwitchI8(long a)
         {
             CodeSource = @"static class Test { 
@@ -442,16 +442,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(1)]
-        [Row(23)]
-        [Row(0)]
+        [TestCase(1)]
+        [TestCase(23)]
+        [TestCase(0)]
         // And reverse
-        [Row(2)]
+        [TestCase(2)]
         // (MinValue, X) Cases
-        [Row(ulong.MinValue)]
+        [TestCase(ulong.MinValue)]
         // (MaxValue, X) Cases
-        [Row(ulong.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(ulong.MaxValue)]
+        [Test]
         public void SwitchU8(ulong a)
         {
             CodeSource = @"static class Test { 

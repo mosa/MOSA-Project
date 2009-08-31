@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using MbUnit.Framework;
+using NUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
@@ -40,11 +40,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the stsfld operation for the boolean type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Row(true)]
-        [Row(false)]
+        [TestCase(true)]
+        [TestCase(false)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StsfldB(bool value)
         {
             this.CodeSource = s_testCode.Replace("type", "bool");
@@ -56,15 +56,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the stsfld operation for the char type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Row(Char.MinValue)]
-        [Row(Char.MaxValue)]
-        [Row('a')]
-        [Row('z')]
-        [Row('0')]
-        [Row('9')]
+        [TestCase(Char.MinValue)]
+        [TestCase(Char.MaxValue)]
+        [TestCase('a')]
+        [TestCase('z')]
+        [TestCase('0')]
+        [TestCase('9')]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StsfldC(char value)
         {
             this.CodeSource = s_testCode.Replace("type", "char");
@@ -76,10 +76,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the stsfld operation for the sbyte type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(SByte.MaxValue, SByte.MinValue, (sbyte)0, (sbyte)1, (sbyte)-1)]
+        [TestCase(SByte.MaxValue)]
+        [TestCase(SByte.MinValue)]
+        [TestCase((sbyte)0)]
+        [TestCase((sbyte)1)]
+        [TestCase((sbyte)-1)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StsfldI1(sbyte value)
         {
             this.CodeSource = s_testCode.Replace("type", "sbyte");
@@ -91,10 +95,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the stsfld operation for the short type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(Int16.MaxValue, Int16.MinValue, (short)0, (short)1, (short)-1)]
+        [TestCase(Int16.MaxValue)]
+        [TestCase(Int16.MinValue)]
+        [TestCase((short)0)]
+        [TestCase((short)1)]
+        [TestCase((short)-1)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StsfldI2(short value)
         {
             this.CodeSource = s_testCode.Replace("type", "short");
@@ -106,10 +114,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the stsfld operation for the int type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(Int32.MaxValue, Int32.MinValue, 0, 1, -1)]
+        [TestCase(Int32.MaxValue)]
+        [TestCase(Int32.MinValue)]
+        [TestCase(0, 1, -1)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StsfldI4(int value)
         {
             this.CodeSource = s_testCode.Replace("type", "int");
@@ -121,10 +131,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the stsfld operation for the long type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(Int64.MaxValue, Int64.MinValue, 0L, 1L, -1L)]
+        [TestCase(Int64.MaxValue)]
+        [TestCase(Int64.MinValue)]
+        [TestCase(0L, 1L, -1L)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StsfldI8(long value)
         {
             this.CodeSource = s_testCode.Replace("type", "long");
@@ -136,10 +148,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the stsfld operation for the byte type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(Byte.MaxValue, Byte.MinValue, (byte)0U, (byte)1U, (byte)0xFFU)]
+        [TestCase(Byte.MaxValue)]
+        [TestCase(Byte.MinValue)]
+        [TestCase((byte)0U)]
+        [TestCase((byte)1U)]
+        [TestCase((byte)0xFFU)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StsfldU1(byte value)
         {
             this.CodeSource = s_testCode.Replace("type", "byte");
@@ -151,10 +167,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the stsfld operation for the ushort type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(UInt16.MaxValue, UInt16.MinValue, (ushort)0U, (ushort)1U, (ushort)0xFFFFU)]
+        [TestCase(UInt16.MaxValue)]
+        [TestCase(UInt16.MinValue)]
+        [TestCase((ushort)0U)]
+        [TestCase((ushort)1U)]
+        [TestCase((ushort)0xFFFFU)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StsfldU2(ushort value)
         {
             this.CodeSource = s_testCode.Replace("type", "ushort");
@@ -166,10 +186,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the stsfld operation for the uint type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(UInt32.MaxValue, UInt32.MinValue, 0U, 1U, 0xFFFFFFFFU)]
+        [TestCase(UInt32.MaxValue)]
+        [TestCase(UInt32.MinValue)]
+        [TestCase(0U, 1U, 0xFFFFFFFFU)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StsfldU4(uint value)
         {
             this.CodeSource = s_testCode.Replace("type", "uint");
@@ -181,10 +203,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the stsfld operation for the ulong type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(UInt64.MaxValue, UInt64.MinValue, 0UL, 1UL, 0xFFFFFFFFFFFFFFFFUL)]
+        [TestCase(UInt64.MaxValue)]
+        [TestCase(UInt64.MinValue)]
+        [TestCase(0UL, 1UL, 0xFFFFFFFFFFFFFFFFUL)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StsfldU8(ulong value)
         {
             this.CodeSource = s_testCode.Replace("type", "ulong");
@@ -196,10 +220,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the stsfld operation for the float type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(Single.MaxValue, Single.MinValue, 0.0f, 1.0f, Single.NaN, Single.NegativeInfinity, Single.PositiveInfinity, Single.Epsilon)]
+        [TestCase(Single.MaxValue)]
+        [TestCase(Single.MinValue)]
+        [TestCase(0.0f)]
+        [TestCase(1.0f)]
+        [TestCase(Single.NaN)]
+        [TestCase(Single.NegativeInfinity)]
+        [TestCase(Single.PositiveInfinity)]
+        [TestCase(Single.Epsilon)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StsfldR4(float value)
         {
             this.CodeSource = s_testCode.Replace("type", "float");
@@ -211,10 +242,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// Tests the stsfld operation for the double type.
         /// </summary>
         /// <param name="value">The value to store in the static field</param>
-        [Column(Double.MaxValue, Double.MinValue, 0.0, 1.0, Double.NaN, Double.NegativeInfinity, Double.PositiveInfinity, Double.Epsilon)]
+        [TestCase(Double.MaxValue)]
+        [TestCase(Double.MinValue)]
+        [TestCase(0.0)]
+        [TestCase(1.0)]
+        [TestCase(Double.NaN)]
+        [TestCase(Double.NegativeInfinity)]
+        [TestCase(Double.PositiveInfinity)]
+        [TestCase(Double.Epsilon)]
         [Test]
-        [Author(@"Michael Ruck", @"sharpos@michaelruck.de")]
-        [Importance(Importance.Severe)]
+        
+        
         public void StsfldR8(double value)
         {
             this.CodeSource = s_testCode.Replace("type", "double");

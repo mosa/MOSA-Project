@@ -14,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using MbUnit.Framework;
+using NUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
@@ -44,15 +44,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row('a')]
-        [Row('Z')]
-        [Row(100)]
-        [Row(char.MaxValue)]
-        [Test, Author("boddlnagg", "boddlnagg@googlemail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase('a')]
+        [TestCase('Z')]
+        [TestCase(100)]
+        [TestCase(char.MaxValue)]
+        [Test]
         public void NotC(char a)
         {
             CodeSource = CreateTestCode("NotC", "char", "int");
@@ -72,23 +72,23 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row(10)]
-        [Row(11)]
-        [Row(100)]
-        [Row(-0)]
-        [Row(-1)]
-        [Row(-2)]
-        [Row(-5)]
-        [Row(-10)]
-        [Row(-11)]
-        [Row(-100)]
-        [Row(sbyte.MinValue)]
-        [Row(sbyte.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(100)]
+        [TestCase(-0)]
+        [TestCase(-1)]
+        [TestCase(-2)]
+        [TestCase(-5)]
+        [TestCase(-10)]
+        [TestCase(-11)]
+        [TestCase(-100)]
+        [TestCase(sbyte.MinValue)]
+        [TestCase(sbyte.MaxValue)]
+        [Test]
         public void NotI1(sbyte a)
         {
             CodeSource = CreateTestCode("NotI1", "sbyte", "int");
@@ -108,16 +108,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row(10)]
-        [Row(11)]
-        [Row(100)]
-        [Row(byte.MinValue)]
-        [Row(byte.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(100)]
+        [TestCase(byte.MinValue)]
+        [TestCase(byte.MaxValue)]
+        [Test]
         public void NotU1(byte a)
         {
             CodeSource = CreateTestCode("NotU1", "byte", "byte");
@@ -137,23 +137,23 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row(10)]
-        [Row(11)]
-        [Row(100)]
-        [Row(-0)]
-        [Row(-1)]
-        [Row(-2)]
-        [Row(-5)]
-        [Row(-10)]
-        [Row(-11)]
-        [Row(-100)]
-        [Row(short.MinValue)]
-        [Row(short.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(100)]
+        [TestCase(-0)]
+        [TestCase(-1)]
+        [TestCase(-2)]
+        [TestCase(-5)]
+        [TestCase(-10)]
+        [TestCase(-11)]
+        [TestCase(-100)]
+        [TestCase(short.MinValue)]
+        [TestCase(short.MaxValue)]
+        [Test]
         public void NotI2(short a)
         {
             CodeSource = CreateTestCode("NotI2", "short", "int");
@@ -173,16 +173,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row(10)]
-        [Row(11)]
-        [Row(100)]
-        [Row(ushort.MinValue)]
-        [Row(ushort.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(100)]
+        [TestCase(ushort.MinValue)]
+        [TestCase(ushort.MaxValue)]
+        [Test]
         public void NotU2(ushort a)
         {
             CodeSource = CreateTestCode("NotU2", "ushort", "ushort");
@@ -202,23 +202,23 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row(10)]
-        [Row(11)]
-        [Row(100)]
-        [Row(-0)]
-        [Row(-1)]
-        [Row(-2)]
-        [Row(-5)]
-        [Row(-10)]
-        [Row(-11)]
-        [Row(-100)]
-        [Row(int.MinValue)]
-        [Row(int.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(100)]
+        [TestCase(-0)]
+        [TestCase(-1)]
+        [TestCase(-2)]
+        [TestCase(-5)]
+        [TestCase(-10)]
+        [TestCase(-11)]
+        [TestCase(-100)]
+        [TestCase(int.MinValue)]
+        [TestCase(int.MaxValue)]
+        [Test]
         public void NotI4(int a)
         {
             CodeSource = CreateTestCode("NotI4", "int", "int");
@@ -238,16 +238,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row(10)]
-        [Row(11)]
-        [Row(100)]
-        [Row(uint.MinValue)]
-        [Row(uint.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(100)]
+        [TestCase(uint.MinValue)]
+        [TestCase(uint.MaxValue)]
+        [Test]
         public void NotU4(uint a)
         {
             CodeSource = CreateTestCode("NotU4", "uint", "uint");
@@ -267,23 +267,23 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row(10)]
-        [Row(11)]
-        [Row(100)]
-        [Row(-0)]
-        [Row(-1)]
-        [Row(-2)]
-        [Row(-5)]
-        [Row(-10)]
-        [Row(-11)]
-        [Row(-100)]
-        [Row(sbyte.MinValue)]
-        [Row(sbyte.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(100)]
+        [TestCase(-0)]
+        [TestCase(-1)]
+        [TestCase(-2)]
+        [TestCase(-5)]
+        [TestCase(-10)]
+        [TestCase(-11)]
+        [TestCase(-100)]
+        [TestCase(sbyte.MinValue)]
+        [TestCase(sbyte.MaxValue)]
+        [Test]
         public void NotI8(long a)
         {
             CodeSource = CreateTestCode("NotI8", "long", "long");
@@ -303,16 +303,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row(10)]
-        [Row(11)]
-        [Row(100)]
-        [Row(ulong.MinValue)]
-        [Row(ulong.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(100)]
+        [TestCase(ulong.MinValue)]
+        [TestCase(ulong.MaxValue)]
+        [Test]
         public void NotU8(ulong a)
         {
             CodeSource = CreateTestCode("NotU8", "ulong", "ulong");

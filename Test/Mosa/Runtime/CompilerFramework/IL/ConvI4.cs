@@ -13,7 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MbUnit.Framework;
+using NUnit.Framework;
 using System.Reflection.Emit;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
@@ -35,8 +35,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, 2, sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0), TestCase(1), TestCase(2), TestCase(sbyte.MinValue), TestCase(sbyte.MaxValue)]
+        [Test]
         public void ConvI4_I1(sbyte a)
         {
             CodeSource = "static class Test { static bool ConvI4_I1(int expect, sbyte a) { return expect == ((int)a); } }";
@@ -54,8 +54,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, 2, short.MinValue, short.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0), TestCase(1), TestCase(2), TestCase(short.MinValue), TestCase(short.MaxValue)]
+        [Test]
         public void ConvI4_I2(short a)
         {
             CodeSource = "static class Test { static bool ConvI4_I2(int expect, short a) { return expect == ((int)a); } }";
@@ -73,8 +73,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, 2, int.MinValue, int.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0), TestCase(1), TestCase(2), TestCase(int.MinValue), TestCase(int.MaxValue)]
+        [Test]
         public void ConvI4_I4(int a)
         {
             CodeSource = "static class Test { static bool ConvI4_I4(int expect, int a) { return expect == ((int)a); } }";
@@ -92,8 +92,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, 2, int.MinValue, int.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0), TestCase(1), TestCase(2), TestCase(int.MinValue), TestCase(int.MaxValue)]
+        [Test]
         public void ConvI4_I8(long a)
         {
             CodeSource = "static class Test { static bool ConvI4_I8(int expect, long a) { return expect == ((int)a); } }";
@@ -111,8 +111,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0.0f, 1.0f, 2.0f, Single.MinValue, Single.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0.0f), TestCase(1.0f), TestCase(2.0f), TestCase(Single.MinValue), TestCase(Single.MaxValue)]
+        [Test]
         public void ConvI4_R4(float a)
         {
             CodeSource = "static class Test { static bool ConvI1_R4(int expect, float a) { return expect == ((int)a); } }";
@@ -130,8 +130,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0.0f, 1.0f, 2.0f, Double.MinValue, Double.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0.0), TestCase(1.0), TestCase(2.0), TestCase(Double.MinValue), TestCase(Double.MaxValue)]
+        [Test]
         public void ConvI4_R8(double a)
         {
             CodeSource = "static class Test { static bool ConvI1_R8(int expect, double a) { return expect == ((int)a); } }";

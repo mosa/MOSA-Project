@@ -13,7 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MbUnit.Framework;
+using NUnit.Framework;
 using System.Reflection.Emit;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
@@ -35,8 +35,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, 2, sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0), TestCase(1), TestCase(2), TestCase(sbyte.MinValue), TestCase(sbyte.MaxValue)]
+        [Test]
         public void ConvI2_I1(sbyte a)
         {
             CodeSource = @"
@@ -60,8 +60,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, 2, short.MinValue, short.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0), TestCase(1), TestCase(2), TestCase(short.MinValue), TestCase(short.MaxValue)]
+        [Test]
         public void ConvI2_I2(short a)
         {
             CodeSource = @"
@@ -85,8 +85,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, 2, int.MinValue, int.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0), TestCase(1), TestCase(2), TestCase(int.MinValue), TestCase(int.MaxValue)]
+        [Test]
         public void ConvI2_I4(int a)
         {
             CodeSource = @"
@@ -110,8 +110,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, 2, long.MinValue, long.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0), TestCase(1), TestCase(2), TestCase(long.MinValue), TestCase(long.MaxValue)]
+        [Test]
         public void ConvI2_I8(long a)
         {
             CodeSource = @"
@@ -135,8 +135,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0.0f, 1.0f, 2.0f, Single.MinValue, Single.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0.0f), TestCase(1.0f), TestCase(2.0f), TestCase(Single.MinValue), TestCase(Single.MaxValue)]
+        [Test]
         public void ConvI2_R4(float a)
         {
             CodeSource = @"
@@ -161,8 +161,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0.0f, 1.0f, 2.0f, Double.MinValue, Double.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0.0), TestCase(1.0), TestCase(2.0), TestCase(Double.MinValue), TestCase(Double.MaxValue)]
+        [Test]
         public void ConvI2_R8(double a)
         {
             CodeSource = @"

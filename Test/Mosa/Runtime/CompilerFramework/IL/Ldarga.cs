@@ -13,7 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MbUnit.Framework;
+using NUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
@@ -35,8 +35,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(sbyte.MinValue)]
+        [TestCase(sbyte.MaxValue)]
+        [Test]
         public void LdargaI1_CheckValue(sbyte a)
         {
             CodeSource = @"
@@ -66,8 +69,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, byte.MinValue, byte.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(byte.MinValue)]
+        [TestCase(byte.MaxValue)]
+        [Test]
         public void LdargaU1_CheckValue(byte a)
         {
             CodeSource = @"
@@ -97,8 +103,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, short.MinValue, short.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(short.MinValue)]
+        [TestCase(short.MaxValue)]
+        [Test]
         public void LdargaI2_CheckValue(short a)
         {
             CodeSource = @"
@@ -128,8 +137,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, ushort.MinValue, ushort.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(ushort.MinValue)]
+        [TestCase(ushort.MaxValue)]
+        [Test]
         public void LdargaU2_CheckValue(ushort a)
         {
             CodeSource = @"
@@ -159,8 +171,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, int.MinValue, int.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(int.MinValue)]
+        [TestCase(int.MaxValue)]
+        [Test]
         public void LdargaI4_CheckValue(int a)
         {
             CodeSource = @"
@@ -190,8 +205,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, uint.MinValue, uint.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(uint.MinValue)]
+        [TestCase(uint.MaxValue)]
+        [Test]
         public void LdargaU4_CheckValue(uint a)
         {
             CodeSource = @"
@@ -221,8 +239,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, long.MinValue, long.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(long.MinValue)]
+        [TestCase(long.MaxValue)]
+        [Test]
         public void LdargaI8_CheckValue(long a)
         {
             CodeSource = @"
@@ -252,8 +273,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, ulong.MinValue, ulong.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(ulong.MinValue)]
+        [TestCase(ulong.MaxValue)]
+        [Test]
         public void LdargaU8_CheckValue(ulong a)
         {
             CodeSource = @"
@@ -283,8 +307,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, float.MinValue, float.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(float.MinValue)]
+        [TestCase(float.MaxValue)]
+        [Test]
         public void LdargaR4_CheckValue(float a)
         {
             CodeSource = @"
@@ -314,8 +341,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, double.MinValue, double.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(double.MinValue)]
+        [TestCase(double.MaxValue)]
+        [Test]
         public void LdargaR8_CheckValue(double a)
         {
             CodeSource = @"
@@ -351,8 +381,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="newValue"></param>
         /// <param name="oldValue"></param>
-        [Row(1, 0), Row(0, 1), Row(1, sbyte.MinValue), Row(0, sbyte.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(1, 0), TestCase(0, 1), TestCase(1, sbyte.MinValue), TestCase(0, sbyte.MaxValue)]
+        [Test]
         public void LdargaI1_ChangeValue(sbyte newValue, sbyte oldValue)
         {
             CodeSource = @"
@@ -383,8 +413,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="newValue"></param>
         /// <param name="oldValue"></param>
-        [Row(1, 0), Row(0, 1), Row(1, short.MinValue), Row(0, short.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(1, 0), TestCase(0, 1), TestCase(1, short.MinValue), TestCase(0, short.MaxValue)]
+        [Test]
         public void LdargaI2_ChangeValue(short newValue, short oldValue)
         {
             CodeSource = "static class Test { static void LdargaI2_ChangeValue(short value, ref short a) { a = value; } }";
@@ -405,8 +435,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="newValue"></param>
         /// <param name="oldValue"></param>
-        [Row(1, 0), Row(0, 1), Row(1, int.MinValue), Row(0, int.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(1, 0), TestCase(0, 1), TestCase(1, int.MinValue), TestCase(0, int.MaxValue)]
+        [Test]
         public void LdargaI4_ChangeValue(int newValue, int oldValue)
         {
             CodeSource = @"static class Test { static void LdargaI4_ChangeValue(int value, ref int a) { a = value; } }";
@@ -427,8 +457,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="newValue"></param>
         /// <param name="oldValue"></param>
-        [Row(1, 0), Row(0, 1), Row(1, long.MinValue), Row(0, long.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(1, 0), TestCase(0, 1), TestCase(1, long.MinValue), TestCase(0, long.MaxValue)]
+        [Test]
         public void LdargaI8_ChangeValue(long newValue, long oldValue)
         {
             CodeSource = "static class Test { static void LdargaI8_ChangeValue(long value, ref long a) { a = value; } }";
@@ -449,8 +479,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="newValue"></param>
         /// <param name="oldValue"></param>
-        [Row(1, 0), Row(0, 1), Row(1, float.MinValue), Row(0, float.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(1, 0), TestCase(0, 1), TestCase(1, float.MinValue), TestCase(0, float.MaxValue)]
+        [Test]
         public void LdargaR4_ChangeValue(float newValue, float oldValue)
         {
             CodeSource = "static class Test { static void LdargaR4_ChangeValue(float value, ref float a) { a = value; } }";
@@ -471,8 +501,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="newValue"></param>
         /// <param name="oldValue"></param>
-        [Row(1, 0), Row(0, 1), Row(1, double.MinValue), Row(0, double.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(1, 0), TestCase(0, 1), TestCase(1, double.MinValue), TestCase(0, double.MaxValue)]
+        [Test]
         public void LdargaR8_ChangeValue(double newValue, double oldValue)
         {
             CodeSource = "static class Test { static void LdargaR8_ChangeValue(double value, ref double a) { a = value; } }";

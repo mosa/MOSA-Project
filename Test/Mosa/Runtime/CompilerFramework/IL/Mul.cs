@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using MbUnit.Framework;
+using NUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
@@ -81,11 +81,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(0, 0)]
-        [Row(17, 128)]
-        [Row('a', 'Z')]
-        [Row(char.MinValue, char.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 0)]
+        [TestCase(17, 128)]
+        [TestCase('a', 'Z')]
+        [TestCase(char.MinValue, char.MaxValue)]
+        [Test]
         public void MulC(char a, char b)
         {
             CodeSource = CreateTestCode("MulC", "char", "char");
@@ -99,10 +99,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(0, 'a')]
-        [Row('-', '.')]
-        [Row('a', 'Z')]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 'a')]
+        [TestCase('-', '.')]
+        [TestCase('a', 'Z')]
+        [Test]
         public void MulConstantCRight(char a, char b)
         {
             CodeSource = CreateConstantTestCode("MulConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
@@ -114,10 +114,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row('a', 0)]
-        [Row('-', '.')]
-        [Row('a', 'Z')]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase('a', 0)]
+        [TestCase('-', '.')]
+        [TestCase('a', 'Z')]
+        [Test]
         public void MulConstantCLeft(char a, char b)
         {
             CodeSource = CreateConstantTestCode("MulConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
@@ -139,58 +139,58 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0)]
-        [Row(-17, -2)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(1, -2)]
+        [TestCase(-1, 2)]
+        [TestCase(0, 0)]
+        [TestCase(-17, -2)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
+        [TestCase(-2, 1)]
+        [TestCase(2, -1)]
+        [TestCase(-2, -17)]
         // (MinValue, X) Cases
-        [Row(sbyte.MinValue, 0)]
-        [Row(sbyte.MinValue, 1)]
-        [Row(sbyte.MinValue, 17)]
-        [Row(sbyte.MinValue, 123)]
-        [Row(sbyte.MinValue, -0)]
-        [Row(sbyte.MinValue, -1)]
-        [Row(sbyte.MinValue, -17)]
-        [Row(sbyte.MinValue, -123)]
+        [TestCase(sbyte.MinValue, 0)]
+        [TestCase(sbyte.MinValue, 1)]
+        [TestCase(sbyte.MinValue, 17)]
+        [TestCase(sbyte.MinValue, 123)]
+        [TestCase(sbyte.MinValue, -0)]
+        [TestCase(sbyte.MinValue, -1)]
+        [TestCase(sbyte.MinValue, -17)]
+        [TestCase(sbyte.MinValue, -123)]
         // (MaxValue, X) Cases
-        [Row(sbyte.MaxValue, 0)]
-        [Row(sbyte.MaxValue, 1)]
-        [Row(sbyte.MaxValue, 17)]
-        [Row(sbyte.MaxValue, 123)]
-        [Row(sbyte.MaxValue, -0)]
-        [Row(sbyte.MaxValue, -1)]
-        [Row(sbyte.MaxValue, -17)]
-        [Row(sbyte.MaxValue, -123)]
+        [TestCase(sbyte.MaxValue, 0)]
+        [TestCase(sbyte.MaxValue, 1)]
+        [TestCase(sbyte.MaxValue, 17)]
+        [TestCase(sbyte.MaxValue, 123)]
+        [TestCase(sbyte.MaxValue, -0)]
+        [TestCase(sbyte.MaxValue, -1)]
+        [TestCase(sbyte.MaxValue, -17)]
+        [TestCase(sbyte.MaxValue, -123)]
         // (X, MinValue) Cases
-        [Row(0, sbyte.MinValue)]
-        [Row(1, sbyte.MinValue)]
-        [Row(17, sbyte.MinValue)]
-        [Row(123, sbyte.MinValue)]
-        [Row(-0, sbyte.MinValue)]
-        [Row(-1, sbyte.MinValue)]
-        [Row(-17, sbyte.MinValue)]
-        [Row(-123, sbyte.MinValue)]
+        [TestCase(0, sbyte.MinValue)]
+        [TestCase(1, sbyte.MinValue)]
+        [TestCase(17, sbyte.MinValue)]
+        [TestCase(123, sbyte.MinValue)]
+        [TestCase(-0, sbyte.MinValue)]
+        [TestCase(-1, sbyte.MinValue)]
+        [TestCase(-17, sbyte.MinValue)]
+        [TestCase(-123, sbyte.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, sbyte.MaxValue)]
-        [Row(1, sbyte.MaxValue)]
-        [Row(17, sbyte.MaxValue)]
-        [Row(123, sbyte.MaxValue)]
-        [Row(-0, sbyte.MaxValue)]
-        [Row(-1, sbyte.MaxValue)]
-        [Row(-17, sbyte.MaxValue)]
-        [Row(-123, sbyte.MaxValue)]
+        [TestCase(0, sbyte.MaxValue)]
+        [TestCase(1, sbyte.MaxValue)]
+        [TestCase(17, sbyte.MaxValue)]
+        [TestCase(123, sbyte.MaxValue)]
+        [TestCase(-0, sbyte.MaxValue)]
+        [TestCase(-1, sbyte.MaxValue)]
+        [TestCase(-17, sbyte.MaxValue)]
+        [TestCase(-123, sbyte.MaxValue)]
         // Extremvaluecases
-        [Row(sbyte.MinValue, sbyte.MaxValue)]
-        [Row(sbyte.MaxValue, sbyte.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(sbyte.MinValue, sbyte.MaxValue)]
+        [TestCase(sbyte.MaxValue, sbyte.MinValue)]
+        [Test]
         public void MulI1(sbyte a, sbyte b)
         {
             CodeSource = CreateTestCode("MulI1", "sbyte", "int");
@@ -204,11 +204,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(2, -17)]
-        [Row(0, 0)]
-        [Row(sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(2, -17)]
+        [TestCase(0, 0)]
+        [TestCase(sbyte.MinValue, sbyte.MaxValue)]
+        [Test]
         public void MulConstantI1Right(sbyte a, sbyte b)
         {
             CodeSource = CreateConstantTestCode("MulConstantI1Right", "sbyte", "int", null, b.ToString());
@@ -220,11 +220,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(2, -17)]
-        [Row(0, 0)]
-        [Row(sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(2, -17)]
+        [TestCase(0, 0)]
+        [TestCase(sbyte.MinValue, sbyte.MaxValue)]
+        [Test]
         public void MulConstantI1Left(sbyte a, sbyte b)
         {
             CodeSource = CreateConstantTestCode("MulConstantI1Left", "sbyte", "int", a.ToString(), null);
@@ -246,36 +246,36 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(0, 0)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
         // (MinValue, X) Cases
-        [Row(byte.MinValue, 0)]
-        [Row(byte.MinValue, 1)]
-        [Row(byte.MinValue, 17)]
-        [Row(byte.MinValue, 123)]
+        [TestCase(byte.MinValue, 0)]
+        [TestCase(byte.MinValue, 1)]
+        [TestCase(byte.MinValue, 17)]
+        [TestCase(byte.MinValue, 123)]
         // (MaxValue, X) Cases
-        [Row(byte.MaxValue, 0)]
-        [Row(byte.MaxValue, 1)]
-        [Row(byte.MaxValue, 17)]
-        [Row(byte.MaxValue, 123)]
+        [TestCase(byte.MaxValue, 0)]
+        [TestCase(byte.MaxValue, 1)]
+        [TestCase(byte.MaxValue, 17)]
+        [TestCase(byte.MaxValue, 123)]
         // (X, MinValue) Cases
-        [Row(0, byte.MinValue)]
-        [Row(1, byte.MinValue)]
-        [Row(17, byte.MinValue)]
-        [Row(123, byte.MinValue)]
+        [TestCase(0, byte.MinValue)]
+        [TestCase(1, byte.MinValue)]
+        [TestCase(17, byte.MinValue)]
+        [TestCase(123, byte.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, byte.MaxValue)]
-        [Row(1, byte.MaxValue)]
-        [Row(17, byte.MaxValue)]
-        [Row(123, byte.MaxValue)]
+        [TestCase(0, byte.MaxValue)]
+        [TestCase(1, byte.MaxValue)]
+        [TestCase(17, byte.MaxValue)]
+        [TestCase(123, byte.MaxValue)]
         // Extremvaluecases
-        [Row(byte.MinValue, byte.MaxValue)]
-        [Row(byte.MaxValue, byte.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(byte.MinValue, byte.MaxValue)]
+        [TestCase(byte.MaxValue, byte.MinValue)]
+        [Test]
         public void MulU1(byte a, byte b)
         {
             CodeSource = CreateTestCode("MulU1", "byte", "uint");
@@ -289,11 +289,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(byte.MinValue, byte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(byte.MinValue, byte.MaxValue)]
+        [Test]
         public void MulConstantU1Right(byte a, byte b)
         {
             CodeSource = CreateConstantTestCode("MulConstantU1Right", "byte", "uint", null, b.ToString());
@@ -305,11 +305,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(byte.MinValue, byte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(byte.MinValue, byte.MaxValue)]
+        [Test]
         public void MulConstantU1Left(byte a, byte b)
         {
             CodeSource = CreateConstantTestCode("MulConstantU1Left", "byte", "uint", a.ToString(), null);
@@ -331,58 +331,58 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0)]
-        [Row(-17, -2)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(1, -2)]
+        [TestCase(-1, 2)]
+        [TestCase(0, 0)]
+        [TestCase(-17, -2)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
+        [TestCase(-2, 1)]
+        [TestCase(2, -1)]
+        [TestCase(-2, -17)]
         // (MinValue, X) Cases
-        [Row(short.MinValue, 0)]
-        [Row(short.MinValue, 1)]
-        [Row(short.MinValue, 17)]
-        [Row(short.MinValue, 123)]
-        [Row(short.MinValue, -0)]
-        [Row(short.MinValue, -1)]
-        [Row(short.MinValue, -17)]
-        [Row(short.MinValue, -123)]
+        [TestCase(short.MinValue, 0)]
+        [TestCase(short.MinValue, 1)]
+        [TestCase(short.MinValue, 17)]
+        [TestCase(short.MinValue, 123)]
+        [TestCase(short.MinValue, -0)]
+        [TestCase(short.MinValue, -1)]
+        [TestCase(short.MinValue, -17)]
+        [TestCase(short.MinValue, -123)]
         // (MaxValue, X) Cases
-        [Row(short.MaxValue, 0)]
-        [Row(short.MaxValue, 1)]
-        [Row(short.MaxValue, 17)]
-        [Row(short.MaxValue, 123)]
-        [Row(short.MaxValue, -0)]
-        [Row(short.MaxValue, -1)]
-        [Row(short.MaxValue, -17)]
-        [Row(short.MaxValue, -123)]
+        [TestCase(short.MaxValue, 0)]
+        [TestCase(short.MaxValue, 1)]
+        [TestCase(short.MaxValue, 17)]
+        [TestCase(short.MaxValue, 123)]
+        [TestCase(short.MaxValue, -0)]
+        [TestCase(short.MaxValue, -1)]
+        [TestCase(short.MaxValue, -17)]
+        [TestCase(short.MaxValue, -123)]
         // (X, MinValue) Cases
-        [Row(0, short.MinValue)]
-        [Row(1, short.MinValue)]
-        [Row(17, short.MinValue)]
-        [Row(123, short.MinValue)]
-        [Row(-0, short.MinValue)]
-        [Row(-1, short.MinValue)]
-        [Row(-17, short.MinValue)]
-        [Row(-123, short.MinValue)]
+        [TestCase(0, short.MinValue)]
+        [TestCase(1, short.MinValue)]
+        [TestCase(17, short.MinValue)]
+        [TestCase(123, short.MinValue)]
+        [TestCase(-0, short.MinValue)]
+        [TestCase(-1, short.MinValue)]
+        [TestCase(-17, short.MinValue)]
+        [TestCase(-123, short.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, short.MaxValue)]
-        [Row(1, short.MaxValue)]
-        [Row(17, short.MaxValue)]
-        [Row(123, short.MaxValue)]
-        [Row(-0, short.MaxValue)]
-        [Row(-1, short.MaxValue)]
-        [Row(-17, short.MaxValue)]
-        [Row(-123, short.MaxValue)]
+        [TestCase(0, short.MaxValue)]
+        [TestCase(1, short.MaxValue)]
+        [TestCase(17, short.MaxValue)]
+        [TestCase(123, short.MaxValue)]
+        [TestCase(-0, short.MaxValue)]
+        [TestCase(-1, short.MaxValue)]
+        [TestCase(-17, short.MaxValue)]
+        [TestCase(-123, short.MaxValue)]
         // Extremvaluecases
-        [Row(short.MinValue, short.MaxValue)]
-        [Row(short.MaxValue, short.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(short.MinValue, short.MaxValue)]
+        [TestCase(short.MaxValue, short.MinValue)]
+        [Test]
         public void MulI2(short a, short b)
         {
             CodeSource = CreateTestCode("MulI2", "short", "int");
@@ -396,11 +396,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 21)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(short.MinValue, short.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 21)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(short.MinValue, short.MaxValue)]
+        [Test]
         public void MulConstantI2Right(short a, short b)
         {
             CodeSource = CreateConstantTestCode("MulConstantI2Right", "short", "int", null, b.ToString());
@@ -412,11 +412,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 21)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(short.MinValue, short.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 21)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(short.MinValue, short.MaxValue)]
+        [Test]
         public void MulConstantI2Left(short a, short b)
         {
             CodeSource = CreateConstantTestCode("MulConstantI2Left", "short", "int", a.ToString(), null);
@@ -438,36 +438,36 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(0, 0)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
         // (MinValue, X) Cases
-        [Row(ushort.MinValue, 0)]
-        [Row(ushort.MinValue, 1)]
-        [Row(ushort.MinValue, 17)]
-        [Row(ushort.MinValue, 123)]
+        [TestCase(ushort.MinValue, 0)]
+        [TestCase(ushort.MinValue, 1)]
+        [TestCase(ushort.MinValue, 17)]
+        [TestCase(ushort.MinValue, 123)]
         // (MaxValue, X) Cases
-        [Row(ushort.MaxValue, 0)]
-        [Row(ushort.MaxValue, 1)]
-        [Row(ushort.MaxValue, 17)]
-        [Row(ushort.MaxValue, 123)]
+        [TestCase(ushort.MaxValue, 0)]
+        [TestCase(ushort.MaxValue, 1)]
+        [TestCase(ushort.MaxValue, 17)]
+        [TestCase(ushort.MaxValue, 123)]
         // (X, MinValue) Cases
-        [Row(0, ushort.MinValue)]
-        [Row(1, ushort.MinValue)]
-        [Row(17, ushort.MinValue)]
-        [Row(123, ushort.MinValue)]
+        [TestCase(0, ushort.MinValue)]
+        [TestCase(1, ushort.MinValue)]
+        [TestCase(17, ushort.MinValue)]
+        [TestCase(123, ushort.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, ushort.MaxValue)]
-        [Row(1, ushort.MaxValue)]
-        [Row(17, ushort.MaxValue)]
-        [Row(123, ushort.MaxValue)]
+        [TestCase(0, ushort.MaxValue)]
+        [TestCase(1, ushort.MaxValue)]
+        [TestCase(17, ushort.MaxValue)]
+        [TestCase(123, ushort.MaxValue)]
         // Extremvaluecases
-        [Row(ushort.MinValue, ushort.MaxValue)]
-        [Row(ushort.MaxValue, ushort.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(ushort.MinValue, ushort.MaxValue)]
+        [TestCase(ushort.MaxValue, ushort.MinValue)]
+        [Test]
         public void MulU2(ushort a, ushort b)
         {
             CodeSource = CreateTestCode("MulU2", "ushort", "uint");
@@ -481,12 +481,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(ushort.MinValue, ushort.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(ushort.MinValue, ushort.MaxValue)]
+        [Test]
         public void MulConstantU2Right(ushort a, ushort b)
         {
             CodeSource = CreateConstantTestCode("MulConstantU2Right", "ushort", "uint", null, b.ToString());
@@ -498,12 +498,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(23, 148)] 
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(ushort.MinValue, ushort.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(23, 148)] 
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(ushort.MinValue, ushort.MaxValue)]
+        [Test]
         public void MulConstantU2Left(ushort a, ushort b)
         {
             CodeSource = CreateConstantTestCode("MulConstantU2Left", "ushort", "uint", a.ToString(), null);
@@ -525,58 +525,58 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0)]
-        [Row(-17, -2)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(1, -2)]
+        [TestCase(-1, 2)]
+        [TestCase(0, 0)]
+        [TestCase(-17, -2)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
+        [TestCase(-2, 1)]
+        [TestCase(2, -1)]
+        [TestCase(-2, -17)]
         // (MinValue, X) Cases
-        [Row(int.MinValue, 0)]
-        [Row(int.MinValue, 1)]
-        [Row(int.MinValue, 17)]
-        [Row(int.MinValue, 123)]
-        [Row(int.MinValue, -0)]
-        [Row(int.MinValue, -1)]
-        [Row(int.MinValue, -17)]
-        [Row(int.MinValue, -123)]
+        [TestCase(int.MinValue, 0)]
+        [TestCase(int.MinValue, 1)]
+        [TestCase(int.MinValue, 17)]
+        [TestCase(int.MinValue, 123)]
+        [TestCase(int.MinValue, -0)]
+        [TestCase(int.MinValue, -1)]
+        [TestCase(int.MinValue, -17)]
+        [TestCase(int.MinValue, -123)]
         // (MaxValue, X) Cases
-        [Row(int.MaxValue, 0)]
-        [Row(int.MaxValue, 1)]
-        [Row(int.MaxValue, 17)]
-        [Row(int.MaxValue, 123)]
-        [Row(int.MaxValue, -0)]
-        [Row(int.MaxValue, -1)]
-        [Row(int.MaxValue, -17)]
-        [Row(int.MaxValue, -123)]
+        [TestCase(int.MaxValue, 0)]
+        [TestCase(int.MaxValue, 1)]
+        [TestCase(int.MaxValue, 17)]
+        [TestCase(int.MaxValue, 123)]
+        [TestCase(int.MaxValue, -0)]
+        [TestCase(int.MaxValue, -1)]
+        [TestCase(int.MaxValue, -17)]
+        [TestCase(int.MaxValue, -123)]
         // (X, MinValue) Cases
-        [Row(0, int.MinValue)]
-        [Row(1, int.MinValue)]
-        [Row(17, int.MinValue)]
-        [Row(123, int.MinValue)]
-        [Row(-0, int.MinValue)]
-        [Row(-1, int.MinValue)]
-        [Row(-17, int.MinValue)]
-        [Row(-123, int.MinValue)]
+        [TestCase(0, int.MinValue)]
+        [TestCase(1, int.MinValue)]
+        [TestCase(17, int.MinValue)]
+        [TestCase(123, int.MinValue)]
+        [TestCase(-0, int.MinValue)]
+        [TestCase(-1, int.MinValue)]
+        [TestCase(-17, int.MinValue)]
+        [TestCase(-123, int.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, int.MaxValue)]
-        [Row(1, int.MaxValue)]
-        [Row(17, int.MaxValue)]
-        [Row(123, int.MaxValue)]
-        [Row(-0, int.MaxValue)]
-        [Row(-1, int.MaxValue)]
-        [Row(-17, int.MaxValue)]
-        [Row(-123, int.MaxValue)]
+        [TestCase(0, int.MaxValue)]
+        [TestCase(1, int.MaxValue)]
+        [TestCase(17, int.MaxValue)]
+        [TestCase(123, int.MaxValue)]
+        [TestCase(-0, int.MaxValue)]
+        [TestCase(-1, int.MaxValue)]
+        [TestCase(-17, int.MaxValue)]
+        [TestCase(-123, int.MaxValue)]
         // Extremvaluecases
-        [Row(int.MinValue, int.MaxValue)]
-        [Row(int.MaxValue, int.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(int.MinValue, int.MaxValue)]
+        [TestCase(int.MaxValue, int.MinValue)]
+        [Test]
         public void MulI4(int a, int b)
         {
             CodeSource = CreateTestCode("MulI4", "int", "int");
@@ -590,12 +590,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 21)]
-        [Row(-23, 148)] 
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(int.MinValue, int.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 21)]
+        [TestCase(-23, 148)] 
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(int.MinValue, int.MaxValue)]
+        [Test]
         public void MulConstantI4Right(int a, int b)
         {
             CodeSource = CreateConstantTestCode("MulConstantI4Right", "int", "int", null, b.ToString());
@@ -607,12 +607,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 21)]
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(int.MinValue, int.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 21)]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(int.MinValue, int.MaxValue)]
+        [Test]
         public void MulConstantI4Left(int a, int b)
         {
             CodeSource = CreateConstantTestCode("MulConstantI4Left", "int", "int", a.ToString(), null);
@@ -634,36 +634,36 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(0, 0)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
         // (MinValue, X) Cases
-        [Row(uint.MinValue, 0)]
-        [Row(uint.MinValue, 1)]
-        [Row(uint.MinValue, 17)]
-        [Row(uint.MinValue, 123)]
+        [TestCase(uint.MinValue, 0)]
+        [TestCase(uint.MinValue, 1)]
+        [TestCase(uint.MinValue, 17)]
+        [TestCase(uint.MinValue, 123)]
         // (MaxValue, X) Cases
-        [Row(uint.MaxValue, 0)]
-        [Row(uint.MaxValue, 1)]
-        [Row(uint.MaxValue, 17)]
-        [Row(uint.MaxValue, 123)]
+        [TestCase(uint.MaxValue, 0)]
+        [TestCase(uint.MaxValue, 1)]
+        [TestCase(uint.MaxValue, 17)]
+        [TestCase(uint.MaxValue, 123)]
         // (X, MinValue) Cases
-        [Row(0, uint.MinValue)]
-        [Row(1, uint.MinValue)]
-        [Row(17, uint.MinValue)]
-        [Row(123, uint.MinValue)]
+        [TestCase(0, uint.MinValue)]
+        [TestCase(1, uint.MinValue)]
+        [TestCase(17, uint.MinValue)]
+        [TestCase(123, uint.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, uint.MaxValue)]
-        [Row(1, uint.MaxValue)]
-        [Row(17, uint.MaxValue)]
-        [Row(123, uint.MaxValue)]
+        [TestCase(0, uint.MaxValue)]
+        [TestCase(1, uint.MaxValue)]
+        [TestCase(17, uint.MaxValue)]
+        [TestCase(123, uint.MaxValue)]
         // Extremvaluecases
-        [Row(uint.MinValue, uint.MaxValue)]
-        [Row(uint.MaxValue, uint.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(uint.MinValue, uint.MaxValue)]
+        [TestCase(uint.MaxValue, uint.MinValue)]
+        [Test]
         public void MulU4(uint a, uint b)
         {
             CodeSource = CreateTestCode("MulU4", "uint", "uint");
@@ -677,12 +677,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(uint.MinValue, uint.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(uint.MinValue, uint.MaxValue)]
+        [Test]
         public void MulConstantU4Right(uint a, uint b)
         {
             CodeSource = CreateConstantTestCode("MulConstantU4Right", "uint", "uint", null, b.ToString());
@@ -694,12 +694,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 21)]
-        [Row(23, 148)] 
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(uint.MinValue, uint.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 21)]
+        [TestCase(23, 148)] 
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(uint.MinValue, uint.MaxValue)]
+        [Test]
         public void MulConstantU4Left(uint a, uint b)
         {
             CodeSource = CreateConstantTestCode("MulConstantU4Left", "uint", "uint", a.ToString(), null);
@@ -721,55 +721,55 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0)]
-        [Row(-17, -2)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(1, -2)]
+        [TestCase(-1, 2)]
+        [TestCase(0, 0)]
+        [TestCase(-17, -2)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
+        [TestCase(-2, 1)]
+        [TestCase(2, -1)]
+        [TestCase(-2, -17)]
         // (MinValue, X) Cases
-        [Row(long.MinValue, 0)]
-        [Row(long.MinValue, 1)]
-        [Row(long.MinValue, 17)]
-        [Row(long.MinValue, 123)]
-        [Row(long.MinValue, -0)]
-        [Row(long.MinValue, -1)]
-        [Row(long.MinValue, -17)]
-        [Row(long.MinValue, -123)]
+        [TestCase(long.MinValue, 0)]
+        [TestCase(long.MinValue, 1)]
+        [TestCase(long.MinValue, 17)]
+        [TestCase(long.MinValue, 123)]
+        [TestCase(long.MinValue, -0)]
+        [TestCase(long.MinValue, -1)]
+        [TestCase(long.MinValue, -17)]
+        [TestCase(long.MinValue, -123)]
         // (MaxValue, X) Cases
-        [Row(long.MaxValue, 0)]
-        [Row(long.MaxValue, 1)]
-        [Row(long.MaxValue, 17)]
-        [Row(long.MaxValue, 123)]
-        [Row(long.MaxValue, -0)]
-        [Row(long.MaxValue, -1)]
-        [Row(long.MaxValue, -17)]
-        [Row(long.MaxValue, -123)]
+        [TestCase(long.MaxValue, 0)]
+        [TestCase(long.MaxValue, 1)]
+        [TestCase(long.MaxValue, 17)]
+        [TestCase(long.MaxValue, 123)]
+        [TestCase(long.MaxValue, -0)]
+        [TestCase(long.MaxValue, -1)]
+        [TestCase(long.MaxValue, -17)]
+        [TestCase(long.MaxValue, -123)]
         // (X, MinValue) Cases
-        [Row(0, long.MinValue)]
-        [Row(1, long.MinValue)]
-        [Row(17, long.MinValue)]
-        [Row(123, long.MinValue)]
-        [Row(-0, long.MinValue)]
-        [Row(-1, long.MinValue)]
-        [Row(-17, long.MinValue)]
-        [Row(-123, long.MinValue)]
+        [TestCase(0, long.MinValue)]
+        [TestCase(1, long.MinValue)]
+        [TestCase(17, long.MinValue)]
+        [TestCase(123, long.MinValue)]
+        [TestCase(-0, long.MinValue)]
+        [TestCase(-1, long.MinValue)]
+        [TestCase(-17, long.MinValue)]
+        [TestCase(-123, long.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, long.MaxValue)]
-        [Row(1, long.MaxValue)]
-        [Row(17, long.MaxValue)]
-        [Row(123, long.MaxValue)]
-        [Row(-0, long.MaxValue)]
-        [Row(-1, long.MaxValue)]
-        [Row(-17, long.MaxValue)]
-        [Row(-123, long.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0, long.MaxValue)]
+        [TestCase(1, long.MaxValue)]
+        [TestCase(17, long.MaxValue)]
+        [TestCase(123, long.MaxValue)]
+        [TestCase(-0, long.MaxValue)]
+        [TestCase(-1, long.MaxValue)]
+        [TestCase(-17, long.MaxValue)]
+        [TestCase(-123, long.MaxValue)]
+        [Test]
         public void MulI8(long a, long b)
         {
             CodeSource = CreateTestCode("MulI8", "long", "long");
@@ -783,11 +783,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(-123, long.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(-123, long.MaxValue)]
+        [Test]
         public void MulConstantI8Right(long a, long b)
         {
             CodeSource = CreateConstantTestCode("MulConstantI8Right", "long", "long", null, b.ToString());
@@ -799,11 +799,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(-123, long.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(-123, long.MaxValue)]
+        [Test]
         public void MulConstantI8Left(long a, long b)
         {
             CodeSource = CreateConstantTestCode("MulConstantI8Left", "long", "long", a.ToString(), null);
@@ -825,33 +825,33 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(0, 0)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
         // (MinValue, X) Cases
-        [Row(ulong.MinValue, 0)]
-        [Row(ulong.MinValue, 1)]
-        [Row(ulong.MinValue, 17)]
-        [Row(ulong.MinValue, 123)]
+        [TestCase(ulong.MinValue, 0)]
+        [TestCase(ulong.MinValue, 1)]
+        [TestCase(ulong.MinValue, 17)]
+        [TestCase(ulong.MinValue, 123)]
         // (MaxValue, X) Cases
-        [Row(ulong.MaxValue, 0)]
-        [Row(ulong.MaxValue, 1)]
-        [Row(ulong.MaxValue, 17)]
-        [Row(ulong.MaxValue, 123)]
+        [TestCase(ulong.MaxValue, 0)]
+        [TestCase(ulong.MaxValue, 1)]
+        [TestCase(ulong.MaxValue, 17)]
+        [TestCase(ulong.MaxValue, 123)]
         // (X, MinValue) Cases
-        [Row(0, ulong.MinValue)]
-        [Row(1, ulong.MinValue)]
-        [Row(17, ulong.MinValue)]
-        [Row(123, ulong.MinValue)]
+        [TestCase(0, ulong.MinValue)]
+        [TestCase(1, ulong.MinValue)]
+        [TestCase(17, ulong.MinValue)]
+        [TestCase(123, ulong.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, ulong.MaxValue)]
-        [Row(1, ulong.MaxValue)]
-        [Row(17, ulong.MaxValue)]
-        [Row(123, ulong.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0, ulong.MaxValue)]
+        [TestCase(1, ulong.MaxValue)]
+        [TestCase(17, ulong.MaxValue)]
+        [TestCase(123, ulong.MaxValue)]
+        [Test]
         public void MulU8(ulong a, ulong b)
         {
             CodeSource = CreateTestCode("MulU8", "ulong", "ulong");
@@ -865,11 +865,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(1, ulong.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(1, ulong.MaxValue)]
+        [Test]
         public void MulConstantU8Right(ulong a, ulong b)
         {
             CodeSource = CreateConstantTestCode("MulConstantU8Right", "ulong", "ulong", null, b.ToString());
@@ -881,11 +881,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(1, ulong.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(1, ulong.MaxValue)]
+        [Test]
         public void MulConstantU8Left(ulong a, ulong b)
         {
             CodeSource = CreateConstantTestCode("MulConstantU8Left", "ulong", "ulong", a.ToString(), null);
@@ -909,15 +909,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1.0f, 2.0f)]
-        [Row(2.0f, 0.0f)]
-        [Row(1.0f, float.NaN)]
-        [Row(float.NaN, 1.0f)]
-        [Row(1.0f, float.PositiveInfinity)]
-        [Row(float.PositiveInfinity, 1.0f)]
-        [Row(1.0f, float.NegativeInfinity)]
-        [Row(float.NegativeInfinity, 1.0f)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(1.0f, 2.0f)]
+        [TestCase(2.0f, 0.0f)]
+        [TestCase(1.0f, float.NaN)]
+        [TestCase(float.NaN, 1.0f)]
+        [TestCase(1.0f, float.PositiveInfinity)]
+        [TestCase(float.PositiveInfinity, 1.0f)]
+        [TestCase(1.0f, float.NegativeInfinity)]
+        [TestCase(float.NegativeInfinity, 1.0f)]
+        [Test]
         public void MulR4(float a, float b)
         {
             CodeSource = CreateTestCode("MulR4", "float", "float");
@@ -931,11 +931,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23f, 148.0016f)]
-        [Row(17.2f, 1f)]
-        [Row(0f, 0f)]
-        [Row(float.MinValue, float.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23f, 148.0016f)]
+        [TestCase(17.2f, 1f)]
+        [TestCase(0f, 0f)]
+        [TestCase(float.MinValue, float.MaxValue)]
+        [Test]
         public void MulConstantR4Right(float a, float b)
         {
             CodeSource = CreateConstantTestCode("MulConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
@@ -947,11 +947,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23f, 148.0016f)]
-        [Row(17.2f, 1f)]
-        [Row(0f, 0f)]
-        [Row(float.MinValue, float.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23f, 148.0016f)]
+        [TestCase(17.2f, 1f)]
+        [TestCase(0f, 0f)]
+        [TestCase(float.MinValue, float.MaxValue)]
+        [Test]
         public void MulConstantR4Left(float a, float b)
         {
             CodeSource = CreateConstantTestCode("MulConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
@@ -973,15 +973,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1.0, 2.0)]
-        [Row(2.0, 0.0)]
-        [Row(1.0, double.NaN)]
-        [Row(double.NaN, 1.0)]
-        [Row(1.0, double.PositiveInfinity)]
-        [Row(double.PositiveInfinity, 1.0)]
-        [Row(1.0, double.NegativeInfinity)]
-        [Row(double.NegativeInfinity, 1.0)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(1.0, 2.0)]
+        [TestCase(2.0, 0.0)]
+        [TestCase(1.0, double.NaN)]
+        [TestCase(double.NaN, 1.0)]
+        [TestCase(1.0, double.PositiveInfinity)]
+        [TestCase(double.PositiveInfinity, 1.0)]
+        [TestCase(1.0, double.NegativeInfinity)]
+        [TestCase(double.NegativeInfinity, 1.0)]
+        [Test]
         public void MulR8(double a, double b)
         {
             CodeSource = CreateTestCode("MulR8", "double", "double");
@@ -995,11 +995,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 148.0016)]
-        [Row(17.2, 1.0)]
-        [Row(0.0, 0.0)]
-        [Row(-1.79769313486231E+308, 1.79769313486231E+308)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 148.0016)]
+        [TestCase(17.2, 1.0)]
+        [TestCase(0.0, 0.0)]
+        [TestCase(-1.79769313486231E+308, 1.79769313486231E+308)]
+        [Test]
         public void MulConstantR8Right(double a, double b)
         {
             CodeSource = CreateConstantTestCode("MulConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
@@ -1011,11 +1011,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(23, 148.0016)]
-        [Row(17.2, 1.0)]
-        [Row(0.0, 0.0)]
-        [Row(-1.79769313486231E+308, 1.79769313486231E+308)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(23, 148.0016)]
+        [TestCase(17.2, 1.0)]
+        [TestCase(0.0, 0.0)]
+        [TestCase(-1.79769313486231E+308, 1.79769313486231E+308)]
+        [Test]
         public void MulConstantR8Left(double a, double b)
         {
             CodeSource = CreateConstantTestCode("MulConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);

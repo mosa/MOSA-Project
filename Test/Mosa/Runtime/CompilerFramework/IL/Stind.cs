@@ -10,8 +10,8 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Gallio.Framework;
-using MbUnit.Framework;
+
+using NUnit.Framework;
 using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
@@ -45,12 +45,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(sbyte.MinValue)]
-        [Row(-1)]
-        [Row(0)]
-        [Row(1)]
-        [Row(sbyte.MaxValue)]
-        [Test, Author("illuminus", "illuminus86@gmail.com")]
+        [TestCase(sbyte.MinValue)]
+        [TestCase(-1)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(sbyte.MaxValue)]
+        [Test]
         public unsafe void DereffedVoidPtrAssign_I1(sbyte a)
         {
             CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("sbyte","I1");
@@ -74,12 +74,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(short.MinValue)]
-        [Row(-1)]
-        [Row(0)]
-        [Row(1)]
-        [Row(short.MaxValue)]
-        [Test, Author("illuminus", "illuminus86@gmail.com")]
+        [TestCase(short.MinValue)]
+        [TestCase(-1)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(short.MaxValue)]
+        [Test]
         public unsafe void DereffedVoidPtrAssign_I2(short a)
         {
             CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("short", "I2");
@@ -103,12 +103,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(int.MinValue)]
-        [Row(-1)]
-        [Row(0)]
-        [Row(1)]
-        [Row(int.MaxValue)]
-        [Test, Author("illuminus", "illuminus86@gmail.com")]
+        [TestCase(int.MinValue)]
+        [TestCase(-1)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(int.MaxValue)]
+        [Test]
         public unsafe void DereffedVoidPtrAssign_I4(int a)
         {
             CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("int", "I4");
@@ -132,12 +132,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(int.MinValue)]
-        [Row(-1)]
-        [Row(0)]
-        [Row(1)]
-        [Row(int.MaxValue)]
-        [Test, Author("illuminus", "illuminus86@gmail.com")]
+        [TestCase(int.MinValue)]
+        [TestCase(-1)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(int.MaxValue)]
+        [Test]
         public unsafe void DereffedVoidPtrAssign_I8(long a)
         {
             CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("long","I8");
@@ -161,11 +161,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(byte.MinValue)]
-        [Row(125)]
-        [Row(127)]
-        [Row(byte.MaxValue)]
-        [Test, Author("illuminus", "illuminus86@gmail.com")]
+        [TestCase(byte.MinValue)]
+        [TestCase(125)]
+        [TestCase(127)]
+        [TestCase(byte.MaxValue)]
+        [Test]
         public unsafe void DereffedVoidPtrAssign_U1(byte a)
         {
             CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("byte","U1");
@@ -189,12 +189,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(ushort.MinValue)]
-        [Row((ushort.MaxValue / 2) - 1)]
-        [Row((ushort.MaxValue / 2) + 1)]
-        [Row(1)]
-        [Row(ushort.MaxValue)]
-        [Test, Author("illuminus", "illuminus86@gmail.com")]
+        [TestCase(ushort.MinValue)]
+        [TestCase((ushort.MaxValue / 2) - 1)]
+        [TestCase((ushort.MaxValue / 2) + 1)]
+        [TestCase(1)]
+        [TestCase(ushort.MaxValue)]
+        [Test]
         public unsafe void DereffedVoidPtrAssign_U2(ushort a)
         {
             CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("ushort","U2");
@@ -218,11 +218,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(uint.MinValue)]
-        [Row((uint.MaxValue / 2))]
-        [Row((uint.MaxValue / 2) + 1)]
-        [Row(uint.MaxValue)]
-        [Test, Author("illuminus", "illuminus86@gmail.com")]
+        [TestCase(uint.MinValue)]
+        [TestCase((uint.MaxValue / 2))]
+        [TestCase((uint.MaxValue / 2) + 1)]
+        [TestCase(uint.MaxValue)]
+        [Test]
         public unsafe void DereffedVoidPtrAssign_U4(uint a)
         {
             CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("uint","U4");
@@ -246,10 +246,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(ulong.MinValue)]
-        [Row((ulong.MaxValue / 2)+1)]
-        [Row(ulong.MaxValue)]
-        [Test, Author("illuminus", "illuminus86@gmail.com")]
+        [TestCase(ulong.MinValue)]
+        [TestCase((ulong.MaxValue / 2)+1)]
+        [TestCase(ulong.MaxValue)]
+        [Test]
         public unsafe void DereffedVoidPtrAssign_U8(ulong a)
         {
             CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("ulong","U8");

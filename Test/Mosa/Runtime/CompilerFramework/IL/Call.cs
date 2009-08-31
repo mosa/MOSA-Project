@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using MbUnit.Framework;
+using NUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {  
@@ -50,7 +50,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// 
         /// </summary>
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [Test]
         public void CallEmpty()
         {
             CodeSource = @"
@@ -72,9 +72,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row(true)]
-        [Row(false)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(true)]
+        [TestCase(false)]
+        [Test]
         public void CallB(bool value)
         {
             CodeSource = CreateTestCode("CallB", "bool");
@@ -85,9 +85,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row(true)]
-        [Row(false)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(true)]
+        [TestCase(false)]
+        [Test]
         public void CallConstantB(bool value)
         {
             CodeSource = CreateConstantTestCode("CallConstantB", "bool", value.ToString().ToLower());
@@ -101,11 +101,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row(0)]
-        [Row('a')]
-        [Row('Z')]
-        [Row(char.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0)]
+        [TestCase('a')]
+        [TestCase('Z')]
+        [TestCase(char.MaxValue)]
+        [Test]
         public void CallC(char value)
         {
             CodeSource = CreateTestCode("CallC", "char");
@@ -116,11 +116,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row('a')]
-        [Row('Z')]
-        [Row('-')]
-        [Row('.')]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase('a')]
+        [TestCase('Z')]
+        [TestCase('-')]
+        [TestCase('.')]
+        [Test]
         public void CallConstantC(char value)
         {
             CodeSource = CreateConstantTestCode("CallConstantC", "char", "'" + value.ToString() + "'");
@@ -139,23 +139,23 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row(10)]
-        [Row(11)]
-        [Row(100)]
-        [Row(-0)]
-        [Row(-1)]
-        [Row(-2)]
-        [Row(-5)]
-        [Row(-10)]
-        [Row(-11)]
-        [Row(-100)]
-        [Row(sbyte.MinValue)]
-        [Row(sbyte.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(100)]
+        [TestCase(-0)]
+        [TestCase(-1)]
+        [TestCase(-2)]
+        [TestCase(-5)]
+        [TestCase(-10)]
+        [TestCase(-11)]
+        [TestCase(-100)]
+        [TestCase(sbyte.MinValue)]
+        [TestCase(sbyte.MaxValue)]
+        [Test]
         public void CallI1(sbyte value)
         {
             CodeSource = CreateTestCode("CallI1", "sbyte");
@@ -166,11 +166,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row(0)]
-        [Row(-48)]
-        [Row(sbyte.MinValue)]
-        [Row(sbyte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0)]
+        [TestCase(-48)]
+        [TestCase(sbyte.MinValue)]
+        [TestCase(sbyte.MaxValue)]
+        [Test]
         public void CallConstantI1(sbyte value)
         {
             CodeSource = CreateConstantTestCode("CallConstantI1", "sbyte", value.ToString());
@@ -189,23 +189,23 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row(10)]
-        [Row(11)]
-        [Row(100)]
-        [Row(-0)]
-        [Row(-1)]
-        [Row(-2)]
-        [Row(-5)]
-        [Row(-10)]
-        [Row(-11)]
-        [Row(-100)]
-        [Row(short.MinValue)]
-        [Row(short.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(100)]
+        [TestCase(-0)]
+        [TestCase(-1)]
+        [TestCase(-2)]
+        [TestCase(-5)]
+        [TestCase(-10)]
+        [TestCase(-11)]
+        [TestCase(-100)]
+        [TestCase(short.MinValue)]
+        [TestCase(short.MaxValue)]
+        [Test]
         public void CallI2(short value)
         {
             CodeSource = CreateTestCode("CallI2", "short");
@@ -216,11 +216,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row(0)]
-        [Row(-48)]
-        [Row(short.MinValue)]
-        [Row(short.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0)]
+        [TestCase(-48)]
+        [TestCase(short.MinValue)]
+        [TestCase(short.MaxValue)]
+        [Test]
         public void CallConstantI2(short value)
         {
             CodeSource = CreateConstantTestCode("CallConstantI2", "short", value.ToString());
@@ -239,23 +239,23 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row(10)]
-        [Row(11)]
-        [Row(100)]
-        [Row(-0)]
-        [Row(-1)]
-        [Row(-2)]
-        [Row(-5)]
-        [Row(-10)]
-        [Row(-11)]
-        [Row(-100)]
-        [Row(int.MinValue)]
-        [Row(int.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(100)]
+        [TestCase(-0)]
+        [TestCase(-1)]
+        [TestCase(-2)]
+        [TestCase(-5)]
+        [TestCase(-10)]
+        [TestCase(-11)]
+        [TestCase(-100)]
+        [TestCase(int.MinValue)]
+        [TestCase(int.MaxValue)]
+        [Test]
         public void CallI4(int value)
         {
             CodeSource = CreateTestCode("CallI4", "int");
@@ -266,11 +266,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row(0)]
-        [Row(-48)]
-        [Row(int.MinValue)]
-        [Row(int.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0)]
+        [TestCase(-48)]
+        [TestCase(int.MinValue)]
+        [TestCase(int.MaxValue)]
+        [Test]
         public void CallConstantI4(int value)
         {
             CodeSource = CreateConstantTestCode("CallConstantI4", "int", value.ToString());
@@ -289,23 +289,23 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(5)]
-        [Row(10)]
-        [Row(11)]
-        [Row(100)]
-        [Row(-0)]
-        [Row(-1)]
-        [Row(-2)]
-        [Row(-5)]
-        [Row(-10)]
-        [Row(-11)]
-        [Row(-100)]
-        [Row(long.MinValue)]
-        [Row(long.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(11)]
+        [TestCase(100)]
+        [TestCase(-0)]
+        [TestCase(-1)]
+        [TestCase(-2)]
+        [TestCase(-5)]
+        [TestCase(-10)]
+        [TestCase(-11)]
+        [TestCase(-100)]
+        [TestCase(long.MinValue)]
+        [TestCase(long.MaxValue)]
+        [Test]
         public void CallI8(long value)
         {
             CodeSource = CreateTestCode("CallI8", "long");
@@ -316,11 +316,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [Row(0)]
-        [Row(-48)]
-        [Row(long.MinValue)]
-        [Row(long.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0)]
+        [TestCase(-48)]
+        [TestCase(long.MinValue)]
+        [TestCase(long.MaxValue)]
+        [Test]
         public void CallConstantI8(long value)
         {
             CodeSource = CreateConstantTestCode("CallConstantI8", "long", value.ToString());
@@ -336,7 +336,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Checks the method call parameter order.
         /// </summary>
-        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        [Test]
         public void CallOrder()
         {
             CodeSource = @"
@@ -358,8 +358,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Tests intrinsic compiler calls.
         /// </summary>
-        [Column(1, 2, Int32.MaxValue, Int32.MinValue)]
-        [Test, Author(@"grover", @"sharpos@michaelruck.de")]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(Int32.MaxValue)]
+        [TestCase(Int32.MinValue)]
+        [Test]
         public void CallIntrinsic(int arg)
         {
             CodeSource = @"

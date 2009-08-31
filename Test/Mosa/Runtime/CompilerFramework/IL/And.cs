@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using MbUnit.Framework;
+using NUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
@@ -81,11 +81,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(true, true)]
-        [Row(true, false)]
-        [Row(false, false)]
-        [Row(false, true)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(true, true)]
+        [TestCase(true, false)]
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [Test]
         public void AndB(bool a, bool b)
         {
             CodeSource = CreateTestCode("AndB", "bool", "bool");
@@ -99,11 +99,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(true, true)]
-        [Row(true, false)]
-        [Row(false, false)]
-        [Row(false, true)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(true, true)]
+        [TestCase(true, false)]
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [Test]
         public void AndConstantBRight(bool a, bool b)
         {
             CodeSource = CreateConstantTestCode("AndConstantBRight", "bool", "bool", null, b.ToString().ToLower());
@@ -115,11 +115,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(true, true)]
-        [Row(true, false)]
-        [Row(false, false)]
-        [Row(false, true)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(true, true)]
+        [TestCase(true, false)]
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [Test]
         public void AndConstantBLeft(bool a, bool b)
         {
             CodeSource = CreateConstantTestCode("AndConstantBLeft", "bool", "bool", a.ToString().ToLower(), null);
@@ -141,12 +141,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(0, 0)]
-        [Row(0, 1)]
-        [Row('-', '.')]
-        [Row('a', 'Z')]
-        [Row(char.MinValue, char.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 0)]
+        [TestCase(0, 1)]
+        [TestCase('-', '.')]
+        [TestCase('a', 'Z')]
+        [TestCase(char.MinValue, char.MaxValue)]
+        [Test]
         public void AndC(char a, char b)
         {
             CodeSource = CreateTestCode("AndC", "char", "char");
@@ -160,10 +160,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(0, 'a')]
-        [Row('-', '.')]
-        [Row('a', 'Z')]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 'a')]
+        [TestCase('-', '.')]
+        [TestCase('a', 'Z')]
+        [Test]
         public void AndConstantCRight(char a, char b)
         {
             CodeSource = CreateConstantTestCode("AndConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
@@ -175,10 +175,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row('a', 0)]
-        [Row('-', '.')]
-        [Row('a', 'Z')]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase('a', 0)]
+        [TestCase('-', '.')]
+        [TestCase('a', 'Z')]
+        [Test]
         public void AndConstantCLeft(char a, char b)
         {
             CodeSource = CreateConstantTestCode("AndConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
@@ -200,58 +200,58 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0)]
-        [Row(-17, -2)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(1, -2)]
+        [TestCase(-1, 2)]
+        [TestCase(0, 0)]
+        [TestCase(-17, -2)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
+        [TestCase(-2, 1)]
+        [TestCase(2, -1)]
+        [TestCase(-2, -17)]
         // (MinValue, X) Cases
-        [Row(sbyte.MinValue, 0)]
-        [Row(sbyte.MinValue, 1)]
-        [Row(sbyte.MinValue, 17)]
-        [Row(sbyte.MinValue, 123)]
-        [Row(sbyte.MinValue, -0)]
-        [Row(sbyte.MinValue, -1)]
-        [Row(sbyte.MinValue, -17)]
-        [Row(sbyte.MinValue, -123)]
+        [TestCase(sbyte.MinValue, 0)]
+        [TestCase(sbyte.MinValue, 1)]
+        [TestCase(sbyte.MinValue, 17)]
+        [TestCase(sbyte.MinValue, 123)]
+        [TestCase(sbyte.MinValue, -0)]
+        [TestCase(sbyte.MinValue, -1)]
+        [TestCase(sbyte.MinValue, -17)]
+        [TestCase(sbyte.MinValue, -123)]
         // (MaxValue, X) Cases
-        [Row(sbyte.MaxValue, 0)]
-        [Row(sbyte.MaxValue, 1)]
-        [Row(sbyte.MaxValue, 17)]
-        [Row(sbyte.MaxValue, 123)]
-        [Row(sbyte.MaxValue, -0)]
-        [Row(sbyte.MaxValue, -1)]
-        [Row(sbyte.MaxValue, -17)]
-        [Row(sbyte.MaxValue, -123)]
+        [TestCase(sbyte.MaxValue, 0)]
+        [TestCase(sbyte.MaxValue, 1)]
+        [TestCase(sbyte.MaxValue, 17)]
+        [TestCase(sbyte.MaxValue, 123)]
+        [TestCase(sbyte.MaxValue, -0)]
+        [TestCase(sbyte.MaxValue, -1)]
+        [TestCase(sbyte.MaxValue, -17)]
+        [TestCase(sbyte.MaxValue, -123)]
         // (X, MinValue) Cases
-        [Row(0, sbyte.MinValue)]
-        [Row(1, sbyte.MinValue)]
-        [Row(17, sbyte.MinValue)]
-        [Row(123, sbyte.MinValue)]
-        [Row(-0, sbyte.MinValue)]
-        [Row(-1, sbyte.MinValue)]
-        [Row(-17, sbyte.MinValue)]
-        [Row(-123, sbyte.MinValue)]
+        [TestCase(0, sbyte.MinValue)]
+        [TestCase(1, sbyte.MinValue)]
+        [TestCase(17, sbyte.MinValue)]
+        [TestCase(123, sbyte.MinValue)]
+        [TestCase(-0, sbyte.MinValue)]
+        [TestCase(-1, sbyte.MinValue)]
+        [TestCase(-17, sbyte.MinValue)]
+        [TestCase(-123, sbyte.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, sbyte.MaxValue)]
-        [Row(1, sbyte.MaxValue)]
-        [Row(17, sbyte.MaxValue)]
-        [Row(123, sbyte.MaxValue)]
-        [Row(-0, sbyte.MaxValue)]
-        [Row(-1, sbyte.MaxValue)]
-        [Row(-17, sbyte.MaxValue)]
-        [Row(-123, sbyte.MaxValue)]
+        [TestCase(0, sbyte.MaxValue)]
+        [TestCase(1, sbyte.MaxValue)]
+        [TestCase(17, sbyte.MaxValue)]
+        [TestCase(123, sbyte.MaxValue)]
+        [TestCase(-0, sbyte.MaxValue)]
+        [TestCase(-1, sbyte.MaxValue)]
+        [TestCase(-17, sbyte.MaxValue)]
+        [TestCase(-123, sbyte.MaxValue)]
         // Extremvaluecases
-        [Row(sbyte.MinValue, sbyte.MaxValue)]
-        [Row(sbyte.MaxValue, sbyte.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(sbyte.MinValue, sbyte.MaxValue)]
+        [TestCase(sbyte.MaxValue, sbyte.MinValue)]
+        [Test]
         public void AndI1(sbyte a, sbyte b)
         {
             CodeSource = CreateTestCode("AndI1", "sbyte", "int");
@@ -265,11 +265,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-42, 48)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-42, 48)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(sbyte.MinValue, sbyte.MaxValue)]
+        [Test]
         public void AndConstantI1Right(sbyte a, sbyte b)
         {
             CodeSource = CreateConstantTestCode("AndConstantI1Right", "sbyte", "int", null, b.ToString());
@@ -281,11 +281,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-42, 48)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(sbyte.MinValue, sbyte.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-42, 48)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(sbyte.MinValue, sbyte.MaxValue)]
+        [Test]
         public void AndConstantI1Left(sbyte a, sbyte b)
         {
             CodeSource = CreateConstantTestCode("AndConstantI1Left", "sbyte", "int", a.ToString(), null);
@@ -307,58 +307,58 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0)]
-        [Row(-17, -2)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(1, -2)]
+        [TestCase(-1, 2)]
+        [TestCase(0, 0)]
+        [TestCase(-17, -2)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
+        [TestCase(-2, 1)]
+        [TestCase(2, -1)]
+        [TestCase(-2, -17)]
         // (MinValue, X) Cases
-        [Row(short.MinValue, 0)]
-        [Row(short.MinValue, 1)]
-        [Row(short.MinValue, 17)]
-        [Row(short.MinValue, 123)]
-        [Row(short.MinValue, -0)]
-        [Row(short.MinValue, -1)]
-        [Row(short.MinValue, -17)]
-        [Row(short.MinValue, -123)]
+        [TestCase(short.MinValue, 0)]
+        [TestCase(short.MinValue, 1)]
+        [TestCase(short.MinValue, 17)]
+        [TestCase(short.MinValue, 123)]
+        [TestCase(short.MinValue, -0)]
+        [TestCase(short.MinValue, -1)]
+        [TestCase(short.MinValue, -17)]
+        [TestCase(short.MinValue, -123)]
         // (MaxValue, X) Cases
-        [Row(short.MaxValue, 0)]
-        [Row(short.MaxValue, 1)]
-        [Row(short.MaxValue, 17)]
-        [Row(short.MaxValue, 123)]
-        [Row(short.MaxValue, -0)]
-        [Row(short.MaxValue, -1)]
-        [Row(short.MaxValue, -17)]
-        [Row(short.MaxValue, -123)]
+        [TestCase(short.MaxValue, 0)]
+        [TestCase(short.MaxValue, 1)]
+        [TestCase(short.MaxValue, 17)]
+        [TestCase(short.MaxValue, 123)]
+        [TestCase(short.MaxValue, -0)]
+        [TestCase(short.MaxValue, -1)]
+        [TestCase(short.MaxValue, -17)]
+        [TestCase(short.MaxValue, -123)]
         // (X, MinValue) Cases
-        [Row(0, short.MinValue)]
-        [Row(1, short.MinValue)]
-        [Row(17, short.MinValue)]
-        [Row(123, short.MinValue)]
-        [Row(-0, short.MinValue)]
-        [Row(-1, short.MinValue)]
-        [Row(-17, short.MinValue)]
-        [Row(-123, short.MinValue)]
+        [TestCase(0, short.MinValue)]
+        [TestCase(1, short.MinValue)]
+        [TestCase(17, short.MinValue)]
+        [TestCase(123, short.MinValue)]
+        [TestCase(-0, short.MinValue)]
+        [TestCase(-1, short.MinValue)]
+        [TestCase(-17, short.MinValue)]
+        [TestCase(-123, short.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, short.MaxValue)]
-        [Row(1, short.MaxValue)]
-        [Row(17, short.MaxValue)]
-        [Row(123, short.MaxValue)]
-        [Row(-0, short.MaxValue)]
-        [Row(-1, short.MaxValue)]
-        [Row(-17, short.MaxValue)]
-        [Row(-123, short.MaxValue)]
+        [TestCase(0, short.MaxValue)]
+        [TestCase(1, short.MaxValue)]
+        [TestCase(17, short.MaxValue)]
+        [TestCase(123, short.MaxValue)]
+        [TestCase(-0, short.MaxValue)]
+        [TestCase(-1, short.MaxValue)]
+        [TestCase(-17, short.MaxValue)]
+        [TestCase(-123, short.MaxValue)]
         // Extremvaluecases
-        [Row(short.MinValue, short.MaxValue)]
-        [Row(short.MaxValue, short.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(short.MinValue, short.MaxValue)]
+        [TestCase(short.MaxValue, short.MinValue)]
+        [Test]
         public void AndI2(short a, short b)
         {
             CodeSource = CreateTestCode("AndI2", "short", "int");
@@ -372,11 +372,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(short.MinValue, short.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(short.MinValue, short.MaxValue)]
+        [Test]
         public void AndConstantI2Right(short a, short b)
         {
             CodeSource = CreateConstantTestCode("AndConstantI2Right", "short", "int", null, b.ToString());
@@ -388,11 +388,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(short.MinValue, short.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(short.MinValue, short.MaxValue)]
+        [Test]
         public void AndConstantI2Left(short a, short b)
         {
             CodeSource = CreateConstantTestCode("AndConstantI2Left", "short", "int", a.ToString(), null);
@@ -414,58 +414,58 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0)]
-        [Row(-17, -2)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(1, -2)]
+        [TestCase(-1, 2)]
+        [TestCase(0, 0)]
+        [TestCase(-17, -2)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
+        [TestCase(-2, 1)]
+        [TestCase(2, -1)]
+        [TestCase(-2, -17)]
         // (MinValue, X) Cases
-        [Row(int.MinValue, 0)]
-        [Row(int.MinValue, 1)]
-        [Row(int.MinValue, 17)]
-        [Row(int.MinValue, 123)]
-        [Row(int.MinValue, -0)]
-        [Row(int.MinValue, -1)]
-        [Row(int.MinValue, -17)]
-        [Row(int.MinValue, -123)]
+        [TestCase(int.MinValue, 0)]
+        [TestCase(int.MinValue, 1)]
+        [TestCase(int.MinValue, 17)]
+        [TestCase(int.MinValue, 123)]
+        [TestCase(int.MinValue, -0)]
+        [TestCase(int.MinValue, -1)]
+        [TestCase(int.MinValue, -17)]
+        [TestCase(int.MinValue, -123)]
         // (MaxValue, X) Cases
-        [Row(int.MaxValue, 0)]
-        [Row(int.MaxValue, 1)]
-        [Row(int.MaxValue, 17)]
-        [Row(int.MaxValue, 123)]
-        [Row(int.MaxValue, -0)]
-        [Row(int.MaxValue, -1)]
-        [Row(int.MaxValue, -17)]
-        [Row(int.MaxValue, -123)]
+        [TestCase(int.MaxValue, 0)]
+        [TestCase(int.MaxValue, 1)]
+        [TestCase(int.MaxValue, 17)]
+        [TestCase(int.MaxValue, 123)]
+        [TestCase(int.MaxValue, -0)]
+        [TestCase(int.MaxValue, -1)]
+        [TestCase(int.MaxValue, -17)]
+        [TestCase(int.MaxValue, -123)]
         // (X, MinValue) Cases
-        [Row(0, int.MinValue)]
-        [Row(1, int.MinValue)]
-        [Row(17, int.MinValue)]
-        [Row(123, int.MinValue)]
-        [Row(-0, int.MinValue)]
-        [Row(-1, int.MinValue)]
-        [Row(-17, int.MinValue)]
-        [Row(-123, int.MinValue)]
+        [TestCase(0, int.MinValue)]
+        [TestCase(1, int.MinValue)]
+        [TestCase(17, int.MinValue)]
+        [TestCase(123, int.MinValue)]
+        [TestCase(-0, int.MinValue)]
+        [TestCase(-1, int.MinValue)]
+        [TestCase(-17, int.MinValue)]
+        [TestCase(-123, int.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, int.MaxValue)]
-        [Row(1, int.MaxValue)]
-        [Row(17, int.MaxValue)]
-        [Row(123, int.MaxValue)]
-        [Row(-0, int.MaxValue)]
-        [Row(-1, int.MaxValue)]
-        [Row(-17, int.MaxValue)]
-        [Row(-123, int.MaxValue)]
+        [TestCase(0, int.MaxValue)]
+        [TestCase(1, int.MaxValue)]
+        [TestCase(17, int.MaxValue)]
+        [TestCase(123, int.MaxValue)]
+        [TestCase(-0, int.MaxValue)]
+        [TestCase(-1, int.MaxValue)]
+        [TestCase(-17, int.MaxValue)]
+        [TestCase(-123, int.MaxValue)]
         // Extremvaluecases
-        [Row(int.MinValue, int.MaxValue)]
-        [Row(int.MaxValue, int.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(int.MinValue, int.MaxValue)]
+        [TestCase(int.MaxValue, int.MinValue)]
+        [Test]
         public void AndI4(int a, int b)
         {
             CodeSource = CreateTestCode("AndI4", "int", "int");
@@ -479,11 +479,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(int.MinValue, int.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(int.MinValue, int.MaxValue)]
+        [Test]
         public void AndConstantI4Right(int a, int b)
         {
             CodeSource = CreateConstantTestCode("AndConstantI4Right", "int", "int", null, b.ToString());
@@ -495,11 +495,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(int.MinValue, int.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(int.MinValue, int.MaxValue)]
+        [Test]
         public void AndConstantI4Left(int a, int b)
         {
             CodeSource = CreateConstantTestCode("AndConstantI4Left", "int", "int", a.ToString(), null);
@@ -521,58 +521,58 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(1, -2)]
-        [Row(-1, 2)]
-        [Row(0, 0)]
-        [Row(-17, -2)]
+        [TestCase(1, 2)]
+        [TestCase(23, 21)]
+        [TestCase(1, -2)]
+        [TestCase(-1, 2)]
+        [TestCase(0, 0)]
+        [TestCase(-17, -2)]
         // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        [Row(-2, 1)]
-        [Row(2, -1)]
-        [Row(-2, -17)]
+        [TestCase(2, 1)]
+        [TestCase(21, 23)]
+        [TestCase(-2, 1)]
+        [TestCase(2, -1)]
+        [TestCase(-2, -17)]
         // (MinValue, X) Cases
-        [Row(long.MinValue, 0)]
-        [Row(long.MinValue, 1)]
-        [Row(long.MinValue, 17)]
-        [Row(long.MinValue, 123)]
-        [Row(long.MinValue, -0)]
-        [Row(long.MinValue, -1)]
-        [Row(long.MinValue, -17)]
-        [Row(long.MinValue, -123)]
+        [TestCase(long.MinValue, 0)]
+        [TestCase(long.MinValue, 1)]
+        [TestCase(long.MinValue, 17)]
+        [TestCase(long.MinValue, 123)]
+        [TestCase(long.MinValue, -0)]
+        [TestCase(long.MinValue, -1)]
+        [TestCase(long.MinValue, -17)]
+        [TestCase(long.MinValue, -123)]
         // (MaxValue, X) Cases
-        [Row(long.MaxValue, 0)]
-        [Row(long.MaxValue, 1)]
-        [Row(long.MaxValue, 17)]
-        [Row(long.MaxValue, 123)]
-        [Row(long.MaxValue, -0)]
-        [Row(long.MaxValue, -1)]
-        [Row(long.MaxValue, -17)]
-        [Row(long.MaxValue, -123)]
+        [TestCase(long.MaxValue, 0)]
+        [TestCase(long.MaxValue, 1)]
+        [TestCase(long.MaxValue, 17)]
+        [TestCase(long.MaxValue, 123)]
+        [TestCase(long.MaxValue, -0)]
+        [TestCase(long.MaxValue, -1)]
+        [TestCase(long.MaxValue, -17)]
+        [TestCase(long.MaxValue, -123)]
         // (X, MinValue) Cases
-        [Row(0, long.MinValue)]
-        [Row(1, long.MinValue)]
-        [Row(17, long.MinValue)]
-        [Row(123, long.MinValue)]
-        [Row(-0, long.MinValue)]
-        [Row(-1, long.MinValue)]
-        [Row(-17, long.MinValue)]
-        [Row(-123, long.MinValue)]
+        [TestCase(0, long.MinValue)]
+        [TestCase(1, long.MinValue)]
+        [TestCase(17, long.MinValue)]
+        [TestCase(123, long.MinValue)]
+        [TestCase(-0, long.MinValue)]
+        [TestCase(-1, long.MinValue)]
+        [TestCase(-17, long.MinValue)]
+        [TestCase(-123, long.MinValue)]
         // (X, MaxValue) Cases
-        [Row(0, long.MaxValue)]
-        [Row(1, long.MaxValue)]
-        [Row(17, long.MaxValue)]
-        [Row(123, long.MaxValue)]
-        [Row(-0, long.MaxValue)]
-        [Row(-1, long.MaxValue)]
-        [Row(-17, long.MaxValue)]
-        [Row(-123, long.MaxValue)]
+        [TestCase(0, long.MaxValue)]
+        [TestCase(1, long.MaxValue)]
+        [TestCase(17, long.MaxValue)]
+        [TestCase(123, long.MaxValue)]
+        [TestCase(-0, long.MaxValue)]
+        [TestCase(-1, long.MaxValue)]
+        [TestCase(-17, long.MaxValue)]
+        [TestCase(-123, long.MaxValue)]
         // Extremvaluecases
-        [Row(long.MinValue, long.MaxValue)]
-        [Row(long.MaxValue, long.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+        [TestCase(long.MinValue, long.MaxValue)]
+        [TestCase(long.MaxValue, long.MinValue)]
+        [Test]
         public void AndI8(long a, long b)
         {
             CodeSource = CreateTestCode("AndI8", "long", "long");
@@ -586,11 +586,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(long.MinValue, long.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(long.MinValue, long.MaxValue)]
+        [Test]
         public void AndConstantI8Right(long a, long b)
         {
             CodeSource = CreateConstantTestCode("AndConstantI8Right", "long", "long", null, b.ToString());
@@ -602,11 +602,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [Row(-23, 148)]
-        [Row(17, 1)]
-        [Row(0, 0)]
-        [Row(long.MinValue, long.MaxValue)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(-23, 148)]
+        [TestCase(17, 1)]
+        [TestCase(0, 0)]
+        [TestCase(long.MinValue, long.MaxValue)]
+        [Test]
         public void AndConstantI8Left(long a, long b)
         {
             CodeSource = CreateConstantTestCode("AndConstantI8Left", "long", "long", a.ToString(), null);

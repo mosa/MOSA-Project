@@ -11,8 +11,8 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Gallio.Framework;
-using MbUnit.Framework;
+
+using NUnit.Framework;
 using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
@@ -77,10 +77,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddCPtrI4Left(int a, int b)
         {
             char* pa = (char*)a;
@@ -94,10 +94,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddCPtrI8Left(int a, long b)
         {
             char* pa = (char*)a;
@@ -111,10 +111,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddCPtrI4Right(int a, int b)
         {
             char* pa = (char*)a;
@@ -128,10 +128,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        //[Row(0, 42)]
-        //[Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        //[TestCase(0, 42)]
+        //[TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddCPtrI8Right(int a, long b)
         {
             char* pa = (char*)a;
@@ -145,10 +145,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantCPtrI4Left(int a, int b)
         {
             char* pa = (char*)a;
@@ -162,10 +162,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantCPtrI8Left(int a, long b)
         {
             char* pa = (char*)a;
@@ -179,10 +179,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantCPtrI4Right(int a, int b)
         {
             char* pa = (char*)a;
@@ -196,10 +196,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantCPtrI8Right(int a, long b)
         {
             char* pa = (char*)a;
@@ -215,10 +215,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddU1PtrI4Left(int a, int b)
         {
             byte* pa = (byte*)a;
@@ -232,10 +232,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddU1PtrI8Left(int a, int b)
         {
             byte* pa = (byte*)a;
@@ -249,10 +249,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddU1PtrI4Right(int a, int b)
         {
             byte* pa = (byte*)a;
@@ -266,10 +266,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddU1PtrI8Right(int a, int b)
         {
             byte* pa = (byte*)a;
@@ -283,10 +283,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantU1PtrI4Left(int a, int b)
         {
             byte* pa = (byte*)a;
@@ -300,10 +300,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantU1PtrI8Left(int a, long b)
         {
             byte* pa = (byte*)a;
@@ -317,10 +317,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantU1PtrI4Right(int a, int b)
         {
             byte* pa = (byte*)a;
@@ -334,10 +334,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantU1PtrI8Right(int a, long b)
         {
             byte* pa = (byte*)a;
@@ -353,10 +353,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddI4PtrI4Left(int a, int b)
         {
             int* pa = (int*)a;
@@ -370,10 +370,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddI4PtrI8Left(int a, int b)
         {
             int* pa = (int*)a;
@@ -387,10 +387,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddI4PtrI4Right(int a, int b)
         {
             int* pa = (int*)a;
@@ -404,10 +404,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddI4PtrI8Right(int a, int b)
         {
             int* pa = (int*)a;
@@ -421,10 +421,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantI4PtrI4Left(int a, int b)
         {
             int* pa = (int*)a;
@@ -438,10 +438,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantI4PtrI8Left(int a, long b)
         {
             int* pa = (int*)a;
@@ -455,10 +455,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantI4PtrI4Right(int a, int b)
         {
             int* pa = (int*)a;
@@ -472,10 +472,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantI4PtrI8Right(int a, long b)
         {
             int* pa = (int*)a;
@@ -491,10 +491,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddI8PtrI4Left(int a, int b)
         {
             long* pa = (long*)a;
@@ -508,10 +508,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddI8PtrI8Left(int a, int b)
         {
             long* pa = (long*)a;
@@ -525,10 +525,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddI8PtrI4Right(int a, int b)
         {
             long* pa = (long*)a;
@@ -542,10 +542,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddI8PtrI8Right(int a, int b)
         {
             long* pa = (long*)a;
@@ -559,10 +559,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantI8PtrI4Left(int a, int b)
         {
             long* pa = (long*)a;
@@ -576,10 +576,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantI8PtrI8Left(int a, long b)
         {
             long* pa = (long*)a;
@@ -593,10 +593,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantI8PtrI4Right(int a, int b)
         {
             long* pa = (long*)a;
@@ -610,10 +610,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantI8PtrI8Right(int a, long b)
         {
             long* pa = (long*)a;
@@ -629,10 +629,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddR8PtrI4Left(int a, int b)
         {
             double* pa = (double*)a;
@@ -646,10 +646,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddR8PtrI8Left(int a, int b)
         {
             long* pa = (long*)a;
@@ -663,10 +663,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddR8PtrI4Right(int a, int b)
         {
             double* pa = (double*)a;
@@ -680,10 +680,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddR8PtrI8Right(int a, int b)
         {
             double* pa = (double*)a;
@@ -697,10 +697,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantR8PtrI4Left(int a, int b)
         {
             double* pa = (double*)a;
@@ -714,10 +714,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantR8PtrI8Left(int a, long b)
         {
             double* pa = (double*)a;
@@ -731,10 +731,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The integer to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantR8PtrI4Right(int a, int b)
         {
             double* pa = (double*)a;
@@ -748,10 +748,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The pointer value.</param>
         /// <param name="b">The long to add to the pointer.</param>
-        [Row(0, 42)]
-        [Row(int.MaxValue, 42)]
-        [Row(42, 0)]
-        [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+        [TestCase(0, 42)]
+        [TestCase(int.MaxValue, 42)]
+        [TestCase(42, 0)]
+        [Test]
         public unsafe void AddConstantR8PtrI8Right(int a, long b)
         {
             double* pa = (double*)a;
