@@ -91,8 +91,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase(0, 0)]
-        [TestCase(17, 128)]
+        [TestCase((char)0, (char)0)]
+        [TestCase((char)17, (char)128)]
         [TestCase('a', 'Z')]
         [TestCase(char.MinValue, char.MaxValue)]
         [Test]
@@ -108,7 +108,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase(0, 'a')]
+        [TestCase((char)0, 'a')]
         [TestCase('-', '.')]
         [TestCase('a', 'Z')]
         [Test]
@@ -124,7 +124,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase('a', 0)]
+        [TestCase('a', (char)0)]
         [TestCase('-', '.')]
         [TestCase('a', 'Z')]
         [Test]
@@ -142,17 +142,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(1, 1)]
-        [TestCase(2, 1)]
-        [TestCase(SByte.MinValue, SByte.MinValue + 10)]
+        [TestCase((sbyte)0, (sbyte)0)]
+        [TestCase((sbyte)1, (sbyte)1)]
+        [TestCase((sbyte)2, (sbyte)1)]
+        [TestCase(SByte.MinValue, (sbyte)(SByte.MinValue + 10))]
         [TestCase(SByte.MaxValue, SByte.MaxValue)]
-        [TestCase(0, SByte.MinValue)]
-        [TestCase(0, SByte.MaxValue)]
-        [TestCase(0, 1)]
-        [TestCase(SByte.MinValue, 0)]
-        [TestCase(SByte.MaxValue, 0)]
-        [TestCase(1, 0)]
+        [TestCase((sbyte)0, SByte.MinValue)]
+        [TestCase((sbyte)0, SByte.MaxValue)]
+        [TestCase((sbyte)0, (sbyte)1)]
+        [TestCase(SByte.MinValue, (sbyte)0)]
+        [TestCase(SByte.MaxValue, (sbyte)0)]
+        [TestCase((sbyte)1, (sbyte)0)]
         [Test]
         public void CgtI1(sbyte a, sbyte b)
         {
@@ -166,8 +166,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(-17, 42)]
+        [TestCase((sbyte)0, (sbyte)0)]
+        [TestCase((sbyte)-17, (sbyte)42)]
         [TestCase(sbyte.MinValue, sbyte.MinValue)]
         [TestCase(sbyte.MinValue, sbyte.MaxValue)]
         [Test]
@@ -183,8 +183,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(-17, 42)]
+        [TestCase((sbyte)0, (sbyte)0)]
+        [TestCase((sbyte)-17, (sbyte)42)]
         [TestCase(sbyte.MinValue, sbyte.MinValue)]
         [TestCase(sbyte.MinValue, sbyte.MaxValue)]
         [Test]
@@ -202,17 +202,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(1, 1)]
-        [TestCase(2, 1)]
-        [TestCase(Int16.MinValue, Int16.MinValue + 10)]
+        [TestCase((short)0, (short)0)]
+        [TestCase((short)1, (short)1)]
+        [TestCase((short)2, (short)1)]
+        [TestCase(Int16.MinValue, (short)(Int16.MinValue + 10))]
         [TestCase(Int16.MaxValue, Int16.MaxValue)]
-        [TestCase(0, Int16.MinValue)]
-        [TestCase(0, Int16.MaxValue)]
-        [TestCase(0, 1)]
-        [TestCase(Int16.MinValue, 0)]
-        [TestCase(Int16.MaxValue, 0)]
-        [TestCase(1, 0)]
+        [TestCase((short)0, Int16.MinValue)]
+        [TestCase((short)0, Int16.MaxValue)]
+        [TestCase((short)0, (short)1)]
+        [TestCase(Int16.MinValue, (short)0)]
+        [TestCase(Int16.MaxValue, (short)0)]
+        [TestCase((short)1, (short)0)]
         [Test]
         public void CgtI2(short a, short b)
         {
@@ -226,8 +226,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(-17, 42)]
+        [TestCase((short)0, (short)0)]
+        [TestCase((short)-17, (short)42)]
         [TestCase(short.MinValue, short.MinValue)]
         [TestCase(short.MinValue, short.MaxValue)]
         [Test]
@@ -243,8 +243,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(-17, 42)]
+        [TestCase((short)0, (short)0)]
+        [TestCase((short)-17, (short)42)]
         [TestCase(short.MinValue, short.MinValue)]
         [TestCase(short.MinValue, short.MaxValue)]
         [Test]
@@ -387,16 +387,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(1, 1)]
-        [TestCase(Byte.MinValue, Byte.MinValue + 10)]
+        [TestCase((byte)0, (byte)0)]
+        [TestCase((byte)1, (byte)1)]
+        [TestCase(Byte.MinValue, (byte)(Byte.MinValue + 10))]
         [TestCase(Byte.MaxValue, Byte.MaxValue)]
-        [TestCase(1, Byte.MinValue)]
-        [TestCase(0, Byte.MaxValue)]
-        [TestCase(0, 1)]
-        [TestCase(Byte.MinValue, 1)]
-        [TestCase(Byte.MaxValue, 0)]
-        [TestCase(1, 0)]
+        [TestCase((byte)1, Byte.MinValue)]
+        [TestCase((byte)0, Byte.MaxValue)]
+        [TestCase((byte)0, (byte)1)]
+        [TestCase(Byte.MinValue, (byte)1)]
+        [TestCase(Byte.MaxValue, (byte)0)]
+        [TestCase((byte)1, (byte)0)]
         [Test]
         public void CgtU1(byte a, byte b)
         {
@@ -410,8 +410,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(17, 142)]
+        [TestCase((byte)0, (byte)0)]
+        [TestCase((byte)17, (byte)142)]
         [TestCase(byte.MaxValue, byte.MaxValue)]
         [TestCase(byte.MinValue, byte.MaxValue)]
         [Test]
@@ -427,8 +427,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(17, 142)]
+        [TestCase((byte)0, (byte)0)]
+        [TestCase((byte)17, (byte)142)]
         [TestCase(byte.MaxValue, byte.MaxValue)]
         [TestCase(byte.MinValue, byte.MaxValue)]
         [Test]
@@ -446,16 +446,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(1, 1)]
-        [TestCase(UInt16.MinValue, UInt16.MinValue + 10)]
+        [TestCase((ushort)0, (ushort)0)]
+        [TestCase((ushort)1, (ushort)1)]
+        [TestCase(UInt16.MinValue, (ushort)(UInt16.MinValue + 10))]
         [TestCase(UInt16.MaxValue, UInt16.MaxValue)]
-        [TestCase(1, UInt16.MinValue)]
-        [TestCase(0, UInt16.MaxValue)]
-        [TestCase(0, 1)]
-        [TestCase(UInt16.MinValue, 2)]
-        [TestCase(UInt16.MaxValue, 0)]
-        [TestCase(1, 0)]
+        [TestCase((ushort)1, UInt16.MinValue)]
+        [TestCase((ushort)0, UInt16.MaxValue)]
+        [TestCase((ushort)0, (ushort)1)]
+        [TestCase(UInt16.MinValue, (ushort)2)]
+        [TestCase(UInt16.MaxValue, (ushort)0)]
+        [TestCase((ushort)1, (ushort)0)]
         [Test]
         public void CgtU2(ushort a, ushort b)
         {
@@ -469,8 +469,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(17, 142)]
+        [TestCase((ushort)0, (ushort)0)]
+        [TestCase((ushort)17, (ushort)142)]
         [TestCase(ushort.MaxValue, ushort.MaxValue)]
         [TestCase(ushort.MinValue, ushort.MaxValue)]
         [Test]
@@ -486,8 +486,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(17, 142)]
+        [TestCase((ushort)0, (ushort)0)]
+        [TestCase((ushort)17, (ushort)142)]
         [TestCase(ushort.MaxValue, ushort.MaxValue)]
         [TestCase(ushort.MinValue, ushort.MaxValue)]
         [Test]
@@ -505,16 +505,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(1, 1)]
-        [TestCase(UInt32.MinValue, UInt32.MinValue + 10)]
+        [TestCase((uint)0, (uint)0)]
+        [TestCase((uint)1, (uint)1)]
+        [TestCase(UInt32.MinValue, (uint)(UInt32.MinValue + 10))]
         [TestCase(UInt32.MaxValue, UInt32.MaxValue)]
-        [TestCase(1, UInt32.MinValue)]
-        [TestCase(0, UInt32.MaxValue)]
-        [TestCase(3, 1)]
-        [TestCase(UInt32.MinValue, 1)]
-        [TestCase(UInt32.MaxValue, 0)]
-        [TestCase(1, 0)]
+        [TestCase((uint)1, UInt32.MinValue)]
+        [TestCase((uint)0, UInt32.MaxValue)]
+        [TestCase((uint)3, (uint)1)]
+        [TestCase(UInt32.MinValue, (uint)1)]
+        [TestCase(UInt32.MaxValue, (uint)0)]
+        [TestCase((uint)1, (uint)0)]
         [Test]
         public void CgtU4(uint a, uint b)
         {
@@ -528,8 +528,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(17, 142)]
+        [TestCase((uint)0, (uint)0)]
+        [TestCase((uint)17, (uint)142)]
         [TestCase(uint.MaxValue, uint.MaxValue)]
         [TestCase(uint.MinValue, uint.MaxValue)]
         [Test]
@@ -545,8 +545,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(17, 142)]
+        [TestCase((uint)0, (uint)0)]
+        [TestCase((uint)17, (uint)142)]
         [TestCase(uint.MaxValue, uint.MaxValue)]
         [TestCase(uint.MinValue, uint.MaxValue)]
         [Test]
@@ -564,16 +564,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(1, 1)]
+        [TestCase((ulong)0, (ulong)0)]
+        [TestCase((ulong)1, (ulong)1)]
         [TestCase(UInt64.MinValue, UInt64.MinValue + 10)]
         [TestCase(UInt64.MaxValue, UInt64.MaxValue)]
-        [TestCase(1, UInt64.MinValue)]
-        [TestCase(0, UInt64.MaxValue)]
-        [TestCase(3, 2)]
-        [TestCase(UInt64.MinValue, 1)]
-        [TestCase(UInt64.MaxValue, 0)]
-        [TestCase(1, 0)]
+        [TestCase((ulong)1, UInt64.MinValue)]
+        [TestCase((ulong)0, UInt64.MaxValue)]
+        [TestCase((ulong)3, (ulong)2)]
+        [TestCase(UInt64.MinValue, (ulong)1)]
+        [TestCase(UInt64.MaxValue, (ulong)0)]
+        [TestCase((ulong)1, (ulong)0)]
         [Test]
         public void CgtU8(ulong a, ulong b)
         {
@@ -587,8 +587,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(17, 142)]
+        [TestCase((ulong)0, (ulong)0)]
+        [TestCase((ulong)17, (ulong)142)]
         [TestCase(ulong.MaxValue, ulong.MaxValue)]
         [TestCase(ulong.MinValue, ulong.MaxValue)]
         [Test]
@@ -604,8 +604,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(0, 0)]
-        [TestCase(17, 142)]
+        [TestCase((ulong)0, (ulong)0)]
+        [TestCase((ulong)17, (ulong)142)]
         [TestCase(ulong.MaxValue, ulong.MaxValue)]
         [TestCase(ulong.MinValue, ulong.MaxValue)]
         [Test]
