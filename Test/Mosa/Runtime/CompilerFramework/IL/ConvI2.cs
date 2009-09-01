@@ -35,7 +35,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(0), TestCase(1), TestCase(2), TestCase(sbyte.MinValue), TestCase(sbyte.MaxValue)]
+        [TestCase((sbyte)0), TestCase((sbyte)1), TestCase((sbyte)2), TestCase(sbyte.MinValue), TestCase(sbyte.MaxValue)]
         [Test]
         public void ConvI2_I1(sbyte a)
         {
@@ -60,7 +60,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(0), TestCase(1), TestCase(2), TestCase(short.MinValue), TestCase(short.MaxValue)]
+        [TestCase((short)0), TestCase((short)1), TestCase((short)2), TestCase(short.MinValue), TestCase(short.MaxValue)]
         [Test]
         public void ConvI2_I2(short a)
         {
