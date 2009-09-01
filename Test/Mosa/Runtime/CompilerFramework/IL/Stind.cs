@@ -46,9 +46,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         [TestCase(sbyte.MinValue)]
-        [TestCase(-1)]
-        [TestCase(0)]
-        [TestCase(1)]
+        [TestCase((sbyte)-1)]
+        [TestCase((sbyte)0)]
+        [TestCase((sbyte)1)]
         [TestCase(sbyte.MaxValue)]
         [Test]
         public unsafe void DereffedVoidPtrAssign_I1(sbyte a)
@@ -75,9 +75,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         [TestCase(short.MinValue)]
-        [TestCase(-1)]
-        [TestCase(0)]
-        [TestCase(1)]
+        [TestCase((short)-1)]
+        [TestCase((short)0)]
+        [TestCase((short)1)]
         [TestCase(short.MaxValue)]
         [Test]
         public unsafe void DereffedVoidPtrAssign_I2(short a)
@@ -162,8 +162,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         [TestCase(byte.MinValue)]
-        [TestCase(125)]
-        [TestCase(127)]
+        [TestCase((byte)125)]
+        [TestCase((byte)127)]
         [TestCase(byte.MaxValue)]
         [Test]
         public unsafe void DereffedVoidPtrAssign_U1(byte a)
@@ -190,9 +190,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         [TestCase(ushort.MinValue)]
-        [TestCase((ushort.MaxValue / 2) - 1)]
-        [TestCase((ushort.MaxValue / 2) + 1)]
-        [TestCase(1)]
+        [TestCase((ushort)((ushort.MaxValue / 2) - 1))]
+        [TestCase((ushort)((ushort.MaxValue / 2) + 1))]
+        [TestCase((ushort)1)]
         [TestCase(ushort.MaxValue)]
         [Test]
         public unsafe void DereffedVoidPtrAssign_U2(ushort a)
@@ -219,8 +219,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         [TestCase(uint.MinValue)]
-        [TestCase((uint.MaxValue / 2))]
-        [TestCase((uint.MaxValue / 2) + 1)]
+        [TestCase((uint)((uint.MaxValue / 2)))]
+        [TestCase((uint)((uint.MaxValue / 2) + 1))]
         [TestCase(uint.MaxValue)]
         [Test]
         public unsafe void DereffedVoidPtrAssign_U4(uint a)
