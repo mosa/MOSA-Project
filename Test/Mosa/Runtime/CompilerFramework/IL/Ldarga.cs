@@ -35,8 +35,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(0)]
-        [TestCase(1)]
+        [TestCase((sbyte)0)]
+        [TestCase((sbyte)1)]
         [TestCase(sbyte.MinValue)]
         [TestCase(sbyte.MaxValue)]
         [Test]
@@ -69,8 +69,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(0)]
-        [TestCase(1)]
+        [TestCase((byte)0)]
+        [TestCase((byte)1)]
         [TestCase(byte.MinValue)]
         [TestCase(byte.MaxValue)]
         [Test]
@@ -103,8 +103,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(0)]
-        [TestCase(1)]
+        [TestCase((short)0)]
+        [TestCase((short)1)]
         [TestCase(short.MinValue)]
         [TestCase(short.MaxValue)]
         [Test]
@@ -137,8 +137,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(0)]
-        [TestCase(1)]
+        [TestCase((ushort)0)]
+        [TestCase((ushort)1)]
         [TestCase(ushort.MinValue)]
         [TestCase(ushort.MaxValue)]
         [Test]
@@ -205,8 +205,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(0)]
-        [TestCase(1)]
+        [TestCase((uint)0)]
+        [TestCase((uint)1)]
         [TestCase(uint.MinValue)]
         [TestCase(uint.MaxValue)]
         [Test]
@@ -273,8 +273,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(0)]
-        [TestCase(1)]
+        [TestCase((ulong)0)]
+        [TestCase((ulong)1)]
         [TestCase(ulong.MinValue)]
         [TestCase(ulong.MaxValue)]
         [Test]
@@ -381,7 +381,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="newValue"></param>
         /// <param name="oldValue"></param>
-        [TestCase(1, 0), TestCase(0, 1), TestCase(1, sbyte.MinValue), TestCase(0, sbyte.MaxValue)]
+        [TestCase((sbyte)1, (sbyte)0), TestCase((sbyte)0, (sbyte)1), TestCase((sbyte)1, sbyte.MinValue), TestCase((sbyte)0, sbyte.MaxValue)]
         [Test]
         public void LdargaI1_ChangeValue(sbyte newValue, sbyte oldValue)
         {
@@ -413,7 +413,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="newValue"></param>
         /// <param name="oldValue"></param>
-        [TestCase(1, 0), TestCase(0, 1), TestCase(1, short.MinValue), TestCase(0, short.MaxValue)]
+        [TestCase((short)1, (short)0), TestCase((short)0, (short)1), TestCase((short)1, short.MinValue), TestCase((short)0, short.MaxValue)]
         [Test]
         public void LdargaI2_ChangeValue(short newValue, short oldValue)
         {
