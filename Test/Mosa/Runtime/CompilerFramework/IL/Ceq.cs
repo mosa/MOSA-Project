@@ -150,14 +150,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
+        [TestCase(true, (char)0, (char)0)]
         [TestCase(false, 'a', 'Z')]
         [TestCase(true, 'a', 'a')]
-        [TestCase(false, 0, 128)]
+        [TestCase(false, (char)0, (char)128)]
         [Test]
         public void CeqC(bool result, char a, char b)
         {
-            this.CodeSource = s_testCode.Replace("t1", "char").Replace("t2", "char");
+            CodeSource = s_testCode.Replace("t1", "char").Replace("t2", "char");
             bool res = (bool)Run<B_C_C>(@"", @"Test", @"Ceq", a, b);
             Assert.IsTrue(result == res);
         }
@@ -168,13 +168,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(false, 0, 'a')]
+        [TestCase(false, (char)0, 'a')]
         [TestCase(false, '-', '.')]
         [TestCase(true, 'a', 'a')]
         [Test]
         public void CeqConstantCRight(bool result, char a, char b)
         {
-            this.CodeSource = CreateConstantTestCode("char", null, "'" + b.ToString() + "'");
+            CodeSource = CreateConstantTestCode("char", null, "'" + b.ToString() + "'");
             bool res = (bool)Run<B_Constant_C>(@"", @"Test", @"CeqConstant", a);
             Assert.IsTrue(result == res);
         }
@@ -185,13 +185,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(false, 'a', 0)]
+        [TestCase(false, 'a', (char)0)]
         [TestCase(false, '-', '.')]
         [TestCase(true, 'a', 'a')]
         [Test]
         public void CeqConstantCLeft(bool result, char a, char b)
         {
-            this.CodeSource = CreateConstantTestCode("char", "'" + a.ToString() + "'", null);
+            CodeSource = CreateConstantTestCode("char", "'" + a.ToString() + "'", null);
             bool res = (bool)Run<B_Constant_C>(@"", @"Test", @"CeqConstant", b);
             Assert.IsTrue(result == res);
         }
@@ -204,20 +204,20 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(true, 1, 1)]
+        [TestCase(true, (sbyte)0, (sbyte)0)]
+        [TestCase(true, (sbyte)1, (sbyte)1)]
         [TestCase(true, SByte.MinValue, SByte.MinValue)]
         [TestCase(true, SByte.MaxValue, SByte.MaxValue)]
-        [TestCase(false, 0, SByte.MinValue)]
-        [TestCase(false, 0, SByte.MaxValue)]
-        [TestCase(false, 0, 1)]
-        [TestCase(false, SByte.MinValue, 0)]
-        [TestCase(false, SByte.MaxValue, 0)]
-        [TestCase(false, 1, 0)]
+        [TestCase(false, (sbyte)0, SByte.MinValue)]
+        [TestCase(false, (sbyte)0, SByte.MaxValue)]
+        [TestCase(false, (sbyte)0, (sbyte)1)]
+        [TestCase(false, SByte.MinValue, (sbyte)0)]
+        [TestCase(false, SByte.MaxValue, (sbyte)0)]
+        [TestCase(false, (sbyte)1, (sbyte)0)]
         [Test]
         public void CeqI1(bool result, sbyte a, sbyte b)
         {
-            this.CodeSource = s_testCode.Replace("t1", "sbyte").Replace("t2", "sbyte");
+            CodeSource = s_testCode.Replace("t1", "sbyte").Replace("t2", "sbyte");
             bool res = (bool)Run<B_I1_I1>(@"", @"Test", @"Ceq", a, b);
             Assert.IsTrue(result == res);
         }
@@ -228,8 +228,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(false, -17, 42)]
+        [TestCase(true, (sbyte)0, (sbyte)0)]
+        [TestCase(false, (sbyte)-17, (sbyte)42)]
         [TestCase(true, sbyte.MinValue, sbyte.MinValue)]
         [TestCase(false, sbyte.MinValue, sbyte.MaxValue)]
         [Test]
@@ -246,14 +246,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(false, -17, 42)]
+        [TestCase(true, (sbyte)0, (sbyte)0)]
+        [TestCase(false, (sbyte)-17, (sbyte)42)]
         [TestCase(true, sbyte.MinValue, sbyte.MinValue)]
         [TestCase(false, sbyte.MinValue, sbyte.MaxValue)]
         [Test]
         public void CeqConstantI1Left(bool result, sbyte a, sbyte b)
         {
-            this.CodeSource = CreateConstantTestCode("sbyte", a.ToString(), null);
+            CodeSource = CreateConstantTestCode("sbyte", a.ToString(), null);
             bool res = (bool)Run<B_Constant_I1>(@"", @"Test", @"CeqConstant", b);
             Assert.IsTrue(result == res);
         }
@@ -266,20 +266,20 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(true, 1, 1)]
+        [TestCase(true, (short)0, (short)0)]
+        [TestCase(true, (short)1, (short)1)]
         [TestCase(true, Int16.MinValue, Int16.MinValue)]
         [TestCase(true, Int16.MaxValue, Int16.MaxValue)]
-        [TestCase(false, 0, Int16.MinValue)]
-        [TestCase(false, 0, Int16.MaxValue)]
-        [TestCase(false, 0, 1)]
-        [TestCase(false, Int16.MinValue, 0)]
-        [TestCase(false, Int16.MaxValue, 0)]
-        [TestCase(false, 1, 0)]
+        [TestCase(false, (short)0, Int16.MinValue)]
+        [TestCase(false, (short)0, Int16.MaxValue)]
+        [TestCase(false, (short)0, (short)1)]
+        [TestCase(false, Int16.MinValue, (short)0)]
+        [TestCase(false, Int16.MaxValue, (short)0)]
+        [TestCase(false, (short)1, (short)0)]
         [Test]
         public void CeqI2(bool result, short a, short b)
         {
-            this.CodeSource = s_testCode.Replace("t1", "short").Replace("t2", "short");
+            CodeSource = s_testCode.Replace("t1", "short").Replace("t2", "short");
             bool res = (bool)Run<B_I2_I2>(@"", @"Test", @"Ceq", a, b);
             Assert.IsTrue(result == res);
         }
@@ -290,8 +290,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(false, -17, 42)]
+        [TestCase(true, (short)0, (short)0)]
+        [TestCase(false, (short)-17, (short)42)]
         [TestCase(true, short.MinValue, short.MinValue)]
         [TestCase(false, short.MinValue, short.MaxValue)]
         [Test]
@@ -308,8 +308,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(false, -17, 42)]
+        [TestCase(true, (short)0, (short)0)]
+        [TestCase(false, (short)-17, (short)42)]
         [TestCase(true, short.MinValue, short.MinValue)]
         [TestCase(false, short.MinValue, short.MaxValue)]
         [Test]
@@ -452,16 +452,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(true, 1, 1)]
+        [TestCase(true, (byte)0, (byte)0)]
+        [TestCase(true, (byte)1, (byte)1)]
         [TestCase(true, Byte.MinValue, Byte.MinValue)]
         [TestCase(true, Byte.MaxValue, Byte.MaxValue)]
-        [TestCase(false, 1, Byte.MinValue)]
-        [TestCase(false, 0, Byte.MaxValue)]
-        [TestCase(false, 0, 1)]
-        [TestCase(false, Byte.MinValue, 1)]
-        [TestCase(false, Byte.MaxValue, 0)]
-        [TestCase(false, 1, 0)]
+        [TestCase(false, (byte)1, Byte.MinValue)]
+        [TestCase(false, (byte)0, Byte.MaxValue)]
+        [TestCase(false, (byte)0, (byte)1)]
+        [TestCase(false, Byte.MinValue, (byte)1)]
+        [TestCase(false, Byte.MaxValue, (byte)0)]
+        [TestCase(false, (byte)1, (byte)0)]
         [Test]
         public void CeqU1(bool result, byte a, byte b)
         {
@@ -476,8 +476,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(false, 17, 142)]
+        [TestCase(true, (byte)0, (byte)0)]
+        [TestCase(false, (byte)17, (byte)142)]
         [TestCase(true, byte.MaxValue, byte.MaxValue)]
         [TestCase(false, byte.MinValue, byte.MaxValue)]
         [Test]
@@ -494,8 +494,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(false, 17, 142)]
+        [TestCase(true, (byte)0, (byte)0)]
+        [TestCase(false, (byte)17, (byte)142)]
         [TestCase(true, byte.MaxValue, byte.MaxValue)]
         [TestCase(false, byte.MinValue, byte.MaxValue)]
         [Test]
@@ -514,16 +514,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(true, 1, 1)]
+        [TestCase(true, (ushort)0, (ushort)0)]
+        [TestCase(true, (ushort)1, (ushort)1)]
         [TestCase(true, UInt16.MinValue, UInt16.MinValue)]
         [TestCase(true, UInt16.MaxValue, UInt16.MaxValue)]
-        [TestCase(false, 1, UInt16.MinValue)]
-        [TestCase(false, 0, UInt16.MaxValue)]
-        [TestCase(false, 0, 1)]
-        [TestCase(false, UInt16.MinValue, 2)]
-        [TestCase(false, UInt16.MaxValue, 0)]
-        [TestCase(false, 1, 0)]
+        [TestCase(false, (ushort)1, UInt16.MinValue)]
+        [TestCase(false, (ushort)0, UInt16.MaxValue)]
+        [TestCase(false, (ushort)0, (ushort)1)]
+        [TestCase(false, UInt16.MinValue, (ushort)2)]
+        [TestCase(false, UInt16.MaxValue, (ushort)0)]
+        [TestCase(false, (ushort)1, (ushort)0)]
         [Test]
         public void CeqU2(bool result, ushort a, ushort b)
         {
@@ -538,8 +538,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(false, 17, 142)]
+        [TestCase(true, (ushort)0, (ushort)0)]
+        [TestCase(false, (ushort)17, (ushort)142)]
         [TestCase(true, ushort.MaxValue, ushort.MaxValue)]
         [TestCase(false, ushort.MinValue, ushort.MaxValue)]
         [Test]
@@ -556,8 +556,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(false, 17, 142)]
+        [TestCase(true, (ushort)0, (ushort)0)]
+        [TestCase(false, (ushort)17, (ushort)142)]
         [TestCase(true, ushort.MaxValue, ushort.MaxValue)]
         [TestCase(false, ushort.MinValue, ushort.MaxValue)]
         [Test]
@@ -576,16 +576,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(true, 1, 1)]
+        [TestCase(true, (uint)0, (uint)0)]
+        [TestCase(true, (uint)1, (uint)1)]
         [TestCase(true, UInt32.MinValue, UInt32.MinValue)]
         [TestCase(true, UInt32.MaxValue, UInt32.MaxValue)]
-        [TestCase(false, 1, UInt32.MinValue)]
-        [TestCase(false, 0, UInt32.MaxValue)]
-        [TestCase(false, 0, 1)]
-        [TestCase(false, UInt32.MinValue, 1)]
-        [TestCase(false, UInt32.MaxValue, 0)]
-        [TestCase(false, 1, 0)]
+        [TestCase(false, (uint)1, UInt32.MinValue)]
+        [TestCase(false, (uint)0, UInt32.MaxValue)]
+        [TestCase(false, (uint)0, (uint)1)]
+        [TestCase(false, UInt32.MinValue, (uint)1)]
+        [TestCase(false, UInt32.MaxValue, (uint)0)]
+        [TestCase(false, (uint)1, (uint)0)]
         [Test]
         public void CeqU4(bool result, uint a, uint b)
         {
@@ -600,8 +600,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(false, 17, 142)]
+        [TestCase(true, (uint)0, (uint)0)]
+        [TestCase(false, (uint)17, (uint)142)]
         [TestCase(true, uint.MaxValue, uint.MaxValue)]
         [TestCase(false, uint.MinValue, uint.MaxValue)]
         [Test]
@@ -618,8 +618,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(false, 17, 142)]
+        [TestCase(true, (uint)0, (uint)0)]
+        [TestCase(false, (uint)17, (uint)142)]
         [TestCase(true, uint.MaxValue, uint.MaxValue)]
         [TestCase(false, uint.MinValue, uint.MaxValue)]
         [Test]
@@ -638,16 +638,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(true, 1, 1)]
+        [TestCase(true, (ulong)0, (ulong)0)]
+        [TestCase(true, (ulong)1, (ulong)1)]
         [TestCase(true, UInt64.MinValue, UInt64.MinValue)]
         [TestCase(true, UInt64.MaxValue, UInt64.MaxValue)]
-        [TestCase(false, 1, UInt64.MinValue)]
-        [TestCase(false, 0, UInt64.MaxValue)]
-        [TestCase(false, 0, 1)]
-        [TestCase(false, UInt64.MinValue, 1)]
-        [TestCase(false, UInt64.MaxValue, 0)]
-        [TestCase(false, 1, 0)]
+        [TestCase(false, (ulong)1, UInt64.MinValue)]
+        [TestCase(false, (ulong)0, UInt64.MaxValue)]
+        [TestCase(false, (ulong)0, (ulong)1)]
+        [TestCase(false, UInt64.MinValue, (ulong)1)]
+        [TestCase(false, UInt64.MaxValue, (ulong)0)]
+        [TestCase(false, (ulong)1, (ulong)0)]
         [Test]
         public void CeqU8(bool result, ulong a, ulong b)
         {
@@ -662,8 +662,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(false, 17, 142)]
+        [TestCase(true, (ulong)0, (ulong)0)]
+        [TestCase(false, (ulong)17, (ulong)142)]
         [TestCase(true, ulong.MaxValue, ulong.MaxValue)]
         [TestCase(false, ulong.MinValue, ulong.MaxValue)]
         [Test]
@@ -680,8 +680,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="result">The expected return value From the compiled code.</param>
         /// <param name="a">The first value to compare.</param>
         /// <param name="b">The second value to compare.</param>
-        [TestCase(true, 0, 0)]
-        [TestCase(false, 17, 142)]
+        [TestCase(true, (ulong)0, (ulong)0)]
+        [TestCase(false, (ulong)17, (ulong)142)]
         [TestCase(true, ulong.MaxValue, ulong.MaxValue)]
         [TestCase(false, ulong.MinValue, ulong.MaxValue)]
         [Test]

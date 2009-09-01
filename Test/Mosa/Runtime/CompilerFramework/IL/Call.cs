@@ -101,7 +101,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [TestCase(0)]
+        [TestCase((char)0)]
         [TestCase('a')]
         [TestCase('Z')]
         [TestCase(char.MaxValue)]
@@ -139,20 +139,20 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(5)]
-        [TestCase(10)]
-        [TestCase(11)]
-        [TestCase(100)]
-        [TestCase(-0)]
-        [TestCase(-1)]
-        [TestCase(-2)]
-        [TestCase(-5)]
-        [TestCase(-10)]
-        [TestCase(-11)]
-        [TestCase(-100)]
+        [TestCase((sbyte)0)]
+        [TestCase((sbyte)1)]
+        [TestCase((sbyte)2)]
+        [TestCase((sbyte)5)]
+        [TestCase((sbyte)10)]
+        [TestCase((sbyte)11)]
+        [TestCase((sbyte)100)]
+        [TestCase((sbyte)-0)]
+        [TestCase((sbyte)-1)]
+        [TestCase((sbyte)-2)]
+        [TestCase((sbyte)-5)]
+        [TestCase((sbyte)-10)]
+        [TestCase((sbyte)-11)]
+        [TestCase((sbyte)-100)]
         [TestCase(sbyte.MinValue)]
         [TestCase(sbyte.MaxValue)]
         [Test]
@@ -166,8 +166,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [TestCase(0)]
-        [TestCase(-48)]
+        [TestCase((sbyte)0)]
+        [TestCase((sbyte)-48)]
         [TestCase(sbyte.MinValue)]
         [TestCase(sbyte.MaxValue)]
         [Test]
@@ -189,20 +189,20 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(5)]
-        [TestCase(10)]
-        [TestCase(11)]
-        [TestCase(100)]
-        [TestCase(-0)]
-        [TestCase(-1)]
-        [TestCase(-2)]
-        [TestCase(-5)]
-        [TestCase(-10)]
-        [TestCase(-11)]
-        [TestCase(-100)]
+        [TestCase((short)0)]
+        [TestCase((short)1)]
+        [TestCase((short)2)]
+        [TestCase((short)5)]
+        [TestCase((short)10)]
+        [TestCase((short)11)]
+        [TestCase((short)100)]
+        [TestCase((short)-0)]
+        [TestCase((short)-1)]
+        [TestCase((short)-2)]
+        [TestCase((short)-5)]
+        [TestCase((short)-10)]
+        [TestCase((short)-11)]
+        [TestCase((short)-100)]
         [TestCase(short.MinValue)]
         [TestCase(short.MaxValue)]
         [Test]
@@ -216,8 +216,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="value"></param>
-        [TestCase(0)]
-        [TestCase(-48)]
+        [TestCase((short)0)]
+        [TestCase((short)-48)]
         [TestCase(short.MinValue)]
         [TestCase(short.MaxValue)]
         [Test]
