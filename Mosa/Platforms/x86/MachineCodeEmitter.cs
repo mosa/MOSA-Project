@@ -915,7 +915,7 @@ namespace Mosa.Platforms.x86
 		void ICodeEmitter.Shl(Operand dest, Operand src)
 		{
 			// We force the shl reg, ecx notion
-			Debug.Assert(dest is RegisterOperand);
+			//Debug.Assert(dest is RegisterOperand);
 			// FIXME: Make sure the constant is emitted as a single-byte opcode
             RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I1), GeneralPurposeRegister.ECX);
 
