@@ -116,7 +116,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="value">The value to store in the static field</param>
         [TestCase(Int32.MaxValue)]
         [TestCase(Int32.MinValue)]
-        [TestCase(0, 1, -1)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(-1)]
         [Test]
         
         
@@ -133,7 +135,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="value">The value to store in the static field</param>
         [TestCase(Int64.MaxValue)]
         [TestCase(Int64.MinValue)]
-        [TestCase(0L, 1L, -1L)]
+        [TestCase(0L)]
+        [TestCase(1L)]
+        [TestCase(-1L)]
         [Test]
         
         
@@ -188,7 +192,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="value">The value to store in the static field</param>
         [TestCase(UInt32.MaxValue)]
         [TestCase(UInt32.MinValue)]
-        [TestCase(0U, 1U, 0xFFFFFFFFU)]
+        [TestCase(0U)]
+        [TestCase(1U)]
+        [TestCase(0xFFFFFFFFU)]
         [Test]
         
         
@@ -205,7 +211,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="value">The value to store in the static field</param>
         [TestCase(UInt64.MaxValue)]
         [TestCase(UInt64.MinValue)]
-        [TestCase(0UL, 1UL, 0xFFFFFFFFFFFFFFFFUL)]
+        [TestCase(0UL)]
+        [TestCase(1UL)]
+        [TestCase(0xFFFFFFFFFFFFFFFFUL)]
         [Test]
         
         
