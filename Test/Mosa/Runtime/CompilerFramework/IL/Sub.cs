@@ -81,8 +81,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase(0, 0)]
-        [TestCase(128, 17)]
+        [TestCase((char)0, (char)0)]
+        [TestCase((char)128, (char)17)]
         [TestCase('a', 'Z')]
         [TestCase(char.MinValue, char.MaxValue)]
         [Test]
@@ -99,7 +99,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase(0, 'a')]
+        [TestCase((char)0, 'a')]
         [TestCase('-', '.')]
         [TestCase('a', 'Z')]
         [Test]
@@ -114,7 +114,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase('a', 0)]
+        [TestCase('a', (char)0)]
         [TestCase('-', '.')]
         [TestCase('a', 'Z')]
         [Test]
@@ -140,55 +140,55 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        
-        [TestCase(1, 2)]
-        [TestCase(23, 21)]
-        [TestCase(1, -2)]
-        [TestCase(-1, 2)]
-        [TestCase(0, 0)]
-        [TestCase(-17, -2)]
+
+        [TestCase((sbyte)1, (sbyte)2)]
+        [TestCase((sbyte)23, (sbyte)21)]
+        [TestCase((sbyte)1, (sbyte)-2)]
+        [TestCase((sbyte)-1, (sbyte)2)]
+        [TestCase((sbyte)0, (sbyte)0)]
+        [TestCase((sbyte)-17, (sbyte)-2)]
         // And reverse
-        [TestCase(2, 1)]
-        [TestCase(21, 23)]
-        [TestCase(-2, 1)]
-        [TestCase(2, -1)]
-        [TestCase(-2, -17)]
+        [TestCase((sbyte)2, (sbyte)1)]
+        [TestCase((sbyte)21, (sbyte)23)]
+        [TestCase((sbyte)-2, (sbyte)1)]
+        [TestCase((sbyte)2, (sbyte)-1)]
+        [TestCase((sbyte)-2, (sbyte)-17)]
         // (MinValue, X) Cases
-        [TestCase(sbyte.MinValue, 0)]
-        [TestCase(sbyte.MinValue, 1)]
-        [TestCase(sbyte.MinValue, 17)]
-        [TestCase(sbyte.MinValue, 123)]
-        [TestCase(sbyte.MinValue, -0)]
-        [TestCase(sbyte.MinValue, -1)]
-        [TestCase(sbyte.MinValue, -17)]
-        [TestCase(sbyte.MinValue, -123)]
+        [TestCase(sbyte.MinValue, (sbyte)0)]
+        [TestCase(sbyte.MinValue, (sbyte)1)]
+        [TestCase(sbyte.MinValue, (sbyte)17)]
+        [TestCase(sbyte.MinValue, (sbyte)123)]
+        [TestCase(sbyte.MinValue, (sbyte)-0)]
+        [TestCase(sbyte.MinValue, (sbyte)-1)]
+        [TestCase(sbyte.MinValue, (sbyte)-17)]
+        [TestCase(sbyte.MinValue, (sbyte)-123)]
         // (MaxValue, X) Cases
-        [TestCase(sbyte.MaxValue, 0)]
-        [TestCase(sbyte.MaxValue, 1)]
-        [TestCase(sbyte.MaxValue, 17)]
-        [TestCase(sbyte.MaxValue, 123)]
-        [TestCase(sbyte.MaxValue, -0)]
-        [TestCase(sbyte.MaxValue, -1)]
-        [TestCase(sbyte.MaxValue, -17)]
-        [TestCase(sbyte.MaxValue, -123)]
+        [TestCase(sbyte.MaxValue, (sbyte)0)]
+        [TestCase(sbyte.MaxValue, (sbyte)1)]
+        [TestCase(sbyte.MaxValue, (sbyte)17)]
+        [TestCase(sbyte.MaxValue, (sbyte)123)]
+        [TestCase(sbyte.MaxValue, (sbyte)-0)]
+        [TestCase(sbyte.MaxValue, (sbyte)-1)]
+        [TestCase(sbyte.MaxValue, (sbyte)-17)]
+        [TestCase(sbyte.MaxValue, (sbyte)-123)]
         // (X, MinValue) Cases
-        [TestCase(0, sbyte.MinValue)]
-        [TestCase(1, sbyte.MinValue)]
-        [TestCase(17, sbyte.MinValue)]
-        [TestCase(123, sbyte.MinValue)]
-        [TestCase(-0, sbyte.MinValue)]
-        [TestCase(-1, sbyte.MinValue)]
-        [TestCase(-17, sbyte.MinValue)]
-        [TestCase(-123, sbyte.MinValue)]
+        [TestCase((sbyte)0, sbyte.MinValue)]
+        [TestCase((sbyte)1, sbyte.MinValue)]
+        [TestCase((sbyte)17, sbyte.MinValue)]
+        [TestCase((sbyte)123, sbyte.MinValue)]
+        [TestCase((sbyte)-0, sbyte.MinValue)]
+        [TestCase((sbyte)-1, sbyte.MinValue)]
+        [TestCase((sbyte)-17, sbyte.MinValue)]
+        [TestCase((sbyte)-123, sbyte.MinValue)]
         // (X, MaxValue) Cases
-        [TestCase(0, sbyte.MaxValue)]
-        [TestCase(1, sbyte.MaxValue)]
-        [TestCase(17, sbyte.MaxValue)]
-        [TestCase(123, sbyte.MaxValue)]
-        [TestCase(-0, sbyte.MaxValue)]
-        [TestCase(-1, sbyte.MaxValue)]
-        [TestCase(-17, sbyte.MaxValue)]
-        [TestCase(-123, sbyte.MaxValue)]
+        [TestCase((sbyte)0, sbyte.MaxValue)]
+        [TestCase((sbyte)1, sbyte.MaxValue)]
+        [TestCase((sbyte)17, sbyte.MaxValue)]
+        [TestCase((sbyte)123, sbyte.MaxValue)]
+        [TestCase((sbyte)-0, sbyte.MaxValue)]
+        [TestCase((sbyte)-1, sbyte.MaxValue)]
+        [TestCase((sbyte)-17, sbyte.MaxValue)]
+        [TestCase((sbyte)-123, sbyte.MaxValue)]
         // Extremvaluecases
         [TestCase(sbyte.MinValue, sbyte.MaxValue)]
         [Test]
@@ -205,12 +205,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase(-42, 48)]
-        [TestCase(17, 1)]
-        [TestCase(0, 0)]
-        [TestCase(0, 10)]
-        [TestCase(0, -10)]
-        [TestCase(10, 0)]
+        [TestCase((sbyte)-42, (sbyte)48)]
+        [TestCase((sbyte)17, (sbyte)1)]
+        [TestCase((sbyte)0, (sbyte)0)]
         [TestCase(sbyte.MinValue, sbyte.MaxValue)]
         [Test]
         public void SubConstantI1Right(sbyte a, sbyte b)
@@ -224,9 +221,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase(-42, 48)]
-        [TestCase(17, 1)]
-        [TestCase(0, 0)]
+        [TestCase((sbyte)-42, (sbyte)48)]
+        [TestCase((sbyte)17, (sbyte)1)]
+        [TestCase((sbyte)0, (sbyte)0)]
         [TestCase(sbyte.MinValue, sbyte.MaxValue)]
         [Test]
         public void SubConstantI1Left(sbyte a, sbyte b)
@@ -250,54 +247,54 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase(1, 2)]
-        [TestCase(23, 21)]
-        [TestCase(1, -2)]
-        [TestCase(-1, 2)]
-        [TestCase(0, 0)]
-        [TestCase(-17, -2)]
+        [TestCase((short)1, (short)2)]
+        [TestCase((short)23, (short)21)]
+        [TestCase((short)1, (short)-2)]
+        [TestCase((short)-1, (short)2)]
+        [TestCase((short)0, (short)0)]
+        [TestCase((short)-17, (short)-2)]
         // And reverse
-        [TestCase(2, 1)]
-        [TestCase(21, 23)]
-        [TestCase(-2, 1)]
-        [TestCase(2, -1)]
-        [TestCase(-2, -17)]
+        [TestCase((short)2, (short)1)]
+        [TestCase((short)21, (short)23)]
+        [TestCase((short)-2, (short)1)]
+        [TestCase((short)2, (short)-1)]
+        [TestCase((short)-2, (short)-17)]
         // (MinValue, X) Cases
-        [TestCase(short.MinValue, 0)]
-        [TestCase(short.MinValue, 1)]
-        [TestCase(short.MinValue, 17)]
-        [TestCase(short.MinValue, 123)]
-        [TestCase(short.MinValue, -0)]
-        [TestCase(short.MinValue, -1)]
-        [TestCase(short.MinValue, -17)]
-        [TestCase(short.MinValue, -123)]
+        [TestCase(short.MinValue, (short)0)]
+        [TestCase(short.MinValue, (short)1)]
+        [TestCase(short.MinValue, (short)17)]
+        [TestCase(short.MinValue, (short)123)]
+        [TestCase(short.MinValue, (short)-0)]
+        [TestCase(short.MinValue, (short)-1)]
+        [TestCase(short.MinValue, (short)-17)]
+        [TestCase(short.MinValue, (short)-123)]
         // (MaxValue, X) Cases
-        [TestCase(short.MaxValue, 0)]
-        [TestCase(short.MaxValue, 1)]
-        [TestCase(short.MaxValue, 17)]
-        [TestCase(short.MaxValue, 123)]
-        [TestCase(short.MaxValue, -0)]
-        [TestCase(short.MaxValue, -1)]
-        [TestCase(short.MaxValue, -17)]
-        [TestCase(short.MaxValue, -123)]
+        [TestCase(short.MaxValue, (short)0)]
+        [TestCase(short.MaxValue, (short)1)]
+        [TestCase(short.MaxValue, (short)17)]
+        [TestCase(short.MaxValue, (short)123)]
+        [TestCase(short.MaxValue, (short)-0)]
+        [TestCase(short.MaxValue, (short)-1)]
+        [TestCase(short.MaxValue, (short)-17)]
+        [TestCase(short.MaxValue, (short)-123)]
         // (X, MinValue) Cases
-        [TestCase(0, short.MinValue)]
-        [TestCase(1, short.MinValue)]
-        [TestCase(17, short.MinValue)]
-        [TestCase(123, short.MinValue)]
-        [TestCase(-0, short.MinValue)]
-        [TestCase(-1, short.MinValue)]
-        [TestCase(-17, short.MinValue)]
-        [TestCase(-123, short.MinValue)]
+        [TestCase((short)0, short.MinValue)]
+        [TestCase((short)1, short.MinValue)]
+        [TestCase((short)17, short.MinValue)]
+        [TestCase((short)123, short.MinValue)]
+        [TestCase((short)-0, short.MinValue)]
+        [TestCase((short)-1, short.MinValue)]
+        [TestCase((short)-17, short.MinValue)]
+        [TestCase((short)-123, short.MinValue)]
         // (X, MaxValue) Cases
-        [TestCase(0, short.MaxValue)]
-        [TestCase(1, short.MaxValue)]
-        [TestCase(17, short.MaxValue)]
-        [TestCase(123, short.MaxValue)]
-        [TestCase(-0, short.MaxValue)]
-        [TestCase(-1, short.MaxValue)]
-        [TestCase(-17, short.MaxValue)]
-        [TestCase(-123, short.MaxValue)]
+        [TestCase((short)0, short.MaxValue)]
+        [TestCase((short)1, short.MaxValue)]
+        [TestCase((short)17, short.MaxValue)]
+        [TestCase((short)123, short.MaxValue)]
+        [TestCase((short)-0, short.MaxValue)]
+        [TestCase((short)-1, short.MaxValue)]
+        [TestCase((short)-17, short.MaxValue)]
+        [TestCase((short)-123, short.MaxValue)]
         // Extremvaluecases
         [TestCase(short.MinValue, short.MaxValue)]
         [Test]
@@ -314,9 +311,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase(-23, 148)]
-        [TestCase(17, 1)]
-        [TestCase(0, 0)]
+        [TestCase((short)-23, (short)148)]
+        [TestCase((short)17, (short)1)]
+        [TestCase((short)0, (short)0)]
         [TestCase(short.MinValue, short.MaxValue)]
         [Test]
         public void SubConstantI2Right(short a, short b)
@@ -330,9 +327,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase(-23, 148)]
-        [TestCase(17, 1)]
-        [TestCase(0, 0)]
+        [TestCase((short)-23, (short)148)]
+        [TestCase((short)17, (short)1)]
+        [TestCase((short)0, (short)0)]
         [TestCase(short.MinValue, short.MaxValue)]
         [Test]
         public void SubConstantI2Left(short a, short b)
@@ -356,31 +353,32 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase(1, 2)]
-        [TestCase(23, 21)]
+        [TestCase((ushort)1, (ushort)2)]
+        [TestCase((ushort)23, (ushort)21)]
+        [TestCase((ushort)0, (ushort)0)]
         // And reverse
-        [TestCase(2, 1)]
-        [TestCase(21, 23)]
+        [TestCase((ushort)2, (ushort)1)]
+        [TestCase((ushort)21, (ushort)23)]
         // (MinValue, X) Cases
-        [TestCase(ushort.MinValue, 0)]
-        [TestCase(ushort.MinValue, 1)]
-        [TestCase(ushort.MinValue, 17)]
-        [TestCase(ushort.MinValue, 123)]
+        [TestCase(ushort.MinValue, (ushort)0)]
+        [TestCase(ushort.MinValue, (ushort)1)]
+        [TestCase(ushort.MinValue, (ushort)17)]
+        [TestCase(ushort.MinValue, (ushort)123)]
         // (MaxValue, X) Cases
-        [TestCase(ushort.MaxValue, 0)]
-        [TestCase(ushort.MaxValue, 1)]
-        [TestCase(ushort.MaxValue, 17)]
-        [TestCase(ushort.MaxValue, 123)]
+        [TestCase(ushort.MaxValue, (ushort)0)]
+        [TestCase(ushort.MaxValue, (ushort)1)]
+        [TestCase(ushort.MaxValue, (ushort)17)]
+        [TestCase(ushort.MaxValue, (ushort)123)]
         // (X, MinValue) Cases
-        [TestCase(0, ushort.MinValue)]
-        [TestCase(1, ushort.MinValue)]
-        [TestCase(17, ushort.MinValue)]
-        [TestCase(123, ushort.MinValue)]
+        [TestCase((ushort)0, ushort.MinValue)]
+        [TestCase((ushort)1, ushort.MinValue)]
+        [TestCase((ushort)17, ushort.MinValue)]
+        [TestCase((ushort)123, ushort.MinValue)]
         // (X, MaxValue) Cases
-        [TestCase(0, ushort.MaxValue)]
-        [TestCase(1, ushort.MaxValue)]
-        [TestCase(17, ushort.MaxValue)]
-        [TestCase(123, ushort.MaxValue)]
+        [TestCase((ushort)0, ushort.MaxValue)]
+        [TestCase((ushort)1, ushort.MaxValue)]
+        [TestCase((ushort)17, ushort.MaxValue)]
+        [TestCase((ushort)123, ushort.MaxValue)]
         // Extremvaluecases
         [TestCase(ushort.MinValue, ushort.MaxValue)]
         [Test]
@@ -397,9 +395,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase(23, 148)]
-        [TestCase(17, 1)]
-        [TestCase(0, 0)]
+        [TestCase((ushort)23, (ushort)148)]
+        [TestCase((ushort)17, (ushort)1)]
+        [TestCase((ushort)0, (ushort)0)]
         [TestCase(ushort.MinValue, ushort.MaxValue)]
         [Test]
         public void SubConstantU2Right(ushort a, ushort b)
@@ -413,9 +411,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [TestCase(23, 148)]
-        [TestCase(17, 1)]
-        [TestCase(0, 0)]
+        [TestCase((ushort)23, (ushort)148)]
+        [TestCase((ushort)17, (ushort)1)]
+        [TestCase((ushort)0, (ushort)0)]
         [TestCase(ushort.MinValue, ushort.MaxValue)]
         [Test]
         public void SubConstantU2Left(ushort a, ushort b)
@@ -676,7 +674,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [TestCase(float.MaxValue, -123.34f)]
         // (X, MinValue) Cases
         [TestCase(0.0f, float.MinValue)]
-        [TestCase(1.2, float.MinValue)]
+        [TestCase(1.2f, float.MinValue)]
         [TestCase(17.4f, float.MinValue)]
         [TestCase(123.561f, float.MinValue)]
         [TestCase(-0.0f, float.MinValue)]
