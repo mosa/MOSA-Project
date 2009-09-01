@@ -10,13 +10,10 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime;
 using Mosa.Runtime.Vm;
-using Mosa.Runtime.Metadata.Signatures;
-using MbUnit.Framework;
+using NUnit.Framework;
 using System.Runtime.InteropServices;
 using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 using System.IO;
@@ -24,36 +21,36 @@ using System.IO;
 namespace Test.Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// Interfaceclass for MbUnit3 to run our testcases.
+    /// Interfaceclass for NUnit3 to run our testcases.
     /// </summary>
     public abstract class MosaCompilerTestRunner : IDisposable
     {
         #region Data members
 
         /// <summary>
-        /// The filename of the assembly, which contains the test case.
+        /// The filename of the _assembly, which contains the test case.
         /// </summary>
-        string assembly = null;
+        string _assembly = null;
 
         /// <summary>
         /// Flag, which determines if the compiler needs to run.
         /// </summary>
-        bool needCompile = true;
+        bool _needCompile = true;
 
         /// <summary>
-        /// An array of assembly references to include in the compilation.
+        /// An array of _assembly _references to include in the compilation.
         /// </summary>
-        string[] references;
+        string[] _references;
 
         /// <summary>
-        /// The test runtime.
+        /// The test _runtime.
         /// </summary>
-        TestRuntime runtime;
+        TestRuntime _runtime;
 
         /// <summary>
-        /// The metadata module of the test case.
+        /// The metadata _module of the test case.
         /// </summary>
-        IMetadataModule module;
+        IMetadataModule _module;
 
         #endregion // Data members
 
@@ -62,9 +59,9 @@ namespace Test.Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Initializes a new instance of the <see cref="MosaCompilerTestRunner"/> class.
         /// </summary>
-        public MosaCompilerTestRunner()
+        protected MosaCompilerTestRunner()
         {
-            this.references = new string[0];
+            _references = new string[0];
         }
 
         #endregion // Construction
@@ -77,23 +74,23 @@ namespace Test.Mosa.Runtime.CompilerFramework
         /// <value><c>true</c> if a compilation is needed; otherwise, <c>false</c>.</value>
         protected bool NeedCompile
         {
-            get { return this.needCompile; }
-            set { this.needCompile = value; }
+            get { return _needCompile; }
+            set { _needCompile = value; }
         }
 
         /// <summary>
-        /// Gets or sets the references.
+        /// Gets or sets the _references.
         /// </summary>
-        /// <value>The references.</value>
+        /// <value>The _references.</value>
         public string[] References
         {
-            get { return this.references; }
+            get { return _references; }
             set
             {
-                if (this.references != value)
+                if (_references != value)
                 {
-                    this.references = value;
-                    this.needCompile = true;
+                    _references = value;
+                    _needCompile = true;
                 }
             }
         }
@@ -103,38 +100,39 @@ namespace Test.Mosa.Runtime.CompilerFramework
         #region Methods
 
         /// <summary>
-        /// Builds the test runtime used to execute tests.
+        /// Builds the test _runtime used to execute tests.
         /// </summary>
-        [FixtureSetUp]
+        [TestFixtureSetUp]
         public void Begin()
         {
-            Console.WriteLine("Building runtime...");
-            runtime = new TestRuntime();
+            Console.WriteLine("Building _runtime...");
+            _runtime = new TestRuntime();
         }
 
         /// <summary>
-        /// Disposes the test runtime and deletes the compiled assembly.
+        /// Disposes the test _runtime and deletes the compiled _assembly.
         /// </summary>
-        [FixtureTearDown]
+        [TestFixtureTearDown]
         public void End()
         {
-            // Dispose the test runtime.
-            if (null != this.runtime)
+            // Dispose the test _runtime.
+            if (null != _runtime)
             {
-                this.runtime.Dispose();
-                this.runtime = null;
+                _runtime.Dispose();
+                _runtime = null;
             }
 
-            // Try to delete the compiled assembly...
-            if (null != this.assembly)
+            // Try to delete the compiled _assembly...
+            if (null == _assembly)
             {
-                try
-                {
-                    File.Delete(this.assembly);
-                }
-                catch
-                {
-                }
+                return;
+            }
+            try
+            {
+                File.Delete(_assembly);
+            }
+            catch
+            {
             }
         }
 
@@ -151,14 +149,14 @@ namespace Test.Mosa.Runtime.CompilerFramework
         public object Run<TDelegate>(string ns, string type, string method, params object[] parameters)
         {
             // Do we need to compile the code?
-            if (this.needCompile == true)
+            if (_needCompile)
             {
-                if (module != null)
-                    RuntimeBase.Instance.AssemblyLoader.Unload(module);
-                this.assembly = this.CompileTestCode<TDelegate>(ns, type, method);
+                if (_module != null)
+                    RuntimeBase.Instance.AssemblyLoader.Unload(_module);
+                _assembly = CompileTestCode<TDelegate>(ns, type, method);
                 Console.WriteLine("Executing MOSA compiler...");
-                module = RunMosaCompiler(this.assembly);
-                this.needCompile = false;
+                _module = RunMosaCompiler(_assembly);
+                _needCompile = false;
             }
 
             // Find the test method to execute
@@ -179,7 +177,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Finds a runtime method, which represents the requested method.
+        /// Finds a _runtime method, which represents the requested method.
         /// </summary>
         /// <exception cref="MissingMethodException">The sought method is not found.</exception>
         /// <param name="ns">The namespace of the sought method.</param>
@@ -188,7 +186,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
         /// <returns>An instance of <see cref="RuntimeMethod"/>.</returns>
         private RuntimeMethod FindMethod(string ns, string type, string method)
         {
-            foreach (RuntimeType t in runtime.TypeLoader.GetTypesFromModule(module))
+            foreach (RuntimeType t in _runtime.TypeLoader.GetTypesFromModule(_module))
             {
                 if (t.Namespace != ns || t.Name != type)
                     continue;
@@ -211,19 +209,17 @@ namespace Test.Mosa.Runtime.CompilerFramework
         /// <param name="method">The name of the method of the test.</param>
         /// <exception cref="NotSupportedException">Compilation is not supported.</exception>
         /// <exception cref="Exception">A generic exception during compilation.</exception>
-        /// <returns>The name of the compiled assembly file.</returns>
+        /// <returns>The name of the compiled _assembly file.</returns>
         protected abstract string CompileTestCode<TDelegate>(string ns, string type, string method);
 
         /// <summary>
-        /// Loads the specified assembly into the mosa runtime and executes the mosa compiler.
+        /// Loads the specified _assembly into the mosa _runtime and executes the mosa compiler.
         /// </summary>
-        /// <param name="assemblyFile">The assembly file name.</param>
-        /// <returns>The metadata module, which represents the loaded assembly.</returns>
+        /// <param name="assemblyFile">The _assembly file name.</param>
+        /// <returns>The metadata _module, which represents the loaded _assembly.</returns>
         private IMetadataModule RunMosaCompiler(string assemblyFile)
         {
-            IMetadataModule rtModule = RuntimeBase.Instance.AssemblyLoader.Load(
-                typeof(RuntimeBase).Module.FullyQualifiedName
-            );
+            RuntimeBase.Instance.AssemblyLoader.Load(typeof(RuntimeBase).Module.FullyQualifiedName);
             IMetadataModule module = RuntimeBase.Instance.AssemblyLoader.Load(
                 assemblyFile
             );
@@ -240,7 +236,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
         /// </summary>
         void IDisposable.Dispose()
         {
-            this.End();
+            End();
         }
 
         #endregion // IDisposable Members
