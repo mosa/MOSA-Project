@@ -34,13 +34,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(1)]
-        [TestCase(23)]
-        [TestCase(-1)]
-        [TestCase(0)]
+        [TestCase((sbyte)1)]
+        [TestCase((sbyte)23)]
+        [TestCase((sbyte)-1)]
+        [TestCase((sbyte)0)]
         // And reverse
-        [TestCase(2)]
-        [TestCase(-2)]       
+        [TestCase((sbyte)2)]
+        [TestCase((sbyte)-2)]       
         [Test]
         public void SwitchI1(sbyte a)
         {
@@ -94,11 +94,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(1)]
-        [TestCase(23)]
-        [TestCase(0)]
+        [TestCase((byte)1)]
+        [TestCase((byte)23)]
+        [TestCase((byte)0)]
         // And reverse
-        [TestCase(2)]
+        [TestCase((byte)2)]
         [Test]
         public void SwitchU1(byte a)
         {
@@ -143,13 +143,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(1)]
-        [TestCase(23)]
-        [TestCase(-1)]
-        [TestCase(0)]
+        [TestCase((short)1)]
+        [TestCase((short)23)]
+        [TestCase((short)-1)]
+        [TestCase((short)0)]
         // And reverse
-        [TestCase(2)]
-        [TestCase(-2)]
+        [TestCase((short)2)]
+        [TestCase((short)-2)]
         // (MinValue, X) Cases
         [TestCase(short.MinValue)]
         // (MaxValue, X) Cases
@@ -207,11 +207,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(1)]
-        [TestCase(23)]
-        [TestCase(0)]
+        [TestCase((ushort)1)]
+        [TestCase((ushort)23)]
+        [TestCase((ushort)0)]
         // And reverse
-        [TestCase(2)]
+        [TestCase((ushort)2)]
         // (MinValue, X) Cases
         [TestCase(ushort.MinValue)]
         // (MaxValue, X) Cases
@@ -324,11 +324,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(1)]
-        [TestCase(23)]
-        [TestCase(0)]
+        [TestCase((uint)1)]
+        [TestCase((uint)23)]
+        [TestCase((uint)0)]
         // And reverse
-        [TestCase(2)]
+        [TestCase((uint)2)]
         // (MinValue, X) Cases
         [TestCase(uint.MinValue)]
         // (MaxValue, X) Cases
@@ -442,11 +442,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [TestCase(1)]
-        [TestCase(23)]
-        [TestCase(0)]
+        [TestCase((ulong)1)]
+        [TestCase((ulong)23)]
+        [TestCase((ulong)0)]
         // And reverse
-        [TestCase(2)]
+        [TestCase((ulong)2)]
         // (MinValue, X) Cases
         [TestCase(ulong.MinValue)]
         // (MaxValue, X) Cases
