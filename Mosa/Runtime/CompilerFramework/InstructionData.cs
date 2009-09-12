@@ -63,6 +63,11 @@ namespace Mosa.Runtime.CompilerFramework
 		public Operand Result;
 
 		/// <summary>
+		/// Holds the result operands of the instruction.
+		/// </summary>
+		public Operand Result2;
+
+		/// <summary>
 		/// Holds the prefix instruction of the instruction
 		/// </summary>
 		public IInstruction Prefix;

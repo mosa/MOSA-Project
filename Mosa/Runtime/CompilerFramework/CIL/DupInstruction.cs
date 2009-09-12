@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class DupInstruction : CILInstruction
+	public class DupInstruction : UnaryInstruction
 	{
 		#region Construction
 
@@ -40,23 +40,22 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
 		{
-			Debug.Assert(OpCode.Nop == opcode, @"Wrong opcode for NopInstruction.");
-			if (OpCode.Nop != opcode)
-				throw new ArgumentException(@"Wrong opcode.", @"code");
-
-			//instruction.Instruction = this;
+			Debug.Assert(OpCode.Dup == opcode);
+			if (OpCode.Dup != opcode)
+				throw new ArgumentException(@"Invalid opcode.", @"code");
 		}
 
 		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// Validates the specified instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		/// <param name="compiler">The compiler.</param>
+		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
 		{
-			return ToString();
+			base.Validate(ref instruction, compiler);
+
+			instruction.Result = instruction.Operand1;
+			instruction.Result2 = instruction.Operand1;
 		}
 
 		#endregion // ICILInstruction Overrides
@@ -69,7 +68,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return "CIL nop";
+			return "CIL dup";
 		}
 
 		#endregion // Operand Overrides

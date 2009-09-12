@@ -76,7 +76,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
             /* 0x023 */ { OpCode.Ldc_r8,            new LdcInstruction() },
             /* 0x024 is undefined */
             /* 0x025 */ { OpCode.Dup,               new DupInstruction() },
-            /* 0x026 */ { OpCode.Pop,               new PopInstruction() },
+            /* 0x026 */ { OpCode.Pop,               new PopInstruction() }, // here
             /* 0x027 */ { OpCode.Jmp,               new JumpInstruction() },
             /* 0x028 */ { OpCode.Call,              new CallInstruction() },
             /* 0x029 */ { OpCode.Calli,             new CalliInstruction() },
