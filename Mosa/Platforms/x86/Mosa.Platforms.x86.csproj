@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -21,10 +21,14 @@
     <RootNamespace>Mosa.Platforms.x86</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
   </PropertyGroup>
@@ -95,6 +99,7 @@
     <Compile Include="Instructions\Intrinsics\NopInstruction.cs" />
     <Compile Include="Instructions\SalInstruction.cs" />
     <Compile Include="OpCode.cs" />
+    <Compile Include="Platform\NopInstruction.cs" />
     <Compile Include="X86.cs" />
     <Compile Include="DefaultCallingConvention.cs">
       <SubType>Code</SubType>

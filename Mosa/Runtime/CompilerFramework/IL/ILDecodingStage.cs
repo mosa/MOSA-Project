@@ -292,6 +292,11 @@ namespace Mosa.Runtime.CompilerFramework.IL
 		/// </summary>
 		private List<Instruction> _instructions = new List<Instruction>();
 
+		/// <summary>
+		/// List of instructions decoded by the decoder.
+		/// </summary>
+		Instructions _instructions2 = new Instructions(1024 * 1024);
+
 		#endregion // Data members
 
 		#region Construction
@@ -473,6 +478,10 @@ namespace Mosa.Runtime.CompilerFramework.IL
 			// Prefix instruction
 			PrefixInstruction prefix = null;
 
+			// Setup first instruction
+			int root = Instructions2.CreateRoot();
+			Instructions2.instructions[root].Ignore = true;
+
 			while (codeEnd != _codeReader.BaseStream.Position) {
 				// Determine the instruction offset
 				int instOffset = (int)(_codeReader.BaseStream.Position - codeStart);
@@ -487,6 +496,9 @@ namespace Mosa.Runtime.CompilerFramework.IL
 				instruction.Decode(this);
 				instruction.Offset = instOffset;
 				instruction.Prefix = prefix;
+
+			//	Instructions2.
+
 
 				// Do we need to patch branch targets?
 				IBranchInstruction branch = instruction as IBranchInstruction;
@@ -561,25 +573,12 @@ namespace Mosa.Runtime.CompilerFramework.IL
 		}
 
 		/// <summary>
-		/// Gibt einen Enumerator zurück, der die Auflistung durchläuft.
+		/// Gets a list of instructions in intermediate representation.
 		/// </summary>
-		/// <returns>
-		/// Ein <see cref="T:System.Collections.Generic.IEnumerator`1"/>, der zum Durchlaufen der Auflistung verwendet werden kann.
-		/// </returns>
-		public IEnumerator<Instruction> GetEnumerator()
+		/// <value></value>
+		public Instructions Instructions2
 		{
-			return _instructions.GetEnumerator();
-		}
-
-		/// <summary>
-		/// Gibt einen Enumerator zurück, der eine Auflistung durchläuft.
-		/// </summary>
-		/// <returns>
-		/// Ein <see cref="T:System.Collections.IEnumerator"/>-Objekt, das zum Durchlaufen der Auflistung verwendet werden kann.
-		/// </returns>
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-		{
-			return _instructions.GetEnumerator();
+			get { return _instructions2; }
 		}
 
 		#endregion //  IInstructionsProvider members

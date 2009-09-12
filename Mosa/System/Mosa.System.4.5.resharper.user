@@ -1,0 +1,26 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="631BC4F3-E2D8-4319-814C-13904CAA17CE/f:Attribute.cs" caret="0" fromTop="0" />
+      <File id="631BC4F3-E2D8-4319-814C-13904CAA17CE/f:ObjectDisposedException.cs" caret="0" fromTop="0" />
+      <File id="631BC4F3-E2D8-4319-814C-13904CAA17CE/d:Primitives/f:Object.cs" caret="0" fromTop="0" />
+    </RecentFiles>
+    <RecentEdits />
+  </RecentFiles>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerMSTest>
+    <UseTestRunConfigFromMetadataFile>False</UseTestRunConfigFromMetadataFile>
+  </UnitTestRunnerMSTest>
+</Configuration>

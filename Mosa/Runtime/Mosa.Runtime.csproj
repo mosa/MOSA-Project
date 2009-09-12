@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -21,10 +21,14 @@
     <RootNamespace>Mosa.Runtime</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
   </PropertyGroup>
@@ -75,7 +79,100 @@
   <ItemGroup>
     <Compile Include="CompilerFramework\BasicBlockBuilderStage.cs" />
     <Compile Include="CompilerFramework\BasicBlockOrderStage.cs" />
+    <Compile Include="CompilerFramework\CIL\AddInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\ArglistInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\ArithmeticInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\ArithmeticOverflowInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\BinaryBranchInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\BinaryComparisonInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\BinaryInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\BinaryLogicInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\BoxingInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\BoxInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\BranchInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\CalliInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\CallInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\CallvirtInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\CastclassInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\CILDecodingStage.cs" />
+    <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\ConstrainedPrefixInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\ConversionInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\CpblkInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\CpobjInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\DivInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\DupInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\EndfilterInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\EndfinallyInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\InitblkInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\InitObjInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\InvokeInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\IsInstInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\JumpInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdargaInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdargInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdcInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdelemaInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdelemInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdfldaInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdfldInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdftnInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdlenInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdlocaInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdlocInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdobjInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdsfldaInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdsfldInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdstrInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdtokenInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LdvirtftnInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LeaveInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LoadInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\LocalallocInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\MkrefanyInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\MulInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\NaryInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\NegInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\NewarrInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\NewobjInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\NoPrefixInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\NotInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\OpCode.cs" />
+    <Compile Include="CompilerFramework\CIL\PopInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\PrefixInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\RefanytypeInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\RefanyvalInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\RemInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\RethrowInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\ReturnInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\ShiftInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\SizeofInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\StargInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\StelemInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\StfldInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\StlocInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\StobjInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\StsfldInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\SubInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\SwitchInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\ThrowInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\UnalignedPrefixInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\UnaryArithmeticInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\UnaryBranchInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\UnaryInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\UnboxAnyInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\UnboxInstruction.cs" />
+    <Compile Include="CompilerFramework\Branch.cs" />
+    <Compile Include="CompilerFramework\IIRnstruction.cs" />
+    <Compile Include="CompilerFramework\IPlatformInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\ICILInstruction.cs" />
+    <Compile Include="CompilerFramework\IInstruction.cs" />
     <Compile Include="CompilerFramework\FlowGraphVisualizationStage.cs" />
+    <Compile Include="CompilerFramework\CIL\NopInstruction.cs" />
+    <Compile Include="CompilerFramework\Instructions.cs" />
+    <Compile Include="CompilerFramework\InstructionData.cs" />
+    <Compile Include="CompilerFramework\InstructionType.cs" />
+    <Compile Include="CompilerFramework\CIL\CILInstruction.cs" />
     <Compile Include="CompilerFramework\ReverseBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\OperandDeterminationStage.cs" />
     <Compile Include="CompilerFramework\StackRegisterAllocator.cs" />

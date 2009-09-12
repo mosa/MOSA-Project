@@ -84,23 +84,24 @@ namespace Mosa.Jit.SimpleJit
             get { return _instructions; }
         }
 
+		/// <summary>
+		/// Gets a list of instructions in intermediate representation.
+		/// </summary>
+		/// <value></value>
+		public Instructions Instructions2
+		{
+			get { return null; } // FIXME
+		}
+
         #endregion // IInstructionsProvider Members
 
         #region IEnumerable<Instruction> Members
 
-        IEnumerator<Instruction> IEnumerable<Instruction>.GetEnumerator()
-        {
-            return _instructions.GetEnumerator();
-        }
 
         #endregion // IEnumerable<Instruction> Members
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return _instructions.GetEnumerator();
-        }
 
         #endregion // IEnumerable Members
     }

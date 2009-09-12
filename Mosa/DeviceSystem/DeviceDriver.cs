@@ -16,7 +16,7 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public class DeviceDriver
 	{
-		private IDeviceDriverAttribute deviceDriverAttribute;
+		private IDeviceDriver deviceDriverAttribute;
 		private System.Type driverType;
 		private LinkedList<DeviceDriverPhysicalMemoryAttribute> memoryAttributes;
 
@@ -24,7 +24,7 @@ namespace Mosa.DeviceSystem
 		/// Gets the signature attribute.
 		/// </summary>
 		/// <value>The signature attribute.</value>
-		public IDeviceDriverAttribute Attribute { get { return deviceDriverAttribute; } }
+		public IDeviceDriver Attribute { get { return deviceDriverAttribute; } }
 
 		/// <summary>
 		/// Gets the type of the driver.
@@ -43,7 +43,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="deviceDriverAttribute">The device driver attribute.</param>
 		/// <param name="driverType">Type of the driver.</param>
-		public DeviceDriver(IDeviceDriverAttribute deviceDriverAttribute, System.Type driverType)
+		public DeviceDriver(IDeviceDriver deviceDriverAttribute, System.Type driverType)
 		{
 			this.deviceDriverAttribute = deviceDriverAttribute;
 			this.driverType = driverType;

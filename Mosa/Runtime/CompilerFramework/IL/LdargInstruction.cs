@@ -23,9 +23,9 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <summary>
         /// Initializes a new instance of <see cref="LdlocInstruction"/>.
         /// </summary>
-        /// <param name="code">The opcode of the load.</param>
-        public LdargInstruction(OpCode code)
-            : base(code)
+        /// <param name="opcode">The opcode of the load.</param>
+		public LdargInstruction(OpCode opcode)
+			: base(opcode)
         {
             // ParameterOperand loads are stack operations, which are not required
             // in a register based vm.

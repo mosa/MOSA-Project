@@ -15,7 +15,7 @@ namespace Mosa.DeviceSystem
 	/// 
 	/// </summary>
 	[System.AttributeUsage(System.AttributeTargets.All | System.AttributeTargets.Property, AllowMultiple = true)]
-	public class PCIDeviceDriverAttribute : System.Attribute, IDeviceDriverAttribute
+	public class PCIDeviceDriverAttribute : System.Attribute, IDeviceDriver
 	{
 		/// <summary>
 		/// 

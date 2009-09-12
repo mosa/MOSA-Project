@@ -419,7 +419,7 @@ namespace Mosa.Runtime.Linker.PE
 			ntHeaders.FileHeader.Characteristics = 0x010E; // FIXME: Use an enum here
 
 			// Prepare the "optional" headers
-			ntHeaders.OptionalHeader.Magic = IMAGE_OPTIONAL_HEADER.IMAGE_OPTIONAL_HEADER_MAGIC_PE32;
+			ntHeaders.OptionalHeader.Magic = IMAGE_OPTIONAL_HEADER.IMAGE_OPTIONAL_HEADER_MAGIC;
 			ntHeaders.OptionalHeader.MajorLinkerVersion = 6;
 			ntHeaders.OptionalHeader.MinorLinkerVersion = 0;
 			ntHeaders.OptionalHeader.SizeOfCode = AlignValue(GetSectionLength(SectionKind.Text), this.sectionAlignment);

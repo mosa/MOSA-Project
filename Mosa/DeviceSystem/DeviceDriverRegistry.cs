@@ -95,11 +95,11 @@ namespace Mosa.DeviceSystem
 			System.Type[] types = assemblyInfo.GetTypes();
 
 			foreach (System.Type type in types) {
-				object[] attributes = type.GetCustomAttributes(typeof(IDeviceDriverAttribute), false);
+				object[] attributes = type.GetCustomAttributes(typeof(IDeviceDriver), false);
 
 				foreach (object attribute in attributes)
-					if (((attribute as IDeviceDriverAttribute).Platforms & platformArchitecture) != 0) {
-						DeviceDriver deviceDriver = new DeviceDriver(attribute as IDeviceDriverAttribute, type);
+					if (((attribute as IDeviceDriver).Platforms & platformArchitecture) != 0) {
+						DeviceDriver deviceDriver = new DeviceDriver(attribute as IDeviceDriver, type);
 
 						object[] memAttributes = type.GetCustomAttributes(typeof(DeviceDriverPhysicalMemoryAttribute), false);
 

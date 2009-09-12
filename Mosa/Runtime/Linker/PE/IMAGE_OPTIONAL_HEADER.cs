@@ -27,14 +27,9 @@ namespace Mosa.Runtime.Linker.PE
 		public const int IMAGE_NUMBEROF_DIRECTORY_ENTRIES = 16;
 
         /// <summary>
-        /// The magic value at the start of the PE32 optional _header.
+        /// The magic value at the start of the optional _header.
         /// </summary>
-        public const ushort IMAGE_OPTIONAL_HEADER_MAGIC_PE32 = 0x10b;
-		
-		/// <summary>
-		/// The magic value at the start of the PE32+ optional _header.
-		/// </summary>
-		public const ushort IMAGE_OPTIONAL_HEADER_MAGIC_PE64 = 0x20b;
+        public const ushort IMAGE_OPTIONAL_HEADER_MAGIC = 0x10b;
 
 		#endregion // Constants
 
@@ -96,7 +91,7 @@ namespace Mosa.Runtime.Linker.PE
         /// <summary>
         /// The preferred address of the first byte of the image.
         /// </summary>
-		public ulong ImageBase;
+		public uint ImageBase;
 
         /// <summary>
         /// The alignment of the sections.
@@ -171,22 +166,22 @@ namespace Mosa.Runtime.Linker.PE
         /// <summary>
         /// The size of the stack reserve.
         /// </summary>
-		public ulong SizeOfStackReserve;
+		public uint SizeOfStackReserve;
 
         /// <summary>
         /// The size of the commited stack.
         /// </summary>
-		public ulong SizeOfStackCommit;
+		public uint SizeOfStackCommit;
 
         /// <summary>
         /// Size of the heap reserve.
         /// </summary>
-		public ulong SizeOfHeapReserve;
+		public uint SizeOfHeapReserve;
 
         /// <summary>
         /// Size of the committed heap.
         /// </summary>
-		public ulong SizeOfHeapCommit;
+		public uint SizeOfHeapCommit;
 
         /// <summary>
         /// Unused. Must be zero.
@@ -214,8 +209,7 @@ namespace Mosa.Runtime.Linker.PE
 		public void Read(BinaryReader reader)
 		{
 			Magic = reader.ReadUInt16();
-			if (IMAGE_OPTIONAL_HEADER_MAGIC_PE32 != Magic
-                && IMAGE_OPTIONAL_HEADER_MAGIC_PE64 != Magic)
+			if (IMAGE_OPTIONAL_HEADER_MAGIC != Magic)
 				throw new BadImageFormatException();
 
             MajorLinkerVersion = reader.ReadByte();
@@ -225,13 +219,9 @@ namespace Mosa.Runtime.Linker.PE
             SizeOfUninitializedData = reader.ReadUInt32();
             AddressOfEntryPoint = reader.ReadUInt32();
             BaseOfCode = reader.ReadUInt32();
-			if(Magic == IMAGE_OPTIONAL_HEADER_MAGIC_PE32)
-			{
-            	BaseOfData = reader.ReadUInt32();
-				ImageBase = reader.ReadUInt32();
-			}
-			else
-				ImageBase = reader.ReadUInt64();
+            BaseOfData = reader.ReadUInt32();
+
+            ImageBase = reader.ReadUInt32();
             SectionAlignment = reader.ReadUInt32();
             FileAlignment = reader.ReadUInt32();
             MajorOperatingSystemVersion = reader.ReadUInt16();
@@ -246,20 +236,10 @@ namespace Mosa.Runtime.Linker.PE
             CheckSum = reader.ReadUInt32();
             Subsystem = reader.ReadUInt16();
             DllCharacteristics = reader.ReadUInt16();
-			if(Magic == IMAGE_OPTIONAL_HEADER_MAGIC_PE32)
-			{
-            	SizeOfStackReserve = reader.ReadUInt32();
-            	SizeOfStackCommit = reader.ReadUInt32();
-            	SizeOfHeapReserve = reader.ReadUInt32();
-            	SizeOfHeapCommit = reader.ReadUInt32();
-			}
-			else
-			{
-				SizeOfStackReserve = reader.ReadUInt64();
-            	SizeOfStackCommit = reader.ReadUInt64();
-            	SizeOfHeapReserve = reader.ReadUInt64();
-            	SizeOfHeapCommit = reader.ReadUInt64();
-			}
+            SizeOfStackReserve = reader.ReadUInt32();
+            SizeOfStackCommit = reader.ReadUInt32();
+            SizeOfHeapReserve = reader.ReadUInt32();
+            SizeOfHeapCommit = reader.ReadUInt32();
             LoaderFlags = reader.ReadUInt32();
             NumberOfRvaAndSizes = reader.ReadUInt32();
 

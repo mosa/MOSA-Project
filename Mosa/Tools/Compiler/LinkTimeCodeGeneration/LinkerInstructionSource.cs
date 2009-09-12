@@ -57,6 +57,15 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
             get { return this.instructions; }
         }
 
+		/// <summary>
+		/// Gets a list of instructions in intermediate representation.
+		/// </summary>
+		/// <value></value>
+		public Instructions Instructions2
+		{
+			get { return null; } // FIXME
+		}
+
         #endregion // IInstructionsProvider Members
 
         #region IEnumerable<Instruction> Members
@@ -75,17 +84,6 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
         #endregion // IEnumerable<Instruction> Members
 
         #region IEnumerable Members
-
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-        /// </returns>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return this.instructions.GetEnumerator();
-        }
 
         #endregion // IEnumerable Members
 

@@ -31,7 +31,6 @@ using Mosa.Tools.Compiler.TypeInitializers;
 namespace Mosa.Tools.Compiler.Boot
 {
 	using Runtime.Metadata;
-    using Mosa.Tools.Compiler.Linkers;
 
 	/*
 	 * FIXME:
@@ -251,18 +250,8 @@ namespace Mosa.Tools.Compiler.Boot
 				// entry_point the load virtualAddress of the entry point to invoke
 				uint entry_point = (uint)entryPoint.ToInt32();
 
-                // Are we linking an ELF binary?
-                bool isLinkingElfBinary = false;
-                isLinkingElfBinary = (linker is Elf32Linker) || (linker is Elf64Linker);
-                if (!isLinkingElfBinary && (linker is LinkerFormatSelector))
-                {
-                    LinkerFormatSelector linkerAsLinkerFormatSelector = linker as LinkerFormatSelector;
-                    isLinkingElfBinary |= (linkerAsLinkerFormatSelector.Implementation is Elf32Linker) || (linkerAsLinkerFormatSelector.Implementation is Elf64Linker);
-                }
-
-				// If we aren't linking an ELF binary...
-                if (!isLinkingElfBinary)
-                {
+				// Are we linking an ELF binary?
+				if (!(linker is Elf32Linker || linker is Elf64Linker)) {
 					// Check the linker layout settings
 					if (linker.LoadSectionAlignment != linker.VirtualSectionAlignment)
 						throw new LinkerException(@"Load and virtual section alignment must be identical if you are booting non-ELF binaries with a multiboot bootloader.");

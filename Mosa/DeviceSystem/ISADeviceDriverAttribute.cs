@@ -13,7 +13,7 @@ namespace Mosa.DeviceSystem
 	/// 
 	/// </summary>
 	[System.AttributeUsage(System.AttributeTargets.All | System.AttributeTargets.Property, AllowMultiple = true)]
-	public class ISADeviceDriverAttribute : System.Attribute, IDeviceDriverAttribute
+	public class ISADeviceDriverAttribute : System.Attribute, IDeviceDriver
 	{
 		/// <summary>
 		/// 

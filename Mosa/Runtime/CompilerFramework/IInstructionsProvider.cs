@@ -15,11 +15,18 @@ namespace Mosa.Runtime.CompilerFramework
     /// Implemented by compiler stages, which produce a list of instructions in
     /// intermediate representation From a source.
     /// </summary>
-    public interface IInstructionsProvider : IEnumerable<Instruction>
+    public interface IInstructionsProvider // : IEnumerable<Instruction>
     {
         /// <summary>
         /// Gets a list of instructions in intermediate representation.
         /// </summary>
         List<Instruction> Instructions { get; }
+
+		/// <summary>
+		/// Gets a list of instructions in intermediate representation.
+		/// </summary>
+		/// <value>The instructions.</value>
+		Instructions Instructions2 { get; }
+
     }
 }
