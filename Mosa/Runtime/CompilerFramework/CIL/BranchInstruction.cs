@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Properties
 
-		#region ICILInstruction Overrides
+		#region CILInstruction Overrides
 
 		/// <summary>
 		/// Decodes the specified instruction.
@@ -93,7 +93,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			return String.Format("{0} L_{1:X4}", base.ToString(), instruction.Branch.Targets[0]);
 		}
 
-		#endregion // ICILInstruction Overrides
+		#endregion // CILInstruction Overrides
 
 		/// <summary>
 		/// Determines if the branch is conditional.

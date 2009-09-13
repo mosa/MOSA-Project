@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-		#region ICILInstruction Overrides
+		#region CILInstruction Overrides
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
@@ -68,7 +68,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			instruction.Result = compiler.CreateTemporary(Operand.SigTypeFromStackType(result));
 		}
 
-		#endregion // ICILInstruction Overrides
+		#endregion // CILInstruction Overrides
 
 	}
 }

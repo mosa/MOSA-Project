@@ -32,7 +32,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-		#region ICILInstruction Overrides
+		#region CILInstruction Overrides
 
 		/// <summary>
 		/// Decodes the specified instruction.
@@ -47,7 +47,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			throw new NotImplementedException();
 		}
 
-		#endregion // ICILInstruction Overrides
+		#endregion // CILInstruction Overrides
 
 	}
 }

@@ -31,7 +31,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-		#region ICILInstruction Overrides
+		#region CILInstruction Overrides
 
 		/// <summary>
 		/// Validates the specified instruction.
@@ -46,7 +46,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			instruction.Result2 = instruction.Operand1;
 		}
 
-		#endregion // ICILInstruction Overrides
+		#endregion // CILInstruction Overrides
 
 	}
 }
