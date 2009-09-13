@@ -64,24 +64,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Static data members
 
-		#region Data members
-
-		/// <summary>
-		/// 
-		/// </summary>
-		protected OpCode _opcode;
-
-		#endregion // Data members
-
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArithmeticInstruction"/> class.
 		/// </summary>
 		public ArithmeticInstruction(OpCode opcode)
-			: base(1)
+			: base(opcode, 1)
 		{
-			_opcode = opcode;
 		}
 
 		#endregion // Construction
@@ -106,7 +96,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
 		{
-			//			base.Validate(compiler);
+			base.Validate(ref instruction, compiler);
 
 			StackTypeCode result = StackTypeCode.Unknown;
 			switch (_opcode) {
@@ -145,31 +135,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			instruction.Result = compiler.CreateTemporary(resultType);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(ref InstructionData instruction)
-		{
-			return ToString();
-		}
-
 		#endregion // ICILInstruction Overrides
 
-		#region Operand Overrides
-
-		/// <summary>
-		/// Returns a string representation of <see cref="ConstantOperand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-		{
-			return "CIL " + _opcode.ToString();
-		}
-
-		#endregion // Operand Overrides
 	}
 }

@@ -24,7 +24,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdargInstruction"/> class.
 		/// </summary>
-		public LdargInstruction()
+		public LdargInstruction(OpCode opCode)
+			: base(opCode)
 		{
 		}
 

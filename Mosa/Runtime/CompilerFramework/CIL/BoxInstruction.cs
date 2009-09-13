@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BoxInstruction"/> class.
 		/// </summary>
-		public BoxInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public BoxInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

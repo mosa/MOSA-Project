@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EndfinallyInstruction"/> class.
 		/// </summary>
-		public EndfinallyInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public EndfinallyInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

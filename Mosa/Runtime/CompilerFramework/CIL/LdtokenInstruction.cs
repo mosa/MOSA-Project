@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdtokenInstruction"/> class.
 		/// </summary>
-		public LdtokenInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public LdtokenInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

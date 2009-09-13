@@ -28,7 +28,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CallInstruction"/> class.
 		/// </summary>
-		public CallInstruction()
+		public CallInstruction(OpCode opCode)
+			: base(opCode)
 		{
 		}
 

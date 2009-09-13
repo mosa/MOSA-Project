@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CpblkInstruction"/> class.
 		/// </summary>
-		public CpblkInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public CpblkInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

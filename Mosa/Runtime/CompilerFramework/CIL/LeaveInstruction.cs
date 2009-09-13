@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LeaveInstruction"/> class.
 		/// </summary>
-		public LeaveInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public LeaveInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

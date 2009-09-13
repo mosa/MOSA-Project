@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ShiftInstruction"/> class.
 		/// </summary>
-		public ShiftInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public ShiftInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

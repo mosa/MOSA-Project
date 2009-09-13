@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NaryInstruction"/> class.
 		/// </summary>
-		public NaryInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public NaryInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

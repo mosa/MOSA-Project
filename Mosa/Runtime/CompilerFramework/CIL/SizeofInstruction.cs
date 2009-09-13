@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SizeofInstruction"/> class.
 		/// </summary>
-		public SizeofInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public SizeofInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

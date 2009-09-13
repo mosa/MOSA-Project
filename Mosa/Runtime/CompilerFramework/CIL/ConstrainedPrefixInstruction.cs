@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConstrainedPrefixInstruction"/> class.
 		/// </summary>
-		public ConstrainedPrefixInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public ConstrainedPrefixInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

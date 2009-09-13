@@ -24,8 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StargInstruction"/> class.
 		/// </summary>
-		public StargInstruction()
-			: base(1)
+		/// <param name="opcode">The opcode.</param>
+		public StargInstruction(OpCode opcode)
+			: base(opcode,1)
 		{
 		}
 

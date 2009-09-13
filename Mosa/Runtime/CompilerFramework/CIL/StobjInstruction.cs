@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StobjInstruction"/> class.
 		/// </summary>
-		public StobjInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public StobjInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

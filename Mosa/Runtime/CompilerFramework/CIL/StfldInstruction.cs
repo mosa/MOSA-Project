@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StfldInstruction"/> class.
 		/// </summary>
-		public StfldInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public StfldInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

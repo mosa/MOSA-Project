@@ -65,7 +65,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InvokeInstruction"/> class.
 		/// </summary>
-		public InvokeInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public InvokeInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

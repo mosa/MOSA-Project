@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdobjInstruction"/> class.
 		/// </summary>
-		public LdobjInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public LdobjInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

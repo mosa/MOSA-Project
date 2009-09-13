@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MkrefanyInstruction"/> class.
 		/// </summary>
-		public MkrefanyInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public MkrefanyInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

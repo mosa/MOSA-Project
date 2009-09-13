@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BranchInstruction"/> class.
 		/// </summary>
-		public BranchInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public BranchInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

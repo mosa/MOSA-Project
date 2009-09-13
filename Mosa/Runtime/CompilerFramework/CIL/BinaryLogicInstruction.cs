@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BinaryLogicInstruction"/> class.
 		/// </summary>
-		public BinaryLogicInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public BinaryLogicInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BreakInstruction"/> class.
 		/// </summary>
-		public BreakInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public BreakInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

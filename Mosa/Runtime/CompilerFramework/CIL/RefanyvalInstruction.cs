@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RefanyvalInstruction"/> class.
 		/// </summary>
-		public RefanyvalInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public RefanyvalInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

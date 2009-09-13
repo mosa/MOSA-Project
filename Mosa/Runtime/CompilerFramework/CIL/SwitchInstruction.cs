@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SwitchInstruction"/> class.
 		/// </summary>
-		public SwitchInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public SwitchInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

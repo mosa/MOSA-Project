@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CastclassInstruction"/> class.
 		/// </summary>
-		public CastclassInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public CastclassInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

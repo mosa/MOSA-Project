@@ -24,17 +24,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UnaryInstruction"/> class.
 		/// </summary>
-		public UnaryInstruction()
-			: base(1)
+		/// <param name="opcode">The opcode.</param>
+		public UnaryInstruction(OpCode opcode)
+			: base(opcode, 1)
 		{
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UnaryInstruction"/> class.
 		/// </summary>
+		/// <param name="opcode">The opcode.</param>
 		/// <param name="resultCount">The result count.</param>
-		public UnaryInstruction(int resultCount)
-			: base(1, resultCount)
+		public UnaryInstruction(OpCode opcode, int resultCount)
+			: base(opcode, 1, resultCount)
 		{
 		}
 

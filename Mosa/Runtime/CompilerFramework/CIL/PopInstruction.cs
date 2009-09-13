@@ -24,7 +24,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PopInstruction"/> class.
 		/// </summary>
-		public PopInstruction()
+		public PopInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

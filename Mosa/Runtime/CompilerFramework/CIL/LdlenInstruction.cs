@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdlenInstruction"/> class.
 		/// </summary>
-		public LdlenInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public LdlenInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

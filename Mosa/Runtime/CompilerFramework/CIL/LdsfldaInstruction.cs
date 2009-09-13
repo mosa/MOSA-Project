@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdsfldaInstruction"/> class.
 		/// </summary>
-		public LdsfldaInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public LdsfldaInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

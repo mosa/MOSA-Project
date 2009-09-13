@@ -24,17 +24,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BinaryInstruction"/> class.
 		/// </summary>
-		public BinaryInstruction()
-			: base(2)
+		/// <param name="opcode">The opcode.</param>
+		public BinaryInstruction(OpCode opcode)
+			: base(opcode,2)
 		{
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BinaryInstruction"/> class.
 		/// </summary>
+		/// <param name="opcode">The opcode.</param>
 		/// <param name="resultCount">The result count.</param>
-		public BinaryInstruction(int resultCount)
-			: base(2, resultCount)
+		public BinaryInstruction(OpCode opcode, int resultCount)
+			: base(opcode, 2, resultCount)
 		{
 		}
 

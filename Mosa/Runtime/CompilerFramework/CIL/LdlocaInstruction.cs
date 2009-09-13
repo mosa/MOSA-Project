@@ -27,7 +27,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdlocaInstruction"/> class.
 		/// </summary>
-		public LdlocaInstruction()
+		public LdlocaInstruction(OpCode opCode)
+			: base(opCode)
 		{
 		}
 

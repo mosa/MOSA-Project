@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IsInstInstruction"/> class.
 		/// </summary>
-		public IsInstInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public IsInstInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

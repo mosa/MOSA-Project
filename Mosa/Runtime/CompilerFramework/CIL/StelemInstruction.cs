@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StelemInstruction"/> class.
 		/// </summary>
-		public StelemInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public StelemInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

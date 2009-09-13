@@ -19,24 +19,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// </summary>
 	public class BinaryBranchInstruction : BinaryInstruction
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the CIL opcode
-		/// </summary>
-		private OpCode opCode;
-
-		#endregion // Data members
-
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BinaryBranchInstruction"/> class.
 		/// </summary>
-		/// <param name="opCode">The op code.</param>
+		/// <param name="opCode">The opcode.</param>
 		public BinaryBranchInstruction(OpCode opCode)
+			: base(opCode)
 		{
-			this.opCode = opCode;
 		}
 
 		#endregion // Construction
@@ -51,11 +42,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
 		{
-			Debug.Assert(opCode == opcode, @"Wrong opcode for BinaryBranch.");
-			if (opCode != opcode)
-				throw new ArgumentException(@"Wrong opcode.", @"code");
-
-			// Decode base classes first
 			// Decode base classes first
 			base.Decode(ref instruction, opcode, decoder);
 
@@ -95,7 +81,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			string op, format;
 			bool unordered = false;
-			switch (opCode) {
+			switch (_opcode) {
 				case OpCode.Beq_s: op = @"=="; break;
 				case OpCode.Beq: op = @"=="; break;
 				case OpCode.Bge_s: op = @">="; break;
@@ -121,26 +107,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			if (!unordered)
-				format = @"{3} ; if ({0} {1} {2}) goto L_{4:X4}";
+				format = @" {3} ; if ({0} {1} {2}) goto L_{4:X4}";
 			else
-				format = @"{3} ; if (unordered({0} {1} {2})) goto L_{4:X4} else goto L_{5:X4}";
+				format = @" {3} ; if (unordered({0} {1} {2})) goto L_{4:X4} else goto L_{5:X4}";
 
-			return String.Format(format, instruction.Operand1, op, instruction.Operand2, base.ToString(), instruction.Branch.BranchTargets[0], instruction.Branch.BranchTargets[1]);
+			return base.ToString() + String.Format(format, instruction.Operand1, op, instruction.Operand2, base.ToString(), instruction.Branch.BranchTargets[0], instruction.Branch.BranchTargets[1]);
 		}
 
 		#endregion // ICILInstruction Overrides
-
-		#region Operand Overrides
-
-		/// <summary>
-		/// Returns a string representation of <see cref="ConstantOperand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-		{
-			return "CIL "+opCode.ToString();
-		}
-
-		#endregion // Operand Overrides
 	}
 }

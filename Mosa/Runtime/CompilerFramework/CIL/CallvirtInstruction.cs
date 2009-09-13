@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CallvirtInstruction"/> class.
 		/// </summary>
-		public CallvirtInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public CallvirtInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

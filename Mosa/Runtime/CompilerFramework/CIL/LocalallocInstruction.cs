@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalallocInstruction"/> class.
 		/// </summary>
-		public LocalallocInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public LocalallocInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

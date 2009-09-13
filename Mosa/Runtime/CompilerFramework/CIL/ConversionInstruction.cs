@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConversionInstruction"/> class.
 		/// </summary>
-		public ConversionInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public ConversionInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

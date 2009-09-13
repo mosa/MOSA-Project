@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RethrowInstruction"/> class.
 		/// </summary>
-		public RethrowInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public RethrowInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

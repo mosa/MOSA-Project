@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InitObjInstruction"/> class.
 		/// </summary>
-		public InitObjInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public InitObjInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

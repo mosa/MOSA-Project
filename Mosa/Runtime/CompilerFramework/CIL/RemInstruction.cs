@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemInstruction"/> class.
 		/// </summary>
-		public RemInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public RemInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

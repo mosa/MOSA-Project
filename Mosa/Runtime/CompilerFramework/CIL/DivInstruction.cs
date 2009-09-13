@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DivInstruction"/> class.
 		/// </summary>
-		public DivInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public DivInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

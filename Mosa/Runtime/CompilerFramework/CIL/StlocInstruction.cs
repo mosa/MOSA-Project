@@ -24,7 +24,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StlocInstruction"/> class.
 		/// </summary>
-		public StlocInstruction()
+		public StlocInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

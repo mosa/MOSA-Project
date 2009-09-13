@@ -28,7 +28,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JumpInstruction"/> class.
 		/// </summary>
-		public JumpInstruction()
+		public JumpInstruction(OpCode opCode)
+			: base(opCode)
 		{
 		}
 

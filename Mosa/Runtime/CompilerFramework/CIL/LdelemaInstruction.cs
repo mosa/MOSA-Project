@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdelemaInstruction"/> class.
 		/// </summary>
-		public LdelemaInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public LdelemaInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

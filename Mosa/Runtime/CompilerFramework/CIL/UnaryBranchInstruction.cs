@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UnaryBranchInstruction"/> class.
 		/// </summary>
-		public UnaryBranchInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public UnaryBranchInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NewarrInstruction"/> class.
 		/// </summary>
-		public NewarrInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public NewarrInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

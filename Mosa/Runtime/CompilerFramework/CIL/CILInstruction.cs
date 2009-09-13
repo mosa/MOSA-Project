@@ -22,6 +22,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#region Data members
 
 		/// <summary>
+		/// Holds the CIL opcode
+		/// </summary>
+		protected OpCode _opcode;
+
+		/// <summary>
 		/// Holds the number of operands for this instruction.
 		/// </summary>
 		public int _operandCount;
@@ -54,8 +59,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CILInstruction"/> class.
 		/// </summary>
-		public CILInstruction()
+		/// <param name="opCode">The op code.</param>
+		public CILInstruction(OpCode opCode)
 		{
+			this._opcode = opCode;
 			_operandCount = 0;
 			_resultCount = 0;
 		}
@@ -63,9 +70,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CILInstruction"/> class.
 		/// </summary>
+		/// <param name="opCode">The op code.</param>
 		/// <param name="operandCount">The operand count.</param>
-		public CILInstruction(int operandCount)
+		public CILInstruction(OpCode opCode, int operandCount)
 		{
+			this._opcode = opCode;
 			_operandCount = operandCount;
 			_resultCount = 0;
 		}
@@ -73,10 +82,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CILInstruction"/> class.
 		/// </summary>
+		/// <param name="opCode">The op code.</param>
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public CILInstruction(int operandCount, int resultCount)
+		public CILInstruction(OpCode opCode, int operandCount, int resultCount)
 		{
+			this._opcode = opCode;
 			_operandCount = operandCount;
 			_resultCount = resultCount;
 		}
@@ -93,7 +104,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public virtual void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
 		{
-			/* Default implementation is to do nothing */
+			Debug.Assert(_opcode == opcode, @"Wrong opcode.");
+			if (_opcode != opcode)
+				throw new ArgumentException(@"Wrong opcode.", @"code");
+
 			instruction.Instruction = this;
 		}
 
@@ -116,13 +130,22 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </returns>
 		public virtual string ToString(ref InstructionData instruction)
 		{
-			return base.ToString();
+			return ToString();
 		}
 
 		#endregion // ICILInstruction Overrides
 
-		#region Operand Overrides
+		#region  Overrides
 
-		#endregion // Operand Overrides
+		/// <summary>
+		/// Returns a string representation of <see cref="ConstantOperand"/>.
+		/// </summary>
+		/// <returns>A string representation of the operand.</returns>
+		public override string ToString()
+		{
+			return "CIL " + _opcode.ToString();
+		}
+
+		#endregion //  Overrides
 	}
 }

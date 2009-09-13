@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UnaryArithmeticInstruction"/> class.
 		/// </summary>
-		public UnaryArithmeticInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public UnaryArithmeticInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 

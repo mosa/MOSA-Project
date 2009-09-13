@@ -24,7 +24,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NopInstruction"/> class.
 		/// </summary>
-		public NopInstruction()
+		/// <param name="opcode">The opcode.</param>
+		public NopInstruction(OpCode opcode)
+			: base(opcode)
 		{
 		}
 
