@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public StargInstruction(OpCode opcode)
-			: base(opcode,1)
+			: base(opcode, 1)
 		{
 		}
 
@@ -42,10 +42,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
 		{
-			ushort argIdx;
-
 			// Decode the base first
-			//base.Decode(decoder);
+			base.Decode(ref instruction, opcode, decoder);
+
+			ushort argIdx;
 
 			// Opcode specific handling 
 			if (opcode == OpCode.Starg_s) {
@@ -65,31 +65,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// verification types.
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(ref InstructionData instruction)
-		{
-			return ToString();
-		}
-
 		#endregion // ICILInstruction Overrides
 
-		#region Operand Overrides
-
-		/// <summary>
-		/// Returns a string representation of <see cref="ConstantOperand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-		{
-			return "CIL nop";
-		}
-
-		#endregion // Operand Overrides
 	}
 }

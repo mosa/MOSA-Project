@@ -78,17 +78,5 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // ICILInstruction Overrides
 
-		#region Operand Overrides
-
-		/// <summary>
-		/// Returns a string representation of <see cref="ConstantOperand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-		{
-			return "CIL br";
-		}
-
-		#endregion // Operand Overrides
 	}
 }

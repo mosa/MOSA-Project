@@ -34,19 +34,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#region ICILInstruction Overrides
 
 		/// <summary>
-		/// Decodes the specified instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="opcode">The opcode of the load.</param>
-		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
-		{
-			Debug.Assert(OpCode.Dup == opcode);
-			if (OpCode.Dup != opcode)
-				throw new ArgumentException(@"Invalid opcode.", @"code");
-		}
-
-		/// <summary>
 		/// Validates the specified instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
@@ -61,17 +48,5 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // ICILInstruction Overrides
 
-		#region Operand Overrides
-
-		/// <summary>
-		/// Returns a string representation of <see cref="ConstantOperand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-		{
-			return "CIL Dup";
-		}
-
-		#endregion // Operand Overrides
 	}
 }

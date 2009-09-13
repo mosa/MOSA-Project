@@ -41,6 +41,5 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // Construction
-
 	}
 }

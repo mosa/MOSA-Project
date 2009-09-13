@@ -79,19 +79,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#region ICILInstruction Overrides
 
 		/// <summary>
-		/// Decodes the specified instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="opcode">The opcode of the load.</param>
-		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
-		{
-			// Make sure the opcode is valid
-			if (OpCode.Add != opcode && OpCode.Div != opcode && OpCode.Mul != opcode && OpCode.Rem != opcode && OpCode.Sub != opcode)
-				throw new ArgumentException(@"Opcode not supported.", @"code");
-		}
-
-		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
 		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)

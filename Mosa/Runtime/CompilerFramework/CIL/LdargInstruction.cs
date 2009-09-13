@@ -45,6 +45,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </remarks>
 		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
 		{
+			// Decode base classes first
+			base.Decode(ref instruction, opcode, decoder);
+
 			ushort argIdx;
 
 			// Opcode specific handling
@@ -85,31 +88,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			instruction.Ignore = true;
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(ref InstructionData instruction)
-		{
-			return ToString();
-		}
-
 		#endregion // ICILInstruction Overrides
-
-		#region Operand Overrides
-
-		/// <summary>
-		/// Returns a string representation of <see cref="ConstantOperand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-		{
-			return "CIL Ldarg";
-		}
-
-		#endregion // Operand Overrides
 	}
 }

@@ -44,9 +44,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
 		{
-			Debug.Assert(OpCode.Ldarga == opcode || OpCode.Ldarga_s == opcode);
-			if (OpCode.Ldarga != opcode && OpCode.Ldarga_s != opcode)
-				throw new ArgumentException(@"Invalid opcode.", @"code");
+			// Decode base classes first
+			base.Decode(ref instruction, opcode, decoder);
 
 			ushort argIdx;
 
@@ -64,31 +63,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			instruction.Result = decoder.Compiler.CreateTemporary(new RefSigType(instruction.Operand1.Type));
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(ref InstructionData instruction)
-		{
-			return ToString();
-		}
 
 		#endregion // ICILInstruction Overrides
 
-		#region Operand Overrides
-
-		/// <summary>
-		/// Returns a string representation of <see cref="ConstantOperand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-		{
-			return "CIL nop";
-		}
-
-		#endregion // Operand Overrides
 	}
 }
