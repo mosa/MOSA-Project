@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class CalliInstruction : CILInstruction
+	public class CalliInstruction : InvokeInstruction
 	{
 		#region Construction
 
@@ -40,11 +40,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
 		{
-			Debug.Assert(OpCode.Nop == opcode, @"Wrong opcode for NopInstruction.");
-			if (OpCode.Nop != opcode)
-				throw new ArgumentException(@"Wrong opcode.", @"code");
-
-			//instruction.Instruction = this;
+			Debug.Assert(OpCode.Calli == opcode);
 		}
 
 		/// <summary>

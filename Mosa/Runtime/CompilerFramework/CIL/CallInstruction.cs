@@ -15,9 +15,13 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
-	/// 
+	/// Intermediate representation for various IL call operations.
 	/// </summary>
-	public class CallInstruction : CILInstruction
+	/// <remarks>
+	/// Instances of this class are used to represent call, calli and callvirt
+	/// instructions.
+	/// </remarks>
+	public class CallInstruction : InvokeInstruction
 	{
 		#region Construction
 
@@ -40,11 +44,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
 		{
-			Debug.Assert(OpCode.Nop == opcode, @"Wrong opcode for NopInstruction.");
-			if (OpCode.Nop != opcode)
-				throw new ArgumentException(@"Wrong opcode.", @"code");
-
-			//instruction.Instruction = this;
+			Debug.Assert(OpCode.Call == opcode);
 		}
 
 		/// <summary>

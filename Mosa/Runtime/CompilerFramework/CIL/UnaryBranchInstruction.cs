@@ -40,11 +40,30 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
 		{
-			Debug.Assert(OpCode.Nop == opcode, @"Wrong opcode for NopInstruction.");
-			if (OpCode.Nop != opcode)
-				throw new ArgumentException(@"Wrong opcode.", @"code");
+			// Decode base classes first
+			base.Decode(ref instruction, opcode, decoder);
 
-			//instruction.Instruction = this;
+			instruction.Branch = new Branch(2);
+			instruction.Branch.BranchTargets[1] = 0;
+
+			// Read the branch target
+			// Is this a short branch target?
+			if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s) {
+				sbyte target;
+				decoder.Decode(out target);
+				instruction.Branch.BranchTargets[0] = target;
+			}
+			else if (opcode == OpCode.Brfalse || opcode == OpCode.Brtrue) {
+				int target;
+				decoder.Decode(out target);
+				instruction.Branch.BranchTargets[0] = target;
+			}
+			else if (opcode == OpCode.Switch) {
+				// Don't do anything, the derived class will do everything
+			}
+			else {
+				throw new NotSupportedException(@"Invalid opcode " + opcode.ToString() + " specified for UnaryBranchInstruction.");
+			}
 		}
 
 		/// <summary>

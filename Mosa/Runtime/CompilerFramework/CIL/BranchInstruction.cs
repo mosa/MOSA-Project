@@ -40,11 +40,26 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
 		{
-			Debug.Assert(OpCode.Nop == opcode, @"Wrong opcode for NopInstruction.");
-			if (OpCode.Nop != opcode)
-				throw new ArgumentException(@"Wrong opcode.", @"code");
+			// Decode bases first
+			base.Decode(ref instruction, opcode, decoder);
 
-			//instruction.Instruction = this;
+			instruction.Branch = new Branch(1);
+
+			switch (opcode) {
+				case OpCode.Br_s: {
+						sbyte target;
+						decoder.Decode(out target);
+						instruction.Branch.BranchTargets[0] = target;
+					}
+					break;
+
+				case OpCode.Br: {
+						int target;
+						decoder.Decode(out target);
+						instruction.Branch.BranchTargets[0] = target;
+						break;
+					}
+			}
 		}
 
 		/// <summary>
@@ -56,7 +71,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </returns>
 		public override string ToString(ref InstructionData instruction)
 		{
-			return ToString();
+			return String.Format("{0} L_{1:X4}", base.ToString(), instruction.Branch.BranchTargets[0]);
 		}
 
 		#endregion // ICILInstruction Overrides
@@ -69,7 +84,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return "CIL nop";
+			return "CIL br";
 		}
 
 		#endregion // Operand Overrides

@@ -47,10 +47,31 @@ namespace Mosa.Runtime.CompilerFramework
 
 		/// <summary>
 		/// Returns the branch targets instruction index.
+		/// TODO: rename to Targets 
 		/// </summary>
 		public int[] BranchTargets { get { return _branchTargets; } set { _branchTargets = value; } }
-
+		
 		#endregion // Properties
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Branch"/> class.
+		/// </summary>
+		public Branch()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Branch"/> class.
+		/// </summary>
+		/// <param name="targets">The targets.</param>
+		public Branch(int targets)
+		{
+			_branchTargets = new int[targets];
+		}
+
+		#endregion // Construction
 
 	}
 }
