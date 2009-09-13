@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
+
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
@@ -40,11 +43,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
 		{
-			Debug.Assert(OpCode.Nop == opcode, @"Wrong opcode for NopInstruction.");
-			if (OpCode.Nop != opcode)
-				throw new ArgumentException(@"Wrong opcode.", @"code");
+			if (OpCode.Ret != opcode)
+				throw new ArgumentException(@"Invalid opcode.", @"code");
 
-			//instruction.Instruction = this;
+			MethodSignature sig = decoder.Method.Signature;
+			if (sig.ReturnType.Type == CilElementType.Void) {
+				//SetOperandCount(0, 0);   // ?
+				return;
+			}
+
+			//base.Decode(ref instruction, opcode, decoder);
 		}
 
 		/// <summary>
@@ -69,7 +77,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return "CIL nop";
+			return "CIL return";
 		}
 
 		#endregion // Operand Overrides
