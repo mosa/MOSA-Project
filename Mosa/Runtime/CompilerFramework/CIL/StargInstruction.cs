@@ -25,6 +25,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="StargInstruction"/> class.
 		/// </summary>
 		public StargInstruction()
+			: base(1)
 		{
 		}
 

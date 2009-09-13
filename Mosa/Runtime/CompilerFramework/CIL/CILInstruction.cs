@@ -19,6 +19,36 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// </summary>
 	public class CILInstruction : ICILInstruction
 	{
+		#region Data members
+
+		/// <summary>
+		/// Holds the number of operands for this instruction.
+		/// </summary>
+		public int _operandCount;
+
+		/// <summary>
+		/// Holds the number of operand results for this instruction.
+		/// </summary>
+		public int _resultCount;
+
+		#endregion // Data members
+
+		#region Properties
+
+		/// <summary>
+		/// Gets the operand count of the instruction
+		/// </summary>
+		/// <value>The operand count.</value>
+		public int OperandCount { get { return _operandCount; } }
+
+		/// <summary>
+		/// Gets the result operand count of the instruction
+		/// </summary>
+		/// <value>The operand result count.</value>
+		public int ResultsCount { get { return _resultCount; } }
+
+		#endregion // Properties
+
 		#region Construction
 
 		/// <summary>
@@ -26,6 +56,29 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		public CILInstruction()
 		{
+			_operandCount = 0;
+			_resultCount = 0;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CILInstruction"/> class.
+		/// </summary>
+		/// <param name="operandCount">The operand count.</param>
+		public CILInstruction(int operandCount)
+		{
+			_operandCount = operandCount;
+			_resultCount = 0;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CILInstruction"/> class.
+		/// </summary>
+		/// <param name="operandCount">The operand count.</param>
+		/// <param name="resultCount">The result count.</param>
+		public CILInstruction(int operandCount, int resultCount)
+		{
+			_operandCount = operandCount;
+			_resultCount = resultCount;
 		}
 
 		#endregion // Construction

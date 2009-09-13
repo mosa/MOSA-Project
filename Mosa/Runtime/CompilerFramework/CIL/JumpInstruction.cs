@@ -15,9 +15,13 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
-	/// 
+	/// Represents a basic jump instruction.
 	/// </summary>
-	public class JumpInstruction : CILInstruction
+	/// <remarks>
+	/// Other more complex method invocation instructions derive From this class, specifically the CallInstruction,
+	/// the CalliInstruction and CallvirtInstruction classes. They share the features provided by the JumpInstruction.
+	/// </remarks>
+	public class JumpInstruction : InvokeInstruction
 	{
 		#region Construction
 

@@ -25,6 +25,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="NopInstruction"/> class.
 		/// </summary>
 		public DupInstruction()
+			: base(2)
 		{
 		}
 
@@ -68,7 +69,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return "CIL dup";
+			return "CIL Dup";
 		}
 
 		#endregion // Operand Overrides

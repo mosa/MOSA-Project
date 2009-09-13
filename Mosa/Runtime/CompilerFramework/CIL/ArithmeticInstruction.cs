@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ArithmeticInstruction : CILInstruction
+	public class ArithmeticInstruction : BinaryInstruction
 	{
 		#region Static data members
 
@@ -64,10 +64,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Static data members
 
+		#region Data members
+
 		/// <summary>
 		/// 
 		/// </summary>
 		protected OpCode _opcode;
+
+		#endregion // Data members
 
 		#region Construction
 
@@ -75,6 +79,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="ArithmeticInstruction"/> class.
 		/// </summary>
 		public ArithmeticInstruction(OpCode opcode)
+			: base(1)
 		{
 			_opcode = opcode;
 		}

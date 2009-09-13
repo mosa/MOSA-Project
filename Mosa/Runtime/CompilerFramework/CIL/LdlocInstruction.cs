@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LdlocInstruction : CILInstruction
+	public class LdlocInstruction : LoadInstruction
 	{
 		#region Construction
 
@@ -40,11 +40,42 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
 		{
-			Debug.Assert(OpCode.Nop == opcode, @"Wrong opcode for NopInstruction.");
-			if (OpCode.Nop != opcode)
-				throw new ArgumentException(@"Wrong opcode.", @"code");
+			// Opcode specific handling
+			ushort locIdx;
+			switch (opcode) {
+				case OpCode.Ldloc:
+					decoder.Decode(out locIdx);
+					break;
 
-			//instruction.Instruction = this;
+				case OpCode.Ldloc_s: {
+						byte loc;
+						decoder.Decode(out loc);
+						locIdx = loc;
+					}
+					break;
+
+				case OpCode.Ldloc_0:
+					locIdx = 0;
+					break;
+
+				case OpCode.Ldloc_1:
+					locIdx = 1;
+					break;
+
+				case OpCode.Ldloc_2:
+					locIdx = 2;
+					break;
+
+				case OpCode.Ldloc_3:
+					locIdx = 3;
+					break;
+
+				default:
+					throw new NotImplementedException();
+			}
+
+			// Push the loaded value onto the evaluation stack
+			instruction.Result = decoder.Compiler.GetLocalOperand(locIdx);
 		}
 
 		/// <summary>
@@ -69,7 +100,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return "CIL nop";
+			return "CIL Ldloc";
 		}
 
 		#endregion // Operand Overrides

@@ -25,6 +25,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="LoadInstruction"/> class.
 		/// </summary>
 		public LoadInstruction()
+			: base(0, 1)
 		{
 		}
 

@@ -25,6 +25,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="BinaryInstruction"/> class.
 		/// </summary>
 		public BinaryInstruction()
+			: base(2)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BinaryInstruction"/> class.
+		/// </summary>
+		/// <param name="resultCount">The result count.</param>
+		public BinaryInstruction(int resultCount)
+			: base(2, resultCount)
 		{
 		}
 

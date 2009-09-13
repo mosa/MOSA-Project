@@ -20,6 +20,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	public interface ICILInstruction : IInstruction
 	{
 		/// <summary>
+		/// Gets the operand count of the instruction
+		/// </summary>
+		/// <value>The operand count.</value>
+		int OperandCount { get; }
+
+		/// <summary>
+		/// Gets the result operand count of the instruction
+		/// </summary>
+		/// <value>The operand result count.</value>
+		int ResultsCount { get; }
+
+		/// <summary>
 		/// Decodes the specified CIL instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
