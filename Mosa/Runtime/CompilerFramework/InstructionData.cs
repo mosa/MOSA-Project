@@ -75,7 +75,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		///  Holds the branch target information
 		/// </summary>
-		public IBranchInstruction Branch;
+		public IBranch Branch;
 
 		#endregion // Data members
 

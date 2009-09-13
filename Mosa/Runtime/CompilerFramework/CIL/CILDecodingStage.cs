@@ -502,11 +502,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 				// Do we need to patch branch targets?
 				IBranchInstruction branch = instruction as IBranchInstruction;
-				if (branch != null) {
+				if (instruction is IBranchInstruction) {
 					int pc = (int)(_codeReader.BaseStream.Position - codeStart);
 
-					for (int i = 0; i < branch.BranchTargets.Length; i++)
-						branch.BranchTargets[i] += pc;
+					for (int i = 0; i < _instructions.instructions[at].Branch.Targets.Length; i++)
+						_instructions.instructions[at].Branch.Targets[i] += pc;
 				}
 
 				prefix = null;

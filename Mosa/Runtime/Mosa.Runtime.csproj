@@ -104,6 +104,7 @@
     <Compile Include="CompilerFramework\CIL\DupInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\EndfilterInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\EndfinallyInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\IBranchInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\InitblkInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\InitObjInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\InvokeInstruction.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="CompilerFramework\CIL\UnboxAnyInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\UnboxInstruction.cs" />
     <Compile Include="CompilerFramework\Branch.cs" />
+    <Compile Include="CompilerFramework\IBranch.cs" />
     <Compile Include="CompilerFramework\IIRnstruction.cs" />
     <Compile Include="CompilerFramework\IPlatformInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ICILInstruction.cs" />

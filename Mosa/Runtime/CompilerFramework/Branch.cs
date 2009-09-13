@@ -12,7 +12,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Holds the branch target information
 	/// </summary>
-	public class Branch : IBranchInstruction
+	public class Branch : IBranch
 	{
 		#region Data members
 
@@ -20,11 +20,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Holds the instruction offset.
 		/// </summary>
 		private int _offset = 0;
-
-		/// <summary>
-		/// Holds if the branch is conditional.
-		/// </summary>
-		private bool _isConditional = false;
 
 		/// <summary>
 		/// Holds the branch targets instruction index.
@@ -41,15 +36,9 @@ namespace Mosa.Runtime.CompilerFramework
 		public int Offset { get { return _offset; } }
 
 		/// <summary>
-		/// Determines if the branch is conditional.
-		/// </summary>
-		public bool IsConditional { get { return _isConditional; } }
-
-		/// <summary>
 		/// Returns the branch targets instruction index.
-		/// TODO: rename to Targets 
 		/// </summary>
-		public int[] BranchTargets { get { return _branchTargets; } set { _branchTargets = value; } }
+		public int[] Targets { get { return _branchTargets; } set { _branchTargets = value; } }
 		
 		#endregion // Properties
 		

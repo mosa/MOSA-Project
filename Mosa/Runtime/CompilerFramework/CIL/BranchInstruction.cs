@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BranchInstruction : CILInstruction
+	public class BranchInstruction : CILInstruction, IBranchInstruction
 	{
 		#region Construction
 
@@ -49,6 +49,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // Properties
+
 		#region ICILInstruction Overrides
 
 		/// <summary>
@@ -67,14 +68,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				case OpCode.Br_s: {
 						sbyte target;
 						decoder.Decode(out target);
-						instruction.Branch.BranchTargets[0] = target;
+						instruction.Branch.Targets[0] = target;
 					}
 					break;
 
 				case OpCode.Br: {
 						int target;
 						decoder.Decode(out target);
-						instruction.Branch.BranchTargets[0] = target;
+						instruction.Branch.Targets[0] = target;
 						break;
 					}
 			}
@@ -89,10 +90,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </returns>
 		public override string ToString(ref InstructionData instruction)
 		{
-			return String.Format("{0} L_{1:X4}", base.ToString(), instruction.Branch.BranchTargets[0]);
+			return String.Format("{0} L_{1:X4}", base.ToString(), instruction.Branch.Targets[0]);
 		}
 
 		#endregion // ICILInstruction Overrides
+
+		/// <summary>
+		/// Determines if the branch is conditional.
+		/// </summary>
+		/// <value></value>
+		public bool IsConditional { get { return false; } }
 
 	}
 }

@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class UnaryBranchInstruction : CILInstruction
+	public class UnaryBranchInstruction : CILInstruction, IBranchInstruction
 	{
 		#region Construction
 
@@ -63,19 +63,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ref instruction, decoder);
 
 			instruction.Branch = new Branch(2);
-			instruction.Branch.BranchTargets[1] = 0;
+			instruction.Branch.Targets[1] = 0;
 
 			// Read the branch target
 			// Is this a short branch target?
 			if (_opcode == OpCode.Brfalse_s || _opcode == OpCode.Brtrue_s) {
 				sbyte target;
 				decoder.Decode(out target);
-				instruction.Branch.BranchTargets[0] = target;
+				instruction.Branch.Targets[0] = target;
 			}
 			else if (_opcode == OpCode.Brfalse || _opcode == OpCode.Brtrue) {
 				int target;
 				decoder.Decode(out target);
-				instruction.Branch.BranchTargets[0] = target;
+				instruction.Branch.Targets[0] = target;
 			}
 			else if (_opcode == OpCode.Switch) {
 				// Don't do anything, the derived class will do everything
@@ -86,6 +86,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // ICILInstruction Overrides
+
+		/// <summary>
+		/// Determines if the branch is conditional.
+		/// </summary>
+		/// <value></value>
+		public bool IsConditional { get { return true; } }
 
 	}
 }

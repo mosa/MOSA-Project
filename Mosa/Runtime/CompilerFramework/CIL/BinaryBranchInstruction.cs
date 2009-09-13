@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BinaryBranchInstruction : BinaryInstruction
+	public class BinaryBranchInstruction : BinaryInstruction, IBranchInstruction
 	{
 		#region Construction
 
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ref instruction, decoder);
 
 			instruction.Branch = new Branch(2);
-			instruction.Branch.BranchTargets[1] = 0;
+			instruction.Branch.Targets[1] = 0;
 
 			// Read the branch target
 			// Is this a short branch target?
@@ -73,14 +73,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				_opcode == OpCode.Blt_un_s || _opcode == OpCode.Bne_un_s) {
 				sbyte target;
 				decoder.Decode(out target);
-				instruction.Branch.BranchTargets[0] = target;
+				instruction.Branch.Targets[0] = target;
 			}
 			else if (_opcode == OpCode.Beq || _opcode == OpCode.Bge || _opcode == OpCode.Bge_un || _opcode == OpCode.Bgt ||
 				_opcode == OpCode.Bgt_un || _opcode == OpCode.Ble || _opcode == OpCode.Ble_un || _opcode == OpCode.Blt ||
 				_opcode == OpCode.Blt_un || _opcode == OpCode.Bne_un) {
 				int target;
 				decoder.Decode(out target);
-				instruction.Branch.BranchTargets[0] = target;
+				instruction.Branch.Targets[0] = target;
 			}
 			else {
 				throw new NotSupportedException(@"Invalid branch opcode specified for BinaryBranchInstruction");
@@ -128,9 +128,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			else
 				format = @" {3} ; if (unordered({0} {1} {2})) goto L_{4:X4} else goto L_{5:X4}";
 
-			return base.ToString() + String.Format(format, instruction.Operand1, op, instruction.Operand2, base.ToString(), instruction.Branch.BranchTargets[0], instruction.Branch.BranchTargets[1]);
+			return base.ToString() + String.Format(format, instruction.Operand1, op, instruction.Operand2, base.ToString(), instruction.Branch.Targets[0], instruction.Branch.Targets[1]);
 		}
 
 		#endregion // ICILInstruction Overrides
+
+		/// <summary>
+		/// Determines if the branch is conditional.
+		/// </summary>
+		/// <value></value>
+		public bool IsConditional { get { return true; } }
 	}
 }
