@@ -38,33 +38,32 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Decodes the specified instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="opcode">The opcode of the load.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
+		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, opcode, decoder);
+			base.Decode(ref instruction, decoder);
 
 			instruction.Branch = new Branch(2);
 			instruction.Branch.BranchTargets[1] = 0;
 
 			// Read the branch target
 			// Is this a short branch target?
-			if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s) {
+			if (_opcode == OpCode.Brfalse_s || _opcode == OpCode.Brtrue_s) {
 				sbyte target;
 				decoder.Decode(out target);
 				instruction.Branch.BranchTargets[0] = target;
 			}
-			else if (opcode == OpCode.Brfalse || opcode == OpCode.Brtrue) {
+			else if (_opcode == OpCode.Brfalse || _opcode == OpCode.Brtrue) {
 				int target;
 				decoder.Decode(out target);
 				instruction.Branch.BranchTargets[0] = target;
 			}
-			else if (opcode == OpCode.Switch) {
+			else if (_opcode == OpCode.Switch) {
 				// Don't do anything, the derived class will do everything
 			}
 			else {
-				throw new NotSupportedException(@"Invalid opcode " + opcode.ToString() + " specified for UnaryBranchInstruction.");
+				throw new NotSupportedException(@"Invalid opcode " + _opcode.ToString() + " specified for UnaryBranchInstruction.");
 			}
 		}
 

@@ -100,14 +100,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Decodes the specified instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="opcode">The opcode of the load.</param>
+		/// 
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public virtual void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
+		public virtual void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
 		{
-			Debug.Assert(_opcode == opcode, @"Wrong opcode.");
-			if (_opcode != opcode)
-				throw new ArgumentException(@"Wrong opcode.", @"code");
-
 			instruction.Instruction = this;
 		}
 
@@ -143,7 +139,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return "CIL " + _opcode.ToString();
+			return "CIL: " + _opcode.ToString();
 		}
 
 		#endregion //  Overrides

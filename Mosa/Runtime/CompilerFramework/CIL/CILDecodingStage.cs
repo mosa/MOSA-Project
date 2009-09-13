@@ -498,7 +498,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				_instructions.instructions[at].Instruction = instruction;
 				_instructions.instructions[at].Prefix = prefix;
 				_instructions.instructions[at].Offset = instOffset;
-				instruction.Decode(ref _instructions.instructions[at], op, this);
+				instruction.Decode(ref _instructions.instructions[at], this);
 
 				// FIXME! 
 				//// Do we need to patch branch targets?

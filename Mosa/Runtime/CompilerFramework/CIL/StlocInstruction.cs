@@ -37,17 +37,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Decodes the specified instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="opcode">The opcode of the load.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, OpCode opcode, IInstructionDecoder decoder)
+		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, opcode, decoder);
+			base.Decode(ref instruction, decoder);
 
 			ushort locIdx;
 
 			// Destination depends on the opcode
-			switch (opcode) {
+			switch (_opcode) {
 				case OpCode.Stloc:
 					decoder.Decode(out locIdx);
 					break;
