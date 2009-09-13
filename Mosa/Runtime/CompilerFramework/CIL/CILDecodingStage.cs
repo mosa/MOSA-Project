@@ -500,16 +500,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				_instructions.instructions[at].Offset = instOffset;
 				instruction.Decode(ref _instructions.instructions[at], this);
 
-				// FIXME! 
-				//// Do we need to patch branch targets?
-				//IBranchInstruction branch = instruction as IBranchInstruction;
-				//if (branch != null) {
-				//    int pc = (int)(_codeReader.BaseStream.Position - codeStart);
-				//    int[] targets = branch.BranchTargets;
+				// Do we need to patch branch targets?
+				IBranchInstruction branch = instruction as IBranchInstruction;
+				if (branch != null) {
+					int pc = (int)(_codeReader.BaseStream.Position - codeStart);
 
-				//    for (int i = 0; i < targets.Length; i++)
-				//        targets[i] += pc;
-				//}
+					for (int i = 0; i < branch.BranchTargets.Length; i++)
+						branch.BranchTargets[i] += pc;
+				}
 
 				prefix = null;
 			}

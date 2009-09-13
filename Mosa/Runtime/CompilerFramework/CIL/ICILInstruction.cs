@@ -32,6 +32,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		int ResultsCount { get; }
 
 		/// <summary>
+		/// Determines flow behavior of this instruction.
+		/// </summary>
+		/// <value>The flow control.</value>
+		/// <remarks>
+		/// Knowledge of control flow is required for correct basic block
+		/// building. Any instruction that alters the control flow must override
+		/// this property and correctly identify its control flow modifications.
+		/// </remarks>
+		FlowControl FlowControl { get; }
+
+		/// <summary>
 		/// Decodes the specified CIL instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>

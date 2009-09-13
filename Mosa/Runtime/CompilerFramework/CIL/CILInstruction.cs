@@ -129,6 +129,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			return ToString();
 		}
 
+		/// <summary>
+		/// Determines flow behavior of this instruction.
+		/// </summary>
+		/// <remarks>
+		/// Knowledge of control flow is required for correct basic block
+		/// building. Any instruction that alters the control flow must override
+		/// this property and correctly identify its control flow modifications.
+		/// </remarks>
+		public virtual FlowControl FlowControl
+		{
+			get { return FlowControl.Next; }
+		}
+
 		#endregion // ICILInstruction Overrides
 
 		#region  Overrides
