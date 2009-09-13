@@ -72,7 +72,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-
 		#region ICILInstruction Overrides
 
 		/// <summary>

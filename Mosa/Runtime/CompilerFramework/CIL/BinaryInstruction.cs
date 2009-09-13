@@ -15,7 +15,7 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
-	/// 
+	/// Intermediate representation of an instruction, which takes two stack arguments.
 	/// </summary>
 	public class BinaryInstruction : CILInstruction
 	{
