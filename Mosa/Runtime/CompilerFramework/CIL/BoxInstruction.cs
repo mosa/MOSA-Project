@@ -12,12 +12,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BoxInstruction : CILInstruction
+	public class BoxInstruction : UnaryInstruction
 	{
 		#region Construction
 
@@ -26,11 +28,38 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public BoxInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 1)
 		{
 		}
 
 		#endregion // Construction
+
+		#region CILInstruction Overrides
+
+		/// <summary>
+		/// Decodes the specified instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		{
+			// Decode base classes first
+			base.Decode(ref instruction, decoder);
+			
+			// Retrieve the provider token to check against
+			TokenTypes token;
+			decoder.Decode(out token);
+			
+			throw new NotImplementedException();
+
+			//TypeReference targetType = MetadataTypeReference.FromToken(decoder.Metadata, token);
+			// FIXME: TypeReference targetType = decoder.Metadata.GetRow<TypeReference>(decoder.Metadata, token);
+
+			// Push the result
+			//_results[0] = CreateResultOperand(targetType);
+		}
+
+		#endregion // CILInstruction Overrides
 
 	}
 }
