@@ -12,6 +12,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Tables;
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Vm;
+
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
@@ -76,6 +81,11 @@ namespace Mosa.Runtime.CompilerFramework
 		///  Holds the branch target information
 		/// </summary>
 		public IBranch Branch;
+
+		/// <summary>
+		/// Holds the function being called.
+		/// </summary>
+		public RuntimeMethod InvokeTarget;
 
 		#endregion // Data members
 
