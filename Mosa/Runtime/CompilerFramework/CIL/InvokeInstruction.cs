@@ -208,7 +208,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				paramCount++;
 
 			// Setup operands for parameters and the return value
-			// FIXME: 
+			// FIXME: ???? think about this - possibility replace with slightly different instruction
 			//SetOperandCount(paramCount, (signature.ReturnType.Type != CilElementType.Void ? 1 : 0));
 
 			// Is the function returning void?
@@ -251,36 +251,36 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			throw new NotImplementedException();
 			/*
-						MethodDefinition result = null;
-						TypeDefinition elementTypeDef = ownerType.ElementType as TypeDefinition;
-						string name;
-						Debug.Assert(null != elementTypeDef, @"Cross assembly type resolution not supported yet.");
-						if (null == elementTypeDef)
+				MethodDefinition result = null;
+				TypeDefinition elementTypeDef = ownerType.ElementType as TypeDefinition;
+				string name;
+				Debug.Assert(null != elementTypeDef, @"Cross assembly type resolution not supported yet.");
+				if (null == elementTypeDef)
+				{
+					// FIXME: Resolve the reference using all referenced assemblies
+					throw new InvalidOperationException(@"Cross assembly type resolution not supported yet.");
+				}
+
+				metadata.Read(nameIdx, out name);
+
+				foreach (MethodDefinition methodDef in elementTypeDef.Methods)
+				{
+					if (true == methodDef.Name.Equals(name))
+					{
+						// FIXME: Check the signatures...
+						if (true == IsSameSignature(metadata, methodDef.SignatureIdx, signatureIdx))
 						{
-							// FIXME: Resolve the reference using all referenced assemblies
-							throw new InvalidOperationException(@"Cross assembly type resolution not supported yet.");
+							// We've found the method
+							//result = temp;
+							//result.OwnerType = ownerType;
+							result = methodDef;
+							break;
 						}
 
-						metadata.Read(nameIdx, out name);
-
-						foreach (MethodDefinition methodDef in elementTypeDef.Methods)
-						{
-							if (true == methodDef.Name.Equals(name))
-							{
-								// FIXME: Check the signatures...
-								if (true == IsSameSignature(metadata, methodDef.SignatureIdx, signatureIdx))
-								{
-									// We've found the method
-									//result = temp;
-									//result.OwnerType = ownerType;
-									result = methodDef;
-									break;
-								}
- 
-							}
-						}
-            
-						return result;
+					}
+				}
+    
+				return result;
 			 */
 		}
 
