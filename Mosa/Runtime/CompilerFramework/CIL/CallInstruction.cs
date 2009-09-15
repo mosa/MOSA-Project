@@ -35,5 +35,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
+		#region Properties
+
+		/// <summary>
+		/// Gets the supported immediate metadata tokens in the instruction.
+		/// </summary>
+		/// <value></value>
+		protected override InvokeInstruction.InvokeSupportFlags InvokeSupport
+		{
+			get { return InvokeSupportFlags.MemberRef | InvokeSupportFlags.MethodDef | InvokeSupportFlags.MethodSpec; }
+		}
+
+		#endregion // Properties
+
 	}
 }
