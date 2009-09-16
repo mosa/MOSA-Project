@@ -495,8 +495,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 				// Create and initialize the corresponding instruction
 				at = _instructions.InsertAfter(at);
-				_instructions.instructions[at].Prefix = prefix;
-				_instructions.instructions[at].Offset = instOffset;
+                _instructions.SetPrefix(at, prefix);
+                _instructions.SetOffset(at, instOffset);
 				instruction.Decode(ref _instructions.instructions[at], this);
 
 				Debug.Assert(_instructions.instructions[at].Instruction != null);

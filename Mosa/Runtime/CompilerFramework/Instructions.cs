@@ -82,7 +82,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="newsize">The newsize.</param>
 		private void Resize(int newsize)
 		{
-			// TODO
+            int[] newNext = new int[newsize];
+            int[] newPrev = new int[newsize];
+            InstructionData[] newInstructions = new InstructionData[newsize];
+
+            _next.CopyTo(newNext, 0);
+            _prev.CopyTo(newPrev, 0);
+            instructions.CopyTo(newInstructions, 0);
+
+            _next = newNext;
+            _prev = newPrev;
+            instructions = newInstructions;
+            _size = newsize;
 		}
 
 		/// <summary>
@@ -208,6 +219,40 @@ namespace Mosa.Runtime.CompilerFramework
 			_prev[_next[index]] = _prev[index];
 
 			AddFree(index);
-		}
-	}
+        }
+
+        #region Utility Methods
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="prefix"></param>
+        public void SetPrefix(int index, CIL.PrefixInstruction prefix)
+        {
+            IsIndexValid(index);
+            instructions[index].Prefix = prefix;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="offset"></param>
+        public void SetOffset(int index, int offset)
+        {
+            IsIndexValid(index);
+            instructions[index].Offset = offset;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        public void IsIndexValid(int index)
+        {
+            Debug.Assert(index < _size);
+            Debug.Assert(index >= 0);
+        }
+        #endregion
+    }
 }
