@@ -121,9 +121,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				paramCount++;
 
 			// Validate the operands...
-			Debug.Assert(this.OperandCount == paramCount, @"Operand count doesn't match parameter count.");
+			Debug.Assert(instruction.OperandCount == paramCount, @"Operand count doesn't match parameter count.");
 
-			for (int i = 0; i < this.OperandCount; i++) {
+			for (int i = 0; i < instruction.OperandCount; i++) {
 				/* FIXME: Check implicit conversions
 				// if (ops[i] != null) {
 					Debug.Assert(_operands[i].Type == _parameterTypes[i]);
@@ -208,13 +208,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				paramCount++;
 
 			// Setup operands for parameters and the return value
-			// FIXME: ???? think about this - possibility replace with slightly different instruction
-			//SetOperandCount(paramCount, (signature.ReturnType.Type != CilElementType.Void ? 1 : 0));
+			if (signature.ReturnType.Type != CilElementType.Void)
+				instruction.ResultCount = 1;
+			else
+				instruction.ResultCount = 0;
 
 			// Is the function returning void?
 			if (signature.ReturnType.Type != CilElementType.Void)
 				instruction.Result = compiler.CreateTemporary(signature.ReturnType);
-
 		}
 
 		/// <summary>

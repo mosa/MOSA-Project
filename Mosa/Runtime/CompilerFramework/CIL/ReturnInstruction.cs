@@ -68,11 +68,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			if (OpCode.Ret != _opcode)
 				throw new ArgumentException(@"Invalid opcode.", @"code");
 
-			MethodSignature sig = decoder.Method.Signature;
-			if (sig.ReturnType.Type == CilElementType.Void) {
-				//SetOperandCount(0, 0);   // ?
-				return;
-			}
+			if (decoder.Method.Signature.ReturnType.Type == CilElementType.Void)
+				instruction.ResultCount = 0;
+			else
+				instruction.ResultCount = 1;
 
 		}
 

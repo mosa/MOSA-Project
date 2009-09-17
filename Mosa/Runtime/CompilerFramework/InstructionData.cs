@@ -87,6 +87,16 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public RuntimeMethod InvokeTarget;
 
+		/// <summary>
+		/// Holds the number of operands
+		/// </summary>
+		public byte OperandCount;
+
+		/// <summary>
+		/// Holds the number of operand results
+		/// </summary>
+		public byte ResultCount;
+
 		#endregion // Data members
 
 		#region Properties

@@ -35,7 +35,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		/// <param name="resultCount">The result count.</param>
-		public BinaryInstruction(OpCode opcode, int resultCount)
+		public BinaryInstruction(OpCode opcode, byte resultCount)
 			: base(opcode, 2, resultCount)
 		{
 		}
