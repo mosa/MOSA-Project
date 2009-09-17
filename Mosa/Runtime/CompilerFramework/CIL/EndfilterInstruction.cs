@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class EndfilterInstruction : CILInstruction
+	public class EndfilterInstruction : UnaryInstruction
 	{
 		#region Construction
 
