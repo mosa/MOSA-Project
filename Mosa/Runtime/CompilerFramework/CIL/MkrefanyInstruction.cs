@@ -12,12 +12,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
+
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class MkrefanyInstruction : CILInstruction
+	public class MkrefanyInstruction : UnaryInstruction
 	{
 		#region Construction
 
@@ -31,6 +34,33 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // Construction
+
+		#region CILInstruction Overrides
+
+		/// <summary>
+		/// Decodes the specified instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		{
+			// Decode base classes first
+			base.Decode(ref instruction, decoder);
+
+            // Retrieve a type reference From the immediate argument
+            // FIXME: Limit the token types
+            TokenTypes token;
+            decoder.Decode(out token);
+            throw new NotImplementedException();
+/*
+            _typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
+            _results[0] = CreateResultOperand(MetadataTypeReference.FromName(decoder.Metadata, @"System", @"TypedReference"));
+ */
+            // FIXME: Validate the operands
+            // FIXME: Do verification
+		}
+
+		#endregion // CILInstruction Overrides
 
 	}
 }
