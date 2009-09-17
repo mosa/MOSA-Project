@@ -29,12 +29,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Holds the default number of operands for this instruction.
 		/// </summary>
-		public byte _operandCount;
+		protected byte _operandDefaultCount;
 
 		/// <summary>
 		/// Holds the default number of operand results for this instruction.
 		/// </summary>
-		public byte _resultCount;
+		protected byte _resultDefaultCount;
 
 		#endregion // Data members
 
@@ -44,13 +44,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Gets the default operand count of the instruction
 		/// </summary>
 		/// <value>The operand count.</value>
-		protected byte OperandCount { get { return _operandCount; } }
+		protected byte DefaultOperandCount { get { return _operandDefaultCount; } }
 
 		/// <summary>
 		/// Gets the default result operand count of the instruction
 		/// </summary>
 		/// <value>The operand result count.</value>
-		protected byte ResultCount { get { return _resultCount; } }
+		protected byte DefaultResultCount { get { return _resultDefaultCount; } }
 
 		#endregion // Properties
 
@@ -63,8 +63,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public CILInstruction(OpCode opCode)
 		{
 			this._opcode = opCode;
-			_operandCount = 0;
-			_resultCount = 0;
+			_operandDefaultCount = 0;
+			_resultDefaultCount = 0;
 		}
 
 		/// <summary>
@@ -75,8 +75,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public CILInstruction(OpCode opCode, byte operandCount)
 		{
 			this._opcode = opCode;
-			_operandCount = operandCount;
-			_resultCount = 0;
+			_operandDefaultCount = operandCount;
+			_resultDefaultCount = 0;
 		}
 
 		/// <summary>
@@ -88,8 +88,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public CILInstruction(OpCode opCode, byte operandCount, byte resultCount)
 		{
 			this._opcode = opCode;
-			_operandCount = operandCount;
-			_resultCount = resultCount;
+			_operandDefaultCount = operandCount;
+			_resultDefaultCount = resultCount;
 		}
 
 		#endregion // Construction
@@ -105,8 +105,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public virtual void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
 		{
 			instruction.Instruction = this;
-			instruction.OperandCount = OperandCount;
-			instruction.ResultCount = ResultCount;
+			instruction.OperandCount = DefaultOperandCount;
+			instruction.ResultCount = DefaultResultCount;
 		}
 
 		/// <summary>
