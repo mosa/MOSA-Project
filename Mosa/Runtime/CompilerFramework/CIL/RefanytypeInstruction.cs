@@ -12,12 +12,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
+
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class RefanytypeInstruction : CILInstruction
+	public class RefanytypeInstruction : UnaryInstruction
 	{
 		#region Construction
 
@@ -26,11 +29,29 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public RefanytypeInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 1)
 		{
 		}
 
 		#endregion // Construction
+
+		#region CILInstruction Overrides
+
+		/// <summary>
+		/// Decodes the specified instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		{
+			// Decode base classes first
+			base.Decode(ref instruction, decoder);
+
+			// FIXME: Validate operands & verify instruction
+			instruction.Result = decoder.Compiler.CreateTemporary(new SigType(CilElementType.I4));
+		}
+
+		#endregion // CILInstruction Overrides
 
 	}
 }

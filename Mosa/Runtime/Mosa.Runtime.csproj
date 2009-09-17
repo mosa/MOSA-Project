@@ -98,6 +98,7 @@
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ConversionInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\Prefix.cs" />
     <Compile Include="CompilerFramework\CIL\CpblkInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CpobjInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\DivInstruction.cs" />
