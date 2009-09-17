@@ -128,7 +128,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			else
 				format = @" {3} ; if (unordered({0} {1} {2})) goto L_{4:X4} else goto L_{5:X4}";
 
-			return base.ToString() + String.Format(format, instruction.Operand1, op, instruction.Operand2, base.ToString(), instruction.Branch.Targets[0], instruction.Branch.Targets[1]);
+			return String.Format(format, instruction.Operand1, op, instruction.Operand2, base.ToString(), instruction.Branch.Targets[0], instruction.Branch.Targets[1]);
 		}
 
 		#endregion // CILInstruction Overrides

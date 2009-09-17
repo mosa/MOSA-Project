@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class CpobjInstruction : CILInstruction
+	public class CpobjInstruction : BinaryInstruction
 	{
 		#region Construction
 
@@ -31,6 +31,22 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // Construction
+
+		#region CILInstruction Overrides
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString(ref InstructionData instruction)
+		{
+			return String.Format("{2} ; *{0} = *{1}", instruction.Operand1, instruction.Operand2, base.ToString());
+		}
+
+		#endregion // CILInstruction Overrides
 
 	}
 }

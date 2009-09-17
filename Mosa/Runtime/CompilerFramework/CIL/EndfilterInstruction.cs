@@ -32,5 +32,21 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
+		#region CILInstruction Overrides
+
+		/// <summary>
+		/// Validates the instruction operands and creates a matching variable for the result.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="compiler">The compiler.</param>
+		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
+		{
+			base.Validate(ref instruction, compiler);
+			
+			throw new NotImplementedException();
+		}
+
+		#endregion // CILInstruction Overrides
+
 	}
 }

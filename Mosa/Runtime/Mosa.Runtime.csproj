@@ -102,6 +102,7 @@
     <Compile Include="CompilerFramework\CIL\CpobjInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\DivInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\DupInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\EhClause.cs" />
     <Compile Include="CompilerFramework\CIL\EndfilterInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\EndfinallyInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\IBranchInstruction.cs" />

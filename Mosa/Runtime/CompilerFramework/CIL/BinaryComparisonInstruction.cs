@@ -86,7 +86,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new InvalidOperationException(@"Invalid opcode.");
 			}
 
-			if (true == un)
+			if (un)
 				result = String.Format(@"{4} ; {0} = unchecked({1} {2} {3})", instruction.Result, instruction.Operand1, op, instruction.Operand2, base.ToString());
 			else
 				result = String.Format(@"{4} ; {0} = ({1} {2} {3})", instruction.Result, instruction.Operand1, op, instruction.Operand2, base.ToString());

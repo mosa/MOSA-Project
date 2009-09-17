@@ -60,7 +60,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </returns>
 		public override string ToString(ref InstructionData instruction)
 		{
-			return String.Format(@"{1} = {2} is {3}", base.ToString(), instruction.Result, instruction.Operand1, instruction.Result.Type);
+			return String.Format(@"{1} ; {2} is {3}", base.ToString(), instruction.Result, instruction.Operand1, instruction.Result.Type);
 		}
 
 		#endregion // CILInstruction Overrides

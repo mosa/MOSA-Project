@@ -12,12 +12,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
+
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ConstrainedPrefixInstruction : CILInstruction
+	public class ConstrainedPrefixInstruction : PrefixInstruction
 	{
 		#region Construction
 
@@ -31,6 +34,30 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // Construction
+
+		#region CILInstruction Overrides
+
+		/// <summary>
+		/// Decodes the specified instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		{
+			// Decode base classes first
+			base.Decode(ref instruction, decoder);
+			
+			// Retrieve the type token
+			TokenTypes token;
+			decoder.Decode(out token);
+			throw new NotImplementedException();
+			/*
+				_constraint = MetadataTypeReference.FromToken(decoder.Metadata, token);
+				Debug.Assert(null != _constraint);
+			 */
+		}
+
+		#endregion // CILInstruction Overrides
 
 	}
 }
