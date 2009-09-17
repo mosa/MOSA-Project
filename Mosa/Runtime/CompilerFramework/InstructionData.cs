@@ -38,11 +38,6 @@ namespace Mosa.Runtime.CompilerFramework
 		public int Block;
 
 		/// <summary>
-		/// Determines if this instruction is ignored.
-		/// </summary>
-		public bool Ignore;
-
-		/// <summary>
 		/// IL offset of the instruction From the start of the method.
 		/// </summary>
 		private int _offset;
@@ -83,9 +78,9 @@ namespace Mosa.Runtime.CompilerFramework
 		public IBranch Branch;
 
 		/// <summary>
-		/// Holds the function being called.
+		/// Holds an object
 		/// </summary>
-		public RuntimeMethod InvokeTarget;
+		private object _other;
 
 		/// <summary>
 		/// Holds the number of operands
@@ -96,6 +91,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Holds the number of operand results
 		/// </summary>
 		public byte ResultCount;
+
+		/// <summary>
+		/// Determines if this instruction is ignored.
+		/// </summary>
+		public bool Ignore;
 
 		#endregion // Data members
 
@@ -120,6 +120,43 @@ namespace Mosa.Runtime.CompilerFramework
 
 				_offset = value;
 			}
+		}
+
+		/// <summary>
+		/// Holds the function being called.
+		/// </summary>
+		public RuntimeMethod InvokeTarget
+		{
+			get { return _other as RuntimeMethod; }
+			set { _other = value; }
+		}
+
+		/// <summary>
+		/// Holds the string.
+		/// </summary>
+		public string String
+		{
+			get { return _other as string; }
+			set { _other = value; }
+		}
+
+		/// <summary>
+		/// Holds the field of the load instruction.
+		/// </summary>
+		public RuntimeField Field
+		{
+			get { return _other as RuntimeField; }
+			set { _other = value; }
+		}
+
+		/// <summary>
+		/// Holds the token type.
+		/// </summary>
+		/// <value>The token.</value>
+		public TokenTypes Token
+		{
+			get { return (TokenTypes) _other; }
+			set { _other = value; }
 		}
 
 		#endregion // Properties

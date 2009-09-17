@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LeaveInstruction : CILInstruction
+	public class LeaveInstruction : BranchInstruction
 	{
 		#region Construction
 
@@ -31,6 +31,52 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // Construction
+
+		#region CILInstruction Overrides
+
+		/// <summary>
+		/// Decodes the specified instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		{
+			// Decode base classes first
+			base.Decode(ref instruction, decoder);
+
+			instruction.Branch = new Branch(1);
+
+			switch (_opcode) {
+				case OpCode.Leave_s: {
+						sbyte sb;
+						decoder.Decode(out sb);
+						instruction.Branch.Targets[0] = sb;
+					}
+					break;
+
+				case OpCode.Leave: {
+						int sb;
+						decoder.Decode(out sb);
+						instruction.Branch.Targets[0] = sb;
+						break;
+					}
+			}
+		}
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString(ref InstructionData instruction)
+		{
+			return String.Format("leave L_{0:X4}", instruction.Branch.Targets);
+		}
+
+		#endregion // CILInstruction Overrides
+
 
 	}
 }

@@ -12,12 +12,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Vm;
+
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LdvirtftnInstruction : CILInstruction
+	public class LdvirtftnInstruction : UnaryInstruction
 	{
 		#region Construction
 
@@ -26,11 +29,35 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public LdvirtftnInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 1)
 		{
 		}
 
 		#endregion // Construction
+
+		#region CILInstruction Overrides
+
+		/// <summary>
+		/// Decodes the specified instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		{
+			// Decode base classes first
+			base.Decode(ref instruction, decoder);
+
+			TokenTypes token;
+			decoder.Decode(out token);
+			throw new NotImplementedException();
+			//  _function = MetadataMemberReference.FromToken(decoder.Metadata, token);
+
+			// Setup the result
+			// FIXME: Function ptr
+			// instruction.Result = CreateResultOperand(NativeTypeReference.NativeInt);
+		}
+
+		#endregion // CILInstruction Overrides
 
 	}
 }

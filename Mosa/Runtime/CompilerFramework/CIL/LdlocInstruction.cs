@@ -79,6 +79,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Push the loaded value onto the evaluation stack
 			instruction.Result = decoder.Compiler.GetLocalOperand(locIdx);
+			instruction.Ignore = true;
+		}
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString(ref InstructionData instruction)
+		{
+			return String.Format("{0} ; {1}", base.ToString(), instruction.Result);
 		}
 
 		#endregion // CILInstruction Overrides

@@ -12,12 +12,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Vm;
+
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LdsfldaInstruction : CILInstruction
+	public class LdsfldaInstruction : LoadInstruction
 	{
 		#region Construction
 
@@ -31,6 +34,39 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // Construction
+
+		#region CILInstruction Overrides
+
+		/// <summary>
+		/// Decodes the specified instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		{
+			// Decode base classes first
+			base.Decode(ref instruction, decoder);
+
+			// Read the _stackFrameIndex From the code
+			TokenTypes token;
+			decoder.Decode(out token);
+			throw new NotImplementedException();
+
+			/*
+				Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) ||
+							 TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
+				MemberDefinition memberDef = MetadataMemberReference.FromToken(decoder.Metadata, token).Resolve();
+
+				DefaultTypeSystem.GetField(decoder.Method.Module, token);
+
+				_field = memberDef as FieldDefinition;
+				Debug.Assert((_field.CustomAttributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static _stackFrameIndex access on non-static _stackFrameIndex.");
+				_results[0] = CreateResultOperand(new ReferenceTypeSpecification(_field.Type));
+			*/
+		}
+
+		#endregion // CILInstruction Overrides
+
 
 	}
 }
