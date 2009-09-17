@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		/// <param name="operandCount">The operand count.</param>
-		public NaryInstruction(OpCode opcode, int operandCount)
+		public NaryInstruction(OpCode opcode, byte operandCount)
 			: base(opcode, operandCount)
 		{
 		}
@@ -37,7 +37,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="code">The code.</param>
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		protected NaryInstruction(OpCode code, int operandCount, int resultCount)
+		protected NaryInstruction(OpCode code, byte operandCount, byte resultCount)
 			: base(code, operandCount, resultCount)
 		{
 		}

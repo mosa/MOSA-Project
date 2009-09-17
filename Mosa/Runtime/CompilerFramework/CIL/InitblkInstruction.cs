@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public InitblkInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 3)
 		{
 		}
 
