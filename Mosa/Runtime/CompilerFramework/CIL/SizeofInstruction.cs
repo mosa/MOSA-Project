@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
@@ -26,11 +28,40 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public SizeofInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0, 1)
 		{
 		}
 
 		#endregion // Construction
+
+		#region CILInstruction Overrides
+
+		/// <summary>
+		/// Decodes the specified instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		{
+			// Decode base classes first
+			base.Decode(ref instruction, decoder);
+
+			// Get the size type
+			// Load the _stackFrameIndex token From the immediate
+			TokenTypes token;
+			decoder.Decode(out token);
+			throw new NotImplementedException();
+			/*
+				TypeReference _typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
+
+				// FIXME: Push the size of the type after layout
+				instruction.Result = new ConstantOperand(NativeTypeReference.Int32, 0);
+			*/
+
+
+		}
+
+		#endregion // CILInstruction Overrides
 
 	}
 }
