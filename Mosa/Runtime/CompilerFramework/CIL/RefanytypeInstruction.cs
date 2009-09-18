@@ -35,7 +35,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-		#region CILInstruction Overrides
+		#region Methods
 
 		/// <summary>
 		/// Decodes the specified instruction.
@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			instruction.Result = decoder.Compiler.CreateTemporary(new SigType(CilElementType.I4));
 		}
 
-		#endregion // CILInstruction Overrides
+		#endregion Methods
 
 	}
 }

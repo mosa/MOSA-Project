@@ -44,7 +44,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-		#region CILInstruction Overrides
+		#region Methods
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
@@ -75,6 +75,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			return builder.ToString();
 		}
 
-		#endregion // CILInstruction Overrides
+		#endregion Methods
 	}
 }

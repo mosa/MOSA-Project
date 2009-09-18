@@ -35,7 +35,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-		#region CILInstruction Overrides
+		#region Methods
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			return String.Format("{2} ; {0} = len({1})", instruction.Result, instruction.Operand1, base.ToString());
 		}
 
-		#endregion // CILInstruction Overrides
+		#endregion Methods
 
 	}
 }

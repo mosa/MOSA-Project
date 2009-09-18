@@ -104,7 +104,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Properties
 
-		#region CILInstruction Overrides
+		#region Methods
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
@@ -137,7 +137,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 
-		#endregion // CILInstruction Overrides
+		#endregion Methods
 
 		#region Methods
 

@@ -34,7 +34,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		
 		#endregion // Construction
 
-		#region CILInstruction Overrides
+		#region Methods
 
 		/// <summary>
 		/// Decodes the specified instruction.
@@ -130,6 +130,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			return String.Format("{0} = ldtoken({1})", instruction.Result, instruction.Token);
 		}
 
-		#endregion // CILInstruction Overrides
+		#endregion Methods
 	}
 }

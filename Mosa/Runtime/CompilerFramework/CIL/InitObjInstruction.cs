@@ -35,7 +35,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-		#region CILInstruction Overrides
+		#region Methods
 
 		/// <summary>
 		/// Decodes the specified instruction.
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			//_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
 		}
 
-		#endregion // CILInstruction Overrides
+		#endregion Methods
 
 	}
 }
