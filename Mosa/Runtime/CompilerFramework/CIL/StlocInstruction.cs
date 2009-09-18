@@ -25,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="StlocInstruction"/> class.
 		/// </summary>
 		public StlocInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 1)
 		{
 		}
 
@@ -79,6 +79,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			instruction.Result = decoder.Compiler.GetLocalOperand(locIdx);
+		}
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString(ref InstructionData instruction)
+		{
+			return String.Format("{0} ; {1} = {2}", base.ToString(), instruction.Result, instruction.Operand1);
 		}
 
 		#endregion Methods

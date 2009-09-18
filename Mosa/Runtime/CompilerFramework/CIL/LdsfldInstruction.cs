@@ -50,10 +50,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Read the _stackFrameIndex From the code
 			TokenTypes token;
 			decoder.Decode(out token);
-			instruction.Field = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
+			instruction.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
 
-			Debug.Assert((instruction.Field.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
-			instruction.Result = decoder.Compiler.CreateTemporary(instruction.Field.Type);
+			Debug.Assert((instruction.RuntimeField.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
+			instruction.Result = decoder.Compiler.CreateTemporary(instruction.RuntimeField.Type);
 		}
 
 		#endregion Methods

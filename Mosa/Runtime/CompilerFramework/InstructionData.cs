@@ -143,7 +143,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the field of the load instruction.
 		/// </summary>
-		public RuntimeField Field
+		public RuntimeField RuntimeField
 		{
 			get { return _other as RuntimeField; }
 			set { _other = value; }

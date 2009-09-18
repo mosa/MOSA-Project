@@ -55,7 +55,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Initializes a new instance of the <see cref="Branch"/> class.
 		/// </summary>
 		/// <param name="targets">The targets.</param>
-		public Branch(int targets)
+		public Branch(uint targets)
 		{
 			_branchTargets = new int[targets];
 		}
