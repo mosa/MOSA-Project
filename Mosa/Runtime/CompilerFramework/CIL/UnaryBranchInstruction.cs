@@ -15,9 +15,12 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
-	/// 
+	/// Represents a unary branch instruction in internal representation.
 	/// </summary>
-	public class UnaryBranchInstruction : CILInstruction, IBranchInstruction
+	/// <remarks>
+	/// This instruction is used to represent brfalse[.s] and brtrue[.s].
+	/// </remarks>
+	public class UnaryBranchInstruction : UnaryInstruction, IBranchInstruction
 	{
 		#region Construction
 
@@ -83,6 +86,29 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			else {
 				throw new NotSupportedException(@"Invalid opcode " + _opcode.ToString() + " specified for UnaryBranchInstruction.");
 			}
+		}
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString(ref InstructionData instruction)
+		{
+			string condition;
+
+			switch (_opcode) {
+				case OpCode.Brtrue: condition = @"true"; break;
+				case OpCode.Brtrue_s: condition = @"true"; break;
+				case OpCode.Brfalse: condition = @"false"; break;
+				case OpCode.Brfalse_s: condition = @"false"; break;
+				default:
+					throw new InvalidOperationException(@"Opcode not set.");
+			}
+
+			return String.Format(@"{4} ; if ({0} == {1}) goto L_{2:X4} else goto L_{3:X4}", instruction.Operand1, condition, instruction.Branch.Targets[0], instruction.Branch.Targets[1], base.ToString());
 		}
 
 		#endregion Methods

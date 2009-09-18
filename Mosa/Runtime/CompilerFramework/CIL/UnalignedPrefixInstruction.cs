@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class UnalignedPrefixInstruction : CILInstruction
+	public class UnalignedPrefixInstruction : PrefixInstruction
 	{
 		#region Construction
 
@@ -31,6 +31,25 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // Construction
+
+		#region Methods Overrides
+
+		/// <summary>
+		/// Decodes the specified instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		{
+			// Decode base classes first
+			base.Decode(ref instruction, decoder);
+
+			byte alignment;
+			decoder.Decode(out alignment);
+			// FIXME
+		}
+
+		#endregion // Methods Overrides
 
 	}
 }

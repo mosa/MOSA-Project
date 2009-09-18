@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class UnboxAnyInstruction : CILInstruction
+	public class UnboxAnyInstruction : BoxingInstruction
 	{
 		#region Construction
 
@@ -31,5 +31,22 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // Construction
+
+		#region Methods Overrides
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString(ref InstructionData instruction)
+		{
+			return String.Format(@"{2} ; {0} = unbox.any({1})", instruction.Result, instruction.Operand0, base.ToString());
+		}
+
+		#endregion // Methods Overrides
+
 	}
 }

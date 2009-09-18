@@ -15,9 +15,9 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
-	/// 
+	/// Intermediate representation of the IL throw instruction.
 	/// </summary>
-	public class ThrowInstruction : CILInstruction
+	public class ThrowInstruction : UnaryInstruction
 	{
 		#region Construction
 
