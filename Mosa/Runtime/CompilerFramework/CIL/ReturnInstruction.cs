@@ -20,8 +20,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ReturnInstruction : CILInstruction, IBranchInstruction
+	public class ReturnInstruction : UnaryInstruction, IBranchInstruction
 	{
+
 		#region Construction
 
 		/// <summary>
@@ -72,6 +73,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				instruction.ResultCount = 0;
 			else
 				instruction.ResultCount = 1;
+
+			instruction.Branch = new Branch(1);
+			instruction.Branch.Targets = new int[] { Int32.MaxValue };
 
 		}
 

@@ -12,12 +12,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
+
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class RefanyvalInstruction : CILInstruction
+	public class RefanyvalInstruction : UnaryInstruction
 	{
 		#region Construction
 
@@ -32,5 +35,49 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
+		#region CILInstruction Overrides
+
+		/// <summary>
+		/// Decodes the specified instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		{
+			// Decode base classes first
+			base.Decode(ref instruction, decoder);
+
+			// Retrieve a type reference From the immediate argument
+			// FIXME: Limit the token types
+			TokenTypes token;
+			decoder.Decode(out token);
+			throw new NotImplementedException();
+			//_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
+		}
+
+		/// <summary>
+		/// Validates the instruction operands and creates a matching variable for the result.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="compiler">The compiler.</param>
+		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
+		{
+			base.Validate(ref instruction, compiler);
+
+			// Make sure the base is a typed reference
+			throw new NotImplementedException();
+			/*
+				if (false == Object.ReferenceEquals(_operands[0].Type, MetadataTypeReference.FromName(compiler.Assembly.Metadata, @"System", @"TypedReference")))
+				{
+					Debug.Assert(false);
+					throw new InvalidProgramException(@"Invalid stack object.");
+				}
+
+				// Push the loaded value
+				_results[0] = CreateResultOperand(_typeRef);
+			 */
+		}
+
+		#endregion // CILInstruction Overrides
 	}
 }

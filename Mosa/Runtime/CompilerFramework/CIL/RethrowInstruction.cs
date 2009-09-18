@@ -15,7 +15,7 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
-	/// 
+	/// Intermediate representation of the IL rethrow instruction.
 	/// </summary>
 	public class RethrowInstruction : CILInstruction
 	{
