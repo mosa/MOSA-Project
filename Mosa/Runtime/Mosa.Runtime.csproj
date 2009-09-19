@@ -169,6 +169,7 @@
     <Compile Include="CompilerFramework\CIL\UnboxAnyInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\UnboxInstruction.cs" />
     <Compile Include="CompilerFramework\Branch.cs" />
+    <Compile Include="CompilerFramework\Context.cs" />
     <Compile Include="CompilerFramework\IBranch.cs" />
     <Compile Include="CompilerFramework\IIRnstruction.cs" />
     <Compile Include="CompilerFramework\IPlatformInstruction.cs" />

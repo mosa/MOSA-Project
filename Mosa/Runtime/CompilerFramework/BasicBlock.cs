@@ -27,8 +27,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// The index of the first instruction in the block.
 		/// </summary>
-		private List<Instruction> _instructions;
+		private List<Instruction> _instructions;	// FIXME PG REMOVE
 
+		/// <summary>
+		/// Holds the instruction set
+		/// </summary>
+		private InstructionSet _instructionSet;
+		
 		/// <summary>
 		/// The label of the block. (For simplicity this is actually the original instruction offset.)
 		/// </summary>
@@ -72,7 +77,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Initializes a new instance of <see cref="BasicBlock"/>.
 		/// </summary>
 		/// <param name="label">The label of the block (IL instruction offset From the method start.)</param>
-		public BasicBlock(int label) :
+		public BasicBlock(int label) : 	// FIXME PG REMOVE
 			this()
 		{
 			_instructions = new List<Instruction>();
@@ -82,9 +87,24 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Initializes a new instance of <see cref="BasicBlock"/>.
 		/// </summary>
+		/// <param name="label">The label of the block (IL instruction offset From the method start.)</param>
+		/// <param name="instructionSet">The instruction set.</param>
+		/// <param name="index">The index.</param>
+		public BasicBlock(int label, InstructionSet instructionSet, int index) :
+			this()
+		{
+			_instructions = new List<Instruction>();
+			_label = label;
+			_index = index;
+			_instructionSet = instructionSet;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="BasicBlock"/>.
+		/// </summary>
 		/// <param name="instructions">The instructions of the basic block.</param>
 		/// <param name="label">The label of the newly created block.</param>
-		private BasicBlock(List<Instruction> instructions, int label) :
+		private BasicBlock(List<Instruction> instructions, int label) :	// FIXME PG REMOVE
 			this()
 		{
 			_instructions = instructions;
@@ -112,6 +132,15 @@ namespace Mosa.Runtime.CompilerFramework
 		public List<Instruction> Instructions
 		{
 			get { return _instructions; }
+		}
+
+		/// <summary>
+		/// Retrieves the instruction list, which belongs to the block.
+		/// </summary>
+		/// <value>The instructions.</value>
+		public InstructionSet InstructionSet
+		{
+			get { return _instructionSet; }
 		}
 
 		/// <summary>
@@ -188,7 +217,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="index">The index of the first instruction of the block to create.</param>
 		/// <param name="label">The label of the new block.</param>
 		/// <returns>The new block with instructions starting at index.</returns>
-		public BasicBlock Split(int index, int label)
+		public BasicBlock Split(int index, int label)	// FIXME PG REMOVE
 		{
 			// Calculate the length of the instruction range
 			int length = _instructions.Count - index;

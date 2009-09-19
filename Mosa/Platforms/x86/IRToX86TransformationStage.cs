@@ -31,9 +31,9 @@ namespace Mosa.Platforms.x86
     public sealed class IRToX86TransformationStage : 
         CodeTransformationStage,
         // HACK: Remove this once we can ensure that no CIL instructions reach this.
-        IL.IILVisitor<CodeTransformationStage.Context>,
-        IR.IIRVisitor<CodeTransformationStage.Context>,
-        IX86InstructionVisitor<CodeTransformationStage.Context>,
+        IL.IILVisitor<Context>,
+        IR.IIRVisitor<Context>,
+        IX86InstructionVisitor<Context>,
         Mosa.Runtime.CompilerFramework.IPlatformTransformationStage
     {
         private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;

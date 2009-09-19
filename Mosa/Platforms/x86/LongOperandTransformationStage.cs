@@ -33,9 +33,9 @@ namespace Mosa.Platforms.x86
 	/// </remarks>
 	public sealed class LongOperandTransformationStage :
 		CodeTransformationStage,
-		IR.IIRVisitor<CodeTransformationStage.Context>,
-		IL.IILVisitor<CodeTransformationStage.Context>,
-		IX86InstructionVisitor<CodeTransformationStage.Context>
+		IR.IIRVisitor<Context>,
+		IL.IILVisitor<Context>,
+		IX86InstructionVisitor<Context>
 	{
 		#region Construction
 

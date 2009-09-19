@@ -27,7 +27,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// </remarks>
 	public sealed class CilToIrTransformationStage :
 		CodeTransformationStage,
-		CILVisitor<CodeTransformationStage.Context>
+		CILVisitor<Context>
 	{
 		#region IMethodCompilerStage Members
 

@@ -22,160 +22,9 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Base class for code transformation stages.
 	/// </summary>
-	public abstract class CodeTransformationStage : IMethodCompilerStage, IInstructionVisitor<CodeTransformationStage.Context>
+	public abstract class CodeTransformationStage : IMethodCompilerStage, IInstructionVisitor<Context>
 	{
-		#region Types
-
-		/// <summary>
-		/// Provides context for transformations.
-		/// </summary>
-		public class Context
-		{
-			#region Data members
-
-			/// <summary>
-			/// Holds the block being operated on.
-			/// </summary>
-			private BasicBlock _block;
-
-			/// <summary>
-			/// Holds the instruction index operated on.
-			/// </summary>
-			private int _index;
-
-			/// <summary>
-			/// Holds the list of instructions
-			/// </summary>
-			InstructionSet _instructions;
-
-			#endregion // Data members
-
-			/// <summary>
-			/// Gets or sets the basic block currently processed.
-			/// </summary>
-			public BasicBlock Block
-			{
-				get { return _block; }
-				set { _block = value; }
-			}
-
-			/// <summary>
-			/// Gets or sets the instruction set.
-			/// </summary>
-			public InstructionSet Instructions
-			{
-				get { return _instructions; }
-				set { _instructions = value; }
-			}
-
-			/// <summary>
-			/// Gets or sets the instruction index currently processed.
-			/// </summary>
-			public int Index
-			{
-				get { return _index; }
-				set { _index = value; }
-			}
-
-			/// <summary>
-			/// Gets the result operand.
-			/// </summary>
-			/// <value>The result operand.</value>
-			public Operand Result
-			{
-				get { return _instructions.instructions[_index].Result; }
-			}
-
-			/// <summary>
-			/// Gets the second result operand.
-			/// </summary>
-			/// <value>The second result operand.</value>
-			public Operand Result2
-			{
-				get { return _instructions.instructions[_index].Result2; }
-			}
-
-			/// <summary>
-			/// Gets the first operand.
-			/// </summary>
-			/// <value>The first operand.</value>
-			public Operand Operand1
-			{
-				get { return _instructions.instructions[_index].Operand1; }
-			}
-
-			/// <summary>
-			/// Gets the first operand.
-			/// </summary>
-			/// <value>The first operand.</value>
-			public Operand Operand2
-			{
-				get { return _instructions.instructions[_index].Operand2; }
-			}
-
-			/// <summary>
-			/// Gets the first operand.
-			/// </summary>
-			/// <value>The first operand.</value>
-			public Operand Operand3
-			{
-				get { return _instructions.instructions[_index].Operand3; }
-			}
-
-			/// <summary>
-			/// Gets the operand count.
-			/// </summary>
-			/// <value>The operand count.</value>
-			public byte OperandCount
-			{
-				get { return _instructions.instructions[_index].OperandCount; }
-			}
-
-			/// <summary>
-			/// Gets the result count.
-			/// </summary>
-			/// <value>The result count.</value>
-			public byte ResultCount
-			{
-				get { return _instructions.instructions[_index].ResultCount; }
-			}
-
-			/// <summary>
-			/// Holds the function being called.
-			/// </summary>
-			public RuntimeMethod InvokeTarget
-			{
-				get { return _instructions.instructions[_index].InvokeTarget; }
-			}
-
-			/// <summary>
-			/// Holds the string.
-			/// </summary>
-			public string String
-			{
-				get { return _instructions.instructions[_index].String; }
-			}
-
-			/// <summary>
-			/// Holds the field of the load instruction.
-			/// </summary>
-			public RuntimeField RuntimeField
-			{
-				get { return _instructions.instructions[_index].RuntimeField; }
-			}
-
-			/// <summary>
-			/// Holds the token type.
-			/// </summary>
-			/// <value>The token.</value>
-			public TokenTypes Token
-			{
-				get { return _instructions.instructions[_index].Token; }
-			}
-		};
-
-		#endregion // Types
-
+		
 		#region Data members
 
 		/// <summary>
@@ -225,9 +74,9 @@ namespace Mosa.Runtime.CompilerFramework
 			Compiler = compiler;
 			Blocks = blockProvider.Blocks;
 
-			Context ctx = new Context();
 			for (CurrentBlock = 0; CurrentBlock < Blocks.Count; CurrentBlock++) {
 				BasicBlock block = Blocks[CurrentBlock];
+				Context ctx = new Context(block);
 				ctx.Block = block;
 				for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++) {
 					block.Instructions[ctx.Index].Visit(this, ctx);

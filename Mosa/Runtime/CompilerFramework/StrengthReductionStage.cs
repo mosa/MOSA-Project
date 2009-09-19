@@ -17,8 +17,8 @@ namespace Mosa.Runtime.CompilerFramework
 	/// the code down to fewer calculations.
 	/// </summary>
 	public sealed class StrengthReductionStage : CodeTransformationStage, IMethodCompilerStage, 
-		IL.IILVisitor<CodeTransformationStage.Context>, 
-		IR.IIRVisitor<CodeTransformationStage.Context>
+		IL.IILVisitor<Context>, 
+		IR.IIRVisitor<Context>
 	{
 
 		/// <summary>
@@ -241,10 +241,9 @@ namespace Mosa.Runtime.CompilerFramework
 			if (null == blockProvider)
 				throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
 
-			Context ctx = new Context();
 
 			foreach (BasicBlock block in blockProvider.Blocks) {
-				ctx.Block = block;
+				Context ctx = new Context(block);
 				for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++) {
 					block.Instructions[ctx.Index].Visit(this, ctx);
 				}

@@ -95,11 +95,10 @@ namespace Mosa.Runtime.CompilerFramework
 
             ++_numberOfMethods;
 
-            CodeTransformationStage.Context ctx = new CodeTransformationStage.Context();
             for (int currentBlock = 0; currentBlock < blockProvider.Blocks.Count; currentBlock++)
             {
                 BasicBlock block = blockProvider.Blocks[currentBlock];
-                ctx.Block = block;
+				Context ctx = new Context(block);
                 for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++)
                 {
                     Visit(block.Instructions[ctx.Index], 0);
