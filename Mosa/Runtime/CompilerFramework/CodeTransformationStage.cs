@@ -424,18 +424,19 @@ namespace Mosa.Runtime.CompilerFramework
 
 			ctx.Block.NextBlocks.Clear();
 
-			if (insert != null) {
-				ctx.Block.NextBlocks.Add(insert);
-				insert.PreviousBlocks.Add(ctx.Block);
-				ctx.Block.Instructions.Add(new IR.JmpInstruction(insert.Label));
-			}
-			else {
-				ctx.Block.NextBlocks.Add(nextBlock);
-				nextBlock.PreviousBlocks.Add(ctx.Block);
-				ctx.Block.Instructions.Add(new IR.JmpInstruction(label));
-			}
+			if (insert != null) 
+				InsertLabel(ref ctx, ref insert, insert.Label);
+			else 
+				InsertLabel(ref ctx, ref nextBlock, label);
 
 			return nextBlock;
+		}
+		
+		private void InsertLabel(ref Context ctx, ref BasicBlock block, int label)
+		{
+			ctx.Block.NextBlocks.Add(block);
+			insert.PreviousBlocks.Add(ctx.Block);
+			ctx.Block.Instructions.Add(new IR.JmpInstruction(label));
 		}
 
 		#endregion
