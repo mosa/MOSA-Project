@@ -338,35 +338,42 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (BasicBlock block in blocks)
 				blockLabels.Add(block.Label, block);
 
-			if (nextBlock != null) {
-				foreach (BasicBlock block in nextBlock.NextBlocks)
+			AddBlockLabels(ref blockLabels, blocks, nextBlock);	
+			AddBlockLabels(ref blockLabels, blocks, currentBlock);
+			UpdateBlockLinks(blocks, blockLabels);
+		}
+		
+		private void AddBlockLabels(ref Dictionary<int, BasicBlock> blockLabels, BasicBlock[] blocks, BasicBlock basicBlock)
+		{
+			if (basicBlock != null) {
+				foreach (BasicBlock block in basicBlock.NextBlocks)
 					if (!blockLabels.ContainsKey(block.Label))
 						blockLabels.Add(block.Label, block);
 
-				if (!blockLabels.ContainsKey(nextBlock.Label))
-					blockLabels.Add(nextBlock.Label, nextBlock);
+				if (!blockLabels.ContainsKey(basicBlock.Label))
+					blockLabels.Add(basicBlock.Label, basicBlock);
 			}
-
-			if (currentBlock != null) {
-				foreach (BasicBlock block in currentBlock.NextBlocks)
-					if (!blockLabels.ContainsKey(block.Label))
-						blockLabels.Add(block.Label, block);
-
-				if (!blockLabels.ContainsKey(currentBlock.Label))
-					blockLabels.Add(currentBlock.Label, currentBlock);
-			}
-
-			// Update block links
+		}
+		
+		private void UpdateBlockLinks(BasicBlock[] blocks, Dictionary<int, BasicBlock> blockLabels)
+		{
 			foreach (BasicBlock block in blocks)
+			{
 				foreach (Instruction instruction in block.Instructions)
+				{
 					if (instruction is IBranchInstruction)
-						foreach (int label in (instruction as IBranchInstruction).BranchTargets) {
+					{
+						foreach (int label in (instruction as IBranchInstruction).BranchTargets) 
+						{
 							BasicBlock next = blockLabels[label];
 							if (!block.NextBlocks.Contains(next))
 								block.NextBlocks.Add(next);
 							if (!next.PreviousBlocks.Contains(block))
 								next.PreviousBlocks.Add(block);
 						}
+					}
+				}
+			}
 		}
 
 		/// <summary>
