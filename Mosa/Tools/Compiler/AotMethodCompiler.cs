@@ -10,7 +10,7 @@
  */
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.IL;
+using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
@@ -44,7 +44,7 @@ namespace Mosa.Tools.Compiler
         {
             aotCompiler = compiler;
             Pipeline.AddRange(new IMethodCompilerStage[] {
-				new ILDecodingStage(),
+				new CILDecodingStage(),
                 //InstructionLogger.Instance,
                 new BasicBlockBuilderStage(),
 				new OperandDeterminationStage(),

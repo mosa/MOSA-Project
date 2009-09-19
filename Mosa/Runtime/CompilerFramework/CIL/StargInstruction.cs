@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class StargInstruction : UnaryInstruction
+	public class StargInstruction : StoreInstruction
 	{
 		#region Construction
 
@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public StargInstruction(OpCode opcode)
-			: base(opcode, 1)
+			: base(opcode)
 		{
 		}
 

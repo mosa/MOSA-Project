@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Class maintenances an array of sorted instruction
 	/// </summary>
-	public class Instructions
+	public class InstructionSet
 	{
 		/// <summary>
 		/// 
@@ -47,10 +47,10 @@ namespace Mosa.Runtime.CompilerFramework
 		private int _free;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Instructions"/> class.
+		/// Initializes a new instance of the <see cref="InstructionSet"/> class.
 		/// </summary>
 		/// <param name="size">The size.</param>
-		public Instructions(int size)
+		public InstructionSet(int size)
 		{
 			_size = size;
 			_next = new int[size];

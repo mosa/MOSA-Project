@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets a list of instructions in intermediate representation.
 		/// </summary>
 		/// <value>The instructions.</value>
-		Instructions Instructions2 { get; }
+		InstructionSet Instructions2 { get; }
 
     }
 }

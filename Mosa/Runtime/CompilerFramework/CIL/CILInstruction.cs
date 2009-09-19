@@ -41,6 +41,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#region Properties
 
 		/// <summary>
+		/// Gets the op code.
+		/// </summary>
+		/// <value>The op code.</value>
+		public OpCode OpCode { get { return _opcode; } }
+
+		/// <summary>
 		/// Gets the default operand count of the instruction
 		/// </summary>
 		/// <value>The operand count.</value>

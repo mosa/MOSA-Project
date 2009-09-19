@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class StlocInstruction : UnaryInstruction
+	public class StlocInstruction : StoreInstruction
 	{
 		#region Construction
 
@@ -25,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="StlocInstruction"/> class.
 		/// </summary>
 		public StlocInstruction(OpCode opcode)
-			: base(opcode, 1)
+			: base(opcode)
 		{
 		}
 

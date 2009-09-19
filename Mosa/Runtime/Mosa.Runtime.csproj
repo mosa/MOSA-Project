@@ -96,8 +96,11 @@
     <Compile Include="CompilerFramework\CIL\CastclassInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CILDecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\CilToIRTransformationStage.cs" />
     <Compile Include="CompilerFramework\CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ConversionInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\StoreInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\IILVisitor.cs" />
     <Compile Include="CompilerFramework\CIL\Prefix.cs" />
     <Compile Include="CompilerFramework\CIL\CpblkInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CpobjInstruction.cs" />
@@ -173,7 +176,7 @@
     <Compile Include="CompilerFramework\IInstruction.cs" />
     <Compile Include="CompilerFramework\FlowGraphVisualizationStage.cs" />
     <Compile Include="CompilerFramework\CIL\NopInstruction.cs" />
-    <Compile Include="CompilerFramework\Instructions.cs" />
+    <Compile Include="CompilerFramework\InstructionSet.cs" />
     <Compile Include="CompilerFramework\InstructionData.cs" />
     <Compile Include="CompilerFramework\InstructionType.cs" />
     <Compile Include="CompilerFramework\CIL\CILInstruction.cs" />
@@ -473,9 +476,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\IL\IILVisitor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerFramework\IL\ILDecodingStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\IL\ILInstruction.cs">

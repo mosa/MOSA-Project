@@ -12,6 +12,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Tables;
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Vm;
+
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
@@ -38,6 +43,11 @@ namespace Mosa.Runtime.CompilerFramework
 			/// </summary>
 			private int _index;
 
+			/// <summary>
+			/// Holds the list of instructions
+			/// </summary>
+			InstructionSet _instructions;
+
 			#endregion // Data members
 
 			/// <summary>
@@ -50,12 +60,117 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			/// <summary>
+			/// Gets or sets the instruction set.
+			/// </summary>
+			public InstructionSet Instructions
+			{
+				get { return _instructions; }
+				set { _instructions = value; }
+			}
+
+			/// <summary>
 			/// Gets or sets the instruction index currently processed.
 			/// </summary>
 			public int Index
 			{
 				get { return _index; }
 				set { _index = value; }
+			}
+
+			/// <summary>
+			/// Gets the result operand.
+			/// </summary>
+			/// <value>The result operand.</value>
+			public Operand Result
+			{
+				get { return _instructions.instructions[_index].Result; }
+			}
+
+			/// <summary>
+			/// Gets the second result operand.
+			/// </summary>
+			/// <value>The second result operand.</value>
+			public Operand Result2
+			{
+				get { return _instructions.instructions[_index].Result2; }
+			}
+
+			/// <summary>
+			/// Gets the first operand.
+			/// </summary>
+			/// <value>The first operand.</value>
+			public Operand Operand1
+			{
+				get { return _instructions.instructions[_index].Operand1; }
+			}
+
+			/// <summary>
+			/// Gets the first operand.
+			/// </summary>
+			/// <value>The first operand.</value>
+			public Operand Operand2
+			{
+				get { return _instructions.instructions[_index].Operand2; }
+			}
+
+			/// <summary>
+			/// Gets the first operand.
+			/// </summary>
+			/// <value>The first operand.</value>
+			public Operand Operand3
+			{
+				get { return _instructions.instructions[_index].Operand3; }
+			}
+
+			/// <summary>
+			/// Gets the operand count.
+			/// </summary>
+			/// <value>The operand count.</value>
+			public byte OperandCount
+			{
+				get { return _instructions.instructions[_index].OperandCount; }
+			}
+
+			/// <summary>
+			/// Gets the result count.
+			/// </summary>
+			/// <value>The result count.</value>
+			public byte ResultCount
+			{
+				get { return _instructions.instructions[_index].ResultCount; }
+			}
+
+			/// <summary>
+			/// Holds the function being called.
+			/// </summary>
+			public RuntimeMethod InvokeTarget
+			{
+				get { return _instructions.instructions[_index].InvokeTarget; }
+			}
+
+			/// <summary>
+			/// Holds the string.
+			/// </summary>
+			public string String
+			{
+				get { return _instructions.instructions[_index].String; }
+			}
+
+			/// <summary>
+			/// Holds the field of the load instruction.
+			/// </summary>
+			public RuntimeField RuntimeField
+			{
+				get { return _instructions.instructions[_index].RuntimeField; }
+			}
+
+			/// <summary>
+			/// Holds the token type.
+			/// </summary>
+			/// <value>The token.</value>
+			public TokenTypes Token
+			{
+				get { return _instructions.instructions[_index].Token; }
 			}
 		};
 

@@ -291,7 +291,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// List of instructions decoded by the decoder.
 		/// </summary>
-		Instructions _instructions = new Instructions(1024 * 1024);
+		InstructionSet _instructions = new InstructionSet(1024 * 1024);
 
 		#endregion // Data members
 
@@ -531,7 +531,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Gets a list of instructions in intermediate representation.
 		/// </summary>
 		/// <value></value>
-		public Instructions Instructions2
+		public InstructionSet Instructions2
 		{
 			get { return _instructions; }
 		}

@@ -88,7 +88,7 @@ namespace Mosa.Jit.SimpleJit
 		/// Gets a list of instructions in intermediate representation.
 		/// </summary>
 		/// <value></value>
-		public Instructions Instructions2
+		public InstructionSet Instructions2
 		{
 			get { return null; } // FIXME
 		}
