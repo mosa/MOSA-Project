@@ -43,7 +43,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </returns>
 		public override string ToString(ref InstructionData instruction)
 		{
-			return String.Format(@"{2} ; {0} = unbox.any({1})", instruction.Result, instruction.Operand0, base.ToString());
+			return String.Format(@"{2} ; {0} = unbox.any({1})", instruction.Result, instruction.Operand1, base.ToString());
 		}
 
 		#endregion // Methods Overrides
