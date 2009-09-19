@@ -435,7 +435,7 @@ namespace Mosa.Runtime.CompilerFramework
 		private void InsertLabel(ref Context ctx, ref BasicBlock block, int label)
 		{
 			ctx.Block.NextBlocks.Add(block);
-			insert.PreviousBlocks.Add(ctx.Block);
+			block.PreviousBlocks.Add(ctx.Block);
 			ctx.Block.Instructions.Add(new IR.JmpInstruction(label));
 		}
 
