@@ -79,10 +79,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="opCode">The op code.</param>
 		/// <param name="operandCount">The operand count.</param>
 		public CILInstruction(OpCode opCode, byte operandCount)
+			: this(opCode)
 		{
-			this._opcode = opCode;
 			_operandDefaultCount = operandCount;
-			_resultDefaultCount = 0;
 		}
 
 		/// <summary>
@@ -92,9 +91,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
 		public CILInstruction(OpCode opCode, byte operandCount, byte resultCount)
+			: this(opCode, operandCount)
 		{
-			this._opcode = opCode;
-			_operandDefaultCount = operandCount;
 			_resultDefaultCount = resultCount;
 		}
 
@@ -113,6 +111,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			instruction.Instruction = this;
 			instruction.OperandCount = DefaultOperandCount;
 			instruction.ResultCount = DefaultResultCount;
+			instruction.Ignore = false;
 		}
 
 		/// <summary>

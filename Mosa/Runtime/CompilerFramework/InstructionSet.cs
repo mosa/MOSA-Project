@@ -20,6 +20,8 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public class InstructionSet
 	{
+		#region Data Members
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -45,6 +47,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// 
 		/// </summary>
 		private int _free;
+
+		#endregion // Data Members
+
+		#region Methods
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InstructionSet"/> class.
@@ -82,18 +88,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="newsize">The newsize.</param>
 		private void Resize(int newsize)
 		{
-            int[] newNext = new int[newsize];
-            int[] newPrev = new int[newsize];
-            InstructionData[] newInstructions = new InstructionData[newsize];
+			int[] newNext = new int[newsize];
+			int[] newPrev = new int[newsize];
+			InstructionData[] newInstructions = new InstructionData[newsize];
 
-            _next.CopyTo(newNext, 0);
-            _prev.CopyTo(newPrev, 0);
-            instructions.CopyTo(newInstructions, 0);
+			_next.CopyTo(newNext, 0);
+			_prev.CopyTo(newPrev, 0);
+			instructions.CopyTo(newInstructions, 0);
 
-            _next = newNext;
-            _prev = newPrev;
-            instructions = newInstructions;
-            _size = newsize;
+			_next = newNext;
+			_prev = newPrev;
+			instructions = newInstructions;
+			_size = newsize;
 		}
 
 		/// <summary>
@@ -219,40 +225,52 @@ namespace Mosa.Runtime.CompilerFramework
 			_prev[_next[index]] = _prev[index];
 
 			AddFree(index);
-        }
+		}
 
-        #region Utility Methods
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="prefix"></param>
-        public void SetPrefix(int index, CIL.PrefixInstruction prefix)
-        {
-            IsIndexValid(index);
-            instructions[index].Prefix = prefix;
-        }
+		/// <summary>
+		/// Slices the instruction flow.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		public void SliceAfter(int index)
+		{
+			_prev[_next[index]] = -1;
+			_next[index] = -1;
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="offset"></param>
-        public void SetOffset(int index, int offset)
-        {
-            IsIndexValid(index);
-            instructions[index].Offset = offset;
-        }
+		#endregion // Methods
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        public void IsIndexValid(int index)
-        {
-            Debug.Assert(index < _size);
-            Debug.Assert(index >= 0);
-        }
-        #endregion
-    }
+		#region Utility Methods
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="prefix"></param>
+		public void SetPrefix(int index, CIL.PrefixInstruction prefix)
+		{
+			IsIndexValid(index);
+			instructions[index].Prefix = prefix;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="offset"></param>
+		public void SetOffset(int index, int offset)
+		{
+			IsIndexValid(index);
+			instructions[index].Offset = offset;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		public void IsIndexValid(int index)
+		{
+			Debug.Assert(index < _size);
+			Debug.Assert(index >= 0);
+		}
+		#endregion
+	}
 }

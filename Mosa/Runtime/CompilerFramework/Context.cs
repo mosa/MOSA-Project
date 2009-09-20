@@ -70,6 +70,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public IInstruction Instruction
 		{
 			get { return _instructionSet.instructions[_index].Instruction; }
+			set { _instructionSet.instructions[_index].Instruction = value; }
 		}
 
 		/// <summary>
@@ -79,6 +80,17 @@ namespace Mosa.Runtime.CompilerFramework
 		public int Offset
 		{
 			get { return _instructionSet.instructions[_index].Offset; }
+			set { _instructionSet.instructions[_index].Offset = value; }
+		}
+
+		/// <summary>
+		/// Gets the result operand.
+		/// </summary>
+		/// <value>The result operand.</value>
+		public IBranch Branch
+		{
+			get { return _instructionSet.instructions[_index].Branch; }
+			set { _instructionSet.instructions[_index].Branch = value; }
 		}
 
 		/// <summary>
@@ -142,6 +154,16 @@ namespace Mosa.Runtime.CompilerFramework
 		public byte ResultCount
 		{
 			get { return _instructionSet.instructions[_index].ResultCount; }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Context"/> is ignore.
+		/// </summary>
+		/// <value><c>true</c> if ignore; otherwise, <c>false</c>.</value>
+		public bool Ignore
+		{
+			get { return _instructionSet.instructions[_index].Ignore; }
+			set { _instructionSet.instructions[_index].Ignore = value; }
 		}
 
 		/// <summary>
@@ -249,6 +271,27 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Backwards()
 		{
 			_index = _instructionSet.Previous(_index);
+		}
+
+		/// <summary>
+		/// Inserts an instruction the after the current instruction.
+		/// </summary>
+		/// <returns></returns>
+		public Context InsertAfter()
+		{
+			Context ctx = new Context(_instructionSet, _instructionSet.InsertAfter(_index));
+			ctx.Block = _block;
+			ctx.Instruction = null;
+			ctx.Ignore = true;
+			return ctx;
+		}
+
+		/// <summary>
+		/// Slices this instance.
+		/// </summary>
+		public void SliceAfter()
+		{
+			_instructionSet.SliceAfter(_index);
 		}
 
 		#endregion // Methods

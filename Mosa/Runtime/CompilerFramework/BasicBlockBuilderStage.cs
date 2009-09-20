@@ -157,11 +157,10 @@ namespace Mosa.Runtime.CompilerFramework
 						case FlowControl.Next:
 							// Insert unconditional branch to next basic block
 
-							//BranchInstruction branch = new BranchInstruction(OpCode.Br_s, new[] { next.Key });
-							BranchInstruction branch = Map.GetInstruction(OpCode.Br_s) as BranchInstruction;
-							
-							// FIXME PG
-							//current.Value.Instructions.Add(branch);
+							Context insert = ctx.InsertAfter();
+							insert.Instruction = Map.GetInstruction(OpCode.Br_s);
+							insert.Branch = new Branch(1);
+							insert.Branch.Targets[0] = next.Key;
 
 							LinkBlocks(current.Value, leaders[next.Key]);
 							break;
