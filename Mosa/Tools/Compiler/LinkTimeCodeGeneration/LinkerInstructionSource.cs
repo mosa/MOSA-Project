@@ -61,7 +61,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 		/// Gets a list of instructions in intermediate representation.
 		/// </summary>
 		/// <value></value>
-		public InstructionSet Instructions2
+		public InstructionSet InstructionSet
 		{
 			get { return null; } // FIXME
 		}

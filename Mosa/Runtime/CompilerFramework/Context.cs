@@ -30,7 +30,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the list of instructions
 		/// </summary>
-		InstructionSet _instructions;
+		private InstructionSet _instructionSet;
 
 		#endregion // Data members
 
@@ -50,8 +50,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public InstructionSet Instructions
 		{
-			get { return _instructions; }
-			set { _instructions = value; }
+			get { return _instructionSet; }
+			set { _instructionSet = value; }
 		}
 
 		/// <summary>
@@ -67,9 +67,27 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the result operand.
 		/// </summary>
 		/// <value>The result operand.</value>
+		public IInstruction Instruction
+		{
+			get { return _instructionSet.instructions[_index].Instruction; }
+		}
+
+		/// <summary>
+		/// Gets the offset.
+		/// </summary>
+		/// <value>The offset.</value>
+		public int Offset
+		{
+			get { return _instructionSet.instructions[_index].Offset; }
+		}
+
+		/// <summary>
+		/// Gets the result operand.
+		/// </summary>
+		/// <value>The result operand.</value>
 		public Operand Result
 		{
-			get { return _instructions.instructions[_index].Result; }
+			get { return _instructionSet.instructions[_index].Result; }
 		}
 
 		/// <summary>
@@ -78,7 +96,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The second result operand.</value>
 		public Operand Result2
 		{
-			get { return _instructions.instructions[_index].Result2; }
+			get { return _instructionSet.instructions[_index].Result2; }
 		}
 
 		/// <summary>
@@ -87,7 +105,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The first operand.</value>
 		public Operand Operand1
 		{
-			get { return _instructions.instructions[_index].Operand1; }
+			get { return _instructionSet.instructions[_index].Operand1; }
 		}
 
 		/// <summary>
@@ -96,7 +114,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The first operand.</value>
 		public Operand Operand2
 		{
-			get { return _instructions.instructions[_index].Operand2; }
+			get { return _instructionSet.instructions[_index].Operand2; }
 		}
 
 		/// <summary>
@@ -105,7 +123,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The first operand.</value>
 		public Operand Operand3
 		{
-			get { return _instructions.instructions[_index].Operand3; }
+			get { return _instructionSet.instructions[_index].Operand3; }
 		}
 
 		/// <summary>
@@ -114,7 +132,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The operand count.</value>
 		public byte OperandCount
 		{
-			get { return _instructions.instructions[_index].OperandCount; }
+			get { return _instructionSet.instructions[_index].OperandCount; }
 		}
 
 		/// <summary>
@@ -123,7 +141,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The result count.</value>
 		public byte ResultCount
 		{
-			get { return _instructions.instructions[_index].ResultCount; }
+			get { return _instructionSet.instructions[_index].ResultCount; }
 		}
 
 		/// <summary>
@@ -131,7 +149,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public RuntimeMethod InvokeTarget
 		{
-			get { return _instructions.instructions[_index].InvokeTarget; }
+			get { return _instructionSet.instructions[_index].InvokeTarget; }
 		}
 
 		/// <summary>
@@ -139,7 +157,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public string String
 		{
-			get { return _instructions.instructions[_index].String; }
+			get { return _instructionSet.instructions[_index].String; }
 		}
 
 		/// <summary>
@@ -147,7 +165,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public RuntimeField RuntimeField
 		{
-			get { return _instructions.instructions[_index].RuntimeField; }
+			get { return _instructionSet.instructions[_index].RuntimeField; }
 		}
 
 		/// <summary>
@@ -156,12 +174,52 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The token.</value>
 		public TokenTypes Token
 		{
-			get { return _instructions.instructions[_index].Token; }
+			get { return _instructionSet.instructions[_index].Token; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether [end of instructions].
+		/// </summary>
+		/// <value><c>true</c> if [end of instructions]; otherwise, <c>false</c>.</value>
+		public bool EndOfInstructions
+		{
+			get { return _index < 0; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether [last instruction].
+		/// </summary>
+		/// <value><c>true</c> if [last instruction]; otherwise, <c>false</c>.</value>
+		public bool LastInstruction
+		{
+			get { return _instructionSet.Next(_index) < 0; }
+		}
+
+		/// <summary>
+		/// Nexts this instance.
+		/// </summary>
+		/// <value>The next.</value>
+		/// <returns></returns>
+		public Context Next
+		{
+			get { return new Context(_instructionSet, _instructionSet.Next(_index)); }
 		}
 
 		#endregion // Properties
-				
+
 		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Context"/> class.
+		/// </summary>
+		/// <param name="instructionSet">The instruction set.</param>
+		/// <param name="index">The index.</param>
+		public Context(InstructionSet instructionSet, int index)
+		{
+			_block = null;
+			_index = index;
+			_instructionSet = instructionSet;
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Context"/> class.
@@ -182,7 +240,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Forward()
 		{
-			_index = _instructions.Next(_index);
+			_index = _instructionSet.Next(_index);
 		}
 
 		/// <summary>
@@ -190,7 +248,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Backwards()
 		{
-			_index = _instructions.Previous(_index);
+			_index = _instructionSet.Previous(_index);
 		}
 
 		#endregion // Methods

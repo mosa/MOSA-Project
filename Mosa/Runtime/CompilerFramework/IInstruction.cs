@@ -18,6 +18,10 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public interface IInstruction
 	{
-		
+		///// <summary>
+		///// Gets the flow control.
+		///// </summary>
+		///// <value>The flow control.</value>
+		//FlowControl FlowControl { get; }
 	}
 }

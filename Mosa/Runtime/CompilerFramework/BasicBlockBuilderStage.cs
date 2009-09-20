@@ -11,7 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Runtime.CompilerFramework.IL;
+using Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -73,9 +73,11 @@ namespace Mosa.Runtime.CompilerFramework
 
 			AddLeader(0);
 
-			for (int index = 0; index < ip.Instructions.Count; index++) {
+			Context ctx = new Context(ip.InstructionSet, 0);
+
+			while (!ctx.EndOfInstructions) {
 				// Retrieve the instruction
-				Instruction instruction = ip.Instructions[index];
+				ICILInstruction instruction = ctx.Instruction as ICILInstruction;
 
 				// Does this instruction end a block?
 				switch (instruction.FlowControl) {
@@ -84,8 +86,9 @@ namespace Mosa.Runtime.CompilerFramework
 					case FlowControl.Next: break;
 
 					case FlowControl.Return:
-						if (index + 1 < ip.Instructions.Count)
-							AddLeader(ip.Instructions[index + 1].Offset);
+						//if (index + 1 < ip.Instructions.Count)
+						if (!ctx.LastInstruction)
+							AddLeader(ctx.Next.Offset);
 						break;
 
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
@@ -99,8 +102,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 					case FlowControl.Throw:
 						// End the block, start a new one on the next statement
-						if (index + 1 < ip.Instructions.Count)
-							AddLeader(ip.Instructions[index + 1].Offset);
+						//if (index + 1 < ip.Instructions.Count)
+						if (!ctx.LastInstruction)
+							AddLeader(ctx.Next.Offset);
 						break;
 
 					default:
@@ -152,8 +156,13 @@ namespace Mosa.Runtime.CompilerFramework
 						case FlowControl.Call: goto case FlowControl.Next;
 						case FlowControl.Next:
 							// Insert unconditional branch to next basic block
-							BranchInstruction branch = new BranchInstruction(OpCode.Br_s, new[] { next.Key });
-							current.Value.Instructions.Add(branch);
+
+							//BranchInstruction branch = new BranchInstruction(OpCode.Br_s, new[] { next.Key });
+							BranchInstruction branch = Map.GetInstruction(OpCode.Br_s) as BranchInstruction;
+							
+							// FIXME PG
+							//current.Value.Instructions.Add(branch);
+
 							LinkBlocks(current.Value, leaders[next.Key]);
 							break;
 

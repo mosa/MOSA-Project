@@ -19,7 +19,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// </summary>
 	public interface ICILInstruction : IInstruction
 	{
-
 		/// <summary>
 		/// Determines flow behavior of this instruction.
 		/// </summary>

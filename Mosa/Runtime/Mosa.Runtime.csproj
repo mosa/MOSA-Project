@@ -99,6 +99,7 @@
     <Compile Include="CompilerFramework\CIL\CilToIRTransformationStage.cs" />
     <Compile Include="CompilerFramework\CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ConversionInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\Map.cs" />
     <Compile Include="CompilerFramework\CIL\StoreInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CILVisitor.cs" />
     <Compile Include="CompilerFramework\CIL\Prefix.cs" />
