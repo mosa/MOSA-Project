@@ -31,7 +31,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// List of leaders
 		/// </summary>
-		private SortedDictionary<int, BasicBlock> leaders;
+		private SortedDictionary<int, BasicBlock> loopHeads;
 
 		#endregion // Data members
 
@@ -43,7 +43,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public BasicBlockBuilderStage()
 		{
 			basicBlocks = new List<BasicBlock>();
-			leaders = new SortedDictionary<int, BasicBlock>();
+			loopHeads = new SortedDictionary<int, BasicBlock>();
 		}
 
 		#endregion // Construction
@@ -71,12 +71,11 @@ namespace Mosa.Runtime.CompilerFramework
 			// Architecture
 			IArchitecture arch = compiler.Architecture;
 
-			AddLeader(0);
+			AddLoopHead(0);
 
-			Context ctx = new Context(ip.InstructionSet, 0);
-			AddLeadersIfNeeded(ctx);
+			FindLoopHeads(new Context(ip.InstructionSet, 0));
 
-			basicBlocks.Capacity = leaders.Count + 2;
+			basicBlocks.Capacity = loopHeads.Count + 2;
 
 			// Start with a prologue block...
 			BasicBlock prologue = new BasicBlock(-1);
@@ -88,22 +87,21 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Create the epilogue block
 			BasicBlock epilogue = new BasicBlock(Int32.MaxValue);
-			epilogue.Index = leaders.Count + 1;
+			epilogue.Index = loopHeads.Count + 1;
 
 			// Add epilogue block to leaders (helps with loop below)
-			leaders.Add(epilogue.Label, epilogue);
+			loopHeads.Add(epilogue.Label, epilogue);
 
 			// Link prologue block to the first leader
-			LinkBlocks(prologue, leaders[0]);
+			LinkBlocks(prologue, loopHeads[0]);
 
-			InsertInstructionsIntoBlocks(leaders, compiler, ctx, epilogue);
-
+			InsertInstructionsIntoBlocks(loopHeads, new Context(ip.InstructionSet, 0), epilogue, compiler);
 
 			// Add the epilogue block
 			basicBlocks.Add(epilogue);
 		}
 
-		private void AddLeadersIfNeeded(Context ctx)
+		private void FindLoopHeads(Context ctx)
 		{
 			while (!ctx.EndOfInstructions) {
 				// Retrieve the instruction
@@ -117,7 +115,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 					case FlowControl.Return:
 						if (!ctx.LastInstruction)
-							AddLeader(ctx.Next.Offset);
+							AddLoopHead(ctx.Next.Offset);
 						break;
 
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
@@ -126,19 +124,20 @@ namespace Mosa.Runtime.CompilerFramework
 					case FlowControl.ConditionalBranch:
 						// Conditional branch with multiple targets
 						foreach (int target in (instruction as IBranchInstruction).BranchTargets)
-							AddLeader(target);
+							AddLoopHead(target);
 						goto case FlowControl.Throw;
 
 					case FlowControl.Throw:
 						// End the block, start a new one on the next statement
 						if (!ctx.LastInstruction)
-							AddLeader(ctx.Next.Offset);
+							AddLoopHead(ctx.Next.Offset);
 						break;
 
 					default:
 						Debug.Assert(false);
 						break;
 				}
+				ctx.Forward();
 			}
 		}
 
@@ -146,13 +145,20 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Adds the leader.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		public void AddLeader(int index)
+		public void AddLoopHead(int index)
 		{
-			if (!leaders.ContainsKey(index))
-				leaders.Add(index, new BasicBlock(index));
+			if (!loopHeads.ContainsKey(index))
+				loopHeads.Add(index, new BasicBlock(index));
 		}
 
-		private void InsertInstructionsIntoBlocks(IDictionary<int, BasicBlock> leaders, IMethodCompiler compiler, Context ctx, BasicBlock epilogue)
+		/// <summary>
+		/// Inserts the instructions into blocks.
+		/// </summary>
+		/// <param name="leaders">The leaders.</param>
+		/// <param name="ctx">The context.</param>
+		/// <param name="epilogue">The epilogue.</param>
+		/// <param name="compiler">The compiler.</param>
+		private void InsertInstructionsIntoBlocks(IDictionary<int, BasicBlock> leaders, Context ctx, BasicBlock epilogue, IMethodCompiler compiler)
 		{
 			// Retrieve the instruction provider
 			IInstructionsProvider ip = (IInstructionsProvider)compiler.GetPreviousStage(typeof(IInstructionsProvider));
@@ -194,7 +200,7 @@ namespace Mosa.Runtime.CompilerFramework
 					insert.Branch.Targets[0] = next.Key;
 
 					ctx.SliceAfter();
-					LinkBlocks(current.Value, leaders[next.Key]);
+					LinkBlocks(current.Value, loopHeads[next.Key]);
 					break;
 
 				case FlowControl.Return:
@@ -211,7 +217,7 @@ namespace Mosa.Runtime.CompilerFramework
 				case FlowControl.ConditionalBranch:
 					// Conditional branch with multiple targets
 					foreach (int target in (lastInstruction as IBranchInstruction).BranchTargets)
-						LinkBlocks(current.Value, leaders[target]);
+						LinkBlocks(current.Value, loopHeads[target]);
 					goto case FlowControl.Throw;
 
 				case FlowControl.Throw:
