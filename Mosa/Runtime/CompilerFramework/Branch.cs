@@ -47,13 +47,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Branch"/> class.
 		/// </summary>
-		public Branch()
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Branch"/> class.
-		/// </summary>
 		/// <param name="targets">The targets.</param>
 		public Branch(uint targets)
 		{
