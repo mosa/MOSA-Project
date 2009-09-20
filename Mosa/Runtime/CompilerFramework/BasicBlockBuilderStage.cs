@@ -33,6 +33,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private SortedDictionary<int, BasicBlock> loopHeads;
 
+		/// <summary>
+		/// Holds the instruction set
+		/// </summary>
+		private InstructionSet _instructionset;
+
 		#endregion // Data members
 
 		#region Construction
@@ -65,15 +70,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="compiler">The compiler context to perform processing in.</param>
 		public void Run(IMethodCompiler compiler)
 		{
-			// Retrieve the instruction provider
-			IInstructionsProvider ip = (IInstructionsProvider)compiler.GetPreviousStage(typeof(IInstructionsProvider));
+			// Retrieve the instruction provider and the instruction set
+			_instructionset = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
 
 			// Architecture
 			IArchitecture arch = compiler.Architecture;
 
 			AddLoopHead(0);
 
-			FindLoopHeads(new Context(ip.InstructionSet, 0));
+			FindLoopHeads(new Context(_instructionset, 0));
 
 			basicBlocks.Capacity = loopHeads.Count + 2;
 
@@ -83,6 +88,7 @@ namespace Mosa.Runtime.CompilerFramework
 			basicBlocks.Add(prologue);
 
 			// Add a jump instruction to the first block From the prologue
+			// FIXME PG
 			prologue.Instructions.Insert(0, arch.CreateInstruction(typeof(BranchInstruction), OpCode.Br, new[] { 0 }));
 
 			// Create the epilogue block
@@ -159,9 +165,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="compiler">The compiler.</param>
 		private void InsertInstructionsIntoBlocks(IDictionary<int, BasicBlock> leaders, BasicBlock epilogue, IMethodCompiler compiler)
 		{
-			// Retrieve the instruction provider
-			IInstructionsProvider ip = (IInstructionsProvider)compiler.GetPreviousStage(typeof(IInstructionsProvider));
-
 			KeyValuePair<int, BasicBlock> current = new KeyValuePair<int, BasicBlock>(-1, null);
 			int blockIndex = 0;
 
@@ -174,25 +177,32 @@ namespace Mosa.Runtime.CompilerFramework
 					// Set the block index
 					current.Value.Index = ++blockIndex;
 
-					Context ctx = new Context(ip.InstructionSet, current.Key);
+					Context ctx = new Context(_instructionset, current.Key);
 					ctx.BasicBlock = current.Value;
 
 					// Set the block index on all the instructions
 					while ((ctx.Index != next.Key) && !ctx.EndOfInstructions) {
-						ctx.Block2 = blockIndex;
+						ctx.Block = blockIndex;
 						ctx.Forward();
 					}
 
 					ctx.Backwards();
 
-					InsertFlowControl(ctx, current, next, epilogue);
+					InsertFlowControl(ctx, current.Value, next.Key, epilogue);
 				}
 
 				current = next;
 			}
 		}
 
-		private void InsertFlowControl(Context ctx, KeyValuePair<int, BasicBlock> current, KeyValuePair<int, BasicBlock> next, BasicBlock epilogue)
+		/// <summary>
+		/// Inserts the flow control.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="current">The current.</param>
+		/// <param name="nextBlock">The next block.</param>
+		/// <param name="epilogue">The epilogue.</param>
+		private void InsertFlowControl(Context ctx, BasicBlock current, int nextBlock, BasicBlock epilogue)
 		{
 			switch ((ctx.Instruction as CILInstruction).FlowControl) {
 				case FlowControl.Break: goto case FlowControl.Next;
@@ -202,15 +212,15 @@ namespace Mosa.Runtime.CompilerFramework
 					Context insert = ctx.InsertAfter();
 					insert.Instruction = Map.GetInstruction(OpCode.Br_s);
 					insert.Branch = new Branch(1);
-					insert.Branch.Targets[0] = next.Key;
+					insert.Branch.Targets[0] = nextBlock;
 
 					ctx.SliceAfter();
-					LinkBlocks(current.Value, loopHeads[next.Key]);
+					LinkBlocks(current, loopHeads[nextBlock]);
 					break;
 
 				case FlowControl.Return:
 					// Insert unconditional branch to epilogue block
-					LinkBlocks(current.Value, epilogue);
+					LinkBlocks(current, epilogue);
 					break;
 
 				case FlowControl.Switch:
@@ -222,7 +232,7 @@ namespace Mosa.Runtime.CompilerFramework
 				case FlowControl.ConditionalBranch:
 					// Conditional branch with multiple targets
 					foreach (int target in ctx.Branch.Targets)
-						LinkBlocks(current.Value, loopHeads[target]);
+						LinkBlocks(current, loopHeads[target]);
 					goto case FlowControl.Throw;
 
 				case FlowControl.Throw:

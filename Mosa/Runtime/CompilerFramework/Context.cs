@@ -86,7 +86,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Gets or sets the block index
 		/// </summary>
-		public int Block2
+		public int Block
 		{
 			get { return _instructionSet.instructions[_index].Block; }
 			set { _instructionSet.instructions[_index].Block = value; }
