@@ -31,7 +31,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			: base(opcode)
 		{
 		}
-		
+
 		#endregion // Construction
 
 		#region Methods
@@ -45,77 +45,87 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			// Decode base classes first
 			base.Decode(ref instruction, decoder);
-			
+
 			TokenTypes token;
-			 // Retrieve the token From the code stream
+			// Retrieve the token From the code stream
 			decoder.Decode(out token);
 
 			instruction.Token = token;
 
-            throw new NotImplementedException();
+			throw new NotImplementedException();
 			/*
-						TypeReference typeRef;
+			TypeReference typeRef;
 
-						// Determine the result type...
-						switch (TokenTypes.TableMask & token)
+			// Determine the result type...
+			switch (TokenTypes.TableMask & token)
+			{
+				case TokenTypes.TypeDef:
+					n = @"RuntimeTypeHandle";
+					break;
+
+				case TokenTypes.TypeRef:
+					n = @"RuntimeTypeHandle";
+					break;
+
+				case TokenTypes.TypeSpec:
+					n = @"RuntimeTypeHandle";
+					break;
+
+				case TokenTypes.MethodDef:
+					n = @"RuntimeMethodHandle";
+					break;
+
+				case TokenTypes.MemberRef:
+					// Field or Method
+					{
+						MemberReference memberRef = MetadataMemberReference.FromToken(decoder.Metadata, _token);
+						MemberDefinition memberDef = memberRef.Resolve();
+						if (memberDef is MethodDefinition)
 						{
-							case TokenTypes.TypeDef:
-								n = @"RuntimeTypeHandle";
-								break;
-
-							case TokenTypes.TypeRef:
-								n = @"RuntimeTypeHandle";
-								break;
-
-							case TokenTypes.TypeSpec:
-								n = @"RuntimeTypeHandle";
-								break;
-
-							case TokenTypes.MethodDef:
-								n = @"RuntimeMethodHandle";
-								break;
-
-							case TokenTypes.MemberRef:
-								// Field or Method
-								{
-									MemberReference memberRef = MetadataMemberReference.FromToken(decoder.Metadata, _token);
-									MemberDefinition memberDef = memberRef.Resolve();
-									if (memberDef is MethodDefinition)
-									{
-										n = @"RuntimeMethodHandle";
-									}
-									else if (memberDef is FieldDefinition)
-									{
-										n = @"RuntimeFieldHandle";
-									}
-									else
-									{
-										Debug.Assert(false, @"Failed to determine member reference type in ldtoken.");
-										throw new InvalidOperationException();
-									}
-								}
-								break;
-
-							case TokenTypes.MethodSpec:
-								n = @"RuntimeMethodHandle";
-								break;
-
-							case TokenTypes.Field:
-								n = @"RuntimeFieldHandle";
-								break;
-
-							default:
-								throw new NotImplementedException();
+							n = @"RuntimeMethodHandle";
 						}
+						else if (memberDef is FieldDefinition)
+						{
+							n = @"RuntimeFieldHandle";
+						}
+						else
+						{
+							Debug.Assert(false, @"Failed to determine member reference type in ldtoken.");
+							throw new InvalidOperationException();
+						}
+					}
+					break;
 
-						typeRef = MetadataTypeReference.FromName(decoder.Metadata, @"System", n);
-						if (null == typeRef)
-							typeRef = MetadataTypeDefinition.FromName(decoder.Metadata, @"System", n);
+				case TokenTypes.MethodSpec:
+					n = @"RuntimeMethodHandle";
+					break;
 
-						// Set the result
-						Debug.Assert(null != typeRef, @"ldtoken: Failed to retrieve type reference.");
-						_results[0] = CreateResultOperand(typeRef);
+				case TokenTypes.Field:
+					n = @"RuntimeFieldHandle";
+					break;
+
+				default:
+					throw new NotImplementedException();
+			}
+
+			typeRef = MetadataTypeReference.FromName(decoder.Metadata, @"System", n);
+			if (null == typeRef)
+				typeRef = MetadataTypeDefinition.FromName(decoder.Metadata, @"System", n);
+
+			// Set the result
+			Debug.Assert(null != typeRef, @"ldtoken: Failed to retrieve type reference.");
+			_results[0] = CreateResultOperand(typeRef);
 			 */
+		}
+
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(CILVisitor vistor, Context context)
+		{
+			vistor.Ldtoken(context);
 		}
 
 		/// <summary>

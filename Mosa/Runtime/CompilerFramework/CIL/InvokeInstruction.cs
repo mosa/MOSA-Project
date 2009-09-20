@@ -136,11 +136,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 		}
 
-
-		#endregion Methods
-
-		#region Methods
-
 		/// <summary>
 		/// Decodes the invocation target.
 		/// </summary>

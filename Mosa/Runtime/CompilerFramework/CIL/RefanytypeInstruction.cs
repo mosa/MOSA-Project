@@ -51,6 +51,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			instruction.Result = decoder.Compiler.CreateTemporary(new SigType(CilElementType.I4));
 		}
 
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(CILVisitor vistor, Context context)
+		{
+			vistor.Refanytype(context);
+		}
+
 		#endregion Methods
 
 	}

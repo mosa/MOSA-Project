@@ -46,7 +46,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Simple result is the same type as the unary argument
 			instruction.Result = compiler.CreateTemporary(instruction.Operand1.Type);
+		}
 
+
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(CILVisitor vistor, Context context)
+		{
+			vistor.UnaryArithmetic(context);
 		}
 
 		#endregion // Methods Overrides

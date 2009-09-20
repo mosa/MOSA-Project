@@ -32,7 +32,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-		#region Methods Overrides
+		#region Methods 
+		
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(CILVisitor vistor, Context context)
+		{
+			vistor.Sub(context);
+		}
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
@@ -46,7 +56,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			return String.Format("{0} ; {1} = {2} - {3}", base.ToString(), instruction.Result, instruction.Operand1, instruction.Operand2);
 		}
 
-		#endregion // Methods Overrides
+		#endregion // Methods 
 
 	}
 }

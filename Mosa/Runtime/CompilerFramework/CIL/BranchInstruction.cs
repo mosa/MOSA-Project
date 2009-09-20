@@ -93,6 +93,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			return String.Format("{0} ; L_{1:X4}", base.ToString(), instruction.Branch.Targets[0]);
 		}
 
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(CILVisitor vistor, Context context)
+		{
+			vistor.Branch(context);
+		}
+
 		#endregion Methods
 
 		/// <summary>

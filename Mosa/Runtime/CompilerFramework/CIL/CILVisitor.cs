@@ -13,444 +13,370 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="ArgType">The type of the rg type.</typeparam>
-    public interface CILVisitor<ArgType> : IInstructionVisitor<ArgType>
-    {
-        /// <summary>
-        /// Nops the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Nop(NopInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Breaks the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Break(BreakInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Ldargs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldarg(LdargInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Ldargas the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldarga(LdargaInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Ldlocs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldloc(LdlocInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Ldlocas the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldloca(LdlocaInstruction instruction, ArgType arg);
-        /// <summary>
-        /// LDCs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldc(LdcInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Ldobjs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldobj(LdobjInstruction instruction, ArgType arg);
-        /// <summary>
-        /// LDSTRs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldstr(LdstrInstruction instruction, ArgType arg);
-        /// <summary>
-        /// LDFLDs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldfld(LdfldInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Ldfldas the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldflda(LdfldaInstruction instruction, ArgType arg);
-        /// <summary>
-        /// LDSFLDs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldsfld(LdsfldInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Ldsfldas the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldsflda(LdsfldaInstruction instruction, ArgType arg);
-        /// <summary>
-        /// LDFTNs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldftn(LdftnInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Ldvirtftns the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldvirtftn(LdvirtftnInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Ldtokens the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldtoken(LdtokenInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Stlocs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Stloc(StlocInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Stargs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Starg(StargInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Stobjs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Stobj(StobjInstruction instruction, ArgType arg);
-        /// <summary>
-        /// STFLDs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Stfld(StfldInstruction instruction, ArgType arg);
-        /// <summary>
-        /// STSFLDs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Stsfld(StsfldInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Dups the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Dup(DupInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Pops the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Pop(PopInstruction instruction, ArgType arg);
-        /// <summary>
-        /// JMPs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Jmp(JumpInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Calls the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Call(CallInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Callis the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Calli(CalliInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Rets the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ret(ReturnInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Brancs the dh.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Branch(BranchInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Unaries the branch.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void UnaryBranch(UnaryBranchInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Binaries the branch.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void BinaryBranch(BinaryBranchInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Switches the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Switch(SwitchInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Binaries the logic.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void BinaryLogic(BinaryLogicInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Shifts the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Shift(ShiftInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Negs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Neg(NegInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Nots the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Not(NotInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Conversions the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Conversion(ConversionInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Callvirts the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Callvirt(CallvirtInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Cpobjs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Cpobj(CpobjInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Newobjs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Newobj(NewobjInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Castclasses the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Castclass(CastclassInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Isinsts the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Isinst(IsInstInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Unboxes the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Unbox(UnboxInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Throws the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Throw(ThrowInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Boxes the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Box(BoxInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Newarrs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Newarr(NewarrInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Ldlens the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldlen(LdlenInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Ldelemas the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldelema(LdelemaInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Ldelems the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Ldelem(LdelemInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Stelems the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Stelem(StelemInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Unboxes any.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void UnboxAny(UnboxAnyInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Refanyvals the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Refanyval(RefanyvalInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Unaries the arithmetic.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void UnaryArithmetic(UnaryArithmeticInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Mkrefanies the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Mkrefany(MkrefanyInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Arithmetics the overflow.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void ArithmeticOverflow(ArithmeticOverflowInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Endfinallies the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Endfinally(EndfinallyInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Leaves the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Leave(LeaveInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Arglists the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Arglist(ArglistInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Binaries the comparison.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void BinaryComparison(BinaryComparisonInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Localallocs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Localalloc(LocalallocInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Endfilters the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Endfilter(EndfilterInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Inits the obj.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void InitObj(InitObjInstruction instruction, ArgType arg);
-        /// <summary>
-        /// CPBLKs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Cpblk(CpblkInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Initblks the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Initblk(InitblkInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Prefixes the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Prefix(PrefixInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Rethrows the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Rethrow(RethrowInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Sizeofs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Sizeof(SizeofInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Refanytypes the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Refanytype(RefanytypeInstruction instruction, ArgType arg);
-
-        /// <summary>
-        /// Adds the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Add(AddInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Subs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Sub(SubInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Muls the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Mul(MulInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Divs the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Div(DivInstruction instruction, ArgType arg);
-        /// <summary>
-        /// Rems the specified instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="arg">The arg.</param>
-        void Rem(RemInstruction instruction, ArgType arg);
-    }
+	/// <summary>
+	/// 
+	/// </summary>
+	public interface CILVisitor
+	{
+		/// <summary>
+		/// Nops the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Nop(Context ctx);
+		/// <summary>
+		/// Breaks the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Break(Context ctx);
+		/// <summary>
+		/// Ldargs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldarg(Context ctx);
+		/// <summary>
+		/// Ldargas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldarga(Context ctx);
+		/// <summary>
+		/// Ldlocs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldloc(Context ctx);
+		/// <summary>
+		/// Ldlocas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldloca(Context ctx);
+		/// <summary>
+		/// LDCs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldc(Context ctx);
+		/// <summary>
+		/// Ldobjs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldobj(Context ctx);
+		/// <summary>
+		/// LDSTRs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldstr(Context ctx);
+		/// <summary>
+		/// LDFLDs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldfld(Context ctx);
+		/// <summary>
+		/// Ldfldas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldflda(Context ctx);
+		/// <summary>
+		/// LDSFLDs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldsfld(Context ctx);
+		/// <summary>
+		/// Ldsfldas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldsflda(Context ctx);
+		/// <summary>
+		/// LDFTNs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldftn(Context ctx);
+		/// <summary>
+		/// Ldvirtftns the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldvirtftn(Context ctx);
+		/// <summary>
+		/// Ldtokens the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldtoken(Context ctx);
+		/// <summary>
+		/// Stlocs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Stloc(Context ctx);
+		/// <summary>
+		/// Stargs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Starg(Context ctx);
+		/// <summary>
+		/// Stobjs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Stobj(Context ctx);
+		/// <summary>
+		/// STFLDs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Stfld(Context ctx);
+		/// <summary>
+		/// STSFLDs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Stsfld(Context ctx);
+		/// <summary>
+		/// Dups the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Dup(Context ctx);
+		/// <summary>
+		/// Pops the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Pop(Context ctx);
+		/// <summary>
+		/// JMPs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Jmp(Context ctx);
+		/// <summary>
+		/// Calls the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Call(Context ctx);
+		/// <summary>
+		/// Callis the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Calli(Context ctx);
+		/// <summary>
+		/// Rets the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ret(Context ctx);
+		/// <summary>
+		/// Brancs the dh.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Branch(Context ctx);
+		/// <summary>
+		/// Unaries the branch.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void UnaryBranch(Context ctx);
+		/// <summary>
+		/// Binaries the branch.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void BinaryBranch(Context ctx);
+		/// <summary>
+		/// Switches the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Switch(Context ctx);
+		/// <summary>
+		/// Binaries the logic.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void BinaryLogic(Context ctx);
+		/// <summary>
+		/// Shifts the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Shift(Context ctx);
+		/// <summary>
+		/// Negs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Neg(Context ctx);
+		/// <summary>
+		/// Nots the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Not(Context ctx);
+		/// <summary>
+		/// Conversions the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Conversion(Context ctx);
+		/// <summary>
+		/// Callvirts the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Callvirt(Context ctx);
+		/// <summary>
+		/// Cpobjs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Cpobj(Context ctx);
+		/// <summary>
+		/// Newobjs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Newobj(Context ctx);
+		/// <summary>
+		/// Castclasses the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Castclass(Context ctx);
+		/// <summary>
+		/// Isinsts the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Isinst(Context ctx);
+		/// <summary>
+		/// Unboxes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Unbox(Context ctx);
+		/// <summary>
+		/// Throws the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Throw(Context ctx);
+		/// <summary>
+		/// Boxes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Box(Context ctx);
+		/// <summary>
+		/// Newarrs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Newarr(Context ctx);
+		/// <summary>
+		/// Ldlens the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldlen(Context ctx);
+		/// <summary>
+		/// Ldelemas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldelema(Context ctx);
+		/// <summary>
+		/// Ldelems the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Ldelem(Context ctx);
+		/// <summary>
+		/// Stelems the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Stelem(Context ctx);
+		/// <summary>
+		/// Unboxes any.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void UnboxAny(Context ctx);
+		/// <summary>
+		/// Refanyvals the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Refanyval(Context ctx);
+		/// <summary>
+		/// Unaries the arithmetic.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void UnaryArithmetic(Context ctx);
+		/// <summary>
+		/// Mkrefanies the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Mkrefany(Context ctx);
+		/// <summary>
+		/// Arithmetics the overflow.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void ArithmeticOverflow(Context ctx);
+		/// <summary>
+		/// Endfinallies the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Endfinally(Context ctx);
+		/// <summary>
+		/// Leaves the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Leave(Context ctx);
+		/// <summary>
+		/// Arglists the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Arglist(Context ctx);
+		/// <summary>
+		/// Binaries the comparison.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void BinaryComparison(Context ctx);
+		/// <summary>
+		/// Localallocs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Localalloc(Context ctx);
+		/// <summary>
+		/// Endfilters the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Endfilter(Context ctx);
+		/// <summary>
+		/// Inits the obj.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void InitObj(Context ctx);
+		/// <summary>
+		/// CPBLKs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Cpblk(Context ctx);
+		/// <summary>
+		/// Initblks the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Initblk(Context ctx);
+		/// <summary>
+		/// Prefixes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Prefix(Context ctx);
+		/// <summary>
+		/// Rethrows the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Rethrow(Context ctx);
+		/// <summary>
+		/// Sizeofs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Sizeof(Context ctx);
+		/// <summary>
+		/// Refanytypes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Refanytype(Context ctx);
+		/// <summary>
+		/// Adds the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Add(Context ctx);
+		/// <summary>
+		/// Subs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Sub(Context ctx);
+		/// <summary>
+		/// Muls the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Mul(Context ctx);
+		/// <summary>
+		/// Divs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Div(Context ctx);
+		/// <summary>
+		/// Rems the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void Rem(Context ctx);
+	}
 }

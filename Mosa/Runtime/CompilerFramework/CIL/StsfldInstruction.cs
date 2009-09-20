@@ -35,7 +35,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-		#region Methods Overrides
+		#region Methods
 
 		/// <summary>
 		/// Decodes the specified instruction.
@@ -56,6 +56,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(CILVisitor vistor, Context context)
+		{
+			vistor.Stsfld(context);
+		}
+
+		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
@@ -67,7 +77,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			return String.Format("IL stsfld ; {0}.{1} = {2}", instruction.RuntimeField.DeclaringType.FullName, instruction.RuntimeField.Name, instruction.Operand1);
 		}
 
-		#endregion // Methods Overrides
+		#endregion // Methods
 
 	}
 }

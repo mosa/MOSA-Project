@@ -57,6 +57,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// instruction.Result = CreateResultOperand(NativeTypeReference.NativeInt);
 		}
 
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(CILVisitor vistor, Context context)
+		{
+			vistor.Ldvirtftn(context);
+		}
+
 		#endregion Methods
 
 	}

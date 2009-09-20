@@ -32,5 +32,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
+		#region Methods
+
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(CILVisitor vistor, Context context)
+		{
+			vistor.Nop(context);
+		}
+
+		#endregion // Methods
+
 	}
 }

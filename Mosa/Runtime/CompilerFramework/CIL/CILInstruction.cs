@@ -149,6 +149,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			get { return FlowControl.Next; }
 		}
 
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public virtual void Visit(CILVisitor vistor, Context context)
+		{
+		}
+		
 		#endregion Methods
 
 		#region  Overrides

@@ -44,8 +44,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-
-
 		#region Methods
 
 		/// <summary>
@@ -111,6 +109,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			instruction.Result = compiler.CreateTemporary(resultType);
+		}
+
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(CILVisitor vistor, Context context)
+		{
+			vistor.Conversion(context);
 		}
 
 		#endregion Methods

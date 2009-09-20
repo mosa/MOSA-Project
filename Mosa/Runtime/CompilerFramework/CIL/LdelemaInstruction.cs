@@ -46,7 +46,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ref instruction, decoder);
 
-
 			// Load the immediate argument
 			// Retrieve the provider token to check against
 			TokenTypes token;
@@ -56,6 +55,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				TypeReference targetType = MetadataTypeReference.FromToken(decoder.Metadata, token);
 				_results[0] = CreateResultOperand(new ReferenceTypeSpecification(targetType));
 			 */
+		}
+
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(CILVisitor vistor, Context context)
+		{
+			vistor.Ldelema(context);
 		}
 
 		/// <summary>

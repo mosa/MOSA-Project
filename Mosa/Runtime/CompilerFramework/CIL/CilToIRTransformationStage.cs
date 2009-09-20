@@ -27,7 +27,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// </remarks>
 	public sealed class CilToIrTransformationStage :
 		CodeTransformationStage,
-		CILVisitor<Context>
+		CILVisitor
 	{
 		#region IMethodCompilerStage Members
 
@@ -50,134 +50,242 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // IMethodCompilerStage Members
 
-		#region CILVisitor<Context> Members
+		#region Members
 
-		void CILVisitor<Context>.Nop(NopInstruction instruction, Context ctx)
+		/// <summary>
+		/// Nops the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Nop(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Break(BreakInstruction instruction, Context ctx)
+		/// <summary>
+		/// Breaks the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Break(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Ldarg(LdargInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldargs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldarg(Context ctx)
 		{
-			ProcessLoadInstruction(instruction, ctx);
+			ProcessLoadInstruction(ctx);
 		}
 
-		void CILVisitor<Context>.Ldarga(LdargaInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldargas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldarga(Context ctx)
 		{
 			Replace(ctx, new AddressOfInstruction(ctx.InstructionSet.Data[ctx.Index].Result, ctx.InstructionSet.Data[ctx.Index].Operand1));
 		}
 
-		void CILVisitor<Context>.Ldloc(LdlocInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldlocs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldloc(Context ctx)
 		{
-			ProcessLoadInstruction(instruction, ctx);
+			ProcessLoadInstruction(ctx);
 		}
 
-		void CILVisitor<Context>.Ldloca(LdlocaInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldlocas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldloca(Context ctx)
 		{
 			Replace(ctx, new AddressOfInstruction(ctx.Result, ctx.Operand1));
 		}
 
-		void CILVisitor<Context>.Ldc(LdcInstruction instruction, Context ctx)
+		/// <summary>
+		/// LDCs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldc(Context ctx)
 		{
-			ProcessLoadInstruction(instruction, ctx);
+			ProcessLoadInstruction(ctx);
 		}
 
-		void CILVisitor<Context>.Ldobj(LdobjInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldobjs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldobj(Context ctx)
 		{
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 			Replace(ctx, new IR.LoadInstruction(ctx.Result, ctx.Operand1));
 		}
 
-		void CILVisitor<Context>.Ldstr(LdstrInstruction instruction, Context ctx)
+		/// <summary>
+		/// LDSTRs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldstr(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Ldfld(LdfldInstruction instruction, Context ctx)
+		/// <summary>
+		/// LDFLDs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldfld(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Ldflda(LdfldaInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldfldas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldflda(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Ldsfld(LdsfldInstruction instruction, Context ctx)
+		/// <summary>
+		/// LDSFLDs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldsfld(Context ctx)
 		{
 			Replace(ctx, new MoveInstruction(ctx.Result, new MemberOperand(ctx.RuntimeField)));
 		}
 
-		void CILVisitor<Context>.Ldsflda(LdsfldaInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldsfldas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldsflda(Context ctx)
 		{
 			Replace(ctx, new AddressOfInstruction(ctx.Result, ctx.Operand1));
 		}
 
-		void CILVisitor<Context>.Ldftn(LdftnInstruction instruction, Context ctx)
+		/// <summary>
+		/// LDFTNs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldftn(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.GetFunctionPtr);
 		}
 
-		void CILVisitor<Context>.Ldvirtftn(LdvirtftnInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldvirtftns the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldvirtftn(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.GetVirtualFunctionPtr);
 		}
 
-		void CILVisitor<Context>.Ldtoken(LdtokenInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldtokens the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldtoken(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.GetHandleForToken);
 		}
 
-		void CILVisitor<Context>.Stloc(StlocInstruction instruction, Context ctx)
+		/// <summary>
+		/// Stlocs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Stloc(Context ctx)
 		{
-			ProcessStoreInstruction(instruction, ctx);
+			ProcessStoreInstruction(ctx);
 		}
 
-		void CILVisitor<Context>.Starg(StargInstruction instruction, Context ctx)
+		/// <summary>
+		/// Stargs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Starg(Context ctx)
 		{
-			ProcessStoreInstruction(instruction, ctx);
+			ProcessStoreInstruction(ctx);
 		}
 
-		void CILVisitor<Context>.Stobj(StobjInstruction instruction, Context ctx)
+		/// <summary>
+		/// Stobjs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Stobj(Context ctx)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
 			Replace(ctx, new Mosa.Runtime.CompilerFramework.IR.StoreInstruction(ctx.Operand1, ctx.Operand2));
 		}
 
-		void CILVisitor<Context>.Stfld(StfldInstruction instruction, Context ctx)
+		/// <summary>
+		/// STFLDs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Stfld(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Stsfld(StsfldInstruction instruction, Context ctx)
+		/// <summary>
+		/// STSFLDs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Stsfld(Context ctx)
 		{
 			Replace(ctx, new MoveInstruction(new MemberOperand(ctx.RuntimeField), ctx.Operand1));
 		}
 
-		void CILVisitor<Context>.Dup(DupInstruction instruction, Context ctx)
+		/// <summary>
+		/// Dups the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Dup(Context ctx)
 		{
 			// We don't need the dup anymore.
 			Remove(ctx);
 		}
 
-		void CILVisitor<Context>.Pop(PopInstruction instruction, Context ctx)
+		/// <summary>
+		/// Pops the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Pop(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Jmp(JumpInstruction instruction, Context ctx)
+		/// <summary>
+		/// JMPs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Jmp(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Call(CallInstruction instruction, Context ctx)
+		/// <summary>
+		/// Calls the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Call(Context ctx)
 		{
-			ProcessRedirectableInvokeInstruction(instruction, ctx);
+			ProcessRedirectableInvokeInstruction(ctx);
 		}
 
-		void CILVisitor<Context>.Calli(CalliInstruction instruction, Context ctx)
+		/// <summary>
+		/// Callis the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Calli(Context ctx)
 		{
-			ProcessInvokeInstruction(instruction, ctx);
+			ProcessInvokeInstruction(ctx);
 		}
 
-		void CILVisitor<Context>.Ret(ReturnInstruction instruction, Context ctx)
+		/// <summary>
+		/// Rets the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ret(Context ctx)
 		{
 			if (ctx.OperandCount == 1)
 				Replace(ctx, new IR.ReturnInstruction(ctx.Operand1));
@@ -185,26 +293,46 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				Replace(ctx, new IR.ReturnInstruction());
 		}
 
-		void CILVisitor<Context>.Branch(BranchInstruction instruction, Context ctx)
+		/// <summary>
+		/// Brancs the dh.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Branch(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.UnaryBranch(UnaryBranchInstruction instruction, Context ctx)
+		/// <summary>
+		/// Unaries the branch.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void UnaryBranch(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.BinaryBranch(BinaryBranchInstruction instruction, Context ctx)
+		/// <summary>
+		/// Binaries the branch.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void BinaryBranch(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Switch(SwitchInstruction instruction, Context ctx)
+		/// <summary>
+		/// Switches the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Switch(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.BinaryLogic(BinaryLogicInstruction instruction, Context ctx)
+		/// <summary>
+		/// Binaries the logic.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void BinaryLogic(Context ctx)
 		{
 			Type type;
-			switch (instruction.OpCode) {
+			switch ((ctx.Instruction as CILInstruction).OpCode) {
 				case OpCode.And:
 					type = typeof(LogicalAndInstruction);
 					break;
@@ -233,10 +361,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			Replace(ctx, result);
 		}
 
-		void CILVisitor<Context>.Shift(ShiftInstruction instruction, Context ctx)
+		/// <summary>
+		/// Shifts the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Shift(Context ctx)
 		{
 			Type replType;
-			switch (instruction.OpCode) {
+			switch ((ctx.Instruction as CILInstruction).OpCode) {
 				case OpCode.Shl:
 					replType = typeof(ShiftLeftInstruction);
 					break;
@@ -257,33 +389,57 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			Replace(ctx, result);
 		}
 
-		void CILVisitor<Context>.Neg(NegInstruction instruction, Context ctx)
+		/// <summary>
+		/// Negs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Neg(Context ctx)
 		{
 			Replace(ctx, new[] {
                 Architecture.CreateInstruction(typeof(SubInstruction), OpCode.Sub, ctx.Result, ctx.Operand1) 
             });
 		}
 
-		void CILVisitor<Context>.Not(NotInstruction instruction, Context ctx)
+		/// <summary>
+		/// Nots the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Not(Context ctx)
 		{
 			Replace(ctx, Architecture.CreateInstruction(typeof(LogicalNotInstruction), ctx.Result, ctx.Operand1));
 		}
 
-		void CILVisitor<Context>.Conversion(ConversionInstruction instruction, Context ctx)
+		/// <summary>
+		/// Conversions the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Conversion(Context ctx)
 		{
-			ProcessConversionInstruction(instruction, ctx);
+			ProcessConversionInstruction(ctx);
 		}
 
-		void CILVisitor<Context>.Callvirt(CallvirtInstruction instruction, Context ctx)
+		/// <summary>
+		/// Callvirts the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Callvirt(Context ctx)
 		{
-			ProcessInvokeInstruction(instruction, ctx);
+			ProcessInvokeInstruction(ctx);
 		}
 
-		void CILVisitor<Context>.Cpobj(CpobjInstruction instruction, Context ctx)
+		/// <summary>
+		/// Cpobjs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Cpobj(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Newobj(NewobjInstruction instruction, Context ctx)
+		/// <summary>
+		/// Newobjs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Newobj(Context ctx)
 		{
 			/* FIXME:
 			 * 
@@ -302,90 +458,166 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			 */
 		}
 
-		void CILVisitor<Context>.Castclass(CastclassInstruction instruction, Context ctx)
+		/// <summary>
+		/// Castclasses the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Castclass(Context ctx)
 		{
 			// We don't need to check the result, if the icall fails, it'll happily throw
 			// the InvalidCastException.
 			ReplaceWithInternalCall(ctx, VmCall.Castclass);
 		}
 
-		void CILVisitor<Context>.Isinst(IsInstInstruction instruction, Context ctx)
+		/// <summary>
+		/// Isinsts the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Isinst(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.IsInstanceOfType);
 		}
 
-		void CILVisitor<Context>.Unbox(UnboxInstruction instruction, Context ctx)
+		/// <summary>
+		/// Unboxes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Unbox(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.Unbox);
 		}
 
-		void CILVisitor<Context>.Throw(ThrowInstruction instruction, Context ctx)
+		/// <summary>
+		/// Throws the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Throw(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.Throw);
 		}
 
-		void CILVisitor<Context>.Box(BoxInstruction instruction, Context ctx)
+		/// <summary>
+		/// Boxes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Box(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.Box);
 		}
 
-		void CILVisitor<Context>.Newarr(NewarrInstruction instruction, Context ctx)
+		/// <summary>
+		/// Newarrs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Newarr(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.Allocate);
 		}
 
-		void CILVisitor<Context>.Ldlen(LdlenInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldlens the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldlen(Context ctx)
 		{
 			// FIXME
 		}
 
-		void CILVisitor<Context>.Ldelema(LdelemaInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldelemas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldelema(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Ldelem(LdelemInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldelems the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldelem(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Stelem(StelemInstruction instruction, Context ctx)
+		/// <summary>
+		/// Stelems the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Stelem(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.UnboxAny(UnboxAnyInstruction instruction, Context ctx)
+		/// <summary>
+		/// Unboxes any.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void UnboxAny(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Refanyval(RefanyvalInstruction instruction, Context ctx)
+		/// <summary>
+		/// Refanyvals the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Refanyval(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.UnaryArithmetic(UnaryArithmeticInstruction instruction, Context ctx)
+		/// <summary>
+		/// Unaries the arithmetic.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void UnaryArithmetic(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Mkrefany(MkrefanyInstruction instruction, Context ctx)
+		/// <summary>
+		/// Mkrefanies the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Mkrefany(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.ArithmeticOverflow(ArithmeticOverflowInstruction instruction, Context ctx)
+		/// <summary>
+		/// Arithmetics the overflow.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void ArithmeticOverflow(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Endfinally(EndfinallyInstruction instruction, Context ctx)
+		/// <summary>
+		/// Endfinallies the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Endfinally(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Leave(LeaveInstruction instruction, Context ctx)
+		/// <summary>
+		/// Leaves the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Leave(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Arglist(ArglistInstruction instruction, Context ctx)
+		/// <summary>
+		/// Arglists the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Arglist(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.BinaryComparison(BinaryComparisonInstruction instruction, Context ctx)
+		/// <summary>
+		/// Binaries the comparison.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void BinaryComparison(Context ctx)
 		{
-			ConditionCode code = GetConditionCode(instruction.OpCode);
+			ConditionCode code = GetConditionCode((ctx.Instruction as CILInstruction).OpCode);
 			Operand op1 = ctx.Operand1;
 			if (op1.StackType == StackTypeCode.F) {
 				Replace(ctx, new FloatingPointCompareInstruction(ctx.Result, op1, code, ctx.Operand1));
@@ -395,62 +627,118 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 		}
 
-		void CILVisitor<Context>.Localalloc(LocalallocInstruction instruction, Context ctx)
+		/// <summary>
+		/// Localallocs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Localalloc(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Endfilter(EndfilterInstruction instruction, Context ctx)
+		/// <summary>
+		/// Endfilters the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Endfilter(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.InitObj(InitObjInstruction instruction, Context ctx)
+		/// <summary>
+		/// Inits the obj.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void InitObj(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Cpblk(CpblkInstruction instruction, Context ctx)
+		/// <summary>
+		/// CPBLKs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Cpblk(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.Memcpy);
 		}
 
-		void CILVisitor<Context>.Initblk(InitblkInstruction instruction, Context ctx)
+		/// <summary>
+		/// Initblks the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Initblk(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.Memset);
 		}
 
-		void CILVisitor<Context>.Prefix(PrefixInstruction instruction, Context ctx)
+		/// <summary>
+		/// Prefixes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Prefix(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Rethrow(RethrowInstruction instruction, Context ctx)
+		/// <summary>
+		/// Rethrows the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Rethrow(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.Rethrow);
 		}
 
-		void CILVisitor<Context>.Sizeof(SizeofInstruction instruction, Context ctx)
+		/// <summary>
+		/// Sizeofs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Sizeof(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Refanytype(RefanytypeInstruction instruction, Context ctx)
+		/// <summary>
+		/// Refanytypes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Refanytype(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Add(AddInstruction instruction, Context ctx)
+		/// <summary>
+		/// Adds the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Add(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Sub(SubInstruction instruction, Context ctx)
+		/// <summary>
+		/// Subs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Sub(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Mul(MulInstruction instruction, Context ctx)
+		/// <summary>
+		/// Muls the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Mul(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Div(DivInstruction instruction, Context ctx)
+		/// <summary>
+		/// Divs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Div(Context ctx)
 		{
 		}
 
-		void CILVisitor<Context>.Rem(RemInstruction instruction, Context ctx)
+		/// <summary>
+		/// Rems the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Rem(Context ctx)
 		{
 		}
 
@@ -783,9 +1071,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Selects the appropriate IR conversion instruction.
 		/// </summary>
-		/// <param name="instruction">The IL conversion instruction.</param>
 		/// <param name="ctx">The transformation context.</param>
-		private void ProcessConversionInstruction(ConversionInstruction instruction, Context ctx)
+		private void ProcessConversionInstruction(Context ctx)
 		{
 			Operand dest = ctx.Result;
 			Operand src = ctx.Operand1;
@@ -913,14 +1200,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Processes redirectable method call instructions.
 		/// </summary>
-		/// <param name="instruction">The call instruction.</param>
 		/// <param name="ctx">The transformation context.</param>
 		/// <remarks>
 		/// This method checks if the call target has an Intrinsic-Attribute applied with
 		/// the current architecture. If it has, the method call is replaced by the specified
 		/// native instruction.
 		/// </remarks>
-		private void ProcessRedirectableInvokeInstruction(CallInstruction instruction, Context ctx)
+		private void ProcessRedirectableInvokeInstruction(Context ctx)
 		{
 			// Retrieve the invocation target
 			RuntimeMethod rm = ctx.InvokeTarget;
@@ -967,7 +1253,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			if (replacement == null)
-				ProcessInvokeInstruction(instruction, ctx);
+				ProcessInvokeInstruction(ctx);
 			else
 				Replace(ctx, replacement);
 		}
@@ -975,9 +1261,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Processes a method call instruction.
 		/// </summary>
-		/// <param name="instruction">The call instruction.</param>
 		/// <param name="ctx">The transformation context.</param>
-		private void ProcessInvokeInstruction(InvokeInstruction instruction, Context ctx)
+		private void ProcessInvokeInstruction(Context ctx)
 		{
 			/* FIXME: Check for IntrinsicAttribute and replace the invoke instruction with the intrinsic,
 			 * if necessary.
@@ -988,51 +1273,49 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Replaces the IL load instruction by an appropriate IR move instruction or removes it entirely, if
 		/// it is a native size.
 		/// </summary>
-		/// <param name="load">The IL load instruction to process.</param>
 		/// <param name="ctx">Provides the transformation context.</param>
-		private void ProcessLoadInstruction(LoadInstruction load, Context ctx)
+		private void ProcessLoadInstruction(Context ctx)
 		{
 			// We don't need to rewire the source/destination yet, its already there. :(
 			Remove(ctx);
 
 			/* FIXME: This is only valid with reg alloc!
-						Type type = null;
+			Type type = null;
 
-						load = load as LoadInstruction;
+			load = load as LoadInstruction;
 
-						// Is this a sign or zero-extending move?
-						if (true == IsSignExtending(load.Source))
-						{
-							type = typeof(IR.SignExtendedMoveInstruction);
-						}
-						else if (true == IsZeroExtending(load.Source))
-						{
-							type = typeof(IR.ZeroExtendedMoveInstruction);
-						}
+			// Is this a sign or zero-extending move?
+			if (true == IsSignExtending(load.Source))
+			{
+				type = typeof(IR.SignExtendedMoveInstruction);
+			}
+			else if (true == IsZeroExtending(load.Source))
+			{
+				type = typeof(IR.ZeroExtendedMoveInstruction);
+			}
 
-						// Do we have a move replacement?
-						if (null == type)
-						{
-							// No, we can safely drop the load instruction and can rewire the operands.
-							/*if (1 == load.Destination.Definitions.Count && 1 == load.Destination.Uses.Count)
-							{
-								load.Destination.Replace(load.Source);
-								Remove(ctx);
-							}
-							return;
-						}
-						else
-						{
-							Replace(ctx, Architecture.CreateInstruction(type, load.Destination, load.Source));
-						}*/
+			// Do we have a move replacement?
+			if (null == type)
+			{
+				// No, we can safely drop the load instruction and can rewire the operands.
+				/*if (1 == load.Destination.Definitions.Count && 1 == load.Destination.Uses.Count)
+				{
+					load.Destination.Replace(load.Source);
+					Remove(ctx);
+				}
+				return;
+			}
+			else
+			{
+				Replace(ctx, Architecture.CreateInstruction(type, load.Destination, load.Source));
+			}*/
 		}
 
 		/// <summary>
 		/// Replaces the IL store instruction by an appropriate IR move instruction.
 		/// </summary>
-		/// <param name="store">The IL store instruction to replace.</param>
 		/// <param name="ctx">Provides the transformation context.</param>
-		private void ProcessStoreInstruction(StoreInstruction store, Context ctx)
+		private void ProcessStoreInstruction(Context ctx)
 		{
 			// Do we need to truncate the value?
 			if (IsTruncating(ctx.Result, ctx.Operand1)) {

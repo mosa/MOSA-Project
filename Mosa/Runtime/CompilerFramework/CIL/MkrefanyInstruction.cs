@@ -47,17 +47,27 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ref instruction, decoder);
 
-            // Retrieve a type reference From the immediate argument
-            // FIXME: Limit the token types
-            TokenTypes token;
-            decoder.Decode(out token);
-            throw new NotImplementedException();
-/*
-            _typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
-            _results[0] = CreateResultOperand(MetadataTypeReference.FromName(decoder.Metadata, @"System", @"TypedReference"));
- */
-            // FIXME: Validate the operands
-            // FIXME: Do verification
+			// Retrieve a type reference From the immediate argument
+			// FIXME: Limit the token types
+			TokenTypes token;
+			decoder.Decode(out token);
+			throw new NotImplementedException();
+			/*
+				_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
+				_results[0] = CreateResultOperand(MetadataTypeReference.FromName(decoder.Metadata, @"System", @"TypedReference"));
+			 */
+			// FIXME: Validate the operands
+			// FIXME: Do verification
+		}
+
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(CILVisitor vistor, Context context)
+		{
+			vistor.Mkrefany(context);
 		}
 
 		#endregion Methods
