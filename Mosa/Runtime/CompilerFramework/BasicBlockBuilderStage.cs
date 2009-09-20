@@ -74,13 +74,45 @@ namespace Mosa.Runtime.CompilerFramework
 			AddLeader(0);
 
 			Context ctx = new Context(ip.InstructionSet, 0);
+			AddLeadersIfNeeded(ctx);
 
-			while (!ctx.EndOfInstructions) {
+			basicBlocks.Capacity = leaders.Count + 2;
+
+			// Start with a prologue block...
+			BasicBlock prologue = new BasicBlock(-1);
+			prologue.Index = 0;
+			basicBlocks.Add(prologue);
+
+			// Add a jump instruction to the first block From the prologue
+			prologue.Instructions.Insert(0, arch.CreateInstruction(typeof(BranchInstruction), OpCode.Br, new[] { 0 }));
+
+			// Create the epilogue block
+			BasicBlock epilogue = new BasicBlock(Int32.MaxValue);
+			epilogue.Index = leaders.Count + 1;
+
+			// Add epilogue block to leaders (helps with loop below)
+			leaders.Add(epilogue.Label, epilogue);
+
+			// Link prologue block to the first leader
+			LinkBlocks(prologue, leaders[0]);
+
+			InsertInstructionsIntoBlocks(leaders, compiler, ctx, epilogue);
+			
+
+			// Add the epilogue block
+			basicBlocks.Add(epilogue);
+		}
+		
+		private void AddLeadersIfNeeded(Context ctx)
+		{
+			while (!ctx.EndOfInstructions) 
+			{
 				// Retrieve the instruction
 				ICILInstruction instruction = ctx.Instruction as ICILInstruction;
 
 				// Does this instruction end a block?
-				switch (instruction.FlowControl) {
+				switch (instruction.FlowControl) 
+				{
 					case FlowControl.Break: goto case FlowControl.Next;
 					case FlowControl.Call: goto case FlowControl.Next;
 					case FlowControl.Next: break;
@@ -112,34 +144,31 @@ namespace Mosa.Runtime.CompilerFramework
 						break;
 				}
 			}
+		}
 
-			basicBlocks.Capacity = leaders.Count + 2;
-
-			// Start with a prologue block...
-			BasicBlock prologue = new BasicBlock(-1);
-			prologue.Index = 0;
-			basicBlocks.Add(prologue);
-
-			// Add a jump instruction to the first block From the prologue
-			prologue.Instructions.Insert(0, arch.CreateInstruction(typeof(BranchInstruction), OpCode.Br, new[] { 0 }));
-
-			// Create the epilogue block
-			BasicBlock epilogue = new BasicBlock(Int32.MaxValue);
-			epilogue.Index = leaders.Count + 1;
-
-			// Add epilogue block to leaders (helps with loop below)
-			leaders.Add(epilogue.Label, epilogue);
-
-			// Link prologue block to the first leader
-			LinkBlocks(prologue, leaders[0]);
-
-			// Insert instructions into basic Blocks
+		/// <summary>
+		/// Adds the leader.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		public void AddLeader(int index)
+		{
+			if (!leaders.ContainsKey(index))
+				leaders.Add(index, new BasicBlock(index));
+		}
+		
+		private void InsertInstructionsIntoBlocks(IDictionary<int, BasicBlock> leaders, IMethodCompiler compiler, Context ctx, BasicBlock epilogue)
+		{
+			// Retrieve the instruction provider
+			IInstructionsProvider ip = (IInstructionsProvider)compiler.GetPreviousStage(typeof(IInstructionsProvider));
+			
 			KeyValuePair<int, BasicBlock> current = new KeyValuePair<int, BasicBlock>(-1, null);
 			int blockIndex = 0;
 			int lastInstructionIndex = 0;
 
-			foreach (KeyValuePair<int, BasicBlock> next in leaders) {
-				if (current.Key != -1) {
+			foreach (KeyValuePair<int, BasicBlock> next in leaders) 
+			{
+				if (current.Key != -1) 
+				{
 					// Insert block into list of basic Blocks
 					basicBlocks.Add(current.Value);
 
@@ -151,63 +180,54 @@ namespace Mosa.Runtime.CompilerFramework
 
 					Instruction lastInstruction = ip.Instructions[lastInstructionIndex - 1];
 
-					switch (lastInstruction.FlowControl) {
-						case FlowControl.Break: goto case FlowControl.Next;
-						case FlowControl.Call: goto case FlowControl.Next;
-						case FlowControl.Next:
-							// Insert unconditional branch to next basic block
-
-							Context insert = ctx.InsertAfter();
-							insert.Instruction = Map.GetInstruction(OpCode.Br_s);
-							insert.Branch = new Branch(1);
-							insert.Branch.Targets[0] = next.Key;
-
-							LinkBlocks(current.Value, leaders[next.Key]);
-							break;
-
-						case FlowControl.Return:
-							// Insert unconditional branch to epilogue block
-							LinkBlocks(current.Value, epilogue);
-							break;
-
-						case FlowControl.Switch:
-							// Switch may fall through
-							goto case FlowControl.ConditionalBranch;
-
-						case FlowControl.Branch: goto case FlowControl.ConditionalBranch;
-
-						case FlowControl.ConditionalBranch:
-							// Conditional branch with multiple targets
-							foreach (int target in (lastInstruction as IBranchInstruction).BranchTargets)
-								LinkBlocks(current.Value, leaders[target]);
-							goto case FlowControl.Throw;
-
-						case FlowControl.Throw:
-							// End the block, start a new one on the next statement
-							break;
-
-						default:
-							Debug.Assert(false);
-							break;
-					}
-
+					InsertFlowControl(ctx, lastInstruction, current, next, epilogue);
 				}
 
 				current = next;
 			}
-
-			// Add the epilogue block
-			basicBlocks.Add(epilogue);
 		}
-
-		/// <summary>
-		/// Adds the leader.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		public void AddLeader(int index)
+		
+		private void InsertFlowControl(Context ctx, Instruction lastInstruction, KeyValuePair<int, BasicBlock> current, KeyValuePair<int, BasicBlock> next, BasicBlock epilogue)
 		{
-			if (!leaders.ContainsKey(index))
-				leaders.Add(index, new BasicBlock(index));
+			switch (lastInstruction.FlowControl) 
+			{
+				case FlowControl.Break: goto case FlowControl.Next;
+				case FlowControl.Call: goto case FlowControl.Next;
+				case FlowControl.Next:
+					// Insert unconditional branch to next basic block
+					Context insert = ctx.InsertAfter();
+					insert.Instruction = Map.GetInstruction(OpCode.Br_s);
+					insert.Branch = new Branch(1);
+					insert.Branch.Targets[0] = next.Key;
+
+					LinkBlocks(current.Value, leaders[next.Key]);
+					break;
+
+				case FlowControl.Return:
+					// Insert unconditional branch to epilogue block
+					LinkBlocks(current.Value, epilogue);
+					break;
+
+				case FlowControl.Switch:
+					// Switch may fall through
+					goto case FlowControl.ConditionalBranch;
+
+				case FlowControl.Branch: goto case FlowControl.ConditionalBranch;
+
+				case FlowControl.ConditionalBranch:
+					// Conditional branch with multiple targets
+					foreach (int target in (lastInstruction as IBranchInstruction).BranchTargets)
+						LinkBlocks(current.Value, leaders[target]);
+					goto case FlowControl.Throw;
+
+				case FlowControl.Throw:
+					// End the block, start a new one on the next statement
+					break;
+
+				default:
+					Debug.Assert(false);
+					break;
+			}
 		}
 
 		/// <summary>
