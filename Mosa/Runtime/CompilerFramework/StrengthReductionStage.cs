@@ -165,7 +165,7 @@ namespace Mosa.Runtime.CompilerFramework
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 			
 			if (blockProvider == null)
-				throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
+				throw new InvalidOperationException(@"Instruction stream must be split to basic Blocks.");
 
 			foreach (BasicBlock block in blockProvider.Blocks) {
 				Context ctx = new Context(block);

@@ -165,9 +165,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="context">The context.</param>
 		public virtual void Visit(IVistor vistor, Context context)
 		{
-			Visit(vistor as ICILVisitor, context);
+			if (vistor is ICILVisitor)
+				Visit(vistor as ICILVisitor, context);
 		}
-		
+
 		#endregion Methods
 
 		#region  Overrides
