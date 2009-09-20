@@ -14,7 +14,7 @@ namespace Mosa.Runtime.CompilerFramework.UnitTests
 			InstructionSet set = new InstructionSet(size);
 			
 			Assert.AreEqual(size, set.Size);
-			Assert.AreEqual(size, set.instructions.Length);
+			Assert.AreEqual(size, set.Data.Length);
 		}
 		
 		[Test]
@@ -68,11 +68,47 @@ namespace Mosa.Runtime.CompilerFramework.UnitTests
 			InstructionData second = new InstructionData();
 			second.Offset = 17;
 			
-			set.instructions[index] = first;
+			set.Data[index] = first;
 			//set.instructions[set.InsertAfter(index)] = second;
 			
-			Assert.AreEqual(42, set.instructions[index].Offset);
+			Assert.AreEqual(42, set.Data[index].Offset);
 			//Assert.AreEqual(17, set.instructions[1].Offset);
+		}
+		
+		[Test]
+		public void GetFree()
+		{
+			InstructionSet set = new InstructionSet(10);
+			
+			Assert.AreEqual(0, set.GetFree());
+			
+			for (int i = 0; i < set.Size - 1; ++i)
+				Assert.AreEqual(set.NextArray[i], set.GetFree());
+			Assert.AreEqual(set.NextArray[set.Size - 1], -1);
+		}
+
+		[Test]
+		public void CreateRoot()
+		{
+			InstructionSet set = new InstructionSet(10);
+			int root = set.CreateRoot();
+			
+			Assert.AreEqual(0, root);
+			Assert.AreEqual(-1, set.NextArray[0]);
+			Assert.AreEqual(-1, set.PrevArray[0]);
+		}
+		
+		[Test]
+		public void SetOffset()
+		{
+			System.Random rnd = new System.Random();
+			InstructionSet set = new InstructionSet(10);
+			int index = set.CreateRoot();
+			
+			int offset = rnd.Next();
+			set.SetOffset(index, offset);
+			
+			Assert.AreEqual(offset, set.Data[index].Offset);
 		}
 	}
 }

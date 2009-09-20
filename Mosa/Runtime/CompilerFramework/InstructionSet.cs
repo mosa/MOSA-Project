@@ -186,7 +186,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the free.
 		/// </summary>
 		/// <returns></returns>
-		private int GetFree()
+		public int GetFree()
 		{
 			// TODO: Resize array
 			Debug.Assert(_used != _size, "array too small");
