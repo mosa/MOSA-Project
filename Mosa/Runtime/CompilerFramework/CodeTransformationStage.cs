@@ -187,8 +187,8 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (BasicBlock block in blocks)
 				blockLabels.Add(block.Label, block);
 
-			AddBlockLabels(ref blockLabels, blocks, nextBlock);	
-			AddBlockLabels(ref blockLabels, blocks, currentBlock);
+			AddBlockLabels(blockLabels, blocks, nextBlock);	
+			AddBlockLabels(blockLabels, blocks, currentBlock);
 			UpdateBlocks(blocks, blockLabels);
 		}
 		
