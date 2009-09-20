@@ -189,10 +189,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 			AddBlockLabels(ref blockLabels, blocks, nextBlock);	
 			AddBlockLabels(ref blockLabels, blocks, currentBlock);
-			UpdateBlockLinks(blocks, blockLabels);
+			UpdateBlocks(blocks, blockLabels);
 		}
 		
-		private void AddBlockLabels(ref Dictionary<int, BasicBlock> blockLabels, BasicBlock[] blocks, BasicBlock basicBlock)
+		private void AddBlockLabels(Dictionary<int, BasicBlock> blockLabels, BasicBlock[] blocks, BasicBlock basicBlock)
 		{
 			if (basicBlock != null) {
 				foreach (BasicBlock block in basicBlock.NextBlocks)
@@ -204,25 +204,21 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 		
-		private void UpdateBlockLinks(BasicBlock[] blocks, Dictionary<int, BasicBlock> blockLabels)
+		private void UpdateBlocks(BasicBlock[] blocks, Dictionary<int, BasicBlock> blockLabels)
 		{
 			foreach (BasicBlock block in blocks)
-			{
 				foreach (Instruction instruction in block.Instructions)
-				{
 					if (instruction is IBranchInstruction)
-					{
 						foreach (int label in (instruction as IBranchInstruction).BranchTargets) 
-						{
-							BasicBlock next = blockLabels[label];
-							if (!block.NextBlocks.Contains(next))
-								block.NextBlocks.Add(next);
-							if (!next.PreviousBlocks.Contains(block))
-								next.PreviousBlocks.Add(block);
-						}
-					}
-				}
-			}
+							UpdateBlockLinks(block, blockLabels[label]);
+		}
+		
+		private void UpdateBlockLinks(BasicBlock block, BasicBlock next)
+		{
+			if (!block.NextBlocks.Contains(next))
+				block.NextBlocks.Add(next);
+			if (!next.PreviousBlocks.Contains(block))
+				next.PreviousBlocks.Add(block);
 		}
 
 		/// <summary>
