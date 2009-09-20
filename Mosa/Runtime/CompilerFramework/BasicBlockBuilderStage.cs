@@ -97,28 +97,25 @@ namespace Mosa.Runtime.CompilerFramework
 			LinkBlocks(prologue, leaders[0]);
 
 			InsertInstructionsIntoBlocks(leaders, compiler, ctx, epilogue);
-			
+
 
 			// Add the epilogue block
 			basicBlocks.Add(epilogue);
 		}
-		
+
 		private void AddLeadersIfNeeded(Context ctx)
 		{
-			while (!ctx.EndOfInstructions) 
-			{
+			while (!ctx.EndOfInstructions) {
 				// Retrieve the instruction
 				ICILInstruction instruction = ctx.Instruction as ICILInstruction;
 
 				// Does this instruction end a block?
-				switch (instruction.FlowControl) 
-				{
+				switch (instruction.FlowControl) {
 					case FlowControl.Break: goto case FlowControl.Next;
 					case FlowControl.Call: goto case FlowControl.Next;
 					case FlowControl.Next: break;
 
 					case FlowControl.Return:
-						//if (index + 1 < ip.Instructions.Count)
 						if (!ctx.LastInstruction)
 							AddLeader(ctx.Next.Offset);
 						break;
@@ -134,7 +131,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 					case FlowControl.Throw:
 						// End the block, start a new one on the next statement
-						//if (index + 1 < ip.Instructions.Count)
 						if (!ctx.LastInstruction)
 							AddLeader(ctx.Next.Offset);
 						break;
@@ -155,20 +151,18 @@ namespace Mosa.Runtime.CompilerFramework
 			if (!leaders.ContainsKey(index))
 				leaders.Add(index, new BasicBlock(index));
 		}
-		
+
 		private void InsertInstructionsIntoBlocks(IDictionary<int, BasicBlock> leaders, IMethodCompiler compiler, Context ctx, BasicBlock epilogue)
 		{
 			// Retrieve the instruction provider
 			IInstructionsProvider ip = (IInstructionsProvider)compiler.GetPreviousStage(typeof(IInstructionsProvider));
-			
+
 			KeyValuePair<int, BasicBlock> current = new KeyValuePair<int, BasicBlock>(-1, null);
 			int blockIndex = 0;
 			int lastInstructionIndex = 0;
 
-			foreach (KeyValuePair<int, BasicBlock> next in leaders) 
-			{
-				if (current.Key != -1) 
-				{
+			foreach (KeyValuePair<int, BasicBlock> next in leaders) {
+				if (current.Key != -1) {
 					// Insert block into list of basic Blocks
 					basicBlocks.Add(current.Value);
 
@@ -186,11 +180,10 @@ namespace Mosa.Runtime.CompilerFramework
 				current = next;
 			}
 		}
-		
+
 		private void InsertFlowControl(Context ctx, Instruction lastInstruction, KeyValuePair<int, BasicBlock> current, KeyValuePair<int, BasicBlock> next, BasicBlock epilogue)
 		{
-			switch (lastInstruction.FlowControl) 
-			{
+			switch (lastInstruction.FlowControl) {
 				case FlowControl.Break: goto case FlowControl.Next;
 				case FlowControl.Call: goto case FlowControl.Next;
 				case FlowControl.Next:
@@ -200,6 +193,7 @@ namespace Mosa.Runtime.CompilerFramework
 					insert.Branch = new Branch(1);
 					insert.Branch.Targets[0] = next.Key;
 
+					ctx.SliceAfter();
 					LinkBlocks(current.Value, leaders[next.Key]);
 					break;
 
