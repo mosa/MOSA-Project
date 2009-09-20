@@ -12,11 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Tables;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
-
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
@@ -187,12 +182,12 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (BasicBlock block in blocks)
 				blockLabels.Add(block.Label, block);
 
-			AddBlockLabels(blockLabels, blocks, nextBlock);	
-			AddBlockLabels(blockLabels, blocks, currentBlock);
+			AddBlockLabels(blockLabels, nextBlock);	
+			AddBlockLabels(blockLabels, currentBlock);
 			UpdateBlocks(blocks, blockLabels);
 		}
 		
-		private void AddBlockLabels(Dictionary<int, BasicBlock> blockLabels, BasicBlock[] blocks, BasicBlock basicBlock)
+		private static void AddBlockLabels(IDictionary<int, BasicBlock> blockLabels, BasicBlock basicBlock)
 		{
 			if (basicBlock != null) {
 				foreach (BasicBlock block in basicBlock.NextBlocks)
@@ -204,7 +199,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 		
-		private void UpdateBlocks(BasicBlock[] blocks, Dictionary<int, BasicBlock> blockLabels)
+		private static void UpdateBlocks(BasicBlock[] blocks, IDictionary<int, BasicBlock> blockLabels)
 		{
 			foreach (BasicBlock block in blocks)
 				foreach (Instruction instruction in block.Instructions)
@@ -213,7 +208,7 @@ namespace Mosa.Runtime.CompilerFramework
 							UpdateBlockLinks(block, blockLabels[label]);
 		}
 		
-		private void UpdateBlockLinks(BasicBlock block, BasicBlock next)
+		private static void UpdateBlockLinks(BasicBlock block, BasicBlock next)
 		{
 			if (!block.NextBlocks.Contains(next))
 				block.NextBlocks.Add(next);
