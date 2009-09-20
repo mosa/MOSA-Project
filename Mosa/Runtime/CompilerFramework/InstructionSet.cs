@@ -49,6 +49,54 @@ namespace Mosa.Runtime.CompilerFramework
 		private int _free;
 
 		#endregion // Data Members
+		
+		#region Properties
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public int Size
+		{
+			get
+			{
+				return _size;
+			}
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public int Used
+		{
+			get
+			{
+				return _used;
+			}
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public int[] NextArray
+		{
+			get
+			{
+				return _next;
+			}
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public int[] PrevArray
+		{
+			get
+			{
+				return _prev;
+			}
+		}
+		
+		#endregion
 
 		#region Methods
 
@@ -86,7 +134,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Resizes the specified newsize.
 		/// </summary>
 		/// <param name="newsize">The newsize.</param>
-		private void Resize(int newsize)
+		public void Resize(int newsize)
 		{
 			int[] newNext = new int[newsize];
 			int[] newPrev = new int[newsize];
@@ -186,7 +234,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (index == -1)
 				return CreateRoot();
 
-			Debug.Assert(index > 0);
+			Debug.Assert(index >= 0);
 
 			int free = GetFree();
 
