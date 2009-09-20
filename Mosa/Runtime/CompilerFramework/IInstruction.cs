@@ -18,10 +18,17 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public interface IInstruction
 	{
-		///// <summary>
-		///// Gets the flow control.
-		///// </summary>
-		///// <value>The flow control.</value>
-		//FlowControl FlowControl { get; }
+		/// <summary>
+		/// Gets the flow control.
+		/// </summary>
+		/// <value>The flow control.</value>
+		FlowControl FlowControl { get; }
+
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		void Visit(IVistor vistor, Context context);
 	}
 }

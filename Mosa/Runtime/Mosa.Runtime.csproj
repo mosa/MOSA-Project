@@ -172,6 +172,7 @@
     <Compile Include="CompilerFramework\CIL\UnboxInstruction.cs" />
     <Compile Include="CompilerFramework\Branch.cs" />
     <Compile Include="CompilerFramework\Context.cs" />
+    <Compile Include="CompilerFramework\IVistor.cs" />
     <Compile Include="CompilerFramework\IInstructionVisitor2.cs" />
     <Compile Include="CompilerFramework\IBranch.cs" />
     <Compile Include="CompilerFramework\IIRnstruction.cs" />

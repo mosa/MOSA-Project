@@ -57,5 +57,27 @@ namespace Mosa.Platforms.x86.Platform
 		}
 
 		#endregion // Operand Overrides
+
+		#region HACK // FIXME PG
+
+		// Needs to derive from base class with implements these default methods:
+
+		/// <summary>
+		/// Gets the flow control.
+		/// </summary>
+		/// <value>The flow control.</value>
+		public FlowControl FlowControl { get { return FlowControl.Next; } }
+
+
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public void Visit(IVistor vistor, Context context)
+		{
+		}
+
+		#endregion
 	}
 }

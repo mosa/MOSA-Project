@@ -157,6 +157,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public virtual void Visit(ICILVisitor vistor, Context context)
 		{
 		}
+
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="vistor">The vistor.</param>
+		/// <param name="context">The context.</param>
+		public virtual void Visit(IVistor vistor, Context context)
+		{
+			Visit(vistor as ICILVisitor, context);
+		}
 		
 		#endregion Methods
 
