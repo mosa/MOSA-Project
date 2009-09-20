@@ -22,7 +22,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	///
 	/// </summary>
-	public class CILStage : CodeTransformationStage, ICILVisitor
+	public class CILStage : CodeTransformationStage, ICILVisitor, IVisitor
 	{
 
 		/// <summary>
