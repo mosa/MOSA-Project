@@ -173,10 +173,10 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (BasicBlock block in blockProvider.Blocks) {
 				Context ctx = new Context(instructionset, block);
 
-				//for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++)
-				//	block.Instructions[ctx.Index].Visit(this, ctx); // FIXME PG
-				while (!ctx.EndOfInstructions)
+				while (!ctx.EndOfInstructions) {
 					ctx.Instruction.Visit(this, ctx);
+					ctx.Forward();
+				}
 			}
 		}
 
