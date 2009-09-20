@@ -38,7 +38,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="vistor">The vistor.</param>
 		/// <param name="context">The context.</param>
-		public override void Visit(CILVisitor vistor, Context context)
+		public override void Visit(ICILVisitor vistor, Context context)
 		{
 			vistor.Add(context);
 		}

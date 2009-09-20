@@ -154,7 +154,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="vistor">The vistor.</param>
 		/// <param name="context">The context.</param>
-		public virtual void Visit(CILVisitor vistor, Context context)
+		public virtual void Visit(ICILVisitor vistor, Context context)
 		{
 		}
 		

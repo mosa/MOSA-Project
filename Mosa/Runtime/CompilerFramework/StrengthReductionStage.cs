@@ -9,6 +9,7 @@
  */
 
 using System;
+using Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -16,8 +17,8 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Performs IR constant folding of arithmetic instructions to optimize
 	/// the code down to fewer calculations.
 	/// </summary>
-	public sealed class StrengthReductionStage : CodeTransformationStage, IMethodCompilerStage, 
-		IL.IILVisitor<Context>, 
+	public sealed class StrengthReductionStage : CodeTransformationStage, IMethodCompilerStage,
+		ICILVisitor,
 		IR.IIRVisitor<Context>
 	{
 
@@ -100,52 +101,49 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Folds multiplication when one of the constants is zero
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The context.</param>
-		void IL.IILVisitor<Context>.Mul(IL.MulInstruction instruction, Context ctx)
+		public void Mul(Context ctx)
 		{
 			bool multiplyByZero = false;
 
-			if (instruction.First is ConstantOperand) 
-				if (IsValueZero(instruction.Results[0].Type.Type, instruction.First as ConstantOperand))
+			if (ctx.Operand1 is ConstantOperand)
+				if (IsValueZero(ctx.Result.Type.Type, ctx.Operand1 as ConstantOperand))
 					multiplyByZero = true;
 
-			if (instruction.Second is ConstantOperand)
-				if (IsValueZero(instruction.Results[0].Type.Type, instruction.Second as ConstantOperand))
+			if (ctx.Operand2 is ConstantOperand)
+				if (IsValueZero(ctx.Result.Type.Type, ctx.Operand2 as ConstantOperand))
 					multiplyByZero = true;
 
 			if (multiplyByZero) {
-				if (instruction.Results[0].Type.Type == Metadata.CilElementType.R4)
-					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, 0)));
-				else if (instruction.Results[0].Type.Type == Metadata.CilElementType.R8)
-					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, 0)));
+				if (ctx.Result.Type.Type == Metadata.CilElementType.R4)
+					Replace(ctx, new IR.MoveInstruction(ctx.Result, new ConstantOperand(ctx.Result.Type, 0)));
+				else if (ctx.Result.Type.Type == Metadata.CilElementType.R8)
+					Replace(ctx, new IR.MoveInstruction(ctx.Result, new ConstantOperand(ctx.Result.Type, 0)));
 				else
-					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, 0)));
+					Replace(ctx, new IR.MoveInstruction(ctx.Result, new ConstantOperand(ctx.Result.Type, 0)));
 
 				return;
 			}
 
-			if (instruction.First is ConstantOperand)
-				if (IsValueOne(instruction.Results[0].Type.Type, instruction.First as ConstantOperand)) {
-					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], instruction.Second));
+			if (ctx.Operand1 is ConstantOperand)
+				if (IsValueOne(ctx.Result.Type.Type, ctx.Operand1 as ConstantOperand)) {
+					Replace(ctx, new IR.MoveInstruction(ctx.Result, ctx.Operand2));
 					return;
 				}
 
-			if (instruction.Second is ConstantOperand)
-				if (IsValueOne(instruction.Results[0].Type.Type, instruction.Second as ConstantOperand)) {
-					Replace(ctx, new IR.MoveInstruction(instruction.Results[0], instruction.First));
+			if (ctx.Operand2 is ConstantOperand)
+				if (IsValueOne(ctx.Result.Type.Type, ctx.Operand2 as ConstantOperand)) {
+					Replace(ctx, new IR.MoveInstruction(ctx.Result, ctx.Operand1));
 					return;
 				}
 
 		}
 
-
 		/// <summary>
 		/// Folds divisions with 2 constants
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The context.</param>
-		void IL.IILVisitor<Context>.Div(IL.DivInstruction instruction, Context ctx)
+		public void Div(Context ctx)
 		{
 
 		}
@@ -153,23 +151,22 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Folds the remainder of 2 constants
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The CTX.</param>
-		void IL.IILVisitor<Context>.Rem(IL.RemInstruction instruction, Context ctx)
+		public void Rem(Context ctx)
 		{
 
 		}
 
-		void IInstructionVisitor<Context>.Visit(Instruction instruction, Context ctx)
-		{
-		}
+		// FIXME PG
+		//void IInstructionVisitor<Context>.Visit(Context ctx)
+		//{
+		//}
 
 		/// <summary>
 		/// Folds additions with 2 constants
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The context.</param>
-		void IL.IILVisitor<Context>.Add(IL.AddInstruction instruction, Context ctx)
+		public void Add(Context ctx)
 		{
 
 		}
@@ -177,11 +174,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Folds substractions with 2 constants
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The context.</param>
-		void IL.IILVisitor<Context>.Sub(IL.SubInstruction instruction, Context ctx)
+		public void Sub(Context ctx)
 		{
-
 		}
 
 		/// <summary>
@@ -194,9 +189,13 @@ namespace Mosa.Runtime.CompilerFramework
 
 		}
 
+		/// <summary>
+		/// Visits the specified instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The CTX.</param>
 		void IR.IIRVisitor<Context>.Visit(IR.LogicalNotInstruction instruction, Context ctx)
 		{
-
 		}
 
 		/// <summary>
@@ -255,284 +254,549 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="pipeline"></param>
 		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertBefore<IL.CilToIrTransformationStage>(this);
+			pipeline.InsertBefore<CilToIrTransformationStage>(this);
 		}
 		#endregion
 
 
 		#region Non-Folding
-		void IL.IILVisitor<Context>.Nop(IL.NopInstruction instruction, Context ctx)
+
+		/// <summary>
+		/// Nops the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Nop(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Break(IL.BreakInstruction instruction, Context ctx)
+		/// <summary>
+		/// Breaks the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Break(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldarg(IL.LdargInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldargs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldarg(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldarga(IL.LdargaInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldargas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldarga(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldloc(IL.LdlocInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldlocs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldloc(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldloca(IL.LdlocaInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldlocas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldloca(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldc(IL.LdcInstruction instruction, Context ctx)
+		/// <summary>
+		/// LDCs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldc(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldobj(IL.LdobjInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldobjs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldobj(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldstr(IL.LdstrInstruction instruction, Context ctx)
+		/// <summary>
+		/// LDSTRs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldstr(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldfld(IL.LdfldInstruction instruction, Context ctx)
+		/// <summary>
+		/// LDFLDs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldfld(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldflda(IL.LdfldaInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldfldas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldflda(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldsfld(IL.LdsfldInstruction instruction, Context ctx)
+		/// <summary>
+		/// LDSFLDs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldsfld(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldsflda(IL.LdsfldaInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldsfldas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldsflda(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldftn(IL.LdftnInstruction instruction, Context ctx)
+		/// <summary>
+		/// LDFTNs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldftn(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldvirtftn(IL.LdvirtftnInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldvirtftns the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldvirtftn(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldtoken(IL.LdtokenInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldtokens the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldtoken(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Stloc(IL.StlocInstruction instruction, Context ctx)
+		/// <summary>
+		/// Stlocs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Stloc(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Starg(IL.StargInstruction instruction, Context ctx)
+		/// <summary>
+		/// Stargs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Starg(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Stobj(IL.StobjInstruction instruction, Context ctx)
+		/// <summary>
+		/// Stobjs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Stobj(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Stfld(IL.StfldInstruction instruction, Context ctx)
+		/// <summary>
+		/// STFLDs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Stfld(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Stsfld(IL.StsfldInstruction instruction, Context ctx)
+		/// <summary>
+		/// STSFLDs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Stsfld(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Dup(IL.DupInstruction instruction, Context ctx)
+		/// <summary>
+		/// Dups the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Dup(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Pop(IL.PopInstruction instruction, Context ctx)
+		/// <summary>
+		/// Pops the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Pop(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Jmp(IL.JumpInstruction instruction, Context ctx)
+		/// <summary>
+		/// JMPs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Jmp(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Call(IL.CallInstruction instruction, Context ctx)
+		/// <summary>
+		/// Calls the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Call(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Calli(IL.CalliInstruction instruction, Context ctx)
+		/// <summary>
+		/// Callis the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Calli(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ret(IL.ReturnInstruction instruction, Context ctx)
+		/// <summary>
+		/// Rets the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ret(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Branch(IL.BranchInstruction instruction, Context ctx)
+		/// <summary>
+		/// Brancs the dh.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Branch(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.UnaryBranch(IL.UnaryBranchInstruction instruction, Context ctx)
+		/// <summary>
+		/// Unaries the branch.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void UnaryBranch(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.BinaryBranch(IL.BinaryBranchInstruction instruction, Context ctx)
+		/// <summary>
+		/// Binaries the branch.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void BinaryBranch(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Switch(IL.SwitchInstruction instruction, Context ctx)
+		/// <summary>
+		/// Switches the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Switch(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.BinaryLogic(IL.BinaryLogicInstruction instruction, Context ctx)
+		/// <summary>
+		/// Binaries the logic.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void BinaryLogic(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Shift(IL.ShiftInstruction instruction, Context ctx)
+		/// <summary>
+		/// Shifts the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Shift(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Neg(IL.NegInstruction instruction, Context ctx)
+		/// <summary>
+		/// Negs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Neg(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Not(IL.NotInstruction instruction, Context ctx)
+		/// <summary>
+		/// Nots the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Not(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Conversion(IL.ConversionInstruction instruction, Context ctx)
+		/// <summary>
+		/// Conversions the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Conversion(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Callvirt(IL.CallvirtInstruction instruction, Context ctx)
+		/// <summary>
+		/// Callvirts the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Callvirt(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Cpobj(IL.CpobjInstruction instruction, Context ctx)
+		/// <summary>
+		/// Cpobjs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Cpobj(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Newobj(IL.NewobjInstruction instruction, Context ctx)
+		/// <summary>
+		/// Newobjs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Newobj(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Castclass(IL.CastclassInstruction instruction, Context ctx)
+		/// <summary>
+		/// Castclasses the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Castclass(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Isinst(IL.IsInstInstruction instruction, Context ctx)
+		/// <summary>
+		/// Isinsts the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Isinst(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Unbox(IL.UnboxInstruction instruction, Context ctx)
+		/// <summary>
+		/// Unboxes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Unbox(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Throw(IL.ThrowInstruction instruction, Context ctx)
+		/// <summary>
+		/// Throws the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Throw(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Box(IL.BoxInstruction instruction, Context ctx)
+		/// <summary>
+		/// Boxes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Box(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Newarr(IL.NewarrInstruction instruction, Context ctx)
+		/// <summary>
+		/// Newarrs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Newarr(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldlen(IL.LdlenInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldlens the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldlen(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldelema(IL.LdelemaInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldelemas the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldelema(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Ldelem(IL.LdelemInstruction instruction, Context ctx)
+		/// <summary>
+		/// Ldelems the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Ldelem(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Stelem(IL.StelemInstruction instruction, Context ctx)
+		/// <summary>
+		/// Stelems the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Stelem(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.UnboxAny(IL.UnboxAnyInstruction instruction, Context ctx)
+		/// <summary>
+		/// Unboxes any.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void UnboxAny(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Refanyval(IL.RefanyvalInstruction instruction, Context ctx)
+		/// <summary>
+		/// Refanyvals the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Refanyval(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.UnaryArithmetic(IL.UnaryArithmeticInstruction instruction, Context ctx)
+		/// <summary>
+		/// Unaries the arithmetic.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void UnaryArithmetic(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Mkrefany(IL.MkrefanyInstruction instruction, Context ctx)
+		/// <summary>
+		/// Mkrefanies the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Mkrefany(Context ctx)
 		{
 		}
 
 		/// <summary>
 		/// Arithmetics the overflow.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
 		/// <param name="ctx">The CTX.</param>
-	    public void ArithmeticOverflow(IL.ArithmeticOverflowInstruction instruction, Context ctx)
+		public void ArithmeticOverflow(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Endfinally(IL.EndfinallyInstruction instruction, Context ctx)
+		/// <summary>
+		/// Endfinallies the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Endfinally(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Leave(IL.LeaveInstruction instruction, Context ctx)
+		/// <summary>
+		/// Leaves the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Leave(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Arglist(IL.ArglistInstruction instruction, Context ctx)
+		/// <summary>
+		/// Arglists the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Arglist(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.BinaryComparison(IL.BinaryComparisonInstruction instruction, Context ctx)
+		/// <summary>
+		/// Binaries the comparison.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void BinaryComparison(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Localalloc(IL.LocalallocInstruction instruction, Context ctx)
+		/// <summary>
+		/// Localallocs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Localalloc(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Endfilter(IL.EndfilterInstruction instruction, Context ctx)
+		/// <summary>
+		/// Endfilters the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Endfilter(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.InitObj(IL.InitObjInstruction instruction, Context ctx)
+		/// <summary>
+		/// Inits the obj.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void InitObj(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Cpblk(IL.CpblkInstruction instruction, Context ctx)
+		/// <summary>
+		/// CPBLKs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Cpblk(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Initblk(IL.InitblkInstruction instruction, Context ctx)
+		/// <summary>
+		/// Initblks the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Initblk(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Prefix(IL.PrefixInstruction instruction, Context ctx)
+		/// <summary>
+		/// Prefixes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Prefix(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Rethrow(IL.RethrowInstruction instruction, Context ctx)
+		/// <summary>
+		/// Rethrows the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Rethrow(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Sizeof(IL.SizeofInstruction instruction, Context ctx)
+		/// <summary>
+		/// Sizeofs the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Sizeof(Context ctx)
 		{
 		}
 
-		void IL.IILVisitor<Context>.Refanytype(IL.RefanytypeInstruction instruction, Context ctx)
+		/// <summary>
+		/// Refanytypes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public void Refanytype(Context ctx)
 		{
 		}
+		
 		#endregion
 
 		#region IR
