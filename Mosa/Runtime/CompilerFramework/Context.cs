@@ -39,7 +39,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Gets or sets the basic block currently processed.
 		/// </summary>
-		public BasicBlock Block
+		public BasicBlock BasicBlock
 		{
 			get { return _block; }
 			set { _block = value; }
@@ -81,6 +81,15 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			get { return _instructionSet.instructions[_index].Offset; }
 			set { _instructionSet.instructions[_index].Offset = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the block index
+		/// </summary>
+		public int Block2
+		{
+			get { return _instructionSet.instructions[_index].Block; }
+			set { _instructionSet.instructions[_index].Block = value; }
 		}
 
 		/// <summary>
@@ -280,7 +289,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public Context InsertAfter()
 		{
 			Context ctx = new Context(_instructionSet, _instructionSet.InsertAfter(_index));
-			ctx.Block = _block;
+			ctx.BasicBlock = _block;
 			ctx.Instruction = null;
 			ctx.Ignore = true;
 			return ctx;

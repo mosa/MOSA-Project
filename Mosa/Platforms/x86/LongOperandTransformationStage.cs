@@ -282,7 +282,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created Blocks together
-			LinkBlocks(blocks, ctx.Block, nextBlock);
+			LinkBlocks(blocks, ctx.BasicBlock, nextBlock);
 		}
 
 		/// <summary>
@@ -548,7 +548,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created Blocks together
-			LinkBlocks(blocks, ctx.Block, nextBlock);
+			LinkBlocks(blocks, ctx.BasicBlock, nextBlock);
 		}
 
 		/// <summary>
@@ -810,7 +810,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created Blocks together
-			LinkBlocks(blocks, ctx.Block, nextBlock);
+			LinkBlocks(blocks, ctx.BasicBlock, nextBlock);
 		}
 
 		/// <summary>
@@ -933,7 +933,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created Blocks together
-			LinkBlocks(blocks, ctx.Block, nextBlock);
+			LinkBlocks(blocks, ctx.BasicBlock, nextBlock);
 		}
 
 		/// <summary>
@@ -1071,7 +1071,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created Blocks together
-			LinkBlocks(blocks, ctx.Block, nextBlock);
+			LinkBlocks(blocks, ctx.BasicBlock, nextBlock);
 		}
 
 		/// <summary>
@@ -1151,7 +1151,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created Blocks together
-			LinkBlocks(blocks, ctx.Block, nextBlock);
+			LinkBlocks(blocks, ctx.BasicBlock, nextBlock);
 		}
 
 		/// <summary>
@@ -1230,7 +1230,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created Blocks together
-			LinkBlocks(blocks, ctx.Block, nextBlock);
+			LinkBlocks(blocks, ctx.BasicBlock, nextBlock);
 		}
 
 		/// <summary>
@@ -1326,7 +1326,7 @@ namespace Mosa.Platforms.x86
 			Remove(ctx);
 
 			// Link the created Blocks together
-			LinkBlocks(blocks, ctx.Block, nextBlock);
+			LinkBlocks(blocks, ctx.BasicBlock, nextBlock);
 		}
 
 		/// <summary>
@@ -1724,7 +1724,7 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(targets[1]),
             });
 
-			LinkBlocks(blocks, ctx.Block, nextBlock);
+			LinkBlocks(blocks, ctx.BasicBlock, nextBlock);
 
 			nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 // Compare low dwords
@@ -1804,7 +1804,7 @@ namespace Mosa.Platforms.x86
                 new IR.JmpInstruction(targets[1]),
             });
 
-			LinkBlocks(blocks, ctx.Block, nextBlock);
+			LinkBlocks(blocks, ctx.BasicBlock, nextBlock);
 
 			nextBlock.Instructions.InsertRange(0, new Instruction[] {
                 // Compare low dwords
@@ -1896,7 +1896,7 @@ namespace Mosa.Platforms.x86
 
 			Remove(ctx);
 
-			LinkBlocks(blocks, ctx.Block, nextBlock);
+			LinkBlocks(blocks, ctx.BasicBlock, nextBlock);
 		}
 
 		/// <summary>

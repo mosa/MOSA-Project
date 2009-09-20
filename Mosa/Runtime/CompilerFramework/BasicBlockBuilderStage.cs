@@ -95,7 +95,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Link prologue block to the first leader
 			LinkBlocks(prologue, loopHeads[0]);
 
-			InsertInstructionsIntoBlocks(loopHeads, new Context(ip.InstructionSet, 0), epilogue, compiler);
+			InsertInstructionsIntoBlocks(loopHeads, epilogue, compiler);
 
 			// Add the epilogue block
 			basicBlocks.Add(epilogue);
@@ -155,41 +155,46 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Inserts the instructions into blocks.
 		/// </summary>
 		/// <param name="leaders">The leaders.</param>
-		/// <param name="ctx">The context.</param>
 		/// <param name="epilogue">The epilogue.</param>
 		/// <param name="compiler">The compiler.</param>
-		private void InsertInstructionsIntoBlocks(IDictionary<int, BasicBlock> leaders, Context ctx, BasicBlock epilogue, IMethodCompiler compiler)
+		private void InsertInstructionsIntoBlocks(IDictionary<int, BasicBlock> leaders, BasicBlock epilogue, IMethodCompiler compiler)
 		{
 			// Retrieve the instruction provider
 			IInstructionsProvider ip = (IInstructionsProvider)compiler.GetPreviousStage(typeof(IInstructionsProvider));
 
 			KeyValuePair<int, BasicBlock> current = new KeyValuePair<int, BasicBlock>(-1, null);
 			int blockIndex = 0;
-			int lastInstructionIndex = 0;
 
 			foreach (KeyValuePair<int, BasicBlock> next in leaders) {
 				if (current.Key != -1) {
+
 					// Insert block into list of basic Blocks
 					basicBlocks.Add(current.Value);
 
-					// Insert instructions into basic block
-					while ((lastInstructionIndex < ip.Instructions.Count) && (ip.Instructions[lastInstructionIndex].Offset < next.Value.Label))
-						current.Value.Instructions.Add(ip.Instructions[lastInstructionIndex++]);
-
+					// Set the block index
 					current.Value.Index = ++blockIndex;
 
-					Instruction lastInstruction = ip.Instructions[lastInstructionIndex - 1];
+					Context ctx = new Context(ip.InstructionSet, current.Key);
+					ctx.BasicBlock = current.Value;
 
-					InsertFlowControl(ctx, lastInstruction, current, next, epilogue);
+					// Set the block index on all the instructions
+					while ((ctx.Index != next.Key) && !ctx.EndOfInstructions) {
+						ctx.Block2 = blockIndex;
+						ctx.Forward();
+					}
+
+					ctx.Backwards();
+
+					InsertFlowControl(ctx, current, next, epilogue);
 				}
 
 				current = next;
 			}
 		}
 
-		private void InsertFlowControl(Context ctx, Instruction lastInstruction, KeyValuePair<int, BasicBlock> current, KeyValuePair<int, BasicBlock> next, BasicBlock epilogue)
+		private void InsertFlowControl(Context ctx, KeyValuePair<int, BasicBlock> current, KeyValuePair<int, BasicBlock> next, BasicBlock epilogue)
 		{
-			switch (lastInstruction.FlowControl) {
+			switch ((ctx.Instruction as CILInstruction).FlowControl) {
 				case FlowControl.Break: goto case FlowControl.Next;
 				case FlowControl.Call: goto case FlowControl.Next;
 				case FlowControl.Next:
@@ -216,7 +221,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				case FlowControl.ConditionalBranch:
 					// Conditional branch with multiple targets
-					foreach (int target in (lastInstruction as IBranchInstruction).BranchTargets)
+					foreach (int target in ctx.Branch.Targets)
 						LinkBlocks(current.Value, loopHeads[target]);
 					goto case FlowControl.Throw;
 

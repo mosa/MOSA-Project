@@ -72,7 +72,7 @@ namespace Mosa.Runtime.CompilerFramework
 			for (CurrentBlock = 0; CurrentBlock < Blocks.Count; CurrentBlock++) {
 				BasicBlock block = Blocks[CurrentBlock];
 				Context ctx = new Context(block);
-				ctx.Block = block;
+				//ctx.Block = block;
 				for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++) {
 					block.Instructions[ctx.Index].Visit(this, ctx);
 				}
@@ -110,8 +110,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="ctx">The context of the instruction to remove.</param>
 		protected void Remove(Context ctx)
 		{
-			Remove(ctx.Block.Instructions[ctx.Index]);
-			ctx.Block.Instructions.RemoveAt(ctx.Index--);
+			Remove(ctx.BasicBlock.Instructions[ctx.Index]);
+			ctx.BasicBlock.Instructions.RemoveAt(ctx.Index--);
 		}
 
 		/// <summary>
@@ -134,7 +134,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction to replace with.</param>
 		protected void Replace(Context arg, Instruction instruction)
 		{
-			arg.Block.Instructions[arg.Index] = instruction;
+			arg.BasicBlock.Instructions[arg.Index] = instruction;
 		}
 
 		/// <summary>
@@ -144,7 +144,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instructions">The instructions to replace with.</param>
 		protected void Replace(Context arg, IEnumerable<Instruction> instructions)
 		{
-			List<Instruction> insts = arg.Block.Instructions;
+			List<Instruction> insts = arg.BasicBlock.Instructions;
 			insts.RemoveAt(arg.Index);
 			int oldCount = insts.Count;
 			insts.InsertRange(arg.Index, instructions);
@@ -255,14 +255,14 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			int label = Blocks.Count + 0x10000000;
 
-			BasicBlock nextBlock = ctx.Block.Split(ctx.Index + 1, label);
+			BasicBlock nextBlock = ctx.BasicBlock.Split(ctx.Index + 1, label);
 			nextBlock.Index = Blocks.Count - 1;
 			Blocks.Add(nextBlock);
 
-			foreach (BasicBlock block in ctx.Block.NextBlocks)
+			foreach (BasicBlock block in ctx.BasicBlock.NextBlocks)
 				nextBlock.NextBlocks.Add(block);
 
-			ctx.Block.NextBlocks.Clear();
+			ctx.BasicBlock.NextBlocks.Clear();
 
 			if (insert != null) 
 				InsertLabel(ref ctx, ref insert, insert.Label);
@@ -274,9 +274,9 @@ namespace Mosa.Runtime.CompilerFramework
 		
 		private void InsertLabel(ref Context ctx, ref BasicBlock block, int label)
 		{
-			ctx.Block.NextBlocks.Add(block);
-			block.PreviousBlocks.Add(ctx.Block);
-			ctx.Block.Instructions.Add(new IR.JmpInstruction(label));
+			ctx.BasicBlock.NextBlocks.Add(block);
+			block.PreviousBlocks.Add(ctx.BasicBlock);
+			ctx.BasicBlock.Instructions.Add(new IR.JmpInstruction(label));
 		}
 
 		#endregion
