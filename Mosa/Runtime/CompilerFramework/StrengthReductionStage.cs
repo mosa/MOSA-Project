@@ -20,6 +20,98 @@ namespace Mosa.Runtime.CompilerFramework
 	public sealed class StrengthReductionStage : CILStage, IMethodCompilerStage
 	{
 
+		#region IMethodCompilerStage
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		public override string Name
+		{
+			get { return @"Strength Reduction"; }
+		}
+
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		/// <param name="compiler">The compiler context to perform processing in.</param>
+		void IMethodCompilerStage.Run(IMethodCompiler compiler)
+		{
+			if (compiler == null)
+				throw new ArgumentNullException(@"compiler");
+
+			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
+
+			if (blockProvider == null)
+				throw new InvalidOperationException(@"Instruction stream must be split to basic Blocks.");
+
+			// Retrieve the instruction provider and the instruction set
+			InstructionSet instructionset = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
+
+			foreach (BasicBlock block in blockProvider.Blocks) {
+				Context ctx = new Context(instructionset, block);
+
+				while (!ctx.EndOfInstructions) {
+					ctx.Instruction.Visit(this, ctx);
+					ctx.Forward();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Adds this stage to the given pipeline.
+		/// </summary>
+		/// <param name="pipeline">The pipeline to add this stage to.</param>
+		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		{
+			pipeline.InsertBefore<CilToIrTransformationStage>(this);
+		}
+
+		#endregion
+
+		#region Methods
+
+		/// <summary>
+		/// Folds multiplication when one of the constants is zero
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		public override void Mul(Context ctx)
+		{
+			bool multiplyByZero = false;
+
+			if (ctx.Operand1 is ConstantOperand)
+				if (IsValueZero(ctx.Result.Type.Type, ctx.Operand1 as ConstantOperand))
+					multiplyByZero = true;
+
+			if (ctx.Operand2 is ConstantOperand)
+				if (IsValueZero(ctx.Result.Type.Type, ctx.Operand2 as ConstantOperand))
+					multiplyByZero = true;
+
+			if (multiplyByZero) {
+				if (ctx.Result.Type.Type == Metadata.CilElementType.R4)
+					Replace(ctx, new IR.MoveInstruction(ctx.Result, new ConstantOperand(ctx.Result.Type, 0)));
+				else if (ctx.Result.Type.Type == Metadata.CilElementType.R8)
+					Replace(ctx, new IR.MoveInstruction(ctx.Result, new ConstantOperand(ctx.Result.Type, 0)));
+				else
+					Replace(ctx, new IR.MoveInstruction(ctx.Result, new ConstantOperand(ctx.Result.Type, 0)));
+
+				return;
+			}
+
+			if (ctx.Operand1 is ConstantOperand)
+				if (IsValueOne(ctx.Result.Type.Type, ctx.Operand1 as ConstantOperand)) {
+					Replace(ctx, new IR.MoveInstruction(ctx.Result, ctx.Operand2));
+					return;
+				}
+
+			if (ctx.Operand2 is ConstantOperand)
+				if (IsValueOne(ctx.Result.Type.Type, ctx.Operand2 as ConstantOperand)) {
+					Replace(ctx, new IR.MoveInstruction(ctx.Result, ctx.Operand1));
+					return;
+				}
+
+		}
+
 		/// <summary>
 		/// Determines whether the value is zero.
 		/// </summary>
@@ -96,100 +188,6 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
-		/// <summary>
-		/// Folds multiplication when one of the constants is zero
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Mul(Context ctx)
-		{
-			bool multiplyByZero = false;
-
-			if (ctx.Operand1 is ConstantOperand)
-				if (IsValueZero(ctx.Result.Type.Type, ctx.Operand1 as ConstantOperand))
-					multiplyByZero = true;
-
-			if (ctx.Operand2 is ConstantOperand)
-				if (IsValueZero(ctx.Result.Type.Type, ctx.Operand2 as ConstantOperand))
-					multiplyByZero = true;
-
-			if (multiplyByZero) {
-				if (ctx.Result.Type.Type == Metadata.CilElementType.R4)
-					Replace(ctx, new IR.MoveInstruction(ctx.Result, new ConstantOperand(ctx.Result.Type, 0)));
-				else if (ctx.Result.Type.Type == Metadata.CilElementType.R8)
-					Replace(ctx, new IR.MoveInstruction(ctx.Result, new ConstantOperand(ctx.Result.Type, 0)));
-				else
-					Replace(ctx, new IR.MoveInstruction(ctx.Result, new ConstantOperand(ctx.Result.Type, 0)));
-
-				return;
-			}
-
-			if (ctx.Operand1 is ConstantOperand)
-				if (IsValueOne(ctx.Result.Type.Type, ctx.Operand1 as ConstantOperand)) {
-					Replace(ctx, new IR.MoveInstruction(ctx.Result, ctx.Operand2));
-					return;
-				}
-
-			if (ctx.Operand2 is ConstantOperand)
-				if (IsValueOne(ctx.Result.Type.Type, ctx.Operand2 as ConstantOperand)) {
-					Replace(ctx, new IR.MoveInstruction(ctx.Result, ctx.Operand1));
-					return;
-				}
-
-		}
-
-		// FIXME PG
-		//void IInstructionVisitor<Context>.Visit(Context ctx)
-		//{
-		//}
-
-		#region IMethodCompilerStage
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public override string Name
-		{
-			get { return @"Strength Reduction"; }
-		}
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		void IMethodCompilerStage.Run(IMethodCompiler compiler)
-		{
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
-			
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-			
-			if (blockProvider == null)
-				throw new InvalidOperationException(@"Instruction stream must be split to basic Blocks.");
-			
-			// Retrieve the instruction provider and the instruction set
-			InstructionSet instructionset = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
-
-			foreach (BasicBlock block in blockProvider.Blocks) {
-				Context ctx = new Context(instructionset, block);
-
-				while (!ctx.EndOfInstructions) {
-					ctx.Instruction.Visit(this, ctx);
-					ctx.Forward();
-				}
-			}
-		}
-
-		/// <summary>
-		/// Adds this stage to the given pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
-		{
-			pipeline.InsertBefore<CilToIrTransformationStage>(this);
-		}
-
-		#endregion
-
+		#endregion // Methods
 	}
 }

@@ -109,6 +109,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public Operand Result
 		{
 			get { return _instructionSet.Data[_index].Result; }
+			set { _instructionSet.Data[_index].Result = value; }
 		}
 
 		/// <summary>
@@ -118,6 +119,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public Operand Result2
 		{
 			get { return _instructionSet.Data[_index].Result2; }
+			set { _instructionSet.Data[_index].Result2 = value; }
 		}
 
 		/// <summary>
@@ -127,6 +129,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public Operand Operand1
 		{
 			get { return _instructionSet.Data[_index].Operand1; }
+			set { _instructionSet.Data[_index].Operand1 = value; }
 		}
 
 		/// <summary>
@@ -136,6 +139,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public Operand Operand2
 		{
 			get { return _instructionSet.Data[_index].Operand2; }
+			set { _instructionSet.Data[_index].Operand2 = value; }
 		}
 
 		/// <summary>
@@ -145,6 +149,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public Operand Operand3
 		{
 			get { return _instructionSet.Data[_index].Operand3; }
+			set { _instructionSet.Data[_index].Operand3 = value; }
 		}
 
 		/// <summary>
@@ -154,6 +159,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public byte OperandCount
 		{
 			get { return _instructionSet.Data[_index].OperandCount; }
+			set { _instructionSet.Data[_index].OperandCount = value; }
 		}
 
 		/// <summary>
@@ -163,6 +169,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public byte ResultCount
 		{
 			get { return _instructionSet.Data[_index].ResultCount; }
+			set { _instructionSet.Data[_index].ResultCount = value; }
 		}
 
 		/// <summary>
@@ -314,6 +321,14 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.BasicBlock = _block;
 			ctx.Instruction = null;
 			ctx.Ignore = true;
+			ctx.Operand1 = null;
+			ctx.Operand2 = null;
+			ctx.Operand3 = null;
+			ctx.Result = null;
+			ctx.OperandCount = 0;
+			ctx.ResultCount = 0;
+			ctx.Branch = null;
+			ctx.Offset = 0;
 			return ctx;
 		}
 
@@ -327,6 +342,14 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.BasicBlock = _block;
 			ctx.Instruction = null;
 			ctx.Ignore = true;
+			ctx.Operand1 = null;
+			ctx.Operand2 = null;
+			ctx.Operand3 = null;
+			ctx.Result = null;
+			ctx.OperandCount = 0;
+			ctx.ResultCount = 0;
+			ctx.Branch = null;
+			ctx.Offset = 0;
 			return ctx;
 		}
 
@@ -336,6 +359,39 @@ namespace Mosa.Runtime.CompilerFramework
 		public void SliceAfter()
 		{
 			_instructionSet.SliceAfter(_index);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		public void SetInstruction(IInstruction instruction)
+		{
+			if (instruction is CIL.ICILInstruction)
+				SetInstruction(instruction,
+					(instruction as CIL.ICILInstruction).DefaultOperandCount,
+					(instruction as CIL.ICILInstruction).DefaultResultCount);
+			else
+				SetInstruction(instruction, 0, 0);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="operandCount">The operand count.</param>
+		/// <param name="resultCount">The result count.</param>
+		public void SetInstruction(IInstruction instruction, int operandCount, int resultCount)
+		{
+			Instruction = instruction;
+			Ignore = false;
+			OperandCount = 0;
+			ResultCount = 0;
+
+			if (instruction is CIL.ICILInstruction) {
+				OperandCount = (instruction as CIL.ICILInstruction).DefaultOperandCount;
+				ResultCount = (instruction as CIL.ICILInstruction).DefaultResultCount;
+			}
 		}
 
 		#endregion // Methods

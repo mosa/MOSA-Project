@@ -50,13 +50,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Gets the default operand count of the instruction
 		/// </summary>
 		/// <value>The operand count.</value>
-		protected byte DefaultOperandCount { get { return _operandDefaultCount; } }
+		public byte DefaultOperandCount { get { return _operandDefaultCount; } }
 
 		/// <summary>
 		/// Gets the default result operand count of the instruction
 		/// </summary>
 		/// <value>The operand result count.</value>
-		protected byte DefaultResultCount { get { return _resultDefaultCount; } }
+		public byte DefaultResultCount { get { return _resultDefaultCount; } }
 
 		#endregion // Properties
 

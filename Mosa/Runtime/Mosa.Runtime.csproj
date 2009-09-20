@@ -172,6 +172,7 @@
     <Compile Include="CompilerFramework\CIL\UnboxInstruction.cs" />
     <Compile Include="CompilerFramework\Branch.cs" />
     <Compile Include="CompilerFramework\Context.cs" />
+    <Compile Include="CompilerFramework\IRConstantFoldingStage.cs" />
     <Compile Include="CompilerFramework\IVisitor.cs" />
     <Compile Include="CompilerFramework\IInstructionVisitor2.cs" />
     <Compile Include="CompilerFramework\IBranch.cs" />
@@ -249,7 +250,7 @@
     <Compile Include="CompilerFramework\CompilerSupportFunction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\ConstantFoldingStage.cs">
+    <Compile Include="CompilerFramework\ILConstantFoldingStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\ConstantOperand.cs">

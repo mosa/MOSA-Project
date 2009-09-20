@@ -19,7 +19,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// </summary>
 	public interface ICILInstruction : IInstruction
 	{
-		
 
 		/// <summary>
 		/// Decodes the specified CIL instruction.
@@ -43,5 +42,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
 		string ToString(ref InstructionData instruction);
+
+		/// <summary>
+		/// Gets the default operand count of the instruction
+		/// </summary>
+		/// <value>The operand count.</value>
+		byte DefaultOperandCount { get; }
+
+		/// <summary>
+		/// Gets the default result operand count of the instruction
+		/// </summary>
+		/// <value>The operand result count.</value>
+		byte DefaultResultCount { get; }
 	}
 }

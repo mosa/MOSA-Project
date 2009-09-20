@@ -124,7 +124,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="pipeline"></param>
         public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
         {
-            pipeline.InsertAfter<ConstantFoldingStage>(this);
+            pipeline.InsertAfter<ILConstantFoldingStage>(this);
         }
 
         #endregion // IMethodCompilerStage Members
