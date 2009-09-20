@@ -283,18 +283,19 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="index">The index.</param>
 		public void Remove(int index)
 		{
-			if (_next[index] < 0) {
+			if (_next[index] < 0) 
+			{
 				if (_prev[index] >= 0)
 					_next[_prev[index]] = -1;
 				AddFree(index);
 				return;
 			}
-			else
-				if (_prev[index] < 0) {
-					_prev[_next[index]] = -1;
-					AddFree(index);
-					return;
-				}
+			if (_prev[index] < 0) 
+			{
+				_prev[_next[index]] = -1;
+				AddFree(index);
+				return;
+			}
 
 			_next[_prev[index]] = _next[index];
 			_prev[_next[index]] = _prev[index];
