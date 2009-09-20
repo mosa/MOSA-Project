@@ -73,9 +73,6 @@ namespace Mosa.Runtime.CompilerFramework
 			// Retrieve the instruction provider and the instruction set
 			_instructionset = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
 
-			// Architecture
-			IArchitecture arch = compiler.Architecture;
-
 			AddLoopHead(0);
 
 			FindLoopHeads(new Context(_instructionset, 0));
@@ -103,7 +100,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Link prologue block to the first leader
 			LinkBlocks(prologue, loopHeads[0]);
 
-			InsertInstructionsIntoBlocks(loopHeads, epilogue, compiler);
+			InsertInstructionsIntoBlocks(loopHeads, epilogue);
 
 			// Add the epilogue block
 			basicBlocks.Add(epilogue);
@@ -168,8 +165,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="leaders">The leaders.</param>
 		/// <param name="epilogue">The epilogue.</param>
-		/// <param name="compiler">The compiler.</param>
-		private void InsertInstructionsIntoBlocks(IDictionary<int, BasicBlock> leaders, BasicBlock epilogue, IMethodCompiler compiler)
+		private void InsertInstructionsIntoBlocks(IDictionary<int, BasicBlock> leaders, BasicBlock epilogue)
 		{
 			KeyValuePair<int, BasicBlock> current = new KeyValuePair<int, BasicBlock>(-1, null);
 			int blockIndex = 0;

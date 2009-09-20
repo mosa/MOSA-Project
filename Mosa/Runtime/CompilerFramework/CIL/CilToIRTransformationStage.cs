@@ -67,7 +67,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		void CILVisitor<Context>.Ldarga(LdargaInstruction instruction, Context ctx)
 		{
-			Replace(ctx, new AddressOfInstruction(ctx.Instructions.instructions[ctx.Index].Result, ctx.Instructions.instructions[ctx.Index].Operand1));
+			Replace(ctx, new AddressOfInstruction(ctx.InstructionSet.Data[ctx.Index].Result, ctx.InstructionSet.Data[ctx.Index].Operand1));
 		}
 
 		void CILVisitor<Context>.Ldloc(LdlocInstruction instruction, Context ctx)
@@ -1088,7 +1088,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Transform the opcode with an internal call
 			CallInstruction call = new CallInstruction(OpCode.Call);
-			call.SetInvokeTarget(ref ctx.Instructions.instructions[ctx.Index], Compiler, callTarget);
+			call.SetInvokeTarget(ref ctx.InstructionSet.Data[ctx.Index], Compiler, callTarget);
 
 			// FIXME PG
 			// int i = 0;

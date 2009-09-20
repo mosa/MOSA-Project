@@ -25,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		public InstructionData[] instructions;
+		public InstructionData[] Data;
 
 		/// <summary>
 		/// 
@@ -109,7 +109,7 @@ namespace Mosa.Runtime.CompilerFramework
 			_size = size;
 			_next = new int[size];
 			_prev = new int[size];
-			instructions = new InstructionData[size];
+			Data = new InstructionData[size];
 			Clear();
 		}
 
@@ -142,11 +142,11 @@ namespace Mosa.Runtime.CompilerFramework
 
 			_next.CopyTo(newNext, 0);
 			_prev.CopyTo(newPrev, 0);
-			instructions.CopyTo(newInstructions, 0);
+			Data.CopyTo(newInstructions, 0);
 
 			_next = newNext;
 			_prev = newPrev;
-			instructions = newInstructions;
+			Data = newInstructions;
 			_size = newsize;
 		}
 
@@ -195,7 +195,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			_free = _next[free];
 			//_prev[_free] = -1;
-			instructions[free].Ignore = true;
+			Data[free].Ignore = true;
 			_used++;
 
 			return free;
@@ -324,7 +324,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public void SetPrefix(int index, CIL.PrefixInstruction prefix)
 		{
 			IsIndexValid(index);
-			instructions[index].Prefix = prefix;
+			Data[index].Prefix = prefix;
 		}
 
 		/// <summary>
@@ -335,7 +335,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public void SetOffset(int index, int offset)
 		{
 			IsIndexValid(index);
-			instructions[index].Offset = offset;
+			Data[index].Offset = offset;
 		}
 
 		/// <summary>

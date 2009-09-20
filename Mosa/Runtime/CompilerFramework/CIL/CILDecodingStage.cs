@@ -55,7 +55,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// List of instructions decoded by the decoder.
 		/// </summary>
-		InstructionSet _instructions = new InstructionSet(1024 * 1024);
+		InstructionSet _instructionSet = new InstructionSet(1024 * 1024);
 
 		#endregion // Data members
 
@@ -238,8 +238,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Prefix instruction
 			PrefixInstruction prefix = null;
 
-			// Setup first instruction
-			int at = -1;
+			// Setup context
+			Context ctx = new Context(_instructionSet, -1);
 
 			while (codeEnd != _codeReader.BaseStream.Position) {
 				// Determine the instruction offset
@@ -258,20 +258,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				}
 
 				// Create and initialize the corresponding instruction
-				at = _instructions.InsertAfter(at);
-				_instructions.SetPrefix(at, prefix);
-				_instructions.SetOffset(at, instOffset);
-				instruction.Decode(ref _instructions.instructions[at], this);
+				ctx = ctx.InsertAfter();
+				instruction.Decode(ref ctx.InstructionSet.Data[ctx.Index], this);
+				ctx.Prefix = prefix;
+				ctx.Offset = instOffset;
 
-				Debug.Assert(_instructions.instructions[at].Instruction != null);
+				Debug.Assert(ctx.Instruction != null);
 
 				// Do we need to patch branch targets?
-				IBranchInstruction branch = instruction as IBranchInstruction;
 				if (instruction is IBranchInstruction) {
 					int pc = (int)(_codeReader.BaseStream.Position - codeStart);
 
-					for (int i = 0; i < _instructions.instructions[at].Branch.Targets.Length; i++)
-						_instructions.instructions[at].Branch.Targets[i] += pc;
+					for (int i = 0; i < ctx.Branch.Targets.Length; i++)
+						ctx.Branch.Targets[i] += pc;
 				}
 
 				prefix = null;
@@ -297,7 +296,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <value></value>
 		public InstructionSet InstructionSet
 		{
-			get { return _instructions; }
+			get { return _instructionSet; }
 		}
 
 		#endregion //  IInstructionsProvider members
