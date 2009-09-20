@@ -228,9 +228,9 @@ namespace Mosa.Runtime.CompilerFramework
 					if (!found) {
 						Operation opr = Operation.None;
 
-						if (instruction is IL.AddInstruction)
+						if (instruction is CIL.AddInstruction)
 							opr = Operation.Add;
-						else if (instruction is IL.MulInstruction)
+						else if (instruction is CIL.MulInstruction)
 							opr = Operation.Mul;
 						else if (instruction is IR.LogicalAndInstruction)
 							opr = Operation.And;
@@ -265,8 +265,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		private static bool IsCommutative(IInstruction instruction)
 		{
-			return (instruction is IL.AddInstruction) ||
-				   (instruction is IL.MulInstruction) ||
+			return (instruction is CIL.AddInstruction) ||
+				   (instruction is CIL.MulInstruction) ||
 				   (instruction is IR.LogicalAndInstruction) ||
 				   (instruction is IR.LogicalOrInstruction) ||
 				   (instruction is IR.LogicalXorInstruction);
