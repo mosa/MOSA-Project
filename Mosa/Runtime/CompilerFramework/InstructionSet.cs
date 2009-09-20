@@ -119,6 +119,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Clear()
 		{
 			_used = 0;
+			_free = 0;
 
 			// setup free list
 			for (int i = 0; i < _size; i++) {
@@ -142,12 +143,19 @@ namespace Mosa.Runtime.CompilerFramework
 
 			_next.CopyTo(newNext, 0);
 			_prev.CopyTo(newPrev, 0);
+			
+			for (int i = _size; i < newsize; ++i)
+			{
+				newNext[i] = i + 1;
+				newPrev[i] = i - 1;
+			}
+			newNext[newsize - 1] = -1;
 			Data.CopyTo(newInstructions, 0);
 
 			_next = newNext;
 			_prev = newPrev;
-			Data = newInstructions;
 			_size = newsize;
+			Data = newInstructions;
 		}
 
 		/// <summary>
@@ -188,8 +196,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public int GetFree()
 		{
-			// TODO: Resize array
-			Debug.Assert(_used != _size, "array too small");
+			if (_used + 1 == _size)
+				Resize(_size * 2);
 
 			int free = _free;
 

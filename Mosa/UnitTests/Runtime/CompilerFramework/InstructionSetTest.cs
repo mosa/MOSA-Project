@@ -81,8 +81,8 @@ namespace Mosa.Runtime.CompilerFramework.UnitTests
 			InstructionSet set = new InstructionSet(10);
 			
 			Assert.AreEqual(0, set.GetFree());
-			
-			for (int i = 0; i < set.Size - 1; ++i)
+			int size = set.Size;
+			for (int i = 0; i < size - 1; ++i)
 				Assert.AreEqual(set.NextArray[i], set.GetFree());
 			Assert.AreEqual(set.NextArray[set.Size - 1], -1);
 		}
@@ -109,6 +109,17 @@ namespace Mosa.Runtime.CompilerFramework.UnitTests
 			set.SetOffset(index, offset);
 			
 			Assert.AreEqual(offset, set.Data[index].Offset);
+		}
+
+		[Test]
+		public void AutomaticResize()
+		{
+			InstructionSet set = new InstructionSet(10);
+			
+			for (int i = 0; i < 10; ++i)
+				set.GetFree();
+			
+			Assert.AreEqual(20, set.Size);
 		}
 	}
 }
