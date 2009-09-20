@@ -29,6 +29,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="vistor">The vistor.</param>
 		/// <param name="context">The context.</param>
-		void Visit(IVistor vistor, Context context);
+		void Visit(IVisitor vistor, Context context);
 	}
 }

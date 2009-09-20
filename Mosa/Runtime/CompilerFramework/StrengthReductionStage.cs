@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Performs IR constant folding of arithmetic instructions to optimize
 	/// the code down to fewer calculations.
 	/// </summary>
-	public sealed class StrengthReductionStage : CILStage, IMethodCompilerStage, IVistor
+	public sealed class StrengthReductionStage : CILStage, IMethodCompilerStage, IVisitor
 	{
 
 		/// <summary>
@@ -166,9 +166,12 @@ namespace Mosa.Runtime.CompilerFramework
 			
 			if (blockProvider == null)
 				throw new InvalidOperationException(@"Instruction stream must be split to basic Blocks.");
+			
+			// Retrieve the instruction provider and the instruction set
+			InstructionSet instructionset = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
 
 			foreach (BasicBlock block in blockProvider.Blocks) {
-				Context ctx = new Context(block);
+				Context ctx = new Context(instructionset, block);
 
 				//for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++)
 				//	block.Instructions[ctx.Index].Visit(this, ctx); // FIXME PG

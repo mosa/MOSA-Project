@@ -74,7 +74,7 @@ namespace Mosa.Platforms.x86.Platform
 		/// </summary>
 		/// <param name="vistor">The vistor.</param>
 		/// <param name="context">The context.</param>
-		public void Visit(IVistor vistor, Context context)
+		public void Visit(IVisitor vistor, Context context)
 		{
 		}
 

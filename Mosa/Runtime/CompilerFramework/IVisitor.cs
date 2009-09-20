@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// 
 	/// </summary>
-	public interface IVistor
+	public interface IVisitor
 	{
 	}
 }

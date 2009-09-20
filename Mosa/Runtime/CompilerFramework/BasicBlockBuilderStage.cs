@@ -26,12 +26,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// List of basic Blocks found during decoding.
 		/// </summary>
-		private List<BasicBlock> basicBlocks;
+		private List<BasicBlock> _basicBlocks;
 
 		/// <summary>
 		/// List of leaders
 		/// </summary>
-		private SortedDictionary<int, BasicBlock> loopHeads;
+		private SortedDictionary<int, BasicBlock> _loopHeads;
 
 		/// <summary>
 		/// Holds the instruction set
@@ -47,8 +47,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public BasicBlockBuilderStage()
 		{
-			basicBlocks = new List<BasicBlock>();
-			loopHeads = new SortedDictionary<int, BasicBlock>();
+			_basicBlocks = new List<BasicBlock>();
+			_loopHeads = new SortedDictionary<int, BasicBlock>();
 		}
 
 		#endregion // Construction
@@ -77,12 +77,12 @@ namespace Mosa.Runtime.CompilerFramework
 
 			FindLoopHeads(new Context(_instructionset, 0));
 
-			basicBlocks.Capacity = loopHeads.Count + 2;
+			_basicBlocks.Capacity = _loopHeads.Count + 2;
 
 			// Start with a prologue block...
 			BasicBlock prologue = new BasicBlock(-1);
 			prologue.Index = 0;
-			basicBlocks.Add(prologue);
+			_basicBlocks.Add(prologue);
 
 			// Add a jump instruction to the first block from the prologue
 			Context ctx = new Context(_instructionset, 0).InsertBefore();
@@ -92,18 +92,18 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Create the epilogue block
 			BasicBlock epilogue = new BasicBlock(Int32.MaxValue);
-			epilogue.Index = loopHeads.Count + 1;
+			epilogue.Index = _loopHeads.Count + 1;
 
 			// Add epilogue block to leaders (helps with loop below)
-			loopHeads.Add(epilogue.Label, epilogue);
+			_loopHeads.Add(epilogue.Label, epilogue);
 
 			// Link prologue block to the first leader
-			LinkBlocks(prologue, loopHeads[0]);
+			LinkBlocks(prologue, _loopHeads[0]);
 
-			InsertInstructionsIntoBlocks(loopHeads, epilogue);
+			InsertInstructionsIntoBlocks(_loopHeads, epilogue);
 
 			// Add the epilogue block
-			basicBlocks.Add(epilogue);
+			_basicBlocks.Add(epilogue);
 		}
 
 		/// <summary>
@@ -156,8 +156,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="index">The index.</param>
 		public void AddLoopHead(int index)
 		{
-			if (!loopHeads.ContainsKey(index))
-				loopHeads.Add(index, new BasicBlock(index));
+			if (!_loopHeads.ContainsKey(index))
+				_loopHeads.Add(index, new BasicBlock(index));
 		}
 
 		/// <summary>
@@ -174,7 +174,7 @@ namespace Mosa.Runtime.CompilerFramework
 				if (current.Key != -1) {
 
 					// Insert block into list of basic Blocks
-					basicBlocks.Add(current.Value);
+					_basicBlocks.Add(current.Value);
 
 					// Set the block index
 					current.Value.Index = ++blockIndex;
@@ -217,7 +217,7 @@ namespace Mosa.Runtime.CompilerFramework
 					insert.Branch.Targets[0] = nextBlock;
 
 					ctx.SliceAfter();
-					LinkBlocks(current, loopHeads[nextBlock]);
+					LinkBlocks(current, _loopHeads[nextBlock]);
 					break;
 
 				case FlowControl.Return:
@@ -234,7 +234,7 @@ namespace Mosa.Runtime.CompilerFramework
 				case FlowControl.ConditionalBranch:
 					// Conditional branch with multiple targets
 					foreach (int target in ctx.Branch.Targets)
-						LinkBlocks(current, loopHeads[target]);
+						LinkBlocks(current, _loopHeads[target]);
 					goto case FlowControl.Throw;
 
 				case FlowControl.Throw:
@@ -278,7 +278,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The basic Blocks.</value>
 		public List<BasicBlock> Blocks
 		{
-			get { return basicBlocks; }
+			get { return _basicBlocks; }
 		}
 
 		/// <summary>
@@ -290,7 +290,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		public BasicBlock FromLabel(int label)
 		{
-			return basicBlocks.Find(delegate(BasicBlock block)
+			return _basicBlocks.Find(delegate(BasicBlock block)
 			{
 				return (label == block.Label);
 			});
@@ -304,7 +304,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		public IEnumerator<BasicBlock> GetEnumerator()
 		{
-			return basicBlocks.GetEnumerator();
+			return _basicBlocks.GetEnumerator();
 		}
 
 		/// <summary>
@@ -315,7 +315,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
-			return basicBlocks.GetEnumerator();
+			return _basicBlocks.GetEnumerator();
 		}
 
 		#endregion // IBasicBlockProvider members
