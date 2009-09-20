@@ -191,11 +191,38 @@ namespace Mosa.Runtime.CompilerFramework
 			int free = GetFree();
 
 			// setup new node's prev/next
-			_next[free] = _next[free];
+			_next[free] = _next[index];
 			_prev[free] = index;
 
 			_next[index] = free;
 
+			if (_next[free] >= 0)
+				_prev[_next[free]] = free;
+
+			return -1;
+		}
+
+		/// <summary>
+		/// Inserts the after.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public int InsertBefore(int index)
+		{
+			if (index == -1)
+				return CreateRoot();
+
+			Debug.Assert(index > 0);
+
+			int free = GetFree();
+
+			// setup new node's prev/next
+			_next[free] = index;
+			_prev[free] = _prev[index];
+
+			_prev[index] = free;
+
+			// TODO: 
 			if (_next[free] >= 0)
 				_prev[_next[free]] = free;
 

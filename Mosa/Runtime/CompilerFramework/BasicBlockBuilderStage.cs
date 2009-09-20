@@ -88,8 +88,10 @@ namespace Mosa.Runtime.CompilerFramework
 			basicBlocks.Add(prologue);
 
 			// Add a jump instruction to the first block From the prologue
-			// FIXME PG
-			prologue.Instructions.Insert(0, arch.CreateInstruction(typeof(BranchInstruction), OpCode.Br, new[] { 0 }));
+			Context ctx = new Context(_instructionset, 0).InsertBefore();
+			ctx.Instruction = Map.GetInstruction(OpCode.Br);
+			ctx.Branch = new Branch(1);
+			ctx.Branch.Targets[0] = 0;
 
 			// Create the epilogue block
 			BasicBlock epilogue = new BasicBlock(Int32.MaxValue);

@@ -296,6 +296,19 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Inserts an instruction the before the current instruction.
+		/// </summary>
+		/// <returns></returns>
+		public Context InsertBefore()
+		{
+			Context ctx = new Context(_instructionSet, _instructionSet.InsertBefore(_index));
+			ctx.BasicBlock = _block;
+			ctx.Instruction = null;
+			ctx.Ignore = true;
+			return ctx;
+		}
+
+		/// <summary>
 		/// Slices this instance.
 		/// </summary>
 		public void SliceAfter()
