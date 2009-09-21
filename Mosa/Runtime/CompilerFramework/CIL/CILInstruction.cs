@@ -169,10 +169,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				Visit(vistor as ICILVisitor, context);
 		}
 
-		#endregion Methods
-
-		#region  Overrides
-
 		/// <summary>
 		/// Returns a string representation of <see cref="ConstantOperand"/>.
 		/// </summary>
