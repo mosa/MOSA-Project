@@ -312,23 +312,21 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Clears the specified context.
+		/// </summary>
+		public  void Clear()
+		{
+			_instructionSet.Data[_index].Clear();
+		}
+
+		/// <summary>
 		/// Inserts an instruction the after the current instruction.
 		/// </summary>
 		/// <returns></returns>
 		public Context InsertAfter()
 		{
 			Context ctx = new Context(_instructionSet, _instructionSet.InsertAfter(_index));
-			ctx.BasicBlock = _block;
-			ctx.Instruction = null;
-			ctx.Ignore = true;
-			ctx.Operand1 = null;
-			ctx.Operand2 = null;
-			ctx.Operand3 = null;
-			ctx.Result = null;
-			ctx.OperandCount = 0;
-			ctx.ResultCount = 0;
-			ctx.Branch = null;
-			ctx.Offset = 0;
+			ctx.Clear();
 			return ctx;
 		}
 
@@ -339,17 +337,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public Context InsertBefore()
 		{
 			Context ctx = new Context(_instructionSet, _instructionSet.InsertBefore(_index));
-			ctx.BasicBlock = _block;
-			ctx.Instruction = null;
-			ctx.Ignore = true;
-			ctx.Operand1 = null;
-			ctx.Operand2 = null;
-			ctx.Operand3 = null;
-			ctx.Result = null;
-			ctx.OperandCount = 0;
-			ctx.ResultCount = 0;
-			ctx.Branch = null;
-			ctx.Offset = 0;
+			ctx.Clear();
 			return ctx;
 		}
 
@@ -381,17 +369,117 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public void SetInstruction(IInstruction instruction, int operandCount, int resultCount)
+		public void SetInstruction(IInstruction instruction, byte operandCount, byte resultCount)
 		{
+			Clear();
 			Instruction = instruction;
 			Ignore = false;
-			OperandCount = 0;
-			ResultCount = 0;
+			OperandCount = operandCount;
+			ResultCount = resultCount;
+		}
 
-			if (instruction is CIL.ICILInstruction) {
-				OperandCount = (instruction as CIL.ICILInstruction).DefaultOperandCount;
-				ResultCount = (instruction as CIL.ICILInstruction).DefaultResultCount;
-			}
+		/// <summary>
+		/// Sets the operands.
+		/// </summary>
+		/// <param name="result">The result.</param>
+		public void SetResult(Operand result)
+		{
+			Result = result;
+		}
+
+		/// <summary>
+		/// Sets the operands.
+		/// </summary>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		public void SetOperands(Operand result, Operand operand1)
+		{
+			Result = result;
+			Operand1 = operand1;
+		}
+
+		/// <summary>
+		/// Sets the operands.
+		/// </summary>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void SetOperands(Operand result, Operand operand1, Operand operand2)
+		{
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+		}
+
+		/// <summary>
+		/// Sets the operands.
+		/// </summary>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void SetOperands(Operand result, Operand operand1, Operand operand2, Operand operand3)
+		{
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			Operand3 = operand3;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		public void SetInstruction(IInstruction instruction, Operand result)
+		{
+			SetInstruction(instruction, 0, 1);
+			Result = result;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1)
+		{
+			SetInstruction(instruction, 0, 1);
+			Result = result;
+			Operand1 = operand1;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2)
+		{
+			SetInstruction(instruction, 0, 1);
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
+		{
+			SetInstruction(instruction, 0, 1);
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			Operand3 = operand3;
 		}
 
 		#endregion // Methods

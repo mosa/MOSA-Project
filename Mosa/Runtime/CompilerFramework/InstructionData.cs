@@ -160,5 +160,29 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		#endregion // Properties
+
+		#region Methods
+
+		/// <summary>
+		/// Clears this instance.
+		/// </summary>
+		public void Clear()
+		{
+			this._offset = 0;
+			this.Instruction = null;
+			this.Ignore = true;
+			this.Operand1 = null;
+			this.Operand2 = null;
+			this.Operand3 = null;
+			this.OperandCount = 0;
+			this.Result = null;
+			this.Result2 = null;
+			this.Prefix = null;
+			this.Branch = null;
+			this.Block = 0;
+			this._other = null;
+		}
+
+		#endregion
 	}
 }

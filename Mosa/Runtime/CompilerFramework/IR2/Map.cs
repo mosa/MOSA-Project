@@ -19,6 +19,15 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 	/// </summary>
 	public sealed class Map
 	{
-		
+		/// <summary>
+		/// 
+		/// </summary>
+		AddressOfInstruction _addressOfInstruction = new AddressOfInstruction();
+
+		/// <summary>
+		/// Gets the address of instruction.
+		/// </summary>
+		/// <value>The address of instruction.</value>
+		AddressOfInstruction AddressOfInstruction { get { return _addressOfInstruction; } }
 	}
 }
