@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class StlocInstruction : StoreInstruction
+	public sealed class StlocInstruction : StoreInstruction
 	{
 		#region Construction
 

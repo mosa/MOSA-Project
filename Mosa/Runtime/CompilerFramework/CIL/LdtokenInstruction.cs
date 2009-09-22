@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LdtokenInstruction : LoadInstruction
+	public sealed class LdtokenInstruction : LoadInstruction
 	{
 		#region Construction
 

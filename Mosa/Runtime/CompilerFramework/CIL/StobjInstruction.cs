@@ -20,14 +20,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// Intermediate representation for stobj and stind.* IL instructions.
 	/// </summary>
-	public class StobjInstruction : BinaryInstruction
+	public sealed class StobjInstruction : BinaryInstruction
 	{
 		#region Data members
 
 		/// <summary>
 		/// Specifies the type of the value.
 		/// </summary>
-		protected SigType _valueType;
+		private SigType _valueType;
 
 		#endregion // Data members
 

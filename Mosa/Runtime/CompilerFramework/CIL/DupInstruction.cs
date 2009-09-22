@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class DupInstruction : UnaryInstruction
+	public sealed class DupInstruction : UnaryInstruction
 	{
 		#region Construction
 

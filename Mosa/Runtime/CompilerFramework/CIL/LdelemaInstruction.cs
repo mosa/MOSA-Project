@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LdelemaInstruction : BinaryInstruction
+	public sealed class LdelemaInstruction : BinaryInstruction
 	{
 		#region Construction
 

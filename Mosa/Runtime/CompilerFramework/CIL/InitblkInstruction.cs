@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class InitblkInstruction : NaryInstruction
+	public sealed class InitblkInstruction : NaryInstruction
 	{
 		#region Construction
 

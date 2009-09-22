@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LeaveInstruction : BranchInstruction
+	public sealed class LeaveInstruction : BranchInstruction
 	{
 		#region Construction
 

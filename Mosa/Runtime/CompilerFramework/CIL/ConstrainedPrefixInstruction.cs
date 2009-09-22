@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ConstrainedPrefixInstruction : PrefixInstruction
+	public sealed class ConstrainedPrefixInstruction : PrefixInstruction
 	{
 		#region Construction
 

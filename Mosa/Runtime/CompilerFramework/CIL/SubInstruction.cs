@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class SubInstruction : ArithmeticInstruction
+	public sealed class SubInstruction : ArithmeticInstruction
 	{
 		#region Construction
 

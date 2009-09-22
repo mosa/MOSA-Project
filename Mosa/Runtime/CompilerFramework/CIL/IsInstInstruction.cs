@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class IsInstInstruction : UnaryInstruction
+	public sealed class IsInstInstruction : UnaryInstruction
 	{
 		#region Construction
 

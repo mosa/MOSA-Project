@@ -46,7 +46,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <para/>
 	/// The expansion essentially adds a dependency to mosacor, which provides the allocator and gc.
 	/// </remarks>
-	public class NewobjInstruction : InvokeInstruction
+	public sealed class NewobjInstruction : InvokeInstruction
 	{
 		#region Construction
 

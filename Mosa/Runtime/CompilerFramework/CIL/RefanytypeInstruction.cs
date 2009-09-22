@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class RefanytypeInstruction : UnaryInstruction
+	public sealed class RefanytypeInstruction : UnaryInstruction
 	{
 		#region Construction
 

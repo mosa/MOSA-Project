@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class NewarrInstruction : UnaryInstruction
+	public sealed class NewarrInstruction : UnaryInstruction
 	{
 		#region Construction
 

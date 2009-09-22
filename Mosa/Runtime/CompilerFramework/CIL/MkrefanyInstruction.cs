@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class MkrefanyInstruction : UnaryInstruction
+	public sealed class MkrefanyInstruction : UnaryInstruction
 	{
 		#region Construction
 

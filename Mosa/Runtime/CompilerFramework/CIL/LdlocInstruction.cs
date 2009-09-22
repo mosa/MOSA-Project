@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LdlocInstruction : LoadInstruction
+	public sealed class LdlocInstruction : LoadInstruction
 	{
 		#region Construction
 

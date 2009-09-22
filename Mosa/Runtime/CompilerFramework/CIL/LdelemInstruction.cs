@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LdelemInstruction : BinaryInstruction
+	public sealed class LdelemInstruction : BinaryInstruction
 	{
 		#region Data members
 

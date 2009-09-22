@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BreakInstruction : CILInstruction
+	public sealed class BreakInstruction : CILInstruction
 	{
 		#region Construction
 

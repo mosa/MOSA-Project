@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// Intermediate representation for the CIL stfld opcode.
 	/// </summary>
-	public class StfldInstruction : BinaryInstruction
+	public sealed class StfldInstruction : BinaryInstruction
 	{
 		#region Construction
 

@@ -72,7 +72,7 @@ namespace Mosa.Tools.Mono.CreateProject
 		/// <summary>
 		/// project Class
 		/// </summary>
-		public class Project
+		public sealed class Project
 		{
 			public string Name;
 			public string ProjectFile;

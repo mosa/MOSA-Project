@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LdfldaInstruction : UnaryInstruction
+	public sealed class LdfldaInstruction : UnaryInstruction
 	{
 		#region Construction
 

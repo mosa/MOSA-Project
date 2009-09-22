@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class NoPrefixInstruction : PrefixInstruction
+	public sealed class NoPrefixInstruction : PrefixInstruction
 	{
 		#region Construction
 

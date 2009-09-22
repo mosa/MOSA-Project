@@ -21,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// Other more complex method invocation instructions derive From this class, specifically the CallInstruction,
 	/// the CalliInstruction and CallvirtInstruction classes. They share the features provided by the JumpInstruction.
 	/// </remarks>
-	public class JumpInstruction : InvokeInstruction
+	public sealed class JumpInstruction : InvokeInstruction
 	{
 		#region Construction
 

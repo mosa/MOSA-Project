@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class NegInstruction : UnaryArithmeticInstruction
+	public sealed class NegInstruction : UnaryArithmeticInstruction
 	{
 		#region Data members
 

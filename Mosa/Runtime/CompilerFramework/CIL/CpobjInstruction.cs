@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class CpobjInstruction : BinaryInstruction
+	public sealed class CpobjInstruction : BinaryInstruction
 	{
 		#region Construction
 

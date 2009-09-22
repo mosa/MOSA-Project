@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// Intermediate representation of the IL rethrow instruction.
 	/// </summary>
-	public class RethrowInstruction : CILInstruction
+	public sealed class RethrowInstruction : CILInstruction
 	{
 		#region Construction
 

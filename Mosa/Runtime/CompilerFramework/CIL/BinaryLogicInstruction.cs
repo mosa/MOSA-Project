@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// Intermediate representation of a IL binary logic instruction.
 	/// </summary>
-	public class BinaryLogicInstruction : BinaryInstruction
+	public sealed class BinaryLogicInstruction : BinaryInstruction
 	{
 
 		#region Operand Table

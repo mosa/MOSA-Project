@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ReturnInstruction : UnaryInstruction, IBranchInstruction
+	public sealed class ReturnInstruction : UnaryInstruction, IBranchInstruction
 	{
 
 		#region Construction

@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// Implements the internal representation for the IL conversion instructions.
 	/// </summary>
-	public class ConversionInstruction : UnaryArithmeticInstruction
+	public sealed class ConversionInstruction : UnaryArithmeticInstruction
 	{
 		#region Data members
 

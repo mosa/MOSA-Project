@@ -21,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// Instances of this class are used to represent call, calli and callvirt
 	/// instructions.
 	/// </remarks>
-	public class CallInstruction : InvokeInstruction
+	public sealed class CallInstruction : InvokeInstruction
 	{
 		#region Construction
 

@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// Intermediate representation of the CIL stelem opcode family.
 	/// </summary>
-	public class StelemInstruction : NaryInstruction
+	public sealed class StelemInstruction : NaryInstruction
 	{
 		#region Data members
 

@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class PopInstruction : UnaryInstruction
+	public sealed class PopInstruction : UnaryInstruction
 	{
 		#region Construction
 

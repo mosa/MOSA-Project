@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class UnalignedPrefixInstruction : PrefixInstruction
+	public sealed class UnalignedPrefixInstruction : PrefixInstruction
 	{
 		#region Construction
 

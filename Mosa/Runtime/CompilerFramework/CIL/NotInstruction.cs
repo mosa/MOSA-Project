@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class NotInstruction : UnaryArithmeticInstruction
+	public sealed class NotInstruction : UnaryArithmeticInstruction
 	{
 		#region Operand Table
 

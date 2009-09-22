@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LdargInstruction : LoadInstruction
+	public sealed class LdargInstruction : LoadInstruction
 	{
 		#region Construction
 

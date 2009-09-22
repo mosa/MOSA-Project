@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// Intermediate representation of the localalloc IL instruction.
 	/// </summary>
-	public class LocalallocInstruction : UnaryInstruction
+	public sealed class LocalallocInstruction : UnaryInstruction
 	{
 		#region Construction
 

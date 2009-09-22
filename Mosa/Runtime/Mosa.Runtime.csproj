@@ -177,6 +177,7 @@
     <Compile Include="CompilerFramework\IR2\BranchInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\CallInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\ConditionCode.cs" />
+    <Compile Include="CompilerFramework\IR2\Map.cs" />
     <Compile Include="CompilerFramework\IR2\EpilogueInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\FloatingPointCompareInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\FloatingPointToIntegerConversionInstruction.cs" />

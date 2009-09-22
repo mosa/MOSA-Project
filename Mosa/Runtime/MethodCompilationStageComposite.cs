@@ -13,7 +13,7 @@ namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
     /// MethodCompilationStageComposite composes several MethodCompilerStages into 
-    /// one sage and forwards calls to the stage to multiple _stages.
+    /// one stage and forwards calls to the stage to multiple _stages.
     /// </summary>
     public class MethodCompilationStageComposite : IMethodCompilerStage
     {

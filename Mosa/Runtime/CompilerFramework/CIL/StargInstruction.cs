@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class StargInstruction : StoreInstruction
+	public sealed class StargInstruction : StoreInstruction
 	{
 		#region Construction
 

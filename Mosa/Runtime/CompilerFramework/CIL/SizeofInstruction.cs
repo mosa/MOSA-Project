@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class SizeofInstruction : CILInstruction
+	public sealed class SizeofInstruction : CILInstruction
 	{
 		#region Construction
 

@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class CastclassInstruction : UnaryInstruction
+	public sealed class CastclassInstruction : UnaryInstruction
 	{
 		#region Construction
 

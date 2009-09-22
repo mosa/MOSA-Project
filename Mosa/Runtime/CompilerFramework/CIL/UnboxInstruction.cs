@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class UnboxInstruction : BoxingInstruction
+	public sealed class UnboxInstruction : BoxingInstruction
 	{
 		#region Construction
 

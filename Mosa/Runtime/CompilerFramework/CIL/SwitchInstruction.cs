@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// Intermediate representation for the IL switch instruction.
 	/// </summary>
-	public class SwitchInstruction : UnaryBranchInstruction
+	public sealed class SwitchInstruction : UnaryBranchInstruction
 	{
 		#region Construction
 

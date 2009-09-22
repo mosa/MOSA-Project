@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LdobjInstruction : UnaryInstruction
+	public sealed class LdobjInstruction : UnaryInstruction
 	{
 		#region Data members
 

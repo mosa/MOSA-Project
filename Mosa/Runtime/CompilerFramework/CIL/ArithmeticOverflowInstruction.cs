@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ArithmeticOverflowInstruction : BinaryInstruction
+	public sealed class ArithmeticOverflowInstruction : BinaryInstruction
 	{
 		#region Static data members
 

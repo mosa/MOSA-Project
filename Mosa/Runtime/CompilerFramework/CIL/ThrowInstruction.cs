@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// Intermediate representation of the IL throw instruction.
 	/// </summary>
-	public class ThrowInstruction : UnaryInstruction
+	public sealed class ThrowInstruction : UnaryInstruction
 	{
 		#region Construction
 

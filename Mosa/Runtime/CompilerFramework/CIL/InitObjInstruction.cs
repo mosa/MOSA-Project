@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class InitObjInstruction : UnaryInstruction
+	public sealed class InitObjInstruction : UnaryInstruction
 	{
 		#region Construction
 

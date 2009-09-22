@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BinaryBranchInstruction : BinaryInstruction, IBranchInstruction
+	public sealed class BinaryBranchInstruction : BinaryInstruction, IBranchInstruction
 	{
 		#region Construction
 

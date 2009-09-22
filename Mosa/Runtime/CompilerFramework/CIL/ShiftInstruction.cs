@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// Intermediate representation for IL shift instructions.
 	/// </summary>
-	public class ShiftInstruction : BinaryInstruction
+	public sealed class ShiftInstruction : BinaryInstruction
 	{
 		#region Operand Table
 

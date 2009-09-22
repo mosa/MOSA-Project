@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BinaryComparisonInstruction : BinaryInstruction
+	public sealed class BinaryComparisonInstruction : BinaryInstruction
 	{
 		#region Construction
 

@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public BinaryInstruction(OpCode opcode)
-			: base(opcode,2)
+			: base(opcode, 2)
 		{
 		}
 

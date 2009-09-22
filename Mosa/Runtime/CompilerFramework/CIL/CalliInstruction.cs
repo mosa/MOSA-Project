@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class CalliInstruction : InvokeInstruction
+	public sealed class CalliInstruction : InvokeInstruction
 	{
 		#region Construction
 

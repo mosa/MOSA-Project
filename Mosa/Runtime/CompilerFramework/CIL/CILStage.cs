@@ -24,7 +24,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// </summary>
 	public class CILStage : CodeTransformationStage, ICILVisitor, IVisitor
 	{
-
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>

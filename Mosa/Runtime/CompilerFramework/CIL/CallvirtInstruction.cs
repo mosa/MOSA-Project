@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class CallvirtInstruction : InvokeInstruction
+	public sealed class CallvirtInstruction : InvokeInstruction
 	{
 		#region Construction
 

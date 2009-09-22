@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// Intermediate representation of the CIL stsfld operation.
 	/// </summary>
-	public class StsfldInstruction : UnaryInstruction
+	public sealed class StsfldInstruction : UnaryInstruction
 	{
 		#region Construction
 
