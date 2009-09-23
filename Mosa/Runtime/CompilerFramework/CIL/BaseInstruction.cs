@@ -175,7 +175,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return "CIL: " + _opcode.ToString();
+			return "CIL." + _opcode.ToString();
 		}
 
 		#endregion //  Overrides
