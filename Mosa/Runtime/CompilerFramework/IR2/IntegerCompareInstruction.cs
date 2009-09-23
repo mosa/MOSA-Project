@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// <summary>
     /// Intermediate representation of an integer comparison.
     /// </summary>
-    public class IntegerCompareInstruction : ThreeOperandInstruction, IConditionalInstruction
+    public class IntegerCompareInstruction : ThreeOperandInstruction
     {
         #region Data members
 
@@ -35,24 +35,9 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         /// </summary>
         public IntegerCompareInstruction()
         {
-            _conditionCode = ConditionCode.Equal;
         }
 
         #endregion // Construction
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the condition code of this instruction.
-        /// </summary>
-        /// <value>The condition code.</value>
-        public ConditionCode ConditionCode
-        {
-            get { return _conditionCode; }
-            set { _conditionCode = value; }
-        }
-
-        #endregion // Properties
 
         #region ThreeOperandInstruction Overrides
 
@@ -64,6 +49,9 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         /// </returns>
         public override string ToString(ref InstructionData instruction)
         {
+			// FIXME PG - pull from instructiondata ?
+			_conditionCode = ConditionCode.Equal; // DUMMY
+
             string cc;
             switch (_conditionCode)
             {

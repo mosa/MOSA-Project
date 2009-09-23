@@ -182,7 +182,6 @@
     <Compile Include="CompilerFramework\IR2\FloatingPointCompareInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\FloatingPointToIntegerConversionInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\IIRInstruction.cs" />
-    <Compile Include="CompilerFramework\IR2\IConditionalInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\IIRVisitor.cs" />
     <Compile Include="CompilerFramework\IR2\IntegerCompareInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\IntegerToFloatingPointConversionInstruction.cs" />

@@ -17,17 +17,39 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class Instruction
+	public static class Instruction
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		AddressOfInstruction _addressOfInstruction = new AddressOfInstruction();
+		private static AddressOfInstruction _addressOfInstruction = new AddressOfInstruction();
+		private static ArithmeticShiftRightInstruction _arithmeticShiftRightInstruction = new ArithmeticShiftRightInstruction();
+		private static BranchInstruction _branchInstruction = new BranchInstruction();
+		private static EpilogueInstruction _epilogueInstruction = new EpilogueInstruction();
+		private static FloatingPointCompareInstruction _floatingPointCompareInstruction = new FloatingPointCompareInstruction();
 
 		/// <summary>
 		/// Gets the address of instruction.
 		/// </summary>
 		/// <value>The address of instruction.</value>
-		AddressOfInstruction AddressOfInstruction { get { return _addressOfInstruction; } }
+		public static AddressOfInstruction AddressOfInstruction { get { return _addressOfInstruction; } }
+		/// <summary>
+		/// Gets the arithmetic shift right instruction.
+		/// </summary>
+		/// <value>The arithmetic shift right instruction.</value>
+		public static ArithmeticShiftRightInstruction ArithmeticShiftRightInstruction { get { return _arithmeticShiftRightInstruction; } }
+		/// <summary>
+		/// Gets the branch instruction.
+		/// </summary>
+		/// <value>The branch instruction.</value>
+		public static BranchInstruction BranchInstruction { get { return _branchInstruction; } }
+		/// <summary>
+		/// Gets the epilogue instruction.
+		/// </summary>
+		/// <value>The epilogue instruction.</value>
+		public static EpilogueInstruction EpilogueInstruction { get { return _epilogueInstruction; } }
+		/// <summary>
+		/// Gets the floating point compare instruction.
+		/// </summary>
+		/// <value>The floating point compare instruction.</value>
+		public static FloatingPointCompareInstruction FloatingPointCompareInstruction { get { return _floatingPointCompareInstruction; } }
+
 	}
 }

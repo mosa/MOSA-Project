@@ -17,16 +17,8 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// <summary>
     /// Represents a floating point comparison instruction.
     /// </summary>
-    public sealed class FloatingPointCompareInstruction : ThreeOperandInstruction, IConditionalInstruction
-    {
-        #region Data members
-
-        /// <summary>
-        /// Holds the conditional code of the comparison.
-        /// </summary>
-        private ConditionCode _conditionCode;
-
-        #endregion // Data members
+    public sealed class FloatingPointCompareInstruction : ThreeOperandInstruction
+    {      
 
         #region Construction
 
@@ -35,24 +27,9 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         /// </summary>
         public FloatingPointCompareInstruction()
         {
-            _conditionCode = ConditionCode.Equal;
         }
 
         #endregion // Construction
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the condition code.
-        /// </summary>
-        /// <value>The condition code.</value>
-        public ConditionCode ConditionCode
-        {
-            get { return _conditionCode; }
-            set { _conditionCode = value; }
-        }
-
-        #endregion // Properties
 
         #region ThreeOperandInstruction Overrides
 
@@ -64,6 +41,9 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         /// </returns>
         public override string ToString(ref InstructionData instruction)
         {
+			// FIXME PG - pull from instructiondata ?
+			ConditionCode _conditionCode = ConditionCode.Equal; // DUMMY
+
             string cc;
             switch (_conditionCode)
             {
