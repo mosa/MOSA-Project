@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// This instruction is usually derived by the architecture and expanded appropriately
     /// for the calling convention of the method.
     /// </remarks>
-    public class PrologueInstruction : Instruction
+    public class PrologueInstruction : LegacyInstruction
     {
         #region Data members
 

@@ -286,7 +286,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Gets a list of instructions in intermediate representation.
 		/// </summary>
 		/// <value></value>
-		List<Mosa.Runtime.CompilerFramework.Instruction> IInstructionsProvider.Instructions
+		List<LegacyInstruction> IInstructionsProvider.Instructions
 		{
 			get { return null; }
 		}

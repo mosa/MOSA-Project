@@ -237,7 +237,7 @@ namespace Mosa.Runtime.CompilerFramework
 					targets[0] = block.NextBlocks[0].Label;
 
 					// Create JUMP instruction
-					Instruction instruction = arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IL.BranchInstruction), Mosa.Runtime.CompilerFramework.IL.OpCode.Br, targets);
+					LegacyInstruction instruction = arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IL.BranchInstruction), Mosa.Runtime.CompilerFramework.IL.OpCode.Br, targets);
 
 					// Assign block index to instruction
 					instruction.Block = block.Index;
@@ -279,7 +279,7 @@ namespace Mosa.Runtime.CompilerFramework
 						targets[0] = block.NextBlocks[0].Label;
 
 						// Create JUMP instruction
-						Instruction instruction = arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IL.BranchInstruction), Mosa.Runtime.CompilerFramework.IL.OpCode.Br, targets);
+						LegacyInstruction instruction = arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IL.BranchInstruction), Mosa.Runtime.CompilerFramework.IL.OpCode.Br, targets);
 
 						// Assign block index to instruction
 						instruction.Block = block.Index;
@@ -391,7 +391,7 @@ namespace Mosa.Runtime.CompilerFramework
 					block.Instructions.RemoveAt(block.Instructions.Count - 1);
 
 					// Copy instructions From next block into the current block
-					foreach (Instruction instruction in nextBlock.Instructions) {
+					foreach (LegacyInstruction instruction in nextBlock.Instructions) {
 						instruction.Block = block.Index;
 						block.Instructions.Add(instruction);
 					}
@@ -449,13 +449,13 @@ namespace Mosa.Runtime.CompilerFramework
 					block.Instructions.RemoveAt(block.Instructions.Count - 1);
 
 					// Get the only instruction in the next block
-					Instruction lastInstruction = block.NextBlocks[0].Instructions[0];
+					LegacyInstruction lastInstruction = block.NextBlocks[0].Instructions[0];
 
 					// Get the branch instruction interface
 					IBranchInstruction lastBranchInstruction = lastInstruction as IBranchInstruction;
 
 					// Clone the last instruction w/ targets
-					Instruction clonedInstruction = CloneBranchInstruction(lastBranchInstruction);
+					LegacyInstruction clonedInstruction = CloneBranchInstruction(lastBranchInstruction);
 
 					// Assign clonsed instruction to this block
 					clonedInstruction.Block = block.Index;
@@ -485,9 +485,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="branchInstruction">The branch instruction.</param>
 		/// <returns></returns>
-		protected Instruction CloneBranchInstruction(IBranchInstruction branchInstruction)
+		protected LegacyInstruction CloneBranchInstruction(IBranchInstruction branchInstruction)
 		{
-			Instruction result;
+			LegacyInstruction result;
 			if (branchInstruction is IL.BinaryBranchInstruction) {
 				result = arch.CreateInstruction(
 					   typeof(IL.BinaryBranchInstruction),

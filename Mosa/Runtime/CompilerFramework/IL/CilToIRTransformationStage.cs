@@ -232,7 +232,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     throw new NotSupportedException();
             }
 
-            Instruction result = Architecture.CreateInstruction(type, instruction.Results[0], instruction.First, instruction.Second);
+            LegacyInstruction result = Architecture.CreateInstruction(type, instruction.Results[0], instruction.First, instruction.Second);
             Replace(ctx, result);
         }
 
@@ -257,7 +257,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                     throw new NotSupportedException();
             }
 
-            Instruction result = Architecture.CreateInstruction(replType, instruction.Results[0], instruction.First, instruction.Second);
+            LegacyInstruction result = Architecture.CreateInstruction(replType, instruction.Results[0], instruction.First, instruction.Second);
             Replace(ctx, result);
         }
 
@@ -822,7 +822,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             {
                 Debug.Assert(0 != mask, @"Conversion is an AND, but no mask given.");
 
-                List<Instruction> instructions = new List<Instruction>();
+                List<LegacyInstruction> instructions = new List<LegacyInstruction>();
                 if (type != typeof(LogicalAndInstruction))
                 {
                     ProcessMixedTypeConversion(instructions, type, mask, destinationOperand, sourceOperand);
@@ -901,7 +901,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             }
         }
 
-        private void ProcessMixedTypeConversion(List<Instruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
+        private void ProcessMixedTypeConversion(List<LegacyInstruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
         {
             instructionList.AddRange(new[] {
                 Architecture.CreateInstruction(type, destinationOperand, sourceOperand),
@@ -909,7 +909,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             });
         }
 
-        private void ProcessSingleTypeTruncation(List<Instruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
+        private void ProcessSingleTypeTruncation(List<LegacyInstruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
         {
             if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
             {
@@ -920,7 +920,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                 instructionList.Add(Architecture.CreateInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask)));
         }
 
-        private void ExtendAndTruncateResult(List<Instruction> instructionList, Type extensionType, Operand destinationOperand)
+        private void ExtendAndTruncateResult(List<LegacyInstruction> instructionList, Type extensionType, Operand destinationOperand)
         {
             if (null != extensionType && destinationOperand is RegisterOperand)
             {
@@ -947,7 +947,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
             // Retrieve the runtime type
             RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
             // The replacement instruction
-            Instruction replacement = null;
+            LegacyInstruction replacement = null;
 
             if (rm.IsDefined(rt))
             {
@@ -970,7 +970,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
                                 foreach (Operand op in instruction.Operands)
                                     args[idx++] = op;
 
-                                replacement = (Instruction)Activator.CreateInstance(ia.InstructionType, args, null);
+                                replacement = (LegacyInstruction)Activator.CreateInstance(ia.InstructionType, args, null);
                                 break;
                             }
                             catch (Exception e)
@@ -1102,7 +1102,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
         /// <param name="ctx">The transformation context.</param>
         /// <param name="instruction">The instruction to replace.</param>
         /// <param name="internalCallTarget">The internal call target.</param>
-        private void ReplaceWithInternalCall(Context ctx, Instruction instruction, object internalCallTarget)
+        private void ReplaceWithInternalCall(Context ctx, LegacyInstruction instruction, object internalCallTarget)
         {
             RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
             RuntimeMethod callTarget = FindMethod(rt, internalCallTarget.ToString());

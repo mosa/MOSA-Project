@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework
     public sealed class IRConstantFoldingStage : CodeTransformationStage, IMethodCompilerStage, IR.IIRVisitor<Context>, IInstructionVisitor<Context>
     {
        
-        void IInstructionVisitor<Context>.Visit(Instruction instruction, Context ctx)
+        void IInstructionVisitor<Context>.Visit(LegacyInstruction instruction, Context ctx)
         {
         }
 

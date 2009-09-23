@@ -53,7 +53,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="instruction">The visiting instruction.</param>
         /// <param name="arg">A visitation context argument.</param>
-        public void Visit(Instruction instruction, int arg)
+        public void Visit(LegacyInstruction instruction, int arg)
         {
             // Count disjoint instructions
             if (_disjointInstructions.ContainsKey(instruction.GetType()))

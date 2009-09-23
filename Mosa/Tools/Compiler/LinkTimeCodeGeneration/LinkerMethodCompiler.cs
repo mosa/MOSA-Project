@@ -28,7 +28,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
         /// <param name="method">The metadata of the method to compile.</param>
         /// <param name="instructions">The instructions to compile into the method.</param>
         /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/>, <paramref name="method"/> or <paramref name="instructions"/> is null.</exception>
-        public LinkerMethodCompiler(AssemblyCompiler compiler, RuntimeMethod method, List<Instruction> instructions) :
+        public LinkerMethodCompiler(AssemblyCompiler compiler, RuntimeMethod method, List<LegacyInstruction> instructions) :
             base(compiler.Pipeline.Find<IAssemblyLinker>(), compiler.Architecture, compiler.Assembly, method.DeclaringType, method)
         {
             if (instructions == null)

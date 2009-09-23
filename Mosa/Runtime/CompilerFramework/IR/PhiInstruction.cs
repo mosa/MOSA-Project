@@ -21,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// automatically select the appropriate value of a variable depending on the
     /// incoming edge.
     /// </summary>
-    public sealed class PhiInstruction : Instruction
+    public sealed class PhiInstruction : LegacyInstruction
     {
         #region Data members
 

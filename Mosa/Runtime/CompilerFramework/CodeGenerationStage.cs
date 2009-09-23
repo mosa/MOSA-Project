@@ -123,7 +123,7 @@ namespace Mosa.Runtime.CompilerFramework
             foreach (BasicBlock block in blockProvider)
             {
                 BlockStart(block);
-                foreach (Instruction instruction in block.Instructions)
+                foreach (LegacyInstruction instruction in block.Instructions)
                     if (!instruction.Ignore)
                         instruction.Visit<ContextType>(this, ct);
  
@@ -161,7 +161,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="instruction">The visiting instruction.</param>
         /// <param name="arg">A visitation context argument.</param>
-        void IInstructionVisitor<ContextType>.Visit(Instruction instruction, ContextType arg)
+        void IInstructionVisitor<ContextType>.Visit(LegacyInstruction instruction, ContextType arg)
         {
             Trace.WriteLine(String.Format(@"Unknown instruction {0} has visited CodeGenerationStage<ContextType>.", instruction.GetType().FullName));
             throw new NotSupportedException();

@@ -133,7 +133,7 @@ namespace Mosa.Runtime.CompilerFramework
                     for (int i = 0; i < block.Instructions.Count; i++)
                     {
                         string color;
-                        Instruction instruction = block.Instructions[i];
+                        LegacyInstruction instruction = block.Instructions[i];
                         string inst = instruction.ToString().Replace("&", "&amp;");
                         inst = inst.Replace("<", "&lt;");
                         inst = inst.Replace(">", "&gt;");

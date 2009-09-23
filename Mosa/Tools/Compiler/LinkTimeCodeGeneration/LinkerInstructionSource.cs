@@ -29,7 +29,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
         /// <summary>
         /// Holds the instructions to emit during the linker process.
         /// </summary>
-        private readonly List<Instruction> instructions;
+        private readonly List<LegacyInstruction> instructions;
 
         #endregion // Data Members
 
@@ -39,9 +39,9 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
         /// Initializes a new instance of the <see cref="LinkerInstructionSource"/> class.
         /// </summary>
         /// <param name="instructions">The instructions to emit.</param>
-        public LinkerInstructionSource(List<Instruction> instructions)
+        public LinkerInstructionSource(List<LegacyInstruction> instructions)
         {
-            this.instructions = new List<Instruction>(instructions);
+            this.instructions = new List<LegacyInstruction>(instructions);
         }
 
         #endregion // Construction
@@ -52,7 +52,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
         /// Gets a list of instructions in intermediate representation.
         /// </summary>
         /// <value></value>
-        public List<Instruction> Instructions
+        public List<LegacyInstruction> Instructions
         {
             get { return this.instructions; }
         }
@@ -76,7 +76,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<Instruction> GetEnumerator()
+        public IEnumerator<LegacyInstruction> GetEnumerator()
         {
             return this.instructions.GetEnumerator();
         }

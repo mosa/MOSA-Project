@@ -51,10 +51,10 @@ namespace Mosa.Runtime.CompilerFramework
 
             foreach (BasicBlock block in blockProvider)
             {
-                List<Instruction> instructions = block.Instructions;
+                List<LegacyInstruction> instructions = block.Instructions;
                 for (int i = 0; i < instructions.Count; i++)
                 {
-                    Instruction instruction = instructions[i];
+                    LegacyInstruction instruction = instructions[i];
 
                     if (instruction is IR.MoveInstruction || instruction is IL.StlocInstruction)
                     {

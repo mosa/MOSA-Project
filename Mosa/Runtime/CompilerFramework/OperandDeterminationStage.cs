@@ -117,7 +117,7 @@ namespace Mosa.Runtime.CompilerFramework
         {
             for (int i = 0; i < block.Instructions.Count; i++)
             {
-                Instruction instruction = block.Instructions[i];
+                LegacyInstruction instruction = block.Instructions[i];
 
                 if (!(instruction is ILInstruction))
                     continue;
@@ -128,7 +128,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
-        private static void AssignOperandsFromILStack(Instruction instruction, IList<Operand> currentStack)
+        private static void AssignOperandsFromILStack(LegacyInstruction instruction, IList<Operand> currentStack)
         {
             for (int opCount = instruction.Operands.Length - 1; opCount >= 0; --opCount)
             {
@@ -141,7 +141,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
-        private static void PushResultOperands(Instruction instruction, IList<Operand> currentStack)
+        private static void PushResultOperands(LegacyInstruction instruction, IList<Operand> currentStack)
         {
             Operand[] ops = instruction.Results;
             if (ops != null && (instruction as ILInstruction).PushResult && ops.Length != 0)

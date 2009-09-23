@@ -105,10 +105,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// Logs the instructions in the given enumerable to the trace.
         /// </summary>
         /// <param name="instructions">The enumerable container of instructions.</param>
-        private void LogInstructions(IEnumerable<Instruction> instructions)
+        private void LogInstructions(IEnumerable<LegacyInstruction> instructions)
         {
             StringBuilder text = new StringBuilder();
-            foreach (Instruction inst in instructions)
+            foreach (LegacyInstruction inst in instructions)
             {
                 text.Length = 0;
                 if (true == inst.Ignore)

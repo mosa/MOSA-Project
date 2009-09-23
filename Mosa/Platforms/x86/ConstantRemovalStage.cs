@@ -82,7 +82,7 @@ namespace Mosa.Platforms.x86
             if (null == methodCompiler)
                 throw new ArgumentNullException(@"methodCompiler");
 
-            List<Instruction> literals = new List<Instruction>();
+            List<LegacyInstruction> literals = new List<LegacyInstruction>();
             IArchitecture arch = methodCompiler.Architecture;
 
             // Is the method split into basic Blocks?
@@ -129,14 +129,14 @@ namespace Mosa.Platforms.x86
         /// <param name="architecture">The architecture used to create literals.</param>
         /// <param name="instructions">The instruction list to enumerate.</param>
         /// <param name="literals">A list of instructions to add the literals to.</param>
-        private static void ProcessInstructions(IArchitecture architecture, IEnumerable<Instruction> instructions, IList<Instruction> literals)
+        private static void ProcessInstructions(IArchitecture architecture, IEnumerable<LegacyInstruction> instructions, IList<LegacyInstruction> literals)
         {
             // Current constant operand
             ConstantOperand co = null;
             // Operand index in an instruction
             int opIdx = 0;
 
-            foreach (Instruction instruction in instructions)
+            foreach (LegacyInstruction instruction in instructions)
             {
                 // A constant may only appear on the right side of an expression, so we ignore constants in
                 // Instruction.Result - there should never be one there.

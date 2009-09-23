@@ -143,7 +143,7 @@ namespace Mosa.Runtime.CompilerFramework
         private void AssignRegisters(BasicBlock block, ref int idx)
         {
             // Retrieve the current instruction
-            Instruction instr = block.Instructions[idx];
+            LegacyInstruction instr = block.Instructions[idx];
             // Retrieve the register constraints for the instruction
             IRegisterConstraint rc = _architecture.GetRegisterConstraint(instr);
             // Operand index
@@ -295,7 +295,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="source">The source operand.</param>
         private void InsertMove(BasicBlock block, int idx, Operand destination, Operand source)
         {
-            Instruction move = _architecture.CreateInstruction(typeof(IR.MoveInstruction), destination, source);
+            LegacyInstruction move = _architecture.CreateInstruction(typeof(IR.MoveInstruction), destination, source);
             block.Instructions.Insert(idx, move);
         }
 

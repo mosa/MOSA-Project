@@ -63,7 +63,7 @@ namespace Mosa.Platforms.x86
         /// <param name="block"></param>
         private void ScheduleBlock(BasicBlock block)
         {
-            foreach (Instruction instruction in block.Instructions)
+            foreach (LegacyInstruction instruction in block.Instructions)
             {
                 sbyte latency = InstructionLatency.GetLatency(instruction);
             }

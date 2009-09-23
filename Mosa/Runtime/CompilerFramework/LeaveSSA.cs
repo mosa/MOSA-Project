@@ -49,7 +49,7 @@ namespace Mosa.Runtime.CompilerFramework
             {
                 if (block.Instructions.Count > 0)
                 {
-                    foreach (Instruction instruction in block.Instructions)
+                    foreach (LegacyInstruction instruction in block.Instructions)
                     {
                         IR.PhiInstruction phi = instruction as IR.PhiInstruction;
                         if (null == phi)
@@ -72,7 +72,7 @@ namespace Mosa.Runtime.CompilerFramework
                                 }
                                 else
                                 {
-                                    List<Instruction> insts = phi.Blocks[i].Instructions;
+                                    List<LegacyInstruction> insts = phi.Blocks[i].Instructions;
                                     int insIdx = insts.Count - 1;
 
                                     /* If there's a use, insert the move right after the last use
@@ -82,7 +82,7 @@ namespace Mosa.Runtime.CompilerFramework
                                     if (0 != op.Uses.Count)
                                     {
                                         // FIXME: Depends on sortable instruction offsets, we really need a custom collection here
-                                        op.Uses.Sort(delegate(Instruction a, Instruction b)
+                                        op.Uses.Sort(delegate(LegacyInstruction a, LegacyInstruction b)
                                         {
                                             return (a.Offset - b.Offset);
                                         });
@@ -95,7 +95,7 @@ namespace Mosa.Runtime.CompilerFramework
                                     if (insIdx == -1)
                                         insIdx = 0;
 
-                                    Instruction move = arch.CreateInstruction(typeof(IR.MoveInstruction), res, op);
+                                    LegacyInstruction move = arch.CreateInstruction(typeof(IR.MoveInstruction), res, op);
                                     insts.Insert(insIdx, move);
                                 }
                             }

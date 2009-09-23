@@ -115,7 +115,7 @@ namespace Mosa.Runtime.CompilerFramework
             IBasicBlockProvider blockProvider = compiler.GetPreviousStage<IBasicBlockProvider>();
             foreach (BasicBlock block in blockProvider)
             {
-                foreach (Instruction instruction in block.Instructions)
+                foreach (LegacyInstruction instruction in block.Instructions)
                 {
                     this.ProcessInstruction(instruction);
                 }
@@ -127,7 +127,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="instruction">The instruction.</param>
         /// <returns>The number of operands popped.</returns>
-        private int PopOperands(Instruction instruction)
+        private int PopOperands(LegacyInstruction instruction)
         {
             Operand[] ops = instruction.Operands;
             for (int i = ops.Length - 1; i > -1; i--)
@@ -189,7 +189,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// Processes the instruction.
         /// </summary>
         /// <param name="instruction">The instruction to process.</param>
-        private void ProcessInstruction(Instruction instruction)
+        private void ProcessInstruction(LegacyInstruction instruction)
         {
             if (instruction is MoveInstruction)
             {
@@ -212,7 +212,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="instruction">The instruction.</param>
         /// <param name="pops">The number of pops performed.</param>
         /// <returns>The number of pushes performed.</returns>
-        private int PushResults(Instruction instruction, int pops)
+        private int PushResults(LegacyInstruction instruction, int pops)
         {
             // Get the result operands
             Operand[] ops = instruction.Results;

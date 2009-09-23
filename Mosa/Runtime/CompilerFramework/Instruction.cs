@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// state the instructions may use more than three operands, however before emitting code these
     /// instructions should expand themselves to ensure a valid three-address code.
     /// </remarks>
-    public abstract class Instruction
+    public abstract class LegacyInstruction
     {
         #region Constant data members
 
@@ -32,7 +32,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Indicates an empty instruction expansion.
         /// </summary>
-        public static readonly Instruction[] Empty = new Instruction[0];
+        public static readonly LegacyInstruction[] Empty = new LegacyInstruction[0];
 
         #endregion // Constant data members
 
@@ -72,9 +72,9 @@ namespace Mosa.Runtime.CompilerFramework
         #region Construction
 
         /// <summary>
-        /// Initializes a new instance of <see cref="Instruction"/>.
+		/// Initializes a new instance of <see cref="LegacyInstruction"/>.
         /// </summary>
-        protected Instruction()
+        protected LegacyInstruction()
         {
             _ignore = false;
             _offset = 0;
@@ -83,10 +83,10 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="Instruction"/>.
+		/// Initializes a new instance of <see cref="LegacyInstruction"/>.
         /// </summary>
         /// <param name="operandCount">The number of operands of the instruction.</param>
-        protected Instruction(int operandCount)
+        protected LegacyInstruction(int operandCount)
         {
             _ignore = false;
             _offset = 0;
@@ -95,11 +95,11 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="Instruction"/>.
+		/// Initializes a new instance of <see cref="LegacyInstruction"/>.
         /// </summary>
         /// <param name="operandCount">The number of operands of the instruction.</param>
         /// <param name="resultCount">The number of results pushed by the instruction.</param>
-        protected Instruction(int operandCount, int resultCount)
+        protected LegacyInstruction(int operandCount, int resultCount)
         {
             // To avoid errors caused by warnings
             _ignore = false;
@@ -190,7 +190,7 @@ namespace Mosa.Runtime.CompilerFramework
             {
                 if (null == value)
                     throw new ArgumentNullException(@"value");
-                if (Instruction.NoOperands == _results)
+                if (LegacyInstruction.NoOperands == _results)
                     throw new InvalidOperationException(@"ILInstruction does not provide results or hasn't been decoded yet.");
                 if (value.Length != _results.Length)
                     throw new ArgumentException(@"Can't change result count of an instruction.", @"value");

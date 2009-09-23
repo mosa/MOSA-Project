@@ -94,7 +94,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The visiting instruction.</param>
 		/// <param name="arg">A visitation context argument.</param>
-		public virtual void Visit(Instruction instruction, Context arg)
+		public virtual void Visit(LegacyInstruction instruction, Context arg)
 		{
 			Trace.WriteLine(String.Format(@"Unknown instruction {0} has visited stage {1}.", instruction.GetType().FullName, Name));
 			throw new NotSupportedException();
@@ -118,7 +118,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Removes the specified instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction to remove.</param>
-		protected void Remove(Instruction instruction)
+		protected void Remove(LegacyInstruction instruction)
 		{
 			// FIXME: Remove this sequence, once we have a smart instruction collection which does this.
 			for (int i = 0; i < instruction.Operands.Length; i++)
@@ -132,7 +132,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="arg">The transformation context.</param>
 		/// <param name="instruction">The instruction to replace with.</param>
-		protected void Replace(Context arg, Instruction instruction)
+		protected void Replace(Context arg, LegacyInstruction instruction)
 		{
 			arg.BasicBlock.Instructions[arg.Index] = instruction;
 		}
@@ -142,9 +142,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="arg">The transformation context.</param>
 		/// <param name="instructions">The instructions to replace with.</param>
-		protected void Replace(Context arg, IEnumerable<Instruction> instructions)
+		protected void Replace(Context arg, IEnumerable<LegacyInstruction> instructions)
 		{
-			List<Instruction> insts = arg.BasicBlock.Instructions;
+			List<LegacyInstruction> insts = arg.BasicBlock.Instructions;
 			insts.RemoveAt(arg.Index);
 			int oldCount = insts.Count;
 			insts.InsertRange(arg.Index, instructions);
@@ -202,7 +202,7 @@ namespace Mosa.Runtime.CompilerFramework
 		private static void UpdateBlocks(BasicBlock[] blocks, IDictionary<int, BasicBlock> blockLabels)
 		{
 			foreach (BasicBlock block in blocks)
-				foreach (Instruction instruction in block.Instructions)
+				foreach (LegacyInstruction instruction in block.Instructions)
 					if (instruction is IBranchInstruction)
 						foreach (int label in (instruction as IBranchInstruction).BranchTargets) 
 							UpdateBlockLinks(block, blockLabels[label]);
@@ -251,7 +251,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction index to split on.</param>
 		/// <param name="insert">The insert to be called after the split.</param>
 		/// <returns></returns>
-		protected BasicBlock SplitBlock(Context ctx, Instruction instruction, BasicBlock insert)
+		protected BasicBlock SplitBlock(Context ctx, LegacyInstruction instruction, BasicBlock insert)
 		{
 			int label = Blocks.Count + 0x10000000;
 

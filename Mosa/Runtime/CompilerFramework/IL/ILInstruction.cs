@@ -33,7 +33,7 @@ namespace Mosa.Runtime.CompilerFramework.IL
 	/// use of the three operands is specific to the IR code used and documented
 	/// with the operand.
 	/// </remarks>
-	public abstract class ILInstruction : Instruction
+	public abstract class ILInstruction : LegacyInstruction
     {
         #region Data members
 

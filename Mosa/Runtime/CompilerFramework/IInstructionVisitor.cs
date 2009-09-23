@@ -20,6 +20,6 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="instruction">The visiting instruction.</param>
         /// <param name="arg">A visitation context argument.</param>
-        void Visit(Instruction instruction, TArgType arg);
+        void Visit(LegacyInstruction instruction, TArgType arg);
     }
 }

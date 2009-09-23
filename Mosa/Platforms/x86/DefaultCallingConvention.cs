@@ -68,7 +68,7 @@ namespace Mosa.Platforms.x86
              * 
              */
 
-            List<Instruction> instructions = new List<Instruction>();
+            List<LegacyInstruction> instructions = new List<LegacyInstruction>();
             SigType I = new SigType(CilElementType.I);
             RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
             bool moveThis = instruction.InvokeTarget.Signature.HasThis;
@@ -118,7 +118,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="instruction"></param>
         /// <param name="moveThis"></param>
-        private Stack<Operand> GetOperandStackFromInstruction(Instruction instruction, bool moveThis)
+        private Stack<Operand> GetOperandStackFromInstruction(LegacyInstruction instruction, bool moveThis)
         {
             Stack<Operand> operandStack = new Stack<Operand>(instruction.Operands.Length);
             int thisArg = 1;
@@ -142,7 +142,7 @@ namespace Mosa.Platforms.x86
         /// <param name="instructionList"></param>
         /// <param name="operandStack"></param>
         /// <param name="space"></param>
-        private void CalculateRemainingSpace(List<Instruction> instructionList, Stack<Operand> operandStack, ref int space)
+        private void CalculateRemainingSpace(List<LegacyInstruction> instructionList, Stack<Operand> operandStack, ref int space)
         {
             while (0 != operandStack.Count)
             {
@@ -160,7 +160,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="resultOperand"></param>
         /// <param name="instructionList"></param>
-        private void MoveReturnValueTo32Bit(Operand resultOperand, List<Instruction> instructionList)
+        private void MoveReturnValueTo32Bit(Operand resultOperand, List<LegacyInstruction> instructionList)
         {
             RegisterOperand eax = new RegisterOperand(resultOperand.Type, GeneralPurposeRegister.EAX);
 
@@ -172,7 +172,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="resultOperand"></param>
         /// <param name="instructionList"></param>
-        private void MoveReturnValueTo64Bit(Operand resultOperand, List<Instruction> instructionList)
+        private void MoveReturnValueTo64Bit(Operand resultOperand, List<LegacyInstruction> instructionList)
         {
             SigType I4 = new SigType(CilElementType.I4);
             SigType U4 = new SigType(CilElementType.U4);
@@ -185,7 +185,7 @@ namespace Mosa.Platforms.x86
             RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
-            instructionList.AddRange(new Instruction[] {
+            instructionList.AddRange(new LegacyInstruction[] {
                 new Instructions.MoveInstruction(opL, eax),
                 new Instructions.MoveInstruction(opH, edx)
             });
@@ -197,7 +197,7 @@ namespace Mosa.Platforms.x86
         /// <param name="instructions">The instructions.</param>
         /// <param name="op">The op.</param>
         /// <param name="stackSize">Size of the stack.</param>
-        private void Push(List<Instruction> instructions, Operand op, int stackSize)
+        private void Push(List<LegacyInstruction> instructions, Operand op, int stackSize)
         {
             if (op is MemoryOperand)
             {
@@ -224,7 +224,7 @@ namespace Mosa.Platforms.x86
                             MemoryOperand opL = new MemoryOperand(I4, mop.Base, mop.Offset);
                             MemoryOperand opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
 
-                            instructions.AddRange(new Instruction[] {
+                            instructions.AddRange(new LegacyInstruction[] {
                                 new x86.Instructions.MoveInstruction(eax, opL),
                                 new x86.Instructions.MoveInstruction(new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax),
                                 new x86.Instructions.MoveInstruction(eax, opH),
@@ -246,7 +246,7 @@ namespace Mosa.Platforms.x86
                 RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
                 LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
-                instructions.AddRange(new Instruction[] {
+                instructions.AddRange(new LegacyInstruction[] {
                     new x86.Instructions.MoveInstruction(eax, opL),
                     new x86.Instructions.MoveInstruction(new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax),
                     new x86.Instructions.MoveInstruction(eax, opH),
@@ -286,7 +286,7 @@ namespace Mosa.Platforms.x86
         /// <returns>
         /// An instruction, which represents the appropriate move.
         /// </returns>
-        Instruction[] ICallingConvention.MoveReturnValue(Operand operand)
+        LegacyInstruction[] ICallingConvention.MoveReturnValue(Operand operand)
         {
             int size, alignment;
             this.architecture.GetTypeRequirements(operand.Type, out size, out alignment);
@@ -294,11 +294,11 @@ namespace Mosa.Platforms.x86
             // FIXME: Do not issue a move, if the operand is already the destination register
             if (4 == size || 2 == size || 1 == size)
             {
-                return new Instruction[] { this.architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand) };
+                return new LegacyInstruction[] { this.architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand) };
             }
             else if (8 == size && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
             {
-                return new Instruction[] { this.architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, SSE2Register.XMM0), operand) };
+                return new LegacyInstruction[] { this.architecture.CreateInstruction(typeof(Instructions.MoveInstruction), new RegisterOperand(operand.Type, SSE2Register.XMM0), operand) };
             }
             else if (8 == size && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
             {
@@ -343,7 +343,7 @@ namespace Mosa.Platforms.x86
                 }
 
                 // Like Win32: EDX:EAX
-                return new Instruction[] { 
+                return new LegacyInstruction[] { 
                     new Instructions.MoveInstruction(new RegisterOperand(U4, GeneralPurposeRegister.EAX), opL),
                     new Instructions.MoveInstruction(new RegisterOperand(I4, GeneralPurposeRegister.EDX), opH),
                 };

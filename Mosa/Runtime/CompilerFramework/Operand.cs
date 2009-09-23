@@ -39,12 +39,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Holds a list of instructions, which define this operand.
         /// </summary>
-        private List<Instruction> _definitions;
+        private List<LegacyInstruction> _definitions;
 
         /// <summary>
         /// Holds a list of instructions, which use this operand.
         /// </summary>
-        private List<Instruction> _uses;
+        private List<LegacyInstruction> _uses;
 
 		#endregion // Data members
 
@@ -66,12 +66,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Returns a list of instructions, which use this operand.
         /// </summary>
-        public List<Instruction> Definitions
+        public List<LegacyInstruction> Definitions
         {
             get 
             {
                 if (null == _definitions)
-                    _definitions = new List<Instruction>();
+                    _definitions = new List<LegacyInstruction>();
 
                 return _definitions; 
             }
@@ -169,12 +169,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Returns a list of instructions, which use this operand.
         /// </summary>
-        public List<Instruction> Uses
+        public List<LegacyInstruction> Uses
         {
             get 
             {
                 if (null == _uses)
-                    _uses = new List<Instruction>();
+                    _uses = new List<LegacyInstruction>();
 
                 return _uses; 
             }
@@ -193,7 +193,7 @@ namespace Mosa.Runtime.CompilerFramework
             int opIdx;
 
             // Iterate all definition sites first
-            foreach (Instruction def in this.Definitions.ToArray())
+            foreach (LegacyInstruction def in this.Definitions.ToArray())
             {
                 opIdx = 0;
                 foreach (Operand r in def.Results)
@@ -207,7 +207,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
 
             // Iterate all use sites
-            foreach (Instruction instr in this.Uses.ToArray())
+            foreach (LegacyInstruction instr in this.Uses.ToArray())
             {
                 opIdx = 0;
                 foreach (Operand r in instr.Operands)

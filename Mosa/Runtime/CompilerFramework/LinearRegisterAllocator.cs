@@ -179,7 +179,7 @@ namespace Mosa.Runtime.CompilerFramework
             int opIdx;
 
             // Iterate all definition sites first
-            foreach (Instruction def in lr.Op.Definitions.ToArray())
+            foreach (LegacyInstruction def in lr.Op.Definitions.ToArray())
             {
                 if (def.Offset == lr.Start)
                 {
@@ -198,7 +198,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
 
             // Iterate all use sites
-            foreach (Instruction instr in lr.Op.Uses.ToArray())
+            foreach (LegacyInstruction instr in lr.Op.Uses.ToArray())
             {
                 if (instr.Offset <= lr.Start)
                 {
@@ -393,7 +393,7 @@ namespace Mosa.Runtime.CompilerFramework
 
             // Find the next definition after defLine
             int ubound = Int32.MaxValue;
-            op.Definitions.Find(delegate(Instruction i)
+            op.Definitions.Find(delegate(LegacyInstruction i)
             {
                 if (i.Offset > defLine)
                 {
@@ -405,7 +405,7 @@ namespace Mosa.Runtime.CompilerFramework
             });
 
             // Now find the last use between defLine and ubound
-            op.Uses.ForEach(delegate(Instruction i)
+            op.Uses.ForEach(delegate(LegacyInstruction i)
             {
                 if (i.Offset > defLine && i.Offset < ubound)
                 {
@@ -428,7 +428,7 @@ namespace Mosa.Runtime.CompilerFramework
             int result = -1;
             
             // Now find the last use between defLine and ubound
-            op.Uses.ForEach(delegate(Instruction i)
+            op.Uses.ForEach(delegate(LegacyInstruction i)
             {
                 if (i.Offset > line && i.Offset < end)
                 {
@@ -443,9 +443,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// Sorts the specified list.
         /// </summary>
         /// <param name="list">The list.</param>
-        private void Sort(List<Instruction> list)
+        private void Sort(List<LegacyInstruction> list)
         {
-            list.Sort(delegate(Instruction a, Instruction b)
+            list.Sort(delegate(LegacyInstruction a, LegacyInstruction b)
             {
                 return a.Offset - b.Offset;
             });
@@ -465,7 +465,7 @@ namespace Mosa.Runtime.CompilerFramework
 
             foreach (BasicBlock block in blockProvider)
             {
-                foreach (Instruction instruction in block.Instructions)
+                foreach (LegacyInstruction instruction in block.Instructions)
                 {
                     instruction.Offset = offset++;
                 }

@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <summary>
     /// Abstract base class for all instructions in the intermediate representation.
     /// </summary>
-    public abstract class IRInstruction : Instruction
+    public abstract class IRInstruction : LegacyInstruction
     {
         #region Construction
 

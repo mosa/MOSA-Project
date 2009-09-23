@@ -96,7 +96,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="instruction">The instruction to retrieve the register constraint description for.</param>
         /// <returns>A register constraint descriptor.</returns>
-        public abstract IRegisterConstraint GetRegisterConstraint(Instruction instruction);
+        public abstract IRegisterConstraint GetRegisterConstraint(LegacyInstruction instruction);
 
         /// <summary>
         /// Gets the type memory requirements.
@@ -114,10 +114,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>
         /// An instance of Instruction or a derived class to represent the requested opcode.
         /// </returns>
-        public virtual Instruction CreateInstruction(Type instructionType, params object[] args)
+        public virtual LegacyInstruction CreateInstruction(Type instructionType, params object[] args)
         {
-            Debug.Assert(typeof(Instruction).IsAssignableFrom(instructionType), @"Requested InstructionType is not an instruction.");
-            return (Instruction) Activator.CreateInstance(instructionType, args, new object[0]);
+            Debug.Assert(typeof(LegacyInstruction).IsAssignableFrom(instructionType), @"Requested InstructionType is not an instruction.");
+            return (LegacyInstruction) Activator.CreateInstance(instructionType, args, new object[0]);
         }
 
         /// <summary>

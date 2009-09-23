@@ -113,7 +113,7 @@ namespace Mosa.Tools.Compiler.Boot
 		/// <summary>
 		/// Holds a list of cctors call instructions.
 		/// </summary>
-		private List<Instruction> instructions;
+		private List<LegacyInstruction> instructions;
 
 		/// <summary>
 		/// Holds true if the second stage is reached
@@ -133,7 +133,7 @@ namespace Mosa.Tools.Compiler.Boot
 			videoWidth = 80;
 			videoHeight = 25;
 			videoDepth = 0;
-			instructions = new List<Instruction>();
+			instructions = new List<LegacyInstruction>();
 			secondStage = false;
 		}
 
@@ -182,7 +182,7 @@ namespace Mosa.Tools.Compiler.Boot
 				MemoryOperand m2 = new MemoryOperand(I4, ecx.Register, new IntPtr(0x4));
 
 				instructions.AddRange(
-					new Instruction[] {
+					new LegacyInstruction[] {
 					new Mosa.Runtime.CompilerFramework.IR.MoveInstruction(ecx, table),
 					new Mosa.Runtime.CompilerFramework.IR.MoveInstruction(m1, eax),
 					new Mosa.Runtime.CompilerFramework.IR.MoveInstruction(m2, ebx),

@@ -38,7 +38,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
         /// <param name="instructions">The instructions to compile into the method.</param>
         /// <exception cref="System.ArgumentNullException"><paramref name="compiler"/>, <paramref name="methodName"/> or <paramref name="instructions"/> is null.</exception>
         /// <exception cref="System.ArgumentException"><paramref name="methodName"/> is invalid.</exception>
-        public static CompilerGeneratedMethod Compile(AssemblyCompiler compiler, string methodName, List<Instruction> instructions)
+        public static CompilerGeneratedMethod Compile(AssemblyCompiler compiler, string methodName, List<LegacyInstruction> instructions)
         {
             if (compiler == null)
                 throw new ArgumentNullException(@"compiler");

@@ -27,7 +27,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// The index of the first instruction in the block.
 		/// </summary>
-		private List<Instruction> _instructions;	// FIXME PG REMOVE
+		private List<LegacyInstruction> _instructions;	// FIXME PG REMOVE
 
 		/// <summary>
 		/// Holds the instruction set
@@ -80,7 +80,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public BasicBlock(int label) : 	// FIXME PG REMOVE
 			this()
 		{
-			_instructions = new List<Instruction>();
+			_instructions = new List<LegacyInstruction>();
 			_label = label;
 		}
 
@@ -93,7 +93,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public BasicBlock(int label, InstructionSet instructionSet, int index) :
 			this()
 		{
-			_instructions = new List<Instruction>();
+			_instructions = new List<LegacyInstruction>();
 			_label = label;
 			_index = index;
 			_instructionSet = instructionSet;
@@ -104,7 +104,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instructions">The instructions of the basic block.</param>
 		/// <param name="label">The label of the newly created block.</param>
-		private BasicBlock(List<Instruction> instructions, int label) :	// FIXME PG REMOVE
+		private BasicBlock(List<LegacyInstruction> instructions, int label) :	// FIXME PG REMOVE
 			this()
 		{
 			_instructions = instructions;
@@ -129,7 +129,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the instruction list, which belongs to the block.
 		/// </summary>
 		/// <value>The instructions.</value>
-		public List<Instruction> Instructions
+		public List<LegacyInstruction> Instructions
 		{
 			get { return _instructions; }
 		}
@@ -188,7 +188,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the last instruction.
 		/// </summary>
 		/// <value>The last instruction.</value>
-		public Instruction LastInstruction
+		public LegacyInstruction LastInstruction
 		{
 			get
 			{

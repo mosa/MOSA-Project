@@ -53,7 +53,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="instruction">Instruction to retrieve latency for</param>
         /// <returns>The matching latency.</returns>
-        public static sbyte GetLatency(Instruction instruction)
+        public static sbyte GetLatency(LegacyInstruction instruction)
         {
             if (Latencies.ContainsKey(instruction.GetType()))
                 return Latencies[instruction.GetType()];

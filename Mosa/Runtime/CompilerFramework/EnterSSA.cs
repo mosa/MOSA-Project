@@ -246,7 +246,7 @@ namespace Mosa.Runtime.CompilerFramework
                 liveOut = new Dictionary<StackOperand, StackOperand>(s_comparer);
 
             // Iterate each instruction in the block
-            foreach (Instruction instruction in block.Instructions)
+            foreach (LegacyInstruction instruction in block.Instructions)
             {
                 // Replace all operands with their current SSA version
                 UpdateUses(instruction, liveOut);
@@ -263,7 +263,7 @@ namespace Mosa.Runtime.CompilerFramework
 
         private void MergePhiInstructions(BasicBlock block, BasicBlock caller, IDictionary<StackOperand, StackOperand> liveIn)
         {
-            foreach (Instruction instruction in block.Instructions)
+            foreach (LegacyInstruction instruction in block.Instructions)
             {
                 IR.PhiInstruction phi = instruction as IR.PhiInstruction;
                 if (null != phi && liveIn.ContainsKey(phi.Result))
@@ -287,7 +287,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
-        private void RenameStackOperands(Instruction instruction, IDictionary<StackOperand, StackOperand> liveOut)
+        private void RenameStackOperands(LegacyInstruction instruction, IDictionary<StackOperand, StackOperand> liveOut)
         {
             // Create new SSA variables for newly defined operands
             Operand[] ops = instruction.Results;
@@ -310,7 +310,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
-        private void UpdateUses(Instruction instruction, IDictionary<StackOperand, StackOperand> liveOut)
+        private void UpdateUses(LegacyInstruction instruction, IDictionary<StackOperand, StackOperand> liveOut)
         {
             Operand[] ops = instruction.Operands;
             for (int opIdx = 0; opIdx < ops.Length; opIdx++)

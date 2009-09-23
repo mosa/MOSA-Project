@@ -32,7 +32,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
         /// <summary>
         /// Holds a list of cctors call instructions.
         /// </summary>
-        private List<Instruction> instructions;
+        private List<LegacyInstruction> instructions;
 
 		/// <summary>
 		/// Holds the method for the type initalizer
@@ -48,7 +48,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
         /// </summary>
         public TypeInitializerSchedulerStage()
         {
-            this.instructions = new List<Instruction>();
+            this.instructions = new List<LegacyInstruction>();
             this.instructions.Add(new PrologueInstruction(0));
         }
 
@@ -104,7 +104,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
             if (this.instructions.Count > 0)
             {
                 // Add a call to the current entry point to the scheduler
-                this.instructions.AddRange(new Instruction[] {
+                this.instructions.AddRange(new LegacyInstruction[] {
                     new CallInstruction(compiler.Assembly.EntryPoint),
                     new EpilogueInstruction(0)
                 });

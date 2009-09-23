@@ -75,7 +75,7 @@ namespace Mosa.Runtime.CompilerFramework
                 throw new ArgumentNullException(@"methodCompiler");
 
             // Instruction lists for the prologue/epilogue instructions
-            List<Instruction> prologueBlock, epilogueBlock;
+            List<LegacyInstruction> prologueBlock, epilogueBlock;
             // Allocate a list of locals
             List<StackOperand> locals = new List<StackOperand>();
             // Architecture
@@ -159,10 +159,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="locals">Holds all locals found by the stage.</param>
         /// <param name="instructions">The enumerable instruction list, which may contain assignments to local variables.</param>
-        private static void CollectLocalVariables(List<StackOperand> locals, IEnumerable<Instruction> instructions)
+        private static void CollectLocalVariables(List<StackOperand> locals, IEnumerable<LegacyInstruction> instructions)
         {
             // Iterate all instructions
-            foreach (Instruction i in instructions)
+            foreach (LegacyInstruction i in instructions)
             {
                 // Does this instruction define a new stack variable?
                 foreach (Operand op in i.Results)

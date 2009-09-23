@@ -60,7 +60,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="instruction">The instruction to retrieve the register constraint description for.</param>
         /// <returns>A register constraint descriptor.</returns>
-        IRegisterConstraint GetRegisterConstraint(Instruction instruction);
+        IRegisterConstraint GetRegisterConstraint(LegacyInstruction instruction);
 
         /// <summary>
         /// Requests the architecture to add architecture specific compilation stages to the assembly compiler 
@@ -86,7 +86,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="instructionType">The type of the instruction to create.</param>
         /// <param name="args">Array of arguments to pass to the instruction type.</param>
         /// <returns>An instance of Instruction or a derived class to represent the requested opcode.</returns>
-        Instruction CreateInstruction(Type instructionType, params object[] args);
+        LegacyInstruction CreateInstruction(Type instructionType, params object[] args);
 
         /// <summary>
         /// Factory method for result operands of instructions.

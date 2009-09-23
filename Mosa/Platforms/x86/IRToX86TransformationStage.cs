@@ -393,7 +393,7 @@ namespace Mosa.Platforms.x86
         {
 			BasicBlock nextBlock = SplitBlock(ctx, instruction, null);
 			
-            Instruction extend, div;
+            LegacyInstruction extend, div;
             if (X86.IsUnsigned(instruction.First))
                 extend = new IR.ZeroExtendedMoveInstruction(new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX), new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX));
             else
@@ -404,7 +404,7 @@ namespace Mosa.Platforms.x86
             else
                 div = new x86.Instructions.DivInstruction(instruction.First, instruction.Second);
 
-            Replace(ctx, new Instruction[] {
+            Replace(ctx, new LegacyInstruction[] {
                 new x86.Instructions.MoveInstruction(new RegisterOperand(instruction.First.Type, GeneralPurposeRegister.EAX), instruction.First),
                 extend,
                 div,
@@ -426,7 +426,7 @@ namespace Mosa.Platforms.x86
 
             instruction.SetResult(0, eax);
 
-            Replace(ctx, new Instruction[] {
+            Replace(ctx, new LegacyInstruction[] {
                 instruction,
                 new x86.Instructions.MoveInstruction(opRes, eax)
             });
@@ -454,7 +454,7 @@ namespace Mosa.Platforms.x86
             if (Compiler.Method.Signature.ReturnType.Type == CilElementType.I8 ||
                 Compiler.Method.Signature.ReturnType.Type == CilElementType.U8)
             {
-                Replace(ctx, new Instruction[] {
+                Replace(ctx, new LegacyInstruction[] {
                     // add esp, -localsSize
                     Architecture.CreateInstruction(typeof(Instructions.AddInstruction), esp, new ConstantOperand(I, -instruction.StackSize)),
                     // pop ebp
@@ -465,7 +465,7 @@ namespace Mosa.Platforms.x86
             }
             else
             {
-                Replace(ctx, new Instruction[] {
+                Replace(ctx, new LegacyInstruction[] {
                     // pop edx
                     Architecture.CreateInstruction(typeof(IR.PopInstruction), new RegisterOperand(I, GeneralPurposeRegister.EDX)),
                     // add esp, -localsSize
@@ -480,7 +480,7 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.FloatingPointCompareInstruction instruction, Context ctx)
         {
-            List<Instruction> insts = new List<Instruction>();
+            List<LegacyInstruction> insts = new List<LegacyInstruction>();
             Operand op0 = instruction.Operand0;
             Operand source = EmitConstant(instruction.Operand1);
             Operand destination = EmitConstant(instruction.Operand2);
@@ -616,7 +616,7 @@ namespace Mosa.Platforms.x86
         {
             //RegisterOperand eax = new RegisterOperand(Architecture.NativeType, GeneralPurposeRegister.EAX);
             RegisterOperand eax = new RegisterOperand(instruction.Operands[0].Type, GeneralPurposeRegister.EAX);
-            Replace(ctx, new Instruction[] {
+            Replace(ctx, new LegacyInstruction[] {
                 new x86.Instructions.MoveInstruction(eax, instruction.Operands[0]),
                 new x86.Instructions.MoveInstruction(eax, new MemoryOperand(instruction.Results[0].Type, GeneralPurposeRegister.EAX, IntPtr.Zero)),
                 new x86.Instructions.MoveInstruction(instruction.Results[0], eax)
@@ -652,7 +652,7 @@ namespace Mosa.Platforms.x86
 
             if (!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) return;
 
-            List<Instruction> replacements = new List<Instruction>();
+            List<LegacyInstruction> replacements = new List<LegacyInstruction>();
             RegisterOperand rop;
             if (op0.StackType == StackTypeCode.F || op1.StackType == StackTypeCode.F)
             {
@@ -667,7 +667,7 @@ namespace Mosa.Platforms.x86
                 rop = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
             }
 
-            replacements.AddRange(new Instruction[] {
+            replacements.AddRange(new LegacyInstruction[] {
                                                         new Instructions.MoveInstruction(rop, op1),
                                                         new Instructions.MoveInstruction(op0, rop)
                                                     });
@@ -693,7 +693,7 @@ namespace Mosa.Platforms.x86
             RegisterOperand edi = new RegisterOperand(I, GeneralPurposeRegister.EDI);
             Debug.Assert((instruction.StackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 
-            List<Instruction> prologue = new List<Instruction>(new Instruction[] {
+            List<LegacyInstruction> prologue = new List<LegacyInstruction>(new LegacyInstruction[] {
                 /* If you want to stop at the _header of an emitted function, just uncomment
                  * the following line. It will issue a breakpoint instruction. Note that if
                  * you debug using visual studio you must enable unmanaged code debugging, 
@@ -751,8 +751,8 @@ namespace Mosa.Platforms.x86
             IL.BranchInstruction br = (IL.BranchInstruction)Architecture.CreateInstruction(typeof(IL.BranchInstruction), IL.OpCode.Br, new int[] { Int32.MaxValue });
             if (null != instruction.Operand0)
             {
-                List<Instruction> instructions = new List<Instruction>();
-                Instruction[] resmove = cc.MoveReturnValue(instruction.Operand0);
+                List<LegacyInstruction> instructions = new List<LegacyInstruction>();
+                LegacyInstruction[] resmove = cc.MoveReturnValue(instruction.Operand0);
                 if (null != resmove)
                     instructions.AddRange(resmove);
                 instructions.Add(br);
@@ -782,7 +782,7 @@ namespace Mosa.Platforms.x86
         {
             RegisterOperand eax = new RegisterOperand(instruction.Results[0].Type, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(instruction.Operands[0].Type, GeneralPurposeRegister.EDX);
-            Replace(ctx, new Instruction[] {
+            Replace(ctx, new LegacyInstruction[] {
                 new x86.Instructions.MoveInstruction(eax, instruction.Results[0]),
                 new x86.Instructions.MoveInstruction(edx, instruction.Operands[0]),
                 new x86.Instructions.MoveInstruction(new MemoryOperand(instruction.Operands[0].Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx)
@@ -797,7 +797,7 @@ namespace Mosa.Platforms.x86
 
         void IR.IIRVisitor<Context>.Visit(IR.URemInstruction instruction, Context ctx)
         {
-            Replace(ctx, new Instruction[] {
+            Replace(ctx, new LegacyInstruction[] {
                 new x86.Instructions.MoveInstruction(new RegisterOperand(instruction.Operand1.Type, GeneralPurposeRegister.EAX), instruction.Operand1),
                 new x86.Instructions.UDivInstruction(instruction.Operand1, instruction.Operand2),
                 new x86.Instructions.MoveInstruction(instruction.Operand0, new RegisterOperand(instruction.Operand0.Type, GeneralPurposeRegister.EDX))
@@ -840,7 +840,7 @@ namespace Mosa.Platforms.x86
             RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
             if (X86.IsSigned(op0))
             {
-                Replace(ctx, new Instruction[] {
+                Replace(ctx, new LegacyInstruction[] {
                                                    new IR.PushInstruction(eax),
                                                    new IR.SignExtendedMoveInstruction(eax, op0),
                                                    instruction,
@@ -849,7 +849,7 @@ namespace Mosa.Platforms.x86
             }
             else
             {
-                Replace(ctx, new Instruction[] {
+                Replace(ctx, new LegacyInstruction[] {
                                                    new IR.PushInstruction(eax),
                                                    new IR.MoveInstruction(eax, op0),
                                                    instruction,
@@ -875,7 +875,7 @@ namespace Mosa.Platforms.x86
         {
             if (instruction.Operand1 is ConstantOperand)
             {
-                Instruction[] insts = new Instruction[] { new Instructions.Cvtss2sdInstruction(instruction.Operand0, EmitConstant(instruction.Operand1)) };
+                LegacyInstruction[] insts = new LegacyInstruction[] { new Instructions.Cvtss2sdInstruction(instruction.Operand0, EmitConstant(instruction.Operand1)) };
                 Replace(ctx, insts);
             }
         }
@@ -1235,7 +1235,7 @@ namespace Mosa.Platforms.x86
         /// which allows the instruction selection in the code generator to use a instruction
         /// format with an immediate operand.
         /// </remarks>
-        private void HandleCommutativeOperation(Context ctx, Instruction instruction, Type replacementType)
+        private void HandleCommutativeOperation(Context ctx, LegacyInstruction instruction, Type replacementType)
         {
             Operand result = instruction.Results[0];
             Operand[] ops = instruction.Operands;
@@ -1261,7 +1261,7 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx"></param>
         /// <param name="instruction"></param>
         /// <param name="replacementType"></param>
-        private void HandleNonCommutativeOperation(Context ctx, Instruction instruction, Type replacementType)
+        private void HandleNonCommutativeOperation(Context ctx, LegacyInstruction instruction, Type replacementType)
         {
             EmitConstants(instruction.Results);
             Operand result = instruction.Results[0];
@@ -1279,7 +1279,7 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The transformation context.</param>
         /// <param name="instruction">The instruction to transform.</param>
         /// <param name="replacementType">The x86 shift to replace with.</param>
-        private void HandleShiftOperation(Context ctx, Instruction instruction, Type replacementType)
+        private void HandleShiftOperation(Context ctx, LegacyInstruction instruction, Type replacementType)
         {
             Operand opRes = instruction.Results[0];
             Operand[] ops = instruction.Operands;
@@ -1301,7 +1301,7 @@ namespace Mosa.Platforms.x86
             if (ops[0].Type.Type == CilElementType.Char)
             {
                 RegisterOperand ecx = new RegisterOperand(ops[1].Type, GeneralPurposeRegister.ECX);
-                Replace(ctx, new Instruction[] {
+                Replace(ctx, new LegacyInstruction[] {
                     Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
                     Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
                     Architecture.CreateInstruction(replacementType, opRes, ecx),
@@ -1311,7 +1311,7 @@ namespace Mosa.Platforms.x86
             else
             {
                 RegisterOperand ecx = new RegisterOperand(ops[1].Type, GeneralPurposeRegister.ECX);
-                Replace(ctx, new Instruction[] {
+                Replace(ctx, new LegacyInstruction[] {
                     Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
                     Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
                     Architecture.CreateInstruction(replacementType, opRes, ecx),
@@ -1329,20 +1329,20 @@ namespace Mosa.Platforms.x86
             ICallingConvention cc = Architecture.GetCallingConvention(instruction.InvokeTarget.Signature.CallingConvention);
             Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
             object result = cc.Expand(instruction);
-            if (result is List<Instruction>)
+            if (result is List<LegacyInstruction>)
             {
                 // Replace the single instruction with the set
-                List<Instruction> insts = (List<Instruction>)result;
+                List<LegacyInstruction> insts = (List<LegacyInstruction>)result;
                 Replace(ctx, insts.ToArray());
             }
-            else if (result is Instruction)
+            else if (result is LegacyInstruction)
             {
                 // Save the replacement instruction
-                Replace(ctx, (Instruction)result);
+                Replace(ctx, (LegacyInstruction)result);
             }
         }
 
-        private void HandleComparisonInstruction<InstType>(Context ctx, InstType instruction) where InstType: Instruction, IR.IConditionalInstruction
+        private void HandleComparisonInstruction<InstType>(Context ctx, InstType instruction) where InstType: LegacyInstruction, IR.IConditionalInstruction
         {
             Operand[] ops = instruction.Operands;
             EmitConstants(ops);
@@ -1354,7 +1354,7 @@ namespace Mosa.Platforms.x86
             else if (ops[0] is MemoryOperand && ops[1] is MemoryOperand)
             {
                 RegisterOperand eax = new RegisterOperand(ops[0].Type, GeneralPurposeRegister.EAX);
-                Instruction[] results = new Instruction[] {
+                LegacyInstruction[] results = new LegacyInstruction[] {
                                 new Instructions.MoveInstruction(eax, ops[0]),
                                 instruction
                             };
@@ -1372,7 +1372,7 @@ namespace Mosa.Platforms.x86
         /// <param name="instruction">The instruction.</param>
         /// <param name="op1">The op1.</param>
         /// <param name="op2">The op2.</param>
-        private void SwapComparisonOperands<InstType>(InstType instruction, Operand op1, Operand op2) where InstType: Instruction, IR.IConditionalInstruction
+        private void SwapComparisonOperands<InstType>(InstType instruction, Operand op1, Operand op2) where InstType: LegacyInstruction, IR.IConditionalInstruction
         {
             // Swap the operands
             instruction.SetOperand(0, op2);
@@ -1427,14 +1427,14 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The conversion context.</param>
         /// <param name="instruction">The instruction to convert.</param>
         /// <param name="replacementType">The unary instruction type to replace <paramref name="instruction"/> with.</param>
-        private void TwoOneAddressConversion(Context ctx, Instruction instruction, Type replacementType)
+        private void TwoOneAddressConversion(Context ctx, LegacyInstruction instruction, Type replacementType)
         {
             Operand opRes = instruction.Results[0];
             RegisterOperand eax = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
             instruction.Operands[0] = EmitConstant(instruction.Operands[0]);
 
             instruction.SetResult(0, eax);
-            Replace(ctx, new Instruction[] {
+            Replace(ctx, new LegacyInstruction[] {
                 Architecture.CreateInstruction(typeof(IR.MoveInstruction), eax, instruction.Operands[0]),
                 instruction,
                 Architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
@@ -1447,7 +1447,7 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The conversion context.</param>
         /// <param name="instruction">The instruction to convert.</param>
         /// <param name="replacementType">The binary instruction type to replace.</param>
-        private void ThreeTwoAddressConversion(Context ctx, Instruction instruction, Type replacementType)
+        private void ThreeTwoAddressConversion(Context ctx, LegacyInstruction instruction, Type replacementType)
         {
             Operand opRes = instruction.Results[0];
             Operand op1 = instruction.Operands[0];
@@ -1472,7 +1472,7 @@ namespace Mosa.Platforms.x86
             if (X86.IsSigned(op1) && !(op1 is ConstantOperand))
             {
                 // Signextend it
-                Replace(ctx, new Instruction[] {
+                Replace(ctx, new LegacyInstruction[] {
                     Architecture.CreateInstruction(typeof(IR.SignExtendedMoveInstruction), eaxL, op1),
                     instruction,
                     Architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
@@ -1481,7 +1481,7 @@ namespace Mosa.Platforms.x86
             // Check if the operand has to be zero-extended
             else if (X86.IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F)
             {
-                Replace(ctx, new Instruction[] {
+                Replace(ctx, new LegacyInstruction[] {
                     Architecture.CreateInstruction(typeof(IR.ZeroExtendedMoveInstruction), eaxL, op1),
                     instruction,
                     Architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax),
@@ -1490,7 +1490,7 @@ namespace Mosa.Platforms.x86
             // In any other case: Just load it
             else
             {
-                Replace(ctx, new Instruction[] {
+                Replace(ctx, new LegacyInstruction[] {
                     Architecture.CreateInstruction(typeof(IR.MoveInstruction), eax, op1),
                     instruction,
                     Architecture.CreateInstruction(typeof(IR.MoveInstruction), opRes, eax)

@@ -280,7 +280,7 @@ namespace Mosa.Runtime.CompilerFramework
         private IEnumerable<BasicBlock> NextBlocks(IBasicBlockProvider blockProvider, BasicBlock basicBlock)
         {
             List<BasicBlock> blocks = new List<BasicBlock>();
-            foreach (Instruction i in basicBlock.Instructions)
+            foreach (LegacyInstruction i in basicBlock.Instructions)
             {
                 switch (i.FlowControl)
                 {

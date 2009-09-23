@@ -195,9 +195,9 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Requests a <see cref="IRegisterConstraint"/> object for the given instruction.
 		/// </summary>
-		/// <param name="instruction">The <see cref="Instruction"/> to provide register constraints for.</param>
+		/// <param name="instruction">The <see cref="LegacyInstruction"/> to provide register constraints for.</param>
 		/// <returns>An object specifying the register constraints or null, if there are no constraints.</returns>
-		public override IRegisterConstraint GetRegisterConstraint(Instruction instruction)
+		public override IRegisterConstraint GetRegisterConstraint(LegacyInstruction instruction)
 		{
 			Type constraintType;
 

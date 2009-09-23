@@ -42,7 +42,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="operand">The operand, that's holding the return value.</param>
         /// <returns>An instruction, which represents the appropriate move.</returns>
-        Instruction[] MoveReturnValue(Operand operand);
+        LegacyInstruction[] MoveReturnValue(Operand operand);
 
         /// <summary>
         /// Retrieves the offset of the first local variable From the stack frame start.

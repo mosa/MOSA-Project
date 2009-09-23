@@ -355,7 +355,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new NotSupportedException();
 			}
 
-			Mosa.Runtime.CompilerFramework.Instruction result = Architecture.CreateInstruction(type, ctx.Result, ctx.Operand1, ctx.Operand2);
+			LegacyInstruction result = Architecture.CreateInstruction(type, ctx.Result, ctx.Operand1, ctx.Operand2);
 			Replace(ctx, result);
 		}
 
@@ -383,7 +383,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new NotSupportedException();
 			}
 
-			Mosa.Runtime.CompilerFramework.Instruction result = Architecture.CreateInstruction(replType, ctx.Result, ctx.Operand1, ctx.Operand2);
+			LegacyInstruction result = Architecture.CreateInstruction(replType, ctx.Result, ctx.Operand1, ctx.Operand2);
 			Replace(ctx, result);
 		}
 
@@ -1094,7 +1094,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			if (type == typeof(LogicalAndInstruction) || 0 != mask) {
 				Debug.Assert(0 != mask, @"Conversion is an AND, but no mask given.");
 
-				List<Mosa.Runtime.CompilerFramework.Instruction> instructions = new List<Mosa.Runtime.CompilerFramework.Instruction>();
+				List<LegacyInstruction> instructions = new List<LegacyInstruction>();
 				if (type != typeof(LogicalAndInstruction)) {
 					ProcessMixedTypeConversion(instructions, type, mask, destinationOperand, sourceOperand);
 				}
@@ -1169,7 +1169,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 		}
 
-		private void ProcessMixedTypeConversion(List<Mosa.Runtime.CompilerFramework.Instruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
+		private void ProcessMixedTypeConversion(List<LegacyInstruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			instructionList.AddRange(new[] {
                 Architecture.CreateInstruction(type, destinationOperand, sourceOperand),
@@ -1177,7 +1177,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
             });
 		}
 
-		private void ProcessSingleTypeTruncation(List<Mosa.Runtime.CompilerFramework.Instruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
+		private void ProcessSingleTypeTruncation(List<LegacyInstruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8) {
 				instructionList.Add(Architecture.CreateInstruction(typeof(IR.MoveInstruction), destinationOperand, sourceOperand));
@@ -1187,7 +1187,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				instructionList.Add(Architecture.CreateInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask)));
 		}
 
-		private void ExtendAndTruncateResult(List<Mosa.Runtime.CompilerFramework.Instruction> instructionList, Type extensionType, Operand destinationOperand)
+		private void ExtendAndTruncateResult(List<LegacyInstruction> instructionList, Type extensionType, Operand destinationOperand)
 		{
 			if (null != extensionType && destinationOperand is RegisterOperand) {
 				RegisterOperand resultOperand = new RegisterOperand(new SigType(CilElementType.I4), ((RegisterOperand)destinationOperand).Register);
@@ -1212,7 +1212,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Retrieve the runtime type
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
 			// The replacement instruction
-			Mosa.Runtime.CompilerFramework.Instruction replacement = null;
+			LegacyInstruction replacement = null;
 
 			if (rm.IsDefined(rt)) {
 				// FIXME: Change this to a GetCustomAttributes call, once we can do that :)
@@ -1238,7 +1238,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 								else if (ctx.OperandCount > 2)
 									args[idx++] = ctx.Operand3;
 
-								replacement = (Mosa.Runtime.CompilerFramework.Instruction)Activator.CreateInstance(ia.InstructionType, args, null);
+								replacement = (LegacyInstruction)Activator.CreateInstance(ia.InstructionType, args, null);
 								break;
 							}
 							catch (Exception e) {
