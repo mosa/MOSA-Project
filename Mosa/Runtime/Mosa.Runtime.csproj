@@ -94,13 +94,13 @@
     <Compile Include="CompilerFramework\CIL\CallInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CallvirtInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CastclassInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\CILDecodingStage.cs" />
+    <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CilToIRTransformationStage.cs" />
     <Compile Include="CompilerFramework\CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ConversionInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CILStage.cs" />
-    <Compile Include="CompilerFramework\CIL\Map.cs" />
+    <Compile Include="CompilerFramework\CIL\Instruction.cs" />
     <Compile Include="CompilerFramework\CIL\StoreInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ICILVisitor.cs" />
     <Compile Include="CompilerFramework\CIL\Prefix.cs" />
@@ -177,7 +177,7 @@
     <Compile Include="CompilerFramework\IR2\BranchInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\CallInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\ConditionCode.cs" />
-    <Compile Include="CompilerFramework\IR2\Map.cs" />
+    <Compile Include="CompilerFramework\IR2\Instruction.cs" />
     <Compile Include="CompilerFramework\IR2\EpilogueInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\FloatingPointCompareInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\FloatingPointToIntegerConversionInstruction.cs" />
@@ -186,7 +186,7 @@
     <Compile Include="CompilerFramework\IR2\IIRVisitor.cs" />
     <Compile Include="CompilerFramework\IR2\IntegerCompareInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\IntegerToFloatingPointConversionInstruction.cs" />
-    <Compile Include="CompilerFramework\IR2\IRInstruction.cs" />
+    <Compile Include="CompilerFramework\IR2\BaseInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\JmpInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\LiteralInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\LoadInstruction.cs" />
@@ -223,7 +223,7 @@
     <Compile Include="CompilerFramework\InstructionSet.cs" />
     <Compile Include="CompilerFramework\InstructionData.cs" />
     <Compile Include="CompilerFramework\InstructionType.cs" />
-    <Compile Include="CompilerFramework\CIL\CILInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\BaseInstruction.cs" />
     <Compile Include="CompilerFramework\ReverseBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\OperandDeterminationStage.cs" />
     <Compile Include="CompilerFramework\StackRegisterAllocator.cs" />

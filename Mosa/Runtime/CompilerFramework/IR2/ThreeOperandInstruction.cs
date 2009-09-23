@@ -21,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// IR instructions using three operands. It provides properties to
     /// easily access the individual operands.
     /// </remarks>
-    public abstract class ThreeOperandInstruction : IRInstruction
+    public abstract class ThreeOperandInstruction : BaseInstruction
     {
        
         #region Construction

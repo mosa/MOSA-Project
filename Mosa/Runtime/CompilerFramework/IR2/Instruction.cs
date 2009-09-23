@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class Map
+	public sealed class Instruction
 	{
 		/// <summary>
 		/// 

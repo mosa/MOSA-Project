@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// <summary>
     /// Used to represent labelled literal data in the instruction stream.
     /// </summary>
-    public abstract class LiteralInstruction: IRInstruction
+    public abstract class LiteralInstruction: BaseInstruction
     {
         #region Data members
 

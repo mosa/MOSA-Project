@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class CILInstruction : ICILInstruction
+	public class BaseInstruction : ICILInstruction
 	{
 		#region Data members
 
@@ -63,10 +63,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CILInstruction"/> class.
+		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
-		public CILInstruction(OpCode opCode)
+		public BaseInstruction(OpCode opCode)
 		{
 			this._opcode = opCode;
 			_operandDefaultCount = 0;
@@ -74,23 +74,23 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CILInstruction"/> class.
+		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
 		/// <param name="operandCount">The operand count.</param>
-		public CILInstruction(OpCode opCode, byte operandCount)
+		public BaseInstruction(OpCode opCode, byte operandCount)
 			: this(opCode)
 		{
 			_operandDefaultCount = operandCount;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CILInstruction"/> class.
+		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public CILInstruction(OpCode opCode, byte operandCount, byte resultCount)
+		public BaseInstruction(OpCode opCode, byte operandCount, byte resultCount)
 			: this(opCode, operandCount)
 		{
 			_resultDefaultCount = resultCount;

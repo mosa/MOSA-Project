@@ -24,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public static class Map
+	public static class Instruction
 	{
 		#region Static data
 
@@ -266,7 +266,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Gets the instruction.
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
-		public static ICILInstruction GetInstruction(OpCode opcode)
+		public static ICILInstruction Get(OpCode opcode)
 		{
 			return opCodeMap[opcode];
 		}

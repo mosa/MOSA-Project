@@ -330,7 +330,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public override void BinaryLogic(Context ctx)
 		{
 			Type type;
-			switch ((ctx.Instruction as CILInstruction).OpCode) {
+			switch ((ctx.Instruction as BaseInstruction).OpCode) {
 				case OpCode.And:
 					type = typeof(LogicalAndInstruction);
 					break;
@@ -355,7 +355,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new NotSupportedException();
 			}
 
-			Instruction result = Architecture.CreateInstruction(type, ctx.Result, ctx.Operand1, ctx.Operand2);
+			Mosa.Runtime.CompilerFramework.Instruction result = Architecture.CreateInstruction(type, ctx.Result, ctx.Operand1, ctx.Operand2);
 			Replace(ctx, result);
 		}
 
@@ -366,7 +366,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public override void Shift(Context ctx)
 		{
 			Type replType;
-			switch ((ctx.Instruction as CILInstruction).OpCode) {
+			switch ((ctx.Instruction as BaseInstruction).OpCode) {
 				case OpCode.Shl:
 					replType = typeof(ShiftLeftInstruction);
 					break;
@@ -383,7 +383,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new NotSupportedException();
 			}
 
-			Instruction result = Architecture.CreateInstruction(replType, ctx.Result, ctx.Operand1, ctx.Operand2);
+			Mosa.Runtime.CompilerFramework.Instruction result = Architecture.CreateInstruction(replType, ctx.Result, ctx.Operand1, ctx.Operand2);
 			Replace(ctx, result);
 		}
 
@@ -615,7 +615,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		public override void BinaryComparison(Context ctx)
 		{
-			ConditionCode code = GetConditionCode((ctx.Instruction as CILInstruction).OpCode);
+			ConditionCode code = GetConditionCode((ctx.Instruction as BaseInstruction).OpCode);
 			Operand op1 = ctx.Operand1;
 			if (op1.StackType == StackTypeCode.F) {
 				Replace(ctx, new FloatingPointCompareInstruction(ctx.Result, op1, code, ctx.Operand1));
@@ -1094,7 +1094,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			if (type == typeof(LogicalAndInstruction) || 0 != mask) {
 				Debug.Assert(0 != mask, @"Conversion is an AND, but no mask given.");
 
-				List<Instruction> instructions = new List<Instruction>();
+				List<Mosa.Runtime.CompilerFramework.Instruction> instructions = new List<Mosa.Runtime.CompilerFramework.Instruction>();
 				if (type != typeof(LogicalAndInstruction)) {
 					ProcessMixedTypeConversion(instructions, type, mask, destinationOperand, sourceOperand);
 				}
@@ -1169,7 +1169,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 		}
 
-		private void ProcessMixedTypeConversion(List<Instruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
+		private void ProcessMixedTypeConversion(List<Mosa.Runtime.CompilerFramework.Instruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			instructionList.AddRange(new[] {
                 Architecture.CreateInstruction(type, destinationOperand, sourceOperand),
@@ -1177,7 +1177,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
             });
 		}
 
-		private void ProcessSingleTypeTruncation(List<Instruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
+		private void ProcessSingleTypeTruncation(List<Mosa.Runtime.CompilerFramework.Instruction> instructionList, Type type, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8) {
 				instructionList.Add(Architecture.CreateInstruction(typeof(IR.MoveInstruction), destinationOperand, sourceOperand));
@@ -1187,7 +1187,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				instructionList.Add(Architecture.CreateInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask)));
 		}
 
-		private void ExtendAndTruncateResult(List<Instruction> instructionList, Type extensionType, Operand destinationOperand)
+		private void ExtendAndTruncateResult(List<Mosa.Runtime.CompilerFramework.Instruction> instructionList, Type extensionType, Operand destinationOperand)
 		{
 			if (null != extensionType && destinationOperand is RegisterOperand) {
 				RegisterOperand resultOperand = new RegisterOperand(new SigType(CilElementType.I4), ((RegisterOperand)destinationOperand).Register);
@@ -1212,7 +1212,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Retrieve the runtime type
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
 			// The replacement instruction
-			Instruction replacement = null;
+			Mosa.Runtime.CompilerFramework.Instruction replacement = null;
 
 			if (rm.IsDefined(rt)) {
 				// FIXME: Change this to a GetCustomAttributes call, once we can do that :)
@@ -1238,7 +1238,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 								else if (ctx.OperandCount > 2)
 									args[idx++] = ctx.Operand3;
 
-								replacement = (Instruction)Activator.CreateInstance(ia.InstructionType, args, null);
+								replacement = (Mosa.Runtime.CompilerFramework.Instruction)Activator.CreateInstance(ia.InstructionType, args, null);
 								break;
 							}
 							catch (Exception e) {

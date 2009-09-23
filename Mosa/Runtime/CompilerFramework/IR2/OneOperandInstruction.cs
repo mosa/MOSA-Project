@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// The <see cref="OneOperandInstruction"/> is the base class for
     /// IR instructions using one operand.
     /// </remarks>
-    public abstract class OneOperandInstruction : IRInstruction
+    public abstract class OneOperandInstruction : BaseInstruction
     {
   
         #region Construction

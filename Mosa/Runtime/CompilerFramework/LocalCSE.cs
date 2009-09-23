@@ -175,25 +175,25 @@ namespace Mosa.Runtime.CompilerFramework
 								switch (aeb.Operator) {
 									case Operation.Add:
 										//inst = new IL.AddInstruction(IL.OpCode.Add, temp, aeb.Operand1, aeb.Operand2);
-										inserted.SetInstruction(CIL.Map.GetInstruction(CIL.OpCode.Add), temp, aeb.Operand1, aeb.Operand2);
+										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Add), temp, aeb.Operand1, aeb.Operand2);
 										break;
 									case Operation.Mul:
 										//inst = new IL.MulInstruction(IL.OpCode.Mul, temp, aeb.Operand1, aeb.Operand2);
-										inserted.SetInstruction(CIL.Map.GetInstruction(CIL.OpCode.Mul), temp, aeb.Operand1, aeb.Operand2);
+										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Mul), temp, aeb.Operand1, aeb.Operand2);
 										break;
 									case Operation.Or:
 										//inst = new IL.BinaryLogicInstruction(IL.OpCode.Or);
 										//inst.SetResult(0, temp);
 										//inst.SetOperand(0, aeb.Operand1);
 										//inst.SetOperand(1, aeb.Operand2);
-										inserted.SetInstruction(CIL.Map.GetInstruction(CIL.OpCode.Or), temp, aeb.Operand1, aeb.Operand2);
+										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Or), temp, aeb.Operand1, aeb.Operand2);
 										break;
 									case Operation.Xor:
 										//inst = new IL.BinaryLogicInstruction(IL.OpCode.Xor);
 										//inst.SetResult(0, temp);
 										//inst.SetOperand(0, aeb.Operand1);
 										//inst.SetOperand(1, aeb.Operand2);
-										inserted.SetInstruction(CIL.Map.GetInstruction(CIL.OpCode.Xor), temp, aeb.Operand1, aeb.Operand2);
+										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Xor), temp, aeb.Operand1, aeb.Operand2);
 										break;
 									default:
 										break;

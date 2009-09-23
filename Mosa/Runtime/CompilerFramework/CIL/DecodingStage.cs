@@ -31,7 +31,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// representation. The instructions are grouped into basic Blocks
 	/// for easier local optimizations in later compiler stages.
 	/// </remarks>
-	public sealed partial class CILDecodingStage : IMethodCompilerStage, IInstructionsProvider, IInstructionDecoder
+	public sealed partial class DecodingStage : IMethodCompilerStage, IInstructionsProvider, IInstructionDecoder
 	{
 		private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
 
@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// The instruction factory used to emit instructions.
 		/// </summary>
-		public CILDecodingStage()
+		public DecodingStage()
 		{
 		}
 
@@ -250,7 +250,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				if (OpCode.Extop == op)
 					op = (OpCode)(0x100 | _codeReader.ReadByte());
 
-				ICILInstruction instruction = Map.GetInstruction(op);
+				ICILInstruction instruction = Instruction.Get(op);
 
 				if (instruction is PrefixInstruction) {
 					prefix = instruction as PrefixInstruction;
@@ -286,7 +286,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Gets a list of instructions in intermediate representation.
 		/// </summary>
 		/// <value></value>
-		List<Instruction> IInstructionsProvider.Instructions
+		List<Mosa.Runtime.CompilerFramework.Instruction> IInstructionsProvider.Instructions
 		{
 			get { return null; }
 		}

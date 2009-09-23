@@ -86,7 +86,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Add a jump instruction to the first block from the prologue
 			Context ctx = new Context(_instructionset, 0).InsertBefore();
-			ctx.SetInstruction(Map.GetInstruction(OpCode.Br));
+			ctx.SetInstruction(CIL.Instruction.Get(OpCode.Br));
 			//ctx.Instruction = Map.GetInstruction(OpCode.Br);
 			ctx.Branch = new Branch(1);
 			ctx.Branch.Targets[0] = 0;
@@ -207,13 +207,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="epilogue">The epilogue.</param>
 		private void InsertFlowControl(Context ctx, BasicBlock current, int nextBlock, BasicBlock epilogue)
 		{
-			switch ((ctx.Instruction as CILInstruction).FlowControl) {
+			switch ((ctx.Instruction as BaseInstruction).FlowControl) {
 				case FlowControl.Break: goto case FlowControl.Next;
 				case FlowControl.Call: goto case FlowControl.Next;
 				case FlowControl.Next:
 					// Insert unconditional branch to next basic block
 					Context inserted = ctx.InsertAfter();
-					inserted.SetInstruction(Map.GetInstruction(OpCode.Br_s));
+					inserted.SetInstruction(CIL.Instruction.Get(OpCode.Br_s));
 //					inserted.Instruction = Map.GetInstruction(OpCode.Br_s);
 					inserted.Branch = new Branch(1);
 					inserted.Branch.Targets[0] = nextBlock;

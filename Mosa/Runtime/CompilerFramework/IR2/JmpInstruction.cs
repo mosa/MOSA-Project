@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// <summary>
     /// Intermediate representation of an unconditional branch instruction.
     /// </summary>
-    public class JmpInstruction : IRInstruction
+    public class JmpInstruction : BaseInstruction
     {
         #region Data members
 

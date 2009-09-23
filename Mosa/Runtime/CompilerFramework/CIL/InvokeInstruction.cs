@@ -30,7 +30,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// Base class for instructions, which invoke other functions.
 	/// </summary>
-	public abstract class InvokeInstruction : CILInstruction
+	public abstract class InvokeInstruction : BaseInstruction
 	{
 
 		#region Types

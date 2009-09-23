@@ -21,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 	/// automatically select the appropriate value of a variable depending on the
 	/// incoming edge.
 	/// </summary>
-	public sealed class PhiInstruction : IRInstruction
+	public sealed class PhiInstruction : BaseInstruction
 	{
 		#region Construction
 

@@ -8,7 +8,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// <summary>
     /// Intermediate representation of call instruction.
     /// </summary>
-    public class CallInstruction : IRInstruction
+    public class CallInstruction : BaseInstruction
     {
         #region Data members
 

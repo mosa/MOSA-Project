@@ -21,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// IR instructions using two operands. It provides properties to
     /// easily access the individual operands.
     /// </remarks>
-    public abstract class TwoOperandInstruction : IRInstruction
+    public abstract class TwoOperandInstruction : BaseInstruction
     {
         #region Construction
 

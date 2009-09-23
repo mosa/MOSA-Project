@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class NaryInstruction : CILInstruction
+	public class NaryInstruction : BaseInstruction
 	{
 		#region Construction
 

@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// Intermediate representation of a push instruction, that moves 
     /// its argument on the top of a stack.
     /// </summary>
-    public class PushInstruction : IRInstruction
+    public class PushInstruction : BaseInstruction
     {
         #region Construction
 

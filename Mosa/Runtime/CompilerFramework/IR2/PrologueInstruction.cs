@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// This instruction is usually derived by the architecture and expanded appropriately
     /// for the calling convention of the method.
     /// </remarks>
-    public class PrologueInstruction: IRInstruction
+    public class PrologueInstruction: BaseInstruction
     {
         #region Data members
 

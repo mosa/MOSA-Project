@@ -16,33 +16,33 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 	/// <summary>
 	/// Abstract base class for all instructions in the intermediate representation.
 	/// </summary>
-	public abstract class IRInstruction : IIRInstruction
+	public abstract class BaseInstruction : IIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="IRInstruction"/>.
+		/// Initializes a new instance of <see cref="BaseInstruction"/>.
 		/// </summary>
-		protected IRInstruction()
+		protected BaseInstruction()
 			: this(0, 0)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="IRInstruction"/>.
+		/// Initializes a new instance of <see cref="BaseInstruction"/>.
 		/// </summary>
 		/// <param name="operandCount">Specifies the number of operands of the instruction.</param>
-		protected IRInstruction(int operandCount) :
+		protected BaseInstruction(int operandCount) :
 			this(operandCount, 0)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="IRInstruction"/>.
+		/// Initializes a new instance of <see cref="BaseInstruction"/>.
 		/// </summary>
 		/// <param name="operandCount">Specifies the number of operands of the instruction.</param>
 		/// <param name="resultCount">Specifies the number of results of the instruction.</param>
-		protected IRInstruction(int operandCount, int resultCount)
+		protected BaseInstruction(int operandCount, int resultCount)
 		{
 		}
 
