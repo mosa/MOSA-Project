@@ -379,12 +379,25 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Sets the operands.
+		/// Sets the result.
 		/// </summary>
 		/// <param name="result">The result.</param>
 		public void SetResult(Operand result)
 		{
 			Result = result;
+			ResultCount = 1;
+		}
+
+		/// <summary>
+		/// Sets the results.
+		/// </summary>
+		/// <param name="result">The result.</param>
+		/// <param name="result2">The result2.</param>
+		public void SetResults(Operand result, Operand result2)
+		{
+			Result = result;
+			Result2 = result2;
+			ResultCount = 2;
 		}
 
 		/// <summary>
@@ -409,6 +422,8 @@ namespace Mosa.Runtime.CompilerFramework
 			Result = result;
 			Operand1 = operand1;
 			Operand2 = operand2;
+			ResultCount = 1;
+			OperandCount = 2;
 		}
 
 		/// <summary>
@@ -424,6 +439,8 @@ namespace Mosa.Runtime.CompilerFramework
 			Operand1 = operand1;
 			Operand2 = operand2;
 			Operand3 = operand3;
+			ResultCount = 1;
+			OperandCount = 3;
 		}
 
 		/// <summary>
@@ -445,7 +462,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="operand1">The operand1.</param>
 		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1)
 		{
-			SetInstruction(instruction, 0, 1);
+			SetInstruction(instruction, 1, 1);
 			Result = result;
 			Operand1 = operand1;
 		}
@@ -459,7 +476,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="operand2">The operand2.</param>
 		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2)
 		{
-			SetInstruction(instruction, 0, 1);
+			SetInstruction(instruction, 2, 1);
 			Result = result;
 			Operand1 = operand1;
 			Operand2 = operand2;
@@ -475,7 +492,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="operand3">The operand3.</param>
 		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
 		{
-			SetInstruction(instruction, 0, 1);
+			SetInstruction(instruction, 3, 1);
 			Result = result;
 			Operand1 = operand1;
 			Operand2 = operand2;
