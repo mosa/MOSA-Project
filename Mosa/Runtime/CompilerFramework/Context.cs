@@ -406,6 +406,21 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Remove this instance.
+		/// </summary>
+		public void Remove()
+		{
+			int prev = _instructionSet.Previous(_index);
+
+			if (prev <= 0)
+				prev = _instructionSet.Next(_index);
+
+			_instructionSet.Remove(_index);
+
+			_index = prev;
+		}
+
+		/// <summary>
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>

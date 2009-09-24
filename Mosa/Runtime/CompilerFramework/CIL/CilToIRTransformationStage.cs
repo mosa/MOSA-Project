@@ -12,10 +12,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
+using Mosa.Runtime.CompilerFramework.IR2;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -51,22 +51,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#region Members
 
 		/// <summary>
-		/// Nops the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Nop(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Breaks the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Break(Context ctx)
-		{
-		}
-
-		/// <summary>
 		/// Ldargs the specified instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -81,7 +65,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		public override void Ldarga(Context ctx)
 		{
-			Replace(ctx, new AddressOfInstruction(ctx.InstructionSet.Data[ctx.Index].Result, ctx.InstructionSet.Data[ctx.Index].Operand1));
+			//ctx.SetInstruction(IR2.Instruction.AddressOfInstruction(ctx.InstructionSet.Data[ctx.Index].Result, ctx.InstructionSet.Data[ctx.Index].Operand1));
+			ctx.SetInstruction(IR2.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -99,7 +84,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		public override void Ldloca(Context ctx)
 		{
-			Replace(ctx, new AddressOfInstruction(ctx.Result, ctx.Operand1));
+			//ctx.SetInstruction(IR2.Instruction.AddressOfInstruction(ctx.Result, ctx.Operand1));
+			ctx.SetInstruction(IR2.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -118,31 +104,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public override void Ldobj(Context ctx)
 		{
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
-			Replace(ctx, new IR.LoadInstruction(ctx.Result, ctx.Operand1));
-		}
-
-		/// <summary>
-		/// LDSTRs the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Ldstr(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// LDFLDs the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Ldfld(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Ldfldas the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Ldflda(Context ctx)
-		{
+			ctx.SetInstruction(IR2.Instruction.LoadInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -151,7 +113,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		public override void Ldsfld(Context ctx)
 		{
-			Replace(ctx, new MoveInstruction(ctx.Result, new MemberOperand(ctx.RuntimeField)));
+			ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new MemberOperand(ctx.RuntimeField));
 		}
 
 		/// <summary>
@@ -160,7 +122,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		public override void Ldsflda(Context ctx)
 		{
-			Replace(ctx, new AddressOfInstruction(ctx.Result, ctx.Operand1));
+			ctx.SetInstruction(IR2.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -215,15 +177,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public override void Stobj(Context ctx)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
-			Replace(ctx, new Mosa.Runtime.CompilerFramework.IR.StoreInstruction(ctx.Operand1, ctx.Operand2));
-		}
-
-		/// <summary>
-		/// STFLDs the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Stfld(Context ctx)
-		{
+			ctx.SetInstruction(IR2.Instruction.StoreInstruction, ctx.Operand1, ctx.Operand2);
 		}
 
 		/// <summary>
@@ -232,7 +186,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		public override void Stsfld(Context ctx)
 		{
-			Replace(ctx, new MoveInstruction(new MemberOperand(ctx.RuntimeField), ctx.Operand1));
+			//			Replace(ctx, new MoveInstruction(new MemberOperand(ctx.RuntimeField), ctx.Operand1));
+			ctx.SetInstruction(IR2.Instruction.MoveInstruction, new MemberOperand(ctx.RuntimeField), ctx.Operand1);
 		}
 
 		/// <summary>
@@ -243,22 +198,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			// We don't need the dup anymore.
 			Remove(ctx);
-		}
-
-		/// <summary>
-		/// Pops the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Pop(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// JMPs the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Jmp(Context ctx)
-		{
 		}
 
 		/// <summary>
@@ -286,41 +225,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public override void Ret(Context ctx)
 		{
 			if (ctx.OperandCount == 1)
-				Replace(ctx, new IR.ReturnInstruction(ctx.Operand1));
+				ctx.SetInstruction(IR2.Instruction.ReturnInstruction, ctx.Operand1);
 			else
-				Replace(ctx, new IR.ReturnInstruction());
-		}
-
-		/// <summary>
-		/// Brancs the dh.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Branch(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Unaries the branch.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void UnaryBranch(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Binaries the branch.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void BinaryBranch(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Switches the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Switch(Context ctx)
-		{
+				ctx.SetInstruction(IR2.Instruction.ReturnInstruction);
 		}
 
 		/// <summary>
@@ -426,14 +333,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
-		/// Cpobjs the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Cpobj(Context ctx)
-		{
-		}
-
-		/// <summary>
 		/// Newobjs the specified instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -513,140 +412,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
-		/// Ldlens the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Ldlen(Context ctx)
-		{
-			// FIXME
-		}
-
-		/// <summary>
-		/// Ldelemas the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Ldelema(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Ldelems the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Ldelem(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Stelems the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Stelem(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Unboxes any.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void UnboxAny(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Refanyvals the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Refanyval(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Unaries the arithmetic.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void UnaryArithmetic(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Mkrefanies the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Mkrefany(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Arithmetics the overflow.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void ArithmeticOverflow(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Endfinallies the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Endfinally(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Leaves the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Leave(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Arglists the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Arglist(Context ctx)
-		{
-		}
-
-		/// <summary>
 		/// Binaries the comparison.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		public override void BinaryComparison(Context ctx)
 		{
 			ConditionCode code = GetConditionCode((ctx.Instruction as BaseInstruction).OpCode);
-			Operand op1 = ctx.Operand1;
-			if (op1.StackType == StackTypeCode.F) {
-				Replace(ctx, new FloatingPointCompareInstruction(ctx.Result, op1, code, ctx.Operand1));
-			}
-			else {
-				Replace(ctx, new IntegerCompareInstruction(ctx.Result, op1, code, ctx.Operand1));
-			}
-		}
 
-		/// <summary>
-		/// Localallocs the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Localalloc(Context ctx)
-		{
-		}
+			if (ctx.Operand1.StackType == StackTypeCode.F)
+				ctx.SetInstruction(IR2.Instruction.FloatingPointCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+			else
+				ctx.SetInstruction(IR2.Instruction.IntegerCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 
-		/// <summary>
-		/// Endfilters the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Endfilter(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Inits the obj.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void InitObj(Context ctx)
-		{
+			ctx.Other = code;
 		}
 
 		/// <summary>
@@ -668,76 +446,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
-		/// Prefixes the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Prefix(Context ctx)
-		{
-		}
-
-		/// <summary>
 		/// Rethrows the specified instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		public override void Rethrow(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.Rethrow);
-		}
-
-		/// <summary>
-		/// Sizeofs the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Sizeof(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Refanytypes the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Refanytype(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Adds the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Add(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Subs the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Sub(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Muls the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Mul(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Divs the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Div(Context ctx)
-		{
-		}
-
-		/// <summary>
-		/// Rems the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public override void Rem(Context ctx)
-		{
 		}
 
 		#endregion // CILVisitor<Context> Members
@@ -777,9 +491,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			bool result = false;
 			CilElementType cet = source.Type.Type;
-			if (cet == CilElementType.I1 || cet == CilElementType.I2) {
+			
+			if (cet == CilElementType.I1 || cet == CilElementType.I2)
 				result = true;
-			}
+
 			return result;
 		}
 
@@ -1226,7 +941,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 								Operand[] args = new Operand[ctx.ResultCount + ctx.OperandCount];
 								int idx = 0;
 
-								foreach(Operand result in ctx.Results)
+								foreach (Operand result in ctx.Results)
 									args[idx++] = result;
 
 								foreach (Operand operand in ctx.Operands)
