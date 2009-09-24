@@ -19,44 +19,109 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 	/// </summary>
 	public static class Instruction
 	{
-		private static AddressOfInstruction _addressOfInstruction = new AddressOfInstruction();
-		private static ArithmeticShiftRightInstruction _arithmeticShiftRightInstruction = new ArithmeticShiftRightInstruction();
-		private static BranchInstruction _branchInstruction = new BranchInstruction();
-		private static EpilogueInstruction _epilogueInstruction = new EpilogueInstruction();
-		private static FloatingPointCompareInstruction _floatingPointCompareInstruction = new FloatingPointCompareInstruction();
-
-		private static PrologueInstruction _prologueInstruction = new PrologueInstruction();
-
 		/// <summary>
-		/// Gets the address of instruction.
+		/// 
 		/// </summary>
-		/// <value>The address of instruction.</value>
-		public static AddressOfInstruction AddressOfInstruction { get { return _addressOfInstruction; } }
+		public static AddressOfInstruction AddressOfInstruction = new AddressOfInstruction();
 		/// <summary>
-		/// Gets the arithmetic shift right instruction.
+		/// 
 		/// </summary>
-		/// <value>The arithmetic shift right instruction.</value>
-		public static ArithmeticShiftRightInstruction ArithmeticShiftRightInstruction { get { return _arithmeticShiftRightInstruction; } }
+		public static ArithmeticShiftRightInstruction ArithmeticShiftRightInstruction = new ArithmeticShiftRightInstruction();
 		/// <summary>
-		/// Gets the branch instruction.
+		/// 
 		/// </summary>
-		/// <value>The branch instruction.</value>
-		public static BranchInstruction BranchInstruction { get { return _branchInstruction; } }
+		public static BranchInstruction BranchInstruction = new BranchInstruction();
 		/// <summary>
-		/// Gets the epilogue instruction.
+		/// 
 		/// </summary>
-		/// <value>The epilogue instruction.</value>
-		public static EpilogueInstruction EpilogueInstruction { get { return _epilogueInstruction; } }
+		public static EpilogueInstruction EpilogueInstruction = new EpilogueInstruction();
 		/// <summary>
-		/// Gets the floating point compare instruction.
+		/// 
 		/// </summary>
-		/// <value>The floating point compare instruction.</value>
-		public static FloatingPointCompareInstruction FloatingPointCompareInstruction { get { return _floatingPointCompareInstruction; } }
+		public static FloatingPointCompareInstruction FloatingPointCompareInstruction = new FloatingPointCompareInstruction();
 		/// <summary>
-		/// Gets the prologue instruction.
+		/// 
 		/// </summary>
-		/// <value>The prologue instruction.</value>
-		public static PrologueInstruction PrologueInstruction { get { return _prologueInstruction; } }
-
+		public static FloatingPointToIntegerConversionInstruction FloatingPointToIntegerConversionInstruction = new FloatingPointToIntegerConversionInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static IntegerCompareInstruction IntegerCompareInstruction = new IntegerCompareInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static IntegerToFloatingPointConversionInstruction IntegerToFloatingPointConversionInstruction = new IntegerToFloatingPointConversionInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static JmpInstruction JmpInstruction = new JmpInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static LoadInstruction LoadInstruction = new LoadInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static LogicalAndInstruction LogicalAndInstruction = new LogicalAndInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static LogicalNotInstruction LogicalNotInstruction = new LogicalNotInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static LogicalOrInstruction LogicalOrInstruction = new LogicalOrInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static LogicalXorInstruction LogicalXorInstruction = new LogicalXorInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static MoveInstruction MoveInstruction = new MoveInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static PhiInstruction PhiInstruction = new PhiInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static PopInstruction PopInstruction = new PopInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static PrologueInstruction PrologueInstruction = new PrologueInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static ReturnInstruction ReturnInstruction = new ReturnInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static ShiftLeftInstruction ShiftLeftInstruction = new ShiftLeftInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static ShiftRightInstruction ShiftRightInstruction = new ShiftRightInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static SignExtendedMoveInstruction SignExtendedMoveInstruction = new SignExtendedMoveInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static StoreInstruction StoreInstruction = new StoreInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static UDivInstruction UDivInstruction = new UDivInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static URemInstruction URemInstruction = new URemInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static ZeroExtendedMoveInstruction ZeroExtendedMoveInstruction = new ZeroExtendedMoveInstruction();
 	}
 }
