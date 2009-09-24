@@ -37,16 +37,16 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		#region Instruction Overrides
 
 		/// <summary>
-		/// Gibt einen <see cref="T:System.String"/> zurück, der den aktuellen <see cref="T:System.Object"/> darstellt.
+		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <returns>
-		/// Ein <see cref="T:System.String"/>, der den aktuellen <see cref="T:System.Object"/> darstellt.
+		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
 		public override string ToString(ref InstructionData instruction)
 		{
 			StringBuilder builder = new StringBuilder();
-			builder.AppendFormat("IR phi ; {0} = phi(", instruction.Result);
+			builder.AppendFormat("IR.phi ; {0} = phi(", instruction.Result);
 			
 			if (instruction.Operand1 != null)
 				builder.AppendFormat("{0}, ", instruction.Operand1);

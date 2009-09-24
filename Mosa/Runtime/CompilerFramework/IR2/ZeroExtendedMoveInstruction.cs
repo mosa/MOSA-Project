@@ -40,7 +40,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         /// <returns>A string representation of the instruction.</returns>
         public override string ToString(ref InstructionData instruction)
         {
-            return String.Format(@"IR zconv {0} <- {1}", instruction.Operand1, instruction.Operand2);
+            return String.Format(@"IR.zconv {0} <- {1}", instruction.Operand1, instruction.Operand2);
         }
 
 		/// <summary>

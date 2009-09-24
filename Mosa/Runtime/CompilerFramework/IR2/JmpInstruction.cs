@@ -18,41 +18,16 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// </summary>
     public class JmpInstruction : BaseInstruction
     {
-        #region Data members
-
-        /// <summary>
-        /// The jump destination.
-        /// </summary>
-        private int _label;
-
-        #endregion // Data members
-
         #region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="JmpInstruction"/> class.
-        /// </summary>
-        /// <param name="label">The jump destination label.</param>
-        public JmpInstruction(int label)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JmpInstruction"/> class.
+		/// </summary>
+        public JmpInstruction()
         {
-            _label = label;
         }
 
         #endregion // Construction
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the jump destination label.
-        /// </summary>
-        /// <value>The label.</value>
-        public int Label
-        {
-            get { return _label; }
-            set { _label = value; }
-        }
-
-        #endregion // Properties
 
         #region IRInstruction Overrides
 
@@ -64,7 +39,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         /// </returns>
         public override string ToString(ref InstructionData instruction)
         {
-            return String.Format(@"IR jmp {0}", _label);
+			return String.Format(@"IR.jmp {0}", instruction.Branch.Targets[0]);
         }
 
 		/// <summary>

@@ -78,9 +78,9 @@ namespace Mosa.Runtime.CompilerFramework
 		public IBranch Branch;
 
 		/// <summary>
-		/// Holds an object
+		/// Holds the "other" object
 		/// </summary>
-		private object _other;
+		public object Other;
 
 		/// <summary>
 		/// Holds the number of operands
@@ -127,8 +127,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public RuntimeMethod InvokeTarget
 		{
-			get { return _other as RuntimeMethod; }
-			set { _other = value; }
+			get { return Other as RuntimeMethod; }
+			set { Other = value; }
 		}
 
 		/// <summary>
@@ -136,8 +136,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public string String
 		{
-			get { return _other as string; }
-			set { _other = value; }
+			get { return Other as string; }
+			set { Other = value; }
 		}
 
 		/// <summary>
@@ -145,8 +145,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public RuntimeField RuntimeField
 		{
-			get { return _other as RuntimeField; }
-			set { _other = value; }
+			get { return Other as RuntimeField; }
+			set { Other = value; }
 		}
 
 		/// <summary>
@@ -155,8 +155,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The token.</value>
 		public TokenTypes Token
 		{
-			get { return (TokenTypes) _other; }
-			set { _other = value; }
+			get { return (TokenTypes) Other; }
+			set { Other = value; }
 		}
 
 		#endregion // Properties
@@ -180,7 +180,7 @@ namespace Mosa.Runtime.CompilerFramework
 			this.Prefix = null;
 			this.Branch = null;
 			this.Block = 0;
-			this._other = null;
+			this.Other = null;
 		}
 
 		#endregion

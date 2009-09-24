@@ -59,9 +59,9 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         public override string ToString(ref InstructionData instruction)
         {
             if (null == instruction.Operand1)
-                return @"IR return";
+                return @"IR.return";
 
-            return String.Format(@"IR return {0}", instruction.Operand1);
+            return String.Format(@"IR.return {0}", instruction.Operand1);
         }
 
 		/// <summary>

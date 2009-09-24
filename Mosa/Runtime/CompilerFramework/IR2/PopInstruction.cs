@@ -42,7 +42,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// </returns>
         public override string ToString(ref InstructionData instruction)
         {
-            return String.Format(@"IR pop {0}", instruction.Result);
+            return String.Format(@"IR.pop {0}", instruction.Result);
         }
 
 		/// <summary>

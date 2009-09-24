@@ -15,117 +15,47 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.IR2
 {
-    /// <summary>
-    /// Used to represent labelled literal data in the instruction stream.
-    /// </summary>
-    public abstract class LiteralInstruction: BaseInstruction
-    {
-        #region Data members
-
-        /// <summary>
-        /// The literal data to embed in the instruction stream.
-        /// </summary>
-        private object _data;
-
-        /// <summary>
-        /// Contains the label to apply to the data.
-        /// </summary>
-        private int _label;
-
-        /// <summary>
-        /// Holds the signature type of the literal data.
-        /// </summary>
-        private SigType _type;
-
-        #endregion // Data members
-
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of LiteralInstruction.
-        /// </summary>
-        /// <param name="label">The label used to identify the literal in code.</param>
-        /// <param name="type">The signature type of the literal data.</param>
-        /// <param name="data">The data to embed along with the code stream.</param>
-        protected LiteralInstruction(int label, SigType type, object data)
-        {
-            if (null == type)
-                throw new ArgumentNullException(@"type");
-            if (null == data)
-                throw new ArgumentNullException(@"data");
-
-            _label = label;
-            _type = type;
-            _data = data;
-        }
-
-        #endregion // Construction
-
-        #region Properties
-
-        /// <summary>
-        /// Gets an object, that represents the data to embed in the instruction stream.
-        /// </summary>
-        /// <value>The data.</value>
-        public object Data
-        {
-            get { return _data; }
-        }
-
-        /// <summary>
-        /// Gets the label to apply to the data.
-        /// </summary>
-        /// <value>The label.</value>
-        public int Label
-        {
-            get { return _label; }
-        }
-
-        /// <summary>
-        /// Gets the signature type of the data to embed.
-        /// </summary>
-        /// <value>The type.</value>
-        public SigType Type
-        {
-            get { return _type; }
-        }
-
-        #endregion // Properties
-
-        #region Methods
-
-        /// <summary>
-        /// Creates an operand for use in instructions that reference this literal.
-        /// </summary>
-        /// <returns>An operand used to reference this literal.</returns>
-        public abstract Operand CreateOperand();
-
-        #endregion // Methods
-
-        #region Instruction Overrides
+	/// <summary>
+	/// Used to represent labelled literal data in the instruction stream.
+	/// </summary>
+	public abstract class LiteralInstruction : BaseInstruction
+	{
+		#region Construction
 
 		/// <summary>
-		/// Gibt einen <see cref="T:System.String"/> zurück, der den aktuellen <see cref="T:System.Object"/> darstellt.
+		/// Initializes a new instance of LiteralInstruction.
+		/// </summary>
+		protected LiteralInstruction()
+		{
+		}
+
+		#endregion // Construction
+
+		#region Instruction Overrides
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <returns>
-		/// Ein <see cref="T:System.String"/>, der den aktuellen <see cref="T:System.Object"/> darstellt.
+		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-        public override string ToString(ref InstructionData instruction)
-        {
-            return String.Format("IR literal {0} {1} ; L_{2}", _type, _data, _label);
-        }
+		public override string ToString(ref InstructionData instruction)
+		{
+			LiteralData data = (LiteralData)instruction.Other;
+			return String.Format("IR.literal {0} {1} ; L_{2}", data.Type, data.Data, data.Label);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
 		/// <param name="context">The context.</param>
-        public override void Visit(IIRVisitor visitor, Context context)
-        {
+		public override void Visit(IIRVisitor visitor, Context context)
+		{
 			visitor.LiteralInstruction(context);
-        }
+		}
 
-        #endregion // Instruction Overrides
-    }
+		#endregion // Instruction Overrides
+	}
 }

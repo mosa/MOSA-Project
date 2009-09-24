@@ -49,7 +49,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         /// <returns>A string representation of the shr instruction.</returns>
         public override string ToString(ref InstructionData instruction)
         {
-            return String.Format(@"IR ashr {0} <- {1} >> {2}", instruction.Operand1, instruction.Operand2, instruction.Operand3);
+            return String.Format(@"IR.ashr {0} <- {1} >> {2}", instruction.Operand1, instruction.Operand2, instruction.Operand3);
         }
 
 		/// <summary>

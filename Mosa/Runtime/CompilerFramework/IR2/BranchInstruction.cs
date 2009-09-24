@@ -106,7 +106,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
                 default:
                     throw new NotSupportedException();
             }            
-            return String.Format(@"IR br.{0} {1} ; if {0} goto {1}", cc, _label);
+            return String.Format(@"IR.br.{0} {1} ; if {0} goto {1}", cc, _label);
         }
 
 		/// <summary>
