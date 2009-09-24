@@ -1226,17 +1226,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 								Operand[] args = new Operand[ctx.ResultCount + ctx.OperandCount];
 								int idx = 0;
 
-								if (ctx.ResultCount > 0)
-									args[idx++] = ctx.Result;
-								else if (ctx.ResultCount > 1)
-									args[idx++] = ctx.Result2;
+								foreach(Operand result in ctx.Results)
+									args[idx++] = result;
 
-								if (ctx.OperandCount > 0)
-									args[idx++] = ctx.Operand1;
-								else if (ctx.OperandCount > 1)
-									args[idx++] = ctx.Operand2;
-								else if (ctx.OperandCount > 2)
-									args[idx++] = ctx.Operand3;
+								foreach (Operand operand in ctx.Operands)
+									args[idx++] = operand;
 
 								replacement = (LegacyInstruction)Activator.CreateInstance(ia.InstructionType, args, null);
 								break;

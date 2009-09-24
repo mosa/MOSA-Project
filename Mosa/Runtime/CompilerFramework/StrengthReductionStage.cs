@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (BasicBlock block in blockProvider.Blocks) {
 				Context ctx = new Context(instructionset, block);
 
-				while (!ctx.EndOfInstructions) {
+				while (!ctx.EndOfInstruction) {
 					ctx.Instruction.Visit(this, ctx);
 					ctx.Forward();
 				}

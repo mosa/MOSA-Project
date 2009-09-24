@@ -141,8 +141,8 @@ namespace Mosa.Runtime.CompilerFramework
 			AEBinExp aeb;
 
 			//int i = 0;
-			
-			while (!ctx.EndOfInstructions)
+
+			while (!ctx.EndOfInstruction)
 			{
 				IInstruction instruction = ctx.Instruction; // block.Instructions[i];
 				RegisterOperand temp = null;

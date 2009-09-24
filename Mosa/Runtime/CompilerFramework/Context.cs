@@ -123,6 +123,21 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Gets the operands.
+		/// </summary>
+		/// <value>The operands.</value>
+		public IEnumerable<Operand> Results
+		{
+			get
+			{
+				if (Result != null)
+					yield return Result;
+				if (Result2 != null)
+					yield return Result2;
+			}
+		}
+
+		/// <summary>
 		/// Gets the first operand.
 		/// </summary>
 		/// <value>The first operand.</value>
@@ -150,6 +165,23 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			get { return _instructionSet.Data[_index].Operand3; }
 			set { _instructionSet.Data[_index].Operand3 = value; }
+		}
+
+		/// <summary>
+		/// Gets the operands.
+		/// </summary>
+		/// <value>The operands.</value>
+		public IEnumerable<Operand> Operands
+		{
+			get
+			{
+				if (Operand1 != null)
+					yield return Operand1;
+				if (Operand2 != null)
+					yield return Operand2;
+				if (Operand3 != null)
+					yield return Operand3;
+			}
 		}
 
 		/// <summary>
@@ -226,21 +258,31 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether [end of instructions].
+		/// Gets the other object.
 		/// </summary>
-		/// <value><c>true</c> if [end of instructions]; otherwise, <c>false</c>.</value>
-		public bool EndOfInstructions
+		/// <value>The other.</value>
+		public object Other
 		{
-			get { return _index < 0; }
+			get { return _instructionSet.Data[_index].Other; }
+			set { _instructionSet.Data[_index].Other = value; }
 		}
 
 		/// <summary>
 		/// Gets a value indicating whether [last instruction].
 		/// </summary>
 		/// <value><c>true</c> if [last instruction]; otherwise, <c>false</c>.</value>
-		public bool LastInstruction
+		public bool IsLastInstruction
 		{
 			get { return _instructionSet.Next(_index) < 0; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether [end of instruction].
+		/// </summary>
+		/// <value><c>true</c> if [end of instruction]; otherwise, <c>false</c>.</value>
+		public bool EndOfInstruction
+		{
+			get { return _index < 0; }
 		}
 
 		/// <summary>
@@ -312,9 +354,23 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Gotos the last.
+		/// </summary>
+		public void GotoLast()
+		{
+			if (_index < 0)
+				return;
+
+			int next = _instructionSet.Next(_index);
+
+			for (; next < 0; )
+				_index = next;
+		}
+
+		/// <summary>
 		/// Clears the specified context.
 		/// </summary>
-		public  void Clear()
+		public void Clear()
 		{
 			_instructionSet.Data[_index].Clear();
 		}

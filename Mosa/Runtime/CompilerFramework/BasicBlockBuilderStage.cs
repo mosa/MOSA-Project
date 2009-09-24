@@ -113,7 +113,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="ctx">The CTX.</param>
 		private void FindLoopHeads(Context ctx)
 		{
-			while (!ctx.EndOfInstructions) {
+			while (!ctx.EndOfInstruction) {
 				// Retrieve the instruction
 				ICILInstruction instruction = ctx.Instruction as ICILInstruction;
 
@@ -124,7 +124,7 @@ namespace Mosa.Runtime.CompilerFramework
 					case FlowControl.Next: break;
 
 					case FlowControl.Return:
-						if (!ctx.LastInstruction)
+						if (!ctx.IsLastInstruction)
 							AddLoopHead(ctx.Next.Offset);
 						break;
 
@@ -139,7 +139,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 					case FlowControl.Throw:
 						// End the block, start a new one on the next statement
-						if (!ctx.LastInstruction)
+						if (!ctx.IsLastInstruction)
 							AddLoopHead(ctx.Next.Offset);
 						break;
 
@@ -184,7 +184,7 @@ namespace Mosa.Runtime.CompilerFramework
 					ctx.BasicBlock = current.Value;
 
 					// Set the block index on all the instructions
-					while ((ctx.Index != next.Key) && !ctx.EndOfInstructions) {
+					while ((ctx.Index != next.Key) && !ctx.EndOfInstruction) {
 						ctx.Block = blockIndex;
 						ctx.Forward();
 					}

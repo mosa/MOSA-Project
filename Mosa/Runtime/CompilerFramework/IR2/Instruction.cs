@@ -25,6 +25,8 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		private static EpilogueInstruction _epilogueInstruction = new EpilogueInstruction();
 		private static FloatingPointCompareInstruction _floatingPointCompareInstruction = new FloatingPointCompareInstruction();
 
+		private static PrologueInstruction _prologueInstruction = new PrologueInstruction();
+
 		/// <summary>
 		/// Gets the address of instruction.
 		/// </summary>
@@ -50,6 +52,11 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// </summary>
 		/// <value>The floating point compare instruction.</value>
 		public static FloatingPointCompareInstruction FloatingPointCompareInstruction { get { return _floatingPointCompareInstruction; } }
+		/// <summary>
+		/// Gets the prologue instruction.
+		/// </summary>
+		/// <value>The prologue instruction.</value>
+		public static PrologueInstruction PrologueInstruction { get { return _prologueInstruction; } }
 
 	}
 }
