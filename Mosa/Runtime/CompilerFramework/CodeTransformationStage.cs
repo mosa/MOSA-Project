@@ -198,7 +198,7 @@ namespace Mosa.Runtime.CompilerFramework
 					blockLabels.Add(basicBlock.Label, basicBlock);
 			}
 		}
-		
+
 		private static void UpdateBlocks(BasicBlock[] blocks, IDictionary<int, BasicBlock> blockLabels)
 		{
 			foreach (BasicBlock block in blocks)
@@ -207,7 +207,7 @@ namespace Mosa.Runtime.CompilerFramework
 						foreach (int label in (instruction as IBranchInstruction).BranchTargets) 
 							UpdateBlockLinks(block, blockLabels[label]);
 		}
-		
+
 		private static void UpdateBlockLinks(BasicBlock block, BasicBlock next)
 		{
 			if (!block.NextBlocks.Contains(next))
@@ -220,6 +220,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Create an empty block.
 		/// </summary>
 		/// <returns></returns>
+		// FIXME PG - REMOVE METHOD
 		protected BasicBlock CreateEmptyBlock()
 		{
 			BasicBlock block = new BasicBlock(Blocks.Count + 0x10000000);
@@ -233,6 +234,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="blocks">The Blocks.</param>
 		/// <returns></returns>
+		// FIXME PG - REMOVE METHOD
 		protected BasicBlock[] CreateEmptyBlocks(int blocks)
 		{
 			// Allocate the block array
@@ -250,6 +252,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="ctx">The context.</param>
 		/// <param name="insert">The insert to be called after the split.</param>
 		/// <returns></returns>
+		// FIXME PG - REMOVE METHOD
 		protected BasicBlock SplitBlock(Context ctx, BasicBlock insert)
 		{
 			int label = Blocks.Count + 0x10000000;
@@ -270,12 +273,67 @@ namespace Mosa.Runtime.CompilerFramework
 
 			return nextBlock;
 		}
-		
+
+		// FIXME PG - REMOVE METHOD
 		private void InsertLabel(ref Context ctx, ref BasicBlock block, int label)
 		{
 			ctx.BasicBlock.NextBlocks.Add(block);
 			block.PreviousBlocks.Add(ctx.BasicBlock);
 			ctx.BasicBlock.Instructions.Add(new IR.JmpInstruction(label));
+		}
+
+
+
+		/// <summary>
+		/// Create an empty block.
+		/// </summary>
+		/// <returns></returns>
+		protected Context CreateEmptyBlockContext()
+		{
+			BasicBlock block = new BasicBlock(Blocks.Count + 0x10000000);
+			block.Index = Blocks.Count;
+			Blocks.Add(block);
+			return new Context(block);
+		}
+
+		/// <summary>
+		/// Creates empty Blocks.
+		/// </summary>
+		/// <param name="blocks">The Blocks.</param>
+		/// <returns></returns>
+		protected Context[] CreateEmptyBlockContexts(int blocks)
+		{
+			// Allocate the block array
+			Context[] result = new Context[blocks];
+
+			for (int index = 0; index < blocks; index++)
+				result[index] = CreateEmptyBlockContext();
+
+			return result;
+		}
+
+		/// <summary>
+		/// Splits the block.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <returns></returns>
+		protected Context SplitBlock(Context ctx)
+		{
+			int label = Blocks.Count + 0x10000000;
+
+			BasicBlock nextBlock = new BasicBlock(label); //ctx.BasicBlock.Split(ctx.Index + 1, label);
+			nextBlock.Index = Blocks.Count - 1;
+
+			foreach (BasicBlock block in ctx.BasicBlock.NextBlocks)
+				nextBlock.NextBlocks.Add(block);
+
+			ctx.BasicBlock.NextBlocks.Clear();
+			ctx.BasicBlock.NextBlocks.Add(nextBlock);
+
+			ctx.InsertInstructionAfter(IR2.Instruction.JmpInstruction, nextBlock);
+			ctx.SliceAfter();
+
+			return new Context(nextBlock);
 		}
 
 		#endregion
