@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -18,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Performs IR constant folding of arithmetic instructions to optimize
 	/// the code down to fewer calculations.
 	/// </summary>
-	public sealed class IRConstantFoldingStage : IR.IRStage, IMethodCompilerStage
+	public sealed class IRConstantFoldingStage : IR2.IRStage, IMethodCompilerStage
 	{
 
 		/// <summary>
@@ -57,7 +56,7 @@ namespace Mosa.Runtime.CompilerFramework
 					default:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
-				ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+				ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
 			}
 		}
 
@@ -66,11 +65,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Folds logical ORs with 2 constants
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void LogicalOrInstruction(Context ctx)
+		public override void LogicalOrInstruction(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand) {
 				int result = 0;
-				switch (instruction.Results[0].Type.Type) {
+				switch (ctx.Result.Type.Type) {
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
@@ -98,7 +97,7 @@ namespace Mosa.Runtime.CompilerFramework
 					default:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
-				ctx.SetInstruction(IR.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+				ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
 			}
 		}
 
@@ -106,11 +105,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Folds logical XORs with 2 constants
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void LogicalXorInstruction(Context ctx)
+		public override void LogicalXorInstruction(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand) {
 				int result = 0;
-				switch (instruction.Results[0].Type.Type) {
+				switch (ctx.Result.Type.Type) {
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
@@ -138,8 +137,7 @@ namespace Mosa.Runtime.CompilerFramework
 					default:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
-				ctx.SetInstruction(IR.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
-
+				ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
 			}
 		}
 
