@@ -119,7 +119,7 @@ namespace Mosa.Runtime.CompilerFramework
 			//prologueBlock.Insert(0, arch.CreateInstruction(typeof(IR.PrologueInstruction), _localsSize));
 			Context prologueCtx = new Context(blockProvider.FromLabel(-1));
 			prologueCtx.InsertBefore();
-			prologueCtx.SetInstruction(IR.Instruction.PrologueInstruction);
+			prologueCtx.SetInstruction(IR2.Instruction.PrologueInstruction);
 			prologueCtx.Other = _localsSize;
 
 			// Create an epilogue instruction
@@ -127,7 +127,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Context epilogueCtx = new Context(blockProvider.FromLabel(Int32.MaxValue));
 			epilogueCtx.GotoLast();
 			epilogueCtx.InsertAfter();
-			epilogueCtx.SetInstruction(IR.Instruction.EpilogueInstruction);
+			epilogueCtx.SetInstruction(IR2.Instruction.EpilogueInstruction);
 			epilogueCtx.Other = _localsSize;
 		}
 

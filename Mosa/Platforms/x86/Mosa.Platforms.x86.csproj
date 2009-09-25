@@ -89,6 +89,7 @@
     <Compile Include="ConstantRemovalStage.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CPUx86\AddInstruction.cs" />
     <Compile Include="CPUx86\DirectMultiplicationInstruction.cs" />
     <Compile Include="CPUx86\Instruction.cs" />
     <Compile Include="Instructions\DirectDivision.cs" />
