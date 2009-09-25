@@ -391,7 +391,7 @@ namespace Mosa.Platforms.x86
 
         void IL.IILVisitor<Context>.Rem(IL.RemInstruction instruction, Context ctx)
         {
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, null);
+			BasicBlock nextBlock = SplitBlock(ctx, null);
 			
             LegacyInstruction extend, div;
             if (X86.IsUnsigned(instruction.First))

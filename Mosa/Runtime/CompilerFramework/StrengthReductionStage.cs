@@ -9,7 +9,7 @@
  */
 
 using System;
-using Mosa.Runtime.CompilerFramework.CIL;
+using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Performs IR constant folding of arithmetic instructions to optimize
 	/// the code down to fewer calculations.
 	/// </summary>
-	public sealed class StrengthReductionStage : CILStage, IMethodCompilerStage
+	public sealed class StrengthReductionStage : CIL.CILStage, IMethodCompilerStage
 	{
 
 		#region IMethodCompilerStage
@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
 		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertBefore<CilToIrTransformationStage>(this);
+			pipeline.InsertBefore<CIL.CilToIrTransformationStage>(this);
 		}
 
 		#endregion

@@ -248,10 +248,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Splits the block.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		/// <param name="instruction">The instruction index to split on.</param>
 		/// <param name="insert">The insert to be called after the split.</param>
 		/// <returns></returns>
-		protected BasicBlock SplitBlock(Context ctx, LegacyInstruction instruction, BasicBlock insert)
+		protected BasicBlock SplitBlock(Context ctx, BasicBlock insert)
 		{
 			int label = Blocks.Count + 0x10000000;
 

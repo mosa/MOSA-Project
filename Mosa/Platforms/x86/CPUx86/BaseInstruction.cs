@@ -13,7 +13,7 @@ using System.Diagnostics;
 using System.Text;
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Platforms.x86.Platform
+namespace Mosa.Platforms.x86.CPUx86
 {
 	/// <summary>
 	/// 

@@ -11,7 +11,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Runtime.CompilerFramework.CIL;
+
+using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -86,10 +87,11 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Add a jump instruction to the first block from the prologue
 			Context ctx = new Context(_instructionset, 0).InsertBefore();
-			ctx.SetInstruction(CIL.Instruction.Get(OpCode.Br));
+			ctx.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
+			ctx.SetBranch(0);
 			//ctx.Instruction = Map.GetInstruction(OpCode.Br);
-			ctx.Branch = new Branch(1);
-			ctx.Branch.Targets[0] = 0;
+			//ctx.Branch = new Branch(1);
+			//ctx.Branch.Targets[0] = 0;
 
 			// Create the epilogue block
 			BasicBlock epilogue = new BasicBlock(Int32.MaxValue);
@@ -115,7 +117,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			while (!ctx.EndOfInstruction) {
 				// Retrieve the instruction
-				ICILInstruction instruction = ctx.Instruction as ICILInstruction;
+				CIL.ICILInstruction instruction = ctx.Instruction as CIL.ICILInstruction;
 
 				// Does this instruction end a block?
 				switch (instruction.FlowControl) {
@@ -207,16 +209,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="epilogue">The epilogue.</param>
 		private void InsertFlowControl(Context ctx, BasicBlock current, int nextBlock, BasicBlock epilogue)
 		{
-			switch ((ctx.Instruction as BaseInstruction).FlowControl) {
+			switch ((ctx.Instruction as CIL.BaseInstruction).FlowControl) {
 				case FlowControl.Break: goto case FlowControl.Next;
 				case FlowControl.Call: goto case FlowControl.Next;
 				case FlowControl.Next:
 					// Insert unconditional branch to next basic block
 					Context inserted = ctx.InsertAfter();
-					inserted.SetInstruction(CIL.Instruction.Get(OpCode.Br_s));
-//					inserted.Instruction = Map.GetInstruction(OpCode.Br_s);
-					inserted.Branch = new Branch(1);
-					inserted.Branch.Targets[0] = nextBlock;
+					inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Br_s));
+					//inserted.Instruction = Map.GetInstruction(OpCode.Br_s);
+					inserted.SetBranch(nextBlock);
+					//inserted.Branch = new Branch(1);
+					//inserted.Branch.Targets[0] = nextBlock;
 
 					ctx.SliceAfter();
 					LinkBlocks(current, _loopHeads[nextBlock]);
@@ -255,7 +258,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="pipeline"></param>
 		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertBefore<CilToIrTransformationStage>(this);
+			pipeline.InsertBefore<CIL.CilToIrTransformationStage>(this);
 		}
 
 		/// <summary>

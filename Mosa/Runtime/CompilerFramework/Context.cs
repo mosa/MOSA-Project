@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-using Mosa.Runtime.CompilerFramework.IR;
+using IR = Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
@@ -438,6 +438,145 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="block">The block.</param>
+		public void SetInstruction(IInstruction instruction, BasicBlock block)
+		{
+			SetInstruction(instruction);
+			SetBranch(block);
+		}
+
+		/// <summary>
+		/// Inserts the instruction after.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		public void InsertInstructionAfter(IInstruction instruction)
+		{
+			_index = _instructionSet.InsertAfter(_index);
+			SetInstruction(instruction);
+		}
+
+		/// <summary>
+		/// Inserts the instruction after.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="block">The block.</param>
+		public void InsertInstructionAfter(IInstruction instruction, BasicBlock block)
+		{
+			_index = _instructionSet.InsertAfter(_index);
+			SetInstruction(instruction, block);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		public void SetInstruction(IInstruction instruction, Operand result)
+		{
+			SetInstruction(instruction, 0, 1);
+			Result = result;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		public void InsertInstructionAfter(IInstruction instruction, Operand result)
+		{
+			_index = _instructionSet.InsertAfter(_index);
+			SetInstruction(instruction, 0, 1);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1)
+		{
+			SetInstruction(instruction, 1, 1);
+			Result = result;
+			Operand1 = operand1;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		public void InsertInstructionAfter(IInstruction instruction, Operand result, Operand operand1)
+		{
+			_index = _instructionSet.InsertAfter(_index);
+			SetInstruction(instruction, result, operand1);
+
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2)
+		{
+			SetInstruction(instruction, 2, 1);
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void InsertInstructionAfter(IInstruction instruction, Operand result, Operand operand1, Operand operand2)
+		{
+			_index = _instructionSet.InsertAfter(_index);
+			SetInstruction(instruction, result, operand1, operand2);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
+		{
+			SetInstruction(instruction, 3, 1);
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			Operand3 = operand3;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void InsertInstructionAfter(IInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
+		{
+			_index = _instructionSet.InsertAfter(_index);
+			SetInstruction(instruction, result, operand1, operand2, operand3);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
 		public void SetInstruction(IInstruction instruction, byte operandCount, byte resultCount)
@@ -515,59 +654,47 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Sets the instruction.
+		/// Sets the branch.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="result">The result.</param>
-		public void SetInstruction(IInstruction instruction, Operand result)
+		/// <param name="block">The block.</param>
+		public void SetBranch(BasicBlock block)
 		{
-			SetInstruction(instruction, 0, 1);
-			Result = result;
+			if (Branch == null)
+				Branch = new Branch(1);
+
+			Branch.Targets[0] = block.Label;
 		}
 
 		/// <summary>
-		/// Sets the instruction.
+		/// Sets the branch.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1)
+		/// <param name="target1">The target1.</param>
+		public void SetBranch(int target1)
 		{
-			SetInstruction(instruction, 1, 1);
-			Result = result;
-			Operand1 = operand1;
+			if (Branch == null)
+				Branch = new Branch(1);
+
+			Branch.Targets[0] = target1;
 		}
 
 		/// <summary>
-		/// Sets the instruction.
+		/// Sets the branch.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2)
+		/// <param name="target1">The target1.</param>
+		/// <param name="target2">The target2.</param>
+		public void SetBranch(int target1, int target2)
 		{
-			SetInstruction(instruction, 2, 1);
-			Result = result;
-			Operand1 = operand1;
-			Operand2 = operand2;
-		}
+			if (Branch == null)
+				Branch = new Branch(2);
+			else
+				if (Branch.Targets.Length < 2) {
+					Branch newBranch = new Branch(2);
+					newBranch.Targets[0] = Branch.Targets[0];
+					Branch = newBranch;
+				}
 
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		/// <param name="operand3">The operand3.</param>
-		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
-		{
-			SetInstruction(instruction, 3, 1);
-			Result = result;
-			Operand1 = operand1;
-			Operand2 = operand2;
-			Operand3 = operand3;
+			Branch.Targets[0] = target1;
+			Branch.Targets[0] = target2;
 		}
 
 		#endregion // Methods

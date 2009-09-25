@@ -89,6 +89,8 @@
     <Compile Include="ConstantRemovalStage.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CPUx86\DirectMultiplicationInstruction.cs" />
+    <Compile Include="CPUx86\Instruction.cs" />
     <Compile Include="Instructions\DirectDivision.cs" />
     <Compile Include="Instructions\DirectMultiplication.cs" />
     <Compile Include="Instructions\Intrinsics\CpuIdEaxInstruction.cs" />
@@ -99,9 +101,9 @@
     <Compile Include="Instructions\Intrinsics\NopInstruction.cs" />
     <Compile Include="Instructions\SalInstruction.cs" />
     <Compile Include="OpCode.cs" />
-    <Compile Include="Platform\BaseInstruction.cs" />
-    <Compile Include="Platform\IX86Visitor.cs" />
-    <Compile Include="Platform\NopInstruction.cs" />
+    <Compile Include="CPUx86\BaseInstruction.cs" />
+    <Compile Include="CPUx86\IX86Visitor.cs" />
+    <Compile Include="CPUx86\NopInstruction.cs" />
     <Compile Include="X86.cs" />
     <Compile Include="DefaultCallingConvention.cs">
       <SubType>Code</SubType>
