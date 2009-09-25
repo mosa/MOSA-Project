@@ -7,7 +7,7 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-using Mosa.Runtime.CompilerFramework.IL;
+using Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
 {
