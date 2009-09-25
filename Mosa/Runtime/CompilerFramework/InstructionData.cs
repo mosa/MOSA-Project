@@ -155,7 +155,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The token.</value>
 		public TokenTypes Token
 		{
-			get { return (TokenTypes) Other; }
+			get { return (TokenTypes)Other; }
+			set { Other = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the condition code.
+		/// </summary>
+		/// <value>The condition code.</value>
+		public IR2.ConditionCode ConditionCode
+		{
+			get { return (IR2.ConditionCode)Other; }
 			set { Other = value; }
 		}
 

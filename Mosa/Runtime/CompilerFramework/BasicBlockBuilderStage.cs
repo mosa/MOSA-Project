@@ -149,7 +149,7 @@ namespace Mosa.Runtime.CompilerFramework
 						Debug.Assert(false);
 						break;
 				}
-				ctx.Forward();
+				ctx.GotoNext();
 			}
 		}
 
@@ -188,10 +188,10 @@ namespace Mosa.Runtime.CompilerFramework
 					// Set the block index on all the instructions
 					while ((ctx.Index != next.Key) && !ctx.EndOfInstruction) {
 						ctx.Block = blockIndex;
-						ctx.Forward();
+						ctx.GotoNext();
 					}
 
-					ctx.Backwards();
+					ctx.GotoPrevious();
 
 					InsertFlowControl(ctx, current.Value, next.Key, epilogue);
 				}

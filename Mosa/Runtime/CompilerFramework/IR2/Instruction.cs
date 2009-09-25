@@ -94,6 +94,10 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// <summary>
 		/// 
 		/// </summary>
+		public static PushInstruction PushInstruction = new PushInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
 		public static ReturnInstruction ReturnInstruction = new ReturnInstruction();
 		/// <summary>
 		/// 

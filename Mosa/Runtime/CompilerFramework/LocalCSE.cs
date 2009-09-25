@@ -247,8 +247,7 @@ namespace Mosa.Runtime.CompilerFramework
 					}
 				}
 
-				//++i;
-				ctx.Forward();
+				ctx.GotoNext();
 			}
 		}
 

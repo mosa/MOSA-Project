@@ -425,7 +425,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			else
 				ctx.SetInstruction(IR2.Instruction.IntegerCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 
-			ctx.Other = code;
+			ctx.ConditionCode = code;
 		}
 
 		/// <summary>

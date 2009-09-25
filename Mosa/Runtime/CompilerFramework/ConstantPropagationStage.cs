@@ -61,24 +61,25 @@ namespace Mosa.Runtime.CompilerFramework
 
 				while (!ctx.EndOfInstruction) {
 
-					if (ctx.Instruction is IR.MoveInstruction || ctx.Instruction is CIL.StlocInstruction) {
+					if (ctx.Instruction is IR2.MoveInstruction || ctx.Instruction is CIL.StlocInstruction) {
 						if ( ctx.Operand1 is ConstantOperand) {
 							// HACK: We can't track a constant through a register, so we keep those moves
 							if (ctx.Result is StackOperand) {
-								Debug.Assert(1 == res.Definitions.Count, @"Operand defined multiple times. Instruction stream not in SSA form!");
+								Debug.Assert(ctx.Result.Definitions.Count == 1, @"Operand defined multiple times. Instruction stream not in SSA form!");
 								ctx.Result.Replace( ctx.Operand1);
 								remove = true;
 							}
 						}
 					}
-					else if (ctx.Instruction is IR.PhiInstruction) {
-						IR.PhiInstruction phi = (IR.PhiInstruction)ctx.Instruction;
-						ConstantOperand co = ctx.Instruction.Operand2 as ConstantOperand;
-						if (co != null && ctx.Blocks.Count = 1) {
+					else if (ctx.Instruction is IR2.PhiInstruction) {
+						IR2.PhiInstruction phi = (IR2.PhiInstruction)ctx.Instruction;
+						ConstantOperand co = ctx.Operand2 as ConstantOperand;
+						List<BasicBlock> blocks = ctx.Other as List<BasicBlock>;	// FIXME PG / ctx has moved
+						if (co != null && blocks.Count == 1) {
 							// We can remove the phi, as it is only defined once
 							// HACK: We can't track a constant through a register, so we keep those moves
 							if (false == ctx.Result.IsRegister) {
-								Debug.Assert(1 == ctx.Result.Definitions.Count, @"Operand defined multiple times. Instruction stream not in SSA form!");
+								Debug.Assert(ctx.Result.Definitions.Count == 1, @"Operand defined multiple times. Instruction stream not in SSA form!");
 								ctx.Result.Replace(co);
 								remove = true;
 							}
@@ -91,7 +92,7 @@ namespace Mosa.Runtime.CompilerFramework
 						remove = false;
 					}
 
-					ctx.Forward();
+					ctx.GotoNext();
 				}
 
 			}

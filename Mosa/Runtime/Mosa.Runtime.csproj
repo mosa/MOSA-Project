@@ -177,6 +177,7 @@
     <Compile Include="CompilerFramework\IR2\BranchInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\CallInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\ConditionCode.cs" />
+    <Compile Include="CompilerFramework\IR2\IConditionalInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\IRCombinedWithCILStage.cs" />
     <Compile Include="CompilerFramework\IR2\IRStage.cs" />
     <Compile Include="CompilerFramework\IR2\LiteralData.cs" />

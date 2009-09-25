@@ -53,7 +53,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				while (!ctx.EndOfInstruction) {
 					ctx.Instruction.Visit(this, ctx);
-					ctx.Forward();
+					ctx.GotoNext();
 				}
 			}
 		}

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-using IR = Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
+using IR2 = Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -258,6 +258,16 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Holds the condition code.
+		/// </summary>
+		/// <value>The condition code.</value>
+		public IR2.ConditionCode ConditionCode
+		{
+			get { return _instructionSet.Data[_index].ConditionCode; }
+			set { _instructionSet.Data[_index].ConditionCode = value; }
+		}
+
+		/// <summary>
 		/// Gets the other object.
 		/// </summary>
 		/// <value>The other.</value>
@@ -286,7 +296,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Nexts this instance.
+		/// Returns the contexts of the next instruction
 		/// </summary>
 		/// <value>The next.</value>
 		/// <returns></returns>
@@ -295,9 +305,32 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return new Context(_instructionSet, _instructionSet.Next(_index)); }
 		}
 
+		/// <summary>
+		/// Returns the contexts of the previous instruction
+		/// </summary>
+		/// <value>The next.</value>
+		/// <returns></returns>
+		public Context Previous
+		{
+			get { return new Context(_instructionSet, _instructionSet.Previous(_index)); }
+		}
+
 		#endregion // Properties
 
 		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Context"/> class.
+		/// </summary>
+		/// <param name="instructionSet">The instruction set.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="block">The block.</param>
+		public Context(InstructionSet instructionSet, int index, BasicBlock block)
+		{
+			_index = index;
+			_instructionSet = instructionSet;
+			_block = block;
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Context"/> class.
@@ -338,23 +371,32 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Methods
 
 		/// <summary>
-		/// Moves context to the next instruction
+		/// Clones this instance.
 		/// </summary>
-		public void Forward()
+		/// <returns></returns>
+		public Context Clone()
+		{
+			return new Context(_instructionSet, _index, _block);
+		}
+
+		/// <summary>
+		/// Nexts this instance.
+		/// </summary>
+		public void GotoNext()
 		{
 			_index = _instructionSet.Next(_index);
 		}
 
 		/// <summary>
-		/// Moves context to the previous instruction
+		/// Gotos the previous instruction.
 		/// </summary>
-		public void Backwards()
+		public void GotoPrevious()
 		{
 			_index = _instructionSet.Previous(_index);
 		}
 
 		/// <summary>
-		/// Gotos the last.
+		/// Gotos the last instruction.
 		/// </summary>
 		public void GotoLast()
 		{
@@ -450,11 +492,34 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="code">The code.</param>
-		/// <param name="block">The block.</param>
-		public void SetInstruction(IInstruction instruction, IR.ConditionCode code, BasicBlock block)
+		public void SetInstruction(IInstruction instruction, IR2.ConditionCode code)
 		{
 			SetInstruction(instruction);
-			Other = code;
+			ConditionCode = code;
+		}
+
+		/// <summary>
+		/// Inserts the instruction after.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="code">The code.</param>
+		public void InsertInstructionAfter(IInstruction instruction, IR2.ConditionCode code)
+		{
+			_index = _instructionSet.InsertAfter(_index);
+			SetInstruction(instruction);
+			ConditionCode = code;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="code">The code.</param>
+		/// <param name="block">The block.</param>
+		public void SetInstruction(IInstruction instruction, IR2.ConditionCode code, BasicBlock block)
+		{
+			SetInstruction(instruction);
+			ConditionCode = code;
 			SetBranch(block);
 		}
 
@@ -485,7 +550,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="code">The code.</param>
 		/// <param name="block">The block.</param>
-		public void InsertInstructionAfter(IInstruction instruction, IR.ConditionCode code, BasicBlock block)
+		public void InsertInstructionAfter(IInstruction instruction, IR2.ConditionCode code, BasicBlock block)
 		{
 			_index = _instructionSet.InsertAfter(_index);
 			SetInstruction(instruction, code, block);
@@ -719,7 +784,7 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 
 			Branch.Targets[0] = target1;
-			Branch.Targets[0] = target2;
+			Branch.Targets[1] = target2;
 		}
 
 		#endregion // Methods
