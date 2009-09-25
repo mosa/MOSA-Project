@@ -27,6 +27,17 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static NopInstruction NopInstruction = new NopInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static AddInstruction AddInstruction = new AddInstruction();
 
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static AddInstruction MoveInstruction = new AddInstruction();
 	}
 }
+
