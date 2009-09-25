@@ -227,7 +227,7 @@ namespace Mosa.Platforms.x86
 		private void ExpandMul(Context ctx, IL.MulInstruction instruction)
 		{
 			BasicBlock[] blocks = CreateEmptyBlocks(4);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock nextBlock = SplitBlock(ctx, blocks[0]);
 
 			MemoryOperand op0 = instruction.Results[0] as MemoryOperand;
 			MemoryOperand op1 = instruction.Operands[0] as MemoryOperand;
@@ -293,7 +293,7 @@ namespace Mosa.Platforms.x86
 		private void ExpandDiv(Context ctx, IL.DivInstruction instruction)
 		{
 			BasicBlock[] blocks = CreateEmptyBlocks(16);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock nextBlock = SplitBlock(ctx, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
 			SigType U4 = new SigType(CilElementType.U4);
@@ -559,7 +559,7 @@ namespace Mosa.Platforms.x86
 		private void ExpandRem(Context ctx, IL.RemInstruction instruction)
 		{
 			BasicBlock[] blocks = CreateEmptyBlocks(15);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock nextBlock = SplitBlock(ctx, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
 		    SigType U1 = new SigType(CilElementType.U1);
@@ -821,7 +821,7 @@ namespace Mosa.Platforms.x86
 		private void ExpandUDiv(Context ctx, IR.UDivInstruction instruction)
 		{
 			BasicBlock[] blocks = CreateEmptyBlocks(10);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock nextBlock = SplitBlock(ctx, blocks[0]);
 
 		    SigType U4 = new SigType(CilElementType.U4);
 			SigType U1 = new SigType(CilElementType.U1);
@@ -944,7 +944,7 @@ namespace Mosa.Platforms.x86
 		private void ExpandURem(Context ctx, IR.URemInstruction instruction)
 		{
 			BasicBlock[] blocks = CreateEmptyBlocks(10);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock nextBlock = SplitBlock(ctx, blocks[0]);
 
 		    SigType U4 = new SigType(CilElementType.U4);
 			SigType U1 = new SigType(CilElementType.U1);
@@ -1082,7 +1082,7 @@ namespace Mosa.Platforms.x86
 		private void ExpandArithmeticShiftRight(Context ctx, IR.ArithmeticShiftRightInstruction instruction)
 		{
 			BasicBlock[] blocks = CreateEmptyBlocks(5);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock nextBlock = SplitBlock(ctx, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
 		    SigType U1 = new SigType(CilElementType.U1);
@@ -1162,7 +1162,7 @@ namespace Mosa.Platforms.x86
 		private void ExpandShiftLeft(Context ctx, IR.ShiftLeftInstruction instruction)
 		{
 			BasicBlock[] blocks = CreateEmptyBlocks(5);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock nextBlock = SplitBlock(ctx, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
 		    Operand count = instruction.Operand2;
@@ -1241,7 +1241,7 @@ namespace Mosa.Platforms.x86
 		private void ExpandShiftRight(Context ctx, IR.ShiftRightInstruction instruction)
 		{
 			BasicBlock[] blocks = CreateEmptyBlocks(5);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock nextBlock = SplitBlock(ctx, blocks[0]);
 
 			SigType I4 = new SigType(CilElementType.I4);
 			SigType I1 = new SigType(CilElementType.I1);
@@ -1669,7 +1669,7 @@ namespace Mosa.Platforms.x86
 			int[] targets = instruction.BranchTargets;
 
 			BasicBlock[] blocks = CreateEmptyBlocks(2);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock nextBlock = SplitBlock(ctx, blocks[0]);
 
 		    Operand op1H, op1L, op2H, op2L;
 			SplitLongOperand(instruction.Operands[0], out op1L, out op1H);
@@ -1749,7 +1749,7 @@ namespace Mosa.Platforms.x86
 			int[] targets = instruction.BranchTargets;
 
 			BasicBlock[] blocks = CreateEmptyBlocks(2);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock nextBlock = SplitBlock(ctx, blocks[0]);
 
 		    Operand op1H, op1L, op2H, op2L;
 			SplitLongOperand(instruction.Operands[0], out op1L, out op1H);
@@ -1857,7 +1857,7 @@ namespace Mosa.Platforms.x86
 
 			// Create an additional block to split the comparison
 			BasicBlock[] blocks = CreateEmptyBlocks(5);
-			BasicBlock nextBlock = SplitBlock(ctx, instruction, blocks[0]);
+			BasicBlock nextBlock = SplitBlock(ctx, blocks[0]);
 
 			Debug.Assert(nextBlock != null, @"No follower block?");
 
