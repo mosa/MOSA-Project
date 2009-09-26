@@ -127,5 +127,9 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// 
 		/// </summary>
 		public static ZeroExtendedMoveInstruction ZeroExtendedMoveInstruction = new ZeroExtendedMoveInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static CallInstruction CallInstruction = new CallInstruction();
 	}
 }

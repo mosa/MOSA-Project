@@ -230,6 +230,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public RuntimeMethod InvokeTarget
 		{
 			get { return _instructionSet.Data[_index].InvokeTarget; }
+			set { _instructionSet.Data[_index].InvokeTarget = value; }
 		}
 
 		/// <summary>

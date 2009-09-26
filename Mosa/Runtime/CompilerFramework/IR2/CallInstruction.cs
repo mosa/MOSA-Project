@@ -10,43 +10,16 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// </summary>
     public class CallInstruction : BaseInstruction
     {
-        #region Data members
-
-        /// <summary>
-        /// The method to invoke.
-        /// </summary>
-        private RuntimeMethod method;
-
-        #endregion // Data members
-
         #region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CallInstruction"/> class.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        public CallInstruction(RuntimeMethod method)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CallInstruction"/> class.
+		/// </summary>
+        public CallInstruction()
         {
-            if (method == null)
-                throw new ArgumentNullException(@"method");
-
-            this.method = method;
         }
 
         #endregion // Construction
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the method to call.
-        /// </summary>
-        /// <value>The method.</value>
-        public RuntimeMethod Method
-        {
-            get { return this.method; }
-        }
-
-        #endregion // Properties
 
         #region IRInstruction Overrides
 
@@ -58,7 +31,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         /// </returns>
         public override string ToString(ref InstructionData instruction)
         {
-            return String.Format(@"IR.call {0}", this.method);
+			return String.Format(@"IR.call {0}", instruction.RuntimeField);
         }
 
 		/// <summary>

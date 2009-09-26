@@ -24,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-		object Expand(Context context);
+		void Expand(Context context);
 
         /// <summary>
         /// Retrieves the stack requirements of a stack operand.

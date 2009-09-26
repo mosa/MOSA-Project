@@ -814,16 +814,7 @@ namespace Mosa.Platforms.x86
 		{
 			ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
 			Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
-			object result = cc.Expand(ctx);
-			if (result is List<LegacyInstruction>) {
-				// Replace the single instruction with the set
-				List<LegacyInstruction> insts = (List<LegacyInstruction>)result;
-				Replace(ctx, insts.ToArray());
-			}
-			else if (result is LegacyInstruction) {
-				// Save the replacement instruction
-				Replace(ctx, (LegacyInstruction)result);
-			}
+			cc.Expand(ctx);			
 		}
 
 		/// <summary>

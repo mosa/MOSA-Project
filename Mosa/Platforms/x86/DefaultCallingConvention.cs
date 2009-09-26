@@ -18,6 +18,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.CompilerFramework.IR;
 using CPUx86 = Mosa.Platforms.x86.CPUx86;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
+using IR2 = Mosa.Runtime.CompilerFramework.IR2;
 
 namespace Mosa.Platforms.x86
 {
@@ -60,8 +61,10 @@ namespace Mosa.Platforms.x86
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-		object ICallingConvention.Expand(Context ctx)
+		void ICallingConvention.Expand(Context ctx)
 		{
+			// FIXME PG - buggy since ctx context moves around 
+
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
 			 * types 4 bytes or less, XMM0 for floating point and EAX:EDX for 64-bit. If this is a method
@@ -69,49 +72,47 @@ namespace Mosa.Platforms.x86
 			 * 
 			 */
 
-			List<LegacyInstruction> instructions = new List<LegacyInstruction>();
 			SigType I = new SigType(CilElementType.I);
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 			bool moveThis = ctx.InvokeTarget.Signature.HasThis;
 			int stackSize = CalculateStackSizeForParameters(ctx, moveThis);
 
-			if (0 != stackSize) {
-				instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.SubInstruction), esp, new ConstantOperand(I, stackSize)));
-				instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.MoveInstruction), new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp));
+			if (stackSize != 0) {
+				ctx.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, stackSize));
+				ctx.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
 
 				Stack<Operand> operandStack = GetOperandStackFromInstruction(ctx, moveThis);
 
 				int space = stackSize;
-				CalculateRemainingSpace(instructions, operandStack, ref space);
+				CalculateRemainingSpace(ctx, operandStack, ref space);
 			}
 
-			if (true == moveThis) {
+			if (moveThis) {
 				RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
-				instructions.Add(this.architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ctx.Operand1));
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ecx, ctx.Operand1); // FIXME PG ctx.operand1!
 			}
 
-			instructions.Add(this.architecture.CreateInstruction(typeof(CallInstruction), ctx.InvokeTarget));
+			ctx.InsertInstructionAfter(IR2.Instruction.CallInstruction);
+			ctx.InvokeTarget = ctx.InvokeTarget; // FIXME PG ctx.InvokeTarget!
 
-			if (0 != stackSize) {
-				instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.AddInstruction), esp, new ConstantOperand(I, stackSize)));
-			}
+			if (stackSize != 0)
+				ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, stackSize));
 
 			if (ctx.ResultCount > 0) {
 				if (ctx.Result.StackType == StackTypeCode.Int64) {
-					MoveReturnValueTo64Bit(ctx.Result, instructions);
+					MoveReturnValueTo64Bit(ctx.Result, ctx);
 				}
 				else {
-					MoveReturnValueTo32Bit(ctx.Result, instructions);
+					MoveReturnValueTo32Bit(ctx.Result, ctx);
 				}
 			}
 
-			return instructions;
 		}
 
 		/// <summary>
 		/// Gets the operand stack from instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="moveThis">if set to <c>true</c> [move this].</param>
 		/// <returns></returns>
 		private Stack<Operand> GetOperandStackFromInstruction(Context ctx, bool moveThis)
@@ -133,10 +134,10 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Calculates the remaining space.
 		/// </summary>
-		/// <param name="instructionList">The instruction list.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="space">The space.</param>
-		private void CalculateRemainingSpace(List<LegacyInstruction> instructionList, Stack<Operand> operandStack, ref int space)
+		private void CalculateRemainingSpace(Context ctx, Stack<Operand> operandStack, ref int space)
 		{
 			while (0 != operandStack.Count) {
 				Operand operand = operandStack.Pop();
@@ -144,7 +145,7 @@ namespace Mosa.Platforms.x86
 
 				this.architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 				space -= size;
-				Push(instructionList, operand, space);
+				Push(ctx, operand, space);
 			}
 		}
 
@@ -152,20 +153,19 @@ namespace Mosa.Platforms.x86
 		/// Moves the return value to32 bit.
 		/// </summary>
 		/// <param name="resultOperand">The result operand.</param>
-		/// <param name="instructionList">The instruction list.</param>
-		private void MoveReturnValueTo32Bit(Operand resultOperand, List<LegacyInstruction> instructionList)
+		/// <param name="ctx">The context.</param>
+		private void MoveReturnValueTo32Bit(Operand resultOperand, Context ctx)
 		{
 			RegisterOperand eax = new RegisterOperand(resultOperand.Type, GeneralPurposeRegister.EAX);
-
-			instructionList.Add(new Instructions.MoveInstruction(resultOperand, eax));
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, resultOperand, eax);
 		}
 
 		/// <summary>
 		/// Moves the return value to64 bit.
 		/// </summary>
 		/// <param name="resultOperand">The result operand.</param>
-		/// <param name="instructionList">The instruction list.</param>
-		private void MoveReturnValueTo64Bit(Operand resultOperand, List<LegacyInstruction> instructionList)
+		/// <param name="ctx">The context.</param>
+		private void MoveReturnValueTo64Bit(Operand resultOperand, Context ctx)
 		{
 			SigType I4 = new SigType(CilElementType.I4);
 			SigType U4 = new SigType(CilElementType.U4);
@@ -178,19 +178,17 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
-			instructionList.AddRange(new LegacyInstruction[] {
-                new Instructions.MoveInstruction(opL, eax),
-                new Instructions.MoveInstruction(opH, edx)
-            });
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, opL, eax);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, opH, edx);
 		}
 
 		/// <summary>
 		/// Pushes the specified instructions.
 		/// </summary>
-		/// <param name="instructions">The instructions.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="op">The op.</param>
 		/// <param name="stackSize">Size of the stack.</param>
-		private void Push(List<LegacyInstruction> instructions, Operand op, int stackSize)
+		private void Push(Context ctx, Operand op, int stackSize)
 		{
 			if (op is MemoryOperand) {
 				RegisterOperand rop;
@@ -214,19 +212,18 @@ namespace Mosa.Platforms.x86
 							MemoryOperand opL = new MemoryOperand(I4, mop.Base, mop.Offset);
 							MemoryOperand opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
 
-							instructions.AddRange(new LegacyInstruction[] {
-                                new x86.Instructions.MoveInstruction(eax, opL),
-                                new x86.Instructions.MoveInstruction(new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax),
-                                new x86.Instructions.MoveInstruction(eax, opH),
-                                new x86.Instructions.MoveInstruction(new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize+4)), eax),
-                            });
+							ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, opL);
+							ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
+							ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, opH);
+							ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
 						}
 						return;
 
 					default:
 						throw new NotSupportedException();
 				}
-				instructions.Add(this.architecture.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.IR.MoveInstruction), rop, op));
+
+				ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction,rop, op);
 				op = rop;
 			}
 			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64) {
@@ -235,17 +232,15 @@ namespace Mosa.Platforms.x86
 				RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 				LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
-				instructions.AddRange(new LegacyInstruction[] {
-                    new x86.Instructions.MoveInstruction(eax, opL),
-                    new x86.Instructions.MoveInstruction(new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax),
-                    new x86.Instructions.MoveInstruction(eax, opH),
-                    new x86.Instructions.MoveInstruction(new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize+4)), eax),
-                });
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, opL);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, opH);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
 
 				return;
 			}
 
-			instructions.Add(this.architecture.CreateInstruction(typeof(x86.Instructions.MoveInstruction), new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op));
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op);
 		}
 
 		/// <summary>
