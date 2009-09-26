@@ -334,6 +334,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static AddInstruction XchgInstruction = new AddInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static AddInstruction DirectDivisionInstruction = new AddInstruction();
 
 	}
 }

@@ -54,5 +54,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <value>The operand result count.</value>
 		byte DefaultResultCount { get; }
+
+		/// <summary>
+		/// Gets the opcode.
+		/// </summary>
+		/// <value>The opcode.</value>
+		OpCode OpCode { get; }
 	}
 }

@@ -184,9 +184,26 @@ namespace Mosa.Runtime.CompilerFramework
 
 			AddBlockLabels(blockLabels, nextBlock);	
 			AddBlockLabels(blockLabels, currentBlock);
-			UpdateBlocks(blocks, blockLabels);
 		}
-		
+
+		/// <summary>
+		/// Links the new Blocks.
+		/// </summary>
+		/// <param name="blocks">The Blocks.</param>
+		/// <param name="currentBlock">The current block.</param>
+		/// <param name="nextBlock">The next block.</param>
+		protected void LinkBlocks(Context[] blocks, Context currentBlock, Context nextBlock)
+		{
+			// Create label to block dictionary
+			Dictionary<int, BasicBlock> blockLabels = new Dictionary<int, BasicBlock>();
+
+			foreach (Context ctx in blocks)
+				blockLabels.Add(ctx.BasicBlock.Label, ctx.BasicBlock);
+
+			AddBlockLabels(blockLabels, nextBlock.BasicBlock);
+			AddBlockLabels(blockLabels, currentBlock.BasicBlock);
+		}
+
 		private static void AddBlockLabels(IDictionary<int, BasicBlock> blockLabels, BasicBlock basicBlock)
 		{
 			if (basicBlock != null) {
@@ -199,14 +216,6 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
-		private static void UpdateBlocks(BasicBlock[] blocks, IDictionary<int, BasicBlock> blockLabels)
-		{
-			foreach (BasicBlock block in blocks)
-				foreach (LegacyInstruction instruction in block.Instructions)
-					if (instruction is IBranchInstruction)
-						foreach (int label in (instruction as IBranchInstruction).BranchTargets) 
-							UpdateBlockLinks(block, blockLabels[label]);
-		}
 
 		private static void UpdateBlockLinks(BasicBlock block, BasicBlock next)
 		{
@@ -317,7 +326,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <returns></returns>
-		protected Context SplitBlock(Context ctx)
+		protected Context SplitContext(Context ctx)
 		{
 			int label = Blocks.Count + 0x10000000;
 
