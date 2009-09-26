@@ -7,6 +7,7 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Simon Wollwage (<mailto:kintaro@think-in-co.de>)
  *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -15,13 +16,10 @@ using System.Text;
 using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Platforms.x86.Instructions;
-using Mosa.Platforms.x86.Instructions.Intrinsics;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR2 = Mosa.Runtime.CompilerFramework.IR2;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
@@ -160,15 +158,12 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 			SplitLongOperand(ctx.Result, out resL, out resH);
 
-			LegacyInstruction[] result = new LegacyInstruction[] {
-                new Instructions.MoveInstruction(eaxL, op1L),
-                new Instructions.AddInstruction(eaxL, op2L),
-                new Instructions.MoveInstruction(resL, eaxL),
-                new Instructions.MoveInstruction(eaxH, op1H),
-                new Instructions.AdcInstruction(eaxH, op2H),
-                new Instructions.MoveInstruction(resH, eaxH),
-            };
-			Replace(ctx, result);
+			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, eaxL, op1L);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, eaxL, op2L);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, resL, eaxL);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eaxH, op1H);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.AdcInstruction, eaxH, op2H);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, resH, eaxH);
 		}
 
 		/// <summary>
@@ -199,15 +194,12 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 			SplitLongOperand(ctx.Result, out resL, out resH);
 
-			LegacyInstruction[] result = new LegacyInstruction[] {
-                new Instructions.MoveInstruction(eaxL, op1L),
-                new Instructions.SubInstruction(eaxL, op2L),
-                new Instructions.MoveInstruction(resL, eaxL),
-                new Instructions.MoveInstruction(eaxH, op1H),
-                new Instructions.SbbInstruction(eaxH, op2H),
-                new Instructions.MoveInstruction(resH, eaxH),
-            };
-			Replace(ctx, result);
+			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, eaxL, op1L);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, eaxL, op2L);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, resL, eaxL);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eaxH, op1H);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.SbbInstruction, eaxH, op2H);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, resH, eaxH);
 		}
 
 		/// <summary>
@@ -1197,10 +1189,8 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(ctx.Operand1, out op0L, out op0H);
 			SplitLongOperand(ctx.Operand2, out op1L, out op1H);
 
-			Replace(ctx, new LegacyInstruction[] {
-                new IR.LogicalNotInstruction(op0H, op1H),
-                new IR.LogicalNotInstruction(op0L, op1L),
-            });
+			ctx.SetInstruction(IR2.Instruction.LogicalNotInstruction, op0H, op1H);
+			ctx.InsertInstructionAfter(IR2.Instruction.LogicalNotInstruction, op0L, op1L);
 		}
 
 		/// <summary>
@@ -1214,10 +1204,8 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(ctx.Operand2, out op1L, out op1H);
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 
-			Replace(ctx, new LegacyInstruction[] {
-                new IR.LogicalAndInstruction(op0H, op1H, op2H),
-                new IR.LogicalAndInstruction(op0L, op1L, op2L),
-            });
+			ctx.SetInstruction(IR2.Instruction.LogicalAndInstruction, op0H, op1H, op2H);
+			ctx.InsertInstructionAfter(IR2.Instruction.LogicalAndInstruction, op0L, op1L, op2L);
 		}
 
 		/// <summary>
@@ -1231,10 +1219,8 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(ctx.Operand2, out op1L, out op1H);
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 
-			Replace(ctx, new LegacyInstruction[] {
-                new IR.LogicalOrInstruction(op0H, op1H, op2H),
-                new IR.LogicalOrInstruction(op0L, op1L, op2L),
-            });
+			ctx.SetInstruction(IR2.Instruction.LogicalAndInstruction, op0H, op1H, op2H);
+			ctx.InsertInstructionAfter(IR2.Instruction.LogicalAndInstruction, op0L, op1L, op2L);
 		}
 
 		/// <summary>
@@ -1248,10 +1234,8 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(ctx.Operand2, out op1L, out op1H);
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 
-			Replace(ctx, new LegacyInstruction[] {
-                new IR.LogicalXorInstruction(op0H, op1H, op2H),
-                new IR.LogicalXorInstruction(op0L, op1L, op2L),
-            });
+			ctx.SetInstruction(IR2.Instruction.LogicalXorInstruction, op0H, op1H, op2H);
+			ctx.InsertInstructionAfter(IR2.Instruction.LogicalXorInstruction, op0L, op1L, op2L);
 		}
 
 		/// <summary>
@@ -1265,16 +1249,13 @@ namespace Mosa.Platforms.x86
 			if (ctx.Operand1.StackType == StackTypeCode.Int64) {
 				SplitLongOperand(ctx.Operand1, out op0L, out op0H);
 				SplitLongOperand(ctx.Operand2, out op1L, out op1H);
-				Replace(ctx, new LegacyInstruction[] {
-                    new IR.MoveInstruction(op0L, op1L),
-                    new IR.MoveInstruction(op0H, op1H)
-                });
+
+				ctx.SetInstruction(IR2.Instruction.MoveInstruction, op0L, op1L);
+				ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, op0H, op1H);
 			}
 			else {
 				SplitLongOperand(ctx.Operand2, out op1L, out op1H);
-				Replace(ctx, new LegacyInstruction[] {
-                    new IR.MoveInstruction(ctx.Operand1, op1L),
-                });
+				ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Operand1, op1L);
 			}
 		}
 
@@ -1287,7 +1268,7 @@ namespace Mosa.Platforms.x86
 			MemoryOperand op0 = ctx.Operand1 as MemoryOperand;
 			Operand op1 = ctx.Operand2;
 			Debug.Assert(op0 != null, @"I8 not in a memory operand!");
-			LegacyInstruction[] instructions = null;
+
 			SigType U4 = new SigType(CilElementType.U4);
 			MemoryOperand op0L = new MemoryOperand(U4, op0.Base, op0.Offset);
 			MemoryOperand op0H = new MemoryOperand(U4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
@@ -1296,42 +1277,34 @@ namespace Mosa.Platforms.x86
 
 			switch (op1.Type.Type) {
 				case CilElementType.Boolean:
-					instructions = new LegacyInstruction[] {
-                        new IR.ZeroExtendedMoveInstruction(op0L, op1),
-                        new IR.LogicalXorInstruction(op0H, op0H, op0H)
-                    };
+					ctx.SetInstruction(IR2.Instruction.ZeroExtendedMoveInstruction, op0L, op1);
+					ctx.InsertInstructionAfter(IR2.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U1:
-					instructions = new LegacyInstruction[] {
-                        new IR.ZeroExtendedMoveInstruction(eax, op1),
-                        new CdqInstruction(),
-                        new MoveInstruction(op0L, eax),
-                        new IR.LogicalXorInstruction(op0H, op0H, op0H)
-                    };
+					ctx.SetInstruction(IR2.Instruction.ZeroExtendedMoveInstruction, eax, op1);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.CdqInstruction);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0L, eax);
+					ctx.InsertInstructionAfter(IR2.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U2: goto case CilElementType.U1;
 
 				case CilElementType.I4:
-					instructions = new LegacyInstruction[] {
-                        new IR.ZeroExtendedMoveInstruction(eax, op1),
-                        new LogicalXorInstruction(edx, edx),
-                        new MoveInstruction(op0L, eax),
-                        new MoveInstruction(op0H, edx)
-                    };
+					ctx.SetInstruction(IR2.Instruction.ZeroExtendedMoveInstruction, eax, op1);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.LogicalXorInstruction, edx, edx);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0L, eax);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0H, edx);
 					break;
 				case CilElementType.U4:
-					instructions = new LegacyInstruction[] {
-                        new IR.MoveInstruction(eax, op1),
-                        new CdqInstruction(),
-                        new MoveInstruction(op0L, eax),
-                        new MoveInstruction(op0H, edx)
-                    };
+					ctx.SetInstruction(IR2.Instruction.ZeroExtendedMoveInstruction, eax, op1);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.LogicalXorInstruction, edx, edx);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0L, eax);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0H, edx);
 					break;
 
 				case CilElementType.U8:
-					Replace(ctx, new MoveInstruction(op0, op1));
+					ctx.SetInstruction(IR2.Instruction.ZeroExtendedMoveInstruction, op0, op1);
 					break;
 
 				case CilElementType.R4:
@@ -1344,7 +1317,6 @@ namespace Mosa.Platforms.x86
 					throw new NotSupportedException();
 			}
 
-			Replace(ctx, instructions);
 		}
 
 		/// <summary>
@@ -1356,7 +1328,6 @@ namespace Mosa.Platforms.x86
 			MemoryOperand op0 = ctx.Operand1 as MemoryOperand;
 			Operand op1 = ctx.Operand2;
 			Debug.Assert(op0 != null, @"I8 not in a memory operand!");
-			LegacyInstruction[] instructions = null;
 			SigType I4 = new SigType(CilElementType.I4);
 			MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
 			MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
@@ -1365,43 +1336,35 @@ namespace Mosa.Platforms.x86
 
 			switch (op1.Type.Type) {
 				case CilElementType.Boolean:
-					instructions = new LegacyInstruction[] {
-                        new IR.ZeroExtendedMoveInstruction(op0L, op1),
-                        new IR.LogicalXorInstruction(op0H, op0H, op0H)
-                    };
+					ctx.SetInstruction(IR2.Instruction.ZeroExtendedMoveInstruction, op0L, op1);
+					ctx.InsertInstructionAfter(IR2.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.I1:
-					instructions = new LegacyInstruction[] {
-                        new IR.SignExtendedMoveInstruction(eax, op1),
-                        new CdqInstruction(),
-                        new MoveInstruction(op0L, eax),
-                        new MoveInstruction(op0H, edx)
-                    };
+					ctx.SetInstruction(IR2.Instruction.SignExtendedMoveInstruction, eax, op1);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.CdqInstruction);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0L, eax);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0H, edx);
 					break;
 
 				case CilElementType.I2: goto case CilElementType.I1;
 
 				case CilElementType.I4:
-					instructions = new LegacyInstruction[] {
-                        new IR.MoveInstruction(eax, op1),
-                        new CdqInstruction(),
-                        new MoveInstruction(op0L, eax),
-                        new MoveInstruction(op0H, edx)
-                    };
+					ctx.SetInstruction(IR2.Instruction.MoveInstruction, eax, op1);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.CdqInstruction);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0L, eax);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0H, edx);
 					break;
 
 				case CilElementType.I8:
-					Replace(ctx, new MoveInstruction(op0, op1));
+					ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, op0, op1);
 					break;
 
 				case CilElementType.U1:
-					instructions = new LegacyInstruction[] {
-                        new IR.ZeroExtendedMoveInstruction(eax, op1),
-                        new CdqInstruction(),
-                        new MoveInstruction(op0L, eax),
-                        new IR.LogicalXorInstruction(op0H, op0H, op0H)
-                    };
+					ctx.SetInstruction(IR2.Instruction.ZeroExtendedMoveInstruction, eax, op1);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.CdqInstruction);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0L, eax);
+					ctx.InsertInstructionAfter(IR2.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U2: goto case CilElementType.U1;
@@ -1421,8 +1384,6 @@ namespace Mosa.Platforms.x86
 				default:
 					throw new NotSupportedException();
 			}
-
-			Replace(ctx, instructions);
 		}
 
 		/// <summary>
@@ -1441,13 +1402,11 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
-			Replace(ctx, new LegacyInstruction[] {
-                new x86.Instructions.MoveInstruction(eax, op1),
-                new x86.Instructions.MoveInstruction(edx, new MemoryOperand(ctx.Result.Type, GeneralPurposeRegister.EAX, IntPtr.Zero)),
-                new x86.Instructions.MoveInstruction(op0L, edx),
-                new x86.Instructions.MoveInstruction(edx, new MemoryOperand(ctx.Result.Type, GeneralPurposeRegister.EAX, new IntPtr(4))),
-                new x86.Instructions.MoveInstruction(op0H, edx)
-            });
+			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, eax, op1);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, edx, new MemoryOperand(ctx.Result.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0L, edx);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, edx, new MemoryOperand(ctx.Result.Type, GeneralPurposeRegister.EAX, new IntPtr(4)));
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0H, edx);
 		}
 
 		/// <summary>
@@ -1467,13 +1426,11 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
-			Replace(ctx, new LegacyInstruction[] {
-                new x86.Instructions.MoveInstruction(edx, op0),
-                new x86.Instructions.MoveInstruction(eax, op1L),
-                new x86.Instructions.MoveInstruction(new MemoryOperand(U4, GeneralPurposeRegister.EDX, IntPtr.Zero), eax),
-                new x86.Instructions.MoveInstruction(eax, op1H),
-                new x86.Instructions.MoveInstruction(new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(4)), eax),
-            });
+			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, edx, op0);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, op1L);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(U4, GeneralPurposeRegister.EDX, IntPtr.Zero), eax);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, op1H);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(4)), eax);
 		}
 
 		/// <summary>
@@ -1735,21 +1692,6 @@ namespace Mosa.Platforms.x86
 					throw new NotSupportedException();
 			}
 			return cc;
-		}
-
-		/// <summary>
-		/// Clears the int64 to zero.
-		/// </summary>
-		/// <param name="block">The basic block to add the clear instructions to.</param>
-		/// <param name="opL">The 64-bit memory operand for the lower dword.</param>
-		/// <param name="opH">The 64-bit memory operand for the higher dword.</param>
-		private void ClearInt64(BasicBlock block, MemoryOperand opL, MemoryOperand opH)
-		{
-			ConstantOperand zero = new ConstantOperand(new SigType(CilElementType.I4), 0);
-			block.Instructions.AddRange(new LegacyInstruction[] {
-                new MoveInstruction(opL, zero),
-                new MoveInstruction(opH, zero)
-            });
 		}
 
 		#endregion // Utility Methods

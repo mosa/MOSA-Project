@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -30,10 +31,8 @@ namespace Mosa.Platforms.x86
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
 	/// </remarks>
 	public sealed class IRToX86TransformationStage :
-		// HACK: Remove this once we can ensure that no CIL instructions reach this.
 		IR2.IRCombinedWithCILStage,
-		//IX86InstructionVisitor<Context>,
-		Mosa.Runtime.CompilerFramework.IPlatformTransformationStage
+		IPlatformTransformationStage
 	{
 		private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
 
