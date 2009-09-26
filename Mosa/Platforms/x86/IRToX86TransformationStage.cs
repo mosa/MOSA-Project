@@ -356,11 +356,9 @@ namespace Mosa.Platforms.x86
 		{
 			//RegisterOperand eax = new RegisterOperand(Architecture.NativeType, GeneralPurposeRegister.EAX);
 			RegisterOperand eax = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX);
-			Replace(ctx, new LegacyInstruction[] {
-                new x86.Instructions.MoveInstruction(eax, ctx.Operand1),
-                new x86.Instructions.MoveInstruction(eax, new MemoryOperand(ctx.Result.Type, GeneralPurposeRegister.EAX, IntPtr.Zero)),
-                new x86.Instructions.MoveInstruction(ctx.Result, eax)
-            });
+			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, eax, ctx.Operand1);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, new MemoryOperand(ctx.Result.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ctx.Result, eax);
 		}
 
 		/// <summary>
@@ -412,24 +410,16 @@ namespace Mosa.Platforms.x86
 
 			if (!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) return;
 
-			List<LegacyInstruction> replacements = new List<LegacyInstruction>();
 			RegisterOperand rop;
-			if (op0.StackType == StackTypeCode.F || op1.StackType == StackTypeCode.F) {
+			if (op0.StackType == StackTypeCode.F || op1.StackType == StackTypeCode.F)
 				rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
-			}
-			else if (op0.StackType == StackTypeCode.Int64) {
+			else if (op0.StackType == StackTypeCode.Int64)
 				rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
-			}
-			else {
+			else
 				rop = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
-			}
 
-			replacements.AddRange(new LegacyInstruction[] {
-                                                        new Instructions.MoveInstruction(rop, op1),
-                                                        new Instructions.MoveInstruction(op0, rop)
-                                                    });
-
-			Replace(ctx, replacements.ToArray());
+			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, rop, op1);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0, rop);
 		}
 
 		/// <summary>
@@ -534,15 +524,13 @@ namespace Mosa.Platforms.x86
 		{
 			RegisterOperand eax = new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX);
-			Replace(ctx, new LegacyInstruction[] {
-                new x86.Instructions.MoveInstruction(eax, ctx.Result),
-                new x86.Instructions.MoveInstruction(edx, ctx.Operand1),
-                new x86.Instructions.MoveInstruction(new MemoryOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx)
-            });
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, ctx.Result);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, edx, ctx.Operand1);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx);
 		}
 
 		/// <summary>
-		/// Us the div instruction.
+		/// UDivInstruction instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		public override void UDivInstruction(Context ctx)
@@ -551,16 +539,14 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Us the rem instruction.
+		/// URemInstruction instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		public override void URemInstruction(Context ctx)
 		{
-			Replace(ctx, new LegacyInstruction[] {
-                new x86.Instructions.MoveInstruction(new RegisterOperand(ctx.Operand2.Type, GeneralPurposeRegister.EAX), ctx.Operand2),
-                new x86.Instructions.UDivInstruction(ctx.Operand2, ctx.Operand3),
-                new x86.Instructions.MoveInstruction(ctx.Operand1, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX))
-            });
+			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, new RegisterOperand(ctx.Operand2.Type, GeneralPurposeRegister.EAX), ctx.Operand2);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.UDivInstruction, ctx.Operand2, ctx.Operand3);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ctx.Operand1, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX));
 		}
 
 		#endregion //  Members
@@ -568,7 +554,7 @@ namespace Mosa.Platforms.x86
 		#region Members
 
 		/// <summary>
-		/// CMPs the instruction.
+		/// CmpInstruction instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		public void CmpInstruction(Context ctx)
@@ -596,21 +582,19 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// CVTSS2SDs the instruction.
+		/// Cvtss2sdInstruction instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
+		/// <param name="ctx">The context.</param>
 		public void Cvtss2sdInstruction(Context ctx)
 		{
-			if (ctx.Operand2 is ConstantOperand) {
-				LegacyInstruction[] insts = new LegacyInstruction[] { new Instructions.Cvtss2sdInstruction(ctx.Operand1, EmitConstant(ctx.Operand2)) };
-				Replace(ctx, insts);
-			}
+			if (ctx.Operand2 is ConstantOperand)
+				ctx.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, ctx.Operand1, EmitConstant(ctx.Operand2));
 		}
 
 		/// <summary>
-		/// Muls the instruction.
+		/// MulInstruction instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
+		/// <param name="ctx">The context.</param>
 		public void MulInstruction(Context ctx)
 		{
 			/*
@@ -634,9 +618,9 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Sses the sub instruction.
+		/// SseSubInstruction instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
+		/// <param name="ctx">The context.</param>
 		public void SseSubInstruction(Context ctx)
 		{
 			EmitOperandConstants(ctx);
