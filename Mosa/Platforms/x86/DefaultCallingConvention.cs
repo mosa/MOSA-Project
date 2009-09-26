@@ -15,7 +15,6 @@ using System.Diagnostics;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.CompilerFramework.IR;
 using CPUx86 = Mosa.Platforms.x86.CPUx86;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR2 = Mosa.Runtime.CompilerFramework.IR2;
