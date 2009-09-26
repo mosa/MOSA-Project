@@ -92,6 +92,7 @@
     <Compile Include="CPUx86\AddInstruction.cs" />
     <Compile Include="CPUx86\DirectMultiplicationInstruction.cs" />
     <Compile Include="CPUx86\Instruction.cs" />
+    <Compile Include="CPUx86\CPUx86CombinedWithIRStage.cs" />
     <Compile Include="Instructions\DirectDivision.cs" />
     <Compile Include="Instructions\DirectMultiplication.cs" />
     <Compile Include="Instructions\Intrinsics\CpuIdEaxInstruction.cs" />
