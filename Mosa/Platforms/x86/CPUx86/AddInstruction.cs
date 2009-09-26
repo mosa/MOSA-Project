@@ -18,8 +18,15 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// 
 	/// </summary>
-	public class AddInstruction : BaseInstruction
+	public sealed class AddInstruction : BaseInstruction
 	{
+		public static OpCode R_C = new OpCode(new byte[] { 0x81 }, 0);
+		public static OpCode R_R = new OpCode(new byte[] { 0x03 });
+		public static OpCode R_M = new OpCode(new byte[] { 0x03 });
+		public static OpCode M_R = new OpCode(new byte[] { 0x01 });
+		public static OpCode R_M_U8 = new OpCode(new byte[] { 0x02 }); // Add r/m8 to r8
+		public static OpCode M_R_U8 = new OpCode(new byte[] { 0x00 }); // Add r8 to r/m8
+
 		#region Construction
 
 		/// <summary>
@@ -33,6 +40,31 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#region Methods
 
+		private static OpCode Add(Operand dest, Operand src)
+		{
+			if ((dest is RegisterOperand) && (src is ConstantOperand))
+				return R_C;
+
+			if ((dest is RegisterOperand) && (src is RegisterOperand))
+				return R_R;
+
+			if ((dest is RegisterOperand) && (src is MemoryOperand))
+				/*if (IsUByte(dest))
+					return R_M_U8;
+				else*/
+				return R_M;
+
+			if ((dest is MemoryOperand) && (src is RegisterOperand))
+				/*if (IsByte(dest) || IsByte(src))
+					return M_R_U8;
+				else if (IsChar(dest) || IsChar(src) || IsShort(dest) || IsShort(src))
+					return M_R_U8;
+				else*/
+				return M_R;
+
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
+
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
@@ -40,7 +72,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="codeStream">The code stream.</param>
 		public override void Emit(ref InstructionData instruction, System.IO.Stream codeStream)
 		{
-			//TODO
+			OpCode opcode = Add(instruction.Result, instruction.Operand1);
+			
+			// TODO: Emit it to codeStream
 		}
 
 
