@@ -84,15 +84,6 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets or sets the block index
-		/// </summary>
-		public int Block
-		{
-			get { return _instructionSet.Data[_index].Block; }
-			set { _instructionSet.Data[_index].Block = value; }
-		}
-
-		/// <summary>
 		/// Gets the result operand.
 		/// </summary>
 		/// <value>The result operand.</value>

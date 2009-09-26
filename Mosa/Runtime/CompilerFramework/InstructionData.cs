@@ -33,11 +33,6 @@ namespace Mosa.Runtime.CompilerFramework
 		public IInstruction Instruction;
 
 		/// <summary>
-		/// Holds the block index of this instruction.
-		/// </summary>
-		public int Block;	// FIXME PG Remove this
-
-		/// <summary>
 		/// IL offset of the instruction From the start of the method.
 		/// </summary>
 		private int _offset;
@@ -189,7 +184,6 @@ namespace Mosa.Runtime.CompilerFramework
 			this.Result2 = null;
 			this.Prefix = null;
 			this.Branch = null;
-			this.Block = 0;
 			this.Other = null;
 		}
 
