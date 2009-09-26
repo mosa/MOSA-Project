@@ -12,7 +12,6 @@ using Mosa.Runtime.CompilerFramework;
 using IR2 = Mosa.Runtime.CompilerFramework.IR2;
 
 namespace Mosa.Platforms.x86.CPUx86
-
 {
 	/// <summary>
 	/// Visitor interface for instructions of the intermediate representation.
@@ -197,6 +196,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		public virtual void Jns(Context context) { }
+
+		#endregion // Methods
 
 		#region Intrinsics
 
@@ -386,7 +387,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		public virtual void Xchg(Context context) { }
 
-		#endregion // Methods
+		#endregion // Intrinsics
 
 	}
 }
