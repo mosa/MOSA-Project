@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using IL = Mosa.Runtime.CompilerFramework.IL;
+using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
 using Mosa.Runtime.Metadata;
