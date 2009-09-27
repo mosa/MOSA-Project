@@ -57,7 +57,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
             }
 
             // Create the method
-            // HACK: <$> prevents the method From being called From CIL
+            // HACK: <$> prevents the method from being called From CIL
             CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, "<$>" + methodName, type);
             type.Methods.Add(method);
 

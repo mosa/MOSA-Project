@@ -48,19 +48,19 @@ namespace Mosa.Platforms.x86
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pipeline"></param>
+		/// <summary>
+		/// Adds the stage to the pipeline.
+		/// </summary>
+		/// <param name="pipeline">The pipeline to add to.</param>
         public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
         {
             pipeline.InsertBefore<LinearRegisterAllocator>(this);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
+		/// <summary>
+		/// Schedules the block.
+		/// </summary>
+		/// <param name="block">The block.</param>
         private void ScheduleBlock(BasicBlock block)
         {
             foreach (LegacyInstruction instruction in block.Instructions)
