@@ -40,19 +40,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			// Read the field From the code
 			TokenTypes token;
 			decoder.Decode(out token);
 
-			instruction.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
-			Debug.Assert((instruction.RuntimeField.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
+			ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
+			Debug.Assert((ctx.RuntimeField.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
 		}
 
 		/// <summary>
@@ -68,13 +68,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The CTX.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
-			return String.Format("IL stsfld ; {0}.{1} = {2}", instruction.RuntimeField.DeclaringType.FullName, instruction.RuntimeField.Name, instruction.Operand1);
+			return String.Format("IL stsfld ; {0}.{1} = {2}", ctx.RuntimeField.DeclaringType.FullName, ctx.RuntimeField.Name, ctx.Operand1);
 		}
 
 		#endregion // Methods

@@ -58,27 +58,24 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
-
-			instruction.Branch = new Branch(2);
-			instruction.Branch.Targets[1] = 0;
+			base.Decode(ctx, decoder);
 
 			// Read the branch target
 			// Is this a short branch target?
 			if (_opcode == OpCode.Brfalse_s || _opcode == OpCode.Brtrue_s) {
 				sbyte target;
 				decoder.Decode(out target);
-				instruction.Branch.Targets[0] = target;
+				ctx.SetBranch(target, 0);
 			}
 			else if (_opcode == OpCode.Brfalse || _opcode == OpCode.Brtrue) {
 				int target;
 				decoder.Decode(out target);
-				instruction.Branch.Targets[0] = target;
+				ctx.SetBranch(target, 0);
 			}
 			else if (_opcode == OpCode.Switch) {
 				// Don't do anything, the derived class will do everything
@@ -101,11 +98,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The CTX.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
 			string condition;
 
@@ -118,7 +115,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new InvalidOperationException(@"Opcode not set.");
 			}
 
-			return String.Format(@"{4} ; if ({0} == {1}) goto L_{2:X4} else goto L_{3:X4}", instruction.Operand1, condition, instruction.Branch.Targets[0], instruction.Branch.Targets[1], base.ToString());
+			return String.Format(@"{4} ; if ({0} == {1}) goto L_{2:X4} else goto L_{3:X4}", ctx.Operand1, condition, ctx.Branch.Targets[0], ctx.Branch.Targets[1], base.ToString());
 		}
 
 		#endregion Methods

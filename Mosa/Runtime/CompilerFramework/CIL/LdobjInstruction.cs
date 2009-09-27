@@ -86,12 +86,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			// Do we have a type?
 			if (_typeRef == null) {
@@ -102,27 +102,27 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			// Push the loaded value
-			instruction.Result = decoder.Compiler.CreateTemporary(_typeRef);
+			ctx.Result = decoder.Compiler.CreateTemporary(_typeRef);
 		}
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
+		public override void Validate(Context ctx, IMethodCompiler compiler)
 		{
-			base.Validate(ref instruction, compiler);
+			base.Validate(ctx, compiler);
 
 			// If we're ldind.i8, fix an IL deficiency that the result may be U8
 			if (_opcode == OpCode.Ldind_i8 && _typeRef.Type == CilElementType.I8) {
-				SigType opType = instruction.Operand1.Type;
+				SigType opType = ctx.Operand1.Type;
 				RefSigType rst = opType as RefSigType;
 				PtrSigType ptr = opType as PtrSigType;
 
 				if (rst != null && rst.ElementType.Type == CilElementType.U8 ||
 					ptr != null && ptr.ElementType.Type == CilElementType.U8) {
-					instruction.Result = compiler.CreateTemporary(new SigType(CilElementType.U8));
+					ctx.Result = compiler.CreateTemporary(new SigType(CilElementType.U8));
 				}
 			}
 		}

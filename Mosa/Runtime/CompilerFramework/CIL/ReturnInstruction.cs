@@ -59,24 +59,22 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			if (OpCode.Ret != _opcode)
 				throw new ArgumentException(@"Invalid opcode.", @"code");
 
 			if (decoder.Method.Signature.ReturnType.Type == CilElementType.Void)
-				instruction.ResultCount = 0;
+				ctx.ResultCount = 0;
 			else
-				instruction.ResultCount = 1;
+				ctx.ResultCount = 1;
 
-			instruction.Branch = new Branch(1);
-			instruction.Branch.Targets = new int[] { Int32.MaxValue };
-
+			ctx.SetBranch(Int32.MaxValue);
 		}
 
 		/// <summary>

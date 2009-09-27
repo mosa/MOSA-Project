@@ -55,15 +55,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
-
-			instruction.Branch = new Branch(2);
-			instruction.Branch.Targets[1] = 0;
+			base.Decode(ctx, decoder);
 
 			// Read the branch target
 			// Is this a short branch target?
@@ -73,14 +70,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				_opcode == OpCode.Blt_un_s || _opcode == OpCode.Bne_un_s) {
 				sbyte target;
 				decoder.Decode(out target);
-				instruction.Branch.Targets[0] = target;
+				ctx.SetBranch(target, 0);
 			}
 			else if (_opcode == OpCode.Beq || _opcode == OpCode.Bge || _opcode == OpCode.Bge_un || _opcode == OpCode.Bgt ||
 				_opcode == OpCode.Bgt_un || _opcode == OpCode.Ble || _opcode == OpCode.Ble_un || _opcode == OpCode.Blt ||
 				_opcode == OpCode.Blt_un || _opcode == OpCode.Bne_un) {
 				int target;
 				decoder.Decode(out target);
-				instruction.Branch.Targets[0] = target;
+				ctx.SetBranch(target, 0);
 			}
 			else {
 				throw new NotSupportedException(@"Invalid branch opcode specified for BinaryBranchInstruction");
@@ -100,11 +97,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The CTX.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
 			string op, format;
 			bool unordered = false;
@@ -138,7 +135,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			else
 				format = @" {3} ; if (unordered({0} {1} {2})) goto L_{4:X4} else goto L_{5:X4}";
 
-			return String.Format(format, instruction.Operand1, op, instruction.Operand2, base.ToString(), instruction.Branch.Targets[0], instruction.Branch.Targets[1]);
+			return String.Format(format, ctx.Operand1, op, ctx.Operand2, base.ToString(), ctx.Branch.Targets[0], ctx.Branch.Targets[1]);
 		}
 
 		#endregion Methods

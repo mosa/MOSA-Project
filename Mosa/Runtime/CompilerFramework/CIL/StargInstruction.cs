@@ -35,14 +35,23 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#region Methods
 
 		/// <summary>
+		/// Starg has a result, but doesn't push it on the stack.
+		/// </summary>
+		/// <value><c>true</c> if [push result]; otherwise, <c>false</c>.</value>
+		public override bool PushResult
+		{
+			get { return false; }
+		}
+
+		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode the base first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			ushort argIdx;
 
@@ -57,7 +66,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			// The argument is the result
-			instruction.Result = decoder.Compiler.GetParameterOperand(argIdx);
+			ctx.Result = decoder.Compiler.GetParameterOperand(argIdx);
 
 			// FIXME: Do some type compatibility checks
 			// See verification for this instruction and

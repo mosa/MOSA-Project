@@ -55,17 +55,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
+		public override void Validate(Context ctx, IMethodCompiler compiler)
 		{
-			base.Validate(ref instruction, compiler);
+			base.Validate(ctx, compiler);
 
-			StackTypeCode result = _opTable[(int)instruction.Operand1.StackType][(int)instruction.Operand2.StackType];
+			StackTypeCode result = _opTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 			if (result == StackTypeCode.Unknown)
 				throw new ExecutionEngineException(@"Invalid stack result of instruction.");
 
-			instruction.Result = compiler.CreateTemporary(Operand.SigTypeFromStackType(result));
+			ctx.Result = compiler.CreateTemporary(Operand.SigTypeFromStackType(result));
 		}
 
 		/// <summary>

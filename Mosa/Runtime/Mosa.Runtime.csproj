@@ -101,6 +101,8 @@
     <Compile Include="CompilerFramework\CIL\ConversionInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CILStage.cs" />
     <Compile Include="CompilerFramework\CIL\Instruction.cs" />
+    <Compile Include="CompilerFramework\CIL\MethodFlags.cs" />
+    <Compile Include="CompilerFramework\CIL\MethodHeader.cs" />
     <Compile Include="CompilerFramework\CIL\StoreInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ICILVisitor.cs" />
     <Compile Include="CompilerFramework\CIL\Prefix.cs" />

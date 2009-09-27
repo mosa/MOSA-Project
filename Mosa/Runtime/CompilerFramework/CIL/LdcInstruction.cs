@@ -39,12 +39,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 			
 			SigType type;
 			object value;
@@ -92,55 +92,55 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					break;
 
 				case OpCode.Ldnull:
-					instruction.Result = ConstantOperand.GetNull();
+					ctx.Result = ConstantOperand.GetNull();
 					return;
 
 				case OpCode.Ldc_i4_0:
-					instruction.Result = ConstantOperand.FromValue(0);
+					ctx.Result = ConstantOperand.FromValue(0);
 					return;
 
 				case OpCode.Ldc_i4_1:
-					instruction.Result =  ConstantOperand.FromValue(1);
+					ctx.Result =  ConstantOperand.FromValue(1);
 					return;
 
 				case OpCode.Ldc_i4_2:
-					instruction.Result =  ConstantOperand.FromValue(2);
+					ctx.Result =  ConstantOperand.FromValue(2);
 					return;
 
 				case OpCode.Ldc_i4_3:
-					instruction.Result =  ConstantOperand.FromValue(3);
+					ctx.Result =  ConstantOperand.FromValue(3);
 					return;
 
 				case OpCode.Ldc_i4_4:
-					instruction.Result =  ConstantOperand.FromValue(4);
+					ctx.Result =  ConstantOperand.FromValue(4);
 					return;
 
 				case OpCode.Ldc_i4_5:
-					instruction.Result =  ConstantOperand.FromValue(5);
+					ctx.Result =  ConstantOperand.FromValue(5);
 					return;
 
 				case OpCode.Ldc_i4_6:
-					instruction.Result = ConstantOperand.FromValue(6);
+					ctx.Result = ConstantOperand.FromValue(6);
 					return;
 
 				case OpCode.Ldc_i4_7:
-					instruction.Result =  ConstantOperand.FromValue(7);
+					ctx.Result =  ConstantOperand.FromValue(7);
 					return;
 
 				case OpCode.Ldc_i4_8:
-					instruction.Result =  ConstantOperand.FromValue(8);
+					ctx.Result =  ConstantOperand.FromValue(8);
 					return;
 
 				case OpCode.Ldc_i4_m1:
-					instruction.Result =  ConstantOperand.FromValue(-1);
+					ctx.Result =  ConstantOperand.FromValue(-1);
 					return;
 
 				default:
 					throw new NotImplementedException();
 			}
 
-			instruction.Result = new ConstantOperand(type, value);
-			instruction.Ignore = true;
+			ctx.Result = new ConstantOperand(type, value);
+			ctx.Ignore = true;
 		}
 
 		/// <summary>

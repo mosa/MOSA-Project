@@ -101,7 +101,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public void Run(IMethodCompiler compiler)
 		{
 			// The size of the code in bytes
-			Mosa.Runtime.CompilerFramework.IL.MethodHeader header = new Mosa.Runtime.CompilerFramework.IL.MethodHeader();
+			Mosa.Runtime.CompilerFramework.CIL.MethodHeader header = new Mosa.Runtime.CompilerFramework.CIL.MethodHeader();
 
 			// Check preconditions
 			if (null == compiler)
@@ -153,18 +153,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="reader">The reader used to decode the instruction stream.</param>
 		/// <param name="header">The method _header structure to populate.</param>
-		private void ReadMethodHeader(BinaryReader reader, ref Mosa.Runtime.CompilerFramework.IL.MethodHeader header)
+		private void ReadMethodHeader(BinaryReader reader, ref Mosa.Runtime.CompilerFramework.CIL.MethodHeader header)
 		{
-			header.flags = (Mosa.Runtime.CompilerFramework.IL.MethodFlags)reader.ReadByte();
-			switch (header.flags & Mosa.Runtime.CompilerFramework.IL.MethodFlags.HeaderMask) {
-				case Mosa.Runtime.CompilerFramework.IL.MethodFlags.TinyFormat:
-					header.codeSize = ((uint)(header.flags & Mosa.Runtime.CompilerFramework.IL.MethodFlags.TinyCodeSizeMask) >> 2);
-					header.flags &= Mosa.Runtime.CompilerFramework.IL.MethodFlags.HeaderMask;
+			header.flags = (Mosa.Runtime.CompilerFramework.CIL.MethodFlags)reader.ReadByte();
+			switch (header.flags & Mosa.Runtime.CompilerFramework.CIL.MethodFlags.HeaderMask) {
+				case Mosa.Runtime.CompilerFramework.CIL.MethodFlags.TinyFormat:
+					header.codeSize = ((uint)(header.flags & Mosa.Runtime.CompilerFramework.CIL.MethodFlags.TinyCodeSizeMask) >> 2);
+					header.flags &= Mosa.Runtime.CompilerFramework.CIL.MethodFlags.HeaderMask;
 					break;
 
-				case Mosa.Runtime.CompilerFramework.IL.MethodFlags.FatFormat:
-					header.flags = (Mosa.Runtime.CompilerFramework.IL.MethodFlags)(reader.ReadByte() << 8 | (byte)header.flags);
-					if (Mosa.Runtime.CompilerFramework.IL.MethodFlags.ValidHeader != (header.flags & Mosa.Runtime.CompilerFramework.IL.MethodFlags.HeaderSizeMask))
+				case Mosa.Runtime.CompilerFramework.CIL.MethodFlags.FatFormat:
+					header.flags = (Mosa.Runtime.CompilerFramework.CIL.MethodFlags)(reader.ReadByte() << 8 | (byte)header.flags);
+					if (Mosa.Runtime.CompilerFramework.CIL.MethodFlags.ValidHeader != (header.flags & Mosa.Runtime.CompilerFramework.CIL.MethodFlags.HeaderSizeMask))
 						throw new InvalidDataException(@"Invalid method _header.");
 					header.maxStack = reader.ReadUInt16();
 					header.codeSize = reader.ReadUInt32();
@@ -176,7 +176,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			// Are there sections following the code?
-			if (Mosa.Runtime.CompilerFramework.IL.MethodFlags.MoreSections == (header.flags & Mosa.Runtime.CompilerFramework.IL.MethodFlags.MoreSections)) {
+			if (Mosa.Runtime.CompilerFramework.CIL.MethodFlags.MoreSections == (header.flags & Mosa.Runtime.CompilerFramework.CIL.MethodFlags.MoreSections)) {
 				// Yes, seek to them and process those sections
 				long codepos = reader.BaseStream.Position;
 
@@ -190,7 +190,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				byte flags;
 				int length, blocks;
 				bool isFat;
-				Mosa.Runtime.CompilerFramework.IL.EhClause clause = new Mosa.Runtime.CompilerFramework.IL.EhClause();
+				Mosa.Runtime.CompilerFramework.CIL.EhClause clause = new Mosa.Runtime.CompilerFramework.CIL.EhClause();
 
 				do {
 					flags = reader.ReadByte();
@@ -227,7 +227,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="compiler">The compiler to populate.</param>
 		/// <param name="header">The method _header.</param>
-		private void Decode(IMethodCompiler compiler, ref Mosa.Runtime.CompilerFramework.IL.MethodHeader header)
+		private void Decode(IMethodCompiler compiler, ref Mosa.Runtime.CompilerFramework.CIL.MethodHeader header)
 		{
 			// Start of the code stream
 			long codeStart = _codeReader.BaseStream.Position;
@@ -258,9 +258,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				}
 
 				// Create and initialize the corresponding instruction
-				ctx = ctx.InsertAfter();
-				ctx.SetInstruction(instruction);
-				instruction.Decode(ref ctx.InstructionSet.Data[ctx.Index], this);
+				ctx.InsertInstructionAfter(instruction);
+				instruction.Decode(ctx, this);
 				ctx.Prefix = prefix;
 				ctx.Offset = instOffset;
 

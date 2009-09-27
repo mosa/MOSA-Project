@@ -103,23 +103,22 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// 
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public virtual void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public virtual void Decode(Context ctx, IInstructionDecoder decoder)
 		{
-			instruction.Instruction = this;
-			instruction.OperandCount = DefaultOperandCount;
-			instruction.ResultCount = DefaultResultCount;
-			instruction.Ignore = false;
+			ctx.Instruction = this;
+			ctx.OperandCount = DefaultOperandCount;
+			ctx.ResultCount = DefaultResultCount;
+			ctx.Ignore = false;
 		}
 
 		/// <summary>
 		/// Validates the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public virtual void Validate(ref InstructionData instruction, IMethodCompiler compiler)
+		public virtual void Validate(Context ctx, IMethodCompiler compiler)
 		{
 			/* Default implementation is to do nothing */
 		}
@@ -127,11 +126,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public virtual string ToString(ref InstructionData instruction)
+		public virtual string ToString(Context ctx)
 		{
 			return ToString();
 		}
@@ -147,6 +146,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public virtual FlowControl FlowControl
 		{
 			get { return FlowControl.Next; }
+		}
+
+		/// <summary>
+		/// Determines if the IL decoder pushes the results of this instruction onto the IL operand stack.
+		/// </summary>
+		/// <value><c>true</c> if [push result]; otherwise, <c>false</c>.</value>
+		public virtual bool PushResult
+		{
+			get { return true; }
 		}
 
 		/// <summary>

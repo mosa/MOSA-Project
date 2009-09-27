@@ -36,14 +36,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Validates the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
+		public override void Validate(Context ctx, IMethodCompiler compiler)
 		{
-			base.Validate(ref instruction, compiler);
+			base.Validate(ctx, compiler);
 
-			instruction.Result = instruction.Operand1;
-			instruction.Result2 = instruction.Operand1;
+			ctx.Result = ctx.Operand1;
+			ctx.Result2 = ctx.Operand1;
 		}
 
 		/// <summary>

@@ -109,21 +109,21 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
+		public override void Validate(Context ctx, IMethodCompiler compiler)
 		{
-			base.Validate(ref instruction, compiler);
+			base.Validate(ctx, compiler);
 
-			int paramCount = instruction.InvokeTarget.Signature.Parameters.Length;
+			int paramCount = ctx.InvokeTarget.Signature.Parameters.Length;
 
-			if (instruction.InvokeTarget.Signature.HasThis && !instruction.InvokeTarget.Signature.HasExplicitThis)
+			if (ctx.InvokeTarget.Signature.HasThis && !ctx.InvokeTarget.Signature.HasExplicitThis)
 				paramCount++;
 
 			// Validate the operands...
-			Debug.Assert(instruction.OperandCount == paramCount, @"Operand count doesn't match parameter count.");
+			Debug.Assert(ctx.OperandCount == paramCount, @"Operand count doesn't match parameter count.");
 
-			for (int i = 0; i < instruction.OperandCount; i++) {
+			for (int i = 0; i < ctx.OperandCount; i++) {
 				/* FIXME: Check implicit conversions
 				// if (ops[i] != null) {
 					Debug.Assert(_operands[i].Type == _parameterTypes[i]);
@@ -139,10 +139,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the invocation target.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The CTX.</param>
 		/// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
 		/// <param name="flags">Flags, which control the</param>
-		protected void DecodeInvocationTarget(ref InstructionData instruction, IInstructionDecoder decoder, InvokeSupportFlags flags)
+		protected void DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
 		{
 			// Holds the token of the call target
 			TokenTypes callTarget, targetType;
@@ -173,16 +173,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					break;
 			}
 
-			SetInvokeTarget(ref instruction, decoder.Compiler, method);
+			SetInvokeTarget(ctx, decoder.Compiler, method);
 		}
 
 		/// <summary>
 		/// Sets the invoke target.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
-		public void SetInvokeTarget(ref InstructionData instruction, IMethodCompiler compiler, RuntimeMethod method)
+		public void SetInvokeTarget(Context ctx, IMethodCompiler compiler, RuntimeMethod method)
 		{
 			if (null == method)
 				throw new ArgumentNullException(@"method");
@@ -192,10 +192,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Number of parameters required for the call
 			int paramCount = 0;
 
-			instruction.InvokeTarget = method;
+			ctx.InvokeTarget = method;
 
 			// Retrieve the target signature
-			signature = instruction.InvokeTarget.Signature;
+			signature = ctx.InvokeTarget.Signature;
 
 			// Fix the parameter list
 			paramCount = signature.Parameters.Length;
@@ -204,13 +204,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Setup operands for parameters and the return value
 			if (signature.ReturnType.Type != CilElementType.Void)
-				instruction.ResultCount = 1;
+				ctx.ResultCount = 1;
 			else
-				instruction.ResultCount = 0;
+				ctx.ResultCount = 0;
 
 			// Is the function returning void?
 			if (signature.ReturnType.Type != CilElementType.Void)
-				instruction.Result = compiler.CreateTemporary(signature.ReturnType);
+				ctx.Result = compiler.CreateTemporary(signature.ReturnType);
 		}
 
 		/// <summary>

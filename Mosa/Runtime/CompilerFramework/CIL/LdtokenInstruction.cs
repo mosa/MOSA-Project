@@ -39,18 +39,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			TokenTypes token;
 			// Retrieve the token From the code stream
 			decoder.Decode(out token);
 
-			instruction.Token = token;
+			ctx.Token = token;
 
 			throw new NotImplementedException();
 			/*
@@ -131,13 +131,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
-			return String.Format("{0} = ldtoken({1})", instruction.Result, instruction.Token);
+			return String.Format("{0} = ldtoken({1})", ctx.Result, ctx.Token);
 		}
 
 		#endregion Methods

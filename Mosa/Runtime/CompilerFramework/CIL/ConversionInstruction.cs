@@ -49,11 +49,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx"></param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
+		public override void Validate(Context ctx, IMethodCompiler compiler)
 		{
-			base.Validate(ref instruction, compiler);
+			base.Validate(ctx, compiler);
 
 			// Validate the typecode & determine the resulting stack type
 			SigType resultType;
@@ -108,7 +108,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new NotSupportedException(@"Overflow checking conversions not supported.");
 			}
 
-			instruction.Result = compiler.CreateTemporary(resultType);
+			ctx.Result = compiler.CreateTemporary(resultType);
 		}
 
 		/// <summary>

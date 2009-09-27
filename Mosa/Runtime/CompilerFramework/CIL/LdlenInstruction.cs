@@ -40,16 +40,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
+		public override void Validate(Context ctx, IMethodCompiler compiler)
 		{
-			base.Validate(ref instruction, compiler);
+			base.Validate(ctx, compiler);
 
-			Mosa.Runtime.Metadata.Signatures.ArraySigType a = instruction.Operand1.Type as Mosa.Runtime.Metadata.Signatures.ArraySigType;
+			Mosa.Runtime.Metadata.Signatures.ArraySigType a = ctx.Operand1.Type as Mosa.Runtime.Metadata.Signatures.ArraySigType;
 			if (null == a || 1 != a.Rank)
 				throw new InvalidProgramException(@"Operand to ldlen is not a vector.");
-			instruction.Result = compiler.CreateTemporary(new SigType(CilElementType.I));
+			ctx.Result = compiler.CreateTemporary(new SigType(CilElementType.I));
 		}
 
 		/// <summary>
@@ -65,13 +65,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
-			return String.Format("{2} ; {0} = len({1})", instruction.Result, instruction.Operand1, base.ToString());
+			return String.Format("{2} ; {0} = len({1})", ctx.Result, ctx.Operand1, base.ToString());
 		}
 
 		#endregion Methods

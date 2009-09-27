@@ -55,22 +55,23 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			// Retrieve the number of branch targets
 			uint count;
 			decoder.Decode(out count);
 
-			instruction.Branch = new Branch(count + 1);
+			ctx.Branch = new Branch(count + 1);
 
 			// Populate the array
-			for (uint i = 0; i < count; i++)
-				decoder.Decode(out instruction.Branch.Targets[i]);
+			for (uint i = 0; i < count; i++) {
+				decoder.Decode(out ctx.Branch.Targets[i]);
+			}
 		}
 
 		/// <summary>
@@ -86,11 +87,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
 			// FIXME:
 			return String.Format(@"switch (...)");

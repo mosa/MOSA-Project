@@ -76,7 +76,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="pipeline"></param>
         public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
         {
-            pipeline.InsertAfter<IL.CilToIrTransformationStage>(this);
+            pipeline.InsertAfter<CIL.CilToIrTransformationStage>(this);
             pipeline.InsertAfter<IPlatformTransformationStage>(this);
             pipeline.InsertBefore<CodeGenerationStage>(this);
         }

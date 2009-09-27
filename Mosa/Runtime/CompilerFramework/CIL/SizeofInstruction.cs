@@ -39,12 +39,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			// Get the size type
 			// Load the _stackFrameIndex token From the immediate
@@ -55,7 +55,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				TypeReference _typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
 
 				// FIXME: Push the size of the type after layout
-				instruction.Result = new ConstantOperand(NativeTypeReference.Int32, 0);
+				ctx.Result = new ConstantOperand(NativeTypeReference.Int32, 0);
 			*/
 		}
 

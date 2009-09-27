@@ -81,24 +81,24 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
+		public override void Validate(Context ctx, IMethodCompiler compiler)
 		{
-			base.Validate(ref instruction, compiler);
+			base.Validate(ctx, compiler);
 
 			StackTypeCode result = StackTypeCode.Unknown;
 			switch (_opcode) {
 				case OpCode.Add:
-					result = _addTable[(int)instruction.Operand1.StackType][(int)instruction.Operand2.StackType];
+					result = _addTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 					break;
 
 				case OpCode.Sub:
-					result = _subTable[(int)instruction.Operand1.StackType][(int)instruction.Operand2.StackType];
+					result = _subTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 					break;
 
 				default:
-					result = _operandTable[(int)instruction.Operand1.StackType][(int)instruction.Operand2.StackType];
+					result = _operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 					break;
 			}
 
@@ -111,8 +111,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 			else {
 				// Copy the pointer element type
-				PtrSigType op0 = instruction.Operand1.Type as PtrSigType;
-				PtrSigType op1 = instruction.Operand2.Type as PtrSigType;
+				PtrSigType op0 = ctx.Operand1.Type as PtrSigType;
+				PtrSigType op1 = ctx.Operand2.Type as PtrSigType;
 				if (op0 != null)
 					resultType = new PtrSigType(op0.CustomMods, op0.ElementType);
 				else if (op1 != null)
@@ -121,7 +121,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new InvalidOperationException();
 			}
 
-			instruction.Result = compiler.CreateTemporary(resultType);
+			ctx.Result = compiler.CreateTemporary(resultType);
 		}
 
 		#endregion Methods

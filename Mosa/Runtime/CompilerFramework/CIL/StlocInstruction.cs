@@ -34,14 +34,23 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#region Methods
 
 		/// <summary>
+		/// Stloc has a result, but doesn't push it on the stack.
+		/// </summary>
+		/// <value><c>true</c> if [push result]; otherwise, <c>false</c>.</value>
+		public override bool PushResult
+		{
+			get { return false; }
+		}
+
+		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			ushort locIdx;
 
@@ -78,7 +87,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new NotImplementedException();
 			}
 
-			instruction.Result = decoder.Compiler.GetLocalOperand(locIdx);
+			ctx.Result = decoder.Compiler.GetLocalOperand(locIdx);
 		}
 
 		/// <summary>
@@ -94,13 +103,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
-			return String.Format("{0} ; {1} = {2}", base.ToString(), instruction.Result, instruction.Operand1);
+			return String.Format("{0} ; {1} = {2}", base.ToString(), ctx.Result, ctx.Operand1);
 		}
 
 		#endregion Methods

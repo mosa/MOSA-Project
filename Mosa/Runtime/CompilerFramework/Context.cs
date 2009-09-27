@@ -22,14 +22,9 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Provides context for transformations.
 	/// </summary>
-	public class Context
+	public sealed class Context
 	{
 		#region Data members
-
-		/// <summary>
-		/// Holds the block being operated on.
-		/// </summary>
-		private BasicBlock _block;
 
 		/// <summary>
 		/// Holds the instruction index operated on.
@@ -40,6 +35,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Holds the list of instructions
 		/// </summary>
 		private InstructionSet _instructionSet;
+
+		/// <summary>
+		/// Holds the block being operated on.
+		/// </summary>
+		private BasicBlock _block;
 
 		#endregion // Data members
 
@@ -239,6 +239,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public string String
 		{
 			get { return _instructionSet.Data[_index].String; }
+			set { _instructionSet.Data[_index].String = value; }
 		}
 
 		/// <summary>
@@ -247,6 +248,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public RuntimeField RuntimeField
 		{
 			get { return _instructionSet.Data[_index].RuntimeField; }
+			set { _instructionSet.Data[_index].RuntimeField = value; }
 		}
 
 		/// <summary>
@@ -256,6 +258,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public TokenTypes Token
 		{
 			get { return _instructionSet.Data[_index].Token; }
+			set { _instructionSet.Data[_index].Token = value; }
 		}
 
 		/// <summary>
@@ -788,6 +791,73 @@ namespace Mosa.Runtime.CompilerFramework
 			Branch.Targets[1] = target2;
 		}
 
+		/// <summary>
+		/// Gets the operand by index
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public Operand GetOperand(int index)
+		{
+			switch (index) {
+				case 0: return Operand1; 
+				case 1: return Operand2; 
+				case 2: return Operand3;
+				default: break;
+			}
+			
+			System.Diagnostics.Debug.Assert(false, @"No index");
+			return null;
+		}
+
+		/// <summary>
+		/// Sets the operand by index
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="operand">The operand.</param>
+		public void SetOperand(int index, Operand operand)
+		{
+			switch (index) {
+				case 0: Operand1 = operand; break;
+				case 1: Operand2 = operand; break;
+				case 2: Operand3 = operand; break;
+				default: break;
+			}
+
+			System.Diagnostics.Debug.Assert(false, @"No index");
+		}
+
+		/// <summary>
+		/// Gets the result by index
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public Operand GetResult(int index)
+		{
+			switch (index) {
+				case 0: return Result;
+				case 1: return Result2;
+				default: break;
+			}
+
+			System.Diagnostics.Debug.Assert(false, @"No index");
+			return null;
+		}
+		/// <summary>
+		/// Sets the result by index
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="operand">The operand.</param>
+		public void SetResult(int index, Operand operand)
+		{
+			switch (index) {
+				case 0: Result = operand; break;
+				case 1: Result2 = operand; break;
+				default: break;
+			}
+
+			System.Diagnostics.Debug.Assert(false, @"No index");
+		}
+		
 		#endregion // Methods
 	};
 

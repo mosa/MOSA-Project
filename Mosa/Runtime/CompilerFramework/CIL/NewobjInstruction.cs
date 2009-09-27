@@ -82,12 +82,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			/*
              * HACK: We need to remove the this parameter From the operand list, as it
@@ -110,11 +110,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
+		public override void Validate(Context ctx, IMethodCompiler compiler)
 		{
-			base.Validate(ref instruction, compiler);
+			base.Validate(ctx, compiler);
 
 			if (compiler == null)
 				throw new ArgumentNullException(@"compiler");
@@ -124,8 +124,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			//base.Validate(compiler);
 
 			// Validate the operands...
-			Debug.Assert(instruction.OperandCount == instruction.InvokeTarget.Parameters.Count - 1, @"Operand count doesn't match parameter count.");
-			for (int i = 0; i < instruction.OperandCount; i++) {
+			Debug.Assert(ctx.OperandCount == ctx.InvokeTarget.Parameters.Count - 1, @"Operand count doesn't match parameter count.");
+			for (int i = 0; i < ctx.OperandCount; i++) {
 				/* FIXME: Check implicit conversions
 					if (ops[i] != null) {
 						Debug.Assert(_operands[i].Type == _parameterTypes[i]);
@@ -151,20 +151,20 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
 			StringBuilder builder = new StringBuilder();
 			//            int opIdx = 0;
 
 			// Output the result...
-			builder.AppendFormat("{0} = newobj ", instruction.Result);
+			builder.AppendFormat("{0} = newobj ", ctx.Result);
 
 			// Output the call name
-			builder.Append(instruction.InvokeTarget);
+			builder.Append(ctx.InvokeTarget);
 			/*
 				if (opIdx < _operands.Length)
 				{

@@ -40,15 +40,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			// Push the address on the stack
-			instruction.Result = decoder.Compiler.CreateTemporary(new SigType(CilElementType.I));
+			ctx.Result = decoder.Compiler.CreateTemporary(new SigType(CilElementType.I));
 		}
 
 		/// <summary>
@@ -64,13 +64,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
-			return String.Format("{0} = localalloc({1})", instruction.Result, instruction.Operand1);
+			return String.Format("{0} = localalloc({1})", ctx.Result, ctx.Operand1);
 		}
 
 		#endregion Methods

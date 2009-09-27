@@ -36,16 +36,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified CIL instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		/// <remarks>
 		/// This method is used by instructions to retrieve immediate operands
 		/// From the instruction stream.
 		/// </remarks>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			ushort argIdx;
 
@@ -83,8 +83,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			// Push the loaded value onto the evaluation stack
-			instruction.Result = decoder.Compiler.GetParameterOperand(argIdx);
-			instruction.Ignore = true;
+			ctx.Result = decoder.Compiler.GetParameterOperand(argIdx);
+			ctx.Ignore = true;
 		}
 
 		/// <summary>

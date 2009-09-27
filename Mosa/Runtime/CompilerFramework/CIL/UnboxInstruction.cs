@@ -47,13 +47,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The CTX.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
-			return String.Format(@"{0} = unbox({1})", instruction.Result, instruction.Operand1);
+			return String.Format(@"{0} = unbox({1})", ctx.Result, ctx.Operand1);
 		}
 
 		#endregion // Methods

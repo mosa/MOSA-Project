@@ -39,17 +39,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			throw new NotImplementedException();
 
 			//TypeReference targetType = MetadataTypeReference.FromToken(decoder.Metadata, token);
-			//instruction.Result = CreateResultOperand(targetType);
+			//ctx.Result = CreateResultOperand(targetType);
 		}
 
 		/// <summary>
@@ -65,13 +65,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
-			return String.Format(@"{1} ; {2} is {3}", base.ToString(), instruction.Result, instruction.Operand1, instruction.Result.Type);
+			return String.Format(@"{1} ; {2} is {3}", base.ToString(), ctx.Result, ctx.Operand1, ctx.Result.Type);
 		}
 
 		#endregion Methods

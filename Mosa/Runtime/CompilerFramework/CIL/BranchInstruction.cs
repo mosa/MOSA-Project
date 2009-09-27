@@ -55,27 +55,25 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode bases first
-			base.Decode(ref instruction, decoder);
-
-			instruction.Branch = new Branch(1);
+			base.Decode(ctx, decoder);
 
 			switch (_opcode) {
 				case OpCode.Br_s: {
 						sbyte target;
 						decoder.Decode(out target);
-						instruction.Branch.Targets[0] = target;
+						ctx.SetBranch(target);
 					}
 					break;
 
 				case OpCode.Br: {
 						int target;
 						decoder.Decode(out target);
-						instruction.Branch.Targets[0] = target;
+						ctx.SetBranch(target);
 						break;
 					}
 			}
@@ -84,13 +82,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
-			return String.Format("{0} ; L_{1:X4}", base.ToString(), instruction.Branch.Targets[0]);
+			return String.Format("{0} ; L_{1:X4}", base.ToString(), ctx.Branch.Targets[0]);
 		}
 
 		/// <summary>

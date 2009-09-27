@@ -87,31 +87,31 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(ref InstructionData instruction, IMethodCompiler compiler)
+		public override void Validate(Context ctx, IMethodCompiler compiler)
 		{
-			base.Validate(ref instruction, compiler);
+			base.Validate(ctx, compiler);
 
 			StackTypeCode result = StackTypeCode.Unknown;
 			switch (_opcode) {
 				case OpCode.Add_ovf_un:
-					result = _addovfunTable[(int)instruction.Operand1.StackType][(int)instruction.Operand2.StackType];
+					result = _addovfunTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 					break;
 
 				case OpCode.Sub_ovf_un:
-					result = _subovfunTable[(int)instruction.Operand1.StackType][(int)instruction.Operand2.StackType];
+					result = _subovfunTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 					break;
 
 				default:
-					result = _operandTable[(int)instruction.Operand1.StackType][(int)instruction.Operand2.StackType];
+					result = _operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 					break;
 			}
 
 			if (StackTypeCode.Unknown == result)
 				throw new InvalidOperationException(@"Invalid operand types passed to " + _opcode);
 
-			instruction.Result = compiler.CreateTemporary(Operand.SigTypeFromStackType(result));
+			ctx.Result = compiler.CreateTemporary(Operand.SigTypeFromStackType(result));
 		}
 
 		#endregion Methods

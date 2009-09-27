@@ -37,27 +37,25 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx"></param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
-
-			instruction.Branch = new Branch(1);
+			base.Decode(ctx, decoder);
 
 			switch (_opcode) {
 				case OpCode.Leave_s: {
 						sbyte sb;
 						decoder.Decode(out sb);
-						instruction.Branch.Targets[0] = sb;
+						ctx.SetBranch(sb);
 					}
 					break;
 
 				case OpCode.Leave: {
 						int sb;
 						decoder.Decode(out sb);
-						instruction.Branch.Targets[0] = sb;
+						ctx.SetBranch(sb);
 						break;
 					}
 			}
@@ -76,13 +74,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context ctx)
 		{
-			return String.Format("leave L_{0:X4}", instruction.Branch.Targets);
+			return String.Format("leave L_{0:X4}", ctx.Branch.Targets);
 		}
 
 		#endregion Methods

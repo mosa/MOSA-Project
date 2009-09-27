@@ -39,12 +39,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(ref InstructionData instruction, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ref instruction, decoder);
+			base.Decode(ctx, decoder);
 
 			ushort argIdx;
 
@@ -58,8 +58,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				decoder.Decode(out argIdx);
 			}
 
-			instruction.Operand1 = decoder.Compiler.GetParameterOperand(argIdx);
-			instruction.Result = decoder.Compiler.CreateTemporary(new RefSigType(instruction.Operand1.Type));
+			ctx.Operand1 = decoder.Compiler.GetParameterOperand(argIdx);
+			ctx.Result = decoder.Compiler.CreateTemporary(new RefSigType(ctx.Operand1.Type));
 		}
 
 		/// <summary>

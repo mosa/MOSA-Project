@@ -112,7 +112,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Finds the loop heads.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
+		/// <param name="ctx">The context.</param>
 		private void FindLoopHeads(Context ctx)
 		{
 			while (!ctx.EndOfInstruction) {

@@ -1263,7 +1263,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Transform the opcode with an internal call
 			CallInstruction call = new CallInstruction(OpCode.Call);
-			call.SetInvokeTarget(ref ctx.InstructionSet.Data[ctx.Index], Compiler, callTarget);
+			call.SetInvokeTarget(ctx, Compiler, callTarget);
 
 			// FIXME PG
 			// int i = 0;
