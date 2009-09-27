@@ -58,6 +58,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.DirectDivision(context);
 		}
 
-		#endregion // TwoOperandInstruction Overrides
+		#endregion // Methods
 	}
 }

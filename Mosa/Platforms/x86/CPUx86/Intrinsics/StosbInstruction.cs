@@ -45,7 +45,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
         /// </returns>
         public override string ToString(Context context)
         {
-            return @"x86 stosb";
+            return @"x86.stosb";
         }
 
 		/// <summary>

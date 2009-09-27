@@ -57,6 +57,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		public BaseInstruction()
 		{
+			_operandDefaultCount = 0;
+			_resultDefaultCount = 0;
 		}
 
 		/// <summary>
@@ -67,7 +69,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			: this()
 		{
 			_operandDefaultCount = operandCount;
-			_resultDefaultCount = 0;
 		}
 
 		/// <summary>
