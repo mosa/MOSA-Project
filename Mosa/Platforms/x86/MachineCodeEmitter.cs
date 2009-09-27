@@ -236,9 +236,8 @@ namespace Mosa.Platforms.x86
 		/// Emits a literal constant into the code stream.
 		/// </summary>
 		/// <param name="label">The label to apply to the data.</param>
-		/// <param name="type">The type of the literal.</param>
-		/// <param name="data">The data to emit.</param>
-		void ICodeEmitter.Literal(int label, SigType type, object data)
+		/// <param name="LiteralData"></param>
+		void ICodeEmitter.Literal(int label, IR2.LiteralData LiteralData) // SigType type, object data)
 		{
 			// Save the current position
 			long currentPosition = _codeStream.Position;
@@ -266,21 +265,21 @@ namespace Mosa.Platforms.x86
 
 			if (true == emit) {
 				_codeStream.Position = currentPosition;
-				switch (type.Type) {
+				switch (LiteralData.Type.Type) {
 					case CilElementType.I8:
-						bytes = LittleEndianBitConverter.GetBytes((long)data);
+						bytes = LittleEndianBitConverter.GetBytes((long)LiteralData.Data);
 						break;
 
 					case CilElementType.U8:
-						bytes = LittleEndianBitConverter.GetBytes((ulong)data);
+						bytes = LittleEndianBitConverter.GetBytes((ulong)LiteralData.Data);
 						break;
 
 					case CilElementType.R4:
-						bytes = LittleEndianBitConverter.GetBytes((float)data);
+						bytes = LittleEndianBitConverter.GetBytes((float)LiteralData.Data);
 						break;
 
 					case CilElementType.R8:
-						bytes = LittleEndianBitConverter.GetBytes((double)data);
+						bytes = LittleEndianBitConverter.GetBytes((double)LiteralData.Data);
 						break;
 
 					default:

@@ -234,8 +234,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Holds the string.
+		/// Gets or sets the string.
 		/// </summary>
+		/// <value>The string.</value>
 		public string String
 		{
 			get { return _instructionSet.Data[_index].String; }
@@ -243,8 +244,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Holds the field of the load instruction.
+		/// Gets or sets the runtime field.
 		/// </summary>
+		/// <value>The runtime field.</value>
 		public RuntimeField RuntimeField
 		{
 			get { return _instructionSet.Data[_index].RuntimeField; }
@@ -252,7 +254,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Holds the token type.
+		/// Gets or sets the token.
 		/// </summary>
 		/// <value>The token.</value>
 		public TokenTypes Token
@@ -262,13 +264,23 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Holds the condition code.
+		/// Gets or sets the condition code.
 		/// </summary>
 		/// <value>The condition code.</value>
 		public IR2.ConditionCode ConditionCode
 		{
 			get { return _instructionSet.Data[_index].ConditionCode; }
 			set { _instructionSet.Data[_index].ConditionCode = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the literal data.
+		/// </summary>
+		/// <value>The token.</value>
+		public IR2.LiteralData LiteralData
+		{
+			get { return (IR2.LiteralData)Other; }
+			set { Other = value; }
 		}
 
 		/// <summary>

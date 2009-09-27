@@ -53,11 +53,11 @@ namespace Mosa.Platforms.x86
 		#endregion
 
 		#region Construction
-		
+
 		public CodeGenerator()
 		{
 		}
-		
+
 		#endregion
 
 		#region Methods
@@ -270,7 +270,8 @@ namespace Mosa.Platforms.x86
 
 		void CPUx86.IX86Visitor.Jns(Context ctx)
 		{
-			_codeEmitter.Jns(instruction.Label);
+			_codeEmitter.Jns(ctx.Branch.Targets[0]);
+			//_codeEmitter.Jns(instruction.Label);
 		}
 
 		void CPUx86.IX86Visitor.Iretd(Context ctx)
@@ -312,7 +313,7 @@ namespace Mosa.Platforms.x86
 		{
 			Operand function = ctx.Operand1;
 			Operand dst = ctx.Operand2;
-			instruction.SetResult(0, ctx.Operand2);
+			ctx.Result = ctx.Operand2;
 			_codeEmitter.CpuId(ctx.Result, function);
 		}
 
@@ -659,8 +660,11 @@ namespace Mosa.Platforms.x86
 		{
 			// Move the this pointer to the right place, if this is an object instance
 			RuntimeMethod method = ctx.InvokeTarget;
-			if (true == method.Signature.HasThis)
-				_codeEmitter.Mov(new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.Object), GeneralPurposeRegister.ECX), instruction.ThisReference);
+			if (method.Signature.HasThis) {
+				// FIXME PG
+				//_codeEmitter.Mov(new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.Object), GeneralPurposeRegister.ECX), instruction.ThisReference);
+				throw new NotImplementedException();
+			}
 
 			/*
 			 * HINT: Microsoft seems not to use vtables/itables in .NET v2/v3/v3.5 anymore. They allocate
@@ -686,12 +690,12 @@ namespace Mosa.Platforms.x86
 		{
 			bool eax = false;
 
-			if (0 != instruction.Operands.Length && null != ctx.Operand1) {
+			if (ctx.OperandCount != 0 && ctx.Operand1 != null) {
 				Operand retval = ctx.Operand1;
 				if (true == retval.IsRegister) {
 					// Do not move, if return value is already in EAX
 					RegisterOperand rop = (RegisterOperand)retval;
-					if (true == System.Object.ReferenceEquals(rop.Register, GeneralPurposeRegister.EAX))
+					if (System.Object.ReferenceEquals(rop.Register, GeneralPurposeRegister.EAX))
 						eax = true;
 				}
 
@@ -710,7 +714,9 @@ namespace Mosa.Platforms.x86
 			SigType I4 = new SigType(CilElementType.I4);
 			_codeEmitter.Cmp(new RegisterOperand(I4, GeneralPurposeRegister.EAX), new ConstantOperand(I4, 0));
 
-			if (instruction.Code == CIL.OpCode.Brtrue || instruction.Code == CIL.OpCode.Brtrue_s) {
+			CIL.OpCode opcode = ((ctx.Instruction) as CIL.ICILInstruction).OpCode;
+
+			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s) {
 				_codeEmitter.Jne(ctx.Branch.Targets[0]);
 				_codeEmitter.Je(ctx.Branch.Targets[1]);
 			}
@@ -730,7 +736,10 @@ namespace Mosa.Platforms.x86
 				targets[1] = tmp;
 
 				_codeEmitter.Cmp(ctx.Operand2, ctx.Operand1);
-				switch (instruction.Code) {
+
+				CIL.OpCode opcode = ((ctx.Instruction) as CIL.ICILInstruction).OpCode;
+
+				switch (opcode) {
 					// Signed
 					case CIL.OpCode.Beq_s: _codeEmitter.Jne(targets[0]); break;
 					case CIL.OpCode.Bge_s: _codeEmitter.Jl(targets[0]); break;
@@ -765,7 +774,9 @@ namespace Mosa.Platforms.x86
 			}
 			else {
 				_codeEmitter.Cmp(ctx.Operand1, ctx.Operand2);
-				switch (instruction.Code) {
+				CIL.OpCode opcode = ((ctx.Instruction) as CIL.ICILInstruction).OpCode;
+
+				switch (opcode) {
 					// Signed
 					case CIL.OpCode.Beq_s: _codeEmitter.Je(targets[0]); break;
 					case CIL.OpCode.Bge_s: _codeEmitter.Jge(targets[0]); break;
@@ -1030,45 +1041,46 @@ namespace Mosa.Platforms.x86
 
 		void IR2.IIRVisitor.BranchInstruction(Context ctx)
 		{
+			int target = ctx.Branch.Targets[0];
 			switch (ctx.ConditionCode) {
 				case IR2.ConditionCode.Equal:
-					_codeEmitter.Je(instruction.Label);
+					_codeEmitter.Je(target);
 					break;
 
 				case IR2.ConditionCode.GreaterOrEqual:
-					_codeEmitter.Jge(instruction.Label);
+					_codeEmitter.Jge(target);
 					break;
 
 				case IR2.ConditionCode.GreaterThan:
-					_codeEmitter.Jg(instruction.Label);
+					_codeEmitter.Jg(target);
 					break;
 
 				case IR2.ConditionCode.LessOrEqual:
-					_codeEmitter.Jle(instruction.Label);
+					_codeEmitter.Jle(target);
 					break;
 
 				case IR2.ConditionCode.LessThan:
-					_codeEmitter.Jl(instruction.Label);
+					_codeEmitter.Jl(target);
 					break;
 
 				case IR2.ConditionCode.NotEqual:
-					_codeEmitter.Jne(instruction.Label);
+					_codeEmitter.Jne(target);
 					break;
 
 				case IR2.ConditionCode.UnsignedGreaterOrEqual:
-					_codeEmitter.Jae(instruction.Label);
+					_codeEmitter.Jae(target);
 					break;
 
 				case IR2.ConditionCode.UnsignedGreaterThan:
-					_codeEmitter.Ja(instruction.Label);
+					_codeEmitter.Ja(target);
 					break;
 
 				case IR2.ConditionCode.UnsignedLessOrEqual:
-					_codeEmitter.Jbe(instruction.Label);
+					_codeEmitter.Jbe(target);
 					break;
 
 				case IR2.ConditionCode.UnsignedLessThan:
-					_codeEmitter.Jb(instruction.Label);
+					_codeEmitter.Jb(target);
 					break;
 
 				default:
@@ -1078,7 +1090,7 @@ namespace Mosa.Platforms.x86
 
 		void IR2.IIRVisitor.CallInstruction(Context ctx)
 		{
-			_codeEmitter.Call(instruction.Method);
+			_codeEmitter.Call(ctx.InvokeTarget);
 		}
 
 		void IR2.IIRVisitor.EpilogueInstruction(Context ctx)
@@ -1176,12 +1188,12 @@ namespace Mosa.Platforms.x86
 
 		void IR2.IIRVisitor.JmpInstruction(Context ctx)
 		{
-			_codeEmitter.Jmp(instruction.Label);
+			_codeEmitter.Jmp(ctx.Branch.Targets[0]);
 		}
 
 		void IR2.IIRVisitor.LiteralInstruction(Context ctx)
 		{
-			_codeEmitter.Literal(instruction.Label, instruction.Type, instruction.Data);
+			_codeEmitter.Literal(ctx.Branch.Targets[0], ctx.LiteralData);
 		}
 
 		void IR2.IIRVisitor.LogicalAndInstruction(Context ctx)
@@ -1259,7 +1271,7 @@ namespace Mosa.Platforms.x86
 
 		void IR2.IIRVisitor.PopInstruction(Context ctx)
 		{
-			_codeEmitter.Pop(instruction.Destination);
+			_codeEmitter.Pop(ctx.Result);
 		}
 
 		void IR2.IIRVisitor.PrologueInstruction(Context ctx)
@@ -1269,7 +1281,7 @@ namespace Mosa.Platforms.x86
 
 		void IR2.IIRVisitor.PushInstruction(Context ctx)
 		{
-			_codeEmitter.Push(instruction.Source);
+			_codeEmitter.Push(ctx.Operand1);
 		}
 
 		void IR2.IIRVisitor.ReturnInstruction(Context ctx)

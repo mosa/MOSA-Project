@@ -41,13 +41,12 @@ namespace Mosa.Platforms.x86
         /// <param name="label">The label name to emit.</param>
         void Label(int label);
 
-        /// <summary>
-        /// Emits a literal constant into the code stream.
-        /// </summary>
-        /// <param name="label">The label to apply to the data.</param>
-        /// <param name="type">The type of the literal.</param>
-        /// <param name="data">The data to emit.</param>
-        void Literal(int label, SigType type, object data); 
+		/// <summary>
+		/// Emits a literal constant into the code stream.
+		/// </summary>
+		/// <param name="label">The label to apply to the data.</param>
+		/// <param name="LiteralData">The literal data.</param>
+		void Literal(int label, IR2.LiteralData LiteralData); 
 
         #region x86 instructions
 

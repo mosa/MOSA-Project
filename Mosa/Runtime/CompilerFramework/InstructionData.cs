@@ -164,6 +164,16 @@ namespace Mosa.Runtime.CompilerFramework
 			set { Other = value; }
 		}
 
+		/// <summary>
+		/// Holds the literal data.
+		/// </summary>
+		/// <value>The token.</value>
+		public IR2.LiteralData LiteralData
+		{
+			get { return (IR2.LiteralData)Other; }
+			set { Other = value; }
+		}
+
 		#endregion // Properties
 
 		#region Methods
