@@ -63,11 +63,11 @@ namespace Mosa.Platforms.x86
         	return -1;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="instruction"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the latency.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <returns></returns>
         public static sbyte GetLatency(Type instruction)
         {
             if (Latencies.ContainsKey(instruction))

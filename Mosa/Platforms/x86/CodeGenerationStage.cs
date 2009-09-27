@@ -24,9 +24,6 @@ using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR2 = Mosa.Runtime.CompilerFramework.IR2;
 using CPUx86 = Mosa.Platforms.x86.CPUx86;
 
-using Mosa.Platforms.x86.Instructions;
-using Mosa.Platforms.x86.Instructions.Intrinsics;
-
 namespace Mosa.Platforms.x86
 {
 
