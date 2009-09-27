@@ -315,7 +315,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// FIXME PG - might be an issue, is Ctx.Results count always less 2 ?
 			int index = 0;
 
-			foreach (Operand op1 in ctx.Results) {
+			foreach (Operand op1 in ctx.Operands) {
 				// Is this a stack operand?
 				StackOperand op = op1 as StackOperand;
 
