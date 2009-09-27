@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public interface ICILVisitor
+	public interface ICILVisitor : IVisitor
 	{
 		/// <summary>
 		/// Visitation function for <see cref="Nop"/>.

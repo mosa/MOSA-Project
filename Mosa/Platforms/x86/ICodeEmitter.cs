@@ -13,9 +13,9 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
+using IR2 = Mosa.Runtime.CompilerFramework.IR2;
 
 namespace Mosa.Platforms.x86
 {
@@ -706,7 +706,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="destination">The destination of the comparison result.</param>
         /// <param name="code">The condition code to test.</param>
-        void Setcc(Operand destination, IR.ConditionCode code);
+        void Setcc(Operand destination, IR2.ConditionCode code);
 
         #endregion // x86 instructions
 

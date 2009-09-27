@@ -14,11 +14,11 @@ using System.IO;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    /// <summary>
-    /// Base class for code generation stages.
-    /// </summary>
-    /// <typeparam name="ContextType">Specifies the context type used by the code generation stage for its visitors.</typeparam>
-    public abstract class CodeGenerationStage<ContextType> : ICodeGenerationStage, IMethodCompilerStage, IInstructionVisitor<ContextType>
+	/// <summary>
+	/// Base class for code generation stages.
+	/// </summary>
+    public abstract class CodeGenerationStage : ICodeGenerationStage, IMethodCompilerStage
+		// , IInstructionVisitor
     {
         #region Data members
 
@@ -41,9 +41,9 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CodeGenerationStage{ContextType}"/> class.
-        /// </summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CodeGenerationStage"/> class.
+		/// </summary>
         protected CodeGenerationStage()
         {
         }
@@ -92,10 +92,10 @@ namespace Mosa.Runtime.CompilerFramework
             }
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pipeline"></param>
+		/// <summary>
+		/// Adds the stage to the pipeline.
+		/// </summary>
+		/// <param name="pipeline">The pipeline to add to.</param>
         public abstract void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline);
 
         #endregion // IMethodCompilerStage members
@@ -112,23 +112,22 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         protected virtual void EmitInstructions()
         {
-            ContextType ct = default(ContextType);
-
             // Retrieve the latest basic block decoder
             IBasicBlockProvider blockProvider = (IBasicBlockProvider)_compiler.GetPreviousStage(typeof(IBasicBlockProvider));
             Debug.Assert(blockProvider != null, @"Code generation requires a basic block provider.");
             if (blockProvider == null)
                 throw new InvalidOperationException(@"Code generation requires a basic block provider.");
 
-            foreach (BasicBlock block in blockProvider)
-            {
-                BlockStart(block);
-                foreach (LegacyInstruction instruction in block.Instructions)
-                    if (!instruction.Ignore)
-                        instruction.Visit<ContextType>(this, ct);
+			// FIXME PG - rewrite with new method
+			//foreach (BasicBlock block in blockProvider)
+			//{
+			//    BlockStart(block);
+			//    foreach (LegacyInstruction instruction in block.Instructions)
+			//        if (!instruction.Ignore)
+			//            instruction.Visit<Context>(this, ct);
  
-				BlockEnd(block);
-            }
+			//    BlockEnd(block);
+			//}
         }
 
         /// <summary>
@@ -154,19 +153,5 @@ namespace Mosa.Runtime.CompilerFramework
 
         #endregion // Methods
 
-        #region IInstructionVisitor<ContextType> Members
-
-        /// <summary>
-        /// Visitation method for instructions not caught by more specific visitation methods.
-        /// </summary>
-        /// <param name="instruction">The visiting instruction.</param>
-        /// <param name="arg">A visitation context argument.</param>
-        void IInstructionVisitor<ContextType>.Visit(LegacyInstruction instruction, ContextType arg)
-        {
-            Trace.WriteLine(String.Format(@"Unknown instruction {0} has visited CodeGenerationStage<ContextType>.", instruction.GetType().FullName));
-            throw new NotSupportedException();
-        }
-
-        #endregion // IInstructionVisitor<ContextType> Members
     }
 }

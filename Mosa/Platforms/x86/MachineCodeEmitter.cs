@@ -20,7 +20,7 @@ using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
-using IR = Mosa.Runtime.CompilerFramework.IR;
+using IR2 = Mosa.Runtime.CompilerFramework.IR2;
 
 namespace Mosa.Platforms.x86
 {
@@ -1697,48 +1697,48 @@ namespace Mosa.Platforms.x86
 			return modRM;
 		}
 
-		void ICodeEmitter.Setcc(Operand destination, IR.ConditionCode code)
+		void ICodeEmitter.Setcc(Operand destination, IR2.ConditionCode code)
 		{
 			byte[] byteCode;
 
 			switch (code) {
-				case IR.ConditionCode.Equal:
+				case IR2.ConditionCode.Equal:
 					byteCode = new byte[] { 0x0F, 0x94 };
 					break;
 
-				case IR.ConditionCode.LessThan:
+				case IR2.ConditionCode.LessThan:
 					byteCode = new byte[] { 0x0F, 0x9C };
 					break;
 
-				case IR.ConditionCode.LessOrEqual:
+				case IR2.ConditionCode.LessOrEqual:
 					byteCode = new byte[] { 0x0F, 0x9E };
 					break;
 
-				case IR.ConditionCode.GreaterOrEqual:
+				case IR2.ConditionCode.GreaterOrEqual:
 					byteCode = new byte[] { 0x0F, 0x9D };
 					break;
 
-				case IR.ConditionCode.GreaterThan:
+				case IR2.ConditionCode.GreaterThan:
 					byteCode = new byte[] { 0x0F, 0x9F };
 					break;
 
-				case IR.ConditionCode.NotEqual:
+				case IR2.ConditionCode.NotEqual:
 					byteCode = new byte[] { 0x0F, 0x95 };
 					break;
 
-				case IR.ConditionCode.UnsignedGreaterOrEqual:
+				case IR2.ConditionCode.UnsignedGreaterOrEqual:
 					byteCode = new byte[] { 0x0F, 0x93 };
 					break;
 
-				case IR.ConditionCode.UnsignedGreaterThan:
+				case IR2.ConditionCode.UnsignedGreaterThan:
 					byteCode = new byte[] { 0x0F, 0x97 };
 					break;
 
-				case IR.ConditionCode.UnsignedLessOrEqual:
+				case IR2.ConditionCode.UnsignedLessOrEqual:
 					byteCode = new byte[] { 0x0F, 0x96 };
 					break;
 
-				case IR.ConditionCode.UnsignedLessThan:
+				case IR2.ConditionCode.UnsignedLessThan:
 					byteCode = new byte[] { 0x0F, 0x92 };
 					break;
 

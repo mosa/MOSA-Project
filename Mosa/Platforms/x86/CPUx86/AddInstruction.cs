@@ -20,12 +20,17 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// </summary>
 	public sealed class AddInstruction : BaseInstruction
 	{
-		public static OpCode R_C = new OpCode(new byte[] { 0x81 }, 0);
-		public static OpCode R_R = new OpCode(new byte[] { 0x03 });
-		public static OpCode R_M = new OpCode(new byte[] { 0x03 });
-		public static OpCode M_R = new OpCode(new byte[] { 0x01 });
-		public static OpCode R_M_U8 = new OpCode(new byte[] { 0x02 }); // Add r/m8 to r8
-		public static OpCode M_R_U8 = new OpCode(new byte[] { 0x00 }); // Add r8 to r/m8
+
+		#region Data Members
+
+		private static OpCode R_C = new OpCode(new byte[] { 0x81 }, 0);
+		private static OpCode R_R = new OpCode(new byte[] { 0x03 });
+		private static OpCode R_M = new OpCode(new byte[] { 0x03 });
+		private static OpCode M_R = new OpCode(new byte[] { 0x01 });
+		private static OpCode R_M_U8 = new OpCode(new byte[] { 0x02 }); // Add r/m8 to r8
+		private static OpCode M_R_U8 = new OpCode(new byte[] { 0x00 }); // Add r8 to r/m8
+
+		#endregion
 
 		#region Construction
 

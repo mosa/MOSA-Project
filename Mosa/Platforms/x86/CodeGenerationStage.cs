@@ -17,11 +17,13 @@ using System.IO;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using IL = Mosa.Runtime.CompilerFramework.IL;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
+using CIL = Mosa.Runtime.CompilerFramework.CIL;
+using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using CPUx86 = Mosa.Platforms.x86.CPUx86;
+
 using Mosa.Platforms.x86.Instructions;
 using Mosa.Platforms.x86.Instructions.Intrinsics;
 
@@ -29,1396 +31,1359 @@ namespace Mosa.Platforms.x86
 {
 
 	/// <summary>
-    /// Generates appropriate x86 code using code emitters.
+	/// Generates appropriate x86 code using code emitters.
 	/// </summary>
-    /// <remarks>
-    /// This code generation stage translates the three-address code used in the intermediate
-    /// representation into an appropriate two-address code used by the x86 processor. We could
-    /// attempt to do this in a seperate compilation stage, however this would create a large
-    /// number of additional intermediate representation classes. There's potential to optimized
-    /// register usage though. This should clearly be done after the results of this approach
-    /// have been validated.
-    /// </remarks>
-    sealed class CodeGenerator : CodeGenerationStage<int>, IX86InstructionVisitor<int>, IL.IILVisitor<int>
-    {
-        #region Data members
+	/// <remarks>
+	/// This code generation stage translates the three-address code used in the intermediate
+	/// representation into an appropriate two-address code used by the x86 processor. We could
+	/// attempt to do this in a seperate compilation stage, however this would create a large
+	/// number of additional intermediate representation classes. There's potential to optimized
+	/// register usage though. This should clearly be done after the results of this approach
+	/// have been validated.
+	/// </remarks>
+	sealed class CodeGenerator : CodeGenerationStage, CIL.ICILVisitor, CPUx86.IX86Visitor, IR2.IIRVisitor
+	{
+		#region Data members
 
-        /// <summary>
-        /// The emitter used by the code generator.
-        /// </summary>
-        private ICodeEmitter _codeEmitter;
-        #endregion
+		/// <summary>
+		/// The emitter used by the code generator.
+		/// </summary>
+		private ICodeEmitter _codeEmitter;
 
-        #region Construction
-        public CodeGenerator()
-		{
-		}
 		#endregion
 
-        #region Methods
+		#region Construction
+		
+		public CodeGenerator()
+		{
+		}
+		
+		#endregion
 
-        protected override void BeginGenerate()
-        {
-        	_codeEmitter = new MachineCodeEmitter(_compiler, _codeStream, _compiler.Linker);
-        }
+		#region Methods
 
-        protected override void EndGenerate()
-        {
-            _codeEmitter.Dispose();
-            _codeEmitter = null;
-        }
+		protected override void BeginGenerate()
+		{
+			_codeEmitter = new MachineCodeEmitter(_compiler, _codeStream, _compiler.Linker);
+		}
 
-        protected override void BlockStart(BasicBlock block)
-        {
-            _codeEmitter.Label(block.Label);
-        }
+		protected override void EndGenerate()
+		{
+			_codeEmitter.Dispose();
+			_codeEmitter = null;
+		}
 
-        public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
-        {
-            pipeline.Add(this);
-        }
+		protected override void BlockStart(BasicBlock block)
+		{
+			_codeEmitter.Label(block.Label);
+		}
 
-        #endregion
+		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		{
+			pipeline.Add(this);
+		}
 
-        #region IX86InstructionVisitor Members
+		#endregion
 
-        void IX86InstructionVisitor<int>.Add(AddInstruction instruction, int arg)
-        {
-            _codeEmitter.Add(instruction.Operand0, instruction.Operand1);
-        }
+		#region IX86Visitor
 
-        void IX86InstructionVisitor<int>.Adc(AdcInstruction instruction, int arg)
-        {
-            _codeEmitter.Adc(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.Add(Context ctx)
+		{
+			_codeEmitter.Add(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.And(LogicalAndInstruction instruction, int arg)
-        {
-            _codeEmitter.And(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.Adc(Context ctx)
+		{
+			_codeEmitter.Adc(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.Or(LogicalOrInstruction instruction, int arg)
-        {
-            _codeEmitter.Or(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.And(Context ctx)
+		{
+			_codeEmitter.And(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.Xor(LogicalXorInstruction instruction, int arg)
-        {
-            _codeEmitter.Xor(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.Or(Context ctx)
+		{
+			_codeEmitter.Or(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.Sub(SubInstruction instruction, int arg)
-        {
-            _codeEmitter.Sub(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.Xor(Context ctx)
+		{
+			_codeEmitter.Xor(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.Sbb(SbbInstruction instruction, int arg)
-        {
-            _codeEmitter.Sbb(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.Sub(Context ctx)
+		{
+			_codeEmitter.Sub(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.Mul(MulInstruction instruction, int arg)
-        {
-            _codeEmitter.Mul(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.Sbb(Context ctx)
+		{
+			_codeEmitter.Sbb(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.DirectMultiplication(Instructions.DirectMultiplicationInstruction instruction, int arg)
-        {
-            if (instruction.Operand0 is ConstantOperand)
-            {
-                RegisterOperand ebx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
-                _codeEmitter.Push(ebx);
-                _codeEmitter.Mov(ebx, instruction.Operand0);
-                _codeEmitter.DirectMultiplication(ebx);
-                _codeEmitter.Pop(ebx);
-            }
-            else
-            {
-                _codeEmitter.DirectMultiplication(instruction.Operand0);
-            }
-        }
+		void CPUx86.IX86Visitor.Mul(Context ctx)
+		{
+			_codeEmitter.Mul(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.DirectDivision(Instructions.DirectDivisionInstruction instruction, int arg)
-        {
-            _codeEmitter.DirectDivision(instruction.Operand0);
-        }
+		void CPUx86.IX86Visitor.DirectMultiplication(Context ctx)
+		{
+			if (ctx.Operand1 is ConstantOperand) {
+				RegisterOperand ebx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
+				_codeEmitter.Push(ebx);
+				_codeEmitter.Mov(ebx, ctx.Operand1);
+				_codeEmitter.DirectMultiplication(ebx);
+				_codeEmitter.Pop(ebx);
+			}
+			else {
+				_codeEmitter.DirectMultiplication(ctx.Operand1);
+			}
+		}
 
-        void IX86InstructionVisitor<int>.Div(DivInstruction instruction, int arg)
-        {
-            // FIXME: Expand divisions to cdq/x86 div pairs in IRToX86TransformationStage
-            _codeEmitter.Cdq();
-            //_codeEmitter.Xor(new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX), new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
-            _codeEmitter.IDiv(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.DirectDivision(Context ctx)
+		{
+			_codeEmitter.DirectDivision(ctx.Operand1);
+		}
 
-        void IX86InstructionVisitor<int>.UDiv(UDivInstruction instruction, int arg)
-        {
-            RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
-            _codeEmitter.Xor(edx, edx);
-            _codeEmitter.Div(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.Div(Context ctx)
+		{
+			// FIXME: Expand divisions to cdq/x86 div pairs in IRToX86TransformationStage
+			_codeEmitter.Cdq();
+			//_codeEmitter.Xor(new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX), new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
+			_codeEmitter.IDiv(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.SseAdd(SseAddInstruction instruction, int arg)
-        {
-            _codeEmitter.SseAdd(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.UDiv(Context ctx)
+		{
+			RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
+			_codeEmitter.Xor(edx, edx);
+			_codeEmitter.Div(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.SseSub(SseSubInstruction instruction, int arg)
-        {
-            _codeEmitter.SseSub(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.SseAdd(Context ctx)
+		{
+			_codeEmitter.SseAdd(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.SseMul(SseMulInstruction instruction, int arg)
-        {
-            _codeEmitter.SseMul(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.SseSub(Context ctx)
+		{
+			_codeEmitter.SseSub(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.SseDiv(SseDivInstruction instruction, int arg)
-        {
-            _codeEmitter.SseDiv(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.SseMul(Context ctx)
+		{
+			_codeEmitter.SseMul(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.Sar(SarInstruction instruction, int arg)
-        {
-            _codeEmitter.Sar(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.SseDiv(Context ctx)
+		{
+			_codeEmitter.SseDiv(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.Sal(SalInstruction instruction, int arg)
-        {
-            _codeEmitter.Sal(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.Sar(Context ctx)
+		{
+			_codeEmitter.Sar(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.Cdq(CdqInstruction instruction, int arg)
-        {
-            _codeEmitter.Cdq();
-        }
+		void CPUx86.IX86Visitor.Sal(Context ctx)
+		{
+			_codeEmitter.Sal(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.Cmp(CmpInstruction instruction, int arg)
-        {
-            Operand op0 = instruction.Operand0;
-            Operand op1 = instruction.Operand1;
+		void CPUx86.IX86Visitor.Cdq(Context ctx)
+		{
+			_codeEmitter.Cdq();
+		}
 
-            bool constant = op0 is ConstantOperand;
+		void CPUx86.IX86Visitor.Cmp(Context ctx)
+		{
+			Operand op0 = ctx.Operand1;
+			Operand op1 = ctx.Operand2;
 
-            if (constant)
-            {
-                RegisterOperand ebx = new RegisterOperand(op0.Type, GeneralPurposeRegister.EBX);
-                _codeEmitter.Push(ebx);
-                _codeEmitter.Mov(ebx, op0);
-                op0 = ebx;
-            }
-            _codeEmitter.Cmp(op0, op1);
-            if (constant)
-            {
-                RegisterOperand ebx = new RegisterOperand(op0.Type, GeneralPurposeRegister.EBX);
-                _codeEmitter.Pop(ebx);
-            }
-        }
+			bool constant = op0 is ConstantOperand;
 
-        void IX86InstructionVisitor<int>.Setcc(SetccInstruction instruction, int arg)
-        {
-            Operand op0 = instruction.Operand0;
-            _codeEmitter.Setcc(op0, instruction.ConditionCode);
+			if (constant) {
+				RegisterOperand ebx = new RegisterOperand(op0.Type, GeneralPurposeRegister.EBX);
+				_codeEmitter.Push(ebx);
+				_codeEmitter.Mov(ebx, op0);
+				op0 = ebx;
+			}
+			_codeEmitter.Cmp(op0, op1);
+			if (constant) {
+				RegisterOperand ebx = new RegisterOperand(op0.Type, GeneralPurposeRegister.EBX);
+				_codeEmitter.Pop(ebx);
+			}
+		}
 
-            // Extend the result to 32-bits
-            if (op0 is RegisterOperand)
-            {
-                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)op0).Register);
-                _codeEmitter.Movzx(rop, rop);
-            }
-        }
+		void CPUx86.IX86Visitor.Setcc(Context ctx)
+		{
+			Operand op0 = ctx.Operand1;
+			_codeEmitter.Setcc(op0, ctx.ConditionCode);
 
-        void IX86InstructionVisitor<int>.Shl(ShlInstruction instruction, int arg)
-        {
-            _codeEmitter.Shl(instruction.Operand0, instruction.Operand1);
-        }
+			// Extend the result to 32-bits
+			if (op0 is RegisterOperand) {
+				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)op0).Register);
+				_codeEmitter.Movzx(rop, rop);
+			}
+		}
 
-        void IX86InstructionVisitor<int>.Shld(ShldInstruction instruction, int arg)
-        {
-            _codeEmitter.Shld(instruction.Operand0, instruction.Operand1, instruction.Operand2);
-        }
+		void CPUx86.IX86Visitor.Shl(Context ctx)
+		{
+			_codeEmitter.Shl(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.Shr(ShrInstruction instruction, int arg)
-        {
-            _codeEmitter.Shr(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.Shld(Context ctx)
+		{
+			_codeEmitter.Shld(ctx.Operand1, ctx.Operand2, ctx.Operand3);
+		}
 
-        void IX86InstructionVisitor<int>.Rcr(RcrInstruction instruction, int arg)
-        {
-            _codeEmitter.Rcr(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.Shr(Context ctx)
+		{
+			_codeEmitter.Shr(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.Shrd(ShrdInstruction instruction, int arg)
-        {
-            _codeEmitter.Shrd(instruction.Operand0, instruction.Operand1, instruction.Operand2);
-        }
+		void CPUx86.IX86Visitor.Rcr(Context ctx)
+		{
+			_codeEmitter.Rcr(ctx.Operand1, ctx.Operand2);
+		}
 
-        #region Intrinsics
-        void IX86InstructionVisitor<int>.In(InInstruction instruction, int arg)
-        {
-            Operand src = instruction.Operand1;
-            Operand result = instruction.Results[0];
+		void CPUx86.IX86Visitor.Shrd(Context ctx)
+		{
+			_codeEmitter.Shrd(ctx.Operand1, ctx.Operand2, ctx.Operand3);
+		}
 
-            RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-            RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
-           
-            _codeEmitter.Mov(edx, src);
-            _codeEmitter.In(edx);
-            _codeEmitter.Mov(result, eax);
-        }
+		#region Intrinsics
 
-        void IX86InstructionVisitor<int>.Jns(JnsBranchInstruction instruction, int arg)
-        {
-            _codeEmitter.Jns(instruction.Label);
-        }
+		void CPUx86.IX86Visitor.In(Context ctx)
+		{
+			Operand src = ctx.Operand2;
+			Operand result = ctx.Result;
 
-        void IX86InstructionVisitor<int>.Iretd(IretdInstruction instruction, int arg)
-        {
-            _codeEmitter.Iretd();
-        }
+			RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+			RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
 
-        void IX86InstructionVisitor<int>.Lidt(LidtInstruction instruction, int arg)
-        {
-            _codeEmitter.Lidt(instruction.Operand0);
-        }
+			_codeEmitter.Mov(edx, src);
+			_codeEmitter.In(edx);
+			_codeEmitter.Mov(result, eax);
+		}
 
-        void IX86InstructionVisitor<int>.Lgdt(LgdtInstruction instruction, int arg)
-        {
-            _codeEmitter.Lgdt(instruction.Operand0);
-        }
+		void CPUx86.IX86Visitor.Jns(Context ctx)
+		{
+			_codeEmitter.Jns(instruction.Label);
+		}
 
-        void IX86InstructionVisitor<int>.Cli(CliInstruction instruction, int arg)
-        {
-            _codeEmitter.Cli();
-        }
+		void CPUx86.IX86Visitor.Iretd(Context ctx)
+		{
+			_codeEmitter.Iretd();
+		}
 
-        void IX86InstructionVisitor<int>.Cld(CldInstruction instruction, int arg)
-        {
-            _codeEmitter.Cld();
-        }
+		void CPUx86.IX86Visitor.Lidt(Context ctx)
+		{
+			_codeEmitter.Lidt(ctx.Operand1);
+		}
 
-        void IX86InstructionVisitor<int>.CmpXchg(CmpXchgInstruction instruction, int arg)
-        {
-            _codeEmitter.CmpXchg(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.Lgdt(Context ctx)
+		{
+			_codeEmitter.Lgdt(ctx.Operand1);
+		}
 
-        void IX86InstructionVisitor<int>.BochsDebug(BochsDebug instruction, int arg)
-        {
-            _codeEmitter.Xchg(new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EBX), new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EBX));
-        }
-        
-        void IX86InstructionVisitor<int>.CpuId(CpuIdInstruction instruction, int arg)
-        {
-        	  Operand function = instruction.Operand0;
-              Operand dst = instruction.Operand1;
-              instruction.SetResult(0, instruction.Operand1);
-              _codeEmitter.CpuId(instruction.Results[0], function);
-        }
+		void CPUx86.IX86Visitor.Cli(Context ctx)
+		{
+			_codeEmitter.Cli();
+		}
 
-        void IX86InstructionVisitor<int>.CpuIdEax(CpuIdEaxInstruction instruction, int arg)
-        {
-            RegisterOperand reg = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-            _codeEmitter.Xor(ecx, ecx);
-            _codeEmitter.CpuId(reg, instruction.Operand0);
-            _codeEmitter.Mov(instruction.Operand1, reg);
-        }
+		void CPUx86.IX86Visitor.Cld(Context ctx)
+		{
+			_codeEmitter.Cld();
+		}
 
-        void IX86InstructionVisitor<int>.CpuIdEbx(CpuIdEbxInstruction instruction, int arg)
-        {
-            RegisterOperand reg = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
-            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-            _codeEmitter.Xor(ecx, ecx);
-            _codeEmitter.CpuId(reg, instruction.Operand0);
-            _codeEmitter.Mov(instruction.Operand1, reg);
-        }
+		void CPUx86.IX86Visitor.CmpXchg(Context ctx)
+		{
+			_codeEmitter.CmpXchg(ctx.Operand1, ctx.Operand2);
+		}
 
-        void IX86InstructionVisitor<int>.CpuIdEcx(CpuIdEcxInstruction instruction, int arg)
-        {
-            RegisterOperand reg = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.ECX);
-            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-            _codeEmitter.Xor(ecx, ecx);
-            _codeEmitter.CpuId(reg, instruction.Operand0);
-            _codeEmitter.Mov(instruction.Operand1, reg);
-        }
+		void CPUx86.IX86Visitor.BochsDebug(Context ctx)
+		{
+			_codeEmitter.Xchg(new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EBX), new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EBX));
+		}
 
-        void IX86InstructionVisitor<int>.CpuIdEdx(CpuIdEdxInstruction instruction, int arg)
-        {
-            RegisterOperand reg = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
-            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-            _codeEmitter.Xor(ecx, ecx);
-            _codeEmitter.CpuId(reg, instruction.Operand0);
-            _codeEmitter.Mov(instruction.Operand1, reg);
-        }
-        
-        void IX86InstructionVisitor<int>.Cvtsi2sd(Cvtsi2sdInstruction instruction, int arg)
-        {
-            _codeEmitter.Cvtsi2sd(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.CpuId(Context ctx)
+		{
+			Operand function = ctx.Operand1;
+			Operand dst = ctx.Operand2;
+			instruction.SetResult(0, ctx.Operand2);
+			_codeEmitter.CpuId(ctx.Result, function);
+		}
 
-        void IX86InstructionVisitor<int>.Cvtsi2ss(Cvtsi2ssInstruction instruction, int arg)
-        {
-            _codeEmitter.Cvtsi2ss(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.CpuIdEax(Context ctx)
+		{
+			RegisterOperand reg = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+			_codeEmitter.Xor(ecx, ecx);
+			_codeEmitter.CpuId(reg, ctx.Operand1);
+			_codeEmitter.Mov(ctx.Operand2, reg);
+		}
 
-        void IX86InstructionVisitor<int>.Cvtss2sd(Cvtss2sdInstruction instruction, int arg)
-        {                
-            _codeEmitter.Cvtss2sd(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.CpuIdEbx(Context ctx)
+		{
+			RegisterOperand reg = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
+			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+			_codeEmitter.Xor(ecx, ecx);
+			_codeEmitter.CpuId(reg, ctx.Operand1);
+			_codeEmitter.Mov(ctx.Operand2, reg);
+		}
 
-        void IX86InstructionVisitor<int>.Cvtsd2ss(Cvtsd2ssInstruction instruction, int arg)
-        {
-            _codeEmitter.Cvtsd2ss(instruction.Operand0, instruction.Operand1);
-        }
+		void CPUx86.IX86Visitor.CpuIdEcx(Context ctx)
+		{
+			RegisterOperand reg = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.ECX);
+			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+			_codeEmitter.Xor(ecx, ecx);
+			_codeEmitter.CpuId(reg, ctx.Operand1);
+			_codeEmitter.Mov(ctx.Operand2, reg);
+		}
 
-        void IX86InstructionVisitor<int>.Hlt(HltInstruction instruction, int arg)
-        {
-            _codeEmitter.Hlt();
-        }
+		void CPUx86.IX86Visitor.CpuIdEdx(Context ctx)
+		{
+			RegisterOperand reg = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
+			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+			_codeEmitter.Xor(ecx, ecx);
+			_codeEmitter.CpuId(reg, ctx.Operand1);
+			_codeEmitter.Mov(ctx.Operand2, reg);
+		}
 
-		void IX86InstructionVisitor<int>.Nop(NopInstruction instruction, int arg)
+		void CPUx86.IX86Visitor.Cvtsi2sd(Context ctx)
+		{
+			_codeEmitter.Cvtsi2sd(ctx.Operand1, ctx.Operand2);
+		}
+
+		void CPUx86.IX86Visitor.Cvtsi2ss(Context ctx)
+		{
+			_codeEmitter.Cvtsi2ss(ctx.Operand1, ctx.Operand2);
+		}
+
+		void CPUx86.IX86Visitor.Cvtss2sd(Context ctx)
+		{
+			_codeEmitter.Cvtss2sd(ctx.Operand1, ctx.Operand2);
+		}
+
+		void CPUx86.IX86Visitor.Cvtsd2ss(Context ctx)
+		{
+			_codeEmitter.Cvtsd2ss(ctx.Operand1, ctx.Operand2);
+		}
+
+		void CPUx86.IX86Visitor.Hlt(Context ctx)
+		{
+			_codeEmitter.Hlt();
+		}
+
+		void CPUx86.IX86Visitor.Nop(Context ctx)
 		{
 			_codeEmitter.Nop();
 		}
 
-        void IX86InstructionVisitor<int>.Lock(LockIntruction instruction, int arg)
-        {
-            _codeEmitter.Lock();
-        }
-
-        void IX86InstructionVisitor<int>.Out(OutInstruction instruction, int arg)
-        {
-            Operand dst = instruction.Operand0;
-            Operand src = instruction.Operand1;
-
-            RegisterOperand eax = new RegisterOperand(src.Type, GeneralPurposeRegister.EAX);
-            RegisterOperand edx = new RegisterOperand(dst.Type, GeneralPurposeRegister.EDX);
-
-            _codeEmitter.Mov(eax, src);
-            _codeEmitter.Mov(edx, dst);
-            _codeEmitter.Out(edx, eax);
-        }
-
-        void IX86InstructionVisitor<int>.Pause(PauseInstruction instruction, int arg)
-        {
-            _codeEmitter.Pause();
-        }
-
-        void IX86InstructionVisitor<int>.Pop(Instructions.Intrinsics.PopInstruction instruction, int arg)
-        {
-            _codeEmitter.Pop(instruction.Operand0);
-        }
-
-        void IX86InstructionVisitor<int>.Popad(PopadInstruction instruction, int arg)
-        {
-            _codeEmitter.Popad();
-        }
-
-        void IX86InstructionVisitor<int>.Popfd(PopfdInstruction instruction, int arg)
-        {
-            _codeEmitter.Popfd();
-        }
-
-        void IX86InstructionVisitor<int>.Push(Instructions.Intrinsics.PushInstruction instruction, int arg)
-        {
-            _codeEmitter.Push(instruction.Operand0);
-        }
-
-        void IX86InstructionVisitor<int>.Pushad(PushadInstruction instruction, int arg)
-        {
-            _codeEmitter.Pushad();
-        }
-
-        void IX86InstructionVisitor<int>.Pushfd(PushfdInstruction instruction, int arg)
-        {
-            _codeEmitter.Pushfd();
-        }
-
-        void IX86InstructionVisitor<int>.Rdmsr(RdmsrInstruction instruction, int arg)
-        {
-            _codeEmitter.Rdmsr();
-        }
-
-        void IX86InstructionVisitor<int>.Rdtsc(RdtscInstruction instruction, int arg)
-        {
-            _codeEmitter.Rdtsc();
-        }
-
-        void IX86InstructionVisitor<int>.Rdpmc(RdpmcInstruction instruction, int arg)
-        {
-            _codeEmitter.Rdpmc();
-        }
-
-        void IX86InstructionVisitor<int>.Rep(RepInstruction instruction, int arg)
-        {
-            _codeEmitter.Rep();
-        }
-
-        void IX86InstructionVisitor<int>.Sti(StiInstruction instruction, int arg)
-        {
-            _codeEmitter.Sti();
-        }
-
-        void IX86InstructionVisitor<int>.Stosb(StosbInstruction instruction, int arg)
-        {
-            _codeEmitter.Stosb();
-        }
-
-        void IX86InstructionVisitor<int>.Stosd(StosdInstruction instruction, int arg)
-        {
-            _codeEmitter.Stosd();
-        }
-
-        void IX86InstructionVisitor<int>.Xchg(XchgInstruction instruction, int arg)
-        {
-            _codeEmitter.Xchg(instruction.Operand0, instruction.Operand1);
-        } 
-        #endregion
-
-        void IX86InstructionVisitor<int>.Int(IntInstruction instruction, int arg)
-        {
-            ConstantOperand co = instruction.Operand0 as ConstantOperand;
-            Debug.Assert(null != co, @"Int operand not constant!");
-
-            if (null == co)
-                throw new InvalidOperationException(@"Int operand not constant.");
-
-            byte value = Convert.ToByte(co.Value);
-            switch (value)
-            {
-                case 3: _codeEmitter.Int3(); break;
-                case 4: _codeEmitter.IntO(); break;
-                default: _codeEmitter.Int(value); break;
-            }
-        }
-
-        void IX86InstructionVisitor<int>.Invlpg(InvlpgInstruction instruction, int ctx)
-        {
-            _codeEmitter.Invlpg(instruction.Operand0);
-        }
-
-        void IX86InstructionVisitor<int>.Dec(DecInstruction instruction, int arg)
-        {
-            _codeEmitter.Dec(instruction.Operand0);
-        }
-
-        void IX86InstructionVisitor<int>.Inc(IncInstruction instruction, int arg)
-        {
-            _codeEmitter.Inc(instruction.Operand0);
-        }
-
-        void IX86InstructionVisitor<int>.Neg(NegInstruction instruction, int arg)
-        {
-            _codeEmitter.Neg(instruction.Operand0);
-        }
-
-        void IX86InstructionVisitor<int>.Comisd(ComisdInstruction instruction, int arg)
-        {
-            _codeEmitter.Comisd(instruction.Operand0, instruction.Operand1);
-        }
-
-        void IX86InstructionVisitor<int>.Comiss(ComissInstruction instruction, int arg)
-        {
-            _codeEmitter.Comiss(instruction.Operand0, instruction.Operand1);
-        }
-
-        void IX86InstructionVisitor<int>.Ucomisd(UcomisdInstruction instruction, int arg)
-        {
-            _codeEmitter.Ucomisd(instruction.Operand0, instruction.Operand1);
-        }
-
-        void IX86InstructionVisitor<int>.Ucomiss(UcomissInstruction instruction, int arg)
-        {
-            _codeEmitter.Ucomiss(instruction.Operand0, instruction.Operand1);
-        }
-        #endregion
-
-        #region IILVisitor Members
-        void IL.IILVisitor<int>.Nop(IL.NopInstruction instruction, int arg)
-        {
-            _codeEmitter.Nop();
-        }
-
-        void IL.IILVisitor<int>.Break(IL.BreakInstruction instruction, int arg)
-        {
-            _codeEmitter.Int3();
-        }
-
-        void IL.IILVisitor<int>.Ldarg(IL.LdargInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Ldarga(IL.LdargaInstruction instruction, int arg)
-        {
-            _codeEmitter.Mov(instruction.Results[0], new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EBP));
-            _codeEmitter.Add(instruction.Results[0], new ConstantOperand(new SigType(CilElementType.Ptr), instruction.Offset));
-        }
-
-        void IL.IILVisitor<int>.Ldloc(IL.LdlocInstruction instruction, int arg)
-        {
-        }
-
-        void IL.IILVisitor<int>.Ldloca(IL.LdlocaInstruction instruction, int arg)
-        {
-            _codeEmitter.Mov(instruction.Results[0], new RegisterOperand(instruction.Results[0].Type, GeneralPurposeRegister.EBP));
-            _codeEmitter.Add(instruction.Results[0], new ConstantOperand(instruction.Results[0].Type, instruction.Offset));
-        }
-
-        void IL.IILVisitor<int>.Ldc(IL.LdcInstruction instruction, int arg)
-        {
-        }
-
-        void IL.IILVisitor<int>.Ldobj(IL.LdobjInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Ldstr(IL.LdstrInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Ldfld(IL.LdfldInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Ldflda(IL.LdfldaInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Ldsfld(IL.LdsfldInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Ldsflda(IL.LdsfldaInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Ldftn(IL.LdftnInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Ldvirtftn(IL.LdvirtftnInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Ldtoken(IL.LdtokenInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Stloc(IL.StlocInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Starg(IL.StargInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Stobj(IL.StobjInstruction instruction, int arg)
-        {
-        }
-
-        void IL.IILVisitor<int>.Stfld(IL.StfldInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Stsfld(IL.StsfldInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Dup(IL.DupInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Pop(IL.PopInstruction instruction, int arg)
-        {
-        }
-
-        void IL.IILVisitor<int>.Jmp(IL.JumpInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Call(IL.CallInstruction instruction, int arg)
-        {
-            // Move the this pointer to the right place, if this is an object instance
-            RuntimeMethod method = instruction.InvokeTarget;
-            if (true == method.Signature.HasThis)
-                _codeEmitter.Mov(new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.Object), GeneralPurposeRegister.ECX), instruction.ThisReference);
-            
-            /*
-             * HINT: Microsoft seems not to use vtables/itables in .NET v2/v3/v3.5 anymore. They allocate
-             * trampolines for virtual calls and rewrite them without indirect lookups if the object type
-             * changes. This way they don't perform indirect lookups and the performance is drastically
-             * improved.
-             * 
-             */
-
-            // Do we need to emit a call with vtable lookup?
-            Debug.Assert(MethodAttributes.Virtual != (MethodAttributes.Virtual & method.Attributes), @"call to a virtual function?");
-
-            // A static call to the right address :)
-            _codeEmitter.Call(method);
-        }
-
-        void IL.IILVisitor<int>.Calli(IL.CalliInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Ret(IL.ReturnInstruction instruction, int arg)
-        {
-            bool eax = false;
-
-            if (0 != instruction.Operands.Length && null != instruction.Operands[0])
-            {
-                Operand retval = instruction.Operands[0];
-                if (true == retval.IsRegister)
-                {
-                    // Do not move, if return value is already in EAX
-                    RegisterOperand rop = (RegisterOperand)retval;
-                    if (true == System.Object.ReferenceEquals(rop.Register, GeneralPurposeRegister.EAX))
-                        eax = true;
-                }
-
-                if (false == eax)
-                    _codeEmitter.Mov(new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX), retval);
-            }
-        }
-
-        void IL.IILVisitor<int>.Branch(IL.BranchInstruction instruction, int arg)
-        {
-            _codeEmitter.Jmp(instruction.BranchTargets[0]);
-        }
-
-        void IL.IILVisitor<int>.UnaryBranch(IL.UnaryBranchInstruction instruction, int arg)
-        {
-            SigType I4 = new SigType(CilElementType.I4);
-            _codeEmitter.Cmp(new RegisterOperand(I4, GeneralPurposeRegister.EAX), new ConstantOperand(I4, 0));
-
-            if (instruction.Code == IL.OpCode.Brtrue || instruction.Code == IL.OpCode.Brtrue_s)
-            {
-                _codeEmitter.Jne(instruction.BranchTargets[0]);
-                _codeEmitter.Je(instruction.BranchTargets[1]);
-            }
-            else
-            {
-                _codeEmitter.Jne(instruction.BranchTargets[1]);
-                _codeEmitter.Je(instruction.BranchTargets[0]);
-            }
-        }
-
-        void IL.IILVisitor<int>.BinaryBranch(IL.BinaryBranchInstruction instruction, int arg)
-        {
-            bool swap = instruction.First is ConstantOperand;
-            int[] targets = instruction.BranchTargets;
-            if (true == swap)
-            {
-                int tmp = targets[0];
-                targets[0] = targets[1];
-                targets[1] = tmp;
-
-                _codeEmitter.Cmp(instruction.Second, instruction.First);
-                switch (instruction.Code)
-                {
-                    // Signed
-                    case IL.OpCode.Beq_s: _codeEmitter.Jne(targets[0]); break;
-                    case IL.OpCode.Bge_s: _codeEmitter.Jl(targets[0]); break;
-                    case IL.OpCode.Bgt_s: _codeEmitter.Jle(targets[0]); break;
-                    case IL.OpCode.Ble_s: _codeEmitter.Jg(targets[0]); break;
-                    case IL.OpCode.Blt_s: _codeEmitter.Jge(targets[0]); break;
-
-                    // Unsigned
-                    case IL.OpCode.Bne_un_s: _codeEmitter.Je(targets[0]); break;
-                    case IL.OpCode.Bge_un_s: _codeEmitter.Jb(targets[0]); break;
-                    case IL.OpCode.Bgt_un_s: _codeEmitter.Jbe(targets[0]); break;
-                    case IL.OpCode.Ble_un_s: _codeEmitter.Ja(targets[0]); break;
-                    case IL.OpCode.Blt_un_s: _codeEmitter.Jae(targets[0]); break;
-
-                    // Long form signed
-                    case IL.OpCode.Beq: goto case IL.OpCode.Beq_s;
-                    case IL.OpCode.Bge: goto case IL.OpCode.Bge_s;
-                    case IL.OpCode.Bgt: goto case IL.OpCode.Bgt_s;
-                    case IL.OpCode.Ble: goto case IL.OpCode.Ble_s;
-                    case IL.OpCode.Blt: goto case IL.OpCode.Blt_s;
-
-                    // Long form unsigned
-                    case IL.OpCode.Bne_un: goto case IL.OpCode.Bne_un_s;
-                    case IL.OpCode.Bge_un: goto case IL.OpCode.Bge_un_s;
-                    case IL.OpCode.Bgt_un: goto case IL.OpCode.Bgt_un_s;
-                    case IL.OpCode.Ble_un: goto case IL.OpCode.Ble_un_s;
-                    case IL.OpCode.Blt_un: goto case IL.OpCode.Blt_un_s;
-
-                    default:
-                        throw new NotImplementedException();
-                }
-            }
-            else
-            {
-                _codeEmitter.Cmp(instruction.First, instruction.Second);
-                switch (instruction.Code)
-                {
-                    // Signed
-                    case IL.OpCode.Beq_s: _codeEmitter.Je(targets[0]); break;
-                    case IL.OpCode.Bge_s: _codeEmitter.Jge(targets[0]); break;
-                    case IL.OpCode.Bgt_s: _codeEmitter.Jg(targets[0]); break;
-                    case IL.OpCode.Ble_s: _codeEmitter.Jle(targets[0]); break;
-                    case IL.OpCode.Blt_s: _codeEmitter.Jl(targets[0]); break;
-
-                    // Unsigned
-                    case IL.OpCode.Bne_un_s: _codeEmitter.Jne(targets[0]); break;
-                    case IL.OpCode.Bge_un_s: _codeEmitter.Jae(targets[0]); break;
-                    case IL.OpCode.Bgt_un_s: _codeEmitter.Ja(targets[0]); break;
-                    case IL.OpCode.Ble_un_s: _codeEmitter.Jbe(targets[0]); break;
-                    case IL.OpCode.Blt_un_s: _codeEmitter.Jb(targets[0]); break;
-
-                    // Long form signed
-                    case IL.OpCode.Beq: goto case IL.OpCode.Beq_s;
-                    case IL.OpCode.Bge: goto case IL.OpCode.Bge_s;
-                    case IL.OpCode.Bgt: goto case IL.OpCode.Bgt_s;
-                    case IL.OpCode.Ble: goto case IL.OpCode.Ble_s;
-                    case IL.OpCode.Blt: goto case IL.OpCode.Blt_s;
-
-                    // Long form unsigned
-                    case IL.OpCode.Bne_un: goto case IL.OpCode.Bne_un_s;
-                    case IL.OpCode.Bge_un: goto case IL.OpCode.Bge_un_s;
-                    case IL.OpCode.Bgt_un: goto case IL.OpCode.Bgt_un_s;
-                    case IL.OpCode.Ble_un: goto case IL.OpCode.Ble_un_s;
-                    case IL.OpCode.Blt_un: goto case IL.OpCode.Blt_un_s;
-
-                    default:
-                        throw new NotImplementedException();
-                }
-            }
-
-            // Emit a regular jump for the second case
-            _codeEmitter.Jmp(targets[1]);
-        }
-
-        void IL.IILVisitor<int>.Switch(IL.SwitchInstruction instruction, int arg)
-        {
-            for (int i = 0; i < instruction.BranchTargets.Length - 1; i++)
-            {
-                _codeEmitter.Cmp(instruction.Operands[0], new ConstantOperand(new SigType(CilElementType.I), i));
-                _codeEmitter.Je(instruction.BranchTargets[i]);
-            }
-			_codeEmitter.Jmp(instruction.BranchTargets[instruction.BranchTargets.Length - 1]);
-        }
-
-        void IL.IILVisitor<int>.Add(IL.AddInstruction instruction, int arg)
-        {
-            ThrowThreeAddressCodeNotSupportedException();
-        }
-
-        void IL.IILVisitor<int>.Div(IL.DivInstruction instruction, int arg)
-        {
-            ThrowThreeAddressCodeNotSupportedException();
-        }
-
-        void IL.IILVisitor<int>.Mul(IL.MulInstruction instruction, int arg)
-        {
-            ThrowThreeAddressCodeNotSupportedException();
-        }
-
-        void IL.IILVisitor<int>.Rem(IL.RemInstruction instruction, int arg)
-        {
-            ThrowThreeAddressCodeNotSupportedException();
-        }
-
-        void IL.IILVisitor<int>.Sub(IL.SubInstruction instruction, int arg)
-        {
-            ThrowThreeAddressCodeNotSupportedException();
-        }
-
-        void IL.IILVisitor<int>.BinaryLogic(IL.BinaryLogicInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Shift(IL.ShiftInstruction instruction, int arg)
-        {
-            ThrowThreeAddressCodeNotSupportedException();
-        }
-
-        void IL.IILVisitor<int>.Neg(IL.NegInstruction instruction, int arg)
-        {
-            ThrowThreeAddressCodeNotSupportedException();
-        }
-
-        void IL.IILVisitor<int>.Not(IL.NotInstruction instruction, int arg)
-        {
-            ThrowThreeAddressCodeNotSupportedException();
-        }
-
-        void IL.IILVisitor<int>.Conversion(IL.ConversionInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Callvirt(IL.CallvirtInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Cpobj(IL.CpobjInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Newobj(IL.NewobjInstruction instruction, int arg)
-        {
-            UnsupportedInstruction();
-        }
-
-        void IL.IILVisitor<int>.Castclass(IL.CastclassInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Isinst(IL.IsInstInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Unbox(IL.UnboxInstruction instruction, int arg)
-        {
-            UnsupportedInstruction();
-        }
-
-        void IL.IILVisitor<int>.Throw(IL.ThrowInstruction instruction, int arg)
-        {
-            UnsupportedInstruction();
-        }
-
-        void IL.IILVisitor<int>.Box(IL.BoxInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Newarr(IL.NewarrInstruction instruction, int arg)
-        {
-            UnsupportedInstruction();
-        }
-
-        void IL.IILVisitor<int>.Ldlen(IL.LdlenInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Ldelema(IL.LdelemaInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Ldelem(IL.LdelemInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Stelem(IL.StelemInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.UnboxAny(IL.UnboxAnyInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Refanyval(IL.RefanyvalInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.UnaryArithmetic(IL.UnaryArithmeticInstruction instruction, int arg)
-        {
-            //throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Mkrefany(IL.MkrefanyInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.ArithmeticOverflow(IL.ArithmeticOverflowInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Endfinally(IL.EndfinallyInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Leave(IL.LeaveInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Arglist(IL.ArglistInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.BinaryComparison(IL.BinaryComparisonInstruction instruction, int arg)
-        {
-            throw new NotSupportedException();
-        }
-
-        void IL.IILVisitor<int>.Localalloc(IL.LocalallocInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Endfilter(IL.EndfilterInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.InitObj(IL.InitObjInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Cpblk(IL.CpblkInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Initblk(IL.InitblkInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Prefix(IL.PrefixInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Rethrow(IL.RethrowInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Sizeof(IL.SizeofInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IL.IILVisitor<int>.Refanytype(IL.RefanytypeInstruction instruction, int arg)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion // IILVisitor Members
-
-        #region Internal Helpers
-        private void UnsupportedInstruction()
-        {
-            throw new NotSupportedException(@"Instruction can not be emitted and requires appropriate expansion and runtime support.");
-        }
-
-        /// <summary>
-        /// Throws an exception, which notifies the user that a three-address code instruction is not supported.
-        /// </summary>
-        private void ThrowThreeAddressCodeNotSupportedException()
-        {
-            throw new NotSupportedException(@"x86 doesn't support this three-address code instruction - did you miss IRToX86TransformationStage?");
-        }
-
-        #endregion // Internal Helpers
-
-        #region IIRVisitor Members
-        void IR.IIRVisitor<int>.Visit(IR.AddressOfInstruction instruction, int arg)
-        {
-            Debug.Assert(instruction.Operand0 is RegisterOperand);
-            Debug.Assert(instruction.Operand1 is MemoryOperand);
-            _codeEmitter.Lea(instruction.Operand0, instruction.Operand1);
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.ArithmeticShiftRightInstruction instruction, int arg)
-        {
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.BranchInstruction instruction, int arg)
-        {
-            switch (instruction.ConditionCode)
-            {
-                case IR.ConditionCode.Equal:
-                    _codeEmitter.Je(instruction.Label);
-                    break;
-
-                case IR.ConditionCode.GreaterOrEqual:
-                    _codeEmitter.Jge(instruction.Label);
-                    break;
-
-                case IR.ConditionCode.GreaterThan:
-                    _codeEmitter.Jg(instruction.Label);
-                    break;
-
-                case IR.ConditionCode.LessOrEqual:
-                    _codeEmitter.Jle(instruction.Label);
-                    break;
-
-                case IR.ConditionCode.LessThan:
-                    _codeEmitter.Jl(instruction.Label);
-                    break;
-
-                case IR.ConditionCode.NotEqual:
-                    _codeEmitter.Jne(instruction.Label);
-                    break;
-
-                case IR.ConditionCode.UnsignedGreaterOrEqual:
-                    _codeEmitter.Jae(instruction.Label);
-                    break;
-
-                case IR.ConditionCode.UnsignedGreaterThan:
-                    _codeEmitter.Ja(instruction.Label);
-                    break;
-
-                case IR.ConditionCode.UnsignedLessOrEqual:
-                    _codeEmitter.Jbe(instruction.Label);
-                    break;
-
-                case IR.ConditionCode.UnsignedLessThan:
-                    _codeEmitter.Jb(instruction.Label);
-                    break;
-
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.CallInstruction instruction, int arg)
-        {
-            _codeEmitter.Call(instruction.Method);
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.EpilogueInstruction instruction, int arg)
-        {
-            throw new NotSupportedException();
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.FloatingPointCompareInstruction instruction, int arg)
-        {
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.FloatingPointToIntegerConversionInstruction instruction, int arg)
-        {
-            Operand source = instruction.Operand1;
-            Operand destination = instruction.Operand0;
-            switch (destination.Type.Type)
-            {
-                case CilElementType.I1: goto case CilElementType.I4;
-                case CilElementType.I2: goto case CilElementType.I4;
-                case CilElementType.I4:
-                    if (source.Type.Type == CilElementType.R8)
-                        _codeEmitter.Cvttsd2si(destination, source);
-                    else
-                        _codeEmitter.Cvttss2si(destination, source);
-                    break;
-
-                case CilElementType.I8:
-                    throw new NotSupportedException();
-
-                case CilElementType.U1: goto case CilElementType.U4;
-                case CilElementType.U2: goto case CilElementType.U4;
-                case CilElementType.U4:
-                    throw new NotSupportedException();
-
-                case CilElementType.U8:
-                    throw new NotSupportedException();
-
-                case CilElementType.I:
-                    goto case CilElementType.I4;
-
-                case CilElementType.U:
-                    goto case CilElementType.U4;
-            }
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.IntegerCompareInstruction instruction, int arg)
-        {
-            Operand resultOperand = instruction.Operand0;
-
-            _codeEmitter.Cmp(instruction.Operand1, instruction.Operand2);
-
-            if (X86.IsUnsigned(instruction.Operand1) || X86.IsUnsigned(instruction.Operand2))
-                _codeEmitter.Setcc(resultOperand, GetUnsignedConditionCode(instruction.ConditionCode));
-            else
-                _codeEmitter.Setcc(resultOperand, instruction.ConditionCode);
-
-            ExtendResultTo32Bits(resultOperand);
-        }
-
-        void ExtendResultTo32Bits(Operand resultOperand)
-        {
-            if (resultOperand is RegisterOperand)
-            {
-                RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)resultOperand).Register);
-                _codeEmitter.Movzx(rop, rop);
-            }
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.IntegerToFloatingPointConversionInstruction instruction, int arg)
-        {
-            Operand source = instruction.Operand1;
-            Operand destination = instruction.Operand0;
-            switch (source.Type.Type)
-            {
-                case CilElementType.I1: goto case CilElementType.I4;
-                case CilElementType.I2: goto case CilElementType.I4;
-                case CilElementType.I4:
-                    if (destination.Type.Type == CilElementType.R8)
-                        _codeEmitter.Cvtsi2sd(destination, source);
-                    else
-                        _codeEmitter.Cvtsi2ss(destination, source);
-                    break;
-
-                case CilElementType.I8:
-                    throw new NotSupportedException();
-
-                case CilElementType.U1: goto case CilElementType.U4;
-                case CilElementType.U2: goto case CilElementType.U4;
-                case CilElementType.U4:
-                    throw new NotSupportedException();
-
-                case CilElementType.U8:
-                    throw new NotSupportedException();
-
-                case CilElementType.I:
-                    goto case CilElementType.I4;
-
-                case CilElementType.U:
-                    goto case CilElementType.U4;
-            }
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.JmpInstruction instruction, int arg)
-        {
-            _codeEmitter.Jmp(instruction.Label);
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.LiteralInstruction instruction, int arg)
-        {
-            _codeEmitter.Literal(instruction.Label, instruction.Type, instruction.Data);
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.LoadInstruction instruction, int arg)
-        {
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.LogicalAndInstruction instruction, int arg)
-        {
-            _codeEmitter.And(instruction.Operand0, instruction.Operand2);
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.LogicalOrInstruction instruction, int arg)
-        {
-            _codeEmitter.Or(instruction.Operand0, instruction.Operand2);
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.LogicalXorInstruction instruction, int arg)
-        {
-            _codeEmitter.Xor(instruction.Operand0, instruction.Operand2);
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.LogicalNotInstruction instruction, int arg)
-        {
-            Operand dest = instruction.Operand0;
-            if (dest.Type.Type == CilElementType.U1)
-                _codeEmitter.Xor(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFF));
-            else if (dest.Type.Type == CilElementType.U2)
-                _codeEmitter.Xor(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFFFF));
-            else
-                _codeEmitter.Not(instruction.Operand0);
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.MoveInstruction instruction, int arg)
-        {
-            Operand dst = instruction.Results[0], src = instruction.Operands[0];
-
-            // FIXME: This should actually be expanded somewhere else
-            if (src is LabelOperand && dst is MemoryOperand)
-            {
-                switch (src.Type.Type)
-                {
-                    case CilElementType.R4:
-                        {
-                            Operand tmp = new RegisterOperand(src.Type, SSE2Register.XMM0);
-                            _codeEmitter.Movss(tmp, src);
-                            _codeEmitter.Movss(dst, tmp);
-                        }
-                        break;
-
-                    case CilElementType.R8:
-                        {
-                            Operand tmp = new RegisterOperand(src.Type, SSE2Register.XMM0);
-                            _codeEmitter.Movsd(tmp, src);
-                            _codeEmitter.Movsd(dst, tmp);
-                        }
-                        break;
-
-                    default:
-                        throw new NotSupportedException();
-                }
-            }
-            else if (src.Type.Type == CilElementType.R4 && dst.Type.Type == CilElementType.R4)
-            {
-                _codeEmitter.Movss(dst, src);
-            }
-            else if (src.Type.Type == CilElementType.R4 && dst.Type.Type == CilElementType.R8)
-            {
-                _codeEmitter.Cvtss2sd(dst, src);
-            }
-            else if (src.Type.Type == CilElementType.R8 && dst.Type.Type == CilElementType.R4)
-            {
-                _codeEmitter.Cvtsd2ss(dst, src);
-            }
-            else if (dst.Type.Type == CilElementType.R8 && src.Type.Type == CilElementType.R8)
-            {
-                _codeEmitter.Movsd(dst, src);
-            }
-            else
-            {
-                _codeEmitter.Mov(dst, src);
-            }
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.PhiInstruction instruction, int arg)
-        {
-            throw new NotSupportedException(@"PHI functions should've been removed by the LeaveSSA stage.");
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.PopInstruction instruction, int arg)
-        {
-            _codeEmitter.Pop(instruction.Destination);
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.PrologueInstruction instruction, int arg)
-        {
-            throw new NotSupportedException();
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.PushInstruction instruction, int arg)
-        {
-            _codeEmitter.Push(instruction.Source);
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.ReturnInstruction instruction, int arg)
-        {
-            _codeEmitter.Ret();
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.ShiftLeftInstruction instruction, int arg)
-        {
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.ShiftRightInstruction instruction, int arg)
-        {
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.SignExtendedMoveInstruction instruction, int arg)
-        {
-            switch (instruction.Operand0.Type.Type)
-            {
-                case CilElementType.I1:
-                    _codeEmitter.Movsx(instruction.Operand0, instruction.Operand1);
-                    break;
-
-                case CilElementType.I2: goto case CilElementType.I1;
-
-                case CilElementType.I4: goto case CilElementType.I1;
-
-                case CilElementType.I8:
-                    _codeEmitter.Mov(instruction.Operand0, instruction.Operand1);
-                    break;
-
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.StoreInstruction instruction, int arg)
-        {
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.UDivInstruction instruction, int arg)
-        {
-            RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
-            _codeEmitter.Xor(edx, edx);
-            _codeEmitter.Div(instruction.Operand0, instruction.Operand1);
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.URemInstruction instruction, int arg)
-        {
-        }
-
-        void IR.IIRVisitor<int>.Visit(IR.ZeroExtendedMoveInstruction instruction, int arg)
-        {
-            switch (instruction.Operand0.Type.Type)
-            {
-                case CilElementType.I1:
-                    _codeEmitter.Movzx(instruction.Operand0, instruction.Operand1);
-                    break;
-
-                case CilElementType.I2: goto case CilElementType.I1;
-
-                case CilElementType.I4: goto case CilElementType.I1;
-
-                case CilElementType.I8:
-                    throw new NotSupportedException();
-
-                case CilElementType.U1: goto case CilElementType.I1;
-                case CilElementType.U2: goto case CilElementType.I1;
-                case CilElementType.U4: goto case CilElementType.I1;
-                case CilElementType.U8: goto case CilElementType.I8;
-                case CilElementType.Char: goto case CilElementType.I2;
-
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-        #endregion // IIRVisitor Members
-
-        /// <summary>
-        /// Gets the unsigned condition code.
-        /// </summary>
-        /// <param name="conditionCode">The condition code to get an unsigned form from.</param>
-        /// <returns>The unsigned form of the given condition code.</returns>
-        private IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
-        {
-            IR.ConditionCode cc = conditionCode;
-            switch (conditionCode)
-            {
-                case IR.ConditionCode.Equal: break;
-                case IR.ConditionCode.NotEqual: break;
-                case IR.ConditionCode.GreaterOrEqual: cc = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-                case IR.ConditionCode.GreaterThan: cc = IR.ConditionCode.UnsignedGreaterThan; break;
-                case IR.ConditionCode.LessOrEqual: cc = IR.ConditionCode.UnsignedLessOrEqual; break;
-                case IR.ConditionCode.LessThan: cc = IR.ConditionCode.UnsignedLessThan; break;
-                case IR.ConditionCode.UnsignedGreaterOrEqual: break;
-                case IR.ConditionCode.UnsignedGreaterThan: break;
-                case IR.ConditionCode.UnsignedLessOrEqual: break;
-                case IR.ConditionCode.UnsignedLessThan: break;
-                default:
-                    throw new NotSupportedException();
-            }
-            return cc;
-        }
-    }
+		void CPUx86.IX86Visitor.Lock(Context ctx)
+		{
+			_codeEmitter.Lock();
+		}
+
+		void CPUx86.IX86Visitor.Out(Context ctx)
+		{
+			Operand dst = ctx.Operand1;
+			Operand src = ctx.Operand2;
+
+			RegisterOperand eax = new RegisterOperand(src.Type, GeneralPurposeRegister.EAX);
+			RegisterOperand edx = new RegisterOperand(dst.Type, GeneralPurposeRegister.EDX);
+
+			_codeEmitter.Mov(eax, src);
+			_codeEmitter.Mov(edx, dst);
+			_codeEmitter.Out(edx, eax);
+		}
+
+		void CPUx86.IX86Visitor.Pause(Context ctx)
+		{
+			_codeEmitter.Pause();
+		}
+
+		void CPUx86.IX86Visitor.Pop(Context ctx)
+		{
+			_codeEmitter.Pop(ctx.Operand1);
+		}
+
+		void CPUx86.IX86Visitor.Popad(Context ctx)
+		{
+			_codeEmitter.Popad();
+		}
+
+		void CPUx86.IX86Visitor.Popfd(Context ctx)
+		{
+			_codeEmitter.Popfd();
+		}
+
+		void CPUx86.IX86Visitor.Push(Context ctx)
+		{
+			_codeEmitter.Push(ctx.Operand1);
+		}
+
+		void CPUx86.IX86Visitor.Pushad(Context ctx)
+		{
+			_codeEmitter.Pushad();
+		}
+
+		void CPUx86.IX86Visitor.Pushfd(Context ctx)
+		{
+			_codeEmitter.Pushfd();
+		}
+
+		void CPUx86.IX86Visitor.Rdmsr(Context ctx)
+		{
+			_codeEmitter.Rdmsr();
+		}
+
+		void CPUx86.IX86Visitor.Rdtsc(Context ctx)
+		{
+			_codeEmitter.Rdtsc();
+		}
+
+		void CPUx86.IX86Visitor.Rdpmc(Context ctx)
+		{
+			_codeEmitter.Rdpmc();
+		}
+
+		void CPUx86.IX86Visitor.Rep(Context ctx)
+		{
+			_codeEmitter.Rep();
+		}
+
+		void CPUx86.IX86Visitor.Sti(Context ctx)
+		{
+			_codeEmitter.Sti();
+		}
+
+		void CPUx86.IX86Visitor.Stosb(Context ctx)
+		{
+			_codeEmitter.Stosb();
+		}
+
+		void CPUx86.IX86Visitor.Stosd(Context ctx)
+		{
+			_codeEmitter.Stosd();
+		}
+
+		void CPUx86.IX86Visitor.Xchg(Context ctx)
+		{
+			_codeEmitter.Xchg(ctx.Operand1, ctx.Operand2);
+		}
+
+		#endregion
+
+		void CPUx86.IX86Visitor.Int(Context ctx)
+		{
+			ConstantOperand co = ctx.Operand1 as ConstantOperand;
+			Debug.Assert(null != co, @"Int operand not constant!");
+
+			if (null == co)
+				throw new InvalidOperationException(@"Int operand not constant.");
+
+			byte value = Convert.ToByte(co.Value);
+			switch (value) {
+				case 3: _codeEmitter.Int3(); break;
+				case 4: _codeEmitter.IntO(); break;
+				default: _codeEmitter.Int(value); break;
+			}
+		}
+
+		void CPUx86.IX86Visitor.Invlpg(Context ctx)
+		{
+			_codeEmitter.Invlpg(ctx.Operand1);
+		}
+
+		void CPUx86.IX86Visitor.Dec(Context ctx)
+		{
+			_codeEmitter.Dec(ctx.Operand1);
+		}
+
+		void CPUx86.IX86Visitor.Inc(Context ctx)
+		{
+			_codeEmitter.Inc(ctx.Operand1);
+		}
+
+		void CPUx86.IX86Visitor.Neg(Context ctx)
+		{
+			_codeEmitter.Neg(ctx.Operand1);
+		}
+
+		void CPUx86.IX86Visitor.Comisd(Context ctx)
+		{
+			_codeEmitter.Comisd(ctx.Operand1, ctx.Operand2);
+		}
+
+		void CPUx86.IX86Visitor.Comiss(Context ctx)
+		{
+			_codeEmitter.Comiss(ctx.Operand1, ctx.Operand2);
+		}
+
+		void CPUx86.IX86Visitor.Ucomisd(Context ctx)
+		{
+			_codeEmitter.Ucomisd(ctx.Operand1, ctx.Operand2);
+		}
+
+		void CPUx86.IX86Visitor.Ucomiss(Context ctx)
+		{
+			_codeEmitter.Ucomiss(ctx.Operand1, ctx.Operand2);
+		}
+
+		#endregion IX86Visitor
+
+		#region CILVisitor
+
+		void CIL.ICILVisitor.Nop(Context ctx)
+		{
+			_codeEmitter.Nop();
+		}
+
+		void CIL.ICILVisitor.Break(Context ctx)
+		{
+			_codeEmitter.Int3();
+		}
+
+		void CIL.ICILVisitor.Ldarg(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Ldarga(Context ctx)
+		{
+			_codeEmitter.Mov(ctx.Result, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EBP));
+			_codeEmitter.Add(ctx.Result, new ConstantOperand(new SigType(CilElementType.Ptr), ctx.Offset));
+		}
+
+		void CIL.ICILVisitor.Ldloc(Context ctx)
+		{
+		}
+
+		void CIL.ICILVisitor.Ldloca(Context ctx)
+		{
+			_codeEmitter.Mov(ctx.Result, new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EBP));
+			_codeEmitter.Add(ctx.Result, new ConstantOperand(ctx.Result.Type, ctx.Offset));
+		}
+
+		void CIL.ICILVisitor.Ldc(Context ctx)
+		{
+		}
+
+		void CIL.ICILVisitor.Ldobj(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Ldstr(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Ldfld(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Ldflda(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Ldsfld(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Ldsflda(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Ldftn(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Ldvirtftn(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Ldtoken(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Stloc(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Starg(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Stobj(Context ctx)
+		{
+		}
+
+		void CIL.ICILVisitor.Stfld(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Stsfld(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Dup(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Pop(Context ctx)
+		{
+		}
+
+		void CIL.ICILVisitor.Jmp(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Call(Context ctx)
+		{
+			// Move the this pointer to the right place, if this is an object instance
+			RuntimeMethod method = ctx.InvokeTarget;
+			if (true == method.Signature.HasThis)
+				_codeEmitter.Mov(new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.Object), GeneralPurposeRegister.ECX), instruction.ThisReference);
+
+			/*
+			 * HINT: Microsoft seems not to use vtables/itables in .NET v2/v3/v3.5 anymore. They allocate
+			 * trampolines for virtual calls and rewrite them without indirect lookups if the object type
+			 * changes. This way they don't perform indirect lookups and the performance is drastically
+			 * improved.
+			 * 
+			 */
+
+			// Do we need to emit a call with vtable lookup?
+			Debug.Assert(MethodAttributes.Virtual != (MethodAttributes.Virtual & method.Attributes), @"call to a virtual function?");
+
+			// A static call to the right address :)
+			_codeEmitter.Call(method);
+		}
+
+		void CIL.ICILVisitor.Calli(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Ret(Context ctx)
+		{
+			bool eax = false;
+
+			if (0 != instruction.Operands.Length && null != ctx.Operand1) {
+				Operand retval = ctx.Operand1;
+				if (true == retval.IsRegister) {
+					// Do not move, if return value is already in EAX
+					RegisterOperand rop = (RegisterOperand)retval;
+					if (true == System.Object.ReferenceEquals(rop.Register, GeneralPurposeRegister.EAX))
+						eax = true;
+				}
+
+				if (false == eax)
+					_codeEmitter.Mov(new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX), retval);
+			}
+		}
+
+		void CIL.ICILVisitor.Branch(Context ctx)
+		{
+			_codeEmitter.Jmp(ctx.Branch.Targets[0]);
+		}
+
+		void CIL.ICILVisitor.UnaryBranch(Context ctx)
+		{
+			SigType I4 = new SigType(CilElementType.I4);
+			_codeEmitter.Cmp(new RegisterOperand(I4, GeneralPurposeRegister.EAX), new ConstantOperand(I4, 0));
+
+			if (instruction.Code == CIL.OpCode.Brtrue || instruction.Code == CIL.OpCode.Brtrue_s) {
+				_codeEmitter.Jne(ctx.Branch.Targets[0]);
+				_codeEmitter.Je(ctx.Branch.Targets[1]);
+			}
+			else {
+				_codeEmitter.Jne(ctx.Branch.Targets[1]);
+				_codeEmitter.Je(ctx.Branch.Targets[0]);
+			}
+		}
+
+		void CIL.ICILVisitor.BinaryBranch(Context ctx)
+		{
+			bool swap = ctx.Operand1 is ConstantOperand;
+			int[] targets = ctx.Branch.Targets;
+			if (true == swap) {
+				int tmp = targets[0];
+				targets[0] = targets[1];
+				targets[1] = tmp;
+
+				_codeEmitter.Cmp(ctx.Operand2, ctx.Operand1);
+				switch (instruction.Code) {
+					// Signed
+					case CIL.OpCode.Beq_s: _codeEmitter.Jne(targets[0]); break;
+					case CIL.OpCode.Bge_s: _codeEmitter.Jl(targets[0]); break;
+					case CIL.OpCode.Bgt_s: _codeEmitter.Jle(targets[0]); break;
+					case CIL.OpCode.Ble_s: _codeEmitter.Jg(targets[0]); break;
+					case CIL.OpCode.Blt_s: _codeEmitter.Jge(targets[0]); break;
+
+					// Unsigned
+					case CIL.OpCode.Bne_un_s: _codeEmitter.Je(targets[0]); break;
+					case CIL.OpCode.Bge_un_s: _codeEmitter.Jb(targets[0]); break;
+					case CIL.OpCode.Bgt_un_s: _codeEmitter.Jbe(targets[0]); break;
+					case CIL.OpCode.Ble_un_s: _codeEmitter.Ja(targets[0]); break;
+					case CIL.OpCode.Blt_un_s: _codeEmitter.Jae(targets[0]); break;
+
+					// Long form signed
+					case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
+					case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
+					case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
+					case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
+					case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
+
+					// Long form unsigned
+					case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
+					case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
+					case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
+					case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
+					case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
+
+					default:
+						throw new NotImplementedException();
+				}
+			}
+			else {
+				_codeEmitter.Cmp(ctx.Operand1, ctx.Operand2);
+				switch (instruction.Code) {
+					// Signed
+					case CIL.OpCode.Beq_s: _codeEmitter.Je(targets[0]); break;
+					case CIL.OpCode.Bge_s: _codeEmitter.Jge(targets[0]); break;
+					case CIL.OpCode.Bgt_s: _codeEmitter.Jg(targets[0]); break;
+					case CIL.OpCode.Ble_s: _codeEmitter.Jle(targets[0]); break;
+					case CIL.OpCode.Blt_s: _codeEmitter.Jl(targets[0]); break;
+
+					// Unsigned
+					case CIL.OpCode.Bne_un_s: _codeEmitter.Jne(targets[0]); break;
+					case CIL.OpCode.Bge_un_s: _codeEmitter.Jae(targets[0]); break;
+					case CIL.OpCode.Bgt_un_s: _codeEmitter.Ja(targets[0]); break;
+					case CIL.OpCode.Ble_un_s: _codeEmitter.Jbe(targets[0]); break;
+					case CIL.OpCode.Blt_un_s: _codeEmitter.Jb(targets[0]); break;
+
+					// Long form signed
+					case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
+					case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
+					case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
+					case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
+					case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
+
+					// Long form unsigned
+					case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
+					case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
+					case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
+					case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
+					case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
+
+					default:
+						throw new NotImplementedException();
+				}
+			}
+
+			// Emit a regular jump for the second case
+			_codeEmitter.Jmp(targets[1]);
+		}
+
+		void CIL.ICILVisitor.Switch(Context ctx)
+		{
+			for (int i = 0; i < ctx.Branch.Targets.Length - 1; i++) {
+				_codeEmitter.Cmp(ctx.Operand1, new ConstantOperand(new SigType(CilElementType.I), i));
+				_codeEmitter.Je(ctx.Branch.Targets[i]);
+			}
+			_codeEmitter.Jmp(ctx.Branch.Targets[ctx.Branch.Targets.Length - 1]);
+		}
+
+		void CIL.ICILVisitor.Add(Context ctx)
+		{
+			ThrowThreeAddressCodeNotSupportedException();
+		}
+
+		void CIL.ICILVisitor.Div(Context ctx)
+		{
+			ThrowThreeAddressCodeNotSupportedException();
+		}
+
+		void CIL.ICILVisitor.Mul(Context ctx)
+		{
+			ThrowThreeAddressCodeNotSupportedException();
+		}
+
+		void CIL.ICILVisitor.Rem(Context ctx)
+		{
+			ThrowThreeAddressCodeNotSupportedException();
+		}
+
+		void CIL.ICILVisitor.Sub(Context ctx)
+		{
+			ThrowThreeAddressCodeNotSupportedException();
+		}
+
+		void CIL.ICILVisitor.BinaryLogic(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Shift(Context ctx)
+		{
+			ThrowThreeAddressCodeNotSupportedException();
+		}
+
+		void CIL.ICILVisitor.Neg(Context ctx)
+		{
+			ThrowThreeAddressCodeNotSupportedException();
+		}
+
+		void CIL.ICILVisitor.Not(Context ctx)
+		{
+			ThrowThreeAddressCodeNotSupportedException();
+		}
+
+		void CIL.ICILVisitor.Conversion(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Callvirt(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Cpobj(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Newobj(Context ctx)
+		{
+			UnsupportedInstruction();
+		}
+
+		void CIL.ICILVisitor.Castclass(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Isinst(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Unbox(Context ctx)
+		{
+			UnsupportedInstruction();
+		}
+
+		void CIL.ICILVisitor.Throw(Context ctx)
+		{
+			UnsupportedInstruction();
+		}
+
+		void CIL.ICILVisitor.Box(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Newarr(Context ctx)
+		{
+			UnsupportedInstruction();
+		}
+
+		void CIL.ICILVisitor.Ldlen(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Ldelema(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Ldelem(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Stelem(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.UnboxAny(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Refanyval(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.UnaryArithmetic(Context ctx)
+		{
+			//throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Mkrefany(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.ArithmeticOverflow(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Endfinally(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Leave(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Arglist(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.BinaryComparison(Context ctx)
+		{
+			throw new NotSupportedException();
+		}
+
+		void CIL.ICILVisitor.Localalloc(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Endfilter(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.InitObj(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Cpblk(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Initblk(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Prefix(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Rethrow(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Sizeof(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		void CIL.ICILVisitor.Refanytype(Context ctx)
+		{
+			throw new NotImplementedException();
+		}
+
+		#endregion // CILVisitor Members
+
+		#region IIRVisitor
+
+		void IR2.IIRVisitor.AddressOfInstruction(Context ctx)
+		{
+			Debug.Assert(ctx.Operand1 is RegisterOperand);
+			Debug.Assert(ctx.Operand2 is MemoryOperand);
+			_codeEmitter.Lea(ctx.Operand1, ctx.Operand2);
+		}
+
+		void IR2.IIRVisitor.BranchInstruction(Context ctx)
+		{
+			switch (ctx.ConditionCode) {
+				case IR2.ConditionCode.Equal:
+					_codeEmitter.Je(instruction.Label);
+					break;
+
+				case IR2.ConditionCode.GreaterOrEqual:
+					_codeEmitter.Jge(instruction.Label);
+					break;
+
+				case IR2.ConditionCode.GreaterThan:
+					_codeEmitter.Jg(instruction.Label);
+					break;
+
+				case IR2.ConditionCode.LessOrEqual:
+					_codeEmitter.Jle(instruction.Label);
+					break;
+
+				case IR2.ConditionCode.LessThan:
+					_codeEmitter.Jl(instruction.Label);
+					break;
+
+				case IR2.ConditionCode.NotEqual:
+					_codeEmitter.Jne(instruction.Label);
+					break;
+
+				case IR2.ConditionCode.UnsignedGreaterOrEqual:
+					_codeEmitter.Jae(instruction.Label);
+					break;
+
+				case IR2.ConditionCode.UnsignedGreaterThan:
+					_codeEmitter.Ja(instruction.Label);
+					break;
+
+				case IR2.ConditionCode.UnsignedLessOrEqual:
+					_codeEmitter.Jbe(instruction.Label);
+					break;
+
+				case IR2.ConditionCode.UnsignedLessThan:
+					_codeEmitter.Jb(instruction.Label);
+					break;
+
+				default:
+					throw new NotSupportedException();
+			}
+		}
+
+		void IR2.IIRVisitor.CallInstruction(Context ctx)
+		{
+			_codeEmitter.Call(instruction.Method);
+		}
+
+		void IR2.IIRVisitor.EpilogueInstruction(Context ctx)
+		{
+			throw new NotSupportedException();
+		}
+
+		void IR2.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context ctx)
+		{
+			Operand source = ctx.Operand2;
+			Operand destination = ctx.Operand1;
+			switch (destination.Type.Type) {
+				case CilElementType.I1: goto case CilElementType.I4;
+				case CilElementType.I2: goto case CilElementType.I4;
+				case CilElementType.I4:
+					if (source.Type.Type == CilElementType.R8)
+						_codeEmitter.Cvttsd2si(destination, source);
+					else
+						_codeEmitter.Cvttss2si(destination, source);
+					break;
+
+				case CilElementType.I8:
+					throw new NotSupportedException();
+
+				case CilElementType.U1: goto case CilElementType.U4;
+				case CilElementType.U2: goto case CilElementType.U4;
+				case CilElementType.U4:
+					throw new NotSupportedException();
+
+				case CilElementType.U8:
+					throw new NotSupportedException();
+
+				case CilElementType.I:
+					goto case CilElementType.I4;
+
+				case CilElementType.U:
+					goto case CilElementType.U4;
+			}
+		}
+
+		void IR2.IIRVisitor.IntegerCompareInstruction(Context ctx)
+		{
+			Operand resultOperand = ctx.Operand1;
+
+			_codeEmitter.Cmp(ctx.Operand2, ctx.Operand3);
+
+			if (X86.IsUnsigned(ctx.Operand2) || X86.IsUnsigned(ctx.Operand3))
+				_codeEmitter.Setcc(resultOperand, GetUnsignedConditionCode(ctx.ConditionCode));
+			else
+				_codeEmitter.Setcc(resultOperand, ctx.ConditionCode);
+
+			ExtendResultTo32Bits(resultOperand);
+		}
+
+		void ExtendResultTo32Bits(Operand resultOperand)
+		{
+			if (resultOperand is RegisterOperand) {
+				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)resultOperand).Register);
+				_codeEmitter.Movzx(rop, rop);
+			}
+		}
+
+		void IR2.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context ctx)
+		{
+			Operand source = ctx.Operand2;
+			Operand destination = ctx.Operand1;
+			switch (source.Type.Type) {
+				case CilElementType.I1: goto case CilElementType.I4;
+				case CilElementType.I2: goto case CilElementType.I4;
+				case CilElementType.I4:
+					if (destination.Type.Type == CilElementType.R8)
+						_codeEmitter.Cvtsi2sd(destination, source);
+					else
+						_codeEmitter.Cvtsi2ss(destination, source);
+					break;
+
+				case CilElementType.I8:
+					throw new NotSupportedException();
+
+				case CilElementType.U1: goto case CilElementType.U4;
+				case CilElementType.U2: goto case CilElementType.U4;
+				case CilElementType.U4:
+					throw new NotSupportedException();
+
+				case CilElementType.U8:
+					throw new NotSupportedException();
+
+				case CilElementType.I:
+					goto case CilElementType.I4;
+
+				case CilElementType.U:
+					goto case CilElementType.U4;
+			}
+		}
+
+		void IR2.IIRVisitor.JmpInstruction(Context ctx)
+		{
+			_codeEmitter.Jmp(instruction.Label);
+		}
+
+		void IR2.IIRVisitor.LiteralInstruction(Context ctx)
+		{
+			_codeEmitter.Literal(instruction.Label, instruction.Type, instruction.Data);
+		}
+
+		void IR2.IIRVisitor.LogicalAndInstruction(Context ctx)
+		{
+			_codeEmitter.And(ctx.Operand1, ctx.Operand3);
+		}
+
+		void IR2.IIRVisitor.LogicalOrInstruction(Context ctx)
+		{
+			_codeEmitter.Or(ctx.Operand1, ctx.Operand3);
+		}
+
+		void IR2.IIRVisitor.LogicalXorInstruction(Context ctx)
+		{
+			_codeEmitter.Xor(ctx.Operand1, ctx.Operand3);
+		}
+
+		void IR2.IIRVisitor.LogicalNotInstruction(Context ctx)
+		{
+			Operand dest = ctx.Operand1;
+			if (dest.Type.Type == CilElementType.U1)
+				_codeEmitter.Xor(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFF));
+			else if (dest.Type.Type == CilElementType.U2)
+				_codeEmitter.Xor(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFFFF));
+			else
+				_codeEmitter.Not(ctx.Operand1);
+		}
+
+		void IR2.IIRVisitor.MoveInstruction(Context ctx)
+		{
+			Operand dst = ctx.Result, src = ctx.Operand1;
+
+			// FIXME: This should actually be expanded somewhere else
+			if (src is LabelOperand && dst is MemoryOperand) {
+				switch (src.Type.Type) {
+					case CilElementType.R4: {
+							Operand tmp = new RegisterOperand(src.Type, SSE2Register.XMM0);
+							_codeEmitter.Movss(tmp, src);
+							_codeEmitter.Movss(dst, tmp);
+						}
+						break;
+
+					case CilElementType.R8: {
+							Operand tmp = new RegisterOperand(src.Type, SSE2Register.XMM0);
+							_codeEmitter.Movsd(tmp, src);
+							_codeEmitter.Movsd(dst, tmp);
+						}
+						break;
+
+					default:
+						throw new NotSupportedException();
+				}
+			}
+			else if (src.Type.Type == CilElementType.R4 && dst.Type.Type == CilElementType.R4) {
+				_codeEmitter.Movss(dst, src);
+			}
+			else if (src.Type.Type == CilElementType.R4 && dst.Type.Type == CilElementType.R8) {
+				_codeEmitter.Cvtss2sd(dst, src);
+			}
+			else if (src.Type.Type == CilElementType.R8 && dst.Type.Type == CilElementType.R4) {
+				_codeEmitter.Cvtsd2ss(dst, src);
+			}
+			else if (dst.Type.Type == CilElementType.R8 && src.Type.Type == CilElementType.R8) {
+				_codeEmitter.Movsd(dst, src);
+			}
+			else {
+				_codeEmitter.Mov(dst, src);
+			}
+		}
+
+		void IR2.IIRVisitor.PhiInstruction(Context ctx)
+		{
+			throw new NotSupportedException(@"PHI functions should've been removed by the LeaveSSA stage.");
+		}
+
+		void IR2.IIRVisitor.PopInstruction(Context ctx)
+		{
+			_codeEmitter.Pop(instruction.Destination);
+		}
+
+		void IR2.IIRVisitor.PrologueInstruction(Context ctx)
+		{
+			throw new NotSupportedException();
+		}
+
+		void IR2.IIRVisitor.PushInstruction(Context ctx)
+		{
+			_codeEmitter.Push(instruction.Source);
+		}
+
+		void IR2.IIRVisitor.ReturnInstruction(Context ctx)
+		{
+			_codeEmitter.Ret();
+		}
+
+		void IR2.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
+		{
+			switch (ctx.Operand1.Type.Type) {
+				case CilElementType.I1:
+					_codeEmitter.Movsx(ctx.Operand1, ctx.Operand2);
+					break;
+
+				case CilElementType.I2: goto case CilElementType.I1;
+
+				case CilElementType.I4: goto case CilElementType.I1;
+
+				case CilElementType.I8:
+					_codeEmitter.Mov(ctx.Operand1, ctx.Operand2);
+					break;
+
+				default:
+					throw new NotSupportedException();
+			}
+		}
+
+		void IR2.IIRVisitor.UDivInstruction(Context ctx)
+		{
+			RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
+			_codeEmitter.Xor(edx, edx);
+			_codeEmitter.Div(ctx.Operand1, ctx.Operand2);
+		}
+
+		void IR2.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx)
+		{
+			switch (ctx.Operand1.Type.Type) {
+				case CilElementType.I1:
+					_codeEmitter.Movzx(ctx.Operand1, ctx.Operand2);
+					break;
+
+				case CilElementType.I2: goto case CilElementType.I1;
+
+				case CilElementType.I4: goto case CilElementType.I1;
+
+				case CilElementType.I8:
+					throw new NotSupportedException();
+
+				case CilElementType.U1: goto case CilElementType.I1;
+				case CilElementType.U2: goto case CilElementType.I1;
+				case CilElementType.U4: goto case CilElementType.I1;
+				case CilElementType.U8: goto case CilElementType.I8;
+				case CilElementType.Char: goto case CilElementType.I2;
+
+				default:
+					throw new NotSupportedException();
+			}
+		}
+
+		void IR2.IIRVisitor.URemInstruction(Context ctx) { }
+
+		void IR2.IIRVisitor.StoreInstruction(Context ctx) { }
+
+		void IR2.IIRVisitor.ShiftRightInstruction(Context ctx) { }
+
+		void IR2.IIRVisitor.ShiftLeftInstruction(Context ctx) { }
+
+		void IR2.IIRVisitor.LoadInstruction(Context ctx) { }
+
+		void IR2.IIRVisitor.FloatingPointCompareInstruction(Context ctx) { }
+
+		void IR2.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx) { }
+
+		#endregion // IIRVisitor
+
+		#region Internal Helpers
+		private void UnsupportedInstruction()
+		{
+			throw new NotSupportedException(@"Instruction can not be emitted and requires appropriate expansion and runtime support.");
+		}
+
+		/// <summary>
+		/// Throws an exception, which notifies the user that a three-address code instruction is not supported.
+		/// </summary>
+		private void ThrowThreeAddressCodeNotSupportedException()
+		{
+			throw new NotSupportedException(@"x86 doesn't support this three-address code instruction - did you miss IRToX86TransformationStage?");
+		}
+
+		#endregion // Internal Helpers
+
+		/// <summary>
+		/// Gets the unsigned condition code.
+		/// </summary>
+		/// <param name="conditionCode">The condition code to get an unsigned form from.</param>
+		/// <returns>The unsigned form of the given condition code.</returns>
+		private IR2.ConditionCode GetUnsignedConditionCode(IR2.ConditionCode conditionCode)
+		{
+			IR2.ConditionCode cc = conditionCode;
+			switch (conditionCode) {
+				case IR2.ConditionCode.Equal: break;
+				case IR2.ConditionCode.NotEqual: break;
+				case IR2.ConditionCode.GreaterOrEqual: cc = IR2.ConditionCode.UnsignedGreaterOrEqual; break;
+				case IR2.ConditionCode.GreaterThan: cc = IR2.ConditionCode.UnsignedGreaterThan; break;
+				case IR2.ConditionCode.LessOrEqual: cc = IR2.ConditionCode.UnsignedLessOrEqual; break;
+				case IR2.ConditionCode.LessThan: cc = IR2.ConditionCode.UnsignedLessThan; break;
+				case IR2.ConditionCode.UnsignedGreaterOrEqual: break;
+				case IR2.ConditionCode.UnsignedGreaterThan: break;
+				case IR2.ConditionCode.UnsignedLessOrEqual: break;
+				case IR2.ConditionCode.UnsignedLessThan: break;
+				default:
+					throw new NotSupportedException();
+			}
+			return cc;
+		}
+	}
 }

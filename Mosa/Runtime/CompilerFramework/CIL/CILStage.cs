@@ -22,7 +22,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	///
 	/// </summary>
-	public class CILStage : CodeTransformationStage, ICILVisitor, IVisitor
+	public class CILStage : CodeTransformationStage, ICILVisitor
 	{
 
 		#region Override Methods
@@ -42,7 +42,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Override Methods
 
-		#region Methods
+		#region ICILVisitor
 
 		/// <summary>
 		/// Visitation function for <see cref="Nop"/>.
@@ -475,6 +475,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		public virtual void Rem(Context ctx) { }
 
-		#endregion // Methods
+		#endregion // ICILVisitor
 	}
 }
