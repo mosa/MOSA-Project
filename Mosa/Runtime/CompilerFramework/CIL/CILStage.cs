@@ -267,7 +267,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public virtual void Callvirt(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="AddressOfInstruction"/>.
+		/// Visitation function for <see cref="Cpobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		public virtual void Cpobj(Context ctx) { }

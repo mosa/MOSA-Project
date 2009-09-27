@@ -139,7 +139,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the invocation target.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
 		/// <param name="flags">Flags, which control the</param>
 		protected void DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)

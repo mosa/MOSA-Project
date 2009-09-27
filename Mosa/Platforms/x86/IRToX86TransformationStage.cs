@@ -31,7 +31,11 @@ namespace Mosa.Platforms.x86
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
 	/// </remarks>
 	public sealed class IRToX86TransformationStage :
-		IR2.IRCombinedWithCILStage,
+		CodeTransformationStage, 
+		CIL.ICILVisitor, 
+		IR2.IIRVisitor, 
+		CPUx86.IX86Visitor,
+		IMethodCompilerStage,
 		IPlatformTransformationStage
 	{
 		private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
@@ -68,13 +72,13 @@ namespace Mosa.Platforms.x86
 
 		#endregion // IMethodCompilerStage Members
 
-		#region Members
+		#region ICILVisitor
 
 		/// <summary>
 		/// Visitation function for <see cref="Call"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Call(Context ctx)
+		void CIL.ICILVisitor.Call(Context ctx)
 		{
 			HandleInvokeInstruction(ctx);
 		}
@@ -83,7 +87,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="Calli"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Calli(Context ctx)
+		void CIL.ICILVisitor.Calli(Context ctx)
 		{
 			HandleInvokeInstruction(ctx);
 		}
@@ -92,7 +96,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="Callvirt"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Callvirt(Context ctx)
+		void CIL.ICILVisitor.Callvirt(Context ctx)
 		{
 			HandleInvokeInstruction(ctx);
 		}
@@ -101,7 +105,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="BinaryComparison"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void BinaryComparison(Context ctx)
+		void CIL.ICILVisitor.BinaryComparison(Context ctx)
 		{
 			throw new NotSupportedException();
 			//HandleComparisonInstruction(ctx, instruction);
@@ -111,7 +115,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="Add"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Add(Context ctx)
+		void CIL.ICILVisitor.Add(Context ctx)
 		{
 			if (ctx.Operand1.StackType == StackTypeCode.F || ctx.Operand2.StackType == StackTypeCode.F)
 				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseAddInstruction);
@@ -123,7 +127,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="Sub"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Sub(Context ctx)
+		void CIL.ICILVisitor.Sub(Context ctx)
 		{
 			if (ctx.Operand1.StackType == StackTypeCode.F || ctx.Operand2.StackType == StackTypeCode.F)
 				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseSubInstruction);
@@ -136,7 +140,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="Mul"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Mul(Context ctx)
+		void CIL.ICILVisitor.Mul(Context ctx)
 		{
 			if (ctx.Operand1.StackType == StackTypeCode.F)
 				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseMulInstruction);
@@ -148,7 +152,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="Div"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Div(Context ctx)
+		void CIL.ICILVisitor.Div(Context ctx)
 		{
 			if (X86.IsUnsigned(ctx.Operand1) || X86.IsUnsigned(ctx.Operand2))
 				HandleCommutativeOperation(ctx, CPUx86.Instruction.UDivInstruction);
@@ -162,7 +166,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="Rem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Rem(Context ctx)
+		void CIL.ICILVisitor.Rem(Context ctx)
 		{
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), ctx.Operand1);
 
@@ -181,13 +185,394 @@ namespace Mosa.Platforms.x86
 
 		#endregion // Members
 
-		#region Members
+		#region ICILVisitor - Unused
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Nop"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Nop(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Break"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Break(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldarg"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldarg(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldarga"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldarga(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldloc"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldloc(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldloca"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldloca(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldc"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldc(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldobj"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldobj(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldstr"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldstr(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldfld"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldfld(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldflda"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldflda(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsfld"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldsfld(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsflda"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldsflda(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldftn"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldftn(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldvirtftn"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldvirtftn(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldtoken"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldtoken(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Stloc"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Stloc(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Starg"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Starg(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Stobj"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Stobj(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Stfld"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Stfld(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Stsfld"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Stsfld(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Dup"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Dup(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Pop"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Pop(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Jmp"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Jmp(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ret"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ret(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Branch"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Branch(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.UnaryBranch"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.UnaryBranch(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryBranch"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.BinaryBranch(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Switch"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Switch(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryLogic"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.BinaryLogic(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Shift"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Shift(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Neg"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Neg(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Not"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Not(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Conversion"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Conversion(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Cpobj"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Cpobj(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Newobj"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Newobj(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Castclass"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Castclass(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Isinst"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Isinst(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Unbox"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Unbox(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Throw"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Throw(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Box"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Box(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Newarr"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Newarr(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldlen"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldlen(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelema"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldelema(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelem"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldelem(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Stelem"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Stelem(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.UnboxAny"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.UnboxAny(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Refanyval"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Refanyval(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.UnaryArithmetic"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.UnaryArithmetic(Context ctx) { }
+
+		/// <summary>
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Mkrefany(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.ArithmeticOverflow"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.ArithmeticOverflow(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Endfinally"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Endfinally(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Leave"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Leave(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Arglist"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Arglist(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Localalloc"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Localalloc(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Endfilter"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Endfilter(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.InitObj"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.InitObj(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Cpblk"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Cpblk(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Initblk"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Initblk(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Prefix"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Prefix(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Rethrow"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Rethrow(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Sizeof"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Sizeof(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Refanytype"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Refanytype(Context ctx) { }
+
+		#endregion // ICILVisitor - Unused
+
+		#region IIRVisitor
 
 		/// <summary>
 		/// Addresses the of instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void AddressOfInstruction(Context ctx)
+		void IR2.IIRVisitor.AddressOfInstruction(Context ctx)
 		{
 			Operand opRes = ctx.Operand1;
 			RegisterOperand eax = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
@@ -201,7 +586,7 @@ namespace Mosa.Platforms.x86
 		/// Arithmetics the shift right instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void ArithmeticShiftRightInstruction(Context ctx)
+		void IR2.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx)
 		{
 			HandleShiftOperation(ctx, CPUx86.Instruction.SarInstruction);
 		}
@@ -210,7 +595,7 @@ namespace Mosa.Platforms.x86
 		/// Epilogues the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void EpilogueInstruction(Context ctx)
+		void IR2.IIRVisitor.EpilogueInstruction(Context ctx)
 		{
 			SigType I = new SigType(CilElementType.I);
 			RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
@@ -243,7 +628,7 @@ namespace Mosa.Platforms.x86
 		/// Floatings the point compare instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void FloatingPointCompareInstruction(Context ctx)
+		void IR2.IIRVisitor.FloatingPointCompareInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			Operand source = EmitConstant(ctx.Operand2);
@@ -343,7 +728,7 @@ namespace Mosa.Platforms.x86
 		/// Integers the compare instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void IntegerCompareInstruction(Context ctx)
+		void IR2.IIRVisitor.IntegerCompareInstruction(Context ctx)
 		{
 			HandleComparisonInstruction(ctx);
 		}
@@ -352,7 +737,7 @@ namespace Mosa.Platforms.x86
 		/// Loads the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void LoadInstruction(Context ctx)
+		void IR2.IIRVisitor.LoadInstruction(Context ctx)
 		{
 			//RegisterOperand eax = new RegisterOperand(Architecture.NativeType, GeneralPurposeRegister.EAX);
 			RegisterOperand eax = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX);
@@ -365,7 +750,7 @@ namespace Mosa.Platforms.x86
 		/// Logicals the and instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void LogicalAndInstruction(Context ctx)
+		void IR2.IIRVisitor.LogicalAndInstruction(Context ctx)
 		{
 			ThreeTwoAddressConversion(ctx);
 		}
@@ -374,7 +759,7 @@ namespace Mosa.Platforms.x86
 		/// Logicals the or instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void LogicalOrInstruction(Context ctx)
+		void IR2.IIRVisitor.LogicalOrInstruction(Context ctx)
 		{
 			ThreeTwoAddressConversion(ctx);
 		}
@@ -383,7 +768,7 @@ namespace Mosa.Platforms.x86
 		/// Logicals the xor instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void LogicalXorInstruction(Context ctx)
+		void IR2.IIRVisitor.LogicalXorInstruction(Context ctx)
 		{
 			ThreeTwoAddressConversion(ctx);
 		}
@@ -392,7 +777,7 @@ namespace Mosa.Platforms.x86
 		/// Logicals the not instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void LogicalNotInstruction(Context ctx)
+		void IR2.IIRVisitor.LogicalNotInstruction(Context ctx)
 		{
 			TwoOneAddressConversion(ctx);
 		}
@@ -401,7 +786,7 @@ namespace Mosa.Platforms.x86
 		/// Moves the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void MoveInstruction(Context ctx)
+		void IR2.IIRVisitor.MoveInstruction(Context ctx)
 		{
 			// We need to replace ourselves in case of a Memory -> Memory transfer
 			Operand op0 = ctx.Operand1;
@@ -426,7 +811,7 @@ namespace Mosa.Platforms.x86
 		/// Prologues the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void PrologueInstruction(Context ctx)
+		void IR2.IIRVisitor.PrologueInstruction(Context ctx)
 		{
 			SigType I = new SigType(CilElementType.I4);
 			RegisterOperand eax = new RegisterOperand(I, GeneralPurposeRegister.EAX);
@@ -485,7 +870,7 @@ namespace Mosa.Platforms.x86
 		/// Returns the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void ReturnInstruction(Context ctx)
+		void IR2.IIRVisitor.ReturnInstruction(Context ctx)
 		{
 			Operand op1 = ctx.Operand1;
 
@@ -502,7 +887,7 @@ namespace Mosa.Platforms.x86
 		/// Shifts the left instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void ShiftLeftInstruction(Context ctx)
+		void IR2.IIRVisitor.ShiftLeftInstruction(Context ctx)
 		{
 			HandleShiftOperation(ctx);
 		}
@@ -511,7 +896,7 @@ namespace Mosa.Platforms.x86
 		/// Shifts the right instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void ShiftRightInstruction(Context ctx)
+		void IR2.IIRVisitor.ShiftRightInstruction(Context ctx)
 		{
 			HandleShiftOperation(ctx);
 		}
@@ -520,7 +905,7 @@ namespace Mosa.Platforms.x86
 		/// Stores the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void StoreInstruction(Context ctx)
+		void IR2.IIRVisitor.StoreInstruction(Context ctx)
 		{
 			RegisterOperand eax = new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX);
@@ -533,7 +918,7 @@ namespace Mosa.Platforms.x86
 		/// UDivInstruction instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void UDivInstruction(Context ctx)
+		void IR2.IIRVisitor.UDivInstruction(Context ctx)
 		{
 			ThreeTwoAddressConversion(ctx);
 		}
@@ -542,7 +927,7 @@ namespace Mosa.Platforms.x86
 		/// URemInstruction instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void URemInstruction(Context ctx)
+		void IR2.IIRVisitor.URemInstruction(Context ctx)
 		{
 			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, new RegisterOperand(ctx.Operand2.Type, GeneralPurposeRegister.EAX), ctx.Operand2);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.UDivInstruction, ctx.Operand2, ctx.Operand3);
@@ -551,13 +936,82 @@ namespace Mosa.Platforms.x86
 
 		#endregion //  Members
 
-		#region Members
+		#region IIRVisitor - Unused
 
 		/// <summary>
-		/// CmpInstruction instruction.
+		/// Visitation function for <see cref="IR2.IIRVisitor.BranchInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.BranchInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.CallInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.CallInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) { }
+
+		/// Visitation function for <see cref="IR2.IIRVisitor.IntegerToFloatingPointConversionInstruction"/> instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.JmpInstruction"/> instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.JmpInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.LiteralInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.LiteralInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.PhiInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.PhiInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.PopInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.PopInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.PushInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.PushInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.SignExtendedMoveInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.SignExtendedMoveInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.ZeroExtendedMoveInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.ZeroExtendedMoveInstruction(Context context) { }
+
+		#endregion // IIRVisitor
+
+		#region IX86Visitor
+
+		/// <summary>
+		/// Cmp the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void CmpInstruction(Context ctx)
+		void CPUx86.IX86Visitor.Cmp(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			Operand op1 = ctx.Operand2;
@@ -585,7 +1039,7 @@ namespace Mosa.Platforms.x86
 		/// Cvtss2sdInstruction instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void Cvtss2sdInstruction(Context ctx)
+		void CPUx86.IX86Visitor.Cvtss2sd(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand)
 				ctx.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, ctx.Operand1, EmitConstant(ctx.Operand2));
@@ -595,7 +1049,7 @@ namespace Mosa.Platforms.x86
 		/// MulInstruction instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void MulInstruction(Context ctx)
+		void CPUx86.IX86Visitor.Mul(Context ctx)
 		{
 			/*
 				if (ctx.Operand1.StackType == StackTypeCode.F || ctx.Operand2.StackType == StackTypeCode.F)
@@ -621,13 +1075,358 @@ namespace Mosa.Platforms.x86
 		/// SseSubInstruction instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void SseSubInstruction(Context ctx)
+		void CPUx86.IX86Visitor.SseSub(Context ctx)
 		{
 			EmitOperandConstants(ctx);
 			ThreeTwoAddressConversion(ctx);
 		}
 
 		#endregion // Members
+
+		#region IX86Visitor - Unused
+
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Add"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Add(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Adc"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Adc(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.And"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.And(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Or"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Or(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Xor"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Xor(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Sub"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Sub(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Sbb"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Sbb(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.DirectMultiplication"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.DirectMultiplication(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.DirectDivision"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.DirectDivision(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Div"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Div(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.UDiv"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.UDiv(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.SseAdd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.SseAdd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.SseMul"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.SseMul(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.SseMul"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.SseDiv(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Sar"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Sar(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Sal"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Sal(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Shl"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Shl(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Shr"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Shr(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Rcr"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Rcr(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Cvtsi2ss"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Cvtsi2ss(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Cvtsi2sd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Cvtsi2sd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Cvtsd2ss"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Cvtsd2ss(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Setcc"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Setcc(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Cdq"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Cdq(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Shld"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Shld(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.ShiftRiShrdghtInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Shrd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Comisd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Comisd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Comiss"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Comiss(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Ucomisd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Ucomisd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Ucomiss"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Ucomiss(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Jns"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Jns(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.BochsDebug"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.BochsDebug(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Cli"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Cli(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Cld"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Cld(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.CmpXchg"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.CmpXchg(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.CpuId"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.CpuId(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.CpuIdEax"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.CpuIdEax(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.CpuIdEbx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.CpuIdEbx(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.CpuIdEcx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.CpuIdEcx(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.CpuIdEdx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.CpuIdEdx(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Hlt"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Hlt(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Invlpg"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Invlpg(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.In"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.In(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Inc"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Inc(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Dec"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Dec(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Int"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Int(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Iretd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Iretd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Lgdt"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Lgdt(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Lidt"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Lidt(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Lock"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Lock(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Neg"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Neg(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Nop"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Nop(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Out"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Out(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Pause"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Pause(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Pop"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Pop(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Popad"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Popad(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Popfd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Popfd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Push"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Push(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Pushad"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Pushad(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Pushfd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Pushfd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Rdmsr"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Rdmsr(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Rdpmc"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Rdpmc(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Rdtsc"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Rdtsc(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Rep"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Rep(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Sti"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Sti(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Stosb"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Stosb(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Stosd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Stosd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="void CPUx86.IX86Visitor.Xchg"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Xchg(Context context) { }
+
+		#endregion // IX86Visitor - Unused
 
 		#region Internals
 

@@ -14,7 +14,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 	/// <summary>
 	/// Visitor interface for instructions of the intermediate representation.
 	/// </summary>
-	public interface IIRVisitor
+	public interface IIRVisitor : IVisitor
 	{
 		/// <summary>
 		/// Visitation function for <see cref="AddressOfInstruction"/>.

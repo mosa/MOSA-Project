@@ -17,7 +17,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// 
 	/// </summary>
-	public interface IX86Visitor
+	public interface IX86Visitor : IVisitor
 	{
 		/// <summary>
 		/// Adds the specified context.
@@ -35,12 +35,17 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		void And(Context context);
 		/// <summary>
-		/// Ors the specified context.
+		/// Cmp the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Cmp(Context context);
+		/// <summary>
+		/// Or the specified context.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Or(Context context);
 		/// <summary>
-		/// Xors the specified context.
+		/// Xor the specified context.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Xor(Context context);
@@ -144,11 +149,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Cvtss2sd(Context context);
-		/// <summary>
-		/// CMPs the specified context.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Cmp(Context context);
 		/// <summary>
 		/// Setccs the specified context.
 		/// </summary>

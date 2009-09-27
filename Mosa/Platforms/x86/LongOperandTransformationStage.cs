@@ -31,7 +31,10 @@ namespace Mosa.Platforms.x86
 	/// architectures without appropriate 64-bit integral operations.
 	/// </remarks>
 	public sealed class LongOperandTransformationStage :
-		IR2.IRCombinedWithCILStage
+		CodeTransformationStage, 
+		CIL.ICILVisitor, 
+		IR2.IIRVisitor, 
+		IMethodCompilerStage
 	{
 		#region Construction
 
@@ -1696,13 +1699,13 @@ namespace Mosa.Platforms.x86
 
 		#endregion // Utility Methods
 
-		#region Members
+		#region IIRVisitor
 
 		/// <summary>
 		/// Arithmetics the shift right instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void ArithmeticShiftRightInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1712,8 +1715,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Integers the compare instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void IntegerCompareInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.IntegerCompareInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1723,8 +1726,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Loads the instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void LoadInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.LoadInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1734,8 +1737,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Logicals the and instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void LogicalAndInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.LogicalAndInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1745,8 +1748,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Logicals the or instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void LogicalOrInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.LogicalOrInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1756,8 +1759,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Logicals the xor instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void LogicalXorInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.LogicalXorInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1767,8 +1770,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Logicals the not instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void LogicalNotInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.LogicalNotInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1778,8 +1781,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Moves the instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void MoveInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.MoveInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1789,8 +1792,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Pops the instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void PopInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.PopInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Result;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1800,8 +1803,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Pushes the instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void PushInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.PushInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1811,8 +1814,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Shifts the left instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void ShiftLeftInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.ShiftLeftInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1822,8 +1825,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Shifts the right instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void ShiftRightInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.ShiftRightInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1833,8 +1836,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Signs the extended move instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void SignExtendedMoveInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1844,8 +1847,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Stores the instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void StoreInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.StoreInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1855,8 +1858,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Us the div instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void UDivInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.UDivInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1866,8 +1869,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Us the rem instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void URemInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.URemInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1877,8 +1880,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Zeroes the extended move instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		public override void ZeroExtendedMoveInstruction(Context ctx)
+		/// <param name="ctx">The context.</param>
+		void IR2.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1887,13 +1890,89 @@ namespace Mosa.Platforms.x86
 
 		#endregion // Members
 
-		#region Members
+		#region IIRVisitor - Unused
 
 		/// <summary>
-		/// Visitation function for <see cref="UnaryBranch"/>.
+		/// Visitation function for <see cref="IR2.IIRVisitor.AddressOfInstruction"/>.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.AddressOfInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.BranchInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.BranchInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.CallInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.CallInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.EpilogueInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.EpilogueInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.FloatingPointCompareInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.FloatingPointCompareInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.IntegerToFloatingPointConversionInstruction"/> instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.JmpInstruction"/> instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.JmpInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.LiteralInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.LiteralInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.PhiInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.PhiInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.PrologueInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.PrologueInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="IR2.IIRVisitor.ReturnInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR2.IIRVisitor.ReturnInstruction(Context context) { }
+
+		#endregion // IIRVisitor - Unused
+
+		#region ICILVisitor
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.UnaryBranch"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void UnaryBranch(Context ctx)
+		void CIL.ICILVisitor.UnaryBranch(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1901,10 +1980,10 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="BinaryBranch"/>.
+		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryBranch"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void BinaryBranch(Context ctx)
+		void CIL.ICILVisitor.BinaryBranch(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1912,10 +1991,10 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="Neg"/>.
+		/// Visitation function for <see cref="CIL.ICILVisitor.Neg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Neg(Context ctx)
+		void CIL.ICILVisitor.Neg(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
@@ -1923,37 +2002,37 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="Not"/>.
+		/// Visitation function for <see cref="CIL.ICILVisitor.Not"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Not(Context ctx)
+		void CIL.ICILVisitor.Not(Context ctx)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="UnaryArithmetic"/>.
+		/// Visitation function for <see cref="CIL.ICILVisitor.UnaryArithmetic"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void UnaryArithmetic(Context ctx)
+		void CIL.ICILVisitor.UnaryArithmetic(Context ctx)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="ArithmeticOverflow"/>.
+		/// Visitation function for <see cref="CIL.ICILVisitor.ArithmeticOverflow"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void ArithmeticOverflow(Context ctx)
+		void CIL.ICILVisitor.ArithmeticOverflow(Context ctx)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="Add"/>.
+		/// Visitation function for <see cref="CIL.ICILVisitor.Add"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Add(Context ctx)
+		void CIL.ICILVisitor.Add(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64) {
@@ -1962,10 +2041,10 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="Sub"/>.
+		/// Visitation function for <see cref="CIL.ICILVisitor.Sub"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Sub(Context ctx)
+		void CIL.ICILVisitor.Sub(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64) {
@@ -1974,10 +2053,10 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="Mul"/>.
+		/// Visitation function for <see cref="CIL.ICILVisitor.Mul"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Mul(Context ctx)
+		void CIL.ICILVisitor.Mul(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64) {
@@ -1986,10 +2065,10 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="Div"/>.
+		/// Visitation function for <see cref="CIL.ICILVisitor.Div"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Div(Context ctx)
+		void CIL.ICILVisitor.Div(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64) {
@@ -1998,10 +2077,10 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="Rem"/>.
+		/// Visitation function for <see cref="CIL.ICILVisitor.Rem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public override void Rem(Context ctx)
+		void CIL.ICILVisitor.Rem(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64) {
@@ -2010,6 +2089,376 @@ namespace Mosa.Platforms.x86
 		}
 
 		#endregion // Members
+
+		#region ICILVisitor - Unused
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Nop"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Nop(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Break"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Break(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldarg"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldarg(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldarga"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldarga(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldloc"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldloc(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldloca"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldloca(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldc"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldc(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldobj"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldobj(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldstr"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldstr(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldfld"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldfld(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldflda"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldflda(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsfld"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldsfld(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsflda"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldsflda(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldftn"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldftn(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldvirtftn"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldvirtftn(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldtoken"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldtoken(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Stloc"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Stloc(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Starg"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Starg(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Stobj"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Stobj(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Stfld"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Stfld(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Stsfld"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Stsfld(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Dup"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Dup(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Pop"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Pop(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Jmp"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Jmp(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Call"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Call(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Calli"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Calli(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ret"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ret(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Branch"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Branch(Context ctx) { }
+
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Switch"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Switch(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryLogic"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.BinaryLogic(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Shift"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Shift(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Conversion"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Conversion(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Callvirt"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Callvirt(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Cpobj"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Cpobj(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Newobj"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Newobj(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Castclass"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Castclass(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Isinst"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Isinst(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Unbox"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Unbox(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Throw"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Throw(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Box"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Box(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Newarr"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Newarr(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldlen"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldlen(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelema"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldelema(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelem"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Ldelem(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Stelem"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Stelem(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.UnboxAny"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.UnboxAny(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Refanyval"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Refanyval(Context ctx) { }
+
+		/// <summary>
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Mkrefany(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Endfinally"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Endfinally(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Leave"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Leave(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Arglist"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Arglist(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryComparison"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.BinaryComparison(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Localalloc"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Localalloc(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Endfilter"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Endfilter(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.InitObj"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.InitObj(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Cpblk"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Cpblk(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Initblk"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Initblk(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Prefix"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Prefix(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Rethrow"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Rethrow(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Sizeof"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Sizeof(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Refanytype"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Refanytype(Context ctx) { }
+
+		#endregion // ICILVisitor - Unused
 
 	}
 }
