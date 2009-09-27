@@ -10,6 +10,8 @@
 using System;
 using System.Collections.Generic;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Platforms.x86.CPUx86;
+using Mosa.Platforms.x86.CPUx86.Intrinsics;
 
 namespace Mosa.Platforms.x86
 {
@@ -29,23 +31,23 @@ namespace Mosa.Platforms.x86
         /// </summary>
         private static readonly Dictionary<Type, sbyte> Latencies = new Dictionary<Type, sbyte>()
         {
-            { typeof(Instructions.AdcInstruction),  1 },
-            { typeof(Instructions.SbbInstruction),  1 },
-            { typeof(Instructions.AddInstruction),  1 },
-            { typeof(Instructions.SubInstruction),  2 },
-            { typeof(Instructions.Intrinsics.CliInstruction), 11 },
-            { typeof(Instructions.MulInstruction),  4 },
-            { typeof(Instructions.DivInstruction), 22 },
-            { typeof(Instructions.Intrinsics.PushInstruction), 3 },
-            { typeof(Instructions.Intrinsics.XchgInstruction), 2 },
-            { typeof(Instructions.SetccInstruction), 1 },
-            { typeof(Instructions.DecInstruction), 1 },
-            { typeof(Instructions.IncInstruction), 1 },
-            { typeof(Instructions.CmpInstruction), 1 },
-            { typeof(Instructions.SseAddInstruction),   3 },
-            { typeof(Instructions.SseSubInstruction),   3 },
-            { typeof(Instructions.SseDivInstruction),  32 },
-            { typeof(Instructions.SseMulInstruction),   5 },
+            { typeof(AdcInstruction),  1 },
+            { typeof(SbbInstruction),  1 },
+            { typeof(AddInstruction),  1 },
+            { typeof(SubInstruction),  2 },
+            { typeof(CliInstruction), 11 },
+            { typeof(MulInstruction),  4 },
+            { typeof(DivInstruction), 22 },
+            { typeof(PushInstruction), 3 },
+            { typeof(XchgInstruction), 2 },
+            { typeof(SetccInstruction), 1 },
+            { typeof(DecInstruction), 1 },
+            { typeof(IncInstruction), 1 },
+            { typeof(CmpInstruction), 1 },
+            { typeof(SseAddInstruction),   3 },
+            { typeof(SseSubInstruction),   3 },
+            { typeof(SseDivInstruction),  32 },
+            { typeof(SseMulInstruction),   5 },
         };
 
         /// <summary>
@@ -70,6 +72,7 @@ namespace Mosa.Platforms.x86
         {
             if (Latencies.ContainsKey(instruction))
                 return Latencies[instruction];
+
             return -1;
         }
     }
