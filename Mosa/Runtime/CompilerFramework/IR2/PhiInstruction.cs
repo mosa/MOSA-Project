@@ -34,7 +34,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 
 		#endregion // Construction
 
-		#region Instruction Overrides
+		#region Methods
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
@@ -70,6 +70,48 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 			visitor.PhiInstruction(context);
 		}
 
-		#endregion // Instruction Overrides
+		/// <summary>
+		/// Determines whether [contains] [the specified CTX].
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="operand">The operand.</param>
+		/// <returns>
+		/// 	<c>true</c> if [contains] [the specified CTX]; otherwise, <c>false</c>.
+		/// </returns>
+		public static bool Contains(Context ctx, StackOperand operand)
+		{
+			PhiData phiData = ctx.Other as PhiData;
+
+			if (phiData == null)
+				return false;
+
+			List<Operand> operands = phiData.Operands as List<Operand>;
+			return operands.Contains(operand);
+		}
+
+		/// <summary>
+		/// Adds the value.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="edge">The edge.</param>
+		/// <param name="op">The operand.</param>
+		public static void AddValue(Context ctx, BasicBlock edge, StackOperand op)
+		{
+			PhiData phiData = ctx.Other as PhiData;
+
+			if (phiData == null) {
+				phiData = new PhiData();
+				ctx.Other = phiData;
+			}
+
+			List<BasicBlock> blocks = phiData.Blocks as List<BasicBlock>;
+
+			Debug.Assert(blocks.Count < 255, @"Maximum number of operands in PHI exceeded.");
+			
+			blocks.Add(edge);
+			phiData.Operands.Add(op);
+		}
+
+		#endregion // Methods
 	}
 }

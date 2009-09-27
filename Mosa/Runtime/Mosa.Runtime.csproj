@@ -198,6 +198,7 @@
     <Compile Include="CompilerFramework\IR2\LogicalXorInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\MoveInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\OneOperandInstruction.cs" />
+    <Compile Include="CompilerFramework\IR2\PhiData.cs" />
     <Compile Include="CompilerFramework\IR2\PhiInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\PopInstruction.cs" />
     <Compile Include="CompilerFramework\IR2\PrologueInstruction.cs" />

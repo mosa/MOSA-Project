@@ -33,7 +33,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public IInstruction Instruction;
 
 		/// <summary>
-		/// IL offset of the instruction From the start of the method.
+		/// IL offset of the instruction from the start of the method.
 		/// </summary>
 		private int _offset;
 
@@ -118,8 +118,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Holds the function being called.
+		/// Gets or sets the invoke target.
 		/// </summary>
+		/// <value>The invoke target.</value>
 		public RuntimeMethod InvokeTarget
 		{
 			get { return Other as RuntimeMethod; }
@@ -127,8 +128,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Holds the string.
+		/// Gets or sets the string.
 		/// </summary>
+		/// <value>The string.</value>
 		public string String
 		{
 			get { return Other as string; }
@@ -136,8 +138,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Holds the field of the load instruction.
+		/// Gets or sets the runtime field.
 		/// </summary>
+		/// <value>The runtime field.</value>
 		public RuntimeField RuntimeField
 		{
 			get { return Other as RuntimeField; }
