@@ -22,323 +22,303 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static DirectMultiplicationInstruction DirectMultiplicationInstruction = new DirectMultiplicationInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
 		public static NopInstruction NopInstruction = new NopInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
 		public static AddInstruction AddInstruction = new AddInstruction();
-
-
-
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction AdcInstruction = new AddInstruction();
+		public static AdcInstruction AdcInstruction = new AdcInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction CdqInstruction = new AddInstruction();
+		public static CdqInstruction CdqInstruction = new CdqInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction CmpInstruction = new AddInstruction();
+		public static CmpInstruction CmpInstruction = new CmpInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction ComisdInstruction = new AddInstruction();
+		public static ComisdInstruction ComisdInstruction = new ComisdInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction ComissInstruction = new AddInstruction();
+		public static ComissInstruction ComissInstruction = new ComissInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction Cvtsd2ssInstruction = new AddInstruction();
+		public static Cvtsd2ssInstruction Cvtsd2ssInstruction = new Cvtsd2ssInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction Cvtsi2sdInstruction = new AddInstruction();
+		public static Cvtsi2sdInstruction Cvtsi2sdInstruction = new Cvtsi2sdInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction Cvtsi2ssInstruction = new AddInstruction();
+		public static Cvtsi2ssInstruction Cvtsi2ssInstruction = new Cvtsi2ssInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction Cvtss2sdInstruction = new AddInstruction();
+		public static Cvtss2sdInstruction Cvtss2sdInstruction = new Cvtss2sdInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction DecInstruction = new AddInstruction();
+		public static DecInstruction DecInstruction = new DecInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction DirectDivision = new AddInstruction();
+		public static DirectDivisionInstruction DirectDivisionInstruction = new DirectDivisionInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction DirectMultiplication = new AddInstruction();
+		public static DirectMultiplicationInstruction DirectMultiplicationInstruction = new DirectMultiplicationInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction DivInstruction = new AddInstruction();
+		public static DivInstruction DivInstruction = new DivInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction EpilogueInstruction = new AddInstruction();
+		public static EpilogueInstruction EpilogueInstruction = new EpilogueInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction IncInstruction = new AddInstruction();
+		public static IncInstruction IncInstruction = new IncInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction IntInstruction = new AddInstruction();
+		public static IntInstruction IntInstruction = new IntInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction JnsBranchInstruction = new AddInstruction();
+		public static JnsBranchInstruction JnsBranchInstruction = new JnsBranchInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction LiteralInstruction = new AddInstruction();
+		public static LiteralInstruction LiteralInstruction = new LiteralInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction LogicalAndInstruction = new AddInstruction();
+		public static LogicalAndInstruction LogicalAndInstruction = new LogicalAndInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction LogicalNotInstruction = new AddInstruction();
+		public static LogicalNotInstruction LogicalNotInstruction = new LogicalNotInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction LogicalOrInstruction = new AddInstruction();
+		public static LogicalOrInstruction LogicalOrInstruction = new LogicalOrInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction LogicalXorInstruction = new AddInstruction();
+		public static LogicalXorInstruction LogicalXorInstruction = new LogicalXorInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction MoveInstruction = new AddInstruction();
+		public static MoveInstruction MoveInstruction = new MoveInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction MulInstruction = new AddInstruction();
+		public static MulInstruction MulInstruction = new MulInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction NegInstruction = new AddInstruction();
+		public static NegInstruction NegInstruction = new NegInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction PrologueInstruction = new AddInstruction();
+		public static PrologueInstruction PrologueInstruction = new PrologueInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction SalInstruction = new AddInstruction();
+		public static SalInstruction SalInstruction = new SalInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction SarInstruction = new AddInstruction();
+		public static SarInstruction SarInstruction = new SarInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction SbbInstruction = new AddInstruction();
+		public static SbbInstruction SbbInstruction = new SbbInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction SetccInstruction = new AddInstruction();
+		public static SetccInstruction SetccInstruction = new SetccInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction ShldInstruction = new AddInstruction();
+		public static ShldInstruction ShldInstruction = new ShldInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction ShlInstruction = new AddInstruction();
+		public static ShlInstruction ShlInstruction = new ShlInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction ShrdInstruction = new AddInstruction();
+		public static ShrdInstruction ShrdInstruction = new ShrdInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction ShrInstruction = new AddInstruction();
+		public static ShrInstruction ShrInstruction = new ShrInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction SseAddInstruction = new AddInstruction();
+		public static SseAddInstruction SseAddInstruction = new SseAddInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction SseDivInstruction = new AddInstruction();
+		public static SseDivInstruction SseDivInstruction = new SseDivInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction SseMulInstruction = new AddInstruction();
+		public static SseMulInstruction SseMulInstruction = new SseMulInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction SseSubInstruction = new AddInstruction();
+		public static SseSubInstruction SseSubInstruction = new SseSubInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction SubInstruction = new AddInstruction();
+		public static SubInstruction SubInstruction = new SubInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction UcomisdInstruction = new AddInstruction();
+		public static UcomisdInstruction UcomisdInstruction = new UcomisdInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction UcomissInstruction = new AddInstruction();
+		public static UcomissInstruction UcomissInstruction = new UcomissInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction UDivInstruction = new AddInstruction();
+		public static Intrinsics.BochsDebug BochsDebug = new Intrinsics.BochsDebug();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction BochsDebug = new AddInstruction();
+		public static Intrinsics.CldInstruction CldInstruction = new Intrinsics.CldInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction CldInstruction = new AddInstruction();
+		public static Intrinsics.CliInstruction CliInstruction = new Intrinsics.CliInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction CliInstruction = new AddInstruction();
+		public static Intrinsics.CmpXchgInstruction CmpXchgInstruction = new Intrinsics.CmpXchgInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction CmpXchgInstruction = new AddInstruction();
+		public static Intrinsics.CpuIdEaxInstruction CpuIdEaxInstruction = new Intrinsics.CpuIdEaxInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction CpuIdEaxInstruction = new AddInstruction();
+		public static Intrinsics.CpuIdEbxInstruction CpuIdEbxInstruction = new Intrinsics.CpuIdEbxInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction CpuIdEbxInstruction = new AddInstruction();
+		public static Intrinsics.CpuIdEcxInstruction CpuIdEcxInstruction = new Intrinsics.CpuIdEcxInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction CpuIdEcxInstruction = new AddInstruction();
+		public static Intrinsics.CpuIdEdxInstruction CpuIdEdxInstruction = new Intrinsics.CpuIdEdxInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction CpuIdEdxInstruction = new AddInstruction();
+		public static Intrinsics.CpuIdInstruction CpuIdInstruction = new Intrinsics.CpuIdInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction CpuIdInstruction = new AddInstruction();
+		public static Intrinsics.HltInstruction HltInstruction = new Intrinsics.HltInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction HltInstruction = new AddInstruction();
+		public static Intrinsics.InInstruction InInstruction = new Intrinsics.InInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction InInstruction = new AddInstruction();
+		public static Intrinsics.InvlpgInstruction InvlpgInstruction = new Intrinsics.InvlpgInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction InvlpgInstruction = new AddInstruction();
+		public static Intrinsics.IretdInstruction IretdInstruction = new Intrinsics.IretdInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction IretdInstruction = new AddInstruction();
+		public static Intrinsics.LgdtInstruction LgdtInstruction = new Intrinsics.LgdtInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction LgdtInstruction = new AddInstruction();
+		public static Intrinsics.LidtInstruction LidtInstruction = new Intrinsics.LidtInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction LidtInstruction = new AddInstruction();
+		public static Intrinsics.OutInstruction OutInstruction = new Intrinsics.OutInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction LockInstruction = new AddInstruction();
+		public static Intrinsics.PauseInstruction PauseInstruction = new Intrinsics.PauseInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction OutInstruction = new AddInstruction();
+		public static Intrinsics.PopadInstruction PopadInstruction = new Intrinsics.PopadInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction PauseInstruction = new AddInstruction();
+		public static Intrinsics.PopfdInstruction PopfdInstruction = new Intrinsics.PopfdInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction PopadInstruction = new AddInstruction();
+		public static Intrinsics.PopInstruction PopInstruction = new Intrinsics.PopInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction PopfdInstruction = new AddInstruction();
+		public static Intrinsics.PushadInstruction PushadInstruction = new Intrinsics.PushadInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction PopInstruction = new AddInstruction();
+		public static Intrinsics.PushfdInstruction PushfdInstruction = new Intrinsics.PushfdInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction PushadInstruction = new AddInstruction();
+		public static Intrinsics.PushInstruction PushInstruction = new Intrinsics.PushInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction PushfdInstruction = new AddInstruction();
+		public static RcrInstruction RcrInstruction = new RcrInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction PushInstruction = new AddInstruction();
+		public static Intrinsics.RdmsrInstruction RdmsrInstruction = new Intrinsics.RdmsrInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction RcrInstruction = new AddInstruction();
+		public static Intrinsics.RdpmcInstruction RdpmcInstruction = new Intrinsics.RdpmcInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction RdmsrInstruction = new AddInstruction();
+		public static Intrinsics.RdtscInstruction RdtscInstruction = new Intrinsics.RdtscInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction RdpmcInstruction = new AddInstruction();
+		public static Intrinsics.RepInstruction RepInstruction = new Intrinsics.RepInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction RdtscInstruction = new AddInstruction();
+		public static Intrinsics.StiInstruction StiInstruction = new Intrinsics.StiInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction RepInstruction = new AddInstruction();
+		public static Intrinsics.StosbInstruction StosbInstrucion = new Intrinsics.StosbInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction StiInstruction = new AddInstruction();
+		public static Intrinsics.StosdInstruction StosdInstruction = new Intrinsics.StosdInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddInstruction StosbInstrucions = new AddInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static AddInstruction StosdInstruction = new AddInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static AddInstruction XchgInstruction = new AddInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static AddInstruction DirectDivisionInstruction = new AddInstruction();
-
+		public static Intrinsics.XchgInstruction XchgInstruction = new Intrinsics.XchgInstruction();
 	}
 }
 

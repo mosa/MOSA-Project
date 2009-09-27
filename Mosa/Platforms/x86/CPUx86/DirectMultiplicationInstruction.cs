@@ -46,13 +46,13 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="context">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context context)
 		{
-			return String.Format(@"x86.mul edx:eax, {0} ; edx:eax = eax * {0}", instruction.Operand1);
+			return String.Format(@"x86.mul edx:eax, {0} ; edx:eax = eax * {0}", context.Operand2);
 		}
 
 		#endregion // Methods

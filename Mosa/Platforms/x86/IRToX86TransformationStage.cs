@@ -155,7 +155,7 @@ namespace Mosa.Platforms.x86
 		void CIL.ICILVisitor.Div(Context ctx)
 		{
 			if (X86.IsUnsigned(ctx.Operand1) || X86.IsUnsigned(ctx.Operand2))
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.UDivInstruction);
+				HandleCommutativeOperation(ctx, IR2.Instruction.UDivInstruction);
 			else if (ctx.Operand1.StackType == StackTypeCode.F)
 				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
 			else
@@ -176,7 +176,7 @@ namespace Mosa.Platforms.x86
 				ctx.InsertInstructionAfter(IR2.Instruction.SignExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
 
 			if (X86.IsUnsigned(ctx.Operand1) && X86.IsUnsigned(ctx.Operand2))
-				ctx.InsertInstructionAfter(CPUx86.Instruction.UDivInstruction, ctx.Operand1, ctx.Operand2);
+				ctx.InsertInstructionAfter(IR2.Instruction.UDivInstruction, ctx.Operand1, ctx.Operand2);
 			else
 				ctx.InsertInstructionAfter(CPUx86.Instruction.DivInstruction, ctx.Operand1, ctx.Operand2);
 
@@ -930,7 +930,7 @@ namespace Mosa.Platforms.x86
 		void IR2.IIRVisitor.URemInstruction(Context ctx)
 		{
 			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, new RegisterOperand(ctx.Operand2.Type, GeneralPurposeRegister.EAX), ctx.Operand2);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.UDivInstruction, ctx.Operand2, ctx.Operand3);
+			ctx.InsertInstructionAfter(IR2.Instruction.UDivInstruction, ctx.Operand2, ctx.Operand3);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ctx.Operand1, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX));
 		}
 

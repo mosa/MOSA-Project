@@ -18,7 +18,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class AddInstruction : BaseInstruction
+	public sealed class AddInstruction : TwoOperandInstruction
 	{
 
 		#region Data Members
@@ -86,13 +86,23 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="context">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context context)
 		{
-			return String.Format(@"x86.add {0}, {1} ; {0} += {1}", instruction.Operand1, instruction.Operand2);
+			return String.Format(@"x86.add {0}, {1} ; {0} += {1}", context.Operand1, context.Operand2);
+		}
+		
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="visitor">The visitor object.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(IX86Visitor visitor, Context context)
+		{
+			visitor.Add(context);
 		}
 
 		#endregion // Methods

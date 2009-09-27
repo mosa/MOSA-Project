@@ -20,6 +20,36 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// </summary>
 	public class BaseInstruction : IPlatformInstruction
 	{
+		#region Data members
+
+		/// <summary>
+		/// Holds the default number of operands for this instruction.
+		/// </summary>
+		protected byte _operandDefaultCount;
+
+		/// <summary>
+		/// Holds the default number of operand results for this instruction.
+		/// </summary>
+		protected byte _resultDefaultCount;
+
+		#endregion // Data members
+
+		#region Properties
+
+		/// <summary>
+		/// Gets the default operand count of the instruction
+		/// </summary>
+		/// <value>The operand count.</value>
+		public byte DefaultOperandCount { get { return _operandDefaultCount; } }
+
+		/// <summary>
+		/// Gets the default result operand count of the instruction
+		/// </summary>
+		/// <value>The operand result count.</value>
+		public byte DefaultResultCount { get { return _resultDefaultCount; } }
+
+		#endregion // Properties
+
 		#region Construction
 
 		/// <summary>
@@ -27,6 +57,28 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		public BaseInstruction()
 		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
+		/// </summary>
+		/// <param name="operandCount">The operand count.</param>
+		public BaseInstruction(byte operandCount)
+			: this()
+		{
+			_operandDefaultCount = operandCount;
+			_resultDefaultCount = 0;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
+		/// </summary>
+		/// <param name="operandCount">The operand count.</param>
+		/// <param name="resultCount">The result count.</param>
+		public BaseInstruction(byte operandCount, byte resultCount)
+			: this(operandCount)
+		{
+			_resultDefaultCount = resultCount;
 		}
 
 		#endregion // Construction
@@ -62,11 +114,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="context">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public virtual string ToString(ref InstructionData instruction)
+		public virtual string ToString(Context context)
 		{
 			return ToString();
 		}
@@ -98,7 +150,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="vistor">The vistor.</param>
 		/// <param name="context">The context.</param>
-		public virtual void Visit(IVisitor vistor, Context context)
+		public void Visit(IVisitor vistor, Context context)
 		{
 			if (vistor is IX86Visitor)
 				Visit(vistor as IX86Visitor, context);

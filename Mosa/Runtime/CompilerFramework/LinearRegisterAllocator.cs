@@ -227,12 +227,12 @@ namespace Mosa.Runtime.CompilerFramework
 					// Yes, spill it back to its operand
 					RegisterOperand rop = new RegisterOperand(lr.Op.Type, lr.Reg);
 
-					MoveInstruction mi = CreateMoveInstruction(lr.Op, rop);		// FIXME XX
-					current.Block.Instructions.Insert(current.Start++, mi);		// FIXME XX
+//					MoveInstruction mi = CreateMoveInstruction(lr.Op, rop);		// FIXME PG - hack to allow compile
+//					current.Block.Instructions.Insert(current.Start++, mi);		// FIXME PG - hack to allow compile
 
 					// Load the new value
-					mi = CreateMoveInstruction(rop, current.Op);				// FIXME XX
-					current.Block.Instructions.Insert(current.Start++, mi);		// FIXME XX
+//					mi = CreateMoveInstruction(rop, current.Op);				// FIXME PG - hack to allow compile
+//					current.Block.Instructions.Insert(current.Start++, mi);		// FIXME PG - hack to allow compile
 
 					// Remove this live range From the active list
 					active.Remove(lr);
