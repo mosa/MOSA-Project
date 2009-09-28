@@ -468,6 +468,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Remove()
 		{
+			Clear();
+
 			int prev = _instructionSet.Previous(_index);
 
 			if (prev <= 0)

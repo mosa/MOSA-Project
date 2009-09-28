@@ -192,9 +192,10 @@ namespace Mosa.Runtime.CompilerFramework
 			this.Operand1 = null;
 			this.Operand2 = null;
 			this.Operand3 = null;
-			this.OperandCount = 0;
 			this.Result = null;
 			this.Result2 = null;
+			this.OperandCount = 0;
+			this.ResultCount = 0;
 			this.Prefix = null;
 			this.Branch = null;
 			this.Other = null;
