@@ -18,7 +18,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class AddInstruction : TwoOperandInstruction
+	public sealed class AddInstruction : TwoOperandInstruction, IPlatformInstruction
 	{
 
 		#region Data Members
@@ -77,9 +77,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="codeStream">The code stream.</param>
 		public override void Emit(ref InstructionData instruction, System.IO.Stream codeStream)
 		{
-			OpCode opcode = Add(instruction.Result, instruction.Operand1);
-			
-			// TODO: Emit it to codeStream
+			OpCode opcode = Add(instruction.Result, instruction.Operand1);			
+			MachineCodeEmitter.Emit(codeStream, opcode, instruction.Result, instruction.Operand1);
 		}
 
 

@@ -29,7 +29,7 @@ namespace Mosa.Platforms.x86
 	/// </summary>
 	public sealed class MachineCodeEmitter : ICodeEmitter, IDisposable
 	{
-		private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
+		private static readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
 
 		#region Types
 
@@ -66,7 +66,7 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// The compiler thats generating the code.
 		/// </summary>
-		IMethodCompiler _compiler;
+		static IMethodCompiler _compiler;
 
 		/// <summary>
 		/// The stream used to write machine code bytes to.
@@ -76,7 +76,7 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// The position that the code stream starts.
 		/// </summary>
-		private readonly long _codeStreamBasePosition;
+		private static long _codeStreamBasePosition;
 
 		/// <summary>
 		/// List of labels that were emitted.
@@ -86,12 +86,12 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Holds the linker used to resolve externals.
 		/// </summary>
-		private readonly IAssemblyLinker _linker;
+		private static IAssemblyLinker _linker;
 
 		/// <summary>
 		/// List of literal patches we need to perform.
 		/// </summary>
-		private readonly List<Patch> _literals = new List<Patch>();
+		private static readonly List<Patch> _literals = new List<Patch>();
 
 		/// <summary>
 		/// Patches we need to perform.
@@ -1486,6 +1486,190 @@ namespace Mosa.Platforms.x86
 			if (op3 is ConstantOperand)
 				EmitImmediate(dest);
 		}
+		
+		/// <summary>
+		/// Emits the given code.
+		/// </summary>
+		/// <param name="code">The opcode bytes.</param>
+		/// <param name="regField">The modR/M regfield.</param>
+		/// <param name="dest">The destination operand.</param>
+		/// <param name="src">The source operand.</param>
+		public static void Emit(System.IO.Stream codeStream, OpCode opCode, Operand dest, Operand src)
+		{
+			byte? sib = null, modRM = null;
+			MemoryOperand displacement = null;
+
+			// Write the opcode
+			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+
+			if (null == dest && null == src)
+				return;
+
+			// Write the mod R/M byte
+			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
+			if (null != modRM) {
+				codeStream.WriteByte(modRM.Value);
+				if (true == sib.HasValue) {
+					codeStream.WriteByte(sib.Value);
+				}
+			}
+
+			// Add displacement to the code
+			if (null != displacement)
+				WriteDisplacement(codeStream, displacement);
+
+			// Add immediate bytes
+			if (dest is ConstantOperand)
+				WriteImmediate(codeStream, dest);
+			if (src is ConstantOperand)
+				WriteImmediate(codeStream, src);
+		}
+		
+		/// <summary>
+		/// Emits the given code.
+		/// </summary>
+		/// <param name="codeStream">The codestream to write to.</param>
+		/// <param name="code">The opcode bytes.</param>
+		/// <param name="regField">The modR/M regfield.</param>
+		/// <param name="result">The destination operand.</param>
+		/// <param name="leftOperand">The source operand.</param>
+		/// <param name="rightOperand">The third operand.</param>
+		public static void Emit(System.IO.Stream codeStream, OpCode opCode, Operand result, Operand leftOperand, Operand rightOperand)
+		{
+			byte? sib = null, modRM = null;
+			MemoryOperand displacement = null;
+
+			// Write the opcode
+			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+
+			if (null == result && null == leftOperand)
+				return;
+
+			// Write the mod R/M byte
+			modRM = CalculateModRM(opCode.RegField, result, leftOperand, out sib, out displacement);
+			if (null != modRM) {
+				codeStream.WriteByte(modRM.Value);
+				if (true == sib.HasValue) {
+					codeStream.WriteByte(sib.Value);
+				}
+			}
+
+			// Add displacement to the code
+			if (null != displacement)
+				WriteDisplacement(codeStream, displacement);
+
+			// Add immediate bytes
+			if (rightOperand is ConstantOperand)
+				WriteImmediate(codeStream, rightOperand);
+		}
+		
+		/// <summary>
+		/// Emits the displacement operand.
+		/// </summary>
+		/// <param name="displacement">The displacement operand.</param>
+		public static void WriteDisplacement(System.IO.Stream codeStream, MemoryOperand displacement)
+		{
+			byte[] disp;
+
+			MemberOperand member = displacement as MemberOperand;
+			LabelOperand label = displacement as LabelOperand;
+			if (null != label) {
+				int pos = (int)(codeStream.Position - _codeStreamBasePosition);
+				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name, IntPtr.Zero));
+			}
+			else if (null != member) {
+				int pos = (int)(codeStream.Position - _codeStreamBasePosition);
+				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member, member.Offset));
+			}
+			else {
+				disp = LittleEndianBitConverter.GetBytes(displacement.Offset.ToInt32());
+			}
+
+			codeStream.Write(disp, 0, disp.Length);
+		}
+		
+		/// <summary>
+		/// Emits an immediate operand.
+		/// </summary>
+		/// <param name="op">The immediate operand to emit.</param>
+		private static void WriteImmediate(System.IO.Stream codeStream, Operand op)
+		{
+			byte[] imm = null;
+			if (op is LocalVariableOperand) {
+				// Add the displacement
+				StackOperand so = (StackOperand)op;
+				imm = LittleEndianBitConverter.GetBytes(so.Offset.ToInt32());
+			}
+			else if (op is LabelOperand) {
+				_literals.Add(new Patch((op as LabelOperand).Label, codeStream.Position));
+				imm = new byte[4];
+			}
+			else if (op is MemoryOperand) {
+				// Add the displacement
+				MemoryOperand mo = (MemoryOperand)op;
+				imm = LittleEndianBitConverter.GetBytes(mo.Offset.ToInt32());
+			}
+			else if (op is ConstantOperand) {
+				// Add the immediate
+				ConstantOperand co = (ConstantOperand)op;
+				switch (op.Type.Type) {
+					case CilElementType.I:
+                        try
+                        {
+                            imm = LittleEndianBitConverter.GetBytes(Convert.ToInt32(co.Value));
+                        }
+                        catch (OverflowException)
+                        {
+                            imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt32(co.Value));
+                        }
+						break;
+
+					case CilElementType.I1:
+						imm = LittleEndianBitConverter.GetBytes(Convert.ToSByte(co.Value));
+						break;
+
+					case CilElementType.I2:
+                        imm = LittleEndianBitConverter.GetBytes(Convert.ToInt16(co.Value));
+                        break; 
+					case CilElementType.I4: goto case CilElementType.I;
+
+					case CilElementType.U1:
+                        //imm = LittleEndianBitConverter.GetBytes(Convert.ToByte(co.Value));
+                        imm = new byte[1] { Convert.ToByte(co.Value) };
+                        break; 
+                    case CilElementType.Char:
+                        goto case CilElementType.U2;
+					case CilElementType.U2:
+                        imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt16(co.Value));
+                        break;
+					case CilElementType.U4:
+                        imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt32(co.Value));
+                        break;
+					case CilElementType.I8:
+                        imm = LittleEndianBitConverter.GetBytes(Convert.ToInt64(co.Value));
+                        break;
+					case CilElementType.U8:
+						imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt64(co.Value));
+						break;
+					case CilElementType.R4:
+						imm = LittleEndianBitConverter.GetBytes(Convert.ToSingle(co.Value));
+						break;
+					case CilElementType.R8: goto default;
+					default:
+						throw new NotSupportedException();
+				}
+			}
+			else if (op is RegisterOperand) {
+				// Nothing to do...
+			}
+			else {
+				throw new NotImplementedException();
+			}
+
+			// Emit the immediate constant to the code
+			if (null != imm)
+				codeStream.Write(imm, 0, imm.Length);
+		}
 
 		/// <summary>
 		/// Emits the relative branch target.
@@ -1630,7 +1814,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="sib">A potential SIB byte to emit.</param>
 		/// <param name="displacement">An immediate displacement to emit.</param>
 		/// <returns>The value of the modR/M byte.</returns>
-		private byte? CalculateModRM(byte? regField, Operand op1, Operand op2, out byte? sib, out MemoryOperand displacement)
+		private static byte? CalculateModRM(byte? regField, Operand op1, Operand op2, out byte? sib, out MemoryOperand displacement)
 		{
 			byte? modRM = null;
 
