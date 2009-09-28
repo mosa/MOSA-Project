@@ -95,6 +95,12 @@ namespace Mosa.Platforms.x86.CPUx86
 		{
 		}
 
+		/// <summary>
+		/// Gets the instruction latency.
+		/// </summary>
+		/// <value>The latency.</value>
+		public virtual int Latency { get { return -1; } }
+
 		#endregion // IPlatformInstruction Overrides
 
 		#region Operand Overrides

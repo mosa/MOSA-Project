@@ -43,6 +43,16 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion // Construction
 
+		#region Properties
+
+		/// <summary>
+		/// Gets the instruction latency.
+		/// </summary>
+		/// <value>The latency.</value>
+		public override int Latency { get { return 1; } }
+
+		#endregion // Properties
+
 		#region Methods
 
 		private static OpCode Add(Operand dest, Operand src)
@@ -80,7 +90,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			OpCode opcode = Add(ctx.Result, ctx.Operand1);
 			MachineCodeEmitter.Emit(codeStream, opcode, ctx.Result, ctx.Operand1);
 		}
-
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.

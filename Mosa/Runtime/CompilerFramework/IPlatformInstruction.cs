@@ -24,5 +24,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="context">The context.</param>
 		/// <param name="codeStream">The code stream.</param>
 		void Emit(Context context, System.IO.Stream codeStream);
+
+		/// <summary>
+		/// Gets the instruction latency.
+		/// </summary>
+		/// <value>The latency.</value>
+		int Latency { get; }
 	}
 }

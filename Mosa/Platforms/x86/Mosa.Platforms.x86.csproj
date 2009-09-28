@@ -198,7 +198,6 @@
     <Compile Include="InstructionSchedulingStage.cs" />
     <Compile Include="Instructions\Intrinsics\BochsDebug.cs" />
     <Compile Include="Instructions\Intrinsics\CpuIdInstruction.cs" />
-    <Compile Include="InstructionLatency.cs" />
     <Compile Include="IRToX86TransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>

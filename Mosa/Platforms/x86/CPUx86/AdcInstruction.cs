@@ -17,23 +17,33 @@ using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Intermediate representation of the x86 adc instruction.
-    /// </summary>
-    public sealed class AdcInstruction : TwoOperandInstruction
-    {
-        #region Construction
+	/// <summary>
+	/// Intermediate representation of the x86 adc instruction.
+	/// </summary>
+	public sealed class AdcInstruction : TwoOperandInstruction
+	{
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AdcInstruction"/> class.
-        /// </summary>
-        public AdcInstruction()
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AdcInstruction"/> class.
+		/// </summary>
+		public AdcInstruction()
+		{
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Methods
+		#region Properties
+
+		/// <summary>
+		/// Gets the instruction latency.
+		/// </summary>
+		/// <value>The latency.</value>
+		public override int Latency { get { return 1; } }
+
+		#endregion // Properties
+
+		#region Methods
 
 		/// <summary>
 		/// Returns a string representation of the instruction.
@@ -42,10 +52,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-        public override string ToString(Context context)
-        {
-            return String.Format("x86.adc {0}, {1} ; {0} = {0} + {1} + carry-flag", context.Operand1, context.Operand2);
-        }
+		public override string ToString(Context context)
+		{
+			return String.Format("x86.adc {0}, {1} ; {0} = {0} + {1} + carry-flag", context.Operand1, context.Operand2);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -57,6 +67,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Adc(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

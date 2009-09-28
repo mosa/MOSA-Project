@@ -35,6 +35,16 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 
         #endregion // Construction
 
+		#region Properties
+
+		/// <summary>
+		/// Gets the instruction latency.
+		/// </summary>
+		/// <value>The latency.</value>
+		public override int Latency { get { return 3; } }
+
+		#endregion // Properties
+
         #region OneOperandInstruction Overrides
 
         /// <summary>
