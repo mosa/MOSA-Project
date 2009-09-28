@@ -102,47 +102,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // IInstructionVisitor<Context> Members
 
-		#region Methods
-
-		/// <summary>
-		/// Removes the specified instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction to remove.</param>
-		protected void Remove(LegacyInstruction instruction)
-		{
-			// FIXME: Remove this sequence, once we have a smart instruction collection which does this.
-			for (int i = 0; i < instruction.Operands.Length; i++)
-				instruction.SetOperand(i, null);
-			for (int i = 0; i < instruction.Results.Length; i++)
-				instruction.SetResult(i, null);
-		}
-
-		/// <summary>
-		/// Replaces the currently processed instruction with another instruction.
-		/// </summary>
-		/// <param name="arg">The transformation context.</param>
-		/// <param name="instruction">The instruction to replace with.</param>
-		protected void Replace(Context arg, LegacyInstruction instruction)
-		{
-			arg.BasicBlock.Instructions[arg.Index] = instruction;
-		}
-
-		/// <summary>
-		/// Replaces the currently processed instruction with a set of instruction.
-		/// </summary>
-		/// <param name="arg">The transformation context.</param>
-		/// <param name="instructions">The instructions to replace with.</param>
-		protected void Replace(Context arg, IEnumerable<LegacyInstruction> instructions)
-		{
-			List<LegacyInstruction> insts = arg.BasicBlock.Instructions;
-			insts.RemoveAt(arg.Index);
-			int oldCount = insts.Count;
-			insts.InsertRange(arg.Index, instructions);
-			arg.Index += (insts.Count - oldCount) - 1;
-		}
-
-		#endregion // Methods
-
 		#region Block Operations
 
 		/// <summary>

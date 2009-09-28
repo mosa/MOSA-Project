@@ -1111,7 +1111,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Retrieve the runtime type
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
 			// The replacement instruction
-			LegacyInstruction replacement = null;
+			//LegacyInstruction replacement = null;
 
 			if (rm.IsDefined(rt)) {
 				// FIXME: Change this to a GetCustomAttributes call, once we can do that :)
@@ -1122,17 +1122,27 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						if (ia.Architecture.IsInstanceOfType(Architecture)) {
 							// Found a replacement for the call...
 							try {
-								Operand[] args = new Operand[ctx.ResultCount + ctx.OperandCount];
-								int idx = 0;
+								// FIXME PG - 
+								// PG: CreateInstance will not work anymore, need another approach
+								// PG: Unknown at this time
 
-								foreach (Operand result in ctx.Results)
-									args[idx++] = result;
+								Debug.Assert(false);
 
-								foreach (Operand operand in ctx.Operands)
-									args[idx++] = operand;
+								//Operand[] args = new Operand[ctx.ResultCount + ctx.OperandCount];
+								//int idx = 0;
 
-								replacement = (LegacyInstruction)Activator.CreateInstance(ia.InstructionType, args, null);
-								break;
+								//foreach (Operand result in ctx.Results)
+								//    args[idx++] = result;
+
+								//foreach (Operand operand in ctx.Operands)
+								//    args[idx++] = operand;
+
+								// FIXME PG - 
+								//replacement = (LegacyInstruction)Activator.CreateInstance(ia.InstructionType, args, null);
+
+								// ctx.SetInstruction();
+
+								return;
 							}
 							catch (Exception e) {
 								Trace.WriteLine("Failed to replace intrinsic call with its instruction:");
@@ -1143,10 +1153,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				}
 			}
 
-			if (replacement == null)
-				ProcessInvokeInstruction(ctx);
-			else
-				Replace(ctx, replacement);
+			ProcessInvokeInstruction(ctx);
 		}
 
 		/// <summary>
