@@ -1486,12 +1486,12 @@ namespace Mosa.Platforms.x86
 			if (op3 is ConstantOperand)
 				EmitImmediate(dest);
 		}
-		
+
 		/// <summary>
 		/// Emits the given code.
 		/// </summary>
-		/// <param name="code">The opcode bytes.</param>
-		/// <param name="regField">The modR/M regfield.</param>
+		/// <param name="codeStream">The code stream.</param>
+		/// <param name="opCode">The op code.</param>
 		/// <param name="dest">The destination operand.</param>
 		/// <param name="src">The source operand.</param>
 		public static void Emit(System.IO.Stream codeStream, OpCode opCode, Operand dest, Operand src)
@@ -1524,13 +1524,12 @@ namespace Mosa.Platforms.x86
 			if (src is ConstantOperand)
 				WriteImmediate(codeStream, src);
 		}
-		
+
 		/// <summary>
 		/// Emits the given code.
 		/// </summary>
 		/// <param name="codeStream">The codestream to write to.</param>
-		/// <param name="code">The opcode bytes.</param>
-		/// <param name="regField">The modR/M regfield.</param>
+		/// <param name="opCode">The op code.</param>
 		/// <param name="result">The destination operand.</param>
 		/// <param name="leftOperand">The source operand.</param>
 		/// <param name="rightOperand">The third operand.</param>
@@ -1562,10 +1561,11 @@ namespace Mosa.Platforms.x86
 			if (rightOperand is ConstantOperand)
 				WriteImmediate(codeStream, rightOperand);
 		}
-		
+
 		/// <summary>
 		/// Emits the displacement operand.
 		/// </summary>
+		/// <param name="codeStream">The code stream.</param>
 		/// <param name="displacement">The displacement operand.</param>
 		public static void WriteDisplacement(System.IO.Stream codeStream, MemoryOperand displacement)
 		{
@@ -1587,10 +1587,11 @@ namespace Mosa.Platforms.x86
 
 			codeStream.Write(disp, 0, disp.Length);
 		}
-		
+
 		/// <summary>
 		/// Emits an immediate operand.
 		/// </summary>
+		/// <param name="codeStream">The code stream.</param>
 		/// <param name="op">The immediate operand to emit.</param>
 		private static void WriteImmediate(System.IO.Stream codeStream, Operand op)
 		{

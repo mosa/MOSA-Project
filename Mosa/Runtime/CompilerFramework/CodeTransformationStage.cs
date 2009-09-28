@@ -105,16 +105,6 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Methods
 
 		/// <summary>
-		/// Removes the current instruction From the instruction stream.
-		/// </summary>
-		/// <param name="ctx">The context of the instruction to remove.</param>
-		protected void Remove(Context ctx)
-		{
-			Remove(ctx.BasicBlock.Instructions[ctx.Index]);
-			ctx.BasicBlock.Instructions.RemoveAt(ctx.Index--);
-		}
-
-		/// <summary>
 		/// Removes the specified instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction to remove.</param>

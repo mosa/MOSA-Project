@@ -765,10 +765,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The block.</param>
 		public void SetBranch(BasicBlock block)
 		{
-			if (Branch == null)
-				Branch = new Branch(1);
-
-			Branch.Targets[0] = block.Label;
+			SetBranch(block.Label);
 		}
 
 		/// <summary>

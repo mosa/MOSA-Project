@@ -200,7 +200,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		void ICILVisitor.Dup(Context ctx)
 		{
 			// We don't need the dup anymore.
-			Remove(ctx);
+			//Remove(ctx);
+			ctx.Remove();
 		}
 
 		/// <summary>
@@ -1167,7 +1168,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		private void ProcessLoadInstruction(Context ctx)
 		{
 			// We don't need to rewire the source/destination yet, its already there. :(
-			Remove(ctx);
+			//Remove(ctx);
+			ctx.Remove();
 
 			/* FIXME: This is only valid with reg alloc!
 			Type type = null;
@@ -1218,7 +1220,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					ctx.SetInstruction(IR2.Instruction.ZeroExtendedMoveInstruction, ctx.Result, ctx.Operand1);
 				return;
 			}
-			if (1 == ctx.Operand1.Definitions.Count && 1 == ctx.Operand1.Uses.Count) {
+			if (ctx.Operand1.Definitions.Count == 1 && ctx.Operand1.Uses.Count == 1) {
 				ctx.Operand1 = ctx.Result;
 				//ctx.Operand1.Replace(ctx.Result);
 				//Remove(ctx); 

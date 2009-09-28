@@ -150,11 +150,10 @@ namespace Mosa.Runtime.CompilerFramework
 				ExpireOldRanges(lr.Start, active);
 
 				Register reg = AllocateRegister(lr.Op);
-				if (reg == null) {
+				if (reg == null) 
 					reg = SpillRegister(active, lr);
-				}
 
-				Debug.Assert(null != reg, @"Failed to allocate a register type.");
+				Debug.Assert(reg != null, @"Failed to allocate a register type.");
 				RegisterOperand rop = new RegisterOperand(lr.Op.Type, reg);
 				ReplaceOperand(lr, rop); ;
 				lr.Reg = reg;
@@ -163,6 +162,7 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					return ((lr.End - match.End) > 0);
 				});
+
 				active.Insert(insIdx + 1, lr);
 			}
 		}
