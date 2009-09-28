@@ -31,7 +31,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// <summary>
 		/// Initializes a new instance of <see cref="BaseInstruction"/>.
 		/// </summary>
-		/// <param name="operandCount">Specifies the number of operands of the instruction.</param>
+		/// <param name="operandCount">Specifies the number of operands of the context.</param>
 		protected BaseInstruction(int operandCount) :
 			this(operandCount, 0)
 		{
@@ -40,8 +40,8 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// <summary>
 		/// Initializes a new instance of <see cref="BaseInstruction"/>.
 		/// </summary>
-		/// <param name="operandCount">Specifies the number of operands of the instruction.</param>
-		/// <param name="resultCount">Specifies the number of results of the instruction.</param>
+		/// <param name="operandCount">Specifies the number of operands of the context.</param>
+		/// <param name="resultCount">Specifies the number of results of the context.</param>
 		protected BaseInstruction(int operandCount, int resultCount)
 		{
 		}
@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		#region Methods
 
 		/// <summary>
-		/// Determines flow behavior of this instruction.
+		/// Determines flow behavior of this context.
 		/// </summary>
 		/// <remarks>
 		/// Knowledge of control flow is required for correct basic block
@@ -66,20 +66,20 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public virtual string ToString(ref InstructionData instruction)
+		public virtual string ToString(Context ctx)
 		{
 			return ToString();
 		}
 
 		/// <summary>
-		/// Returns a string representation of the instruction.
+		/// Returns a string representation of the context.
 		/// </summary>
 		/// <returns>
-		/// A string representation of the instruction in intermediate form.
+		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
 		public override string ToString()
 		{

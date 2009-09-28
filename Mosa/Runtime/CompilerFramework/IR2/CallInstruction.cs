@@ -6,7 +6,7 @@ using Mosa.Runtime.Vm;
 namespace Mosa.Runtime.CompilerFramework.IR2
 {
     /// <summary>
-    /// Intermediate representation of call instruction.
+    /// Intermediate representation of call context.
     /// </summary>
     public class CallInstruction : BaseInstruction
     {
@@ -23,15 +23,16 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 
         #region IRInstruction Overrides
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString(ref InstructionData instruction)
+		/// <summary>
+		/// Returns a string representation of the context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+        public override string ToString(Context context)
         {
-			return String.Format(@"IR.call {0}", instruction.RuntimeField);
+			return String.Format(@"IR.call {0}", context.RuntimeField);
         }
 
 		/// <summary>

@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of LiteralInstruction.
+		/// Initializes a new instance of Literalcontext.
 		/// </summary>
 		protected LiteralInstruction()
 		{
@@ -36,13 +36,13 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="context">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context context)
 		{
-			LiteralData data = (LiteralData)instruction.Other;
+			LiteralData data = (LiteralData)context.Other;
 			return String.Format("IR.literal {0} {1} ; L_{2}", data.Type, data.Data, data.Label);
 		}
 

@@ -23,15 +23,16 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 
         #region TwoOperandInstruction Overrides
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString(ref InstructionData instruction)
+		/// <summary>
+		/// Returns a string representation of the context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+        public override string ToString(Context context)
         {
-            return String.Format(@"IR.itofp {0}, {1} ; {0} = (fp){1}", instruction.Operand1, instruction.Operand2);
+			return String.Format(@"IR.itofp {0}, {1} ; {0} = (fp){1}", context.Operand1, context.Operand2);
         }
 
         #endregion // TwoOperandInstruction Overrides

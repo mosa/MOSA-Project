@@ -73,12 +73,12 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="codeStream">The code stream.</param>
-		public override void Emit(ref InstructionData instruction, System.IO.Stream codeStream)
+		public override void Emit(Context ctx, System.IO.Stream codeStream)
 		{
-			OpCode opcode = Add(instruction.Result, instruction.Operand1);			
-			MachineCodeEmitter.Emit(codeStream, opcode, instruction.Result, instruction.Operand1);
+			OpCode opcode = Add(ctx.Result, ctx.Operand1);
+			MachineCodeEmitter.Emit(codeStream, opcode, ctx.Result, ctx.Operand1);
 		}
 
 

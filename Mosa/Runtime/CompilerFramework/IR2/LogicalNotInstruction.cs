@@ -31,13 +31,16 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 
         #region Instruction Overrides
 
-        /// <summary>
-        /// Returns a string representation of the <see cref="MoveInstruction"/>.
-        /// </summary>
-        /// <returns>A string representation of the move instruction.</returns>
-        public override string ToString(ref InstructionData instruction)
+		/// <summary>
+		/// Returns a string representation of the <see cref="MoveInstruction"/>.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+        public override string ToString(Context context)
         {
-            return String.Format(@"IR.not {0} <- ~{1}", instruction.Operand1, instruction.Operand2);
+			return String.Format(@"IR.not {0} <- ~{1}", context.Operand1, context.Operand2);
         }
 
 		/// <summary>

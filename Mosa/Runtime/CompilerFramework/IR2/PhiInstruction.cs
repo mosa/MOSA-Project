@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of PhiInstruction.
+		/// Initializes a new instance of Phicontext.
 		/// </summary>
 		public PhiInstruction()
 		{
@@ -39,21 +39,21 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="context">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context context)
 		{
 			StringBuilder builder = new StringBuilder();
-			builder.AppendFormat("IR.phi ; {0} = phi(", instruction.Result);
+			builder.AppendFormat("IR.phi ; {0} = phi(", context.Result);
 			
-			if (instruction.Operand1 != null)
-				builder.AppendFormat("{0}, ", instruction.Operand1);
-			if (instruction.Operand2 != null)
-				builder.AppendFormat("{0}, ", instruction.Operand2);
-			if (instruction.Operand3 != null)
-				builder.AppendFormat("{0}, ", instruction.Operand3);
+			if (context.Operand1 != null)
+				builder.AppendFormat("{0}, ", context.Operand1);
+			if (context.Operand2 != null)
+				builder.AppendFormat("{0}, ", context.Operand2);
+			if (context.Operand3 != null)
+				builder.AppendFormat("{0}, ", context.Operand3);
 			
 			builder.Remove(builder.Length - 2, 2);
 			builder.Append(')');

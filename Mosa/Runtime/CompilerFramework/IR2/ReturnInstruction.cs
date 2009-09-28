@@ -12,7 +12,7 @@ using System;
 namespace Mosa.Runtime.CompilerFramework.IR2
 {
     /// <summary>
-    /// Intermediate representation of a method return instruction.
+    /// Intermediate representation of a method return context.
     /// </summary>
     public class ReturnInstruction : OneOperandInstruction
     {
@@ -39,7 +39,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         #region OneOperandInstruction Overrides
 
         /// <summary>
-        /// Determines flow behavior of this instruction.
+        /// Determines flow behavior of this context.
         /// </summary>
         /// <value></value>
         /// <remarks>
@@ -55,13 +55,13 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         /// <summary>
         /// Returns a string representation of the <see cref="ReturnInstruction"/>.
         /// </summary>
-        /// <returns>A string representation of the instruction.</returns>
-        public override string ToString(ref InstructionData instruction)
+        /// 
+        public override string ToString(Context context)
         {
-            if (null == instruction.Operand1)
+            if (null == context.Operand1)
                 return @"IR.return";
 
-            return String.Format(@"IR.return {0}", instruction.Operand1);
+            return String.Format(@"IR.return {0}", context.Operand1);
         }
 
 		/// <summary>

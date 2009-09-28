@@ -36,13 +36,13 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// <summary>
 		/// Returns a string representation of the <see cref="PopInstruction"/>.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="context">The context.</param>
 		/// <returns>
-		/// A string representation of the instruction.
+		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-        public override string ToString(ref InstructionData instruction)
+        public override string ToString(Context context)
         {
-            return String.Format("IR.push {0}", instruction.Operand1);
+            return String.Format("IR.push {0}", context.Operand1);
         }
 
 		/// <summary>

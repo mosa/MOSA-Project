@@ -14,7 +14,7 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.IR2
 {
     /// <summary>
-    /// Intermediate representation of an arbitrary move instruction.
+    /// Intermediate representation of an arbitrary move context.
     /// </summary>
     public class MoveInstruction : TwoOperandInstruction
     {
@@ -31,13 +31,16 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 
         #region TwoOperandInstruction Overrides
 
-        /// <summary>
-        /// Returns a string representation of the <see cref="MoveInstruction"/>.
-        /// </summary>
-        /// <returns>A string representation of the move instruction.</returns>
-        public override string ToString(ref InstructionData instruction)
+		/// <summary>
+		/// Returns a string representation of the <see cref="MoveInstruction"/>.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns>
+		/// A string representation of the move context.
+		/// </returns>
+        public override string ToString(Context context)
         {
-            return String.Format(@"IR.move {0} <- {1}", instruction.Operand1, instruction.Operand2);
+            return String.Format(@"IR.move {0} <- {1}", context.Operand1, context.Operand2);
         }
 
 		/// <summary>

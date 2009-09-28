@@ -224,7 +224,6 @@
     <Compile Include="CompilerFramework\CIL\NopInstruction.cs" />
     <Compile Include="CompilerFramework\InstructionSet.cs" />
     <Compile Include="CompilerFramework\InstructionData.cs" />
-    <Compile Include="CompilerFramework\InstructionType.cs" />
     <Compile Include="CompilerFramework\CIL\BaseInstruction.cs" />
     <Compile Include="CompilerFramework\ReverseBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\OperandDeterminationStage.cs" />

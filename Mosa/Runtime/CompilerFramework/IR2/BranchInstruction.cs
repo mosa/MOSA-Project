@@ -14,7 +14,7 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.IR2
 {
     /// <summary>
-    /// Intermediate representation of a branch instruction.
+    /// Intermediate representation of a branch context.
     /// </summary>
     public sealed class BranchInstruction : OneOperandInstruction
     {
@@ -82,13 +82,14 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 
         #region OneOperandInstruction Overrides
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString(ref InstructionData instruction)
+		/// <summary>
+		/// Returns a string representation of the context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+        public override string ToString(Context context)
         {
             string cc;
             switch (_conditionCode)

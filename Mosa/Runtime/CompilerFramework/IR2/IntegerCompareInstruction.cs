@@ -33,15 +33,16 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		#region ThreeOperandInstruction Overrides
 
 		/// <summary>
-		/// Returns a string representation of the instruction.
+		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
+		/// <param name="context">The context.</param>
 		/// <returns>
 		/// A string representation of the instruction in intermediate form.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context context)
 		{
 			string cc;
-			switch ((ConditionCode)instruction.Other) {
+			switch ((ConditionCode)context.Other) {
 				case ConditionCode.Equal: cc = @"=="; break;
 				case ConditionCode.GreaterOrEqual: cc = @">="; break;
 				case ConditionCode.GreaterThan: cc = @">"; break;
@@ -55,7 +56,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 				default:
 					throw new NotSupportedException();
 			}
-			return String.Format(@"IR.icmp {0} = {1} {2} {3}", instruction.Operand1, instruction.Operand2, cc, instruction.Operand3);
+			return String.Format(@"IR.icmp {0} = {1} {2} {3}", context.Operand1, context.Operand2, cc, context.Operand3);
 		}
 
 		/// <summary>

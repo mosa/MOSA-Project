@@ -43,10 +43,10 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         /// <summary>
         /// Returns a string representation of the <see cref="ShiftLeftInstruction"/>.
         /// </summary>
-        /// <returns>A string representation of the shl instruction.</returns>
-        public override string ToString(ref InstructionData instruction)
+        /// <returns>A string representation of the shl context.</returns>
+        public override string ToString(Context context)
         {
-            return String.Format(@"IR.shl {0} <- {1} & {2}", instruction.Operand1, instruction.Operand2, instruction.Operand3);
+            return String.Format(@"IR.shl {0} <- {1} & {2}", context.Operand1, context.Operand2, context.Operand3);
         }
 
 		/// <summary>

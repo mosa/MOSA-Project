@@ -89,9 +89,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="codeStream">The code stream.</param>
-		public virtual void Emit(ref InstructionData instruction, System.IO.Stream codeStream)
+		public virtual void Emit(Context ctx, System.IO.Stream codeStream)
 		{
 		}
 

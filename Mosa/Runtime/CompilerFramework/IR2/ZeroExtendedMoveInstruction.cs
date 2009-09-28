@@ -14,7 +14,7 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.IR2
 {
     /// <summary>
-    /// Intermediate representation of a signed conversion instruction.
+    /// Intermediate representation of a signed conversion context.
     /// </summary>
     /// <remarks>
     /// This instruction takes the source operand and converts to the request size maintaining its sign.
@@ -37,10 +37,10 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         /// <summary>
         /// Returns a string representation of <see cref="SignExtendedMoveInstruction"/>.
         /// </summary>
-        /// <returns>A string representation of the instruction.</returns>
-        public override string ToString(ref InstructionData instruction)
+        /// 
+        public override string ToString(Context context)
         {
-            return String.Format(@"IR.zconv {0} <- {1}", instruction.Operand1, instruction.Operand2);
+            return String.Format(@"IR.zconv {0} <- {1}", context.Operand1, context.Operand2);
         }
 
 		/// <summary>

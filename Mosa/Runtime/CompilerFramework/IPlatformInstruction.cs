@@ -21,8 +21,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="codeStream">The code stream.</param>
-		void Emit(ref InstructionData instruction, System.IO.Stream codeStream);
+		void Emit(Context context, System.IO.Stream codeStream);
 	}
 }

@@ -25,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
     /// is statically or dynamically equal to or larger than the number of bits in the first
     /// operand, the result is undefined.
     /// <para/>
-    /// The most significant bits will be filled with zeroes by this instruction. To preserve
+    /// The most significant bits will be filled with zeroes by this context. To preserve
     /// the sign of the shifted value (inserting ones if it is negative), use the 
     /// <see cref="ArithmeticShiftRightInstruction"/> instead.
     /// </remarks>
@@ -47,10 +47,10 @@ namespace Mosa.Runtime.CompilerFramework.IR2
         /// <summary>
         /// Returns a string representation of the <see cref="ShiftRightInstruction"/>.
         /// </summary>
-        /// <returns>A string representation of the shr instruction.</returns>
-        public override string ToString(ref InstructionData instruction)
+        /// <returns>A string representation of the shr context.</returns>
+        public override string ToString(Context context)
         {
-            return String.Format(@"IR.shr {0} <- {1} & {2}", instruction.Operand1, instruction.Operand2, instruction.Operand3);
+            return String.Format(@"IR.shr {0} <- {1} & {2}", context.Operand1, context.Operand2, context.Operand3);
         }
 
 		/// <summary>

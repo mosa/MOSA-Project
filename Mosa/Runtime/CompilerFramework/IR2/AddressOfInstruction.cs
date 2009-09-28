@@ -37,14 +37,14 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		#region Methods
 
 		/// <summary>
-		/// Returns a string representation of the instruction.
+		/// Returns a string representation of the context.
 		/// </summary>
 		/// <returns>
-		/// A string representation of the instruction in intermediate form.
+		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(ref InstructionData instruction)
+		public override string ToString(Context context)
 		{
-			return String.Format("IR.{0} = &{1}", instruction.Operand1, instruction.Operand2);
+			return String.Format("IR.{0} = &{1}", context.Operand1, context.Operand2);
 		}
 
 		/// <summary>
