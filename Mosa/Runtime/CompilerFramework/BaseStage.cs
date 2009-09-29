@@ -33,6 +33,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected List<BasicBlock> BasicBlocks;
 
+		/// <summary>
+		/// Hods the block provider
+		/// </summary>
+		protected IBasicBlockProvider BlockProvider;
+
 		#endregion // Data members
 
 		#region Construction
@@ -63,11 +68,11 @@ namespace Mosa.Runtime.CompilerFramework
 				throw new InvalidOperationException(@"Instruction set provider missing.");
 			InstructionSet = instructionsProvider.InstructionSet;
 
-			// Retrieve the basic block list
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-			if (blockProvider == null)
+			// Retrieve the basic block provider and list
+			BlockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
+			if (BlockProvider == null)
 				throw new InvalidOperationException(@"Instruction stream must be split to basic Blocks.");
-			BasicBlocks = blockProvider.Blocks;
+			BasicBlocks = BlockProvider.Blocks;
 
 		}
 
