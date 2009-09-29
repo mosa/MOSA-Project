@@ -19,6 +19,5 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 	/// </summary>
 	public interface IIRInstruction : IInstruction
 	{
-
 	}
 }

@@ -120,6 +120,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		#endregion //  Overrides
 
 		#region Typesizes
+
 		/// <summary>
 		/// Check if the given operand is an unsigned byte
 		/// </summary>
@@ -249,6 +250,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		{
 			return IsUnsignedLong(operand) || IsSignedLong(operand);
 		}
+
 		#endregion
 	}
 }

@@ -486,17 +486,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction.</param>
 		public void SetInstruction(IInstruction instruction)
 		{
-			if (instruction is CIL.ICILInstruction)
-				SetInstruction(instruction,
-					(instruction as CIL.ICILInstruction).DefaultOperandCount,
-					(instruction as CIL.ICILInstruction).DefaultResultCount);
-			else
-				//if (instruction is IR2.IIRInstruction)
-				//    SetInstruction(instruction,
-				//        (instruction as IR2.IIRInstruction).DefaultOperandCount,
-				//        (instruction as IR2.IIRInstruction).DefaultResultCount);
-				//else
-					SetInstruction(instruction, 0, 0);
+			SetInstruction(instruction, instruction.DefaultOperandCount, instruction.DefaultResultCount);
 		}
 
 		/// <summary>

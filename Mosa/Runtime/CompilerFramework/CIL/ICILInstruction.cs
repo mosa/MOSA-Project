@@ -35,27 +35,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		void Validate(Context ctx, IMethodCompiler compiler);
 
 		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		string ToString(Context ctx);
-
-		/// <summary>
-		/// Gets the default operand count of the instruction
-		/// </summary>
-		/// <value>The operand count.</value>
-		byte DefaultOperandCount { get; }
-
-		/// <summary>
-		/// Gets the default result operand count of the instruction
-		/// </summary>
-		/// <value>The operand result count.</value>
-		byte DefaultResultCount { get; }
-
-		/// <summary>
 		/// Gets the opcode.
 		/// </summary>
 		/// <value>The opcode.</value>
