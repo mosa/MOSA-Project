@@ -24,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <para/>
 	/// It is only safe to use this stage on an instruction stream in SSA form.
 	/// </remarks>
-	public sealed class ConstantPropagationStage : IMethodCompilerStage
+	public sealed class ConstantPropagationStage : BaseStage, IMethodCompilerStage
 	{
 		#region IMethodCompilerStage Members
 
@@ -41,32 +41,23 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
-
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-
-			if (blockProvider == null)
-				throw new InvalidOperationException(@"Instruction stream must be split to basic Blocks.");
-
-			// Retrieve the instruction provider and the instruction set
-			InstructionSet instructionset = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
+			base.Run(compiler);
 
 			bool remove = false;
 
-			foreach (BasicBlock block in blockProvider.Blocks) {
-				Context ctx = new Context(instructionset, block);
+			foreach (BasicBlock block in _basicBlocks) {
+				Context ctx = new Context(_instructionset, block);
 
 				while (!ctx.EndOfInstruction) {
 
 					if (ctx.Instruction is IR2.MoveInstruction || ctx.Instruction is CIL.StlocInstruction) {
-						if ( ctx.Operand1 is ConstantOperand) {
+						if (ctx.Operand1 is ConstantOperand) {
 							// HACK: We can't track a constant through a register, so we keep those moves
 							if (ctx.Result is StackOperand) {
 								Debug.Assert(ctx.Result.Definitions.Count == 1, @"Operand defined multiple times. Instruction stream not in SSA form!");
-								ctx.Result.Replace( ctx.Operand1);
+								ctx.Result.Replace(ctx.Operand1);
 								remove = true;
 							}
 						}
@@ -94,15 +85,13 @@ namespace Mosa.Runtime.CompilerFramework
 
 					ctx.GotoNext();
 				}
-
 			}
-
 		}
 
 		/// <summary>
-		/// 
+		/// Adds the stage to the pipeline.
 		/// </summary>
-		/// <param name="pipeline"></param>
+		/// <param name="pipeline">The pipeline to add to.</param>
 		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
 			pipeline.InsertAfter<EnterSSA>(this);

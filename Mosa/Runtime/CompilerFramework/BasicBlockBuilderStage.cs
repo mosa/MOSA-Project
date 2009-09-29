@@ -116,11 +116,8 @@ namespace Mosa.Runtime.CompilerFramework
 		private void FindLoopHeads(Context ctx)
 		{
 			while (!ctx.EndOfInstruction) {
-				// Retrieve the instruction
-				CIL.ICILInstruction instruction = ctx.Instruction as CIL.ICILInstruction;
-
 				// Does this instruction end a block?
-				switch (instruction.FlowControl) {
+				switch (ctx.Instruction.FlowControl) {
 					case FlowControl.Break: goto case FlowControl.Next;
 					case FlowControl.Call: goto case FlowControl.Next;
 					case FlowControl.Next: break;
@@ -135,7 +132,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 					case FlowControl.ConditionalBranch:
 						// Conditional branch with multiple targets
-						foreach (int target in (instruction as IBranchInstruction).BranchTargets)
+						foreach (int target in ctx.Branch.Targets)
 							AddLoopHead(target);
 						goto case FlowControl.Throw;
 
@@ -186,10 +183,10 @@ namespace Mosa.Runtime.CompilerFramework
 					ctx.BasicBlock = current.Value;
 
 					// Set the block index on all the instructions
-					while ((ctx.Index != next.Key) && !ctx.EndOfInstruction) 
+					while ((ctx.Index != next.Key) && !ctx.EndOfInstruction)
 						ctx.GotoNext();
-			
-					ctx.GotoPrevious(); // FIXME PG - might be buggy if on last instruction in set
+
+					ctx.GotoPrevious(); // FIXME PG - might be buggy if on the last instruction in set
 
 					InsertFlowControl(ctx, current.Value, next.Key, epilogue);
 				}

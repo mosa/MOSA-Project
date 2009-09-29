@@ -14,7 +14,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// </summary>
 	public interface IBranchInstruction
 	{
-
 		#region Properties
 
 		/// <summary>
