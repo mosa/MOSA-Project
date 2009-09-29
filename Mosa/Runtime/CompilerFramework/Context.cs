@@ -491,7 +491,12 @@ namespace Mosa.Runtime.CompilerFramework
 					(instruction as CIL.ICILInstruction).DefaultOperandCount,
 					(instruction as CIL.ICILInstruction).DefaultResultCount);
 			else
-				SetInstruction(instruction, 0, 0);
+				//if (instruction is IR2.IIRInstruction)
+				//    SetInstruction(instruction,
+				//        (instruction as IR2.IIRInstruction).DefaultOperandCount,
+				//        (instruction as IR2.IIRInstruction).DefaultResultCount);
+				//else
+					SetInstruction(instruction, 0, 0);
 		}
 
 		/// <summary>
@@ -810,12 +815,12 @@ namespace Mosa.Runtime.CompilerFramework
 		public Operand GetOperand(int index)
 		{
 			switch (index) {
-				case 0: return Operand1; 
-				case 1: return Operand2; 
+				case 0: return Operand1;
+				case 1: return Operand2;
 				case 2: return Operand3;
 				default: break;
 			}
-			
+
 			System.Diagnostics.Debug.Assert(false, @"No index");
 			return null;
 		}
@@ -868,7 +873,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			System.Diagnostics.Debug.Assert(false, @"No index");
 		}
-		
+
 		#endregion // Methods
 	};
 

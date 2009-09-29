@@ -77,6 +77,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompilerFramework\BaseInstruction.cs" />
     <Compile Include="CompilerFramework\BasicBlockBuilderStage.cs" />
     <Compile Include="CompilerFramework\BasicBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\CIL\AddInstruction.cs" />
