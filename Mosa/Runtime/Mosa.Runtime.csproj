@@ -444,112 +444,112 @@
     <Compile Include="CompilerFramework\VariableOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\AddressOfInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\AddressOfInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\ArithmeticShiftRightInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\ArithmeticShiftRightInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\BranchInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\BranchInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\CallInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\CallInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\ConditionCode.cs">
+    <Compile Include="CompilerFramework\_IR\ConditionCode.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\EpilogueInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\EpilogueInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\FloatingPointCompareInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\FloatingPointCompareInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\FloatingPointToIntegerConversionInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\FloatingPointToIntegerConversionInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\IConditionalInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\IConditionalInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\IIrVisitor.cs">
+    <Compile Include="CompilerFramework\_IR\IIrVisitor.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\IntegerCompareInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\IntegerCompareInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\IntegerToFloatingPointConversionInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\IntegerToFloatingPointConversionInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\IRInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\IRInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\JmpInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\JmpInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\LiteralInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\LiteralInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\LoadInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\LoadInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\LogicalAndInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\LogicalAndInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\LogicalNotInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\LogicalNotInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\LogicalOrInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\LogicalOrInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\LogicalXorInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\LogicalXorInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\MoveInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\MoveInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\OneOperandInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\OneOperandInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\PhiInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\PhiInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\PopInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\PopInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\PrologueInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\PrologueInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\PushInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\PushInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\ReturnInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\ReturnInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\ShiftLeftInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\ShiftLeftInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\ShiftRightInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\ShiftRightInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\SignExtendedMoveInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\SignExtendedMoveInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\StoreInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\StoreInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\ThreeOperandInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\ThreeOperandInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\TwoOperandInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\TwoOperandInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\UDivInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\UDivInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\URemInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\URemInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\ZeroExtendedMoveInstruction.cs">
+    <Compile Include="CompilerFramework\_IR\ZeroExtendedMoveInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Linker\AssemblyLinkerStage.cs">
