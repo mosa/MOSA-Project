@@ -8,9 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
@@ -20,28 +17,19 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// </summary>
 	public class DirectMultiplicationInstruction : BaseInstruction
 	{
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DirectMultiplicationInstruction"/> class.
-		/// </summary>
-		public DirectMultiplicationInstruction()
-		{
-		}
-
-		#endregion // Construction
-
 		#region Methods
 
-		/// <summary>
-		/// Emits the specified platform instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="codeStream">The code stream.</param>
-		public override void Emit(Context ctx, System.IO.Stream codeStream)
-		{
-			codeStream.WriteByte(0x90);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstOperand"></param>
+        /// <param name="secondOperand"></param>
+        /// <param name="thirdOperand"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand firstOperand, Operand secondOperand, Operand thirdOperand)
+        {
+            return new OpCode(new byte[] { 0xF7 }, 4);
+        }
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.

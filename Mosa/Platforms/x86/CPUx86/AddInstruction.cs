@@ -48,7 +48,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// <param name="src"></param>
         /// <param name="thirdOperand"></param>
         /// <returns></returns>
-        protected override OpCode  ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
+        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
         {
 			if ((dest is RegisterOperand) && (src is ConstantOperand))
 				return R_C;

@@ -8,12 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -21,22 +16,14 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// Intermediate representation of the x86 int instruction.
 	/// </summary>
 	public sealed class DecInstruction : OneOperandInstruction
-	{
-		#region Construction
+    {
+        #region Data Members
+	    private static readonly OpCode R = new OpCode(new byte[] { 0xFF }, 1);
+	    private static readonly OpCode M = new OpCode(new byte[] { 0xFF }, 1);
+        #endregion
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IntInstruction"/> class.
-		/// </summary>
-		public DecInstruction() :
-			base()
-		{
-		}
-
-		#endregion // Construction
-
-		#region Properties
-
-		/// <summary>
+        #region Properties
+        /// <summary>
 		/// Gets the instruction latency.
 		/// </summary>
 		/// <value>The latency.</value>
@@ -45,6 +32,19 @@ namespace Mosa.Platforms.x86.CPUx86
 		#endregion // Properties
 
 		#region OneOperandInstruction Overrides
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        /// <param name="third"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand third)
+        {
+            if (dest is RegisterOperand) return R;
+            if (dest is MemoryOperand) return M;
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 
 		/// <summary>
 		/// Returns a string representation of the instruction.
@@ -66,7 +66,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		{
 			visitor.Dec(context);
 		}
-
 		#endregion // OneOperandInstruction Overrides
 	}
 }

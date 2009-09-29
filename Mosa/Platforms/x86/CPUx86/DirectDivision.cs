@@ -8,13 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
-using Mosa.Runtime.Metadata;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -22,20 +16,28 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// Intermediate representation of the div instruction.
 	/// </summary>
 	public sealed class DirectDivisionInstruction : OneOperandInstruction
-	{
-		#region Construction
+    {
+        #region Data Members
+        private static readonly OpCode R = new OpCode(new byte[] { 0xF7 }, 6);
+	    private static readonly OpCode M = new OpCode(new byte[] { 0xF7 }, 6);
+        #endregion
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DivInstruction"/> class.
-		/// </summary>
-		public DirectDivisionInstruction() :
-			base()
-		{
-		}
+        #region OneOperandInstruction Overrides
 
-		#endregion // Construction
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        /// <param name="thirdOperand"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
+        {
+            if (src is RegisterOperand) return R;
+            if (src is MemoryOperand) return M;
 
-		#region OneOperandInstruction Overrides
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 
 		/// <summary>
 		/// Returns a string representation of the instruction.
@@ -45,7 +47,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </returns>
 		public override string ToString(Context context)
 		{
-			return String.Format(@"x86 idiv {0} ; edx:eax /= {0}", context.Operand1);
+			return String.Format(@"x86.div {0} ; edx:eax /= {0}", context.Operand1);
 		}
 
 		/// <summary>
