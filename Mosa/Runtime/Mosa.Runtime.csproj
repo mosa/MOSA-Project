@@ -321,7 +321,7 @@
     <Compile Include="CompilerFramework\IBasicBlockProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IBranchInstruction.cs">
+    <Compile Include="CompilerFramework\_IBranchInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\ICallingConvention.cs">
@@ -339,7 +339,7 @@
     <Compile Include="CompilerFramework\IInstructionsProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IInstructionVisitor.cs">
+    <Compile Include="CompilerFramework\_IInstructionVisitor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\IMethodCompilerBuilder.cs">
@@ -348,7 +348,7 @@
     <Compile Include="CompilerFramework\IMethodCompilerStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Instruction.cs">
+    <Compile Include="CompilerFramework\_Instruction.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\InstructionLogger.cs">
