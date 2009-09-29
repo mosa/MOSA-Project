@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BaseInstruction : ICILInstruction
+	public class BaseInstruction : Mosa.Runtime.CompilerFramework.BaseInstruction, ICILInstruction
 	{
 		#region Data members
 
@@ -25,16 +25,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Holds the CIL opcode
 		/// </summary>
 		protected OpCode _opcode;
-
-		/// <summary>
-		/// Holds the default number of operands for this instruction.
-		/// </summary>
-		protected byte _operandDefaultCount;
-
-		/// <summary>
-		/// Holds the default number of operand results for this instruction.
-		/// </summary>
-		protected byte _resultDefaultCount;
 
 		#endregion // Data members
 
@@ -46,18 +36,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <value>The op code.</value>
 		public OpCode OpCode { get { return _opcode; } }
 
-		/// <summary>
-		/// Gets the default operand count of the instruction
-		/// </summary>
-		/// <value>The operand count.</value>
-		public byte DefaultOperandCount { get { return _operandDefaultCount; } }
-
-		/// <summary>
-		/// Gets the default result operand count of the instruction
-		/// </summary>
-		/// <value>The operand result count.</value>
-		public byte DefaultResultCount { get { return _resultDefaultCount; } }
-
 		#endregion // Properties
 
 		#region Construction
@@ -67,10 +45,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
 		public BaseInstruction(OpCode opCode)
+			: base()
 		{
 			this._opcode = opCode;
-			_operandDefaultCount = 0;
-			_resultDefaultCount = 0;
 		}
 
 		/// <summary>
@@ -79,9 +56,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="opCode">The op code.</param>
 		/// <param name="operandCount">The operand count.</param>
 		public BaseInstruction(OpCode opCode, byte operandCount)
-			: this(opCode)
+			: base(operandCount, 0)
 		{
-			_operandDefaultCount = operandCount;
+			this._opcode = opCode;
 		}
 
 		/// <summary>
@@ -91,9 +68,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
 		public BaseInstruction(OpCode opCode, byte operandCount, byte resultCount)
-			: this(opCode, operandCount)
+			: base(operandCount, resultCount)
 		{
-			_resultDefaultCount = resultCount;
+			this._opcode = opCode;
 		}
 
 		#endregion // Construction
@@ -111,41 +88,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ctx.OperandCount = DefaultOperandCount;
 			ctx.ResultCount = DefaultResultCount;
 			ctx.Ignore = false;
-		}
-
-		/// <summary>
-		/// Validates the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		public virtual void Validate(Context ctx, IMethodCompiler compiler)
-		{
-			/* Default implementation is to do nothing */
-		}
-
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public virtual string ToString(Context ctx)
-		{
-			return ToString();
-		}
-
-		/// <summary>
-		/// Determines flow behavior of this instruction.
-		/// </summary>
-		/// <remarks>
-		/// Knowledge of control flow is required for correct basic block
-		/// building. Any instruction that alters the control flow must override
-		/// this property and correctly identify its control flow modifications.
-		/// </remarks>
-		public virtual FlowControl FlowControl
-		{
-			get { return FlowControl.Next; }
 		}
 
 		/// <summary>
@@ -169,12 +111,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
-		/// <param name="vistor">The vistor.</param>
+		/// <param name="visitor">The visitor.</param>
 		/// <param name="context">The context.</param>
-		public virtual void Visit(IVisitor vistor, Context context)
+		public override void Visit(IVisitor visitor, Context context)
 		{
-			if (vistor is ICILVisitor)
-				Visit(vistor as ICILVisitor, context);
+			if (visitor is ICILVisitor)
+				Visit(visitor as ICILVisitor, context);
 		}
 
 		/// <summary>

@@ -15,37 +15,8 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BaseInstruction : IPlatformInstruction
+	public class BaseInstruction : Mosa.Runtime.CompilerFramework.BaseInstruction, IPlatformInstruction
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the default number of operands for this instruction.
-		/// </summary>
-		protected byte _operandDefaultCount;
-
-		/// <summary>
-		/// Holds the default number of operand results for this instruction.
-		/// </summary>
-        protected byte _resultDefaultCount;
-
-		#endregion // Data members
-
-		#region Properties
-
-		/// <summary>
-		/// Gets the default operand count of the instruction
-		/// </summary>
-		/// <value>The operand count.</value>
-		public byte DefaultOperandCount { get { return _operandDefaultCount; } }
-
-		/// <summary>
-		/// Gets the default result operand count of the instruction
-		/// </summary>
-		/// <value>The operand result count.</value>
-		public byte DefaultResultCount { get { return _resultDefaultCount; } }
-
-		#endregion // Properties
 
 		#region Construction
 
@@ -53,9 +24,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
 		/// </summary>
 		protected BaseInstruction()
+			: base()
 		{
-			_operandDefaultCount = 0;
-			_resultDefaultCount = 0;
 		}
 
 		/// <summary>
@@ -63,9 +33,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operandCount">The operand count.</param>
 		private BaseInstruction(byte operandCount)
-			: this()
+			: base(operandCount)
 		{
-			_operandDefaultCount = operandCount;
 		}
 
 		/// <summary>
@@ -74,26 +43,25 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
 		protected BaseInstruction(byte operandCount, byte resultCount)
-			: this(operandCount)
+			: base(operandCount, resultCount)
 		{
-			_resultDefaultCount = resultCount;
 		}
 
 		#endregion // Construction
 
 		#region IPlatformInstruction Overrides
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="firstOperand"></param>
-        /// <param name="secondOperand"></param>
-        /// <param name="thirdOperand"></param>
-        /// <returns></returns>
-	    protected virtual OpCode ComputeOpCode(Operand firstOperand, Operand secondOperand, Operand thirdOperand)
-	    {
-	        throw new NotSupportedException();
-	    }
+		/// <summary>
+		/// Computes the op code.
+		/// </summary>
+		/// <param name="firstOperand">The first operand.</param>
+		/// <param name="secondOperand">The second operand.</param>
+		/// <param name="thirdOperand">The third operand.</param>
+		/// <returns></returns>
+		protected virtual OpCode ComputeOpCode(Operand firstOperand, Operand secondOperand, Operand thirdOperand)
+		{
+			throw new NotSupportedException();
+		}
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -102,8 +70,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="codeStream">The code stream.</param>
 		public virtual void Emit(Context ctx, System.IO.Stream codeStream)
 		{
-		    OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
-            MachineCodeEmitter.Emit(codeStream, opCode, ctx.Result, ctx.Operand1, ctx.Operand2);
+			OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
+			MachineCodeEmitter.Emit(codeStream, opCode, ctx.Result, ctx.Operand1, ctx.Operand2);
 		}
 
 		/// <summary>
@@ -130,31 +98,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region Methods
 
 		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public virtual string ToString(Context context)
-		{
-			return ToString();
-		}
-
-		/// <summary>
-		/// Determines flow behavior of this instruction.
-		/// </summary>
-		/// <remarks>
-		/// Knowledge of control flow is required for correct basic block
-		/// building. Any instruction that alters the control flow must override
-		/// this property and correctly identify its control flow modifications.
-		/// </remarks>
-		public virtual FlowControl FlowControl
-		{
-			get { return FlowControl.Next; }
-		}
-
-		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="vistor">The vistor.</param>
@@ -168,7 +111,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="vistor">The vistor.</param>
 		/// <param name="context">The context.</param>
-		public void Visit(IVisitor vistor, Context context)
+		public override void Visit(IVisitor vistor, Context context)
 		{
 			if (vistor is IX86Visitor)
 				Visit(vistor as IX86Visitor, context);
@@ -176,136 +119,136 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion //  Overrides
 
-        #region Typesizes
-        /// <summary>
-        /// Check if the given operand is an unsigned byte
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is an unsigned byte</returns>
-        public static bool IsUnsignedByte(Operand operand)
-        {
-            return (operand.Type.Type == Runtime.Metadata.CilElementType.U1);
-        }
+		#region Typesizes
+		/// <summary>
+		/// Check if the given operand is an unsigned byte
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is an unsigned byte</returns>
+		public static bool IsUnsignedByte(Operand operand)
+		{
+			return (operand.Type.Type == Runtime.Metadata.CilElementType.U1);
+		}
 
-        /// <summary>
-        /// Check if the given operand is a signed byte
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is a signed byte</returns>
-        public static bool IsSignedByte(Operand operand)
-        {
-            return (operand.Type.Type == Runtime.Metadata.CilElementType.I1);
-        }
+		/// <summary>
+		/// Check if the given operand is a signed byte
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is a signed byte</returns>
+		public static bool IsSignedByte(Operand operand)
+		{
+			return (operand.Type.Type == Runtime.Metadata.CilElementType.I1);
+		}
 
-        /// <summary>
-        /// Check if the given operand is an unsigned short
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is an unsigned short</returns>
-        public static bool IsUnsignedShort(Operand operand)
-        {
-            return (operand.Type.Type == Runtime.Metadata.CilElementType.U2);
-        }
+		/// <summary>
+		/// Check if the given operand is an unsigned short
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is an unsigned short</returns>
+		public static bool IsUnsignedShort(Operand operand)
+		{
+			return (operand.Type.Type == Runtime.Metadata.CilElementType.U2);
+		}
 
-        /// <summary>
-        /// Check if the given operand is a signed short
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is a signed short</returns>
-        public static bool IsSignedShort(Operand operand)
-        {
-            return (operand.Type.Type == Runtime.Metadata.CilElementType.I2);
-        }
+		/// <summary>
+		/// Check if the given operand is a signed short
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is a signed short</returns>
+		public static bool IsSignedShort(Operand operand)
+		{
+			return (operand.Type.Type == Runtime.Metadata.CilElementType.I2);
+		}
 
-        /// <summary>
-        /// Check if the given operand is an unsigned integer
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is an unsigned integer</returns>
-        public static bool IsUnsignedInt(Operand operand)
-        {
-            return (operand.Type.Type == Runtime.Metadata.CilElementType.U4);
-        }
+		/// <summary>
+		/// Check if the given operand is an unsigned integer
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is an unsigned integer</returns>
+		public static bool IsUnsignedInt(Operand operand)
+		{
+			return (operand.Type.Type == Runtime.Metadata.CilElementType.U4);
+		}
 
-        /// <summary>
-        /// Check if the given operand is a signed integer
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is a signed integer</returns>
-        public static bool IsSignedInt(Operand operand)
-        {
-            return (operand.Type.Type == Runtime.Metadata.CilElementType.I4);
-        }
+		/// <summary>
+		/// Check if the given operand is a signed integer
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is a signed integer</returns>
+		public static bool IsSignedInt(Operand operand)
+		{
+			return (operand.Type.Type == Runtime.Metadata.CilElementType.I4);
+		}
 
-        /// <summary>
-        /// Check if the given operand is an unsigned long
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is an unsigned long</returns>
-        public static bool IsUnsignedLong(Operand operand)
-        {
-            return (operand.Type.Type == Runtime.Metadata.CilElementType.U8);
-        }
+		/// <summary>
+		/// Check if the given operand is an unsigned long
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is an unsigned long</returns>
+		public static bool IsUnsignedLong(Operand operand)
+		{
+			return (operand.Type.Type == Runtime.Metadata.CilElementType.U8);
+		}
 
-        /// <summary>
-        /// Check if the given operand is a signed long
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is a signed long</returns>
-        public static bool IsSignedLong(Operand operand)
-        {
-            return (operand.Type.Type == Runtime.Metadata.CilElementType.I8);
-        }
+		/// <summary>
+		/// Check if the given operand is a signed long
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is a signed long</returns>
+		public static bool IsSignedLong(Operand operand)
+		{
+			return (operand.Type.Type == Runtime.Metadata.CilElementType.I8);
+		}
 
-        /// <summary>
-        /// Check if the given operand is a byte
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is a byte</returns>
-        public static bool IsByte(Operand operand)
-        {
-            return IsUnsignedByte(operand) || IsSignedByte(operand);
-        }
+		/// <summary>
+		/// Check if the given operand is a byte
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is a byte</returns>
+		public static bool IsByte(Operand operand)
+		{
+			return IsUnsignedByte(operand) || IsSignedByte(operand);
+		}
 
-        /// <summary>
-        /// Check if the given operand is a short
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is a short</returns>
-        public static bool IsShort(Operand operand)
-        {
-            return IsUnsignedShort(operand) || IsSignedShort(operand);
-        }
+		/// <summary>
+		/// Check if the given operand is a short
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is a short</returns>
+		public static bool IsShort(Operand operand)
+		{
+			return IsUnsignedShort(operand) || IsSignedShort(operand);
+		}
 
-        /// <summary>
-        /// Check if the given operand is a char
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is a char</returns>
-        public static bool IsChar(Operand operand)
-        {
-            return operand.Type.Type == Runtime.Metadata.CilElementType.Char;
-        }
+		/// <summary>
+		/// Check if the given operand is a char
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is a char</returns>
+		public static bool IsChar(Operand operand)
+		{
+			return operand.Type.Type == Runtime.Metadata.CilElementType.Char;
+		}
 
-        /// <summary>
-        /// Check if the given operand is an integer
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is an integer</returns>
-        public static bool IsInt(Operand operand)
-        {
-            return IsUnsignedInt(operand) || IsSignedInt(operand);
-        }
+		/// <summary>
+		/// Check if the given operand is an integer
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is an integer</returns>
+		public static bool IsInt(Operand operand)
+		{
+			return IsUnsignedInt(operand) || IsSignedInt(operand);
+		}
 
-        /// <summary>
-        /// Check if the given operand is a long
-        /// </summary>
-        /// <param name="operand">The operand to check</param>
-        /// <returns>True if it is a long</returns>
-        public static bool IsLong(Operand operand)
-        {
-            return IsUnsignedLong(operand) || IsSignedLong(operand);
-        }
-        #endregion
-    }
+		/// <summary>
+		/// Check if the given operand is a long
+		/// </summary>
+		/// <param name="operand">The operand to check</param>
+		/// <returns>True if it is a long</returns>
+		public static bool IsLong(Operand operand)
+		{
+			return IsUnsignedLong(operand) || IsSignedLong(operand);
+		}
+		#endregion
+	}
 }

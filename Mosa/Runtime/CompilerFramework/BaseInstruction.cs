@@ -65,9 +65,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="operandCount">The operand count.</param>
 		public BaseInstruction(byte operandCount)
-			: this()
 		{
 			_operandDefaultCount = operandCount;
+			_resultDefaultCount = 0;
 		}
 
 		/// <summary>
@@ -76,9 +76,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
 		public BaseInstruction(byte operandCount, byte resultCount)
-			: this( operandCount)
 		{
 			_resultDefaultCount = resultCount;
+			_operandDefaultCount = operandCount;
 		}
 
 		#endregion // Construction

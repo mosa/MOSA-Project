@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 	/// <summary>
 	/// Abstract base class for all instructions in the intermediate representation.
 	/// </summary>
-	public abstract class BaseInstruction : IIRInstruction
+	public abstract class BaseInstruction : Mosa.Runtime.CompilerFramework.BaseInstruction, IIRInstruction
 	{
 		#region Construction
 
@@ -24,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// Initializes a new instance of <see cref="BaseInstruction"/>.
 		/// </summary>
 		protected BaseInstruction()
-			: this(0, 0)
+			: base()
 		{
 		}
 
@@ -32,8 +32,8 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// Initializes a new instance of <see cref="BaseInstruction"/>.
 		/// </summary>
 		/// <param name="operandCount">Specifies the number of operands of the context.</param>
-		protected BaseInstruction(int operandCount) :
-			this(operandCount, 0)
+		protected BaseInstruction(byte operandCount) :
+			base(operandCount)
 		{
 		}
 
@@ -42,38 +42,14 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// </summary>
 		/// <param name="operandCount">Specifies the number of operands of the context.</param>
 		/// <param name="resultCount">Specifies the number of results of the context.</param>
-		protected BaseInstruction(int operandCount, int resultCount)
+		protected BaseInstruction(byte operandCount, byte resultCount)
+			: base(operandCount, resultCount)
 		{
 		}
 
 		#endregion // Construction
 
 		#region Methods
-
-		/// <summary>
-		/// Determines flow behavior of this context.
-		/// </summary>
-		/// <remarks>
-		/// Knowledge of control flow is required for correct basic block
-		/// building. Any instruction that alters the control flow must override
-		/// this property and correctly identify its control flow modifications.
-		/// </remarks>
-		public virtual FlowControl FlowControl
-		{
-			get { return FlowControl.Next; }
-		}
-
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public virtual string ToString(Context ctx)
-		{
-			return ToString();
-		}
 
 		/// <summary>
 		/// Returns a string representation of the context.
@@ -100,7 +76,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// </summary>
 		/// <param name="visitor">The visitor.</param>
 		/// <param name="context">The context.</param>
-		public virtual void Visit(IVisitor visitor, Context context)
+		public override void Visit(IVisitor visitor, Context context)
 		{
 			if (visitor is IIRVisitor)
 				Visit(visitor as IIRVisitor, context);
