@@ -156,10 +156,16 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected Context CreateEmptyBlockContext()
 		{
+			Context ctx = new Context(InstructionSet, -1);
 			BasicBlock block = new BasicBlock(BasicBlocks.Count + 0x10000000);
 			block.Index = BasicBlocks.Count;
+			ctx.BasicBlock = block;	
 			BasicBlocks.Add(block);
-			return new Context(block);
+
+			// FIXME - Add dummy start of block instruction - so we have an instruction index that never moves
+			// ??
+
+			return ctx;
 		}
 
 		/// <summary>
@@ -187,7 +193,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			int label = BasicBlocks.Count + 0x10000000;
 
-			BasicBlock nextBlock = new BasicBlock(label); //ctx.BasicBlock.Split(ctx.Index + 1, label);
+			BasicBlock nextBlock = new BasicBlock(label);
 			nextBlock.Index = BasicBlocks.Count - 1;
 
 			foreach (BasicBlock block in ctx.BasicBlock.NextBlocks)

@@ -25,16 +25,6 @@ namespace Mosa.Runtime.CompilerFramework
 		private int _index;
 
 		/// <summary>
-		/// The index of the first instruction in the block.
-		/// </summary>
-		private List<LegacyInstruction> _instructions;	// FIXME PG REMOVE
-
-		/// <summary>
-		/// Holds the instruction set
-		/// </summary>
-		private InstructionSet _instructionSet;
-		
-		/// <summary>
 		/// The label of the block. (For simplicity this is actually the original instruction offset.)
 		/// </summary>
 		private int _label;
@@ -54,11 +44,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private List<BasicBlock> _previousBlocks;
 
-		/// <summary>
-		/// Holds state for compilation stages.
-		/// </summary>
-		private Dictionary<string, object> _state;
-
 		#endregion // Data members
 
 		#region Construction
@@ -76,39 +61,23 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Initializes a new instance of <see cref="BasicBlock"/>.
 		/// </summary>
-		/// <param name="label">The label of the block (IL instruction offset From the method start.)</param>
-		public BasicBlock(int label) : 	// FIXME PG REMOVE
+		/// <param name="label">The label of the block (IL instruction offset from the method start.)</param>
+		public BasicBlock(int label) : 
 			this()
 		{
-			_instructions = new List<LegacyInstruction>();
 			_label = label;
 		}
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="BasicBlock"/>.
 		/// </summary>
-		/// <param name="label">The label of the block (IL instruction offset From the method start.)</param>
-		/// <param name="instructionSet">The instruction set.</param>
+		/// <param name="label">The label of the block (IL instruction offset from the method start.)</param>
 		/// <param name="index">The index.</param>
-		public BasicBlock(int label, InstructionSet instructionSet, int index) :
+		public BasicBlock(int label, int index) :
 			this()
 		{
-			_instructions = new List<LegacyInstruction>();
 			_label = label;
 			_index = index;
-			_instructionSet = instructionSet;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="BasicBlock"/>.
-		/// </summary>
-		/// <param name="instructions">The instructions of the basic block.</param>
-		/// <param name="label">The label of the newly created block.</param>
-		private BasicBlock(List<LegacyInstruction> instructions, int label) :	// FIXME PG REMOVE
-			this()
-		{
-			_instructions = instructions;
-			_label = label;
 		}
 
 		#endregion // Construction
@@ -129,18 +98,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the instruction list, which belongs to the block.
 		/// </summary>
 		/// <value>The instructions.</value>
-		public List<LegacyInstruction> Instructions
+		public List<LegacyInstruction> Instructions		// FIXME PG - Remove this
 		{
-			get { return _instructions; }
-		}
-
-		/// <summary>
-		/// Retrieves the instruction list, which belongs to the block.
-		/// </summary>
-		/// <value>The instructions.</value>
-		public InstructionSet InstructionSet
-		{
-			get { return _instructionSet; }
+			get { return null; }
 		}
 
 		/// <summary>
@@ -169,35 +129,6 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return _previousBlocks; }
 		}
 
-		/// <summary>
-		/// Holds state for compilation stages.
-		/// </summary>
-		public IDictionary<string, object> State
-		{
-			get
-			{
-				if (null != _state)
-					return _state;
-
-				_state = new Dictionary<string, object>();
-				return _state;
-			}
-		}
-
-		/// <summary>
-		/// Gets the last instruction.
-		/// </summary>
-		/// <value>The last instruction.</value>
-		public LegacyInstruction LastInstruction
-		{
-			get
-			{
-			    if (_instructions.Count == 0)
-					return null;
-			    return _instructions[_instructions.Count - 1];
-			}
-		}
-
 		#endregion // Properties
 
 		#region Methods
@@ -209,26 +140,6 @@ namespace Mosa.Runtime.CompilerFramework
 		public override string ToString()
 		{
 			return Label.ToString();
-		}
-
-		/// <summary>
-		/// Splits the basic block at the given instruction index.
-		/// </summary>
-		/// <param name="index">The index of the first instruction of the block to create.</param>
-		/// <param name="label">The label of the new block.</param>
-		/// <returns>The new block with instructions starting at index.</returns>
-		public BasicBlock Split(int index, int label)	// FIXME PG REMOVE
-		{
-			// Calculate the length of the instruction range
-			int length = _instructions.Count - index;
-
-			// Create a new basic block
-			BasicBlock result = new BasicBlock(_instructions.GetRange(index, length), label);
-
-			// Remove the range of instructions From this block
-			_instructions.RemoveRange(index, length);
-
-			return result;
 		}
 
 		#endregion // Methods
