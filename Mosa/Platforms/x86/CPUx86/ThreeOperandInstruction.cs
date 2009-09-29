@@ -7,10 +7,6 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
@@ -29,7 +25,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// <summary>
         /// Initializes a new instance of <see cref="ThreeOperandInstruction"/>.
         /// </summary>
-        public ThreeOperandInstruction() :
+        protected ThreeOperandInstruction() :
             base(2, 1)
         {
         }

@@ -41,8 +41,15 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#region Methods
 
-		private static OpCode Add(Operand dest, Operand src)
-		{
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        /// <param name="thirdOperand"></param>
+        /// <returns></returns>
+        protected override OpCode  ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
+        {
 			if ((dest is RegisterOperand) && (src is ConstantOperand))
 				return R_C;
 
@@ -64,17 +71,6 @@ namespace Mosa.Platforms.x86.CPUx86
             }
 
 		    throw new ArgumentException(@"No opcode for operand type.");
-		}
-
-		/// <summary>
-		/// Emits the specified platform instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="codeStream">The code stream.</param>
-		public override void Emit(Context ctx, System.IO.Stream codeStream)
-		{
-			OpCode opcode = Add(ctx.Result, ctx.Operand1);
-			MachineCodeEmitter.Emit(codeStream, opcode, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>

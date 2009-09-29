@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
@@ -51,7 +52,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
 		/// </summary>
-		public BaseInstruction()
+		protected BaseInstruction()
 		{
 			_operandDefaultCount = 0;
 			_resultDefaultCount = 0;
@@ -61,7 +62,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
 		/// </summary>
 		/// <param name="operandCount">The operand count.</param>
-		public BaseInstruction(byte operandCount)
+		private BaseInstruction(byte operandCount)
 			: this()
 		{
 			_operandDefaultCount = operandCount;
@@ -72,7 +73,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public BaseInstruction(byte operandCount, byte resultCount)
+		protected BaseInstruction(byte operandCount, byte resultCount)
 			: this(operandCount)
 		{
 			_resultDefaultCount = resultCount;
@@ -82,6 +83,18 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#region IPlatformInstruction Overrides
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstOperand"></param>
+        /// <param name="secondOperand"></param>
+        /// <param name="thirdOperand"></param>
+        /// <returns></returns>
+	    protected virtual OpCode ComputeOpCode(Operand firstOperand, Operand secondOperand, Operand thirdOperand)
+	    {
+	        throw new NotSupportedException();
+	    }
+
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
@@ -89,6 +102,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="codeStream">The code stream.</param>
 		public virtual void Emit(Context ctx, System.IO.Stream codeStream)
 		{
+		    OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
+            MachineCodeEmitter.Emit(codeStream, opCode, ctx.Result, ctx.Operand1, ctx.Operand2);
 		}
 
 		/// <summary>

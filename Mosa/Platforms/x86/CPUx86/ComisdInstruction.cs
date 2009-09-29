@@ -11,7 +11,6 @@
 using System;
 
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -20,20 +19,32 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public class ComisdInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComisdInstruction"/> class.
-        /// </summary>
-        public ComisdInstruction()
-        {
-        }
-
-        #endregion // Construction
+        #region Data Members
+        private static readonly OpCode R_R = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
+        private static readonly OpCode R_M = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
+        private static readonly OpCode R_L = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
+        private static readonly OpCode R_C = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
+        #endregion
 
         #region Methods
 
-		/// <summary>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        /// <param name="third"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand third)
+        {
+            if ((dest is RegisterOperand) && (src is RegisterOperand)) return R_R;
+            if ((dest is RegisterOperand) && (src is MemoryOperand)) return R_M;
+            if ((dest is RegisterOperand) && (src is LabelOperand)) return R_L;
+            if ((dest is RegisterOperand) && (src is ConstantOperand)) return R_C;
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
+
+        /// <summary>
 		/// Returns a string representation of the instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>

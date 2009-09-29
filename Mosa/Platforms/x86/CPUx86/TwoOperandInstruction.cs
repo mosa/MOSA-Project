@@ -8,8 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -28,12 +27,34 @@ namespace Mosa.Platforms.x86.CPUx86
         /// <summary>
         /// Initializes a new instance of <see cref="ThreeOperandInstruction"/>.
         /// </summary>
-        public TwoOperandInstruction() :
+        protected TwoOperandInstruction() :
             base(1, 1)
         {
         }
 
         #endregion // Construction
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstOperand"></param>
+        /// <param name="secondOperand"></param>
+        /// <param name="thirdOperand"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand firstOperand, Operand secondOperand, Operand thirdOperand)
+        {
+            throw new NotSupportedException();
+        }
 
+        /// <summary>
+        /// Emits the specified platform instruction.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        /// <param name="codeStream">The code stream.</param>
+        public override void Emit(Context ctx, System.IO.Stream codeStream)
+        {
+            OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, null);
+            MachineCodeEmitter.Emit(codeStream, opCode, ctx.Result, ctx.Operand1);
+        }
     }
 }
