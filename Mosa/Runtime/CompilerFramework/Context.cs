@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
@@ -118,8 +119,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The second result operand.</value>
 		public Operand Result2
 		{
-			get { return _instructionSet.Data[_index].Result2; }
-			set { _instructionSet.Data[_index].Result2 = value; }
+			get
+			{
+				if (ResultCount == 2)
+					return Result;
+				else
+					return null;
+			}
+			set
+			{
+				Debug.Assert(Result == value);
+			}
 		}
 
 		/// <summary>
@@ -132,8 +142,8 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				if (Result != null)
 					yield return Result;
-				if (Result2 != null)
-					yield return Result2;
+				if (ResultCount == 2)
+					yield return Result;
 			}
 		}
 
@@ -392,7 +402,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="visitor">The visitor.</param>
 		public void Visit(IVisitor visitor)
 		{
-			Instruction.Visit(visitor,this);
+			Instruction.Visit(visitor, this);
 		}
 
 		/// <summary>
