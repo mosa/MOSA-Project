@@ -8,12 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -21,21 +16,17 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// Intermediate representation of the x86 adc instruction.
 	/// </summary>
 	public sealed class AdcInstruction : TwoOperandInstruction
-	{
-		#region Construction
+    {
+        #region Data members
+        private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 });
+        private static readonly OpCode R_R = new OpCode(new byte[] { 0x11 });
+        private static readonly OpCode R_M = new OpCode(new byte[] { 0x13 });
+        private static readonly OpCode M_R = new OpCode(new byte[] { 0x11 });
+        #endregion
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AdcInstruction"/> class.
-		/// </summary>
-		public AdcInstruction()
-		{
-		}
+        #region Properties
 
-		#endregion // Construction
-
-		#region Properties
-
-		/// <summary>
+        /// <summary>
 		/// Gets the instruction latency.
 		/// </summary>
 		/// <value>The latency.</value>
@@ -44,6 +35,26 @@ namespace Mosa.Platforms.x86.CPUx86
 		#endregion // Properties
 
 		#region Methods
+
+        private static OpCode Adc(Operand dest, Operand src)
+        {
+            if ((dest is RegisterOperand) && (src is ConstantOperand)) return R_C;
+            if ((dest is RegisterOperand) && (src is RegisterOperand)) return R_R;
+            if ((dest is RegisterOperand) && (src is MemoryOperand)) return R_M;
+            if ((dest is MemoryOperand) && (src is RegisterOperand)) return M_R;
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
+
+        /// <summary>
+        /// Emits the specified platform instruction.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        /// <param name="codeStream">The code stream.</param>
+        public override void Emit(Context ctx, System.IO.Stream codeStream)
+        {
+            OpCode opcode = Adc(ctx.Result, ctx.Operand1);
+            MachineCodeEmitter.Emit(codeStream, opcode, ctx.Result, ctx.Operand1);
+        }
 
 		/// <summary>
 		/// Returns a string representation of the instruction.

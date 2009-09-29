@@ -7,10 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
@@ -30,7 +26,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Holds the default number of operand results for this instruction.
 		/// </summary>
-		protected byte _resultDefaultCount;
+        protected byte _resultDefaultCount;
 
 		#endregion // Data members
 
@@ -111,7 +107,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return "X86." + this.GetType().ToString();
+			return "X86." + GetType();
 		}
 
 		#endregion // Operand Overrides
