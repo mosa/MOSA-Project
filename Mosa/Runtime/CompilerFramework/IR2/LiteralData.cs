@@ -47,7 +47,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// <param name="label">The label used to identify the literal in code.</param>
 		/// <param name="type">The signature type of the literal data.</param>
 		/// <param name="data">The data to embed along with the code stream.</param>
-		protected LiteralData(int label, SigType type, object data)
+		public LiteralData(int label, SigType type, object data)
 		{
 			if (null == type)
 				throw new ArgumentNullException(@"type");

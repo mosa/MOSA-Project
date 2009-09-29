@@ -251,9 +251,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// 
+		/// Adds the stage to the pipeline.
 		/// </summary>
-		/// <param name="pipeline"></param>
+		/// <param name="pipeline">The pipeline to add to.</param>
 		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
 			pipeline.InsertBefore<CIL.CilToIrTransformationStage>(this);

@@ -25,22 +25,18 @@ namespace Mosa.Jit.SimpleJit
         /// <summary>
         /// Holds the instructions of this trampoline.
         /// </summary>
-        private List<LegacyInstruction> _instructions;
+		private InstructionSet _instructionSet;
 
         #endregion // Data members
 
         #region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the trampoline builder stage.
-        /// </summary>
-        /// <param name="instructions">The instructions that make up the trampoline.</param>
-        public TrampolineBuilderStage(List<LegacyInstruction> instructions)
+		/// <summary>
+		/// Initializes a new instance of the trampoline builder stage.
+		/// </summary>
+        public TrampolineBuilderStage()
         {
-            if (null == instructions)
-                throw new ArgumentNullException(@"instructions");
-
-            _instructions = instructions;
+			_instructionSet = null; // FIXME 
         }
 
         #endregion // Construction
@@ -79,26 +75,16 @@ namespace Mosa.Jit.SimpleJit
 
         #region IInstructionsProvider Members
 
-        List<LegacyInstruction> IInstructionsProvider.Instructions
-        {
-            get { return _instructions; }
-        }
-
 		/// <summary>
 		/// Gets a list of instructions in intermediate representation.
 		/// </summary>
 		/// <value></value>
 		public InstructionSet InstructionSet
 		{
-			get { return null; } // FIXME
+			get { return _instructionSet; }
 		}
 
         #endregion // IInstructionsProvider Members
-
-        #region IEnumerable<Instruction> Members
-
-
-        #endregion // IEnumerable<Instruction> Members
 
         #region IEnumerable Members
 

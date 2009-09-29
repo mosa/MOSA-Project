@@ -32,11 +32,6 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         protected IMethodCompiler _compiler;
 
-        // <summary>
-        // Maps label targets as instruction offsets.
-        // </summary>
-        //private Dictionary<int, int> _labels;
-
         #endregion // Data members
 
         #region Construction

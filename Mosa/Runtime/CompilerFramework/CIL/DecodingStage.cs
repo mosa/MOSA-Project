@@ -136,9 +136,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
-		/// 
+		/// Adds the stage to the pipeline.
 		/// </summary>
-		/// <param name="pipeline"></param>
+		/// <param name="pipeline">The pipeline to add to.</param>
 		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
 			pipeline.Add(this);
@@ -280,15 +280,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#endregion // Internals
 
 		#region IInstructionsProvider members
-
-		/// <summary>
-		/// Gets a list of instructions in intermediate representation.
-		/// </summary>
-		/// <value></value>
-		List<LegacyInstruction> IInstructionsProvider.Instructions
-		{
-			get { return null; }
-		}
 
 		/// <summary>
 		/// Gets a list of instructions in intermediate representation.
