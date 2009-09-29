@@ -35,33 +35,6 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		void IMethodCompilerStage.Run(IMethodCompiler compiler)
-		{
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
-
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-
-			if (blockProvider == null)
-				throw new InvalidOperationException(@"Instruction stream must be split to basic Blocks.");
-
-			// Retrieve the instruction provider and the instruction set
-			InstructionSet instructionset = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
-
-			foreach (BasicBlock block in blockProvider.Blocks) {
-				Context ctx = new Context(instructionset, block);
-
-				while (!ctx.EndOfInstruction) {
-					ctx.Instruction.Visit(this, ctx);
-					ctx.GotoNext();
-				}
-			}
-		}
-
-		/// <summary>
 		/// Adds this stage to the given pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add this stage to.</param>

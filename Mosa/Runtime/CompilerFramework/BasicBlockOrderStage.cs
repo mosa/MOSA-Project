@@ -15,7 +15,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BasicBlockOrderStage : IMethodCompilerStage
+	public class BasicBlockOrderStage : BaseStage, IMethodCompilerStage
 	{
 		#region Data members
 
@@ -45,13 +45,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Runs the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
-			// Retrieve the basic block provider
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-
-			if (blockProvider == null)
-				throw new InvalidOperationException(@"Basic Block Order stage requires basic Blocks.");
+			base.Run(compiler);
 
 			// Order the Blocks based on loop depth
 			IBasicBlockOrder orderProvider = (IBasicBlockOrder)compiler.GetPreviousStage(typeof(IBasicBlockOrder));
@@ -59,22 +55,19 @@ namespace Mosa.Runtime.CompilerFramework
 			if (orderProvider == null)
 				throw new InvalidOperationException(@"Basic Block Order stage requires ordered Blocks.");
 
-			// Get list of Blocks
-			List<BasicBlock> blocks = blockProvider.Blocks;
-
 			// Set the new indexes of each block
-			for (int i = 0; i < blocks.Count; i++)
-				blocks[orderProvider.OrderedBlocks[i]].Index = i;
+			for (int i = 0; i < BasicBlocks.Count; i++)
+				BasicBlocks[orderProvider.OrderedBlocks[i]].Index = i;
 
 			// Sort the Blocks based on new index values
-			blocks.Sort(CompareBlocksByIndex);
+			BasicBlocks.Sort(CompareBlocksByIndex);
 		}
 
 		/// <summary>
 		/// Compares two Blocks by their index.
 		/// </summary>
-		/// <param name="a">A.</param>
-		/// <param name="b">The b.</param>
+		/// <param name="a">BasicBlock A.</param>
+		/// <param name="b">BasicBlock B.</param>
 		/// <returns></returns>
 		private static int CompareBlocksByIndex(BasicBlock a, BasicBlock b)
 		{
