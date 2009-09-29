@@ -8,9 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
@@ -18,17 +15,17 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class AddInstruction : TwoOperandInstruction, IPlatformInstruction
+	public sealed class AddInstruction : TwoOperandInstruction
 	{
 
 		#region Data Members
 
-		private static OpCode R_C = new OpCode(new byte[] { 0x81 }, 0);
-		private static OpCode R_R = new OpCode(new byte[] { 0x03 });
-		private static OpCode R_M = new OpCode(new byte[] { 0x03 });
-		private static OpCode M_R = new OpCode(new byte[] { 0x01 });
-		private static OpCode R_M_U8 = new OpCode(new byte[] { 0x02 }); // Add r/m8 to r8
-		private static OpCode M_R_U8 = new OpCode(new byte[] { 0x00 }); // Add r8 to r/m8
+		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 0);
+		private static readonly OpCode R_R = new OpCode(new byte[] { 0x03 });
+		private static readonly OpCode R_M = new OpCode(new byte[] { 0x03 });
+		private static readonly OpCode M_R = new OpCode(new byte[] { 0x01 });
+		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x02 }); // Add r/m8 to r8
+		private static readonly OpCode M_R_U8 = new OpCode(new byte[] { 0x00 }); // Add r8 to r/m8
 
 		#endregion
 
@@ -63,21 +60,21 @@ namespace Mosa.Platforms.x86.CPUx86
 			if ((dest is RegisterOperand) && (src is RegisterOperand))
 				return R_R;
 
-			if ((dest is RegisterOperand) && (src is MemoryOperand))
-				/*if (IsUByte(dest))
-					return R_M_U8;
-				else*/
-				return R_M;
+            if ((dest is RegisterOperand) && (src is MemoryOperand))
+            {
+                return IsUnsignedByte(dest) ? R_M_U8 : R_M;
+            }
 
-			if ((dest is MemoryOperand) && (src is RegisterOperand))
-				/*if (IsByte(dest) || IsByte(src))
-					return M_R_U8;
-				else if (IsChar(dest) || IsChar(src) || IsShort(dest) || IsShort(src))
-					return M_R_U8;
-				else*/
-				return M_R;
+		    if ((dest is MemoryOperand) && (src is RegisterOperand))
+            {
+                if (IsByte(dest) || IsByte(src))
+                    return M_R_U8;
+                if (IsChar(dest) || IsChar(src) || IsShort(dest) || IsShort(src))
+                    return M_R_U8;
+                return M_R;
+            }
 
-			throw new ArgumentException(@"No opcode for operand type.");
+		    throw new ArgumentException(@"No opcode for operand type.");
 		}
 
 		/// <summary>
