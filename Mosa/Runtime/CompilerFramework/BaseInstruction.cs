@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BaseInstruction : IInstruction
+	public abstract class BaseInstruction : IInstruction
 	{
 		#region Data members
 

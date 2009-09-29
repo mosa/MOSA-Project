@@ -17,9 +17,9 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Base class for code transformation stages.
 	/// </summary>
-	public abstract class CodeTransformationStage : IMethodCompilerStage, IInstructionVisitor<Context>
+	public abstract class CodeTransformationStage : BaseStage, IMethodCompilerStage, IVisitor
 	{
-		
+
 		#region Data members
 
 		/// <summary>
@@ -28,19 +28,9 @@ namespace Mosa.Runtime.CompilerFramework
 		protected IArchitecture Architecture;
 
 		/// <summary>
-		/// Holds the list of basic Blocks.
-		/// </summary>
-		protected List<BasicBlock> Blocks;
-
-		/// <summary>
 		/// Holds the executing method compiler.
 		/// </summary>
 		protected IMethodCompiler Compiler;
-
-		/// <summary>
-		/// Holds the current block.
-		/// </summary>
-		protected int CurrentBlock;
 
 		#endregion // Data members
 
@@ -56,25 +46,20 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
-			if (null == compiler)
-				throw new ArgumentNullException(@"compiler");
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-			if (null == blockProvider)
-				throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
+			base.Run(compiler);
 
 			// Save the architecture & compiler
 			Architecture = compiler.Architecture;
 			Compiler = compiler;
-			Blocks = blockProvider.Blocks;
 
-			for (CurrentBlock = 0; CurrentBlock < Blocks.Count; CurrentBlock++) {
-				BasicBlock block = Blocks[CurrentBlock];
-				Context ctx = new Context(block);
-				//ctx.Block = block;
-				for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++) {
-					block.Instructions[ctx.Index].Visit(this, ctx);
+			for (int index = 0; index < BasicBlocks.Count; index++) {
+				Context ctx = new Context(BasicBlocks[index]);
+
+				while (!ctx.EndOfInstruction) {
+					ctx.Visit(this);
+					ctx.GotoNext();
 				}
 			}
 		}
@@ -131,7 +116,7 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (BasicBlock block in blocks)
 				blockLabels.Add(block.Label, block);
 
-			AddBlockLabels(blockLabels, nextBlock);	
+			AddBlockLabels(blockLabels, nextBlock);
 			AddBlockLabels(blockLabels, currentBlock);
 		}
 
@@ -171,9 +156,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected Context CreateEmptyBlockContext()
 		{
-			BasicBlock block = new BasicBlock(Blocks.Count + 0x10000000);
-			block.Index = Blocks.Count;
-			Blocks.Add(block);
+			BasicBlock block = new BasicBlock(BasicBlocks.Count + 0x10000000);
+			block.Index = BasicBlocks.Count;
+			BasicBlocks.Add(block);
 			return new Context(block);
 		}
 
@@ -200,10 +185,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected Context SplitContext(Context ctx)
 		{
-			int label = Blocks.Count + 0x10000000;
+			int label = BasicBlocks.Count + 0x10000000;
 
 			BasicBlock nextBlock = new BasicBlock(label); //ctx.BasicBlock.Split(ctx.Index + 1, label);
-			nextBlock.Index = Blocks.Count - 1;
+			nextBlock.Index = BasicBlocks.Count - 1;
 
 			foreach (BasicBlock block in ctx.BasicBlock.NextBlocks)
 				nextBlock.NextBlocks.Add(block);

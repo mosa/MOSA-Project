@@ -15,7 +15,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BaseInstruction : Mosa.Runtime.CompilerFramework.BaseInstruction, IPlatformInstruction
+	public abstract class BaseInstruction : Mosa.Runtime.CompilerFramework.BaseInstruction, IPlatformInstruction
 	{
 
 		#region Construction

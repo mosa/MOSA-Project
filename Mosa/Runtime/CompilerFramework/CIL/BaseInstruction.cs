@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BaseInstruction : Mosa.Runtime.CompilerFramework.BaseInstruction, ICILInstruction
+	public abstract class BaseInstruction : Mosa.Runtime.CompilerFramework.BaseInstruction, ICILInstruction
 	{
 		#region Data members
 

@@ -19,19 +19,19 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Basic base class for other stages
 	/// </summary>
-	public class BaseStage
+	public abstract class BaseStage
 	{
 		#region Data members
 
 		/// <summary>
 		/// Holds the instruction set
 		/// </summary>
-		protected InstructionSet _instructionset;
+		protected InstructionSet InstructionSet;
 
 		/// <summary>
 		/// List of basic Blocks found during decoding.
 		/// </summary>
-		protected List<BasicBlock> _basicBlocks;
+		protected List<BasicBlock> BasicBlocks;
 
 		#endregion // Data members
 
@@ -59,15 +59,15 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Retrieve the instruction set
 			IInstructionsProvider instructionsProvider = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider);
-			if (_instructionset == null)
+			if (InstructionSet == null)
 				throw new InvalidOperationException(@"Instruction set provider missing.");
-			_instructionset = instructionsProvider.InstructionSet;
+			InstructionSet = instructionsProvider.InstructionSet;
 
 			// Retrieve the basic block list
 			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
 			if (blockProvider == null)
 				throw new InvalidOperationException(@"Instruction stream must be split to basic Blocks.");
-			_basicBlocks = blockProvider.Blocks;
+			BasicBlocks = blockProvider.Blocks;
 
 		}
 

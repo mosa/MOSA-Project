@@ -17,10 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Performs IR constant folding of arithmetic instructions to optimize
 	/// the code down to fewer calculations.
 	/// </summary>
-	public sealed class StrengthReductionStage :
-		CodeTransformationStage,
-		CIL.ICILVisitor,
-		IMethodCompilerStage
+	public sealed class StrengthReductionStage : CodeTransformationStage, CIL.ICILVisitor, IMethodCompilerStage
 	{
 
 		#region IMethodCompilerStage
@@ -32,33 +29,6 @@ namespace Mosa.Runtime.CompilerFramework
 		public override string Name
 		{
 			get { return @"Strength Reduction"; }
-		}
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		void IMethodCompilerStage.Run(IMethodCompiler compiler)
-		{
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
-
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-
-			if (blockProvider == null)
-				throw new InvalidOperationException(@"Instruction stream must be split to basic Blocks.");
-
-			// Retrieve the instruction provider and the instruction set
-			InstructionSet instructionset = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
-
-			foreach (BasicBlock block in blockProvider.Blocks) {
-				Context ctx = new Context(instructionset, block);
-
-				while (!ctx.EndOfInstruction) {
-					ctx.Instruction.Visit(this, ctx);
-					ctx.GotoNext();
-				}
-			}
 		}
 
 		/// <summary>

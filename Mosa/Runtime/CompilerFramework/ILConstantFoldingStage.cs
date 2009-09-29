@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Performs IR constant folding of arithmetic instructions to optimize
 	/// the code down to fewer calculations.
 	/// </summary>
-	public sealed class ILConstantFoldingStage : CodeTransformationStage, CIL.ICILVisitor, IMethodCompilerStage
+	public sealed class ILConstantFoldingStage : CodeTransformationStage, CIL.ICILVisitor
 	{
 
 		#region IMethodCompilerStage
@@ -30,26 +30,6 @@ namespace Mosa.Runtime.CompilerFramework
 		public override string Name
 		{
 			get { return @"IL Constant Folding"; }
-		}
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		void IMethodCompilerStage.Run(IMethodCompiler compiler)
-		{
-			if (null == compiler)
-				throw new ArgumentNullException(@"compiler");
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-			if (null == blockProvider)
-				throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
-
-			foreach (BasicBlock block in blockProvider.Blocks) {
-				Context ctx = new Context(block);
-				for (ctx.Index = 0; ctx.Index < block.Instructions.Count; ctx.Index++) {
-					block.Instructions[ctx.Index].Visit(this, ctx);
-				}
-			}
 		}
 
 		/// <summary>
