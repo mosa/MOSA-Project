@@ -7,12 +7,7 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -21,18 +16,17 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class CdqInstruction : BaseInstruction
     {
-        #region Construction
+        #region IRInstruction Overrides
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CdqInstruction"/> class.
+        /// Emits the specified platform instruction.
         /// </summary>
-        public CdqInstruction()
+        /// <param name="ctx">The context.</param>
+        /// <param name="codeStream">The code stream.</param>
+        public override void Emit(Context ctx, System.IO.Stream codeStream)
         {
+            codeStream.WriteByte(0x99);
         }
-
-        #endregion // Construction
-
-        #region IRInstruction Overrides
 
         /// <summary>
         /// Returns a string representation of the instruction.
