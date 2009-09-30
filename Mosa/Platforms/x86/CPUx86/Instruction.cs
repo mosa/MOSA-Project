@@ -286,7 +286,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static RcrInstruction RcrInstruction = new RcrInstruction();
+        public static Intrinsics.RcrInstruction RcrInstruction = new Intrinsics.RcrInstruction();
 		/// <summary>
 		/// 
 		/// </summary>

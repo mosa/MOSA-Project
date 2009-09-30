@@ -11,8 +11,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
@@ -33,20 +31,8 @@ namespace Mosa.Platforms.x86
 	public sealed class LongOperandTransformationStage :
 		CodeTransformationStage, 
 		CIL.ICILVisitor, 
-		IR2.IIRVisitor, 
-		IMethodCompilerStage
+		IR2.IIRVisitor
 	{
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LongOperandTransformationStage"/> class.
-		/// </summary>
-		public LongOperandTransformationStage()
-		{
-		}
-
-		#endregion // Construction
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>
@@ -62,7 +48,7 @@ namespace Mosa.Platforms.x86
 		/// Adds this stage to the given pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		public sealed override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
 		}
 

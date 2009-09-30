@@ -8,15 +8,9 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
-using Mosa.Runtime.Metadata;
 
-namespace Mosa.Platforms.x86.CPUx86
+namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 {
     /// <summary>
     /// Intermediate representation of the x86 rotate right instruction.

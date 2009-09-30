@@ -8,13 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
-using Mosa.Runtime.Metadata;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -23,17 +17,10 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class DivInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DivInstruction"/> class.
-		/// </summary>
-        public DivInstruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
+        #region Data Member
+        private static readonly OpCode R = new OpCode(new byte[] { 0xF7 }, 7);
+        private static readonly OpCode M = new OpCode(new byte[] { 0xF7 }, 7);
+        #endregion 
 
 		#region Properties
 
@@ -48,6 +35,20 @@ namespace Mosa.Platforms.x86.CPUx86
         #region Methods
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        /// <param name="thirdOperand"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
+        {
+            if (dest is RegisterOperand) return R;
+            if (dest is MemoryOperand) return M;
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
+
+        /// <summary>
         /// Returns a string representation of the instruction.
         /// </summary>
         /// <returns>
@@ -55,7 +56,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"x86 idiv {0}, {1} ; {0} /= {1}", context.Operand1, context.Operand2);
+            return String.Format(@"x86.idiv {0}, {1} ; {0} /= {1}", context.Operand1, context.Operand2);
         }
 
 		/// <summary>

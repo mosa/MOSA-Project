@@ -11,7 +11,6 @@
 using System;
 
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -20,18 +19,26 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public class Cvtsd2ssInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Cvtsd2ssInstruction"/> class.
-        /// </summary>
-        public Cvtsd2ssInstruction()
-        {
-        }
-
-        #endregion // Construction
+        #region Data Members
+        private static readonly OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x5A });
+        private static readonly OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x5A });
+        #endregion
 
         #region Methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        /// <param name="thirdOperand"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
+        {
+            if ((dest is RegisterOperand) && (src is RegisterOperand)) return R_R;
+            if ((dest is RegisterOperand) && (src is MemoryOperand)) return R_M;
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 
         /// <summary>
         /// Returns a string representation of the instruction.
