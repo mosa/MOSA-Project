@@ -130,7 +130,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// 
+		/// Starts this instance.
 		/// </summary>
 		public void Start()
 		{
@@ -138,7 +138,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// 
+		/// Ends this instance.
 		/// </summary>
 		public void End()
 		{
