@@ -72,7 +72,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Stores the register index of this instance.
         /// </summary>
-        private int _registerCode;
+        private readonly int _registerCode;
 
         #endregion // Data members
 

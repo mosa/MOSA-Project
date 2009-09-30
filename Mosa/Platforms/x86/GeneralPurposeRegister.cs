@@ -7,10 +7,6 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
@@ -120,7 +116,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Stores the general purpose register identified by this object instance.
         /// </summary>
-        private GPR _gpr;
+        private readonly GPR _gpr;
 
         #endregion // Data members
 

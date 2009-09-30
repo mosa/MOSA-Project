@@ -7,10 +7,6 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86
@@ -25,7 +21,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Determines if this register is caller-saved.
         /// </summary>
-        private bool _isCallerSave;
+        private readonly bool _isCallerSave;
 
         #endregion // Data members
 

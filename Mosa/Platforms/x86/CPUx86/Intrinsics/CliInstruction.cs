@@ -9,11 +9,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
-
 using Mosa.Runtime.CompilerFramework;
 
 
@@ -24,17 +19,6 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
     /// </summary>
     public sealed class CliInstruction : BaseInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CliInstruction"/> class.
-        /// </summary>
-        public CliInstruction()
-        {
-        }
-
-        #endregion // Construction
-
 		#region Properties
 
 		/// <summary>
@@ -48,6 +32,16 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
         #region CliInstruction Overrides
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="codeStream"></param>
+        public override void Emit(Context ctx, System.IO.Stream codeStream)
+        {
+            codeStream.WriteByte(0xFA);
+        }
+
+        /// <summary>
         /// Returns a string representation of the instruction.
         /// </summary>
         /// <returns>
@@ -55,7 +49,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"x86 cli");
+            return String.Format(@"x86.cli");
         }
 
 		/// <summary>

@@ -8,13 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
-using Mosa.Runtime.Metadata;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -23,19 +17,30 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
 	public sealed class SalInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SalInstruction"/> class.
-		/// </summary>
-        public SalInstruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
+        #region Data Members
+        private static readonly OpCode R = new OpCode(new byte[] { 0xD3 }, 4);
+        private static readonly OpCode M = new OpCode(new byte[] { 0xD3 }, 4);
+        private static readonly OpCode R_C = new OpCode(new byte[] { 0xC1 }, 4);
+        private static readonly OpCode M_C = new OpCode(new byte[] { 0xC1 }, 4);
+        #endregion
 
         #region Methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        /// <param name="thirdOperand"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
+        {
+            if ((dest is RegisterOperand) && (src is ConstantOperand)) return R_C;
+            if ((dest is MemoryOperand) && (src is ConstantOperand)) return M_C;
+            if (dest is RegisterOperand) return R;
+            if (dest is MemoryOperand) return M;
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 
         /// <summary>
         /// Returns a string representation of the instruction.
@@ -45,7 +50,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"x86 Sal {0}, {1} ;  {0} >>= {1}", context.Operand1, context.Operand2);
+            return String.Format(@"x86.sal {0}, {1} ;  {0} >>= {1}", context.Operand1, context.Operand2);
         }
 
 		/// <summary>

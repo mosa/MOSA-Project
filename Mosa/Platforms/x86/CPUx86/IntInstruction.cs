@@ -8,12 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -22,19 +17,18 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
 	public sealed class IntInstruction : OneOperandInstruction
     {
-        #region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IntInstruction"/> class.
-		/// </summary>
-        public IntInstruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
-
         #region OneOperandInstruction Overrides
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="codeStream"></param>
+        public override void Emit(Context ctx, System.IO.Stream codeStream)
+        {
+            byte interrupt = Convert.ToByte(((ConstantOperand)ctx.Operand1).Value);
+            codeStream.Write(new byte[] { 0xCD, interrupt }, 0, 2);
+        }
 
         /// <summary>
         /// Returns a string representation of the instruction.
@@ -44,7 +38,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"x86 int {0}", context.Operand1);
+            return String.Format(@"x86.int {0}", context.Operand1);
         }
 
 		/// <summary>
