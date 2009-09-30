@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The Loop Aware Block Ordering Stage reorders Blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class LoopAwareBlockOrderStage : IMethodCompilerStage, IBasicBlockOrder
+	public class LoopAwareBlockOrderStage : BaseStage, IMethodCompilerStage, IBasicBlockOrder
 	{
 		#region Data members
 
@@ -24,11 +24,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// 
 		/// </summary>
 		protected IArchitecture arch;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private List<BasicBlock> blocks;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -103,24 +98,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Runs the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
-			// Retrieve the basic block provider
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-
-			if (blockProvider == null)
-				throw new InvalidOperationException(@"Loop Aware Block Order stage requires basic Blocks.");
-			
-			blocks = blockProvider.Blocks;
+			base.Run(compiler);
 
 			// Retreive the first block
-			firstBlock = blockProvider.FromLabel(-1);
+			firstBlock = FromLabel(-1);
 
 			// Create list for loops
 			loops = new List<ConnectedBlocks>();
 
 			// Create dictionary for the depth of basic Blocks
-			loopDepths = new Dictionary<BasicBlock, int>(blocks.Count);
+			loopDepths = new Dictionary<BasicBlock, int>(BasicBlocks.Count);
 
 			// Deteremine Loop Depths
 			DetermineLoopDepths();
@@ -139,8 +128,8 @@ namespace Mosa.Runtime.CompilerFramework
 			queue.Enqueue(new ConnectedBlocks(null, firstBlock));
 
 			// Flag per basic block
-			BitArray visited = new BitArray(blocks.Count, false);
-			BitArray active = new BitArray(blocks.Count, false);
+			BitArray visited = new BitArray(BasicBlocks.Count, false);
+			BitArray active = new BitArray(BasicBlocks.Count, false);
 
 			// Create dictionary for loop _header index assignments
 			Dictionary<BasicBlock, int> loopHeaderIndexes = new Dictionary<BasicBlock, int>();
@@ -163,11 +152,11 @@ namespace Mosa.Runtime.CompilerFramework
 					// and continue iteration
 					continue;
 				}
-			
-                // Mark as active
-			    active.Set(at.to.Index, true);
 
-			    // Mark as visited
+				// Mark as active
+				active.Set(at.to.Index, true);
+
+				// Mark as visited
 				visited.Set(at.to.Index, true);
 
 				// Add successors to queue
@@ -176,7 +165,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Create two-dimensional bit set of Blocks belonging to loops
-			BitArray bitSet = new BitArray(loopHeaderIndexes.Count * blocks.Count, false);
+			BitArray bitSet = new BitArray(loopHeaderIndexes.Count * BasicBlocks.Count, false);
 
 			// Create stack of Blocks for next step of iterations
 			Stack<BasicBlock> stack = new Stack<BasicBlock>();
@@ -186,7 +175,7 @@ namespace Mosa.Runtime.CompilerFramework
 				int index = loopHeaderIndexes[loop.to];
 
 				// Add loop-tail to bit set
-				bitSet[(index * blocks.Count) + loop.to.Index] = true;
+				bitSet[(index * BasicBlocks.Count) + loop.to.Index] = true;
 
 				//Console.WriteLine(index.ToString() + " : B" + loop.to.Index.ToString());
 
@@ -194,7 +183,7 @@ namespace Mosa.Runtime.CompilerFramework
 				stack.Push(loop.From);
 
 				// Clear visit flag
-				visited = new BitArray(blocks.Count, false);
+				visited = new BitArray(BasicBlocks.Count, false);
 
 				while (stack.Count != 0) {
 					BasicBlock at = stack.Pop();
@@ -207,7 +196,7 @@ namespace Mosa.Runtime.CompilerFramework
 					visited.Set(at.Index, true);
 
 					// Set predecessor to bit set
-					bitSet[(index * blocks.Count) + at.Index] = true;
+					bitSet[(index * BasicBlocks.Count) + at.Index] = true;
 
 					//Console.WriteLine(index.ToString() + " : B" + at.Index.ToString());
 
@@ -219,14 +208,14 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Last step, assign LoopIndex and LoopDepth to each basic block
-			foreach (BasicBlock block in blocks) {
+			foreach (BasicBlock block in BasicBlocks) {
 				// Loop depth is the number of bits that are set for the according block id
 				int depth = 0;
 
 				for (int i = 0; i < loopHeaderIndexes.Count; i++)
-					if (bitSet[(i * blocks.Count) + block.Index])
+					if (bitSet[(i * BasicBlocks.Count) + block.Index])
 						depth++;
-				
+
 				// Set loop depth
 				loopDepths.Add(block, depth);
 			}
@@ -269,15 +258,15 @@ namespace Mosa.Runtime.CompilerFramework
 			/// </returns>
 			public int CompareTo(Priority other)
 			{
-			    if (Depth > other.Depth)
+				if (Depth > other.Depth)
 					return 1;
-			    if (Depth < other.Depth)
-			        return -1;
-			    if (Order > other.Order)
-			        return 1;
-			    if (Order < other.Order)
-			        return -1;
-			    return 0;
+				if (Depth < other.Depth)
+					return -1;
+				if (Order > other.Order)
+					return 1;
+				if (Order < other.Order)
+					return -1;
+				return 0;
 			}
 		}
 		#endregion
@@ -288,22 +277,22 @@ namespace Mosa.Runtime.CompilerFramework
 		private void DetermineBlockOrder()
 		{
 			// Create an array to hold the forward branch count
-			int[] forwardBranches = new int[blocks.Count];
+			int[] forwardBranches = new int[BasicBlocks.Count];
 
 			// Copy previous branch count to array
-			for (int i = 0; i < blocks.Count; i++)
-				forwardBranches[i] = blocks[i].PreviousBlocks.Count;
+			for (int i = 0; i < BasicBlocks.Count; i++)
+				forwardBranches[i] = BasicBlocks[i].PreviousBlocks.Count;
 
 			// Calculate forward branch count (PreviousBlock.Count minus loops to head)
 			foreach (ConnectedBlocks connecterBlock in loops)
 				forwardBranches[connecterBlock.to.Index]--;
 
 			// Allocate list of ordered Blocks
-			orderedBlocks = new int[blocks.Count];
+			orderedBlocks = new int[BasicBlocks.Count];
 			int orderBlockCnt = 0;
 
 			// Create bit array of refereced Blocks (by index)
-			BitArray referencedBlocks = new BitArray(blocks.Count, false);
+			BitArray referencedBlocks = new BitArray(BasicBlocks.Count, false);
 
 			// Create sorted worklist
 			SortedList<Priority, BasicBlock> workList = new SortedList<Priority, BasicBlock>();
@@ -331,9 +320,9 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Place unreferenced Blocks at the end of the list
-			for (int i = 0; i < blocks.Count; i++)
+			for (int i = 0; i < BasicBlocks.Count; i++)
 				if (!referencedBlocks.Get(i))
-					orderedBlocks[orderBlockCnt++] = i;			
+					orderedBlocks[orderBlockCnt++] = i;
 		}
 
 		/// <summary>

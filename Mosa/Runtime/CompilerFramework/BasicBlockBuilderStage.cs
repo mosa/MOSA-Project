@@ -20,14 +20,9 @@ namespace Mosa.Runtime.CompilerFramework
 	/// This compilation stage is used by method compilers after the
 	/// IL decoding stage to build basic Blocks out of the instruction list.
 	/// </summary>
-	public sealed class BasicBlockBuilderStage : IMethodCompilerStage, IBasicBlockProvider
+	public sealed class BasicBlockBuilderStage : BaseStage, IMethodCompilerStage
 	{
 		#region Data members
-
-		/// <summary>
-		/// List of basic Blocks found during decoding.
-		/// </summary>
-		private List<BasicBlock> _basicBlocks;
 
 		/// <summary>
 		/// List of leaders
@@ -48,7 +43,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public BasicBlockBuilderStage()
 		{
-			_basicBlocks = new List<BasicBlock>();
 			_loopHeads = new SortedDictionary<int, BasicBlock>();
 		}
 
@@ -69,7 +63,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
 			// Retrieve the instruction provider and the instruction set
 			_instructionset = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
@@ -78,20 +72,17 @@ namespace Mosa.Runtime.CompilerFramework
 
 			FindLoopHeads(new Context(_instructionset, 0));
 
-			_basicBlocks.Capacity = _loopHeads.Count + 2;
+			BasicBlocks.Capacity = _loopHeads.Count + 2;
 
 			// Start with a prologue block...
 			BasicBlock prologue = new BasicBlock(-1);
 			prologue.Index = 0;
-			_basicBlocks.Add(prologue);
+			BasicBlocks.Add(prologue);
 
 			// Add a jump instruction to the first block from the prologue
 			Context ctx = new Context(_instructionset, 0).InsertBefore();
 			ctx.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
 			ctx.SetBranch(0);
-			//ctx.Instruction = Map.GetInstruction(OpCode.Br);
-			//ctx.Branch = new Branch(1);
-			//ctx.Branch.Targets[0] = 0;
 
 			// Create the epilogue block
 			BasicBlock epilogue = new BasicBlock(Int32.MaxValue);
@@ -106,7 +97,7 @@ namespace Mosa.Runtime.CompilerFramework
 			InsertInstructionsIntoBlocks(_loopHeads, epilogue);
 
 			// Add the epilogue block
-			_basicBlocks.Add(epilogue);
+			BasicBlocks.Add(epilogue);
 		}
 
 		/// <summary>
@@ -174,7 +165,7 @@ namespace Mosa.Runtime.CompilerFramework
 				if (current.Key != -1) {
 
 					// Insert block into list of basic Blocks
-					_basicBlocks.Add(current.Value);
+					BasicBlocks.Add(current.Value);
 
 					// Set the block index
 					current.Value.Index = ++blockIndex;
@@ -270,54 +261,5 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // IMethodCompilerStage members
 
-		#region IBasicBlockProvider members
-
-		/// <summary>
-		/// Gets the basic Blocks.
-		/// </summary>
-		/// <value>The basic Blocks.</value>
-		public List<BasicBlock> Blocks
-		{
-			get { return _basicBlocks; }
-		}
-
-		/// <summary>
-		/// Retrieves a basic block From its label.
-		/// </summary>
-		/// <param name="label">The label of the basic block.</param>
-		/// <returns>
-		/// The basic block with the given label or null.
-		/// </returns>
-		public BasicBlock FromLabel(int label)
-		{
-			return _basicBlocks.Find(delegate(BasicBlock block)
-			{
-				return (label == block.Label);
-			});
-		}
-
-		/// <summary>
-		/// Gibt einen Enumerator zurück, der die Auflistung durchläuft.
-		/// </summary>
-		/// <returns>
-		/// Ein <see cref="T:System.Collections.Generic.IEnumerator`1"/>, der zum Durchlaufen der Auflistung verwendet werden kann.
-		/// </returns>
-		public IEnumerator<BasicBlock> GetEnumerator()
-		{
-			return _basicBlocks.GetEnumerator();
-		}
-
-		/// <summary>
-		/// Gibt einen Enumerator zurück, der eine Auflistung durchläuft.
-		/// </summary>
-		/// <returns>
-		/// Ein <see cref="T:System.Collections.IEnumerator"/>-Objekt, das zum Durchlaufen der Auflistung verwendet werden kann.
-		/// </returns>
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-		{
-			return _basicBlocks.GetEnumerator();
-		}
-
-		#endregion // IBasicBlockProvider members
 	}
 }

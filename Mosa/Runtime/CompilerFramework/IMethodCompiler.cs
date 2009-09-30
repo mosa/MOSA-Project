@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Interface provided by method compilers.
     /// </summary>
-    public interface IMethodCompiler
+    public interface IMethodCompiler : IBasicBlockProvider
     {
         /// <summary>
         /// Retrieves the architecture to compile for.
@@ -105,5 +105,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="localVariableSignature">The local variable signature of the method.</param>
         void SetLocalVariableSignature(LocalVariableSignature localVariableSignature);
+
+		/// <summary>
+		/// Gets the instruction set.
+		/// </summary>
+		/// <value>The instruction set.</value>
+		InstructionSet InstructionSet { get; }
     }
 }

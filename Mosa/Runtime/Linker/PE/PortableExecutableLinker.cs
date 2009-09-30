@@ -316,7 +316,7 @@ namespace Mosa.Runtime.Linker.PE
 				}
 
 				// Do we need to set the checksum?
-				if (true == this.setChecksum) {
+				if (this.setChecksum) {
 					// Flush all data to disk
 					writer.Flush();
 

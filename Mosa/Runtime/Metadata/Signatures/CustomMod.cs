@@ -123,7 +123,7 @@ namespace Mosa.Runtime.Metadata.Signatures
                 return false;
 
             bool result = true;
-            for (int idx = 0; true == result && idx < first.Length; idx++)
+            for (int idx = 0; result && idx < first.Length; idx++)
             {
                 result = first[idx].Equals(second[idx]);
             }

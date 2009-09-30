@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -7,9 +16,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// This stage just saves statistics about the code we're compiling, for example
 	/// ratio of IL to IR code, number of compiled instructions, etc.
 	/// </summary>
-	public class InstructionStatisticsStage :
-		BaseStage,
-		IMethodCompilerStage
+	public class InstructionStatisticsStage : BaseStage, IMethodCompilerStage
 	{
 		/// <summary>
 		/// 

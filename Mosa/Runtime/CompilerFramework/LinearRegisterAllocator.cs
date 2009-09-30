@@ -14,7 +14,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// This is not a real register allocator. It ensures that operations with register
 	/// constraints are executed properly, but does not assign variables to fixed registers.
 	/// </remarks>
-	public class LinearRegisterAllocator : IMethodCompilerStage
+	public class LinearRegisterAllocator : BaseStage, IMethodCompilerStage
 	{
 		#region Types
 
@@ -108,21 +108,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
+			base.Run(compiler);
+
 			// Retrieve the architecture
 			_architecture = compiler.Architecture;
 
-			// Retrieve the basic block provider
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-			if (null == blockProvider)
-				throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
-
 			// 1st Pass: Number all instructions in the order of appearance
-			NumberInstructions(blockProvider);
+			NumberInstructions();
 
 			// 2nd Pass: Capture all operands and their live ranges
-			CaptureLiveRanges(compiler, blockProvider);
+			CaptureLiveRanges();
 
 			// 3rd Pass: Assign registers
 			AssignRegisters();
@@ -182,7 +179,7 @@ namespace Mosa.Runtime.CompilerFramework
 					opIdx = 0;
 					foreach (Operand r in def.Results) {
 						// Is this the operand?
-						if (true == object.ReferenceEquals(r, lr.Op))
+						if (object.ReferenceEquals(r, lr.Op))
 							def.SetResult(opIdx, replacement);
 
 						opIdx++;
@@ -201,7 +198,7 @@ namespace Mosa.Runtime.CompilerFramework
 					opIdx = 0;
 					foreach (Operand r in instr.Operands) {
 						// Is this the operand?
-						if (true == object.ReferenceEquals(r, lr.Op))
+						if (object.ReferenceEquals(r, lr.Op))
 							instr.SetOperand(opIdx, replacement);
 
 						opIdx++;
@@ -312,52 +309,50 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Captures the live ranges.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		/// <param name="blockProvider">The block provider.</param>
-		private void CaptureLiveRanges(IMethodCompiler compiler, IBasicBlockProvider blockProvider)
+		private void CaptureLiveRanges()
 		{
 			/*			
-					   // Start live ranges for the parameters of the method
-					   int paramIdx = 0;
-					   foreach (RuntimeParameter rp in compiler.Method.Parameters)
-					   {
-						   Operand paramOp = compiler.GetParameterOperand(paramIdx++);
-						   if (0 != paramOp.Uses.Count)
-						   {
-							   Sort(paramOp.Definitions);
-							   Sort(paramOp.Uses);
+		   // Start live ranges for the parameters of the method
+		   int paramIdx = 0;
+		   foreach (RuntimeParameter rp in compiler.Method.Parameters)
+		   {
+			   Operand paramOp = compiler.GetParameterOperand(paramIdx++);
+			   if (0 != paramOp.Uses.Count)
+			   {
+				   Sort(paramOp.Definitions);
+				   Sort(paramOp.Uses);
 
-							   int lastUse = PickLastUseForDef(paramOp, 0);
-							   if (-1 != lastUse)
-							   {
-								   LiveRange lr = new LiveRange(blockProvider.Blocks[0], paramOp, 0, lastUse);
-								   _liveRanges.Add(lr);
-							   }
+				   int lastUse = PickLastUseForDef(paramOp, 0);
+				   if (-1 != lastUse)
+				   {
+					   LiveRange lr = new LiveRange(blockProvider.Blocks[0], paramOp, 0, lastUse);
+					   _liveRanges.Add(lr);
+				   }
+			   }
+		   }
+
+		   // Now process all additional definitions
+		   foreach (BasicBlock block in blockProvider)
+		   {
+			   foreach (Instruction instruction in block.Instructions)
+			   {
+				   foreach (Operand op in instruction.Results)
+				   {
+					   if (0 != op.Uses.Count)
+					   {
+						   Sort(op.Uses);
+						   Sort(op.Definitions);
+
+						   int lastUse = PickLastUseForDef(op, instruction.Offset);
+						   if (instruction.Offset < lastUse)
+						   {
+							   LiveRange lr = new LiveRange(block, op, instruction.Offset, lastUse);
+							   _liveRanges.Add(lr);
 						   }
 					   }
-
-					   // Now process all additional definitions
-					   foreach (BasicBlock block in blockProvider)
-					   {
-						   foreach (Instruction instruction in block.Instructions)
-						   {
-							   foreach (Operand op in instruction.Results)
-							   {
-								   if (0 != op.Uses.Count)
-								   {
-									   Sort(op.Uses);
-									   Sort(op.Definitions);
-
-									   int lastUse = PickLastUseForDef(op, instruction.Offset);
-									   if (instruction.Offset < lastUse)
-									   {
-										   LiveRange lr = new LiveRange(block, op, instruction.Offset, lastUse);
-										   _liveRanges.Add(lr);
-									   }
-								   }
-							   }
-						   }
-					   }
+				   }
+			   }
+		   }
 		   */
 		}
 
@@ -435,12 +430,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Assigns every instruction an increasing offset value.
 		/// </summary>
-		/// <param name="blockProvider">The block provider.</param>
-		private void NumberInstructions(IBasicBlockProvider blockProvider)
+		private void NumberInstructions()
 		{
 			int offset = 0;
 
-			foreach (BasicBlock block in blockProvider) {
+			foreach (BasicBlock block in BasicBlocks) {
 				Context ctx = new Context(block);
 
 				while (!ctx.EndOfInstruction) {

@@ -120,7 +120,7 @@ namespace Mosa.Platforms.x86
 			int thisArg = 1;
 
 			foreach (Operand operand in ctx.Operands) {
-				if (true == moveThis && 1 == thisArg) {
+				if (moveThis && 1 == thisArg) {
 					thisArg = 0;
 					continue;
 				}

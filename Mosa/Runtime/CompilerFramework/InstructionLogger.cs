@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Logs all incoming instructions and forwards them to the next compiler stage.
 	/// </summary>
-	public sealed class InstructionLogger : IMethodCompilerStage
+	public sealed class InstructionLogger : BaseStage, IMethodCompilerStage
 	{
 		#region Data members
 
@@ -27,11 +27,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Static instance of the instruction logger.
 		/// </summary>
 		public static readonly InstructionLogger Instance = new InstructionLogger();
-
-		/// <summary>
-		/// Holds the instruction set
-		/// </summary>
-		private InstructionSet _instructionset;
 
 		#endregion // Data members
 
@@ -61,10 +56,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
-			// Retrieve the instruction provider and the instruction set
-			_instructionset = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
+			base.Run(compiler);
 
 			// Previous stage
 			IMethodCompilerStage prevStage = compiler.GetPreviousStage<IMethodCompilerStage>();
@@ -74,16 +68,13 @@ namespace Mosa.Runtime.CompilerFramework
 
 			Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", compiler.Method, prevStage.Name));
 
-			// Block provider
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-			if (blockProvider != null)
-				foreach (BasicBlock block in blockProvider) {
-					Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
-					Debug.Indent();
-					LogInstructions(block.Instructions);
-					Debug.Unindent();
-					index++;
-				}
+			foreach (BasicBlock block in BasicBlocks) {
+				Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
+				Debug.Indent();
+				LogInstructions(new Context(InstructionSet,block));
+				Debug.Unindent();
+				index++;
+			}
 		}
 
 		/// <summary>
@@ -102,17 +93,22 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Logs the instructions in the given enumerable to the trace.
 		/// </summary>
-		/// <param name="instructions">The enumerable container of instructions.</param>
-		private void LogInstructions(IEnumerable<LegacyInstruction> instructions)
+		/// <param name="ctx">The context.</param>
+		private void LogInstructions(Context ctx)
 		{
 			StringBuilder text = new StringBuilder();
-			foreach (LegacyInstruction inst in instructions) {
+			while (!ctx.EndOfInstruction)
+			{
 				text.Length = 0;
-				if (inst.Ignore)
+
+				if (ctx.Ignore)
 					text.Append("; ");
-				text.AppendFormat("L_{0:X4}: {1}", inst.Offset, inst);
+
+				text.AppendFormat("L_{0:X4}: {1}", ctx.Offset, ctx.Instruction.ToString(ctx));
 
 				Debug.WriteLine(text.ToString());
+
+				ctx.GotoNext();
 			}
 		}
 

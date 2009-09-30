@@ -24,6 +24,11 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Data members
 
 		/// <summary>
+		/// Hold the method compiler
+		/// </summary>
+		protected IMethodCompiler MethodCompiler;
+
+		/// <summary>
 		/// Holds the instruction set
 		/// </summary>
 		protected InstructionSet InstructionSet;
@@ -51,6 +56,34 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Construction
 
+		#region Methods
+
+		/// <summary>
+		/// Sets the internals.
+		/// </summary>
+		/// <param name="compiler">The compiler.</param>
+		protected void SetInternals(IMethodCompiler compiler)
+		{
+			if (compiler == null)
+				throw new ArgumentNullException(@"compiler");
+
+			MethodCompiler = compiler;
+			InstructionSet = compiler.InstructionSet;
+			BasicBlocks = compiler.BasicBlocks;
+		}
+
+		/// <summary>
+		/// Gets block by label
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <returns></returns>
+		protected BasicBlock FromLabel(int label)
+		{
+			return MethodCompiler.FromLabel(label);
+		}
+
+		#endregion
+
 		#region IMethodCompilerStage members
 
 		/// <summary>
@@ -59,21 +92,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="compiler">The compiler context to perform processing in.</param>
 		public virtual void Run(IMethodCompiler compiler)
 		{
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
-
-			// Retrieve the instruction set
-			IInstructionsProvider instructionsProvider = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider);
-			if (InstructionSet == null)
-				throw new InvalidOperationException(@"Instruction set provider missing.");
-			InstructionSet = instructionsProvider.InstructionSet;
-
-			// Retrieve the basic block provider and list
-			BlockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-			if (BlockProvider == null)
-				throw new InvalidOperationException(@"Instruction stream must be split to basic Blocks.");
-			BasicBlocks = BlockProvider.Blocks;
-
+			SetInternals(compiler);
 		}
 
 		#endregion

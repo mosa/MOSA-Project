@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The Reserver Block Order Stage reorders Blocks in reverse order. This stage is for testing use only.
 	/// </summary>
-	public class ReverseBlockOrderStage : IMethodCompilerStage, IBasicBlockOrder
+	public class ReverseBlockOrderStage : BaseStage, IMethodCompilerStage, IBasicBlockOrder
 	{
 		#region Data members
 
@@ -64,18 +64,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Runs the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
-			// Retrieve the basic block provider
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-
-			if (blockProvider == null)
-				throw new InvalidOperationException(@"Simple Trace Block Order stage requires basic Blocks.");
-
-			Blocks = blockProvider.Blocks;
+			base.Run(compiler);
 
 			// Retreive the first block
-			FirstBlock = blockProvider.FromLabel(-1);
+			FirstBlock = FromLabel(-1);
 
 			// Determines the block order
 			DetermineBlockOrder();

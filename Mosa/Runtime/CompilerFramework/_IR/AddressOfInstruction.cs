@@ -37,8 +37,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
                 throw new ArgumentNullException(@"op");
             if (null == destination)
                 throw new ArgumentNullException(@"destination");
-            Debug.Assert(false == op.IsRegister, @"Operand can not be a register.");
-            if (true == op.IsRegister)
+            Debug.Assert(!op.IsRegister, @"Operand can not be a register.");
+            if (op.IsRegister)
                 throw new ArgumentException(@"The operand op may not be a register.", @"op");
         }
 

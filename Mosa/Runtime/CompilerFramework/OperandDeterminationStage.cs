@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The Operand Determination Stage determines the operands for each instructions.
 	/// </summary>
-	public class OperandDeterminationStage : IMethodCompilerStage
+	public class OperandDeterminationStage : BaseStage, IMethodCompilerStage
 	{
 		#region Data members
 
@@ -25,10 +25,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// 
 		/// </summary>
 		protected IArchitecture Architecture;
-		/// <summary>
-		/// 
-		/// </summary>
-		private List<BasicBlock> _blocks;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -67,16 +63,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Runs the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
-			// Retrieve the basic block provider
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
+			base.Run(compiler);
 
-			if (blockProvider == null)
-				throw new InvalidOperationException(@"Operand Determination stage requires basic Blocks.");
-
-			_blocks = blockProvider.Blocks;
-			_firstBlock = blockProvider.FromLabel(-1);
+			_firstBlock = FromLabel(-1);
 
 			InitializeWorkItems();
 
@@ -100,7 +91,7 @@ namespace Mosa.Runtime.CompilerFramework
 			WorkListStack = new Stack<List<Operand>>();
 			WorkList.Push(_firstBlock);
 			WorkListStack.Push(new List<Operand>());
-			WorkArray = new BitArray(_blocks.Count);
+			WorkArray = new BitArray(BasicBlocks.Count);
 		}
 
 		private static List<Operand> GetCurrentStack(IList<Operand> stack)

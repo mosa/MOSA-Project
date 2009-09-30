@@ -153,7 +153,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// of the methoddef, methodref, methodspec or callsite to call.
 			decoder.Decode(out callTarget);
 			targetType = (TokenTypes.TableMask & callTarget);
-			if (false == IsCallTargetSupported(targetType, flags))
+			if (!IsCallTargetSupported(targetType, flags))
 				throw new InvalidOperationException(@"Invalid IL call target specification.");
 
 			switch (targetType) {
@@ -261,10 +261,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 				foreach (MethodDefinition methodDef in elementTypeDef.Methods)
 				{
-					if (true == methodDef.Name.Equals(name))
+					if (methodDef.Name.Equals(name))
 					{
 						// FIXME: Check the signatures...
-						if (true == IsSameSignature(metadata, methodDef.SignatureIdx, signatureIdx))
+						if (IsSameSignature(metadata, methodDef.SignatureIdx, signatureIdx))
 						{
 							// We've found the method
 							//result = temp;
@@ -295,8 +295,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			metadata.Read(sig1, out src);
 			metadata.Read(sig2, out dst);
 			bool result = (src.Length == dst.Length);
-			if (true == result) {
-				for (int i = 0; true == result && i < src.Length; i++)
+			if (result) {
+				for (int i = 0; result && i < src.Length; i++)
 					result = (src[i] == dst[i]);
 			}
 			return result;

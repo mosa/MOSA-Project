@@ -79,7 +79,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (szast == null)
                 return false;
 
-            return (base.Equals(other) == true && true == _elementType.Equals(szast._elementType) && true == CustomMod.Equals(_customMods, szast._customMods));
+            return (base.Equals(other) == true && _elementType.Equals(szast._elementType) && CustomMod.Equals(_customMods, szast._customMods));
         }
 
         #endregion // SigType Overrides

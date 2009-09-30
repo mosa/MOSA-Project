@@ -122,11 +122,11 @@ namespace Mosa.Tools.Compiler
             CheckImplementation();
             implementation.Run(compiler);
         }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pipeline"></param>
+
+		/// <summary>
+		/// Adds the stage to the pipeline.
+		/// </summary>
+		/// <param name="pipeline">The pipeline to add to.</param>
         public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
         {
             CheckImplementation();

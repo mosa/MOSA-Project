@@ -91,7 +91,7 @@ namespace Mosa.Runtime.Linker
             foreach (string member in members)
             {
                 // Is the runtime member resolved?
-                if (true == IsResolved(member, out address))
+                if (IsResolved(member, out address))
                 {
                     // Yes, patch up the method
                     List<LinkRequest> link = _linkRequests[member];
@@ -299,7 +299,7 @@ namespace Mosa.Runtime.Linker
                 throw new ArgumentNullException(@"symbolName");
 
             LinkerSymbol result;
-            if (false == this._symbols.TryGetValue(symbolName, out result))
+            if (!this._symbols.TryGetValue(symbolName, out result))
                 throw new ArgumentException(@"Symbol not compiled.", @"member");
 
             return result;
@@ -316,12 +316,12 @@ namespace Mosa.Runtime.Linker
         /// <param name="offset">An offset to apply to the link target.</param>
         public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target, IntPtr offset)
         {
-            Debug.Assert(true == IsValid(target), @"Invalid RuntimeMember passed to IAssemblyLinker.Link");
-            if (false == IsValid(target))
+            Debug.Assert(IsValid(target), @"Invalid RuntimeMember passed to IAssemblyLinker.Link");
+            if (!IsValid(target))
                 throw new ArgumentException(@"RuntimeMember is not a static field or method.", @"member");
 
             long address;
-            if (false == IsResolved(target, out address))
+            if (!IsResolved(target, out address))
             {
                 address = Link(linkType, method, methodOffset, methodRelativeBase, CreateSymbolName(target), offset);
             }
@@ -354,10 +354,10 @@ namespace Mosa.Runtime.Linker
                 throw new ArgumentNullException(@"symbol");
 
             long result = 0;
-            if (true == IsResolved(symbol, out result))
+            if (IsResolved(symbol, out result))
             {
                 List<LinkRequest> patchList;
-                if (false == _linkRequests.TryGetValue(symbol, out patchList))
+                if (!_linkRequests.TryGetValue(symbol, out patchList))
                 {
                     patchList = new List<LinkRequest>(1);
                     patchList.Add(new LinkRequest(linkType, CreateSymbolName(method), methodOffset, methodRelativeBase, symbol, offset));
@@ -370,7 +370,7 @@ namespace Mosa.Runtime.Linker
             {
                 // FIXME: Make this thread safe
                 List<LinkRequest> list;
-                if (false == _linkRequests.TryGetValue(symbol, out list))
+                if (!_linkRequests.TryGetValue(symbol, out list))
                 {
                     list = new List<LinkRequest>();
                     _linkRequests.Add(symbol, list);
@@ -403,10 +403,10 @@ namespace Mosa.Runtime.Linker
                 throw new ArgumentNullException(@"symbol");
 
             long result = 0;
-            if (true == IsResolved(symbolName, out result))
+            if (IsResolved(symbolName, out result))
             {
                 List<LinkRequest> patchList;
-                if (false == _linkRequests.TryGetValue(targetSymbol, out patchList))
+                if (!_linkRequests.TryGetValue(targetSymbol, out patchList))
                 {
                     patchList = new List<LinkRequest>(1);
                     patchList.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
@@ -419,7 +419,7 @@ namespace Mosa.Runtime.Linker
             {
                 // FIXME: Make this thread safe
                 List<LinkRequest> list;
-                if (false == _linkRequests.TryGetValue(targetSymbol, out list))
+                if (!_linkRequests.TryGetValue(targetSymbol, out list))
                 {
                     list = new List<LinkRequest>();
                     _linkRequests.Add(targetSymbol, list);
@@ -540,7 +540,7 @@ namespace Mosa.Runtime.Linker
         {
             virtualAddress = 0;
             LinkerSymbol linkerSymbol;
-            if (true == this._symbols.TryGetValue(symbol, out linkerSymbol))
+            if (this._symbols.TryGetValue(symbol, out linkerSymbol))
             {
                 virtualAddress = linkerSymbol.VirtualAddress.ToInt64();
             }

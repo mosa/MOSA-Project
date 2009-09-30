@@ -180,7 +180,7 @@ namespace Mosa.Platforms.x86
 			// Relative branch offset
 			int relOffset;
 
-			if (true == _labels.TryGetValue(label, out pos)) {
+			if (_labels.TryGetValue(label, out pos)) {
 				Debug.Assert(pos == currentPosition);
 				if (pos != currentPosition)
 					throw new ArgumentException(@"Label already defined for another code point.", @"label");
@@ -263,7 +263,7 @@ namespace Mosa.Platforms.x86
 				return false;
 			}));
 
-			if (true == emit) {
+			if (emit) {
 				_codeStream.Position = currentPosition;
 				switch (LiteralData.Type.Type) {
 					case CilElementType.I8:
@@ -1434,7 +1434,7 @@ namespace Mosa.Platforms.x86
 			modRM = CalculateModRM(regField, dest, src, out sib, out displacement);
 			if (null != modRM) {
 				_codeStream.WriteByte(modRM.Value);
-				if (true == sib.HasValue) {
+				if (sib.HasValue) {
 					_codeStream.WriteByte(sib.Value);
 				}
 			}
@@ -1473,7 +1473,7 @@ namespace Mosa.Platforms.x86
 			modRM = CalculateModRM(regField, dest, src, out sib, out displacement);
 			if (null != modRM) {
 				_codeStream.WriteByte(modRM.Value);
-				if (true == sib.HasValue) {
+				if (sib.HasValue) {
 					_codeStream.WriteByte(sib.Value);
 				}
 			}
@@ -1509,7 +1509,7 @@ namespace Mosa.Platforms.x86
 			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
 			if (null != modRM) {
 				codeStream.WriteByte(modRM.Value);
-				if (true == sib.HasValue) {
+				if (sib.HasValue) {
 					codeStream.WriteByte(sib.Value);
 				}
 			}
@@ -1548,7 +1548,7 @@ namespace Mosa.Platforms.x86
 			modRM = CalculateModRM(opCode.RegField, result, leftOperand, out sib, out displacement);
 			if (null != modRM) {
 				codeStream.WriteByte(modRM.Value);
-				if (true == sib.HasValue) {
+				if (sib.HasValue) {
 					codeStream.WriteByte(sib.Value);
 				}
 			}
@@ -1684,7 +1684,7 @@ namespace Mosa.Platforms.x86
 			long position;
 
 			// Did we see the label?
-			if (true == _labels.TryGetValue(label, out position)) {
+			if (_labels.TryGetValue(label, out position)) {
 				// Yes, calculate the relative offset
 				relOffset = (int)position - ((int)_codeStream.Position + 4);
 			}

@@ -27,7 +27,7 @@ namespace Mosa.Platforms.x86.Constraints
         /// <returns>True if the used operand is valid or false, if it is not valid.</returns>
         public override bool IsValidOperand(int opIdx, Operand op)
         {
-            return (true == base.IsValidOperand(opIdx, op) && !(op is ConstantOperand));
+            return (base.IsValidOperand(opIdx, op) && !(op is ConstantOperand));
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Mosa.Platforms.x86.Constraints
         public override bool IsValidResult(int resIdx, Operand op)
         {
             RegisterOperand rop = op as RegisterOperand;
-            return (true == base.IsValidResult(resIdx, op) && null != rop && rop.Register == GeneralPurposeRegister.EAX);
+            return (base.IsValidResult(resIdx, op) && null != rop && rop.Register == GeneralPurposeRegister.EAX);
         }
 
         /// <summary>

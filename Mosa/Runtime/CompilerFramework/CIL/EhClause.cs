@@ -81,7 +81,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
         /// <param name="isFat">if set to <c>true</c> [is fat].</param>
         public void Read(BinaryReader reader, bool isFat)
         {
-            if (false == isFat)
+            if (!isFat)
             {
                 this.Kind = (EhClauseType)reader.ReadInt16();
                 this.TryOffset = reader.ReadInt16();

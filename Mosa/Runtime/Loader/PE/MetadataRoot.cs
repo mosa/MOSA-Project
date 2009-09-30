@@ -121,19 +121,19 @@ namespace Mosa.Runtime.Loader.PE
 				position = (int)reader.BaseStream.Position;
 				length = Array.IndexOf<byte>(metadata, 0, position, 32);
 				name = Encoding.ASCII.GetString(metadata, position, length - position);
-				if (true == name.Equals("#Strings")) {
+				if (name.Equals("#Strings")) {
 					kind = HeapType.String;
 				}
-				else if (true == name.Equals("#US")) {
+				else if (name.Equals("#US")) {
 					kind = HeapType.UserString;
 				}
-				else if (true == name.Equals("#Blob")) {
+				else if (name.Equals("#Blob")) {
 					kind = HeapType.Blob;
 				}
-				else if (true == name.Equals("#GUID")) {
+				else if (name.Equals("#GUID")) {
 					kind = HeapType.Guid;
 				}
-				else if (true == name.Equals("#~")) {
+				else if (name.Equals("#~")) {
 					kind = HeapType.Tables;
 				}
 				else {

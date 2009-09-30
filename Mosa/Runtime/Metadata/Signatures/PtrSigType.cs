@@ -88,7 +88,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (null == pother)
                 return false;
 
-            return (base.Equals(other) == true && this.elementType.Matches(pother.elementType) == true && true == CustomMod.Equals(this.customMods, pother.customMods));
+            return (base.Equals(other) == true && this.elementType.Matches(pother.elementType) == true && CustomMod.Equals(this.customMods, pother.customMods));
         }
 
         /// <summary>

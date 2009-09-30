@@ -1,22 +1,20 @@
-// -----------------------------------------------------------------------------------------------------------
-// <copyright file="StackRegisterAllocator.cs" company="(C) 2008-2009 MOSA - The Managed Operating System Alliance">
-//  
-// (c) 2008-2009 MOSA - The Managed Operating System Alliance
-// 
-// Licensed under the terms of the New BSD License.
-//  
-// Authors:
-//   Michael Ruck (mailto:sharpos@michaelruck.de)
-//   
-// </copyright>
-// -----------------------------------------------------------------------------------------------------------
+/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System.Collections.Generic;
+using System.Diagnostics;
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
+using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+
 namespace Mosa.Runtime.CompilerFramework
 {
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using IR;
-    using Metadata;
-    using Metadata.Signatures;
 
     /// <summary>
     /// Allocates the registers according to the IL stack.
@@ -52,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <para />
     /// - EAX and ECX are not touched for floating point. They keep their last state.
     /// </remarks>
-    public class StackRegisterAllocator : IMethodCompilerStage
+    public class StackRegisterAllocator : BaseStage, IMethodCompilerStage
     {
         /// <summary>
         /// Holds the number of registers used for the evaluation stack.
@@ -106,38 +104,39 @@ namespace Mosa.Runtime.CompilerFramework
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(IMethodCompiler compiler)
+        public override void Run(IMethodCompiler compiler)
         {
+			base.Run(compiler);
+
             // Prepare the registers used for the evaluation stack
             this.PrepareEvaluationStack(compiler.Architecture);
 
-            // Enumerate the basic Blocks and process the instructions in each of them
-            IBasicBlockProvider blockProvider = compiler.GetPreviousStage<IBasicBlockProvider>();
-            foreach (BasicBlock block in blockProvider)
+			foreach (BasicBlock block in BasicBlocks)
             {
-                foreach (LegacyInstruction instruction in block.Instructions)
-                {
-                    this.ProcessInstruction(instruction);
-                }
+				Context ctx = new Context(InstructionSet, block);
+
+				while (!ctx.EndOfInstruction) {
+					ProcessInstruction(ctx);
+					ctx.GotoNext();
+				}
             }
         }
 
-        /// <summary>
-        /// Pops the operands of an instruction From the evaluation stack.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <returns>The number of operands popped.</returns>
-        private int PopOperands(LegacyInstruction instruction)
+		/// <summary>
+		/// Pops the operands of an instruction From the evaluation stack.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <returns>The number of operands popped.</returns>
+        private int PopOperands(Context ctx)
         {
-            Operand[] ops = instruction.Operands;
-            for (int i = ops.Length - 1; i > -1; i--)
+            for (int i = ctx.OperandCount - 1; i > -1; i--)
             {
-                Operand op = ops[i];
-                Operand evalOp = this.evaluationStack.Pop();
+				Operand op = ctx.GetOperand(i);
+                Operand evalOp = evaluationStack.Pop();
                 Debug.Assert(ReferenceEquals(evalOp, op), @"Operand's are not equal?");
             }
 
-            return ops.Length;
+			return ctx.OperandCount;
         }
 
         /// <summary>
@@ -185,49 +184,45 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
-        /// <summary>
-        /// Processes the instruction.
-        /// </summary>
-        /// <param name="instruction">The instruction to process.</param>
-        private void ProcessInstruction(LegacyInstruction instruction)
+		/// <summary>
+		/// Processes the instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+        private void ProcessInstruction(Context ctx)
         {
-            if (instruction is MoveInstruction)
+            if (ctx.Instruction is IR2.MoveInstruction)
             {
-                this.evaluationStack.Push(instruction.Results[0]);
+                evaluationStack.Push(ctx.Result);
                 return;
             }
 
             // If the instruction has operands, these are popped From the IL stack.
-            int pops = this.PopOperands(instruction);
+            int pops = PopOperands(ctx);
 
             // If an instruction has a result, it is pushed onto the evaluation stack.
-            int pushes = this.PushResults(instruction, pops);
+            int pushes = this.PushResults(ctx, pops);
 
             this.SyncEvalStack(pops - pushes);
         }
 
-        /// <summary>
-        /// Pushes the results of an instruction onto the evaluation stack.
-        /// </summary>
-        /// <param name="instruction">The instruction.</param>
-        /// <param name="pops">The number of pops performed.</param>
-        /// <returns>The number of pushes performed.</returns>
-        private int PushResults(LegacyInstruction instruction, int pops)
+		/// <summary>
+		/// Pushes the results of an instruction onto the evaluation stack.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="pops">The number of pops performed.</param>
+		/// <returns>The number of pushes performed.</returns>
+		private int PushResults(Context ctx, int pops)
         {
-            // Get the result operands
-            Operand[] ops = instruction.Results;
-
-            Debug.Assert(
-                ops == null || ops.Length == 1, @"Not tested for more than one result. Which order should they take?");
+            Debug.Assert(ctx.ResultCount == 1, @"Not tested for more than one result. Which order should they take?");
 
             // Enumerate the result operands
-            foreach (Operand result in ops)
+			foreach (Operand result in ctx.Results)
             {
                 // Move the result to the top of the eval stack
                 this.evaluationStack.Push(result);
             }
 
-            return ops != null ? ops.Length : 0;
+			return ctx.ResultCount;
         }
 
         /// <summary>

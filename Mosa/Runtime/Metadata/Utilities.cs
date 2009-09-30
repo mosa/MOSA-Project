@@ -67,7 +67,7 @@ namespace Mosa.Runtime.Metadata
         public static bool ReadCustomMod(IMetadataProvider provider, byte[] buffer, ref int index)
         {
             bool result = (buffer[index] == (byte)CilElementType.Required || buffer[index] == (byte)CilElementType.Optional);
-            if (true == result)
+            if (result)
             {
                 index++;
                 ReadTypeDefOrRefEncoded(provider, buffer, ref index);
@@ -106,7 +106,7 @@ namespace Mosa.Runtime.Metadata
         {
             // FIXME: Influence the variable type somehow.
             bool result = (signature[index] == (byte)CilElementType.Pinned);
-            if (true == result)
+            if (result)
                 index++;
             return result;
         }

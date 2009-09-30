@@ -64,7 +64,7 @@ namespace Mosa.Runtime.Linker
         /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is null.</exception>
         public LinkerSymbol(string name, SectionKind section, long sectionAddress)
         {
-            Debug.Assert(false == String.IsNullOrEmpty(name), @"LinkerSymbol requires a proper name.");
+            Debug.Assert(!String.IsNullOrEmpty(name), @"LinkerSymbol requires a proper name.");
             if (name == null)
                 throw new ArgumentNullException(@"name");
             if (name.Length == 0)

@@ -26,8 +26,7 @@ namespace Mosa.Platforms.x86
 	/// embedding floating point values as immediates inside the code, so these have to be moved outside
 	/// and referenced through a memory offset starting at the 
 	/// </remarks>
-	public sealed class ConstantRemovalStage :
-		IMethodCompilerStage
+	public sealed class ConstantRemovalStage : BaseStage, IMethodCompilerStage
 	{
 		#region Data members
 
@@ -36,11 +35,6 @@ namespace Mosa.Platforms.x86
 		/// one floating point constant to physical memory.
 		/// </summary>
 		private bool _constantRemoved;
-
-		/// <summary>
-		/// Holds the instruction set
-		/// </summary>
-		private InstructionSet _instructionset;
 
 		#endregion // Data members
 
@@ -81,24 +75,18 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Runs the specified method compiler.
 		/// </summary>
-		/// <param name="methodCompiler">The method compiler.</param>
-		public void Run(IMethodCompiler methodCompiler)
+		/// <param name="compiler">The compiler context to perform processing in.</param>
+		public override void Run(IMethodCompiler compiler)
 		{
-			if (methodCompiler != null)
-				throw new ArgumentNullException(@"methodCompiler");
+			base.Run(compiler);
 
-			// Retrieve the instruction provider and the instruction set
-			_instructionset = (methodCompiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
+			IArchitecture arch = compiler.Architecture;
 
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)methodCompiler.GetPreviousStage(typeof(IBasicBlockProvider));
-
-			IArchitecture arch = methodCompiler.Architecture;
-
-			Context ctxEpilogue = new Context(blockProvider.FromLabel(Int32.MaxValue));
+			Context ctxEpilogue = new Context(FromLabel(Int32.MaxValue));
 			ctxEpilogue.GotoLast();
 
 			// Iterate all Blocks and collect locals from all Blocks
-			foreach (BasicBlock block in blockProvider)
+			foreach (BasicBlock block in BasicBlocks)
 				ProcessInstructions(arch, new Context(block), ctxEpilogue);
 		}
 

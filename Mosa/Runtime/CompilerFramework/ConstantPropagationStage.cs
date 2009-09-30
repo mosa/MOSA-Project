@@ -69,7 +69,7 @@ namespace Mosa.Runtime.CompilerFramework
 						if (co != null && blocks.Count == 1) {
 							// We can remove the phi, as it is only defined once
 							// HACK: We can't track a constant through a register, so we keep those moves
-							if (false == ctx.Result.IsRegister) {
+							if (!ctx.Result.IsRegister) {
 								Debug.Assert(ctx.Result.Definitions.Count == 1, @"Operand defined multiple times. Instruction stream not in SSA form!");
 								ctx.Result.Replace(co);
 								remove = true;

@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// The FlowGraph Visualization Stage emits flowgraphs for graphviz.
     /// </summary>
-    public class FlowGraphVisualizationStage : IMethodCompilerStage
+    public class FlowGraphVisualizationStage : BaseStage, IMethodCompilerStage
     {
         #region Data members
 
@@ -26,10 +26,6 @@ namespace Mosa.Runtime.CompilerFramework
         /// 
         /// </summary>
         protected IArchitecture arch;
-        /// <summary>
-        /// 
-        /// </summary>
-        private List<BasicBlock> blocks;
         /// <summary>
         /// 
         /// </summary>
@@ -73,8 +69,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// Runs the specified compiler.
         /// </summary>
         /// <param name="compiler">The compiler.</param>
-        public void Run(IMethodCompiler compiler)
+        public override void Run(IMethodCompiler compiler)
         {
+			base.Run(compiler);
+
             if (!methodCount.ContainsKey(compiler.Method.Name))
                 methodCount[compiler.Method.Name] = 0;
 
@@ -91,20 +89,12 @@ namespace Mosa.Runtime.CompilerFramework
 
             ++methodCount[compiler.Method.Name];
 
-            // Retrieve the basic block provider
-            IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-
-            if (blockProvider == null)
-                throw new InvalidOperationException(@"Operand Determination stage requires basic blocks.");
-
-            blocks = blockProvider.Blocks;
-
             // Retreive the first block
-            firstBlock = blockProvider.FromLabel(-1);
+            firstBlock = FromLabel(-1);
 
             workList = new Stack<BasicBlock>();
             workList.Push(firstBlock);
-            workArray = new BitArray(blocks.Count);
+            workArray = new BitArray(BasicBlocks.Count);
 
             IMethodCompilerStage previousStage = compiler.GetPreviousStage<IMethodCompilerStage>();
             dotFile.WriteLine("digraph " + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + "_FlowGraph {");

@@ -15,13 +15,13 @@ namespace Mosa.Runtime.CompilerFramework
     /// Allows downlevel compilation stages to access basic Blocks and the raw instruction stream
     /// determined by a previous compilation stage.
     /// </summary>
-    public interface IBasicBlockProvider : IEnumerable<BasicBlock>
+    public interface IBasicBlockProvider // : IEnumerable<BasicBlock>
     {
         /// <summary>
         /// Gets the basic Blocks.
         /// </summary>
         /// <value>The basic Blocks.</value>
-        List<BasicBlock> Blocks { get; }
+        List<BasicBlock> BasicBlocks { get; }
 
         /// <summary>
         /// Retrieves a basic block from its label.

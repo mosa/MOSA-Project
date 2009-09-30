@@ -67,7 +67,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Make sure the base is a typed reference
 			throw new NotImplementedException();
 			/*
-				if (false == Object.ReferenceEquals(_operands[0].Type, MetadataTypeReference.FromName(compiler.Assembly.Metadata, @"System", @"TypedReference")))
+				if (!Object.ReferenceEquals(_operands[0].Type, MetadataTypeReference.FromName(compiler.Assembly.Metadata, @"System", @"TypedReference")))
 				{
 					Debug.Assert(false);
 					throw new InvalidProgramException(@"Invalid stack object.");

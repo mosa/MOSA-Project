@@ -1184,11 +1184,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			load = load as LoadInstruction;
 
 			// Is this a sign or zero-extending move?
-			if (true == IsSignExtending(load.Source))
+			if (IsSignExtending(load.Source))
 			{
 				type = typeof(IR2.SignExtendedMoveInstruction);
 			}
-			else if (true == IsZeroExtending(load.Source))
+			else if (IsZeroExtending(load.Source))
 			{
 				type = typeof(IR2.ZeroExtendedMoveInstruction);
 			}

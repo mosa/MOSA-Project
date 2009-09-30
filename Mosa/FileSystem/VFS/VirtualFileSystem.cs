@@ -243,7 +243,7 @@ namespace Mosa.FileSystem.VFS
 		//    String pathSep = new String(Path.DirectorySeparatorChar, 1);
 		//    String result = String.Concat(pathSep, entry.Name);
 
-		//    while (false == Object.ReferenceEquals(entry, entry.Parent))
+		//    while (!Object.ReferenceEquals(entry, entry.Parent))
 		//    {
 		//        entry = entry.Parent;
 		//        result = String.Concat(pathSep, entry.Name, result);

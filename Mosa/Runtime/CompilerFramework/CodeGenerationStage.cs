@@ -71,9 +71,9 @@ namespace Mosa.Runtime.CompilerFramework
             using (_codeStream = _compiler.RequestCodeStream())
             {
                 // HINT: We need seeking to resolve labels.
-                Debug.Assert(true == _codeStream.CanSeek, @"Can't seek code output stream.");
-                Debug.Assert(true == _codeStream.CanWrite, @"Can't write to code output stream.");
-                if (false == _codeStream.CanSeek || false == _codeStream.CanWrite)
+                Debug.Assert(_codeStream.CanSeek, @"Can't seek code output stream.");
+                Debug.Assert(_codeStream.CanWrite, @"Can't write to code output stream.");
+                if (!_codeStream.CanSeek || !_codeStream.CanWrite)
                     throw new NotSupportedException(@"Code stream doesn't support seeking or writing.");
 
                 // Emit method prologue

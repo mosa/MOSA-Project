@@ -104,7 +104,7 @@ namespace Mosa.Runtime.CompilerFramework
 								idom = Intersect(p, idom);
 						}
 
-						if (false == ReferenceEquals(_doms[b.Index], idom)) {
+						if (!ReferenceEquals(_doms[b.Index], idom)) {
 							_doms[b.Index] = idom;
 							changed = true;
 						}
@@ -129,7 +129,7 @@ namespace Mosa.Runtime.CompilerFramework
 							if (null == runnerFrontier)
 								runnerFrontier = domFrontiers[runner.Index] = new List<BasicBlock>();
 
-							if (false == domFrontier.Contains(b))
+							if (!domFrontier.Contains(b))
 								domFrontier.Add(b);
 							runnerFrontier.Add(b);
 							runner = _doms[runner.Index];

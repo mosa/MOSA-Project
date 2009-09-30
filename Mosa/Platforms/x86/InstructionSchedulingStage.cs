@@ -15,7 +15,7 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class InstructionSchedulingStage : IMethodCompilerStage
+	public sealed class InstructionSchedulingStage : BaseStage, IMethodCompilerStage
 	{
 		//private static int latencySum = 0;
 
@@ -34,15 +34,12 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Runs the specified method compiler.
 		/// </summary>
-		/// <param name="methodCompiler">The method compiler.</param>
-		public void Run(IMethodCompiler methodCompiler)
+		/// <param name="compiler">The compiler context to perform processing in.</param>
+		public override void Run(IMethodCompiler compiler)
 		{
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)methodCompiler.GetPreviousStage(typeof(IBasicBlockProvider));
+			base.Run(compiler);
 
-			if (null == blockProvider)
-				throw new InvalidOperationException(@"Code generation requires a basic block provider.");
-
-			foreach (BasicBlock block in blockProvider) 
+			foreach (BasicBlock block in BasicBlocks) 
 				ScheduleBlock(block);
 		}
 

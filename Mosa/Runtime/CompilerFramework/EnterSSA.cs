@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// The minimal form only inserts the really required PHI functions in order to reduce the 
 	/// number of live registers used by register allocation.
 	/// </remarks>
-	public sealed class EnterSSA : IMethodCompilerStage
+	public sealed class EnterSSA : BaseStage, IMethodCompilerStage
 	{
 		#region Tracing
 
@@ -62,10 +62,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private IArchitecture _architecture;
 
-		/// <summary>
-		/// Holds the currently running method compiler.
-		/// </summary>
-		private IMethodCompiler _compiler;
 
 		/// <summary>
 		/// Holds the dominance frontier Blocks of the stage.
@@ -104,28 +100,23 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
-			// Retrieve the basic block provider
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-			if (null == blockProvider)
-				throw new InvalidOperationException(@"SSA Conversion requires basic Blocks.");
+			base.Run(compiler);
+
 			_dominanceProvider = (IDominanceProvider)compiler.GetPreviousStage(typeof(IDominanceProvider));
 			Debug.Assert(null != _dominanceProvider, @"SSA Conversion requires a dominance provider.");
 			if (null == _dominanceProvider)
 				throw new InvalidOperationException(@"SSA Conversion requires a dominance provider.");
 			_architecture = compiler.Architecture;
-			_compiler = compiler;
-
-			List<BasicBlock> blocks = blockProvider.Blocks;
-
+	
 			// Allocate space for live outs
-			_liveness = new IDictionary<StackOperand, StackOperand>[blocks.Count];
+			_liveness = new IDictionary<StackOperand, StackOperand>[BasicBlocks.Count];
 			// Retrieve the dominance frontier Blocks
 			_dominanceFrontierBlocks = _dominanceProvider.GetDominanceFrontier();
 
 			// Add ref/out parameters to the epilogue block to have uses there...
-			AddPhiFunctionsForOutParameters(compiler, blockProvider);
+			AddPhiFunctionsForOutParameters();
 
 			// Transformation worklist 
 			Queue<WorkItem> workList = new Queue<WorkItem>();
@@ -147,7 +138,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Start with the very first block
-			workList.Enqueue(new WorkItem(blocks[0], null, liveIn));
+			workList.Enqueue(new WorkItem(BasicBlocks[0], null, liveIn));
 
 			// Iterate until the worklist is empty
 			while (0 != workList.Count) {
@@ -183,23 +174,21 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Adds PHI functions for all ref/out parameters of the method being compiled.
 		/// </summary>
-		/// <param name="compiler">The method compiler.</param>
-		/// <param name="blockProvider">The block provider.</param>
-		private void AddPhiFunctionsForOutParameters(IMethodCompiler compiler, IBasicBlockProvider blockProvider)
+		private void AddPhiFunctionsForOutParameters()
 		{
 			Dictionary<StackOperand, StackOperand> liveIn = null;
 
 			// Retrieve the well known epilogue block
-			BasicBlock epilogue = blockProvider.FromLabel(Int32.MaxValue);
+			BasicBlock epilogue = FromLabel(Int32.MaxValue);
 			Debug.Assert(epilogue != null, @"Method doesn't have epilogue block?");
 
 			Context ctxEpilogue = new Context(epilogue);
 			ctxEpilogue.GotoLast();
 
 			// Iterate all parameter definitions
-			foreach (RuntimeParameter rp in compiler.Method.Parameters) {
+			foreach (RuntimeParameter rp in MethodCompiler.Method.Parameters) {
 				// Retrieve the stack operand for the parameter
-				StackOperand paramOp = (StackOperand)compiler.GetParameterOperand(rp.Position - 1);
+				StackOperand paramOp = (StackOperand)MethodCompiler.GetParameterOperand(rp.Position - 1);
 
 				// Only add a PHI if the runtime parameter is out or ref...
 				if (rp.IsOut || (paramOp.Type is RefSigType || paramOp.Type is PtrSigType)) {
@@ -364,7 +353,7 @@ namespace Mosa.Runtime.CompilerFramework
 			string name = cur.Name;
 			if (cur.Version == 0)
 				name = String.Format(@"T_{0}", name);
-			StackOperand op = _compiler.CreateTemporary(cur.Type) as StackOperand;
+			StackOperand op = MethodCompiler.CreateTemporary(cur.Type) as StackOperand;
 			//StackOperand op = new LocalVariableOperand(cur.Base, name, idx, cur.Type);
 			op.Version = ++_ssaVersion;
 			return op;

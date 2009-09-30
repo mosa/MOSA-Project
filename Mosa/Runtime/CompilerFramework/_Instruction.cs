@@ -194,7 +194,7 @@ namespace Mosa.Runtime.CompilerFramework
                     throw new InvalidOperationException(@"ILInstruction does not provide results or hasn't been decoded yet.");
                 if (value.Length != _results.Length)
                     throw new ArgumentException(@"Can't change result count of an instruction.", @"value");
-                if (true == IsAnyOperandMuted(value, _results))
+                if (IsAnyOperandMuted(value, _results))
                     throw new ArgumentException(@"Result operands can't change type.", @"value");
 
                 _results = value;
@@ -295,7 +295,7 @@ namespace Mosa.Runtime.CompilerFramework
         private bool IsAnyOperandMuted(Operand[] value, Operand[] _result)
         {
             bool result = false;
-            for (int i = 0; false == result && i < value.Length; i++)
+            for (int i = 0; !result && i < value.Length; i++)
             {
                 if (null != _results[i] && null != value[i])
                     result = (_results[i].Type == value[i].Type);

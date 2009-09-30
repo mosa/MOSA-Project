@@ -66,7 +66,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (null == vst)
                 return false;
 
-            return (true == base.Equals(other) && _index == vst._index);
+            return (base.Equals(other) && _index == vst._index);
         }
 
         #endregion // SigType Overrides

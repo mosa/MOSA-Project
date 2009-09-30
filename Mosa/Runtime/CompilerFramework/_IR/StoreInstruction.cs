@@ -50,14 +50,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
              *
             if (null != dref)
             {
-                Debug.Assert(true == dref.ElementType.Equals(value.Type), @"Incompatible destination and source types.");
-                if (false == dref.ElementType.Equals(value.Type))
+                Debug.Assert(dref.ElementType.Equals(value.Type), @"Incompatible destination and source types.");
+                if (!dref.ElementType.Equals(value.Type))
                     throw new ArgumentException(@"Destination pointer incompatible with value type.", @"destinationPtr");
             }
             else if (null != dptr)
             {
-                Debug.Assert(true == dptr.ElementType.Equals(value.Type), @"Incompatible destination and source types.");
-                if (false == dptr.ElementType.Equals(value.Type))
+                Debug.Assert(dptr.ElementType.Equals(value.Type), @"Incompatible destination and source types.");
+                if (!dptr.ElementType.Equals(value.Type))
                     throw new ArgumentException(@"Destination pointer incompatible with value type.", @"destinationPtr");
             }
              */

@@ -195,7 +195,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				do {
 					flags = reader.ReadByte();
 					isFat = (0x40 == (flags & 0x40));
-					if (true == isFat) {
+					if (isFat) {
 						byte[] buffer = new byte[4];
 						reader.Read(buffer, 0, 3);
 						length = LittleEndianBitConverter.GetInt32(buffer, 0);

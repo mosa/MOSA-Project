@@ -17,10 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Calculates the layout of the stack of the method.
 	/// </summary>
-	public sealed class StackLayoutStage :
-		BaseStage,
-		IMethodCompilerStage,
-		IStackLayoutProvider
+	public sealed class StackLayoutStage : BaseStage, IMethodCompilerStage, IStackLayoutProvider
 	{
 		#region Tracing
 

@@ -109,7 +109,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (null == ast)
                 return false;
 
-            return (true == base.Equals(other) && _rank == ast._rank && true == Equal(_sizes, ast._sizes) && true == Equal(_lowbounds, ast._lowbounds));
+            return (base.Equals(other) && _rank == ast._rank && Equal(_sizes, ast._sizes) && Equal(_lowbounds, ast._lowbounds));
         }
 
         /// <summary>

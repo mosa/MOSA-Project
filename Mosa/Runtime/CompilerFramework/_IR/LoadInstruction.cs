@@ -39,14 +39,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
             Debug.Assert((null != sref || null != sptr), @"Source not a pointer or reference.");
             if (null != sref)
             {
-                Debug.Assert(true == sref.ElementType.Equals(destination.Type), @"Incompatible destination and source types.");
-                if (false == sref.ElementType.Equals(destination.Type))
+                Debug.Assert(sref.ElementType.Equals(destination.Type), @"Incompatible destination and source types.");
+                if (!sref.ElementType.Equals(destination.Type))
                     throw new ArgumentException(@"Source pointer incompatible with destination type.", @"destinationPtr");
             }
             else if (null != sptr)
             {
-                Debug.Assert(true == sptr.ElementType.Equals(destination.Type), @"Incompatible destination and source types.");
-                if (false == sptr.ElementType.Equals(destination.Type))
+                Debug.Assert(sptr.ElementType.Equals(destination.Type), @"Incompatible destination and source types.");
+                if (!sptr.ElementType.Equals(destination.Type))
                     throw new ArgumentException(@"Source pointer incompatible with destination type.", @"destinationPtr");
             }
             else

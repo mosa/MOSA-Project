@@ -64,12 +64,12 @@ namespace Mosa.Jit.SimpleJit
 
             // Code the appropriate trampoline
 /*
-            if (true == method.DeclaringType.IsGeneric) {
+            if (method.DeclaringType.IsGeneric) {
                 FIXME: method.DeclaringType is always null right now
  *              the loader doesn't initialize these properly.
             }
  */
-            if (true == method.IsGeneric)
+            if (method.IsGeneric)
             {
                 // Emit a generic call trampoline
                 method.Address = EmitGenericMethodTrampoline();

@@ -79,7 +79,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (null == gist)
                 return false;
 
-            return (true == base.Equals(other) && _baseType == gist._baseType && true == SigType.Equals(_genericArgs, gist._genericArgs));
+            return (base.Equals(other) && _baseType == gist._baseType && SigType.Equals(_genericArgs, gist._genericArgs));
         }
 
         #endregion // SigType Overrides

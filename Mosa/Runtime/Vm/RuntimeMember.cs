@@ -186,7 +186,7 @@ namespace Mosa.Runtime.Vm
             {
                 foreach (RuntimeAttribute attribute in this.attributes)
                 {
-                    if (true == attributeType.IsAssignableFrom(attribute.Type))
+                    if (attributeType.IsAssignableFrom(attribute.Type))
                         result.Add(attribute.GetAttribute());
                 }
             }

@@ -439,7 +439,7 @@ namespace Mosa.Runtime.Vm
             RuntimeMethod result = null;
 
             // Shortcut: If the call was resolved previously, scan it there
-            if (true == this.internalCallTargets.TryGetValue(internalCall, out result))
+            if (this.internalCallTargets.TryGetValue(internalCall, out result))
                 return result;
 
             /*

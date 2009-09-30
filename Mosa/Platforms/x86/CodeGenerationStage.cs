@@ -689,14 +689,14 @@ namespace Mosa.Platforms.x86
 
 			if (ctx.OperandCount != 0 && ctx.Operand1 != null) {
 				Operand retval = ctx.Operand1;
-				if (true == retval.IsRegister) {
+				if (retval.IsRegister) {
 					// Do not move, if return value is already in EAX
 					RegisterOperand rop = (RegisterOperand)retval;
 					if (System.Object.ReferenceEquals(rop.Register, GeneralPurposeRegister.EAX))
 						eax = true;
 				}
 
-				if (false == eax)
+				if (!eax)
 					_codeEmitter.Mov(new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX), retval);
 			}
 		}
@@ -727,7 +727,7 @@ namespace Mosa.Platforms.x86
 		{
 			bool swap = ctx.Operand1 is ConstantOperand;
 			int[] targets = ctx.Branch.Targets;
-			if (true == swap) {
+			if (swap) {
 				int tmp = targets[0];
 				targets[0] = targets[1];
 				targets[1] = tmp;

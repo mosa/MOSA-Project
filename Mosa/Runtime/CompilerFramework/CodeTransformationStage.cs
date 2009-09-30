@@ -96,8 +96,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="to">The block, where From is jumping to.</param>
 		protected void LinkBlocks(BasicBlock from, BasicBlock to)
 		{
-			Debug.Assert(false == from.NextBlocks.Contains(to), @"A link already exists?");
-			Debug.Assert(false == to.PreviousBlocks.Contains(from), @"A link already exists?");
+			Debug.Assert(!from.NextBlocks.Contains(to), @"A link already exists?");
+			Debug.Assert(!to.PreviousBlocks.Contains(from), @"A link already exists?");
 			from.NextBlocks.Add(to);
 			to.PreviousBlocks.Add(from);
 		}

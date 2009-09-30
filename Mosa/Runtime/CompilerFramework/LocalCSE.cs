@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// according to Steven S. Muchnick, Advanced Compiler Design 
 	/// and Implementation (Morgan Kaufmann, 1997) pp. 378-396
 	/// </summary>
-	public class LocalCSE : IMethodCompilerStage
+	public class LocalCSE : BaseStage, IMethodCompilerStage
 	{
 		/// <summary>
 		/// 
@@ -104,8 +104,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Adds the stage to the pipeline.
 		/// </summary>
-		/// <param name="pipeline"></param>
+		/// <param name="pipeline">The pipeline to add to.</param>
 		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
 			pipeline.InsertAfter<ILConstantFoldingStage>(this);
@@ -115,18 +116,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
-			// Retrieve the basic block provider
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-			if (blockProvider == null)
-				throw new InvalidOperationException(@"Instruction stream must have been split to basic Blocks.");
+			base.Run(compiler);
 
-			// Retrieve the instruction provider and the instruction set
-			InstructionSet instructionset = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
-
-			foreach (BasicBlock block in blockProvider.Blocks)
-				EliminateCommonSubexpressions(new Context(instructionset, block));
+			foreach (BasicBlock block in BasicBlocks)
+				EliminateCommonSubexpressions(new Context(InstructionSet, block));
 		}
 
 		/// <summary>

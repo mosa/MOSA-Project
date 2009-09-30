@@ -72,7 +72,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (null == rst)
                 return false;
 
-            return (true == base.Equals(other) && this.elementType.Matches(rst.elementType) == true);
+            return (base.Equals(other) && this.elementType.Matches(rst.elementType) == true);
         }
 
         /// <summary>

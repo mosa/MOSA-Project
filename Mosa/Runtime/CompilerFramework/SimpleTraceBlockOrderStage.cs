@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The Simple Trace Block Order Stage reorders Blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class SimpleTraceBlockOrderStage : IMethodCompilerStage, IBasicBlockOrder
+	public class SimpleTraceBlockOrderStage : BaseStage, IMethodCompilerStage, IBasicBlockOrder
 	{
 		#region Data members
 
@@ -25,10 +25,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// 
 		/// </summary>
 		protected IArchitecture arch;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected List<BasicBlock> blocks;
+		
 		/// <summary>
 		/// 
 		/// </summary>
@@ -65,18 +62,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Runs the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
-			// Retrieve the basic block provider
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-
-			if (blockProvider == null)
-				throw new InvalidOperationException(@"Simple Trace Block Order stage requires basic Blocks.");
-
-			blocks = blockProvider.Blocks;
+			base.Run(compiler);
 
 			// Retreive the first block
-			firstBlock = blockProvider.FromLabel(-1);
+			firstBlock = FromLabel(-1);
 
 			// Determines the block order
 			DetermineBlockOrder();
@@ -88,10 +79,10 @@ namespace Mosa.Runtime.CompilerFramework
 		private void DetermineBlockOrder()
 		{
 			// Create bit array of refereced Blocks (by index)
-			BitArray referencedBlocks = new BitArray(blocks.Count, false);
+			BitArray referencedBlocks = new BitArray(BasicBlocks.Count, false);
 
 			// Allocate list of ordered Blocks
-			orderedBlocks = new int[blocks.Count];
+			orderedBlocks = new int[BasicBlocks.Count];
 			int orderBlockCnt = 0;
 
 			// Create sorted worklist
@@ -115,7 +106,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Place unreferenced Blocks at the end of the list
-			for (int i = 0; i < blocks.Count; i++)
+			for (int i = 0; i < BasicBlocks.Count; i++)
 				if (!referencedBlocks.Get(i))
 					orderedBlocks[orderBlockCnt++] = i;
 		}
