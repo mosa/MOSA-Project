@@ -111,9 +111,6 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 
 				_method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", this.instructions);
 
-                // FIXME: Set the assembly initializer method as the entry point
-                //IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
-				//linker.EntryPoint = linker.GetSymbol(_method);
             }
         }
 

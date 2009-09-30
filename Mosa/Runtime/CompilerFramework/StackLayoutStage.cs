@@ -69,7 +69,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Runs the specified method compiler.
 		/// </summary>
-		/// <param name="methodCompiler">The method compiler.</param>
+		/// <param name="compiler">The compiler context to perform processing in.</param>
 		public override void Run(IMethodCompiler compiler)
 		{
 			base.Run(compiler);
@@ -171,7 +171,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter, -1);
 
-			if (TRACING.TraceInfo == true)
+			if (TRACING.TraceInfo)
 				LogOperands(paramOps);
 		}
 
