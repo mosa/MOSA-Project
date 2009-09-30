@@ -378,6 +378,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			_block = basicBlock;
 			_index = basicBlock.Index;
+//			_instructionSet 
 		}
 
 		/// <summary>

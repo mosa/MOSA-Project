@@ -18,6 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Calculates the layout of the stack of the method.
 	/// </summary>
 	public sealed class StackLayoutStage :
+		BaseStage,
 		IMethodCompilerStage,
 		IStackLayoutProvider
 	{
@@ -40,11 +41,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Holds the total stack requirements of local variables of the compiled method.
 		/// </summary>
 		private int _localsSize;
-
-		/// <summary>
-		/// Holds the instruction set
-		/// </summary>
-		private InstructionSet _instructionSet;
 
 		#endregion // Data members
 
@@ -74,32 +70,22 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Runs the specified method compiler.
 		/// </summary>
 		/// <param name="methodCompiler">The method compiler.</param>
-		public void Run(IMethodCompiler methodCompiler)
+		public override void Run(IMethodCompiler compiler)
 		{
-			if (methodCompiler == null)
-				throw new ArgumentNullException(@"methodCompiler");
+			base.Run(compiler);
 
 			// Allocate a list of locals
 			List<StackOperand> locals = new List<StackOperand>();
 
 			// Architecture
-			IArchitecture arch = methodCompiler.Architecture;
+			IArchitecture arch = compiler.Architecture;
 
 			// Retrieve the calling convention of the method
-			ICallingConvention cc = methodCompiler.Architecture.GetCallingConvention(methodCompiler.Method.Signature.CallingConvention);
+			ICallingConvention cc = compiler.Architecture.GetCallingConvention(compiler.Method.Signature.CallingConvention);
 			Debug.Assert(null != cc, @"Failed to retrieve the calling convention of the method.");
 
-			// Retrieve the instruction provider and the instruction set
-			_instructionSet = (methodCompiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
-
-			// Is the method split into basic Blocks?
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)methodCompiler.GetPreviousStage(typeof(IBasicBlockProvider));
-
-			if (blockProvider == null)
-				throw new InvalidOperationException(@"Instruction stream must be split to basic Blocks.");
-
 			// Iterate all Blocks and collect locals From all Blocks
-			foreach (BasicBlock block in blockProvider)
+			foreach (BasicBlock block in BasicBlocks)
 				CollectLocalVariables(locals, block);
 
 			// Sort all found locals
@@ -108,33 +94,29 @@ namespace Mosa.Runtime.CompilerFramework
 			// Now we assign increasing stack offsets to each variable
 			_localsSize = LayoutVariables(locals, cc, cc.OffsetOfFirstLocal, 1);
 			if (TRACING.TraceInfo == true) {
-				Trace.WriteLine(String.Format(@"Stack layout for method {0}", methodCompiler.Method));
+				Trace.WriteLine(String.Format(@"Stack layout for method {0}", compiler.Method));
 				LogOperands(locals);
 			}
 
 			// Layout parameters
-			LayoutParameters(methodCompiler, cc);
+			LayoutParameters(compiler, cc);
 
 			// Create a prologue instruction
-			//prologueBlock.Insert(0, arch.CreateInstruction(typeof(IR.PrologueInstruction), _localsSize));
-			Context prologueCtx = new Context(blockProvider.FromLabel(-1));
-			prologueCtx.InsertBefore();
-			prologueCtx.SetInstruction(IR2.Instruction.PrologueInstruction);
+			Context prologueCtx = new Context(InstructionSet, BlockProvider.FromLabel(-1));
+			prologueCtx.InsertInstructionAfter(IR2.Instruction.PrologueInstruction);
 			prologueCtx.Other = _localsSize;
 
 			// Create an epilogue instruction
-			//epilogueBlock.Add(arch.CreateInstruction(typeof(IR.EpilogueInstruction), _localsSize));
-			Context epilogueCtx = new Context(blockProvider.FromLabel(Int32.MaxValue));
+			Context epilogueCtx = new Context(InstructionSet, BlockProvider.FromLabel(Int32.MaxValue));
 			epilogueCtx.GotoLast();
-			epilogueCtx.InsertAfter();
-			epilogueCtx.SetInstruction(IR2.Instruction.EpilogueInstruction);
+			epilogueCtx.InsertInstructionAfter(IR2.Instruction.EpilogueInstruction);
 			epilogueCtx.Other = _localsSize;
 		}
 
 		/// <summary>
-		/// 
+		/// Adds the stage to the pipeline.
 		/// </summary>
-		/// <param name="pipeline"></param>
+		/// <param name="pipeline">The pipeline to add to.</param>
 		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
 			pipeline.InsertAfter<LeaveSSA>(this);
@@ -158,9 +140,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="locals">Holds all locals found by the stage.</param>
 		/// <param name="block">The block.</param>
-		private static void CollectLocalVariables(List<StackOperand> locals, BasicBlock block)
+		private void CollectLocalVariables(List<StackOperand> locals, BasicBlock block)
 		{
-			Context ctx = new Context(block);
+			Context ctx = new Context(InstructionSet, block);
 
 			// Iterate all instructions
 			while (!ctx.EndOfInstruction) {
@@ -184,12 +166,12 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			List<StackOperand> paramOps = new List<StackOperand>();
 
-			for (int i = 0; i < compiler.Method.Parameters.Count; i++) 
+			for (int i = 0; i < compiler.Method.Parameters.Count; i++)
 				paramOps.Add((StackOperand)compiler.GetParameterOperand(i));
 
 			LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter, -1);
-			
-			if (TRACING.TraceInfo == true) 
+
+			if (TRACING.TraceInfo == true)
 				LogOperands(paramOps);
 		}
 

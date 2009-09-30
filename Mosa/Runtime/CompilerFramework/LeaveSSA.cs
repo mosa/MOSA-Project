@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// This transformation simplifies and expands all PHI functions and
 	/// unifies variable version.
 	/// </remarks>
-	public sealed class LeaveSSA : IMethodCompilerStage
+	public sealed class LeaveSSA : BaseStage, IMethodCompilerStage
 	{
 		#region IMethodCompilerStage Members
 
@@ -37,83 +37,90 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
-			// Retrieve the basic block provider
-			IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-			if (null == blockProvider)
-				throw new InvalidOperationException(@"SSA Conversion requires basic Blocks.");
-			IArchitecture arch = compiler.Architecture;
+			base.Run(compiler);
 
-			foreach (BasicBlock block in blockProvider) {
-				if (block.Instructions.Count > 0) {
-					foreach (LegacyInstruction instruction in block.Instructions) {
-						IR.PhiInstruction phi = instruction as IR.PhiInstruction;
-						if (null == phi)
-							break;
+			// FIXME PG - this is too complex to modify at the moment. It's not used so this will be tabled until later.
 
-						Operand res = phi.Result;
-						for (int i = 0; i < phi.Blocks.Count; i++) {
-							Operand op = phi.Operands[i];
+			//foreach (BasicBlock block in blockProvider) {
+			//                    if (block.Instructions.Count > 0) {
+			//    {
+			//        Context ctx = new Context(InstructionSet, block);
 
-							// HACK: Remove phi From the operand use list
-							op.Uses.Remove(phi);
+			//        while (!ctx.EndOfInstruction) {
 
-							if (false == Object.ReferenceEquals(res, op)) {
-								if (op.Definitions.Count == 1 && op.Uses.Count == 0) {
-									// Replace the operand, as it is only defined but never used again
-									op.Replace(res);
-								}
-								else {
-									List<LegacyInstruction> insts = phi.Blocks[i].Instructions;
-									int insIdx = insts.Count - 1;
+			//            if (!ctx.Instruction is IR.PhiInstruction)
+			//                break;
 
-									/* If there's a use, insert the move right after the last use
-									 * this really helps the register allocator as it keeps the lifetime
-									 * of the temporary short.
-									 */
-									if (0 != op.Uses.Count) {
-										// FIXME: Depends on sortable instruction offsets, we really need a custom collection here
-										op.Uses.Sort(delegate(LegacyInstruction a, LegacyInstruction b)
-										{
-											return (a.Offset - b.Offset);
-										});
+			//            Operand res = ctx.Result;
+			//            for (int i = 0; i < phi.Blocks.Count; i++) {
+			//                IR2.PhiData phi = ctx.Other as IR2.PhiData;
 
-										insIdx = insts.IndexOf(op.Uses[op.Uses.Count - 1]) + 1;
-									}
+			//                Operand op = phi.Operands[i];
+
+			//                 HACK: Remove phi from the operand use list
+			//                op.Uses.Remove(phi);	// FIXME PG - ???
+
+			//                if (!Object.ReferenceEquals(res, op)) {
+			//                    if (op.Definitions.Count == 1 && op.Uses.Count == 0) {
+			//                         Replace the operand, as it is only defined but never used again
+			//                        op.Replace(res);
+			//                    }
+			//                    else {
+			//                        List<LegacyInstruction> insts = phi.Blocks[i].Instructions;
+			//                        int insIdx = insts.Count - 1;
+			//                        Context insts = new Context(InstructionSet, phi.Blocks);
+
+			//                        /* If there's a use, insert the move right after the last use
+			//                         * this really helps the register allocator as it keeps the lifetime
+			//                         * of the temporary short.
+			//                         */
+			//                        if (op.Uses.Count != 0) {
+			//                             FIXME: Depends on sortable instruction offsets, we really need a custom collection here
+			//                            op.Uses.Sort(delegate(LegacyInstruction a, LegacyInstruction b)
+			//                            {
+			//                                return (a.Offset - b.Offset);
+			//                            });
+
+			//                            insIdx = insts.IndexOf(op.Uses[op.Uses.Count - 1]) + 1;
+			//                        }
 
 
-									// Make sure we're inserting at a valid position
-									if (insIdx == -1)
-										insIdx = 0;
+			//                         Make sure we're inserting at a valid position
+			//                        if (insIdx == -1)
+			//                            insIdx = 0;
 
-									LegacyInstruction move = arch.CreateInstruction(typeof(IR.MoveInstruction), res, op);
-									insts.Insert(insIdx, move);
-								}
-							}
-						}
+			//                        LegacyInstruction move = arch.CreateInstruction(typeof(IR.MoveInstruction), res, op);
+			//                        insts.Insert(insIdx, move);
+			//                    }
+			//                }
+			//            }
 
-						/* HACK: Hide the PHI instruction.
-						 * 
-						 * We're not removing the PHI instruction as it may still be valuable to calculate
-						 * live ranges in later stages (e.g. register allocation) in those cases, the PHI
-						 * function causes the live range to be virtually "extended".
-						 * 
-						 */
-						phi.Ignore = true;
-						//block.Instructions.RemoveAt(0);
+			//            /* HACK: Hide the PHI instruction.
+			//             * 
+			//             * We're not removing the PHI instruction as it may still be valuable to calculate
+			//             * live ranges in later stages (e.g. register allocation) in those cases, the PHI
+			//             * function causes the live range to be virtually "extended".
+			//             * 
+			//             */
+			//            phi.Ignore = true;
 
-						// HACK: Remove phi From the operand def list
-						res.Definitions.Remove(phi);
-					}
-				}
-			}
+			//             HACK: Remove phi From the operand def list
+			//            res.Definitions.Remove(phi);
+
+			//            ctx.GotoNext();
+			//        }
+
+
+			//    }
+			//}
 		}
 
 		/// <summary>
-		/// 
+		/// Adds the stage to the pipeline.
 		/// </summary>
-		/// <param name="pipeline"></param>
+		/// <param name="pipeline">The pipeline to add to.</param>
 		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
 			pipeline.InsertAfter<ILConstantFoldingStage>(this);

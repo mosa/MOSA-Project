@@ -47,14 +47,14 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		{
 			StringBuilder builder = new StringBuilder();
 			builder.AppendFormat("IR.phi ; {0} = phi(", context.Result);
-			
+
 			if (context.Operand1 != null)
 				builder.AppendFormat("{0}, ", context.Operand1);
 			if (context.Operand2 != null)
 				builder.AppendFormat("{0}, ", context.Operand2);
 			if (context.Operand3 != null)
 				builder.AppendFormat("{0}, ", context.Operand3);
-			
+
 			builder.Remove(builder.Length - 2, 2);
 			builder.Append(')');
 			return builder.ToString();
@@ -94,7 +94,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="edge">The edge.</param>
-		/// <param name="op">The operand.</param>
+		/// <param name="op">The op.</param>
 		public static void AddValue(Context ctx, BasicBlock edge, StackOperand op)
 		{
 			PhiData phiData = ctx.Other as PhiData;
@@ -107,7 +107,7 @@ namespace Mosa.Runtime.CompilerFramework.IR2
 			List<BasicBlock> blocks = phiData.Blocks as List<BasicBlock>;
 
 			Debug.Assert(blocks.Count < 255, @"Maximum number of operands in PHI exceeded.");
-			
+
 			blocks.Add(edge);
 			phiData.Operands.Add(op);
 		}

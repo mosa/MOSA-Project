@@ -15,7 +15,10 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework.IR2
 {
-	class PhiData
+	/// <summary>
+	/// 
+	/// </summary>
+	public class PhiData
 	{
 		/// <summary>
 		/// 
