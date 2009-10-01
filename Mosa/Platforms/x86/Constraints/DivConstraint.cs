@@ -7,9 +7,6 @@
  *  Simon Wollwage (<mailto:kintaro@think-in-co.de>)
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.Constraints
@@ -48,7 +45,7 @@ namespace Mosa.Platforms.x86.Constraints
         /// <param name="resIdx">The result operand index to check.</param>
         public override Register[] GetRegistersForResult(int resIdx)
         {
-            return new Register[] { x86.GeneralPurposeRegister.EAX };
+            return new Register[] { GeneralPurposeRegister.EAX };
         }
 
         /// <summary>
@@ -60,7 +57,7 @@ namespace Mosa.Platforms.x86.Constraints
         /// <returns>An array of registers used by the instruction.</returns>
         public override Register[] GetRegistersUsed()
         {
-            return new Register[] { x86.GeneralPurposeRegister.EDX };
+            return new Register[] { GeneralPurposeRegister.EDX };
         }
     }
 }

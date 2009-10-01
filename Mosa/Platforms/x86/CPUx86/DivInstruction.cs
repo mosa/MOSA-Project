@@ -17,11 +17,6 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class DivInstruction : TwoOperandInstruction
     {
-        #region Data Member
-        private static readonly OpCode R = new OpCode(new byte[] { 0xF7 }, 7);
-        private static readonly OpCode M = new OpCode(new byte[] { 0xF7 }, 7);
-        #endregion 
-
 		#region Properties
 
 		/// <summary>
@@ -43,8 +38,8 @@ namespace Mosa.Platforms.x86.CPUx86
         /// <returns></returns>
         protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
         {
-            if (dest is RegisterOperand) return R;
-            if (dest is MemoryOperand) return M;
+            if (dest is RegisterOperand || dest is MemoryOperand) 
+                new OpCode(new byte[] { 0xF7 }, 7);
             throw new ArgumentException(@"No opcode for operand type.");
         }
 

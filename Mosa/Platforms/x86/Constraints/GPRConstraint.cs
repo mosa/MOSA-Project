@@ -20,17 +20,6 @@ namespace Mosa.Platforms.x86.Constraints
     /// </summary>
     public class GPRConstraint : IRegisterConstraint
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GPRConstraint"/> class.
-        /// </summary>
-        public GPRConstraint()
-        {
-        }
-
-        #endregion // Construction
-
         #region IRegisterConstraint Members
 
         /// <summary>
