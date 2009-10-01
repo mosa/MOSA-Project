@@ -100,16 +100,16 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
-		/// <param name="vistor">The vistor.</param>
+		/// <param name="visitor">The visitor.</param>
 		/// <param name="context">The context.</param>
-		public virtual void Visit(IX86Visitor vistor, Context context)
+		public virtual void Visit(IX86Visitor visitor, Context context)
 		{
 		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
-		/// <param name="visitor">The vistor.</param>
+		/// <param name="visitor">The visitor.</param>
 		/// <param name="context">The context.</param>
 		public override void Visit(IVisitor visitor, Context context)
 		{
