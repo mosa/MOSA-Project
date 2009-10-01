@@ -204,7 +204,7 @@
     <Compile Include="IX86Instruction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IX86InstructionVisitor.cs">
+    <Compile Include="_IX86InstructionVisitor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LongOperandTransformationStage.cs">

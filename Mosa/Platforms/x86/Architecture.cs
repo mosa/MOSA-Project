@@ -1,28 +1,24 @@
-// -----------------------------------------------------------------------------------------------------------
-// <copyright file="Architecture.cs" company="(C) 2008-2009 MOSA - The Managed Operating System Alliance">
-//  
-// (c) 2008-2009 MOSA - The Managed Operating System Alliance
-// 
-// Licensed under the terms of the New BSD License.
-//  
-// Authors:
-//   Michael Ruck (mailto:sharpos@michaelruck.de)
-//   Simon Wollwage (mailto:kintaro@think-in-co.de)
-//   
-// </copyright>
-// -----------------------------------------------------------------------------------------------------------
+/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
+using System;
+using System.Collections.Generic;
+
+using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Platforms.x86.Constraints;
+
+using CPUx86 = Mosa.Platforms.x86.CPUx86;
 
 namespace Mosa.Platforms.x86
 {
-	using System;
-	using System.Collections.Generic;
-
-	using Constraints;
-	using Instructions;
-	using Runtime.CompilerFramework;
-	using Runtime.Metadata;
-	using Runtime.Metadata.Signatures;
-	using MoveInstruction = Runtime.CompilerFramework.IR.MoveInstruction;
 
 	/// <summary>
 	/// This class provides a common base class for architecture
@@ -63,18 +59,18 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		private static readonly Dictionary<Type, Type> Constraints = new Dictionary<Type, Type>()
         {
-            { typeof(AddInstruction), typeof(GPRConstraint) },
-            { typeof(AdcInstruction), typeof(GPRConstraint) },
-            { typeof(DivInstruction), typeof(DivConstraint) },
-            { typeof(LogicalAndInstruction), typeof(LogicalAndConstraint) },
-            { typeof(LogicalOrInstruction), typeof(LogicalOrConstraint) },
-            { typeof(LogicalXorInstruction), typeof(LogicalXorConstraint) },
-            { typeof(MoveInstruction), typeof(MoveConstraint) },
-            { typeof(MulInstruction), typeof(MulConstraint) },
-            { typeof(SarInstruction), typeof(ShiftConstraint) },
-            { typeof(ShlInstruction), typeof(ShiftConstraint) },
-            { typeof(ShrInstruction), typeof(ShiftConstraint) },
-            { typeof(SubInstruction), typeof(GPRConstraint) },
+            { typeof(CPUx86.AddInstruction), typeof(GPRConstraint) },
+            { typeof(CPUx86.AdcInstruction), typeof(GPRConstraint) },
+            { typeof(CPUx86.DivInstruction), typeof(DivConstraint) },
+            { typeof(CPUx86.LogicalAndInstruction), typeof(LogicalAndConstraint) },
+            { typeof(CPUx86.LogicalOrInstruction), typeof(LogicalOrConstraint) },
+            { typeof(CPUx86.LogicalXorInstruction), typeof(LogicalXorConstraint) },
+            { typeof(CPUx86.MoveInstruction), typeof(MoveConstraint) },
+            { typeof(CPUx86.MulInstruction), typeof(MulConstraint) },
+            { typeof(CPUx86.SarInstruction), typeof(ShiftConstraint) },
+            { typeof(CPUx86.ShlInstruction), typeof(ShiftConstraint) },
+            { typeof(CPUx86.ShrInstruction), typeof(ShiftConstraint) },
+            { typeof(CPUx86.SubInstruction), typeof(GPRConstraint) },
         };
 
 		/// <summary>
@@ -85,8 +81,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Architecture"/> class.
 		/// </summary>
-        /// <param name="architectureFeatures">The features this architecture supports.</param>
-        protected Architecture(ArchitectureFeatureFlags architectureFeatures)
+		/// <param name="architectureFeatures">The features this architecture supports.</param>
+		protected Architecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			this.architectureFeatures = architectureFeatures;
 		}
@@ -120,37 +116,36 @@ namespace Mosa.Platforms.x86
 		/// Factory method for the Architecture class.
 		/// </summary>
 		/// <returns>The created architecture instance.</returns>
-        /// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
+		/// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
 		/// <remarks>
 		/// This method creates an instance of an appropriate architecture class, which supports the specific
 		/// architecture features.
 		/// </remarks>
 		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
-            if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
-            {
-                architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
+			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect) {
+				architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
 			}
 
-            return new Architecture(architectureFeatures);
+			return new Architecture(architectureFeatures);
 		}
 
 		/// <summary>
 		/// Creates a new result operand of the requested type.
 		/// </summary>
-        /// <param name="signatureType">The type requested.</param>
-        /// <param name="instructionLabel">The label of the instruction requesting the operand.</param>
-        /// <param name="operandStackIndex">The stack index of the operand.</param>
+		/// <param name="signatureType">The type requested.</param>
+		/// <param name="instructionLabel">The label of the instruction requesting the operand.</param>
+		/// <param name="operandStackIndex">The stack index of the operand.</param>
 		/// <returns>A new operand usable as a result operand.</returns>
 		public override Operand CreateResultOperand(SigType signatureType, int instructionLabel, int operandStackIndex)
 		{
-            return new RegisterOperand(signatureType, GeneralPurposeRegister.EAX);
+			return new RegisterOperand(signatureType, GeneralPurposeRegister.EAX);
 		}
 
 		/// <summary>
 		/// Extends the assembly compiler pipeline with x86 specific stages.
 		/// </summary>
-        /// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
+		/// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
 		public override void ExtendAssemblyCompilerPipeline(CompilerPipeline<IAssemblyCompilerStage> assemblyCompilerPipeline)
 		{
 		}
@@ -158,13 +153,13 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Extends the method compiler pipeline with x86 specific stages.
 		/// </summary>
-        /// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
+		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline<IMethodCompilerStage> methodCompilerPipeline)
 		{
 			// FIXME: Create a specific code generator instance using requested feature flags.
 			// FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
 			// and packed operations available with MMX/SSE extensions
-            methodCompilerPipeline.AddRange(
+			methodCompilerPipeline.AddRange(
 				new IMethodCompilerStage[]
                 {
                     new LongOperandTransformationStage(),
@@ -177,13 +172,12 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Retrieves a calling convention object for the requested calling convention.
 		/// </summary>
-        /// <param name="callingConvention">One of the defined calling conventions.</param>
+		/// <param name="callingConvention">One of the defined calling conventions.</param>
 		/// <returns>An instance of <see cref="ICallingConvention"/>.</returns>
 		/// <exception cref="System.NotSupportedException"><paramref name="cc"/> is not a supported calling convention.</exception>
 		public override ICallingConvention GetCallingConvention(CallingConvention callingConvention)
 		{
-            switch (callingConvention)
-            {
+			switch (callingConvention) {
 				case CallingConvention.Default:
 					return new DefaultCallingConvention(this);
 
@@ -202,28 +196,24 @@ namespace Mosa.Platforms.x86
 			Type constraintType;
 
 			if (Constraints.TryGetValue(instruction.GetType(), out constraintType)) 
-            {
 				return (IRegisterConstraint)Activator.CreateInstance(constraintType);
-			}
-		
-		    return null;
+
+			return null;
 		}
 
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
-        /// <param name="signatureType">The signature type.</param>
-        /// <param name="memorySize">Receives the memory size of the type.</param>
+		/// <param name="signatureType">The signature type.</param>
+		/// <param name="memorySize">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
 		public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
 		{
-            if (null == signatureType)
-            {
+			if (null == signatureType) {
 				throw new ArgumentNullException(@"type");
 			}
 
-            switch (signatureType.Type)
-            {
+			switch (signatureType.Type) {
 				case CilElementType.R4:
 					memorySize = alignment = 4;
 					break;

@@ -166,25 +166,15 @@ namespace Mosa.Runtime.CompilerFramework
 
 								switch (aeb.Operator) {
 									case Operation.Add:
-										//inst = new IL.AddInstruction(IL.OpCode.Add, temp, aeb.Operand1, aeb.Operand2);
 										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Add), temp, aeb.Operand1, aeb.Operand2);
 										break;
 									case Operation.Mul:
-										//inst = new IL.MulInstruction(IL.OpCode.Mul, temp, aeb.Operand1, aeb.Operand2);
 										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Mul), temp, aeb.Operand1, aeb.Operand2);
 										break;
 									case Operation.Or:
-										//inst = new IL.BinaryLogicInstruction(IL.OpCode.Or);
-										//inst.SetResult(0, temp);
-										//inst.SetOperand(0, aeb.Operand1);
-										//inst.SetOperand(1, aeb.Operand2);
 										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Or), temp, aeb.Operand1, aeb.Operand2);
 										break;
 									case Operation.Xor:
-										//inst = new IL.BinaryLogicInstruction(IL.OpCode.Xor);
-										//inst.SetResult(0, temp);
-										//inst.SetOperand(0, aeb.Operand1);
-										//inst.SetOperand(1, aeb.Operand2);
 										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Xor), temp, aeb.Operand1, aeb.Operand2);
 										break;
 									default:
@@ -220,7 +210,7 @@ namespace Mosa.Runtime.CompilerFramework
 							opr = Operation.Add;
 						else if (instruction is CIL.MulInstruction)
 							opr = Operation.Mul;
-						else if (instruction is IR.LogicalAndInstruction)
+						else if (instruction is IR2.LogicalAndInstruction)
 							opr = Operation.And;
 						// Insert new tuple
 						AEB.Add(new AEBinExp(ctx.Index, ctx.Operand1, opr, ctx.Operand2, null));
@@ -252,9 +242,9 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			return (instruction is CIL.AddInstruction) ||
 				   (instruction is CIL.MulInstruction) ||
-				   (instruction is IR.LogicalAndInstruction) ||
-				   (instruction is IR.LogicalOrInstruction) ||
-				   (instruction is IR.LogicalXorInstruction);
+				   (instruction is IR2.LogicalAndInstruction) ||
+				   (instruction is IR2.LogicalOrInstruction) ||
+				   (instruction is IR2.LogicalXorInstruction);
 		}
 	}
 }
