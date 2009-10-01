@@ -123,9 +123,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
-		/// <param name="vistor">The vistor.</param>
+		/// <param name="visitor">The visitor.</param>
 		/// <param name="context">The context.</param>
-		public virtual void Visit(IVisitor vistor, Context context)
+		public virtual void Visit(IVisitor visitor, Context context)
 		{
 		}
 
