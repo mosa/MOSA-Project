@@ -10,7 +10,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -20,7 +19,6 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR2 = Mosa.Runtime.CompilerFramework.IR2;
-using CPUx86 = Mosa.Platforms.x86.CPUx86;
 
 namespace Mosa.Platforms.x86
 {
@@ -38,18 +36,7 @@ namespace Mosa.Platforms.x86
 		IMethodCompilerStage,
 		IPlatformTransformationStage
 	{
-		private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="IRToX86TransformationStage"/>.
-		/// </summary>
-		public IRToX86TransformationStage()
-		{
-		}
-
-		#endregion // Construction
+		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
 		#region IMethodCompilerStage Members
 
@@ -57,7 +44,7 @@ namespace Mosa.Platforms.x86
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public sealed override string Name
+		public override string Name
 		{
 			get { return @"IRToX86TransformationStage"; }
 		}
@@ -1474,10 +1461,10 @@ namespace Mosa.Platforms.x86
 			ConstantOperand cop = op as ConstantOperand;
 			if (cop != null && cop.StackType == StackTypeCode.F) {
 				int size, alignment;
-				this.Architecture.GetTypeRequirements(cop.Type, out size, out alignment);
+				Architecture.GetTypeRequirements(cop.Type, out size, out alignment);
 
 				string name = String.Format("C_{0}", Guid.NewGuid());
-				using (Stream stream = this.Compiler.Linker.Allocate(name, SectionKind.ROData, size, alignment)) {
+				using (Stream stream = Compiler.Linker.Allocate(name, SectionKind.ROData, size, alignment)) {
 					byte[] buffer;
 
 					switch (cop.Type.Type) {
@@ -1646,7 +1633,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		/// <param name="op1">The op1.</param>
 		/// <param name="op2">The op2.</param>
-		private void SwapComparisonOperands(Context ctx, Operand op1, Operand op2)
+		private static void SwapComparisonOperands(Context ctx, Operand op1, Operand op2)
 		{
 			// Swap the operands
 			ctx.Operand1 = op2;
@@ -1713,7 +1700,7 @@ namespace Mosa.Platforms.x86
 		/// Converts the given instruction from three address format to a two address format.
 		/// </summary>
 		/// <param name="ctx">The conversion context.</param>
-		private void ThreeTwoAddressConversion(Context ctx)
+		private static void ThreeTwoAddressConversion(Context ctx)
 		{
 			ThreeTwoAddressConversion(ctx, ctx.Instruction);
 		}
@@ -1723,16 +1710,15 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="ctx">The conversion context.</param>
 		/// <param name="instruction">The instruction.</param>
-		private void ThreeTwoAddressConversion(Context ctx, IInstruction instruction)
+		private static void ThreeTwoAddressConversion(Context ctx, IInstruction instruction)
 		{
 			Operand opRes = ctx.Result;
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
 			// Create registers for different data types
-			RegisterOperand eax = new RegisterOperand(opRes.Type, opRes.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : (Register)GeneralPurposeRegister.EAX);
+			RegisterOperand eax = new RegisterOperand(opRes.Type, opRes.StackType == StackTypeCode.F ? (Register) SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
 			RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
-			RegisterOperand eaxS = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
 
 			if (instruction != null)
 				ctx.SetInstruction(instruction, eax, op2);
