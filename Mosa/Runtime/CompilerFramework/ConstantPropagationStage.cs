@@ -48,9 +48,8 @@ namespace Mosa.Runtime.CompilerFramework
 			bool remove = false;
 
 			foreach (BasicBlock block in BasicBlocks) {
-				Context ctx = new Context(InstructionSet, block);
 
-				while (!ctx.EndOfInstruction) {
+				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
 
 					if (ctx.Instruction is IR2.MoveInstruction || ctx.Instruction is CIL.StlocInstruction) {
 						if (ctx.Operand1 is ConstantOperand) {
@@ -83,7 +82,6 @@ namespace Mosa.Runtime.CompilerFramework
 						remove = false;
 					}
 
-					ctx.GotoNext();
 				}
 			}
 		}

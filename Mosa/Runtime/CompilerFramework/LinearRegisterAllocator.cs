@@ -147,7 +147,7 @@ namespace Mosa.Runtime.CompilerFramework
 				ExpireOldRanges(lr.Start, active);
 
 				Register reg = AllocateRegister(lr.Op);
-				if (reg == null) 
+				if (reg == null)
 					reg = SpillRegister(active, lr);
 
 				Debug.Assert(reg != null, @"Failed to allocate a register type.");
@@ -224,12 +224,12 @@ namespace Mosa.Runtime.CompilerFramework
 					// Yes, spill it back to its operand
 					RegisterOperand rop = new RegisterOperand(lr.Op.Type, lr.Reg);
 
-//					MoveInstruction mi = CreateMoveInstruction(lr.Op, rop);		// FIXME PG - hack to allow compile
-//					current.Block.Instructions.Insert(current.Start++, mi);		// FIXME PG - hack to allow compile
+					//					MoveInstruction mi = CreateMoveInstruction(lr.Op, rop);		// FIXME PG - hack to allow compile
+					//					current.Block.Instructions.Insert(current.Start++, mi);		// FIXME PG - hack to allow compile
 
 					// Load the new value
-//					mi = CreateMoveInstruction(rop, current.Op);				// FIXME PG - hack to allow compile
-//					current.Block.Instructions.Insert(current.Start++, mi);		// FIXME PG - hack to allow compile
+					//					mi = CreateMoveInstruction(rop, current.Op);				// FIXME PG - hack to allow compile
+					//					current.Block.Instructions.Insert(current.Start++, mi);		// FIXME PG - hack to allow compile
 
 					// Remove this live range From the active list
 					active.Remove(lr);
@@ -434,14 +434,9 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			int offset = 0;
 
-			foreach (BasicBlock block in BasicBlocks) {
-				Context ctx = new Context(block);
-
-				while (!ctx.EndOfInstruction) {
+			foreach (BasicBlock block in BasicBlocks)
+				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 					ctx.Offset = offset++;
-					ctx.GotoNext();
-				}
-			}
 		}
 
 		/// <summary>

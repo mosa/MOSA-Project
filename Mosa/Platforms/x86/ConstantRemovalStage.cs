@@ -114,7 +114,7 @@ namespace Mosa.Platforms.x86
 			// Current constant operand
 			ConstantOperand co = null;
 
-			while (!ctx.EndOfInstruction) {
+			for (; !ctx.EndOfInstruction; ctx.GotoNext()) {
 				// A constant may only appear on the right side of an expression, so we ignore constants in
 				// Instruction.Result - there should never be one there.
 				foreach (Operand op in ctx.Operands) {

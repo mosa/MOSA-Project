@@ -99,13 +99,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 			++_numberOfMethods;
 
-			foreach (BasicBlock block in BasicBlocks) {
-				Context ctx = new Context(InstructionSet, block);
-				while (!ctx.EndOfInstruction) {
+			foreach (BasicBlock block in BasicBlocks)
+				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 					Visit(ctx);
-					ctx.GotoNext();
-				}
-			}
 		}
 
 		/// <summary>

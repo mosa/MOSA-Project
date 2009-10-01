@@ -93,15 +93,11 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Iterate basic Blocks
 			foreach (BasicBlock block in BasicBlocks) {
-				Context ctx = new Context(InstructionSet, block);
 
 				// Iterate all instructions in the block
-				while (!ctx.EndOfInstruction) {
-					// Assign registers to all operands, where this needs to be done
+				// Assign registers to all operands, where this needs to be done
+				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 					AssignRegisters(ctx);
-
-					ctx.GotoNext();
-				}
 
 				// Spill active registers at the end of a block (they're reloaded in the next, if necessary.)
 				SpillActiveOperands(block);
@@ -342,7 +338,7 @@ namespace Mosa.Runtime.CompilerFramework
 			KeyValuePair<Register, Context>[] lastUses = new KeyValuePair<Register, Context>[regs.Length];
 
 			int i = 0;
-			foreach (Register reg in regs) 
+			foreach (Register reg in regs)
 				lastUses[i++] = new KeyValuePair<Register, Context>(reg, _activeOpLastUse[reg.Index]);
 
 			// Sort the last uses from oldest -> newest

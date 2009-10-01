@@ -139,10 +139,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The block.</param>
 		private void CollectLocalVariables(List<StackOperand> locals, BasicBlock block)
 		{
-			Context ctx = new Context(InstructionSet, block);
-
-			// Iterate all instructions
-			while (!ctx.EndOfInstruction) {
+			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
 				// Does this instruction define a new stack variable?
 				foreach (Operand op in ctx.Results) {
 					// The instruction list may not be in SSA form, so we have to check existence again here unfortunately.

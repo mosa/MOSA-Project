@@ -103,7 +103,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="ctx">The context.</param>
 		private void FindLoopHeads(Context ctx)
 		{
-			while (!ctx.EndOfInstruction) {
+			for (; !ctx.EndOfInstruction; ctx.GotoNext()) {
 				// Does this instruction end a block?
 				switch (ctx.Instruction.FlowControl) {
 					case FlowControl.Break: goto case FlowControl.Next;

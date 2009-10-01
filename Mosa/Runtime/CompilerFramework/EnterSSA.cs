@@ -229,10 +229,9 @@ namespace Mosa.Runtime.CompilerFramework
 			else
 				liveOut = new Dictionary<StackOperand, StackOperand>(s_comparer);
 
-			Context ctxBlock = new Context(ctx.BasicBlock);
-
 			// Iterate each instruction in the block
-			while (!ctxBlock.EndOfInstruction) {
+			for (Context ctxBlock = new Context(InstructionSet, ctx.BasicBlock); !ctxBlock.EndOfInstruction; ctxBlock.GotoNext()) {
+				// FIXME PG - ctx or ctxBlock below?
 
 				// Replace all operands with their current SSA version
 				UpdateUses(ctx, liveOut);
@@ -240,8 +239,6 @@ namespace Mosa.Runtime.CompilerFramework
 				// Is this an instruction we ignore?
 				if (!ctx.Ignore)
 					RenameStackOperands(ctx, liveOut);
-
-				ctxBlock.GotoNext();
 			}
 
 			return true;

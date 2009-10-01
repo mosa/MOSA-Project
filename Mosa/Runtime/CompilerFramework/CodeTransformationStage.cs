@@ -54,14 +54,9 @@ namespace Mosa.Runtime.CompilerFramework
 			Architecture = compiler.Architecture;
 			Compiler = compiler;
 
-			for (int index = 0; index < BasicBlocks.Count; index++) {
-				Context ctx = new Context(BasicBlocks[index]);
-
-				while (!ctx.EndOfInstruction) {
+			for (int index = 0; index < BasicBlocks.Count; index++)
+				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
 					ctx.Visit(this);
-					ctx.GotoNext();
-				}
-			}
 		}
 
 		/// <summary>
@@ -159,7 +154,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Context ctx = new Context(InstructionSet, -1);
 			BasicBlock block = new BasicBlock(BasicBlocks.Count + 0x10000000);
 			block.Index = BasicBlocks.Count;
-			ctx.BasicBlock = block;	
+			ctx.BasicBlock = block;
 			BasicBlocks.Add(block);
 
 			// FIXME - Add dummy start of block instruction - so we have an instruction index that never moves

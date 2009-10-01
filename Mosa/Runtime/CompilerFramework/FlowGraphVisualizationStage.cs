@@ -15,170 +15,164 @@ using Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    /// <summary>
-    /// The FlowGraph Visualization Stage emits flowgraphs for graphviz.
-    /// </summary>
-    public class FlowGraphVisualizationStage : BaseStage, IMethodCompilerStage
-    {
-        #region Data members
+	/// <summary>
+	/// The FlowGraph Visualization Stage emits flowgraphs for graphviz.
+	/// </summary>
+	public class FlowGraphVisualizationStage : BaseStage, IMethodCompilerStage
+	{
+		#region Data members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        protected IArchitecture arch;
-        /// <summary>
-        /// 
-        /// </summary>
-        private BasicBlock firstBlock;
-        /// <summary>
-        /// 
-        /// </summary>
-        protected BitArray workArray;
-        /// <summary>
-        /// 
-        /// </summary>
-        protected Stack<BasicBlock> workList;
-        /// <summary>
-        /// 
-        /// </summary>
-        static protected Dictionary<string, int> methodCount = new Dictionary<string,int>();
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IArchitecture arch;
+		/// <summary>
+		/// 
+		/// </summary>
+		private BasicBlock firstBlock;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected BitArray workArray;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected Stack<BasicBlock> workList;
+		/// <summary>
+		/// 
+		/// </summary>
+		static protected Dictionary<string, int> methodCount = new Dictionary<string, int>();
 
-        #endregion // Data members
+		#endregion // Data members
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value>The name of the compilation stage.</value>
-        public string Name
-        {
-            get { return @"FlowGraph Visualization Stage"; }
-        }
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		public string Name
+		{
+			get { return @"FlowGraph Visualization Stage"; }
+		}
 
-        #endregion // Properties
+		#endregion // Properties
 
-        #region IMethodCompilerStage Members
+		#region IMethodCompilerStage Members
 
-        /// <summary>
-        /// A reference to the running instance of this stage
-        /// </summary>
-        public static readonly FlowGraphVisualizationStage Instance = new FlowGraphVisualizationStage();
+		/// <summary>
+		/// A reference to the running instance of this stage
+		/// </summary>
+		public static readonly FlowGraphVisualizationStage Instance = new FlowGraphVisualizationStage();
 
-        /// <summary>
-        /// Runs the specified compiler.
-        /// </summary>
-        /// <param name="compiler">The compiler.</param>
-        public override void Run(IMethodCompiler compiler)
-        {
+		/// <summary>
+		/// Runs the specified compiler.
+		/// </summary>
+		/// <param name="compiler">The compiler.</param>
+		public override void Run(IMethodCompiler compiler)
+		{
 			base.Run(compiler);
 
-            if (!methodCount.ContainsKey(compiler.Method.Name))
-                methodCount[compiler.Method.Name] = 0;
+			if (!methodCount.ContainsKey(compiler.Method.Name))
+				methodCount[compiler.Method.Name] = 0;
 
-            System.IO.StreamWriter dotFile;
+			System.IO.StreamWriter dotFile;
 
-            try
-            {
-                dotFile = new System.IO.StreamWriter("dotGraph_" + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + ".dot");
-            }
-            catch (System.Exception)
-            {
-                return;
-            }
+			try {
+				dotFile = new System.IO.StreamWriter("dotGraph_" + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + ".dot");
+			}
+			catch (System.Exception) {
+				return;
+			}
 
-            ++methodCount[compiler.Method.Name];
+			++methodCount[compiler.Method.Name];
 
-            // Retreive the first block
-            firstBlock = FromLabel(-1);
+			// Retreive the first block
+			firstBlock = FromLabel(-1);
 
-            workList = new Stack<BasicBlock>();
-            workList.Push(firstBlock);
-            workArray = new BitArray(BasicBlocks.Count);
+			workList = new Stack<BasicBlock>();
+			workList.Push(firstBlock);
+			workArray = new BitArray(BasicBlocks.Count);
 
-            IMethodCompilerStage previousStage = compiler.GetPreviousStage<IMethodCompilerStage>();
-            dotFile.WriteLine("digraph " + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + "_FlowGraph {");
-            dotFile.WriteLine("label = \"Method: " + compiler.Method.Name + "(" + compiler.Method.Signature + ") after " + previousStage.Name + "\";");
-            dotFile.WriteLine("graph [rankdir = \"TB\"];");
+			IMethodCompilerStage previousStage = compiler.GetPreviousStage<IMethodCompilerStage>();
+			dotFile.WriteLine("digraph " + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + "_FlowGraph {");
+			dotFile.WriteLine("label = \"Method: " + compiler.Method.Name + "(" + compiler.Method.Signature + ") after " + previousStage.Name + "\";");
+			dotFile.WriteLine("graph [rankdir = \"TB\"];");
 
-            string nodes = string.Empty;
-            string edges = string.Empty;
+			string nodes = string.Empty;
+			string edges = string.Empty;
 
-            while (workList.Count != 0)
-            {
-                BasicBlock block = workList.Pop();
+			while (workList.Count != 0) {
+				BasicBlock block = workList.Pop();
 
-                if (!workArray.Get(block.Index))
-                {
-                    string nodeName = string.Empty;
-                    string nodeContent = string.Empty;
-                    string nextNode = string.Empty;
+				if (!workArray.Get(block.Index)) {
+					string nodeName = string.Empty;
+					string nodeContent = string.Empty;
+					string nextNode = string.Empty;
 
-                    nodeName = block.Index.ToString() + "_" + block.Label.ToString();
-                    nodeName = nodeName.Replace("-", "_");
+					nodeName = block.Index.ToString() + "_" + block.Label.ToString();
+					nodeName = nodeName.Replace("-", "_");
 
-                    nodeContent += "<tr><td bgcolor=\"#DDDDDD\" align=\"center\" colspan=\"3\"><font face=\"Courier\">L_" + block.Label.ToString("x4") + "</font></td></tr>";
+					nodeContent += "<tr><td bgcolor=\"#DDDDDD\" align=\"center\" colspan=\"3\"><font face=\"Courier\">L_" + block.Label.ToString("x4") + "</font></td></tr>";
 
-                    int field = 0;
-                    for (int i = 0; i < block.Instructions.Count; i++)
-                    {
-                        string color;
-                        LegacyInstruction instruction = block.Instructions[i];
-                        string inst = instruction.ToString().Replace("&", "&amp;");
-                        inst = inst.Replace("<", "&lt;");
-                        inst = inst.Replace(">", "&gt;");
+					int field = 0;
+					int i = 0;
 
-                        if (inst.StartsWith("IL") || inst.StartsWith("T_"))
-                            color = "#0000ff5f";
-                        else if (inst.StartsWith("IR"))
-                            color = "#00ff005f";
-                        else
-                            color = "#ff00005f";
+					for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
+						string color;
+						string inst = ctx.Instruction.ToString(ctx).Replace("&", "&amp;");
+						inst = inst.Replace("<", "&lt;");
+						inst = inst.Replace(">", "&gt;");
 
-                        //nodeContent += (" <f" + field + "> " + inst + " |");
+						if (inst.StartsWith("IL") || inst.StartsWith("T_"))
+							color = "#0000ff5f";
+						else if (inst.StartsWith("IR"))
+							color = "#00ff005f";
+						else
+							color = "#ff00005f";
 
-                        nodeContent += "<tr><td bgcolor=\"white\" align=\"right\">" + i + "</td><td bgcolor=\"" + color + "\" align=\"center\" colspan=\"2\"><font face=\"Courier\">" + inst + "</font></td></tr>";
-                        //nodeContent = nodeContent.Replace(";", string.Empty);
+						//nodeContent += (" <f" + field + "> " + inst + " |");
 
-                        ++field;
-                    }
+						nodeContent += "<tr><td bgcolor=\"white\" align=\"right\">" + (i++) + "</td><td bgcolor=\"" + color + "\" align=\"center\" colspan=\"2\"><font face=\"Courier\">" + inst + "</font></td></tr>";
+						//nodeContent = nodeContent.Replace(";", string.Empty);
 
-                    if (nodeContent != string.Empty && nodeContent[nodeContent.Length - 1] == '|')
-                        nodeContent = nodeContent.Substring(0, nodeContent.Length - 2);
+						++field;
+					}
 
-                    if (nodeContent != string.Empty)
-                        nodes += "\"" + nodeName + "\" [label = <<table border=\"1\" cellborder=\"0\" cellpadding=\"3\" bgcolor=\"white\">" + nodeContent + "</table>> shape = \"Mrecord\"];\r\n";
+					if (nodeContent != string.Empty && nodeContent[nodeContent.Length - 1] == '|')
+						nodeContent = nodeContent.Substring(0, nodeContent.Length - 2);
 
-                    workArray.Set(block.Index, true);
+					if (nodeContent != string.Empty)
+						nodes += "\"" + nodeName + "\" [label = <<table border=\"1\" cellborder=\"0\" cellpadding=\"3\" bgcolor=\"white\">" + nodeContent + "</table>> shape = \"Mrecord\"];\r\n";
 
-                    foreach (BasicBlock nextBlock in block.NextBlocks)
-                    {
-                        nextNode = nextBlock.Index.ToString() + "_" + nextBlock.Label.ToString();
+					workArray.Set(block.Index, true);
 
-                        edges += "\"" + nodeName + "\"" + " -> " + "\"" + nextNode + "\"\r\n";
+					foreach (BasicBlock nextBlock in block.NextBlocks) {
+						nextNode = nextBlock.Index.ToString() + "_" + nextBlock.Label.ToString();
 
-                        if (!workArray.Get(nextBlock.Index))
-                        {
-                            workList.Push(nextBlock);
-                        }
-                    }
-                }
-            }
-            dotFile.WriteLine(nodes);
-            dotFile.WriteLine(edges);
-            dotFile.WriteLine("};");
-            dotFile.Close();
-        }
+						edges += "\"" + nodeName + "\"" + " -> " + "\"" + nextNode + "\"\r\n";
 
-        /// <summary>
-        /// Adds to pipeline.
-        /// </summary>
-        /// <param name="pipeline">The pipeline.</param>
-        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
-        {
-            pipeline.InsertBefore<CIL.CilToIrTransformationStage>(this);
-        }
+						if (!workArray.Get(nextBlock.Index)) {
+							workList.Push(nextBlock);
+						}
+					}
+				}
+			}
+			dotFile.WriteLine(nodes);
+			dotFile.WriteLine(edges);
+			dotFile.WriteLine("};");
+			dotFile.Close();
+		}
 
-        #endregion // Methods
-    }
+		/// <summary>
+		/// Adds to pipeline.
+		/// </summary>
+		/// <param name="pipeline">The pipeline.</param>
+		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		{
+			pipeline.InsertBefore<CIL.CilToIrTransformationStage>(this);
+		}
+
+		#endregion // Methods
+	}
 }

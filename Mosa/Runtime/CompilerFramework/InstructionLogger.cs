@@ -71,7 +71,7 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (BasicBlock block in BasicBlocks) {
 				Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
 				Debug.Indent();
-				LogInstructions(new Context(InstructionSet,block));
+				LogInstructions(new Context(InstructionSet, block));
 				Debug.Unindent();
 				index++;
 			}
@@ -97,8 +97,9 @@ namespace Mosa.Runtime.CompilerFramework
 		private void LogInstructions(Context ctx)
 		{
 			StringBuilder text = new StringBuilder();
-			while (!ctx.EndOfInstruction)
-			{
+			
+			for (; !ctx.EndOfInstruction; ctx.GotoNext()) {
+			
 				text.Length = 0;
 
 				if (ctx.Ignore)
@@ -107,8 +108,6 @@ namespace Mosa.Runtime.CompilerFramework
 				text.AppendFormat("L_{0:X4}: {1}", ctx.Offset, ctx.Instruction.ToString(ctx));
 
 				Debug.WriteLine(text.ToString());
-
-				ctx.GotoNext();
 			}
 		}
 

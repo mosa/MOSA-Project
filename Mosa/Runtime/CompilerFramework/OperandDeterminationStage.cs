@@ -110,9 +110,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="compiler">The compiler.</param>
 		private void ProcessInstructions(BasicBlock block, IList<Operand> currentStack, IMethodCompiler compiler)
 		{
-			Context ctx = new Context(block);
-
-			while (!ctx.EndOfInstruction) {
+			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
 				if (!(ctx.Instruction is CIL.ICILInstruction))
 					continue;
 
@@ -122,8 +120,6 @@ namespace Mosa.Runtime.CompilerFramework
 				//instruction.Validate(compiler);
 
 				PushResultOperands(ctx, currentStack);
-
-				ctx.GotoNext();
 			}
 		}
 
@@ -141,7 +137,7 @@ namespace Mosa.Runtime.CompilerFramework
 		private static void PushResultOperands(Context ctx, IList<Operand> currentStack)
 		{
 			if ((ctx.Instruction as ICILInstruction).PushResult)
-				foreach (Operand operand in ctx.Operands) 
+				foreach (Operand operand in ctx.Operands)
 					currentStack.Add(operand);
 		}
 

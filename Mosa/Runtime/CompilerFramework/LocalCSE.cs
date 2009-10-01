@@ -135,10 +135,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			AEBinExp aeb;
 
-			//int i = 0;
-
-			while (!ctx.EndOfInstruction)
-			{
+			for (; !ctx.EndOfInstruction; ctx.GotoNext()) {
 				IInstruction instruction = ctx.Instruction; // block.Instructions[i];
 				RegisterOperand temp = null;
 				bool found = false;
@@ -204,8 +201,8 @@ namespace Mosa.Runtime.CompilerFramework
 								// FIXME PG:
 								// block.Instructions[position] = new IR.MoveInstruction(block.Instructions[position].Results[0], temp);
 								// ctx.SetInstruction(IR.MoveInstruction); // FIXME PG
- 								// ctx.Result = block.Instructions[position].Results[0]; // FIXME PG
-								ctx.Operand1 = temp; 
+								// ctx.Result = block.Instructions[position].Results[0]; // FIXME PG
+								ctx.Operand1 = temp;
 							}
 							else {
 								temp = (RegisterOperand)aeb.Var;
@@ -241,8 +238,6 @@ namespace Mosa.Runtime.CompilerFramework
 							AEB.Remove(aeb);
 					}
 				}
-
-				ctx.GotoNext();
 			}
 		}
 
