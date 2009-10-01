@@ -15,18 +15,19 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 
+using NDesk.Options;
+
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
-
-using NDesk.Options;
 using Mosa.Runtime.Linker.Elf32;
 using Mosa.Runtime.Linker.Elf64;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
-
 using Mosa.Platforms.x86;
 using Mosa.Platforms.x86.Instructions;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Tools.Compiler.TypeInitializers;
+
+using IR2 = Mosa.Runtime.CompilerFramework.IR2;
 
 namespace Mosa.Tools.Compiler.Boot
 {
@@ -111,11 +112,6 @@ namespace Mosa.Tools.Compiler.Boot
 		private uint videoDepth;
 
 		/// <summary>
-		/// Holds a list of cctors call instructions.
-		/// </summary>
-		private List<LegacyInstruction> instructions;
-
-		/// <summary>
 		/// Holds true if the second stage is reached
 		/// </summary>
 		private bool secondStage;
@@ -133,7 +129,6 @@ namespace Mosa.Tools.Compiler.Boot
 			videoWidth = 80;
 			videoHeight = 25;
 			videoDepth = 0;
-			instructions = new List<LegacyInstruction>();
 			secondStage = false;
 		}
 
@@ -172,25 +167,20 @@ namespace Mosa.Tools.Compiler.Boot
 
 				SigType I4 = new SigType(CilElementType.I4);
 
-				ConstantOperand table = new ConstantOperand(I4, 0x200000);
-
 				RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 				RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 				RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
 
-				MemoryOperand m1 = new MemoryOperand(I4, ecx.Register, new IntPtr(0x0));
-				MemoryOperand m2 = new MemoryOperand(I4, ecx.Register, new IntPtr(0x4));
+				InstructionSet instructionSet = new InstructionSet(16);
+				Context ctx = new Context(instructionSet, -1);
 
-				instructions.AddRange(
-					new LegacyInstruction[] {
-					new Mosa.Runtime.CompilerFramework.IR.MoveInstruction(ecx, table),
-					new Mosa.Runtime.CompilerFramework.IR.MoveInstruction(m1, eax),
-					new Mosa.Runtime.CompilerFramework.IR.MoveInstruction(m2, ebx),
-					new Mosa.Runtime.CompilerFramework.IR.CallInstruction(typeInitializerSchedulerStage.Method)
-					}
-				);
+				ctx.SetInstruction(IR2.Instruction.MoveInstruction, ecx, new ConstantOperand(I4, 0x200000));
+				ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
+				ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
+				ctx.InsertInstructionAfter(IR2.Instruction.CallInstruction);
+				ctx.InvokeTarget = typeInitializerSchedulerStage.Method;
 
-				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"MultibootInit", instructions);
+				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"MultibootInit", instructionSet);
 				linker.EntryPoint = linker.GetSymbol(method);
 			}
 		}

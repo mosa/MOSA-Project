@@ -7,113 +7,118 @@
  *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
  */
 
+using System.Collections.Generic;
+
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Vm;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
-using Mosa.Runtime.CompilerFramework.IR;
-using System.Collections.Generic;
 using Mosa.Runtime.Linker;
+
+using IR2 = Mosa.Runtime.CompilerFramework.IR2;
 
 namespace Mosa.Tools.Compiler.TypeInitializers
 {
-    /// <summary>
-    /// Schedules type initializers and creates a hidden mosacl_main method,
-    /// which runs all type initializers in sequence.
-    /// </summary>
-    /// <remarks>
-    /// Dependencies are not resolved, it is hoped that dependencies are resolved
-    /// by the high-level language compiler by placing cctors in some order in
-    /// metadata.
-    /// </remarks>
-    public sealed class TypeInitializerSchedulerStage : IAssemblyCompilerStage
-    {
-        #region Data Members
+	/// <summary>
+	/// Schedules type initializers and creates a hidden mosacl_main method,
+	/// which runs all type initializers in sequence.
+	/// </summary>
+	/// <remarks>
+	/// Dependencies are not resolved, it is hoped that dependencies are resolved
+	/// by the high-level language compiler by placing cctors in some order in
+	/// metadata.
+	/// </remarks>
+	public sealed class TypeInitializerSchedulerStage : BaseStage, IAssemblyCompilerStage
+	{
+		#region Data Members
 
-        /// <summary>
-        /// Holds a list of cctors call instructions.
-        /// </summary>
-        private List<LegacyInstruction> instructions;
+		/// <summary>
+		/// Holds a list of cctors call instructions.
+		/// </summary>
+		private InstructionSet _instructionSet;
+
+		/// <summary>
+		/// Hold the current context
+		/// </summary>
+		private Context _ctx;
 
 		/// <summary>
 		/// Holds the method for the type initalizer
 		/// </summary>
-    	private CompilerGeneratedMethod _method;
+		private CompilerGeneratedMethod _method;
 
-        #endregion // Data Members
+		#endregion // Data Members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TypeInitializerSchedulerStage"/> class.
-        /// </summary>
-        public TypeInitializerSchedulerStage()
-        {
-            this.instructions = new List<LegacyInstruction>();
-            this.instructions.Add(new PrologueInstruction(0));
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TypeInitializerSchedulerStage"/> class.
+		/// </summary>
+		public TypeInitializerSchedulerStage()
+		{
+			_instructionSet = new InstructionSet(16);
+			_ctx = new Context(_instructionSet, -1);
 
-        #endregion // Construction
-		
+			_ctx.InsertInstructionAfter(IR2.Instruction.PrologueInstruction);
+			_ctx.Other = 0; // stacksize
+		}
+
+		#endregion // Construction
+
 		#region Properties
 
 		/// <summary>
 		/// Gets the intializer method.
 		/// </summary>
 		/// <value>The method.</value>
-    	public CompilerGeneratedMethod Method
-    	{
-    		get
+		public CompilerGeneratedMethod Method
+		{
+			get
 			{
 				return _method;
 			}
-    	}
+		}
 
 		#endregion
 
 		#region Methods
 
 		/// <summary>
-        /// Schedules the specified method for invocation in the main.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        public void Schedule(RuntimeMethod method)
-        {
-            this.instructions.Add(new CallInstruction(method));
-        }
+		/// Schedules the specified method for invocation in the main.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		public void Schedule(RuntimeMethod method)
+		{
+			_ctx.InsertInstructionAfter(IR2.Instruction.CallInstruction);
+			_ctx.InvokeTarget = method;
+		}
 
-        #endregion // Methods
+		#endregion // Methods
 
-        #region IAssemblyCompilerStage Members
+		#region IAssemblyCompilerStage Members
 
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value>The name of the compilation stage.</value>
-        public string Name
-        {
-            get { return @"Type Initializer Scheduler"; }
-        }
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		public string Name
+		{
+			get { return @"Type Initializer Scheduler"; }
+		}
 
-        /// <summary>
-        /// Performs stage specific processing on the compiler context.
-        /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(AssemblyCompiler compiler)
-        {
-            // Any initializers to run?
-            if (this.instructions.Count > 0)
-            {
-                // Add a call to the current entry point to the scheduler
-                this.instructions.AddRange(new LegacyInstruction[] {
-                    new CallInstruction(compiler.Assembly.EntryPoint),
-                    new EpilogueInstruction(0)
-                });
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		/// <param name="compiler">The compiler context to perform processing in.</param>
+		public void Run(AssemblyCompiler compiler)
+		{
+			_ctx.InsertInstructionAfter(IR2.Instruction.CallInstruction);
+			_ctx.InvokeTarget = compiler.Assembly.EntryPoint;
+			_ctx.InsertInstructionAfter(IR2.Instruction.EpilogueInstruction);
+			_ctx.Other = 0;
 
-				_method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", this.instructions);
+			_method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", _instructionSet);
+		}
 
-            }
-        }
-
-        #endregion // IAssemblyCompilerStage Members
-    }
+		#endregion // IAssemblyCompilerStage Members
+	}
 }

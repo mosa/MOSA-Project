@@ -110,6 +110,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the instruction set.
 		/// </summary>
 		/// <value>The instruction set.</value>
-		InstructionSet InstructionSet { get; }
+		InstructionSet InstructionSet { get; set;  }
     }
 }

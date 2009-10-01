@@ -12,8 +12,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-//using Mosa.Runtime.CompilerFramework.CIL;
-//using Mosa.Runtime.CompilerFramework.IL;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
@@ -31,7 +29,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// representation. The instructions are grouped into basic Blocks
 	/// for easier local optimizations in later compiler stages.
 	/// </remarks>
-	public sealed partial class DecodingStage : IMethodCompilerStage, IInstructionsProvider, IInstructionDecoder
+	public sealed partial class DecodingStage : BaseStage, IMethodCompilerStage, IInstructionDecoder
 	{
 		private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
 
@@ -70,19 +68,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-		#region Properties
-
-		// <summary>
-		// Returns the binary reader to access the code stream.
-		// </summary>
-		// <value></value>
-		//public BinaryReader CodeReader
-		//{
-		//    get { return _codeReader; }
-		//}
-
-		#endregion // Properties
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>
@@ -98,40 +83,47 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(IMethodCompiler compiler)
+		public override void Run(IMethodCompiler compiler)
 		{
+			base.Run(compiler);
+
 			// The size of the code in bytes
-			Mosa.Runtime.CompilerFramework.CIL.MethodHeader header = new Mosa.Runtime.CompilerFramework.CIL.MethodHeader();
+			CIL.MethodHeader header = new CIL.MethodHeader();
 
 			// Check preconditions
-			if (null == compiler)
+			if (compiler == null)
 				throw new ArgumentNullException(@"compiler");
 
 			//Debug.WriteLine(@"Decoding " + compiler.Type.ToString() + "." + compiler.Method.ToString());
 
-			using (Stream code = compiler.GetInstructionStream())
-			using (BinaryReader reader = new BinaryReader(code)) {
-				_compiler = compiler;
-				_method = compiler.Method;
-				_codeReader = reader;
+			using (Stream code = compiler.GetInstructionStream()) {
 
-				ReadMethodHeader(reader, ref header);
-				//Debug.WriteLine("Decoding " + compiler.Method.ToString());
+				// Initalize the instruction, setting the initalize size to 10 times the code stream
+				InstructionSet = new InstructionSet((int)code.Length * 10);
 
-				if (0 != header.localsSignature) {
-					StandAloneSigRow row;
-					IMetadataProvider md = _method.Module.Metadata;
-					md.Read(header.localsSignature, out row);
-					compiler.SetLocalVariableSignature(LocalVariableSignature.Parse(md, row.SignatureBlobIdx));
+				using (BinaryReader reader = new BinaryReader(code)) {
+					_compiler = compiler;
+					_method = compiler.Method;
+					_codeReader = reader;
+
+					ReadMethodHeader(reader, ref header);
+					//Debug.WriteLine("Decoding " + compiler.Method.ToString());
+
+					if (0 != header.localsSignature) {
+						StandAloneSigRow row;
+						IMetadataProvider md = _method.Module.Metadata;
+						md.Read(header.localsSignature, out row);
+						compiler.SetLocalVariableSignature(LocalVariableSignature.Parse(md, row.SignatureBlobIdx));
+					}
+
+					/* Decode the instructions */
+					Decode(compiler, ref header);
+
+					// When we leave, the operand stack must only contain the locals...
+					//Debug.Assert(_operandStack.Count == _method.Locals.Count);
+					_codeReader = null;
+					_compiler = null;
 				}
-
-				/* Decode the instructions */
-				Decode(compiler, ref header);
-
-				// When we leave, the operand stack must only contain the locals...
-				//Debug.Assert(_operandStack.Count == _method.Locals.Count);
-				_codeReader = null;
-				_compiler = null;
 			}
 		}
 
@@ -153,18 +145,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="reader">The reader used to decode the instruction stream.</param>
 		/// <param name="header">The method _header structure to populate.</param>
-		private void ReadMethodHeader(BinaryReader reader, ref Mosa.Runtime.CompilerFramework.CIL.MethodHeader header)
+		private void ReadMethodHeader(BinaryReader reader, ref CIL.MethodHeader header)
 		{
-			header.flags = (Mosa.Runtime.CompilerFramework.CIL.MethodFlags)reader.ReadByte();
-			switch (header.flags & Mosa.Runtime.CompilerFramework.CIL.MethodFlags.HeaderMask) {
-				case Mosa.Runtime.CompilerFramework.CIL.MethodFlags.TinyFormat:
-					header.codeSize = ((uint)(header.flags & Mosa.Runtime.CompilerFramework.CIL.MethodFlags.TinyCodeSizeMask) >> 2);
-					header.flags &= Mosa.Runtime.CompilerFramework.CIL.MethodFlags.HeaderMask;
+			header.flags = (CIL.MethodFlags)reader.ReadByte();
+			switch (header.flags & CIL.MethodFlags.HeaderMask) {
+				case CIL.MethodFlags.TinyFormat:
+					header.codeSize = ((uint)(header.flags & CIL.MethodFlags.TinyCodeSizeMask) >> 2);
+					header.flags &= CIL.MethodFlags.HeaderMask;
 					break;
 
-				case Mosa.Runtime.CompilerFramework.CIL.MethodFlags.FatFormat:
-					header.flags = (Mosa.Runtime.CompilerFramework.CIL.MethodFlags)(reader.ReadByte() << 8 | (byte)header.flags);
-					if (Mosa.Runtime.CompilerFramework.CIL.MethodFlags.ValidHeader != (header.flags & Mosa.Runtime.CompilerFramework.CIL.MethodFlags.HeaderSizeMask))
+				case CIL.MethodFlags.FatFormat:
+					header.flags = (CIL.MethodFlags)(reader.ReadByte() << 8 | (byte)header.flags);
+					if (CIL.MethodFlags.ValidHeader != (header.flags & Mosa.Runtime.CompilerFramework.CIL.MethodFlags.HeaderSizeMask))
 						throw new InvalidDataException(@"Invalid method _header.");
 					header.maxStack = reader.ReadUInt16();
 					header.codeSize = reader.ReadUInt32();
@@ -176,7 +168,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			// Are there sections following the code?
-			if (Mosa.Runtime.CompilerFramework.CIL.MethodFlags.MoreSections == (header.flags & Mosa.Runtime.CompilerFramework.CIL.MethodFlags.MoreSections)) {
+			if (CIL.MethodFlags.MoreSections == (header.flags & CIL.MethodFlags.MoreSections)) {
 				// Yes, seek to them and process those sections
 				long codepos = reader.BaseStream.Position;
 
@@ -190,7 +182,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				byte flags;
 				int length, blocks;
 				bool isFat;
-				Mosa.Runtime.CompilerFramework.CIL.EhClause clause = new Mosa.Runtime.CompilerFramework.CIL.EhClause();
+				CIL.EhClause clause = new CIL.EhClause();
 
 				do {
 					flags = reader.ReadByte();
@@ -227,7 +219,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="compiler">The compiler to populate.</param>
 		/// <param name="header">The method _header.</param>
-		private void Decode(IMethodCompiler compiler, ref Mosa.Runtime.CompilerFramework.CIL.MethodHeader header)
+		private void Decode(IMethodCompiler compiler, ref CIL.MethodHeader header)
 		{
 			// Start of the code stream
 			long codeStart = _codeReader.BaseStream.Position;
@@ -278,19 +270,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // Internals
-
-		#region IInstructionsProvider members
-
-		/// <summary>
-		/// Gets a list of instructions in intermediate representation.
-		/// </summary>
-		/// <value></value>
-		public InstructionSet InstructionSet
-		{
-			get { return _instructionSet; }
-		}
-
-		#endregion //  IInstructionsProvider members
 
 		#region IInstructionDecoder Members
 

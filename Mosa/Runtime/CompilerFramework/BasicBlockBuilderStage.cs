@@ -29,11 +29,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private SortedDictionary<int, BasicBlock> _loopHeads;
 
-		/// <summary>
-		/// Holds the instruction set
-		/// </summary>
-		private InstructionSet _instructionset;
-
 		#endregion // Data members
 
 		#region Construction
@@ -65,14 +60,16 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="compiler">The compiler context to perform processing in.</param>
 		public override void Run(IMethodCompiler compiler)
 		{
-			// Retrieve the instruction provider and the instruction set
-			_instructionset = (compiler.GetPreviousStage(typeof(IInstructionsProvider)) as IInstructionsProvider).InstructionSet;
+			base.Run(compiler);
 
 			AddLoopHead(0);
 
-			FindLoopHeads(new Context(_instructionset, 0));
+			FindLoopHeads(new Context(InstructionSet, 0));
 
-			BasicBlocks.Capacity = _loopHeads.Count + 2;
+			if (BasicBlocks == null)
+				BasicBlocks = new List<BasicBlock>(_loopHeads.Count + 2);
+			else
+				BasicBlocks.Capacity = _loopHeads.Count + 2;
 
 			// Start with a prologue block...
 			BasicBlock prologue = new BasicBlock(-1);
@@ -80,7 +77,7 @@ namespace Mosa.Runtime.CompilerFramework
 			BasicBlocks.Add(prologue);
 
 			// Add a jump instruction to the first block from the prologue
-			Context ctx = new Context(_instructionset, 0).InsertBefore();
+			Context ctx = new Context(InstructionSet, 0).InsertBefore();
 			ctx.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
 			ctx.SetBranch(0);
 
@@ -94,7 +91,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Link prologue block to the first leader
 			LinkBlocks(prologue, _loopHeads[0]);
 
-			InsertInstructionsIntoBlocks(_loopHeads, epilogue);
+			CreateBlocks(_loopHeads, epilogue);
 
 			// Add the epilogue block
 			BasicBlocks.Add(epilogue);
@@ -156,7 +153,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="leaders">The leaders.</param>
 		/// <param name="epilogue">The epilogue.</param>
-		private void InsertInstructionsIntoBlocks(IDictionary<int, BasicBlock> leaders, BasicBlock epilogue)
+		private void CreateBlocks(IDictionary<int, BasicBlock> leaders, BasicBlock epilogue)
 		{
 			KeyValuePair<int, BasicBlock> current = new KeyValuePair<int, BasicBlock>(-1, null);
 			int blockIndex = 0;
@@ -170,7 +167,7 @@ namespace Mosa.Runtime.CompilerFramework
 					// Set the block index
 					current.Value.Index = ++blockIndex;
 
-					Context ctx = new Context(_instructionset, current.Key);
+					Context ctx = new Context(InstructionSet, current.Key);
 					ctx.BasicBlock = current.Value;
 
 					// Set the block index on all the instructions

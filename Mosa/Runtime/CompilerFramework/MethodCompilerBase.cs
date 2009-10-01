@@ -127,7 +127,8 @@ namespace Mosa.Runtime.CompilerFramework
 			_parameters = new List<Operand>(new Operand[_method.Parameters.Count]);
 			_type = type;
 			_nextStackSlot = 0;
-			_basicBlocks = new List<BasicBlock>();
+			_basicBlocks = null; // this will be set later
+			_instructionSet = null; // this will be set later
 		}
 
 		#endregion // Construction
@@ -180,6 +181,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public InstructionSet InstructionSet
 		{
 			get { return _instructionSet; }
+			set { _instructionSet = value; }
 		}
 
 		/// <summary>
@@ -244,7 +246,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Dispose()
 		{
-			if (_pipeline == null) 
+			if (_pipeline == null)
 				throw new ObjectDisposedException(@"MethodCompilerBase");
 
 			foreach (IMethodCompilerStage mcs in _pipeline) {
@@ -397,7 +399,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		#endregion // IBasicBlockProvider members
-		
+
 
 		#endregion // Methods
 
