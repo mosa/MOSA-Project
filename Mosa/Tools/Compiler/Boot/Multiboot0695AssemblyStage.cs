@@ -23,7 +23,6 @@ using Mosa.Runtime.Linker.Elf32;
 using Mosa.Runtime.Linker.Elf64;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 using Mosa.Platforms.x86;
-using Mosa.Platforms.x86.Instructions;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Tools.Compiler.TypeInitializers;
 
