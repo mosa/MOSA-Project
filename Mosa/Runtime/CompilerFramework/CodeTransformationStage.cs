@@ -56,7 +56,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 			for (int index = 0; index < BasicBlocks.Count; index++)
 				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
-					ctx.Visit(this);
+					if (ctx.Instruction != null)
+						ctx.Visit(this);
 		}
 
 		/// <summary>
@@ -115,11 +116,10 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.BasicBlock = block;
 			BasicBlocks.Add(block);
 
-			// FIXME PG - Add dummy start of block instruction - so we have an instruction index that never moves
-			ctx.InsertInstructionAfter(DumyInstruction.Instance);
-			ctx.Ignore = true;
-
+			// Need a dummy instruction at the start of each block to establish an index
+			ctx.InsertInstructionAfter(null);
 			block.Index = ctx.Index;
+			ctx.Ignore = true;
 
 			return ctx;
 		}

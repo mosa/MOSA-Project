@@ -102,6 +102,9 @@ namespace Mosa.Runtime.CompilerFramework
 			
 				text.Length = 0;
 
+				if (ctx.Instruction == null)
+					continue;
+
 				if (ctx.Ignore)
 					text.Append("; ");
 

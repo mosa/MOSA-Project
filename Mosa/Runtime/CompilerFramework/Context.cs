@@ -378,7 +378,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			_block = basicBlock;
 			_index = basicBlock.Index;
-//			_instructionSet 
+			//			_instructionSet 
 		}
 
 		/// <summary>
@@ -492,11 +492,14 @@ namespace Mosa.Runtime.CompilerFramework
 
 			int prev = _instructionSet.Previous(_index);
 
-			if (prev <= 0)
-				prev = _instructionSet.Next(_index);
+			// if this instruction was part of the head of the block, then don't remove it 
+			if (prev <= 0) {
+				Instruction = null;
+				Ignore = true;
+				return;
+			}
 
 			_instructionSet.Remove(_index);
-
 			_index = prev;
 		}
 
@@ -562,7 +565,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction.</param>
 		public void InsertInstructionAfter(IInstruction instruction)
 		{
-			_index = _instructionSet.InsertAfter(_index);
+			// replace dummy instruction, if possible
+			if (Ignore && instruction == null)
+				_index = _instructionSet.InsertAfter(_index);
+
 			SetInstruction(instruction);
 		}
 
