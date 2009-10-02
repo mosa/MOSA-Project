@@ -70,37 +70,6 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Block Operations
 
 		/// <summary>
-		/// Links the Blocks.
-		/// </summary>
-		/// <param name="from">The block issuing the jump.</param>
-		/// <param name="to">The block, where From is jumping to.</param>
-		protected void LinkBlocks(BasicBlock from, BasicBlock to)
-		{
-			Debug.Assert(!from.NextBlocks.Contains(to), @"A link already exists?");
-			Debug.Assert(!to.PreviousBlocks.Contains(from), @"A link already exists?");
-			from.NextBlocks.Add(to);
-			to.PreviousBlocks.Add(from);
-		}
-
-		/// <summary>
-		/// Links the new Blocks.
-		/// </summary>
-		/// <param name="blocks">The Blocks.</param>
-		/// <param name="currentBlock">The current block.</param>
-		/// <param name="nextBlock">The next block.</param>
-		protected void LinkBlocks(BasicBlock[] blocks, BasicBlock currentBlock, BasicBlock nextBlock)
-		{
-			// Create label to block dictionary
-			Dictionary<int, BasicBlock> blockLabels = new Dictionary<int, BasicBlock>();
-
-			foreach (BasicBlock block in blocks)
-				blockLabels.Add(block.Label, block);
-
-			AddBlockLabels(blockLabels, nextBlock);
-			AddBlockLabels(blockLabels, currentBlock);
-		}
-
-		/// <summary>
 		/// Links the new Blocks.
 		/// </summary>
 		/// <param name="blocks">The Blocks.</param>
@@ -142,8 +111,7 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.BasicBlock = block;
 			BasicBlocks.Add(block);
 
-			// FIXME - Add dummy start of block instruction - so we have an instruction index that never moves
-			// ??
+			// FIXME PG - Add dummy start of block instruction - so we have an instruction index that never moves
 
 			return ctx;
 		}
