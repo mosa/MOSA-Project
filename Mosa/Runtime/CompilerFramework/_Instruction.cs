@@ -219,8 +219,8 @@ namespace Mosa.Runtime.CompilerFramework
                     for (int i = operands; i < _operands.Length; i++)
                     {
                         Operand op = _operands[i];
-                        if (null != op)
-                            op.Uses.Remove(this);
+						//if (null != op)
+						//    ;  op.Uses.Remove(this);
                     }
                 }
                 if (0 != operands)
@@ -236,8 +236,8 @@ namespace Mosa.Runtime.CompilerFramework
                     for (int i = results; i < _results.Length; i++)
                     {
                         Operand op = _results[i];
-                        if (null != op)
-                            op.Definitions.Remove(this);
+						//if (null != op)
+						//    op.Definitions.Remove(this);
                     }
                 }
 
@@ -261,10 +261,10 @@ namespace Mosa.Runtime.CompilerFramework
 
             Operand old = _operands[index];
             _operands[index] = operand;
-            if (null != operand)
-                operand.Uses.Add(this);
-            if (null != old)
-                old.Uses.Remove(this);
+			//if (null != operand)
+			//    operand.Uses.Add(this);
+			//if (null != old)
+			//    old.Uses.Remove(this);
         }
 
         /// <summary>
@@ -280,10 +280,10 @@ namespace Mosa.Runtime.CompilerFramework
 
             Operand old = _results[index];            
             _results[index] = operand;
-            if (null != operand)
-                operand.Definitions.Add(this);
-            if (null != old)
-                old.Definitions.Remove(this);
+			//if (null != operand)
+			//    operand.Definitions.Add(this);
+			//if (null != old)
+			//    old.Definitions.Remove(this);
         }
 
         /// <summary>

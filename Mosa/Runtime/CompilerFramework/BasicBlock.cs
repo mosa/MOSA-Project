@@ -95,15 +95,6 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Retrieves the instruction list, which belongs to the block.
-		/// </summary>
-		/// <value>The instructions.</value>
-		public List<LegacyInstruction> Instructions		// FIXME PG - Remove this
-		{
-			get { return null; }
-		}
-
-		/// <summary>
 		/// Retrieves the label, which uniquely identifies this block.
 		/// </summary>
 		/// <value>The label.</value>

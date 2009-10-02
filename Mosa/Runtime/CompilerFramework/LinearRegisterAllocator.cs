@@ -174,7 +174,7 @@ namespace Mosa.Runtime.CompilerFramework
 			int opIdx;
 
 			// Iterate all definition sites first
-			foreach (LegacyInstruction def in lr.Op.Definitions.ToArray()) {
+			foreach (Context def in lr.Op.Definitions.ToArray()) {
 				if (def.Offset == lr.Start) {
 					opIdx = 0;
 					foreach (Operand r in def.Results) {
@@ -190,7 +190,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Iterate all use sites
-			foreach (LegacyInstruction instr in lr.Op.Uses.ToArray()) {
+			foreach (Context instr in lr.Op.Uses.ToArray()) {
 				if (instr.Offset <= lr.Start) {
 					// A use on instr.Offset == lr.Start is one From a previous definition!!
 				}
@@ -368,7 +368,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Find the next definition after defLine
 			int ubound = Int32.MaxValue;
-			op.Definitions.Find(delegate(LegacyInstruction i)
+			op.Definitions.Find(delegate(Context i)
 			{
 				if (i.Offset > defLine) {
 					ubound = i.Offset;
@@ -379,7 +379,7 @@ namespace Mosa.Runtime.CompilerFramework
 			});
 
 			// Now find the last use between defLine and ubound
-			op.Uses.ForEach(delegate(LegacyInstruction i)
+			op.Uses.ForEach(delegate(Context i)
 			{
 				if (i.Offset > defLine && i.Offset < ubound) {
 					result = i.Offset;
@@ -401,7 +401,7 @@ namespace Mosa.Runtime.CompilerFramework
 			int result = -1;
 
 			// Now find the last use between defLine and ubound
-			op.Uses.ForEach(delegate(LegacyInstruction i)
+			op.Uses.ForEach(delegate(Context i)
 			{
 				if (i.Offset > line && i.Offset < end) {
 					result = i.Offset;
@@ -415,9 +415,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Sorts the specified list.
 		/// </summary>
 		/// <param name="list">The list.</param>
-		private void Sort(List<LegacyInstruction> list)
+		private void Sort(List<Context> list)
 		{
-			list.Sort(delegate(LegacyInstruction a, LegacyInstruction b)
+			list.Sort(delegate(Context a, Context b)
 			{
 				return a.Offset - b.Offset;
 			});

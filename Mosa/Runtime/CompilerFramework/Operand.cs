@@ -39,12 +39,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Holds a list of instructions, which define this operand.
         /// </summary>
-        private List<LegacyInstruction> _definitions;
+		private List<Context> _definitions;
 
         /// <summary>
         /// Holds a list of instructions, which use this operand.
         /// </summary>
-        private List<LegacyInstruction> _uses;
+		private List<Context> _uses;
 
 		#endregion // Data members
 
@@ -66,12 +66,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Returns a list of instructions, which use this operand.
         /// </summary>
-        public List<LegacyInstruction> Definitions
+		public List<Context> Definitions
         {
             get 
             {
-                if (null == _definitions)
-                    _definitions = new List<LegacyInstruction>();
+                if (_definitions == null)
+					_definitions = new List<Context>();
 
                 return _definitions; 
             }
@@ -169,12 +169,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Returns a list of instructions, which use this operand.
         /// </summary>
-        public List<LegacyInstruction> Uses
+        public List<Context> Uses
         {
             get 
             {
-                if (null == _uses)
-                    _uses = new List<LegacyInstruction>();
+                if (_uses == null)
+					_uses = new List<Context>();
 
                 return _uses; 
             }
@@ -193,7 +193,7 @@ namespace Mosa.Runtime.CompilerFramework
             int opIdx;
 
             // Iterate all definition sites first
-            foreach (LegacyInstruction def in this.Definitions.ToArray())
+            foreach (Context def in Definitions)
             {
                 opIdx = 0;
                 foreach (Operand r in def.Results)
@@ -207,7 +207,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
 
             // Iterate all use sites
-            foreach (LegacyInstruction instr in this.Uses.ToArray())
+            foreach (Context instr in Uses)
             {
                 opIdx = 0;
                 foreach (Operand r in instr.Operands)

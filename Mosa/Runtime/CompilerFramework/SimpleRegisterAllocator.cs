@@ -122,7 +122,6 @@ namespace Mosa.Runtime.CompilerFramework
 			int regIdx = 0;
 			foreach (Operand op in _activeOperands) {
 				if (op != null && op is MemoryOperand) {
-					Debug.Assert(block.Instructions.Count > 0, @"No instructions in the block?");
 
 					Context ctx = new Context(InstructionSet, block);
 					ctx.GotoLast();
