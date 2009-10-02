@@ -87,6 +87,11 @@ namespace Mosa.Runtime.CompilerFramework
 			AddBlockLabels(blockLabels, currentBlock.BasicBlock);
 		}
 
+		/// <summary>
+		/// Adds the block labels.
+		/// </summary>
+		/// <param name="blockLabels">The block labels.</param>
+		/// <param name="basicBlock">The basic block.</param>
 		private static void AddBlockLabels(IDictionary<int, BasicBlock> blockLabels, BasicBlock basicBlock)
 		{
 			if (basicBlock != null) {
@@ -107,11 +112,14 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			Context ctx = new Context(InstructionSet, -1);
 			BasicBlock block = new BasicBlock(BasicBlocks.Count + 0x10000000);
-			block.Index = BasicBlocks.Count;
 			ctx.BasicBlock = block;
 			BasicBlocks.Add(block);
 
 			// FIXME PG - Add dummy start of block instruction - so we have an instruction index that never moves
+			ctx.InsertInstructionAfter(DumyInstruction.Instance);
+			ctx.Ignore = true;
+
+			block.Index = ctx.Index;
 
 			return ctx;
 		}
