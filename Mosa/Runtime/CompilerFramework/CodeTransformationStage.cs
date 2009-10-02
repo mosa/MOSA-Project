@@ -67,21 +67,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // IMethodCompilerStage Members
 
-		#region IInstructionVisitor<Context> Members
-
-		/// <summary>
-		/// Visitation method for instructions not caught by more specific visitation methods.
-		/// </summary>
-		/// <param name="instruction">The visiting instruction.</param>
-		/// <param name="arg">A visitation context argument.</param>
-		public virtual void Visit(LegacyInstruction instruction, Context arg)
-		{
-			Trace.WriteLine(String.Format(@"Unknown instruction {0} has visited stage {1}.", instruction.GetType().FullName, Name));
-			throw new NotSupportedException();
-		}
-
-		#endregion // IInstructionVisitor<Context> Members
-
 		#region Block Operations
 
 		/// <summary>
