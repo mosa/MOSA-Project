@@ -87,7 +87,7 @@ namespace Mosa.Platforms.x86
 
 			// Iterate all Blocks and collect locals from all Blocks
 			foreach (BasicBlock block in BasicBlocks)
-				ProcessInstructions(arch, new Context(block), ctxEpilogue);
+				ProcessInstructions(arch, new Context(InstructionSet, block), ctxEpilogue);
 		}
 
 		/// <summary>

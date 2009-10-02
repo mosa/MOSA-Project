@@ -62,28 +62,26 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			base.Run(compiler);
 
-			AddLoopHead(0);
+			FindLoopHeads(0);
 
-			FindLoopHeads(new Context(InstructionSet, 0));
+			compiler.BasicBlocks = new List<BasicBlock>((_loopHeads.Count + 2) * 2);
+			BasicBlocks = compiler.BasicBlocks;
 
-			if (BasicBlocks == null)
-				BasicBlocks = new List<BasicBlock>(_loopHeads.Count + 2);
-			else
-				BasicBlocks.Capacity = _loopHeads.Count + 2;
-
-			// Start with a prologue block...
-			BasicBlock prologue = new BasicBlock(-1);
-			prologue.Index = 0;
+			// Create the prologue block
+			Context ctx = new Context(InstructionSet, -1);
+			// Add a jump instruction to the first block from the prologue
+			ctx.InsertInstructionAfter(CIL.Instruction.Get(CIL.OpCode.Br));
+			ctx.SetBranch(0);
+			BasicBlock prologue = new BasicBlock(-1, ctx.Index);
 			BasicBlocks.Add(prologue);
 
-			// Add a jump instruction to the first block from the prologue
-			Context ctx = new Context(InstructionSet, 0).InsertBefore();
-			ctx.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
-			ctx.SetBranch(0);
-
 			// Create the epilogue block
-			BasicBlock epilogue = new BasicBlock(Int32.MaxValue);
-			epilogue.Index = _loopHeads.Count + 1;
+			ctx = new Context(InstructionSet, -1);
+			// Add null instruction, necessary to generate a block index
+			ctx.InsertInstructionAfter(null);
+			ctx.Ignore = true;
+			BasicBlock epilogue = new BasicBlock(Int32.MaxValue, ctx.Index);
+			BasicBlocks.Add(epilogue);
 
 			// Add epilogue block to leaders (helps with loop below)
 			_loopHeads.Add(epilogue.Label, epilogue);
@@ -92,18 +90,15 @@ namespace Mosa.Runtime.CompilerFramework
 			LinkBlocks(prologue, _loopHeads[0]);
 
 			CreateBlocks(_loopHeads, epilogue);
-
-			// Add the epilogue block
-			BasicBlocks.Add(epilogue);
 		}
 
 		/// <summary>
 		/// Finds the loop heads.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void FindLoopHeads(Context ctx)
+		/// <param name="index">The index.</param>
+		private void FindLoopHeads(int index)
 		{
-			for (; !ctx.EndOfInstruction; ctx.GotoNext()) {
+			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext()) {
 				// Does this instruction end a block?
 				switch (ctx.Instruction.FlowControl) {
 					case FlowControl.Break: goto case FlowControl.Next;
@@ -199,10 +194,7 @@ namespace Mosa.Runtime.CompilerFramework
 					// Insert unconditional branch to next basic block
 					Context inserted = ctx.InsertAfter();
 					inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Br_s));
-					//inserted.Instruction = Map.GetInstruction(OpCode.Br_s);
 					inserted.SetBranch(nextBlock);
-					//inserted.Branch = new Branch(1);
-					//inserted.Branch.Targets[0] = nextBlock;
 
 					ctx.SliceAfter();
 					LinkBlocks(current, _loopHeads[nextBlock]);

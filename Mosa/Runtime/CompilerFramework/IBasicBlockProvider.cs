@@ -21,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// Gets the basic Blocks.
         /// </summary>
         /// <value>The basic Blocks.</value>
-        List<BasicBlock> BasicBlocks { get; }
+		List<BasicBlock> BasicBlocks { get; set;  }
 
         /// <summary>
         /// Retrieves a basic block from its label.

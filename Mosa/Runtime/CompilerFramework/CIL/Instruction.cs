@@ -38,8 +38,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="opcode">The opcode.</param>
 		public static ICILInstruction Get(OpCode opcode)
 		{
-			return null;
-			//return _opcodeMap[(int)opcode];
+			return _opcodeMap[(int)opcode];
 		}
 
 		/// <summary>
@@ -276,7 +275,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			/* 0x070 */
 			opcodeMap[(int)OpCode.Cpobj] = new CpobjInstruction(OpCode.Cpobj);
 			/* 0x071 */
-			opcodeMap[(int)OpCode.Ldobj] = new LdobjInstruction(OpCode.Ldobj);
+			opcodeMap[(int)OpCode.Ldobj] = null; // new LdobjInstruction(OpCode.Ldobj);
 			/* 0x072 */
 			opcodeMap[(int)OpCode.Ldstr] = new LdstrInstruction(OpCode.Ldstr);
 			/* 0x073 */
@@ -305,7 +304,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			/* 0x080 */
 			opcodeMap[(int)OpCode.Stsfld] = new StsfldInstruction(OpCode.Stsfld);
 			/* 0x081 */
-			opcodeMap[(int)OpCode.Stobj] = new StobjInstruction(OpCode.Stobj);
+			opcodeMap[(int)OpCode.Stobj] = null; // new StobjInstruction(OpCode.Stobj);
 			/* 0x082 */
 			opcodeMap[(int)OpCode.Conv_ovf_i1_un] = new ConversionInstruction(OpCode.Conv_ovf_i1_un);
 			/* 0x083 */
@@ -373,9 +372,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			/* 0x0A2 */
 			opcodeMap[(int)OpCode.Stelem_ref] = new StelemInstruction(OpCode.Stelem_ref);
 			/* 0x0A3 */
-			opcodeMap[(int)OpCode.Ldelem] = new LdelemInstruction(OpCode.Ldelem);
+			opcodeMap[(int)OpCode.Ldelem] = null; // new LdelemInstruction(OpCode.Ldelem);
 			/* 0x0A4 */
-			opcodeMap[(int)OpCode.Stelem] = new StelemInstruction(OpCode.Stelem);
+			opcodeMap[(int)OpCode.Stelem] = null; // new StelemInstruction(OpCode.Stelem);
 			/* 0x0A5 */
 			opcodeMap[(int)OpCode.Unbox_any] = new UnboxAnyInstruction(OpCode.Unbox_any);
 			/* Opcodes 0x0A6-0x0B2 are undefined */

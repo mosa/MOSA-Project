@@ -176,8 +176,9 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the owner _type of the _method.
+		/// Gets the instruction set.
 		/// </summary>
+		/// <value>The instruction set.</value>
 		public InstructionSet InstructionSet
 		{
 			get { return _instructionSet; }
@@ -185,12 +186,13 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the list of basic blocks.
+		/// Gets the basic Blocks.
 		/// </summary>
 		/// <value>The basic blocks.</value>
 		public List<BasicBlock> BasicBlocks
 		{
 			get { return _basicBlocks; }
+			set { _basicBlocks = value; }
 		}
 
 		#endregion // Properties

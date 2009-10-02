@@ -90,16 +90,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// The size of the code in bytes
 			CIL.MethodHeader header = new CIL.MethodHeader();
 
-			// Check preconditions
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
-
-			//Debug.WriteLine(@"Decoding " + compiler.Type.ToString() + "." + compiler.Method.ToString());
-
 			using (Stream code = compiler.GetInstructionStream()) {
 
 				// Initalize the instruction, setting the initalize size to 10 times the code stream
-				InstructionSet = new InstructionSet((int)code.Length * 10);
+				compiler.InstructionSet = new InstructionSet((int)code.Length * 10);
+				
+				// update the base class 
+				InstructionSet = compiler.InstructionSet;
 
 				using (BinaryReader reader = new BinaryReader(code)) {
 					_compiler = compiler;
@@ -243,6 +240,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					op = (OpCode)(0x100 | _codeReader.ReadByte());
 
 				ICILInstruction instruction = Instruction.Get(op);
+
+				if (instruction == null)
+					throw new Exception("CIL " + op.ToString() + " is not yet supported");
 
 				if (instruction is PrefixInstruction) {
 					prefix = instruction as PrefixInstruction;
