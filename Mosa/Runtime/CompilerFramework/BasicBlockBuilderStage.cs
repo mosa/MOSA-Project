@@ -98,6 +98,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="index">The index.</param>
 		private void FindLoopHeads(int index)
 		{
+			// Add the start of the instruction set
+			AddLoopHead(0);
+
 			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext()) {
 				// Does this instruction end a block?
 				switch (ctx.Instruction.FlowControl) {
@@ -129,7 +132,6 @@ namespace Mosa.Runtime.CompilerFramework
 						Debug.Assert(false);
 						break;
 				}
-				ctx.GotoNext();
 			}
 		}
 
@@ -160,7 +162,7 @@ namespace Mosa.Runtime.CompilerFramework
 					BasicBlocks.Add(current.Value);
 
 					// Set the block index
-					current.Value.Index = ++blockIndex;
+					current.Value.Index = ++blockIndex;	// ???
 
 					Context ctx = new Context(InstructionSet, current.Key);
 					ctx.BasicBlock = current.Value;

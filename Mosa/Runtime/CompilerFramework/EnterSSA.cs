@@ -109,7 +109,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (null == _dominanceProvider)
 				throw new InvalidOperationException(@"SSA Conversion requires a dominance provider.");
 			_architecture = compiler.Architecture;
-	
+
 			// Allocate space for live outs
 			_liveness = new IDictionary<StackOperand, StackOperand>[BasicBlocks.Count];
 			// Retrieve the dominance frontier Blocks
@@ -246,9 +246,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void MergePhiInstructions(BasicBlock block, BasicBlock caller, IDictionary<StackOperand, StackOperand> liveIn)
 		{
-			Context ctx = new Context(block);
 
-			while (!ctx.EndOfInstruction) {
+
+			for (Context ctx = new Context(block); !ctx.EndOfInstruction; ctx.GotoNext()) {
 				IR.PhiInstruction phi = ctx.Instruction as IR.PhiInstruction;
 
 				if (phi != null && liveIn.ContainsKey(ctx.Result as StackOperand)) {
@@ -257,7 +257,6 @@ namespace Mosa.Runtime.CompilerFramework
 					if (!IR.PhiInstruction.Contains(ctx, value) && (ctx.Result as StackOperand).Version != value.Version)
 						IR.PhiInstruction.AddValue(ctx, caller, value);
 				}
-				ctx.GotoNext();
 			}
 
 		}

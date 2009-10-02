@@ -509,7 +509,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction.</param>
 		public void SetInstruction(IInstruction instruction)
 		{
-			SetInstruction(instruction, instruction.DefaultOperandCount, instruction.DefaultResultCount);
+			if (instruction != null)
+				SetInstruction(instruction, instruction.DefaultOperandCount, instruction.DefaultResultCount);
+			else
+				SetInstruction(null, 0, 0);
 		}
 
 		/// <summary>
@@ -714,9 +717,9 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			Clear();
 			Instruction = instruction;
-			Ignore = false;
 			OperandCount = operandCount;
 			ResultCount = resultCount;
+			Ignore = false;
 		}
 
 		/// <summary>

@@ -50,11 +50,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		private RuntimeMethod _method;
 
-		/// <summary>
-		/// List of instructions decoded by the decoder.
-		/// </summary>
-		InstructionSet _instructionSet = new InstructionSet(1024 * 1024);
-
 		#endregion // Data members
 
 		#region Construction
@@ -228,7 +223,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			PrefixInstruction prefix = null;
 
 			// Setup context
-			Context ctx = new Context(_instructionSet, -1);
+			Context ctx = new Context(InstructionSet, -1);
 
 			while (codeEnd != _codeReader.BaseStream.Position) {
 				// Determine the instruction offset
