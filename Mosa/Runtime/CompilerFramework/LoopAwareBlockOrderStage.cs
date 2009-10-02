@@ -103,7 +103,7 @@ namespace Mosa.Runtime.CompilerFramework
 			base.Run(compiler);
 
 			// Retreive the first block
-			firstBlock = FromLabel(-1);
+			firstBlock = FindBlock(-1);
 
 			// Create list for loops
 			loops = new List<ConnectedBlocks>();

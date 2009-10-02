@@ -67,7 +67,7 @@ namespace Mosa.Runtime.CompilerFramework
 			base.Run(compiler);
 
 			// Retreive the first block
-			firstBlock = FromLabel(-1);
+			firstBlock = FindBlock(-1);
 
 			// Determines the block order
 			DetermineBlockOrder();

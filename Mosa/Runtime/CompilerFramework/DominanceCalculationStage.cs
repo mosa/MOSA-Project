@@ -256,30 +256,21 @@ namespace Mosa.Runtime.CompilerFramework
 		private IEnumerable<BasicBlock> NextBlocks(BasicBlock basicBlock)
 		{
 			List<BasicBlock> blocks = new List<BasicBlock>();
-			foreach (LegacyInstruction i in basicBlock.Instructions) {
-				switch (i.FlowControl) {
-					case FlowControl.Branch:
-						IBranchInstruction branch = (IBranchInstruction)i;
-						foreach (int target in branch.BranchTargets) {
-							blocks.Add(FindLabelledBlock(target));
-						}
-						break;
 
+			for (Context ctx = new Context(InstructionSet, basicBlock); !ctx.EndOfInstruction; ctx.GotoNext()) {
+				switch (ctx.Instruction.FlowControl) {
+					case FlowControl.Branch:
+						foreach (int target in ctx.Branch.Targets) 
+							blocks.Add(FindBlock(target));
+						break;
 					case FlowControl.ConditionalBranch:
 						goto case FlowControl.Branch;
-
 				}
 			}
+
 			return blocks;
 		}
 
-		private BasicBlock FindLabelledBlock(int target)
-		{
-			BasicBlock result = BlockProvider.FromLabel(target);
-			if (result == null)
-				throw new InvalidOperationException(@"Failed to resolve jump target.");
-			return result;
-		}
 
 		#endregion // Internals
 	}

@@ -67,7 +67,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			base.Run(compiler);
 
-			_firstBlock = FromLabel(-1);
+			_firstBlock = FindBlock(-1);
 
 			InitializeWorkItems();
 

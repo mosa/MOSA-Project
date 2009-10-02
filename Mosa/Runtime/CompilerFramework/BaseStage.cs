@@ -77,7 +77,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="label">The label.</param>
 		/// <returns></returns>
-		protected BasicBlock FromLabel(int label)
+		protected BasicBlock FindBlock(int label)
 		{
 			return MethodCompiler.FromLabel(label);
 		}

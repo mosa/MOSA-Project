@@ -88,7 +88,7 @@ namespace Mosa.Runtime.CompilerFramework
 			++methodCount[compiler.Method.Name];
 
 			// Retreive the first block
-			firstBlock = FromLabel(-1);
+			firstBlock = FindBlock(-1);
 
 			workList = new Stack<BasicBlock>();
 			workList.Push(firstBlock);

@@ -179,7 +179,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Dictionary<StackOperand, StackOperand> liveIn = null;
 
 			// Retrieve the well known epilogue block
-			BasicBlock epilogue = FromLabel(Int32.MaxValue);
+			BasicBlock epilogue = FindBlock(Int32.MaxValue);
 			Debug.Assert(epilogue != null, @"Method doesn't have epilogue block?");
 
 			Context ctxEpilogue = new Context(epilogue);
