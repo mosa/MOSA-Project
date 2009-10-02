@@ -74,14 +74,6 @@ namespace Mosa.Runtime.CompilerFramework
         void ExtendMethodCompilerPipeline(CompilerPipeline<IMethodCompilerStage> methodPipeline);
 
         /// <summary>
-        /// Factory method for instruction object instances.
-        /// </summary>
-        /// <param name="instructionType">The type of the instruction to create.</param>
-        /// <param name="args">Array of arguments to pass to the instruction type.</param>
-        /// <returns>An instance of Instruction or a derived class to represent the requested opcode.</returns>
-        LegacyInstruction CreateInstruction(Type instructionType, params object[] args);
-
-        /// <summary>
         /// Factory method for result operands of instructions.
         /// </summary>
         /// <param name="type">The datatype held in the result operand.</param>

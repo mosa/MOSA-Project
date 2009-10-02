@@ -100,20 +100,6 @@ namespace Mosa.Runtime.CompilerFramework
         public abstract void GetTypeRequirements(SigType type, out int size, out int alignment);
 
         /// <summary>
-        /// Factory method for instruction object instances.
-        /// </summary>
-        /// <param name="instructionType">The type of the instruction to create.</param>
-        /// <param name="args">Array of arguments to pass to the instruction type.</param>
-        /// <returns>
-        /// An instance of Instruction or a derived class to represent the requested opcode.
-        /// </returns>
-        public virtual LegacyInstruction CreateInstruction(Type instructionType, params object[] args)
-        {
-            Debug.Assert(typeof(LegacyInstruction).IsAssignableFrom(instructionType), @"Requested InstructionType is not an instruction.");
-            return (LegacyInstruction) Activator.CreateInstance(instructionType, args, new object[0]);
-        }
-
-        /// <summary>
         /// Factory method for result operands of instructions.
         /// </summary>
         /// <param name="type">The datatype held in the result operand.</param>
