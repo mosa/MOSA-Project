@@ -17,12 +17,12 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
-	/// Transforms CIL instructions into their appropriate IR2.
+	/// Transforms CIL instructions into their appropriate IR.
 	/// </summary>
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
@@ -68,8 +68,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldarga(Context ctx)
 		{
-			//ctx.SetInstruction(IR2.Instruction.AddressOfInstruction(ctx.InstructionSet.Data[ctx.Index].Result, ctx.InstructionSet.Data[ctx.Index].Operand1));
-			ctx.SetInstruction(IR2.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
+			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction(ctx.InstructionSet.Data[ctx.Index].Result, ctx.InstructionSet.Data[ctx.Index].Operand1));
+			ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -87,8 +87,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldloca(Context ctx)
 		{
-			//ctx.SetInstruction(IR2.Instruction.AddressOfInstruction(ctx.Result, ctx.Operand1));
-			ctx.SetInstruction(IR2.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
+			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction(ctx.Result, ctx.Operand1));
+			ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -107,7 +107,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		void ICILVisitor.Ldobj(Context ctx)
 		{
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
-			ctx.SetInstruction(IR2.Instruction.LoadInstruction, ctx.Result, ctx.Operand1);
+			ctx.SetInstruction(IR.Instruction.LoadInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -116,7 +116,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldsfld(Context ctx)
 		{
-			ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new MemberOperand(ctx.RuntimeField));
+			ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new MemberOperand(ctx.RuntimeField));
 		}
 
 		/// <summary>
@@ -125,7 +125,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldsflda(Context ctx)
 		{
-			ctx.SetInstruction(IR2.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
+			ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -180,7 +180,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		void ICILVisitor.Stobj(Context ctx)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
-			ctx.SetInstruction(IR2.Instruction.StoreInstruction, ctx.Operand1, ctx.Operand2);
+			ctx.SetInstruction(IR.Instruction.StoreInstruction, ctx.Operand1, ctx.Operand2);
 		}
 
 		/// <summary>
@@ -190,7 +190,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		void ICILVisitor.Stsfld(Context ctx)
 		{
 			//			Replace(ctx, new MoveInstruction(new MemberOperand(ctx.RuntimeField), ctx.Operand1));
-			ctx.SetInstruction(IR2.Instruction.MoveInstruction, new MemberOperand(ctx.RuntimeField), ctx.Operand1);
+			ctx.SetInstruction(IR.Instruction.MoveInstruction, new MemberOperand(ctx.RuntimeField), ctx.Operand1);
 		}
 
 		/// <summary>
@@ -229,9 +229,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		void ICILVisitor.Ret(Context ctx)
 		{
 			if (ctx.OperandCount == 1)
-				ctx.SetInstruction(IR2.Instruction.ReturnInstruction, ctx.Operand1);
+				ctx.SetInstruction(IR.Instruction.ReturnInstruction, ctx.Operand1);
 			else
-				ctx.SetInstruction(IR2.Instruction.ReturnInstruction);
+				ctx.SetInstruction(IR.Instruction.ReturnInstruction);
 		}
 
 		/// <summary>
@@ -242,19 +242,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			switch ((ctx.Instruction as BaseInstruction).OpCode) {
 				case OpCode.And:
-					ctx.SetInstruction(IR2.Instruction.LogicalAndInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+					ctx.SetInstruction(IR.Instruction.LogicalAndInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				case OpCode.Or:
-					ctx.SetInstruction(IR2.Instruction.LogicalOrInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+					ctx.SetInstruction(IR.Instruction.LogicalOrInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				case OpCode.Xor:
-					ctx.SetInstruction(IR2.Instruction.LogicalXorInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+					ctx.SetInstruction(IR.Instruction.LogicalXorInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				case OpCode.Div_un:
-					ctx.SetInstruction(IR2.Instruction.UDivInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+					ctx.SetInstruction(IR.Instruction.UDivInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				case OpCode.Rem_un:
-					ctx.SetInstruction(IR2.Instruction.URemInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+					ctx.SetInstruction(IR.Instruction.URemInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				default:
 					throw new NotSupportedException();
@@ -270,13 +270,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			switch ((ctx.Instruction as BaseInstruction).OpCode) {
 				case OpCode.Shl:
-					ctx.SetInstruction(IR2.Instruction.ShiftLeftInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+					ctx.SetInstruction(IR.Instruction.ShiftLeftInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				case OpCode.Shr:
-					ctx.SetInstruction(IR2.Instruction.ArithmeticShiftRightInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+					ctx.SetInstruction(IR.Instruction.ArithmeticShiftRightInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				case OpCode.Shr_un:
-					ctx.SetInstruction(IR2.Instruction.ShiftRightInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+					ctx.SetInstruction(IR.Instruction.ShiftRightInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				default:
 					throw new NotSupportedException();
@@ -298,7 +298,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Not(Context ctx)
 		{
-			ctx.SetInstruction(IR2.Instruction.LogicalNotInstruction, ctx.Result, ctx.Operand1);
+			ctx.SetInstruction(IR.Instruction.LogicalNotInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -404,12 +404,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.BinaryComparison(Context ctx)
 		{
-			IR2.ConditionCode code = GetConditionCode((ctx.Instruction as BaseInstruction).OpCode);
+			IR.ConditionCode code = GetConditionCode((ctx.Instruction as BaseInstruction).OpCode);
 
 			if (ctx.Operand1.StackType == StackTypeCode.F)
-				ctx.SetInstruction(IR2.Instruction.FloatingPointCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+				ctx.SetInstruction(IR.Instruction.FloatingPointCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 			else
-				ctx.SetInstruction(IR2.Instruction.IntegerCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+				ctx.SetInstruction(IR.Instruction.IntegerCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 
 			ctx.ConditionCode = code;
 		}
@@ -791,199 +791,199 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		private static readonly Type[][] s_convTable = new Type[13][] {
             /* I1 */ new Type[13] { 
-                /* I1 */ typeof(IR2.MoveInstruction),
-                /* I2 */ typeof(IR2.LogicalAndInstruction),
-                /* I4 */ typeof(IR2.LogicalAndInstruction),
-                /* I8 */ typeof(IR2.LogicalAndInstruction),
-                /* U1 */ typeof(IR2.MoveInstruction),
-                /* U2 */ typeof(IR2.LogicalAndInstruction),
-                /* U4 */ typeof(IR2.LogicalAndInstruction),
-                /* U8 */ typeof(IR2.LogicalAndInstruction),
-                /* R4 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* R8 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* I  */ typeof(IR2.LogicalAndInstruction),
-                /* U  */ typeof(IR2.LogicalAndInstruction),
-                /* Ptr*/ typeof(IR2.LogicalAndInstruction),
+                /* I1 */ typeof(IR.MoveInstruction),
+                /* I2 */ typeof(IR.LogicalAndInstruction),
+                /* I4 */ typeof(IR.LogicalAndInstruction),
+                /* I8 */ typeof(IR.LogicalAndInstruction),
+                /* U1 */ typeof(IR.MoveInstruction),
+                /* U2 */ typeof(IR.LogicalAndInstruction),
+                /* U4 */ typeof(IR.LogicalAndInstruction),
+                /* U8 */ typeof(IR.LogicalAndInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
             },
             /* I2 */ new Type[13] { 
-                /* I1 */ typeof(IR2.SignExtendedMoveInstruction),
-                /* I2 */ typeof(IR2.MoveInstruction),
-                /* I4 */ typeof(IR2.LogicalAndInstruction),
-                /* I8 */ typeof(IR2.LogicalAndInstruction),
-                /* U1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U2 */ typeof(IR2.MoveInstruction),
-                /* U4 */ typeof(IR2.LogicalAndInstruction),
-                /* U8 */ typeof(IR2.LogicalAndInstruction),
-                /* R4 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* R8 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* I  */ typeof(IR2.LogicalAndInstruction),
-                /* U  */ typeof(IR2.LogicalAndInstruction),
-                /* Ptr*/ typeof(IR2.LogicalAndInstruction),
+                /* I1 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I2 */ typeof(IR.MoveInstruction),
+                /* I4 */ typeof(IR.LogicalAndInstruction),
+                /* I8 */ typeof(IR.LogicalAndInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.MoveInstruction),
+                /* U4 */ typeof(IR.LogicalAndInstruction),
+                /* U8 */ typeof(IR.LogicalAndInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
             },
             /* I4 */ new Type[13] { 
-                /* I1 */ typeof(IR2.SignExtendedMoveInstruction),
-                /* I2 */ typeof(IR2.SignExtendedMoveInstruction),
-                /* I4 */ typeof(IR2.MoveInstruction),
-                /* I8 */ typeof(IR2.LogicalAndInstruction),
-                /* U1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U2 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U4 */ typeof(IR2.MoveInstruction),
-                /* U8 */ typeof(IR2.LogicalAndInstruction),
-                /* R4 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* R8 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* I  */ typeof(IR2.LogicalAndInstruction),
-                /* U  */ typeof(IR2.LogicalAndInstruction),
-                /* Ptr*/ typeof(IR2.LogicalAndInstruction),
+                /* I1 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I2 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I4 */ typeof(IR.MoveInstruction),
+                /* I8 */ typeof(IR.LogicalAndInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.MoveInstruction),
+                /* U8 */ typeof(IR.LogicalAndInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
             },
             /* I8 */ new Type[13] {
-                /* I1 */ typeof(IR2.SignExtendedMoveInstruction),
-                /* I2 */ typeof(IR2.SignExtendedMoveInstruction),
-                /* I4 */ typeof(IR2.SignExtendedMoveInstruction),
-                /* I8 */ typeof(IR2.MoveInstruction),
-                /* U1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U2 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U4 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U8 */ typeof(IR2.MoveInstruction),
-                /* R4 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* R8 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* I  */ typeof(IR2.LogicalAndInstruction),
-                /* U  */ typeof(IR2.LogicalAndInstruction),
-                /* Ptr*/ typeof(IR2.LogicalAndInstruction),
+                /* I1 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I2 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I4 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I8 */ typeof(IR.MoveInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U8 */ typeof(IR.MoveInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
             },
             /* U1 */ new Type[13] {
-                /* I1 */ typeof(IR2.MoveInstruction),
-                /* I2 */ typeof(IR2.LogicalAndInstruction),
-                /* I4 */ typeof(IR2.LogicalAndInstruction),
-                /* I8 */ typeof(IR2.LogicalAndInstruction),
-                /* U1 */ typeof(IR2.MoveInstruction),
-                /* U2 */ typeof(IR2.LogicalAndInstruction),
-                /* U4 */ typeof(IR2.LogicalAndInstruction),
-                /* U8 */ typeof(IR2.LogicalAndInstruction),
-                /* R4 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* R8 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* I  */ typeof(IR2.LogicalAndInstruction),
-                /* U  */ typeof(IR2.LogicalAndInstruction),
-                /* Ptr*/ typeof(IR2.LogicalAndInstruction),
+                /* I1 */ typeof(IR.MoveInstruction),
+                /* I2 */ typeof(IR.LogicalAndInstruction),
+                /* I4 */ typeof(IR.LogicalAndInstruction),
+                /* I8 */ typeof(IR.LogicalAndInstruction),
+                /* U1 */ typeof(IR.MoveInstruction),
+                /* U2 */ typeof(IR.LogicalAndInstruction),
+                /* U4 */ typeof(IR.LogicalAndInstruction),
+                /* U8 */ typeof(IR.LogicalAndInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
             },
             /* U2 */ new Type[13] {
-                /* I1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* I2 */ typeof(IR2.MoveInstruction),
-                /* I4 */ typeof(IR2.LogicalAndInstruction),
-                /* I8 */ typeof(IR2.LogicalAndInstruction),
-                /* U1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U2 */ typeof(IR2.MoveInstruction),
-                /* U4 */ typeof(IR2.LogicalAndInstruction),
-                /* U8 */ typeof(IR2.LogicalAndInstruction),
-                /* R4 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* R8 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* I  */ typeof(IR2.LogicalAndInstruction),
-                /* U  */ typeof(IR2.LogicalAndInstruction),
-                /* Ptr*/ typeof(IR2.LogicalAndInstruction),
+                /* I1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I2 */ typeof(IR.MoveInstruction),
+                /* I4 */ typeof(IR.LogicalAndInstruction),
+                /* I8 */ typeof(IR.LogicalAndInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.MoveInstruction),
+                /* U4 */ typeof(IR.LogicalAndInstruction),
+                /* U8 */ typeof(IR.LogicalAndInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
             },
             /* U4 */ new Type[13] {
-                /* I1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* I2 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* I4 */ typeof(IR2.MoveInstruction),
-                /* I8 */ typeof(IR2.LogicalAndInstruction),
-                /* U1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U2 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U4 */ typeof(IR2.MoveInstruction),
-                /* U8 */ typeof(IR2.LogicalAndInstruction),
-                /* R4 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* R8 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* I  */ typeof(IR2.LogicalAndInstruction),
-                /* U  */ typeof(IR2.LogicalAndInstruction),
-                /* Ptr*/ typeof(IR2.LogicalAndInstruction),
+                /* I1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I4 */ typeof(IR.MoveInstruction),
+                /* I8 */ typeof(IR.LogicalAndInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.MoveInstruction),
+                /* U8 */ typeof(IR.LogicalAndInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
             },
             /* U8 */ new Type[13] {
-                /* I1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* I2 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* I4 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* I8 */ typeof(IR2.MoveInstruction),
-                /* U1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U2 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U4 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U8 */ typeof(IR2.MoveInstruction),
-                /* R4 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* R8 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* I  */ typeof(IR2.LogicalAndInstruction),
-                /* U  */ typeof(IR2.LogicalAndInstruction),
-                /* Ptr*/ typeof(IR2.LogicalAndInstruction),
+                /* I1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I8 */ typeof(IR.MoveInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U8 */ typeof(IR.MoveInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.LogicalAndInstruction),
+                /* U  */ typeof(IR.LogicalAndInstruction),
+                /* Ptr*/ typeof(IR.LogicalAndInstruction),
             },
             /* R4 */ new Type[13] {
-                /* I1 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* I2 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* I4 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* I8 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* U1 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* U2 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* U4 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* U8 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* R4 */ typeof(IR2.MoveInstruction),
-                /* R8 */ typeof(IR2.MoveInstruction),
-                /* I  */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* U  */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
+                /* I1 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* I2 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* I4 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* I8 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U1 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U2 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U4 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U8 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* R4 */ typeof(IR.MoveInstruction),
+                /* R8 */ typeof(IR.MoveInstruction),
+                /* I  */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U  */ typeof(IR.IntegerToFloatingPointConversionInstruction),
                 /* Ptr*/ null,
             },
             /* R8 */ new Type[13] {
-                /* I1 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* I2 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* I4 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* I8 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* U1 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* U2 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* U4 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* U8 */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* R4 */ typeof(IR2.MoveInstruction),
-                /* R8 */ typeof(IR2.MoveInstruction),
-                /* I  */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
-                /* U  */ typeof(IR2.IntegerToFloatingPointConversionInstruction),
+                /* I1 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* I2 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* I4 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* I8 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U1 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U2 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U4 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U8 */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* R4 */ typeof(IR.MoveInstruction),
+                /* R8 */ typeof(IR.MoveInstruction),
+                /* I  */ typeof(IR.IntegerToFloatingPointConversionInstruction),
+                /* U  */ typeof(IR.IntegerToFloatingPointConversionInstruction),
                 /* Ptr*/ null,
             },
             /* I  */ new Type[13] {
-                /* I1 */ typeof(IR2.SignExtendedMoveInstruction),
-                /* I2 */ typeof(IR2.SignExtendedMoveInstruction),
-                /* I4 */ typeof(IR2.SignExtendedMoveInstruction),
-                /* I8 */ typeof(IR2.SignExtendedMoveInstruction),
-                /* U1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U2 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U4 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U8 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* R4 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* R8 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* I  */ typeof(IR2.MoveInstruction),
-                /* U  */ typeof(IR2.MoveInstruction),
-                /* Ptr*/ typeof(IR2.MoveInstruction),
+                /* I1 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I2 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I4 */ typeof(IR.SignExtendedMoveInstruction),
+                /* I8 */ typeof(IR.SignExtendedMoveInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U8 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.MoveInstruction),
+                /* U  */ typeof(IR.MoveInstruction),
+                /* Ptr*/ typeof(IR.MoveInstruction),
             },
             /* U  */ new Type[13] {
-                /* I1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* I2 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* I4 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* I8 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U2 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U4 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U8 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* R4 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* R8 */ typeof(IR2.FloatingPointToIntegerConversionInstruction),
-                /* I  */ typeof(IR2.MoveInstruction),
-                /* U  */ typeof(IR2.MoveInstruction),
-                /* Ptr*/ typeof(IR2.MoveInstruction),
+                /* I1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I8 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U8 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* R4 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* R8 */ typeof(IR.FloatingPointToIntegerConversionInstruction),
+                /* I  */ typeof(IR.MoveInstruction),
+                /* U  */ typeof(IR.MoveInstruction),
+                /* Ptr*/ typeof(IR.MoveInstruction),
             },
             /* Ptr*/ new Type[13] {
-                /* I1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* I2 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* I4 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* I8 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U1 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U2 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U4 */ typeof(IR2.ZeroExtendedMoveInstruction),
-                /* U8 */ typeof(IR2.ZeroExtendedMoveInstruction),
+                /* I1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* I8 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U1 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U2 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U4 */ typeof(IR.ZeroExtendedMoveInstruction),
+                /* U8 */ typeof(IR.ZeroExtendedMoveInstruction),
                 /* R4 */ null,
                 /* R8 */ null,
-                /* I  */ typeof(IR2.MoveInstruction),
-                /* U  */ typeof(IR2.MoveInstruction),
-                /* Ptr*/ typeof(IR2.MoveInstruction),
+                /* I  */ typeof(IR.MoveInstruction),
+                /* U  */ typeof(IR.MoveInstruction),
+                /* Ptr*/ typeof(IR.MoveInstruction),
             },
         };
 
@@ -1011,12 +1011,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			uint mask = 0;
 			IInstruction instruction = ComputeExtensionTypeAndMask(ctDest, ref mask);
 
-			if (instruction == IR2.Instruction.LogicalAndInstruction || mask != 0) {
+			if (instruction == IR.Instruction.LogicalAndInstruction || mask != 0) {
 				Debug.Assert(mask != 0, @"Conversion is an AND, but no mask given.");
 
 				ctx.Remove();
 
-				if (instruction != IR2.Instruction.LogicalAndInstruction)
+				if (instruction != IR.Instruction.LogicalAndInstruction)
 					ProcessMixedTypeConversion(ctx, instruction, mask, destinationOperand, sourceOperand);
 				else
 					ProcessSingleTypeTruncation(ctx, instruction, mask, destinationOperand, sourceOperand);
@@ -1032,10 +1032,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			switch (destinationType) {
 				case ConvType.I1:
 					mask = 0xFF;
-					return IR2.Instruction.SignExtendedMoveInstruction;
+					return IR.Instruction.SignExtendedMoveInstruction;
 				case ConvType.I2:
 					mask = 0xFFFF;
-					return IR2.Instruction.SignExtendedMoveInstruction;
+					return IR.Instruction.SignExtendedMoveInstruction;
 				case ConvType.I4:
 					mask = 0xFFFFFFFF;
 					break;
@@ -1043,10 +1043,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					break;
 				case ConvType.U1:
 					mask = 0xFF;
-					return IR2.Instruction.ZeroExtendedMoveInstruction;
+					return IR.Instruction.ZeroExtendedMoveInstruction;
 				case ConvType.U2:
 					mask = 0xFFFF;
-					return IR2.Instruction.ZeroExtendedMoveInstruction;
+					return IR.Instruction.ZeroExtendedMoveInstruction;
 				case ConvType.U4:
 					mask = 0xFFFFFFFF;
 					break;
@@ -1073,13 +1073,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		private void ProcessMixedTypeConversion(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			ctx.InsertInstructionAfter(instruction, destinationOperand, sourceOperand);
-			ctx.InsertInstructionAfter(IR2.Instruction.LogicalAndInstruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
+			ctx.InsertInstructionAfter(IR.Instruction.LogicalAndInstruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
 		}
 
 		private void ProcessSingleTypeTruncation(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8) {
-				ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, destinationOperand, sourceOperand);
+				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, destinationOperand, sourceOperand);
 				ctx.InsertInstructionAfter(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
 			}
 			else
@@ -1186,11 +1186,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Is this a sign or zero-extending move?
 			if (IsSignExtending(load.Source))
 			{
-				type = typeof(IR2.SignExtendedMoveInstruction);
+				type = typeof(IR.SignExtendedMoveInstruction);
 			}
 			else if (IsZeroExtending(load.Source))
 			{
-				type = typeof(IR2.ZeroExtendedMoveInstruction);
+				type = typeof(IR.ZeroExtendedMoveInstruction);
 			}
 
 			// Do we have a move replacement?
@@ -1222,9 +1222,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				// FIXME: Implement proper truncation as specified in the CIL spec
 				//Debug.Assert(false);
 				if (IsSignExtending(ctx.Operand1))
-					ctx.SetInstruction(IR2.Instruction.SignExtendedMoveInstruction,ctx.Result,ctx.Operand1);					
+					ctx.SetInstruction(IR.Instruction.SignExtendedMoveInstruction,ctx.Result,ctx.Operand1);					
 				else
-					ctx.SetInstruction(IR2.Instruction.ZeroExtendedMoveInstruction, ctx.Result, ctx.Operand1);
+					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ctx.Result, ctx.Operand1);
 				return;
 			}
 			if (ctx.Operand1.Definitions.Count == 1 && ctx.Operand1.Uses.Count == 1) {
@@ -1235,7 +1235,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				return;
 			}
 
-			ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
+			ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
 		}
 
 
@@ -1244,15 +1244,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opCode">The opcode.</param>
 		/// <returns>The IR condition code.</returns>
-		private IR2.ConditionCode GetConditionCode(OpCode opCode)
+		private IR.ConditionCode GetConditionCode(OpCode opCode)
 		{
-			IR2.ConditionCode result;
+			IR.ConditionCode result;
 			switch (opCode) {
-				case OpCode.Ceq: result = IR2.ConditionCode.Equal; break;
-				case OpCode.Cgt: result = IR2.ConditionCode.GreaterThan; break;
-				case OpCode.Cgt_un: result = IR2.ConditionCode.UnsignedGreaterThan; break;
-				case OpCode.Clt: result = IR2.ConditionCode.LessThan; break;
-				case OpCode.Clt_un: result = IR2.ConditionCode.UnsignedLessThan; break;
+				case OpCode.Ceq: result = IR.ConditionCode.Equal; break;
+				case OpCode.Cgt: result = IR.ConditionCode.GreaterThan; break;
+				case OpCode.Cgt_un: result = IR.ConditionCode.UnsignedGreaterThan; break;
+				case OpCode.Clt: result = IR.ConditionCode.LessThan; break;
+				case OpCode.Clt_un: result = IR.ConditionCode.UnsignedLessThan; break;
 
 				default:
 					throw new NotSupportedException();

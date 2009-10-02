@@ -156,9 +156,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets or sets the condition code.
 		/// </summary>
 		/// <value>The condition code.</value>
-		public IR2.ConditionCode ConditionCode
+		public IR.ConditionCode ConditionCode
 		{
-			get { return (IR2.ConditionCode)Other; }
+			get { return (IR.ConditionCode)Other; }
 			set { Other = value; }
 		}
 
@@ -166,9 +166,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Holds the literal data.
 		/// </summary>
 		/// <value>The token.</value>
-		public IR2.LiteralData LiteralData
+		public IR.LiteralData LiteralData
 		{
-			get { return (IR2.LiteralData)Other; }
+			get { return (IR.LiteralData)Other; }
 			set { Other = value; }
 		}
 

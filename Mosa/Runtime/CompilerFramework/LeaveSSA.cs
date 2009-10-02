@@ -55,7 +55,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			//            Operand res = ctx.Result;
 			//            for (int i = 0; i < phi.Blocks.Count; i++) {
-			//                IR2.PhiData phi = ctx.Other as IR2.PhiData;
+			//                IR.PhiData phi = ctx.Other as IR.PhiData;
 
 			//                Operand op = phi.Operands[i];
 

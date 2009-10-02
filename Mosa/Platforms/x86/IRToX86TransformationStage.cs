@@ -18,12 +18,12 @@ using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
 	/// <summary>
-	/// Transforms CIL instructions into their appropriate IR2.
+	/// Transforms CIL instructions into their appropriate IR.
 	/// </summary>
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
@@ -31,7 +31,7 @@ namespace Mosa.Platforms.x86
 	public sealed class IRToX86TransformationStage :
 		CodeTransformationStage, 
 		CIL.ICILVisitor, 
-		IR2.IIRVisitor, 
+		IR.IIRVisitor, 
 		CPUx86.IX86Visitor,
 		IMethodCompilerStage,
 		IPlatformTransformationStage
@@ -142,7 +142,7 @@ namespace Mosa.Platforms.x86
 		void CIL.ICILVisitor.Div(Context ctx)
 		{
 			if (X86.IsUnsigned(ctx.Operand1) || X86.IsUnsigned(ctx.Operand2))
-				HandleCommutativeOperation(ctx, IR2.Instruction.UDivInstruction);
+				HandleCommutativeOperation(ctx, IR.Instruction.UDivInstruction);
 			else if (ctx.Operand1.StackType == StackTypeCode.F)
 				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
 			else
@@ -158,12 +158,12 @@ namespace Mosa.Platforms.x86
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), ctx.Operand1);
 
 			if (X86.IsUnsigned(ctx.Operand1))
-				ctx.InsertInstructionAfter(IR2.Instruction.ZeroExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
+				ctx.InsertInstructionAfter(IR.Instruction.ZeroExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
 			else
-				ctx.InsertInstructionAfter(IR2.Instruction.SignExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
+				ctx.InsertInstructionAfter(IR.Instruction.SignExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
 
 			if (X86.IsUnsigned(ctx.Operand1) && X86.IsUnsigned(ctx.Operand2))
-				ctx.InsertInstructionAfter(IR2.Instruction.UDivInstruction, ctx.Operand1, ctx.Operand2);
+				ctx.InsertInstructionAfter(IR.Instruction.UDivInstruction, ctx.Operand1, ctx.Operand2);
 			else
 				ctx.InsertInstructionAfter(CPUx86.Instruction.DivInstruction, ctx.Operand1, ctx.Operand2);
 
@@ -559,7 +559,7 @@ namespace Mosa.Platforms.x86
 		/// Addresses the of instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.AddressOfInstruction(Context ctx)
+		void IR.IIRVisitor.AddressOfInstruction(Context ctx)
 		{
 			Operand opRes = ctx.Operand1;
 			RegisterOperand eax = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
@@ -573,7 +573,7 @@ namespace Mosa.Platforms.x86
 		/// Arithmetics the shift right instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx)
+		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx)
 		{
 			HandleShiftOperation(ctx, CPUx86.Instruction.SarInstruction);
 		}
@@ -582,7 +582,7 @@ namespace Mosa.Platforms.x86
 		/// Epilogues the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.EpilogueInstruction(Context ctx)
+		void IR.IIRVisitor.EpilogueInstruction(Context ctx)
 		{
 			SigType I = new SigType(CilElementType.I);
 			RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
@@ -595,19 +595,19 @@ namespace Mosa.Platforms.x86
 				// add esp, -localsSize
 				ctx.SetInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
 				// pop ebp
-				ctx.InsertInstructionAfter(IR2.Instruction.PopInstruction, ebp);
+				ctx.InsertInstructionAfter(IR.Instruction.PopInstruction, ebp);
 				// ret
-				ctx.InsertInstructionAfter(IR2.Instruction.ReturnInstruction);
+				ctx.InsertInstructionAfter(IR.Instruction.ReturnInstruction);
 			}
 			else {
 				// pop edx
-				ctx.SetInstruction(IR2.Instruction.PopInstruction, new RegisterOperand(I, GeneralPurposeRegister.EDX));
+				ctx.SetInstruction(IR.Instruction.PopInstruction, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 				// add esp, -localsSize
 				ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
 				// pop ebp
-				ctx.InsertInstructionAfter(IR2.Instruction.PopInstruction, ebp);
+				ctx.InsertInstructionAfter(IR.Instruction.PopInstruction, ebp);
 				// ret
-				ctx.InsertInstructionAfter(IR2.Instruction.ReturnInstruction);
+				ctx.InsertInstructionAfter(IR.Instruction.ReturnInstruction);
 			}
 		}
 
@@ -615,12 +615,12 @@ namespace Mosa.Platforms.x86
 		/// Floatings the point compare instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.FloatingPointCompareInstruction(Context ctx)
+		void IR.IIRVisitor.FloatingPointCompareInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;
 			Operand source = EmitConstant(ctx.Operand2);
 			Operand destination = EmitConstant(ctx.Operand3);
-			IR2.ConditionCode setcc = IR2.ConditionCode.Equal;
+			IR.ConditionCode setcc = IR.ConditionCode.Equal;
 
 			ctx.Remove();
 
@@ -638,16 +638,16 @@ namespace Mosa.Platforms.x86
 
 			// x86 is messed up :(
 			switch (ctx.ConditionCode) {
-				case IR2.ConditionCode.Equal: break;
-				case IR2.ConditionCode.NotEqual: break;
-				case IR2.ConditionCode.UnsignedGreaterOrEqual: setcc = IR2.ConditionCode.GreaterOrEqual; break;
-				case IR2.ConditionCode.UnsignedGreaterThan: setcc = IR2.ConditionCode.GreaterThan; break;
-				case IR2.ConditionCode.UnsignedLessOrEqual: setcc = IR2.ConditionCode.LessOrEqual; break;
-				case IR2.ConditionCode.UnsignedLessThan: setcc = IR2.ConditionCode.LessThan; break;
-				case IR2.ConditionCode.GreaterOrEqual: setcc = IR2.ConditionCode.UnsignedGreaterOrEqual; break;
-				case IR2.ConditionCode.GreaterThan: setcc = IR2.ConditionCode.UnsignedGreaterThan; break;
-				case IR2.ConditionCode.LessOrEqual: setcc = IR2.ConditionCode.UnsignedLessOrEqual; break;
-				case IR2.ConditionCode.LessThan: setcc = IR2.ConditionCode.UnsignedLessThan; break;
+				case IR.ConditionCode.Equal: break;
+				case IR.ConditionCode.NotEqual: break;
+				case IR.ConditionCode.UnsignedGreaterOrEqual: setcc = IR.ConditionCode.GreaterOrEqual; break;
+				case IR.ConditionCode.UnsignedGreaterThan: setcc = IR.ConditionCode.GreaterThan; break;
+				case IR.ConditionCode.UnsignedLessOrEqual: setcc = IR.ConditionCode.LessOrEqual; break;
+				case IR.ConditionCode.UnsignedLessThan: setcc = IR.ConditionCode.LessThan; break;
+				case IR.ConditionCode.GreaterOrEqual: setcc = IR.ConditionCode.UnsignedGreaterOrEqual; break;
+				case IR.ConditionCode.GreaterThan: setcc = IR.ConditionCode.UnsignedGreaterThan; break;
+				case IR.ConditionCode.LessOrEqual: setcc = IR.ConditionCode.UnsignedLessOrEqual; break;
+				case IR.ConditionCode.LessThan: setcc = IR.ConditionCode.UnsignedLessThan; break;
 			}
 
 			// Compare using the smallest precision
@@ -664,38 +664,38 @@ namespace Mosa.Platforms.x86
 
 			if (source.Type.Type == CilElementType.R4) {
 				switch (ctx.ConditionCode) {
-					case IR2.ConditionCode.Equal:
+					case IR.ConditionCode.Equal:
 						ctx.InsertInstructionAfter(CPUx86.Instruction.UcomissInstruction, source, destination);
 						break;
-					case IR2.ConditionCode.NotEqual: goto case IR2.ConditionCode.Equal;
-					case IR2.ConditionCode.UnsignedGreaterOrEqual: goto case IR2.ConditionCode.Equal;
-					case IR2.ConditionCode.UnsignedGreaterThan: goto case IR2.ConditionCode.Equal;
-					case IR2.ConditionCode.UnsignedLessOrEqual: goto case IR2.ConditionCode.Equal;
-					case IR2.ConditionCode.UnsignedLessThan: goto case IR2.ConditionCode.Equal;
-					case IR2.ConditionCode.GreaterOrEqual:
+					case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
+					case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
+					case IR.ConditionCode.UnsignedGreaterThan: goto case IR.ConditionCode.Equal;
+					case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
+					case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
+					case IR.ConditionCode.GreaterOrEqual:
 						ctx.InsertInstructionAfter(CPUx86.Instruction.ComissInstruction, source, destination);
 						break;
-					case IR2.ConditionCode.GreaterThan: goto case IR2.ConditionCode.GreaterOrEqual;
-					case IR2.ConditionCode.LessOrEqual: goto case IR2.ConditionCode.GreaterOrEqual;
-					case IR2.ConditionCode.LessThan: goto case IR2.ConditionCode.GreaterOrEqual;
+					case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
+					case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
+					case IR.ConditionCode.LessThan: goto case IR.ConditionCode.GreaterOrEqual;
 				}
 			}
 			else {
 				switch (ctx.ConditionCode) {
-					case IR2.ConditionCode.Equal:
+					case IR.ConditionCode.Equal:
 						ctx.InsertInstructionAfter(CPUx86.Instruction.UcomisdInstruction, source, destination);
 						break;
-					case IR2.ConditionCode.NotEqual: goto case IR2.ConditionCode.Equal;
-					case IR2.ConditionCode.UnsignedGreaterOrEqual: goto case IR2.ConditionCode.Equal;
-					case IR2.ConditionCode.UnsignedGreaterThan: goto case IR2.ConditionCode.Equal;
-					case IR2.ConditionCode.UnsignedLessOrEqual: goto case IR2.ConditionCode.Equal;
-					case IR2.ConditionCode.UnsignedLessThan: goto case IR2.ConditionCode.Equal;
-					case IR2.ConditionCode.GreaterOrEqual:
+					case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
+					case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
+					case IR.ConditionCode.UnsignedGreaterThan: goto case IR.ConditionCode.Equal;
+					case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
+					case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
+					case IR.ConditionCode.GreaterOrEqual:
 						ctx.InsertInstructionAfter(CPUx86.Instruction.ComisdInstruction, source, destination);
 						break;
-					case IR2.ConditionCode.GreaterThan: goto case IR2.ConditionCode.GreaterOrEqual;
-					case IR2.ConditionCode.LessOrEqual: goto case IR2.ConditionCode.GreaterOrEqual;
-					case IR2.ConditionCode.LessThan: goto case IR2.ConditionCode.GreaterOrEqual;
+					case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
+					case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
+					case IR.ConditionCode.LessThan: goto case IR.ConditionCode.GreaterOrEqual;
 				}
 			}
 
@@ -706,7 +706,7 @@ namespace Mosa.Platforms.x86
 			// Extend this to the full register, if we're storing it in a register
 			if (op0 is RegisterOperand) {
 				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)op0).Register);
-				ctx.InsertInstructionAfter(IR2.Instruction.ZeroExtendedMoveInstruction, op0, rop);
+				ctx.InsertInstructionAfter(IR.Instruction.ZeroExtendedMoveInstruction, op0, rop);
 			}
 
 		}
@@ -715,7 +715,7 @@ namespace Mosa.Platforms.x86
 		/// Integers the compare instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.IntegerCompareInstruction(Context ctx)
+		void IR.IIRVisitor.IntegerCompareInstruction(Context ctx)
 		{
 			HandleComparisonInstruction(ctx);
 		}
@@ -724,7 +724,7 @@ namespace Mosa.Platforms.x86
 		/// Loads the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.LoadInstruction(Context ctx)
+		void IR.IIRVisitor.LoadInstruction(Context ctx)
 		{
 			//RegisterOperand eax = new RegisterOperand(Architecture.NativeType, GeneralPurposeRegister.EAX);
 			RegisterOperand eax = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX);
@@ -737,7 +737,7 @@ namespace Mosa.Platforms.x86
 		/// Logicals the and instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.LogicalAndInstruction(Context ctx)
+		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
 		{
 			ThreeTwoAddressConversion(ctx);
 		}
@@ -746,7 +746,7 @@ namespace Mosa.Platforms.x86
 		/// Logicals the or instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.LogicalOrInstruction(Context ctx)
+		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
 		{
 			ThreeTwoAddressConversion(ctx);
 		}
@@ -755,7 +755,7 @@ namespace Mosa.Platforms.x86
 		/// Logicals the xor instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.LogicalXorInstruction(Context ctx)
+		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
 		{
 			ThreeTwoAddressConversion(ctx);
 		}
@@ -764,7 +764,7 @@ namespace Mosa.Platforms.x86
 		/// Logicals the not instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.LogicalNotInstruction(Context ctx)
+		void IR.IIRVisitor.LogicalNotInstruction(Context ctx)
 		{
 			TwoOneAddressConversion(ctx);
 		}
@@ -773,7 +773,7 @@ namespace Mosa.Platforms.x86
 		/// Moves the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.MoveInstruction(Context ctx)
+		void IR.IIRVisitor.MoveInstruction(Context ctx)
 		{
 			// We need to replace ourselves in case of a Memory -> Memory transfer
 			Operand op0 = ctx.Operand1;
@@ -798,7 +798,7 @@ namespace Mosa.Platforms.x86
 		/// Prologues the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.PrologueInstruction(Context ctx)
+		void IR.IIRVisitor.PrologueInstruction(Context ctx)
 		{
 			SigType I = new SigType(CilElementType.I4);
 			RegisterOperand eax = new RegisterOperand(I, GeneralPurposeRegister.EAX);
@@ -821,35 +821,35 @@ namespace Mosa.Platforms.x86
 			// Uncomment this line to enable breakpoints within Bochs
 			ctx.SetInstruction(CPUx86.Instruction.BochsDebug);
 			// push ebp
-			ctx.InsertInstructionAfter(IR2.Instruction.PushInstruction, ebp);
+			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, ebp);
 			// mov ebp, esp
-			ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, ebp, esp);
+			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, ebp, esp);
 			// sub esp, localsSize
 			ctx.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, -stackSize));
 			// Initialize all locals to zero
-			ctx.InsertInstructionAfter(IR2.Instruction.PushInstruction, edi);
-			ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, edi, esp);
-			ctx.InsertInstructionAfter(IR2.Instruction.PushInstruction, ecx);
+			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, edi);
+			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, edi, esp);
+			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, ecx);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edi, new ConstantOperand(I, 4));
-			ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, ecx, new ConstantOperand(I, (-stackSize) / 4));
+			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, ecx, new ConstantOperand(I, (-stackSize) / 4));
 			ctx.InsertInstructionAfter(CPUx86.Instruction.LogicalXorInstruction, eax, eax);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.RepInstruction);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.StosdInstruction);
-			ctx.InsertInstructionAfter(IR2.Instruction.PopInstruction, ecx);
-			ctx.InsertInstructionAfter(IR2.Instruction.PopInstruction, edi);
+			ctx.InsertInstructionAfter(IR.Instruction.PopInstruction, ecx);
+			ctx.InsertInstructionAfter(IR.Instruction.PopInstruction, edi);
 			/*
 			 * This move adds the runtime method identification token onto the stack. This
 			 * allows us to perform call stack identification and gives the garbage collector 
 			 * the possibility to identify roots into the managed heap. 
 			 */
 			// mov [ebp-4], token
-			ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, Compiler.Method.Token));
+			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, Compiler.Method.Token));
 
 			// Do not save EDX for non-int64 return values
 			if (Compiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
 				Compiler.Method.Signature.ReturnType.Type != CilElementType.U8) {
 				// push edx
-				ctx.InsertInstructionAfter(IR2.Instruction.PushInstruction, new RegisterOperand(I, GeneralPurposeRegister.EDX));
+				ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 			}
 		}
 
@@ -857,7 +857,7 @@ namespace Mosa.Platforms.x86
 		/// Returns the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.ReturnInstruction(Context ctx)
+		void IR.IIRVisitor.ReturnInstruction(Context ctx)
 		{
 			Operand op1 = ctx.Operand1;
 
@@ -874,7 +874,7 @@ namespace Mosa.Platforms.x86
 		/// Shifts the left instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.ShiftLeftInstruction(Context ctx)
+		void IR.IIRVisitor.ShiftLeftInstruction(Context ctx)
 		{
 			HandleShiftOperation(ctx);
 		}
@@ -883,7 +883,7 @@ namespace Mosa.Platforms.x86
 		/// Shifts the right instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.ShiftRightInstruction(Context ctx)
+		void IR.IIRVisitor.ShiftRightInstruction(Context ctx)
 		{
 			HandleShiftOperation(ctx);
 		}
@@ -892,7 +892,7 @@ namespace Mosa.Platforms.x86
 		/// Stores the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.StoreInstruction(Context ctx)
+		void IR.IIRVisitor.StoreInstruction(Context ctx)
 		{
 			RegisterOperand eax = new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX);
@@ -905,7 +905,7 @@ namespace Mosa.Platforms.x86
 		/// UDivInstruction instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.UDivInstruction(Context ctx)
+		void IR.IIRVisitor.UDivInstruction(Context ctx)
 		{
 			ThreeTwoAddressConversion(ctx);
 		}
@@ -914,10 +914,10 @@ namespace Mosa.Platforms.x86
 		/// URemInstruction instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR2.IIRVisitor.URemInstruction(Context ctx)
+		void IR.IIRVisitor.URemInstruction(Context ctx)
 		{
 			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, new RegisterOperand(ctx.Operand2.Type, GeneralPurposeRegister.EAX), ctx.Operand2);
-			ctx.InsertInstructionAfter(IR2.Instruction.UDivInstruction, ctx.Operand2, ctx.Operand3);
+			ctx.InsertInstructionAfter(IR.Instruction.UDivInstruction, ctx.Operand2, ctx.Operand3);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ctx.Operand1, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX));
 		}
 
@@ -926,70 +926,70 @@ namespace Mosa.Platforms.x86
 		#region IIRVisitor - Unused
 
 		/// <summary>
-		/// Visitation function for <see cref="IR2.IIRVisitor.BranchInstruction"/> instructions.
+		/// Visitation function for <see cref="IR.IIRVisitor.BranchInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR2.IIRVisitor.BranchInstruction(Context context) { }
+		void IR.IIRVisitor.BranchInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR2.IIRVisitor.CallInstruction"/> instructions.
+		/// Visitation function for <see cref="IR.IIRVisitor.CallInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR2.IIRVisitor.CallInstruction(Context context) { }
+		void IR.IIRVisitor.CallInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR2.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.
+		/// Visitation function for <see cref="IR.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR2.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) { }
+		void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR2.IIRVisitor.IntegerToFloatingPointConversionInstruction"/> instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.IntegerToFloatingPointConversionInstruction"/> instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR2.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
+		void IR.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR2.IIRVisitor.JmpInstruction"/> instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.JmpInstruction"/> instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR2.IIRVisitor.JmpInstruction(Context context) { }
+		void IR.IIRVisitor.JmpInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR2.IIRVisitor.LiteralInstruction"/> instructions.
+		/// Visitation function for <see cref="IR.IIRVisitor.LiteralInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR2.IIRVisitor.LiteralInstruction(Context context) { }
+		void IR.IIRVisitor.LiteralInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR2.IIRVisitor.PhiInstruction"/> instructions.
+		/// Visitation function for <see cref="IR.IIRVisitor.PhiInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR2.IIRVisitor.PhiInstruction(Context context) { }
+		void IR.IIRVisitor.PhiInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR2.IIRVisitor.PopInstruction"/> instructions.
+		/// Visitation function for <see cref="IR.IIRVisitor.PopInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR2.IIRVisitor.PopInstruction(Context context) { }
+		void IR.IIRVisitor.PopInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR2.IIRVisitor.PushInstruction"/> instructions.
+		/// Visitation function for <see cref="IR.IIRVisitor.PushInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR2.IIRVisitor.PushInstruction(Context context) { }
+		void IR.IIRVisitor.PushInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR2.IIRVisitor.SignExtendedMoveInstruction"/> instructions.
+		/// Visitation function for <see cref="IR.IIRVisitor.SignExtendedMoveInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR2.IIRVisitor.SignExtendedMoveInstruction(Context context) { }
+		void IR.IIRVisitor.SignExtendedMoveInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR2.IIRVisitor.ZeroExtendedMoveInstruction"/> instructions.
+		/// Visitation function for <see cref="IR.IIRVisitor.ZeroExtendedMoveInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR2.IIRVisitor.ZeroExtendedMoveInstruction(Context context) { }
+		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context context) { }
 
 		#endregion // IIRVisitor
 
@@ -1013,14 +1013,14 @@ namespace Mosa.Platforms.x86
 			ctx.Result = eax;
 
 			Context start = ctx.InsertBefore();
-			start.SetInstruction(IR2.Instruction.PushInstruction, eax);
+			start.SetInstruction(IR.Instruction.PushInstruction, eax);
 
 			if (X86.IsSigned(op0))
-				start.InsertInstructionAfter(IR2.Instruction.SignExtendedMoveInstruction, eax, op0);
+				start.InsertInstructionAfter(IR.Instruction.SignExtendedMoveInstruction, eax, op0);
 			else
-				start.InsertInstructionAfter(IR2.Instruction.MoveInstruction, eax, op0);
+				start.InsertInstructionAfter(IR.Instruction.MoveInstruction, eax, op0);
 
-			ctx.InsertInstructionAfter(IR2.Instruction.PopInstruction, eax);
+			ctx.InsertInstructionAfter(IR.Instruction.PopInstruction, eax);
 		}
 
 		/// <summary>
@@ -1641,42 +1641,42 @@ namespace Mosa.Platforms.x86
 
 			// Negate the condition code if necessary...
 			switch (ctx.ConditionCode) {
-				case IR2.ConditionCode.Equal:
+				case IR.ConditionCode.Equal:
 					break;
 
-				case IR2.ConditionCode.GreaterOrEqual:
-					ctx.ConditionCode = IR2.ConditionCode.LessThan;
+				case IR.ConditionCode.GreaterOrEqual:
+					ctx.ConditionCode = IR.ConditionCode.LessThan;
 					break;
 
-				case IR2.ConditionCode.GreaterThan:
-					ctx.ConditionCode = IR2.ConditionCode.LessOrEqual;
+				case IR.ConditionCode.GreaterThan:
+					ctx.ConditionCode = IR.ConditionCode.LessOrEqual;
 					break;
 
-				case IR2.ConditionCode.LessOrEqual:
-					ctx.ConditionCode = IR2.ConditionCode.GreaterThan;
+				case IR.ConditionCode.LessOrEqual:
+					ctx.ConditionCode = IR.ConditionCode.GreaterThan;
 					break;
 
-				case IR2.ConditionCode.LessThan:
-					ctx.ConditionCode = IR2.ConditionCode.GreaterOrEqual;
+				case IR.ConditionCode.LessThan:
+					ctx.ConditionCode = IR.ConditionCode.GreaterOrEqual;
 					break;
 
-				case IR2.ConditionCode.NotEqual:
+				case IR.ConditionCode.NotEqual:
 					break;
 
-				case IR2.ConditionCode.UnsignedGreaterOrEqual:
-					ctx.ConditionCode = IR2.ConditionCode.UnsignedLessThan;
+				case IR.ConditionCode.UnsignedGreaterOrEqual:
+					ctx.ConditionCode = IR.ConditionCode.UnsignedLessThan;
 					break;
 
-				case IR2.ConditionCode.UnsignedGreaterThan:
-					ctx.ConditionCode = IR2.ConditionCode.UnsignedLessOrEqual;
+				case IR.ConditionCode.UnsignedGreaterThan:
+					ctx.ConditionCode = IR.ConditionCode.UnsignedLessOrEqual;
 					break;
 
-				case IR2.ConditionCode.UnsignedLessOrEqual:
-					ctx.ConditionCode = IR2.ConditionCode.UnsignedGreaterThan;
+				case IR.ConditionCode.UnsignedLessOrEqual:
+					ctx.ConditionCode = IR.ConditionCode.UnsignedGreaterThan;
 					break;
 
-				case IR2.ConditionCode.UnsignedLessThan:
-					ctx.ConditionCode = IR2.ConditionCode.UnsignedGreaterOrEqual;
+				case IR.ConditionCode.UnsignedLessThan:
+					ctx.ConditionCode = IR.ConditionCode.UnsignedGreaterOrEqual;
 					break;
 			}
 		}
@@ -1692,8 +1692,8 @@ namespace Mosa.Platforms.x86
 			ctx.Operand1 = EmitConstant(ctx.Operand1);
 			ctx.Result = eax;
 
-			ctx.InsertBefore().SetInstruction(IR2.Instruction.MoveInstruction, eax, ctx.Operand2);
-			ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, opRes, eax);
+			ctx.InsertBefore().SetInstruction(IR.Instruction.MoveInstruction, eax, ctx.Operand2);
+			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, opRes, eax);
 
 		}
 		/// <summary>
@@ -1730,17 +1730,17 @@ namespace Mosa.Platforms.x86
 			// Check if we have to sign-extend the operand that's being loaded
 			if (X86.IsSigned(op1) && !(op1 is ConstantOperand)) {
 				// Signextend it
-				ctx.InsertBefore().SetInstruction(IR2.Instruction.SignExtendedMoveInstruction, eaxL, op1);
+				ctx.InsertBefore().SetInstruction(IR.Instruction.SignExtendedMoveInstruction, eaxL, op1);
 			}
 			// Check if the operand has to be zero-extended
 			else if (X86.IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {
-				ctx.InsertBefore().SetInstruction(IR2.Instruction.ZeroExtendedMoveInstruction, eaxL, op1);
+				ctx.InsertBefore().SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eaxL, op1);
 			}
 			// In any other case: Just load it
 			else
-				ctx.InsertBefore().SetInstruction(IR2.Instruction.MoveInstruction, eax, op1);
+				ctx.InsertBefore().SetInstruction(IR.Instruction.MoveInstruction, eax, op1);
 
-			ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, opRes, eax);
+			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, opRes, eax);
 		}
 		#endregion // Internals
 	}

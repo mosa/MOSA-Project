@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
 
-					if (ctx.Instruction is IR2.MoveInstruction || ctx.Instruction is CIL.StlocInstruction) {
+					if (ctx.Instruction is IR.MoveInstruction || ctx.Instruction is CIL.StlocInstruction) {
 						if (ctx.Operand1 is ConstantOperand) {
 							// HACK: We can't track a constant through a register, so we keep those moves
 							if (ctx.Result is StackOperand) {
@@ -61,8 +61,8 @@ namespace Mosa.Runtime.CompilerFramework
 							}
 						}
 					}
-					else if (ctx.Instruction is IR2.PhiInstruction) {
-						IR2.PhiInstruction phi = (IR2.PhiInstruction)ctx.Instruction;
+					else if (ctx.Instruction is IR.PhiInstruction) {
+						IR.PhiInstruction phi = (IR.PhiInstruction)ctx.Instruction;
 						ConstantOperand co = ctx.Operand2 as ConstantOperand;
 						List<BasicBlock> blocks = ctx.Other as List<BasicBlock>;	// FIXME PG / ctx has moved
 						if (co != null && blocks.Count == 1) {

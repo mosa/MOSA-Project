@@ -14,7 +14,7 @@ using System.Text;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
@@ -125,7 +125,7 @@ namespace Mosa.Platforms.x86
 
 						//Instructions.LiteralInstruction literal = (Instructions.LiteralInstruction)architecture.CreateInstruction(typeof(Instructions.LiteralInstruction), );                       						
 						ctxEpilogue.InsertInstructionAfter(CPUx86.Instruction.LiteralInstruction);
-						ctxEpilogue.LiteralData = new IR2.LiteralData(ctx.Offset, co.Type, co.Value);
+						ctxEpilogue.LiteralData = new IR.LiteralData(ctx.Offset, co.Type, co.Value);
 
 						// FIXME - I hope I got this right
 						//co.Replace(literal.CreateOperand());

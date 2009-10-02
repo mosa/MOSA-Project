@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -49,21 +49,21 @@ namespace Mosa.Platforms.x86.CPUx86
         /// Gets the condition code string.
         /// </summary>
         /// <returns>The string shortcut of the condition code.</returns>
-        public static string GetConditionString(IR2.ConditionCode code)
+        public static string GetConditionString(IR.ConditionCode code)
         {
             string result;
             switch (code)
             {
-                case IR2.ConditionCode.Equal: result = @"e"; break;
-                case IR2.ConditionCode.GreaterOrEqual: result = @"ge"; break;
-                case IR2.ConditionCode.GreaterThan: result = @"g"; break;
-                case IR2.ConditionCode.LessOrEqual: result = @"le"; break;
-                case IR2.ConditionCode.LessThan: result = @"l"; break;
-                case IR2.ConditionCode.NotEqual: result = @"ne"; break;
-                case IR2.ConditionCode.UnsignedGreaterOrEqual: result = @"ae"; break;
-                case IR2.ConditionCode.UnsignedGreaterThan: result = @"a"; break;
-                case IR2.ConditionCode.UnsignedLessOrEqual: result = @"be"; break;
-                case IR2.ConditionCode.UnsignedLessThan: result = @"b"; break;
+                case IR.ConditionCode.Equal: result = @"e"; break;
+                case IR.ConditionCode.GreaterOrEqual: result = @"ge"; break;
+                case IR.ConditionCode.GreaterThan: result = @"g"; break;
+                case IR.ConditionCode.LessOrEqual: result = @"le"; break;
+                case IR.ConditionCode.LessThan: result = @"l"; break;
+                case IR.ConditionCode.NotEqual: result = @"ne"; break;
+                case IR.ConditionCode.UnsignedGreaterOrEqual: result = @"ae"; break;
+                case IR.ConditionCode.UnsignedGreaterThan: result = @"a"; break;
+                case IR.ConditionCode.UnsignedLessOrEqual: result = @"be"; break;
+                case IR.ConditionCode.UnsignedLessThan: result = @"b"; break;
                 default:
                     throw new NotSupportedException();
             }

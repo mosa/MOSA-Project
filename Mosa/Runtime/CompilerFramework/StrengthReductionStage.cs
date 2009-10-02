@@ -61,19 +61,19 @@ namespace Mosa.Runtime.CompilerFramework
 					multiplyByZero = true;
 
 			if (multiplyByZero) {
-				ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, 0));
+				ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, 0));
 				return;
 			}
 
 			if (ctx.Operand1 is ConstantOperand)
 				if (IsValueOne(ctx.Result.Type.Type, ctx.Operand1 as ConstantOperand)) {
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, ctx.Operand2);
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand2);
 					return;
 				}
 
 			if (ctx.Operand2 is ConstantOperand)
 				if (IsValueOne(ctx.Result.Type.Type, ctx.Operand2 as ConstantOperand)) {
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
 					return;
 				}
 

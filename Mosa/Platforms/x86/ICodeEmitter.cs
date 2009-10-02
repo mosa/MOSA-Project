@@ -15,7 +15,7 @@ using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
@@ -46,7 +46,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="label">The label to apply to the data.</param>
 		/// <param name="LiteralData">The literal data.</param>
-		void Literal(int label, IR2.LiteralData LiteralData); 
+		void Literal(int label, IR.LiteralData LiteralData); 
 
         #region x86 instructions
 
@@ -705,7 +705,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="destination">The destination of the comparison result.</param>
         /// <param name="code">The condition code to test.</param>
-        void Setcc(Operand destination, IR2.ConditionCode code);
+        void Setcc(Operand destination, IR.ConditionCode code);
 
         #endregion // x86 instructions
 

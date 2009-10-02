@@ -100,13 +100,13 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Create a prologue instruction
 			Context prologueCtx = new Context(InstructionSet, BlockProvider.FromLabel(-1));
-			prologueCtx.InsertInstructionAfter(IR2.Instruction.PrologueInstruction);
+			prologueCtx.InsertInstructionAfter(IR.Instruction.PrologueInstruction);
 			prologueCtx.Other = _localsSize;
 
 			// Create an epilogue instruction
 			Context epilogueCtx = new Context(InstructionSet, BlockProvider.FromLabel(Int32.MaxValue));
 			epilogueCtx.GotoLast();
-			epilogueCtx.InsertInstructionAfter(IR2.Instruction.EpilogueInstruction);
+			epilogueCtx.InsertInstructionAfter(IR.Instruction.EpilogueInstruction);
 			epilogueCtx.Other = _localsSize;
 		}
 

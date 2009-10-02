@@ -277,7 +277,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets or sets the condition code.
 		/// </summary>
 		/// <value>The condition code.</value>
-		public IR2.ConditionCode ConditionCode
+		public IR.ConditionCode ConditionCode
 		{
 			get { return _instructionSet.Data[_index].ConditionCode; }
 			set { _instructionSet.Data[_index].ConditionCode = value; }
@@ -287,9 +287,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets or sets the literal data.
 		/// </summary>
 		/// <value>The token.</value>
-		public IR2.LiteralData LiteralData
+		public IR.LiteralData LiteralData
 		{
-			get { return (IR2.LiteralData)Other; }
+			get { return (IR.LiteralData)Other; }
 			set { Other = value; }
 		}
 
@@ -525,7 +525,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="code">The code.</param>
-		public void SetInstruction(IInstruction instruction, IR2.ConditionCode code)
+		public void SetInstruction(IInstruction instruction, IR.ConditionCode code)
 		{
 			SetInstruction(instruction);
 			ConditionCode = code;
@@ -536,7 +536,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="code">The code.</param>
-		public void InsertInstructionAfter(IInstruction instruction, IR2.ConditionCode code)
+		public void InsertInstructionAfter(IInstruction instruction, IR.ConditionCode code)
 		{
 			_index = _instructionSet.InsertAfter(_index);
 			SetInstruction(instruction);
@@ -549,7 +549,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="code">The code.</param>
 		/// <param name="block">The block.</param>
-		public void SetInstruction(IInstruction instruction, IR2.ConditionCode code, BasicBlock block)
+		public void SetInstruction(IInstruction instruction, IR.ConditionCode code, BasicBlock block)
 		{
 			SetInstruction(instruction);
 			ConditionCode = code;
@@ -583,7 +583,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="code">The code.</param>
 		/// <param name="block">The block.</param>
-		public void InsertInstructionAfter(IInstruction instruction, IR2.ConditionCode code, BasicBlock block)
+		public void InsertInstructionAfter(IInstruction instruction, IR.ConditionCode code, BasicBlock block)
 		{
 			_index = _instructionSet.InsertAfter(_index);
 			SetInstruction(instruction, code, block);

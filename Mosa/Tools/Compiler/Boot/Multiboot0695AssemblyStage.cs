@@ -26,7 +26,7 @@ using Mosa.Platforms.x86;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Tools.Compiler.TypeInitializers;
 
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Tools.Compiler.Boot
 {
@@ -173,10 +173,10 @@ namespace Mosa.Tools.Compiler.Boot
 				InstructionSet instructionSet = new InstructionSet(16);
 				Context ctx = new Context(instructionSet, -1);
 
-				ctx.SetInstruction(IR2.Instruction.MoveInstruction, ecx, new ConstantOperand(I4, 0x200000));
-				ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
-				ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
-				ctx.InsertInstructionAfter(IR2.Instruction.CallInstruction);
+				ctx.SetInstruction(IR.Instruction.MoveInstruction, ecx, new ConstantOperand(I4, 0x200000));
+				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
+				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
+				ctx.InsertInstructionAfter(IR.Instruction.CallInstruction);
 				ctx.InvokeTarget = typeInitializerSchedulerStage.Method;
 
 				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"MultibootInit", instructionSet);

@@ -13,7 +13,7 @@ using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;

@@ -21,7 +21,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 using CPUx86 = Mosa.Platforms.x86.CPUx86;
 
 namespace Mosa.Platforms.x86
@@ -38,7 +38,7 @@ namespace Mosa.Platforms.x86
 	/// register usage though. This should clearly be done after the results of this approach
 	/// have been validated.
 	/// </remarks>
-	sealed class CodeGenerator : CodeGenerationStage, CIL.ICILVisitor, CPUx86.IX86Visitor, IR2.IIRVisitor
+	sealed class CodeGenerator : CodeGenerationStage, CIL.ICILVisitor, CPUx86.IX86Visitor, IR.IIRVisitor
 	{
 		#region Data members
 
@@ -1029,54 +1029,54 @@ namespace Mosa.Platforms.x86
 
 		#region IIRVisitor
 
-		void IR2.IIRVisitor.AddressOfInstruction(Context ctx)
+		void IR.IIRVisitor.AddressOfInstruction(Context ctx)
 		{
 			Debug.Assert(ctx.Operand1 is RegisterOperand);
 			Debug.Assert(ctx.Operand2 is MemoryOperand);
 			_codeEmitter.Lea(ctx.Operand1, ctx.Operand2);
 		}
 
-		void IR2.IIRVisitor.BranchInstruction(Context ctx)
+		void IR.IIRVisitor.BranchInstruction(Context ctx)
 		{
 			int target = ctx.Branch.Targets[0];
 			switch (ctx.ConditionCode) {
-				case IR2.ConditionCode.Equal:
+				case IR.ConditionCode.Equal:
 					_codeEmitter.Je(target);
 					break;
 
-				case IR2.ConditionCode.GreaterOrEqual:
+				case IR.ConditionCode.GreaterOrEqual:
 					_codeEmitter.Jge(target);
 					break;
 
-				case IR2.ConditionCode.GreaterThan:
+				case IR.ConditionCode.GreaterThan:
 					_codeEmitter.Jg(target);
 					break;
 
-				case IR2.ConditionCode.LessOrEqual:
+				case IR.ConditionCode.LessOrEqual:
 					_codeEmitter.Jle(target);
 					break;
 
-				case IR2.ConditionCode.LessThan:
+				case IR.ConditionCode.LessThan:
 					_codeEmitter.Jl(target);
 					break;
 
-				case IR2.ConditionCode.NotEqual:
+				case IR.ConditionCode.NotEqual:
 					_codeEmitter.Jne(target);
 					break;
 
-				case IR2.ConditionCode.UnsignedGreaterOrEqual:
+				case IR.ConditionCode.UnsignedGreaterOrEqual:
 					_codeEmitter.Jae(target);
 					break;
 
-				case IR2.ConditionCode.UnsignedGreaterThan:
+				case IR.ConditionCode.UnsignedGreaterThan:
 					_codeEmitter.Ja(target);
 					break;
 
-				case IR2.ConditionCode.UnsignedLessOrEqual:
+				case IR.ConditionCode.UnsignedLessOrEqual:
 					_codeEmitter.Jbe(target);
 					break;
 
-				case IR2.ConditionCode.UnsignedLessThan:
+				case IR.ConditionCode.UnsignedLessThan:
 					_codeEmitter.Jb(target);
 					break;
 
@@ -1085,17 +1085,17 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
-		void IR2.IIRVisitor.CallInstruction(Context ctx)
+		void IR.IIRVisitor.CallInstruction(Context ctx)
 		{
 			_codeEmitter.Call(ctx.InvokeTarget);
 		}
 
-		void IR2.IIRVisitor.EpilogueInstruction(Context ctx)
+		void IR.IIRVisitor.EpilogueInstruction(Context ctx)
 		{
 			throw new NotSupportedException();
 		}
 
-		void IR2.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context ctx)
+		void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context ctx)
 		{
 			Operand source = ctx.Operand2;
 			Operand destination = ctx.Operand1;
@@ -1128,7 +1128,7 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
-		void IR2.IIRVisitor.IntegerCompareInstruction(Context ctx)
+		void IR.IIRVisitor.IntegerCompareInstruction(Context ctx)
 		{
 			Operand resultOperand = ctx.Operand1;
 
@@ -1150,7 +1150,7 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
-		void IR2.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context ctx)
+		void IR.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context ctx)
 		{
 			Operand source = ctx.Operand2;
 			Operand destination = ctx.Operand1;
@@ -1183,32 +1183,32 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
-		void IR2.IIRVisitor.JmpInstruction(Context ctx)
+		void IR.IIRVisitor.JmpInstruction(Context ctx)
 		{
 			_codeEmitter.Jmp(ctx.Branch.Targets[0]);
 		}
 
-		void IR2.IIRVisitor.LiteralInstruction(Context ctx)
+		void IR.IIRVisitor.LiteralInstruction(Context ctx)
 		{
 			_codeEmitter.Literal(ctx.Branch.Targets[0], ctx.LiteralData);
 		}
 
-		void IR2.IIRVisitor.LogicalAndInstruction(Context ctx)
+		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
 		{
 			_codeEmitter.And(ctx.Operand1, ctx.Operand3);
 		}
 
-		void IR2.IIRVisitor.LogicalOrInstruction(Context ctx)
+		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
 		{
 			_codeEmitter.Or(ctx.Operand1, ctx.Operand3);
 		}
 
-		void IR2.IIRVisitor.LogicalXorInstruction(Context ctx)
+		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
 		{
 			_codeEmitter.Xor(ctx.Operand1, ctx.Operand3);
 		}
 
-		void IR2.IIRVisitor.LogicalNotInstruction(Context ctx)
+		void IR.IIRVisitor.LogicalNotInstruction(Context ctx)
 		{
 			Operand dest = ctx.Operand1;
 			if (dest.Type.Type == CilElementType.U1)
@@ -1219,7 +1219,7 @@ namespace Mosa.Platforms.x86
 				_codeEmitter.Not(ctx.Operand1);
 		}
 
-		void IR2.IIRVisitor.MoveInstruction(Context ctx)
+		void IR.IIRVisitor.MoveInstruction(Context ctx)
 		{
 			Operand dst = ctx.Result, src = ctx.Operand1;
 
@@ -1261,32 +1261,32 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
-		void IR2.IIRVisitor.PhiInstruction(Context ctx)
+		void IR.IIRVisitor.PhiInstruction(Context ctx)
 		{
 			throw new NotSupportedException(@"PHI functions should've been removed by the LeaveSSA stage.");
 		}
 
-		void IR2.IIRVisitor.PopInstruction(Context ctx)
+		void IR.IIRVisitor.PopInstruction(Context ctx)
 		{
 			_codeEmitter.Pop(ctx.Result);
 		}
 
-		void IR2.IIRVisitor.PrologueInstruction(Context ctx)
+		void IR.IIRVisitor.PrologueInstruction(Context ctx)
 		{
 			throw new NotSupportedException();
 		}
 
-		void IR2.IIRVisitor.PushInstruction(Context ctx)
+		void IR.IIRVisitor.PushInstruction(Context ctx)
 		{
 			_codeEmitter.Push(ctx.Operand1);
 		}
 
-		void IR2.IIRVisitor.ReturnInstruction(Context ctx)
+		void IR.IIRVisitor.ReturnInstruction(Context ctx)
 		{
 			_codeEmitter.Ret();
 		}
 
-		void IR2.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
+		void IR.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
 		{
 			switch (ctx.Operand1.Type.Type) {
 				case CilElementType.I1:
@@ -1306,14 +1306,14 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
-		void IR2.IIRVisitor.UDivInstruction(Context ctx)
+		void IR.IIRVisitor.UDivInstruction(Context ctx)
 		{
 			RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
 			_codeEmitter.Xor(edx, edx);
 			_codeEmitter.Div(ctx.Operand1, ctx.Operand2);
 		}
 
-		void IR2.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx)
+		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx)
 		{
 			switch (ctx.Operand1.Type.Type) {
 				case CilElementType.I1:
@@ -1338,19 +1338,19 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
-		void IR2.IIRVisitor.URemInstruction(Context ctx) { }
+		void IR.IIRVisitor.URemInstruction(Context ctx) { }
 
-		void IR2.IIRVisitor.StoreInstruction(Context ctx) { }
+		void IR.IIRVisitor.StoreInstruction(Context ctx) { }
 
-		void IR2.IIRVisitor.ShiftRightInstruction(Context ctx) { }
+		void IR.IIRVisitor.ShiftRightInstruction(Context ctx) { }
 
-		void IR2.IIRVisitor.ShiftLeftInstruction(Context ctx) { }
+		void IR.IIRVisitor.ShiftLeftInstruction(Context ctx) { }
 
-		void IR2.IIRVisitor.LoadInstruction(Context ctx) { }
+		void IR.IIRVisitor.LoadInstruction(Context ctx) { }
 
-		void IR2.IIRVisitor.FloatingPointCompareInstruction(Context ctx) { }
+		void IR.IIRVisitor.FloatingPointCompareInstruction(Context ctx) { }
 
-		void IR2.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx) { }
+		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx) { }
 
 		#endregion // IIRVisitor
 
@@ -1375,20 +1375,20 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="conditionCode">The condition code to get an unsigned form from.</param>
 		/// <returns>The unsigned form of the given condition code.</returns>
-		private IR2.ConditionCode GetUnsignedConditionCode(IR2.ConditionCode conditionCode)
+		private IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
 		{
-			IR2.ConditionCode cc = conditionCode;
+			IR.ConditionCode cc = conditionCode;
 			switch (conditionCode) {
-				case IR2.ConditionCode.Equal: break;
-				case IR2.ConditionCode.NotEqual: break;
-				case IR2.ConditionCode.GreaterOrEqual: cc = IR2.ConditionCode.UnsignedGreaterOrEqual; break;
-				case IR2.ConditionCode.GreaterThan: cc = IR2.ConditionCode.UnsignedGreaterThan; break;
-				case IR2.ConditionCode.LessOrEqual: cc = IR2.ConditionCode.UnsignedLessOrEqual; break;
-				case IR2.ConditionCode.LessThan: cc = IR2.ConditionCode.UnsignedLessThan; break;
-				case IR2.ConditionCode.UnsignedGreaterOrEqual: break;
-				case IR2.ConditionCode.UnsignedGreaterThan: break;
-				case IR2.ConditionCode.UnsignedLessOrEqual: break;
-				case IR2.ConditionCode.UnsignedLessThan: break;
+				case IR.ConditionCode.Equal: break;
+				case IR.ConditionCode.NotEqual: break;
+				case IR.ConditionCode.GreaterOrEqual: cc = IR.ConditionCode.UnsignedGreaterOrEqual; break;
+				case IR.ConditionCode.GreaterThan: cc = IR.ConditionCode.UnsignedGreaterThan; break;
+				case IR.ConditionCode.LessOrEqual: cc = IR.ConditionCode.UnsignedLessOrEqual; break;
+				case IR.ConditionCode.LessThan: cc = IR.ConditionCode.UnsignedLessThan; break;
+				case IR.ConditionCode.UnsignedGreaterOrEqual: break;
+				case IR.ConditionCode.UnsignedGreaterThan: break;
+				case IR.ConditionCode.UnsignedLessOrEqual: break;
+				case IR.ConditionCode.UnsignedLessThan: break;
 				default:
 					throw new NotSupportedException();
 			}

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Vm;
 using System.Diagnostics;
 
@@ -447,7 +447,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="src">The operand to move.</param>
 		private void CreateMoveInstruction(Context ctx, Operand dest, Operand src)
 		{
-			ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction, dest, src);
+			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, dest, src);
 		}
 
 		#endregion // Internals

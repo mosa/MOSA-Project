@@ -17,7 +17,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
 using CPUx86 = Mosa.Platforms.x86.CPUx86;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
@@ -91,7 +91,7 @@ namespace Mosa.Platforms.x86
 				ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ecx, ctx.Operand1); // FIXME PG ctx.operand1!
 			}
 
-			ctx.InsertInstructionAfter(IR2.Instruction.CallInstruction);
+			ctx.InsertInstructionAfter(IR.Instruction.CallInstruction);
 			ctx.InvokeTarget = ctx.InvokeTarget; // FIXME PG ctx.InvokeTarget!
 
 			if (stackSize != 0)
@@ -222,7 +222,7 @@ namespace Mosa.Platforms.x86
 						throw new NotSupportedException();
 				}
 
-				ctx.InsertInstructionAfter(IR2.Instruction.MoveInstruction,rop, op);
+				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction,rop, op);
 				op = rop;
 			}
 			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64) {

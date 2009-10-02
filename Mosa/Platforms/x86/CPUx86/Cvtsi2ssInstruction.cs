@@ -13,7 +13,7 @@ using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using System.Diagnostics;
 using Mosa.Runtime.Metadata;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {

@@ -20,7 +20,7 @@ using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
@@ -237,7 +237,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="label">The label to apply to the data.</param>
 		/// <param name="LiteralData"></param>
-		void ICodeEmitter.Literal(int label, IR2.LiteralData LiteralData) // SigType type, object data)
+		void ICodeEmitter.Literal(int label, IR.LiteralData LiteralData) // SigType type, object data)
 		{
 			// Save the current position
 			long currentPosition = _codeStream.Position;
@@ -1881,48 +1881,48 @@ namespace Mosa.Platforms.x86
 			return modRM;
 		}
 
-		void ICodeEmitter.Setcc(Operand destination, IR2.ConditionCode code)
+		void ICodeEmitter.Setcc(Operand destination, IR.ConditionCode code)
 		{
 			byte[] byteCode;
 
 			switch (code) {
-				case IR2.ConditionCode.Equal:
+				case IR.ConditionCode.Equal:
 					byteCode = new byte[] { 0x0F, 0x94 };
 					break;
 
-				case IR2.ConditionCode.LessThan:
+				case IR.ConditionCode.LessThan:
 					byteCode = new byte[] { 0x0F, 0x9C };
 					break;
 
-				case IR2.ConditionCode.LessOrEqual:
+				case IR.ConditionCode.LessOrEqual:
 					byteCode = new byte[] { 0x0F, 0x9E };
 					break;
 
-				case IR2.ConditionCode.GreaterOrEqual:
+				case IR.ConditionCode.GreaterOrEqual:
 					byteCode = new byte[] { 0x0F, 0x9D };
 					break;
 
-				case IR2.ConditionCode.GreaterThan:
+				case IR.ConditionCode.GreaterThan:
 					byteCode = new byte[] { 0x0F, 0x9F };
 					break;
 
-				case IR2.ConditionCode.NotEqual:
+				case IR.ConditionCode.NotEqual:
 					byteCode = new byte[] { 0x0F, 0x95 };
 					break;
 
-				case IR2.ConditionCode.UnsignedGreaterOrEqual:
+				case IR.ConditionCode.UnsignedGreaterOrEqual:
 					byteCode = new byte[] { 0x0F, 0x93 };
 					break;
 
-				case IR2.ConditionCode.UnsignedGreaterThan:
+				case IR.ConditionCode.UnsignedGreaterThan:
 					byteCode = new byte[] { 0x0F, 0x97 };
 					break;
 
-				case IR2.ConditionCode.UnsignedLessOrEqual:
+				case IR.ConditionCode.UnsignedLessOrEqual:
 					byteCode = new byte[] { 0x0F, 0x96 };
 					break;
 
-				case IR2.ConditionCode.UnsignedLessThan:
+				case IR.ConditionCode.UnsignedLessThan:
 					byteCode = new byte[] { 0x0F, 0x92 };
 					break;
 

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -178,7 +178,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="ctx">The context.</param>
 		private void ProcessInstruction(Context ctx)
 		{
-			if (ctx.Instruction is IR2.MoveInstruction) {
+			if (ctx.Instruction is IR.MoveInstruction) {
 				evaluationStack.Push(ctx.Result);
 				return;
 			}

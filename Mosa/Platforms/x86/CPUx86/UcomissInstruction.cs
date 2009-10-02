@@ -11,7 +11,7 @@
 using System;
 
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {

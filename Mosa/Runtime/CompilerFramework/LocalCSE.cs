@@ -210,7 +210,7 @@ namespace Mosa.Runtime.CompilerFramework
 							opr = Operation.Add;
 						else if (instruction is CIL.MulInstruction)
 							opr = Operation.Mul;
-						else if (instruction is IR2.LogicalAndInstruction)
+						else if (instruction is IR.LogicalAndInstruction)
 							opr = Operation.And;
 						// Insert new tuple
 						AEB.Add(new AEBinExp(ctx.Index, ctx.Operand1, opr, ctx.Operand2, null));
@@ -242,9 +242,9 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			return (instruction is CIL.AddInstruction) ||
 				   (instruction is CIL.MulInstruction) ||
-				   (instruction is IR2.LogicalAndInstruction) ||
-				   (instruction is IR2.LogicalOrInstruction) ||
-				   (instruction is IR2.LogicalXorInstruction);
+				   (instruction is IR.LogicalAndInstruction) ||
+				   (instruction is IR.LogicalOrInstruction) ||
+				   (instruction is IR.LogicalXorInstruction);
 		}
 	}
 }

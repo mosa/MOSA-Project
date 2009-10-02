@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -192,7 +192,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				// Only add a PHI if the runtime parameter is out or ref...
 				if (rp.IsOut || (paramOp.Type is RefSigType || paramOp.Type is PtrSigType)) {
-					ctxEpilogue.InsertInstructionAfter(IR2.Instruction.PhiInstruction, paramOp);
+					ctxEpilogue.InsertInstructionAfter(IR.Instruction.PhiInstruction, paramOp);
 
 					if (liveIn == null)
 						liveIn = new Dictionary<StackOperand, StackOperand>();
@@ -249,13 +249,13 @@ namespace Mosa.Runtime.CompilerFramework
 			Context ctx = new Context(block);
 
 			while (!ctx.EndOfInstruction) {
-				IR2.PhiInstruction phi = ctx.Instruction as IR2.PhiInstruction;
+				IR.PhiInstruction phi = ctx.Instruction as IR.PhiInstruction;
 
 				if (phi != null && liveIn.ContainsKey(ctx.Result as StackOperand)) {
 					StackOperand value = liveIn[ctx.Result as StackOperand];
 
-					if (!IR2.PhiInstruction.Contains(ctx, value) && (ctx.Result as StackOperand).Version != value.Version)
-						IR2.PhiInstruction.AddValue(ctx, caller, value);
+					if (!IR.PhiInstruction.Contains(ctx, value) && (ctx.Result as StackOperand).Version != value.Version)
+						IR.PhiInstruction.AddValue(ctx, caller, value);
 				}
 				ctx.GotoNext();
 			}
@@ -266,8 +266,8 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			// Iterate all incoming variables
 			foreach (StackOperand key in liveIn.Keys) {
-				ctx.InsertInstructionAfter(IR2.Instruction.PhiInstruction, key);
-				IR2.PhiInstruction.AddValue(ctx, caller, key);
+				ctx.InsertInstructionAfter(IR.Instruction.PhiInstruction, key);
+				IR.PhiInstruction.AddValue(ctx, caller, key);
 			}
 		}
 

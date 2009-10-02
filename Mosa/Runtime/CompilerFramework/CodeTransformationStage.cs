@@ -182,7 +182,7 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.BasicBlock.NextBlocks.Clear();
 			ctx.BasicBlock.NextBlocks.Add(nextBlock);
 
-			ctx.InsertInstructionAfter(IR2.Instruction.JmpInstruction, nextBlock);
+			ctx.InsertInstructionAfter(IR.Instruction.JmpInstruction, nextBlock);
 			ctx.SliceAfter();
 
 			return new Context(nextBlock);

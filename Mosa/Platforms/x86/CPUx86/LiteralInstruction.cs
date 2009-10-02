@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using IR2 = Mosa.Runtime.CompilerFramework.IR2;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Platforms.x86.CPUx86

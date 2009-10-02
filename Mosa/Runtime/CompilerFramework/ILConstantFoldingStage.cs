@@ -90,11 +90,11 @@ namespace Mosa.Runtime.CompilerFramework
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
 				if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
 				else if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
 				else
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
 			}
 		}
 
@@ -143,11 +143,11 @@ namespace Mosa.Runtime.CompilerFramework
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
 				if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
 				else if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
 				else
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
 			}
 		}
 
@@ -196,11 +196,11 @@ namespace Mosa.Runtime.CompilerFramework
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
 				if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction,ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction,ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
 				else if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction,ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction,ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
 				else
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
 			}
 		}
 
@@ -250,11 +250,11 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 
 				if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
 				else if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
 				else
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
 			}
 		}
 
@@ -303,11 +303,11 @@ namespace Mosa.Runtime.CompilerFramework
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
 				if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
 				else if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
 				else
-					ctx.SetInstruction(IR2.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
 			}
 		}
 
