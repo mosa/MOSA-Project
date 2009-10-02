@@ -187,21 +187,6 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Requests a <see cref="IRegisterConstraint"/> object for the given instruction.
-		/// </summary>
-		/// <param name="instruction">The <see cref="LegacyInstruction"/> to provide register constraints for.</param>
-		/// <returns>An object specifying the register constraints or null, if there are no constraints.</returns>
-		public override IRegisterConstraint GetRegisterConstraint(LegacyInstruction instruction)
-		{
-			Type constraintType;
-
-			if (Constraints.TryGetValue(instruction.GetType(), out constraintType)) 
-				return (IRegisterConstraint)Activator.CreateInstance(constraintType);
-
-			return null;
-		}
-
-		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
 		/// <param name="signatureType">The signature type.</param>
@@ -209,10 +194,9 @@ namespace Mosa.Platforms.x86
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
 		public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
 		{
-			if (null == signatureType) {
+			if (signatureType == null) 
 				throw new ArgumentNullException(@"type");
-			}
-
+			
 			switch (signatureType.Type) {
 				case CilElementType.R4:
 					memorySize = alignment = 4;

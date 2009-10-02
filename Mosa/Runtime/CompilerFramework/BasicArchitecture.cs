@@ -92,13 +92,6 @@ namespace Mosa.Runtime.CompilerFramework
         public abstract ICallingConvention GetCallingConvention(CallingConvention cc);
 
         /// <summary>
-        /// Retrieves a register constraint description object.
-        /// </summary>
-        /// <param name="instruction">The instruction to retrieve the register constraint description for.</param>
-        /// <returns>A register constraint descriptor.</returns>
-        public abstract IRegisterConstraint GetRegisterConstraint(LegacyInstruction instruction);
-
-        /// <summary>
         /// Gets the type memory requirements.
         /// </summary>
         /// <param name="type">The signature type.</param>

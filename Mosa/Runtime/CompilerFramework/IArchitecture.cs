@@ -56,13 +56,6 @@ namespace Mosa.Runtime.CompilerFramework
         ICallingConvention GetCallingConvention(CallingConvention cc);
 
         /// <summary>
-        /// Retrieves a register constraint description object.
-        /// </summary>
-        /// <param name="instruction">The instruction to retrieve the register constraint description for.</param>
-        /// <returns>A register constraint descriptor.</returns>
-        IRegisterConstraint GetRegisterConstraint(LegacyInstruction instruction);
-
-        /// <summary>
         /// Requests the architecture to add architecture specific compilation stages to the assembly compiler 
         /// pipeline. These may depend upon the current state of the pipeline.
         /// </summary>
