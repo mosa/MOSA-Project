@@ -566,7 +566,9 @@ namespace Mosa.Runtime.CompilerFramework
 		public void InsertInstructionAfter(IInstruction instruction)
 		{
 			// replace dummy instruction, if possible
-			if (Ignore && instruction == null)
+			if (_index < 0)
+				_index = _instructionSet.InsertAfter(_index);
+			else if (Ignore && instruction == null)
 				_index = _instructionSet.InsertAfter(_index);
 
 			SetInstruction(instruction);
