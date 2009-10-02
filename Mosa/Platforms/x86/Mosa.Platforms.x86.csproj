@@ -169,15 +169,6 @@
     <Compile Include="CPUx86\TwoOperandInstruction.cs" />
     <Compile Include="CPUx86\UcomisdInstruction.cs" />
     <Compile Include="CPUx86\UcomissInstruction.cs" />
-    <Compile Include="_Instructions\DirectDivision.cs" />
-    <Compile Include="_Instructions\DirectMultiplication.cs" />
-    <Compile Include="_Instructions\Intrinsics\CpuIdEaxInstruction.cs" />
-    <Compile Include="_Instructions\Intrinsics\CpuIdEbxInstruction.cs" />
-    <Compile Include="_Instructions\Intrinsics\CpuIdEcxInstruction.cs" />
-    <Compile Include="_Instructions\Intrinsics\CpuIdEdxInstruction.cs" />
-    <Compile Include="_Instructions\Intrinsics\InvlpgInstruction.cs" />
-    <Compile Include="_Instructions\Intrinsics\NopInstruction.cs" />
-    <Compile Include="_Instructions\SalInstruction.cs" />
     <Compile Include="OpCode.cs" />
     <Compile Include="CPUx86\BaseInstruction.cs" />
     <Compile Include="CPUx86\IX86Visitor.cs" />
@@ -196,15 +187,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InstructionSchedulingStage.cs" />
-    <Compile Include="_Instructions\Intrinsics\BochsDebug.cs" />
-    <Compile Include="_Instructions\Intrinsics\CpuIdInstruction.cs" />
     <Compile Include="IRToX86TransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IX86Instruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_IX86InstructionVisitor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LongOperandTransformationStage.cs">
@@ -265,204 +251,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Constraints\SseSubConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\AdcInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\AddInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\CdqInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\CmpInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\ComisdInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\ComissInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Cvtsd2ssInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Cvtsi2sdInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Cvtsi2ssInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Cvtss2sdInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\DecInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\DivInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\EpilogueInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\IncInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\IntInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\JnsBranchInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\LiteralInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\LogicalAndInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\LogicalNotInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\LogicalOrInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\LogicalXorInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\MoveInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\MulInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\NegInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\PrologueInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\SarInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\SbbInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\SetccInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\ShldInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\ShlInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\ShrdInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\ShrInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\SseAddInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\SseDivInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\SseMulInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\SseSubInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\SubInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\UcomisdInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\UcomissInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\UDivInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\CldInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\CliInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\CmpXchgInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\HltInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\InInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\IretdInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\LgdtInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\LidtInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\LockInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\OutInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\PauseInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\PopadInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\PopfdInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\PopInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\PushadInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\PushfdInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\PushInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\RcrInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\RdmsrInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\RdpmcInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\RdtscInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\RepInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\StiInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\StosbInstrucions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\StosdInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="_Instructions\Intrinsics\XchgInstruction.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

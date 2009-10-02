@@ -12,6 +12,7 @@
 
 using System;
 using Mosa.Runtime.CompilerFramework;
+using CPUx86 = Mosa.Platforms.x86.CPUx86;
 
 namespace Mosa.Platforms.x86
 {
@@ -25,163 +26,163 @@ namespace Mosa.Platforms.x86
         /// Wraps the x86 ldit instruction to load the interrupt descriptor table.
         /// </summary>
         /// <param name="idt">A pointer to the interrupt descriptor table.</param>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.LidtInstruction))]
+		[Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.LidtInstruction))]
         public static void Ldit(IntPtr idt) { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 cli instruction to disable interrupts
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CliInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.CliInstruction))]
         public static void Cli() { ThrowPlatformNotSupported(); return;  }
 
         /// <summary>
         /// Wraps the x86 cmpxchg instruction to disable interrupts
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CmpXchgInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.CmpXchgInstruction))]
         public static void CmpXchg16(ref short first, short second) { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 cmpxchg instruction to disable interrupts
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CmpXchgInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.CmpXchgInstruction))]
         public static void CmpXchg32(ref int first, int second) { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 lgdt instruction to load global descriptor table
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.LgdtInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.LgdtInstruction))]
         public static void Lgdt(IntPtr gdt) { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 pop instruction to pop a value from the stack
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PopInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.PopInstruction))]
         public static short Pop16() { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// Wraps the x86 pop instruction to pop a value from the stack
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PopInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.PopInstruction))]
         public static int Pop32() { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// Wraps the x86 popad instruction to pop all GPR from the stack
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PopadInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.PopadInstruction))]
         public static void Popad() { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 push instruction to push a value on the stack
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PushInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.PushInstruction))]
         public static void Push16(short value) { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 push instruction to push a value on the stack
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PushInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.PushInstruction))]
         public static void Push32(int value) { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 pushad instruction to push all GPR to the stack
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.PushadInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.PushadInstruction))]
         public static void Pushad() { ThrowPlatformNotSupported(); return;  }
 
         /// <summary>
         /// Wraps the x86 sti instruction to enable interrupts
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.StiInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.StiInstruction))]
         public static void Sti() { ThrowPlatformNotSupported(); return; }
 
         /// <summary>
         /// Wraps the x86 in instruction to read from an 8-bit port.
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.InInstruction))]
         public static unsafe byte In8(byte address) { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// Wraps the x86 in instruction to read from a 16-bit port.
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.InInstruction))]
         public static unsafe ushort In16(ushort address) { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// Wraps the x86 in instruction to read from a 32-bit port.
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.InInstruction))]
         public static unsafe uint In32(uint address) { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// Wraps the x86 out instruction to write to an 8-bit port.
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.OutInstruction))]
         public static unsafe void Out8(byte address, byte value) { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 out instruction to write to a 16-bit port.
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.OutInstruction))]
         public static unsafe void Out16(ushort address, ushort value) { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 out instruction to write to a 32-bit port.
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.OutInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.OutInstruction))]
         public static unsafe void Out32(uint address, uint value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a nop instruction.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.NopInstruction))]
+		[Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.NopInstruction))]
 		public static unsafe void Nop() { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 hlt instruction.
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.HltInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.HltInstruction))]
         public static void Hlt() { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// 
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.InvlpgInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.InvlpgInstruction))]
 		public static void Invlpg(uint address) { ThrowPlatformNotSupported(); }
 
         /// <summary>
         /// Wraps the x86 CPUID instruction.
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CpuIdInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.CpuIdInstruction))]
         public static unsafe byte* CpuId(uint function) { ThrowPlatformNotSupported(); return null; }
 
         /// <summary>
         /// Wraps the x86 CPUID instruction.
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CpuIdEaxInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.CpuIdEaxInstruction))]
         public static int CpuIdEax(uint function) { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// Wraps the x86 CPUID instruction.
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CpuIdEbxInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.CpuIdEbxInstruction))]
         public static int CpuIdEbx(uint function) { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// Wraps the x86 CPUID instruction.
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CpuIdEcxInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.CpuIdEcxInstruction))]
         public static int CpuIdEcx(uint function) { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// Wraps the x86 CPUID instruction.
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.CpuIdEdxInstruction))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.CpuIdEdxInstruction))]
         public static int CpuIdEdx(uint function) { ThrowPlatformNotSupported(); return 0; }
 
         /// <summary>
         /// 
         /// </summary>
-        [Intrinsic(typeof(Architecture), typeof(Instructions.Intrinsics.BochsDebug))]
+        [Intrinsic(typeof(Architecture), typeof(CPUx86.Intrinsics.BochsDebug))]
         public static void BochsDebug() { ThrowPlatformNotSupported(); return; }
 
         #endregion

@@ -11,9 +11,9 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.Constraints
 {
-    /// <summary>
-    /// Provides register constraints for the <see cref="Mosa.Platforms.x86.Instructions.Intrinsics.CmpXchgInstruction"/>.
-    /// </summary>
+	/// <summary>
+	/// Provides register constraints for the <see cref="Mosa.Platforms.x86.CPUx86.Intrinsics.CmpXchgInstruction"/>.
+	/// </summary>
     sealed class CmpXchgConstraint : GPRConstraint
     {
         #region Construction
