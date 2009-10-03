@@ -58,10 +58,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="secondOperand">The second operand.</param>
 		/// <param name="thirdOperand">The third operand.</param>
 		/// <returns></returns>
-		protected virtual OpCode ComputeOpCode(Operand firstOperand, Operand secondOperand, Operand thirdOperand)
-		{
-			throw new NotSupportedException();
-		}
+		protected abstract OpCode ComputeOpCode(Operand firstOperand, Operand secondOperand, Operand thirdOperand);
 
 		/// <summary>
 		/// Emits the specified platform instruction.
