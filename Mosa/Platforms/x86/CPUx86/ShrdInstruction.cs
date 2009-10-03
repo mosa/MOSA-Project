@@ -25,17 +25,17 @@ namespace Mosa.Platforms.x86.CPUx86
         #region ThreeOperandInstruction Overrides
 
 		/// <summary>
-		/// Computes the op code.
+		/// Computes the opcode.
 		/// </summary>
-		/// <param name="dest">The destination.</param>
-		/// <param name="src">The source.</param>
-		/// <param name="count">The count.</param>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand count)
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-            if (count is RegisterOperand)
+			if (third is RegisterOperand)
                 return Register;
-            if (count is ConstantOperand)
+			if (third is ConstantOperand)
                 return Constant;
             throw new ArgumentException(@"No opcode for operand type.");
         }

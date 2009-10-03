@@ -45,35 +45,35 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Computes the op code.
 		/// </summary>
-		/// <param name="dest">The destination.</param>
-		/// <param name="src">The source.</param>
-		/// <param name="third">The third.</param>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand third)
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-            if ((dest is MemoryOperand) && (src is RegisterOperand))
+			if ((destination is MemoryOperand) && (source is RegisterOperand))
             {
-                if (IsByte(dest) || IsByte(src))
+				if (IsByte(destination) || IsByte(source))
                     return M_R_8;
-                if (IsChar(dest) || IsChar(src))
+				if (IsChar(destination) || IsChar(source))
                     return M_R_16;
                 return M_R;
             }
 
-            if ((dest is RegisterOperand) && (src is MemoryOperand))
+			if ((destination is RegisterOperand) && (source is MemoryOperand))
             {
-                if (IsByte(src) || IsByte(dest))
+				if (IsByte(source) || IsByte(destination))
                     return R_M_8;
-                if (IsChar(src) || IsShort(src))
+				if (IsChar(source) || IsShort(source))
                     return R_M_16;
                 return R_M;
             }
 
-            if ((dest is RegisterOperand) && (src is RegisterOperand)) return R_R;
-            if ((dest is MemoryOperand) && (src is ConstantOperand)) return M_C;
-            if ((dest is RegisterOperand) && (src is ConstantOperand))
+			if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
+			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
+			if ((destination is RegisterOperand) && (source is ConstantOperand))
             {
-                if (IsByte(src) || IsByte(dest))
+				if (IsByte(source) || IsByte(destination))
                     return R_C_8;
                 return R_C;
             }

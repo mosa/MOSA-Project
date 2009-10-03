@@ -38,50 +38,48 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Computes the op code.
 		/// </summary>
-		/// <param name="dest">The destination.</param>
-		/// <param name="src">The source.</param>
-		/// <param name="thirdOperand">The third operand.</param>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-            if ((dest is RegisterOperand) && (src is ConstantOperand))
-            {
+			if ((destination is RegisterOperand) && (source is ConstantOperand))
                 return R_C;
-            }
 
-            if ((dest is MemoryOperand) && (src is ConstantOperand))
-            {
+			if ((destination is MemoryOperand) && (source is ConstantOperand))
                 return M_C;
-            }
 
-            if ((dest is RegisterOperand) && (src is RegisterOperand))
+			if ((destination is RegisterOperand) && (source is RegisterOperand))
             {
-                if (IsByte(src) || IsByte(dest))
+				if (IsByte(source) || IsByte(destination))
                     return R_R_U8;
-                if (IsChar(src) || IsChar(dest) || IsShort(src) || IsShort(dest))
+				if (IsChar(source) || IsChar(destination) || IsShort(source) || IsShort(destination))
                     return R_R_16;
+
                 return R_R;
             }
 
-            if ((dest is RegisterOperand) && (src is MemoryOperand))
+			if ((destination is RegisterOperand) && (source is MemoryOperand))
             {
-                if (IsByte(dest))
+				if (IsByte(destination))
                     return R_M_U8;
-                if (IsChar(dest) || IsShort(dest))
+				if (IsChar(destination) || IsShort(destination))
                     return R_M_16;
+
                 return R_M;
             }
 
-            if ((dest is MemoryOperand) && (src is RegisterOperand))
+			if ((destination is MemoryOperand) && (source is RegisterOperand))
             {
-                if (IsByte(dest))
+				if (IsByte(destination))
                     return M_R_U8;
-                if (IsChar(dest) || IsShort(dest))
+				if (IsChar(destination) || IsShort(destination))
                     return M_R_16;
                 return M_R;
             }
 
-            throw new ArgumentException(@"No opcode for operand type. [" + dest.GetType() + ", " + src.GetType() + ")");
+			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
         }
 
         /// <summary>

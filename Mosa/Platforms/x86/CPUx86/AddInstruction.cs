@@ -41,31 +41,30 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#region Methods
 
+
 		/// <summary>
-		/// Computes the op code.
+		/// Computes the opcode.
 		/// </summary>
-		/// <param name="dest">The destination.</param>
-		/// <param name="src">The source.</param>
-		/// <param name="thirdOperand">The third operand.</param>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-			if ((dest is RegisterOperand) && (src is ConstantOperand))
+			if ((destination is RegisterOperand) && (source is ConstantOperand))
 				return R_C;
 
-			if ((dest is RegisterOperand) && (src is RegisterOperand))
+			if ((destination is RegisterOperand) && (source is RegisterOperand))
 				return R_R;
 
-            if ((dest is RegisterOperand) && (src is MemoryOperand))
-            {
-                return IsUnsignedByte(dest) ? R_M_U8 : R_M;
-            }
+			if ((destination is RegisterOperand) && (source is MemoryOperand))
+				return IsUnsignedByte(destination) ? R_M_U8 : R_M;
 
-		    if ((dest is MemoryOperand) && (src is RegisterOperand))
+			if ((destination is MemoryOperand) && (source is RegisterOperand))
             {
-                if (IsByte(dest) || IsByte(src))
+				if (IsByte(destination) || IsByte(source))
                     return M_R_U8;
-                if (IsChar(dest) || IsChar(src) || IsShort(dest) || IsShort(src))
+				if (IsChar(destination) || IsChar(source) || IsShort(destination) || IsShort(source))
                     return M_R_U8;
                 return M_R;
             }

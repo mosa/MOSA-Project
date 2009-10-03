@@ -51,13 +51,16 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region IPlatformInstruction Overrides
 
 		/// <summary>
-		/// Computes the op code.
+		/// Computes the opcode.
 		/// </summary>
-		/// <param name="firstOperand">The first operand.</param>
-		/// <param name="secondOperand">The second operand.</param>
-		/// <param name="thirdOperand">The third operand.</param>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		protected abstract OpCode ComputeOpCode(Operand firstOperand, Operand secondOperand, Operand thirdOperand);
+		protected virtual OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
+			throw new System.Exception("Missed something!");
+		}
 
 		/// <summary>
 		/// Emits the specified platform instruction.

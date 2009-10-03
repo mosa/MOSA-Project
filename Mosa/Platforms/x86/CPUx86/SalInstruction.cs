@@ -27,14 +27,14 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Computes the op code.
 		/// </summary>
-		/// <param name="dest">The destination.</param>
-		/// <param name="src">The source.</param>
-		/// <param name="thirdOperand">The third operand.</param>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-            if ((dest is RegisterOperand || dest is MemoryOperand) && (src is ConstantOperand)) return RegMemConstant;
-            if (dest is RegisterOperand || dest is MemoryOperand) return RegMem;
+			if ((destination is RegisterOperand || destination is MemoryOperand) && (source is ConstantOperand)) return RegMemConstant;
+			if (destination is RegisterOperand || destination is MemoryOperand) return RegMem;
             throw new ArgumentException(@"No opcode for operand type.");
         }
 

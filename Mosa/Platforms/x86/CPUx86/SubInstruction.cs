@@ -16,21 +16,54 @@ using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Intermediate representation of the sub instruction.
-    /// </summary>
-    public sealed class SubInstruction : TwoOperandInstruction
-    {
-        #region Construction
+	/// <summary>
+	/// Intermediate representation of the sub instruction.
+	/// </summary>
+	public sealed class SubInstruction : TwoOperandInstruction
+	{
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SubInstruction"/> class.
-        /// </summary>
-        public SubInstruction()
-        {
-        }
+		#region Data Members
 
-        #endregion // Construction
+		private static readonly OpCode O_C = new OpCode(new byte[] { 0x81 }, 5);
+		private static readonly OpCode O_C_16 = new OpCode(new byte[] { 0x66, 0x81 }, 5);
+		private static readonly OpCode R_O = new OpCode(new byte[] { 0x2B });
+		private static readonly OpCode R_O_16 = new OpCode(new byte[] { 0x66, 0x2B });
+		private static readonly OpCode M_R = new OpCode(new byte[] { 0x29 });
+
+		#endregion
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SubInstruction"/> class.
+		/// </summary>
+		public SubInstruction()
+		{
+		}
+
+		#endregion // Construction
+
+
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
+			if (source is ConstantOperand) 
+				return O_C;
+			
+			if (destination is RegisterOperand) 
+				return R_O;
+
+			if ((destination is MemoryOperand) && (source is RegisterOperand)) 
+				return M_R;
+
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
 
 		#region Properties
 
@@ -42,18 +75,18 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion // Properties
 
-        #region Methods
+		#region Methods
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString(Context context)
-        {
-            return String.Format(@"x86 sub {0}, {1} ; {0} -= {1}", context.Operand1, context.Operand2);
-        }
+		/// <summary>
+		/// Returns a string representation of the instruction.
+		/// </summary>
+		/// <returns>
+		/// A string representation of the instruction in intermediate form.
+		/// </returns>
+		public override string ToString(Context context)
+		{
+			return String.Format(@"x86 sub {0}, {1} ; {0} -= {1}", context.Operand1, context.Operand2);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -65,6 +98,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Sub(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }
