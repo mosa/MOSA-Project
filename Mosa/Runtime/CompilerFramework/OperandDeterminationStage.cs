@@ -67,8 +67,6 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			base.Run(compiler);
 
-			_firstBlock = FindBlock(-1);
-
 			InitializeWorkItems();
 
 			while (WorkList.Count != 0) {
@@ -85,8 +83,12 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
+		/// <summary>
+		/// Initializes the work items.
+		/// </summary>
 		private void InitializeWorkItems()
 		{
+			_firstBlock = FindBlock(-1);
 			WorkList = new Stack<BasicBlock>();
 			WorkListStack = new Stack<List<Operand>>();
 			WorkList.Push(_firstBlock);
@@ -94,6 +96,11 @@ namespace Mosa.Runtime.CompilerFramework
 			WorkArray = new BitArray(BasicBlocks.Count);
 		}
 
+		/// <summary>
+		/// Gets the current stack.
+		/// </summary>
+		/// <param name="stack">The stack.</param>
+		/// <returns></returns>
 		private static List<Operand> GetCurrentStack(IList<Operand> stack)
 		{
 			List<Operand> currentStack = new List<Operand>();
@@ -117,23 +124,32 @@ namespace Mosa.Runtime.CompilerFramework
 				AssignOperandsFromCILStack(ctx, currentStack);
 
 				(ctx.Instruction as ICILInstruction).Validate(ctx, compiler);
-				//instruction.Validate(compiler);
 
 				PushResultOperands(ctx, currentStack);
 			}
 		}
 
+		/// <summary>
+		/// Assigns the operands from CIL stack.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="currentStack">The current stack.</param>
 		private static void AssignOperandsFromCILStack(Context ctx, IList<Operand> currentStack)
 		{
 			for (int index = ctx.OperandCount - 1; index >= 0; --index) {
-				Operand operand = ctx.GetOperand(index);
-				if (operand == null) {
+				if ( ctx.GetOperand(index) == null) {
+					Operand operand = currentStack[currentStack.Count - 1];
 					currentStack.RemoveAt(currentStack.Count - 1);
 					ctx.SetOperand(index, operand);
 				}
 			}
 		}
 
+		/// <summary>
+		/// Pushes the result operands on to the stack
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="currentStack">The current stack.</param>
 		private static void PushResultOperands(Context ctx, IList<Operand> currentStack)
 		{
 			if ((ctx.Instruction as ICILInstruction).PushResult)
