@@ -255,7 +255,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (_next[free] >= 0)
 				_prev[_next[free]] = free;
 
-			return -1;
+			return free;
 		}
 
 		/// <summary>
@@ -282,7 +282,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (_next[free] >= 0)
 				_prev[_next[free]] = free;
 
-			return -1;
+			return free;
 		}
 
 		/// <summary>
