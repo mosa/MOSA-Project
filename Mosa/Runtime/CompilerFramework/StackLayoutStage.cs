@@ -41,17 +41,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="StackLayoutStage"/>.
-		/// </summary>
-		public StackLayoutStage()
-		{
-		}
-
-		#endregion // Construction
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>

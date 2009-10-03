@@ -30,17 +30,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="InstructionLogger"/>.
-		/// </summary>
-		private InstructionLogger()
-		{
-		}
-
-		#endregion // Construction
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>

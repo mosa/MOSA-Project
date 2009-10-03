@@ -56,17 +56,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="SimpleRegisterAllocator"/>.
-		/// </summary>
-		public SimpleRegisterAllocator()
-		{
-		}
-
-		#endregion // Construction
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>

@@ -45,17 +45,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseStage"/> class.
-		/// </summary>
-		public BaseStage()
-		{
-		}
-
-		#endregion // Construction
-
 		#region Methods
 
 		/// <summary>

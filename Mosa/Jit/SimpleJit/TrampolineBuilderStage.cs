@@ -18,28 +18,8 @@ namespace Mosa.Jit.SimpleJit
     /// <summary>
     /// The first stage in a method compiler building the call trampoline.
     /// </summary>
-    sealed class TrampolineBuilderStage : IMethodCompilerStage, IInstructionsProvider
+    sealed class TrampolineBuilderStage : BaseStage, IMethodCompilerStage
     {
-        #region Data members
-
-        /// <summary>
-        /// Holds the instructions of this trampoline.
-        /// </summary>
-		private InstructionSet _instructionSet;
-
-        #endregion // Data members
-
-        #region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the trampoline builder stage.
-		/// </summary>
-        public TrampolineBuilderStage()
-        {
-			_instructionSet = null; // FIXME 
-        }
-
-        #endregion // Construction
 
         #region IMethodCompilerStage Members
 
@@ -56,16 +36,18 @@ namespace Mosa.Jit.SimpleJit
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(IMethodCompiler compiler)
+        public override void Run(IMethodCompiler compiler)
         {
+			base.Run(compiler);
+
             // Nothing to do here, the jit already gives us a list of instructions 
             // we need to compile so we don't have to do anything here.
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pipeline"></param>
+		/// <summary>
+		/// Adds the stage to the pipeline.
+		/// </summary>
+		/// <param name="pipeline">The pipeline to add to.</param>
         public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
         {
             pipeline.Add(this);
@@ -73,22 +55,5 @@ namespace Mosa.Jit.SimpleJit
 
         #endregion // IMethodCompilerStage Members
 
-        #region IInstructionsProvider Members
-
-		/// <summary>
-		/// Gets a list of instructions in intermediate representation.
-		/// </summary>
-		/// <value></value>
-		public InstructionSet InstructionSet
-		{
-			get { return _instructionSet; }
-		}
-
-        #endregion // IInstructionsProvider Members
-
-        #region IEnumerable Members
-
-
-        #endregion // IEnumerable Members
     }
 }

@@ -38,17 +38,6 @@ namespace Mosa.Platforms.x86
 
 		#endregion // Data members
 
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="ConstantRemovalStage"/>.
-		/// </summary>
-		public ConstantRemovalStage()
-		{
-		}
-
-		#endregion // Construction
-
 		#region Properties
 
 		/// <summary>
