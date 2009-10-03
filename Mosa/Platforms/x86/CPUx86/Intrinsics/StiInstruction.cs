@@ -18,7 +18,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
     /// </summary>
     public sealed class StiInstruction : BaseInstruction
     {
-        #region IRInstruction Overrides
+        #region Methods
 
         /// <summary>
         /// 
@@ -51,6 +51,6 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 			visitor.Sti(context);
 		}
 
-        #endregion // IRInstruction Overrides
+        #endregion // Methods
     }
 }

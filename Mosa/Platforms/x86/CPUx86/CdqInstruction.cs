@@ -16,7 +16,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class CdqInstruction : BaseInstruction
     {
-        #region IRInstruction Overrides
+        #region Methods
 
         /// <summary>
         /// Emits the specified platform instruction.
@@ -49,6 +49,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Cdq(context);
 		}
 
-        #endregion //  IRInstruction Overrides
+        #endregion //  Methods
     }
 }

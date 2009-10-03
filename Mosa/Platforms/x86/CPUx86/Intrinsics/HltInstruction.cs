@@ -17,7 +17,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
     /// </summary>
     public sealed class HltInstruction : BaseInstruction
     {
-        #region IRInstruction Overrides
+        #region Methods
 
         /// <summary>
         /// 
@@ -50,6 +50,6 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 			visitor.Hlt(context);
 		}
 
-        #endregion // IRInstruction Overrides
+        #endregion // Methods
     }
 }

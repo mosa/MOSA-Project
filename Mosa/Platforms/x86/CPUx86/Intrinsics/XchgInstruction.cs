@@ -10,11 +10,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 {

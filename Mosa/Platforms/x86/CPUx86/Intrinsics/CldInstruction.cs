@@ -35,7 +35,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 
         #endregion // Construction
 
-        #region IRInstruction Overrides
+        #region Methods
 
         /// <summary>
         /// Returns a string representation of the instruction.
@@ -58,6 +58,6 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 			visitor.Cld(context);
 		}
 
-        #endregion // IRInstruction Overrides
+        #endregion // Methods
     }
 }
