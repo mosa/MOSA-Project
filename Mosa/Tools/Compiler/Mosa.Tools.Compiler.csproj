@@ -87,7 +87,6 @@
       <Name>Mosa.Runtime</Name>
     </ProjectReference>
     <Compile Include="ConstantFoldingWrapper.cs" />
-    <Compile Include="LinkTimeCodeGeneration\LinkerInstructionSource.cs" />
     <Compile Include="Metadata\MetadataBuilderStage.cs" />
     <Compile Include="Metadata\MetadataStreamHeader.cs" />
     <Compile Include="Metadata\MetadataTableCodedIndexWriter.cs" />
