@@ -22,16 +22,10 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
 	public sealed class IncInstruction : OneOperandInstruction
     {
-        #region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IntInstruction"/> class.
-		/// </summary>
-        public IncInstruction() :
-            base()
-        {
-        }
-
+        #region Data Members
+        private static readonly OpCode Byte = new OpCode(new byte[] { 0xFE });
+        private static readonly OpCode Short = new OpCode(new byte[] { 0xFE });
+        private static readonly OpCode Int = new OpCode(new byte[] { 0xFE });
         #endregion // Construction
 
 		#region Properties
@@ -45,6 +39,24 @@ namespace Mosa.Platforms.x86.CPUx86
 		#endregion // Properties
 
         #region OneOperandInstruction Overrides
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        /// <param name="thirdOperand"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
+        {
+            if (IsByte(dest))
+                return Byte;
+            if (IsShort(dest) || IsChar(dest))
+                return Short;
+            if (IsInt(dest))
+                return Int;
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 
         /// <summary>
         /// Returns a string representation of the instruction.

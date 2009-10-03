@@ -1,5 +1,6 @@
 ﻿using System;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 {
@@ -8,18 +9,29 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
     /// </summary>
     public sealed class BochsDebug : BaseInstruction
     {
-        #region Construction
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="CpuIdInstruction"/> class.
+        /// 
         /// </summary>
-        public BochsDebug() :
-            base()
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        /// <param name="thirdOperand"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
         {
+            return new OpCode(new byte[] { 0x66, 0x87 });
         }
 
-        #endregion // Construction
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="codeStream"></param>
+        public override void Emit(Context ctx, System.IO.Stream codeStream)
+        {
+            ctx.Result = new RegisterOperand(new SigType(Runtime.Metadata.CilElementType.I2), GeneralPurposeRegister.EBX);
+            ctx.Operand1 = new RegisterOperand(new SigType(Runtime.Metadata.CilElementType.I2), GeneralPurposeRegister.EBX);
+            base.Emit(ctx, codeStream);
+        }
         /// <summary>
         /// Returns a string representation of the instruction.
         /// </summary>
@@ -28,7 +40,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
         /// </returns>
         public override string ToString()
         {
-            return String.Format(@"x86 xchg bx, bx");
+            return String.Format(@"x86.xchg bx, bx");
         }
 
 		/// <summary>

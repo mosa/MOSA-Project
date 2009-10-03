@@ -8,31 +8,37 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Intermediate representation of the x86 shld instruction.
+    /// Intermediate representation of the x86 shrd instruction.
     /// </summary>
     public class ShldInstruction : ThreeOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShldInstruction"/> class.
-        /// </summary>
-        public ShldInstruction()
-        {
-        }
-
+        #region Data Members
+        private static readonly OpCode Register = new OpCode(new byte[] { 0x0F, 0xA5 }, 4);
+        private static readonly OpCode Constant = new OpCode(new byte[] { 0x0F, 0xA4 }, 4);
         #endregion // Construction
 
         #region ThreeOperandInstruction Overrides
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand count)
+        {
+            if (count is RegisterOperand)
+                return Register;
+            if (count is ConstantOperand)
+                return Constant;
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 
         /// <summary>
         /// Returns a string representation of the instruction.
@@ -42,18 +48,18 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"x86 shld {0}, {1}, {2}", context.Operand1, context.Operand2, context.Operand2);
+            return String.Format(@"x86.shld {0}, {1}, {2}", context.Operand1, context.Operand2, context.Operand2);
         }
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor object.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IX86Visitor visitor, Context context)
-		{
-			visitor.Shld(context);
-		}
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="context">The context.</param>
+        public override void Visit(IX86Visitor visitor, Context context)
+        {
+            visitor.Shrd(context);
+        }
 
         #endregion // ThreeOperandInstruction Overrides
     }

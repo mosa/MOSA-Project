@@ -8,11 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -21,18 +17,28 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public class ShrdInstruction : ThreeOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShldInstruction"/> class.
-        /// </summary>
-        public ShrdInstruction()
-        {
-        }
-
+        #region Data Members
+        private static readonly OpCode Register = new OpCode( new byte[] { 0x0F, 0xAD }, 4);
+        private static readonly OpCode Constant = new OpCode(new byte[] { 0x0F, 0xAC }, 4);
         #endregion // Construction
 
         #region ThreeOperandInstruction Overrides
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="src"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand count)
+        {
+            if (count is RegisterOperand)
+                return Register;
+            if (count is ConstantOperand)
+                return Constant;
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 
         /// <summary>
         /// Returns a string representation of the instruction.
@@ -42,7 +48,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"x86 shrd {0}, {1}, {2}", context.Operand1, context.Operand2, context.Operand2);
+            return String.Format(@"x86.shrd {0}, {1}, {2}", context.Operand1, context.Operand2, context.Operand2);
         }
 
 		/// <summary>

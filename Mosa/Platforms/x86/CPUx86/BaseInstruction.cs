@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
@@ -15,7 +14,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class BaseInstruction : Mosa.Runtime.CompilerFramework.BaseInstruction, IPlatformInstruction
+	public abstract class BaseInstruction : Runtime.CompilerFramework.BaseInstruction, IPlatformInstruction
 	{
 
 		#region Construction

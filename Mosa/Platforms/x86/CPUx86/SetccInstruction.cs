@@ -73,7 +73,63 @@ namespace Mosa.Platforms.x86.CPUx86
         #endregion // Methods
 
         #region OneOperandInstruction Overrides
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="codeStream"></param>
+        public override void Emit(Context ctx, System.IO.Stream codeStream)
+        {
+            byte[] byteCode;
 
+            switch (ctx.ConditionCode)
+            {
+                case IR.ConditionCode.Equal:
+                    byteCode = new byte[] { 0x0F, 0x94 };
+                    break;
+
+                case IR.ConditionCode.LessThan:
+                    byteCode = new byte[] { 0x0F, 0x9C };
+                    break;
+
+                case IR.ConditionCode.LessOrEqual:
+                    byteCode = new byte[] { 0x0F, 0x9E };
+                    break;
+
+                case IR.ConditionCode.GreaterOrEqual:
+                    byteCode = new byte[] { 0x0F, 0x9D };
+                    break;
+
+                case IR.ConditionCode.GreaterThan:
+                    byteCode = new byte[] { 0x0F, 0x9F };
+                    break;
+
+                case IR.ConditionCode.NotEqual:
+                    byteCode = new byte[] { 0x0F, 0x95 };
+                    break;
+
+                case IR.ConditionCode.UnsignedGreaterOrEqual:
+                    byteCode = new byte[] { 0x0F, 0x93 };
+                    break;
+
+                case IR.ConditionCode.UnsignedGreaterThan:
+                    byteCode = new byte[] { 0x0F, 0x97 };
+                    break;
+
+                case IR.ConditionCode.UnsignedLessOrEqual:
+                    byteCode = new byte[] { 0x0F, 0x96 };
+                    break;
+
+                case IR.ConditionCode.UnsignedLessThan:
+                    byteCode = new byte[] { 0x0F, 0x92 };
+                    break;
+
+                default:
+                    throw new NotSupportedException();
+            }
+
+            MachineCodeEmitter.Emit(codeStream, new OpCode(byteCode), ctx.Operand1, null);
+        }
         /// <summary>
         /// Returns a string representation of the instruction.
         /// </summary>
@@ -82,7 +138,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"x86 set{0} {1}", GetConditionString(context.ConditionCode), context.Operand1);
+            return String.Format(@"x86.set{0} {1}", GetConditionString(context.ConditionCode), context.Operand1);
         }
 
 		/// <summary>

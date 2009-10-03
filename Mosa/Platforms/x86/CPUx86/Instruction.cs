@@ -77,10 +77,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-        public static readonly EpilogueInstruction EpilogueInstruction = new EpilogueInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
         public static readonly IncInstruction IncInstruction = new IncInstruction();
 		/// <summary>
 		/// 
@@ -122,10 +118,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
         public static readonly NegInstruction NegInstruction = new NegInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-        public static readonly PrologueInstruction PrologueInstruction = new PrologueInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
