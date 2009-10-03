@@ -62,13 +62,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			/* 0x005 */
 			opcodeMap[(int)OpCode.Ldarg_3] = new LdargInstruction(OpCode.Ldarg_3);
 			/* 0x006 */
-			opcodeMap[(int)OpCode.Ldloc_0] = new LdargInstruction(OpCode.Ldloc_0);
+			opcodeMap[(int)OpCode.Ldloc_0] = new LdlocInstruction(OpCode.Ldloc_0);
 			/* 0x007 */
-			opcodeMap[(int)OpCode.Ldloc_1] = new LdargInstruction(OpCode.Ldloc_1);
+			opcodeMap[(int)OpCode.Ldloc_1] = new LdlocInstruction(OpCode.Ldloc_1);
 			/* 0x008 */
-			opcodeMap[(int)OpCode.Ldloc_2] = new LdargInstruction(OpCode.Ldloc_2);
+			opcodeMap[(int)OpCode.Ldloc_2] = new LdlocInstruction(OpCode.Ldloc_2);
 			/* 0x009 */
-			opcodeMap[(int)OpCode.Ldloc_3] = new LdargInstruction(OpCode.Ldloc_3);
+			opcodeMap[(int)OpCode.Ldloc_3] = new LdlocInstruction(OpCode.Ldloc_3);
 			/* 0x00A */
 			opcodeMap[(int)OpCode.Stloc_0] = new StlocInstruction(OpCode.Stloc_0);
 			/* 0x00B */

@@ -23,6 +23,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
     /// </summary>
     public sealed class StosdInstruction : BaseInstruction
     {
+
         #region Construction
 
         /// <summary>
@@ -36,6 +37,16 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
         #endregion // Construction
 
         #region Methods
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="codeStream">The code stream.</param>
+		public override void Emit(Context ctx, System.IO.Stream codeStream)
+		{
+			codeStream.WriteByte(0xAB);
+		}
 
         /// <summary>
         /// Returns a string representation of the instruction.
