@@ -26,13 +26,13 @@ namespace Mosa.Platforms.x86.CPUx86
 
         #region Methods
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dest"></param>
-        /// <param name="src"></param>
-        /// <param name="thirdOperand"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Computes the op code.
+		/// </summary>
+		/// <param name="dest">The destination.</param>
+		/// <param name="src">The source.</param>
+		/// <param name="thirdOperand">The third operand.</param>
+		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
         {
             if ((dest is RegisterOperand) && (src is RegisterOperand)) return R_R;

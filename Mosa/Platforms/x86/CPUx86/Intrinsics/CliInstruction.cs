@@ -31,11 +31,11 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 
         #region CliInstruction Overrides
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="codeStream"></param>
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="codeStream">The code stream.</param>
         public override void Emit(Context ctx, System.IO.Stream codeStream)
         {
             codeStream.WriteByte(0xFA);

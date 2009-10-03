@@ -35,7 +35,6 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 
         #endregion // Construction
 
-
 		#region Methods
 
 		/// <summary>

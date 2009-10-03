@@ -19,6 +19,13 @@ namespace Mosa.Platforms.x86.CPUx86
     {
         #region OneOperandInstruction Overrides
 
+		/// <summary>
+		/// Computes the op code.
+		/// </summary>
+		/// <param name="firstOperand">The first operand.</param>
+		/// <param name="secondOperand">The second operand.</param>
+		/// <param name="thirdOperand">The third operand.</param>
+		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand firstOperand, Operand secondOperand, Operand thirdOperand)
         {
             return new OpCode(new byte[] {0x0F, 0x89});

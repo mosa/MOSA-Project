@@ -9,23 +9,23 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
     /// </summary>
     public sealed class BochsDebug : BaseInstruction
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dest"></param>
-        /// <param name="src"></param>
-        /// <param name="thirdOperand"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Computes the op code.
+		/// </summary>
+		/// <param name="dest">The destination.</param>
+		/// <param name="src">The source.</param>
+		/// <param name="thirdOperand">The third operand.</param>
+		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand dest, Operand src, Operand thirdOperand)
         {
             return new OpCode(new byte[] { 0x66, 0x87 });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="codeStream"></param>
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="codeStream">The code stream.</param>
         public override void Emit(Context ctx, System.IO.Stream codeStream)
         {
             ctx.Result = new RegisterOperand(new SigType(Runtime.Metadata.CilElementType.I2), GeneralPurposeRegister.EBX);

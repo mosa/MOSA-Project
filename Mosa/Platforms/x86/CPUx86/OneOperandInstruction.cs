@@ -33,11 +33,11 @@ namespace Mosa.Platforms.x86.CPUx86
 
         #endregion // Construction
 
-        /// <summary>
-        /// Emits the specified platform instruction.
-        /// </summary>
-        /// <param name="ctx">The context.</param>
-        /// <param name="codeStream">The code stream.</param>
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="codeStream">The code stream.</param>
         public override void Emit(Context ctx, System.IO.Stream codeStream)
         {
             OpCode opCode = ComputeOpCode(ctx.Result, null, null);

@@ -33,24 +33,24 @@ namespace Mosa.Platforms.x86.CPUx86
         }
 
         #endregion // Construction
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="firstOperand"></param>
-        /// <param name="secondOperand"></param>
-        /// <param name="thirdOperand"></param>
-        /// <returns></returns>
+
+		/// <summary>
+		/// Computes the op code.
+		/// </summary>
+		/// <param name="firstOperand">The first operand.</param>
+		/// <param name="secondOperand">The second operand.</param>
+		/// <param name="thirdOperand">The third operand.</param>
+		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand firstOperand, Operand secondOperand, Operand thirdOperand)
         {
             throw new NotSupportedException();
         }
 
-        /// <summary>
-        /// Emits the specified platform instruction.
-        /// </summary>
-        /// <param name="ctx">The context.</param>
-        /// <param name="codeStream">The code stream.</param>
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="codeStream">The code stream.</param>
         public override void Emit(Context ctx, System.IO.Stream codeStream)
         {
             OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, null);
