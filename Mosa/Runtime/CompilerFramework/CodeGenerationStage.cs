@@ -96,9 +96,8 @@ namespace Mosa.Runtime.CompilerFramework
 				BlockStart(block);
 
 				for (Context ctx = new Context(_compiler.InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-					if (ctx.Instruction != null) {
+					if (ctx.Instruction != null) 
 						(ctx.Instruction as IPlatformInstruction).Emit(ctx, _codeStream);
-					}
 
 				BlockEnd(block);
 			}
