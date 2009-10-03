@@ -571,7 +571,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// replace dummy instruction, if possible
 			if (_index < 0)
 				_index = _instructionSet.InsertAfter(_index);
-			else if (Ignore && instruction == null)
+			else if (instruction != null)
 				_index = _instructionSet.InsertAfter(_index);
 
 			SetInstruction(instruction);

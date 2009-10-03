@@ -55,7 +55,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// </summary>
 		public TypeInitializerSchedulerStage()
 		{
-			_instructionSet = new InstructionSet(16);
+			_instructionSet = new InstructionSet(1024);
 			_ctx = new Context(_instructionSet, -1);
 
 			_ctx.InsertInstructionAfter(IR.Instruction.PrologueInstruction);
