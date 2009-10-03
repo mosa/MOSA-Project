@@ -168,10 +168,8 @@ namespace Mosa.Runtime.CompilerFramework
 					ctx.BasicBlock = current.Value;
 
 					// Set the block index on all the instructions
-					while ((ctx.Index != next.Key) && !ctx.EndOfInstruction)
+					while ((ctx.Index != next.Key) && !ctx.IsLastInstruction)
 						ctx.GotoNext();
-
-					ctx.GotoPrevious(); // FIXME PG - might be buggy if on the last instruction in set
 
 					InsertFlowControl(ctx, current.Value, next.Key, epilogue);
 				}

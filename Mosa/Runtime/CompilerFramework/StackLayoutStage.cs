@@ -88,13 +88,12 @@ namespace Mosa.Runtime.CompilerFramework
 			LayoutParameters(compiler, cc);
 
 			// Create a prologue instruction
-			Context prologueCtx = new Context(InstructionSet, BlockProvider.FromLabel(-1));
+			Context prologueCtx = new Context(InstructionSet, FindBlock(-1));
 			prologueCtx.InsertInstructionAfter(IR.Instruction.PrologueInstruction);
 			prologueCtx.Other = _localsSize;
 
 			// Create an epilogue instruction
-			Context epilogueCtx = new Context(InstructionSet, BlockProvider.FromLabel(Int32.MaxValue));
-			epilogueCtx.GotoLast();
+			Context epilogueCtx = new Context(InstructionSet, FindBlock(Int32.MaxValue));
 			epilogueCtx.InsertInstructionAfter(IR.Instruction.EpilogueInstruction);
 			epilogueCtx.Other = _localsSize;
 		}
