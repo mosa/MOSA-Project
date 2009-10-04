@@ -349,12 +349,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Initializes a new instance of the <see cref="Context"/> class.
 		/// </summary>
 		/// <param name="instructionSet">The instruction set.</param>
-		/// <param name="index">The index.</param>
 		/// <param name="block">The block.</param>
-		public Context(InstructionSet instructionSet, int index, BasicBlock block)
+		/// <param name="index">The index.</param>
+		public Context(InstructionSet instructionSet, BasicBlock block, int index)
 		{
-			_index = index;
 			_instructionSet = instructionSet;
+			_index = index;
 			_block = block;
 		}
 
@@ -365,11 +365,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="index">The index.</param>
 		public Context(InstructionSet instructionSet, int index)
 		{
-			_block = null;
-			_index = index;
 			_instructionSet = instructionSet;
+			_index = index;
+			_block = null;
 		}
-
+		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Context"/> class.
 		/// </summary>
@@ -378,8 +378,8 @@ namespace Mosa.Runtime.CompilerFramework
 		public Context(InstructionSet instructionSet, BasicBlock basicBlock)
 		{
 			_instructionSet = instructionSet;
-			_block = basicBlock;
 			_index = basicBlock.Index;
+			_block = basicBlock;
 		}
 
 		#endregion // Construction
@@ -401,7 +401,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public Context Clone()
 		{
-			return new Context(_instructionSet, _index, _block);
+			return new Context(_instructionSet, _block, _index);
 		}
 
 		/// <summary>

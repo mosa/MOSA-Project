@@ -153,16 +153,14 @@ namespace Mosa.Runtime.CompilerFramework
 		private void CreateBlocks(IDictionary<int, BasicBlock> leaders, BasicBlock epilogue)
 		{
 			KeyValuePair<int, BasicBlock> current = new KeyValuePair<int, BasicBlock>(-1, null);
-			int blockIndex = 0;
 
 			foreach (KeyValuePair<int, BasicBlock> next in leaders) {
 				if (current.Key != -1) {
-
 					// Insert block into list of basic Blocks
 					BasicBlocks.Add(current.Value);
 
 					// Set the block index
-					current.Value.Index = ++blockIndex;	// ???
+					current.Value.Index = current.Key;
 
 					Context ctx = new Context(InstructionSet, current.Key);
 					ctx.BasicBlock = current.Value;
