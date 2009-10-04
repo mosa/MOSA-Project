@@ -323,7 +323,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// only saves runtime space/perf.
 			MethodSignature sig = _method.Signature;
 			if (sig.HasThis || sig.HasExplicitThis) {
-				if (0 == index) {
+				if (index == 0) {
 					return new ParameterOperand(
 						_architecture.StackFrameRegister,
 						new RuntimeParameter(_method.Module, @"this", 0, ParameterAttributes.In),
@@ -335,11 +335,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// A normal argument, decode it...
 			IList<RuntimeParameter> parameters = _method.Parameters;
-			Debug.Assert(null != parameters, @"Method doesn't have arguments.");
+			Debug.Assert(parameters != null, @"Method doesn't have arguments.");
 			Debug.Assert(index < parameters.Count, @"Invalid argument index requested.");
-			if (null == parameters || parameters.Count <= index) {
+			if (parameters == null || parameters.Count <= index) 
 				throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
-			}
 
 			Operand param = null;
 			if (_parameters.Count > index)

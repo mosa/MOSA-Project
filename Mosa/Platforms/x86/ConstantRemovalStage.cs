@@ -71,10 +71,10 @@ namespace Mosa.Platforms.x86
 
 			IArchitecture arch = compiler.Architecture;
 
-			Context ctxEpilogue = new Context(FindBlock(Int32.MaxValue));
+			Context ctxEpilogue = new Context(InstructionSet, FindBlock(Int32.MaxValue));
 			ctxEpilogue.GotoLast();
 
-			// Iterate all Blocks and collect locals from all Blocks
+			// Iterate all blocks and collect locals from all blocks
 			foreach (BasicBlock block in BasicBlocks)
 				ProcessInstructions(arch, new Context(InstructionSet, block), ctxEpilogue);
 		}

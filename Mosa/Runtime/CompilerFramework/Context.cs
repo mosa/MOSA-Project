@@ -373,17 +373,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Context"/> class.
 		/// </summary>
-		/// <param name="basicBlock">The basic block.</param>
-		public Context(BasicBlock basicBlock)
-		{
-			_block = basicBlock;
-			_index = basicBlock.Index;
-			//			_instructionSet 
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Context"/> class.
-		/// </summary>
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <param name="basicBlock">The basic block.</param>
 		public Context(InstructionSet instructionSet, BasicBlock basicBlock)
