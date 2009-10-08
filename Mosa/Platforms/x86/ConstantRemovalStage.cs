@@ -114,7 +114,7 @@ namespace Mosa.Platforms.x86
 
 						//Instructions.LiteralInstruction literal = (Instructions.LiteralInstruction)architecture.CreateInstruction(typeof(Instructions.LiteralInstruction), );                       						
 						ctxEpilogue.InsertInstructionAfter(CPUx86.Instruction.LiteralInstruction);
-						ctxEpilogue.LiteralData = new IR.LiteralData(ctx.Offset, co.Type, co.Value);
+						ctxEpilogue.LiteralData = new IR.LiteralData(ctx.Label, co.Type, co.Value);
 
 						// FIXME - I hope I got this right
 						//co.Replace(literal.CreateOperand());

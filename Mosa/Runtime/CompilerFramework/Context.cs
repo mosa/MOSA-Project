@@ -87,6 +87,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the offset.
 		/// </summary>
 		/// <value>The offset.</value>
+		public int Label
+		{
+			get { return _instructionSet.Data[_index].Label; }
+			set { _instructionSet.Data[_index].Label = value; }
+		}
+
+
+		/// <summary>
+		/// Gets the offset.
+		/// </summary>
+		/// <value>The offset.</value>
 		public int Offset
 		{
 			get { return _instructionSet.Data[_index].Offset; }

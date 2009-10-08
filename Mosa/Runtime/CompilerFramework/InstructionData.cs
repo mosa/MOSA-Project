@@ -33,7 +33,12 @@ namespace Mosa.Runtime.CompilerFramework
 		public IInstruction Instruction;
 
 		/// <summary>
-		/// IL offset of the instruction from the start of the method.
+		/// Label of the instruction
+		/// </summary>
+		public int Label;
+
+		/// <summary>
+		/// Offset of the instruction from the start of the method.
 		/// </summary>
 		private int _offset;
 
@@ -92,7 +97,7 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Properties
 
 		/// <summary>
-		/// Gets or sets the offset of the instruction From the start of the method.
+		/// Gets or sets the label of the instruction.
 		/// </summary>
 		/// <remarks>
 		/// Offsets are used by branch instructions to define their target. During basic block
@@ -181,7 +186,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Clear()
 		{
-			this._offset = 0;
+			this.Label = -1;
+			this.Offset = 0;
 			this.Instruction = null;
 			this.Ignore = true;
 			this.Operand1 = null;

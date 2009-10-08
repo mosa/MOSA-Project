@@ -97,7 +97,7 @@ namespace Mosa.Runtime.CompilerFramework
 				if (ctx.Ignore)
 					text.Append("; ");
 
-				text.AppendFormat("L_{0:X4}: {1}", ctx.Offset, ctx.Instruction.ToString(ctx));
+				text.AppendFormat("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx));
 
 				Debug.WriteLine(text.ToString());
 			}

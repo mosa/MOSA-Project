@@ -360,7 +360,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public void SetOffset(int index, int offset)
 		{
 			IsIndexValid(index);
-			Data[index].Offset = offset;
+			Data[index].Label = offset;
 		}
 
 		/// <summary>

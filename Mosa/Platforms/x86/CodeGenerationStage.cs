@@ -553,7 +553,7 @@ namespace Mosa.Platforms.x86
 		void CIL.ICILVisitor.Ldarga(Context ctx)
 		{
 			_codeEmitter.Mov(ctx.Result, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EBP));
-			_codeEmitter.Add(ctx.Result, new ConstantOperand(new SigType(CilElementType.Ptr), ctx.Offset));
+			_codeEmitter.Add(ctx.Result, new ConstantOperand(new SigType(CilElementType.Ptr), ctx.Label));
 		}
 
 		void CIL.ICILVisitor.Ldloc(Context ctx)
@@ -563,7 +563,7 @@ namespace Mosa.Platforms.x86
 		void CIL.ICILVisitor.Ldloca(Context ctx)
 		{
 			_codeEmitter.Mov(ctx.Result, new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EBP));
-			_codeEmitter.Add(ctx.Result, new ConstantOperand(ctx.Result.Type, ctx.Offset));
+			_codeEmitter.Add(ctx.Result, new ConstantOperand(ctx.Result.Type, ctx.Label));
 		}
 
 		void CIL.ICILVisitor.Ldc(Context ctx)
