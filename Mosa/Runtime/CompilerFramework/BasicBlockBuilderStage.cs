@@ -29,6 +29,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private SortedDictionary<int, BasicBlock> _loopHeads;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private List<int> _sliceAfter;
+		/// <summary>
+		/// 
+		/// </summary>
+		private Dictionary<int, int> _targets;
+
 		#endregion // Data members
 
 		#region Construction
@@ -39,6 +48,8 @@ namespace Mosa.Runtime.CompilerFramework
 		public BasicBlockBuilderStage()
 		{
 			_loopHeads = new SortedDictionary<int, BasicBlock>();
+			_sliceAfter = new List<int>();
+			_targets = new Dictionary<int, int>();
 		}
 
 		#endregion // Construction
@@ -62,8 +73,6 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			base.Run(compiler);
 
-			FindLoopHeads(0);
-
 			compiler.BasicBlocks = new List<BasicBlock>((_loopHeads.Count + 2) * 2);
 			BasicBlocks = compiler.BasicBlocks;
 
@@ -86,95 +95,82 @@ namespace Mosa.Runtime.CompilerFramework
 			// Add epilogue block to leaders (helps with loop below)
 			_loopHeads.Add(epilogue.Label, epilogue);
 
+			FindTargets(0);
+
 			// Link prologue block to the first leader
 			LinkBlocks(prologue, _loopHeads[0]);
 
-			CreateBlocks(_loopHeads, epilogue);
+			//			CreateBlocks(_loopHeads, epilogue);
 		}
 
 		/// <summary>
-		/// Finds the loop heads.
+		/// Finds all targets.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		private void FindLoopHeads(int index)
+		private void FindTargets(int index)
 		{
-			// Add the start of the instruction set
-			AddLoopHead(0);
-
+			// Find out all targets labels
 			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext()) {
-				// Does this instruction end a block?
+
 				switch (ctx.Instruction.FlowControl) {
-					case FlowControl.Break: goto case FlowControl.Next;
-					case FlowControl.Call: goto case FlowControl.Next;
-					case FlowControl.Next: break;
-
+					case FlowControl.Next: continue;
+					case FlowControl.Call: continue;
+					case FlowControl.Break:
+						_sliceAfter.Add(ctx.Index);
+						continue;
 					case FlowControl.Return:
-						if (!ctx.IsLastInstruction)
-							AddLoopHead(ctx.Next.Offset);
-						break;
-
+						_sliceAfter.Add(ctx.Index);
+						continue;
+					case FlowControl.Throw:
+						_sliceAfter.Add(ctx.Index);
+						goto case FlowControl.Branch;
+					case FlowControl.Branch:
+						// Unconditional branch 
+						Debug.Assert(ctx.Branch.Targets.Length == 1);
+						_sliceAfter.Add(ctx.Index);
+						_targets.Add(ctx.Branch.Targets[0], -1);
+						continue;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
-					case FlowControl.Branch: goto case FlowControl.ConditionalBranch;
-
 					case FlowControl.ConditionalBranch:
 						// Conditional branch with multiple targets
+						_sliceAfter.Add(ctx.Index);
 						foreach (int target in ctx.Branch.Targets)
-							AddLoopHead(target);
-						goto case FlowControl.Throw;
-
-					case FlowControl.Throw:
-						// End the block, start a new one on the next statement
-						if (!ctx.IsLastInstruction)
-							AddLoopHead(ctx.Next.Offset);
-						break;
-
+							_targets.Add(target, -1);
+						continue;
 					default:
 						Debug.Assert(false);
 						break;
 				}
 			}
-		}
 
-		/// <summary>
-		/// Adds the leader.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		public void AddLoopHead(int index)
-		{
-			if (!_loopHeads.ContainsKey(index))
-				_loopHeads.Add(index, new BasicBlock(index));
-		}
-
-		/// <summary>
-		/// Inserts the instructions into blocks.
-		/// </summary>
-		/// <param name="leaders">The leaders.</param>
-		/// <param name="epilogue">The epilogue.</param>
-		private void CreateBlocks(IDictionary<int, BasicBlock> leaders, BasicBlock epilogue)
-		{
-			KeyValuePair<int, BasicBlock> current = new KeyValuePair<int, BasicBlock>(-1, null);
-
-			foreach (KeyValuePair<int, BasicBlock> next in leaders) {
-				if (current.Key != -1) {
-					// Insert block into list of basic Blocks
-					BasicBlocks.Add(current.Value);
-
-					// Set the block index
-					current.Value.Index = current.Key;
-
-					Context ctx = new Context(InstructionSet, current.Key);
-					ctx.BasicBlock = current.Value;
-
-					// Set the block index on all the instructions
-					while ((ctx.Index != next.Key) && !ctx.IsLastInstruction)
-						ctx.GotoNext();
-
-					InsertFlowControl(ctx, current.Value, next.Key, epilogue);
+			// Map target labels to indexes
+			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext())
+				if (_targets.ContainsKey(ctx.Label)) {
+					BasicBlocks.Add(new BasicBlock(ctx.Label, ctx.Index));
+					_targets.Remove(ctx.Label);
 				}
 
-				current = next;
-			}
+			Debug.Assert(_targets.Count == 0);
+
+			if (FindBlock(0) == null)
+				BasicBlocks.Add(new BasicBlock(0, index));
+
 		}
+
+		/// <summary>
+		/// Splits the instruction set into blocks.
+		/// </summary>
+		private void SplitIntoBlocks()
+		{
+			foreach (int index in _sliceAfter)
+				InstructionSet.SliceAfter(index);
+
+			//			foreach (KeyValuePair<int, BasicBlock> next in _loopHeads)
+			//				InstructionSet.SliceBefore(next.Key);
+		}
+
+
+
 
 		/// <summary>
 		/// Inserts the flow control.
@@ -190,8 +186,8 @@ namespace Mosa.Runtime.CompilerFramework
 				case FlowControl.Call: goto case FlowControl.Next;
 				case FlowControl.Next:
 					// Insert unconditional branch to next basic block
-					Context inserted = ctx.InsertAfter();
-					inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Br_s));
+					Context inserted = ctx.Clone();
+					inserted.InsertInstructionAfter(CIL.Instruction.Get(CIL.OpCode.Br_s));
 					inserted.SetBranch(nextBlock);
 
 					ctx.SliceAfter();
@@ -241,7 +237,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="callee">The callee.</param>
 		private void LinkBlocks(BasicBlock caller, BasicBlock callee)
 		{
-			// Chain the Blocks together
+			// Chain the blocks together
 			callee.PreviousBlocks.Add(caller);
 			caller.NextBlocks.Add(callee);
 		}
