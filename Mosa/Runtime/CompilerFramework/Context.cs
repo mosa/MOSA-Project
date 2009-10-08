@@ -465,7 +465,15 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Slices this instance.
+		/// Slices the instruction flow before the current instruction
+		/// </summary>
+		public void SliceBefore()
+		{
+			_instructionSet.SliceBefore(_index);
+		}
+
+		/// <summary>
+		/// Slices the instruction flow after the current instruction
 		/// </summary>
 		public void SliceAfter()
 		{

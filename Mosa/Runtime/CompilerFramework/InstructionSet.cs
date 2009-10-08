@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Class maintenances an array of sorted instruction
 	/// </summary>
-	public class InstructionSet
+	public sealed class InstructionSet
 	{
 		#region Data Members
 
@@ -311,12 +311,29 @@ namespace Mosa.Runtime.CompilerFramework
 			AddFree(index);
 		}
 
+
 		/// <summary>
-		/// Slices the instruction flow.
+		/// Slices the instruction flow before the current instruction
+		/// </summary>
+		/// <param name="index">The index.</param>
+		public void SliceBefore(int index)
+		{
+			if (_prev[index] == -1)
+				return;
+
+			_next[_prev[index]] = -1;
+			_prev[index] = -1;
+		}
+
+		/// <summary>
+		/// Slices the instruction flow after the current instruction
 		/// </summary>
 		/// <param name="index">The index.</param>
 		public void SliceAfter(int index)
 		{
+			if (_next[index] == -1)
+				return;
+
 			_prev[_next[index]] = -1;
 			_next[index] = -1;
 		}

@@ -344,7 +344,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (_parameters.Count > index)
 				param = _parameters[index];
 
-			if (null == param) {
+			if (param == null) {
 				param = new ParameterOperand(
 					_architecture.StackFrameRegister, parameters[index], sig.Parameters[index]);
 				_parameters[index] = param;
