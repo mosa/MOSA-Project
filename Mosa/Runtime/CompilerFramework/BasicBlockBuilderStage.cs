@@ -27,16 +27,23 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// List of leaders
 		/// </summary>
-		private SortedDictionary<int, BasicBlock> _loopHeads;
-
+		private SortedDictionary<int, BasicBlock> _heads;
 		/// <summary>
 		/// 
 		/// </summary>
-		private List<int> _sliceAfter;
+		private List<int> _slice;
 		/// <summary>
 		/// 
 		/// </summary>
 		private Dictionary<int, int> _targets;
+		/// <summary>
+		/// 
+		/// </summary>
+		private BasicBlock _epilogue;
+		/// <summary>
+		/// 
+		/// </summary>
+		private BasicBlock _prologue;
 
 		#endregion // Data members
 
@@ -47,8 +54,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public BasicBlockBuilderStage()
 		{
-			_loopHeads = new SortedDictionary<int, BasicBlock>();
-			_sliceAfter = new List<int>();
+			_heads = new SortedDictionary<int, BasicBlock>();
+			_slice = new List<int>();
 			_targets = new Dictionary<int, int>();
 		}
 
@@ -73,34 +80,43 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			base.Run(compiler);
 
-			compiler.BasicBlocks = new List<BasicBlock>((_loopHeads.Count + 2) * 2);
-			BasicBlocks = compiler.BasicBlocks;
-
 			// Create the prologue block
 			Context ctx = new Context(InstructionSet, -1);
 			// Add a jump instruction to the first block from the prologue
 			ctx.InsertInstructionAfter(CIL.Instruction.Get(CIL.OpCode.Br));
 			ctx.SetBranch(0);
-			BasicBlock prologue = new BasicBlock(-1, ctx.Index);
-			BasicBlocks.Add(prologue);
+			_prologue = new BasicBlock(-1, ctx.Index);
+			BasicBlocks.Add(_prologue);
 
 			// Create the epilogue block
 			ctx = new Context(InstructionSet, -1);
 			// Add null instruction, necessary to generate a block index
 			ctx.InsertInstructionAfter(null);
 			ctx.Ignore = true;
-			BasicBlock epilogue = new BasicBlock(Int32.MaxValue, ctx.Index);
-			BasicBlocks.Add(epilogue);
+			_epilogue = new BasicBlock(Int32.MaxValue, ctx.Index);
+			BasicBlocks.Add(_epilogue);
 
 			// Add epilogue block to leaders (helps with loop below)
-			_loopHeads.Add(epilogue.Label, epilogue);
+			_heads.Add(_epilogue.Label, _epilogue);
+
+			compiler.BasicBlocks = new List<BasicBlock>(_heads.Count + 2);
+			BasicBlocks = compiler.BasicBlocks;
 
 			FindTargets(0);
 
 			// Link prologue block to the first leader
-			LinkBlocks(prologue, _loopHeads[0]);
+			LinkBlocks(_prologue, FindBlock(0));
 
-			//			CreateBlocks(_loopHeads, epilogue);
+			// Split the blocks
+			SplitIntoBlocks();
+
+			// Link all the blocks together
+			BuildBlockLinks(_prologue);
+
+			// help out the gargage collector
+			_heads = null;
+			_slice = null;
+			_targets = null;
 		}
 
 		/// <summary>
@@ -116,24 +132,22 @@ namespace Mosa.Runtime.CompilerFramework
 					case FlowControl.Next: continue;
 					case FlowControl.Call: continue;
 					case FlowControl.Break:
-						_sliceAfter.Add(ctx.Index);
-						continue;
+						goto case FlowControl.Branch;
 					case FlowControl.Return:
-						_sliceAfter.Add(ctx.Index);
+						_slice.Add(ctx.Index);
 						continue;
 					case FlowControl.Throw:
-						_sliceAfter.Add(ctx.Index);
 						goto case FlowControl.Branch;
 					case FlowControl.Branch:
 						// Unconditional branch 
 						Debug.Assert(ctx.Branch.Targets.Length == 1);
-						_sliceAfter.Add(ctx.Index);
+						_slice.Add(ctx.Index);
 						_targets.Add(ctx.Branch.Targets[0], -1);
 						continue;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.ConditionalBranch:
 						// Conditional branch with multiple targets
-						_sliceAfter.Add(ctx.Index);
+						_slice.Add(ctx.Index);
 						foreach (int target in ctx.Branch.Targets)
 							_targets.Add(target, -1);
 						continue;
@@ -162,62 +176,50 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private void SplitIntoBlocks()
 		{
-			foreach (int index in _sliceAfter)
+			foreach (int index in _slice)
 				InstructionSet.SliceAfter(index);
-
-			//			foreach (KeyValuePair<int, BasicBlock> next in _loopHeads)
-			//				InstructionSet.SliceBefore(next.Key);
 		}
 
-
-
-
 		/// <summary>
-		/// Inserts the flow control.
+		/// Builds the block links.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="current">The current.</param>
-		/// <param name="nextBlock">The next block.</param>
-		/// <param name="epilogue">The epilogue.</param>
-		private void InsertFlowControl(Context ctx, BasicBlock current, int nextBlock, BasicBlock epilogue)
+		/// <param name="block">The current block.</param>
+		private void BuildBlockLinks(BasicBlock block)
 		{
-			switch ((ctx.Instruction as CIL.BaseInstruction).FlowControl) {
-				case FlowControl.Break: goto case FlowControl.Next;
-				case FlowControl.Call: goto case FlowControl.Next;
-				case FlowControl.Next:
-					// Insert unconditional branch to next basic block
-					Context inserted = ctx.Clone();
-					inserted.InsertInstructionAfter(CIL.Instruction.Get(CIL.OpCode.Br_s));
-					inserted.SetBranch(nextBlock);
+			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
 
-					ctx.SliceAfter();
-					LinkBlocks(current, _loopHeads[nextBlock]);
-					break;
-
-				case FlowControl.Return:
-					// Insert unconditional branch to epilogue block
-					LinkBlocks(current, epilogue);
-					break;
-
-				case FlowControl.Switch:
-					// Switch may fall through
-					goto case FlowControl.ConditionalBranch;
-
-				case FlowControl.Branch: goto case FlowControl.ConditionalBranch;
-
-				case FlowControl.ConditionalBranch:
-					// Conditional branch with multiple targets
-					foreach (int target in ctx.Branch.Targets)
-						LinkBlocks(current, _loopHeads[target]);
-					goto case FlowControl.Throw;
-
-				case FlowControl.Throw:
-					// End the block, start a new one on the next statement
-					break;
-
-				default:
-					Debug.Assert(false);
-					break;
+				switch (ctx.Instruction.FlowControl) {
+					case FlowControl.Next: continue;
+					case FlowControl.Call: continue;
+					case FlowControl.Return:
+						LinkBlocks(block, _epilogue);
+						return;
+					case FlowControl.Break: goto case FlowControl.Branch;
+					case FlowControl.Throw: goto case FlowControl.Branch;
+					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
+					case FlowControl.Branch: {
+							BasicBlock next = FindBlock(ctx.Branch.Targets[0]);
+							if (!block.NextBlocks.Contains(next)) {
+								LinkBlocks(block, next);
+								BuildBlockLinks(next);
+							}
+							return;
+						}
+					case FlowControl.ConditionalBranch:
+						foreach (int target in ctx.Branch.Targets) {
+							BasicBlock next = FindBlock(target);
+							if (!block.NextBlocks.Contains(next)) {
+								LinkBlocks(block, next);
+								BuildBlockLinks(next);
+							}	
+							ctx.InsertInstructionAfter(CIL.Instruction.Get(CIL.OpCode.Br_s));
+							ctx.SetBranch(next);
+						}
+						return;
+					default:
+						Debug.Assert(false);
+						break;
+				}
 			}
 		}
 
@@ -238,8 +240,8 @@ namespace Mosa.Runtime.CompilerFramework
 		private void LinkBlocks(BasicBlock caller, BasicBlock callee)
 		{
 			// Chain the blocks together
-			callee.PreviousBlocks.Add(caller);
 			caller.NextBlocks.Add(callee);
+			callee.PreviousBlocks.Add(caller);
 		}
 
 		#endregion // IMethodCompilerStage members
