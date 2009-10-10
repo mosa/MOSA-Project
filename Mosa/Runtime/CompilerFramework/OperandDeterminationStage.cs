@@ -32,15 +32,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		protected BitArray WorkArray;
+		protected Dictionary<BasicBlock, int> _processed;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected Stack<BasicBlock> WorkList;
+		protected Stack<BasicBlock> _unprocessed;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected Stack<List<Operand>> WorkListStack;
+		protected Stack<List<Operand>> _stack;
 
 		#endregion
 
@@ -67,35 +67,33 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			base.Run(compiler);
 
-			InitializeWorkItems();
+			_firstBlock = FindBlock(-1);
+			_unprocessed = new Stack<BasicBlock>();
+			_stack = new Stack<List<Operand>>();
+			_processed = new Dictionary<BasicBlock, int>();
+			
+			_unprocessed.Push(_firstBlock);
+			_stack.Push(new List<Operand>());
 
-			while (WorkList.Count != 0) {
-				BasicBlock block = WorkList.Pop();
-				List<Operand> stack = WorkListStack.Pop();
+			while (_unprocessed.Count != 0) {
+				BasicBlock block = _unprocessed.Pop();
+				List<Operand> stack = _stack.Pop();
 
-				if (!WorkArray.Get(block.Index)) {
+				if (!_processed.ContainsKey(block)) {
 					List<Operand> currentStack = GetCurrentStack(stack);
 
 					ProcessInstructions(block, currentStack, compiler);
-					WorkArray.Set(block.Index, true);
+					_processed.Add(block,0);
 					UpdateWorkList(block, currentStack);
 				}
 			}
-		}
 
-		/// <summary>
-		/// Initializes the work items.
-		/// </summary>
-		private void InitializeWorkItems()
-		{
-			_firstBlock = FindBlock(-1);
-			WorkList = new Stack<BasicBlock>();
-			WorkListStack = new Stack<List<Operand>>();
-			WorkList.Push(_firstBlock);
-			WorkListStack.Push(new List<Operand>());
-			WorkArray = new BitArray(BasicBlocks.Count);
+			_unprocessed = null;
+			_stack = null;
+			_unprocessed.Push(_firstBlock);
+			_processed = null;
 		}
-
+		
 		/// <summary>
 		/// Gets the current stack.
 		/// </summary>
@@ -157,12 +155,17 @@ namespace Mosa.Runtime.CompilerFramework
 					currentStack.Add(operand);
 		}
 
+		/// <summary>
+		/// Updates the work list.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="currentStack">The current stack.</param>
 		private void UpdateWorkList(BasicBlock block, List<Operand> currentStack)
 		{
 			foreach (BasicBlock nextBlock in block.NextBlocks) {
-				if (!WorkArray.Get(nextBlock.Index)) {
-					WorkList.Push(nextBlock);
-					WorkListStack.Push(currentStack);
+				if (!_processed.ContainsKey(nextBlock)) {
+					_unprocessed.Push(nextBlock);
+					_stack.Push(currentStack);
 				}
 			}
 		}
