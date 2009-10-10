@@ -91,7 +91,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </remarks>
 		public override FlowControl FlowControl
 		{
-			get { return FlowControl.Branch; }
+			get { return FlowControl.Call; }
 		}
 
 		/// <summary>

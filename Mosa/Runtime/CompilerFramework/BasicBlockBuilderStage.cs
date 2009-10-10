@@ -86,7 +86,6 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.InsertInstructionAfter(CIL.Instruction.Get(CIL.OpCode.Br));
 			ctx.SetBranch(0);
 			_prologue = new BasicBlock(-1, ctx.Index);
-			BasicBlocks.Add(_prologue);
 
 			// Create the epilogue block
 			ctx = new Context(InstructionSet, -1);
@@ -94,13 +93,14 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.InsertInstructionAfter(null);
 			ctx.Ignore = true;
 			_epilogue = new BasicBlock(Int32.MaxValue, ctx.Index);
-			BasicBlocks.Add(_epilogue);
 
 			// Add epilogue block to leaders (helps with loop below)
 			_heads.Add(_epilogue.Label, _epilogue);
 
 			compiler.BasicBlocks = new List<BasicBlock>(_heads.Count + 2);
 			BasicBlocks = compiler.BasicBlocks;
+			BasicBlocks.Add(_prologue);
+			BasicBlocks.Add(_epilogue);
 
 			FindTargets(0);
 
