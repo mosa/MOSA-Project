@@ -862,9 +862,9 @@ namespace Mosa.Runtime.CompilerFramework
 		public void SetOperand(int index, Operand operand)
 		{
 			switch (index) {
-				case 0: Operand1 = operand; break;
-				case 1: Operand2 = operand; break;
-				case 2: Operand3 = operand; break;
+				case 0: Operand1 = operand; return;
+				case 1: Operand2 = operand; return;
+				case 2: Operand3 = operand; return;
 				default: break;
 			}
 

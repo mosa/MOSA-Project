@@ -84,7 +84,13 @@ namespace Mosa.Runtime.CompilerFramework
 
 					ProcessInstructions(block, currentStack, compiler);
 					_processed.Add(block,0);
-					UpdateWorkList(block, currentStack);
+
+					foreach (BasicBlock nextBlock in block.NextBlocks) 
+						if (!_processed.ContainsKey(nextBlock)) {
+							_unprocessed.Push(nextBlock);
+							_stack.Push(currentStack);
+						}
+					
 				}
 			}
 
@@ -151,23 +157,8 @@ namespace Mosa.Runtime.CompilerFramework
 		private static void PushResultOperands(Context ctx, IList<Operand> currentStack)
 		{
 			if ((ctx.Instruction as ICILInstruction).PushResult)
-				foreach (Operand operand in ctx.Operands)
+				foreach (Operand operand in ctx.Results)
 					currentStack.Add(operand);
-		}
-
-		/// <summary>
-		/// Updates the work list.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="currentStack">The current stack.</param>
-		private void UpdateWorkList(BasicBlock block, List<Operand> currentStack)
-		{
-			foreach (BasicBlock nextBlock in block.NextBlocks) {
-				if (!_processed.ContainsKey(nextBlock)) {
-					_unprocessed.Push(nextBlock);
-					_stack.Push(currentStack);
-				}
-			}
 		}
 
 		/// <summary>
