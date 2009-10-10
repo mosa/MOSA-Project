@@ -107,6 +107,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#region Methods
 
 		/// <summary>
+		/// Decodes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		{
+			DecodeInvocationTarget(ctx, decoder, this.InvokeSupport);
+		}
+
+		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
