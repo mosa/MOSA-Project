@@ -8,13 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using IR = Mosa.Runtime.CompilerFramework.IR;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 {
@@ -23,19 +17,17 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
     /// </summary>
     public sealed class RepInstruction : BaseInstruction
     {
-        #region Construction
+        #region Methods
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RepInstruction"/> class.
+        /// 
         /// </summary>
-        public RepInstruction() :
-            base()
+        /// <param name="ctx"></param>
+        /// <param name="codeStream"></param>
+        public override void Emit(Context ctx, System.IO.Stream codeStream)
         {
+            codeStream.WriteByte(0xF3);
         }
-
-        #endregion // Construction
-
-        #region Methods
 
         /// <summary>
         /// Returns a string representation of the instruction.
@@ -45,7 +37,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"x86 rep");
+            return String.Format(@"x86.rep");
         }
 
 		/// <summary>

@@ -22,17 +22,37 @@ namespace Mosa.Platforms.x86.CPUx86
     public sealed class LogicalXorInstruction : TwoOperandInstruction
     {
         #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogicalXorInstruction"/> class.
-        /// </summary>
-        public LogicalXorInstruction()
-        {
-        }
-
+        private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 6);
+        private static readonly OpCode R_M = new OpCode(new byte[] { 0x33 });
+        private static readonly OpCode R_R = new OpCode(new byte[] { 0x33 });
+        private static readonly OpCode M_R = new OpCode(new byte[] { 0x31 });
         #endregion // Construction
 
         #region Methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <param name="source"></param>
+        /// <param name="third"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+        {
+            if ((destination is RegisterOperand) && (source is ConstantOperand))
+                return R_C;
+
+            if ((destination is RegisterOperand) && (source is MemoryOperand))
+                return R_M;
+
+            if ((destination is RegisterOperand) && (source is RegisterOperand))
+                return R_R;
+
+            if ((destination is MemoryOperand) && (source is RegisterOperand))
+                return M_R;
+
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 
         /// <summary>
         /// Returns a string representation of the instruction.
@@ -42,7 +62,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"x86 xor {0}, {1} ; {0} ^= {1}", context.Operand1, context.Operand2);
+            return String.Format(@"x86.xor {0}, {1} ; {0} ^= {1}", context.Operand1, context.Operand2);
         }
 
 		/// <summary>
