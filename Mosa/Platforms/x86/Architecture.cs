@@ -165,7 +165,6 @@ namespace Mosa.Platforms.x86
                     new LongOperandTransformationStage(),
                     new IRToX86TransformationStage(),
                     InstructionLogger.Instance,
-                    new CodeGenerator()
                 });
 		}
 
