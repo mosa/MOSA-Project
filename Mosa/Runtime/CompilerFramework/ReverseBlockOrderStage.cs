@@ -34,7 +34,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		protected int[] orderedBlocks;
+		protected BasicBlock[] _ordered;
 
 		#endregion // Data members
 
@@ -53,7 +53,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the ordered Blocks.
 		/// </summary>
 		/// <value>The ordered Blocks.</value>
-		public int[] OrderedBlocks { get { return orderedBlocks; } }
+		public BasicBlock[] OrderedBlocks { get { return _ordered; } }
 
 		#endregion // Properties
 
@@ -70,24 +70,15 @@ namespace Mosa.Runtime.CompilerFramework
 			// Retreive the first block
 			FirstBlock = FindBlock(-1);
 
-			// Determines the block order
-			DetermineBlockOrder();
-		}
-
-		/// <summary>
-		/// Determines the block order.
-		/// </summary>
-		private void DetermineBlockOrder()
-		{
 			// Allocate list of ordered Blocks
-			orderedBlocks = new int[Blocks.Count];
+			_ordered = new BasicBlock[Blocks.Count];
 
 			Debug.Assert(FirstBlock.Index == 0);
-			orderedBlocks[0] = FirstBlock.Index;
+			_ordered[0] = FirstBlock;
 			int orderBlockCnt = 1;
 
 			for (int i = Blocks.Count - 1; i > 0; i--)
-				orderedBlocks[orderBlockCnt++] = i;
+				_ordered[orderBlockCnt++] = BasicBlocks[i];
 		}
 
 		/// <summary>

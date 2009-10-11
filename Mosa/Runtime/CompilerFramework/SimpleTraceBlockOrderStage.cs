@@ -25,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// 
 		/// </summary>
 		protected IArchitecture arch;
-		
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -33,7 +33,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		protected int[] orderedBlocks;
+		protected BasicBlock[] _orderBlocks;
 
 		#endregion // Data members
 
@@ -52,7 +52,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the ordered Blocks.
 		/// </summary>
 		/// <value>The ordered Blocks.</value>
-		public int[] OrderedBlocks { get { return orderedBlocks; } }
+		public BasicBlock[] OrderedBlocks { get { return _orderBlocks; } }
 
 		#endregion // Properties
 
@@ -68,21 +68,12 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Retreive the first block
 			firstBlock = FindBlock(-1);
-
-			// Determines the block order
-			DetermineBlockOrder();
-		}
-
-		/// <summary>
-		/// Determines the block order.
-		/// </summary>
-		private void DetermineBlockOrder()
-		{
+		
 			// Create bit array of refereced Blocks (by index)
-			BitArray referencedBlocks = new BitArray(BasicBlocks.Count, false);
+			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(BasicBlocks.Count);
 
 			// Allocate list of ordered Blocks
-			orderedBlocks = new int[BasicBlocks.Count];
+			_orderBlocks = new BasicBlock[BasicBlocks.Count];
 			int orderBlockCnt = 0;
 
 			// Create sorted worklist
@@ -94,21 +85,20 @@ namespace Mosa.Runtime.CompilerFramework
 			while (workList.Count != 0) {
 				BasicBlock block = workList.Pop();
 
-				if (!referencedBlocks.Get(block.Index)) {
-
-					referencedBlocks.Set(block.Index, true);
-					orderedBlocks[orderBlockCnt++] = block.Index;
+				if (!referenced.ContainsKey(block)) {
+					referenced.Add(block, 0);
+					_orderBlocks[orderBlockCnt++] = block;
 
 					foreach (BasicBlock successor in block.NextBlocks)
-						if (!referencedBlocks.Get(successor.Index))
+						if (!referenced.ContainsKey(successor))
 							workList.Push(successor);
 				}
 			}
 
 			// Place unreferenced Blocks at the end of the list
-			for (int i = 0; i < BasicBlocks.Count; i++)
-				if (!referencedBlocks.Get(i))
-					orderedBlocks[orderBlockCnt++] = i;
+			foreach (BasicBlock block in BasicBlocks)
+				if (!referenced.ContainsKey(block))
+					_orderBlocks[orderBlockCnt++] = block;
 		}
 
 		/// <summary>

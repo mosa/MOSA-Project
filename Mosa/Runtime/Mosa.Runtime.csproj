@@ -79,7 +79,6 @@
   <ItemGroup>
     <Compile Include="CompilerFramework\BaseInstruction.cs" />
     <Compile Include="CompilerFramework\BasicBlockBuilderStage.cs" />
-    <Compile Include="CompilerFramework\BasicBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\CIL\AddInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ArglistInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ArithmeticInstruction.cs" />

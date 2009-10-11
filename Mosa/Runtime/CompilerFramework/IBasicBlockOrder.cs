@@ -18,6 +18,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the ordered Blocks.
 		/// </summary>
 		/// <value>The ordered Blocks.</value>
-		int[] OrderedBlocks { get; }
+		BasicBlock[] OrderedBlocks { get; }
 	}
 }
