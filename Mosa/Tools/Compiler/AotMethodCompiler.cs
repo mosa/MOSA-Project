@@ -52,7 +52,7 @@ namespace Mosa.Tools.Compiler
                 new CilToIrTransformationStage(),
                 //InstructionLogger.Instance,
                 //InstructionStatisticsStage.Instance,
-                new DominanceCalculationStage(),
+                //new DominanceCalculationStage(),
                 //InstructionLogger.Instance,
                 //new EnterSSA(),
                 //InstructionLogger.Instance,
