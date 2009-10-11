@@ -862,7 +862,7 @@ namespace Mosa.Platforms.x86
 			Operand op1 = ctx.Operand1;
 
 			ctx.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
-			ctx.Branch.Targets[0] = Int32.MaxValue;
+			ctx.SetBranch(Int32.MaxValue);
 
 			if (op1 != null) {
 				ICallingConvention cc = Architecture.GetCallingConvention(Compiler.Method.Signature.CallingConvention);

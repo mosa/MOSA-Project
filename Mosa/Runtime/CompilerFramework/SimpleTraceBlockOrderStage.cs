@@ -24,16 +24,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		protected IArchitecture arch;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		protected BasicBlock firstBlock;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected BasicBlock[] _orderBlocks;
+		protected BasicBlock[] _ordered;
 
 		#endregion // Data members
 
@@ -52,7 +43,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the ordered Blocks.
 		/// </summary>
 		/// <value>The ordered Blocks.</value>
-		public BasicBlock[] OrderedBlocks { get { return _orderBlocks; } }
+		public BasicBlock[] OrderedBlocks { get { return _ordered; } }
 
 		#endregion // Properties
 
@@ -67,27 +58,27 @@ namespace Mosa.Runtime.CompilerFramework
 			base.Run(compiler);
 
 			// Retreive the first block
-			firstBlock = FindBlock(-1);
+			BasicBlock first = FindBlock(-1);
 		
-			// Create bit array of refereced Blocks (by index)
+			// Create dictionary of refereced blocks
 			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(BasicBlocks.Count);
 
 			// Allocate list of ordered Blocks
-			_orderBlocks = new BasicBlock[BasicBlocks.Count];
+			_ordered = new BasicBlock[BasicBlocks.Count];
 			int orderBlockCnt = 0;
 
 			// Create sorted worklist
 			Stack<BasicBlock> workList = new Stack<BasicBlock>();
 
 			// Start worklist with first block
-			workList.Push(firstBlock);
+			workList.Push(first);
 
 			while (workList.Count != 0) {
 				BasicBlock block = workList.Pop();
 
 				if (!referenced.ContainsKey(block)) {
 					referenced.Add(block, 0);
-					_orderBlocks[orderBlockCnt++] = block;
+					_ordered[orderBlockCnt++] = block;
 
 					foreach (BasicBlock successor in block.NextBlocks)
 						if (!referenced.ContainsKey(successor))
@@ -98,7 +89,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Place unreferenced Blocks at the end of the list
 			foreach (BasicBlock block in BasicBlocks)
 				if (!referenced.ContainsKey(block))
-					_orderBlocks[orderBlockCnt++] = block;
+					_ordered[orderBlockCnt++] = block;
 		}
 
 		/// <summary>

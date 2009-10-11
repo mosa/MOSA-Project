@@ -22,18 +22,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		protected IArchitecture Architecture;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected List<BasicBlock> Blocks;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected BasicBlock FirstBlock;
-		/// <summary>
-		/// 
-		/// </summary>
 		protected BasicBlock[] _ordered;
 
 		#endregion // Data members
@@ -68,16 +56,16 @@ namespace Mosa.Runtime.CompilerFramework
 			base.Run(compiler);
 
 			// Retreive the first block
-			FirstBlock = FindBlock(-1);
+			BasicBlock first = FindBlock(-1);
 
 			// Allocate list of ordered Blocks
-			_ordered = new BasicBlock[Blocks.Count];
+			_ordered = new BasicBlock[BasicBlocks.Count];
 
-			Debug.Assert(FirstBlock.Index == 0);
-			_ordered[0] = FirstBlock;
+			Debug.Assert(first.Index == 0);
+			_ordered[0] = first;
 			int orderBlockCnt = 1;
 
-			for (int i = Blocks.Count - 1; i > 0; i--)
+			for (int i = BasicBlocks.Count - 1; i > 0; i--)
 				_ordered[orderBlockCnt++] = BasicBlocks[i];
 		}
 

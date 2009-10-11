@@ -25,10 +25,6 @@
 //        /// <summary>
 //        /// 
 //        /// </summary>
-//        protected IArchitecture arch;
-//        /// <summary>
-//        /// 
-//        /// </summary>
 //        private BasicBlock firstBlock;
 //        /// <summary>
 //        /// 

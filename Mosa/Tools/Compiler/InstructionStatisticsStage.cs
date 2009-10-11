@@ -63,6 +63,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="ctx">The context.</param>
 		public void Visit(Context ctx)
 		{
+			if (ctx.Instruction == null)
+				return;
+
 			// Count disjoint instructions
 			if (_disjointInstructions.ContainsKey(ctx.Instruction.GetType()))
 				++_disjointInstructions[ctx.Instruction.GetType()];
