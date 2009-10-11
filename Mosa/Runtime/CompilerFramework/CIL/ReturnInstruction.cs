@@ -70,9 +70,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				throw new ArgumentException(@"Invalid opcode.", @"code");
 
 			if (decoder.Method.Signature.ReturnType.Type == CilElementType.Void)
-				ctx.ResultCount = 0;
+				ctx.OperandCount = 0;
 			else
-				ctx.ResultCount = 1;
+				ctx.OperandCount = 1;
 
 			ctx.SetBranch(Int32.MaxValue);
 		}

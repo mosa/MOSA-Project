@@ -96,7 +96,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 			_unprocessed = null;
 			_stack = null;
-			_unprocessed.Push(_firstBlock);
 			_processed = null;
 		}
 		
