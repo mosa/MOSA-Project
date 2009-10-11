@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <summary>
     /// Intermediate representation of the unsigned remainder context.
     /// </summary>
-    public class URemInstruction : ThreeOperandInstruction
+    public sealed class URemInstruction : ThreeOperandInstruction
     {
         #region Construction
 

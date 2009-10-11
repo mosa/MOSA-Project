@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <remarks>
     /// This instruction takes the source operand and converts to the request size maintaining its sign.
     /// </remarks>
-    public class ZeroExtendedMoveInstruction : TwoOperandInstruction
+    public sealed class ZeroExtendedMoveInstruction : TwoOperandInstruction
     {
         #region Construction
 

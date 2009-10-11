@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <summary>
     /// Intermediate representation of an arbitrary move context.
     /// </summary>
-    public class MoveInstruction : TwoOperandInstruction
+    public sealed class MoveInstruction : TwoOperandInstruction
     {
         #region Construction
 

@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// Intermediate representation of a pop operation, that removes the topmost element From the stack and
     /// places it in the destination operand.
     /// </summary>
-    public class PopInstruction: BaseInstruction
+    public sealed class PopInstruction: BaseInstruction
     {
         #region Construction
 

@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <summary>
     /// Intermediate representation of the not instruction.
     /// </summary>
-    public class LogicalNotInstruction : TwoOperandInstruction
+    public sealed class LogicalNotInstruction : TwoOperandInstruction
     {
         #region Construction
 

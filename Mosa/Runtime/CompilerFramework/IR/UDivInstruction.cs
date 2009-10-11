@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <summary>
     /// Intermediate representation of the unsigned division operation.
     /// </summary>
-    public class UDivInstruction : ThreeOperandInstruction
+    public sealed class UDivInstruction : ThreeOperandInstruction
     {
         #region Construction
 

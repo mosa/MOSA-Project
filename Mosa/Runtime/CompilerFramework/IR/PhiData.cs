@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// <summary>
 	/// 
 	/// </summary>
-	public class PhiData
+	public sealed class PhiData
 	{
 		/// <summary>
 		/// 

@@ -8,7 +8,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <summary>
     /// Intermediate representation of call context.
     /// </summary>
-    public class CallInstruction : BaseInstruction
+    public sealed class CallInstruction : BaseInstruction
     {
         #region Construction
 

@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// <summary>
 	/// Intermediate representation of an integer comparison.
 	/// </summary>
-	public class IntegerCompareInstruction : ThreeOperandInstruction
+	public sealed class IntegerCompareInstruction : ThreeOperandInstruction
 	{
 		#region Construction
 

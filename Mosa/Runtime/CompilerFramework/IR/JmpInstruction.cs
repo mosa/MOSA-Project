@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <summary>
     /// Intermediate representation of an unconditional branch context.
     /// </summary>
-    public class JmpInstruction : BaseInstruction
+    public sealed class JmpInstruction : BaseInstruction
     {
         #region Construction
 
