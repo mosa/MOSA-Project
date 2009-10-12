@@ -1067,7 +1067,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new NotSupportedException();
 			}
 
-			throw new NotSupportedException();
 		}
 
 		private void ProcessMixedTypeConversion(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)

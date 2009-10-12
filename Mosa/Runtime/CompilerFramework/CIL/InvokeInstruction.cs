@@ -194,13 +194,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="method">The method.</param>
 		public void SetInvokeTarget(Context ctx, IMethodCompiler compiler, RuntimeMethod method)
 		{
-			if (null == method)
+			if (method == null)
 				throw new ArgumentNullException(@"method");
 
 			// Signature of the call target
 			MethodSignature signature;
 			// Number of parameters required for the call
-			int paramCount = 0;
+			byte paramCount = 0;
 
 			ctx.InvokeTarget = method;
 
@@ -208,19 +208,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			signature = ctx.InvokeTarget.Signature;
 
 			// Fix the parameter list
-			paramCount = signature.Parameters.Length;
+			paramCount = (byte)signature.Parameters.Length;
 			if (signature.HasThis && !signature.HasExplicitThis)
 				paramCount++;
 
 			// Setup operands for parameters and the return value
-			if (signature.ReturnType.Type != CilElementType.Void)
+			if (signature.ReturnType.Type != CilElementType.Void) {
 				ctx.ResultCount = 1;
+				ctx.Result = compiler.CreateTemporary(signature.ReturnType);
+			}
 			else
 				ctx.ResultCount = 0;
 
-			// Is the function returning void?
-			if (signature.ReturnType.Type != CilElementType.Void)
-				ctx.Result = compiler.CreateTemporary(signature.ReturnType);
+			ctx.OperandCount = paramCount;
 		}
 
 		/// <summary>
