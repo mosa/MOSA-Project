@@ -201,6 +201,33 @@ namespace Mosa.Runtime.CompilerFramework
 			this.Other = null;
 		}
 
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString()
+		{
+			if (Instruction == null)
+				return "null";
+
+			string str = Instruction.ToString();
+
+			if (Label >= 0)
+				str = Label.ToString() + ": " + str;
+
+			if (Branch != null) {
+				str = str + " (";
+				foreach (int branch in Branch.Targets)
+					str = str + branch.ToString() + ",";
+
+				str = str.Trim(',') + ")";
+			}
+
+			return str;
+		}
+
 		#endregion
 	}
 }

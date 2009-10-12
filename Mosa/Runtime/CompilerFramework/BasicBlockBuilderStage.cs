@@ -104,9 +104,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 			FindTargets(0);
 
-			// Link prologue block to the first leader
-			LinkBlocks(_prologue, FindBlock(0));
-
 			// Split the blocks
 			SplitIntoBlocks();
 
@@ -142,14 +139,16 @@ namespace Mosa.Runtime.CompilerFramework
 						// Unconditional branch 
 						Debug.Assert(ctx.Branch.Targets.Length == 1);
 						_slice.Add(ctx.Index);
-						_targets.Add(ctx.Branch.Targets[0], -1);
+						if (!_targets.ContainsKey(ctx.Branch.Targets[0]))
+							_targets.Add(ctx.Branch.Targets[0], -1);
 						continue;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.ConditionalBranch:
 						// Conditional branch with multiple targets
 						_slice.Add(ctx.Index);
 						foreach (int target in ctx.Branch.Targets)
-							_targets.Add(target, -1);
+							if (!_targets.ContainsKey(target))
+								_targets.Add(target, -1);
 						continue;
 					default:
 						Debug.Assert(false);
@@ -211,7 +210,7 @@ namespace Mosa.Runtime.CompilerFramework
 							if (!block.NextBlocks.Contains(next)) {
 								LinkBlocks(block, next);
 								BuildBlockLinks(next);
-							}	
+							}
 							ctx.InsertInstructionAfter(CIL.Instruction.Get(CIL.OpCode.Br_s));
 							ctx.SetBranch(next);
 						}

@@ -340,38 +340,5 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Methods
 
-		#region Utility Methods
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="index"></param>
-		/// <param name="prefix"></param>
-		public void SetPrefix(int index, CIL.PrefixInstruction prefix)
-		{
-			IsIndexValid(index);
-			Data[index].Prefix = prefix;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="index"></param>
-		/// <param name="offset"></param>
-		public void SetOffset(int index, int offset)
-		{
-			IsIndexValid(index);
-			Data[index].Label = offset;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="index"></param>
-		public void IsIndexValid(int index)
-		{
-			Debug.Assert(index < _size);
-			Debug.Assert(index >= 0);
-		}
-		#endregion
 	}
 }

@@ -891,16 +891,27 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Sets the result by index
 		/// </summary>
 		/// <param name="index">The index.</param>
-		/// <param name="operand">The operand.</param>
-		public void SetResult(int index, Operand operand)
+		/// <param name="result">The result operand.</param>
+		public void SetResult(int index, Operand result)
 		{
 			switch (index) {
-				case 0: Result = operand; break;
-				case 1: Result2 = operand; break;
+				case 0: Result = result; break;
+				case 1: Result2 = result; break;
 				default: break;
 			}
 
 			System.Diagnostics.Debug.Assert(false, @"No index");
+		}
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString()
+		{
+			return Instruction.ToString(this);
 		}
 
 		#endregion // Methods
