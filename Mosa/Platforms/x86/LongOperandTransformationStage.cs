@@ -1235,16 +1235,16 @@ namespace Mosa.Platforms.x86
 		{
 			Operand op0L, op0H, op1L, op1H;
 
-			if (ctx.Operand1.StackType == StackTypeCode.Int64) {
-				SplitLongOperand(ctx.Operand1, out op0L, out op0H);
-				SplitLongOperand(ctx.Operand2, out op1L, out op1H);
+			if (ctx.Result.StackType == StackTypeCode.Int64) {
+				SplitLongOperand(ctx.Result, out op0L, out op0H);
+				SplitLongOperand(ctx.Operand1, out op1L, out op1H);
 
 				ctx.SetInstruction(IR.Instruction.MoveInstruction, op0L, op1L);
 				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, op0H, op1H);
 			}
 			else {
-				SplitLongOperand(ctx.Operand2, out op1L, out op1H);
-				ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Operand1, op1L);
+				SplitLongOperand(ctx.Operand1, out op1L, out op1H);
+				ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, op1L);
 			}
 		}
 
