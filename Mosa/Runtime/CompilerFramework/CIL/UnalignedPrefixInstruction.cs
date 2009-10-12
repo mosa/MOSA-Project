@@ -46,7 +46,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			byte alignment;
 			decoder.Decode(out alignment);
-			// FIXME
+			ctx.Other = alignment;
 		}
 
 		#endregion // Methods Overrides

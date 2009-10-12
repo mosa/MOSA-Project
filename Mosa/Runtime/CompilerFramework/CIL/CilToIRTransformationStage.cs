@@ -1013,7 +1013,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			if (instruction == IR.Instruction.LogicalAndInstruction || mask != 0) {
 				Debug.Assert(mask != 0, @"Conversion is an AND, but no mask given.");
-
+				
 				ctx.Remove();
 
 				if (instruction != IR.Instruction.LogicalAndInstruction)
@@ -1067,6 +1067,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new NotSupportedException();
 			}
 
+			return null; // FIXME PG
 		}
 
 		private void ProcessMixedTypeConversion(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
