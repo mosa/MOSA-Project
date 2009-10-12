@@ -236,16 +236,6 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets or sets the instruction prefix.
-		/// </summary>
-		/// <value>The prefix.</value>
-		public IInstruction Prefix
-		{
-			get { return _instructionSet.Data[_index].Prefix; }
-			set { _instructionSet.Data[_index].Prefix = value; }
-		}
-
-		/// <summary>
 		/// Holds the function being called.
 		/// </summary>
 		public RuntimeMethod InvokeTarget

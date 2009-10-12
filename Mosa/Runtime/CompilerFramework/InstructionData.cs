@@ -63,11 +63,6 @@ namespace Mosa.Runtime.CompilerFramework
 		public Operand Result;
 
 		/// <summary>
-		/// Holds the prefix instruction of the instruction
-		/// </summary>
-		public IInstruction Prefix;
-
-		/// <summary>
 		///  Holds the branch target information
 		/// </summary>
 		public IBranch Branch;
@@ -196,7 +191,6 @@ namespace Mosa.Runtime.CompilerFramework
 			this.Result = null;
 			this.OperandCount = 0;
 			this.ResultCount = 0;
-			this.Prefix = null;
 			this.Branch = null;
 			this.Other = null;
 		}
