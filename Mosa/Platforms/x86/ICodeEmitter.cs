@@ -17,6 +17,8 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
+// FIXME PG - this class goes away eventually
+
 namespace Mosa.Platforms.x86
 {
     /// <summary>

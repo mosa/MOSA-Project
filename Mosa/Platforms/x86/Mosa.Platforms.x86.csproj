@@ -96,6 +96,7 @@
     <Compile Include="CPUx86\CmpInstruction.cs" />
     <Compile Include="CPUx86\ComisdInstruction.cs" />
     <Compile Include="CPUx86\ComissInstruction.cs" />
+    <Compile Include="CPUx86\BreakInstruction.cs" />
     <Compile Include="CPUx86\Cvtsd2ssInstruction.cs" />
     <Compile Include="CPUx86\Cvtsi2sdInstruction.cs" />
     <Compile Include="CPUx86\Cvtsi2ssInstruction.cs" />

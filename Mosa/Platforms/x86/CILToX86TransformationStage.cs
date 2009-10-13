@@ -75,11 +75,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Break(Context ctx)
 		{
-			// FIXME PG
-
-			//ctx.SetInstruction(CPUx86.Instruction.XXX);
-			//			_codeEmitter.Int3();
-			//			_codeStream.WriteByte(0xCC);
+			ctx.SetInstruction(CPUx86.Instruction.BreakInstruction);
 		}
 
 		/// <summary>
@@ -113,7 +109,7 @@ namespace Mosa.Platforms.x86
 			HandleInvokeInstruction(ctx);
 
 			// FIXME PG
-	
+
 			// Move the this pointer to the right place, if this is an object instance
 			RuntimeMethod method = ctx.InvokeTarget;
 			if (method.Signature.HasThis) {
@@ -181,7 +177,7 @@ namespace Mosa.Platforms.x86
 		void CIL.ICILVisitor.Branch(Context ctx)
 		{
 			// FIXME PG
-			
+
 			// ctx.SetInstruction(CPUx86.Instruction.JumpInstruction, ctx.Branch.Targets[0]);
 
 			//_codeEmitter.Jmp(ctx.Branch.Targets[0]);
