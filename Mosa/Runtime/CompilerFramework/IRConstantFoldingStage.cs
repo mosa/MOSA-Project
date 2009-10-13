@@ -328,6 +328,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context context) { }
 
+		/// <summary>
+		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.NopInstruction(Context context) {}
+
 		#endregion // IIRVisitor - Unused
 
 	}

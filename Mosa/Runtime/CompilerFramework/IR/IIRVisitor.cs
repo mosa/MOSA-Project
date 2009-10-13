@@ -189,5 +189,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void ZeroExtendedMoveInstruction(Context context);
+
+		/// <summary>
+		/// Visitation function for <see cref="NopInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void NopInstruction(Context context);
 	}
 }

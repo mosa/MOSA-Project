@@ -1397,5 +1397,15 @@ namespace Mosa.Platforms.x86
 			}
 			return cc;
 		}
+
+
+		/// <summary>
+		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IR.IIRVisitor.NopInstruction(Context ctx)
+		{
+			// TEMP
+		}
 	}
 }

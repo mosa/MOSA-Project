@@ -131,5 +131,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// 
 		/// </summary>
 		public static CallInstruction CallInstruction = new CallInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static NopInstruction NopInstruction = new NopInstruction();
 	}
 }

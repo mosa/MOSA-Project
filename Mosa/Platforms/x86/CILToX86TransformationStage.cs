@@ -61,15 +61,6 @@ namespace Mosa.Platforms.x86
 		#region ICILVisitor
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Nop"/>.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Nop(Context ctx)
-		{
-			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
-		}
-
-		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Break"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -743,6 +734,12 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Refanytype(Context ctx) { }
 
+		/// <summary>
+		/// Visitation function for <see cref="CIL.ICILVisitor.Nop"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CIL.ICILVisitor.Nop(Context ctx) { }
+
 		#endregion // ICILVisitor - Unused
 
 		#region Internals
@@ -1071,6 +1068,7 @@ namespace Mosa.Platforms.x86
 
 			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, opRes, eax);
 		}
+
 		#endregion // Internals
 	}
 }

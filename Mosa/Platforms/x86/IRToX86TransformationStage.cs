@@ -426,6 +426,16 @@ namespace Mosa.Platforms.x86
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ctx.Operand1, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX));
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IR.IIRVisitor.NopInstruction(Context ctx)
+		{
+			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
+		}
+
+
 		#endregion //  Members
 
 		#region IIRVisitor - Unused

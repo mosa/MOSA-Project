@@ -179,6 +179,7 @@
     <Compile Include="CompilerFramework\IR\BranchInstruction.cs" />
     <Compile Include="CompilerFramework\IR\CallInstruction.cs" />
     <Compile Include="CompilerFramework\IR\ConditionCode.cs" />
+    <Compile Include="CompilerFramework\IR\NopInstruction.cs" />
     <Compile Include="CompilerFramework\IR\IConditionalInstruction.cs" />
     <Compile Include="CompilerFramework\IR\LiteralData.cs" />
     <Compile Include="CompilerFramework\IR\Instruction.cs" />
