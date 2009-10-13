@@ -744,9 +744,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandUDiv(Context ctx)
 		{
-			Context[] newBlocks = CreateEmptyBlockContexts(10);
-			Context nextBlock = SplitContext(ctx);
-
 			SigType U4 = new SigType(CilElementType.U4);
 			SigType U1 = new SigType(CilElementType.U1);
 
@@ -760,6 +757,9 @@ namespace Mosa.Platforms.x86
 			RegisterOperand ecx = new RegisterOperand(U4, GeneralPurposeRegister.ECX);
 			RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
 			RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
+
+            Context[] newBlocks = CreateEmptyBlockContexts(10);
+            Context nextBlock = SplitContext(ctx);
 
 			newBlocks[0].InsertInstructionAfter(IR.Instruction.PushInstruction, edi);
 			newBlocks[0].InsertInstructionAfter(IR.Instruction.PushInstruction, esi);
@@ -842,22 +842,22 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandURem(Context ctx)
 		{
-			Context[] newBlocks = CreateEmptyBlockContexts(10);
-			Context nextBlock = SplitContext(ctx);
-
 			SigType U4 = new SigType(CilElementType.U4);
 			SigType U1 = new SigType(CilElementType.U1);
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand2, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand3, out op2L, out op2H);
+			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
+			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 			RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(U4, GeneralPurposeRegister.EBX);
 			RegisterOperand edx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
 			RegisterOperand ecx = new RegisterOperand(U4, GeneralPurposeRegister.ECX);
 			RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
 			RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
+
+            Context[] newBlocks = CreateEmptyBlockContexts(10);
+            Context nextBlock = SplitContext(ctx);
 
 			// Determine sign of the result (edi = 0 if result is positive, non-zero
 			// otherwise) and make operands positive.
@@ -1614,8 +1614,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandComparison(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			Operand op1 = ctx.Operand2;
+			Operand op0 = ctx.Result;
+			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
 			Debug.Assert(op1 != null && op2 != null, @"IntegerCompareInstruction operand not memory!");
@@ -1628,6 +1628,7 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(op2, out op2L, out op2H);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(5);
+		    IR.ConditionCode conditionCode = ctx.ConditionCode;
 			Context nextBlock = SplitContext(ctx);
 
 			Debug.Assert(nextBlock != null, @"No follower block?");
@@ -1638,13 +1639,13 @@ namespace Mosa.Platforms.x86
 			newBlocks[0].InsertInstructionAfter(IR.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 
 			// Branch if check already gave results
-			newBlocks[1].InsertInstructionAfter(IR.Instruction.BranchInstruction, ctx.ConditionCode, newBlocks[3].BasicBlock);
+            newBlocks[1].InsertInstructionAfter(IR.Instruction.BranchInstruction, conditionCode, newBlocks[3].BasicBlock);
 			newBlocks[1].InsertInstructionAfter(IR.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
 
 			// Compare low dwords
 			newBlocks[2].InsertInstructionAfter(CPUx86.Instruction.CmpInstruction, op1L, op2L);
 			// Set the unsigned result...
-			newBlocks[2].InsertInstructionAfter(IR.Instruction.BranchInstruction, GetUnsignedConditionCode(ctx.ConditionCode), newBlocks[3].BasicBlock);
+            newBlocks[2].InsertInstructionAfter(IR.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), newBlocks[3].BasicBlock);
 			newBlocks[2].InsertInstructionAfter(IR.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
 
 			// Success
@@ -1849,7 +1850,7 @@ namespace Mosa.Platforms.x86
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
-				ExpandUDiv(ctx);
+				    ExpandUDiv(ctx);
 		}
 
 		/// <summary>
