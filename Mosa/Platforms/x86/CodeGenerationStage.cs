@@ -24,7 +24,7 @@ using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CPUx86 = Mosa.Platforms.x86.CPUx86;
 
-// FIXME PG: This class will be removed 
+// FIXME PG: This class will be removed eventually
 
 namespace Mosa.Platforms.x86
 {

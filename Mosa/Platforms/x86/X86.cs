@@ -12,6 +12,8 @@ using System;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 
+// FIXME PG: This class will be removed eventually
+
 namespace Mosa.Platforms.x86
 {
     /// <summary>
