@@ -163,6 +163,7 @@ namespace Mosa.Platforms.x86
 				new IMethodCompilerStage[]
                 {
                     new LongOperandTransformationStage(),
+					new CILToX86TransformationStage(),
                     new IRToX86TransformationStage(),
                     InstructionLogger.Instance,
                 });
