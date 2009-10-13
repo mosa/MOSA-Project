@@ -23,10 +23,10 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 namespace Mosa.Platforms.x86
 {
 	/// <summary>
-	/// Transforms CIL instructions into their appropriate IR.
+	/// Transforms CIL instructions into their appropriate X86.
 	/// </summary>
 	/// <remarks>
-	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
+	/// This transformation stage transforms CIL instructions into their equivalent X86 sequences.
 	/// </remarks>
 	public sealed class CILToX86TransformationStage :
 		CodeTransformationStage,

@@ -508,6 +508,7 @@ namespace Mosa.Platforms.x86
 
 		#endregion // IIRVisitor
 
+		// FIXME PG - somes of these seem to be X86 to IR (wrong transformation direction)
 		#region IX86Visitor
 
 		/// <summary>

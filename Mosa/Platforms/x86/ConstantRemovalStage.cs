@@ -30,6 +30,15 @@ namespace Mosa.Platforms.x86
 	{
 		#region Data members
 
+		// Check the type of the constant operand against this list of large CIL types,
+		// that need special handling.
+		private static CilElementType[] _largeCilTypes = {
+                CilElementType.R4,
+                CilElementType.R8,
+                CilElementType.I8,
+                CilElementType.U8
+            };
+
 		/// <summary>
 		/// If true it indicates that this compiler stage has moved at least 
 		/// one floating point constant to physical memory.
@@ -105,14 +114,12 @@ namespace Mosa.Platforms.x86
 
 			for (; !ctx.EndOfInstruction; ctx.GotoNext()) {
 				// A constant may only appear on the right side of an expression, so we ignore constants in
-				// Instruction.Result - there should never be one there.
+				// Result - there should never be one there.
 				foreach (Operand op in ctx.Operands) {
 					co = op as ConstantOperand;
 					if (co != null && IsLargeConstant(co)) {
-						// Move the constant out of the code stream and place it right after
-						// the code.
 
-						//Instructions.LiteralInstruction literal = (Instructions.LiteralInstruction)architecture.CreateInstruction(typeof(Instructions.LiteralInstruction), );                       						
+						// Move the constant out of the code stream and place it right after the code.
 						ctxEpilogue.InsertInstructionAfter(CPUx86.Instruction.LiteralInstruction);
 						ctxEpilogue.LiteralData = new IR.LiteralData(ctx.Label, co.Type, co.Value);
 
@@ -138,16 +145,7 @@ namespace Mosa.Platforms.x86
 		/// <returns>True if the constant is large and needs to be moved to a literal.</returns>
 		private static bool IsLargeConstant(ConstantOperand co)
 		{
-			// Check the type of the constant operand against this list of large CIL types,
-			// that need special handling.
-			CilElementType[] largeCilTypes = {
-                CilElementType.R4,
-                CilElementType.R8,
-                CilElementType.I8,
-                CilElementType.U8
-            };
-
-			return (Array.IndexOf<CilElementType>(largeCilTypes, co.Type.Type) != -1);
+			return (Array.IndexOf<CilElementType>(_largeCilTypes, co.Type.Type) != -1);
 		}
 
 		#endregion // Internals
