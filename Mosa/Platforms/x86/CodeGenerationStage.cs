@@ -24,6 +24,8 @@ using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CPUx86 = Mosa.Platforms.x86.CPUx86;
 
+// FIXME PG: This class will be removed 
+
 namespace Mosa.Platforms.x86
 {
 
@@ -533,7 +535,8 @@ namespace Mosa.Platforms.x86
 
 		#endregion IX86Visitor
 
-		#region CILVisitor
+		// Moved to CILToX86Transformation
+		#region CILVisitor 
 
 		void CIL.ICILVisitor.Nop(Context ctx)
 		{

@@ -97,15 +97,11 @@ namespace Mosa.Platforms.x86
 			if (stackSize != 0)
 				ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, stackSize));
 
-			if (ctx.ResultCount > 0) {
-				if (ctx.Result.StackType == StackTypeCode.Int64) {
+			if (ctx.ResultCount > 0)
+				if (ctx.Result.StackType == StackTypeCode.Int64)
 					MoveReturnValueTo64Bit(ctx.Result, ctx);
-				}
-				else {
+				else
 					MoveReturnValueTo32Bit(ctx.Result, ctx);
-				}
-			}
-
 		}
 
 		/// <summary>
@@ -222,7 +218,7 @@ namespace Mosa.Platforms.x86
 						throw new NotSupportedException();
 				}
 
-				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction,rop, op);
+				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, rop, op);
 				op = rop;
 			}
 			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64) {

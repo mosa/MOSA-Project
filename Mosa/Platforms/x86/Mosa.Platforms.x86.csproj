@@ -89,6 +89,7 @@
     <Compile Include="ConstantRemovalStage.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CILToX86TransformationStage.cs" />
     <Compile Include="CPUx86\AdcInstruction.cs" />
     <Compile Include="CPUx86\AddInstruction.cs" />
     <Compile Include="CPUx86\CdqInstruction.cs" />
