@@ -97,19 +97,21 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Call(Context ctx)
 		{
-			HandleInvokeInstruction(ctx);
+			HandleInvokeInstruction(ctx.Clone());
+
+			return; 
 
 			// FIXME PG
 
 			// Move the this pointer to the right place, if this is an object instance
-			RuntimeMethod method = ctx.InvokeTarget;
-			if (method.Signature.HasThis) {
-				// FIXME PG - 
-				//_codeEmitter.Mov(new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.Object), GeneralPurposeRegister.ECX), instruction.ThisReference);
-				//ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.Object), GeneralPurposeRegister.ECX), instruction.ThisReference);
+			//RuntimeMethod method = ctx.InvokeTarget;
+			//if (method.Signature.HasThis) {
+			//    // FIXME PG - 
+			//    //_codeEmitter.Mov(new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.Object), GeneralPurposeRegister.ECX), instruction.ThisReference);
+			//    //ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.Object), GeneralPurposeRegister.ECX), instruction.ThisReference);
 
-				throw new NotImplementedException();
-			}
+			//    throw new NotImplementedException();
+			//}
 
 			/*
 			 * HINT: Microsoft seems not to use vtables/itables in .NET v2/v3/v3.5 anymore. They allocate
@@ -120,7 +122,7 @@ namespace Mosa.Platforms.x86
 			 */
 
 			// Do we need to emit a call with vtable lookup?
-			Debug.Assert(MethodAttributes.Virtual != (MethodAttributes.Virtual & method.Attributes), @"call to a virtual function?");
+			//Debug.Assert(MethodAttributes.Virtual != (MethodAttributes.Virtual & method.Attributes), @"call to a virtual function?");
 
 			// A static call to the right address :)
 
