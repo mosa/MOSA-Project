@@ -399,11 +399,14 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.StoreInstruction(Context ctx)
 		{
-			RegisterOperand eax = new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EAX);
-			RegisterOperand edx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, ctx.Result);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, edx, ctx.Operand1);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx);
+			Operand operand1 = ctx.Operand1;
+			Operand result = ctx.Result;
+
+			RegisterOperand eax = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+			RegisterOperand edx = new RegisterOperand(operand1.Type, GeneralPurposeRegister.EDX);
+			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, eax, result);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, edx, operand1);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(operand1.Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx);
 		}
 
 		/// <summary>
@@ -421,9 +424,13 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.URemInstruction(Context ctx)
 		{
-			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, new RegisterOperand(ctx.Operand2.Type, GeneralPurposeRegister.EAX), ctx.Operand2);
-			ctx.InsertInstructionAfter(IR.Instruction.UDivInstruction, ctx.Operand2, ctx.Operand3);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ctx.Operand1, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX));
+			Operand operand1 = ctx.Operand1;
+			Operand operand2 = ctx.Operand2;
+			Operand operand3 = ctx.Operand3;
+
+			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, new RegisterOperand(operand2.Type, GeneralPurposeRegister.EAX), operand2);
+			ctx.InsertInstructionAfter(IR.Instruction.UDivInstruction, operand2, operand3);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, operand1, new RegisterOperand(operand1.Type, GeneralPurposeRegister.EDX));
 		}
 
 		/// <summary>
@@ -434,7 +441,6 @@ namespace Mosa.Platforms.x86
 		{
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 		}
-
 
 		#endregion //  Members
 
