@@ -618,6 +618,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			_index = _instructionSet.InsertAfter(_index);
 			SetInstruction(instruction, 0, 1);
+			Result = result;
 		}
 
 		/// <summary>

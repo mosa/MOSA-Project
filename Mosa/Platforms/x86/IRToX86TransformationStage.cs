@@ -326,15 +326,15 @@ namespace Mosa.Platforms.x86
 			// Uncomment this line to enable breakpoints within Bochs
 			ctx.SetInstruction(CPUx86.Instruction.BochsDebug);
 			// push ebp
-			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, ebp);
+			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, null, ebp);
 			// mov ebp, esp
 			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, ebp, esp);
 			// sub esp, localsSize
 			ctx.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, -stackSize));
 			// Initialize all locals to zero
-			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, edi);
+			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, null, edi);
 			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, edi, esp);
-			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, ecx);
+			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, null, ecx);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edi, new ConstantOperand(I, 4));
 			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, ecx, new ConstantOperand(I, (-stackSize) / 4));
 			ctx.InsertInstructionAfter(CPUx86.Instruction.LogicalXorInstruction, eax, eax);
@@ -354,7 +354,7 @@ namespace Mosa.Platforms.x86
 			if (Compiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
 				Compiler.Method.Signature.ReturnType.Type != CilElementType.U8) {
 				// push edx
-				ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, new RegisterOperand(I, GeneralPurposeRegister.EDX));
+				ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 			}
 		}
 
@@ -529,7 +529,7 @@ namespace Mosa.Platforms.x86
 			ctx.Result = eax;
 
 			Context start = ctx.InsertBefore();
-			start.SetInstruction(IR.Instruction.PushInstruction, eax);
+			start.SetInstruction(IR.Instruction.PushInstruction, null, eax);
 
 			if (X86.IsSigned(op0))
 				start.InsertInstructionAfter(IR.Instruction.SignExtendedMoveInstruction, eax, op0);
