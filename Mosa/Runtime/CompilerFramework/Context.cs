@@ -370,7 +370,7 @@ namespace Mosa.Runtime.CompilerFramework
 			_index = index;
 			_block = null;
 		}
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Context"/> class.
 		/// </summary>
@@ -629,7 +629,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="operand1">The operand1.</param>
 		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1)
 		{
-			SetInstruction(instruction, 1, 1);
+			SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
 			Result = result;
 			Operand1 = operand1;
 		}
@@ -656,7 +656,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="operand2">The operand2.</param>
 		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2)
 		{
-			SetInstruction(instruction, 2, 1);
+			SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
 			Result = result;
 			Operand1 = operand1;
 			Operand2 = operand2;
@@ -685,7 +685,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="operand3">The operand3.</param>
 		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
 		{
-			SetInstruction(instruction, 3, 1);
+			SetInstruction(instruction, 3, (byte)((result == null) ? 0 : 1));
 			Result = result;
 			Operand1 = operand1;
 			Operand2 = operand2;
@@ -752,6 +752,8 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			Result = result;
 			Operand1 = operand1;
+			ResultCount = (byte)((result == null) ? 0 : 1);
+			OperandCount = 1;
 		}
 
 		/// <summary>
@@ -765,7 +767,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Result = result;
 			Operand1 = operand1;
 			Operand2 = operand2;
-			ResultCount = 1;
+			ResultCount = (byte)((result == null) ? 0 : 1);
 			OperandCount = 2;
 		}
 
@@ -782,7 +784,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Operand1 = operand1;
 			Operand2 = operand2;
 			Operand3 = operand3;
-			ResultCount = 1;
+			ResultCount = (byte)((result == null) ? 0 : 1);
 			OperandCount = 3;
 		}
 
