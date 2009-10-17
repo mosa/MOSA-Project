@@ -48,7 +48,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format("x86.cvtsd2ss {0}, {1} ; {0} = (float){1}", context.Operand1, context.Operand2);
+            return String.Format("X86.cvtsd2ss {0}, {1} ; {0} = (float){1}", context.Operand1, context.Operand2);
         }
 
 		/// <summary>

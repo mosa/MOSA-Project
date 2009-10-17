@@ -1029,6 +1029,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		private IInstruction ComputeExtensionTypeAndMask(ConvType destinationType, ref uint mask)
 		{
+			mask = 0;
+
 			switch (destinationType) {
 				case ConvType.I1:
 					mask = 0xFF;
@@ -1067,7 +1069,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new NotSupportedException();
 			}
 
-			return null; // FIXME PG
+			return null; 
 		}
 
 		private void ProcessMixedTypeConversion(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)

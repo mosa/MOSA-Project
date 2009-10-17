@@ -40,7 +40,7 @@ namespace Mosa.Platforms.x86.CPUx86
         public override string ToString(Context context)
         {
             int label = Convert.ToInt32((context.Operand1 as ConstantOperand).Value);
-            return String.Format(@"x86.jns >= 0 {0} ; if >= 0 goto {0}", label);
+            return String.Format(@"X86.jns >= 0 {0} ; if >= 0 goto {0}", label);
         }
 
 		/// <summary>
