@@ -40,7 +40,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </returns>
 		public override string ToString(Context context)
 		{
-			return String.Format(@"x86.mul edx:eax, {0} ; edx:eax = eax * {0}", context.Operand2);
+			return String.Format(@"X86.mul edx:eax, {0} ; edx:eax = eax * {0}", context.Operand2);
 		}
 
 		#endregion // Methods

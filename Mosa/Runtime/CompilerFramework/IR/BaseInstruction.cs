@@ -59,7 +59,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </returns>
 		public override string ToString()
 		{
-			return "IR." + this.GetType().ToString();
+			return "IR." + base.ToString();
 		}
 
 		/// <summary>

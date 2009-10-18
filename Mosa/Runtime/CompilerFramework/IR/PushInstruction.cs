@@ -34,18 +34,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
         #region Instruction Overrides
 
 		/// <summary>
-		/// Returns a string representation of the <see cref="PopInstruction"/>.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-        public override string ToString(Context context)
-        {
-            return String.Format("IR.push {0}", context.Operand1);
-        }
-
-		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>

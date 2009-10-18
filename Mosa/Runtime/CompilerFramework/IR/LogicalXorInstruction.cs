@@ -32,18 +32,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
         #region ThreeOperandInstruction Overrides
 
 		/// <summary>
-		/// Returns a string representation of the <see cref="MoveInstruction"/>.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-        public override string ToString(Context context)
-        {
-			return String.Format(@"IR.or {0} <- {1} ^ {2}", context.Operand1, context.Operand2, context.Operand3);
-        }
-
-		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>

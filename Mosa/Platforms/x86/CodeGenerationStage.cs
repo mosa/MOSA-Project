@@ -1368,7 +1368,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		private void ThrowThreeAddressCodeNotSupportedException()
 		{
-			throw new NotSupportedException(@"x86.doesn't support this three-address code instruction - did you miss IRToX86TransformationStage?");
+			throw new NotSupportedException(@"X86.doesn't support this three-address code instruction - did you miss IRToX86TransformationStage?");
 		}
 
 		#endregion // Internal Helpers

@@ -38,7 +38,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"x86.sti");
+            return String.Format(@"X86.sti");
         }
 
 		/// <summary>

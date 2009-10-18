@@ -49,8 +49,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-        {
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
 			if ((destination is RegisterOperand) && (source is ConstantOperand))
 				return R_C;
 
@@ -60,30 +60,17 @@ namespace Mosa.Platforms.x86.CPUx86
 			if ((destination is RegisterOperand) && (source is MemoryOperand))
 				return IsUnsignedByte(destination) ? R_M_U8 : R_M;
 
-			if ((destination is MemoryOperand) && (source is RegisterOperand))
-            {
+			if ((destination is MemoryOperand) && (source is RegisterOperand)) {
 				if (IsByte(destination) || IsByte(source))
-                    return M_R_U8;
+					return M_R_U8;
 				if (IsChar(destination) || IsChar(source) || IsShort(destination) || IsShort(source))
-                    return M_R_U8;
-                return M_R;
-            }
+					return M_R_U8;
+				return M_R;
+			}
 
-		    throw new ArgumentException(@"No opcode for operand type.");
+			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context context)
-		{
-			return String.Format(@"x86.add {0}, {1} ; {0} += {1}", context.Operand1, context.Operand2);
-		}
-		
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>

@@ -52,18 +52,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
             get { return FlowControl.Branch; }
         }
 
-        /// <summary>
-        /// Returns a string representation of the <see cref="ReturnInstruction"/>.
-        /// </summary>
-        /// 
-        public override string ToString(Context context)
-        {
-            if (null == context.Operand1)
-                return @"IR.return";
-
-            return String.Format(@"IR.return {0}", context.Operand1);
-        }
-
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>

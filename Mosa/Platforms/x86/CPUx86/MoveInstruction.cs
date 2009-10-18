@@ -89,7 +89,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// <returns></returns>
         public override string ToString(Context ctx)
         {
-            return String.Format(@"x86.move {0}, {1} ; {0} <- {1}", ctx.Result, ctx.Operand1);
+			return base.ToString(ctx) + String.Format(@" ; {0} <- {1}", ctx.Result, ctx.Operand2);
         }
 
         #endregion

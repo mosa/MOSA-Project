@@ -30,13 +30,13 @@ namespace Mosa.Platforms.x86.CPUx86
 
         #region Methods
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="destination"></param>
-        /// <param name="source"></param>
-        /// <param name="third"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
             if ((destination is RegisterOperand) && (source is ConstantOperand))
@@ -52,17 +52,6 @@ namespace Mosa.Platforms.x86.CPUx86
                 return M_R;
 
             throw new ArgumentException(@"No opcode for operand type.");
-        }
-
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString(Context context)
-        {
-            return String.Format(@"x86.xor {0}, {1} ; {0} ^= {1}", context.Operand1, context.Operand2);
         }
 
 		/// <summary>

@@ -34,17 +34,6 @@ namespace Mosa.Platforms.x86.CPUx86
 
         #region Methods
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString(Context context)
-        {
-            return String.Format(@"x86.and {0}, {1} ; {0} &= {1}", context.Operand1, context.Operand2);
-        }
-
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>

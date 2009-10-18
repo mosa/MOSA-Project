@@ -36,17 +36,6 @@ namespace Mosa.Platforms.x86.CPUx86
 
         #region OneOperandInstruction Overrides
 
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString(Context context)
-        {
-            return String.Format(@"x86.neg {0}", context.Operand1);
-        }
-
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>

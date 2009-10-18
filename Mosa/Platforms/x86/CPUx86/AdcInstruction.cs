@@ -53,18 +53,6 @@ namespace Mosa.Platforms.x86.CPUx86
         }
 
 		/// <summary>
-		/// Returns a string representation of the instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context context)
-		{
-			return String.Format("x86.adc {0}, {1} ; {0} = {0} + {1} + carry-flag", context.Operand1, context.Operand2);
-		}
-
-		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
