@@ -45,7 +45,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"x86 in eax, {0} ", context.Operand1);
+            return String.Format(@"x86.in eax, {0} ", context.Operand1);
         }
 
 		/// <summary>

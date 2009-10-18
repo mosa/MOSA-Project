@@ -138,7 +138,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"X86.set{0} {1}", GetConditionString(context.ConditionCode), context.Operand1);
+            return String.Format(@"x86.set{0} {1}", GetConditionString(context.ConditionCode), context.Operand1);
         }
 
 		/// <summary>

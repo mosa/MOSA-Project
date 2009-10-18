@@ -49,7 +49,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 		/// </returns>
 		public override string ToString()
 		{
-			return String.Format(@"X86.xchg bx, bx [BochsDebug]");
+			return String.Format(@"x86.xchg bx, bx [BochsDebug]");
 		}
 
 		/// <summary>

@@ -202,6 +202,10 @@ namespace Mosa.Runtime.CompilerFramework
 					yield return Operand2;
 				if (Operand3 != null)
 					yield return Operand3;
+
+				if (OperandCount >= 3)
+					for (int index = 3; index < OperandCount; index++)
+						yield return _instructionSet.Data[_index].GetAdditionalOperand(index);
 			}
 		}
 

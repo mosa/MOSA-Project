@@ -89,7 +89,37 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return "X86." + GetType();
+			return "x86." + GetType();
+		}
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString(Context context)
+		{
+			string s = ToString();
+
+			if (context.ResultCount == 1)
+				s = s + " " + context.Result;
+			else if (context.ResultCount == 2)
+				s = s + " " + context.Result + ", " + context.Result2;
+
+			if (context.ResultCount > 0)
+				s = s + " <=";
+
+			for (int i = 0; (i < 3) && (i < context.OperandCount); i++)
+				s = s + " " + context.GetOperand(i) + ",";
+
+			if (context.OperandCount > 3)
+				s = s + " [...]";
+			else
+				s = s.TrimEnd(',');
+
+			return s;
 		}
 
 		#endregion // Operand Overrides

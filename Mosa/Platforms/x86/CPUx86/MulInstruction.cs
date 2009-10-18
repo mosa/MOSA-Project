@@ -54,7 +54,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </returns>
         public override string ToString(Context context)
         {
-            return String.Format(@"x86 mul {0}, {1} ; {0} *= {1}", context.Operand1, context.Operand2);
+            return String.Format(@"x86.mul {0}, {1} ; {0} *= {1}", context.Operand1, context.Operand2);
         }
 
 		/// <summary>

@@ -36,7 +36,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </returns>
         public override string ToString(Context context)
         {
-            return @"X86.cdq";
+            return @"x86.cdq";
         }
 
 		/// <summary>
