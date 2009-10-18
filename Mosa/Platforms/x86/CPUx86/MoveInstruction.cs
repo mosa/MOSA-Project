@@ -82,16 +82,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <returns></returns>
-        public override string ToString(Context ctx)
-        {
-			return base.ToString(ctx) + String.Format(@" ; {0} <- {1}", ctx.Result, ctx.Operand2);
-        }
-
         #endregion
     }
 }

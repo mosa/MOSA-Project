@@ -38,18 +38,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
         #region TwoOperandInstruction Overrides
 
 		/// <summary>
-		/// Returns a string representation of the context.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-        public override string ToString(Context context)
-        {
-            return String.Format(@"IR.load {0}, {1} ; {0} = *{1}", context.Operand1, context.Operand2);
-        }
-
-		/// <summary>
 		/// Visitor method for intermediate representation visitors.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
