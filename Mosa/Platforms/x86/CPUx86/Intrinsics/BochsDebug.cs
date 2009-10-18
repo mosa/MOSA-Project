@@ -9,6 +9,12 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 	/// </summary>
 	public sealed class BochsDebug : BaseInstruction
 	{
+		#region Data Members
+
+		private static readonly OpCode code = new OpCode(new byte[] { 0x66, 0x87 });
+
+		#endregion
+
 		#region Methods
 
 		/// <summary>
@@ -20,7 +26,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			return new OpCode(new byte[] { 0x66, 0x87 });
+			return code;
 		}
 
 		/// <summary>
@@ -43,7 +49,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 		/// </returns>
 		public override string ToString()
 		{
-			return String.Format(@"X86.xchg bx, bx");
+			return String.Format(@"X86.xchg bx, bx [BochsDebug]");
 		}
 
 		/// <summary>

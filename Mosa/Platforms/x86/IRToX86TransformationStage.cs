@@ -324,7 +324,7 @@ namespace Mosa.Platforms.x86
 			//Architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
 
 			// Uncomment this line to enable breakpoints within Bochs
-			ctx.SetInstruction(CPUx86.Instruction.BochsDebug);
+			ctx.SetInstruction(CPUx86.Intrinsics.Instruction.BochsDebug);
 			// push ebp
 			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, null, ebp);
 			// mov ebp, esp
@@ -338,8 +338,8 @@ namespace Mosa.Platforms.x86
 			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edi, new ConstantOperand(I, 4));
 			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, ecx, new ConstantOperand(I, (-stackSize) / 4));
 			ctx.InsertInstructionAfter(CPUx86.Instruction.LogicalXorInstruction, eax, eax);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.RepInstruction);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.StosdInstruction);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RepInstruction);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.StosdInstruction);
 			ctx.InsertInstructionAfter(IR.Instruction.PopInstruction, ecx);
 			ctx.InsertInstructionAfter(IR.Instruction.PopInstruction, edi);
 			/*

@@ -1,15 +1,12 @@
-// -----------------------------------------------------------------------------------------------------------
-// <copyright file="BasicArchitecture.cs" company="(C) 2008-2009 MOSA - The Managed Operating System Alliance">
-//  
-// (c) 2008-2009 MOSA - The Managed Operating System Alliance
-// 
-// Licensed under the terms of the New BSD License.
-//  
-// Authors:
-//   Michael Ruck (mailto:sharpos@michaelruck.de)
-//   
-// </copyright>
-// -----------------------------------------------------------------------------------------------------------
+/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ */
+
 namespace Mosa.Runtime.CompilerFramework
 {
     using System;
@@ -112,5 +109,12 @@ namespace Mosa.Runtime.CompilerFramework
         {
             return new TemporaryOperand(label, type, StackFrameRegister, index);
         }
+
+		/// <summary>
+		/// Gets the intrinsics instruction by type
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public abstract IInstruction GetIntrinsicIntruction(Type type);
     }
 }

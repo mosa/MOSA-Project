@@ -29,8 +29,8 @@ namespace Mosa.Platforms.x86
 	/// architectures without appropriate 64-bit integral operations.
 	/// </remarks>
 	public sealed class LongOperandTransformationStage :
-		CodeTransformationStage, 
-		CIL.ICILVisitor, 
+		CodeTransformationStage,
+		CIL.ICILVisitor,
 		IR.IIRVisitor
 	{
 		#region IMethodCompilerStage Members
@@ -445,9 +445,9 @@ namespace Mosa.Platforms.x86
 			// add     edx,ecx         ; EDX:EAX = QUOT * DVSR
 			// jc      short L6        ; carry means Quotient is off by 1
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, ebx, new ConstantOperand(U1, 1));
-			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.RcrInstruction, ecx, new ConstantOperand(U1, 1)); // RCR
+			newBlocks[7].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, ecx, new ConstantOperand(U1, 1)); // RCR
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
-			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
+			newBlocks[7].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.LogicalOrInstruction, ebx, ebx);
 			newBlocks[7].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[7].BasicBlock);
 			newBlocks[7].InsertInstructionAfter(IR.Instruction.JmpInstruction, newBlocks[8].BasicBlock);
@@ -675,9 +675,9 @@ namespace Mosa.Platforms.x86
 			//  jbe     short L7        ; if less or equal we are ok, else subtract
 
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, ebx, new ConstantOperand(U1, 1));
-			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.RcrInstruction, ecx, new ConstantOperand(U1, 1)); // RCR
+			newBlocks[7].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, ecx, new ConstantOperand(U1, 1)); // RCR
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
-			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
+			newBlocks[7].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.LogicalOrInstruction, ebx, ebx);
 			newBlocks[7].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[7].BasicBlock);
 			newBlocks[7].InsertInstructionAfter(IR.Instruction.JmpInstruction, newBlocks[8].BasicBlock);
@@ -685,7 +685,7 @@ namespace Mosa.Platforms.x86
 			newBlocks[8].InsertInstructionAfter(CPUx86.Instruction.DirectDivisionInstruction, ecx);
 			newBlocks[8].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ecx, eax);
 			newBlocks[8].InsertInstructionAfter(CPUx86.Instruction.DirectMultiplicationInstruction, op2H);
-			newBlocks[8].InsertInstructionAfter(CPUx86.Instruction.XchgInstruction, ecx, eax);
+			newBlocks[8].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.XchgInstruction, ecx, eax);
 			newBlocks[8].InsertInstructionAfter(CPUx86.Instruction.DirectMultiplicationInstruction, op2L);
 			newBlocks[8].InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edx, ecx);
 			newBlocks[8].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
@@ -758,8 +758,8 @@ namespace Mosa.Platforms.x86
 			RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
 			RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
 
-            Context[] newBlocks = CreateEmptyBlockContexts(10);
-            Context nextBlock = SplitContext(ctx);
+			Context[] newBlocks = CreateEmptyBlockContexts(10);
+			Context nextBlock = SplitContext(ctx);
 
 			newBlocks[0].InsertInstructionAfter(IR.Instruction.PushInstruction, null, edi);
 			newBlocks[0].InsertInstructionAfter(IR.Instruction.PushInstruction, null, esi);
@@ -788,9 +788,9 @@ namespace Mosa.Platforms.x86
 
 			// L3
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, ecx, new ConstantOperand(U1, 1));
-			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.RcrInstruction, ebx, new ConstantOperand(U1, 1)); // RCR
+			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, ebx, new ConstantOperand(U1, 1)); // RCR
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
-			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
+			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.LogicalOrInstruction, ecx, ecx);
 			newBlocks[3].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[3].BasicBlock); // JNZ
 			newBlocks[3].InsertInstructionAfter(IR.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
@@ -856,8 +856,8 @@ namespace Mosa.Platforms.x86
 			RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
 			RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
 
-            Context[] newBlocks = CreateEmptyBlockContexts(10);
-            Context nextBlock = SplitContext(ctx);
+			Context[] newBlocks = CreateEmptyBlockContexts(10);
+			Context nextBlock = SplitContext(ctx);
 
 			// Determine sign of the result (edi = 0 if result is positive, non-zero
 			// otherwise) and make operands positive.
@@ -899,9 +899,9 @@ namespace Mosa.Platforms.x86
 
 			// L3:
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, ecx, new ConstantOperand(U1, 1));
-			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.RcrInstruction, ebx, new ConstantOperand(U1, 1)); // RCR
+			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, ebx, new ConstantOperand(U1, 1)); // RCR
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
-			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
+			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.LogicalOrInstruction, ecx, ecx);
 			newBlocks[3].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[3].BasicBlock);
 			newBlocks[3].InsertInstructionAfter(IR.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
@@ -909,7 +909,7 @@ namespace Mosa.Platforms.x86
 			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.DirectDivisionInstruction, ebx);
 			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ecx, eax);
 			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.DirectMultiplicationInstruction, op2H);
-			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.XchgInstruction, ecx, eax);
+			newBlocks[4].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.XchgInstruction, ecx, eax);
 			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.DirectMultiplicationInstruction, op2L);
 			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edx, ecx);
 			newBlocks[4].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
@@ -1628,7 +1628,7 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(op2, out op2L, out op2H);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(5);
-		    IR.ConditionCode conditionCode = ctx.ConditionCode;
+			IR.ConditionCode conditionCode = ctx.ConditionCode;
 			Context nextBlock = SplitContext(ctx);
 
 			Debug.Assert(nextBlock != null, @"No follower block?");
@@ -1639,13 +1639,13 @@ namespace Mosa.Platforms.x86
 			newBlocks[0].InsertInstructionAfter(IR.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 
 			// Branch if check already gave results
-            newBlocks[1].InsertInstructionAfter(IR.Instruction.BranchInstruction, conditionCode, newBlocks[3].BasicBlock);
+			newBlocks[1].InsertInstructionAfter(IR.Instruction.BranchInstruction, conditionCode, newBlocks[3].BasicBlock);
 			newBlocks[1].InsertInstructionAfter(IR.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
 
 			// Compare low dwords
 			newBlocks[2].InsertInstructionAfter(CPUx86.Instruction.CmpInstruction, op1L, op2L);
 			// Set the unsigned result...
-            newBlocks[2].InsertInstructionAfter(IR.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), newBlocks[3].BasicBlock);
+			newBlocks[2].InsertInstructionAfter(IR.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), newBlocks[3].BasicBlock);
 			newBlocks[2].InsertInstructionAfter(IR.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
 
 			// Success
@@ -1850,7 +1850,7 @@ namespace Mosa.Platforms.x86
 		{
 			Operand op0 = ctx.Operand1;
 			if (op0.StackType == StackTypeCode.Int64)
-				    ExpandUDiv(ctx);
+				ExpandUDiv(ctx);
 		}
 
 		/// <summary>

@@ -119,6 +119,7 @@
     <Compile Include="CPUx86\Intrinsics\CpuIdInstruction.cs" />
     <Compile Include="CPUx86\Intrinsics\HltInstruction.cs" />
     <Compile Include="CPUx86\Intrinsics\InInstruction.cs" />
+    <Compile Include="CPUx86\Intrinsics\Instruction.cs" />
     <Compile Include="CPUx86\Intrinsics\InvlpgInstruction.cs" />
     <Compile Include="CPUx86\Intrinsics\IretdInstruction.cs" />
     <Compile Include="CPUx86\Intrinsics\LgdtInstruction.cs" />

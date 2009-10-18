@@ -840,11 +840,9 @@ namespace Mosa.Runtime.CompilerFramework
 				case 0: return Operand1;
 				case 1: return Operand2;
 				case 2: return Operand3;
-				default: break;
+				default: return _instructionSet.Data[_index].GetAdditionalOperand(index);
 			}
 
-			System.Diagnostics.Debug.Assert(false, @"No index");
-			return null;
 		}
 
 		/// <summary>
@@ -858,10 +856,8 @@ namespace Mosa.Runtime.CompilerFramework
 				case 0: Operand1 = operand; return;
 				case 1: Operand2 = operand; return;
 				case 2: Operand3 = operand; return;
-				default: break;
+				default: _instructionSet.Data[_index].SetAdditionalOperand(index, operand); return;
 			}
-
-			System.Diagnostics.Debug.Assert(false, @"No index");
 		}
 
 		/// <summary>

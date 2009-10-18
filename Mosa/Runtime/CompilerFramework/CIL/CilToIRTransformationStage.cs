@@ -189,7 +189,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Stsfld(Context ctx)
 		{
-			//			Replace(ctx, new MoveInstruction(new MemberOperand(ctx.RuntimeField), ctx.Operand1));
 			ctx.SetInstruction(IR.Instruction.MoveInstruction, new MemberOperand(ctx.RuntimeField), ctx.Operand1);
 		}
 
@@ -1013,7 +1012,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			if (instruction == IR.Instruction.LogicalAndInstruction || mask != 0) {
 				Debug.Assert(mask != 0, @"Conversion is an AND, but no mask given.");
-				
+
 				ctx.Remove();
 
 				if (instruction != IR.Instruction.LogicalAndInstruction)
@@ -1023,7 +1022,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 				ExtendAndTruncateResult(ctx, instruction, destinationOperand);
 			}
-			else 
+			else
 				ctx.SetInstruction(instruction, destinationOperand, sourceOperand);
 		}
 
@@ -1069,7 +1068,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					throw new NotSupportedException();
 			}
 
-			return null; 
+			return null;
 		}
 
 		private void ProcessMixedTypeConversion(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
@@ -1109,11 +1108,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			// Retrieve the invocation target
 			RuntimeMethod rm = ctx.InvokeTarget;
-			Debug.Assert(null != rm, @"Call doesn't have a target.");
+			Debug.Assert(rm != null, @"Call doesn't have a target.");
 			// Retrieve the runtime type
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
-			// The replacement instruction
-			//LegacyInstruction replacement = null;
 
 			if (rm.IsDefined(rt)) {
 				// FIXME: Change this to a GetCustomAttributes call, once we can do that :)
@@ -1124,25 +1121,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						if (ia.Architecture.IsInstanceOfType(Architecture)) {
 							// Found a replacement for the call...
 							try {
-								// FIXME PG - 
-								// PG: CreateInstance will not work anymore, need another approach
-								// PG: Unknown at this time
-
-								Debug.Assert(false);
-
-								//Operand[] args = new Operand[ctx.ResultCount + ctx.OperandCount];
-								//int idx = 0;
-
-								//foreach (Operand result in ctx.Results)
-								//    args[idx++] = result;
-
-								//foreach (Operand operand in ctx.Operands)
-								//    args[idx++] = operand;
-
-								// FIXME PG - 
-								//replacement = (LegacyInstruction)Activator.CreateInstance(ia.InstructionType, args, null);
-
-								// ctx.SetInstruction();
+								ctx.Instruction = MethodCompiler.Architecture.GetIntrinsicIntruction(ia.InstructionType);
 
 								return;
 							}
@@ -1224,7 +1203,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				// FIXME: Implement proper truncation as specified in the CIL spec
 				//Debug.Assert(false);
 				if (IsSignExtending(ctx.Operand1))
-					ctx.SetInstruction(IR.Instruction.SignExtendedMoveInstruction,ctx.Result,ctx.Operand1);					
+					ctx.SetInstruction(IR.Instruction.SignExtendedMoveInstruction, ctx.Result, ctx.Operand1);
 				else
 					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ctx.Result, ctx.Operand1);
 				return;

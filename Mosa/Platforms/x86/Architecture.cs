@@ -220,5 +220,15 @@ namespace Mosa.Platforms.x86
 					break;
 			}
 		}
+
+		/// <summary>
+		/// Gets the intrinsics instruction by type
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public override IInstruction GetIntrinsicIntruction(Type type)
+		{
+			return CPUx86.Intrinsics.Instruction.Get(type);
+		}
 	}
 }

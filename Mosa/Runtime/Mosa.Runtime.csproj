@@ -68,7 +68,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kernel\Mosa.Kernel.csproj">
@@ -229,6 +228,7 @@
     <Compile Include="CompilerFramework\CIL\BaseInstruction.cs" />
     <Compile Include="CompilerFramework\ReverseBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\OperandDeterminationStage.cs" />
+    <Compile Include="CompilerFramework\RuntimeMethodData.cs" />
     <Compile Include="CompilerFramework\StackRegisterAllocator.cs" />
     <Compile Include="CompilerFramework\StrengthReductionStage.cs" />
     <Compile Include="CompilerFramework\IBasicBlockOrder.cs" />

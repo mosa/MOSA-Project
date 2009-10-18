@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
@@ -118,8 +119,16 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The invoke target.</value>
 		public RuntimeMethod InvokeTarget
 		{
-			get { return Other as RuntimeMethod; }
-			set { Other = value; }
+			get
+			{
+				if (!(Other is RuntimeMethodData)) return null;
+				return (Other as RuntimeMethodData).RuntimeMethod;
+			}
+			set
+			{
+				if (!(Other is RuntimeMethodData)) Other = new RuntimeMethodData(value);
+				else (Other as RuntimeMethodData).RuntimeMethod = value;
+			}
 		}
 
 		/// <summary>
@@ -193,6 +202,36 @@ namespace Mosa.Runtime.CompilerFramework
 			this.ResultCount = 0;
 			this.Branch = null;
 			this.Other = null;
+		}
+
+		/// <summary>
+		/// Sets the addition operand.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="operand">The operand.</param>
+		public void SetAdditionalOperand(int index, Operand operand)
+		{
+			if (Other == null) Other = new RuntimeMethodData();
+
+			Debug.Assert(index < RuntimeMethodData.MaxOperands, @"No index");
+			Debug.Assert(index >= 3, @"No index");
+
+			(Other as RuntimeMethodData).AdditionalOperands[index - 3] = operand;
+		}
+
+		/// <summary>
+		/// Gets the addition operand.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public Operand GetAdditionalOperand(int index)
+		{
+			if (Other == null) return null;
+
+			Debug.Assert(index < RuntimeMethodData.MaxOperands, @"No index");
+			Debug.Assert(index >= 3, @"No index");
+
+			return (Other as RuntimeMethodData).AdditionalOperands[index - 3];
 		}
 
 		/// <summary>
