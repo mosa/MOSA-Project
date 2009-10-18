@@ -21,7 +21,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 	{
 		#region Static Data
 
-		private static Dictionary<Type, IInstruction> _map = Initialize();
+		private static Dictionary<Type, IInstruction> _map = null; 
 
 		/// <summary>
 		/// 
@@ -161,6 +161,9 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 		/// <returns></returns>
 		public static IInstruction Get(Type type)
 		{
+			if (_map == null)
+				_map = Initialize();
+
 			return _map[type];
 		}
 
@@ -180,6 +183,9 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 			map.Add(typeof(CpuIdEcxInstruction), CpuIdEcxInstruction);
 			map.Add(typeof(CpuIdEdxInstruction), CpuIdEdxInstruction);
 			map.Add(typeof(CpuIdInstruction), CpuIdInstruction);
+			map.Add(typeof(InvlpgInstruction), InvlpgInstruction);
+
+			// TODO - finsh up the list
 
 			return map;
 		}
