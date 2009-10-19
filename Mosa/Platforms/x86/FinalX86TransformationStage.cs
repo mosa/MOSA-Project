@@ -77,7 +77,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Cmp(Context ctx)
 		{
-			// This seems to be wrong X86 to IR translation?
+			// This seems to be wrong; X86 to IR translation?
 
 			Operand op0 = ctx.Result;
 			Operand op1 = ctx.Operand1;
