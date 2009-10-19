@@ -165,7 +165,7 @@ namespace Mosa.Platforms.x86
                     new LongOperandTransformationStage(),
 					new CILToX86TransformationStage(),
                     new IRToX86TransformationStage(),
-                    InstructionLogger.Instance,
+                    //InstructionLogger.Instance,
                 });
 		}
 
@@ -194,9 +194,9 @@ namespace Mosa.Platforms.x86
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
 		public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
 		{
-			if (signatureType == null) 
+			if (signatureType == null)
 				throw new ArgumentNullException(@"type");
-			
+
 			switch (signatureType.Type) {
 				case CilElementType.R4:
 					memorySize = alignment = 4;

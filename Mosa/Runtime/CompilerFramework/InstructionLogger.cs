@@ -86,9 +86,9 @@ namespace Mosa.Runtime.CompilerFramework
 		private void LogInstructions(Context ctx)
 		{
 			StringBuilder text = new StringBuilder();
-			
+
 			for (; !ctx.EndOfInstruction; ctx.GotoNext()) {
-			
+
 				text.Length = 0;
 
 				if (ctx.Instruction == null)
