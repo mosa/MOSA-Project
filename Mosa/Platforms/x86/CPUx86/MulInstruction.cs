@@ -23,6 +23,13 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class MulInstruction : TwoOperandInstruction
     {
+		#region Data Members
+
+		private static readonly OpCode R = new OpCode(new byte[] { 0xF7 }, 4);
+		private static readonly OpCode M = new OpCode(new byte[] { 0xF7 }, 4);
+
+		#endregion
+
         #region Construction
 
         /// <summary>
@@ -45,6 +52,22 @@ namespace Mosa.Platforms.x86.CPUx86
 		#endregion // Properties
 
         #region Methods
+
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
+			if (destination == null) return R;
+			if (destination is RegisterOperand) return R;
+			if (destination is MemoryOperand) return M;
+
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

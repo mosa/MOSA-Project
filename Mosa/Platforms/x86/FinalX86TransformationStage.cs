@@ -1,0 +1,436 @@
+/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System;
+using System.Diagnostics;
+using System.IO;
+
+using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Linker;
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
+
+
+namespace Mosa.Platforms.x86
+{
+	/// <summary>
+	/// Transforms CIL instructions into their appropriate IR.
+	/// </summary>
+	/// <remarks>
+	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
+	/// </remarks>
+	public sealed class FinalX86TransformationStage :
+		CodeTransformationStage,
+		CPUx86.IX86Visitor,
+		IMethodCompilerStage,
+		IPlatformTransformationStage
+	{
+		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
+
+		#region IMethodCompilerStage Members
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		public override string Name
+		{
+			get { return @"FinalX86TransformationStage"; }
+		}
+
+		/// <summary>
+		/// Adds this stage to the given pipeline.
+		/// </summary>
+		/// <param name="pipeline">The pipeline to add this stage to.</param>
+		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		{
+		}
+
+		#endregion // IMethodCompilerStage Members
+
+		#region IX86Visitor
+
+		/// <summary>
+		/// MulInstruction instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CPUx86.IX86Visitor.Mul(Context ctx) 
+		{
+			if (ctx.Operand1 is ConstantOperand) {
+				ctx.InsertAfter().InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
+				ctx.Operand1 = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.ECX);
+			}
+		}
+
+		#endregion // Members
+
+		#region IX86Visitor - Unused
+
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Add"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Add(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Adc"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Adc(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.And"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.And(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Or"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Or(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Xor"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Xor(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Sub"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Sub(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Sbb"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Sbb(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.DirectMultiplication"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.DirectMultiplication(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.DirectDivision"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.DirectDivision(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Div"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Div(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.UDiv"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.UDiv(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseAdd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.SseAdd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseMul"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.SseMul(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseMul"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.SseDiv(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Sar"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Sar(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Sal"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Sal(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Shl"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Shl(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Shr"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Shr(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Rcr"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Rcr(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cvtsi2ss"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Cvtsi2ss(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cvtsi2sd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Cvtsi2sd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cvtsd2ss"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Cvtsd2ss(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Setcc"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Setcc(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cdq"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Cdq(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Shld"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Shld(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Shrd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Shrd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Comisd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Comisd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Comiss"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Comiss(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Ucomisd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Ucomisd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Ucomiss"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Ucomiss(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Jns"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Jns(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.BochsDebug"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.BochsDebug(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cli"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Cli(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cld"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Cld(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.CmpXchg"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.CmpXchg(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.CpuId"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.CpuId(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.CpuIdEax"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.CpuIdEax(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.CpuIdEbx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.CpuIdEbx(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.CpuIdEcx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.CpuIdEcx(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.CpuIdEdx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.CpuIdEdx(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Hlt"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Hlt(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Invlpg"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Invlpg(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.In"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.In(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Inc"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Inc(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Dec"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Dec(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Int"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Int(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Iretd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Iretd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Lgdt"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Lgdt(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Lidt"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Lidt(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Lock"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Lock(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Neg"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Neg(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Nop"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Nop(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Out"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Out(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Pause"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Pause(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Pop"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Pop(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Popad"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Popad(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Popfd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Popfd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Push"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Push(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Pushad"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Pushad(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Pushfd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Pushfd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Rdmsr"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Rdmsr(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Rdpmc"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Rdpmc(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Rdtsc"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Rdtsc(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Rep"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Rep(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Sti"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Sti(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Stosb"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Stosb(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Stosd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Stosd(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Xchg"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Xchg(Context context) { }
+		/// <summary>
+		/// Cmp the instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CPUx86.IX86Visitor.Cmp(Context ctx) { }
+		/// <summary>
+		/// Cvtss2sdInstruction instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CPUx86.IX86Visitor.Cvtss2sd(Context ctx) { }
+		/// <summary>
+		/// SseSubInstruction instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CPUx86.IX86Visitor.SseSub(Context ctx) { }
+
+		#endregion // IX86Visitor - Unused
+
+	}
+}

@@ -41,7 +41,6 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#region Methods
 
-
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>

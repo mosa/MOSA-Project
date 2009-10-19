@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -96,11 +96,12 @@ namespace Mosa.Runtime.CompilerFramework
 				BlockStart(block);
 
 				for (Context ctx = new Context(_compiler.InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-					if (ctx.Instruction != null) {
-						IPlatformInstruction instruction = ctx.Instruction as IPlatformInstruction;
-						if (instruction != null)
-							instruction.Emit(ctx, _codeStream);
-					}
+					if (ctx.Instruction != null)
+						if (!ctx.Ignore) {
+							IPlatformInstruction instruction = ctx.Instruction as IPlatformInstruction;
+							if (instruction != null)
+								instruction.Emit(ctx, _codeStream);
+						}
 
 				BlockEnd(block);
 			}
