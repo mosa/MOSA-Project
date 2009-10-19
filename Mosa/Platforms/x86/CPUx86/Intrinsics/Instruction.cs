@@ -184,6 +184,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 			map.Add(typeof(CpuIdEdxInstruction), CpuIdEdxInstruction);
 			map.Add(typeof(CpuIdInstruction), CpuIdInstruction);
 			map.Add(typeof(InvlpgInstruction), InvlpgInstruction);
+			map.Add(typeof(NopInstruction), CPUx86.Instruction.NopInstruction);
 
 			// TODO - finsh up the list
 

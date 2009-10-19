@@ -1121,7 +1121,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						if (ia.Architecture.IsInstanceOfType(Architecture)) {
 							// Found a replacement for the call...
 							try {
-								ctx.Instruction = MethodCompiler.Architecture.GetIntrinsicIntruction(ia.InstructionType);
+								ctx.ReplaceInstructionOnly(MethodCompiler.Architecture.GetIntrinsicIntruction(ia.InstructionType));
 
 								return;
 							}

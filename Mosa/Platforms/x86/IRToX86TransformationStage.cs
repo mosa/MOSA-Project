@@ -1170,6 +1170,9 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private static void ThreeTwoAddressConversion(Context ctx, IInstruction instruction)
 		{
+			if (ctx.OperandCount != 2)
+				return;
+
 			Operand opRes = ctx.Result;
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;

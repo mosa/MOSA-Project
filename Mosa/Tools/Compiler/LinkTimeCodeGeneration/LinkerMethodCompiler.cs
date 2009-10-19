@@ -31,6 +31,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 		public LinkerMethodCompiler(AssemblyCompiler compiler, RuntimeMethod method, InstructionSet instructionSet) :
 			base(compiler.Pipeline.Find<IAssemblyLinker>(), compiler.Architecture, compiler.Assembly, method.DeclaringType, method)
 		{
+			InstructionSet = instructionSet;
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
 				new BasicBlockBuilderStage()
             });

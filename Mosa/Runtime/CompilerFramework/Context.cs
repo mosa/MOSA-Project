@@ -74,12 +74,21 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the result operand.
+		/// Gets the instruction.
 		/// </summary>
 		/// <value>The result operand.</value>
 		public IInstruction Instruction
 		{
 			get { return _instructionSet.Data[_index].Instruction; }
+			//set { _instructionSet.Data[_index].Instruction = value; }
+		}
+
+		/// <summary>
+		/// Sets the new instruction.
+		/// </summary>
+		/// <value>The result operand.</value>
+		private IInstruction NewInstruction
+		{
 			set { _instructionSet.Data[_index].Instruction = value; }
 		}
 
@@ -496,13 +505,22 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// if this instruction was part of the head of the block, then don't remove it 
 			if (prev <= 0) {
-				Instruction = null;
+				NewInstruction = null;
 				Ignore = true;
 				return;
 			}
 
 			_instructionSet.Remove(_index);
 			_index = prev;
+		}
+
+		/// <summary>
+		/// Replaces the instruction only.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		public void ReplaceInstructionOnly(IInstruction instruction)
+		{
+			NewInstruction = instruction;
 		}
 
 		/// <summary>
@@ -648,7 +666,6 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			_index = _instructionSet.InsertAfter(_index);
 			SetInstruction(instruction, result, operand1);
-
 		}
 
 		/// <summary>
@@ -719,7 +736,8 @@ namespace Mosa.Runtime.CompilerFramework
 		public void SetInstruction(IInstruction instruction, byte operandCount, byte resultCount)
 		{
 			Clear();
-			Instruction = instruction;
+
+			NewInstruction = instruction;
 			OperandCount = operandCount;
 			ResultCount = resultCount;
 			Ignore = false;

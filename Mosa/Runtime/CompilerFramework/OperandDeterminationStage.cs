@@ -10,6 +10,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+
 using Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -71,7 +73,7 @@ namespace Mosa.Runtime.CompilerFramework
 			_unprocessed = new Stack<BasicBlock>();
 			_stack = new Stack<List<Operand>>();
 			_processed = new Dictionary<BasicBlock, int>();
-			
+
 			_unprocessed.Push(_firstBlock);
 			_stack.Push(new List<Operand>());
 
@@ -83,22 +85,38 @@ namespace Mosa.Runtime.CompilerFramework
 					List<Operand> currentStack = GetCurrentStack(stack);
 
 					ProcessInstructions(block, currentStack, compiler);
-					_processed.Add(block,0);
+					_processed.Add(block, 0);
 
-					foreach (BasicBlock nextBlock in block.NextBlocks) 
+					foreach (BasicBlock nextBlock in block.NextBlocks)
 						if (!_processed.ContainsKey(nextBlock)) {
 							_unprocessed.Push(nextBlock);
 							_stack.Push(currentStack);
 						}
-					
+
 				}
 			}
+
+			if (_processed.Count != BasicBlocks.Count) {
+
+				foreach (BasicBlock block in BasicBlocks)
+					if (!_processed.ContainsKey(block)) {
+
+						if (block.Label == Int32.MaxValue) {
+							List<Operand> stack = new List<Operand>();
+							ProcessInstructions(block, stack, compiler);
+						}
+						else
+							Console.WriteLine(block);
+					}
+			}
+
+			//Debug.Assert(_processed.Count == BasicBlocks.Count, @"Did not process all blocks!");
 
 			_unprocessed = null;
 			_stack = null;
 			_processed = null;
 		}
-		
+
 		/// <summary>
 		/// Gets the current stack.
 		/// </summary>
@@ -140,7 +158,7 @@ namespace Mosa.Runtime.CompilerFramework
 		private static void AssignOperandsFromCILStack(Context ctx, IList<Operand> currentStack)
 		{
 			for (int index = ctx.OperandCount - 1; index >= 0; --index) {
-				if ( ctx.GetOperand(index) == null) {
+				if (ctx.GetOperand(index) == null) {
 					Operand operand = currentStack[currentStack.Count - 1];
 					currentStack.RemoveAt(currentStack.Count - 1);
 					ctx.SetOperand(index, operand);

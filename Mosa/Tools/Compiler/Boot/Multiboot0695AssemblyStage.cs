@@ -173,7 +173,7 @@ namespace Mosa.Tools.Compiler.Boot
 				InstructionSet instructionSet = new InstructionSet(16);
 				Context ctx = new Context(instructionSet, -1);
 
-				ctx.SetInstruction(IR.Instruction.MoveInstruction, ecx, new ConstantOperand(I4, 0x200000));
+				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, ecx, new ConstantOperand(I4, 0x200000));
 				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
 				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
 				ctx.InsertInstructionAfter(IR.Instruction.CallInstruction);
@@ -267,7 +267,7 @@ namespace Mosa.Tools.Compiler.Boot
 
 				// HACK: Symbol has been hacked. What's the correct way to do this?
 				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", IntPtr.Zero);
-				
+
 				bw.Write(videoMode);
 				bw.Write(videoWidth);
 				bw.Write(videoHeight);
