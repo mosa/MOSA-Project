@@ -347,7 +347,7 @@ namespace Mosa.Platforms.x86
             {
                 Operand op = context.Result;
                 RegisterOperand reg = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.EAX);
-                context.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, reg, op);
+                context.InsertBefore().SetInstruction(CPUx86.Instruction.MoveInstruction, reg, op);
                 context.Result = reg;
             }
 		}
@@ -406,7 +406,7 @@ namespace Mosa.Platforms.x86
             {
                 Operand op = context.Operand2;
                 RegisterOperand reg = new RegisterOperand(context.Operand2.Type, GeneralPurposeRegister.EAX);
-                context.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, reg, op);
+				context.InsertBefore().SetInstruction(CPUx86.Instruction.MoveInstruction, reg, op);
                 context.Operand2 = reg;
             }
 		}
