@@ -284,6 +284,7 @@ namespace Mosa.Platforms.x86
 			// We need to replace ourselves in case of a Memory -> Memory transfer
 			Operand op0 = ctx.Result;
 			Operand op1 = ctx.Operand1;
+
 			op1 = EmitConstant(op1);
 
 			if (!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) return;
@@ -860,7 +861,16 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Out"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Out(Context context) { }
+		void CPUx86.IX86Visitor.Out(Context context)
+		{
+            if (context.Operand3 is MemoryOperand)
+            {
+                Operand op = context.Operand3;
+                RegisterOperand reg = new RegisterOperand(context.Operand3.Type, GeneralPurposeRegister.EAX);
+                context.InsertBefore().InsertInstructionAfter(IR.Instruction.MoveInstruction, reg, op);
+                context.Operand3 = reg;
+            }
+		}
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Pause"/> instructions.
 		/// </summary>
@@ -1027,7 +1037,7 @@ namespace Mosa.Platforms.x86
 			RegisterOperand ecx = new RegisterOperand(op2.Type, GeneralPurposeRegister.ECX);
 
 			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, ecx, op2);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, opRes, op1);
+			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, opRes, op1);
 			ctx.InsertInstructionAfter(instruction, opRes, ecx);
 
 

@@ -7,14 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using IR = Mosa.Runtime.CompilerFramework.IR;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 {
@@ -23,19 +16,18 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
     /// </summary>
     public sealed class InvlpgInstruction : OneOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PushInstruction"/> class.
-        /// </summary>
-        public InvlpgInstruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
-
         #region OneOperandInstruction Overrides
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <param name="source"></param>
+        /// <param name="third"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+        {
+            return new OpCode(new byte[] { 0x0F, 0x01 });
+        }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

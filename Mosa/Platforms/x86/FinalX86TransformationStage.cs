@@ -338,7 +338,16 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Out"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Out(Context context) { }
+		void CPUx86.IX86Visitor.Out(Context context)
+		{
+            if (context.Operand2 is MemoryOperand)
+            {
+                Operand op = context.Operand2;
+                RegisterOperand reg = new RegisterOperand(context.Operand2.Type, GeneralPurposeRegister.EAX);
+                context.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, reg, op);
+                context.Operand2 = reg;
+            }
+		}
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Pause"/> instructions.
 		/// </summary>

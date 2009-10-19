@@ -8,33 +8,44 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using IR = Mosa.Runtime.CompilerFramework.IR;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 {
     /// <summary>
     /// Intermediate representation of the x86 out instruction.
     /// </summary>
-    public sealed class OutInstruction : TwoOperandInstruction
+    public sealed class OutInstruction : ThreeOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OutInstruction"/> class.
-        /// </summary>
-        public OutInstruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
+        #region Codes
+        private static OpCode C_R_8 = new OpCode(new byte[] { 0xE6 });
+        private static OpCode R_R_8 = new OpCode(new byte[] { 0xEE });
+        private static OpCode C_R_32 = new OpCode(new byte[] { 0xE7 });
+        private static OpCode R_R_32 = new OpCode(new byte[] { 0xEF });
+        #endregion 
 
         #region Methods
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="empty"></param>
+        /// <param name="destination"></param>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand empty, Operand destination, Operand source)
+        {
+            if (IsByte(source))
+            {
+                if ((destination is ConstantOperand) && (source is RegisterOperand)) return C_R_8;
+                if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_8;
+            }
+            else
+            {
+                if ((destination is ConstantOperand) && (source is RegisterOperand)) return C_R_32;
+                if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_32;
+            }
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 
         /// <summary>
         /// Returns a string representation of the instruction.

@@ -176,7 +176,7 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 			Dictionary<Type, IInstruction> map = new Dictionary<Type, IInstruction>();
 
 			map.Add(typeof(BochsDebug), BochsDebug);
-			map.Add(typeof(OutInstruction),  OutInstruction);
+			map.Add(typeof(OutInstruction), OutInstruction);
 			map.Add(typeof(InInstruction),  InInstruction);
 			map.Add(typeof(CpuIdEaxInstruction), CpuIdEaxInstruction);
 			map.Add(typeof(CpuIdEbxInstruction), CpuIdEbxInstruction);
