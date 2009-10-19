@@ -23,19 +23,35 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
     /// </summary>
     public sealed class InInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InInstruction"/> class.
-        /// </summary>
-        public InInstruction() :
-            base()
-        {
-        }
-
+        #region Codes
+        private static readonly OpCode R_C_8 = new OpCode(new byte[] { 0xE4 });
+        private static readonly OpCode R_R_8 = new OpCode(new byte[] { 0xEC });
+        private static readonly OpCode R_C_32 = new OpCode(new byte[] { 0xE5 });
+        private static readonly OpCode R_R_32 = new OpCode(new byte[] { 0xED });
         #endregion // Construction
 
         #region Methods
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <param name="source"></param>
+        /// <param name="third"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+        {
+            if (IsByte(destination))
+            {
+                if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C_8;
+                if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_8;
+            }
+            else
+            {
+                if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C_32;
+                if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_32;
+            }
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 
         /// <summary>
         /// Returns a string representation of the instruction.
