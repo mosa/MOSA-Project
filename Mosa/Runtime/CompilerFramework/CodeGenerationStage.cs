@@ -24,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the stream, where code is emitted to.
 		/// </summary>
-		protected Stream _codeStream;
+		protected static Stream _codeStream;
 
 		/// <summary>
 		/// Holds the method compiler, which is executing this stage.

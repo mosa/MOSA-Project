@@ -1494,10 +1494,10 @@ namespace Mosa.Platforms.x86
 		/// <param name="opCode">The op code.</param>
 		/// <param name="dest">The destination operand.</param>
 		/// <param name="src">The source operand.</param>
-		public static void Emit(System.IO.Stream codeStream, OpCode opCode, Operand dest, Operand src)
+		public static void Emit(Stream codeStream, OpCode opCode, Operand dest, Operand src)
 		{
-			byte? sib = null, modRM = null;
-			MemoryOperand displacement = null;
+			byte? sib, modRM;
+			MemoryOperand displacement;
 
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
@@ -1567,7 +1567,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="codeStream">The code stream.</param>
 		/// <param name="displacement">The displacement operand.</param>
-		public static void WriteDisplacement(System.IO.Stream codeStream, MemoryOperand displacement)
+		public static void WriteDisplacement(Stream codeStream, MemoryOperand displacement)
 		{
 			byte[] disp;
 

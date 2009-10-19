@@ -1043,7 +1043,7 @@ namespace Mosa.Platforms.x86
 			Operand op2 = ctx.Operand2;
 			EmitOperandConstants(ctx);
 
-			RegisterOperand ecx = new RegisterOperand(op2.Type, GeneralPurposeRegister.ECX);
+			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I1), GeneralPurposeRegister.ECX);
 
 			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, ecx, op2);
 			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, opRes, op1);
