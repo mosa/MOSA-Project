@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
- *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Alex Lyman <mail.alex.lyman@gmail.com>
  */
 
 using Mosa.Runtime;

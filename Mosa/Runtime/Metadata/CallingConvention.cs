@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
 namespace Mosa.Runtime.Metadata {

@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Simon Wollwage (<mailto:simon_wollwage@yahoo.co.jp>)
+ *  Simon Wollwage (rootnode) <simon_wollwage@yahoo.co.jp>
  */
 
 using System;

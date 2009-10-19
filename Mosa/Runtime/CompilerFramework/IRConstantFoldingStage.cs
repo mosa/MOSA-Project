@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Simon Wollwage (<mailto:simon_wollwage@yahoo.co.jp>)
+ *  Simon Wollwage (rootnode) <simon_wollwage@yahoo.co.jp>
  */
 
 using System;

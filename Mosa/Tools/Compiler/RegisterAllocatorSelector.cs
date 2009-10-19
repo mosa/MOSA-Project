@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
+ *  Kai P. Reisert <kpreisert@googlemail.com>
  */
 
 using System;

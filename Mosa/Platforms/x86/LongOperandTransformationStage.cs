@@ -4,9 +4,9 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
- *  Simon Wollwage (<mailto:kintaro@think-in-co.de>)
- *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Scott Balmos <sbalmos@fastmail.fm>
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 

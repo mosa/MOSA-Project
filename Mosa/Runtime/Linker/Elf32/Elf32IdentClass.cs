@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Simon "Kintaro" Wollwage (<mailto:kintaro@think-in-co.de>)
+ *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
 namespace Mosa.Runtime.Linker.Elf32

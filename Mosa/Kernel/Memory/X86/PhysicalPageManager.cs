@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
 namespace Mosa.Kernel.Memory.X86

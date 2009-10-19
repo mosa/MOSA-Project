@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
+ *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 namespace Pictor.PixelFormat
 {

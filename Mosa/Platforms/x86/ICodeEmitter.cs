@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
- *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Scott Balmos <sbalmos@fastmail.fm>
  */
 
 using System;

@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (<mailto:phil@thinkedge.com>)
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
 using System;

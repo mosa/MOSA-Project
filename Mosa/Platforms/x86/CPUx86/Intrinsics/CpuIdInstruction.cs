@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
+ *  Scott Balmos <sbalmos@fastmail.fm>
  */
 
 using System;
@@ -14,7 +14,6 @@ using System.Diagnostics;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
 using Mosa.Runtime.CompilerFramework;
-
 
 namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 {

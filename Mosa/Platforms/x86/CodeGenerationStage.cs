@@ -4,10 +4,10 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
- *  Phil Garcia (<mailto:phil@thinkedge.com>)
- *  Simon Wollwage (<mailto:rootnode@mosa-project.org>)
- *  Scott Balmos (<mailto:sbalmos@fastmail.fm>)
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Scott Balmos <sbalmos@fastmail.fm>
  */
 
 using System;
