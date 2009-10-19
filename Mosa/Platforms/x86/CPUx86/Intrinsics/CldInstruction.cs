@@ -16,7 +16,6 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 using Mosa.Runtime.CompilerFramework;
 
-
 namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 {
     /// <summary>

@@ -18,6 +18,7 @@ using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
@@ -68,6 +69,58 @@ namespace Mosa.Platforms.x86
 				ctx.InsertAfter().InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
 				ctx.Operand1 = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.ECX);
 			}
+		}
+
+		/// <summary>
+		/// Cmp the instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CPUx86.IX86Visitor.Cmp(Context ctx)
+		{
+			// This seems to be wrong X86 to IR translation?
+
+			Operand op0 = ctx.Result;
+			Operand op1 = ctx.Operand1;
+
+			if (((!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) &&
+				 (!(op0 is ConstantOperand) || !(op1 is ConstantOperand))) && !(op1 is ConstantOperand))
+				return;
+
+			RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
+
+			ctx.Result = eax;
+
+			Context start = ctx.InsertBefore();
+			start.SetInstruction(IR.Instruction.PushInstruction, null, eax);
+
+			if (X86.IsSigned(op0))
+				start.InsertInstructionAfter(IR.Instruction.SignExtendedMoveInstruction, eax, op0);
+			else
+				start.InsertInstructionAfter(IR.Instruction.MoveInstruction, eax, op0);
+
+			ctx.InsertInstructionAfter(IR.Instruction.PopInstruction, eax);
+		}
+
+		/// <summary>
+		/// Cvtss2sdInstruction instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CPUx86.IX86Visitor.Cvtss2sd(Context ctx)
+		{
+			if (ctx.Operand2 is ConstantOperand)
+				ctx.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, ctx.Operand1, EmitConstant(ctx.Operand2));
+		}
+
+		/// <summary>
+		/// SseSubInstruction instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CPUx86.IX86Visitor.SseSub(Context ctx)
+		{
+			EmitOperandConstants(ctx);
+
+			// FIXME PG - 
+			// ThreeTwoAddressConversion(ctx);
 		}
 
 		#endregion // Members
@@ -432,24 +485,6 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Xchg(Context context) { }
-		/// <summary>
-		/// Cmp the instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CPUx86.IX86Visitor.Cmp(Context ctx)
-		{
-		    
-		}
-		/// <summary>
-		/// Cvtss2sdInstruction instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CPUx86.IX86Visitor.Cvtss2sd(Context ctx) { }
-		/// <summary>
-		/// SseSubInstruction instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CPUx86.IX86Visitor.SseSub(Context ctx) { }
 
 		#endregion // IX86Visitor - Unused
 
