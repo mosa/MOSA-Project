@@ -297,7 +297,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(' ');
 			Screen.Write(' ');
 			Screen.Color = 0x0F;
-
+/*
 			int identifier = Platforms.x86.Native.CpuIdEbx(0);
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
@@ -309,7 +309,7 @@ namespace Mosa.HelloWorld
 			identifier = Platforms.x86.Native.CpuIdEcx(0);
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
-
+            */
 			Screen.NextLine();
 			#endregion
 
@@ -333,8 +333,8 @@ namespace Mosa.HelloWorld
 			Screen.NextLine();
 			#endregion
 
-			int info = Platforms.x86.Native.CpuIdEax(1);
-
+			//int info = Platforms.x86.Native.CpuIdEax(1);
+		    int info = 0;
 			#region Stepping
 			Screen.Color = 0x0A;
 			Screen.Write('S');

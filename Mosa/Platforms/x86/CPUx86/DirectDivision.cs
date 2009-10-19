@@ -33,8 +33,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-			if (source is RegisterOperand) return R;
-			if (source is MemoryOperand) return M;
+            if (destination is RegisterOperand) return R;
+            if (destination is MemoryOperand) return M;
 
             throw new ArgumentException(@"No opcode for operand type.");
         }

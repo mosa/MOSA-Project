@@ -282,8 +282,8 @@ namespace Mosa.Platforms.x86
 		void IR.IIRVisitor.MoveInstruction(Context ctx)
 		{
 			// We need to replace ourselves in case of a Memory -> Memory transfer
-			Operand op0 = ctx.Operand1;
-			Operand op1 = ctx.Operand2;
+			Operand op0 = ctx.Result;
+			Operand op1 = ctx.Operand1;
 			op1 = EmitConstant(op1);
 
 			if (!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) return;
@@ -524,8 +524,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Cmp(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			Operand op1 = ctx.Operand2;
+			Operand op0 = ctx.Result;
+			Operand op1 = ctx.Operand1;
 
 			if (((!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) &&
 				 (!(op0 is ConstantOperand) || !(op1 is ConstantOperand))) && !(op1 is ConstantOperand))

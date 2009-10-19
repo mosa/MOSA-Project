@@ -8,13 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
-
 using Mosa.Runtime.CompilerFramework;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 {
@@ -23,17 +17,11 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
     /// </summary>
     public sealed class XchgInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XchgInstruction"/> class.
-        /// </summary>
-        public XchgInstruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
+        #region Codes
+        private static readonly OpCode R_M = new OpCode(new byte[] { 0x87 });
+        private static readonly OpCode R_R = new OpCode(new byte[] { 0x87 });
+        private static readonly OpCode M_R = new OpCode(new byte[] { 0x87 });
+        #endregion
 
 		#region Properties
 
@@ -46,6 +34,20 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 		#endregion // Properties
 
         #region Methods
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <param name="source"></param>
+        /// <param name="third"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+        {
+            if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
+            if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
+            if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
+            throw new ArgumentException(@"No opcode for operand type."); 
+        }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

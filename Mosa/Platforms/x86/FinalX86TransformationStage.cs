@@ -418,7 +418,10 @@ namespace Mosa.Platforms.x86
 		/// Cmp the instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CPUx86.IX86Visitor.Cmp(Context ctx) { }
+		void CPUx86.IX86Visitor.Cmp(Context ctx)
+		{
+		    
+		}
 		/// <summary>
 		/// Cvtss2sdInstruction instruction.
 		/// </summary>

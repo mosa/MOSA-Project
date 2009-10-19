@@ -17,19 +17,26 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
     /// </summary>
     public sealed class RcrInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ShrInstruction"/> class.
-		/// </summary>
-        public RcrInstruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
+        #region Codes
+        private static readonly OpCode R = new OpCode(new byte[] { 0xD1 }, 3);
+        private static readonly OpCode M = new OpCode(new byte[] { 0xD1 }, 3);
+        #endregion
 
         #region Methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <param name="source"></param>
+        /// <param name="third"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+        {
+            if (destination is RegisterOperand) return R;
+            if (destination is MemoryOperand) return M;
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
