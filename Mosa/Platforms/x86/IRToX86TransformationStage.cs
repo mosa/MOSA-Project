@@ -329,22 +329,22 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
 			// int 3
-			//Architecture.CreateInstruction(typeof(Instructions.IntInstruction), new ConstantOperand(new SigType(CilElementType.U1), (byte)3)),
+			// ctx.InsertInstructionAfter(CPUx86.IntInstruction, new ConstantOperand(new SigType(CilElementType.U1), (byte)3));
 
 			// Uncomment this line to enable breakpoints within Bochs
-			ctx.SetInstruction(CPUx86.Intrinsics.BochsDebug);
+			//ctx.SetInstruction(CPUx86.Intrinsics.BochsDebug);
 			// push ebp
 			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ebp);
 			// mov ebp, esp
-			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, ebp, esp);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ebp, esp);
 			// sub esp, localsSize
 			ctx.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, -stackSize));
 			// Initialize all locals to zero
 			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, edi);
-			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, edi, esp);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, edi, esp);
 			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edi, new ConstantOperand(I, 4));
-			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, ecx, new ConstantOperand(I, (-stackSize) / 4));
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ecx, new ConstantOperand(I, (-stackSize) / 4));
 			ctx.InsertInstructionAfter(CPUx86.Instruction.LogicalXorInstruction, eax, eax);
 			ctx.InsertInstructionAfter(CPUx86.Intrinsics.RepInstruction);
 			ctx.InsertInstructionAfter(CPUx86.Intrinsics.StosdInstruction);
@@ -356,7 +356,7 @@ namespace Mosa.Platforms.x86
 			 * the possibility to identify roots into the managed heap. 
 			 */
 			// mov [ebp-4], token
-			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, Compiler.Method.Token));
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, Compiler.Method.Token));
 
 			// Do not save EDX for non-int64 return values
 			if (Compiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
@@ -544,7 +544,7 @@ namespace Mosa.Platforms.x86
 			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I1), GeneralPurposeRegister.ECX);
 
 			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, ecx, op2);
-			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, opRes, op1);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, opRes, op1);
 			ctx.InsertInstructionAfter(instruction, opRes, ecx);
 
 
@@ -668,8 +668,8 @@ namespace Mosa.Platforms.x86
 			ctx.Operand1 = EmitConstant(ctx.Operand1);
 			ctx.Result = eax;
 
-			ctx.InsertBefore().SetInstruction(IR.Instruction.MoveInstruction, eax, ctx.Operand2);
-			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, opRes, eax);
+			ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MoveInstruction, eax, ctx.Operand2);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, opRes, eax);
 
 		}
 		/// <summary>
@@ -717,9 +717,9 @@ namespace Mosa.Platforms.x86
 			}
 			// In any other case: Just load it
 			else
-				ctx.InsertBefore().SetInstruction(IR.Instruction.MoveInstruction, eax, op1);
+				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MoveInstruction, eax, op1);
 
-			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, opRes, eax);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, opRes, eax);
 		}
 		#endregion // Internals
 	}
