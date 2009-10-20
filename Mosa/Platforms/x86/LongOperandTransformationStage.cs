@@ -229,7 +229,7 @@ namespace Mosa.Platforms.x86
 			newBlocks[1].InsertInstructionAfter(CPUx86.Instruction.DirectMultiplicationInstruction, ecx);
 			newBlocks[1].InsertInstructionAfter(CPUx86.Instruction.JumpInstruction, nextBlock.BasicBlock);
 
-			newBlocks[2].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ebx);
+			newBlocks[2].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ebx);
 			newBlocks[2].InsertInstructionAfter(CPUx86.Instruction.DirectMultiplicationInstruction, ecx);
 			newBlocks[2].InsertInstructionAfter(IR.Instruction.MoveInstruction, ebx, eax);
 			newBlocks[2].InsertInstructionAfter(IR.Instruction.MoveInstruction, eax, op1L);
@@ -238,7 +238,7 @@ namespace Mosa.Platforms.x86
 			newBlocks[2].InsertInstructionAfter(IR.Instruction.MoveInstruction, eax, op1L);
 			newBlocks[2].InsertInstructionAfter(CPUx86.Instruction.DirectMultiplicationInstruction, ecx);
 			newBlocks[2].InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edx, ebx);
-			newBlocks[2].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ebx);
+			newBlocks[2].InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, ebx);
 			newBlocks[2].InsertInstructionAfter(CPUx86.Instruction.JumpInstruction, nextBlock.BasicBlock);
 
 			nextBlock.InsertInstructionAfter(IR.Instruction.MoveInstruction, op0L, eax);
@@ -292,9 +292,9 @@ namespace Mosa.Platforms.x86
 			// sbb     eax,0
 			// mov     HIWORD(DVND),eax ; save positive value
 			// mov     LOWORD(DVND),edx
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, edi);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, esi);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ebx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, edi);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, esi);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ebx);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.LogicalXorInstruction, edi, edi);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, op1H);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.LogicalOrInstruction, eax, eax);
@@ -411,9 +411,9 @@ namespace Mosa.Platforms.x86
 			// add     edx,ecx         ; EDX:EAX = QUOT * DVSR
 			// jc      short L6        ; carry means Quotient is off by 1
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, ebx, new ConstantOperand(U1, 1));
-			newBlocks[7].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, ecx, new ConstantOperand(U1, 1)); // RCR
+			newBlocks[7].InsertInstructionAfter(CPUx86.Intrinsics.RcrInstruction, ecx, new ConstantOperand(U1, 1)); // RCR
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
-			newBlocks[7].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
+			newBlocks[7].InsertInstructionAfter(CPUx86.Intrinsics.RcrInstruction, eax, new ConstantOperand(U1, 1));
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.LogicalOrInstruction, ebx, ebx);
 			newBlocks[7].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[7].BasicBlock);
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.JumpInstruction, newBlocks[8].BasicBlock);
@@ -469,9 +469,9 @@ namespace Mosa.Platforms.x86
 
 			nextBlock.SetInstruction(CPUx86.Instruction.MoveInstruction, op0L, ueax);
 			nextBlock.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0H, edx);
-			nextBlock.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ebx);
-			nextBlock.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, esi);
-			nextBlock.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, edi);
+			nextBlock.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, ebx);
+			nextBlock.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, esi);
+			nextBlock.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, edi);
 
 			// Link the created blocks together
 			LinkBlocks(newBlocks, ctx, nextBlock);
@@ -513,9 +513,9 @@ namespace Mosa.Platforms.x86
 			//sbb     eax,0
 			//mov     HIWORD(DVND),eax ; save positive value
 			//mov     LOWORD(DVND),edx
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, edi);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, esi);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ebx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, edi);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, esi);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ebx);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.LogicalXorInstruction, edi, edi);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, op1H);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.LogicalOrInstruction, eax, eax);
@@ -641,9 +641,9 @@ namespace Mosa.Platforms.x86
 			//  jbe     short L7        ; if less or equal we are ok, else subtract
 
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, ebx, new ConstantOperand(U1, 1));
-			newBlocks[7].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, ecx, new ConstantOperand(U1, 1)); // RCR
+			newBlocks[7].InsertInstructionAfter(CPUx86.Intrinsics.RcrInstruction, ecx, new ConstantOperand(U1, 1)); // RCR
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
-			newBlocks[7].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
+			newBlocks[7].InsertInstructionAfter(CPUx86.Intrinsics.RcrInstruction, eax, new ConstantOperand(U1, 1));
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.LogicalOrInstruction, ebx, ebx);
 			newBlocks[7].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[7].BasicBlock);
 			newBlocks[7].InsertInstructionAfter(CPUx86.Instruction.JumpInstruction, newBlocks[8].BasicBlock);
@@ -651,7 +651,7 @@ namespace Mosa.Platforms.x86
 			newBlocks[8].InsertInstructionAfter(CPUx86.Instruction.DirectDivisionInstruction, ecx);
 			newBlocks[8].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ecx, eax);
 			newBlocks[8].InsertInstructionAfter(CPUx86.Instruction.DirectMultiplicationInstruction, op2H);
-			newBlocks[8].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.XchgInstruction, ecx, eax);
+			newBlocks[8].InsertInstructionAfter(CPUx86.Intrinsics.XchgInstruction, ecx, eax);
 			newBlocks[8].InsertInstructionAfter(CPUx86.Instruction.DirectMultiplicationInstruction, op2L);
 			newBlocks[8].InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edx, ecx);
 			newBlocks[8].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
@@ -696,9 +696,9 @@ namespace Mosa.Platforms.x86
 
 			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, op0L, eax);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0H, edx);
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ebx);
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, esi);
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, edi);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, ebx);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, esi);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, edi);
 
 			// Link the created Blocks together
 			LinkBlocks(newBlocks, ctx, nextBlock);
@@ -727,9 +727,9 @@ namespace Mosa.Platforms.x86
 			Context[] newBlocks = CreateEmptyBlockContexts(10);
 			Context nextBlock = SplitContext(ctx);
 
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, edi);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, esi);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ebx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, edi);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, esi);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ebx);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, op2H);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.LogicalOrInstruction, eax, eax);
 			newBlocks[0].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[2].BasicBlock); // JNZ
@@ -754,9 +754,9 @@ namespace Mosa.Platforms.x86
 
 			// L3
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, ecx, new ConstantOperand(U1, 1));
-			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, ebx, new ConstantOperand(U1, 1)); // RCR
+			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.RcrInstruction, ebx, new ConstantOperand(U1, 1)); // RCR
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
-			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
+			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.RcrInstruction, eax, new ConstantOperand(U1, 1));
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.LogicalOrInstruction, ecx, ecx);
 			newBlocks[3].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[3].BasicBlock); // JNZ
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.JumpInstruction, newBlocks[4].BasicBlock);
@@ -794,9 +794,9 @@ namespace Mosa.Platforms.x86
 			// L2
 			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, op0L, eax);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0H, edx);
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ebx);
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, esi);
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, edi);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, ebx);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, esi);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, edi);
 
 			// Link the created Blocks together
 			LinkBlocks(newBlocks, ctx, nextBlock);
@@ -838,9 +838,9 @@ namespace Mosa.Platforms.x86
 			//sbb     eax,0
 			//mov     HIWORD(DVND),eax ; save positive value
 			//mov     LOWORD(DVND),edx
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, edi);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, esi);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ebx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, edi);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, esi);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ebx);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, op2H);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.LogicalOrInstruction, eax, eax);
 			newBlocks[0].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[2].BasicBlock);
@@ -865,9 +865,9 @@ namespace Mosa.Platforms.x86
 
 			// L3:
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, ecx, new ConstantOperand(U1, 1));
-			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, ebx, new ConstantOperand(U1, 1)); // RCR
+			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.RcrInstruction, ebx, new ConstantOperand(U1, 1)); // RCR
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
-			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
+			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.RcrInstruction, eax, new ConstantOperand(U1, 1));
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.LogicalOrInstruction, ecx, ecx);
 			newBlocks[3].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[3].BasicBlock);
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.JumpInstruction, newBlocks[4].BasicBlock);
@@ -875,7 +875,7 @@ namespace Mosa.Platforms.x86
 			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.DirectDivisionInstruction, ebx);
 			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ecx, eax);
 			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.DirectMultiplicationInstruction, op2H);
-			newBlocks[4].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.XchgInstruction, ecx, eax);
+			newBlocks[4].InsertInstructionAfter(CPUx86.Intrinsics.XchgInstruction, ecx, eax);
 			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.DirectMultiplicationInstruction, op2L);
 			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edx, ecx);
 			newBlocks[4].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
@@ -907,9 +907,9 @@ namespace Mosa.Platforms.x86
 
 			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, op0L, eax);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0H, edx);
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ebx);
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, esi);
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, edi);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, ebx);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, esi);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, edi);
 
 			// Link the created Blocks together
 			LinkBlocks(newBlocks, ctx, nextBlock);
@@ -939,7 +939,7 @@ namespace Mosa.Platforms.x86
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
 			newBlocks[0].InsertInstructionAfter(IR.Instruction.LogicalAndInstruction, count, count, new ConstantOperand(I4, 0x3F));
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ecx, count);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, edx, op1H);
@@ -974,7 +974,7 @@ namespace Mosa.Platforms.x86
 			// ; remaining code from current basic block
 			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, op0H, edx);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0L, eax);
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ecx);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, ecx);
 
 			// Link the created Blocks together
 			LinkBlocks(newBlocks, ctx, nextBlock);
@@ -1003,7 +1003,7 @@ namespace Mosa.Platforms.x86
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
 			newBlocks[0].InsertInstructionAfter(IR.Instruction.LogicalAndInstruction, count, count, new ConstantOperand(I4, 0x3F));
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ecx, count);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, edx, op1H);
@@ -1038,7 +1038,7 @@ namespace Mosa.Platforms.x86
 			// ; remaining code from current basic block
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0H, edx);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0L, eax);
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ecx);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, ecx);
 
 			// Link the created Blocks together
 			LinkBlocks(newBlocks, ctx, nextBlock);
@@ -1069,20 +1069,20 @@ namespace Mosa.Platforms.x86
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
 			newBlocks[0].InsertInstructionAfter(IR.Instruction.LogicalAndInstruction, count, count, new ConstantOperand(I4, 0x3F));
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ecx, count);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, edx, op1H);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, op1L);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.CmpInstruction, ecx, new ConstantOperand(I4, 64));
 			newBlocks[0].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.JumpInstruction, newBlocks[1].BasicBlock);
@@ -1098,15 +1098,15 @@ namespace Mosa.Platforms.x86
 			// Handle shifts of between 32 and 63 bits
 			// MORE32:
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, edx);
-			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
+			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ecx, new ConstantOperand(I1, (sbyte)0x1F));
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.SarInstruction, edx, ecx);
-			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ecx);
+			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, ecx);
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.LogicalAndInstruction, ecx, new ConstantOperand(I4, 0x1F));
-			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
+			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ecx);
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ecx, new ConstantOperand(I1, (sbyte)0x1F));
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.SarInstruction, eax, ecx);
-			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ecx);
+			newBlocks[3].InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, ecx);
 			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.JumpInstruction, nextBlock.BasicBlock);
 
 			// Return double precision 0 or -1, depending on the sign of edx
@@ -1119,7 +1119,7 @@ namespace Mosa.Platforms.x86
 			// ; remaining code from current basic block
 			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, op0H, edx);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, op0L, eax);
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ecx);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, ecx);
 
 			// Link the created Blocks together
 			LinkBlocks(newBlocks, ctx, nextBlock);
