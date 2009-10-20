@@ -51,18 +51,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region IPlatformInstruction Overrides
 
 		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected virtual OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-		{
-			throw new System.Exception("Missed something!");
-		}
-
-		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -70,17 +58,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		public void Emit(Context context, ICodeEmitter emitter)
 		{
 			Emit(context, emitter as MachineCodeEmitter);
-		}
-
-		/// <summary>
-		/// Emits the specified platform instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="emitter">The emitter.</param>
-		public virtual void Emit(Context context, MachineCodeEmitter emitter)
-		{
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
-			emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
 		}
 
 		/// <summary>
@@ -105,6 +82,29 @@ namespace Mosa.Platforms.x86.CPUx86
 		#endregion // Operand Overrides
 
 		#region Methods
+
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
+		protected virtual OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
+			throw new System.Exception("Missed something!");
+		}
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		public virtual void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
+			emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

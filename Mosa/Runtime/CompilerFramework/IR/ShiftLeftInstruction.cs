@@ -40,15 +40,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
         #region ThreeOperandInstruction Overrides
 
-        /// <summary>
-        /// Returns a string representation of the <see cref="ShiftLeftInstruction"/>.
-        /// </summary>
-        /// <returns>A string representation of the shl context.</returns>
-        public override string ToString(Context context)
-        {
-            return String.Format(@"IR.shl {0} <- {1} & {2}", context.Operand1, context.Operand2, context.Operand3);
-        }
-
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>

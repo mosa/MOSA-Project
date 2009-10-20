@@ -34,15 +34,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
         #region TwoOperandInstruction Overrides
 
-        /// <summary>
-        /// Returns a string representation of <see cref="SignExtendedMoveInstruction"/>.
-        /// </summary>
-        /// 
-        public override string ToString(Context context)
-        {
-            return String.Format(@"IR.sconv {0} <- {1}", context.Operand1, context.Operand2);
-        }
-
 		/// <summary>
 		/// Implementation of the visitor pattern.
 		/// </summary>
