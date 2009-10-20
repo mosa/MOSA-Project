@@ -1252,8 +1252,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			RuntimeMethod callTarget = FindMethod(rt, internalCallTarget.ToString());
 
 			ctx.ReplaceInstructionOnly(CIL.Instruction.Get(OpCode.Call));
-
-			((ctx.Instruction) as CallInstruction).SetInvokeTarget(ctx, Compiler, callTarget);
+			ctx.InvokeTarget = callTarget;
 		}
 
 		/// <summary>
