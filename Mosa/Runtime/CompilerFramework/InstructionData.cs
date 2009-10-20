@@ -205,6 +205,21 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Clears the instance.
+		/// </summary>
+		public void ClearAbbreviated()
+		{
+			this.Label = -1;
+			this.Offset = 0;
+			this.Instruction = null;
+			this.Ignore = true;
+			this.OperandCount = 0;
+			this.ResultCount = 0;
+			this.Branch = null;
+			this.Other = null;
+		}
+		
+		/// <summary>
 		/// Sets the addition operand.
 		/// </summary>
 		/// <param name="index">The index.</param>

@@ -163,7 +163,8 @@ namespace Mosa.Runtime.CompilerFramework
 			int opIdx;
 
 			// Iterate all definition sites first
-			foreach (Context def in lr.Op.Definitions.ToArray()) {
+			foreach (int index in lr.Op.Definitions.ToArray()) {
+				Context def = new Context(InstructionSet, index);
 				if (def.Offset == lr.Start) {
 					opIdx = 0;
 					foreach (Operand r in def.Results) {
@@ -179,7 +180,9 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Iterate all use sites
-			foreach (Context instr in lr.Op.Uses.ToArray()) {
+			foreach (int index in lr.Op.Uses.ToArray()) {
+				Context instr = new Context(InstructionSet, index);
+
 				if (instr.Offset <= lr.Start) {
 					// A use on instr.Offset == lr.Start is one From a previous definition!!
 				}
@@ -357,23 +360,21 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Find the next definition after defLine
 			int ubound = Int32.MaxValue;
-			op.Definitions.Find(delegate(Context i)
-			{
-				if (i.Offset > defLine) {
-					ubound = i.Offset;
-					return true;
-				}
 
-				return false;
-			});
-
-			// Now find the last use between defLine and ubound
-			op.Uses.ForEach(delegate(Context i)
-			{
-				if (i.Offset > defLine && i.Offset < ubound) {
-					result = i.Offset;
+			foreach (int index in op.Definitions) {
+				Context ctx = new Context(InstructionSet, index);
+				if (ctx.Offset > defLine) {
+					ubound = ctx.Offset;
+					break;
 				}
-			});
+			}
+
+			foreach (int index in op.Uses) {
+				Context ctx = new Context(InstructionSet, index);
+				if (ctx.Offset > defLine && ctx.Offset < ubound) {
+					result = ctx.Offset;
+				}
+			}
 
 			return result;
 		}
@@ -390,12 +391,11 @@ namespace Mosa.Runtime.CompilerFramework
 			int result = -1;
 
 			// Now find the last use between defLine and ubound
-			op.Uses.ForEach(delegate(Context i)
-			{
-				if (i.Offset > line && i.Offset < end) {
-					result = i.Offset;
-				}
-			});
+			foreach (int index in op.Uses) {
+				Context ctx = new Context(InstructionSet, index);
+				if (ctx.Offset > line && ctx.Offset < end) 
+					result = ctx.Offset;
+			}
 
 			return result;
 		}

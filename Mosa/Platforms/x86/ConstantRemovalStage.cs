@@ -125,7 +125,7 @@ namespace Mosa.Platforms.x86
 
 						// FIXME - I hope I got this right
 						//co.Replace(literal.CreateOperand());
-						op.Replace(((ctxEpilogue.Instruction) as CPUx86.LiteralInstruction).CreateOperand(ctxEpilogue));
+						op.Replace(((ctxEpilogue.Instruction) as CPUx86.LiteralInstruction).CreateOperand(ctxEpilogue), InstructionSet);
 
 						_constantRemoved = true;
 					}

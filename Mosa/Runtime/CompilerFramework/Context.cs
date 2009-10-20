@@ -102,7 +102,6 @@ namespace Mosa.Runtime.CompilerFramework
 			set { _instructionSet.Data[_index].Label = value; }
 		}
 
-
 		/// <summary>
 		/// Gets the offset.
 		/// </summary>
@@ -124,13 +123,88 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Gets the first operand.
+		/// </summary>
+		/// <value>The first operand.</value>
+		public Operand Operand1
+		{
+			get { return _instructionSet.Data[_index].Operand1; }
+			set
+			{
+				Operand current = _instructionSet.Data[_index].Operand1;
+				if (current != null) current.Uses.Remove(_index);
+				if (value != null) value.Uses.Add(_index);
+				_instructionSet.Data[_index].Operand1 = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets the first operand.
+		/// </summary>
+		/// <value>The first operand.</value>
+		public Operand Operand2
+		{
+			get { return _instructionSet.Data[_index].Operand2; }
+			set
+			{
+				Operand current = _instructionSet.Data[_index].Operand2;
+				if (current != null) current.Uses.Remove(_index);
+				if (value != null) value.Uses.Add(_index);
+				_instructionSet.Data[_index].Operand2 = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets the first operand.
+		/// </summary>
+		/// <value>The first operand.</value>
+		public Operand Operand3
+		{
+			get { return _instructionSet.Data[_index].Operand3; }
+			set
+			{
+				Operand current = _instructionSet.Data[_index].Operand3;
+				if (current != null) current.Uses.Remove(_index);
+				if (value != null) value.Uses.Add(_index);
+				_instructionSet.Data[_index].Operand3 = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets the operands.
+		/// </summary>
+		/// <value>The operands.</value>
+		public IEnumerable<Operand> Operands
+		{
+			get
+			{
+				if (Operand1 != null)
+					yield return Operand1;
+				if (Operand2 != null)
+					yield return Operand2;
+				if (Operand3 != null)
+					yield return Operand3;
+
+				if (OperandCount >= 3)
+					for (int index = 3; index < OperandCount; index++)
+						yield return _instructionSet.Data[_index].GetAdditionalOperand(index);
+			}
+		}
+
+		/// <summary>
 		/// Gets the result operand.
 		/// </summary>
 		/// <value>The result operand.</value>
 		public Operand Result
 		{
 			get { return _instructionSet.Data[_index].Result; }
-			set { _instructionSet.Data[_index].Result = value; }
+			set
+			{
+				Operand current = _instructionSet.Data[_index].Result;
+				if (current != null) current.Definitions.Remove(_index);
+				if (value != null) value.Definitions.Add(_index);
+				_instructionSet.Data[_index].Result = value;
+			}
 		}
 
 		/// <summary>
@@ -164,57 +238,6 @@ namespace Mosa.Runtime.CompilerFramework
 					yield return Result;
 				if (ResultCount == 2)
 					yield return Result;
-			}
-		}
-
-		/// <summary>
-		/// Gets the first operand.
-		/// </summary>
-		/// <value>The first operand.</value>
-		public Operand Operand1
-		{
-			get { return _instructionSet.Data[_index].Operand1; }
-			set { _instructionSet.Data[_index].Operand1 = value; }
-		}
-
-		/// <summary>
-		/// Gets the first operand.
-		/// </summary>
-		/// <value>The first operand.</value>
-		public Operand Operand2
-		{
-			get { return _instructionSet.Data[_index].Operand2; }
-			set { _instructionSet.Data[_index].Operand2 = value; }
-		}
-
-		/// <summary>
-		/// Gets the first operand.
-		/// </summary>
-		/// <value>The first operand.</value>
-		public Operand Operand3
-		{
-			get { return _instructionSet.Data[_index].Operand3; }
-			set { _instructionSet.Data[_index].Operand3 = value; }
-		}
-
-		/// <summary>
-		/// Gets the operands.
-		/// </summary>
-		/// <value>The operands.</value>
-		public IEnumerable<Operand> Operands
-		{
-			get
-			{
-				if (Operand1 != null)
-					yield return Operand1;
-				if (Operand2 != null)
-					yield return Operand2;
-				if (Operand3 != null)
-					yield return Operand3;
-
-				if (OperandCount >= 3)
-					for (int index = 3; index < OperandCount; index++)
-						yield return _instructionSet.Data[_index].GetAdditionalOperand(index);
 			}
 		}
 
@@ -453,7 +476,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Clear()
 		{
+			Operand1 = null;
+			Operand2 = null;
+			Operand3 = null;
+			Result = null;
 			_instructionSet.Data[_index].Clear();
+
+			if (OperandCount >= 3)
+				for (int i = 3; i < OperandCount; i++)
+					SetOperand(i, null);
 		}
 
 		/// <summary>
@@ -878,7 +909,13 @@ namespace Mosa.Runtime.CompilerFramework
 				case 0: Operand1 = operand; return;
 				case 1: Operand2 = operand; return;
 				case 2: Operand3 = operand; return;
-				default: _instructionSet.Data[_index].SetAdditionalOperand(index, operand); return;
+				default: {
+						Operand current = _instructionSet.Data[_index].GetAdditionalOperand(index);
+						if (current != null) current.Uses.Remove(_index);
+						if (operand != null) operand.Uses.Add(_index);
+						_instructionSet.Data[_index].SetAdditionalOperand(index, operand);
+						return;
+					}
 			}
 		}
 
