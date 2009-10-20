@@ -29,12 +29,11 @@ namespace Mosa.Platforms.x86
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
 	/// </remarks>
 	public sealed class FinalX86TransformationStage :
-		CodeTransformationStage,
+		BaseX86TransformationStage,
 		CPUx86.IX86Visitor,
 		IMethodCompilerStage,
 		IPlatformTransformationStage
 	{
-		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
 		#region IMethodCompilerStage Members
 
@@ -93,7 +92,7 @@ namespace Mosa.Platforms.x86
 			Context start = ctx.InsertBefore();
 			start.SetInstruction(IR.Instruction.PushInstruction, null, eax);
 
-			if (X86.IsSigned(op0))
+			if (IsSigned(op0))
 				start.InsertInstructionAfter(IR.Instruction.SignExtendedMoveInstruction, eax, op0);
 			else
 				start.InsertInstructionAfter(IR.Instruction.MoveInstruction, eax, op0);

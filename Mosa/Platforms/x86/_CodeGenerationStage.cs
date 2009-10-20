@@ -1147,7 +1147,7 @@ namespace Mosa.Platforms.x86
 
 			_codeEmitter.Cmp(ctx.Operand2, ctx.Operand3);
 
-			if (X86.IsUnsigned(ctx.Operand2) || X86.IsUnsigned(ctx.Operand3))
+			if (_X86.IsUnsigned(ctx.Operand2) || _X86.IsUnsigned(ctx.Operand3))
 				_codeEmitter.Setcc(resultOperand, GetUnsignedConditionCode(ctx.ConditionCode));
 			else
 				_codeEmitter.Setcc(resultOperand, ctx.ConditionCode);

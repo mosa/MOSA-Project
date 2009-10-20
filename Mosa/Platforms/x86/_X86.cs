@@ -12,14 +12,14 @@ using System;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 
-// FIXME PG: This class will be removed eventually
+// FIXME PG - this class goes away eventually
 
 namespace Mosa.Platforms.x86
 {
     /// <summary>
     /// Returns X86 opcodes.
     /// </summary>
-    public static class X86
+    public static class _X86
     {
 
         #region X86Intructions

@@ -83,6 +83,7 @@
     <Compile Include="ArchitectureFeatureFlags.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BaseX86TransformationStage.cs" />
     <Compile Include="MachineCodeEmitter.cs" />
     <Compile Include="_CodeGenerationStage.cs">
       <SubType>Code</SubType>
@@ -177,7 +178,7 @@
     <Compile Include="CPUx86\BaseInstruction.cs" />
     <Compile Include="CPUx86\IX86Visitor.cs" />
     <Compile Include="CPUx86\NopInstruction.cs" />
-    <Compile Include="X86.cs" />
+    <Compile Include="_X86.cs" />
     <Compile Include="DefaultCallingConvention.cs">
       <SubType>Code</SubType>
     </Compile>

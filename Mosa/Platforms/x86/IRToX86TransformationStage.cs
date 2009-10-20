@@ -29,7 +29,7 @@ namespace Mosa.Platforms.x86
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
 	/// </remarks>
 	public sealed class IRToX86TransformationStage :
-		CodeTransformationStage, 
+		BaseX86TransformationStage, 
 		IR.IIRVisitor, 
 		IMethodCompilerStage,
 		IPlatformTransformationStage
@@ -706,12 +706,12 @@ namespace Mosa.Platforms.x86
 			}
 
 			// Check if we have to sign-extend the operand that's being loaded
-			if (X86.IsSigned(op1) && !(op1 is ConstantOperand)) {
+			if (IsSigned(op1) && !(op1 is ConstantOperand)) {
 				// Signextend it
 				ctx.InsertBefore().SetInstruction(IR.Instruction.SignExtendedMoveInstruction, eaxL, op1);
 			}
 			// Check if the operand has to be zero-extended
-			else if (X86.IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {
+			else if (IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {
 				ctx.InsertBefore().SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eaxL, op1);
 			}
 			// In any other case: Just load it

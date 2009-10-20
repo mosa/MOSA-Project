@@ -297,9 +297,9 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="dest">The destination operand of the instruction.</param>
 		/// <param name="src">The source operand of the instruction.</param>
-		void _ICodeEmitter.And(Operand dest, Operand src)
+		void _ICodeEmitter.And(Operand dest, Operand src)	// DONE
 		{
-			Emit(dest, src, X86.And(dest, src));
+			Emit(dest, src, _X86.And(dest, src));
 		}
 
 		void _ICodeEmitter.Cdq()
@@ -313,7 +313,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The destination operand of the instruction.</param>
 		void _ICodeEmitter.Not(Operand dest)
 		{
-			Emit(dest, null, X86.Not(dest));
+			Emit(dest, null, _X86.Not(dest));
 		}
 
 		/// <summary>
@@ -323,7 +323,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The source operand of the instruction.</param>
 		void _ICodeEmitter.Or(Operand dest, Operand src)
 		{
-			Emit(dest, src, X86.Or(dest, src));
+			Emit(dest, src, _X86.Or(dest, src));
 		}
 
 		/// <summary>
@@ -346,7 +346,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The SRC.</param>
 		void _ICodeEmitter.Add(Operand dest, Operand src)
 		{
-			Emit(dest, src, X86.Add(dest, src));
+			Emit(dest, src, _X86.Add(dest, src));
 		}
 
 		/// <summary>
@@ -356,7 +356,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The SRC.</param>
 		void _ICodeEmitter.Adc(Operand dest, Operand src)
 		{
-			Emit(dest, src, X86.Adc(dest, src));
+			Emit(dest, src, _X86.Adc(dest, src));
 		}
 
 		/// <summary>
@@ -423,7 +423,7 @@ namespace Mosa.Platforms.x86
                 opTmp = new RegisterOperand(opTmp.Type, GeneralPurposeRegister.EDX);
 
                 (this as _ICodeEmitter).Push(opTmp);
-                Emit(opTmp, op1, X86.Move(opTmp, op1));
+                Emit(opTmp, op1, _X86.Move(opTmp, op1));
             }
 			// Swap if needed
 			if (op1 is ConstantOperand && !(op2 is ConstantOperand)) {
@@ -432,14 +432,14 @@ namespace Mosa.Platforms.x86
 				op2 = tmp;
 			}
 
-            if (!(op1 is RegisterOperand) && op2 is ConstantOperand && X86.IsSigned(opTmp) && X86.IsSigned(op2))
+            if (!(op1 is RegisterOperand) && op2 is ConstantOperand && _X86.IsSigned(opTmp) && _X86.IsSigned(op2))
             {
                 RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
                 (this as _ICodeEmitter).Movsx(eax, opTmp);
                 opTmp = eax;
             }
           
-            Emit(opTmp, op2, X86.Cmp(opTmp, op2));
+            Emit(opTmp, op2, _X86.Cmp(opTmp, op2));
 
             if (flag)
                 (this as _ICodeEmitter).Pop(opTmp);
@@ -452,27 +452,27 @@ namespace Mosa.Platforms.x86
 		/// <param name="op2">Second operand</param>
 		void _ICodeEmitter.CmpXchg(Operand op1, Operand op2)
 		{
-			Emit(op1, op2, X86.Cmpxchg(op1, op2));
+			Emit(op1, op2, _X86.Cmpxchg(op1, op2));
 		}
 
 		void _ICodeEmitter.Cvtsd2ss(Operand op1, Operand op2)
 		{
-			Emit(op1, op2, X86.Cvtsd2ss(op1, op2));
+			Emit(op1, op2, _X86.Cvtsd2ss(op1, op2));
 		}
 
 		void _ICodeEmitter.Cvtsi2sd(Operand op1, Operand op2)
 		{
-			Emit(op1, op2, X86.Cvtsi2sd(op1, op2));
+			Emit(op1, op2, _X86.Cvtsi2sd(op1, op2));
 		}
 
 		void _ICodeEmitter.Cvtss2sd(Operand op1, Operand op2)
 		{
-            Emit(op1, op2, X86.Cvtss2sd(op1, op2));
+            Emit(op1, op2, _X86.Cvtss2sd(op1, op2));
 		}
 
 		void _ICodeEmitter.Cvtsi2ss(Operand op1, Operand op2)
 		{
-			Emit(op1, op2, X86.Cvtsi2ss(op1, op2));
+			Emit(op1, op2, _X86.Cvtsi2ss(op1, op2));
 		}
 
 		void _ICodeEmitter.Cvttsd2si(Operand op1, Operand op2)
@@ -480,12 +480,12 @@ namespace Mosa.Platforms.x86
             RegisterOperand edx = new RegisterOperand(op1.Type, GeneralPurposeRegister.EDX);
             if (!(op1 is RegisterOperand))
             {
-                Emit(edx, op1, X86.Move(edx, op1));
-                Emit(edx, op2, X86.Cvttsd2si(edx, op2));
-                Emit(op1, edx, X86.Move(op1, edx));
+                Emit(edx, op1, _X86.Move(edx, op1));
+                Emit(edx, op2, _X86.Cvttsd2si(edx, op2));
+                Emit(op1, edx, _X86.Move(op1, edx));
             }
             else
-                Emit(op1, op2, X86.Cvttsd2si(op1, op2));
+                Emit(op1, op2, _X86.Cvttsd2si(op1, op2));
 		}
 
 		void _ICodeEmitter.Cvttss2si(Operand op1, Operand op2)
@@ -493,12 +493,12 @@ namespace Mosa.Platforms.x86
             RegisterOperand edx = new RegisterOperand(op1.Type, GeneralPurposeRegister.EDX);
             if (!(op1 is RegisterOperand))
             {
-                Emit(edx, op1, X86.Move(edx, op1));
-                Emit(edx, op2, X86.Cvttss2si(edx, op2));
-                Emit(op1, edx, X86.Move(op1, edx));
+                Emit(edx, op1, _X86.Move(edx, op1));
+                Emit(edx, op2, _X86.Cvttss2si(edx, op2));
+                Emit(op1, edx, _X86.Move(op1, edx));
             }
             else
-			    Emit(op1, op2, X86.Cvttss2si(op1, op2));
+			    Emit(op1, op2, _X86.Cvttss2si(op1, op2));
 		}
 
 		/// <summary>
@@ -538,7 +538,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		void _ICodeEmitter.Neg(Operand op)
 		{
-			Emit(op, null, X86.Neg(op));
+			Emit(op, null, _X86.Neg(op));
 		}
 
 		/// <summary>
@@ -547,7 +547,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="op"></param>
 		void _ICodeEmitter.Dec(Operand op)
 		{
-			Emit(op, null, X86.Dec(op));
+			Emit(op, null, _X86.Dec(op));
 		}
 
 		/// <summary>
@@ -556,7 +556,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="op"></param>
 		void _ICodeEmitter.Inc(Operand op)
 		{
-			Emit(op, null, X86.Inc(op));
+			Emit(op, null, _X86.Inc(op));
 		}
 
 		/// <summary>
@@ -698,7 +698,7 @@ namespace Mosa.Platforms.x86
 		/// Emits a jump instruction.
 		/// </summary>
 		/// <param name="dest">The target label of the jump.</param>
-		void _ICodeEmitter.Jmp(int dest)
+		void _ICodeEmitter.Jmp(int dest)	// DONE
 		{
 			EmitBranch(new byte[] { 0xE9 }, dest);
 		}
@@ -735,9 +735,9 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Emits a nop instructions.
 		/// </summary>
-		void _ICodeEmitter.Nop()
+		void _ICodeEmitter.Nop()	// DONE
 		{
-			_codeStream.WriteByte(0x90);
+			_codeStream.WriteByte(0x90); 
 		}
 
 		/// <summary>
@@ -754,7 +754,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">Destination to load into</param>
 		void _ICodeEmitter.Lgdt(Operand dest)
 		{
-			Emit(dest, null, X86.Lgdt(dest));
+			Emit(dest, null, _X86.Lgdt(dest));
 		}
 
 		/// <summary>
@@ -763,7 +763,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">Destination to load into</param>
 		void _ICodeEmitter.Lidt(Operand dest)
 		{
-			Emit(dest, null, X86.Lidt(dest));
+			Emit(dest, null, _X86.Lidt(dest));
 		}
 
 		/// <summary>
@@ -772,7 +772,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The dest.</param>
 		void _ICodeEmitter.Lldt(Operand dest)
 		{
-			Emit(dest, null, X86.Lldt(dest));
+			Emit(dest, null, _X86.Lldt(dest));
 		}
 
 		/// <summary>
@@ -781,7 +781,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">Source to load from</param>
 		void _ICodeEmitter.Lmsw(Operand src)
 		{
-			Emit(src, null, X86.Lmsw(src));
+			Emit(src, null, _X86.Lmsw(src));
 		}
 
 		/// <summary>
@@ -811,10 +811,10 @@ namespace Mosa.Platforms.x86
 			Debug.Assert(dest is RegisterOperand && ((RegisterOperand)dest).Register is GeneralPurposeRegister && ((GeneralPurposeRegister)((RegisterOperand)dest).Register).RegisterCode == GeneralPurposeRegister.EAX.RegisterCode);
 			if (src is ConstantOperand) {
 				Operand newsrc = new RegisterOperand(src.Type, GeneralPurposeRegister.ECX);
-				Emit(newsrc, src, X86.Move(dest, src));
+				Emit(newsrc, src, _X86.Move(dest, src));
 				src = newsrc;
 			}
-			Emit(src, null, X86.Mul(dest, src));
+			Emit(src, null, _X86.Mul(dest, src));
 		}
 
         /// <summary>
@@ -823,7 +823,7 @@ namespace Mosa.Platforms.x86
         /// <param name="op"></param>
         void _ICodeEmitter.DirectMultiplication(Operand op)
         {
-            Emit(op, null, X86.Mul(null, op));
+            Emit(op, null, _X86.Mul(null, op));
         }
 
         /// <summary>
@@ -832,7 +832,7 @@ namespace Mosa.Platforms.x86
         /// <param name="op"></param>
         void _ICodeEmitter.DirectDivision(Operand op)
         {
-            Emit(op, null, X86.Div(null, op));
+            Emit(op, null, _X86.Div(null, op));
         }
 
 		/// <summary>
@@ -847,26 +847,26 @@ namespace Mosa.Platforms.x86
 		{
 			// Write the opcode byte
 			Debug.Assert(dest is RegisterOperand);
-			Emit(dest, null, X86.Rcr(dest, src));
+			Emit(dest, null, _X86.Rcr(dest, src));
 		}
 
 		void _ICodeEmitter.SseAdd(Operand dest, Operand src)
 		{
             if (dest.Type.Type == CilElementType.R4 && src.Type.Type == CilElementType.R4)
             {
-                Emit(dest, src, X86.Addss(dest, src));
+                Emit(dest, src, _X86.Addss(dest, src));
             }
             else
             {
                 CheckAndConvertR4(ref src);
-                Emit(dest, src, X86.Addsd(dest, src));
+                Emit(dest, src, _X86.Addsd(dest, src));
             }
 		}
 
 		void _ICodeEmitter.SseSub(Operand dest, Operand src)
 		{
 			CheckAndConvertR4(ref src);
-			Emit(dest, src, X86.Subsd(dest, src));
+			Emit(dest, src, _X86.Subsd(dest, src));
 		}
 
 		/// <summary>
@@ -877,7 +877,7 @@ namespace Mosa.Platforms.x86
 		void _ICodeEmitter.SseMul(Operand dest, Operand src)
 		{
 			CheckAndConvertR4(ref src);
-			Emit(dest, src, X86.Mulsd(dest, src));
+			Emit(dest, src, _X86.Mulsd(dest, src));
 		}
 
 		/// <summary>
@@ -889,7 +889,7 @@ namespace Mosa.Platforms.x86
 		{
             CheckAndConvertR4(ref dest);
 			CheckAndConvertR4(ref src);
-			Emit(dest, src, X86.Divsd(dest, src));
+			Emit(dest, src, _X86.Divsd(dest, src));
 		}
 
 		void _ICodeEmitter.Sar(Operand dest, Operand src)
@@ -899,7 +899,7 @@ namespace Mosa.Platforms.x86
 				Debug.Assert(((RegisterOperand)src).Register == GeneralPurposeRegister.ECX, @"Wrong source register for sar.");
 				src = null;
 			}
-			Emit(dest, src, X86.Sar(dest, src));
+			Emit(dest, src, _X86.Sar(dest, src));
 		}
 
         void _ICodeEmitter.Sal(Operand dest, Operand src)
@@ -910,7 +910,7 @@ namespace Mosa.Platforms.x86
                 Debug.Assert(((RegisterOperand)src).Register == GeneralPurposeRegister.ECX, @"Wrong source register for sar.");
                 src = null;
             }
-            Emit(dest, src, X86.Sal(dest, src));
+            Emit(dest, src, _X86.Sal(dest, src));
         }
 
 		void _ICodeEmitter.Shl(Operand dest, Operand src)
@@ -923,14 +923,14 @@ namespace Mosa.Platforms.x86
             if (src is ConstantOperand)
             {
                 src = new ConstantOperand(new SigType(CilElementType.U1), (src as ConstantOperand).Value);
-                Emit(dest, src, X86.Shl(dest, src));
+                Emit(dest, src, _X86.Shl(dest, src));
             }
             else
             {
                 ConstantOperand max = new ConstantOperand(new SigType(CilElementType.I4), 31);
-                Emit(ecx, src, X86.Move(ecx, src));
-                Emit(ecx, max, X86.And(ecx, max));
-                Emit(dest, null, X86.Shl(dest, src));
+                Emit(ecx, src, _X86.Move(ecx, src));
+                Emit(ecx, max, _X86.And(ecx, max));
+                Emit(dest, null, _X86.Shl(dest, src));
             }
 		}
 
@@ -939,7 +939,7 @@ namespace Mosa.Platforms.x86
 			// HACK: For some reason shld isn't emitted properly if we do
 			// Emit(dst, src, count, X86.Shld). It is emitted backwards, if
 			// we turn this around the following way - it works.
-			Emit(src, dest, count, X86.Shld(dest, src, count));
+			Emit(src, dest, count, _X86.Shld(dest, src, count));
 		}
 
 		void _ICodeEmitter.Shr(Operand dest, Operand src)
@@ -951,12 +951,12 @@ namespace Mosa.Platforms.x86
 
             if (src is ConstantOperand)
             {
-                Emit(dest, src, X86.Shr(dest, src));
+                Emit(dest, src, _X86.Shr(dest, src));
             }
             else
             {
-                Emit(ecx, src, X86.Move(ecx, src));
-                Emit(dest, null, X86.Shr(dest, src));
+                Emit(ecx, src, _X86.Move(ecx, src));
+                Emit(dest, null, _X86.Shr(dest, src));
             }
 		}
 
@@ -965,17 +965,17 @@ namespace Mosa.Platforms.x86
 			// HACK: For some reason shrd isn't emitted properly if we do
 			// Emit(dst, src, count, X86.Shrd). It is emitted backwards, if
 			// we turn this around the following way - it works.
-			Emit(src, dest, count, X86.Shrd(dest,src,count));
+			Emit(src, dest, count, _X86.Shrd(dest,src,count));
 		}
 
 		void _ICodeEmitter.Div(Operand dest, Operand src)
 		{
 			if (src is ConstantOperand) {
 				Operand newsrc = new RegisterOperand(src.Type, GeneralPurposeRegister.ECX);
-				Emit(newsrc, src, X86.Move(dest, src));
+				Emit(newsrc, src, _X86.Move(dest, src));
 				src = newsrc;
 			}
-			Emit(src, null, X86.Div(null, src));
+			Emit(src, null, _X86.Div(null, src));
 		}
 
 		void _ICodeEmitter.IDiv(Operand dest, Operand src)
@@ -983,15 +983,15 @@ namespace Mosa.Platforms.x86
             if (dest is ConstantOperand)
             {
                 Operand newdst = new RegisterOperand(src.Type, GeneralPurposeRegister.EAX);
-                Emit(newdst, dest, X86.Move(newdst, dest));
+                Emit(newdst, dest, _X86.Move(newdst, dest));
                 dest = newdst;
             }
 			if (src is ConstantOperand) {
 				Operand newsrc = new RegisterOperand(src.Type, GeneralPurposeRegister.ECX);
-                Emit(newsrc, src, X86.Move(newsrc, src));
+                Emit(newsrc, src, _X86.Move(newsrc, src));
 				src = newsrc;
 			}
-			Emit(src, null, X86.Idiv(dest, src));
+			Emit(src, null, _X86.Idiv(dest, src));
 		}
 
 		void _ICodeEmitter.Mov(Operand dest, Operand src)
@@ -1005,11 +1005,11 @@ namespace Mosa.Platforms.x86
 
                 if (dest is MemoryOperand && src is MemoryOperand)
                 {
-                    Emit(new RegisterOperand(src.Type, GeneralPurposeRegister.EDX), src, X86.Move(new RegisterOperand(src.Type, GeneralPurposeRegister.EDX), src));
+                    Emit(new RegisterOperand(src.Type, GeneralPurposeRegister.EDX), src, _X86.Move(new RegisterOperand(src.Type, GeneralPurposeRegister.EDX), src));
                     src = new RegisterOperand(src.Type, GeneralPurposeRegister.EDX);
                 }
 
-				Emit(dest, src, X86.Move(dest, src));
+				Emit(dest, src, _X86.Move(dest, src));
 
 			}
 			// We are dealing with floating point values
@@ -1018,10 +1018,10 @@ namespace Mosa.Platforms.x86
                 {
                     //RegisterOperand xmm3 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM3);
                     //Emit(xmm3, src, X86.Cvtss2sd(xmm3, src));
-                    Emit(dest, src, X86.Movsd(dest, src));
+                    Emit(dest, src, _X86.Movsd(dest, src));
                 }
                 else
-                    Emit(dest, src, X86.Movsd(dest, src));
+                    Emit(dest, src, _X86.Movsd(dest, src));
 			}
 		}
 
@@ -1030,7 +1030,7 @@ namespace Mosa.Platforms.x86
 			if (dest is ConstantOperand)
 				throw new ArgumentException(@"Destination can't be constant.", @"dest");
 
-			Emit(dest, src, X86.Movss(dest, src));
+			Emit(dest, src, _X86.Movss(dest, src));
 		}
 
 		void _ICodeEmitter.Movsd(Operand dest, Operand src)
@@ -1038,7 +1038,7 @@ namespace Mosa.Platforms.x86
 			if (dest is ConstantOperand)
 				throw new ArgumentException(@"Destination can't be constant.", @"dest");
 
-			Emit(dest, src, X86.Movsd(dest, src));
+			Emit(dest, src, _X86.Movsd(dest, src));
 		}
 
 		/// <summary>
@@ -1056,16 +1056,16 @@ namespace Mosa.Platforms.x86
 			switch (src.Type.Type) {
 				case CilElementType.U1: goto case CilElementType.I1;
 				case CilElementType.I1:
-					Emit(dest, src, X86.Movsx8(dest, src));
+					Emit(dest, src, _X86.Movsx8(dest, src));
 					break;
 
 				case CilElementType.U2: goto case CilElementType.I2;
 				case CilElementType.I2:
-					Emit(dest, src, X86.Movsx16(dest, src));
+					Emit(dest, src, _X86.Movsx16(dest, src));
 					break;
 
 				default:
-					Emit(dest, src, X86.Move(dest, src));
+					Emit(dest, src, _X86.Move(dest, src));
 
 					break;
 			}
@@ -1086,16 +1086,16 @@ namespace Mosa.Platforms.x86
 			switch (src.Type.Type) {
 				case CilElementType.I1: goto case CilElementType.U1;
 				case CilElementType.U1:
-					Emit(dest, src, X86.Movzx8(dest, src));
+					Emit(dest, src, _X86.Movzx8(dest, src));
 					break;
 
 				case CilElementType.I2: goto case CilElementType.U2;
 				case CilElementType.U2:
-					Emit(dest, src, X86.Movzx16(dest, src));
+					Emit(dest, src, _X86.Movzx16(dest, src));
 					break;
 
 				default:
-					Emit(dest, src, X86.Move(dest, src));
+					Emit(dest, src, _X86.Move(dest, src));
 
 					break;
 			}
@@ -1223,7 +1223,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		void _ICodeEmitter.Sfence()
 		{
-			Emit(null, null, X86.Sfence());
+			Emit(null, null, _X86.Sfence());
 		}
 
 		/// <summary>
@@ -1232,7 +1232,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">Destination to save to</param>
 		void _ICodeEmitter.Sgdt(Operand dest)
 		{
-			Emit(dest, null, X86.Sgdt(dest));
+			Emit(dest, null, _X86.Sgdt(dest));
 		}
 
 		/// <summary>
@@ -1241,7 +1241,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">Destination to save to</param>
 		void _ICodeEmitter.Sidt(Operand dest)
 		{
-			Emit(dest, null, X86.Sidt(dest));
+			Emit(dest, null, _X86.Sidt(dest));
 		}
 
 		/// <summary>
@@ -1250,7 +1250,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The destination operand</param>
 		void _ICodeEmitter.Sldt(Operand dest)
 		{
-			Emit(dest, null, X86.Sidt(dest));
+			Emit(dest, null, _X86.Sidt(dest));
 		}
 
 		/// <summary>
@@ -1259,7 +1259,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The destination operand</param>
 		void _ICodeEmitter.Smsw(Operand dest)
 		{
-			Emit(dest, null, X86.Smsw(dest));
+			Emit(dest, null, _X86.Smsw(dest));
 		}
 
 		/// <summary>
@@ -1276,7 +1276,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The destination operand</param>
 		void _ICodeEmitter.StmXcsr(Operand dest)
 		{
-			Emit(dest, null, X86.Stmxcsr(dest));
+			Emit(dest, null, _X86.Stmxcsr(dest));
 		}
 
 		void _ICodeEmitter.Stosb()
@@ -1296,7 +1296,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The source operand.</param>
 		void _ICodeEmitter.Sub(Operand dest, Operand src)
 		{
-			Emit(dest, src, X86.Sub(dest, src));
+			Emit(dest, src, _X86.Sub(dest, src));
 		}
 
 		/// <summary>
@@ -1306,7 +1306,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The source operand.</param>
 		void _ICodeEmitter.Sbb(Operand dest, Operand src)
 		{
-			Emit(dest, src, X86.Sbb(dest, src));
+			Emit(dest, src, _X86.Sbb(dest, src));
 		}
 
 		/// <summary>
@@ -1336,7 +1336,7 @@ namespace Mosa.Platforms.x86
 		{
 			/*byte[] code = { 0x66 };
 			Emit(code, null, null, null);*/
-			Emit(dest, src, X86.Xchg(dest, src));
+			Emit(dest, src, _X86.Xchg(dest, src));
 		}
 
 		/// <summary>
@@ -1354,7 +1354,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The destination operand</param>
 		void _ICodeEmitter.Xsave(Operand dest)
 		{
-			Emit(dest, null, X86.Xsave(dest));
+			Emit(dest, null, _X86.Xsave(dest));
 		}
 
 		/// <summary>
@@ -1364,7 +1364,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The source operand of the instruction.</param>
 		void _ICodeEmitter.Xor(Operand dest, Operand src)
 		{
-			Emit(dest, src, X86.Xor(dest, src));
+			Emit(dest, src, _X86.Xor(dest, src));
 		}
 
 		/// <summary>
@@ -1936,22 +1936,22 @@ namespace Mosa.Platforms.x86
 
 		void _ICodeEmitter.Comisd(Operand op1, Operand op2)
 		{
-			Emit(op1, op2, X86.Comisd(op1, op2));
+			Emit(op1, op2, _X86.Comisd(op1, op2));
 		}
 
 		void _ICodeEmitter.Comiss(Operand op1, Operand op2)
 		{
-			Emit(op1, op2, X86.Comiss(op1, op2));
+			Emit(op1, op2, _X86.Comiss(op1, op2));
 		}
 
 		void _ICodeEmitter.Ucomisd(Operand op1, Operand op2)
 		{
-			Emit(op1, op2, X86.Ucomisd(op1, op2));
+			Emit(op1, op2, _X86.Ucomisd(op1, op2));
 		}
 
 		void _ICodeEmitter.Ucomiss(Operand op1, Operand op2)
 		{
-			Emit(op1, op2, X86.Ucomiss(op1, op2));
+			Emit(op1, op2, _X86.Ucomiss(op1, op2));
 		}
 
 		/// <summary>
@@ -1965,7 +1965,7 @@ namespace Mosa.Platforms.x86
 
 		    // First, convert it to double precision
 		    RegisterOperand dest = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);
-		    Emit(dest, src, X86.Cvtss2sd(dest,src));
+		    Emit(dest, src, _X86.Cvtss2sd(dest,src));
 
 		    // New Operand is a Registeroperand
 		    src = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM1);

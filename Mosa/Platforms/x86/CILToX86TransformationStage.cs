@@ -23,19 +23,17 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 namespace Mosa.Platforms.x86
 {
 	/// <summary>
-	/// Transforms CIL instructions into their appropriate X86.
+	/// Transforms CIL instructions into their appropriate 
 	/// </summary>
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent X86 sequences.
 	/// </remarks>
 	public sealed class CILToX86TransformationStage :
-		CodeTransformationStage,
+		BaseX86TransformationStage,
 		CIL.ICILVisitor,
 		IMethodCompilerStage,
 		IPlatformTransformationStage
 	{
-		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>
@@ -380,7 +378,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Div(Context ctx)
 		{
-			if (X86.IsUnsigned(ctx.Operand1) || X86.IsUnsigned(ctx.Operand2))
+			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Operand2))
 				HandleCommutativeOperation(ctx, IR.Instruction.UDivInstruction);
 			else if (ctx.Operand1.StackType == StackTypeCode.F)
 				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
@@ -396,12 +394,12 @@ namespace Mosa.Platforms.x86
 		{
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), ctx.Operand1);
 
-			if (X86.IsUnsigned(ctx.Operand1))
+			if (IsUnsigned(ctx.Operand1))
 				ctx.InsertInstructionAfter(IR.Instruction.ZeroExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
 			else
 				ctx.InsertInstructionAfter(IR.Instruction.SignExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
 
-			if (X86.IsUnsigned(ctx.Operand1) && X86.IsUnsigned(ctx.Operand2))
+			if (IsUnsigned(ctx.Operand1) && IsUnsigned(ctx.Operand2))
 				ctx.InsertInstructionAfter(IR.Instruction.UDivInstruction, ctx.Operand1, ctx.Operand2);
 			else
 				ctx.InsertInstructionAfter(CPUx86.Instruction.DivInstruction, ctx.Operand1, ctx.Operand2);
@@ -982,12 +980,12 @@ namespace Mosa.Platforms.x86
 			}
 
 			// Check if we have to sign-extend the operand that's being loaded
-			if (X86.IsSigned(op1) && !(op1 is ConstantOperand)) {
+			if (IsSigned(op1) && !(op1 is ConstantOperand)) {
 				// Signextend it
 				ctx.InsertBefore().SetInstruction(IR.Instruction.SignExtendedMoveInstruction, eaxL, op1);
 			}
 			// Check if the operand has to be zero-extended
-			else if (X86.IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {
+			else if (IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {
 				ctx.InsertBefore().SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eaxL, op1);
 			}
 			// In any other case: Just load it
