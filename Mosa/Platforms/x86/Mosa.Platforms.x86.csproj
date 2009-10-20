@@ -83,13 +83,15 @@
     <Compile Include="ArchitectureFeatureFlags.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CodeGenerationStage.cs">
+    <Compile Include="MachineCodeEmitter.cs" />
+    <Compile Include="_CodeGenerationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConstantRemovalStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CILToX86TransformationStage.cs" />
+    <Compile Include="CPUx86\JumpInstruction.cs" />
     <Compile Include="FinalX86TransformationStage.cs" />
     <Compile Include="CPUx86\AdcInstruction.cs" />
     <Compile Include="CPUx86\AddInstruction.cs" />
@@ -185,7 +187,7 @@
     <Compile Include="GenericX86Register.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ICodeEmitter.cs">
+    <Compile Include="_ICodeEmitter.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InstructionSchedulingStage.cs" />
@@ -198,7 +200,7 @@
     <Compile Include="LongOperandTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MachineCodeEmitter.cs">
+    <Compile Include="_MachineCodeEmitter.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MMXRegister.cs">

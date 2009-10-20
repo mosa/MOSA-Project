@@ -65,12 +65,22 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="codeStream">The code stream.</param>
-		public virtual void Emit(Context ctx, System.IO.Stream codeStream)
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		public void Emit(Context context, ICodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
-			MachineCodeEmitter.Emit(codeStream, opCode, ctx.Result, ctx.Operand1, ctx.Operand2);
+			Emit(context, emitter as MachineCodeEmitter);
+		}
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		public virtual void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
+			emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
 		}
 
 		/// <summary>

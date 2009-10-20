@@ -29,7 +29,7 @@ namespace Mosa.Platforms.x86
     /// <see cref="MachineCodeEmitter"/> that emits the raw opcode bytes into a stream of the
     /// respective x86 instructions.
     /// </remarks>
-    public interface ICodeEmitter : IDisposable
+    public interface _ICodeEmitter : IDisposable
     {
         /// <summary>
         /// Emits a comment into the code stream.

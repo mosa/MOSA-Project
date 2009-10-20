@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Base class for code generation stages.
 	/// </summary>
-	public abstract class CodeGenerationStage : ICodeGenerationStage, IMethodCompilerStage
+	public class CodeGenerationStage : ICodeGenerationStage, IMethodCompilerStage
 	{
 		#region Data members
 
@@ -41,8 +41,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The name of the compilation stage.</value>
 		public string Name
 		{
-			get { return @"CodeGeneration"; }
+			get { return @"CodeGenerationStage"; }
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected ICodeEmitter _codeEmitter;
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -76,16 +81,14 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Adds the stage to the pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add to.</param>
-		public abstract void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline);
+		public virtual void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		{
+			pipeline.Add(this);
+		}
 
 		#endregion // IMethodCompilerStage members
 
 		#region Methods
-
-		/// <summary>
-		/// Notifies the derived class about the start of code generation.
-		/// </summary>
-		protected abstract void BeginGenerate();
 
 		/// <summary>
 		/// Called to emit a list of instructions offered by the instruction provider.
@@ -100,7 +103,7 @@ namespace Mosa.Runtime.CompilerFramework
 						if (!ctx.Ignore) {
 							IPlatformInstruction instruction = ctx.Instruction as IPlatformInstruction;
 							if (instruction != null)
-								instruction.Emit(ctx, _codeStream);
+								instruction.Emit(ctx, _codeEmitter);
 						}
 
 				BlockEnd(block);
@@ -108,15 +111,25 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Notifies a derived class about start of code generation for a block.
+		/// Begins the generate.
+		/// </summary>
+		protected virtual void BeginGenerate()
+		{
+			_codeEmitter = _compiler.Architecture.GetCodeEmitter();
+			_codeEmitter.Initialize(_compiler, _codeStream, _compiler.Linker);
+		}
+
+		/// <summary>
+		/// Start of code generation for a block.
 		/// </summary>
 		/// <param name="block">The started block.</param>
 		protected virtual void BlockStart(BasicBlock block)
 		{
+			_codeEmitter.Label(block.Label);
 		}
 
 		/// <summary>
-		/// Notifies a derived class about completion of code generation for a block.
+		/// Completion of code generation for a block.
 		/// </summary>
 		/// <param name="block">The completed block.</param>
 		protected virtual void BlockEnd(BasicBlock block)
@@ -124,9 +137,13 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Notifies the derived class the code generation completed.
+		/// Code generation completed.
 		/// </summary>
-		protected abstract void EndGenerate();
+		protected virtual void EndGenerate()
+		{
+			_codeEmitter.Dispose();
+			_codeEmitter = null;
+		}
 
 		#endregion // Methods
 

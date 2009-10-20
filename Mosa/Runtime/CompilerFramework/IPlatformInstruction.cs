@@ -22,8 +22,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="codeStream">The code stream.</param>
-		void Emit(Context context, System.IO.Stream codeStream);
+		/// <param name="emitter">The emitter.</param>
+		void Emit(Context context, ICodeEmitter emitter);
 
 		/// <summary>
 		/// Gets the instruction latency.

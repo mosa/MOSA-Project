@@ -18,14 +18,14 @@ namespace Mosa.Platforms.x86.CPUx86
     {
         #region Methods
 
-        /// <summary>
-        /// Emits the specified platform instruction.
-        /// </summary>
-        /// <param name="ctx">The context.</param>
-        /// <param name="codeStream">The code stream.</param>
-        public override void Emit(Context ctx, System.IO.Stream codeStream)
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+        public override void Emit(Context ctx, MachineCodeEmitter emitter)
         {
-            codeStream.WriteByte(0x99);
+			emitter.WriteByte(0x99);
         }
 
 		/// <summary>

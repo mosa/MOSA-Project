@@ -20,14 +20,14 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
     {
         #region Methods
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="codeStream"></param>
-        public override void Emit(Context ctx, System.IO.Stream codeStream)
+		/// <summary>
+		/// Emits the specified CTX.
+		/// </summary>
+		/// <param name="ctx">The CTX.</param>
+		/// <param name="emitter">The emitter.</param>
+        public override void Emit(Context ctx, MachineCodeEmitter emitter)
         {
-            codeStream.WriteByte(0xFB);
+			emitter.WriteByte(0xFB);
         }
 
 		/// <summary>

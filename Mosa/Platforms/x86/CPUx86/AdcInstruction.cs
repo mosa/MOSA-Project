@@ -13,9 +13,9 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.CPUx86
 {
 	/// <summary>
-	/// Intermediate representation of the x86 adc instruction.
+	/// Intermediate representation of the x86 jump instruction.
 	/// </summary>
-	public sealed class AdcInstruction : TwoOperandInstruction
+	public sealed class AdcInstruction : BaseInstruction
     {
         #region Data members
         private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 });

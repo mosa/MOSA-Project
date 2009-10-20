@@ -4,23 +4,25 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
+using System.IO;
+
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Intermediate representation of the mul instruction.
-    /// </summary>
-    public sealed class MulInstruction : TwoOperandInstruction
-    {
+	/// <summary>
+	/// 
+	/// </summary>
+	public sealed class JumpInstruction : TwoOperandInstruction
+	{
+
 		#region Data Members
 
-		private static readonly OpCode R = new OpCode(new byte[] { 0xF7 }, 4);
-		private static readonly OpCode M = new OpCode(new byte[] { 0xF7 }, 4);
+		//private static readonly OpCode JMP = new OpCode(new byte[] { 0xE9 });
 
 		#endregion
 
@@ -30,11 +32,21 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// Gets the instruction latency.
 		/// </summary>
 		/// <value>The latency.</value>
-		public override int Latency { get { return 4; } }
+		public override int Latency { get { return 1; } }
 
 		#endregion // Properties
 
-        #region Methods
+		#region Methods
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		public override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
+			//MachineCodeEmitter.EmitBranch(new byte[] { 0xE9 }, dest);
+		}
 
 		/// <summary>
 		/// Computes the opcode.
@@ -45,23 +57,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-            if (destination == null) return R;
-            if (destination is RegisterOperand) return R;
-            if (destination is MemoryOperand) return M;
-
+			// TODO:
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
-
-		/// <summary>
-		/// Emits the specified platform instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="emitter">The emitter.</param>
-        public override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
-            OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, null);
-			emitter.Emit(opCode, null, ctx.Operand1);
-        }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -70,9 +68,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			visitor.Mul(context);
+			visitor.Add(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+
+	}
 }

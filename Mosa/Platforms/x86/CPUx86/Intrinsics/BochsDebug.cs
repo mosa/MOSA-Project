@@ -33,12 +33,12 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		/// <param name="codeStream">The code stream.</param>
-		public override void Emit(Context ctx, System.IO.Stream codeStream)
+		/// <param name="emitter">The emitter.</param>
+		public override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
 			ctx.Result = new RegisterOperand(new SigType(Runtime.Metadata.CilElementType.I2), GeneralPurposeRegister.EBX);
 			ctx.Operand1 = new RegisterOperand(new SigType(Runtime.Metadata.CilElementType.I2), GeneralPurposeRegister.EBX);
-			base.Emit(ctx, codeStream);
+			base.Emit(ctx, emitter);
 		}
 
 		/// <summary>

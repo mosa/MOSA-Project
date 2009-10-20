@@ -37,10 +37,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		/// <param name="codeStream">The code stream.</param>
-		public override void Emit(Context ctx, System.IO.Stream codeStream)
+		/// <param name="emitter">The emitter.</param>
+		public override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-			codeStream.WriteByte(0x90);
+			emitter.WriteByte(0x90);
 		}
 
 		#endregion // IPlatformInstruction Overrides

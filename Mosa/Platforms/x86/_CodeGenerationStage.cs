@@ -24,7 +24,7 @@ using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CPUx86 = Mosa.Platforms.x86.CPUx86;
 
-// FIXME PG: This class will be removed eventually
+// FIXME PG - this class goes away eventually
 
 namespace Mosa.Platforms.x86
 {
@@ -40,20 +40,20 @@ namespace Mosa.Platforms.x86
 	/// register usage though. This should clearly be done after the results of this approach
 	/// have been validated.
 	/// </remarks>
-	sealed class CodeGenerator : CodeGenerationStage, CIL.ICILVisitor, CPUx86.IX86Visitor, IR.IIRVisitor
+	sealed class _CodeGenerationStage : CodeGenerationStage, CIL.ICILVisitor, CPUx86.IX86Visitor, IR.IIRVisitor
 	{
 		#region Data members
 
 		/// <summary>
 		/// The emitter used by the code generator.
 		/// </summary>
-		private ICodeEmitter _codeEmitter;
+		private _ICodeEmitter _codeEmitter;
 
 		#endregion
 
 		#region Construction
 
-		public CodeGenerator()
+		public _CodeGenerationStage()
 		{
 		}
 
@@ -61,17 +61,27 @@ namespace Mosa.Platforms.x86
 
 		#region Methods
 
+		/// <summary>
+		/// Begins the generate.
+		/// </summary>
 		protected override void BeginGenerate()
 		{
-			_codeEmitter = new MachineCodeEmitter(_compiler, _codeStream, _compiler.Linker);
+			_codeEmitter = new _MachineCodeEmitter(_compiler, _codeStream, _compiler.Linker);
 		}
 
+		/// <summary>
+		/// Notifies the derived class the code generation completed.
+		/// </summary>
 		protected override void EndGenerate()
 		{
 			_codeEmitter.Dispose();
 			_codeEmitter = null;
 		}
 
+		/// <summary>
+		/// Notifies a derived class about start of code generation for a block.
+		/// </summary>
+		/// <param name="block">The started block.</param>
 		protected override void BlockStart(BasicBlock block)
 		{
 			_codeEmitter.Label(block.Label);

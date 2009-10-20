@@ -73,12 +73,12 @@ namespace Mosa.Platforms.x86.CPUx86
         #endregion // Methods
 
         #region OneOperandInstruction Overrides
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="codeStream"></param>
-        public override void Emit(Context ctx, System.IO.Stream codeStream)
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+        public override void Emit(Context ctx, MachineCodeEmitter emitter)
         {
             byte[] byteCode;
 
@@ -128,7 +128,7 @@ namespace Mosa.Platforms.x86.CPUx86
                     throw new NotSupportedException();
             }
 
-            MachineCodeEmitter.Emit(codeStream, new OpCode(byteCode), ctx.Operand1, null);
+			emitter.Emit(new OpCode(byteCode), ctx.Operand1, null);
         }
         /// <summary>
         /// Returns a string representation of the instruction.

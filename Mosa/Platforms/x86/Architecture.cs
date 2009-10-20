@@ -168,7 +168,7 @@ namespace Mosa.Platforms.x86
                     new IRToX86TransformationStage(),
 					new FinalX86TransformationStage(),
                     //InstructionLogger.Instance,
-					new CodeGenerator(),
+					//new _CodeGenerationStage(),
                 });
 		}
 
@@ -232,6 +232,15 @@ namespace Mosa.Platforms.x86
 		public override IInstruction GetIntrinsicIntruction(Type type)
 		{
 			return CPUx86.Intrinsics.Instruction.Get(type);
+		}
+
+		/// <summary>
+		/// Gets the code emitter.
+		/// </summary>
+		/// <returns></returns>
+		public override ICodeEmitter GetCodeEmitter()
+		{
+			return new MachineCodeEmitter();	
 		}
 	}
 }

@@ -19,15 +19,15 @@ namespace Mosa.Platforms.x86.CPUx86
     {
         #region OneOperandInstruction Overrides
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="codeStream"></param>
-        public override void Emit(Context ctx, System.IO.Stream codeStream)
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+        public override void Emit(Context ctx, MachineCodeEmitter emitter)
         {
             byte interrupt = Convert.ToByte(((ConstantOperand)ctx.Operand1).Value);
-            codeStream.Write(new byte[] { 0xCD, interrupt }, 0, 2);
+			emitter.Write(new byte[] { 0xCD, interrupt }, 0, 2);
         }
 
         /// <summary>
