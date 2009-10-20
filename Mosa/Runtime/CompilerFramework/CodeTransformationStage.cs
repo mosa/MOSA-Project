@@ -64,8 +64,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 			for (int index = 0; index < BasicBlocks.Count; index++)
 				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
-					if (ctx.Instruction != null)
-						ctx.Visit(this);
+					if (ctx.Instruction != null) {
+						ctx.Clone().Visit(this);
+					}
 		}
 
 		/// <summary>

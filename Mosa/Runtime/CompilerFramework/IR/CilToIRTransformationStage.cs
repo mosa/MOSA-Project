@@ -17,9 +17,12 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework;
-using IR = Mosa.Runtime.CompilerFramework.IR;
+using Mosa.Runtime.CompilerFramework.CIL;
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+using IR = Mosa.Runtime.CompilerFramework.IR;
+using CIL = Mosa.Runtime.CompilerFramework.CIL;
+
+namespace Mosa.Runtime.CompilerFramework.IR
 {
 	/// <summary>
 	/// Transforms CIL instructions into their appropriate IR.
@@ -239,7 +242,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.BinaryLogic(Context ctx)
 		{
-			switch ((ctx.Instruction as BaseInstruction).OpCode) {
+			switch ((ctx.Instruction as CIL.BaseInstruction).OpCode) {
 				case OpCode.And:
 					ctx.SetInstruction(IR.Instruction.LogicalAndInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
@@ -267,7 +270,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Shift(Context ctx)
 		{
-			switch ((ctx.Instruction as BaseInstruction).OpCode) {
+			switch ((ctx.Instruction as CIL.BaseInstruction).OpCode) {
 				case OpCode.Shl:
 					ctx.SetInstruction(IR.Instruction.ShiftLeftInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
@@ -403,7 +406,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.BinaryComparison(Context ctx)
 		{
-			IR.ConditionCode code = GetConditionCode((ctx.Instruction as BaseInstruction).OpCode);
+			IR.ConditionCode code = GetConditionCode((ctx.Instruction as CIL.BaseInstruction).OpCode);
 
 			if (ctx.Operand1.StackType == StackTypeCode.F)
 				ctx.SetInstruction(IR.Instruction.FloatingPointCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
@@ -440,15 +443,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ReplaceWithInternalCall(ctx, VmCall.Rethrow);
 		}
 
-		#endregion // ICILVisitor
-
-		#region ICILVisitor - Unused
-
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Nop"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Nop(Context ctx) { }
+		void ICILVisitor.Nop(Context ctx)
+		{
+			ctx.ReplaceInstructionOnly(IR.Instruction.NopInstruction);
+		}
+
+		#endregion // ICILVisitor
+
+		#region ICILVisitor - Unused
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Break"/>.
@@ -1224,7 +1230,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opCode">The opcode.</param>
 		/// <returns>The IR condition code.</returns>
-		private IR.ConditionCode GetConditionCode(OpCode opCode)
+		private IR.ConditionCode GetConditionCode(CIL.OpCode opCode)
 		{
 			IR.ConditionCode result;
 			switch (opCode) {

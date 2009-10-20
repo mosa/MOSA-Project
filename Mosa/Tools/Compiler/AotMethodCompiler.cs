@@ -11,6 +11,7 @@
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.CIL;
+using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
@@ -71,7 +72,7 @@ namespace Mosa.Tools.Compiler
 				new SimpleTraceBlockOrderStage(),
 				InstructionStatisticsStage.Instance,
 		        //new LocalCSE(),
-				new CodeGenerationStage(),
+				//new CodeGenerationStage(),
             });
         }
 

@@ -52,7 +52,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
 		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertBefore<FinalX86TransformationStage>(this);
+			pipeline.InsertAfter<CILToX86TransformationStage>(this);
 		}
 
 		#endregion // IMethodCompilerStage Members

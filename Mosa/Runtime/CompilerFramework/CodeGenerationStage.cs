@@ -104,6 +104,8 @@ namespace Mosa.Runtime.CompilerFramework
 							IPlatformInstruction instruction = ctx.Instruction as IPlatformInstruction;
 							if (instruction != null)
 								instruction.Emit(ctx, _codeEmitter);
+							else
+								Debug.WriteLine(ctx.ToString());
 						}
 
 				BlockEnd(block);

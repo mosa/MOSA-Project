@@ -150,8 +150,10 @@ namespace Mosa.Runtime.CompilerFramework
 				newPrev[i] = i - 1;
 			}
 			newNext[newsize - 1] = -1;
+			newPrev[_size] = -1;
 			Data.CopyTo(newInstructions, 0);
 
+			_free = _size;
 			_next = newNext;
 			_prev = newPrev;
 			_size = newsize;
@@ -196,7 +198,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public int GetFree()
 		{
-			if (_used + 1 == _size)
+			//	if (_used + 1 == _size)
+			if (_free == -1)
 				Resize(_size * 2);
 
 			int free = _free;

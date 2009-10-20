@@ -532,17 +532,21 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			Clear();
 
-			int prev = _instructionSet.Previous(_index);
+			NewInstruction = null;
+			Ignore = true;
+			return;
 
-			// if this instruction was part of the head of the block, then don't remove it 
-			if (prev <= 0) {
-				NewInstruction = null;
-				Ignore = true;
-				return;
-			}
+			//int prev = _instructionSet.Previous(_index);
 
-			_instructionSet.Remove(_index);
-			_index = prev;
+			//// if this instruction was part of the head of the block, then don't remove it 
+			//if (prev <= 0) {
+			//    NewInstruction = null;
+			//    Ignore = true;
+			//    return;
+			//}
+
+			//_instructionSet.Remove(_index);
+			//_index = prev;
 		}
 
 		/// <summary>
@@ -695,7 +699,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="operand1">The operand1.</param>
 		public void InsertInstructionAfter(IInstruction instruction, Operand result, Operand operand1)
 		{
-			_index = _instructionSet.InsertAfter(_index);
+			if (Instruction != null)
+				_index = _instructionSet.InsertAfter(_index);
+			else
+				_index = _index + 1 - 1;
+
 			SetInstruction(instruction, result, operand1);
 		}
 

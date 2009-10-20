@@ -48,6 +48,16 @@ namespace Mosa.Runtime.CompilerFramework
 		#region IMethodCompilerStage Members
 
 		/// <summary>
+		/// Adds to pipeline.
+		/// </summary>
+		/// <param name="pipeline">The pipeline.</param>
+		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		{
+			pipeline.InsertAfter<IPlatformTransformationStage>(this);
+			pipeline.InsertBefore<CodeGenerationStage>(this);
+		}
+
+		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
@@ -67,15 +77,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 			for (int i = BasicBlocks.Count - 1; i > 0; i--)
 				_ordered[orderBlockCnt++] = BasicBlocks[i];
-		}
-
-		/// <summary>
-		/// Adds to pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline.</param>
-		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
-		{
-			pipeline.InsertBefore<CIL.CilToIrTransformationStage>(this);
 		}
 
 		#endregion // Methods

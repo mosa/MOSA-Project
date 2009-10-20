@@ -41,7 +41,7 @@ namespace Mosa.Platforms.x86
 		/// <value>The name of the compilation stage.</value>
 		public override string Name
 		{
-			get { return @"LongArithmeticTransformationStage"; }
+			get { return @"LongOperandTransformationStage"; }
 		}
 
 		/// <summary>
@@ -50,6 +50,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
 		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
+			pipeline.InsertAfter<StackLayoutStage>(this);
+
 		}
 
 		#endregion // IMethodCompilerStage Members

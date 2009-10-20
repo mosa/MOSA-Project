@@ -51,7 +51,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
 		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertBefore<IRToX86TransformationStage>(this);
+			pipeline.InsertAfter<LongOperandTransformationStage>(this);
 		}
 
 		#endregion // IMethodCompilerStage Members
@@ -167,12 +167,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Branch(Context ctx)
 		{
-			// FIXME PG
-
-			// ctx.SetInstruction(CPUx86.Instruction.JumpInstruction, ctx.Branch.Targets[0]);
-
-			//_codeEmitter.Jmp(ctx.Branch.Targets[0]);
-			//calls: EmitBranch(new byte[] { 0xE9 }, dest);
+			ctx.ReplaceInstructionOnly(CPUx86.Instruction.JumpInstruction);
 		}
 
 		/// <summary>

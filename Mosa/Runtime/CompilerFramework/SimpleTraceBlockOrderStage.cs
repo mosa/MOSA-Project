@@ -50,6 +50,16 @@ namespace Mosa.Runtime.CompilerFramework
 		#region IMethodCompilerStage Members
 
 		/// <summary>
+		/// Adds to pipeline.
+		/// </summary>
+		/// <param name="pipeline">The pipeline.</param>
+		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		{
+			//pipeline.InsertBefore<CodeGenerationStage>(this);
+			pipeline.InsertAfter<IPlatformTransformationStage>(this);
+		}
+
+		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
@@ -59,7 +69,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Retreive the first block
 			BasicBlock first = FindBlock(-1);
-		
+
 			// Create dictionary of refereced blocks
 			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(BasicBlocks.Count);
 
@@ -90,15 +100,6 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (BasicBlock block in BasicBlocks)
 				if (!referenced.ContainsKey(block))
 					_ordered[orderBlockCnt++] = block;
-		}
-
-		/// <summary>
-		/// Adds to pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline.</param>
-		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
-		{
-			pipeline.InsertBefore<CIL.CilToIrTransformationStage>(this);
 		}
 
 		#endregion // Methods
