@@ -194,9 +194,16 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Jns(Context context);
-
-		#region Intrinsics
-
+		/// <summary>
+		/// Jumps the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Jump(Context context);
+		/// <summary>
+		/// Movsxes the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Movsx(Context context);
 		/// <summary>
 		/// Emits xchg bx, bx to force bochs into debug mode
 		/// </summary>
@@ -382,7 +389,5 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Xchg(Context context);
-
-		#endregion
 	}
 }

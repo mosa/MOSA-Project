@@ -63,7 +63,7 @@ namespace Mosa.Platforms.x86
 		/// MulInstruction instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CPUx86.IX86Visitor.Mul(Context ctx) 
+		void CPUx86.IX86Visitor.Mul(Context ctx)
 		{
 			if (ctx.Operand1 is ConstantOperand) {
 				ctx.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
@@ -77,8 +77,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Cmp(Context ctx)
 		{
-			// This seems to be wrong; X86 to IR translation?
-
 			Operand op0 = ctx.Result;
 			Operand op1 = ctx.Operand1;
 
@@ -94,9 +92,9 @@ namespace Mosa.Platforms.x86
 			start.SetInstruction(CPUx86.Intrinsics.PushInstruction, null, eax);
 
 			if (IsSigned(op0))
-				start.InsertInstructionAfter(IR.Instruction.SignExtendedMoveInstruction, eax, op0);
+				start.InsertInstructionAfter(IR.Instruction.SignExtendedMoveInstruction, eax, op0); // FIX PG: Can't replace w/ IR instruction
 			else
-				start.InsertInstructionAfter(IR.Instruction.MoveInstruction, eax, op0);
+				start.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, op0);
 
 			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, eax);
 		}
@@ -121,6 +119,30 @@ namespace Mosa.Platforms.x86
 
 			// FIXME PG - 
 			// ThreeTwoAddressConversion(ctx);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.In"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.In(Context context)
+		{
+			if (context.Result is MemoryOperand) {
+				Operand op = context.Result;
+				RegisterOperand reg = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.EAX);
+				context.InsertBefore().SetInstruction(CPUx86.Instruction.MoveInstruction, reg, op);
+				context.Result = reg;
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Movsx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Movsx(Context context) 
+		{
+			if ((context.Operand1.Type.Type == CilElementType.U4) || (context.Operand1.Type.Type == CilElementType.I4))
+				context.ReplaceInstructionOnly(CPUx86.Instruction.MoveInstruction);				
 		}
 
 		#endregion // Members
@@ -338,20 +360,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Invlpg(Context context) { }
 		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.In"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.In(Context context)
-		{
-            if (context.Result is MemoryOperand)
-            {
-                Operand op = context.Result;
-                RegisterOperand reg = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.EAX);
-                context.InsertBefore().SetInstruction(CPUx86.Instruction.MoveInstruction, reg, op);
-                context.Result = reg;
-            }
-		}
-		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Inc"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -402,13 +410,12 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Out(Context context)
 		{
-            if (context.Operand2 is MemoryOperand || context.Operand2 is ConstantOperand)
-            {
-                Operand op = context.Operand2;
-                RegisterOperand reg = new RegisterOperand(context.Operand2.Type, GeneralPurposeRegister.EAX);
+			if (context.Operand2 is MemoryOperand || context.Operand2 is ConstantOperand) {
+				Operand op = context.Operand2;
+				RegisterOperand reg = new RegisterOperand(context.Operand2.Type, GeneralPurposeRegister.EAX);
 				context.InsertBefore().SetInstruction(CPUx86.Instruction.MoveInstruction, reg, op);
-                context.Operand2 = reg;
-            }
+				context.Operand2 = reg;
+			}
 		}
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Pause"/> instructions.
@@ -485,6 +492,11 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Xchg(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Jump"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Jump(Context context) { }
 
 		#endregion // IX86Visitor - Unused
 

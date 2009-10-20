@@ -426,6 +426,11 @@ namespace Mosa.Platforms.x86
 		void IR.IIRVisitor.UDivInstruction(Context ctx)
 		{
 			ThreeTwoAddressConversion(ctx);
+
+			//RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
+			//_codeEmitter.Xor(edx, edx);
+			//_codeEmitter.Div(instruction.Operand0, instruction.Operand1);
+
 		}
 
 		/// <summary>
