@@ -1251,28 +1251,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
 			RuntimeMethod callTarget = FindMethod(rt, internalCallTarget.ToString());
 
-			// Transform the opcode with an internal call
-			CallInstruction call = new CallInstruction(OpCode.Call);
-			call.SetInvokeTarget(ctx, Compiler, callTarget);
+			ctx.ReplaceInstructionOnly(CIL.Instruction.Get(OpCode.Call));
 
-			// FIXME PG
-			// int i = 0;
-
-			//if (ctx.ResultCount > 0)
-			//    call.SetOperand(i++, ctx.Result);
-			//else if (ctx.ResultCount > 1)
-			//    call.SetOperand(i++, ctx.Result2);
-
-			//i = 0;
-
-			//if (ctx.OperandCount > 0)
-			//    call.SetResult(i++, ctx.Operand1);
-			//else if (ctx.OperandCount > 1)
-			//    call.SetResult(i++, ctx.Operand2);
-			//else if (ctx.OperandCount > 2)
-			//    call.SetResult(i++, ctx.Operand3);
-
-			// Replace(ctx, call);
+			((ctx.Instruction) as CallInstruction).SetInvokeTarget(ctx, Compiler, callTarget);
 		}
 
 		/// <summary>
