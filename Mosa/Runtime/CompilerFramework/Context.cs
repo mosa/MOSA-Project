@@ -701,8 +701,6 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			if (Instruction != null)
 				_index = _instructionSet.InsertAfter(_index);
-			else
-				_index = _index + 1 - 1;
 
 			SetInstruction(instruction, result, operand1);
 		}
