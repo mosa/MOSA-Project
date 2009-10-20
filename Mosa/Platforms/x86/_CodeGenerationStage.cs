@@ -47,7 +47,7 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// The emitter used by the code generator.
 		/// </summary>
-		private _ICodeEmitter _codeEmitter;
+		private new _ICodeEmitter _codeEmitter;
 
 		#endregion
 

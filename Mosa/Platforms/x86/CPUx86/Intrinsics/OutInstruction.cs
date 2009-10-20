@@ -25,13 +25,13 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
         #endregion 
 
         #region Methods
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="empty"></param>
-        /// <param name="destination"></param>
-        /// <param name="source"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Computes the op code.
+		/// </summary>
+		/// <param name="empty">The empty.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand empty, Operand destination, Operand source)
         {
             if (IsByte(source))

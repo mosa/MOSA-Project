@@ -22,7 +22,7 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#region Data Members
 
-		//private static readonly OpCode JMP = new OpCode(new byte[] { 0xE9 });
+		private static readonly OpCode JMP = new OpCode(new byte[] { 0xE9 });
 
 		#endregion
 
@@ -45,7 +45,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		public override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-			//MachineCodeEmitter.EmitBranch(new byte[] { 0xE9 }, dest);
+			emitter.EmitBranch(JMP.Code, ctx.Branch.Targets[0]);
 		}
 
 		/// <summary>

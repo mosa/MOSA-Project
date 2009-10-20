@@ -60,7 +60,7 @@ namespace Mosa.Platforms.x86
 		#region IIRVisitor
 
 		/// <summary>
-		/// Addresses the of instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.AddressOfInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.AddressOfInstruction(Context ctx)
@@ -74,7 +74,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Arithmetics the shift right instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.ArithmeticShiftRightInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx)
@@ -83,7 +83,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Epilogues the instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.EpilogueInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.EpilogueInstruction(Context ctx)
@@ -216,7 +216,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Integers the compare instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.IntegerCompareInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.IntegerCompareInstruction(Context ctx)
@@ -225,7 +225,16 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Loads the instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.JmpInstruction"/> instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IR.IIRVisitor.JmpInstruction(Context ctx) 
+		{
+			ctx.ReplaceInstructionOnly(CPUx86.Instruction.JumpInstruction);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IR.IIRVisitor.LoadInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LoadInstruction(Context ctx)
@@ -238,7 +247,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Logicals the and instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.LogicalAndInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
@@ -247,7 +256,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Logicals the or instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.LogicalOrInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
@@ -256,7 +265,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Logicals the xor instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.LogicalXorInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
@@ -265,7 +274,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Logicals the not instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.LogicalNotInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalNotInstruction(Context ctx)
@@ -274,7 +283,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Moves the instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.MoveInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.MoveInstruction(Context ctx)
@@ -300,7 +309,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Prologues the instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.PrologueInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.PrologueInstruction(Context ctx)
@@ -359,7 +368,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Returns the instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.ReturnInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ReturnInstruction(Context ctx)
@@ -376,7 +385,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Shifts the left instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.ShiftLeftInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ShiftLeftInstruction(Context ctx)
@@ -385,7 +394,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Shifts the right instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.ShiftRightInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ShiftRightInstruction(Context ctx)
@@ -394,7 +403,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Stores the instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.StoreInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.StoreInstruction(Context ctx)
@@ -410,7 +419,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// UDivInstruction instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.UDivInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.UDivInstruction(Context ctx)
@@ -419,7 +428,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// URemInstruction instruction.
+		/// Visitation function for <see cref="IR.IIRVisitor.URemInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.URemInstruction(Context ctx)
@@ -469,12 +478,6 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.JmpInstruction"/> instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.JmpInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.LiteralInstruction"/> instructions.

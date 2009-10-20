@@ -71,6 +71,7 @@ namespace Mosa.Tools.Compiler
 				new SimpleTraceBlockOrderStage(),
 				InstructionStatisticsStage.Instance,
 		        //new LocalCSE(),
+				new CodeGenerationStage(),
             });
         }
 

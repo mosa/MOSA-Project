@@ -303,7 +303,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="code">The branch instruction code.</param>
 		/// <param name="dest">The destination label.</param>
-		private void EmitBranch(byte[] code, int dest)
+		public void EmitBranch(byte[] code, int dest)
 		{
 			_codeStream.Write(code, 0, code.Length);
 			EmitRelativeBranchTarget(dest);
@@ -315,7 +315,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The dest.</param>
 		/// <param name="src">The SRC.</param>
 		/// <param name="opCode">The op code.</param>
-		private void Emit(Operand dest, Operand src, OpCode opCode)
+		public void Emit(Operand dest, Operand src, OpCode opCode)
 		{
 			Emit(opCode.Code, opCode.RegField, dest, src);
 		}
@@ -327,7 +327,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="src">The SRC.</param>
 		/// <param name="op">The op.</param>
 		/// <param name="opCode">The op code.</param>
-		private void Emit(Operand dest, Operand src, Operand op, OpCode opCode)
+		public void Emit(Operand dest, Operand src, Operand op, OpCode opCode)
 		{
 			Emit(opCode.Code, opCode.RegField, dest, src, op);
 		}
@@ -339,7 +339,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="regField">The modR/M regfield.</param>
 		/// <param name="dest">The destination operand.</param>
 		/// <param name="src">The source operand.</param>
-		private void Emit(byte[] code, byte? regField, Operand dest, Operand src)
+		public void Emit(byte[] code, byte? regField, Operand dest, Operand src)
 		{
 			byte? sib = null, modRM = null;
 			MemoryOperand displacement = null;
@@ -378,7 +378,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The destination operand.</param>
 		/// <param name="src">The source operand.</param>
 		/// <param name="op3">The third operand.</param>
-		private void Emit(byte[] code, byte? regField, Operand dest, Operand src, Operand op3)
+		public void Emit(byte[] code, byte? regField, Operand dest, Operand src, Operand op3)
 		{
 			byte? sib = null, modRM = null;
 			MemoryOperand displacement = null;
