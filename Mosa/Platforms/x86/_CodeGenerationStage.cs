@@ -415,7 +415,7 @@ namespace Mosa.Platforms.x86
 			_codeEmitter.Pause();
 		}
 
-		void CPUx86.IX86Visitor.Pop(Context ctx)
+		void CPUx86.IX86Visitor.Pop(Context ctx)	// DONE
 		{
 			_codeEmitter.Pop(ctx.Operand1);
 		}
@@ -430,7 +430,7 @@ namespace Mosa.Platforms.x86
 			_codeEmitter.Popfd();
 		}
 
-		void CPUx86.IX86Visitor.Push(Context ctx)
+		void CPUx86.IX86Visitor.Push(Context ctx)  // DONE
 		{
 			_codeEmitter.Push(ctx.Operand1);
 		}

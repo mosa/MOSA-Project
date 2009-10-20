@@ -18,24 +18,43 @@ using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 {
-    /// <summary>
-    /// Intermediate representation of the x86 pop instruction.
-    /// </summary>
-    public sealed class PopInstruction : OneOperandInstruction
-    {
-        #region Construction
+	/// <summary>
+	/// Intermediate representation of the x86 pop instruction.
+	/// </summary>
+	public sealed class PopInstruction : OneOperandInstruction
+	{
+		#region Data Members
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PopInstruction"/> class.
-        /// </summary>
-        public PopInstruction() :
-            base()
-        {
-        }
+		private static readonly OpCode POP = new OpCode(new byte[] { 0x8F });
 
-        #endregion // Construction
+		#endregion
 
-        #region OneOperandInstruction Overrides
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PopInstruction"/> class.
+		/// </summary>
+		public PopInstruction() :
+			base()
+		{
+		}
+
+		#endregion // Construction
+
+		#region Methods
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		public override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
+			if (ctx.Operand1 is RegisterOperand)
+				emitter.WriteByte((byte)(0x58 + (ctx.Operand1 as RegisterOperand).Register.RegisterCode));
+			else
+				emitter.Emit(POP.Code, 0, ctx.Operand1, null);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -47,6 +66,6 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 			visitor.Pop(context);
 		}
 
-        #endregion // OneOperandInstruction Overrides
-    }
+		#endregion // Methods
+	}
 }

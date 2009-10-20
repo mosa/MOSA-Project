@@ -1145,7 +1145,7 @@ namespace Mosa.Platforms.x86
 		/// Pops the top-most value from the stack into the given operand.
 		/// </summary>
 		/// <param name="operand">The operand to pop.</param>
-		void _ICodeEmitter.Push(Operand operand)
+		void _ICodeEmitter.Push(Operand operand) // DONE
 		{
 			if (operand is ConstantOperand) {
 				_codeStream.WriteByte(0x68);

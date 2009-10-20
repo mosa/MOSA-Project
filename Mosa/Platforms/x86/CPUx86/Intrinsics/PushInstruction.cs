@@ -18,22 +18,28 @@ using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 {
-    /// <summary>
-    /// Intermediate representation of the x86 push instruction.
-    /// </summary>
-    public sealed class PushInstruction : OneOperandInstruction
-    {
-        #region Construction
+	/// <summary>
+	/// Intermediate representation of the x86 push instruction.
+	/// </summary>
+	public sealed class PushInstruction : OneOperandInstruction
+	{
+		#region Data Members
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PushInstruction"/> class.
-        /// </summary>
-        public PushInstruction() :
-            base()
-        {
-        }
+		private static readonly OpCode PUSH = new OpCode(new byte[] { 0xFF });
 
-        #endregion // Construction
+		#endregion
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PushInstruction"/> class.
+		/// </summary>
+		public PushInstruction() :
+			base()
+		{
+		}
+
+		#endregion // Construction
 
 		#region Properties
 
@@ -45,7 +51,24 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 
 		#endregion // Properties
 
-        #region OneOperandInstruction Overrides
+		#region Methods
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		public override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
+			if (ctx.Operand1 is ConstantOperand) {
+				emitter.WriteByte(0x68);
+				emitter.EmitImmediate(ctx.Operand1);
+			}
+			else if (ctx.Operand1 is RegisterOperand)
+				emitter.WriteByte((byte)(0x50 + (ctx.Operand1 as RegisterOperand).Register.RegisterCode));
+			else
+				emitter.Emit(PUSH.Code, 6, ctx.Operand1, null);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -57,6 +80,6 @@ namespace Mosa.Platforms.x86.CPUx86.Intrinsics
 			visitor.Push(context);
 		}
 
-        #endregion // OneOperandInstruction Overrides
-    }
+		#endregion // Methods
+	}
 }

@@ -230,10 +230,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ret(Context ctx)
 		{
-			if (ctx.OperandCount == 1)
-				ctx.SetInstruction(IR.Instruction.ReturnInstruction, ctx.Operand1);
-			else
-				ctx.SetInstruction(IR.Instruction.ReturnInstruction);
+			ctx.ReplaceInstructionOnly(IR.Instruction.ReturnInstruction);
+			//if (ctx.OperandCount == 1)
+			//    ctx.SetInstruction(IR.Instruction.ReturnInstruction, ctx.Operand1);
+			//else
+			//    ctx.SetInstruction(IR.Instruction.ReturnInstruction);
 		}
 
 		/// <summary>

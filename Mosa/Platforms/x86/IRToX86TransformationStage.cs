@@ -17,16 +17,15 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
 	/// <summary>
-	/// Transforms CIL instructions into their appropriate IR.
+	/// Transforms IR instructions into their appropriate X86.
 	/// </summary>
 	/// <remarks>
-	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
+	/// This transformation stage transforms IR instructions into their equivalent X86 sequences.
 	/// </remarks>
 	public sealed class IRToX86TransformationStage :
 		BaseX86TransformationStage, 
@@ -99,17 +98,17 @@ namespace Mosa.Platforms.x86
 				// add esp, -localsSize
 				ctx.SetInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
 				// pop ebp
-				ctx.InsertInstructionAfter(IR.Instruction.PopInstruction, ebp);
+				ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ebp);
 				// ret
 				ctx.InsertInstructionAfter(IR.Instruction.ReturnInstruction);
 			}
 			else {
 				// pop edx
-				ctx.SetInstruction(IR.Instruction.PopInstruction, new RegisterOperand(I, GeneralPurposeRegister.EDX));
+				ctx.SetInstruction(CPUx86.Intrinsics.Instruction.PopInstruction, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 				// add esp, -localsSize
 				ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
 				// pop ebp
-				ctx.InsertInstructionAfter(IR.Instruction.PopInstruction, ebp);
+				ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ebp);
 				// ret
 				ctx.InsertInstructionAfter(IR.Instruction.ReturnInstruction);
 			}
@@ -335,22 +334,22 @@ namespace Mosa.Platforms.x86
 			// Uncomment this line to enable breakpoints within Bochs
 			ctx.SetInstruction(CPUx86.Intrinsics.Instruction.BochsDebug);
 			// push ebp
-			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, null, ebp);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ebp);
 			// mov ebp, esp
 			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, ebp, esp);
 			// sub esp, localsSize
 			ctx.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, -stackSize));
 			// Initialize all locals to zero
-			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, null, edi);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, edi);
 			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, edi, esp);
-			ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, null, ecx);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, ecx);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edi, new ConstantOperand(I, 4));
 			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, ecx, new ConstantOperand(I, (-stackSize) / 4));
 			ctx.InsertInstructionAfter(CPUx86.Instruction.LogicalXorInstruction, eax, eax);
 			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.RepInstruction);
 			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.StosdInstruction);
-			ctx.InsertInstructionAfter(IR.Instruction.PopInstruction, ecx);
-			ctx.InsertInstructionAfter(IR.Instruction.PopInstruction, edi);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, ecx);
+			ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PopInstruction, edi);
 			/*
 			 * This move adds the runtime method identification token onto the stack. This
 			 * allows us to perform call stack identification and gives the garbage collector 
@@ -363,7 +362,7 @@ namespace Mosa.Platforms.x86
 			if (Compiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
 				Compiler.Method.Signature.ReturnType.Type != CilElementType.U8) {
 				// push edx
-				ctx.InsertInstructionAfter(IR.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
+				ctx.InsertInstructionAfter(CPUx86.Intrinsics.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 			}
 		}
 
@@ -373,15 +372,17 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ReturnInstruction(Context ctx)
 		{
-			Operand op1 = ctx.Operand1;
+			Operand op = ctx.Operand1;
+			
+			ctx.Remove();
 
-			ctx.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
-			ctx.SetBranch(Int32.MaxValue);
-
-			if (op1 != null) {
+			if (op != null) {
 				ICallingConvention cc = Architecture.GetCallingConvention(Compiler.Method.Signature.CallingConvention);
-				cc.MoveReturnValue(ctx.Next, op1);
+				cc.MoveReturnValue(ctx, op);
 			}
+			
+			ctx.InsertInstructionAfter(CPUx86.Instruction.JumpInstruction);
+			ctx.SetBranch(Int32.MaxValue);
 		}
 
 		/// <summary>

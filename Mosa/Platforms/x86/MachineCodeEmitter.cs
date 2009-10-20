@@ -641,7 +641,7 @@ namespace Mosa.Platforms.x86
 		/// Emits an immediate operand.
 		/// </summary>
 		/// <param name="op">The immediate operand to emit.</param>
-		private void EmitImmediate(Operand op)
+		public void EmitImmediate(Operand op)
 		{
 			byte[] imm = null;
 			if (op is LocalVariableOperand) {
