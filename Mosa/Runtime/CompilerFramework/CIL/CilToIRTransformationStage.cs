@@ -1208,13 +1208,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ctx.Result, ctx.Operand1);
 				return;
 			}
-			if (ctx.Operand1.Definitions.Count == 1 && ctx.Operand1.Uses.Count == 1) {
-				ctx.Operand1 = ctx.Result;
-				//ctx.Operand1.Replace(ctx.Result);
-				//Remove(ctx); 
-				ctx.Remove();	// FIXME PG - this seems odd
-				return;
-			}
+			// FIXME PG - below seems like an optimization; ignoring it for now
+			//if (ctx.Operand1.Definitions.Count == 1 && ctx.Operand1.Uses.Count == 1) {
+			//    //ctx.Operand1.Replace(ctx.Result); // FIXME PG
+			//    ctx.Remove();
+			//    return;
+			//}
 
 			ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
 		}
