@@ -57,7 +57,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </returns>
 		public override string ToString(Context context)
 		{
-			return base.ToString() + " " + context.InvokeTarget.ToString();
+			return String.Format(@"{0} {1}", base.ToString(context), context.InvokeTarget.ToString());
 		}
 
 		#endregion // Methods

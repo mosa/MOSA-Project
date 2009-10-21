@@ -32,7 +32,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </returns>
 		public override string ToString(Context context)
 		{
-			return base.ToString() + " " + context.InvokeTarget;
+			return String.Format(@"{0} {1}", base.ToString(context), context.InvokeTarget.ToString());
 		}
 
 		/// <summary>
