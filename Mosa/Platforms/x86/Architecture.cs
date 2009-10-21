@@ -169,7 +169,7 @@ namespace Mosa.Platforms.x86
                     new IRToX86TransformationStage(),
                     InstructionLogger.Instance,
 					new FinalX86TransformationStage(),
-                    //InstructionLogger.Instance,
+                    InstructionLogger.Instance,
 					new CodeGenerationStage(),
                 });
 		}

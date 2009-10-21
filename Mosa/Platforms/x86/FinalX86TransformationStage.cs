@@ -69,8 +69,14 @@ namespace Mosa.Platforms.x86
 				return;
 
 			RegisterOperand ebx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EBX);
-			ctx.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebx, ctx.Operand1);
-			ctx.Operand1 = ebx;
+			Operand source = ctx.Operand1;
+			Operand result = ctx.Result;
+
+			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ebx, source);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MulInstruction, result, ebx);
+			
+			//ctx.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebx, ctx.Operand1);
+			//ctx.Operand1 = ebx;
 		}
 
 		/// <summary>
