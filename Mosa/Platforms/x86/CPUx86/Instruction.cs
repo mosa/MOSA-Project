@@ -190,7 +190,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly SignExtendedMoveInstruction SignExtendedMoveInstruction = new SignExtendedMoveInstruction();
+		public static readonly MovsxInstruction MovsxInstruction = new MovsxInstruction();
 	}
 }
 

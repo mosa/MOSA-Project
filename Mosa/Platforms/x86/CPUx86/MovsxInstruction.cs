@@ -15,9 +15,9 @@ using Mosa.Runtime.Metadata;
 namespace Mosa.Platforms.x86.CPUx86
 {
 	/// <summary>
-	/// Representations the x86 move instruction.
+	/// Representations the x86 Movsx instruction.
 	/// </summary>
-	public sealed class SignExtendedMoveInstruction : TwoOperandInstruction
+	public sealed class MovsxInstruction : TwoOperandInstruction
 	{
 		#region Data Members
 
@@ -62,17 +62,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			}
 
 			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
-		}
-
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString()
-		{
-			return "X86.Movsx";
 		}
 
 		#endregion
