@@ -65,13 +65,11 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Mul(Context ctx)
 		{
-			if (!(ctx.Operand1 is ConstantOperand))
-				return;
-
-			RegisterOperand ebx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EBX);
-
-			ctx.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebx, ctx.Operand1);
-			ctx.Operand1 = ebx;
+			if (ctx.Operand1 is ConstantOperand) {
+				RegisterOperand ebx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EBX);
+				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, ebx, ctx.Operand1);
+				ctx.Operand1 = ebx;
+			}
 		}
 
 		/// <summary>
@@ -153,8 +151,27 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Movzx(Context context)
 		{
-			if ((context.Operand1.Type.Type == CilElementType.U4) || (context.Operand1.Type.Type == CilElementType.I4))
+			if (Is32Bit(context.Operand1))
 				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.DirectMultiplication"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CPUx86.IX86Visitor.DirectMultiplication(Context ctx) 
+		{
+			Operand op = ctx.Operand1;
+
+			if (op is ConstantOperand) {
+				RegisterOperand ebx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
+				ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebx, op);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.DivInstruction, null, ebx);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, ebx);
+			}
+			else
+				ctx.SetInstruction(CPUx86.Instruction.DivInstruction, null, op);
 		}
 
 		#endregion // Members
@@ -195,12 +212,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Sbb"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Sbb(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.DirectMultiplication"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.DirectMultiplication(Context context) { }
+		void CPUx86.IX86Visitor.Sbb(Context context) { }	
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.DirectDivision"/> instructions.
 		/// </summary>

@@ -17,6 +17,12 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// </summary>
 	public class DirectMultiplicationInstruction : BaseInstruction
 	{
+		#region Data Members
+
+		private static readonly OpCode DIV = new OpCode(new byte[] { 0xF7 }, 4);
+
+		#endregion // Data Members
+
 		#region Methods
 
 		/// <summary>
@@ -28,7 +34,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-            return new OpCode(new byte[] { 0xF7 }, 4);
+			return DIV; 
         }
 
 		/// <summary>

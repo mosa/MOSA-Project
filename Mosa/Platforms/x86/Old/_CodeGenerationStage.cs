@@ -98,56 +98,47 @@ namespace Mosa.Platforms.x86
 
 		void CPUx86.IX86Visitor.Add(Context ctx)
 		{
-			_codeEmitter.Add(ctx.Operand1, ctx.Operand2);
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.Adc(Context ctx)
 		{
-			_codeEmitter.Adc(ctx.Operand1, ctx.Operand2);
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.And(Context ctx)
 		{
-			_codeEmitter.And(ctx.Operand1, ctx.Operand2);
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.Or(Context ctx)
 		{
-			_codeEmitter.Or(ctx.Operand1, ctx.Operand2);
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.Xor(Context ctx)
 		{
-			_codeEmitter.Xor(ctx.Operand1, ctx.Operand2);
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.Sub(Context ctx)
 		{
-			_codeEmitter.Sub(ctx.Operand1, ctx.Operand2);
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.Sbb(Context ctx)
 		{
-			_codeEmitter.Sbb(ctx.Operand1, ctx.Operand2);
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.Mul(Context ctx)
 		{
-			_codeEmitter.Mul(ctx.Operand1, ctx.Operand2);
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.DirectMultiplication(Context ctx)
 		{
-			if (ctx.Operand1 is ConstantOperand) {
-				RegisterOperand ebx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
-				_codeEmitter.Push(ebx);
-				_codeEmitter.Mov(ebx, ctx.Operand1);
-				_codeEmitter.DirectMultiplication(ebx);
-				_codeEmitter.Pop(ebx);
-			}
-			else {
-				_codeEmitter.DirectMultiplication(ctx.Operand1);
-			}
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.DirectDivision(Context ctx)
@@ -415,9 +406,9 @@ namespace Mosa.Platforms.x86
 			_codeEmitter.Pause();
 		}
 
-		void CPUx86.IX86Visitor.Pop(Context ctx)	// DONE
+		void CPUx86.IX86Visitor.Pop(Context ctx)
 		{
-			_codeEmitter.Pop(ctx.Operand1);
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.Popad(Context ctx)
@@ -430,9 +421,9 @@ namespace Mosa.Platforms.x86
 			_codeEmitter.Popfd();
 		}
 
-		void CPUx86.IX86Visitor.Push(Context ctx)  // DONE
+		void CPUx86.IX86Visitor.Push(Context ctx)
 		{
-			_codeEmitter.Push(ctx.Operand1);
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.Pushad(Context ctx)
@@ -791,17 +782,17 @@ namespace Mosa.Platforms.x86
 
 		void IR.IIRVisitor.PrologueInstruction(Context ctx)
 		{
-			throw new NotSupportedException();
+			// DONE
 		}
 
 		void IR.IIRVisitor.PushInstruction(Context ctx)
 		{
-			_codeEmitter.Push(ctx.Operand1);
+			// DONE
 		}
 
 		void IR.IIRVisitor.ReturnInstruction(Context ctx)
 		{
-			_codeEmitter.Ret();
+			// DONE
 		}
 
 		void IR.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
@@ -900,10 +891,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Movzx(Context context)
 		{
-			if ((context.Operand1.Type.Type == CilElementType.U4) || (context.Operand1.Type.Type == CilElementType.I4))
-				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+			// DONE
 		}
-
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Call"/> instructions.
 		/// </summary>
