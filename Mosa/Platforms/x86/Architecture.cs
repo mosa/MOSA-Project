@@ -165,7 +165,9 @@ namespace Mosa.Platforms.x86
                 {
                     new LongOperandTransformationStage(),
 					new CILToX86TransformationStage(),
+                    InstructionLogger.Instance,
                     new IRToX86TransformationStage(),
+                    InstructionLogger.Instance,
 					new FinalX86TransformationStage(),
                     //InstructionLogger.Instance,
 					new CodeGenerationStage(),

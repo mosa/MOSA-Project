@@ -391,7 +391,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ShiftLeftInstruction(Context ctx)
 		{
-			HandleShiftOperation(ctx);
+			HandleShiftOperation(ctx, ctx.Instruction);
 		}
 
 		/// <summary>
@@ -400,7 +400,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ShiftRightInstruction(Context ctx)
 		{
-			HandleShiftOperation(ctx);
+			HandleShiftOperation(ctx, ctx.Instruction);
 		}
 
 		/// <summary>
@@ -454,7 +454,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.NopInstruction(Context ctx)
 		{
-			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
+			ctx.ReplaceInstructionOnly(CPUx86.Instruction.NopInstruction);
 		}
 
 		#endregion //  Members
@@ -524,15 +524,6 @@ namespace Mosa.Platforms.x86
 		#endregion // IIRVisitor
 
 		#region Internals
-
-		/// <summary>
-		/// Special handling for shift operations, which require the shift amount in the ECX or as a constant register.
-		/// </summary>
-		/// <param name="ctx">The transformation context.</param>
-		private void HandleShiftOperation(Context ctx)
-		{
-			HandleShiftOperation(ctx, ctx.Instruction);
-		}
 
 		/// <summary>
 		/// Special handling for shift operations, which require the shift amount in the ECX or as a constant register.

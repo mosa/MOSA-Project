@@ -488,24 +488,19 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Inserts an instruction the after the current instruction.
-		/// </summary>
-		/// <returns></returns>
-		public Context InsertAfter()
-		{
-			Context ctx = new Context(_instructionSet, _instructionSet.InsertAfter(_index));
-			ctx.Clear();
-			return ctx;
-		}
-
-		/// <summary>
 		/// Inserts an instruction the before the current instruction.
 		/// </summary>
 		/// <returns></returns>
 		public Context InsertBefore()
 		{
+			int offset = Offset;
+
+			if (_instructionSet.Previous(_index) == -1)
+				_index = _index + 1 - 1;
+
 			Context ctx = new Context(_instructionSet, _instructionSet.InsertBefore(_index));
 			ctx.Clear();
+			ctx.Offset = offset;
 			return ctx;
 		}
 
@@ -564,10 +559,14 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction.</param>
 		public void SetInstruction(IInstruction instruction)
 		{
+			int offset = Offset;
+
 			if (instruction != null)
 				SetInstruction(instruction, instruction.DefaultOperandCount, instruction.DefaultResultCount);
 			else
 				SetInstruction(null, 0, 0);
+
+			Offset = offset;
 		}
 
 		/// <summary>
@@ -901,7 +900,6 @@ namespace Mosa.Runtime.CompilerFramework
 				case 2: return Operand3;
 				default: return _instructionSet.Data[_index].GetAdditionalOperand(index);
 			}
-
 		}
 
 		/// <summary>
