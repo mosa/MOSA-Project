@@ -200,11 +200,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		void Jump(Context context);
 		/// <summary>
-		/// Movsxes the specified context.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Movsx(Context context);
-		/// <summary>
 		/// Emits xchg bx, bx to force bochs into debug mode
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -305,7 +300,17 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		void Neg(Context context);
 		/// <summary>
-		/// No operation
+		/// Move with Sign-Extension
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Movsx(Context context);
+		/// <summary>
+		/// Move with Zero-Extension
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Movzx(Context context);
+		/// <summary>
+		/// Output to port
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Nop(Context context);

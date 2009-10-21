@@ -929,5 +929,14 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Movsx(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Movsx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Movzx(Context context)
+		{
+			if ((context.Operand1.Type.Type == CilElementType.U4) || (context.Operand1.Type.Type == CilElementType.I4))
+				context.ReplaceInstructionOnly(CPUx86.Instruction.MoveInstruction);
+		}
 	}
 }
