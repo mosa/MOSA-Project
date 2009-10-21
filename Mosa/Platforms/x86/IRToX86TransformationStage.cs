@@ -28,8 +28,8 @@ namespace Mosa.Platforms.x86
 	/// This transformation stage transforms IR instructions into their equivalent X86 sequences.
 	/// </remarks>
 	public sealed class IRToX86TransformationStage :
-		BaseX86TransformationStage, 
-		IR.IIRVisitor, 
+		BaseX86TransformationStage,
+		IR.IIRVisitor,
 		IMethodCompilerStage,
 		IPlatformTransformationStage
 	{
@@ -227,7 +227,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.JmpInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.JmpInstruction(Context ctx) 
+		void IR.IIRVisitor.JmpInstruction(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.JumpInstruction);
 		}
@@ -293,7 +293,7 @@ namespace Mosa.Platforms.x86
 
 			op1 = EmitConstant(op1);
 
-			if (!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) {
+			if (!(op0 is MemoryOperand && op1 is MemoryOperand)) {
 				ctx.ReplaceInstructionOnly(CPUx86.Instruction.MoveInstruction);
 				return;
 			}
@@ -376,14 +376,14 @@ namespace Mosa.Platforms.x86
 		void IR.IIRVisitor.ReturnInstruction(Context ctx)
 		{
 			Operand op = ctx.Operand1;
-			
+
 			ctx.Remove();
 
 			if (op != null) {
 				ICallingConvention cc = Architecture.GetCallingConvention(Compiler.Method.Signature.CallingConvention);
 				cc.MoveReturnValue(ctx, op);
 			}
-			
+
 			ctx.InsertInstructionAfter(CPUx86.Instruction.JumpInstruction);
 			ctx.SetBranch(Int32.MaxValue);
 		}
