@@ -460,6 +460,15 @@ namespace Mosa.Platforms.x86
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.NopInstruction);
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="IR.IIRVisitor.SignExtendedMoveInstruction"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IR.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
+		{
+			ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovsxInstruction);
+		}
+
 		#endregion //  Members
 
 		#region IIRVisitor - Unused
@@ -511,12 +520,6 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PushInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.SignExtendedMoveInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SignExtendedMoveInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.ZeroExtendedMoveInstruction"/> instructions.
@@ -707,7 +710,7 @@ namespace Mosa.Platforms.x86
 
 			// Check if we have to sign-extend the operand that's being loaded
 			if (IsSigned(op1) && !(op1 is ConstantOperand)) {
-				// Signextend it
+				// Sign extend it
 				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovsxInstruction, eaxL, op1);
 			}
 			// Check if the operand has to be zero-extended

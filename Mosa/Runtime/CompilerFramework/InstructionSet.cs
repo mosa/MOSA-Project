@@ -279,11 +279,10 @@ namespace Mosa.Runtime.CompilerFramework
 			_next[free] = index;
 			_prev[free] = _prev[index];
 
-			_prev[index] = free;
+			if (_prev[index] >= 0)
+				_next[_prev[index]] = free;
 
-			// TODO: 
-			if (_next[free] >= 0)
-				_prev[_next[free]] = free;
+			_prev[index] = free;
 
 			return free;
 		}

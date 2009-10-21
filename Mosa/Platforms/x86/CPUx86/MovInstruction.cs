@@ -76,6 +76,7 @@ namespace Mosa.Platforms.x86.CPUx86
                     return M_R_U8;
 				if (IsChar(destination) || IsShort(destination))
                     return M_R_16;
+
                 return M_R;
             }
 
