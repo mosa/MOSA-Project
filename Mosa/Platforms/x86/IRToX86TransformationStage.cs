@@ -347,7 +347,7 @@ namespace Mosa.Platforms.x86
 			ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, null, ecx);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edi, new ConstantOperand(I, 4));
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I, (-stackSize) / 4));
-			ctx.InsertInstructionAfter(CPUx86.Instruction.LogicalXorInstruction, eax, eax);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.XorInstruction, eax, eax);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.RepInstruction);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.StosdInstruction);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, ecx);

@@ -19,7 +19,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 or instruction.
     /// </summary>
-    public sealed class LogicalOrInstruction : TwoOperandInstruction
+    public sealed class OrInstruction : TwoOperandInstruction
     {
         #region Codes
         private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 1);

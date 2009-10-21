@@ -152,10 +152,10 @@
     <Compile Include="CPUx86\XchgInstruction.cs" />
     <Compile Include="CPUx86\JnsBranchInstruction.cs" />
     <Compile Include="CPUx86\LiteralInstruction.cs" />
-    <Compile Include="CPUx86\LogicalAndInstruction.cs" />
-    <Compile Include="CPUx86\LogicalNotInstruction.cs" />
-    <Compile Include="CPUx86\LogicalOrInstruction.cs" />
-    <Compile Include="CPUx86\LogicalXorInstruction.cs" />
+    <Compile Include="CPUx86\AndInstruction.cs" />
+    <Compile Include="CPUx86\NotInstruction.cs" />
+    <Compile Include="CPUx86\OrInstruction.cs" />
+    <Compile Include="CPUx86\XorInstruction.cs" />
     <Compile Include="CPUx86\MovInstruction.cs" />
     <Compile Include="CPUx86\MulInstruction.cs" />
     <Compile Include="CPUx86\NegInstruction.cs" />

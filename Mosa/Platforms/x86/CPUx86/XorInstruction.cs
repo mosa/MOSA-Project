@@ -19,7 +19,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 xor instruction.
     /// </summary>
-    public sealed class LogicalXorInstruction : TwoOperandInstruction
+    public sealed class XorInstruction : TwoOperandInstruction
 	{
 		#region Data Members
 

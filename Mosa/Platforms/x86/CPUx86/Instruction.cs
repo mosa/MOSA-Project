@@ -98,19 +98,19 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly LogicalAndInstruction LogicalAndInstruction = new LogicalAndInstruction();
+		public static readonly AndInstruction AndInstruction = new AndInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly LogicalNotInstruction LogicalNotInstruction = new LogicalNotInstruction();
+		public static readonly NotInstruction NotInstruction = new NotInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly LogicalOrInstruction LogicalOrInstruction = new LogicalOrInstruction();
+		public static readonly OrInstruction OrInstruction = new OrInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly LogicalXorInstruction LogicalXorInstruction = new LogicalXorInstruction();
+		public static readonly XorInstruction XorInstruction = new XorInstruction();
 		/// <summary>
 		/// 
 		/// </summary>

@@ -19,7 +19,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// Intermediate representation of the x86 not instruction.
 	/// </summary>
-	public sealed class LogicalNotInstruction : TwoOperandInstruction
+	public sealed class NotInstruction : TwoOperandInstruction
 	{
 	}
 }

@@ -19,7 +19,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 and instruction.
     /// </summary>
-	public sealed class LogicalAndInstruction : TwoOperandInstruction
+	public sealed class AndInstruction : TwoOperandInstruction
     {
 
         #region Methods
