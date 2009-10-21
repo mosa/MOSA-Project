@@ -496,7 +496,7 @@ namespace Mosa.Runtime.CompilerFramework
 			int offset = Offset;
 
 			if (_instructionSet.Previous(_index) == -1)
-				_index = _index + 1 - 1;
+				_index = _index + 1 - 1; // TEST
 
 			Context ctx = new Context(_instructionSet, _instructionSet.InsertBefore(_index));
 			ctx.Clear();

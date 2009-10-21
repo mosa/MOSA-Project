@@ -391,7 +391,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ShiftLeftInstruction(Context ctx)
 		{
-			HandleShiftOperation(ctx, ctx.Instruction);
+			HandleShiftOperation(ctx, CPUx86.Instruction.ShlInstruction);
 		}
 
 		/// <summary>
@@ -400,7 +400,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ShiftRightInstruction(Context ctx)
 		{
-			HandleShiftOperation(ctx, ctx.Instruction);
+			HandleShiftOperation(ctx, CPUx86.Instruction.ShrInstruction);
 		}
 
 		/// <summary>
