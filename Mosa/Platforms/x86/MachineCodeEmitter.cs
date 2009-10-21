@@ -76,7 +76,7 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// The position that the code stream starts.
 		/// </summary>
-		private static long _codeStreamBasePosition;
+		private long _codeStreamBasePosition;
 
 		/// <summary>
 		/// List of labels that were emitted.
@@ -86,12 +86,12 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Holds the linker used to resolve externals.
 		/// </summary>
-		private static IAssemblyLinker _linker;
+		private IAssemblyLinker _linker;
 
 		/// <summary>
 		/// List of literal patches we need to perform.
 		/// </summary>
-		private static readonly List<Patch> _literals = new List<Patch>();
+		private readonly List<Patch> _literals = new List<Patch>();
 
 		/// <summary>
 		/// Patches we need to perform.
@@ -125,13 +125,13 @@ namespace Mosa.Platforms.x86
 		void ICodeEmitter.Initialize(IMethodCompiler compiler, Stream codeStream, IAssemblyLinker linker)
 		{
 			Debug.Assert(null != compiler, @"MachineCodeEmitter needs a method compiler.");
-			if (null == compiler)
+			if (compiler == null)
 				throw new ArgumentNullException(@"compiler");
 			Debug.Assert(null != codeStream, @"MachineCodeEmitter needs a code stream.");
-			if (null == codeStream)
+			if (codeStream == null)
 				throw new ArgumentNullException(@"codeStream");
 			Debug.Assert(null != linker, @"MachineCodeEmitter needs a linker.");
-			if (null == linker)
+			if (linker == null)
 				throw new ArgumentNullException(@"linker");
 
 			_compiler = compiler;

@@ -62,8 +62,6 @@ namespace Mosa.Platforms.x86
 		/// </returns>
 		void ICallingConvention.Expand(Context ctx)
 		{
-			// FIXME PG - buggy since ctx context moves around 
-
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
 			 * types 4 bytes or less, XMM0 for floating point and EAX:EDX for 64-bit. If this is a method
@@ -71,37 +69,38 @@ namespace Mosa.Platforms.x86
 			 * 
 			 */
 
+			Context after = ctx.Clone();
+
 			SigType I = new SigType(CilElementType.I);
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
-			bool moveThis = ctx.InvokeTarget.Signature.HasThis;
-			int stackSize = CalculateStackSizeForParameters(ctx, moveThis);
+			int stackSize = CalculateStackSizeForParameters(ctx);
 
 			if (stackSize != 0) {
-				ctx.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, stackSize));
-				ctx.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
+				after.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, stackSize));
+				after.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
 
-				Stack<Operand> operandStack = GetOperandStackFromInstruction(ctx, moveThis);
+				Stack<Operand> operandStack = GetOperandStackFromInstruction(ctx, ctx.InvokeTarget.Signature.HasThis);
 
 				int space = stackSize;
 				CalculateRemainingSpace(ctx, operandStack, ref space);
 			}
 
-			if (moveThis) {
+			if (ctx.InvokeTarget.Signature.HasThis) {
 				RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ecx, ctx.Operand1); // FIXME PG ctx.operand1!
+				after.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ecx, ctx.Operand1); 
 			}
 
-			ctx.InsertInstructionAfter(IR.Instruction.CallInstruction);
-			ctx.InvokeTarget = ctx.InvokeTarget; // FIXME PG ctx.InvokeTarget!
+			after.InsertInstructionAfter(IR.Instruction.CallInstruction);
+			after.InvokeTarget = ctx.InvokeTarget; 
 
 			if (stackSize != 0)
-				ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, stackSize));
+				after.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, stackSize));
 
 			if (ctx.ResultCount > 0)
 				if (ctx.Result.StackType == StackTypeCode.Int64)
-					MoveReturnValueTo64Bit(ctx.Result, ctx);
+					MoveReturnValueTo64Bit(ctx.Result, after);
 				else
-					MoveReturnValueTo32Bit(ctx.Result, ctx);
+					MoveReturnValueTo32Bit(ctx.Result, after);
 		}
 
 		/// <summary>
@@ -134,18 +133,18 @@ namespace Mosa.Platforms.x86
 		/// <param name="space">The space.</param>
 		private void CalculateRemainingSpace(Context ctx, Stack<Operand> operandStack, ref int space)
 		{
-			while (0 != operandStack.Count) {
+			while (operandStack.Count != 0) {
 				Operand operand = operandStack.Pop();
 				int size, alignment;
 
-				this.architecture.GetTypeRequirements(operand.Type, out size, out alignment);
+				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 				space -= size;
 				Push(ctx, operand, space);
 			}
 		}
 
 		/// <summary>
-		/// Moves the return value to32 bit.
+		/// Moves the return value to 32 bit.
 		/// </summary>
 		/// <param name="resultOperand">The result operand.</param>
 		/// <param name="ctx">The context.</param>
@@ -156,7 +155,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Moves the return value to64 bit.
+		/// Moves the return value to 64 bit.
 		/// </summary>
 		/// <param name="resultOperand">The result operand.</param>
 		/// <param name="ctx">The context.</param>
@@ -218,7 +217,7 @@ namespace Mosa.Platforms.x86
 						throw new NotSupportedException();
 				}
 
-				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, rop, op);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, rop, op);
 				op = rop;
 			}
 			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64) {
@@ -242,11 +241,10 @@ namespace Mosa.Platforms.x86
 		/// Calculates the stack size for parameters.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		/// <param name="hasThis">if set to <c>true</c> [has this].</param>
 		/// <returns></returns>
-		private int CalculateStackSizeForParameters(Context ctx, bool hasThis)
+		private int CalculateStackSizeForParameters(Context ctx)
 		{
-			int result = (hasThis ? -4 : 0);
+			int result = (ctx.InvokeTarget.Signature.HasThis ? -4 : 0);
 			int size, alignment;
 
 			foreach (Operand op in ctx.Operands) {

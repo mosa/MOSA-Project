@@ -38,6 +38,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// Cmp the specified context.
 		/// </summary>
 		/// <param name="context">The context.</param>
+		void Call(Context context);
+		/// <summary>
+		/// Or the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void Cmp(Context context);
 		/// <summary>
 		/// Or the specified context.

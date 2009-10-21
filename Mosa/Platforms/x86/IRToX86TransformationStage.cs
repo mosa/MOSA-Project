@@ -467,6 +467,14 @@ namespace Mosa.Platforms.x86
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovsxInstruction);
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="IR.IIRVisitor.CallInstruction"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IR.IIRVisitor.CallInstruction(Context ctx) 
+		{ 
+		}
+
 		#endregion //  Members
 
 		#region IIRVisitor - Unused
@@ -476,12 +484,6 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.BranchInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.CallInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.CallInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.

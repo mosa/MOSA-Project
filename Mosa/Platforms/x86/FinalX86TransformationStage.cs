@@ -157,6 +157,15 @@ namespace Mosa.Platforms.x86
 				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Call"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Call(Context context)
+		{ 
+		
+		}
+
 		#endregion // Members
 
 		#region IX86Visitor - Unused
