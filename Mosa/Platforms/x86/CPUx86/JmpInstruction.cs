@@ -49,19 +49,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		}
 
 		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-		{
-			// TODO:
-			throw new ArgumentException(@"No opcode for operand type.");
-		}
-
-		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>

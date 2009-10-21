@@ -103,7 +103,6 @@ namespace Mosa.Runtime.CompilerFramework
 			compiler.BasicBlocks = new List<BasicBlock>(_heads.Count + 2);
 			BasicBlocks = compiler.BasicBlocks;
 			BasicBlocks.Add(_prologue);
-			BasicBlocks.Add(_epilogue);
 
 			FindTargets(0);
 
@@ -112,6 +111,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Link all the blocks together
 			BuildBlockLinks(_prologue);
+
+			BasicBlocks.Add(_epilogue);
 
 			// help out the gargage collector
 			_heads = null;
