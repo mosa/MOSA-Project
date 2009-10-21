@@ -505,16 +505,18 @@ namespace Mosa.Runtime.CompilerFramework
 		public Context InsertBefore()
 		{
 			int label = Label;
+			int index = -1;
 
 			if (IsFirstInstruction) {
 				Debug.Assert(BasicBlock != null, @"Cannot insert before first instruction without basic block");
 				Debug.Assert(BasicBlock.Index == _index, @"Cannot be first instruction since basic block does not start here");
-				_index = _instructionSet.InsertAfter(_index);
-
-				BasicBlock.Index = _index;
+				index = _instructionSet.InsertBefore(_index);
+				BasicBlock.Index = index;
 			}
+			else
+				index = _instructionSet.InsertBefore(_index);
 
-			Context ctx = new Context(_instructionSet, _instructionSet.InsertBefore(_index));
+			Context ctx = new Context(_instructionSet, index);
 			ctx.Clear();
 			ctx.Label = label;
 			return ctx;
