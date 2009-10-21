@@ -323,8 +323,6 @@ namespace Mosa.Platforms.x86
 			int stackSize = (int)ctx.Other;
 			Debug.Assert((stackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 
-			ctx.Remove();
-
 			/* If you want to stop at the _header of an emitted function, just uncomment
                  * the following line. It will issue a breakpoint instruction. Note that if
                  * you debug using visual studio you must enable unmanaged code debugging, 
@@ -332,13 +330,13 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
 			// int 3
-			// ctx.InsertInstructionAfter(CPUx86.IntInstruction, new ConstantOperand(new SigType(CilElementType.U1), (byte)3));
+			// ctx.XXX(CPUx86.IntInstruction, new ConstantOperand(new SigType(CilElementType.U1), (byte)3));
 
 			// Uncomment this line to enable breakpoints within Bochs
-			//ctx.InsertInstructionAfter(CPUx86.Intrinsics.BochsDebug);
+			//ctx.XXX(CPUx86.Intrinsics.BochsDebug);
 
 			// push ebp
-			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PushInstruction, null, ebp);
+			ctx.SetInstruction(CPUx86.Intrinsics.PushInstruction, null, ebp);
 			// mov ebp, esp
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebp, esp);
 			// sub esp, localsSize

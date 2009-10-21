@@ -163,7 +163,9 @@ namespace Mosa.Platforms.x86
 			methodCompilerPipeline.AddRange(
 				new IMethodCompilerStage[]
                 {
+                    InstructionLogger.Instance,
                     new LongOperandTransformationStage(),
+                    InstructionLogger.Instance,
 					new CILToX86TransformationStage(),
                     InstructionLogger.Instance,
                     new IRToX86TransformationStage(),

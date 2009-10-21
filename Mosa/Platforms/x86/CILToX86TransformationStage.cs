@@ -390,9 +390,9 @@ namespace Mosa.Platforms.x86
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), ctx.Operand1);
 
 			if (IsUnsigned(ctx.Operand1))
-				ctx.InsertInstructionAfter(IR.Instruction.ZeroExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
+				ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
 			else
-				ctx.InsertInstructionAfter(IR.Instruction.SignExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
+				ctx.SetInstruction(IR.Instruction.SignExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
 
 			if (IsUnsigned(ctx.Operand1) && IsUnsigned(ctx.Operand2))
 				ctx.InsertInstructionAfter(IR.Instruction.UDivInstruction, ctx.Operand1, ctx.Operand2);
@@ -976,7 +976,7 @@ namespace Mosa.Platforms.x86
 
 			// Check if we have to sign-extend the operand that's being loaded
 			if (IsSigned(op1) && !(op1 is ConstantOperand)) {
-				// Signextend it
+				// Sign extend it
 				ctx.InsertBefore().SetInstruction(IR.Instruction.SignExtendedMoveInstruction, eaxL, op1);
 			}
 			// Check if the operand has to be zero-extended

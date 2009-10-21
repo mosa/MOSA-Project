@@ -106,7 +106,7 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return _offset; }
 			set
 			{
-				if (value < 0)
+				if (value < -1)
 					throw new ArgumentOutOfRangeException(@"Offset can not be negative.", @"value");
 
 				_offset = value;

@@ -86,6 +86,7 @@ namespace Mosa.Runtime.CompilerFramework
 			//ctx.InsertInstructionAfter(IR.Instruction.JmpInstruction);
 			ctx.InsertInstructionAfter(CIL.Instruction.Get(CIL.OpCode.Br));
 			ctx.SetBranch(0);
+			ctx.Label = -1;
 			_prologue = new BasicBlock(-1, ctx.Index);
 
 			// Create the epilogue block
@@ -93,6 +94,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Add null instruction, necessary to generate a block index
 			ctx.InsertInstructionAfter(null);
 			ctx.Ignore = true;
+			ctx.Label = Int32.MaxValue;
 			_epilogue = new BasicBlock(Int32.MaxValue, ctx.Index);
 
 			// Add epilogue block to leaders (helps with loop below)

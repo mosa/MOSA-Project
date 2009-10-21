@@ -504,7 +504,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public Context InsertBefore()
 		{
-			int offset = Offset;
+			int label = Label;
 
 			if (IsFirstInstruction) {
 				Debug.Assert(BasicBlock != null, @"Cannot insert before first instruction without basic block");
@@ -516,7 +516,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			Context ctx = new Context(_instructionSet, _instructionSet.InsertBefore(_index));
 			ctx.Clear();
-			ctx.Offset = offset;
+			ctx.Label = label;
 			return ctx;
 		}
 
@@ -541,10 +541,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Remove()
 		{
+			int label = Label;
 			Clear();
 
 			NewInstruction = null;
 			Ignore = true;
+			Label = label;
 
 			return;
 
@@ -574,16 +576,36 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="operandCount">The operand count.</param>
+		/// <param name="resultCount">The result count.</param>
+		public void SetInstruction(IInstruction instruction, byte operandCount, byte resultCount)
+		{
+			int label = -1;
+
+			if (_index == -1)
+				_index = _instructionSet.CreateRoot();
+			else {
+				label = Label;
+				Clear();
+			}
+
+			NewInstruction = instruction;
+			OperandCount = operandCount;
+			ResultCount = resultCount;
+			Ignore = false;
+			Label = label;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		public void SetInstruction(IInstruction instruction)
 		{
-			int offset = Offset;
-
 			if (instruction != null)
 				SetInstruction(instruction, instruction.DefaultOperandCount, instruction.DefaultResultCount);
 			else
 				SetInstruction(null, 0, 0);
-
-			Offset = offset;
 		}
 
 		/// <summary>
@@ -609,18 +631,6 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Inserts the instruction after.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="code">The code.</param>
-		public void InsertInstructionAfter(IInstruction instruction, IR.ConditionCode code)
-		{
-			_index = _instructionSet.InsertAfter(_index);
-			SetInstruction(instruction);
-			ConditionCode = code;
-		}
-
-		/// <summary>
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
@@ -631,44 +641,6 @@ namespace Mosa.Runtime.CompilerFramework
 			SetInstruction(instruction);
 			ConditionCode = code;
 			SetBranch(block);
-		}
-
-		/// <summary>
-		/// Inserts the instruction after.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		public void InsertInstructionAfter(IInstruction instruction)
-		{
-			// replace dummy instruction, if possible
-			if (_index < 0)
-				_index = _instructionSet.InsertAfter(_index);
-			else if (instruction != null)
-				_index = _instructionSet.InsertAfter(_index);
-
-			SetInstruction(instruction);
-		}
-
-		/// <summary>
-		/// Inserts the instruction after.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="block">The block.</param>
-		public void InsertInstructionAfter(IInstruction instruction, BasicBlock block)
-		{
-			_index = _instructionSet.InsertAfter(_index);
-			SetInstruction(instruction, block);
-		}
-
-		/// <summary>
-		/// Inserts the instruction after.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="code">The code.</param>
-		/// <param name="block">The block.</param>
-		public void InsertInstructionAfter(IInstruction instruction, IR.ConditionCode code, BasicBlock block)
-		{
-			_index = _instructionSet.InsertAfter(_index);
-			SetInstruction(instruction, code, block);
 		}
 
 		/// <summary>
@@ -687,38 +659,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="result">The result.</param>
-		public void InsertInstructionAfter(IInstruction instruction, Operand result)
-		{
-			_index = _instructionSet.InsertAfter(_index);
-			SetInstruction(instruction, 0, 1);
-			Result = result;
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1)
 		{
 			SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
 			Result = result;
 			Operand1 = operand1;
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		public void InsertInstructionAfter(IInstruction instruction, Operand result, Operand operand1)
-		{
-			if (Instruction != null)
-				_index = _instructionSet.InsertAfter(_index);
-
-			SetInstruction(instruction, result, operand1);
 		}
 
 		/// <summary>
@@ -743,19 +689,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
-		public void InsertInstructionAfter(IInstruction instruction, Operand result, Operand operand1, Operand operand2)
-		{
-			_index = _instructionSet.InsertAfter(_index);
-			SetInstruction(instruction, result, operand1, operand2);
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
 		/// <param name="operand3">The operand3.</param>
 		public void SetInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
 		{
@@ -764,6 +697,106 @@ namespace Mosa.Runtime.CompilerFramework
 			Operand1 = operand1;
 			Operand2 = operand2;
 			Operand3 = operand3;
+		}
+
+		/// <summary>
+		/// Inserts the instruction after.
+		/// </summary>
+		private void InsertInstructionAfter()
+		{
+			int label = -1;
+
+			if (_index == -1)
+				_index = _instructionSet.InsertAfter(_index);
+			else {
+				label = Label;
+				if (Instruction != null)
+					_index = _instructionSet.InsertAfter(_index);
+			}
+
+			Label = label;
+		}
+
+		/// <summary>
+		/// Inserts the instruction after.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="code">The code.</param>
+		public void InsertInstructionAfter(IInstruction instruction, IR.ConditionCode code)
+		{
+			InsertInstructionAfter();
+			SetInstruction(instruction);
+			ConditionCode = code;
+		}
+
+		/// <summary>
+		/// Inserts the instruction after.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		public void InsertInstructionAfter(IInstruction instruction)
+		{
+			InsertInstructionAfter();
+			SetInstruction(instruction);
+		}
+
+		/// <summary>
+		/// Inserts the instruction after.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="block">The block.</param>
+		public void InsertInstructionAfter(IInstruction instruction, BasicBlock block)
+		{
+			InsertInstructionAfter();
+			SetInstruction(instruction, block);
+		}
+
+		/// <summary>
+		/// Inserts the instruction after.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="code">The code.</param>
+		/// <param name="block">The block.</param>
+		public void InsertInstructionAfter(IInstruction instruction, IR.ConditionCode code, BasicBlock block)
+		{
+			InsertInstructionAfter();
+			SetInstruction(instruction, code, block);
+		}
+
+		/// <summary>
+		/// Inserts the instruction after.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		public void InsertInstructionAfter(IInstruction instruction, Operand result)
+		{
+			InsertInstructionAfter();
+			SetInstruction(instruction, 0, 1);
+			Result = result;
+		}
+
+		/// <summary>
+		/// Inserts the instruction after.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		public void InsertInstructionAfter(IInstruction instruction, Operand result, Operand operand1)
+		{
+			InsertInstructionAfter();
+			SetInstruction(instruction, result, operand1);
+		}
+
+		/// <summary>
+		/// Inserts the instruction after.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void InsertInstructionAfter(IInstruction instruction, Operand result, Operand operand1, Operand operand2)
+		{
+			InsertInstructionAfter();
+			SetInstruction(instruction, result, operand1, operand2);
 		}
 
 		/// <summary>
@@ -776,27 +809,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="operand3">The operand3.</param>
 		public void InsertInstructionAfter(IInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
 		{
-			_index = _instructionSet.InsertAfter(_index);
+			InsertInstructionAfter();
 			SetInstruction(instruction, result, operand1, operand2, operand3);
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="operandCount">The operand count.</param>
-		/// <param name="resultCount">The result count.</param>
-		public void SetInstruction(IInstruction instruction, byte operandCount, byte resultCount)
-		{
-			if (_index == -1)
-				_index = _instructionSet.CreateRoot();
-			else
-				Clear();
-
-			NewInstruction = instruction;
-			OperandCount = operandCount;
-			ResultCount = resultCount;
-			Ignore = false;
 		}
 
 		/// <summary>
