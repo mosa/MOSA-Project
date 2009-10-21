@@ -472,7 +472,8 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.CallInstruction(Context ctx) 
-		{ 
+		{
+			ctx.ReplaceInstructionOnly(CPUx86.Instruction.CallInstruction);
 		}
 
 		#endregion //  Members

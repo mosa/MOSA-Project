@@ -5,23 +5,23 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
-    /// <summary>
-    /// Intermediate representation of call context.
-    /// </summary>
-    public sealed class CallInstruction : BaseInstruction
-    {
-        #region Construction
+	/// <summary>
+	/// Intermediate representation of call context.
+	/// </summary>
+	public sealed class CallInstruction : BaseInstruction
+	{
+		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CallInstruction"/> class.
 		/// </summary>
-        public CallInstruction()
-        {
-        }
+		public CallInstruction()
+		{
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region IRInstruction Overrides
+		#region IRInstruction Overrides
 
 		/// <summary>
 		/// Returns a string representation of the context.
@@ -30,21 +30,21 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-        public override string ToString(Context context)
-        {
-			return String.Format(@"IR.call {0}", context.RuntimeField);
-        }
+		public override string ToString(Context context)
+		{
+			return base.ToString() + " " + context.InvokeTarget;
+		}
 
 		/// <summary>
 		/// Abstract visitor method for intermediate representation visitors.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
 		/// <param name="context">The context.</param>
-        public override void Visit(IIRVisitor visitor, Context context)
-        {
+		public override void Visit(IIRVisitor visitor, Context context)
+		{
 			visitor.CallInstruction(context);
-        }
+		}
 
-        #endregion // IRInstruction Overrides
-    }
+		#endregion // IRInstruction Overrides
+	}
 }
