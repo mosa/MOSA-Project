@@ -65,10 +65,12 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Mul(Context ctx)
 		{
-			if (ctx.Operand1 is ConstantOperand) {
-				ctx.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
-				ctx.Operand1 = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.ECX);
-			}
+			if (!(ctx.Operand1 is ConstantOperand))
+				return;
+
+			RegisterOperand ebx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EBX);
+			ctx.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ebx, ctx.Operand1);
+			ctx.Operand1 = ebx;
 		}
 
 		/// <summary>
