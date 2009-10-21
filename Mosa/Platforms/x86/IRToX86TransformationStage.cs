@@ -293,7 +293,10 @@ namespace Mosa.Platforms.x86
 
 			op1 = EmitConstant(op1);
 
-			if (!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) return;
+			if (!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) {
+				ctx.ReplaceInstructionOnly(CPUx86.Instruction.MoveInstruction);
+				return;
+			}
 
 			RegisterOperand rop;
 			if (op0.StackType == StackTypeCode.F || op1.StackType == StackTypeCode.F)
