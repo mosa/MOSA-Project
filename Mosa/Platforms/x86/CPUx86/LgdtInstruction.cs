@@ -19,7 +19,7 @@ using System.Diagnostics;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Intermediate representation of the x86 lgdt instruction.
+    /// Representations the x86 lgdt instruction.
     /// </summary>
     public sealed class LgdtInstruction : OneOperandInstruction
     {

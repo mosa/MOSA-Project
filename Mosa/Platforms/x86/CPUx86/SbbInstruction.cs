@@ -18,7 +18,7 @@ using System.Diagnostics;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Intermediate representation of the x86 sbb instruction.
+    /// Representations the x86 sbb instruction.
     /// </summary>
     public sealed class SbbInstruction : TwoOperandInstruction
     {

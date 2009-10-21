@@ -18,7 +18,7 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Intermediate representation of the x86 lidt instruction.
+    /// Representations the x86 lidt instruction.
     /// </summary>
     public sealed class LidtInstruction : OneOperandInstruction
     {

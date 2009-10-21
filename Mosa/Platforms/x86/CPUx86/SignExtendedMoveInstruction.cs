@@ -15,7 +15,7 @@ using Mosa.Runtime.Metadata;
 namespace Mosa.Platforms.x86.CPUx86
 {
 	/// <summary>
-	/// Intermediate representation of the x86 move instruction.
+	/// Representations the x86 move instruction.
 	/// </summary>
 	public sealed class SignExtendedMoveInstruction : TwoOperandInstruction
 	{
@@ -74,6 +74,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		{
 			return "X86.Movsx";
 		}
+
 		#endregion
 	}
 }

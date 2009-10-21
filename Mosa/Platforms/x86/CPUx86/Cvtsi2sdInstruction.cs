@@ -18,7 +18,7 @@ using Mosa.Runtime.Metadata;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Intermediate representation of the x86 cvtsi2sd instruction.
+    /// Representations the x86 cvtsi2sd instruction.
     /// </summary>
     public sealed class Cvtsi2sdInstruction : TwoOperandInstruction
     {

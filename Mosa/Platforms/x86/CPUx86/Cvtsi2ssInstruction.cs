@@ -18,7 +18,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 namespace Mosa.Platforms.x86.CPUx86
 {
 	/// <summary>
-	/// Intermediate representation of the x86 cvtsi2ss instruction.
+	/// Representations the x86 cvtsi2ss instruction.
 	/// </summary>
 	public sealed class Cvtsi2ssInstruction : TwoOperandInstruction
 	{

@@ -19,7 +19,7 @@ using System.Diagnostics;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Intermediate representation of the x86 in instruction.
+    /// Representations the x86 in instruction.
     /// </summary>
     public sealed class InInstruction : TwoOperandInstruction
     {

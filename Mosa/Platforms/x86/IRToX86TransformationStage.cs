@@ -708,7 +708,7 @@ namespace Mosa.Platforms.x86
 			// Check if we have to sign-extend the operand that's being loaded
 			if (IsSigned(op1) && !(op1 is ConstantOperand)) {
 				// Signextend it
-				ctx.InsertBefore().SetInstruction(IR.Instruction.SignExtendedMoveInstruction, eaxL, op1);
+				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.SignExtendedMoveInstruction, eaxL, op1);
 			}
 			// Check if the operand has to be zero-extended
 			else if (IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {

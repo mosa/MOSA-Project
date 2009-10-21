@@ -19,7 +19,7 @@ using Mosa.Runtime.Metadata;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Intermediate representation of the x86 shift right instruction.
+    /// Representations the x86 shift right instruction.
     /// </summary>
 	public sealed class ShrInstruction : TwoOperandInstruction
     {

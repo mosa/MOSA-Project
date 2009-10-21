@@ -12,7 +12,7 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Intermediate representation of the x86 push instruction.
+    /// Representations the x86 push instruction.
     /// </summary>
     public sealed class InvlpgInstruction : OneOperandInstruction
     {

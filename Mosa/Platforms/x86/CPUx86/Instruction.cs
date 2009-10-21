@@ -186,8 +186,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly JumpInstruction JumpInstruction = new JumpInstruction();	
-		
+		public static readonly JumpInstruction JumpInstruction = new JumpInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly SignExtendedMoveInstruction SignExtendedMoveInstruction = new SignExtendedMoveInstruction();
 	}
 }
 

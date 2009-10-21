@@ -17,7 +17,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Intermediate representation of the x86 or instruction.
+    /// Representations the x86 or instruction.
     /// </summary>
     public sealed class LogicalOrInstruction : TwoOperandInstruction
     {

@@ -17,7 +17,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Intermediate representation of the x86 setcc instruction.
+    /// Representations the x86 setcc instruction.
     /// </summary>
     public sealed class SetccInstruction : OneOperandInstruction
     {

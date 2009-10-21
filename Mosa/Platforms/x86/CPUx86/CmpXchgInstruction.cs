@@ -16,7 +16,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Intermediate representation of the x86 compare-exchange instruction.
+    /// Representations the x86 compare-exchange instruction.
     /// </summary>
     /// <remarks>
     /// This instruction compares the value of Operand0 and Operand1. If they are
