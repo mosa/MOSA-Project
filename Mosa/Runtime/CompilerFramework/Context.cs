@@ -341,6 +341,17 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Gets a value indicating whether this instance is first instruction.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is first instruction; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsFirstInstruction
+		{
+			get { return _instructionSet.Previous(_index) < 0; }
+		}
+
+		/// <summary>
 		/// Gets a value indicating whether [last instruction].
 		/// </summary>
 		/// <value><c>true</c> if [last instruction]; otherwise, <c>false</c>.</value>
@@ -495,8 +506,14 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			int offset = Offset;
 
-			if (_instructionSet.Previous(_index) == -1)
-				_index = _index + 1 - 1; // TEST
+			if (IsFirstInstruction) {
+				if (BasicBlock == null)
+					Debug.Assert(false, @"Cannot insert before first instruction without basic block");
+				
+				_index = _instructionSet.InsertAfter(_index);
+
+				BasicBlock.Index = _index;
+			}
 
 			Context ctx = new Context(_instructionSet, _instructionSet.InsertBefore(_index));
 			ctx.Clear();
@@ -529,6 +546,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			NewInstruction = null;
 			Ignore = true;
+
 			return;
 
 			//int prev = _instructionSet.Previous(_index);

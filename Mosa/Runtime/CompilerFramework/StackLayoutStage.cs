@@ -88,8 +88,8 @@ namespace Mosa.Runtime.CompilerFramework
 			LayoutParameters(compiler, cc);
 
 			// Create a prologue instruction
-			Context prologueCtx = new Context(InstructionSet, FindBlock(-1));
-			prologueCtx.InsertInstructionAfter(IR.Instruction.PrologueInstruction);
+			Context prologueCtx = new Context(InstructionSet, FindBlock(-1)).InsertBefore();
+			prologueCtx.SetInstruction(IR.Instruction.PrologueInstruction);
 			prologueCtx.Other = _localsSize;
 
 			// Create an epilogue instruction
