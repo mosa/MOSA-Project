@@ -31,7 +31,7 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion // Properties
 
-		#region OneOperandInstruction Overrides
+		#region Methods
 		/// <summary>
 		/// Computes the op code.
 		/// </summary>
@@ -55,6 +55,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		{
 			visitor.Dec(context);
 		}
-		#endregion // OneOperandInstruction Overrides
+		#endregion // Methods
 	}
 }

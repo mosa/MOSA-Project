@@ -22,8 +22,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
 		/// </summary>
-		protected BaseInstruction()
-			: base()
+		public BaseInstruction()
 		{
 		}
 
@@ -126,7 +125,7 @@ namespace Mosa.Platforms.x86.CPUx86
 				Visit(visitor as IX86Visitor, context);
 		}
 
-		#endregion //  Overrides
+		#endregion // Overrides
 
 		#region Typesizes
 

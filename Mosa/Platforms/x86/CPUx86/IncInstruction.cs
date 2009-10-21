@@ -23,10 +23,12 @@ namespace Mosa.Platforms.x86.CPUx86
 	public sealed class IncInstruction : OneOperandInstruction
     {
         #region Data Members
+
         private static readonly OpCode Byte = new OpCode(new byte[] { 0xFE });
         private static readonly OpCode Short = new OpCode(new byte[] { 0xFE });
         private static readonly OpCode Int = new OpCode(new byte[] { 0xFE });
-        #endregion // Construction
+
+		#endregion // Data Members
 
 		#region Properties
 
@@ -38,7 +40,7 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion // Properties
 
-        #region OneOperandInstruction Overrides
+        #region Methods
 
 		/// <summary>
 		/// Computes the op code.
@@ -68,6 +70,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Inc(context);
 		}
 
-        #endregion // OneOperandInstruction Overrides
+        #endregion // Methods
     }
 }

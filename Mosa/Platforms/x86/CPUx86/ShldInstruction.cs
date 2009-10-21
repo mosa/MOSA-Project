@@ -18,11 +18,13 @@ namespace Mosa.Platforms.x86.CPUx86
     public class ShldInstruction : ThreeOperandInstruction
     {
         #region Data Members
+
         private static readonly OpCode Register = new OpCode(new byte[] { 0x0F, 0xA5 }, 4);
         private static readonly OpCode Constant = new OpCode(new byte[] { 0x0F, 0xA4 }, 4);
-        #endregion // Construction
 
-        #region ThreeOperandInstruction Overrides
+		#endregion // Data Members
+
+		#region Methods
 
 		/// <summary>
 		/// Computes the op code.
@@ -50,6 +52,6 @@ namespace Mosa.Platforms.x86.CPUx86
             visitor.Shrd(context);
         }
 
-        #endregion // ThreeOperandInstruction Overrides
+        #endregion // Methods
     }
 }

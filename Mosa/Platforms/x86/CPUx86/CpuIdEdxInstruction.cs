@@ -23,17 +23,6 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class CpuIdEdxInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CpuIdEdxInstruction"/> class.
-        /// </summary>
-        public CpuIdEdxInstruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
 
         #region Methods
 

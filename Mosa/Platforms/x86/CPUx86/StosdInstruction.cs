@@ -24,18 +24,6 @@ namespace Mosa.Platforms.x86.CPUx86
     public sealed class StosdInstruction : BaseInstruction
     {
 
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StosdInstruction"/> class.
-        /// </summary>
-        public StosdInstruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
-
         #region Methods
 
 		/// <summary>

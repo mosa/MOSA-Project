@@ -24,17 +24,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class IretdInstruction : BaseInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IretdInstruction"/> class.
-        /// </summary>
-        public IretdInstruction()
-        {
-        }
-
-        #endregion // Construction
-
+ 
         #region Methods
 
 		/// <summary>

@@ -17,21 +17,11 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Intermediate representation of an SSE based subtraction instruction.
-    /// </summary>
-    public sealed class SseSubInstruction : TwoOperandInstruction
-    {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SseSubInstruction"/> class.
-        /// </summary>
-        public SseSubInstruction()
-        {
-        }
-
-        #endregion // Construction
+	/// <summary>
+	/// Intermediate representation of an SSE based subtraction instruction.
+	/// </summary>
+	public sealed class SseSubInstruction : TwoOperandInstruction
+	{
 
 		#region Properties
 
@@ -43,7 +33,7 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion // Properties
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -55,6 +45,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.SseSub(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

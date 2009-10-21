@@ -17,7 +17,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
 	public sealed class IntInstruction : OneOperandInstruction
     {
-        #region OneOperandInstruction Overrides
+        #region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -40,6 +40,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Int(context);
 		}
 
-        #endregion // OneOperandInstruction Overrides
+        #endregion // Methods
     }
 }

@@ -20,15 +20,17 @@ namespace Mosa.Platforms.x86.CPUx86
     /// Representations the x86 xor instruction.
     /// </summary>
     public sealed class LogicalXorInstruction : TwoOperandInstruction
-    {
-        #region Construction
-        private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 6);
+	{
+		#region Data Members
+
+		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 6);
         private static readonly OpCode R_M = new OpCode(new byte[] { 0x33 });
         private static readonly OpCode R_R = new OpCode(new byte[] { 0x33 });
         private static readonly OpCode M_R = new OpCode(new byte[] { 0x31 });
-        #endregion // Construction
 
-        #region Methods
+		#endregion // Data Members
+
+		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.

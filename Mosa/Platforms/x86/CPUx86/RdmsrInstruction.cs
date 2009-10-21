@@ -23,16 +23,6 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class RdmsrInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RdmsrInstruction"/> class.
-        /// </summary>
-        public RdmsrInstruction()
-        {
-        }
-
-        #endregion // Construction
 
         #region Methods
 

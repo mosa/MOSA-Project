@@ -19,22 +19,12 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Representations the x86 cli instruction.
+    /// Representations the x86 popad instruction.
     /// </summary>
     public sealed class PopadInstruction : BaseInstruction
     {
-        #region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PopadInstruction"/> class.
-        /// </summary>
-        public PopadInstruction()
-        {
-        }
-
-        #endregion // Construction
-
-        #region PopadInstruction Overrides
+        #region Methods
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -46,6 +36,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Popad(context);
 		}
 
-        #endregion // PopadInstruction Overrides
-    }
+		#endregion // Methods
+	}
 }

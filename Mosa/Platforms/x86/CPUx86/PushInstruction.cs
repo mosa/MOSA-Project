@@ -29,18 +29,6 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion
 
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PushInstruction"/> class.
-		/// </summary>
-		public PushInstruction() :
-			base()
-		{
-		}
-
-		#endregion // Construction
-
 		#region Properties
 
 		/// <summary>

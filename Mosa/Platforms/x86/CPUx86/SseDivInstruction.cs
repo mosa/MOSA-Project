@@ -22,16 +22,6 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
 	public sealed class SseDivInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SseDivInstruction"/> class.
-        /// </summary>
-        public SseDivInstruction()
-        {
-        }
-
-        #endregion // Construction
 
 		#region Properties
 

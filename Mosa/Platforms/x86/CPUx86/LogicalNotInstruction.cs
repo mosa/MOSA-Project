@@ -16,20 +16,10 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Intermediate representation of the X86 NOT instruction.
-    /// </summary>
-    public sealed class LogicalNotInstruction : TwoOperandInstruction
-    {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogicalNotInstruction"/> class.
-        /// </summary>
-        public LogicalNotInstruction()
-        {
-        }
-
-        #endregion // Construction
-    }
+	/// <summary>
+	/// Intermediate representation of the x86 not instruction.
+	/// </summary>
+	public sealed class LogicalNotInstruction : TwoOperandInstruction
+	{
+	}
 }

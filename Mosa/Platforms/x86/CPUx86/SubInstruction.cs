@@ -32,17 +32,6 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion
 
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SubInstruction"/> class.
-		/// </summary>
-		public SubInstruction()
-		{
-		}
-
-		#endregion // Construction
-
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>

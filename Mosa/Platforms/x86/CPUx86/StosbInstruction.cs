@@ -23,19 +23,8 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class StosbInstruction : BaseInstruction
     {
-        #region Construction
-
-        /// <summary>
-		/// Initializes a new instance of the <see cref="StosbInstruction"/> class.
-        /// </summary>
-        public StosbInstruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
-
-        #region OneOperandInstruction Overrides
+      
+        #region Methods
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -47,6 +36,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Stosb(context);
 		}
 
-        #endregion // OneOperandInstruction Overrides
+        #endregion // Methods
     }
 }

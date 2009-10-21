@@ -22,17 +22,6 @@ namespace Mosa.Platforms.x86.CPUx86
     public sealed class SetccInstruction : OneOperandInstruction
     {
 
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SetccInstruction"/> class.
-        /// </summary>
-        public SetccInstruction()
-        {
-        }
-
-        #endregion // Construction
-
 		#region Properties
 
 		/// <summary>
@@ -72,7 +61,7 @@ namespace Mosa.Platforms.x86.CPUx86
 
         #endregion // Methods
 
-        #region OneOperandInstruction Overrides
+        #region Methods
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
@@ -151,6 +140,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Setcc(context);
 		}
 
-        #endregion // OneOperandInstruction Overrides
+        #endregion // Methods
     }
 }

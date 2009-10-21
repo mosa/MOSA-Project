@@ -21,14 +21,16 @@ namespace Mosa.Platforms.x86.CPUx86
     /// Representations the x86 sbb instruction.
     /// </summary>
     public sealed class SbbInstruction : TwoOperandInstruction
-    {
-        #region Codes
-        private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 3);
+	{
+		#region Data Members
+
+		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 3);
         private static readonly OpCode M_C = new OpCode(new byte[] { 0x81 }, 3);
         private static readonly OpCode R_R = new OpCode(new byte[] { 0x19 });
         private static readonly OpCode M_R = new OpCode(new byte[] { 0x19 });
         private static readonly OpCode R_M = new OpCode(new byte[] { 0x1B });
-        #endregion // Construction
+
+		#endregion // Data Members
 
 		#region Properties
 

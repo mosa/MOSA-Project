@@ -23,16 +23,6 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class PushadInstruction : BaseInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PushadInstruction"/> class.
-        /// </summary>
-        public PushadInstruction()
-        {
-        }
-
-        #endregion // Construction
 
         #region Methods
 

@@ -22,17 +22,6 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
 	public sealed class LiteralInstruction : BaseInstruction
     {
-        #region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="LiteralInstruction"/>.
-		/// </summary>
-        public LiteralInstruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
 
 		#region Methods
 

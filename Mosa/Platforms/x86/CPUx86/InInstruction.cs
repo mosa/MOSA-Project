@@ -31,13 +31,13 @@ namespace Mosa.Platforms.x86.CPUx86
         #endregion // Construction
 
         #region Methods
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="destination"></param>
-        /// <param name="source"></param>
-        /// <param name="third"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
             if (IsByte(destination))
@@ -51,17 +51,6 @@ namespace Mosa.Platforms.x86.CPUx86
                 if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_32;
             }
             throw new ArgumentException(@"No opcode for operand type.");
-        }
-
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString(Context context)
-        {
-            return String.Format(@"X86.in eax, {0} ", context.Operand1);
         }
 
 		/// <summary>

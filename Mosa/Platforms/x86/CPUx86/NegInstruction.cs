@@ -27,7 +27,7 @@ namespace Mosa.Platforms.x86.CPUx86
         private static readonly OpCode M = new OpCode(new byte[] { 0xF7 }, 3);
         #endregion 
 
-        #region OneOperandInstruction Overrides
+        #region Methods
         /// <summary>
         /// 
         /// </summary>
@@ -56,6 +56,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Neg(context);
 		}
 
-        #endregion // OneOperandInstruction Overrides
+        #endregion // Methods
     }
 }

@@ -321,6 +321,22 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
+		/// Calls the specified target.
+		/// </summary>
+		/// <param name="target">The target.</param>
+		public void Call(RuntimeMethod target)
+		{
+			long address = _linker.Link(
+				LinkType.RelativeOffset | LinkType.I4,
+				_compiler.Method,
+				(int)(_codeStream.Position - _codeStreamBasePosition) - 4,
+				(int)(_codeStream.Position - _codeStreamBasePosition),
+				target,
+				IntPtr.Zero
+			);
+		}
+
+		/// <summary>
 		/// Emits the specified op code.
 		/// </summary>
 		/// <param name="dest">The dest.</param>

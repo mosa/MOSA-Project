@@ -20,18 +20,8 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// </summary>
 	public class NopInstruction : BaseInstruction
 	{
-		#region Construction
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NopInstruction"/> class.
-		/// </summary>
-		public NopInstruction()
-		{
-		}
-
-		#endregion // Construction
-
-		#region IPlatformInstruction Overrides
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -43,7 +33,7 @@ namespace Mosa.Platforms.x86.CPUx86
 			emitter.WriteByte(0x90);
 		}
 
-		#endregion // IPlatformInstruction Overrides
+		#endregion // Methods
 
 	}
 }

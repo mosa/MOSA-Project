@@ -34,7 +34,6 @@ namespace Mosa.Platforms.x86.CPUx86
 
         #endregion // Construction
 
-
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>

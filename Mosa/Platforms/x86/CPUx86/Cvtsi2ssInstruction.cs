@@ -22,17 +22,6 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// </summary>
 	public sealed class Cvtsi2ssInstruction : TwoOperandInstruction
 	{
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="Cvtsi2ssInstruction"/>.
-		/// </summary>
-		public Cvtsi2ssInstruction() :
-			base()
-		{
-		}
-
-		#endregion // Construction
 
 		#region Methods
 

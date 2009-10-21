@@ -22,7 +22,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	    private static readonly OpCode M = new OpCode(new byte[] { 0xF7 }, 6);
         #endregion
 
-        #region OneOperandInstruction Overrides
+        #region Methods
 
 		/// <summary>
 		/// Computes the op code.

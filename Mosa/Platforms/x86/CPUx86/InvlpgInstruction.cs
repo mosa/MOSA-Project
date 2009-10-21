@@ -16,7 +16,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class InvlpgInstruction : OneOperandInstruction
     {
-        #region OneOperandInstruction Overrides
+        #region Methods
         /// <summary>
         /// 
         /// </summary>
@@ -39,6 +39,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Invlpg(context);
 		}
 
-        #endregion // OneOperandInstruction Overrides
+        #endregion // Methods
     }
 }

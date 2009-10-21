@@ -22,16 +22,6 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
 	public sealed class SseMulInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SseMulInstruction"/> class.
-        /// </summary>
-        public SseMulInstruction()
-        {
-        }
-
-        #endregion // Construction
 
 		#region Properties
 

@@ -23,18 +23,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
 	public sealed class ShlInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ShlInstruction"/> class.
-		/// </summary>
-        public ShlInstruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
-
+       
         #region Methods
 
 		/// <summary>

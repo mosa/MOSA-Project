@@ -23,16 +23,6 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class PopfdInstruction : BaseInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PopfdInstruction"/> class.
-        /// </summary>
-        public PopfdInstruction()
-        {
-        }
-
-        #endregion // Construction
 
         #region Methods
 

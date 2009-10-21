@@ -21,16 +21,6 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
 	public sealed class LogicalAndInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogicalAndInstruction"/> class.
-        /// </summary>
-        public LogicalAndInstruction()
-        {
-        }
-
-        #endregion // Construction
 
         #region Methods
 

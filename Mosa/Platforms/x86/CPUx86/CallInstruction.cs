@@ -23,7 +23,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// </summary>
 	public sealed class CallInstruction : OneOperandInstruction
 	{
-		
+
 		#region Methods
 
 		/// <summary>
@@ -35,16 +35,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		{
 			emitter.WriteByte(0xE8);
 			emitter.Write(new byte[4], 0, 4);
-
-			//long address = _linker.Link(
-			//    LinkType.RelativeOffset | LinkType.I4,
-			//    _compiler.Method,
-			//    (int)(_codeStream.Position - _codeStreamBasePosition) - 4,
-			//    (int)(_codeStream.Position - _codeStreamBasePosition),
-			//    target,
-			//    IntPtr.Zero
-			//);
-
+			emitter.Call(ctx.InvokeTarget);
 		}
 
 		/// <summary>
@@ -55,6 +46,18 @@ namespace Mosa.Platforms.x86.CPUx86
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
 			visitor.Call(context);
+		}
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString(Context context)
+		{
+			return base.ToString() + " " + context.InvokeTarget.ToString();
 		}
 
 		#endregion // Methods

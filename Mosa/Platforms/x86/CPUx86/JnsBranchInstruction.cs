@@ -17,7 +17,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class JnsBranchInstruction : OneOperandInstruction
     {
-        #region OneOperandInstruction Overrides
+        #region Methods
 
 		/// <summary>
 		/// Computes the op code.
@@ -53,7 +53,7 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Jns(context);
 		}
 
-        #endregion // OneOperandInstruction Overrides
+        #endregion // Methods
 
     }
 }

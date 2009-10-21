@@ -23,17 +23,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class RdtscInstruction : OneOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RdtscInstruction"/> class.
-        /// </summary>
-        public RdtscInstruction()
-        {
-        }
-
-        #endregion // Construction
-
+      
         #region Methods
 
 		/// <summary>

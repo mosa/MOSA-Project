@@ -20,18 +20,8 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// </summary>
 	public class BreakInstruction : BaseInstruction
 	{
-		#region Construction
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BreakInstruction"/> class.
-		/// </summary>
-		public BreakInstruction()
-		{
-		}
-
-		#endregion // Construction
-
-		#region IPlatformInstruction Overrides
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -43,7 +33,7 @@ namespace Mosa.Platforms.x86.CPUx86
 			emitter.WriteByte(0xCC);
 		}
 
-		#endregion // IPlatformInstruction Overrides
+		#endregion // Methods
 
 	}
 }

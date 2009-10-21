@@ -23,17 +23,6 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class LockIntruction : BaseInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LockIntruction"/> class.
-        /// </summary>
-        public LockIntruction() :
-            base()
-        {
-        }
-
-        #endregion // Construction
 
         #region Methods
 

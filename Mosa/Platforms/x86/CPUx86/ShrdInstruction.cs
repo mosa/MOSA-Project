@@ -18,11 +18,13 @@ namespace Mosa.Platforms.x86.CPUx86
     public class ShrdInstruction : ThreeOperandInstruction
     {
         #region Data Members
-        private static readonly OpCode Register = new OpCode( new byte[] { 0x0F, 0xAD }, 4);
+        
+		private static readonly OpCode Register = new OpCode( new byte[] { 0x0F, 0xAD }, 4);
         private static readonly OpCode Constant = new OpCode(new byte[] { 0x0F, 0xAC }, 4);
-        #endregion // Construction
+		
+		#endregion // Data Members
 
-        #region ThreeOperandInstruction Overrides
+		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.
@@ -50,6 +52,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Shrd(context);
 		}
 
-        #endregion // ThreeOperandInstruction Overrides
+        #endregion // Methods
     }
 }

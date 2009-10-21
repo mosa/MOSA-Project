@@ -20,16 +20,6 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public class UcomisdInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UcomisdInstruction"/> class.
-        /// </summary>
-        public UcomisdInstruction()
-        {
-        }
-
-        #endregion // Construction
 
         #region Methods
 
