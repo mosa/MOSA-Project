@@ -209,7 +209,7 @@ namespace Mosa.Platforms.x86
 			// Extend this to the full register, if we're storing it in a register
 			if (op0 is RegisterOperand) {
 				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)op0).Register);
-				ctx.InsertInstructionAfter(IR.Instruction.ZeroExtendedMoveInstruction, op0, rop);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MovzxInstruction, op0, rop);
 			}
 
 		}
@@ -712,7 +712,7 @@ namespace Mosa.Platforms.x86
 			}
 			// Check if the operand has to be zero-extended
 			else if (IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {
-				ctx.InsertBefore().SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eaxL, op1);
+				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovzxInstruction, eaxL, op1);
 			}
 			// In any other case: Just load it
 			else

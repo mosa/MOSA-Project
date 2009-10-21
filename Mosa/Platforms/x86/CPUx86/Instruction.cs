@@ -191,6 +191,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly MovsxInstruction MovsxInstruction = new MovsxInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly MovzxInstruction MovzxInstruction = new MovzxInstruction();
 	}
 }
 

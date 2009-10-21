@@ -15,14 +15,14 @@ using Mosa.Runtime.Metadata;
 namespace Mosa.Platforms.x86.CPUx86
 {
 	/// <summary>
-	/// Representations the x86 Movsx instruction.
+	/// Representations the x86 Movzx instruction.
 	/// </summary>
-	public sealed class MovsxInstruction : TwoOperandInstruction
+	public sealed class MovzxInstruction : TwoOperandInstruction
 	{
 		#region Data Members
 
-		private static OpCode R_X8 = new OpCode(new byte[] { 0x0F, 0xBE });
-		private static OpCode R_X16 = new OpCode(new byte[] { 0x0F, 0xBF });
+		private static OpCode R_X8 = new OpCode(new byte[] { 0x0F, 0xB6 });
+		private static OpCode R_X16 = new OpCode(new byte[] { 0x0F, 0xB7 });
 
 		#endregion
 
