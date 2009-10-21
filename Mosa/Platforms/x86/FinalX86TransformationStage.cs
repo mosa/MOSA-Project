@@ -69,11 +69,6 @@ namespace Mosa.Platforms.x86
 				return;
 
 			RegisterOperand ebx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EBX);
-			//Operand source = ctx.Operand1;
-			//Operand result = ctx.Result;
-
-			//ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ebx, source);
-			//ctx.InsertInstructionAfter(CPUx86.Instruction.MulInstruction, result, ebx);
 
 			ctx.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebx, ctx.Operand1);
 			ctx.Operand1 = ebx;
@@ -93,14 +88,13 @@ namespace Mosa.Platforms.x86
 				return;
 
 			RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
-
 			ctx.Result = eax;
 
 			Context start = ctx.InsertBefore();
 			start.SetInstruction(CPUx86.Intrinsics.PushInstruction, null, eax);
 
-			if (IsSigned(op0))
-				start.InsertInstructionAfter(IR.Instruction.SignExtendedMoveInstruction, eax, op0); // FIX PG: Can't replace w/ IR instruction
+			if ((IsSigned(op0)) && (!Is32Bit(op0)))
+				start.InsertInstructionAfter(CPUx86.Instruction.MovsxInstruction, eax, op0);
 			else
 				start.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, eax, op0);
 
@@ -147,10 +141,10 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Movsx"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Movsx(Context context) 
+		void CPUx86.IX86Visitor.Movsx(Context context)
 		{
-			if ((context.Operand1.Type.Type == CilElementType.U4) || (context.Operand1.Type.Type == CilElementType.I4))
-				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);				
+			if (Is32Bit(context.Operand1))
+				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
 		}
 
 		/// <summary>

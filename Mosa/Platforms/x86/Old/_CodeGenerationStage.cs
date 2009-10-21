@@ -703,7 +703,7 @@ namespace Mosa.Platforms.x86
 
 		void IR.IIRVisitor.JmpInstruction(Context ctx)
 		{
-			_codeEmitter.Jmp(ctx.Branch.Targets[0]);
+			// DONE
 		}
 
 		void IR.IIRVisitor.LiteralInstruction(Context ctx)
@@ -786,7 +786,7 @@ namespace Mosa.Platforms.x86
 
 		void IR.IIRVisitor.PopInstruction(Context ctx)
 		{
-			_codeEmitter.Pop(ctx.Result);
+			// DONE
 		}
 
 		void IR.IIRVisitor.PrologueInstruction(Context ctx)
@@ -806,22 +806,7 @@ namespace Mosa.Platforms.x86
 
 		void IR.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
 		{
-			switch (ctx.Operand1.Type.Type) {
-				case CilElementType.I1:
-					_codeEmitter.Movsx(ctx.Operand1, ctx.Operand2);
-					break;
-
-				case CilElementType.I2: goto case CilElementType.I1;
-
-				case CilElementType.I4: goto case CilElementType.I1;
-
-				case CilElementType.I8:
-					_codeEmitter.Mov(ctx.Operand1, ctx.Operand2);
-					break;
-
-				default:
-					throw new NotSupportedException();
-			}
+			// DONE
 		}
 
 		void IR.IIRVisitor.UDivInstruction(Context ctx)
@@ -833,27 +818,7 @@ namespace Mosa.Platforms.x86
 
 		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx)
 		{
-			switch (ctx.Operand1.Type.Type) {
-				case CilElementType.I1:
-					_codeEmitter.Movzx(ctx.Operand1, ctx.Operand2);
-					break;
-
-				case CilElementType.I2: goto case CilElementType.I1;
-
-				case CilElementType.I4: goto case CilElementType.I1;
-
-				case CilElementType.I8:
-					throw new NotSupportedException();
-
-				case CilElementType.U1: goto case CilElementType.I1;
-				case CilElementType.U2: goto case CilElementType.I1;
-				case CilElementType.U4: goto case CilElementType.I1;
-				case CilElementType.U8: goto case CilElementType.I8;
-				case CilElementType.Char: goto case CilElementType.I2;
-
-				default:
-					throw new NotSupportedException();
-			}
+			// DONE
 		}
 
 		void IR.IIRVisitor.URemInstruction(Context ctx) { }

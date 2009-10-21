@@ -36,135 +36,145 @@ namespace Mosa.Platforms.x86
 		#region X86 Internals
 
 		/// <summary>
-		/// Determines whether the specified op is unsigned.
+		/// Determines whether the specified operand is 32 bits.
 		/// </summary>
-		/// <param name="op">The op.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified op is unsigned; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool IsUnsigned(Operand op)
+		/// <param name="operand">The operand.</param>
+		/// <returns></returns>
+		public static bool Is32Bit(Operand operand)
 		{
-			return IsUByte(op) || IsUShort(op) || IsUInt(op) || IsChar(op);
+			return (operand.Type.Type == CilElementType.U4) || (operand.Type.Type == CilElementType.I4);
 		}
 
 		/// <summary>
-		/// Determines whether the specified op is signed.
+		/// Determines whether the specified operand is unsigned.
 		/// </summary>
-		/// <param name="op">The op.</param>
+		/// <param name="operand">The operand.</param>
 		/// <returns>
-		/// 	<c>true</c> if the specified op is signed; otherwise, <c>false</c>.
+		/// 	<c>true</c> if the specified operand is unsigned; otherwise, <c>false</c>.
 		/// </returns>
-		public static bool IsSigned(Operand op)
+		public static bool IsUnsigned(Operand operand)
 		{
-			return IsSByte(op) || IsSShort(op) || IsInt(op);
+			return IsUByte(operand) || IsUShort(operand) || IsUInt(operand) || IsChar(operand);
 		}
 
 		/// <summary>
-		/// Determines whether the specified op is byte.
+		/// Determines whether the specified operand is signed.
 		/// </summary>
-		/// <param name="op">The op.</param>
+		/// <param name="operand">The operand.</param>
 		/// <returns>
-		/// 	<c>true</c> if the specified op is byte; otherwise, <c>false</c>.
+		/// 	<c>true</c> if the specified operand is signed; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsByte(Operand op)
+		public static bool IsSigned(Operand operand)
 		{
-			return IsSByte(op) || IsUByte(op);
+			return IsSByte(operand) || IsSShort(operand) || IsInt(operand);
 		}
 
 		/// <summary>
-		/// Determines whether [is S byte] [the specified op].
+		/// Determines whether the specified operand is byte.
 		/// </summary>
-		/// <param name="op">The op.</param>
+		/// <param name="operand">The operand.</param>
 		/// <returns>
-		/// 	<c>true</c> if [is S byte] [the specified op]; otherwise, <c>false</c>.
+		/// 	<c>true</c> if the specified operand is byte; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsSByte(Operand op)
+		private static bool IsByte(Operand operand)
 		{
-			return (op.Type.Type == CilElementType.I1);
+			return IsSByte(operand) || IsUByte(operand);
 		}
 
 		/// <summary>
-		/// Determines whether [is U byte] [the specified op].
+		/// Determines whether [is S byte] [the specified operand].
 		/// </summary>
-		/// <param name="op">The op.</param>
+		/// <param name="operand">The operand.</param>
 		/// <returns>
-		/// 	<c>true</c> if [is U byte] [the specified op]; otherwise, <c>false</c>.
+		/// 	<c>true</c> if [is S byte] [the specified operand]; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsUByte(Operand op)
+		private static bool IsSByte(Operand operand)
 		{
-			return (op.Type.Type == CilElementType.U1);
+			return (operand.Type.Type == CilElementType.I1);
 		}
 
 		/// <summary>
-		/// Determines whether the specified op is short.
+		/// Determines whether [is U byte] [the specified operand].
 		/// </summary>
-		/// <param name="op">The op.</param>
+		/// <param name="operand">The operand.</param>
 		/// <returns>
-		/// 	<c>true</c> if the specified op is short; otherwise, <c>false</c>.
+		/// 	<c>true</c> if [is U byte] [the specified operand]; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsShort(Operand op)
+		private static bool IsUByte(Operand operand)
 		{
-			return IsSShort(op) || IsUShort(op);
+			return (operand.Type.Type == CilElementType.U1);
 		}
 
 		/// <summary>
-		/// Determines whether [is S short] [the specified op].
+		/// Determines whether the specified operand is short.
 		/// </summary>
-		/// <param name="op">The op.</param>
+		/// <param name="operand">The operand.</param>
 		/// <returns>
-		/// 	<c>true</c> if [is S short] [the specified op]; otherwise, <c>false</c>.
+		/// 	<c>true</c> if the specified operand is short; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsSShort(Operand op)
+		private static bool IsShort(Operand operand)
 		{
-			return (op.Type.Type == CilElementType.I2);
+			return IsSShort(operand) || IsUShort(operand);
 		}
 
 		/// <summary>
-		/// Determines whether [is U short] [the specified op].
+		/// Determines whether [is S short] [the specified operand].
 		/// </summary>
-		/// <param name="op">The op.</param>
+		/// <param name="operand">The operand.</param>
 		/// <returns>
-		/// 	<c>true</c> if [is U short] [the specified op]; otherwise, <c>false</c>.
+		/// 	<c>true</c> if [is S short] [the specified operand]; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsUShort(Operand op)
+		private static bool IsSShort(Operand operand)
 		{
-			return (op.Type.Type == CilElementType.U2);
+			return (operand.Type.Type == CilElementType.I2);
 		}
 
 		/// <summary>
-		/// Determines whether the specified op is char.
+		/// Determines whether [is U short] [the specified operand].
 		/// </summary>
-		/// <param name="op">The op.</param>
+		/// <param name="operand">The operand.</param>
 		/// <returns>
-		/// 	<c>true</c> if the specified op is char; otherwise, <c>false</c>.
+		/// 	<c>true</c> if [is U short] [the specified operand]; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsChar(Operand op)
+		private static bool IsUShort(Operand operand)
 		{
-			return (op.Type.Type == CilElementType.Char || IsUShort(op));
+			return (operand.Type.Type == CilElementType.U2);
 		}
 
 		/// <summary>
-		/// Determines whether the specified op is int.
+		/// Determines whether the specified operand is char.
 		/// </summary>
-		/// <param name="op">The op.</param>
+		/// <param name="operand">The operand.</param>
 		/// <returns>
-		/// 	<c>true</c> if the specified op is int; otherwise, <c>false</c>.
+		/// 	<c>true</c> if the specified operand is char; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsInt(Operand op)
+		private static bool IsChar(Operand operand)
 		{
-			return (op.Type.Type == CilElementType.I4);
+			return (operand.Type.Type == CilElementType.Char || IsUShort(operand));
 		}
 
 		/// <summary>
-		/// Determines whether [is U int] [the specified op].
+		/// Determines whether the specified operand is int.
 		/// </summary>
-		/// <param name="op">The op.</param>
+		/// <param name="operand">The operand.</param>
 		/// <returns>
-		/// 	<c>true</c> if [is U int] [the specified op]; otherwise, <c>false</c>.
+		/// 	<c>true</c> if the specified operand is int; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsUInt(Operand op)
+		private static bool IsInt(Operand operand)
 		{
-			return (op.Type.Type == CilElementType.U4);
+			return (operand.Type.Type == CilElementType.I4);
+		}
+
+		/// <summary>
+		/// Determines whether [is U int] [the specified operand].
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <returns>
+		/// 	<c>true</c> if [is U int] [the specified operand]; otherwise, <c>false</c>.
+		/// </returns>
+		private static bool IsUInt(Operand operand)
+		{
+			return (operand.Type.Type == CilElementType.U4);
 		}
 
 		#endregion // X86 Internals
