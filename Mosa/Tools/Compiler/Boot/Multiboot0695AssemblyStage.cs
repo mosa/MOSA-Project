@@ -27,6 +27,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Tools.Compiler.TypeInitializers;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;
+using CPUx86 = Mosa.Platforms.x86.CPUx86;
 
 namespace Mosa.Tools.Compiler.Boot
 {
@@ -173,9 +174,9 @@ namespace Mosa.Tools.Compiler.Boot
 				InstructionSet instructionSet = new InstructionSet(16);
 				Context ctx = new Context(instructionSet, -1);
 
-				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, ecx, new ConstantOperand(I4, 0x200000));
-				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
-				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
+				ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, ecx, new ConstantOperand(I4, 0x200000));
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
 				ctx.InsertInstructionAfter(IR.Instruction.CallInstruction);
 				ctx.InvokeTarget = typeInitializerSchedulerStage.Method;
 

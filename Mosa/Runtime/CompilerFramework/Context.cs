@@ -771,7 +771,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="resultCount">The result count.</param>
 		public void SetInstruction(IInstruction instruction, byte operandCount, byte resultCount)
 		{
-			Clear();
+			if (_index == -1)
+				_index = _instructionSet.CreateRoot();
+			else
+				Clear();
 
 			NewInstruction = instruction;
 			OperandCount = operandCount;
