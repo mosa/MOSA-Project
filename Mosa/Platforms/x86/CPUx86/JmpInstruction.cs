@@ -17,7 +17,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class JmpInstruction : TwoOperandInstruction
+	public sealed class JmpInstruction : BaseInstruction
 	{
 
 		#region Data Members

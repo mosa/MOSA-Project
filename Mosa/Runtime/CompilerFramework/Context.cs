@@ -507,9 +507,8 @@ namespace Mosa.Runtime.CompilerFramework
 			int offset = Offset;
 
 			if (IsFirstInstruction) {
-				if (BasicBlock == null)
-					Debug.Assert(false, @"Cannot insert before first instruction without basic block");
-				
+				Debug.Assert(BasicBlock != null, @"Cannot insert before first instruction without basic block");
+				Debug.Assert(BasicBlock.Index == _index, @"Cannot be first instruction since basic block does not start here");
 				_index = _instructionSet.InsertAfter(_index);
 
 				BasicBlock.Index = _index;

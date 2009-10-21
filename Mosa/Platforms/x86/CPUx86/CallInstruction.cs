@@ -21,7 +21,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// Representations the x86 call instruction.
 	/// </summary>
-	public sealed class CallInstruction : OneOperandInstruction
+	public sealed class CallInstruction : BaseInstruction
 	{
 
 		#region Methods
