@@ -66,7 +66,7 @@ namespace Mosa.Platforms.x86
             { typeof(CPUx86.LogicalAndInstruction), typeof(LogicalAndConstraint) },
             { typeof(CPUx86.LogicalOrInstruction), typeof(LogicalOrConstraint) },
             { typeof(CPUx86.LogicalXorInstruction), typeof(LogicalXorConstraint) },
-            { typeof(CPUx86.MoveInstruction), typeof(MoveConstraint) },
+            { typeof(CPUx86.MovInstruction), typeof(MoveConstraint) },
             { typeof(CPUx86.MulInstruction), typeof(MulConstraint) },
             { typeof(CPUx86.SarInstruction), typeof(ShiftConstraint) },
             { typeof(CPUx86.ShlInstruction), typeof(ShiftConstraint) },

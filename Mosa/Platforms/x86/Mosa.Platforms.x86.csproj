@@ -94,7 +94,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CILToX86TransformationStage.cs" />
-    <Compile Include="CPUx86\JumpInstruction.cs" />
+    <Compile Include="CPUx86\JmpInstruction.cs" />
     <Compile Include="FinalX86TransformationStage.cs" />
     <Compile Include="CPUx86\AdcInstruction.cs" />
     <Compile Include="CPUx86\AddInstruction.cs" />
@@ -154,7 +154,7 @@
     <Compile Include="CPUx86\LogicalNotInstruction.cs" />
     <Compile Include="CPUx86\LogicalOrInstruction.cs" />
     <Compile Include="CPUx86\LogicalXorInstruction.cs" />
-    <Compile Include="CPUx86\MoveInstruction.cs" />
+    <Compile Include="CPUx86\MovInstruction.cs" />
     <Compile Include="CPUx86\MulInstruction.cs" />
     <Compile Include="CPUx86\NegInstruction.cs" />
     <Compile Include="CPUx86\OneOperandInstruction.cs" />

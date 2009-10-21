@@ -69,7 +69,7 @@ namespace Mosa.Platforms.x86
 				return;
 
 			RegisterOperand ebx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EBX);
-			ctx.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ebx, ctx.Operand1);
+			ctx.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebx, ctx.Operand1);
 			ctx.Operand1 = ebx;
 		}
 
@@ -96,7 +96,7 @@ namespace Mosa.Platforms.x86
 			if (IsSigned(op0))
 				start.InsertInstructionAfter(IR.Instruction.SignExtendedMoveInstruction, eax, op0); // FIX PG: Can't replace w/ IR instruction
 			else
-				start.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, eax, op0);
+				start.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, eax, op0);
 
 			ctx.InsertInstructionAfter(CPUx86.Intrinsics.PopInstruction, eax);
 		}
@@ -132,7 +132,7 @@ namespace Mosa.Platforms.x86
 			if (context.Result is MemoryOperand) {
 				Operand op = context.Result;
 				RegisterOperand reg = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.EAX);
-				context.InsertBefore().SetInstruction(CPUx86.Instruction.MoveInstruction, reg, op);
+				context.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, reg, op);
 				context.Result = reg;
 			}
 		}
@@ -144,7 +144,7 @@ namespace Mosa.Platforms.x86
 		void CPUx86.IX86Visitor.Movsx(Context context) 
 		{
 			if ((context.Operand1.Type.Type == CilElementType.U4) || (context.Operand1.Type.Type == CilElementType.I4))
-				context.ReplaceInstructionOnly(CPUx86.Instruction.MoveInstruction);				
+				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);				
 		}
 
 		/// <summary>
@@ -154,7 +154,7 @@ namespace Mosa.Platforms.x86
 		void CPUx86.IX86Visitor.Movzx(Context context)
 		{
 			if ((context.Operand1.Type.Type == CilElementType.U4) || (context.Operand1.Type.Type == CilElementType.I4))
-				context.ReplaceInstructionOnly(CPUx86.Instruction.MoveInstruction);
+				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
 		}
 
 		#endregion // Members
@@ -425,7 +425,7 @@ namespace Mosa.Platforms.x86
 			if (context.Operand2 is MemoryOperand || context.Operand2 is ConstantOperand) {
 				Operand op = context.Operand2;
 				RegisterOperand reg = new RegisterOperand(context.Operand2.Type, GeneralPurposeRegister.EAX);
-				context.InsertBefore().SetInstruction(CPUx86.Instruction.MoveInstruction, reg, op);
+				context.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, reg, op);
 				context.Operand2 = reg;
 			}
 		}

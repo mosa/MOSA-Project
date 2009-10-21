@@ -936,7 +936,7 @@ namespace Mosa.Platforms.x86
 		void CPUx86.IX86Visitor.Movzx(Context context)
 		{
 			if ((context.Operand1.Type.Type == CilElementType.U4) || (context.Operand1.Type.Type == CilElementType.I4))
-				context.ReplaceInstructionOnly(CPUx86.Instruction.MoveInstruction);
+				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
 		}
 	}
 }

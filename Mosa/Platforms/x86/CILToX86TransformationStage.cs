@@ -74,7 +74,7 @@ namespace Mosa.Platforms.x86
 		void CIL.ICILVisitor.Ldarga(Context ctx)
 		{
 			Operand result = ctx.Result;
-			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, result, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EBP));
+			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EBP));
 			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, result, new ConstantOperand(new SigType(CilElementType.Ptr), ctx.Label));
 		}
 
@@ -85,7 +85,7 @@ namespace Mosa.Platforms.x86
 		void CIL.ICILVisitor.Ldloca(Context ctx)
 		{
 			Operand result = ctx.Result;
-			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, result, new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EBP));
+			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EBP));
 			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, result, new ConstantOperand(ctx.Result.Type, ctx.Label));
 		}
 
@@ -157,7 +157,7 @@ namespace Mosa.Platforms.x86
 				}
 
 				if (!eax)
-					ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX), retval);
+					ctx.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX), retval);
 			}
 		}
 
@@ -167,7 +167,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Branch(Context ctx)
 		{
-			ctx.ReplaceInstructionOnly(CPUx86.Instruction.JumpInstruction);
+			ctx.ReplaceInstructionOnly(CPUx86.Instruction.JmpInstruction);
 		}
 
 		/// <summary>
@@ -387,7 +387,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Rem(Context ctx)
 		{
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), ctx.Operand1);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), ctx.Operand1);
 
 			if (IsUnsigned(ctx.Operand1))
 				ctx.InsertInstructionAfter(IR.Instruction.ZeroExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
@@ -399,7 +399,7 @@ namespace Mosa.Platforms.x86
 			else
 				ctx.InsertInstructionAfter(CPUx86.Instruction.DivInstruction, ctx.Operand1, ctx.Operand2);
 
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, ctx.Result, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX));
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ctx.Result, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX));
 		}
 
 		#endregion // Members
@@ -804,8 +804,8 @@ namespace Mosa.Platforms.x86
 
 			RegisterOperand ecx = new RegisterOperand(op2.Type, GeneralPurposeRegister.ECX);
 
-			ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, ecx, op2);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MoveInstruction, opRes, op1);
+			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, op2);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, opRes, op1);
 			ctx.InsertInstructionAfter(instruction, opRes, ecx);
 
 
@@ -867,7 +867,7 @@ namespace Mosa.Platforms.x86
 			else if (op1 is MemoryOperand && op2 is MemoryOperand) {
 				RegisterOperand eax = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
 
-				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MoveInstruction, eax, op1);
+				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
 				ctx.Operand1 = eax;
 			}
 
