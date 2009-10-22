@@ -694,7 +694,7 @@ namespace Mosa.Platforms.x86
 		/// Emits a jump instruction.
 		/// </summary>
 		/// <param name="dest">The target label of the jump.</param>
-		void _ICodeEmitter.Jmp(int dest)	
+		void _ICodeEmitter.Jmp(int dest)
 		{
 			// DONE
 		}
@@ -828,7 +828,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="op"></param>
 		void _ICodeEmitter.DirectDivision(Operand op)
 		{
-			Emit(op, null, _X86.Div(null, op));
+			// DONE
 		}
 
 		/// <summary>

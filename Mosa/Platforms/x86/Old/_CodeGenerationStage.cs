@@ -143,7 +143,7 @@ namespace Mosa.Platforms.x86
 
 		void CPUx86.IX86Visitor.DirectDivision(Context ctx)
 		{
-			_codeEmitter.DirectDivision(ctx.Operand1);
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.Div(Context ctx)

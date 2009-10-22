@@ -120,8 +120,7 @@
     <Compile Include="CPUx86\Cvtsi2ssInstruction.cs" />
     <Compile Include="CPUx86\Cvtss2sdInstruction.cs" />
     <Compile Include="CPUx86\DecInstruction.cs" />
-    <Compile Include="CPUx86\DirectDivision.cs" />
-    <Compile Include="CPUx86\DirectMultiplicationInstruction.cs" />
+    <Compile Include="CPUx86\DirectMultiplication.cs" />
     <Compile Include="CPUx86\DivInstruction.cs" />
     <Compile Include="CPUx86\IncInstruction.cs" />
     <Compile Include="CPUx86\Instruction.cs" />

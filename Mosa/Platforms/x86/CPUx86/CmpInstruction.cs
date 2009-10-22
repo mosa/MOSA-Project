@@ -18,6 +18,7 @@ namespace Mosa.Platforms.x86.CPUx86
     public sealed class CmpInstruction : TwoOperandInstruction
     {
         #region Data Member
+
         private static readonly OpCode M_R = new OpCode(new byte[] { 0x39 });
         private static readonly OpCode R_M = new OpCode(new byte[] { 0x3B });
         private static readonly OpCode R_R = new OpCode(new byte[] { 0x3B });
@@ -28,6 +29,7 @@ namespace Mosa.Platforms.x86.CPUx86
         private static readonly OpCode R_M_8 = new OpCode(new byte[] { 0x3A });
         private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x39 });
         private static readonly OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x3B });
+
         #endregion
 
         #region Properties

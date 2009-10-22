@@ -60,7 +60,7 @@ namespace Mosa.Platforms.x86
 		#region IX86Visitor
 
 		/// <summary>
-		/// MulInstruction instruction.
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Mul"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Mul(Context ctx)
@@ -73,7 +73,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Cmp the instruction.
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cmp"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Cmp(Context ctx)
@@ -100,7 +100,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Cvtss2sdInstruction instruction.
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cvtss2sd"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Cvtss2sd(Context ctx)
@@ -110,7 +110,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// SseSubInstruction instruction.
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseSub"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.SseSub(Context ctx)

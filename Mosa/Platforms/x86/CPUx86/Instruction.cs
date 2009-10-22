@@ -70,11 +70,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly DirectDivisionInstruction DirectDivisionInstruction = new DirectDivisionInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly DirectMultiplicationInstruction DirectMultiplicationInstruction = new DirectMultiplicationInstruction();
+		public static readonly DirectMultiplication DirectMultiplication = new DirectMultiplication();
 		/// <summary>
 		/// 
 		/// </summary>
