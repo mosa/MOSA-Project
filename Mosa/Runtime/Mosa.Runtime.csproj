@@ -433,7 +433,7 @@
     <Compile Include="CompilerFramework\TypeLayoutStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\VariableOperand.cs">
+    <Compile Include="CompilerFramework\LocalVariableOperand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Linker\AssemblyLinkerStage.cs">

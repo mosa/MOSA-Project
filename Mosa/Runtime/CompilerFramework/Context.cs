@@ -999,7 +999,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		public override string ToString()
 		{
-			return Instruction.ToString(this);
+			return String.Format("L_{0:X4}: {1}", Label, Instruction.ToString(this));
 		}
 
 		#endregion // Methods
