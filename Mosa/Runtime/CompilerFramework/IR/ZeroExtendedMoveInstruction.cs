@@ -21,27 +21,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// </remarks>
     public sealed class ZeroExtendedMoveInstruction : TwoOperandInstruction
     {
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ZeroExtendedMoveInstruction"/>.
-        /// </summary>
-        public ZeroExtendedMoveInstruction()
-        {
-        }
-
-        #endregion // Construction
 
         #region TwoOperandInstruction Overrides
-
-        /// <summary>
-        /// Returns a string representation of <see cref="SignExtendedMoveInstruction"/>.
-        /// </summary>
-        /// 
-        public override string ToString(Context context)
-        {
-            return String.Format(@"IR.zconv {0} <- {1}", context.Operand1, context.Operand2);
-        }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

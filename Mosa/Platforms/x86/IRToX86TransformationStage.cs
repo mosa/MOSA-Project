@@ -477,6 +477,28 @@ namespace Mosa.Platforms.x86
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.CallInstruction);
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="IR.IIRVisitor.ZeroExtendedMoveInstruction"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx)
+		{
+			switch (ctx.Operand1.Type.Type) {
+				case CilElementType.I1:
+					ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovzxInstruction);
+					return;
+				case CilElementType.I2: goto case CilElementType.I1;
+				case CilElementType.I4: goto case CilElementType.I1;
+				case CilElementType.I8: throw new NotSupportedException();
+				case CilElementType.U1: goto case CilElementType.I1;
+				case CilElementType.U2: goto case CilElementType.I1;
+				case CilElementType.U4: goto case CilElementType.I1;
+				case CilElementType.U8: goto case CilElementType.I8;
+				case CilElementType.Char: goto case CilElementType.I2;
+				default: throw new NotSupportedException();
+			}
+		}
+
 		#endregion //  Members
 
 		#region IIRVisitor - Unused
@@ -522,12 +544,6 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PushInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.ZeroExtendedMoveInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context context) { }
 
 		#endregion // IIRVisitor
 
