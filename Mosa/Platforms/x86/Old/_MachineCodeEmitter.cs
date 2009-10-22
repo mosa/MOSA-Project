@@ -365,16 +365,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="target">The target.</param>
 		void _ICodeEmitter.Call(RuntimeMethod target)
 		{
-			_codeStream.WriteByte(0xE8);
-			_codeStream.Write(new byte[4], 0, 4);
-			long address = _linker.Link(
-				LinkType.RelativeOffset | LinkType.I4,
-				_compiler.Method,
-				(int)(_codeStream.Position - _codeStreamBasePosition) - 4,
-				(int)(_codeStream.Position - _codeStreamBasePosition),
-				target,
-				IntPtr.Zero
-			);
+			// Done
 		}
 
 		/// <summary>
@@ -984,31 +975,7 @@ namespace Mosa.Platforms.x86
 
 		void _ICodeEmitter.Mov(Operand dest, Operand src)
 		{
-			if (dest is ConstantOperand)
-				return;//throw new ArgumentException(@"Destination can't be constant.", @"dest");
-
-
-			// Check that we're not dealing with floatingpoint values
-			if (dest.StackType != StackTypeCode.F && src.StackType != StackTypeCode.F) {
-
-				if (dest is MemoryOperand && src is MemoryOperand) {
-					Emit(new RegisterOperand(src.Type, GeneralPurposeRegister.EDX), src, _X86.Move(new RegisterOperand(src.Type, GeneralPurposeRegister.EDX), src));
-					src = new RegisterOperand(src.Type, GeneralPurposeRegister.EDX);
-				}
-
-				Emit(dest, src, _X86.Move(dest, src));
-
-			}
-			// We are dealing with floating point values
-			else {
-				if (src.Type.Type == CilElementType.R4) {
-					//RegisterOperand xmm3 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM3);
-					//Emit(xmm3, src, X86.Cvtss2sd(xmm3, src));
-					Emit(dest, src, _X86.Movsd(dest, src));
-				}
-				else
-					Emit(dest, src, _X86.Movsd(dest, src));
-			}
+			// DONE
 		}
 
 		void _ICodeEmitter.Movss(Operand dest, Operand src)

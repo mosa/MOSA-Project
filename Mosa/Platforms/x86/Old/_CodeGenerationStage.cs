@@ -270,8 +270,7 @@ namespace Mosa.Platforms.x86
 
 		void CPUx86.IX86Visitor.Jns(Context ctx)
 		{
-			_codeEmitter.Jns(ctx.Branch.Targets[0]);
-			//_codeEmitter.Jns(instruction.Label);
+			// DONE
 		}
 
 		void CPUx86.IX86Visitor.Iretd(Context ctx)
@@ -596,12 +595,12 @@ namespace Mosa.Platforms.x86
 
 		void IR.IIRVisitor.CallInstruction(Context ctx)
 		{
-			_codeEmitter.Call(ctx.InvokeTarget);
+			// DONE
 		}
 
 		void IR.IIRVisitor.EpilogueInstruction(Context ctx)
 		{
-			throw new NotSupportedException();
+			// DONE
 		}
 
 		void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context ctx)
@@ -704,28 +703,22 @@ namespace Mosa.Platforms.x86
 
 		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
 		{
-			_codeEmitter.And(ctx.Operand1, ctx.Operand3);
+			// DONE
 		}
 
 		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
 		{
-			_codeEmitter.Or(ctx.Operand1, ctx.Operand3);
+			// DONE
 		}
 
 		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
 		{
-			_codeEmitter.Xor(ctx.Operand1, ctx.Operand3);
+			// DONE
 		}
 
 		void IR.IIRVisitor.LogicalNotInstruction(Context ctx)
 		{
-			Operand dest = ctx.Operand1;
-			if (dest.Type.Type == CilElementType.U1)
-				_codeEmitter.Xor(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFF));
-			else if (dest.Type.Type == CilElementType.U2)
-				_codeEmitter.Xor(dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFFFF));
-			else
-				_codeEmitter.Not(ctx.Operand1);
+			// DONE
 		}
 
 		void IR.IIRVisitor.MoveInstruction(Context ctx)

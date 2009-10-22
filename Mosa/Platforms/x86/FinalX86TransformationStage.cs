@@ -73,33 +73,6 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cmp"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CPUx86.IX86Visitor.Cmp(Context ctx)
-		{
-			Operand op0 = ctx.Result;
-			Operand op1 = ctx.Operand1;
-
-			if (((!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) &&
-				 (!(op0 is ConstantOperand) || !(op1 is ConstantOperand))) && !(op1 is ConstantOperand))
-				return;
-
-			RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
-			ctx.Result = eax;
-
-			Context start = ctx.InsertBefore();
-			start.SetInstruction(CPUx86.Instruction.PushInstruction, null, eax);
-
-			if ((IsSigned(op0)) && (!Is32Bit(op0)))
-				start.InsertInstructionAfter(CPUx86.Instruction.MovsxInstruction, eax, op0);
-			else
-				start.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, eax, op0);
-
-			ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, eax);
-		}
-
-		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cvtss2sd"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -107,18 +80,6 @@ namespace Mosa.Platforms.x86
 		{
 			if (ctx.Operand2 is ConstantOperand)
 				ctx.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, ctx.Operand1, EmitConstant(ctx.Operand2));
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseSub"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CPUx86.IX86Visitor.SseSub(Context ctx)
-		{
-			EmitOperandConstants(ctx);
-
-			// FIXME PG - 
-			// ThreeTwoAddressConversion(ctx);
 		}
 
 		/// <summary>
@@ -146,7 +107,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Movsx"/> instructions.
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Movzx"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Movzx(Context context)
@@ -172,6 +133,45 @@ namespace Mosa.Platforms.x86
 			}
 			else
 				ctx.SetInstruction(CPUx86.Instruction.DivInstruction, null, op);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseSub"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CPUx86.IX86Visitor.SseSub(Context ctx)
+		{
+			EmitOperandConstants(ctx);
+
+			// FIXME PG - 
+			// ThreeTwoAddressConversion(ctx);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cmp"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CPUx86.IX86Visitor.Cmp(Context ctx)
+		{
+			Operand op0 = ctx.Result;
+			Operand op1 = ctx.Operand1;
+
+			if (((!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) &&
+				 (!(op0 is ConstantOperand) || !(op1 is ConstantOperand))) && !(op1 is ConstantOperand))
+				return;
+
+			RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
+			ctx.Result = eax;
+
+			Context start = ctx.InsertBefore();
+			start.SetInstruction(CPUx86.Instruction.PushInstruction, null, eax);
+
+			if ((IsSigned(op0)) && (!Is32Bit(op0)))
+				start.InsertInstructionAfter(CPUx86.Instruction.MovsxInstruction, eax, op0);
+			else
+				start.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, eax, op0);
+
+			ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, eax);
 		}
 
 		#endregion // Members

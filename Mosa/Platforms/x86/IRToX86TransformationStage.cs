@@ -276,7 +276,16 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalNotInstruction(Context ctx)
 		{
-			ThreeTwoAddressConversion(ctx, CPUx86.Instruction.NotInstruction);
+			Operand dest = ctx.Operand1;
+
+			if (dest.Type.Type == CilElementType.U1)
+				ctx.SetInstruction(CPUx86.Instruction.XorInstruction, dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFF));
+			else if (dest.Type.Type == CilElementType.U2)
+				ctx.SetInstruction(CPUx86.Instruction.XorInstruction, dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFFFF));
+			else
+				ctx.SetInstruction(CPUx86.Instruction.NotInstruction, dest);
+
+			// ThreeTwoAddressConversion(ctx, CPUx86.Instruction.NotInstruction);
 		}
 
 		/// <summary>
