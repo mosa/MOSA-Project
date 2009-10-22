@@ -736,7 +736,7 @@ namespace Mosa.Platforms.x86
 			else if (IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {
 				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovzxInstruction, eaxL, op1);
 			}
-			// In any other case: Just load it
+			// In any other case just load it
 			else
 				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
 

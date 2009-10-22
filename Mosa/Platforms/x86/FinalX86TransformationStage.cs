@@ -64,7 +64,7 @@ namespace Mosa.Platforms.x86
 			Operand destination = ctx.Result;
 			Operand source = ctx.Operand1;
 
-			if (destination is MemberOperand && source is MemoryOperand) {
+			if (destination is MemoryOperand && source is MemoryOperand) {
 				if (register == null)
 					register = new RegisterOperand(destination.Type, GeneralPurposeRegister.EDX);
 
