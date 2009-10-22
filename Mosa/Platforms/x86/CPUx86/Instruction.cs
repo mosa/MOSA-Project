@@ -90,7 +90,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly JnsBranchInstruction JnsBranchInstruction = new JnsBranchInstruction();
+		public static readonly JnsInstruction JnsInstruction = new JnsInstruction();
 		/// <summary>
 		/// 
 		/// </summary>

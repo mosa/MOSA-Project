@@ -588,7 +588,7 @@ namespace Mosa.Platforms.x86
 			newBlocks[5].InsertInstructionAfter(CPUx86.Instruction.MovInstruction, eax, edx);
 			newBlocks[5].InsertInstructionAfter(CPUx86.Instruction.XorInstruction, edx, edx);
 			newBlocks[5].InsertInstructionAfter(CPUx86.Instruction.DecInstruction, edi);
-			newBlocks[5].InsertInstructionAfter(CPUx86.Instruction.JnsBranchInstruction, newBlocks[14].BasicBlock);
+			newBlocks[5].InsertInstructionAfter(CPUx86.Instruction.JnsInstruction, newBlocks[14].BasicBlock);
 			newBlocks[5].InsertInstructionAfter(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
 
 			// Here we do it the hard way.  Remember, eax contains the high word of DVSR
@@ -682,7 +682,7 @@ namespace Mosa.Platforms.x86
 			newBlocks[13].InsertInstructionAfter(CPUx86.Instruction.SubInstruction, eax, op1L);
 			newBlocks[13].InsertInstructionAfter(CPUx86.Instruction.SbbInstruction, edx, op1H);
 			newBlocks[13].InsertInstructionAfter(CPUx86.Instruction.DecInstruction, edi);
-			newBlocks[13].InsertInstructionAfter(CPUx86.Instruction.JnsBranchInstruction, nextBlock.BasicBlock);
+			newBlocks[13].InsertInstructionAfter(CPUx86.Instruction.JnsInstruction, nextBlock.BasicBlock);
 			newBlocks[13].InsertInstructionAfter(CPUx86.Instruction.JmpInstruction, newBlocks[14].BasicBlock);
 
 			// L4:
