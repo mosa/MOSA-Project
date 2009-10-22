@@ -41,9 +41,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			if ((destination is RegisterOperand) || (destination is MemoryOperand))
-				if (IsByte(destination)) return X86Instruction.Not.MR_8;
-				else if (IsChar(destination)) return X86Instruction.Not.MR_16;
-				else return X86Instruction.Not.MR;
+				if (IsByte(destination)) return MR_8;
+				else if (IsChar(destination)) return MR_16;
+				else return MR;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

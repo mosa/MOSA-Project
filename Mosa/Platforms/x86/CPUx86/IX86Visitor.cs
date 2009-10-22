@@ -453,5 +453,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Xchg(Context context);
+		/// <summary>
+		/// Not operation
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Not(Context context);
 	}
 }
