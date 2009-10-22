@@ -610,7 +610,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The target label of the jump.</param>
 		void _ICodeEmitter.Ja(int dest)
 		{
-			EmitBranch(new byte[] { 0x0F, 0x87 }, dest);
+			// DONE
 		}
 
 		/// <summary>
@@ -619,7 +619,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The target label of the jump.</param>
 		void _ICodeEmitter.Jae(int dest)
 		{
-			EmitBranch(new byte[] { 0x0F, 0x83 }, dest);
+			// DONE
 		}
 
 		/// <summary>
@@ -628,12 +628,12 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The target label of the jump.</param>
 		void _ICodeEmitter.Jb(int dest)
 		{
-			EmitBranch(new byte[] { 0x0F, 0x82 }, dest);
+			// DONE
 		}
 
 		void _ICodeEmitter.Jbe(int dest)
 		{
-			EmitBranch(new byte[] { 0x0F, 0x86 }, dest);
+			// DONE
 		}
 
 		/// <summary>
@@ -642,7 +642,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The target label of the jump.</param>
 		void _ICodeEmitter.Je(int dest)
 		{
-			EmitBranch(new byte[] { 0x0F, 0x84 }, dest);
+			// DONE
 		}
 
 		/// <summary>
@@ -651,7 +651,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The target label of the jump.</param>
 		void _ICodeEmitter.Jg(int dest)
 		{
-			EmitBranch(new byte[] { 0x0F, 0x8F }, dest);
+			// DONE
 		}
 
 		/// <summary>
@@ -660,7 +660,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The target label of the jump.</param>
 		void _ICodeEmitter.Jge(int dest)
 		{
-			EmitBranch(new byte[] { 0x0F, 0x8D }, dest);
+			// DONE
 		}
 
 		/// <summary>
@@ -669,7 +669,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The target label of the jump.</param>
 		void _ICodeEmitter.Jl(int dest)
 		{
-			EmitBranch(new byte[] { 0x0F, 0x8C }, dest);
+			// DONE
 		}
 
 		/// <summary>
@@ -678,7 +678,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The target label of the jump.</param>
 		void _ICodeEmitter.Jle(int dest)
 		{
-			EmitBranch(new byte[] { 0x0F, 0x8E }, dest);
+			// DONE
 		}
 
 		/// <summary>
@@ -687,16 +687,16 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The target label of the jump.</param>
 		void _ICodeEmitter.Jne(int dest)
 		{
-			EmitBranch(new byte[] { 0x0F, 0x85 }, dest);
+			// DONE
 		}
 
 		/// <summary>
 		/// Emits a jump instruction.
 		/// </summary>
 		/// <param name="dest">The target label of the jump.</param>
-		void _ICodeEmitter.Jmp(int dest)	// DONE
+		void _ICodeEmitter.Jmp(int dest)	
 		{
-			EmitBranch(new byte[] { 0xE9 }, dest);
+			// DONE
 		}
 
 		/// <summary>
@@ -705,7 +705,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="dest">The target label of the jump.</param>
 		void _ICodeEmitter.Jns(int dest)
 		{
-			EmitBranch(new byte[] { 0x0f, 0x89 }, dest);
+			// DONE
 		}
 
 		void _ICodeEmitter.Lea(Operand dest, Operand op)

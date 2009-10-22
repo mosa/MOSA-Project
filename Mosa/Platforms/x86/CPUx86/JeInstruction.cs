@@ -15,12 +15,12 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// Representation a x86 branch instruction.
 	/// </summary>
-	public sealed class JaInstruction : BaseInstruction
+	public sealed class JeInstruction : BaseInstruction
 	{
 
 		#region Data Members
 
-		private static readonly byte[] JA = new byte[] { 0x0F, 0x87 };
+		private static readonly byte[] JE = new byte[] { 0x0F, 0x84 };
 
 		#endregion
 
@@ -33,7 +33,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		public override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-			emitter.EmitBranch(JA, ctx.Branch.Targets[0]);
+			emitter.EmitBranch(JE, ctx.Branch.Targets[0]);
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			visitor.Ja(context);
+			visitor.Je(context);
 		}
 
 		#endregion // Methods

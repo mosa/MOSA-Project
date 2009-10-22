@@ -199,6 +199,60 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Jns(Context context);
+
+
+		/// <summary>
+		/// Jae the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Jae(Context context);
+		/// <summary>
+		/// Ja the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Ja(Context context);
+		/// <summary>
+		/// Jbe the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Jbe(Context context);
+		/// <summary>
+		/// Jb the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Jb(Context context);
+		/// <summary>
+		/// Je the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Je(Context context);
+		/// <summary>
+		/// Jge the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Jge(Context context);
+		/// <summary>
+		/// Jg the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Jg(Context context);
+		/// <summary>
+		/// Jle the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Jle(Context context);
+		/// <summary>
+		/// Jl the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Jl(Context context);
+		/// <summary>
+		/// Jne the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Jne(Context context);		
+
+
 		/// <summary>
 		/// Jumps the specified context.
 		/// </summary>

@@ -85,6 +85,15 @@
     </Compile>
     <Compile Include="BaseX86TransformationStage.cs" />
     <Compile Include="CPUx86\CallInstruction.cs" />
+    <Compile Include="CPUx86\JneInstruction.cs" />
+    <Compile Include="CPUx86\JgInstruction.cs" />
+    <Compile Include="CPUx86\JgeInstruction.cs" />
+    <Compile Include="CPUx86\JlInstruction.cs" />
+    <Compile Include="CPUx86\JleInstruction.cs" />
+    <Compile Include="CPUx86\JeInstruction.cs" />
+    <Compile Include="CPUx86\JbeInstruction.cs" />
+    <Compile Include="CPUx86\JbInstruction.cs" />
+    <Compile Include="CPUx86\JaeInstruction.cs" />
     <Compile Include="CPUx86\JaInstruction.cs" />
     <Compile Include="CPUx86\RetInstruction.cs" />
     <Compile Include="CPUx86\MovzxInstruction.cs" />
