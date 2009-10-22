@@ -20,12 +20,11 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#region Data Members
 
-		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 0);
-		private static readonly OpCode R_R = new OpCode(new byte[] { 0x03 });
-		private static readonly OpCode R_M = new OpCode(new byte[] { 0x03 });
-		private static readonly OpCode M_R = new OpCode(new byte[] { 0x01 });
-		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x02 }); // Add r/m8 to r8
-		private static readonly OpCode M_R_U8 = new OpCode(new byte[] { 0x00 }); // Add r8 to r/m8
+		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 4);
+		private static readonly OpCode M_C = new OpCode(new byte[] { 0x81 }, 4);
+		private static readonly OpCode R_M = new OpCode(new byte[] { 0x23 });
+		private static readonly OpCode R_R = new OpCode(new byte[] { 0x23 });
+		private static readonly OpCode M_R = new OpCode(new byte[] { 0x21 });
 
 		#endregion
 
@@ -50,22 +49,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination is RegisterOperand) && (source is ConstantOperand))
-				return R_C;
-
-			if ((destination is RegisterOperand) && (source is RegisterOperand))
-				return R_R;
-
-			if ((destination is RegisterOperand) && (source is MemoryOperand))
-				return IsUnsignedByte(destination) ? R_M_U8 : R_M;
-
-			if ((destination is MemoryOperand) && (source is RegisterOperand)) {
-				if (IsByte(destination) || IsByte(source))
-					return M_R_U8;
-				if (IsChar(destination) || IsChar(source) || IsShort(destination) || IsShort(source))
-					return M_R_U8;
-				return M_R;
-			}
+			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
+			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
+			if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
+			if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
+			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_C;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

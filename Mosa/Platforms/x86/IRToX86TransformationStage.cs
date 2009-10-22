@@ -249,7 +249,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
 		{
-			ThreeTwoAddressConversion(ctx);
+			ThreeTwoAddressConversion(ctx, CPUx86.Instruction.AndInstruction);
 		}
 
 		/// <summary>
@@ -258,7 +258,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
 		{
-			ThreeTwoAddressConversion(ctx);
+			ThreeTwoAddressConversion(ctx, CPUx86.Instruction.OrInstruction);
 		}
 
 		/// <summary>
@@ -267,7 +267,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
 		{
-			ThreeTwoAddressConversion(ctx);
+			ThreeTwoAddressConversion(ctx, CPUx86.Instruction.XorInstruction);
 		}
 
 		/// <summary>
@@ -276,7 +276,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalNotInstruction(Context ctx)
 		{
-			TwoOneAddressConversion(ctx);
+			ThreeTwoAddressConversion(ctx, CPUx86.Instruction.NotInstruction);
 		}
 
 		/// <summary>
@@ -427,7 +427,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.UDivInstruction(Context ctx)
 		{
-			ThreeTwoAddressConversion(ctx);
+			ThreeTwoAddressConversion(ctx, ctx.Instruction);
 
 			//RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
 			//_codeEmitter.Xor(edx, edx);
@@ -472,7 +472,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.CallInstruction"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.CallInstruction(Context ctx) 
+		void IR.IIRVisitor.CallInstruction(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.CallInstruction);
 		}
@@ -675,14 +675,6 @@ namespace Mosa.Platforms.x86
 			ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, ctx.Operand2);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, opRes, eax);
 
-		}
-		/// <summary>
-		/// Converts the given instruction from three address format to a two address format.
-		/// </summary>
-		/// <param name="ctx">The conversion context.</param>
-		private static void ThreeTwoAddressConversion(Context ctx)
-		{
-			ThreeTwoAddressConversion(ctx, ctx.Instruction);
 		}
 
 		/// <summary>

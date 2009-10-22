@@ -17,34 +17,31 @@ using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 int instruction.
-    /// </summary>
-    public sealed class NegInstruction : OneOperandInstruction
-    {
-        #region Codes
-        private static readonly OpCode R = new OpCode(new byte[] { 0xF7 }, 3);
-        private static readonly OpCode M = new OpCode(new byte[] { 0xF7 }, 3);
-        #endregion 
+	/// <summary>
+	/// Representations the x86 int instruction.
+	/// </summary>
+	public sealed class NegInstruction : OneOperandInstruction
+	{
+		#region Codes
+		private static readonly OpCode R = new OpCode(new byte[] { 0xF7 }, 3);
+		private static readonly OpCode M = new OpCode(new byte[] { 0xF7 }, 3);
+		#endregion
 
-        #region Methods
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="destination"></param>
-        /// <param name="source"></param>
-        /// <param name="third"></param>
-        /// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-        {
-            if (destination is RegisterOperand)
-                return R;
+		#region Methods
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="destination"></param>
+		/// <param name="source"></param>
+		/// <param name="third"></param>
+		/// <returns></returns>
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
+			if (destination is RegisterOperand) return R;
+			if (destination is MemoryOperand) return M;
 
-            if (destination is MemoryOperand)
-                return M;
-
-            throw new ArgumentException(@"No opcode for operand type.");
-        }
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -56,6 +53,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Neg(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

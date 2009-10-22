@@ -18,43 +18,38 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 shift right instruction.
-    /// </summary>
+	/// <summary>
+	/// Representations the x86 shift right instruction.
+	/// </summary>
 	public sealed class ShrInstruction : TwoOperandInstruction
-    {
-        #region Codes
-        private static readonly OpCode R = new OpCode(new byte[] { 0xD3 }, 5);
-        private static readonly OpCode M = new OpCode(new byte[] { 0xD3 }, 5);
-        private static readonly OpCode R_C = new OpCode(new byte[] { 0xC1 }, 5);
-        private static readonly OpCode M_C = new OpCode(new byte[] { 0xC1 }, 5);
-        #endregion 
+	{
+		#region Codes
 
-        #region Methods
+		private static readonly OpCode R = new OpCode(new byte[] { 0xD3 }, 5);
+		private static readonly OpCode M = new OpCode(new byte[] { 0xD3 }, 5);
+		private static readonly OpCode R_C = new OpCode(new byte[] { 0xC1 }, 5);
+		private static readonly OpCode M_C = new OpCode(new byte[] { 0xC1 }, 5);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="destination"></param>
-        /// <param name="source"></param>
-        /// <param name="third"></param>
-        /// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-        {
-            if ((destination is RegisterOperand) && (source is ConstantOperand))
-                return R_C;
+		#endregion
 
-            if ((destination is MemoryOperand) && (source is ConstantOperand))
-                return M_C;
+		#region Methods
 
-            if (destination is RegisterOperand)
-                return R;
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
+			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
+			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
+			if (destination is RegisterOperand) return R;
+			if (destination is MemoryOperand) return M;
 
-            if (destination is MemoryOperand)
-                return M;
-
-            throw new ArgumentException(@"No opcode for operand type.");
-        }
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -66,6 +61,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Shr(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

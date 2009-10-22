@@ -18,8 +18,9 @@ namespace Mosa.Platforms.x86.CPUx86
 	public sealed class DecInstruction : OneOperandInstruction
     {
         #region Data Members
-	    private static readonly OpCode R = new OpCode(new byte[] { 0xFF }, 1);
-	    private static readonly OpCode M = new OpCode(new byte[] { 0xFF }, 1);
+
+	    private static readonly OpCode DEC = new OpCode(new byte[] { 0xFF }, 1);
+
         #endregion
 
         #region Properties
@@ -41,8 +42,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-			if (destination is RegisterOperand) return R;
-			if (destination is MemoryOperand) return M;
+			if (destination is RegisterOperand) return DEC;
+			if (destination is MemoryOperand) return DEC;
+
             throw new ArgumentException(@"No opcode for operand type.");
         }
 
