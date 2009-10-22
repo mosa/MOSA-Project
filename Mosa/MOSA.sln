@@ -66,7 +66,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System", "System", "{FF773B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.CreateProject", "Tools\Mono\CreateProject\Mosa.Tools.Mono.CreateProject.csproj", "{17DA1FF2-7414-4E25-8053-F3880C045877}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{038DC96D-021B-41E6-867E-047598F92ED3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.UnitTest", "UnitTest\Mosa.UnitTest.csproj", "{038DC96D-021B-41E6-867E-047598F92ED3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
