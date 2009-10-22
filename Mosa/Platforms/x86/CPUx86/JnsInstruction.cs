@@ -13,14 +13,21 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Intermediate representation of a branch instruction.
+	/// Representation a x86 branch instruction.
     /// </summary>
-    public sealed class JnsBranchInstruction : OneOperandInstruction
+	public sealed class JnsInstruction : BaseInstruction
     {
+
+		#region Data Members
+
+		private static readonly OpCode JNS = new OpCode(new byte[] { 0x0F, 0x89 });
+
+		#endregion
+
         #region Methods
 
 		/// <summary>
-		/// Computes the op code.
+		/// Computes the opcode.
 		/// </summary>
 		/// <param name="destination">The destination operand.</param>
 		/// <param name="source">The source operand.</param>
@@ -28,19 +35,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-            return new OpCode(new byte[] {0x0F, 0x89});
-        }
-
-        /// <summary>
-        /// Returns a string representation of the instruction.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the instruction in intermediate form.
-        /// </returns>
-        public override string ToString(Context context)
-        {
-            int label = Convert.ToInt32((context.Operand1 as ConstantOperand).Value);
-            return String.Format(@"X86.jns >= 0 {0} ; if >= 0 goto {0}", label);
+			return JNS;
         }
 
 		/// <summary>

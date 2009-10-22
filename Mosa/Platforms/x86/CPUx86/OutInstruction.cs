@@ -26,7 +26,7 @@ namespace Mosa.Platforms.x86.CPUx86
 
         #region Methods
 		/// <summary>
-		/// Computes the op code.
+		/// Computes the opcode.
 		/// </summary>
 		/// <param name="empty">The empty.</param>
 		/// <param name="destination">The destination.</param>

@@ -37,7 +37,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region Methods
 
 		/// <summary>
-		/// Computes the op code.
+		/// Computes the opcode.
 		/// </summary>
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source operand.</param>

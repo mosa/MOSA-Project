@@ -15,7 +15,7 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.CPUx86
 {
 	/// <summary>
-	/// 
+	/// Representation the x86 jump instruction.
 	/// </summary>
 	public sealed class JmpInstruction : BaseInstruction
 	{

@@ -150,7 +150,7 @@
     <Compile Include="CPUx86\StosbInstruction.cs" />
     <Compile Include="CPUx86\StosdInstruction.cs" />
     <Compile Include="CPUx86\XchgInstruction.cs" />
-    <Compile Include="CPUx86\JnsBranchInstruction.cs" />
+    <Compile Include="CPUx86\JnsInstruction.cs" />
     <Compile Include="CPUx86\LiteralInstruction.cs" />
     <Compile Include="CPUx86\AndInstruction.cs" />
     <Compile Include="CPUx86\NotInstruction.cs" />
