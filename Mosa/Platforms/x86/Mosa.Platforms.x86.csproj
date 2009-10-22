@@ -85,6 +85,8 @@
     </Compile>
     <Compile Include="BaseX86TransformationStage.cs" />
     <Compile Include="CPUx86\CallInstruction.cs" />
+    <Compile Include="CPUx86\MovsdInstruction.cs" />
+    <Compile Include="CPUx86\MovssInstruction.cs" />
     <Compile Include="CPUx86\JneInstruction.cs" />
     <Compile Include="CPUx86\JgInstruction.cs" />
     <Compile Include="CPUx86\JgeInstruction.cs" />

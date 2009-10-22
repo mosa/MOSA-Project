@@ -18,10 +18,10 @@ namespace Mosa.Platforms.x86.CPUx86
     public sealed class OutInstruction : ThreeOperandInstruction
     {
         #region Codes
-        private static OpCode C_R_8 = new OpCode(new byte[] { 0xE6 });
-        private static OpCode R_R_8 = new OpCode(new byte[] { 0xEE });
-        private static OpCode C_R_32 = new OpCode(new byte[] { 0xE7 });
-        private static OpCode R_R_32 = new OpCode(new byte[] { 0xEF });
+        private static readonly OpCode C_R_8 = new OpCode(new byte[] { 0xE6 });
+        private static readonly OpCode R_R_8 = new OpCode(new byte[] { 0xEE });
+        private static readonly OpCode C_R_32 = new OpCode(new byte[] { 0xE7 });
+        private static readonly OpCode R_R_32 = new OpCode(new byte[] { 0xEF });
         #endregion 
 
         #region Methods

@@ -60,6 +60,40 @@ namespace Mosa.Platforms.x86
 		#region IX86Visitor
 
 		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Mov"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CPUx86.IX86Visitor.Mov(Context ctx)
+		{
+			Operand destination = ctx.Result;
+
+			if (destination is ConstantOperand)
+				return;
+
+			Operand source = ctx.Operand1;
+
+			// Check that we're not dealing with floating point values
+			if (destination.StackType != StackTypeCode.F && source.StackType != StackTypeCode.F) {
+				if (destination is MemoryOperand && source is MemoryOperand) 
+				{
+					Operand edx = new RegisterOperand(destination.Type, GeneralPurposeRegister.EDX);
+					ctx.SetInstruction(CPUx86.Instruction.MovInstruction, edx, source);
+					ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, destination, edx);
+				}
+			}
+			else {
+				// We are dealing with floating point values
+				if (ctx.Result.Type.Type == CilElementType.R4) {
+					//RegisterOperand xmm3 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM3);
+					//Emit(xmm3, src, X86.Cvtss2sd(xmm3, src));
+					ctx.SetInstruction(CPUx86.Instruction.MovsdInstruction, destination, source);
+				}
+				else
+					ctx.SetInstruction(CPUx86.Instruction.MovsdInstruction, destination, source);
+			}
+		}
+
+		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Mul"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>

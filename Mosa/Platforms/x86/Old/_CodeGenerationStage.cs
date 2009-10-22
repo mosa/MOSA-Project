@@ -945,6 +945,10 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Not(Context context) { }
-
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Mov"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Mov(Context context) { }
 	}
 }

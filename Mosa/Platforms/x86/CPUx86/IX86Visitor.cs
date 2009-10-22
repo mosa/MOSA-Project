@@ -359,6 +359,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		void Neg(Context context);
 		/// <summary>
+		/// Move 
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Mov(Context context);
+		/// <summary>
 		/// Move with Sign-Extension
 		/// </summary>
 		/// <param name="context">The context.</param>

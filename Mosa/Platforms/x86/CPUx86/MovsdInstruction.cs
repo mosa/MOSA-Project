@@ -15,14 +15,16 @@ using Mosa.Runtime.Metadata;
 namespace Mosa.Platforms.x86.CPUx86
 {
 	/// <summary>
-	/// Representations the x86 Movzx instruction.
+	/// Representations the x86 movsd instruction.
 	/// </summary>
-	public sealed class MovzxInstruction : TwoOperandInstruction
+	public sealed class MovsdInstruction : TwoOperandInstruction
 	{
 		#region Data Members
 
-		private static readonly OpCode R_X8 = new OpCode(new byte[] { 0x0F, 0xB6 });
-		private static readonly OpCode R_X16 = new OpCode(new byte[] { 0x0F, 0xB7 });
+		private static readonly OpCode R_L = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
+		private static readonly OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
+		private static readonly OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
+		private static readonly OpCode M_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x11 });
 
 		#endregion
 
@@ -37,27 +39,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (!(destination is RegisterOperand))
-				throw new ArgumentException(@"Destination must be RegisterOperand.", @"destination");
-			if (source is ConstantOperand)
-				throw new ArgumentException(@"Source must not be ConstantOperand.", @"source");
-
-			switch (source.Type.Type) {
-				case CilElementType.U1: goto case CilElementType.I1;
-				case CilElementType.I1: {
-						if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_X8;
-						if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_X8;
-					}
-					break;
-				case CilElementType.U2: goto case CilElementType.I2;
-				case CilElementType.I2:
-					if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_X16;
-					if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_X16;
-					break;
-				default:
-					//Emit(destination, source, X86.Move(destination, source));
-					break;
-			}
+			if ((destination is RegisterOperand) && (source is LabelOperand)) return R_L;
+			if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
+			if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
+			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
 
 			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
 		}
