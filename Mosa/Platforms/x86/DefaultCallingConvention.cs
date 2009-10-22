@@ -82,7 +82,7 @@ namespace Mosa.Platforms.x86
 				Stack<Operand> operandStack = GetOperandStackFromInstruction(ctx, ctx.InvokeTarget.Signature.HasThis);
 
 				int space = stackSize;
-				CalculateRemainingSpace(ctx, operandStack, ref space);
+				CalculateRemainingSpace(after, operandStack, ref space);
 			}
 
 			if (ctx.InvokeTarget.Signature.HasThis) {
@@ -101,6 +101,8 @@ namespace Mosa.Platforms.x86
 					MoveReturnValueTo64Bit(ctx.Result, after);
 				else
 					MoveReturnValueTo32Bit(ctx.Result, after);
+
+			ctx.Remove();
 		}
 
 		/// <summary>
