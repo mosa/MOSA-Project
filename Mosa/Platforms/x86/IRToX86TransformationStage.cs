@@ -436,12 +436,14 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.UDivInstruction(Context ctx)
 		{
-			ThreeTwoAddressConversion(ctx, ctx.Instruction);
+			ThreeTwoAddressConversion(ctx, CPUx86.Instruction.DivInstruction);
+
+			//Operand op1 = ctx.Operand1;
+			//Operand op2 = ctx.Operand2;
 
 			//RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
-			//_codeEmitter.Xor(edx, edx);
-			//_codeEmitter.Div(instruction.Operand0, instruction.Operand1);
-
+			//ctx.InsertInstructionAfter(CPUx86.Instruction.XorInstruction, edx, edx);
+			//ctx.InsertInstructionAfter(CPUx86.Instruction.DivInstruction, op1, op2);
 		}
 
 		/// <summary>
@@ -725,9 +727,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction.</param>
 		private static void ThreeTwoAddressConversion(Context ctx, IInstruction instruction)
 		{
-			if (ctx.OperandCount != 2)
-				return;
-
 			Operand opRes = ctx.Result;
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
