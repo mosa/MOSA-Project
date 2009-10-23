@@ -495,7 +495,7 @@ namespace Mosa.Platforms.x86
 			switch (ctx.Operand1.Type.Type) {
 				case CilElementType.I1:
 					ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovzxInstruction);
-					return;
+			        break;
 				case CilElementType.I2: goto case CilElementType.I1;
 				case CilElementType.I4: goto case CilElementType.I1;
 				case CilElementType.I8: throw new NotSupportedException();
@@ -506,6 +506,16 @@ namespace Mosa.Platforms.x86
 				case CilElementType.Char: goto case CilElementType.I2;
 				default: throw new NotSupportedException();
 			}
+
+		    if ((ctx.Result is RegisterOperand)) 
+                return;
+
+		    Operand result = ctx.Result;
+		    Operand source = ctx.Operand1;
+		    RegisterOperand ebx = new RegisterOperand(result.Type, GeneralPurposeRegister.EBX);
+		    ctx.Result = ebx;
+
+		    ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, result, ebx);
 		}
 
 		#endregion //  Members
