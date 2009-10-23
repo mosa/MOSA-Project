@@ -22,15 +22,18 @@ namespace Mosa.Platforms.x86.CPUx86
     /// Representations the x86 in instruction.
     /// </summary>
     public sealed class InInstruction : TwoOperandInstruction
-    {
-        #region Codes
-        private static readonly OpCode R_C_8 = new OpCode(new byte[] { 0xE4 });
+	{
+		#region Data Members
+		
+		private static readonly OpCode R_C_8 = new OpCode(new byte[] { 0xE4 });
         private static readonly OpCode R_R_8 = new OpCode(new byte[] { 0xEC });
         private static readonly OpCode R_C_32 = new OpCode(new byte[] { 0xE5 });
         private static readonly OpCode R_R_32 = new OpCode(new byte[] { 0xED });
-        #endregion // Construction
+		
+		#endregion // Data Members
 
-        #region Methods
+		#region Methods
+		
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>

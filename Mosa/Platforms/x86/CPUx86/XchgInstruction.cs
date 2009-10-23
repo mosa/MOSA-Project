@@ -16,12 +16,14 @@ namespace Mosa.Platforms.x86.CPUx86
     /// Representations the x86 xchg instruction.
     /// </summary>
     public sealed class XchgInstruction : TwoOperandInstruction
-    {
-        #region Codes
-        private static readonly OpCode R_M = new OpCode(new byte[] { 0x87 });
+	{
+		#region Data Members
+
+		private static readonly OpCode R_M = new OpCode(new byte[] { 0x87 });
         private static readonly OpCode R_R = new OpCode(new byte[] { 0x87 });
         private static readonly OpCode M_R = new OpCode(new byte[] { 0x87 });
-        #endregion
+
+		#endregion // Data Members
 
 		#region Properties
 
@@ -34,13 +36,14 @@ namespace Mosa.Platforms.x86.CPUx86
 		#endregion // Properties
 
         #region Methods
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="destination"></param>
-        /// <param name="source"></param>
-        /// <param name="third"></param>
-        /// <returns></returns>
+	
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
             if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
