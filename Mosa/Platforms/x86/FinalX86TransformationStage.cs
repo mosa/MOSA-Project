@@ -59,7 +59,7 @@ namespace Mosa.Platforms.x86
 
 		#region IX86Visitor
 
-		private void HandleMoveToMoveOperation(Context ctx, Operand register, bool useStack)
+		private void HandleMemoryToMemoryOperation(Context ctx, Operand register, bool useStack)
 		{
 			Operand destination = ctx.Result;
 			Operand source = ctx.Operand1;
@@ -98,12 +98,12 @@ namespace Mosa.Platforms.x86
 
 			// Check that we're not dealing with floating point values
 			if (destination.StackType != StackTypeCode.F && source.StackType != StackTypeCode.F)
-				HandleMoveToMoveOperation(ctx, null, true);
+				HandleMemoryToMemoryOperation(ctx, null, true);
 			else {
 				// We are dealing with floating point values
 				if (ctx.Result.Type.Type == CilElementType.R4) {
 					ctx.SetInstruction(CPUx86.Instruction.MovsdInstruction, destination, source);
-					HandleMoveToMoveOperation(ctx, null, true);
+					HandleMemoryToMemoryOperation(ctx, null, true);
 				}
 			}
 		}
@@ -155,7 +155,7 @@ namespace Mosa.Platforms.x86
 		{
 			if (Is32Bit(context.Operand1)) {
 				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
-				HandleMoveToMoveOperation(context, null, true);
+				HandleMemoryToMemoryOperation(context, null, true);
 			}
 		}
 
@@ -167,7 +167,7 @@ namespace Mosa.Platforms.x86
 		{
 			if (Is32Bit(context.Operand1)) {
 				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
-				HandleMoveToMoveOperation(context, null, true);
+				HandleMemoryToMemoryOperation(context, null, true);
 			}
 		}
 

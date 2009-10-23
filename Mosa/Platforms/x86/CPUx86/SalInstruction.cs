@@ -18,11 +18,14 @@ namespace Mosa.Platforms.x86.CPUx86
 	public sealed class SalInstruction : TwoOperandInstruction
     {
         #region Data Members
-        private static readonly OpCode RegMem = new OpCode(new byte[] { 0xD3 }, 4);
-        private static readonly OpCode RegMemConstant = new OpCode(new byte[] { 0xC1 }, 4);
-        #endregion
+
+        private static readonly OpCode RM = new OpCode(new byte[] { 0xD3 }, 4);
+        private static readonly OpCode RMC = new OpCode(new byte[] { 0xC1 }, 4);
+        
+		#endregion
 
         #region Methods
+
 
 		/// <summary>
 		/// Computes the opcode.
@@ -33,9 +36,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-			if ((destination is RegisterOperand || destination is MemoryOperand) && (source is ConstantOperand)) return RegMemConstant;
-			if (destination is RegisterOperand || destination is MemoryOperand) return RegMem;
-            throw new ArgumentException(@"No opcode for operand type.");
+			if ((destination is RegisterOperand || destination is MemoryOperand) && (source is ConstantOperand)) return RMC;
+			if (destination is RegisterOperand || destination is MemoryOperand) return RM;
+            
+			throw new ArgumentException(@"No opcode for operand type.");
         }
 
 		/// <summary>

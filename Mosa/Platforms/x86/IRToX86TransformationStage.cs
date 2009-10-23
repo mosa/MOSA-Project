@@ -218,7 +218,39 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.IntegerCompareInstruction(Context ctx)
 		{
-			HandleComparisonInstruction(ctx);
+			// FIXME PG - I'm sure this is all messed up!
+
+			Operand op1 = ctx.Operand1;
+			Operand op2 = ctx.Operand2;
+
+			EmitOperandConstants(ctx);
+
+			if (op1 is MemoryOperand && op2 is RegisterOperand)
+				SwapComparisonOperands(ctx, op1, op2);
+			else if (op1 is MemoryOperand && op2 is MemoryOperand) {
+				RegisterOperand eax = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
+				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+				ctx.Operand1 = eax;
+			}
+
+			ThreeTwoAddressConversion(ctx.Clone(), null);
+
+			IR.ConditionCode cond = ctx.ConditionCode;
+			Operand result = ctx.Operand1;
+
+			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand2, ctx.Operand3);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, result);
+
+			if (X86.IsUnsigned(instruction.Operand1) || X86.IsUnsigned(instruction.Operand2))
+				ctx.ConditionCode = GetUnsignedConditionCode(cond);
+			else
+				ctx.ConditionCode = cond;
+
+			if (result is RegisterOperand) {
+				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)resultOperand).Register);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MovzxInstruction, rop, rop);
+			}
+
 		}
 
 		/// <summary>
@@ -497,7 +529,7 @@ namespace Mosa.Platforms.x86
 			switch (ctx.Operand1.Type.Type) {
 				case CilElementType.I1:
 					ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovzxInstruction);
-			        break;
+					break;
 				case CilElementType.I2: goto case CilElementType.I1;
 				case CilElementType.I4: goto case CilElementType.I1;
 				case CilElementType.I8: throw new NotSupportedException();
@@ -509,15 +541,15 @@ namespace Mosa.Platforms.x86
 				default: throw new NotSupportedException();
 			}
 
-		    if ((ctx.Result is RegisterOperand)) 
-                return;
+			if ((ctx.Result is RegisterOperand))
+				return;
 
-		    Operand result = ctx.Result;
-		    Operand source = ctx.Operand1;
-		    RegisterOperand ebx = new RegisterOperand(result.Type, GeneralPurposeRegister.EBX);
-		    ctx.Result = ebx;
+			Operand result = ctx.Result;
+			Operand source = ctx.Operand1;
+			RegisterOperand ebx = new RegisterOperand(result.Type, GeneralPurposeRegister.EBX);
+			ctx.Result = ebx;
 
-		    ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, result, ebx);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, result, ebx);
 		}
 
 		#endregion //  Members
@@ -560,7 +592,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PopInstruction(Context context)
 		{
-            context.ReplaceInstructionOnly(CPUx86.Instruction.PopInstruction);
+			context.ReplaceInstructionOnly(CPUx86.Instruction.PopInstruction);
 		}
 
 		/// <summary>
@@ -569,7 +601,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PushInstruction(Context context)
 		{
-		    context.ReplaceInstructionOnly(CPUx86.Instruction.PushInstruction);
+			context.ReplaceInstructionOnly(CPUx86.Instruction.PushInstruction);
 		}
 
 		#endregion // IIRVisitor
@@ -624,30 +656,6 @@ namespace Mosa.Platforms.x86
 			//        Architecture.CreateInstruction(replacementType, opRes, ecx),
 			//    });
 			//}
-		}
-
-
-		/// <summary>
-		/// Handles the comparison instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void HandleComparisonInstruction(Context ctx)
-		{
-			Operand op1 = ctx.Operand1;
-			Operand op2 = ctx.Operand2;
-			EmitOperandConstants(ctx);
-
-			if (op1 is MemoryOperand && op2 is RegisterOperand) {
-				SwapComparisonOperands(ctx, op1, op2);
-			}
-			else if (op1 is MemoryOperand && op2 is MemoryOperand) {
-				RegisterOperand eax = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
-
-				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
-				ctx.Operand1 = eax;
-			}
-
-			ThreeTwoAddressConversion(ctx, null);
 		}
 
 		/// <summary>
@@ -740,6 +748,7 @@ namespace Mosa.Platforms.x86
 			else {
 				ctx.Result = eax;
 				ctx.Operand1 = eax;
+				ctx.Operand2 = null;
 			}
 
 			// Check if we have to sign-extend the operand that's being loaded
