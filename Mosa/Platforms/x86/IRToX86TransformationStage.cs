@@ -465,7 +465,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.NopInstruction(Context ctx)
 		{
-			ctx.ReplaceInstructionOnly(CPUx86.Instruction.NopInstruction);
+			//ctx.ReplaceInstructionOnly(CPUx86.Instruction.NopInstruction);
 		}
 
 		/// <summary>
