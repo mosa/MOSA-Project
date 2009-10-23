@@ -84,7 +84,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseX86TransformationStage.cs" />
+    <Compile Include="AddressModeTransformationStage.cs" />
     <Compile Include="CPUx86\CallInstruction.cs" />
+    <Compile Include="CPUx86\IX86Instruction.cs" />
     <Compile Include="CPUx86\MovsdInstruction.cs" />
     <Compile Include="CPUx86\MovssInstruction.cs" />
     <Compile Include="CPUx86\JneInstruction.cs" />
@@ -207,9 +209,6 @@
     </Compile>
     <Compile Include="InstructionSchedulingStage.cs" />
     <Compile Include="IRToX86TransformationStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IX86Instruction.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LongOperandTransformationStage.cs">

@@ -171,6 +171,8 @@ namespace Mosa.Platforms.x86
                     InstructionLogger.Instance,
 					new FinalX86TransformationStage(),
                     InstructionLogger.Instance,
+					new AddressModeTransformationStage(),
+					InstructionLogger.Instance,
 					new CodeGenerationStage(),
                 });
 		}

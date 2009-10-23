@@ -220,36 +220,36 @@ namespace Mosa.Platforms.x86
 		{
 			// FIXME PG - I'm sure this is all messed up!
 
-			Operand op1 = ctx.Operand1;
-			Operand op2 = ctx.Operand2;
+			//Operand op1 = ctx.Operand1;
+			//Operand op2 = ctx.Operand2;
 
-			EmitOperandConstants(ctx);
+			//EmitOperandConstants(ctx);
 
-			if (op1 is MemoryOperand && op2 is RegisterOperand)
-				SwapComparisonOperands(ctx, op1, op2);
-			else if (op1 is MemoryOperand && op2 is MemoryOperand) {
-				RegisterOperand eax = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
-				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
-				ctx.Operand1 = eax;
-			}
+			//if (op1 is MemoryOperand && op2 is RegisterOperand)
+			//    SwapComparisonOperands(ctx, op1, op2);
+			//else if (op1 is MemoryOperand && op2 is MemoryOperand) {
+			//    RegisterOperand eax = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
+			//    ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+			//    ctx.Operand1 = eax;
+			//}
 
-			ThreeTwoAddressConversion(ctx.Clone(), null);
+			//ThreeTwoAddressConversion(ctx.Clone(), null);
 
-			IR.ConditionCode cond = ctx.ConditionCode;
-			Operand result = ctx.Operand1;
+			//IR.ConditionCode cond = ctx.ConditionCode;
+			//Operand result = ctx.Operand1;
 
-			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand2, ctx.Operand3);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, result);
+			//ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand2, ctx.Operand3);
+			//ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, result);
 
-			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Operand2))
-				ctx.ConditionCode = GetUnsignedConditionCode(cond);
-			else
-				ctx.ConditionCode = cond;
+			//if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Operand2))
+			//    ctx.ConditionCode = GetUnsignedConditionCode(cond);
+			//else
+			//    ctx.ConditionCode = cond;
 
-			if (result is RegisterOperand) {
-				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)result).Register);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.MovzxInstruction, rop, rop);
-			}
+			//if (result is RegisterOperand) {
+			//    RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)result).Register);
+			//    ctx.InsertInstructionAfter(CPUx86.Instruction.MovzxInstruction, rop, rop);
+			//}
 
 		}
 

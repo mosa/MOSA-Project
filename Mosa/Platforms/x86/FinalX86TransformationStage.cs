@@ -52,36 +52,12 @@ namespace Mosa.Platforms.x86
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
 		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertBefore<CodeGenerationStage>(this);
+			pipeline.InsertBefore<AddressModeTransformationStage>(this);
 		}
 
 		#endregion // IMethodCompilerStage Members
 
 		#region IX86Visitor
-
-		private void HandleMemoryToMemoryOperation(Context ctx, Operand register, bool useStack)
-		{
-			Operand destination = ctx.Result;
-			Operand source = ctx.Operand1;
-
-			if (destination is MemoryOperand && source is MemoryOperand) {
-				if (register == null)
-					register = new RegisterOperand(destination.Type, GeneralPurposeRegister.EDX);
-
-				ctx.Operand1 = register;
-
-				Context before = ctx.InsertBefore();
-
-				if (useStack)
-					before.SetInstruction(CPUx86.Instruction.PushInstruction, null, register);
-
-				before.SetInstruction(CPUx86.Instruction.MovInstruction, register, source);
-
-				if (useStack)
-					ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, register);
-			}
-		}
-
 
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Mov"/> instructions.
@@ -89,23 +65,13 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Mov(Context ctx)
 		{
-			Operand destination = ctx.Result;
-
-			if (destination is ConstantOperand)
+			if (ctx.Result is ConstantOperand)
 				return;
 
-			Operand source = ctx.Operand1;
-
 			// Check that we're not dealing with floating point values
-			if (destination.StackType != StackTypeCode.F && source.StackType != StackTypeCode.F)
-				HandleMemoryToMemoryOperation(ctx, null, true);
-			else {
-				// We are dealing with floating point values
-				if (ctx.Result.Type.Type == CilElementType.R4) {
-					ctx.SetInstruction(CPUx86.Instruction.MovsdInstruction, destination, source);
-					HandleMemoryToMemoryOperation(ctx, null, true);
-				}
-			}
+			if (ctx.Result.StackType == StackTypeCode.F || ctx.Operand1.StackType == StackTypeCode.F)
+				if (ctx.Result.Type.Type == CilElementType.R4)
+					ctx.SetInstruction(CPUx86.Instruction.MovsdInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -153,10 +119,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Movsx(Context context)
 		{
-			if (Is32Bit(context.Operand1)) {
+			if (Is32Bit(context.Operand1))
 				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
-				HandleMemoryToMemoryOperation(context, null, true);
-			}
 		}
 
 		/// <summary>
@@ -165,10 +129,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Movzx(Context context)
 		{
-			if (Is32Bit(context.Operand1)) {
+			if (Is32Bit(context.Operand1))
 				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
-				HandleMemoryToMemoryOperation(context, null, true);
-			}
 		}
 
 		/// <summary>
