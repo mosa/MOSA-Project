@@ -57,7 +57,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		#region ICILVisitor
 
 		/// <summary>
-		/// Ldargs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Ldarg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldarg(Context ctx)
@@ -66,7 +66,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Ldargas the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Ldarga"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldarga(Context ctx)
@@ -76,7 +76,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Ldlocs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Ldloc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldloc(Context ctx)
@@ -85,7 +85,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Ldlocas the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Ldloca"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldloca(Context ctx)
@@ -95,7 +95,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// LDCs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Ldc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldc(Context ctx)
@@ -104,7 +104,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Ldobjs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Ldobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldobj(Context ctx)
@@ -114,7 +114,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// LDSFLDs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Ldsfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldsfld(Context ctx)
@@ -123,7 +123,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Ldsfldas the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Ldsflda"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldsflda(Context ctx)
@@ -132,7 +132,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// LDFTNs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Ldftn"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldftn(Context ctx)
@@ -141,7 +141,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Ldvirtftns the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Ldvirtftn"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldvirtftn(Context ctx)
@@ -150,7 +150,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Ldtokens the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Ldtoken"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldtoken(Context ctx)
@@ -159,7 +159,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Stlocs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Stloc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Stloc(Context ctx)
@@ -168,7 +168,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Stargs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Starg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Starg(Context ctx)
@@ -177,7 +177,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Stobjs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Stobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Stobj(Context ctx)
@@ -187,7 +187,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// STSFLDs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Stsfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Stsfld(Context ctx)
@@ -196,7 +196,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Dups the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Dup"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Dup(Context ctx)
@@ -207,7 +207,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Calls the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Call"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Call(Context ctx)
@@ -216,7 +216,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Callis the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Calli"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Calli(Context ctx)
@@ -225,7 +225,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Rets the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Ret"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ret(Context ctx)
@@ -234,7 +234,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Binaries the logic.
+		/// Visitation function for <see cref="ICILVisitor.BinaryLogic"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.BinaryLogic(Context ctx)
@@ -262,7 +262,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Shifts the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Shift"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Shift(Context ctx)
@@ -283,7 +283,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Negs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Neg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Neg(Context ctx)
@@ -292,7 +292,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Nots the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Not"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Not(Context ctx)
@@ -301,7 +301,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Conversions the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Conversion"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Conversion(Context ctx)
@@ -310,7 +310,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Callvirts the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Callvirt"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Callvirt(Context ctx)
@@ -319,7 +319,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Newobjs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Newobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Newobj(Context ctx)
@@ -342,7 +342,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Castclasses the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Castclass"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Castclass(Context ctx)
@@ -353,7 +353,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Isinsts the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Isinst"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Isinst(Context ctx)
@@ -362,7 +362,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Unboxes the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Unbox"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Unbox(Context ctx)
@@ -371,7 +371,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Throws the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Throw"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Throw(Context ctx)
@@ -380,7 +380,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Boxes the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Box"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Box(Context ctx)
@@ -389,7 +389,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Newarrs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Newarr"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Newarr(Context ctx)
@@ -398,7 +398,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Binaries the comparison.
+		/// Visitation function for <see cref="ICILVisitor.BinaryComparison"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.BinaryComparison(Context ctx)
@@ -414,7 +414,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// CPBLKs the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Cpblk"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Cpblk(Context ctx)
@@ -423,7 +423,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Initblks the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Initblk"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Initblk(Context ctx)
@@ -432,7 +432,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Rethrows the specified instruction.
+		/// Visitation function for <see cref="ICILVisitor.Rethrow"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Rethrow(Context ctx)
@@ -447,6 +447,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		void ICILVisitor.Nop(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(IR.Instruction.NopInstruction);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="ICILVisitor.Pop"/>.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void ICILVisitor.Pop(Context ctx) 
+		{
+			ctx.Remove();
 		}
 
 		#endregion // ICILVisitor
@@ -482,12 +491,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Stfld(Context ctx) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="ICILVisitor.Pop"/>.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Pop(Context ctx) { }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Jmp"/>.
