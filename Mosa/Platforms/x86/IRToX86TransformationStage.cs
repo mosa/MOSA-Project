@@ -436,7 +436,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.UDivInstruction(Context ctx)
 		{
-			ThreeTwoAddressConversion(ctx, CPUx86.Instruction.DivInstruction);
+			//ThreeTwoAddressConversion(ctx, CPUx86.Instruction.DivInstruction);
 
 			//Operand op1 = ctx.Operand1;
 			//Operand op2 = ctx.Operand2;
