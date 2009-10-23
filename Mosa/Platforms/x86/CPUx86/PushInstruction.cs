@@ -7,14 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using IR = Mosa.Runtime.CompilerFramework.IR;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -26,6 +19,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region Data Members
 
 		private static readonly OpCode PUSH = new OpCode(new byte[] { 0xFF });
+        private static readonly OpCode Const = new OpCode(new byte[] { 0x68 });
 
 		#endregion
 
@@ -48,14 +42,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		public override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-			if (ctx.Operand1 is ConstantOperand) {
-				emitter.WriteByte(0x68);
-				emitter.EmitImmediate(ctx.Operand1);
-			}
-			else if (ctx.Operand1 is RegisterOperand)
-				emitter.WriteByte((byte)(0x50 + (ctx.Operand1 as RegisterOperand).Register.RegisterCode));
+            if (ctx.Result is ConstantOperand)
+                emitter.Emit(Const.Code, null, ctx.Result, null); 
 			else
-				emitter.Emit(PUSH.Code, 6, ctx.Operand1, null);
+                emitter.Emit(PUSH.Code, 6, ctx.Result, null);
 		}
 
 		/// <summary>

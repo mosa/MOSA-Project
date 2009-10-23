@@ -7,10 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
@@ -20,7 +16,6 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// </summary>
 	public class NopInstruction : BaseInstruction
 	{
-
 		#region Methods
 
 		/// <summary>

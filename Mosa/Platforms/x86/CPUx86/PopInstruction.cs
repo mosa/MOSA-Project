@@ -7,14 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Mosa.Runtime.CompilerFramework;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using IR = Mosa.Runtime.CompilerFramework.IR;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -38,10 +31,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		public override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-			if (ctx.Operand1 is RegisterOperand)
-				emitter.WriteByte((byte)(0x58 + (ctx.Operand1 as RegisterOperand).Register.RegisterCode));
+            if (ctx.Result is RegisterOperand)
+				emitter.WriteByte((byte)(0x58 + (ctx.Result as RegisterOperand).Register.RegisterCode));
 			else
-				emitter.Emit(POP.Code, 0, ctx.Operand1, null);
+                emitter.Emit(POP.Code, 0, ctx.Result, null);
 		}
 
 		/// <summary>

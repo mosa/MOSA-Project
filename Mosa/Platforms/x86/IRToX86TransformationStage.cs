@@ -345,15 +345,15 @@ namespace Mosa.Platforms.x86
 			//ctx.XXX(CPUx86.Instruction.BochsDebug);
 
 			// push ebp
-			ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
+			ctx.SetInstruction(CPUx86.Instruction.PushInstruction, ebp);
 			// mov ebp, esp
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebp, esp);
 			// sub esp, localsSize
 			ctx.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, -stackSize));
 			// Initialize all locals to zero
-			ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, null, edi);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, edi);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, edi, esp);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, null, ecx);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, ecx);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edi, new ConstantOperand(I, 4));
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I, (-stackSize) / 4));
 			ctx.InsertInstructionAfter(CPUx86.Instruction.XorInstruction, eax, eax);
@@ -373,7 +373,7 @@ namespace Mosa.Platforms.x86
 			if (Compiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
 				Compiler.Method.Signature.ReturnType.Type != CilElementType.U8) {
 				// push edx
-				ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
+				ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 			}
 		}
 
@@ -556,13 +556,19 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.PopInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PopInstruction(Context context) { }
+		void IR.IIRVisitor.PopInstruction(Context context)
+		{
+            context.ReplaceInstructionOnly(CPUx86.Instruction.PopInstruction);
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.PushInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PushInstruction(Context context) { }
+		void IR.IIRVisitor.PushInstruction(Context context)
+		{
+		    context.ReplaceInstructionOnly(CPUx86.Instruction.PushInstruction);
+		}
 
 		#endregion // IIRVisitor
 
