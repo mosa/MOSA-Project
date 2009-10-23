@@ -97,7 +97,7 @@ namespace Mosa.Platforms.x86
 		{
 			HandleInvokeInstruction(ctx.Clone());
 
-			return; 
+			return;
 
 			// FIXME PG
 
@@ -176,21 +176,25 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.UnaryBranch(Context ctx)
 		{
-			// FIXME PG
+			IBranch branch = ctx.Branch;
+			CIL.OpCode opcode = (ctx.Instruction as CIL.ICILInstruction).OpCode;
 
-			//SigType I4 = new SigType(CilElementType.I4);
-			//_codeEmitter.Cmp(new RegisterOperand(I4, GeneralPurposeRegister.EAX), new ConstantOperand(I4, 0));
+			SigType I4 = new SigType(CilElementType.I4);
+			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, new RegisterOperand(I4, GeneralPurposeRegister.EAX), new ConstantOperand(I4, 0));
 
-			//CIL.OpCode opcode = ((ctx.Instruction) as CIL.ICILInstruction).OpCode;
+			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s) {
+				ctx.InsertInstructionAfter(CPUx86.Instruction.JneInstruction);
+				ctx.SetBranch(branch.Targets[0]);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.JeInstruction);
+				ctx.SetBranch(branch.Targets[1]);
+			}
+			else {
+				ctx.InsertInstructionAfter(CPUx86.Instruction.JneInstruction);
+				ctx.SetBranch(branch.Targets[1]);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.JeInstruction);
+				ctx.SetBranch(branch.Targets[0]);
+			}
 
-			//if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s) {
-			//    _codeEmitter.Jne(ctx.Branch.Targets[0]);
-			//    _codeEmitter.Je(ctx.Branch.Targets[1]);
-			//}
-			//else {
-			//    _codeEmitter.Jne(ctx.Branch.Targets[1]);
-			//    _codeEmitter.Je(ctx.Branch.Targets[0]);
-			//}
 		}
 
 		/// <summary>

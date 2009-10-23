@@ -331,7 +331,47 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly XchgInstruction XchgInstruction = new XchgInstruction();
-
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly JbInstruction JbInstruction = new JbInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly JaeInstruction JaeInstruction = new JaeInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly JbeInstruction JbeInstruction = new JbeInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly JaInstruction JaInstruction = new JaInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly JeInstruction JeInstruction = new JeInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly JgeInstruction JgeInstruction = new JgeInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly JgInstruction JgInstruction = new JgInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly JleInstruction JleInstruction = new JleInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly JlInstruction JlInstruction = new JlInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly JneInstruction JneInstruction = new JneInstruction();
+		
 	}
 }
 
