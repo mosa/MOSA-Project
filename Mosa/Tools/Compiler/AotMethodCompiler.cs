@@ -49,7 +49,6 @@ namespace Mosa.Tools.Compiler
                 //InstructionLogger.Instance,
                 new BasicBlockBuilderStage(),
 				new OperandDeterminationStage(),
-                InstructionLogger.Instance,
                 new CilToIrTransformationStage(),
                 InstructionLogger.Instance,
                 //InstructionStatisticsStage.Instance,

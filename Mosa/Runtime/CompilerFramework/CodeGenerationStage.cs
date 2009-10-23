@@ -105,7 +105,7 @@ namespace Mosa.Runtime.CompilerFramework
 							if (instruction != null)
 								instruction.Emit(ctx, _codeEmitter);
 							else
-								Debug.WriteLine(ctx.ToString());
+								Debug.WriteLine("Missing Code Transformation: "+ctx.ToString());
 						}
 
 				BlockEnd(block);
