@@ -241,13 +241,13 @@ namespace Mosa.Platforms.x86
 			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand2, ctx.Operand3);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, result);
 
-			if (X86.IsUnsigned(instruction.Operand1) || X86.IsUnsigned(instruction.Operand2))
+			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Operand2))
 				ctx.ConditionCode = GetUnsignedConditionCode(cond);
 			else
 				ctx.ConditionCode = cond;
 
 			if (result is RegisterOperand) {
-				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)resultOperand).Register);
+				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)result).Register);
 				ctx.InsertInstructionAfter(CPUx86.Instruction.MovzxInstruction, rop, rop);
 			}
 

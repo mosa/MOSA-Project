@@ -11,7 +11,7 @@
 namespace Mosa.Runtime.CompilerFramework.IR
 {
     /// <summary>
-    /// Specifies condition codes for <see cref="IntegerCompareInstruction"/>.
+	/// Specifies condition codes for <see cref="ConditionCode"/>.
     /// </summary>
     public enum ConditionCode
     {
