@@ -131,11 +131,11 @@ namespace Mosa.Platforms.x86
 				source = ctx.Operand1;
 				destination = ctx.Operand2;
 			}
-			else if (source is MemoryOperand && destination is MemoryOperand) {
-				RegisterOperand xmm2 = new RegisterOperand(source.Type, SSE2Register.XMM2);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, xmm2, source);
-				source = xmm2;
-			}
+			//else if (source is MemoryOperand && destination is MemoryOperand) {
+			//    RegisterOperand xmm2 = new RegisterOperand(source.Type, SSE2Register.XMM2);
+			//    ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, xmm2, source);
+			//    source = xmm2;
+			//}
 
 			// x86 is messed up :(
 			switch (ctx.ConditionCode) {
@@ -552,7 +552,7 @@ namespace Mosa.Platforms.x86
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, result, ebx);
 		}
 
-		#endregion //  Members
+		#endregion //  IIRVisitor
 
 		#region IIRVisitor - Unused
 

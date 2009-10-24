@@ -223,7 +223,7 @@ namespace Mosa.Runtime.CompilerFramework
 					//					mi = CreateMoveInstruction(rop, current.Op);				// FIXME PG - hack to allow compile
 					//					current.Block.Instructions.Insert(current.Start++, mi);		// FIXME PG - hack to allow compile
 
-					// Remove this live range From the active list
+					// Remove this live range from the active list
 					active.Remove(lr);
 
 					lr.Start = PickNextUse(lr.Op, current.Start, lr.End);

@@ -76,7 +76,6 @@ namespace Mosa.Runtime.CompilerFramework
 					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
 					return;
 				}
-
 		}
 
 		/// <summary>
@@ -90,30 +89,18 @@ namespace Mosa.Runtime.CompilerFramework
 		private static bool IsValueZero(Metadata.CilElementType cilElementType, ConstantOperand constantOperand)
 		{
 			switch (cilElementType) {
-				case Metadata.CilElementType.Char:
-					goto case Metadata.CilElementType.U2;
-				case Metadata.CilElementType.U1:
-					return (byte)(constantOperand.Value) == 0;
-				case Metadata.CilElementType.U2:
-					return (ushort)(constantOperand.Value) == 0;
-				case Metadata.CilElementType.U4:
-					return (int)(constantOperand.Value) == 0;
-				case Metadata.CilElementType.I1:
-					return (sbyte)(constantOperand.Value) == 0;
-				case Metadata.CilElementType.I2:
-					return (short)(constantOperand.Value) == 0;
-				case Metadata.CilElementType.I4:
-					return (int)(constantOperand.Value) == 0;
-				case Metadata.CilElementType.R4:
-					return (float)(constantOperand.Value) == 0;
-				case Metadata.CilElementType.R8:
-					return (double)(constantOperand.Value) == 0;
-				case Metadata.CilElementType.I:
-					goto case Metadata.CilElementType.I4;
-				case Metadata.CilElementType.U:
-					goto case Metadata.CilElementType.U4;
-				default:
-					goto case Metadata.CilElementType.I4;
+				case Metadata.CilElementType.Char: goto case Metadata.CilElementType.U2;
+				case Metadata.CilElementType.U1: return (byte)(constantOperand.Value) == 0;
+				case Metadata.CilElementType.U2: return (ushort)(constantOperand.Value) == 0;
+				case Metadata.CilElementType.U4: return (int)(constantOperand.Value) == 0;
+				case Metadata.CilElementType.I1: return (sbyte)(constantOperand.Value) == 0;
+				case Metadata.CilElementType.I2: return (short)(constantOperand.Value) == 0;
+				case Metadata.CilElementType.I4: return (int)(constantOperand.Value) == 0;
+				case Metadata.CilElementType.R4: return (float)(constantOperand.Value) == 0;
+				case Metadata.CilElementType.R8: return (double)(constantOperand.Value) == 0;
+				case Metadata.CilElementType.I: goto case Metadata.CilElementType.I4;
+				case Metadata.CilElementType.U: goto case Metadata.CilElementType.U4;
+				default: goto case Metadata.CilElementType.I4;
 			}
 		}
 
@@ -128,30 +115,18 @@ namespace Mosa.Runtime.CompilerFramework
 		private static bool IsValueOne(Metadata.CilElementType cilElementType, ConstantOperand constantOperand)
 		{
 			switch (cilElementType) {
-				case Metadata.CilElementType.Char:
-					goto case Metadata.CilElementType.U2;
-				case Metadata.CilElementType.U1:
-					return (byte)(constantOperand.Value) == 1;
-				case Metadata.CilElementType.U2:
-					return (ushort)(constantOperand.Value) == 1;
-				case Metadata.CilElementType.U4:
-					return (int)(constantOperand.Value) == 1;
-				case Metadata.CilElementType.I1:
-					return (sbyte)(constantOperand.Value) == 1;
-				case Metadata.CilElementType.I2:
-					return (short)(constantOperand.Value) == 1;
-				case Metadata.CilElementType.I4:
-					return (int)(constantOperand.Value) == 1;
-				case Metadata.CilElementType.R4:
-					return (float)(constantOperand.Value) == 1;
-				case Metadata.CilElementType.R8:
-					return (double)(constantOperand.Value) == 1;
-				case Metadata.CilElementType.I:
-					goto case Metadata.CilElementType.I4;
-				case Metadata.CilElementType.U:
-					goto case Metadata.CilElementType.U4;
-				default:
-					goto case Metadata.CilElementType.I4;
+				case Metadata.CilElementType.Char: goto case Metadata.CilElementType.U2;
+				case Metadata.CilElementType.U1: return (byte)(constantOperand.Value) == 1;
+				case Metadata.CilElementType.U2: return (ushort)(constantOperand.Value) == 1;
+				case Metadata.CilElementType.U4: return (int)(constantOperand.Value) == 1;
+				case Metadata.CilElementType.I1: return (sbyte)(constantOperand.Value) == 1;
+				case Metadata.CilElementType.I2: return (short)(constantOperand.Value) == 1;
+				case Metadata.CilElementType.I4: return (int)(constantOperand.Value) == 1;
+				case Metadata.CilElementType.R4: return (float)(constantOperand.Value) == 1;
+				case Metadata.CilElementType.R8: return (double)(constantOperand.Value) == 1;
+				case Metadata.CilElementType.I: goto case Metadata.CilElementType.I4;
+				case Metadata.CilElementType.U: goto case Metadata.CilElementType.U4;
+				default: goto case Metadata.CilElementType.I4;
 			}
 		}
 
