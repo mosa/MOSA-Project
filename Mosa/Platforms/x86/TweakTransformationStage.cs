@@ -23,11 +23,8 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 namespace Mosa.Platforms.x86
 {
 	/// <summary>
-	/// Transforms CIL instructions into their appropriate IR.
+	/// 
 	/// </summary>
-	/// <remarks>
-	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
-	/// </remarks>
 	public sealed class TweakTransformationStage :
 		BaseTransformationStage,
 		CPUx86.IX86Visitor,
@@ -191,7 +188,7 @@ namespace Mosa.Platforms.x86
 			ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, eax);
 		}
 
-		#endregion // Members
+		#endregion // IX86Visitor
 
 		#region IX86Visitor - Unused
 
