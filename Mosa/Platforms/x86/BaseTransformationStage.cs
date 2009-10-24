@@ -26,7 +26,7 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class BaseX86TransformationStage :
+	public abstract class BaseTransformationStage :
 		CodeTransformationStage,
 		IMethodCompilerStage,
 		IPlatformTransformationStage

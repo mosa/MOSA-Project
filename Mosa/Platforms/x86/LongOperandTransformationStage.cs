@@ -41,7 +41,7 @@ namespace Mosa.Platforms.x86
 		/// <value>The name of the compilation stage.</value>
 		public override string Name
 		{
-			get { return @"LongOperandTransformationStage"; }
+			get { return @"X86.LongOperandTransformationStage"; }
 		}
 
 		/// <summary>

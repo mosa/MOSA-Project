@@ -165,13 +165,13 @@ namespace Mosa.Platforms.x86
                 {
                     new LongOperandTransformationStage(),
                     InstructionLogger.Instance,
-					new CILToX86TransformationStage(),
+					new CILTransformationStage(),
                     InstructionLogger.Instance,
-                    new IRToX86TransformationStage(),
+                    new IRTransformationStage(),
                     InstructionLogger.Instance,
-					new FinalX86TransformationStage(),
+					new TweakTransformationStage(),
                     InstructionLogger.Instance,
-					new AddressModeTransformationStage(),
+					new AddressModeConversionStage(),
 					InstructionLogger.Instance,
 					new CodeGenerationStage(),
                 });

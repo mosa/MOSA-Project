@@ -27,8 +27,8 @@ namespace Mosa.Platforms.x86
 	/// <remarks>
 	/// This transformation stage transforms IR instructions into their equivalent X86 sequences.
 	/// </remarks>
-	public sealed class IRToX86TransformationStage :
-		BaseX86TransformationStage,
+	public sealed class IRTransformationStage :
+		BaseTransformationStage,
 		IR.IIRVisitor,
 		IMethodCompilerStage,
 		IPlatformTransformationStage
@@ -42,7 +42,7 @@ namespace Mosa.Platforms.x86
 		/// <value>The name of the compilation stage.</value>
 		public override string Name
 		{
-			get { return @"IRToX86TransformationStage"; }
+			get { return @"X86.IRTransformationStage"; }
 		}
 
 		/// <summary>
@@ -51,7 +51,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
 		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertAfter<CILToX86TransformationStage>(this);
+			pipeline.InsertAfter<CILTransformationStage>(this);
 		}
 
 		#endregion // IMethodCompilerStage Members

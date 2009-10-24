@@ -23,13 +23,10 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 namespace Mosa.Platforms.x86
 {
 	/// <summary>
-	/// Transforms CIL instructions into their appropriate IR.
+	/// 
 	/// </summary>
-	/// <remarks>
-	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
-	/// </remarks>
-	public sealed class AddressModeTransformationStage :
-		BaseX86TransformationStage,
+	public sealed class MemToMemConversionStage :
+		BaseTransformationStage,
 		IMethodCompilerStage,
 		IPlatformTransformationStage
 	{
@@ -42,7 +39,7 @@ namespace Mosa.Platforms.x86
 		/// <value>The name of the compilation stage.</value>
 		public override string Name
 		{
-			get { return @"FinalX86TransformationStage"; }
+			get { return @"X86.MemToMemConversionStage"; }
 		}
 
 		/// <summary>
@@ -51,7 +48,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
 		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertAfter<FinalX86TransformationStage>(this);
+			pipeline.InsertAfter<TweakTransformationStage>(this);
 		}
 
 		/// <summary>
@@ -94,6 +91,5 @@ namespace Mosa.Platforms.x86
 			if (useStack)
 				ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, register);
 		}
-
 	}
 }

@@ -28,8 +28,8 @@ namespace Mosa.Platforms.x86
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
 	/// </remarks>
-	public sealed class FinalX86TransformationStage :
-		BaseX86TransformationStage,
+	public sealed class TweakTransformationStage :
+		BaseTransformationStage,
 		CPUx86.IX86Visitor,
 		IMethodCompilerStage,
 		IPlatformTransformationStage
@@ -43,7 +43,7 @@ namespace Mosa.Platforms.x86
 		/// <value>The name of the compilation stage.</value>
 		public override string Name
 		{
-			get { return @"FinalX86TransformationStage"; }
+			get { return @"X86.TweakTransformationStage"; }
 		}
 
 		/// <summary>
@@ -52,7 +52,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
 		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertBefore<AddressModeTransformationStage>(this);
+			pipeline.InsertBefore<AddressModeConversionStage>(this);
 		}
 
 		#endregion // IMethodCompilerStage Members

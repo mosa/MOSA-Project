@@ -83,8 +83,9 @@
     <Compile Include="ArchitectureFeatureFlags.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseX86TransformationStage.cs" />
-    <Compile Include="AddressModeTransformationStage.cs" />
+    <Compile Include="BaseTransformationStage.cs" />
+    <Compile Include="AddressModeConversionStage.cs" />
+    <Compile Include="MemToMemConversionStage.cs" />
     <Compile Include="CPUx86\CallInstruction.cs" />
     <Compile Include="CPUx86\IX86Instruction.cs" />
     <Compile Include="CPUx86\MovsdInstruction.cs" />
@@ -109,9 +110,9 @@
     <Compile Include="ConstantRemovalStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CILToX86TransformationStage.cs" />
+    <Compile Include="CILTransformationStage.cs" />
     <Compile Include="CPUx86\JmpInstruction.cs" />
-    <Compile Include="FinalX86TransformationStage.cs" />
+    <Compile Include="TweakTransformationStage.cs" />
     <Compile Include="CPUx86\AdcInstruction.cs" />
     <Compile Include="CPUx86\AddInstruction.cs" />
     <Compile Include="CPUx86\CdqInstruction.cs" />
@@ -208,7 +209,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InstructionSchedulingStage.cs" />
-    <Compile Include="IRToX86TransformationStage.cs">
+    <Compile Include="IRTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LongOperandTransformationStage.cs">

@@ -28,8 +28,8 @@ namespace Mosa.Platforms.x86
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent X86 sequences.
 	/// </remarks>
-	public sealed class CILToX86TransformationStage :
-		BaseX86TransformationStage,
+	public sealed class CILTransformationStage :
+		BaseTransformationStage,
 		CIL.ICILVisitor,
 		IMethodCompilerStage,
 		IPlatformTransformationStage
@@ -42,7 +42,7 @@ namespace Mosa.Platforms.x86
 		/// <value>The name of the compilation stage.</value>
 		public override string Name
 		{
-			get { return @"CILToX86TransformationStage"; }
+			get { return @"X86.CILTransformationStage"; }
 		}
 
 		/// <summary>
