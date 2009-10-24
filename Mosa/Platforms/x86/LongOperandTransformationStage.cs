@@ -1635,8 +1635,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandArithmeticShiftRight(ctx);
 		}
 
@@ -1646,8 +1645,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.IntegerCompareInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandComparison(ctx);
 		}
 
@@ -1657,8 +1655,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LoadInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandLoad(ctx);
 		}
 
@@ -1668,8 +1665,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandAnd(ctx);
 		}
 
@@ -1679,8 +1675,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandOr(ctx);
 		}
 
@@ -1690,8 +1685,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandXor(ctx);
 		}
 
@@ -1701,8 +1695,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalNotInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandNot(ctx);
 		}
 
@@ -1712,8 +1705,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.MoveInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandMove(ctx);
 		}
 
@@ -1723,8 +1715,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.PopInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Result;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandPop(ctx);
 		}
 
@@ -1734,8 +1725,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.PushInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandPush(ctx);
 		}
 
@@ -1745,8 +1735,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ShiftLeftInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandShiftLeft(ctx);
 		}
 
@@ -1756,8 +1745,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ShiftRightInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandShiftRight(ctx);
 		}
 
@@ -1767,8 +1755,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandSignedMove(ctx);
 		}
 
@@ -1778,8 +1765,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.StoreInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandStore(ctx);
 		}
 
@@ -1789,8 +1775,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.UDivInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandUDiv(ctx);
 		}
 
@@ -1800,8 +1785,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.URemInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandURem(ctx);
 		}
 
@@ -1811,12 +1795,11 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandUnsignedMove(ctx);
 		}
 
-		#endregion // Members
+		#endregion // IIRVisitor
 
 		#region IIRVisitor - Unused
 
@@ -1908,8 +1891,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.UnaryBranch(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandUnaryBranch(ctx);
 		}
 
@@ -1919,8 +1901,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.BinaryBranch(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandBinaryBranch(ctx);
 		}
 
@@ -1930,8 +1911,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Neg(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandNeg(ctx);
 		}
 
@@ -1968,10 +1948,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Add(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64) {
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandAdd(ctx);
-			}
 		}
 
 		/// <summary>
@@ -1980,10 +1958,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Sub(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64) {
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandSub(ctx);
-			}
 		}
 
 		/// <summary>
@@ -1992,10 +1968,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Mul(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64) {
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandMul(ctx);
-			}
 		}
 
 		/// <summary>
@@ -2004,10 +1978,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Div(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64) {
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandDiv(ctx);
-			}
 		}
 
 		/// <summary>
@@ -2016,10 +1988,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Rem(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			if (op0.StackType == StackTypeCode.Int64) {
+			if (ctx.Operand1.StackType == StackTypeCode.Int64)
 				ExpandRem(ctx);
-			}
 		}
 
 		#endregion // Members
