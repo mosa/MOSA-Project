@@ -38,11 +38,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected List<BasicBlock> BasicBlocks;
 
-		/// <summary>
-		/// Hods the block provider
-		/// </summary>
-		protected IBasicBlockProvider BlockProvider;
-
 		#endregion // Data members
 
 		#region Methods

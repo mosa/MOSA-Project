@@ -8,10 +8,12 @@
  */
 
 using System;
+using System.IO;
+using System.Collections.Generic;
+
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Loader;
-using System.IO;
 using Mosa.Runtime.Linker;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -19,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Interface provided by method compilers.
     /// </summary>
-    public interface IMethodCompiler : IBasicBlockProvider
+    public interface IMethodCompiler
     {
         /// <summary>
         /// Retrieves the architecture to compile for.
@@ -111,5 +113,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <value>The instruction set.</value>
 		InstructionSet InstructionSet { get; set;  }
+
+		/// <summary>
+		/// Gets the basic Blocks.
+		/// </summary>
+		/// <value>The basic Blocks.</value>
+		List<BasicBlock> BasicBlocks { get; set; }
+
+		/// <summary>
+		/// Retrieves a basic block from its label.
+		/// </summary>
+		/// <param name="label">The label of the basic block.</param>
+		/// <returns>The basic block with the given label or null.</returns>
+		BasicBlock FromLabel(int label);
     }
 }

@@ -34,7 +34,6 @@ namespace Mosa.Runtime.CompilerFramework
 	public class MethodCompilerBase :
 		CompilerBase<IMethodCompilerStage>,
 		IMethodCompiler,
-		IBasicBlockProvider,
 		IDisposable
 	{
 

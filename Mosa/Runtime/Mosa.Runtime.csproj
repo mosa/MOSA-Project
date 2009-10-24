@@ -232,7 +232,6 @@
     <Compile Include="CompilerFramework\RuntimeMethodData.cs" />
     <Compile Include="CompilerFramework\StackRegisterAllocator.cs" />
     <Compile Include="CompilerFramework\StrengthReductionStage.cs" />
-    <Compile Include="CompilerFramework\IBasicBlockOrder.cs" />
     <Compile Include="CompilerFramework\SimpleTraceBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\LoopAwareBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\LocalCSE.cs" />
@@ -317,9 +316,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\IAssemblyCompilerStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerFramework\IBasicBlockProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\ICallingConvention.cs">
