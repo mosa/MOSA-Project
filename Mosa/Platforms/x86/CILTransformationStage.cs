@@ -764,7 +764,7 @@ namespace Mosa.Platforms.x86
 				ctx.Operand1 = ctx.Operand2;
 				ctx.Operand2 = tmp;
 			}
-
+            ctx.ReplaceInstructionOnly(instruction);
 		}
 
 		/// <summary>

@@ -326,7 +326,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="target">The target.</param>
 		public void Call(RuntimeMethod target)
 		{
-			long address = _linker.Link(
+			_linker.Link(
 				LinkType.RelativeOffset | LinkType.I4,
 				_compiler.Method,
 				(int)(_codeStream.Position - _codeStreamBasePosition) - 4,
