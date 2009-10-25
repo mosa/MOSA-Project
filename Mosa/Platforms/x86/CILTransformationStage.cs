@@ -182,19 +182,15 @@ namespace Mosa.Platforms.x86
 			SigType I4 = new SigType(CilElementType.I4);
 			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, new RegisterOperand(I4, GeneralPurposeRegister.EAX), new ConstantOperand(I4, 0));
 
-			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s) {
-				ctx.SetInstruction(CPUx86.Instruction.JneInstruction);
-				ctx.SetBranch(branch.Targets[0]);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.JeInstruction);
-				ctx.SetBranch(branch.Targets[1]);
-			}
-			else {
-				ctx.SetInstruction(CPUx86.Instruction.JneInstruction);
-				ctx.SetBranch(branch.Targets[1]);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.JeInstruction);
-				ctx.SetBranch(branch.Targets[0]);
-			}
+			ctx.InsertInstructionAfter(CPUx86.Instruction.JneInstruction);
 
+			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
+				ctx.SetBranch(branch.Targets[0]);
+			else
+				ctx.SetBranch(branch.Targets[1]);
+
+			ctx.InsertInstructionAfter(CPUx86.Instruction.JmpInstruction);
+			ctx.SetBranch(branch.Targets[1]);
 		}
 
 		/// <summary>
@@ -764,7 +760,7 @@ namespace Mosa.Platforms.x86
 				ctx.Operand1 = ctx.Operand2;
 				ctx.Operand2 = tmp;
 			}
-            ctx.ReplaceInstructionOnly(instruction);
+			ctx.ReplaceInstructionOnly(instruction);
 		}
 
 		/// <summary>
@@ -818,7 +814,7 @@ namespace Mosa.Platforms.x86
 			Operand op2 = ctx.Operand2;
 			EmitOperandConstants(ctx);
 
-			if (op1 is MemoryOperand && op2 is RegisterOperand) 
+			if (op1 is MemoryOperand && op2 is RegisterOperand)
 				SwapComparisonOperands(ctx, op1, op2);
 		}
 
