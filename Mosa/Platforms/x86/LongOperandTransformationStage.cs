@@ -200,7 +200,7 @@ namespace Mosa.Platforms.x86
 		private void ExpandMul(Context ctx)
 		{
 			Context nextBlock = SplitContext(ctx);
-			Context[] newBlocks = CreateEmptyBlockContexts(4);
+			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 4);
 
 			MemoryOperand op0 = ctx.Result as MemoryOperand;
 			MemoryOperand op1 = ctx.Operand1 as MemoryOperand;
@@ -254,7 +254,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandDiv(Context ctx)
 		{
-			Context[] newBlocks = CreateEmptyBlockContexts(16);
+			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 16);
 			Context nextBlock = SplitContext(ctx);
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -483,7 +483,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandRem(Context ctx)
 		{
-			Context[] newBlocks = CreateEmptyBlockContexts(15);
+			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 15);
 			Context nextBlock = SplitContext(ctx);
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -724,7 +724,7 @@ namespace Mosa.Platforms.x86
 			RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
 			RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(10);
+			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 10);
 			Context nextBlock = SplitContext(ctx);
 
 			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.PushInstruction, edi);
@@ -822,7 +822,7 @@ namespace Mosa.Platforms.x86
 			RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
 			RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(10);
+			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 10);
 			Context nextBlock = SplitContext(ctx);
 
 			// Determine sign of the result (edi = 0 if result is positive, non-zero
@@ -921,7 +921,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandArithmeticShiftRight(Context ctx)
 		{
-			Context[] newBlocks = CreateEmptyBlockContexts(5);
+			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 5);
 			Context nextBlock = SplitContext(ctx);
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -987,7 +987,7 @@ namespace Mosa.Platforms.x86
 		private void ExpandShiftLeft(Context ctx)
 		{
 			Context nextBlock = SplitContext(ctx);
-			Context[] newBlocks = CreateEmptyBlockContexts(5);
+			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 5);
 
 			SigType I4 = new SigType(CilElementType.I4);
 			Operand count = ctx.Operand2;  //  FIXME PG
@@ -1050,7 +1050,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandShiftRight(Context ctx)
 		{
-			Context[] newBlocks = CreateEmptyBlockContexts(5);
+			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 5);
 			Context nextBlock = SplitContext(ctx);
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -1416,7 +1416,7 @@ namespace Mosa.Platforms.x86
 
 			int[] targets = ctx.Branch.Targets;
 
-			Context[] newBlocks = CreateEmptyBlockContexts(2);
+			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 2);
 			Context nextBlock = SplitContext(ctx);
 
 			Operand op1H, op1L, op2H, op2L;
@@ -1491,7 +1491,7 @@ namespace Mosa.Platforms.x86
 
 			int[] targets = ctx.Branch.Targets;
 
-			Context[] newBlocks = CreateEmptyBlockContexts(2);
+			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 2);
 			Context nextBlock = SplitContext(ctx);
 
 			Operand op1H, op1L, op2H, op2L;
@@ -1593,7 +1593,7 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(op1, out op1L, out op1H);
 			SplitLongOperand(op2, out op2L, out op2H);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(5);
+			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 5);
 			IR.ConditionCode conditionCode = ctx.ConditionCode;
 			Context nextBlock = SplitContext(ctx);
 

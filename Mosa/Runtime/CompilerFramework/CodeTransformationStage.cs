@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			for (int index = 0; index < BasicBlocks.Count; index++)
 				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
-					if (ctx.Instruction != null) 
+					if (ctx.Instruction != null)
 						ctx.Clone().Visit(this);
 		}
 
@@ -116,16 +116,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Create an empty block.
 		/// </summary>
+		/// <param name="label">The label.</param>
 		/// <returns></returns>
-		protected Context CreateEmptyBlockContext()
+		protected Context CreateEmptyBlockContext(int label)
 		{
 			Context ctx = new Context(InstructionSet, -1);
 			BasicBlock block = new BasicBlock(BasicBlocks.Count + 0x10000000);
 			ctx.BasicBlock = block;
 			BasicBlocks.Add(block);
 
-			// Need a dummy instruction at the start of each block to establish an index
+			// Need a dummy instruction at the start of each block to establish a starting point of the block
 			ctx.InsertInstructionAfter(null);
+			ctx.Label = label;
 			block.Index = ctx.Index;
 			ctx.Ignore = true;
 
@@ -136,14 +138,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Creates empty Blocks.
 		/// </summary>
 		/// <param name="blocks">The Blocks.</param>
+		/// <param name="label">The label.</param>
 		/// <returns></returns>
-		protected Context[] CreateEmptyBlockContexts(int blocks)
+		protected Context[] CreateEmptyBlockContexts(int label, int blocks)
 		{
 			// Allocate the block array
 			Context[] result = new Context[blocks];
 
 			for (int index = 0; index < blocks; index++)
-				result[index] = CreateEmptyBlockContext();
+				result[index] = CreateEmptyBlockContext(label);
 
 			return result;
 		}
