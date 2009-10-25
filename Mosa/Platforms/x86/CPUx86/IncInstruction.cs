@@ -24,7 +24,9 @@ namespace Mosa.Platforms.x86.CPUx86
 	{
 		#region Data Members
 
-		private static readonly OpCode INC = new OpCode(new byte[] { 0xFE });
+		private static readonly OpCode Inc_8 = new OpCode(new byte[] { 0xFE }, 0);
+        private static readonly OpCode Inc_16 = new OpCode(new byte[] { 0x66, 0xFF }, 0);
+        private static readonly OpCode Inc_32 = new OpCode(new byte[] { 0xFF }, 0);
 
 		#endregion // Data Members
 
@@ -49,9 +51,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (IsByte(destination)) return INC;
-			if (IsShort(destination) || IsChar(destination)) return INC;
-			if (IsInt(destination)) return INC;
+			if (IsByte(destination)) return Inc_8;
+			if (IsShort(destination) || IsChar(destination)) return Inc_16;
+			if (IsInt(destination)) return Inc_32;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
