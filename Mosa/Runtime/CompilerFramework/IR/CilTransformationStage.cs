@@ -30,7 +30,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
 	/// </remarks>
-	public sealed class CilToIrTransformationStage
+	public sealed class CilTransformationStage
 		: CodeTransformationStage, CIL.ICILVisitor
 	{
 		#region IMethodCompilerStage Members
@@ -41,7 +41,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <value>The name of the compilation stage.</value>
 		public override string Name
 		{
-			get { return @"CilToIrTransformationStage"; }
+			get { return @"IR.CilTransformationStage"; }
 		}
 
 		/// <summary>

@@ -281,7 +281,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
 		{
-			ThreeTwoAddressConversion(ctx, CPUx86.Instruction.AndInstruction);
+			//ThreeTwoAddressConversion(ctx, CPUx86.Instruction.AndInstruction);
 		}
 
 		/// <summary>
@@ -290,7 +290,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
 		{
-			ThreeTwoAddressConversion(ctx, CPUx86.Instruction.OrInstruction);
+			//ThreeTwoAddressConversion(ctx, CPUx86.Instruction.OrInstruction);
 		}
 
 		/// <summary>
@@ -299,7 +299,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
 		{
-			ThreeTwoAddressConversion(ctx, CPUx86.Instruction.XorInstruction);
+			//ThreeTwoAddressConversion(ctx, CPUx86.Instruction.XorInstruction);
 		}
 
 		/// <summary>
@@ -728,44 +728,45 @@ namespace Mosa.Platforms.x86
 
 		}
 
-		/// <summary>
-		/// Converts the given instruction from three address format to a two address format.
-		/// </summary>
-		/// <param name="ctx">The conversion context.</param>
-		/// <param name="instruction">The instruction.</param>
-		private static void ThreeTwoAddressConversion(Context ctx, IInstruction instruction)
-		{
-			Operand opRes = ctx.Result;
-			Operand op1 = ctx.Operand1;
-			Operand op2 = ctx.Operand2;
+		///// <summary>
+		///// Converts the given instruction from three address format to a two address format.
+		///// </summary>
+		///// <param name="ctx">The conversion context.</param>
+		///// <param name="instruction">The instruction.</param>
+		//private static void ThreeTwoAddressConversion(Context ctx, IInstruction instruction)
+		//{
+		//    Operand opRes = ctx.Result;
+		//    Operand op1 = ctx.Operand1;
+		//    Operand op2 = ctx.Operand2;
 
-			// Create registers for different data types
-			RegisterOperand eax = new RegisterOperand(opRes.Type, opRes.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
-			RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
+		//    // Create registers for different data types
+		//    RegisterOperand eax = new RegisterOperand(opRes.Type, opRes.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
+		//    RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
 
-			if (instruction != null)
-				ctx.SetInstruction(instruction, eax, op2);
-			else {
-				ctx.Result = eax;
-				ctx.Operand1 = eax;
-				ctx.Operand2 = null;
-			}
+		//    if (instruction != null)
+		//        ctx.SetInstruction(instruction, eax, op2);
+		//    else {
+		//        ctx.Result = eax;
+		//        ctx.Operand1 = eax;
+		//        ctx.Operand2 = null;
+		//    }
 
-			// Check if we have to sign-extend the operand that's being loaded
-			if (IsSigned(op1) && !(op1 is ConstantOperand)) {
-				// Sign extend it
-				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovsxInstruction, eaxL, op1);
-			}
-			// Check if the operand has to be zero-extended
-			else if (IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {
-				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovzxInstruction, eaxL, op1);
-			}
-			// In any other case just load it
-			else
-				ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+		//    // Check if we have to sign-extend the operand that's being loaded
+		//    if (IsSigned(op1) && !(op1 is ConstantOperand)) {
+		//        // Sign extend it
+		//        ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovsxInstruction, eaxL, op1);
+		//    }
+		//    // Check if the operand has to be zero-extended
+		//    else if (IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {
+		//        ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovzxInstruction, eaxL, op1);
+		//    }
+		//    // In any other case just load it
+		//    else
+		//        ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
 
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, opRes, eax);
-		}
+		//    ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, opRes, eax);
+		//}
+
 		#endregion // Internals
 	}
 }

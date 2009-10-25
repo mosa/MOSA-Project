@@ -19,6 +19,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;
+using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Platforms.x86
 {
@@ -27,7 +28,7 @@ namespace Mosa.Platforms.x86
 	/// </summary>
 	public sealed class AddressModeConversionStage :
 		BaseTransformationStage,
-		IR.IIRVisitor,
+		//		IR.IIRVisitor,
 		IMethodCompilerStage,
 		IPlatformTransformationStage
 	{
@@ -55,6 +56,23 @@ namespace Mosa.Platforms.x86
 		#endregion // IMethodCompilerStage Members
 
 		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		/// <param name="compiler">The compiler context to perform processing in.</param>
+		public override void Run(IMethodCompiler compiler)
+		{
+			base.Run(compiler);
+
+			foreach (BasicBlock block in BasicBlocks)
+				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+					if (ctx.Instruction != null)
+						if (!ctx.Ignore && (ctx.Instruction is CIL.ICILInstruction || ctx.Instruction is IR.IIRInstruction))
+							if (ctx.Result is MemoryOperand && ctx.Operand1 is MemoryOperand)
+								if (ctx.Operand2 != null && ctx.Result != ctx.Operand1 && ctx.Operand3 == null)
+									ThreeTwoAddressConversion(ctx);
+		}
+
+		/// <summary>
 		/// Converts the given instruction from three address format to a two address format.
 		/// </summary>
 		/// <param name="ctx">The conversion context.</param>
@@ -66,195 +84,26 @@ namespace Mosa.Platforms.x86
 
 			// Create registers for different data types
 			RegisterOperand eax = new RegisterOperand(ctx.Result.Type, ctx.Result.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
-			
+			//    RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
+
 			ctx.Result = eax;
 			ctx.Operand1 = op2;
 
+			//    // Check if we have to sign-extend the operand that's being loaded
+			//    if (IsSigned(op1) && !(op1 is ConstantOperand)) {
+			//        // Sign extend it
+			//        ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovsxInstruction, eaxL, op1);
+			//    }
+			//    // Check if the operand has to be zero-extended
+			//    else if (IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {
+			//        ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovzxInstruction, eaxL, op1);
+			//    }
+			//    // In any other case just load it
+			//    else
 			ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, ctx.Operand1);
+
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, opRes, eax);
 		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.LogicalAndInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
-		{
-			ThreeTwoAddressConversion(ctx);
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.LogicalOrInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
-		{
-			ThreeTwoAddressConversion(ctx);
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.LogicalXorInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
-		{
-			ThreeTwoAddressConversion(ctx);
-		}
-
-
-
-		#region IIRVisitor
-
-		#endregion //  IIRVisitor
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.AddressOfInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.AddressOfInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.ArithmeticShiftRightInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.EpilogueInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.EpilogueInstruction(Context ctx) { }
-		/// <summary>
-		/// Floatings the point compare instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.FloatingPointCompareInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.IntegerCompareInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.IntegerCompareInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.JmpInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.JmpInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.LoadInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LoadInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.LogicalNotInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalNotInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.MoveInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.MoveInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.PrologueInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.PrologueInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.ReturnInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ReturnInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.ShiftLeftInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ShiftLeftInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.ShiftRightInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ShiftRightInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.StoreInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.StoreInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.UDivInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.UDivInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.URemInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.URemInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.NopInstruction(Context ctx) { }
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.SignExtendedMoveInstruction"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.SignExtendedMoveInstruction(Context ctx) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.CallInstruction"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.CallInstruction(Context ctx) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.ZeroExtendedMoveInstruction"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx) { }
-
-		#region IIRVisitor - Unused
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.BranchInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.BranchInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.IntegerToFloatingPointConversionInstruction"/> instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.LiteralInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LiteralInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.PhiInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PhiInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.PopInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PopInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.PushInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PushInstruction(Context context) { }
-
-		#endregion // IIRVisitor
 
 	}
 }

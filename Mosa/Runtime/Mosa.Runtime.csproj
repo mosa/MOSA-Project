@@ -95,7 +95,7 @@
     <Compile Include="CompilerFramework\CIL\CastclassInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\CilToIRTransformationStage.cs" />
+    <Compile Include="CompilerFramework\IR\CilTransformationStage.cs" />
     <Compile Include="CompilerFramework\CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ConversionInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\Instruction.cs" />

@@ -49,7 +49,7 @@ namespace Mosa.Tools.Compiler
                 //InstructionLogger.Instance,
                 new BasicBlockBuilderStage(),
 				new OperandDeterminationStage(),
-                new CilToIrTransformationStage(),
+                new CilTransformationStage(),
                 InstructionLogger.Instance,
                 //InstructionStatisticsStage.Instance,
                 //new DominanceCalculationStage(),

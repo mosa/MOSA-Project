@@ -37,7 +37,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
 		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertBefore<IR.CilToIrTransformationStage>(this);
+			pipeline.InsertBefore<IR.CilTransformationStage>(this);
 		}
 
 		#endregion
