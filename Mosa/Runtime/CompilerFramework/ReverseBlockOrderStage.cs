@@ -13,7 +13,7 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// The Reserver Block Order Stage reorders Blocks in reverse order. This stage is for testing use only.
+	/// This class orders blocks in reverse order. This stage is used for testing.
 	/// </summary>
 	public class ReverseBlockOrderStage : BaseStage, IMethodCompilerStage
 	{
