@@ -88,7 +88,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </returns>
 		public override string ToString(Context ctx)
 		{
-			return String.Format("{0} ; L_{1:X4}", base.ToString(), ctx.Branch.Targets[0]);
+			return String.Format("{0} {1:X4}", base.ToString(), ctx.Branch.Targets[0]);
 		}
 
 		/// <summary>

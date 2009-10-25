@@ -18,37 +18,39 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Tools.Compiler
 {
-    /// <summary>
-    /// Specializes <see cref="MethodCompilerBase"/> for AOT purposes.
-    /// </summary>
-    public sealed class AotMethodCompiler : MethodCompilerBase
-    {
-        #region Data Members
+	/// <summary>
+	/// Specializes <see cref="MethodCompilerBase"/> for AOT purposes.
+	/// </summary>
+	public sealed class AotMethodCompiler : MethodCompilerBase
+	{
+		#region Data Members
 
-        /// <summary>
-        /// Holds the aot compiler, which started this method compiler.
-        /// </summary>
-        private AotCompiler aotCompiler;
+		/// <summary>
+		/// Holds the aot compiler, which started this method compiler.
+		/// </summary>
+		private AotCompiler aotCompiler;
 
-        #endregion // Data Members
+		#endregion // Data Members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
-        /// </summary>
-        /// <param name="compiler">The AOT assembly compiler.</param>
-        /// <param name="type">The type.</param>
-        /// <param name="method">The method.</param>
-        public AotMethodCompiler(AotCompiler compiler, RuntimeType type, RuntimeMethod method)
-            : base(compiler.Pipeline.Find<IAssemblyLinker>(), compiler.Architecture, compiler.Assembly, type, method)
-        {
-            aotCompiler = compiler;
-            Pipeline.AddRange(new IMethodCompilerStage[] {
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
+		/// </summary>
+		/// <param name="compiler">The AOT assembly compiler.</param>
+		/// <param name="type">The type.</param>
+		/// <param name="method">The method.</param>
+		public AotMethodCompiler(AotCompiler compiler, RuntimeType type, RuntimeMethod method)
+			: base(compiler.Pipeline.Find<IAssemblyLinker>(), compiler.Architecture, compiler.Assembly, type, method)
+		{
+			aotCompiler = compiler;
+			Pipeline.AddRange(new IMethodCompilerStage[] {
 				new DecodingStage(),
                 //InstructionLogger.Instance,
                 new BasicBlockBuilderStage(),
+				InstructionLogger.Instance,
 				new OperandDeterminationStage(),
+                InstructionLogger.Instance,
                 new CilTransformationStage(),
                 InstructionLogger.Instance,
                 //InstructionStatisticsStage.Instance,
@@ -68,33 +70,32 @@ namespace Mosa.Tools.Compiler
 				//InstructionLogger.Instance,
 				//new BlockReductionStage(),
 				//new LoopAwareBlockOrderStage(),
-				new SimpleTraceBlockOrderStage(),
+				//new SimpleTraceBlockOrderStage(),
 				InstructionStatisticsStage.Instance,
 		        //new LocalCSE(),
 				//new CodeGenerationStage(),
             });
-        }
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region MethodCompilerBase Overrides
+		#region MethodCompilerBase Overrides
 
-        /// <summary>
-        /// Called after the method compiler has finished compiling the method.
-        /// </summary>
-        protected override void EndCompile()
-        {
-            // If we're compiling a type initializer, run it immediately.
-            MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
-            if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
-            {
-                TypeInitializers.TypeInitializerSchedulerStage tiss = aotCompiler.Pipeline.Find<TypeInitializers.TypeInitializerSchedulerStage>();
-                tiss.Schedule(Method);
-            }
+		/// <summary>
+		/// Called after the method compiler has finished compiling the method.
+		/// </summary>
+		protected override void EndCompile()
+		{
+			// If we're compiling a type initializer, run it immediately.
+			MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
+			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor") {
+				TypeInitializers.TypeInitializerSchedulerStage tiss = aotCompiler.Pipeline.Find<TypeInitializers.TypeInitializerSchedulerStage>();
+				tiss.Schedule(Method);
+			}
 
-            base.EndCompile();
-        }
+			base.EndCompile();
+		}
 
-        #endregion // MethodCompilerBase Overrides
-    }
+		#endregion // MethodCompilerBase Overrides
+	}
 }

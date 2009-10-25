@@ -104,6 +104,9 @@ namespace Mosa.Runtime.CompilerFramework
 			BasicBlocks = compiler.BasicBlocks;
 			BasicBlocks.Add(_prologue);
 
+			if (compiler.Method.ToString().Contains("Next"))
+				Console.WriteLine(compiler.Method);
+
 			FindTargets(0);
 
 			// Split the blocks
@@ -113,6 +116,9 @@ namespace Mosa.Runtime.CompilerFramework
 			BuildBlockLinks(_prologue);
 
 			BasicBlocks.Add(_epilogue);
+
+			if (compiler.Method.ToString().Contains("Next"))
+				Console.WriteLine(compiler.Method);
 
 			// help out the gargage collector
 			_heads = null;
@@ -215,8 +221,6 @@ namespace Mosa.Runtime.CompilerFramework
 								LinkBlocks(block, next);
 								BuildBlockLinks(next);
 							}
-							ctx.InsertInstructionAfter(CIL.Instruction.Get(CIL.OpCode.Br_s));
-							ctx.SetBranch(next);
 						}
 						return;
 					default:
