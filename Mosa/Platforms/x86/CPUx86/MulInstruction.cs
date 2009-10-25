@@ -12,15 +12,14 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Intermediate representation of the mul instruction.
-    /// </summary>
-    public sealed class MulInstruction : TwoOperandInstruction
-    {
+	/// <summary>
+	/// Intermediate representation of the mul instruction.
+	/// </summary>
+	public sealed class MulInstruction : TwoOperandInstruction
+	{
 		#region Data Members
 
-		private static readonly OpCode R = new OpCode(new byte[] { 0xF7 }, 4);
-		private static readonly OpCode M = new OpCode(new byte[] { 0xF7 }, 4);
+		private static readonly OpCode MUL = new OpCode(new byte[] { 0xF7 }, 4);
 
 		#endregion
 
@@ -34,7 +33,7 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion // Properties
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.
@@ -45,9 +44,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-            if (destination == null) return R;
-            if (destination is RegisterOperand) return R;
-            if (destination is MemoryOperand) return M;
+			if (destination == null || destination is RegisterOperand || destination is MemoryOperand) return MUL;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
@@ -57,11 +54,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-        public override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
-            OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, null);
+		public override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
+			OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, null);
 			emitter.Emit(opCode, null, ctx.Operand1);
-        }
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -73,6 +70,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Mul(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }
