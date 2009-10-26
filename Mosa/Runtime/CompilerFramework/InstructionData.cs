@@ -93,6 +93,16 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Properties
 
 		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="InstructionData"/> is locked.
+		/// </summary>
+		/// <value><c>true</c> if locked; otherwise, <c>false</c>.</value>
+		public bool Locked
+		{
+			get { return false; }
+			set { return;  }
+		}
+
+		/// <summary>
 		/// Gets or sets the label of the instruction.
 		/// </summary>
 		/// <remarks>
@@ -218,7 +228,7 @@ namespace Mosa.Runtime.CompilerFramework
 			this.Branch = null;
 			this.Other = null;
 		}
-		
+
 		/// <summary>
 		/// Sets the addition operand.
 		/// </summary>

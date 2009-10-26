@@ -218,39 +218,27 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.IntegerCompareInstruction(Context ctx)
 		{
-			// FIXME PG - I'm sure this is all messed up!
-
-			//Operand op1 = ctx.Operand1;
-			//Operand op2 = ctx.Operand2;
+			// TODO
 
 			//EmitOperandConstants(ctx);
 
-			//if (op1 is MemoryOperand && op2 is RegisterOperand)
-			//    SwapComparisonOperands(ctx, op1, op2);
-			//else if (op1 is MemoryOperand && op2 is MemoryOperand) {
-			//    RegisterOperand eax = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
-			//    ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
-			//    ctx.Operand1 = eax;
-			//}
+			//if (ctx.Operand1 is MemoryOperand && ctx.Operand2 is RegisterOperand)
+			//    SwapComparisonOperands(ctx);
 
-			//ThreeTwoAddressConversion(ctx.Clone(), null);
-
-			//IR.ConditionCode cond = ctx.ConditionCode;
 			//Operand result = ctx.Operand1;
 
-			//ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand2, ctx.Operand3);
-			//ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, result);
+			//ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand1, ctx.Operand2);
 
 			//if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Operand2))
-			//    ctx.ConditionCode = GetUnsignedConditionCode(cond);
+			//    ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(ctx.ConditionCode));
 			//else
-			//    ctx.ConditionCode = cond;
+			//    ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, ctx.ConditionCode);
 
 			//if (result is RegisterOperand) {
 			//    RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)result).Register);
-			//    ctx.InsertInstructionAfter(CPUx86.Instruction.MovzxInstruction, rop, rop);
-			//}
 
+			//    ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, rop, rop);
+			//}
 		}
 
 		/// <summary>
@@ -624,37 +612,6 @@ namespace Mosa.Platforms.x86
 			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, op2);
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, opRes, op1);
 			ctx.InsertInstructionAfter(instruction, opRes, ecx);
-
-
-			// FIXME
-			// Commented part causes an access violation!
-			/*
-			if (ops[1] is ConstantOperand)
-			{
-				Replace(ctx, new Instruction[] {
-					Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
-					Architecture.CreateInstruction(replacementType, opRes, ops[1])
-				});
-			}
-			else
-			{*/
-
-			//if (ops[0].Type.Type == CilElementType.Char) {
-			//    RegisterOperand ecx = new RegisterOperand(ops[1].Type, GeneralPurposeRegister.ECX);
-			//    Replace(ctx, new LegacyInstruction[] {
-			//        Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
-			//        Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
-			//        Architecture.CreateInstruction(replacementType, opRes, ecx),
-			//    });
-			//}
-			//else {
-			//    RegisterOperand ecx = new RegisterOperand(ops[1].Type, GeneralPurposeRegister.ECX);
-			//    Replace(ctx, new LegacyInstruction[] {
-			//        Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), ecx, ops[1]),
-			//        Architecture.CreateInstruction(typeof(Instructions.MoveInstruction), opRes, ops[0]),
-			//        Architecture.CreateInstruction(replacementType, opRes, ecx),
-			//    });
-			//}
 		}
 
 

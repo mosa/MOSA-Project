@@ -407,9 +407,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			if (ctx.Operand1.StackType == StackTypeCode.F)
 				ctx.SetInstruction(IR.Instruction.FloatingPointCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
-			else
+			else {
 				ctx.SetInstruction(IR.Instruction.IntegerCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
-
+				//ctx.Locked = true;
+			}
 			ctx.ConditionCode = code;
 		}
 
