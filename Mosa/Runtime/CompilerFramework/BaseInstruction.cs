@@ -123,6 +123,9 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			string s = ToString();
 
+			if (context.Other is IR.ConditionCode)
+				s = s + " [" + GetConditionString(context.ConditionCode) + "] ";
+
 			if (context.ResultCount == 1)
 				s = s + " " + context.Result;
 			else if (context.ResultCount == 2)
@@ -164,6 +167,28 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 		}
 
-		#endregion //  Overrides
+		/// <summary>
+		/// Gets the condition string.
+		/// </summary>
+		/// <param name="conditioncode">The conditioncode.</param>
+		/// <returns></returns>
+		protected string GetConditionString(IR.ConditionCode conditioncode)
+		{
+			switch (conditioncode) {
+				case IR.ConditionCode.Equal: return @"equal";
+				case IR.ConditionCode.GreaterOrEqual: return @"greater or equal";
+				case IR.ConditionCode.GreaterThan: return @"greater";
+				case IR.ConditionCode.LessOrEqual: return @"less or equa";
+				case IR.ConditionCode.LessThan: return @"less";
+				case IR.ConditionCode.NotEqual: return @"not equal";
+				case IR.ConditionCode.UnsignedGreaterOrEqual: return @"greater or equal (U)";
+				case IR.ConditionCode.UnsignedGreaterThan: return @"greater (U)";
+				case IR.ConditionCode.UnsignedLessOrEqual: return @"less or equal (U)";
+				case IR.ConditionCode.UnsignedLessThan: return @"less (U)";
+				default: throw new System.NotSupportedException();
+			}
+		}
+
+		#endregion //  Methods
 	}
 }
