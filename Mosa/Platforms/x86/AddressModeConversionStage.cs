@@ -67,7 +67,7 @@ namespace Mosa.Platforms.x86
 				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null)
 						if (!ctx.Ignore && (ctx.Instruction is CIL.ICILInstruction || ctx.Instruction is IR.IIRInstruction))
-							if (ctx.Result is MemoryOperand && ctx.Operand1 is MemoryOperand)
+							if (ctx.Result is MemoryOperand && ctx.Operand1 is MemoryOperand) 
 								if (ctx.Operand2 != null && ctx.Result != ctx.Operand1 && ctx.Operand3 == null)
 									ThreeTwoAddressConversion(ctx);
 		}

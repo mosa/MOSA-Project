@@ -407,10 +407,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			if (ctx.Operand1.StackType == StackTypeCode.F)
 				ctx.SetInstruction(IR.Instruction.FloatingPointCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
-			else {
+			else
 				ctx.SetInstruction(IR.Instruction.IntegerCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
-				//ctx.Locked = true;
-			}
+
 			ctx.ConditionCode = code;
 		}
 
@@ -454,7 +453,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Pop"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Pop(Context ctx) 
+		void ICILVisitor.Pop(Context ctx)
 		{
 			ctx.Remove();
 		}
@@ -1257,7 +1256,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
 			RuntimeMethod callTarget = FindMethod(rt, internalCallTarget.ToString());
 
-			ctx.ReplaceInstructionOnly(CIL.Instruction.Get(OpCode.Call));
+			//ctx.ReplaceInstructionOnly(CIL.Instruction.Get(OpCode.Call));
+			ctx.ReplaceInstructionOnly(IR.Instruction.CallInstruction);
 			ctx.InvokeTarget = callTarget;
 		}
 

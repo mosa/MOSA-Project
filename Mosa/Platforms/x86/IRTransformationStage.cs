@@ -130,12 +130,7 @@ namespace Mosa.Platforms.x86
 				SwapComparisonOperands(ctx);
 				source = ctx.Operand1;
 				destination = ctx.Operand2;
-			}
-			//else if (source is MemoryOperand && destination is MemoryOperand) {
-			//    RegisterOperand xmm2 = new RegisterOperand(source.Type, SSE2Register.XMM2);
-			//    ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, xmm2, source);
-			//    source = xmm2;
-			//}
+			}	
 
 			// x86 is messed up :(
 			switch (ctx.ConditionCode) {
@@ -218,27 +213,25 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.IntegerCompareInstruction(Context ctx)
 		{
-			// TODO
+			EmitOperandConstants(ctx);
 
-			//EmitOperandConstants(ctx);
+			if (ctx.Operand1 is MemoryOperand && ctx.Operand2 is RegisterOperand)
+				SwapComparisonOperands(ctx);
 
-			//if (ctx.Operand1 is MemoryOperand && ctx.Operand2 is RegisterOperand)
-			//    SwapComparisonOperands(ctx);
+			Operand result = ctx.Operand1;
+			IR.ConditionCode condition = ctx.ConditionCode;
 
-			//Operand result = ctx.Operand1;
+			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 
-			//ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand1, ctx.Operand2);
+			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Operand2))
+				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(condition));
+			else
+				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, condition);
 
-			//if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Operand2))
-			//    ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(ctx.ConditionCode));
-			//else
-			//    ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, ctx.ConditionCode);
-
-			//if (result is RegisterOperand) {
-			//    RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)result).Register);
-
-			//    ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, rop, rop);
-			//}
+			if (result is RegisterOperand) {
+				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)result).Register);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, rop, rop);
+			}
 		}
 
 		/// <summary>
@@ -455,8 +448,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.UDivInstruction(Context ctx)
 		{
-			//ThreeTwoAddressConversion(ctx, CPUx86.Instruction.DivInstruction);
-
 			//Operand op1 = ctx.Operand1;
 			//Operand op2 = ctx.Operand2;
 
