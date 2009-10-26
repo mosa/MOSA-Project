@@ -27,6 +27,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		private static readonly OpCode R_M = new OpCode(new byte[] { 0x33 });
 		private static readonly OpCode R_R = new OpCode(new byte[] { 0x33 });
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x31 });
+		private static readonly OpCode M_C = new OpCode(new byte[] { 0x83 }, 4); // Buggy
 
 		#endregion // Data Members
 
@@ -41,10 +42,15 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
-			if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
-			if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
-			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
+			if (destination is RegisterOperand) {
+				if (source is ConstantOperand) return R_C;
+				else if (source is MemoryOperand) return R_M;
+				else if (source is RegisterOperand) return R_R;
+			}
+			else if (destination is MemoryOperand) {
+				if (source is RegisterOperand) return M_R;
+				else if (source is ConstantOperand) return M_C;
+			}
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
