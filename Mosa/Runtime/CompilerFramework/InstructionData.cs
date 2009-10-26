@@ -68,38 +68,55 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public IBranch Branch;
 
+
 		/// <summary>
 		/// Holds the "other" object
 		/// </summary>
 		public object Other;
 
 		/// <summary>
-		/// Holds the number of operands
+		/// 
 		/// </summary>
-		public byte OperandCount;
-
-		/// <summary>
-		/// Holds the number of operand results
-		/// </summary>
-		public byte ResultCount;
-
-		/// <summary>
-		/// Determines if this instruction is ignored.
-		/// </summary>
-		public bool Ignore;
+		private uint _packed;
 
 		#endregion // Data members
 
 		#region Properties
 
 		/// <summary>
-		/// Gets or sets a value indicating whether this <see cref="InstructionData"/> is locked.
+		/// Gets or sets the ignored attribute
 		/// </summary>
-		/// <value><c>true</c> if locked; otherwise, <c>false</c>.</value>
+		public bool Ignore
+		{
+			get { return (_packed & 0x01) == 0x01; }
+			set { if (value) _packed = _packed | 0x01; else _packed = (uint)(_packed ^ 0x1); }
+		}
+
+		/// <summary>
+		/// Gets or sets the lock attribute (used for testing)
+		/// </summary>
 		public bool Locked
 		{
-			get { return false; }
-			set { return;  }
+			get { return (_packed & 0x02) == 0x02; }
+			set { if (value) _packed = _packed | 0x02; else _packed = (uint)(_packed ^ 0x2); }
+		}
+
+		/// <summary>
+		/// Gets or sets the number of operand results
+		/// </summary>
+		public byte ResultCount
+		{
+			get { return (byte)((_packed >> 16) & 0xF); }
+			set { _packed = (uint)((_packed & 0xFF00FFFF) | ((uint)value << 16)); }
+		}
+
+		/// <summary>
+		/// Gets or sets the number of operands
+		/// </summary>
+		public byte OperandCount
+		{
+			get { return (byte)((_packed >> 24) & 0xF); }
+			set { _packed = (uint)((_packed & 0x00FFFFFF) | ((uint)value << 24)); }
 		}
 
 		/// <summary>
@@ -203,13 +220,11 @@ namespace Mosa.Runtime.CompilerFramework
 			this.Label = -1;
 			this.Offset = 0;
 			this.Instruction = null;
-			this.Ignore = true;
 			this.Operand1 = null;
 			this.Operand2 = null;
 			this.Operand3 = null;
 			this.Result = null;
-			this.OperandCount = 0;
-			this.ResultCount = 0;
+			this._packed = 0;
 			this.Branch = null;
 			this.Other = null;
 		}
