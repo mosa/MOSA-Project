@@ -779,15 +779,6 @@ namespace Mosa.Platforms.x86
 		/// Special handling for shift operations, which require the shift amount in the ECX or as a constant register.
 		/// </summary>
 		/// <param name="ctx">The transformation context.</param>
-		private void HandleShiftOperation(Context ctx)
-		{
-			HandleShiftOperation(ctx, ctx.Instruction);
-		}
-
-		/// <summary>
-		/// Special handling for shift operations, which require the shift amount in the ECX or as a constant register.
-		/// </summary>
-		/// <param name="ctx">The transformation context.</param>
 		/// <param name="instruction">The instruction to transform.</param>
 		private void HandleShiftOperation(Context ctx, IInstruction instruction)
 		{
@@ -803,47 +794,6 @@ namespace Mosa.Platforms.x86
 			ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
 			Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
 			cc.Expand(ctx);
-		}
-
-		/// <summary>
-		/// Handles the comparison instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void HandleComparisonInstruction(Context ctx)
-		{
-			Operand op1 = ctx.Operand1;
-			Operand op2 = ctx.Operand2;
-			EmitOperandConstants(ctx);
-
-			if (op1 is MemoryOperand && op2 is RegisterOperand)
-				SwapComparisonOperands(ctx, op1, op2);
-		}
-
-		/// <summary>
-		/// Swaps the comparison operands.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="op1">The op1.</param>
-		/// <param name="op2">The op2.</param>
-		private static void SwapComparisonOperands(Context ctx, Operand op1, Operand op2)
-		{
-			// Swap the operands
-			ctx.Operand1 = op2;
-			ctx.Operand2 = op1;
-
-			// Negate the condition code if necessary...
-			switch (ctx.ConditionCode) {
-				case IR.ConditionCode.Equal: break;
-				case IR.ConditionCode.GreaterOrEqual: ctx.ConditionCode = IR.ConditionCode.LessThan; break;
-				case IR.ConditionCode.GreaterThan: ctx.ConditionCode = IR.ConditionCode.LessOrEqual; break;
-				case IR.ConditionCode.LessOrEqual: ctx.ConditionCode = IR.ConditionCode.GreaterThan; break;
-				case IR.ConditionCode.LessThan: ctx.ConditionCode = IR.ConditionCode.GreaterOrEqual; break;
-				case IR.ConditionCode.NotEqual: break;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: ctx.ConditionCode = IR.ConditionCode.UnsignedLessThan; break;
-				case IR.ConditionCode.UnsignedGreaterThan: ctx.ConditionCode = IR.ConditionCode.UnsignedLessOrEqual; break;
-				case IR.ConditionCode.UnsignedLessOrEqual: ctx.ConditionCode = IR.ConditionCode.UnsignedGreaterThan; break;
-				case IR.ConditionCode.UnsignedLessThan: ctx.ConditionCode = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-			}
 		}
 
 		#endregion // Internals

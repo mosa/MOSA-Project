@@ -127,7 +127,7 @@ namespace Mosa.Platforms.x86
 
 			// Swap the operands if necessary...
 			if (source is MemoryOperand && destination is RegisterOperand) {
-				SwapComparisonOperands(ctx, source, destination);
+				SwapComparisonOperands(ctx);
 				source = ctx.Operand1;
 				destination = ctx.Operand2;
 			}
@@ -658,114 +658,31 @@ namespace Mosa.Platforms.x86
 			//}
 		}
 
+
 		/// <summary>
 		/// Swaps the comparison operands.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		/// <param name="op1">The op1.</param>
-		/// <param name="op2">The op2.</param>
-		private static void SwapComparisonOperands(Context ctx, Operand op1, Operand op2)
+		private static void SwapComparisonOperands(Context ctx)
 		{
-			// Swap the operands
-			ctx.Operand1 = op2;
+			Operand op1 = ctx.Operand1;
 			ctx.Operand2 = op1;
+			ctx.Operand1 = ctx.Operand2;
 
 			// Negate the condition code if necessary...
 			switch (ctx.ConditionCode) {
-				case IR.ConditionCode.Equal:
-					break;
-
-				case IR.ConditionCode.GreaterOrEqual:
-					ctx.ConditionCode = IR.ConditionCode.LessThan;
-					break;
-
-				case IR.ConditionCode.GreaterThan:
-					ctx.ConditionCode = IR.ConditionCode.LessOrEqual;
-					break;
-
-				case IR.ConditionCode.LessOrEqual:
-					ctx.ConditionCode = IR.ConditionCode.GreaterThan;
-					break;
-
-				case IR.ConditionCode.LessThan:
-					ctx.ConditionCode = IR.ConditionCode.GreaterOrEqual;
-					break;
-
-				case IR.ConditionCode.NotEqual:
-					break;
-
-				case IR.ConditionCode.UnsignedGreaterOrEqual:
-					ctx.ConditionCode = IR.ConditionCode.UnsignedLessThan;
-					break;
-
-				case IR.ConditionCode.UnsignedGreaterThan:
-					ctx.ConditionCode = IR.ConditionCode.UnsignedLessOrEqual;
-					break;
-
-				case IR.ConditionCode.UnsignedLessOrEqual:
-					ctx.ConditionCode = IR.ConditionCode.UnsignedGreaterThan;
-					break;
-
-				case IR.ConditionCode.UnsignedLessThan:
-					ctx.ConditionCode = IR.ConditionCode.UnsignedGreaterOrEqual;
-					break;
+				case IR.ConditionCode.Equal: break;
+				case IR.ConditionCode.GreaterOrEqual: ctx.ConditionCode = IR.ConditionCode.LessThan; break;
+				case IR.ConditionCode.GreaterThan: ctx.ConditionCode = IR.ConditionCode.LessOrEqual; break;
+				case IR.ConditionCode.LessOrEqual: ctx.ConditionCode = IR.ConditionCode.GreaterThan; break;
+				case IR.ConditionCode.LessThan: ctx.ConditionCode = IR.ConditionCode.GreaterOrEqual; break;
+				case IR.ConditionCode.NotEqual: break;
+				case IR.ConditionCode.UnsignedGreaterOrEqual: ctx.ConditionCode = IR.ConditionCode.UnsignedLessThan; break;
+				case IR.ConditionCode.UnsignedGreaterThan: ctx.ConditionCode = IR.ConditionCode.UnsignedLessOrEqual; break;
+				case IR.ConditionCode.UnsignedLessOrEqual: ctx.ConditionCode = IR.ConditionCode.UnsignedGreaterThan; break;
+				case IR.ConditionCode.UnsignedLessThan: ctx.ConditionCode = IR.ConditionCode.UnsignedGreaterOrEqual; break;
 			}
 		}
-
-		/// <summary>
-		/// Converts the given instruction from two address format to a one address format.
-		/// </summary>
-		/// <param name="ctx">The conversion context.</param>
-		private void TwoOneAddressConversion(Context ctx)
-		{
-			Operand opRes = ctx.Result;
-			RegisterOperand eax = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
-			ctx.Operand1 = EmitConstant(ctx.Operand1);
-			ctx.Result = eax;
-
-			ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, ctx.Operand2);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, opRes, eax);
-
-		}
-
-		///// <summary>
-		///// Converts the given instruction from three address format to a two address format.
-		///// </summary>
-		///// <param name="ctx">The conversion context.</param>
-		///// <param name="instruction">The instruction.</param>
-		//private static void ThreeTwoAddressConversion(Context ctx, IInstruction instruction)
-		//{
-		//    Operand opRes = ctx.Result;
-		//    Operand op1 = ctx.Operand1;
-		//    Operand op2 = ctx.Operand2;
-
-		//    // Create registers for different data types
-		//    RegisterOperand eax = new RegisterOperand(opRes.Type, opRes.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
-		//    RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
-
-		//    if (instruction != null)
-		//        ctx.SetInstruction(instruction, eax, op2);
-		//    else {
-		//        ctx.Result = eax;
-		//        ctx.Operand1 = eax;
-		//        ctx.Operand2 = null;
-		//    }
-
-		//    // Check if we have to sign-extend the operand that's being loaded
-		//    if (IsSigned(op1) && !(op1 is ConstantOperand)) {
-		//        // Sign extend it
-		//        ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovsxInstruction, eaxL, op1);
-		//    }
-		//    // Check if the operand has to be zero-extended
-		//    else if (IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {
-		//        ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovzxInstruction, eaxL, op1);
-		//    }
-		//    // In any other case just load it
-		//    else
-		//        ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
-
-		//    ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, opRes, eax);
-		//}
 
 		#endregion // Internals
 	}
