@@ -281,7 +281,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
 		{
-			//ThreeTwoAddressConversion(ctx, CPUx86.Instruction.AndInstruction);
+			ctx.ReplaceInstructionOnly(CPUx86.Instruction.AndInstruction);
 		}
 
 		/// <summary>
@@ -290,7 +290,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
 		{
-			//ThreeTwoAddressConversion(ctx, CPUx86.Instruction.OrInstruction);
+			ctx.ReplaceInstructionOnly(CPUx86.Instruction.OrInstruction);
 		}
 
 		/// <summary>
@@ -299,7 +299,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
 		{
-			//ThreeTwoAddressConversion(ctx, CPUx86.Instruction.XorInstruction);
+			ctx.ReplaceInstructionOnly(CPUx86.Instruction.XorInstruction);
 		}
 
 		/// <summary>
@@ -317,7 +317,6 @@ namespace Mosa.Platforms.x86
 			else
 				ctx.SetInstruction(CPUx86.Instruction.NotInstruction, dest);
 
-			// ThreeTwoAddressConversion(ctx, CPUx86.Instruction.NotInstruction);
 		}
 
 		/// <summary>
