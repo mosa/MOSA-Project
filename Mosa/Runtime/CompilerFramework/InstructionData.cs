@@ -89,7 +89,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public bool Ignore
 		{
 			get { return (_packed & 0x01) == 0x01; }
-			set { if (value) _packed = _packed | 0x01; else _packed = (uint)(_packed ^ 0x1); }
+			set { if (value) _packed = _packed | 0x01; else _packed = (uint)(_packed & ~0x1); }
 		}
 
 		/// <summary>
@@ -98,7 +98,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public bool Locked
 		{
 			get { return (_packed & 0x02) == 0x02; }
-			set { if (value) _packed = _packed | 0x02; else _packed = (uint)(_packed ^ 0x2); }
+			set { if (value) _packed = _packed | 0x02; else _packed = (uint)(_packed & ~0x2); }
 		}
 
 		/// <summary>
