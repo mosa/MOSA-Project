@@ -20,11 +20,11 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#region Data Members
 
-		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 4);
-		private static readonly OpCode M_C = new OpCode(new byte[] { 0x81 }, 4);
-		private static readonly OpCode R_M = new OpCode(new byte[] { 0x23 });
-		private static readonly OpCode R_R = new OpCode(new byte[] { 0x23 });
-		private static readonly OpCode M_R = new OpCode(new byte[] { 0x21 });
+		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 0);
+		private static readonly OpCode M_C = new OpCode(new byte[] { 0x81 }, 0);
+		private static readonly OpCode R_M = new OpCode(new byte[] { 0x03 });
+		private static readonly OpCode R_R = new OpCode(new byte[] { 0x03 });
+		private static readonly OpCode M_R = new OpCode(new byte[] { 0x01 });
 
 		#endregion
 
@@ -53,7 +53,7 @@ namespace Mosa.Platforms.x86.CPUx86
 			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
 			if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
 			if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
-			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_C;
+			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
