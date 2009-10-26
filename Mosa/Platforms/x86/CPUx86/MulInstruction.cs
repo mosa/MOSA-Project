@@ -56,8 +56,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		public override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, null);
-			emitter.Emit(opCode, ctx.Operand1, null);
+            OpCode opCode = ComputeOpCode(ctx.Operand1, ctx.Operand2, null);
+			emitter.Emit(opCode, ctx.Operand2, null);
 		}
 
 		/// <summary>

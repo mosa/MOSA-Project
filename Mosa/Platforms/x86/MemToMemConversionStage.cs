@@ -83,10 +83,13 @@ namespace Mosa.Platforms.x86
 
 			Context before = ctx.InsertBefore();
 
-			if (useStack)
-				before.SetInstruction(CPUx86.Instruction.PushInstruction, null, register);
-
-			before.SetInstruction(CPUx86.Instruction.MovInstruction, register, source);
+            if (useStack)
+            {
+                before.SetInstruction(CPUx86.Instruction.PushInstruction, register);
+                before.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, register, source);
+            }
+            else 
+                before.SetInstruction(CPUx86.Instruction.MovInstruction, register, source);
 
 			if (useStack)
 				ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, register);

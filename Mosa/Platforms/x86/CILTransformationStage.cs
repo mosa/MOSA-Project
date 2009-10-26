@@ -374,11 +374,11 @@ namespace Mosa.Platforms.x86
 		void CIL.ICILVisitor.Div(Context ctx)
 		{
 			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Operand2))
-				HandleCommutativeOperation(ctx, IR.Instruction.UDivInstruction);
+				HandleNonCommutativeOperation(ctx, IR.Instruction.UDivInstruction);
 			else if (ctx.Operand1.StackType == StackTypeCode.F)
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
+                HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
 			else
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.DivInstruction);
+                HandleNonCommutativeOperation(ctx, CPUx86.Instruction.DivInstruction);
 		}
 
 		/// <summary>
@@ -772,6 +772,7 @@ namespace Mosa.Platforms.x86
 		{
 			EmitResultConstants(ctx);
 			EmitOperandConstants(ctx);
+            ctx.ReplaceInstructionOnly(instruction);
 		}
 
 		/// <summary>
