@@ -142,9 +142,9 @@ namespace Mosa.Platforms.x86
 
 			if (op is ConstantOperand) {
 				RegisterOperand ebx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
-				ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
+				ctx.SetInstruction(CPUx86.Instruction.PushInstruction, ebx);
 				ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebx, op);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.DivInstruction, null, ebx);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.DivInstruction, ebx);
 				ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, ebx);
 			}
 			else
