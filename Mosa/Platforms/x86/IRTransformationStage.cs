@@ -130,7 +130,7 @@ namespace Mosa.Platforms.x86
 				SwapComparisonOperands(ctx);
 				source = ctx.Operand1;
 				destination = ctx.Operand2;
-			}	
+			}
 
 			// x86 is messed up :(
 			switch (ctx.ConditionCode) {
@@ -223,7 +223,7 @@ namespace Mosa.Platforms.x86
 
 			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 
-			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Operand2))
+			if (IsUnsigned(ctx.Operand1))
 				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(condition));
 			else
 				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, condition);

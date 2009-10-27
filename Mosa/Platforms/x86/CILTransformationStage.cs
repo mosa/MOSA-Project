@@ -336,7 +336,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Add(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.F || ctx.Operand2.StackType == StackTypeCode.F)
+			if (ctx.Operand1.StackType == StackTypeCode.F)
 				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseAddInstruction);
 			else
 				HandleCommutativeOperation(ctx, CPUx86.Instruction.AddInstruction);

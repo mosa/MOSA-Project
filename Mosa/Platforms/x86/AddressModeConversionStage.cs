@@ -28,7 +28,6 @@ namespace Mosa.Platforms.x86
 	/// </summary>
 	public sealed class AddressModeConversionStage :
 		BaseTransformationStage,
-		//		IR.IIRVisitor,
 		IMethodCompilerStage,
 		IPlatformTransformationStage
 	{
@@ -66,8 +65,8 @@ namespace Mosa.Platforms.x86
 			foreach (BasicBlock block in BasicBlocks)
 				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null)
-						if (!ctx.Ignore && (ctx.Instruction is CIL.ICILInstruction || ctx.Instruction is IR.IIRInstruction))
-							if (ctx.Operand2 != null && ctx.Result != ctx.Operand1 && ctx.Operand3 == null)
+						if (!ctx.Ignore && ctx.OperandCount == 2 && ctx.ResultCount == 1)
+							if (ctx.Instruction is CIL.ArithmeticInstruction || ctx.Instruction is IR.ThreeOperandInstruction)
 								ThreeTwoAddressConversion(ctx);
 		}
 
@@ -86,8 +85,9 @@ namespace Mosa.Platforms.x86
 			//    RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
 
 			ctx.Result = eax;
-			ctx.Operand1 = eax;
-			ctx.Operand2 = op2;
+			ctx.Operand1 = op2;
+			ctx.Operand2 = null; // eax;
+			ctx.OperandCount = 1;
 
 			//    // Check if we have to sign-extend the operand that's being loaded
 			//    if (IsSigned(op1) && !(op1 is ConstantOperand)) {
