@@ -87,6 +87,7 @@ namespace Mosa.Platforms.x86
 
 			ctx.Result = eax;
 			ctx.Operand1 = eax;
+			ctx.Operand2 = op2;
 
 			//    // Check if we have to sign-extend the operand that's being loaded
 			//    if (IsSigned(op1) && !(op1 is ConstantOperand)) {
