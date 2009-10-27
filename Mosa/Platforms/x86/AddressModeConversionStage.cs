@@ -77,7 +77,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The conversion context.</param>
 		private static void ThreeTwoAddressConversion(Context ctx)
 		{
-			Operand opRes = ctx.Result;
+			Operand result = ctx.Result;
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
@@ -99,9 +99,9 @@ namespace Mosa.Platforms.x86
 			//    }
 			//    // In any other case just load it
 			//    else
-			ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, ctx.Operand1);
+			ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
 
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, opRes, eax);
+			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, result, eax);
 		}
 
 	}
