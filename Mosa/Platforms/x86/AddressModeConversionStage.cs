@@ -86,7 +86,7 @@ namespace Mosa.Platforms.x86
 			//    RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
 
 			ctx.Result = eax;
-			ctx.Operand1 = op2;
+			ctx.Operand1 = eax;
 
 			//    // Check if we have to sign-extend the operand that's being loaded
 			//    if (IsSigned(op1) && !(op1 is ConstantOperand)) {
