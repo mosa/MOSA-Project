@@ -13,14 +13,12 @@ namespace Mosa.UnitTest
 	public static class Boot
 	{
 		/// <summary>
-		/// Mains this instance.
+		/// Main
 		/// </summary>
 		public static void Main()
 		{
-			Screen.Clear();
-			Screen.Color = 0x0E;
-
-			Screen.Write('.');			
+			int x = 3;
+			int y = 4 + x;
 		}
 
 	}

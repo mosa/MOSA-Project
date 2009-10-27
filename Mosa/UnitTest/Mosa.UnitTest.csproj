@@ -36,7 +36,6 @@
   <ItemGroup>
     <Compile Include="Boot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Screen.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Platforms\x86\Mosa.Platforms.x86.csproj">
