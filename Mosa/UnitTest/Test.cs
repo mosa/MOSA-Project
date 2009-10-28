@@ -10,7 +10,7 @@ namespace Mosa.UnitTest
 	/// <summary>
 	/// 
 	/// </summary>
-	public static class Boot
+	public static class Test
 	{
 		/// <summary>
 		/// Main
@@ -19,6 +19,7 @@ namespace Mosa.UnitTest
 		{
 			int x = 3;
 			int y = 4 + x;
+			int z = x * y;
 		}
 
 	}
