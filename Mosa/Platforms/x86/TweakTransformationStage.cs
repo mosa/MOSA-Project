@@ -73,16 +73,17 @@ namespace Mosa.Platforms.x86
 
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Mul"/> instructions.
-		/// </summary>
+			/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Mul(Context ctx)
 		{
-            RegisterOperand eax = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX);
-            ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, ctx.Operand1);
-			if (ctx.Operand2 is ConstantOperand) {
-                RegisterOperand ebx = new RegisterOperand(ctx.Operand2.Type, GeneralPurposeRegister.EBX);
-                ctx.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebx, ctx.Operand2);
-                ctx.Operand2 = ebx;
+			if (ctx.Operand1 == null)
+				return;
+
+			if (ctx.Operand1 is ConstantOperand) {
+				RegisterOperand ebx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EBX);
+				ctx.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebx, ctx.Operand1);
+				ctx.Operand1 = ebx;
 			}
 		}
 
@@ -105,9 +106,9 @@ namespace Mosa.Platforms.x86
 			if (context.Result is MemoryOperand) {
 				Operand op = context.Result;
 				// FIX: Push EAX
-				RegisterOperand reg = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.EAX);
-				context.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, reg, op);
-				context.Result = reg;
+				RegisterOperand eax = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.EAX);
+				context.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op);
+				context.Result = eax;
 				// FIX: Pop EAX
 			}
 		}

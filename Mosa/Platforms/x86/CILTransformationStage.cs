@@ -348,7 +348,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Sub(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.F || ctx.Operand2.StackType == StackTypeCode.F)
+			if (ctx.Operand1.StackType == StackTypeCode.F)
 				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseSubInstruction);
 			else
 				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SubInstruction);
@@ -752,14 +752,6 @@ namespace Mosa.Platforms.x86
 		private void HandleCommutativeOperation(Context ctx, IInstruction instruction)
 		{
 			EmitOperandConstants(ctx);
-
-			// If the first operand is a constant, move it to the second operand
-			if (ctx.Operand1 is ConstantOperand) {
-				// Yes, swap the operands...
-				Operand tmp = ctx.Operand1;
-				ctx.Operand1 = ctx.Operand2;
-				ctx.Operand2 = tmp;
-			}
 			ctx.ReplaceInstructionOnly(instruction);
 		}
 

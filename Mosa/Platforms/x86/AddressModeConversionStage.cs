@@ -81,12 +81,12 @@ namespace Mosa.Platforms.x86
 			Operand op2 = ctx.Operand2;
 
 			// Create registers for different data types
-			RegisterOperand eax = new RegisterOperand(ctx.Result.Type, ctx.Result.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
+			RegisterOperand eax = new RegisterOperand(result.Type, result.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
 			//    RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
 
 			ctx.Result = eax;
 			ctx.Operand1 = op2;
-			ctx.Operand2 = null; // eax;
+			ctx.Operand2 = null; 
 			ctx.OperandCount = 1;
 
 			//    // Check if we have to sign-extend the operand that's being loaded
@@ -100,6 +100,7 @@ namespace Mosa.Platforms.x86
 			//    }
 			//    // In any other case just load it
 			//    else
+
 			ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
 
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, result, eax);

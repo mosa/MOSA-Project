@@ -81,7 +81,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </returns>
 		public override string ToString(Context context)
 		{
-			return String.Format(@"{0} L_{2:X4}", base.ToString(context), context.Branch.Targets[0]);
+			return String.Format(@"{0} L_{1:X4}", base.ToString(context), context.Branch.Targets[0]);
 		}
 
 		/// <summary>

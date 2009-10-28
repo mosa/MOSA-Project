@@ -215,13 +215,13 @@ namespace Mosa.Platforms.x86
 		{
 			EmitOperandConstants(ctx);
 
-			if (ctx.Operand1 is MemoryOperand && ctx.Operand2 is RegisterOperand)
-				SwapComparisonOperands(ctx);
+			//if (ctx.Operand1 is MemoryOperand && ctx.Operand2 is RegisterOperand)
+			//    SwapComparisonOperands(ctx);
 
 			Operand result = ctx.Operand1;
 			IR.ConditionCode condition = ctx.ConditionCode;
 
-			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+			ctx.ReplaceInstructionOnly(CPUx86.Instruction.CmpInstruction);
 
 			if (IsUnsigned(ctx.Operand1))
 				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(condition));
@@ -462,13 +462,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.URemInstruction(Context ctx)
 		{
-			Operand operand1 = ctx.Operand1;
-			Operand operand2 = ctx.Operand2;
-			Operand operand3 = ctx.Operand3;
-
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(operand2.Type, GeneralPurposeRegister.EAX), operand2);
-			ctx.InsertInstructionAfter(IR.Instruction.UDivInstruction, operand2, operand3);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, operand1, new RegisterOperand(operand1.Type, GeneralPurposeRegister.EDX));
+			ctx.ReplaceInstructionOnly(IR.Instruction.UDivInstruction);
 		}
 
 		/// <summary>
@@ -593,16 +587,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="instruction">The instruction to transform.</param>
 		private void HandleShiftOperation(Context ctx, IInstruction instruction)
 		{
-			Operand opRes = ctx.Result;
-			Operand op1 = ctx.Operand1;
-			Operand op2 = ctx.Operand2;
 			EmitOperandConstants(ctx);
-
-			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I1), GeneralPurposeRegister.ECX);
-
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, op2);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, opRes, op1);
-			ctx.InsertInstructionAfter(instruction, opRes, ecx);
+			ctx.ReplaceInstructionOnly(instruction);
 		}
 
 
