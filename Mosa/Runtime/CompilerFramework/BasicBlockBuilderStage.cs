@@ -126,6 +126,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="index">The index.</param>
 		private void FindTargets(int index)
 		{
+			_targets.Add(index, -1);
+
 			// Find out all targets labels
 			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext()) {
 
@@ -167,7 +169,7 @@ namespace Mosa.Runtime.CompilerFramework
 					_targets.Remove(ctx.Label);
 				}
 
-			Debug.Assert(_targets.Count == 0);
+			Debug.Assert(_targets.Count <= 1);
 
 			if (FindBlock(0) == null)
 				BasicBlocks.Add(new BasicBlock(0, index));

@@ -174,11 +174,14 @@ namespace Mosa.Tools.Compiler.Boot
 				InstructionSet instructionSet = new InstructionSet(16);
 				Context ctx = new Context(instructionSet, -1);
 
-				ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I4, 0x200000));
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I4, 0x200000));
 				ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
 				ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
 				ctx.InsertInstructionAfter(IR.Instruction.CallInstruction);
 				ctx.InvokeTarget = typeInitializerSchedulerStage.Method;
+				ctx.InsertInstructionAfter(CPUx86.Instruction.NopInstruction);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.NopInstruction);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.RetInstruction);
 
 				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"MultibootInit", instructionSet);
 				linker.EntryPoint = linker.GetSymbol(method);

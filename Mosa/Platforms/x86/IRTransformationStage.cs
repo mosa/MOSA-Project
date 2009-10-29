@@ -306,27 +306,29 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.MoveInstruction(Context ctx)
 		{
-			// We need to replace ourselves in case of a Memory -> Memory transfer
-			Operand op0 = ctx.Result;
-			Operand op1 = ctx.Operand1;
+			//// We need to replace ourselves in case of a Memory -> Memory transfer
+			//Operand op0 = ctx.Result;
+			//Operand op1 = ctx.Operand1;
 
-			op1 = EmitConstant(op1);
+			//op1 = EmitConstant(ctx.Operand1);
+			EmitConstant(ctx.Operand1);
+			ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
 
-			if (!(op0 is MemoryOperand && op1 is MemoryOperand)) {
-				ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
-				return;
-			}
+			//if (!(op0 is MemoryOperand && op1 is MemoryOperand)) {
+			//    ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+			//    return;
+			//}
 
-			RegisterOperand rop;
-			if (op0.StackType == StackTypeCode.F || op1.StackType == StackTypeCode.F)
-				rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
-			else if (op0.StackType == StackTypeCode.Int64)
-				rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
-			else
-				rop = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
+			//RegisterOperand rop;
+			//if (op0.StackType == StackTypeCode.F || op1.StackType == StackTypeCode.F)
+			//    rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
+			//else if (op0.StackType == StackTypeCode.Int64)
+			//    rop = new RegisterOperand(op0.Type, SSE2Register.XMM0);
+			//else
+			//    rop = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
 
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, rop, op1);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, op0, rop);
+			//ctx.SetInstruction(CPUx86.Instruction.MovInstruction, rop, op1);
+			//ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, op0, rop);
 		}
 
 		/// <summary>
