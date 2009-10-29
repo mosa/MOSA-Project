@@ -75,11 +75,8 @@
   <ItemGroup>
     <Compile Include="Boot.cs" />
     <Compile Include="CMOS.cs" />
-    <Compile Include="Tests.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Multiboot.cs" />
-    <Compile Include="PageFrameAllocator.cs" />
-    <Compile Include="PageTable.cs" />
     <Compile Include="Screen.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -32,22 +32,6 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion
 
-		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-		{
-			if (source is ConstantOperand) return O_C;
-			if (destination is RegisterOperand) return R_O;
-			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
-
-			throw new ArgumentException(@"No opcode for operand type.");
-		}
-
 		#region Properties
 
 		/// <summary>
@@ -68,6 +52,22 @@ namespace Mosa.Platforms.x86.CPUx86
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
 			visitor.Sub(context);
+		}
+
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
+			if (source is ConstantOperand) return O_C;
+			if (destination is RegisterOperand) return R_O;
+			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
+
+			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
 		#endregion // Methods
