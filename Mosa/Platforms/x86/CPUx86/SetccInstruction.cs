@@ -53,7 +53,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// Gets the condition code string.
 		/// </summary>
 		/// <returns>The string shortcut of the condition code.</returns>
-		public static new string GetConditionString(IR.ConditionCode code)
+		public static string GetInstructionString(IR.ConditionCode code)
 		{
 			switch (code) {
 				case IR.ConditionCode.Equal: return @"e";
@@ -107,7 +107,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </returns>
 		public override string ToString(Context context)
 		{
-			return base.ToString().Remove(6, 2).Insert(6, GetConditionString(context.ConditionCode));
+			return base.ToString(context).Remove(7, 2).Insert(7, GetInstructionString(context.ConditionCode));
 		}
 
 		/// <summary>

@@ -20,6 +20,12 @@ namespace Mosa.UnitTest
 			int x = 3;
 			int y = 4 + x;
 			int z = x * y;
+			int a = z - 5;
+			int b = a;
+			if (a > z)
+				b = a * 100;
+			else
+				b = a * 1000;
 		}
 
 	}
