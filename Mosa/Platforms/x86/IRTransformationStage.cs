@@ -196,8 +196,7 @@ namespace Mosa.Platforms.x86
 			}
 
 			// Determine the result
-			ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, op0);
-			ctx.ConditionCode = setcc;
+			ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, setcc, op0);
 
 			// Extend this to the full register, if we're storing it in a register
 			if (op0 is RegisterOperand) {
@@ -221,9 +220,9 @@ namespace Mosa.Platforms.x86
 			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Result, ctx.Operand1);
 
 			if (IsUnsigned(ctx.Operand1))
-				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(condition));
+				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(condition), result);
 			else
-				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, condition);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, condition, result);
 
 			if (result is RegisterOperand) {
 				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)result).Register);

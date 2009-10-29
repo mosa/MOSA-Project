@@ -760,6 +760,20 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Inserts the instruction after.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="code">The code.</param>
+		/// <param name="result">The result.</param>
+		public void InsertInstructionAfter(IInstruction instruction, IR.ConditionCode code, Operand result)
+		{
+			InsertInstructionAfter();
+			SetInstruction(instruction);
+			ConditionCode = code;
+			Result = result;
+		}
+
+		/// <summary>
+		/// Inserts the instruction after.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		public void InsertInstructionAfter(IInstruction instruction)
 		{
 			InsertInstructionAfter();
