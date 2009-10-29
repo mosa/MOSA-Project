@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartArguments>-a=x86 -f=PE -pe-file-alignment=4096 -b=mb0.7 -o Kernel.bin Mosa.HelloWorld.exe</StartArguments>
+    <StartArguments>-a=x86 -f=PE -pe-file-alignment=4096 -b=mb0.7 -o X:\mosa-experiment\Mosa\bin\Kernel.bin X:\mosa-experiment\Mosa\bin\Mosa.UnitTest.exe</StartArguments>
     <StartWorkingDirectory>X:\mosa-experiment\Mosa\bin</StartWorkingDirectory>
   </PropertyGroup>
 </Project>
