@@ -80,18 +80,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
-		{
-			return String.Format("{0} {1:X4}", base.ToString(), ctx.Branch.Targets[0]);
-		}
-
-		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor.</param>

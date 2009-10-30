@@ -189,8 +189,8 @@ namespace Mosa.Platforms.x86
 			else
 				ctx.SetBranch(branch.Targets[1]);
 
-			ctx.InsertInstructionAfter(CPUx86.Instruction.JmpInstruction);
-			ctx.SetBranch(branch.Targets[1]);
+			//ctx.InsertInstructionAfter(CPUx86.Instruction.JmpInstruction);
+			//ctx.SetBranch(branch.Targets[1]);
 		}
 
 		/// <summary>

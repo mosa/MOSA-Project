@@ -104,18 +104,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			visitor.Stelem(context);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
-		{
-			return String.Format("{4} ; {0}[{1}] = ({3}){2}", ctx.Operand1, ctx.Operand2, ctx.Operand3, _typeRef, base.ToString());
-		}
-
 		#endregion Methods
 
 

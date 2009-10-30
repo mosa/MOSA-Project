@@ -61,18 +61,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			visitor.Localalloc(context);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
-		{
-			return String.Format("{0} = localalloc({1})", ctx.Result, ctx.Operand1);
-		}
-
 		#endregion Methods
 
 	}

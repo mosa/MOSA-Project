@@ -76,12 +76,13 @@ namespace Mosa.Platforms.x86.CPUx86
 		}
 
 		/// <summary>
-		/// Gets the condition code string.
+		/// Gets the instruction modifier.
 		/// </summary>
-		/// <returns>The string shortcut of the condition code.</returns>
-		public static string GetInstructionString(IR.ConditionCode code)
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
+		protected override string GetModifier(Context context)
 		{
-			switch (code) {
+			switch (context.ConditionCode) {
 				case IR.ConditionCode.Equal: return @"e";
 				case IR.ConditionCode.GreaterOrEqual: return @"ge";
 				case IR.ConditionCode.GreaterThan: return @"g";
@@ -94,17 +95,6 @@ namespace Mosa.Platforms.x86.CPUx86
 				case IR.ConditionCode.UnsignedLessThan: return @"b";
 				default: throw new NotSupportedException();
 			}
-		}
-
-		/// <summary>
-		/// Returns a string representation of the instruction.
-		/// </summary>
-		/// <returns>
-		/// A string representation of the instruction in intermediate form.
-		/// </returns>
-		public override string ToString(Context context)
-		{
-			return base.ToString(context).Remove(7, 2).Insert(7, GetInstructionString(context.ConditionCode));
 		}
 
 		/// <summary>

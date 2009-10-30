@@ -25,18 +25,6 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Data members
 
 		/// <summary>
-		/// List of leaders
-		/// </summary>
-		private SortedDictionary<int, BasicBlock> _heads;
-		/// <summary>
-		/// 
-		/// </summary>
-		private List<int> _slice;
-		/// <summary>
-		/// 
-		/// </summary>
-		private Dictionary<int, int> _targets;
-		/// <summary>
 		/// 
 		/// </summary>
 		private BasicBlock _epilogue;
@@ -46,20 +34,6 @@ namespace Mosa.Runtime.CompilerFramework
 		private BasicBlock _prologue;
 
 		#endregion // Data members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BasicBlockBuilderStage"/> class.
-		/// </summary>
-		public BasicBlockBuilderStage()
-		{
-			_heads = new SortedDictionary<int, BasicBlock>();
-			_slice = new List<int>();
-			_targets = new Dictionary<int, int>();
-		}
-
-		#endregion // Construction
 
 		#region IMethodCompilerStage members
 
@@ -97,35 +71,27 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.Label = Int32.MaxValue;
 			_epilogue = new BasicBlock(Int32.MaxValue, ctx.Index);
 
-			// Add epilogue block to leaders (helps with loop below)
-			_heads.Add(_epilogue.Label, _epilogue);
-
-			compiler.BasicBlocks = new List<BasicBlock>(_heads.Count + 2);
+			compiler.BasicBlocks = new List<BasicBlock>();
 			BasicBlocks = compiler.BasicBlocks;
 			BasicBlocks.Add(_prologue);
 
-			FindTargets(0);
-
-			// Split the blocks
-			SplitIntoBlocks();
+			SplitIntoBlocks(0);
 
 			// Link all the blocks together
 			BuildBlockLinks(_prologue);
 
 			BasicBlocks.Add(_epilogue);
-
-			// help out the gargage collector
-			_heads = null;
-			_slice = null;
-			_targets = null;
 		}
 
 		/// <summary>
 		/// Finds all targets.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		private void FindTargets(int index)
+		private void SplitIntoBlocks(int index)
 		{
+
+			Dictionary<int, int> _targets = new Dictionary<int, int>();
+
 			_targets.Add(index, -1);
 
 			// Find out all targets labels
@@ -137,21 +103,18 @@ namespace Mosa.Runtime.CompilerFramework
 					case FlowControl.Break:
 						goto case FlowControl.Branch;
 					case FlowControl.Return:
-						_slice.Add(ctx.Index);
 						continue;
 					case FlowControl.Throw:
 						goto case FlowControl.Branch;
 					case FlowControl.Branch:
 						// Unconditional branch 
 						Debug.Assert(ctx.Branch.Targets.Length == 1);
-						_slice.Add(ctx.Index);
 						if (!_targets.ContainsKey(ctx.Branch.Targets[0]))
 							_targets.Add(ctx.Branch.Targets[0], -1);
 						continue;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.ConditionalBranch:
 						// Conditional branch with multiple targets
-						_slice.Add(ctx.Index);
 						foreach (int target in ctx.Branch.Targets)
 							if (!_targets.ContainsKey(target))
 								_targets.Add(target, -1);
@@ -162,27 +125,41 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 			}
 
-			// Map target labels to indexes
-			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext())
+			bool slice = false;
+
+			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext()) {
+				FlowControl flow;
+
 				if (_targets.ContainsKey(ctx.Label)) {
 					BasicBlocks.Add(new BasicBlock(ctx.Label, ctx.Index));
+
+					if (!ctx.IsFirstInstruction) {
+						Context prev = ctx.Previous;
+						flow = prev.Instruction.FlowControl;
+						if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch) {
+							prev.InsertInstructionAfter(IR.Instruction.JmpInstruction);
+							prev.SetBranch(ctx.Label);
+							prev.SliceAfter();
+//							slice = false;
+						}
+					}
+
 					_targets.Remove(ctx.Label);
 				}
+
+				if (slice)
+					ctx.SliceBefore();
+
+				flow = ctx.Instruction.FlowControl;
+
+				slice = (flow == FlowControl.Return || flow == FlowControl.Branch || flow == FlowControl.ConditionalBranch || flow == FlowControl.Break || flow == FlowControl.Throw);
+			}
 
 			Debug.Assert(_targets.Count <= 1);
 
 			if (FindBlock(0) == null)
 				BasicBlocks.Add(new BasicBlock(0, index));
 
-		}
-
-		/// <summary>
-		/// Splits the instruction set into blocks.
-		/// </summary>
-		private void SplitIntoBlocks()
-		{
-			foreach (int index in _slice)
-				InstructionSet.SliceAfter(index);
 		}
 
 		/// <summary>

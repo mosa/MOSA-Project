@@ -44,37 +44,5 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-		#region Methods
-
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
-		{
-			StringBuilder builder = new StringBuilder();
-			builder.AppendFormat("{0}", _opcode);
-
-			if (ctx.OperandCount != 0) {
-				builder.Append(' ');
-
-				if (ctx.OperandCount == 1)
-					builder.AppendFormat("{0}, ", ctx.Operand1);
-
-				if (ctx.OperandCount == 2)
-					builder.AppendFormat("{0}, ", ctx.Operand2);
-
-				if (ctx.OperandCount == 3)
-					builder.AppendFormat("{0}, ", ctx.Operand3);
-
-				builder.Remove(builder.Length - 2, 2);
-			}
-			return builder.ToString();
-		}
-
-		#endregion Methods
 	}
 }

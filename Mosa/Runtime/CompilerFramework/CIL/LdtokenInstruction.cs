@@ -128,18 +128,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			visitor.Ldtoken(context);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
-		{
-			return String.Format("{0} = ldtoken({1})", ctx.Result, ctx.Token);
-		}
-
 		#endregion Methods
 	}
 }

@@ -73,18 +73,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		#region OneOperandInstruction Overrides
 
 		/// <summary>
-		/// Returns a string representation of the context.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context context)
-		{
-			return String.Format(@"{0} L_{1:X4}", base.ToString(context), context.Branch.Targets[0]);
-		}
-
-		/// <summary>
 		/// Abstract visitor method for intermediate representation visitors.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>

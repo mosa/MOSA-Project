@@ -34,29 +34,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		#region ThreeOperandInstruction Overrides
 
 		/// <summary>
-		/// Returns a string representation of the context.
+		/// Gets the instruction modifier.
 		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context context)
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
+		protected override string GetModifier(Context context)
 		{
-			string cc;
-			switch ((ConditionCode)context.Other) {
-				case ConditionCode.Equal: cc = @"=="; break;
-				case ConditionCode.GreaterOrEqual: cc = @">="; break;
-				case ConditionCode.GreaterThan: cc = @">"; break;
-				case ConditionCode.LessOrEqual: cc = @"<="; break;
-				case ConditionCode.LessThan: cc = @"<"; break;
-				case ConditionCode.NotEqual: cc = @"!="; break;
-				case ConditionCode.UnsignedGreaterOrEqual: cc = @">= (U)"; break;
-				case ConditionCode.UnsignedGreaterThan: cc = @"> (U)"; break;
-				case ConditionCode.UnsignedLessOrEqual: cc = @"<= (U)"; break;
-				case ConditionCode.UnsignedLessThan: cc = @"< (U)"; break;
-				default:
-					throw new NotSupportedException();
-			}
-			return String.Format(@"IR.fcmp {0} = {1} {2} {3}", context.Operand1, context.Operand2, cc, context.Operand3);
+			return GetConditionString(context.ConditionCode);
 		}
 
 		/// <summary>

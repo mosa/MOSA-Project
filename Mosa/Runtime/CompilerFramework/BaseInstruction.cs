@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
@@ -126,21 +128,38 @@ namespace Mosa.Runtime.CompilerFramework
 			if (context.Other is IR.ConditionCode)
 				s = s + " [" + GetConditionString(context.ConditionCode) + "] ";
 
+			string mod = GetModifier(context);
+			if (mod != null)
+				s = s + " [" + mod + "]";
+
 			if (context.ResultCount == 1)
 				s = s + " " + context.Result;
 			else if (context.ResultCount == 2)
 				s = s + " " + context.Result + ", " + context.Result2;
 
-			if (context.ResultCount > 0)
+			if (context.ResultCount > 0 && context.OperandCount > 0)
 				s = s + " <-";
 
 			for (int i = 0; (i < 3) && (i < context.OperandCount); i++)
 				s = s + " " + context.GetOperand(i) + ",";
 
 			if (context.OperandCount > 3)
-				s = s + " [...]";
+				s = s + " [more]";
 			else
 				s = s.TrimEnd(',');
+
+			if (context.Branch != null) {
+				for (int i = 0; (i < 2) && (i < context.Branch.Targets.Length); i++)
+					s = s + String.Format(@" L_{0:X4},", context.Branch.Targets[i]);
+
+				if (context.Branch.Targets.Length > 2)
+					s = s + " [more]";
+				else
+					s = s.TrimEnd(',');
+			}
+
+			if (context.InvokeTarget != null)
+				s = s + " " + context.InvokeTarget.ToString();
 
 			return s;
 		}
@@ -168,6 +187,16 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Gets the instruction modifier.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
+		protected virtual string GetModifier(Context context)
+		{
+			return null;
+		}
+
+		/// <summary>
 		/// Gets the condition string.
 		/// </summary>
 		/// <param name="conditioncode">The conditioncode.</param>
@@ -178,7 +207,7 @@ namespace Mosa.Runtime.CompilerFramework
 				case IR.ConditionCode.Equal: return @"equal";
 				case IR.ConditionCode.GreaterOrEqual: return @"greater or equal";
 				case IR.ConditionCode.GreaterThan: return @"greater";
-				case IR.ConditionCode.LessOrEqual: return @"less or equa";
+				case IR.ConditionCode.LessOrEqual: return @"less or equal";
 				case IR.ConditionCode.LessThan: return @"less";
 				case IR.ConditionCode.NotEqual: return @"not equal";
 				case IR.ConditionCode.UnsignedGreaterOrEqual: return @"greater or equal (U)";

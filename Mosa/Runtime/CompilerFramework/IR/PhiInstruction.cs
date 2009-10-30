@@ -37,30 +37,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		#region Methods
 
 		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context context)
-		{
-			StringBuilder builder = new StringBuilder();
-			builder.AppendFormat("IR.phi ; {0} = phi(", context.Result);
-
-			if (context.Operand1 != null)
-				builder.AppendFormat("{0}, ", context.Operand1);
-			if (context.Operand2 != null)
-				builder.AppendFormat("{0}, ", context.Operand2);
-			if (context.Operand3 != null)
-				builder.AppendFormat("{0}, ", context.Operand3);
-
-			builder.Remove(builder.Length - 2, 2);
-			builder.Append(')');
-			return builder.ToString();
-		}
-
-		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>

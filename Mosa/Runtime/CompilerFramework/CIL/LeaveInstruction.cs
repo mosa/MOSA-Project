@@ -71,18 +71,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			visitor.Leave(context);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
-		{
-			return String.Format("leave L_{0:X4}", ctx.Branch.Targets);
-		}
-
 		#endregion Methods
 
 

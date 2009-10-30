@@ -48,18 +48,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Call(context);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context context)
-		{
-			return String.Format(@"{0} {1}", base.ToString(context), context.InvokeTarget.ToString());
-		}
-
 		#endregion // Methods
 	}
 }

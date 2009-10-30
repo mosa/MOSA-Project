@@ -43,7 +43,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		public override string ToString(Context context)
 		{
 			LiteralData data = (LiteralData)context.Other;
-			return String.Format("IR.literal {0} {1} ; L_{2}", data.Type, data.Data, data.Label);
+			return String.Format("{0} ; {1} {2} {3}", ToString(context), data.Label, data.Type, data.Data);
 		}
 
 		/// <summary>

@@ -96,26 +96,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// Gets the instruction modifier.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
+		protected override string GetModifier(Context context)
 		{
-			string condition;
-
-			switch (_opcode) {
-				case OpCode.Brtrue: condition = @"true"; break;
-				case OpCode.Brtrue_s: condition = @"true"; break;
-				case OpCode.Brfalse: condition = @"false"; break;
-				case OpCode.Brfalse_s: condition = @"false"; break;
-				default:
-					throw new InvalidOperationException(@"Opcode not set.");
+			switch (((context.Instruction) as CIL.ICILInstruction).OpCode) {
+				case OpCode.Brtrue: return @"true";
+				case OpCode.Brtrue_s: return @"true";
+				case OpCode.Brfalse: return @"false";
+				case OpCode.Brfalse_s: return @"false";
+				default: throw new InvalidOperationException(@"Opcode not set.");
 			}
-
-			return String.Format(@"{4} ; if ({0} == {1}) goto L_{2:X4} else goto L_{3:X4}", ctx.Operand1, condition, ctx.Branch.Targets[0], ctx.Branch.Targets[1], base.ToString());
 		}
 
 		#endregion Methods

@@ -148,42 +148,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			visitor.Newobj(context);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
-		{
-			StringBuilder builder = new StringBuilder();
-			//            int opIdx = 0;
-
-			// Output the result...
-			builder.AppendFormat("{0} = newobj ", ctx.Result);
-
-			// Output the call name
-			builder.Append(ctx.InvokeTarget);
-			/*
-				if (opIdx < _operands.Length)
-				{
-					builder.Append('(');
-
-					while (opIdx < _operands.Length)
-					{
-						builder.AppendFormat("{0}, ", _operands[opIdx++]);
-					}
-
-					builder.Remove(builder.Length - 2, 2);
-					builder.Append(')');
-				}
-				else
-					builder.Append("()");
-			*/
-			return builder.ToString();
-		}
-
 		#endregion Methods
 
 

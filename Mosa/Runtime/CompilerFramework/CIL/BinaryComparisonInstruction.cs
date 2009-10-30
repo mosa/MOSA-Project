@@ -34,7 +34,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // Construction
-		
+
 		#region Methods
 
 		/// <summary>
@@ -52,46 +52,20 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
-		/// Returns a formatted representation of the opcode.
+		/// Gets the instruction modifier.
 		/// </summary>
-		/// <returns>The code as a string value.</returns>
-		public override string ToString(Context ctx)
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
+		protected override string GetModifier(Context context)
 		{
-			string result, op;
-			bool un = false;
-			switch (_opcode) {
-				case OpCode.Ceq:
-					op = @"==";
-					break;
-
-				case OpCode.Cgt:
-					op = @">";
-					break;
-
-				case OpCode.Cgt_un:
-					op = @">";
-					un = true;
-					break;
-
-				case OpCode.Clt:
-					op = @"<";
-					break;
-
-				case OpCode.Clt_un:
-					op = @"<";
-					un = true;
-					break;
-
-				default:
-					throw new InvalidOperationException(@"Invalid opcode.");
+			switch (((context.Instruction) as CIL.ICILInstruction).OpCode) {
+				case OpCode.Ceq: return @"==";
+				case OpCode.Cgt: return @">";
+				case OpCode.Cgt_un: return @"> unordered";
+				case OpCode.Clt: return @"<";
+				case OpCode.Clt_un: return @"< unordered";
+				default: throw new InvalidOperationException(@"Invalid opcode.");
 			}
-
-			if (un)
-				result = String.Format(@"{4} ; {0} = unchecked({1} {2} {3})", ctx.Result, ctx.Operand1, op, ctx.Operand2, base.ToString());
-			else
-				result = String.Format(@"{4} ; {0} = ({1} {2} {3})", ctx.Result, ctx.Operand1, op, ctx.Operand2, base.ToString());
-
-			return result;
 		}
 
 		/// <summary>

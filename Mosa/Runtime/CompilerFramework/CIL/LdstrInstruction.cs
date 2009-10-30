@@ -71,18 +71,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			visitor.Ldstr(context);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
-		{
-			return String.Format("{0} = \"{1}\"", ctx.Result, ctx.String);
-		}
-
 		#endregion Methods
 
 

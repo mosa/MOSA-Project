@@ -65,18 +65,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			visitor.Stsfld(context);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
-		{
-			return String.Format("IL stsfld ; {0}.{1} = {2}", ctx.RuntimeField.DeclaringType.FullName, ctx.RuntimeField.Name, ctx.Operand1);
-		}
-
 		#endregion // Methods
 
 	}

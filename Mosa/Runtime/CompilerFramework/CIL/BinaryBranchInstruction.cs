@@ -94,48 +94,37 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			visitor.BinaryBranch(context);
 		}
 
+
 		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// Gets the instruction modifier.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
+		protected override string GetModifier(Context context)
 		{
-			string op, format;
-			bool unordered = false;
-			switch (_opcode) {
-				case OpCode.Beq_s: op = @"=="; break;
-				case OpCode.Beq: op = @"=="; break;
-				case OpCode.Bge_s: op = @">="; break;
-				case OpCode.Bge: op = @">="; break;
-				case OpCode.Bge_un_s: op = @">="; unordered = true; break;
-				case OpCode.Bge_un: op = @">="; unordered = true; break;
-				case OpCode.Bgt_s: op = @">"; break;
-				case OpCode.Bgt: op = @">"; break;
-				case OpCode.Bgt_un_s: op = @">"; unordered = true; break;
-				case OpCode.Bgt_un: op = @">"; unordered = true; break;
-				case OpCode.Ble_s: op = @"<="; break;
-				case OpCode.Ble: op = @"<="; break;
-				case OpCode.Ble_un_s: op = @"<="; unordered = true; break;
-				case OpCode.Ble_un: op = @"<="; unordered = true; break;
-				case OpCode.Blt_s: op = @"<"; break;
-				case OpCode.Blt: op = @"<"; break;
-				case OpCode.Blt_un_s: op = @"<"; unordered = true; break;
-				case OpCode.Blt_un: op = @"<"; unordered = true; break;
-				case OpCode.Bne_un_s: op = @"!="; unordered = true; break;
-				case OpCode.Bne_un: op = @"!="; unordered = true; break;
-				default:
-					throw new InvalidOperationException(@"Opcode not set.");
+			switch (((context.Instruction) as CIL.ICILInstruction).OpCode) {
+				case OpCode.Beq_s: return @"==";
+				case OpCode.Beq: return @"==";
+				case OpCode.Bge_s: return @">=";
+				case OpCode.Bge: return @">=";
+				case OpCode.Bge_un_s: return @">= unordered";
+				case OpCode.Bge_un: return @">= unordered";
+				case OpCode.Bgt_s: return @">";
+				case OpCode.Bgt: return @">";
+				case OpCode.Bgt_un_s: return @"> unordered";
+				case OpCode.Bgt_un: return @"> unordered";
+				case OpCode.Ble_s: return @"<=";
+				case OpCode.Ble: return @"<=";
+				case OpCode.Ble_un_s: return @"<= unordered";
+				case OpCode.Ble_un: return @"<= unordered";
+				case OpCode.Blt_s: return @"<";
+				case OpCode.Blt: return @"<";
+				case OpCode.Blt_un_s: return @"< unordered";
+				case OpCode.Blt_un: return @"< unordered";
+				case OpCode.Bne_un_s: return @"!= unordered";
+				case OpCode.Bne_un: return @"!= unordered";
+				default: throw new InvalidOperationException(@"Opcode not set.");
 			}
-
-			if (!unordered)
-				format = @" {3} ; if ({0} {1} {2}) goto L_{4:X4}";
-			else
-				format = @" {3} ; if (unordered({0} {1} {2})) goto L_{4:X4} else goto L_{5:X4}";
-
-			return String.Format(format, ctx.Operand1, op, ctx.Operand2, base.ToString(), ctx.Branch.Targets[0], ctx.Branch.Targets[1]);
 		}
 
 		#endregion Methods

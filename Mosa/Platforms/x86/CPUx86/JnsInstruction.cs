@@ -46,18 +46,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Jns(context);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context context)
-		{
-			return String.Format(@"{0} L_{1:X4}", base.ToString(context), context.Branch.Targets[0]);
-		}
-
 		#endregion // Methods
 
 	}

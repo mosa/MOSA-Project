@@ -44,18 +44,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			visitor.UnboxAny(context);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
-		{
-			return String.Format(@"{2} ; {0} = unbox.any({1})", ctx.Result, ctx.Operand1, base.ToString());
-		}
-
 		#endregion // Methods
 
 	}

@@ -74,20 +74,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			visitor.Newarr(context);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context ctx)
-		{
-			throw new NotImplementedException();
-			//            TypeSpecification typeSpec = (TypeSpecification)_results[0].Type;
-			//            return String.Format(@"{0} = new {1}[{2}]", _results[0], typeSpec.ElementType, _operands[0]);
-		}
-
 		#endregion Methods
 
 	}
