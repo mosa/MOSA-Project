@@ -70,12 +70,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			if (_opcode == OpCode.Brfalse_s || _opcode == OpCode.Brtrue_s) {
 				sbyte target;
 				decoder.Decode(out target);
-				ctx.SetBranch(target, 0);
+				ctx.SetBranch(target);
 			}
 			else if (_opcode == OpCode.Brfalse || _opcode == OpCode.Brtrue) {
 				int target;
 				decoder.Decode(out target);
-				ctx.SetBranch(target, 0);
+				ctx.SetBranch(target);
 			}
 			else if (_opcode == OpCode.Switch) {
 				// Don't do anything, the derived class will do everything

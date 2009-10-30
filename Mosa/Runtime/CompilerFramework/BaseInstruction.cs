@@ -44,6 +44,19 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The operand result count.</value>
 		public byte DefaultResultCount { get { return _resultDefaultCount; } }
 
+		/// <summary>
+		/// Determines flow behavior of this instruction.
+		/// </summary>
+		/// <remarks>
+		/// Knowledge of control flow is required for correct basic block
+		/// building. Any instruction that alters the control flow must override
+		/// this property and correctly identify its control flow modifications.
+		/// </remarks>
+		public virtual FlowControl FlowControl
+		{
+			get { return FlowControl.Next; }
+		}
+
 		#endregion // Properties
 
 		#region Construction
@@ -126,7 +139,7 @@ namespace Mosa.Runtime.CompilerFramework
 			string s = ToString();
 
 			if (context.Other is IR.ConditionCode)
-				s = s + " [" + GetConditionString(context.ConditionCode) + "] ";
+				s = s + " [" + GetConditionString(context.ConditionCode) + "]";
 
 			string mod = GetModifier(context);
 			if (mod != null)
@@ -162,19 +175,6 @@ namespace Mosa.Runtime.CompilerFramework
 				s = s + " " + context.InvokeTarget.ToString();
 
 			return s;
-		}
-
-		/// <summary>
-		/// Determines flow behavior of this instruction.
-		/// </summary>
-		/// <remarks>
-		/// Knowledge of control flow is required for correct basic block
-		/// building. Any instruction that alters the control flow must override
-		/// this property and correctly identify its control flow modifications.
-		/// </remarks>
-		public virtual FlowControl FlowControl
-		{
-			get { return FlowControl.Next; }
 		}
 
 		/// <summary>
