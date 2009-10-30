@@ -19,9 +19,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region Data Members
 
 		private static readonly OpCode PUSH = new OpCode(new byte[] { 0xFF });
-        private static readonly OpCode Const_8 = new OpCode(new byte[] { 0x6A });
-        private static readonly OpCode Const_16 = new OpCode(new byte[] { 0x66, 0x68 });
-        private static readonly OpCode Const_32 = new OpCode(new byte[] { 0x68 });
+		private static readonly OpCode Const_8 = new OpCode(new byte[] { 0x6A });
+		private static readonly OpCode Const_16 = new OpCode(new byte[] { 0x66, 0x68 });
+		private static readonly OpCode Const_32 = new OpCode(new byte[] { 0x68 });
 
 		#endregion
 
@@ -44,17 +44,16 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		public override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-            if (ctx.Result is ConstantOperand)
-            {
-                if (IsByte(ctx.Result))
-                    emitter.Emit(Const_8.Code, null, ctx.Result, null);
-                else if (IsShort(ctx.Result) || IsChar(ctx.Result))
-                    emitter.Emit(Const_16.Code, null, ctx.Result, null);
-                else if (IsInt(ctx.Result))
-                    emitter.Emit(Const_32.Code, null, ctx.Result, null);
-            }
-            else
-                emitter.Emit(PUSH.Code, 6, ctx.Result, null);
+			if (ctx.Operand1 is ConstantOperand) {
+				if (IsByte(ctx.Result))
+					emitter.Emit(Const_8.Code, null, ctx.Operand1, null);
+				else if (IsShort(ctx.Operand1) || IsChar(ctx.Operand1))
+					emitter.Emit(Const_16.Code, null, ctx.Operand1, null);
+				else if (IsInt(ctx.Result))
+					emitter.Emit(Const_32.Code, null, ctx.Operand1, null);
+			}
+			else
+				emitter.Emit(PUSH.Code, 6, ctx.Operand1, null);
 		}
 
 		/// <summary>

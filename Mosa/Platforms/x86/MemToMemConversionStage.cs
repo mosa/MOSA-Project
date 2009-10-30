@@ -85,7 +85,7 @@ namespace Mosa.Platforms.x86
 
             if (useStack)
             {
-                before.SetInstruction(CPUx86.Instruction.PushInstruction, register);
+				before.SetInstruction(CPUx86.Instruction.PushInstruction, null, register);
                 before.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, register, source);
             }
             else 
