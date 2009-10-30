@@ -337,18 +337,6 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Emits the specified op code.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <param name="op">The op.</param>
-		/// <param name="opCode">The op code.</param>
-		public void Emit(Operand dest, Operand src, Operand op, OpCode opCode)
-		{
-			Emit(opCode.Code, opCode.RegField, dest, src, op);
-		}
-
-		/// <summary>
 		/// Emits the given code.
 		/// </summary>
 		/// <param name="code">The opcode bytes.</param>
