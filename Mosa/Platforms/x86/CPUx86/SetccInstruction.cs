@@ -50,30 +50,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region Methods
 
 		/// <summary>
-		/// Gets the condition code string.
-		/// </summary>
-		/// <returns>The string shortcut of the condition code.</returns>
-		public static string GetInstructionString(IR.ConditionCode code)
-		{
-			switch (code) {
-				case IR.ConditionCode.Equal: return @"e";
-				case IR.ConditionCode.GreaterOrEqual: return @"ge";
-				case IR.ConditionCode.GreaterThan: return @"g";
-				case IR.ConditionCode.LessOrEqual: return @"le";
-				case IR.ConditionCode.LessThan: return @"l";
-				case IR.ConditionCode.NotEqual: return @"ne";
-				case IR.ConditionCode.UnsignedGreaterOrEqual: return @"ae";
-				case IR.ConditionCode.UnsignedGreaterThan: return @"a";
-				case IR.ConditionCode.UnsignedLessOrEqual: return @"be";
-				case IR.ConditionCode.UnsignedLessThan: return @"b";
-				default: throw new NotSupportedException();
-			}
-		}
-
-		#endregion // Methods
-
-		#region Methods
-		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -97,6 +73,27 @@ namespace Mosa.Platforms.x86.CPUx86
 			}
 
 			emitter.Emit(opcode, ctx.Result, null, null);
+		}
+
+		/// <summary>
+		/// Gets the condition code string.
+		/// </summary>
+		/// <returns>The string shortcut of the condition code.</returns>
+		public static string GetInstructionString(IR.ConditionCode code)
+		{
+			switch (code) {
+				case IR.ConditionCode.Equal: return @"e";
+				case IR.ConditionCode.GreaterOrEqual: return @"ge";
+				case IR.ConditionCode.GreaterThan: return @"g";
+				case IR.ConditionCode.LessOrEqual: return @"le";
+				case IR.ConditionCode.LessThan: return @"l";
+				case IR.ConditionCode.NotEqual: return @"ne";
+				case IR.ConditionCode.UnsignedGreaterOrEqual: return @"ae";
+				case IR.ConditionCode.UnsignedGreaterThan: return @"a";
+				case IR.ConditionCode.UnsignedLessOrEqual: return @"be";
+				case IR.ConditionCode.UnsignedLessThan: return @"b";
+				default: throw new NotSupportedException();
+			}
 		}
 
 		/// <summary>
