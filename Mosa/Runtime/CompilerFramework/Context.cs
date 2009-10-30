@@ -765,7 +765,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public void InsertInstructionAfter(IInstruction instruction, IR.ConditionCode code, Operand result)
 		{
 			InsertInstructionAfter();
-			SetInstruction(instruction);
+			SetInstruction(instruction, result);
 			ConditionCode = code;
 			Result = result;
 		}

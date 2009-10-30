@@ -19,21 +19,21 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// Representations the x86 setcc instruction.
 	/// </summary>
-	public sealed class SetccInstruction : OneOperandInstruction
+	public sealed class SetccInstruction : BaseInstruction
 	{
 
 		#region Data Members
 
-		private static readonly byte[] E = new byte[] { 0x0F, 0x94 };
-		private static readonly byte[] LT = new byte[] { 0x0F, 0x9C };
-		private static readonly byte[] LE = new byte[] { 0x0F, 0x9E };
-		private static readonly byte[] GE = new byte[] { 0x0F, 0x9D };
-		private static readonly byte[] GT = new byte[] { 0x0F, 0x9F };
-		private static readonly byte[] NE = new byte[] { 0x0F, 0x95 };
-		private static readonly byte[] UGE = new byte[] { 0x0F, 0x93 };
-		private static readonly byte[] UGT = new byte[] { 0x0F, 0x97 };
-		private static readonly byte[] ULE = new byte[] { 0x0F, 0x96 };
-		private static readonly byte[] ULT = new byte[] { 0x0F, 0x92 };
+		private static readonly OpCode E = new OpCode(new byte[] { 0x0F, 0x94 });
+		private static readonly OpCode LT = new OpCode(new byte[] { 0x0F, 0x9C });
+		private static readonly OpCode LE = new OpCode(new byte[] { 0x0F, 0x9E });
+		private static readonly OpCode GE = new OpCode(new byte[] { 0x0F, 0x9D });
+		private static readonly OpCode GT = new OpCode(new byte[] { 0x0F, 0x9F });
+		private static readonly OpCode NE = new OpCode(new byte[] { 0x0F, 0x95 });
+		private static readonly OpCode UGE = new OpCode(new byte[] { 0x0F, 0x93 });
+		private static readonly OpCode UGT = new OpCode(new byte[] { 0x0F, 0x97 });
+		private static readonly OpCode ULE = new OpCode(new byte[] { 0x0F, 0x96 });
+		private static readonly OpCode ULT = new OpCode(new byte[] { 0x0F, 0x92 });
 
 		#endregion
 
@@ -80,23 +80,23 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		public override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-			byte[] byteCode;
+			OpCode opcode;
 
 			switch (ctx.ConditionCode) {
-				case IR.ConditionCode.Equal: byteCode = E; break;
-				case IR.ConditionCode.LessThan: byteCode = LT; break;
-				case IR.ConditionCode.LessOrEqual: byteCode = LE; break;
-				case IR.ConditionCode.GreaterOrEqual: byteCode = GE; break;
-				case IR.ConditionCode.GreaterThan: byteCode = GT; break;
-				case IR.ConditionCode.NotEqual: byteCode = NE; break;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: byteCode = UGE; break;
-				case IR.ConditionCode.UnsignedGreaterThan: byteCode = UGT; break;
-				case IR.ConditionCode.UnsignedLessOrEqual: byteCode = ULE; break;
-				case IR.ConditionCode.UnsignedLessThan: byteCode = ULT; break;
+				case IR.ConditionCode.Equal: opcode = E; break;
+				case IR.ConditionCode.LessThan: opcode = LT; break;
+				case IR.ConditionCode.LessOrEqual: opcode = LE; break;
+				case IR.ConditionCode.GreaterOrEqual: opcode = GE; break;
+				case IR.ConditionCode.GreaterThan: opcode = GT; break;
+				case IR.ConditionCode.NotEqual: opcode = NE; break;
+				case IR.ConditionCode.UnsignedGreaterOrEqual: opcode = UGE; break;
+				case IR.ConditionCode.UnsignedGreaterThan: opcode = UGT; break;
+				case IR.ConditionCode.UnsignedLessOrEqual: opcode = ULE; break;
+				case IR.ConditionCode.UnsignedLessThan: opcode = ULT; break;
 				default: throw new NotSupportedException();
 			}
 
-			emitter.Emit(new OpCode(byteCode), ctx.Result, null);
+			emitter.Emit(opcode, ctx.Result, null, null);
 		}
 
 		/// <summary>
