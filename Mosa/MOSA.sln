@@ -66,9 +66,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System", "System", "{FF773B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.CreateProject", "Tools\Mono\CreateProject\Mosa.Tools.Mono.CreateProject.csproj", "{17DA1FF2-7414-4E25-8053-F3880C045877}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.QuickTest", "UnitTest\Mosa.QuickTest.csproj", "{038DC96D-021B-41E6-867E-047598F92ED3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Mosa.Runtime.CompilerFramework", "..\Tests\Runtime\CompilerFramework\Test.Mosa.Runtime.CompilerFramework.csproj", "{AD653B6B-EBB7-4E69-93F7-FADA40462648}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.QuickTest", "QuickTest\Mosa.QuickTest.csproj", "{038DC96D-021B-41E6-867E-047598F92ED3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -161,14 +161,14 @@ Global
 		{17DA1FF2-7414-4E25-8053-F3880C045877}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17DA1FF2-7414-4E25-8053-F3880C045877}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17DA1FF2-7414-4E25-8053-F3880C045877}.Release|Any CPU.Build.0 = Release|Any CPU
-		{038DC96D-021B-41E6-867E-047598F92ED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{038DC96D-021B-41E6-867E-047598F92ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{038DC96D-021B-41E6-867E-047598F92ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{038DC96D-021B-41E6-867E-047598F92ED3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AD653B6B-EBB7-4E69-93F7-FADA40462648}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD653B6B-EBB7-4E69-93F7-FADA40462648}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD653B6B-EBB7-4E69-93F7-FADA40462648}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD653B6B-EBB7-4E69-93F7-FADA40462648}.Release|Any CPU.Build.0 = Release|Any CPU
+		{038DC96D-021B-41E6-867E-047598F92ED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{038DC96D-021B-41E6-867E-047598F92ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{038DC96D-021B-41E6-867E-047598F92ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{038DC96D-021B-41E6-867E-047598F92ED3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
