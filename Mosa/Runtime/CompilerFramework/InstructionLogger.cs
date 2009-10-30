@@ -52,6 +52,10 @@ namespace Mosa.Runtime.CompilerFramework
 			// Previous stage
 			IMethodCompilerStage prevStage = compiler.GetPreviousStage<IMethodCompilerStage>();
 
+			// Do not dump internal methods
+			if (compiler.Method.Name.Contains("<$>"))
+				return;
+
 			// Line number
 			int index = 1;
 

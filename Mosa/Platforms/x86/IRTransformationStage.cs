@@ -214,19 +214,18 @@ namespace Mosa.Platforms.x86
 		{
 			EmitOperandConstants(ctx);
 
-			Operand result = ctx.Operand1;
 			IR.ConditionCode condition = ctx.ConditionCode;
 
 			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Result, ctx.Operand1);
 
-			if (IsUnsigned(ctx.Operand1))
-				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(condition), result);
+			if (IsUnsigned(ctx.Result))
+				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(condition), ctx.Result);
 			else
-				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, condition, result);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, condition, ctx.Result);
 
-			if (result is RegisterOperand) {
-				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)result).Register);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, rop, rop);
+			if (ctx.Result is RegisterOperand) {
+				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)ctx.Result).Register);
+				ctx.InsertInstructionAfter(CPUx86.Instruction.MovzxInstruction, rop, rop);
 			}
 		}
 
