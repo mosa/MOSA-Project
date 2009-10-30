@@ -5,7 +5,7 @@
  *
  */
 
-namespace Mosa.UnitTest
+namespace Mosa.QuickTest
 {
 	/// <summary>
 	/// 

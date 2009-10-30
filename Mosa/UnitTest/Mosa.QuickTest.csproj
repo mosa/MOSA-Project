@@ -8,8 +8,8 @@
     <ProjectGuid>{038DC96D-021B-41E6-867E-047598F92ED3}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.UnitTest</RootNamespace>
-    <AssemblyName>Mosa.UnitTest</AssemblyName>
+    <RootNamespace>Mosa.QuickTest</RootNamespace>
+    <AssemblyName>Mosa.QuickTest</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
