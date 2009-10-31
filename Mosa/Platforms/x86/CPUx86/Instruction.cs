@@ -63,6 +63,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly Cvtss2sdInstruction Cvtss2sdInstruction = new Cvtss2sdInstruction();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly DebugInstruction DebugInstruction = new DebugInstruction();
 		/// <summary>
 		/// 
 		/// </summary>

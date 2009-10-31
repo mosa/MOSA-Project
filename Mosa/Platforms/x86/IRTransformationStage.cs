@@ -327,13 +327,13 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
 			// int 3
-			// ctx.XXX(CPUx86.IntInstruction, new ConstantOperand(new SigType(CilElementType.U1), (byte)3));
+            ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
 
 			// Uncomment this line to enable breakpoints within Bochs
 			//ctx.XXX(CPUx86.Instruction.BochsDebug);
 
 			// push ebp
-			ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
+            ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, null, ebp);
 			// mov ebp, esp
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebp, esp);
 			// sub esp, localsSize
