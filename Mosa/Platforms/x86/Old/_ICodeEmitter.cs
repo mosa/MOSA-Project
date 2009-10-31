@@ -179,14 +179,14 @@ namespace Mosa.Platforms.x86
         void Cvtss2sd(Operand destination, Operand operand);
 
         /// <summary>
-        /// Converts the double precision floating point value in <paramref name="source"/> to a signed integer and stores it in <paramref name="destination"/>.
+        /// Converts the double precision floating point value in <paramref name="operand"/> to a signed integer and stores it in <paramref name="destination"/>.
         /// </summary>
         /// <param name="destination">The destination operand, which receives the converted signed integer.</param>
         /// <param name="operand">The source operand, which holds the floating point value.</param>
         void Cvttsd2si(Operand destination, Operand operand);
 
         /// <summary>
-        /// Converts the single precision floating point value in <paramref name="source"/> to a signed integer and stores it in <paramref name="destination"/>.
+        /// Converts the single precision floating point value in <paramref name="operand"/> to a signed integer and stores it in <paramref name="destination"/>.
         /// </summary>
         /// <param name="destination">The destination operand, which receives the converted signed integer.</param>
         /// <param name="operand">The source operand, which holds the floating point value.</param>

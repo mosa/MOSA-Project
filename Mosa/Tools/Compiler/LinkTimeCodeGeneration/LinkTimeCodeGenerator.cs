@@ -36,7 +36,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 		/// <param name="compiler">The assembly compiler used to compile this method.</param>
 		/// <param name="methodName">The name of the created method.</param>
 		/// <returns></returns>
-		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/>, <paramref name="methodName"/> or <paramref name="instructions"/> is null.</exception>
+		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> or <paramref name="methodName"/>  is null.</exception>
 		/// <exception cref="System.ArgumentException"><paramref name="methodName"/> is invalid.</exception>
 		public static CompilerGeneratedMethod Compile(AssemblyCompiler compiler, string methodName)
 		{
@@ -50,7 +50,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 		/// <param name="methodName">The name of the created method.</param>
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <returns></returns>
-		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/>, <paramref name="methodName"/> or <paramref name="instructions"/> is null.</exception>
+		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/>, <paramref name="methodName"/> or <paramref name="instructionSet"/> is null.</exception>
 		/// <exception cref="System.ArgumentException"><paramref name="methodName"/> is invalid.</exception>
 		public static CompilerGeneratedMethod Compile(AssemblyCompiler compiler, string methodName, InstructionSet instructionSet)
 		{

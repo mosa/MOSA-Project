@@ -184,7 +184,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="callingConvention">One of the defined calling conventions.</param>
 		/// <returns>An instance of <see cref="ICallingConvention"/>.</returns>
-		/// <exception cref="System.NotSupportedException"><paramref name="cc"/> is not a supported calling convention.</exception>
+		/// <exception cref="System.NotSupportedException"><paramref name="callingConvention"/> is not a supported calling convention.</exception>
 		public override ICallingConvention GetCallingConvention(CallingConvention callingConvention)
 		{
 			switch (callingConvention) {

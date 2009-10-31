@@ -47,7 +47,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
         /// <param name="architecture">The compiler target architecture.</param>
         /// <param name="assembly">The assembly of this compiler.</param>
-        /// <exception cref="System.ArgumentNullException">Either <paramref name="architecture"/> or <paramref name="stages"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Either <paramref name="architecture"/> or <paramref name="assembly"/> is null.</exception>
 		protected AssemblyCompiler(IArchitecture architecture, IMetadataModule assembly)
 		{
             if (null == architecture)

@@ -18,16 +18,16 @@ namespace Mosa.Platforms.x86.CPUx86
 	public sealed class IntInstruction : OneOperandInstruction
     {
         #region Methods
-
-		/// <summary>
-		/// Emits the specified platform instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="emitter">The emitter.</param>
-        public override void Emit(Context ctx, MachineCodeEmitter emitter)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <param name="source"></param>
+        /// <param name="third"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-            byte interrupt = Convert.ToByte(((ConstantOperand)ctx.Operand1).Value);
-			emitter.Write(new byte[] { 0xCD, interrupt }, 0, 2);
+            return new OpCode(new byte[] { 0xCD });
         }
 
 		/// <summary>
