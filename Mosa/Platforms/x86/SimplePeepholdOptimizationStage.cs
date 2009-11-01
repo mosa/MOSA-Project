@@ -74,6 +74,7 @@ namespace Mosa.Platforms.x86
                             if (prev != null)
                             {
                                 if (RemoveMultipleStores(ctx, prev)) continue;
+                                if (RemoveSingleLineJump(ctx, prev)) continue;
                             }
 
                             prev = ctx.Clone();
@@ -87,21 +88,48 @@ namespace Mosa.Platforms.x86
         /// Remove multiple occuring stores, for e.g. before:
         /// <code>
         /// mov eax, operand
-        /// mov eax, operand
+        /// mov operand, eax
         /// </code>
         /// after:
         /// <code>
         /// mov eax, operand
         /// </code>
         /// </summary>
+        /// <param name="current">The current context</param>
+        /// <param name="previous">The previous context</param>
+        /// <returns>True if an instruction has been removed</returns>
+        private bool RemoveMultipleStores(Context current, Context previous)
+        {
+            if (current.Instruction is CPUx86.MovInstruction && previous.Instruction is CPUx86.MovInstruction)
+            {
+                if (previous.Result == current.Operand1 && previous.Operand1 == current.Result)
+                {
+                    current.Remove();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="current"></param>
         /// <param name="previous"></param>
         /// <returns></returns>
-        protected bool RemoveMultipleStores(Context current, Context previous)
+        private bool RemoveSingleLineJump(Context current, Context previous)
         {
-            if (ctx.Instruction is CPUx86.MovInstruction && prev.Instruction is CPUx86.MovInstruction)
-                if (prev.Result == ctx.Operand1 && prev.Operand1 == ctx.Result)
-                    ctx.Remove();
+            if (previous.Instruction is CPUx86.JmpInstruction)
+            {
+                if (previous.Branch.Targets[0] == current.Label)
+                {
+                    previous.Remove();
+                    return true;
+                }
+            }
+
+            return false;
         }
 	}
 }
