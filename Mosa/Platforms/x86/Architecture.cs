@@ -175,6 +175,8 @@ namespace Mosa.Platforms.x86
                     InstructionLogger.Instance,
 					new MemToMemConversionStage(),
 					InstructionLogger.Instance,
+					new SimplePeepholdOptimizationStage(),
+					InstructionLogger.Instance,
 					new CodeGenerationStage(),
                 });
 		}
