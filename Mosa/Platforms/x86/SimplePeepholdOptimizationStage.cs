@@ -62,27 +62,46 @@ namespace Mosa.Platforms.x86
 		{
 			base.Run(compiler);
 
-			foreach (BasicBlock block in BasicBlocks) {
+			foreach (BasicBlock block in BasicBlocks) 
+            {
 				Context prev = null;
-				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
-					if (ctx.Instruction != null)
-						if (!ctx.Ignore) {
-							if (prev != null) {
-								if (ctx.Instruction is CPUx86.MovInstruction && prev.Instruction is CPUx86.MovInstruction)
-									if (prev.Result == ctx.Operand1 && prev.Operand1 == ctx.Result) {
-										ctx.Remove();
-										continue;
-									}
+				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) 
+                {
+                    if (ctx.Instruction != null)
+                    {
+                        if (!ctx.Ignore)
+                        {
+                            if (prev != null)
+                            {
+                                if (RemoveMultipleStores(ctx, prev)) continue;
+                            }
 
-								//if (ctx.Instruction is CPUx86.AddInstruction && prev.Instruction is CPUx86.MovInstruction &&
-									//&& ctx.Operand1 is RegisterOperand && prev.Operand1 is ConstantOperand)
-							}
-
-							prev = ctx.Clone();
-						}
+                            prev = ctx.Clone();
+                        }
+                    }
 				}
 			}
-
 		}
+
+        /// <summary>
+        /// Remove multiple occuring stores, for e.g. before:
+        /// <code>
+        /// mov eax, operand
+        /// mov eax, operand
+        /// </code>
+        /// after:
+        /// <code>
+        /// mov eax, operand
+        /// </code>
+        /// </summary>
+        /// <param name="current"></param>
+        /// <param name="previous"></param>
+        /// <returns></returns>
+        protected bool RemoveMultipleStores(Context current, Context previous)
+        {
+            if (ctx.Instruction is CPUx86.MovInstruction && prev.Instruction is CPUx86.MovInstruction)
+                if (prev.Result == ctx.Operand1 && prev.Operand1 == ctx.Result)
+                    ctx.Remove();
+        }
 	}
 }
