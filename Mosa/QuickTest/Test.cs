@@ -26,7 +26,7 @@ namespace Mosa.QuickTest
 				b = a * 100;
 			else
 				b = a * 1000;
+			int q = a / 10;
 		}
-
 	}
 }
