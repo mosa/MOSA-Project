@@ -121,7 +121,7 @@ namespace Mosa.Platforms.x86
         {
             if (previous.Instruction is CPUx86.JmpInstruction)
             {
-                if (previous.Branch.Targets[0] == current.Label)
+                if (previous.Branch.Targets[0] == current.Index)
                 {
                     previous.Remove();
                     return true;

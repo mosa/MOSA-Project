@@ -1155,8 +1155,8 @@ namespace Mosa.Platforms.x86
 		private void ExpandAnd(Context ctx)
 		{
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(ctx.Operand1, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand2, out op1L, out op1H);
+			SplitLongOperand(ctx.Result, out op0L, out op0H);
+			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 
 			ctx.SetInstruction(IR.Instruction.LogicalAndInstruction, op0H, op1H, op2H);
@@ -1170,8 +1170,8 @@ namespace Mosa.Platforms.x86
 		private void ExpandOr(Context ctx)
 		{
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(ctx.Operand1, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand2, out op1L, out op1H);
+            SplitLongOperand(ctx.Result, out op0L, out op0H);
+            SplitLongOperand(ctx.Operand1, out op1L, out op1H);
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 
 			ctx.SetInstruction(IR.Instruction.LogicalAndInstruction, op0H, op1H, op2H);
@@ -1185,8 +1185,8 @@ namespace Mosa.Platforms.x86
 		private void ExpandXor(Context ctx)
 		{
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(ctx.Operand1, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand2, out op1L, out op1H);
+            SplitLongOperand(ctx.Result, out op0L, out op0H);
+            SplitLongOperand(ctx.Operand1, out op1L, out op1H);
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 
 			ctx.SetInstruction(IR.Instruction.LogicalXorInstruction, op0H, op1H, op2H);
@@ -1593,35 +1593,34 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(op1, out op1L, out op1H);
 			SplitLongOperand(op2, out op2L, out op2H);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 5);
+			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 4);
 			IR.ConditionCode conditionCode = ctx.ConditionCode;
 			Context nextBlock = SplitContext(ctx);
 
 			Debug.Assert(nextBlock != null, @"No follower block?");
 
 			// Compare high dwords
-			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.CmpInstruction, op1H, op2H);
-			newBlocks[0].InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[2].BasicBlock);
-			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+            ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, op1H, op2H);
+            ctx.InsertInstructionAfter(IR.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
+            ctx.InsertInstructionAfter(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 
 			// Branch if check already gave results
-			newBlocks[1].InsertInstructionAfter(IR.Instruction.BranchInstruction, conditionCode, newBlocks[3].BasicBlock);
-			newBlocks[1].InsertInstructionAfter(CPUx86.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
+            newBlocks[0].InsertInstructionAfter(IR.Instruction.BranchInstruction, conditionCode, newBlocks[2].BasicBlock);
+			newBlocks[0].InsertInstructionAfter(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 
 			// Compare low dwords
-			newBlocks[2].InsertInstructionAfter(CPUx86.Instruction.CmpInstruction, op1L, op2L);
+            newBlocks[1].InsertInstructionAfter(CPUx86.Instruction.CmpInstruction, op1L, op2L);
 			// Set the unsigned result...
-			newBlocks[2].InsertInstructionAfter(IR.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), newBlocks[3].BasicBlock);
-			newBlocks[2].InsertInstructionAfter(CPUx86.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
+            newBlocks[1].InsertInstructionAfter(IR.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), newBlocks[2].BasicBlock);
+			newBlocks[1].InsertInstructionAfter(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 
 			// Success
-			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 1));
-			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+            newBlocks[2].InsertInstructionAfter(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 1));
+			newBlocks[2].InsertInstructionAfter(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
 
 			// Failed
-			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 0));
-			newBlocks[4].InsertInstructionAfter(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
-
+            newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 0));
+			newBlocks[3].InsertInstructionAfter(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks, ctx, nextBlock);
 		}
 
