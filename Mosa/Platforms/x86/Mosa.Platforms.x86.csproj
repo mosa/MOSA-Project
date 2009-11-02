@@ -86,7 +86,7 @@
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="AddressModeConversionStage.cs" />
     <Compile Include="CPUx86\DebugInstruction.cs" />
-    <Compile Include="SimplePeepholdOptimizationStage.cs" />
+    <Compile Include="SimplePeepholeOptimizationStage.cs" />
     <Compile Include="MemToMemConversionStage.cs" />
     <Compile Include="CPUx86\CallInstruction.cs" />
     <Compile Include="CPUx86\IX86Instruction.cs" />

@@ -25,7 +25,7 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class SimplePeepholdOptimizationStage :
+	public sealed class SimplePeepholeOptimizationStage :
 		BaseTransformationStage,
 		IMethodCompilerStage,
 		IPlatformTransformationStage
@@ -39,7 +39,7 @@ namespace Mosa.Platforms.x86
 		/// <value>The name of the compilation stage.</value>
 		public override string Name
 		{
-			get { return @"X86.SimplePeepholdOptimizationStage"; }
+			get { return @"X86.SimplePeepholeOptimizationStage"; }
 		}
 
 		/// <summary>
