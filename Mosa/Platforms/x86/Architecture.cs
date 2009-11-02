@@ -178,6 +178,7 @@ namespace Mosa.Platforms.x86
 					new SimplePeepholdOptimizationStage(),
 					InstructionLogger.Instance,
 					new CodeGenerationStage(),
+                    //FlowGraphVisualizationStage.Instance,
                 });
 		}
 

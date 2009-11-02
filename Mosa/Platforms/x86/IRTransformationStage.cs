@@ -122,7 +122,7 @@ namespace Mosa.Platforms.x86
 			Operand source = EmitConstant(ctx.Operand2);
 			Operand destination = EmitConstant(ctx.Operand3);
 			IR.ConditionCode setcc = IR.ConditionCode.Equal;
-
+            IR.ConditionCode code = ctx.ConditionCode;
 			ctx.Remove();
 
 			// Swap the operands if necessary...
@@ -133,7 +133,8 @@ namespace Mosa.Platforms.x86
 			}
 
 			// x86 is messed up :(
-			switch (ctx.ConditionCode) {
+            switch (code)
+            {
 				case IR.ConditionCode.Equal: break;
 				case IR.ConditionCode.NotEqual: break;
 				case IR.ConditionCode.UnsignedGreaterOrEqual: setcc = IR.ConditionCode.GreaterOrEqual; break;
@@ -159,7 +160,8 @@ namespace Mosa.Platforms.x86
 			}
 
 			if (source.Type.Type == CilElementType.R4) {
-				switch (ctx.ConditionCode) {
+                switch (code)
+                {
 					case IR.ConditionCode.Equal:
 						ctx.InsertInstructionAfter(CPUx86.Instruction.UcomissInstruction, source, destination);
 						break;
@@ -177,7 +179,8 @@ namespace Mosa.Platforms.x86
 				}
 			}
 			else {
-				switch (ctx.ConditionCode) {
+                switch (code)
+                {
 					case IR.ConditionCode.Equal:
 						ctx.InsertInstructionAfter(CPUx86.Instruction.UcomisdInstruction, source, destination);
 						break;
@@ -327,13 +330,14 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
 			// int 3
-            ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
+            //ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
+            //ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, null, ebp);
 
 			// Uncomment this line to enable breakpoints within Bochs
 			//ctx.XXX(CPUx86.Instruction.BochsDebug);
 
 			// push ebp
-            ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, null, ebp);
+            ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 			// mov ebp, esp
 			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebp, esp);
 			// sub esp, localsSize

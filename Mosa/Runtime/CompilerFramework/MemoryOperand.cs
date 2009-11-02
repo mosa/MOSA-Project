@@ -88,14 +88,22 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString()
-		{
-			if (_offset.ToInt32() > 0)
-				return String.Format("[{0}+{1:X}h] {2}", _base.ToString(), _offset.ToInt32(), base.ToString());
-			else
-				return String.Format("[{0}-{1:X}h] {2}", _base.ToString(), -_offset.ToInt32(), base.ToString());
-
-		}
+        public override string ToString()
+        {
+            if (_base == null)
+            {
+                if (_offset.ToInt32() > 0)
+                    return String.Format("[{0:X}h] {1}", _offset.ToInt32(), base.ToString());
+                else
+                    return String.Format("[-{0:X}h] {1}", -_offset.ToInt32(), base.ToString());
+            }
+            {
+                if (_offset.ToInt32() > 0)
+                    return String.Format("[{0}+{1:X}h] {2}", _base.ToString(), _offset.ToInt32(), base.ToString());
+                else
+                    return String.Format("[{0}-{1:X}h] {2}", _base.ToString(), -_offset.ToInt32(), base.ToString());
+            }
+        }
 
 		#endregion // Operand Overrides
 	}

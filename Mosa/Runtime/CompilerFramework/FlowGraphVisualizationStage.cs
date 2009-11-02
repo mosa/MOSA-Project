@@ -42,6 +42,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// 
 		/// </summary>
 		static protected Dictionary<string, int> methodCount = new Dictionary<string, int>();
+        /// <summary>
+        /// 
+        /// </summary>
+        System.IO.StreamWriter dotFile = null;
 
 		#endregion // Data members
 
@@ -76,15 +80,6 @@ namespace Mosa.Runtime.CompilerFramework
 			if (!methodCount.ContainsKey(compiler.Method.Name))
 				methodCount[compiler.Method.Name] = 0;
 
-			System.IO.StreamWriter dotFile;
-
-			try {
-				dotFile = new System.IO.StreamWriter("dotGraph_" + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + ".dot");
-			}
-			catch (System.Exception) {
-				return;
-			}
-
 			++methodCount[compiler.Method.Name];
 
 			// Retreive the first block
@@ -95,7 +90,7 @@ namespace Mosa.Runtime.CompilerFramework
 			workArray = new BitArray(BasicBlocks.Count);
 
 			IMethodCompilerStage previousStage = compiler.GetPreviousStage<IMethodCompilerStage>();
-			dotFile.WriteLine("digraph " + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + "_FlowGraph {");
+			dotFile.WriteLine("digraph " + compiler.Method.Name + "_FlowGraph {");
 			dotFile.WriteLine("label = \"Method: " + compiler.Method.Name + "(" + compiler.Method.Signature + ") after " + previousStage.Name + "\";");
 			dotFile.WriteLine("graph [rankdir = \"TB\"];");
 
@@ -161,8 +156,31 @@ namespace Mosa.Runtime.CompilerFramework
 			dotFile.WriteLine(nodes);
 			dotFile.WriteLine(edges);
 			dotFile.WriteLine("};");
-			dotFile.Close();
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Open()
+        {
+            try
+            {
+                //dotFile = new System.IO.StreamWriter("dotGraph_" + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + ".dot");
+                dotFile = new System.IO.StreamWriter("dotGraph.dot");
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Close()
+        {
+            dotFile.Close();
+        }
 
 		/// <summary>
 		/// Adds to pipeline.

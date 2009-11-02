@@ -35,8 +35,8 @@ namespace Mosa.Platforms.x86
 		private static CilElementType[] _largeCilTypes = {
                 CilElementType.R4,
                 CilElementType.R8,
-                CilElementType.I8,
-                CilElementType.U8
+                //CilElementType.I8,
+                //CilElementType.U8
             };
 
 		/// <summary>
