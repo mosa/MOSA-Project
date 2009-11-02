@@ -373,7 +373,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Div(Context ctx)
 		{
-			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Operand2))
+			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Result))
 				HandleNonCommutativeOperation(ctx, IR.Instruction.UDivInstruction);
 			else if (ctx.Operand1.StackType == StackTypeCode.F)
                 HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
