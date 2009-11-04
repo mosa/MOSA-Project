@@ -71,9 +71,9 @@ namespace Mosa.Tools.Compiler
 				//new BlockReductionStage(),
 				//new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
+				//new ReverseBlockOrderStage(),	
 				InstructionStatisticsStage.Instance,
 		        //new LocalCSE(),
-				//new CodeGenerationStage(),
             });
 		}
 

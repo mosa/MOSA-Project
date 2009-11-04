@@ -19,11 +19,6 @@ namespace Mosa.Runtime.CompilerFramework
 	{
 		#region Data members
 
-		/// <summary>
-		/// 
-		/// </summary>
-		protected BasicBlock[] _ordered;
-
 		#endregion // Data members
 
 		#region Properties
@@ -34,7 +29,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The name of the compilation stage.</value>
 		public string Name
 		{
-			get { return @"Simple Trace Block Order"; }
+			get { return @"ReverseBlockOrderStage"; }
 		}
 
 		#endregion // Properties
@@ -59,18 +54,11 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			base.Run(compiler);
 
-			// Retreive the first block
-			BasicBlock first = FindBlock(-1);
-
-			// Allocate list of ordered Blocks
-			_ordered = new BasicBlock[BasicBlocks.Count];
-
-			Debug.Assert(first.Index == 0);
-			_ordered[0] = first;
-			int orderBlockCnt = 1;
-
-			for (int i = BasicBlocks.Count - 1; i > 0; i--)
-				_ordered[orderBlockCnt++] = BasicBlocks[i];
+			for (int i = 1; i <= BasicBlocks.Count / 2; i++) {
+				BasicBlock temp = BasicBlocks[i];
+				BasicBlocks[i] = BasicBlocks[BasicBlocks.Count - i];
+				BasicBlocks[BasicBlocks.Count - i] = temp;
+			}
 		}
 
 		#endregion // Methods
