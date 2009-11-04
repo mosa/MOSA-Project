@@ -61,74 +61,66 @@ namespace Mosa.Platforms.x86
 		{
 			base.Run(compiler);
 
-			foreach (BasicBlock block in BasicBlocks) 
-            {
-				Context prev = null;
-				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) 
-                {
-                    if (ctx.Instruction != null)
-                    {
-                        if (!ctx.Ignore)
-                        {
-                            if (prev != null)
-                            {
-                                if (RemoveMultipleStores(ctx, prev)) continue;
-                                if (RemoveSingleLineJump(ctx, prev)) continue;
-                            }
+			Context prev = null;
+			foreach (BasicBlock block in BasicBlocks) {
+				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
+					if (ctx.Instruction != null) {
+						if (!ctx.Ignore) {
+							if (prev != null) {
+								if (RemoveMultipleStores(ctx, prev)) continue;
+								else if (RemoveSingleLineJump(ctx, prev)) { prev = ctx.Clone(); continue; }
+							}
 
-                            prev = ctx.Clone();
-                        }
-                    }
+							prev = ctx.Clone();
+						}
+					}
 				}
 			}
 		}
 
-        /// <summary>
-        /// Remove multiple occuring stores, for e.g. before:
-        /// <code>
-        /// mov eax, operand
-        /// mov operand, eax
-        /// </code>
-        /// after:
-        /// <code>
-        /// mov eax, operand
-        /// </code>
-        /// </summary>
-        /// <param name="current">The current context</param>
-        /// <param name="previous">The previous context</param>
-        /// <returns>True if an instruction has been removed</returns>
-        private bool RemoveMultipleStores(Context current, Context previous)
-        {
-            if (current.Instruction is CPUx86.MovInstruction && previous.Instruction is CPUx86.MovInstruction)
-            {
-                if (previous.Result == current.Operand1 && previous.Operand1 == current.Result)
-                {
-                    current.Remove();
-                    return true;
-                }
-            }
+		/// <summary>
+		/// Remove multiple occuring stores, for e.g. before:
+		/// <code>
+		/// mov eax, operand
+		/// mov operand, eax
+		/// </code>
+		/// after:
+		/// <code>
+		/// mov eax, operand
+		/// </code>
+		/// </summary>
+		/// <param name="current">The current context</param>
+		/// <param name="previous">The previous context</param>
+		/// <returns>True if an instruction has been removed</returns>
+		private bool RemoveMultipleStores(Context current, Context previous)
+		{
+			if (current.BasicBlock == previous.BasicBlock)
+				if (current.Instruction is CPUx86.MovInstruction && previous.Instruction is CPUx86.MovInstruction) {
+					if (previous.Result == current.Operand1 && previous.Operand1 == current.Result) {
+						current.Remove();
+						return true;
+					}
+				}
 
-            return false;
-        }
+			return false;
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="current"></param>
-        /// <param name="previous"></param>
-        /// <returns></returns>
-        private bool RemoveSingleLineJump(Context current, Context previous)
-        {
-            if (previous.Instruction is CPUx86.JmpInstruction)
-            {
-                if (previous.Branch.Targets[0] == current.Index)
-                {
-                    previous.Remove();
-                    return true;
-                }
-            }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="current"></param>
+		/// <param name="previous"></param>
+		/// <returns></returns>
+		private bool RemoveSingleLineJump(Context current, Context previous)
+		{
+			if (previous.Instruction is CPUx86.JmpInstruction)
+				if (current.BasicBlock != previous.BasicBlock)	// should always be true
+					if (previous.Branch.Targets[0] == current.BasicBlock.Label) {
+						previous.Remove();
+						return true;
+					}
 
-            return false;
-        }
+			return false;
+		}
 	}
 }
