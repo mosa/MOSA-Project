@@ -10,7 +10,7 @@
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.CIL
 {
     /// <summary>
     /// Interface of instruction decoders.

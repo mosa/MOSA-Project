@@ -97,9 +97,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Adds the stage to the pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add to.</param>
-		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		public void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertBefore<ICodeGenerationStage>(this);
+			pipeline.RunBefore<ICodeGenerationStage>(this);
 		}
 
 		/// <summary>

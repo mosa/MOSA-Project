@@ -327,7 +327,7 @@
     <Compile Include="CompilerFramework\IDominanceProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IInstructionDecoder.cs">
+    <Compile Include="CompilerFramework\CIL\IInstructionDecoder.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\IInstructionsProvider.cs">

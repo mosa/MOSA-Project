@@ -47,9 +47,9 @@ namespace Mosa.Platforms.x86
 		/// Adds this stage to the given pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		public override void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
-			pipeline.InsertBefore<AddressModeConversionStage>(this);
+			pipeline.RunBefore<AddressModeConversionStage>(this);
 		}
 
 		#endregion // IMethodCompilerStage Members

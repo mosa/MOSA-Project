@@ -72,7 +72,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Adds this stage to the given pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		public abstract void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline);
+		public abstract void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline);
 
 		#endregion // IMethodCompilerStage Members
 

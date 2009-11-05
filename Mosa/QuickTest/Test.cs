@@ -27,6 +27,12 @@ namespace Mosa.QuickTest
 			else
 				b = a * 1000;
 			int q = a / 10;
+
+			//byte a = 11;
+			//int b = a;// +22;
+			//byte c = (byte)b;
+
+			//long x = 16;
 		}
 	}
 }

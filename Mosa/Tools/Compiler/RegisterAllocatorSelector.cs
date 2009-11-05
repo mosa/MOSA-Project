@@ -127,10 +127,10 @@ namespace Mosa.Tools.Compiler
 		/// Adds the stage to the pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add to.</param>
-        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+        public void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline)
         {
             CheckImplementation();
-            implementation.AddToPipeline(pipeline);
+            implementation.SetPipelinePosition(pipeline);
         }
     }
 }

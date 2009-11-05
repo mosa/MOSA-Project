@@ -34,7 +34,7 @@ namespace Mosa.Runtime.CompilerFramework
 		protected InstructionSet InstructionSet;
 
 		/// <summary>
-		/// List of basic Blocks found during decoding.
+		/// List of basic blocks found during decoding.
 		/// </summary>
 		protected List<BasicBlock> BasicBlocks;
 

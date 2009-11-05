@@ -87,7 +87,7 @@ namespace Mosa.Platforms.x86
 			_codeEmitter.Label(block.Label);
 		}
 
-		public override void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
+		public override void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline)
 		{
 			pipeline.Add(this);
 		}

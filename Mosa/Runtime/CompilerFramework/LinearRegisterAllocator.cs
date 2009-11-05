@@ -90,7 +90,16 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value></value>
 		public string Name
 		{
-			get { return @"PseudoRegisterAllocator"; }
+			get { return @"LinearRegisterAllocator"; }
+		}
+
+		/// <summary>
+		/// Adds the stage to the pipeline.
+		/// </summary>
+		/// <param name="pipeline">The pipeline to add to.</param>
+		public void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline)
+		{
+			pipeline.RunBefore<ICodeGenerationStage>(this);
 		}
 
 		/// <summary>
@@ -112,15 +121,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// 3rd Pass: Assign registers
 			AssignRegisters();
-		}
-
-		/// <summary>
-		/// Adds the stage to the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
-		{
-			pipeline.InsertBefore<ICodeGenerationStage>(this);
 		}
 
 		/// <summary>
@@ -393,7 +393,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Now find the last use between defLine and ubound
 			foreach (int index in op.Uses) {
 				Context ctx = new Context(InstructionSet, index);
-				if (ctx.Offset > line && ctx.Offset < end) 
+				if (ctx.Offset > line && ctx.Offset < end)
 					result = ctx.Offset;
 			}
 

@@ -115,7 +115,7 @@
 //        /// <param name="pipeline">The pipeline.</param>
 //        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
 //        {
-//            pipeline.InsertBefore<CIL.CilToIrTransformationStage>(this);
+//            pipeline.RunBefore<CIL.CilToIrTransformationStage>(this);
 //        }
 
 //        /// <summary>
