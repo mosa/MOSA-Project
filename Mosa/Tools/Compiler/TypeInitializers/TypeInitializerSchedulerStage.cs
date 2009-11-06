@@ -58,7 +58,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 			_instructionSet = new InstructionSet(1024);
 			_ctx = new Context(_instructionSet, -1);
 
-			_ctx.InsertInstructionAfter(IR.Instruction.PrologueInstruction);
+			_ctx.AppendInstruction(IR.Instruction.PrologueInstruction);
 			_ctx.Other = 0; // stacksize
 		}
 
@@ -88,7 +88,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// <param name="method">The method.</param>
 		public void Schedule(RuntimeMethod method)
 		{
-			_ctx.InsertInstructionAfter(IR.Instruction.CallInstruction);
+			_ctx.AppendInstruction(IR.Instruction.CallInstruction);
 			_ctx.InvokeTarget = method;
 		}
 
@@ -111,9 +111,9 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// <param name="compiler">The compiler context to perform processing in.</param>
 		public void Run(AssemblyCompiler compiler)
 		{
-			_ctx.InsertInstructionAfter(IR.Instruction.CallInstruction);
+			_ctx.AppendInstruction(IR.Instruction.CallInstruction);
 			_ctx.InvokeTarget = compiler.Assembly.EntryPoint;
-			_ctx.InsertInstructionAfter(IR.Instruction.EpilogueInstruction);
+			_ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);
 			_ctx.Other = 0;
 
 			_method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", _instructionSet);

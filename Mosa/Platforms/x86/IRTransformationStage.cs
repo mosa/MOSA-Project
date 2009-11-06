@@ -67,7 +67,7 @@ namespace Mosa.Platforms.x86
 			Operand opRes = ctx.Operand1;
 			RegisterOperand eax = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
 			ctx.Result = eax;
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, opRes, eax);
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, opRes, eax);
 		}
 
 		/// <summary>
@@ -96,19 +96,19 @@ namespace Mosa.Platforms.x86
 				// add esp, -localsSize
 				ctx.SetInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
 				// pop ebp
-				ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, ebp);
+				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ebp);
 				// ret
-				ctx.InsertInstructionAfter(IR.Instruction.ReturnInstruction);
+				ctx.AppendInstruction(IR.Instruction.ReturnInstruction);
 			}
 			else {
 				// pop edx
 				ctx.SetInstruction(CPUx86.Instruction.PopInstruction, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 				// add esp, -localsSize
-				ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
+				ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
 				// pop ebp
-				ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, ebp);
+				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ebp);
 				// ret
-				ctx.InsertInstructionAfter(CPUx86.Instruction.RetInstruction); // Change to Return
+				ctx.AppendInstruction(CPUx86.Instruction.RetInstruction); // Change to Return
 			}
 		}
 
@@ -150,12 +150,12 @@ namespace Mosa.Platforms.x86
 			// Compare using the smallest precision
 			if (source.Type.Type == CilElementType.R4 && destination.Type.Type == CilElementType.R8) {
 				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM1);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.Cvtsd2ssInstruction, rop, destination);
+				ctx.AppendInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, rop, destination);
 				destination = rop;
 			}
 			if (source.Type.Type == CilElementType.R8 && destination.Type.Type == CilElementType.R4) {
 				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM0);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.Cvtsd2ssInstruction, rop, source);
+				ctx.AppendInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, rop, source);
 				source = rop;
 			}
 
@@ -163,7 +163,7 @@ namespace Mosa.Platforms.x86
                 switch (code)
                 {
 					case IR.ConditionCode.Equal:
-						ctx.InsertInstructionAfter(CPUx86.Instruction.UcomissInstruction, source, destination);
+						ctx.AppendInstruction(CPUx86.Instruction.UcomissInstruction, source, destination);
 						break;
 					case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
@@ -171,7 +171,7 @@ namespace Mosa.Platforms.x86
 					case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.GreaterOrEqual:
-						ctx.InsertInstructionAfter(CPUx86.Instruction.ComissInstruction, source, destination);
+						ctx.AppendInstruction(CPUx86.Instruction.ComissInstruction, source, destination);
 						break;
 					case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
 					case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
@@ -182,7 +182,7 @@ namespace Mosa.Platforms.x86
                 switch (code)
                 {
 					case IR.ConditionCode.Equal:
-						ctx.InsertInstructionAfter(CPUx86.Instruction.UcomisdInstruction, source, destination);
+						ctx.AppendInstruction(CPUx86.Instruction.UcomisdInstruction, source, destination);
 						break;
 					case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
@@ -190,7 +190,7 @@ namespace Mosa.Platforms.x86
 					case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.GreaterOrEqual:
-						ctx.InsertInstructionAfter(CPUx86.Instruction.ComisdInstruction, source, destination);
+						ctx.AppendInstruction(CPUx86.Instruction.ComisdInstruction, source, destination);
 						break;
 					case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
 					case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
@@ -199,12 +199,12 @@ namespace Mosa.Platforms.x86
 			}
 
 			// Determine the result
-			ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, setcc, op0);
+			ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setcc, op0);
 
 			// Extend this to the full register, if we're storing it in a register
 			if (op0 is RegisterOperand) {
 				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)op0).Register);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.MovzxInstruction, op0, rop);
+				ctx.AppendInstruction(CPUx86.Instruction.MovzxInstruction, op0, rop);
 			}
 
 		}
@@ -222,13 +222,13 @@ namespace Mosa.Platforms.x86
 			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Result, ctx.Operand1);
 
 			if (IsUnsigned(ctx.Result))
-				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(condition), ctx.Result);
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(condition), ctx.Result);
 			else
-				ctx.InsertInstructionAfter(CPUx86.Instruction.SetccInstruction, condition, ctx.Result);
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, condition, ctx.Result);
 
 			if (ctx.Result is RegisterOperand) {
 				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)ctx.Result).Register);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.MovzxInstruction, rop, rop);
+				ctx.AppendInstruction(CPUx86.Instruction.MovzxInstruction, rop, rop);
 			}
 		}
 
@@ -250,8 +250,8 @@ namespace Mosa.Platforms.x86
 			//RegisterOperand eax = new RegisterOperand(Architecture.NativeType, GeneralPurposeRegister.EAX);
 			RegisterOperand eax = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX);
 			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, ctx.Operand1);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, eax, new MemoryOperand(ctx.Result.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ctx.Result, eax);
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new MemoryOperand(ctx.Result.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ctx.Result, eax);
 		}
 
 		/// <summary>
@@ -339,33 +339,33 @@ namespace Mosa.Platforms.x86
 			// push ebp
             ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 			// mov ebp, esp
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebp, esp);
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, esp);
 			// sub esp, localsSize
-			ctx.InsertInstructionAfter(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, -stackSize));
+			ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, -stackSize));
 			// Initialize all locals to zero
-			ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, null, edi);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, edi, esp);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, null, ecx);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, edi, new ConstantOperand(I, 4));
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I, (-stackSize) / 4));
-			ctx.InsertInstructionAfter(CPUx86.Instruction.XorInstruction, eax, eax);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.RepInstruction);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.StosdInstruction);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, ecx);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, edi);
+			ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, edi);
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edi, esp);
+			ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
+			ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, edi, new ConstantOperand(I, 4));
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I, (-stackSize) / 4));
+			ctx.AppendInstruction(CPUx86.Instruction.XorInstruction, eax, eax);
+			ctx.AppendInstruction(CPUx86.Instruction.RepInstruction);
+			ctx.AppendInstruction(CPUx86.Instruction.StosdInstruction);
+			ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
+			ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, edi);
 			/*
 			 * This move adds the runtime method identification token onto the stack. This
 			 * allows us to perform call stack identification and gives the garbage collector 
 			 * the possibility to identify roots into the managed heap. 
 			 */
 			// mov [ebp-4], token
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, Compiler.Method.Token));
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, Compiler.Method.Token));
 
 			// Do not save EDX for non-int64 return values
 			if (Compiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
 				Compiler.Method.Signature.ReturnType.Type != CilElementType.U8) {
 				// push edx
-				ctx.InsertInstructionAfter(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
+				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 			}
 		}
 
@@ -384,7 +384,7 @@ namespace Mosa.Platforms.x86
 				cc.MoveReturnValue(ctx, op);
 			}
 
-			ctx.InsertInstructionAfter(CPUx86.Instruction.JmpInstruction);
+			ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction);
 			ctx.SetBranch(Int32.MaxValue);
 		}
 
@@ -418,8 +418,8 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eax = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(operand1.Type, GeneralPurposeRegister.EDX);
 			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, result);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, edx, operand1);
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, new MemoryOperand(operand1.Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx);
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, operand1);
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(operand1.Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx);
 		}
 
 		/// <summary>
@@ -501,7 +501,7 @@ namespace Mosa.Platforms.x86
 			RegisterOperand ebx = new RegisterOperand(result.Type, GeneralPurposeRegister.EBX);
 			ctx.Result = ebx;
 
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, result, ebx);
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, ebx);
 		}
 
 		#endregion //  IIRVisitor

@@ -75,7 +75,7 @@ namespace Mosa.Platforms.x86
 		{
 			Operand result = ctx.Result;
 			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EBP));
-			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, result, new ConstantOperand(new SigType(CilElementType.Ptr), ctx.Label));
+			ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, result, new ConstantOperand(new SigType(CilElementType.Ptr), ctx.Label));
 		}
 
 		/// <summary>
@@ -86,7 +86,7 @@ namespace Mosa.Platforms.x86
 		{
 			Operand result = ctx.Result;
 			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EBP));
-			ctx.InsertInstructionAfter(CPUx86.Instruction.AddInstruction, result, new ConstantOperand(ctx.Result.Type, ctx.Label));
+			ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, result, new ConstantOperand(ctx.Result.Type, ctx.Label));
 		}
 
 		/// <summary>
@@ -182,7 +182,7 @@ namespace Mosa.Platforms.x86
 			SigType I4 = new SigType(CilElementType.I4);
 			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, new RegisterOperand(I4, GeneralPurposeRegister.EAX), new ConstantOperand(I4, 0));
 
-			ctx.InsertInstructionAfter(CPUx86.Instruction.JneInstruction);
+			ctx.AppendInstruction(CPUx86.Instruction.JneInstruction);
 
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
 				ctx.SetBranch(branch.Targets[0]);
@@ -387,7 +387,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Rem(Context ctx)
 		{
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), ctx.Operand1);
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), ctx.Operand1);
 
 			if (IsUnsigned(ctx.Operand1))
 				ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
@@ -395,11 +395,11 @@ namespace Mosa.Platforms.x86
 				ctx.SetInstruction(IR.Instruction.SignExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
 
 			if (IsUnsigned(ctx.Operand1) && IsUnsigned(ctx.Operand2))
-				ctx.InsertInstructionAfter(IR.Instruction.UDivInstruction, ctx.Operand1, ctx.Operand2);
+				ctx.AppendInstruction(IR.Instruction.UDivInstruction, ctx.Operand1, ctx.Operand2);
 			else
-				ctx.InsertInstructionAfter(CPUx86.Instruction.DivInstruction, ctx.Operand1, ctx.Operand2);
+				ctx.AppendInstruction(CPUx86.Instruction.DivInstruction, ctx.Operand1, ctx.Operand2);
 
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ctx.Result, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX));
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ctx.Result, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX));
 		}
 
 		#endregion // Members

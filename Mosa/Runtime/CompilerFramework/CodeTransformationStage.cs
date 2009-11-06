@@ -126,7 +126,7 @@ namespace Mosa.Runtime.CompilerFramework
 			BasicBlocks.Add(block);
 
 			// Need a dummy instruction at the start of each block to establish a starting point of the block
-			ctx.InsertInstructionAfter(null);
+			ctx.AppendInstruction(null);
 			ctx.Label = label;
 			block.Index = ctx.Index;
 			ctx.Ignore = true;
@@ -168,7 +168,7 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.BasicBlock.NextBlocks.Clear();
 			ctx.BasicBlock.NextBlocks.Add(nextBlock);
 
-			ctx.InsertInstructionAfter(IR.Instruction.JmpInstruction, nextBlock);
+			ctx.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
 			ctx.SliceAfter();
 
 			nextBlock.Index = ctx.Next.Index;

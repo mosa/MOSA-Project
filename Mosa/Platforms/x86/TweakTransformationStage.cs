@@ -82,7 +82,7 @@ namespace Mosa.Platforms.x86
 
 			if (ctx.Operand1 is ConstantOperand) {
 				RegisterOperand ebx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EBX);
-				ctx.InsertBefore().InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebx, ctx.Operand1);
+				ctx.InsertBefore().AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, ctx.Operand1);
 				ctx.Operand1 = ebx;
 			}
 		}
@@ -144,9 +144,9 @@ namespace Mosa.Platforms.x86
 			if (op is ConstantOperand) {
 				RegisterOperand ebx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
 				ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, ebx, op);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.DivInstruction, ebx);
-				ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, ebx);
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, op);
+				ctx.AppendInstruction(CPUx86.Instruction.DivInstruction, ebx);
+				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
 			}
 			else
 				ctx.SetInstruction(CPUx86.Instruction.DivInstruction, null, op);
@@ -184,11 +184,11 @@ namespace Mosa.Platforms.x86
 			start.SetInstruction(CPUx86.Instruction.PushInstruction, null, eax);
 
 			if ((IsSigned(op0)) && (!Is32Bit(op0)))
-				start.InsertInstructionAfter(CPUx86.Instruction.MovsxInstruction, eax, op0);
+				start.AppendInstruction(CPUx86.Instruction.MovsxInstruction, eax, op0);
 			else
-				start.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, eax, op0);
+				start.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op0);
 
-			ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, eax);
+			ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
 
 		}
 

@@ -103,7 +103,7 @@ namespace Mosa.Platforms.x86
 
 			ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
 
-			ctx.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, result, eax);
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
 		}
 
 	}

@@ -1080,25 +1080,25 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		private void ProcessMixedTypeConversion(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
-			ctx.InsertInstructionAfter(instruction, destinationOperand, sourceOperand);
-			ctx.InsertInstructionAfter(IR.Instruction.LogicalAndInstruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
+			ctx.AppendInstruction(instruction, destinationOperand, sourceOperand);
+			ctx.AppendInstruction(IR.Instruction.LogicalAndInstruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
 		}
 
 		private void ProcessSingleTypeTruncation(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8) {
-				ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, destinationOperand, sourceOperand);
-				ctx.InsertInstructionAfter(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
+				ctx.AppendInstruction(IR.Instruction.MoveInstruction, destinationOperand, sourceOperand);
+				ctx.AppendInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
 			}
 			else
-				ctx.InsertInstructionAfter(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
+				ctx.AppendInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
 		}
 
 		private void ExtendAndTruncateResult(Context ctx, IInstruction instruction, Operand destinationOperand)
 		{
 			if (instruction != null && destinationOperand is RegisterOperand) {
 				RegisterOperand resultOperand = new RegisterOperand(new SigType(CilElementType.I4), ((RegisterOperand)destinationOperand).Register);
-				ctx.InsertInstructionAfter(instruction, resultOperand, destinationOperand);
+				ctx.AppendInstruction(instruction, resultOperand, destinationOperand);
 			}
 		}
 

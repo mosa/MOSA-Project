@@ -270,7 +270,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			//LegacyInstruction move = _architecture.CreateInstruction(typeof(IR.MoveInstruction), destination, source);
 			//block.Instructions.Insert(idx, move);
-			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, destination, source);
+			ctx.AppendInstruction(IR.Instruction.MoveInstruction, destination, source);
 		}
 
 		/// <summary>

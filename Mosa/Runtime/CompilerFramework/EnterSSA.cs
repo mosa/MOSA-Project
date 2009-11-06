@@ -192,7 +192,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				// Only add a PHI if the runtime parameter is out or ref...
 				if (rp.IsOut || (paramOp.Type is RefSigType || paramOp.Type is PtrSigType)) {
-					ctxEpilogue.InsertInstructionAfter(IR.Instruction.PhiInstruction, paramOp);
+					ctxEpilogue.AppendInstruction(IR.Instruction.PhiInstruction, paramOp);
 
 					if (liveIn == null)
 						liveIn = new Dictionary<StackOperand, StackOperand>();
@@ -263,7 +263,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			// Iterate all incoming variables
 			foreach (StackOperand key in liveIn.Keys) {
-				ctx.InsertInstructionAfter(IR.Instruction.PhiInstruction, key);
+				ctx.AppendInstruction(IR.Instruction.PhiInstruction, key);
 				IR.PhiInstruction.AddValue(ctx, caller, key);
 			}
 		}

@@ -95,7 +95,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Create an epilogue instruction
 			Context epilogueCtx = new Context(InstructionSet, FindBlock(Int32.MaxValue));
-			epilogueCtx.InsertInstructionAfter(IR.Instruction.EpilogueInstruction);
+			epilogueCtx.AppendInstruction(IR.Instruction.EpilogueInstruction);
 			epilogueCtx.Other = _localsSize;
 			epilogueCtx.Label = Int32.MaxValue;
 		}

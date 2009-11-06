@@ -58,7 +58,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Context ctx = new Context(InstructionSet, -1);
 			// Add a jump instruction to the first block from the prologue
 			//ctx.InsertInstructionAfter(IR.Instruction.JmpInstruction);
-			ctx.InsertInstructionAfter(CIL.Instruction.Get(CIL.OpCode.Br));
+			ctx.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
 			ctx.SetBranch(0);
 			ctx.Label = -1;
 			_prologue = new BasicBlock(-1, ctx.Index);
@@ -66,7 +66,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Create the epilogue block
 			ctx = new Context(InstructionSet, -1);
 			// Add null instruction, necessary to generate a block index
-			ctx.InsertInstructionAfter(null);
+			ctx.AppendInstruction(null);
 			ctx.Ignore = true;
 			ctx.Label = Int32.MaxValue;
 			_epilogue = new BasicBlock(Int32.MaxValue, ctx.Index);
@@ -138,7 +138,7 @@ namespace Mosa.Runtime.CompilerFramework
 						Context prev = ctx.Previous;
 						flow = prev.Instruction.FlowControl;
 						if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch) {
-							prev.InsertInstructionAfter(IR.Instruction.JmpInstruction);
+							prev.AppendInstruction(IR.Instruction.JmpInstruction);
 							prev.SetBranch(ctx.Label);
 							prev.SliceAfter();
 						}

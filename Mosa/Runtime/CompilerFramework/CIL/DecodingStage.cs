@@ -245,7 +245,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				//}
 
 				// Create and initialize the corresponding instruction
-				ctx.InsertInstructionAfter(instruction);
+				ctx.AppendInstruction(instruction);
 				instruction.Decode(ctx, this);
 				ctx.Label = instOffset;
 				//ctx.Prefix = prefix;

@@ -436,7 +436,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="src">The operand to move.</param>
 		private void CreateMoveInstruction(Context ctx, Operand dest, Operand src)
 		{
-			ctx.InsertInstructionAfter(IR.Instruction.MoveInstruction, dest, src);
+			ctx.AppendInstruction(IR.Instruction.MoveInstruction, dest, src);
 		}
 
 		#endregion // Internals

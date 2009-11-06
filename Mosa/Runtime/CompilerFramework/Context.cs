@@ -729,7 +729,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Inserts the instruction after.
 		/// </summary>
-		private void InsertInstructionAfter()
+		private void AppendInstruction()
 		{
 			int label = -1;
 
@@ -749,9 +749,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="code">The code.</param>
-		public void InsertInstructionAfter(IInstruction instruction, IR.ConditionCode code)
+		public void AppendInstruction(IInstruction instruction, IR.ConditionCode code)
 		{
-			InsertInstructionAfter();
+			AppendInstruction();
 			SetInstruction(instruction);
 			ConditionCode = code;
 		}
@@ -762,9 +762,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="code">The code.</param>
 		/// <param name="result">The result.</param>
-		public void InsertInstructionAfter(IInstruction instruction, IR.ConditionCode code, Operand result)
+		public void AppendInstruction(IInstruction instruction, IR.ConditionCode code, Operand result)
 		{
-			InsertInstructionAfter();
+			AppendInstruction();
 			SetInstruction(instruction, result);
 			ConditionCode = code;
 			Result = result;
@@ -774,9 +774,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Inserts the instruction after.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		public void InsertInstructionAfter(IInstruction instruction)
+		public void AppendInstruction(IInstruction instruction)
 		{
-			InsertInstructionAfter();
+			AppendInstruction();
 			SetInstruction(instruction);
 		}
 
@@ -785,9 +785,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="block">The block.</param>
-		public void InsertInstructionAfter(IInstruction instruction, BasicBlock block)
+		public void AppendInstruction(IInstruction instruction, BasicBlock block)
 		{
-			InsertInstructionAfter();
+			AppendInstruction();
 			SetInstruction(instruction, block);
 		}
 
@@ -797,9 +797,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="code">The code.</param>
 		/// <param name="block">The block.</param>
-		public void InsertInstructionAfter(IInstruction instruction, IR.ConditionCode code, BasicBlock block)
+		public void AppendInstruction(IInstruction instruction, IR.ConditionCode code, BasicBlock block)
 		{
-			InsertInstructionAfter();
+			AppendInstruction();
 			SetInstruction(instruction, code, block);
 		}
 
@@ -808,9 +808,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="result">The result.</param>
-		public void InsertInstructionAfter(IInstruction instruction, Operand result)
+		public void AppendInstruction(IInstruction instruction, Operand result)
 		{
-			InsertInstructionAfter();
+			AppendInstruction();
 			SetInstruction(instruction, 0, 1);
 			Result = result;
 		}
@@ -821,9 +821,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
-		public void InsertInstructionAfter(IInstruction instruction, Operand result, Operand operand1)
+		public void AppendInstruction(IInstruction instruction, Operand result, Operand operand1)
 		{
-			InsertInstructionAfter();
+			AppendInstruction();
 			SetInstruction(instruction, result, operand1);
 		}
 
@@ -834,9 +834,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
-		public void InsertInstructionAfter(IInstruction instruction, Operand result, Operand operand1, Operand operand2)
+		public void AppendInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2)
 		{
-			InsertInstructionAfter();
+			AppendInstruction();
 			SetInstruction(instruction, result, operand1, operand2);
 		}
 
@@ -848,9 +848,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
 		/// <param name="operand3">The operand3.</param>
-		public void InsertInstructionAfter(IInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
+		public void AppendInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
 		{
-			InsertInstructionAfter();
+			AppendInstruction();
 			SetInstruction(instruction, result, operand1, operand2, operand3);
 		}
 

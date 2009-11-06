@@ -86,13 +86,13 @@ namespace Mosa.Platforms.x86
             if (useStack)
             {
 				before.SetInstruction(CPUx86.Instruction.PushInstruction, null, register);
-                before.InsertInstructionAfter(CPUx86.Instruction.MovInstruction, register, source);
+                before.AppendInstruction(CPUx86.Instruction.MovInstruction, register, source);
             }
             else 
                 before.SetInstruction(CPUx86.Instruction.MovInstruction, register, source);
 
 			if (useStack)
-				ctx.InsertInstructionAfter(CPUx86.Instruction.PopInstruction, register);
+				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, register);
 		}
 	}
 }
