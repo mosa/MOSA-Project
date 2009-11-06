@@ -1606,21 +1606,21 @@ namespace Mosa.Platforms.x86
             ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 
 			// Branch if check already gave results
-            newBlocks[0].AppendInstruction(IR.Instruction.BranchInstruction, conditionCode, newBlocks[2].BasicBlock);
+            newBlocks[0].SetInstruction(IR.Instruction.BranchInstruction, conditionCode, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 
 			// Compare low dwords
-            newBlocks[1].AppendInstruction(CPUx86.Instruction.CmpInstruction, op1L, op2L);
+            newBlocks[1].SetInstruction(CPUx86.Instruction.CmpInstruction, op1L, op2L);
 			// Set the unsigned result...
             newBlocks[1].AppendInstruction(IR.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), newBlocks[2].BasicBlock);
 			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 
 			// Success
-            newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 1));
+            newBlocks[2].SetInstruction(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 1));
 			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
 
 			// Failed
-            newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 0));
+            newBlocks[3].SetInstruction(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 0));
 			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
 		}
 
