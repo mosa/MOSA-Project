@@ -104,12 +104,12 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Adds the stage to the pipeline.
+		/// Sets the position of the stage within the pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add to.</param>
-		public void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline)
+		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
 		{
-			pipeline.RunAfter<ILConstantFoldingStage>(this);
+			pipeline.RunAfter<CILConstantFoldingStage>(this);
 		}
 
 		/// <summary>

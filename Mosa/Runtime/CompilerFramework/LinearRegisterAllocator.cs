@@ -94,10 +94,10 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Adds the stage to the pipeline.
+		/// Sets the pipeline position.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add to.</param>
-		public void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline)
+		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
 		{
 			pipeline.RunBefore<ICodeGenerationStage>(this);
 		}

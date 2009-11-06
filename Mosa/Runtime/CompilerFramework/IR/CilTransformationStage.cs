@@ -30,8 +30,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
 	/// </remarks>
-	public sealed class CilTransformationStage
-		: CodeTransformationStage, CIL.ICILVisitor
+	public sealed class CILTransformationStage : CodeTransformationStage, CIL.ICILVisitor
 	{
 		#region IMethodCompilerStage Members
 
@@ -41,14 +40,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <value>The name of the compilation stage.</value>
 		public override string Name
 		{
-			get { return @"IR.CilTransformationStage"; }
+			get { return @"IR.CILTransformationStage"; }
 		}
 
 		/// <summary>
-		/// Adds this stage to the given pipeline.
+		/// Sets the position of the stage within the pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		public override void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline)
+		public override void SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
 		{
 		}
 
@@ -794,7 +793,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			throw new NotSupportedException();
 		}
 
-        private static readonly BaseInstruction[][] s_convTable = new BaseInstruction[13][] {
+		private static readonly BaseInstruction[][] s_convTable = new BaseInstruction[13][] {
             /* I1 */ new BaseInstruction[13] { 
                 /* I1 */ IR.Instruction.MoveInstruction,
                 /* I2 */ IR.Instruction.LogicalAndInstruction,
@@ -1016,8 +1015,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			uint mask = 0;
 			IInstruction instruction = ComputeExtensionTypeAndMask(ctDest, ref mask);
 
-            if (type == IR.Instruction.LogicalAndInstruction || mask != 0)
-            {
+			if (type == IR.Instruction.LogicalAndInstruction || mask != 0) {
 				Debug.Assert(mask != 0, @"Conversion is an AND, but no mask given.");
 
 				ctx.Remove();
@@ -1030,7 +1028,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				ExtendAndTruncateResult(ctx, instruction, destinationOperand);
 			}
 			else
-                ctx.SetInstruction(type, destinationOperand, sourceOperand);
+				ctx.SetInstruction(type, destinationOperand, sourceOperand);
 		}
 
 		private IInstruction ComputeExtensionTypeAndMask(ConvType destinationType, ref uint mask)

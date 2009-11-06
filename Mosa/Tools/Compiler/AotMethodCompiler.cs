@@ -51,7 +51,7 @@ namespace Mosa.Tools.Compiler
 				InstructionLogger.Instance,
 				new OperandDeterminationStage(),
                 InstructionLogger.Instance,
-                new CilTransformationStage(),
+                new CILTransformationStage(),
                 InstructionLogger.Instance,
                 //InstructionStatisticsStage.Instance,
                 //new DominanceCalculationStage(),

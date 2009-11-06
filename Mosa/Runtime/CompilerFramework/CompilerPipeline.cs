@@ -32,8 +32,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private List<T> _pipeline;
 
-		private Dictionary<T, System.Type> _before;
-		private Dictionary<T, System.Type> _after;
+		private Dictionary<T, List<Type>> _before;
+		private Dictionary<T, List<Type>> _after;
+		bool _ordered;
 
 		#endregion // Data members
 
@@ -45,8 +46,9 @@ namespace Mosa.Runtime.CompilerFramework
 		public CompilerPipeline()
 		{
 			_pipeline = new List<T>();
-			_before = new Dictionary<T, Type>();
-			_after = new Dictionary<T, Type>();
+			_before = new Dictionary<T, List<Type>>();
+			_after = new Dictionary<T, List<Type>>();
+			_ordered = true;
 		}
 
 		#endregion // Construction
@@ -93,6 +95,9 @@ namespace Mosa.Runtime.CompilerFramework
 				throw new ArgumentNullException(@"stage");
 
 			_pipeline.Add(stage);
+			_ordered = false;
+			
+			// 
 		}
 
 		/// <summary>
@@ -104,7 +109,8 @@ namespace Mosa.Runtime.CompilerFramework
 			if (stages == null)
 				throw new ArgumentNullException(@"stages");
 
-			_pipeline.AddRange(stages);
+			foreach (T stage in stages)
+				Add(stage);
 		}
 
 		/// <summary>
@@ -113,6 +119,9 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Clear()
 		{
 			_pipeline.Clear();
+			_before.Clear();
+			_after.Clear();
+			_ordered = true;
 		}
 
 		/// <summary>
@@ -121,6 +130,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="action">The action.</param>
 		public void Execute(Action<T> action)
 		{
+			if (!_ordered) OrderPipeline();
+
 			_currentStage = 0;
 			foreach (T stage in _pipeline) {
 				action(stage);
@@ -138,6 +149,9 @@ namespace Mosa.Runtime.CompilerFramework
 				throw new ArgumentNullException(@"stage");
 
 			_pipeline.Remove(stage);
+			_after.Remove(stage);
+			_before.Remove(stage);
+			_ordered = false;
 		}
 
 		#endregion // Methods
@@ -152,6 +166,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		public IEnumerator<T> GetEnumerator()
 		{
+			if (!_ordered) OrderPipeline();
+
 			return _pipeline.GetEnumerator();
 		}
 
@@ -167,6 +183,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
+			if (!_ordered) OrderPipeline();
+
 			return _pipeline.GetEnumerator();
 		}
 
@@ -190,14 +208,82 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Sorts this instance.
+		/// Finds the last.
+		/// </summary>
+		/// <param name="types">The types.</param>
+		/// <returns></returns>
+		private int FindLast(List<Type> types)
+		{
+			if (types == null || types.Count == 0)
+				return -1;
+
+			for (int i = _pipeline.Count; i >= 0; i--)
+				if (types.Contains(_pipeline[i].GetType()))
+					return i;
+
+			return -1;
+		}
+
+		/// <summary>
+		/// Finds the first.
+		/// </summary>
+		/// <param name="types">The types.</param>
+		/// <returns></returns>
+		private int FindFirst(List<Type> types)
+		{
+			if (types == null || types.Count == 0)
+				return -1;
+
+			for (int i = 0; i < _pipeline.Count; i++)
+				if (types.Contains(_pipeline[i].GetType()))
+					return i;
+
+			return -1;
+		}
+
+		/// <summary>
+		/// Orders the pipeline.
 		/// </summary>
 		/// <returns></returns>
-		public bool Order()
+		private bool OrderPipeline()
 		{
-			List<T> order = new List<T>();
+			int loops = 0;
+			bool changed = true;
 
-			// TODO
+			while (changed) {
+				changed = false;
+				loops++;
+
+				for (int i = 0; i < _pipeline.Count; i++) {
+					T stage = _pipeline[i];
+
+					if (_after.ContainsKey(stage)) {
+						int last = FindLast(_after[stage]);
+
+						if (last != -1 && i < last) {
+							_pipeline.Insert(last + 1, stage);
+							_pipeline.RemoveAt(i);
+							changed = true;
+							break;
+						}
+					}
+
+					if (_before.ContainsKey(stage)) {
+						int first = FindFirst(_before[stage]);
+
+						if (first == -1 && i > first) {
+							_pipeline.Insert(first - 1, stage);
+							_pipeline.RemoveAt(i + 1);
+							changed = true;
+							break;
+						}
+					}
+				}
+
+				Debug.Assert(loops < 1000, @"impossible ordering of stages");
+			}
+
+			_ordered = true;
 
 			return true;
 		}
@@ -210,7 +296,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public void RunBefore<StageType>(T item) where StageType : class
 		{
-			_before.Add(item, typeof(StageType));
+			if (!_before.ContainsKey(item))
+				_before.Add(item, new List<Type>());
+
+			_before[item].Add(typeof(StageType));
 		}
 
 		/// <summary>
@@ -221,7 +310,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public void RunAfter<StageType>(T item) where StageType : class
 		{
-			_after.Add(item, typeof(StageType));
+			if (!_after.ContainsKey(item))
+				_after.Add(item, new List<Type>());
+
+			_after[item].Add(typeof(StageType));
 		}
 
 	}

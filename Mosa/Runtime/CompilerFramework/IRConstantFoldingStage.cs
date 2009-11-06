@@ -17,10 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Performs IR constant folding of arithmetic instructions to optimize
 	/// the code down to fewer calculations.
 	/// </summary>
-	public sealed class IRConstantFoldingStage :
-		CodeTransformationStage,
-		IR.IIRVisitor,
-		IMethodCompilerStage
+	public sealed class IRConstantFoldingStage : CodeTransformationStage, IR.IIRVisitor
 	{
 
 		#region IMethodCompilerStage
@@ -35,12 +32,12 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Adds this stage to the given pipeline.
+		/// Sets the position of the stage within the pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		public override void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline)
+		public override void SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
 		{
-			pipeline.RunBefore<IR.CilTransformationStage>(this);
+			pipeline.RunBefore<IR.CILTransformationStage>(this);
 		}
 
 		#endregion
@@ -167,7 +164,7 @@ namespace Mosa.Runtime.CompilerFramework
 				ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
 			}
 		}
-		
+
 		#endregion // IIRVisitor
 
 		#region IIRVisitor - Unused
@@ -332,7 +329,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.NopInstruction(Context context) {}
+		void IR.IIRVisitor.NopInstruction(Context context) { }
 
 		#endregion // IIRVisitor - Unused
 

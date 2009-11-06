@@ -28,10 +28,7 @@ namespace Mosa.Platforms.x86
 	/// This stage translates all 64-bit operations to appropriate 32-bit operations on
 	/// architectures without appropriate 64-bit integral operations.
 	/// </remarks>
-	public sealed class LongOperandTransformationStage :
-		CodeTransformationStage,
-		CIL.ICILVisitor,
-		IR.IIRVisitor
+	public sealed class LongOperandTransformationStage : CodeTransformationStage, CIL.ICILVisitor, IR.IIRVisitor
 	{
 		#region IMethodCompilerStage Members
 
@@ -45,13 +42,13 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Adds this stage to the given pipeline.
+		/// Sets the position of the stage within the pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		public override void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline)
+		public override void SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
 		{
 			pipeline.RunAfter<StackLayoutStage>(this);
-
+			pipeline.RunBefore<AddressModeConversionStage>(this);
 		}
 
 		#endregion // IMethodCompilerStage Members
@@ -1170,8 +1167,8 @@ namespace Mosa.Platforms.x86
 		private void ExpandOr(Context ctx)
 		{
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-            SplitLongOperand(ctx.Result, out op0L, out op0H);
-            SplitLongOperand(ctx.Operand1, out op1L, out op1H);
+			SplitLongOperand(ctx.Result, out op0L, out op0H);
+			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 
 			ctx.SetInstruction(IR.Instruction.LogicalAndInstruction, op0H, op1H, op2H);
@@ -1185,8 +1182,8 @@ namespace Mosa.Platforms.x86
 		private void ExpandXor(Context ctx)
 		{
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-            SplitLongOperand(ctx.Result, out op0L, out op0H);
-            SplitLongOperand(ctx.Operand1, out op1L, out op1H);
+			SplitLongOperand(ctx.Result, out op0L, out op0H);
+			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 
 			ctx.SetInstruction(IR.Instruction.LogicalXorInstruction, op0H, op1H, op2H);
@@ -1596,29 +1593,29 @@ namespace Mosa.Platforms.x86
 			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 4);
 			IR.ConditionCode conditionCode = ctx.ConditionCode;
 			Context nextBlock = SplitContext(ctx);
-            LinkBlocks(newBlocks, ctx, nextBlock);
+			LinkBlocks(newBlocks, ctx, nextBlock);
 
 			// Compare high dwords
-            ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, op1H, op2H);
-            ctx.AppendInstruction(IR.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
-            ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, op1H, op2H);
+			ctx.AppendInstruction(IR.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
+			ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 
 			// Branch if check already gave results
-            newBlocks[0].SetInstruction(IR.Instruction.BranchInstruction, conditionCode, newBlocks[2].BasicBlock);
+			newBlocks[0].SetInstruction(IR.Instruction.BranchInstruction, conditionCode, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 
 			// Compare low dwords
-            newBlocks[1].SetInstruction(CPUx86.Instruction.CmpInstruction, op1L, op2L);
+			newBlocks[1].SetInstruction(CPUx86.Instruction.CmpInstruction, op1L, op2L);
 			// Set the unsigned result...
-            newBlocks[1].AppendInstruction(IR.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), newBlocks[2].BasicBlock);
+			newBlocks[1].AppendInstruction(IR.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), newBlocks[2].BasicBlock);
 			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 
 			// Success
-            newBlocks[2].SetInstruction(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 1));
+			newBlocks[2].SetInstruction(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 1));
 			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
 
 			// Failed
-            newBlocks[3].SetInstruction(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 0));
+			newBlocks[3].SetInstruction(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 0));
 			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
 		}
 

@@ -16,7 +16,7 @@ namespace Mosa.Tools.Compiler
     /// 
     /// TODO: put this wrapper stage somewhere in the actual pipeline.
     /// </summary>
-    public class InstructionStatisticsWrapper : MethodCompilerStageWrapper<ILConstantFoldingStage>
+    public class InstructionStatisticsWrapper : MethodCompilerStageWrapper<CILConstantFoldingStage>
     {
         /// <summary>
         /// Initializes a new instance of the ConstantFoldingWrapper class.

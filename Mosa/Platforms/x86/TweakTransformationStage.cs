@@ -44,10 +44,10 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Adds this stage to the given pipeline.
+		/// Sets the position of the stage within the pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		public override void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline)
+		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
 		{
 			pipeline.RunBefore<AddressModeConversionStage>(this);
 		}

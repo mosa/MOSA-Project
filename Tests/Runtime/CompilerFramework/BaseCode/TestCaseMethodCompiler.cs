@@ -34,7 +34,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 				new OperandDeterminationStage(),
                 //InstructionLogger.Instance,
                 //new ConstantFoldingStage(),
-                new CilTransformationStage(),
+                new CILTransformationStage(),
                 //InstructionLogger.Instance,
                 //InstructionStatisticsStage.Instance,
                 //new DominanceCalculationStage(),

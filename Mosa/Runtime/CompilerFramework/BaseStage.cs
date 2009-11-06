@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Basic base class for other stages
 	/// </summary>
-	public abstract class BaseStage
+	public abstract class BaseStage 
 	{
 		#region Data members
 

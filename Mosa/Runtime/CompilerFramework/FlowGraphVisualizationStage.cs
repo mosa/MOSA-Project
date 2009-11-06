@@ -186,9 +186,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Adds to pipeline.
 		/// </summary>
 		/// <param name="pipeline">The pipeline.</param>
-		public void SetPipelinePosition(CompilerPipeline<IMethodCompilerStage> pipeline)
+		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
 		{
-			pipeline.RunBefore<IR.CilTransformationStage>(this);
+			pipeline.RunBefore<IR.CILTransformationStage>(this);
 		}
 
 		#endregion // Methods
