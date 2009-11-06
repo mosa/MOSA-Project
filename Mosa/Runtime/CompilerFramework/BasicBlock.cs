@@ -7,6 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -130,7 +131,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>The code as a string value.</returns>
 		public override string ToString()
 		{
-			return Label.ToString();
+			return String.Format(@"L_{0:X4}", Label);
 		}
 
 		#endregion // Methods
