@@ -158,28 +158,31 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected Context SplitContext(Context ctx)
 		{
+			Context current = ctx.Clone();
+
 			int label = BasicBlocks.Count + 0x10000000;
 
 			BasicBlock nextBlock = new BasicBlock(label);
 			BasicBlocks.Add(nextBlock);
 
-			foreach (BasicBlock block in ctx.BasicBlock.NextBlocks)
+			foreach (BasicBlock block in current.BasicBlock.NextBlocks)
 				nextBlock.NextBlocks.Add(block);
 
-			ctx.BasicBlock.NextBlocks.Clear();
-			ctx.BasicBlock.NextBlocks.Add(nextBlock);
 
-			ctx.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
+			current.BasicBlock.NextBlocks.Clear();
+			current.BasicBlock.NextBlocks.Add(nextBlock);
 
-			if (ctx.IsLastInstruction) {
-				nextBlock.Index = ctx.Index;
-				ctx.AppendInstruction(null);
-				ctx.Ignore = true;
-				ctx.SliceBefore();
+			current.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
+
+			if (current.IsLastInstruction) {
+				nextBlock.Index = current.Index;
+				current.AppendInstruction(null);
+				current.Ignore = true;
+				current.SliceBefore();
 			}
 			else {
-				nextBlock.Index = ctx.Next.Index;
-				ctx.SliceAfter();
+				nextBlock.Index = current.Next.Index;
+				current.SliceAfter();
 			}
 
 			return new Context(InstructionSet, nextBlock);
