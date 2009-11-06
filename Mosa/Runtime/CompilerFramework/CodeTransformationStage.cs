@@ -161,6 +161,7 @@ namespace Mosa.Runtime.CompilerFramework
 			int label = BasicBlocks.Count + 0x10000000;
 
 			BasicBlock nextBlock = new BasicBlock(label);
+			BasicBlocks.Add(nextBlock);
 
 			foreach (BasicBlock block in ctx.BasicBlock.NextBlocks)
 				nextBlock.NextBlocks.Add(block);
@@ -169,11 +170,17 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.BasicBlock.NextBlocks.Add(nextBlock);
 
 			ctx.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
-			ctx.SliceAfter();
 
-			nextBlock.Index = ctx.Next.Index;
-
-			// FIXME PG - does not handle split on last instruction
+			if (ctx.IsLastInstruction) {
+				nextBlock.Index = ctx.Index;
+				ctx.AppendInstruction(null);
+				ctx.Ignore = true;
+				ctx.SliceBefore();
+			}
+			else {
+				nextBlock.Index = ctx.Next.Index;
+				ctx.SliceAfter();
+			}
 
 			return new Context(InstructionSet, nextBlock);
 		}
