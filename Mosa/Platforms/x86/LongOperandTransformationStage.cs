@@ -1598,8 +1598,6 @@ namespace Mosa.Platforms.x86
 			Context nextBlock = SplitContext(ctx);
             LinkBlocks(newBlocks, ctx, nextBlock);
 
-			Debug.Assert(nextBlock != null, @"No follower block?");
-
 			// Compare high dwords
             ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, op1H, op2H);
             ctx.AppendInstruction(IR.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
