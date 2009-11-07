@@ -18,30 +18,35 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Performs IR constant folding of arithmetic instructions to optimize
 	/// the code down to fewer calculations.
 	/// </summary>
-	public sealed class CILConstantFoldingStage : CodeTransformationStage, CIL.ICILVisitor
+	public sealed class CILConstantFoldingStage : CodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
 
-		#region IMethodCompilerStage
+		#region IPipelineStage
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public override string Name
+		string IPipelineStage.Name
 		{
 			get { return @"CILConstantFoldingStage"; }
 		}
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		public override void SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunBefore<IR.CILTransformationStage>(this);
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
-		#endregion
+		#endregion // IPipelineStage
 
 		#region ICILVisitor
 
@@ -196,9 +201,9 @@ namespace Mosa.Runtime.CompilerFramework
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
 				if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction,ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
 				else if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction,ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
+					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
 				else
 					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
 			}

@@ -15,128 +15,136 @@ using NDesk.Options;
 
 namespace Mosa.Tools.Compiler.Boot
 {
-    /// <summary>
-    /// Selector proxy type for the boot format. 
-    /// </summary>
-    public class BootFormatSelector : IAssemblyCompilerStage, IHasOptions
-    {
-        #region Data Members
+	/// <summary>
+	/// Selector proxy type for the boot format. 
+	/// </summary>
+	public class BootFormatSelector : IAssemblyCompilerStage, IHasOptions, IPipelineStage
+	{
+		#region Data Members
 
-        /// <summary>
-        /// Holds the real stage implementation to use.
-        /// </summary>
-        private IAssemblyCompilerStage implementation;
+		/// <summary>
+		/// Holds the real stage implementation to use.
+		/// </summary>
+		private IAssemblyCompilerStage implementation;
 
-        /// <summary>
-        /// Holds the Multiboot 0.7 stage.
-        /// </summary>
-        private IAssemblyCompilerStage multiboot07Stage;
+		/// <summary>
+		/// Holds the Multiboot 0.7 stage.
+		/// </summary>
+		private IAssemblyCompilerStage multiboot07Stage;
 
-        #endregion // Data Members
+		#endregion // Data Members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the BootFormatSelector class.
-        /// </summary>
-        public BootFormatSelector()
-        {
-            this.multiboot07Stage = new Multiboot0695AssemblyStage();
-            this.implementation = null;
-        }
+		/// <summary>
+		/// Initializes a new instance of the BootFormatSelector class.
+		/// </summary>
+		public BootFormatSelector()
+		{
+			this.multiboot07Stage = new Multiboot0695AssemblyStage();
+			this.implementation = null;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is configured.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is configured; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsConfigured
-        {
-            get { return (this.implementation != null); }
-        }
+		/// <summary>
+		/// Gets a value indicating whether this instance is configured.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is configured; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsConfigured
+		{
+			get { return (this.implementation != null); }
+		}
 
-        #endregion // Properties
+		#endregion // Properties
 
-        #region IHasOptions Members
+		#region IHasOptions Members
 
-        /// <summary>
-        /// Adds the additional options for the parsing process to the given OptionSet.
-        /// </summary>
-        /// <param name="optionSet">A given OptionSet to add the options to.</param>
-        public void AddOptions(OptionSet optionSet)
-        {
-            IHasOptions options;
-            
-            optionSet.Add(
-                "b|boot=",
-                "Specify the bootable format of the produced binary [{mb0.7}].",
-                delegate(string format)
-                {
-                    this.implementation = SelectImplementation(format);
-                }
-            );
-            
-            options = multiboot07Stage as IHasOptions;
-            if (options != null)
-                options.AddOptions(optionSet);
-        }
+		/// <summary>
+		/// Adds the additional options for the parsing process to the given OptionSet.
+		/// </summary>
+		/// <param name="optionSet">A given OptionSet to add the options to.</param>
+		public void AddOptions(OptionSet optionSet)
+		{
+			IHasOptions options;
 
-        #endregion // IHasOptions Members
+			optionSet.Add(
+				"b|boot=",
+				"Specify the bootable format of the produced binary [{mb0.7}].",
+				delegate(string format)
+				{
+					this.implementation = SelectImplementation(format);
+				}
+			);
 
-        #region IAssemblyCompilerStage Members
+			options = multiboot07Stage as IHasOptions;
+			if (options != null)
+				options.AddOptions(optionSet);
+		}
 
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value>The name of the compilation stage.</value>
-        public string Name
-        {
-            get
-            {
-                if (this.implementation == null)
-                    return @"Not bootable";
+		#endregion // IHasOptions Members
 
-                return this.implementation.Name;
-            }
-        }
+		#region IAssemblyCompilerStage Members
 
-        /// <summary>
-        /// Performs stage specific processing on the compiler context.
-        /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(AssemblyCompiler compiler)
-        {
-            if (this.implementation != null)
-                implementation.Run(compiler);
-        }
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name
+		{
+			get
+			{
+				if (implementation == null)
+					return @"Not bootable";
 
-        #endregion // IAssemblyCompilerStage
-        
-        #region Internals
+				return ((IPipelineStage)implementation).Name;
+			}
+		}
 
-        /// <summary>
-        /// Selects the implementation.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <returns></returns>
-        private IAssemblyCompilerStage SelectImplementation(string format)
-        {
-            switch (format.ToLower())
-            {
-                case "multiboot-0.7":
-                case "mb0.7":
-                    return this.multiboot07Stage;
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get { return ((IPipelineStage)implementation).PipelineStageOrder; }
+		}
 
-                default:
-                    throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
-            }
-        }
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		/// <param name="compiler">The compiler context to perform processing in.</param>
+		public void Run(AssemblyCompiler compiler)
+		{
+			if (this.implementation != null)
+				implementation.Run(compiler);
+		}
 
-        #endregion // Internals
-    }
+		#endregion // IAssemblyCompilerStage
+
+		#region Internals
+
+		/// <summary>
+		/// Selects the implementation.
+		/// </summary>
+		/// <param name="format">The format.</param>
+		/// <returns></returns>
+		private IAssemblyCompilerStage SelectImplementation(string format)
+		{
+			switch (format.ToLower()) {
+				case "multiboot-0.7":
+				case "mb0.7":
+					return this.multiboot07Stage;
+
+				default:
+					throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
+			}
+		}
+
+		#endregion // Internals
+	}
 }

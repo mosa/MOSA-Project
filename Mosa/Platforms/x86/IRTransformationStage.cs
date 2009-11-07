@@ -27,11 +27,7 @@ namespace Mosa.Platforms.x86
 	/// <remarks>
 	/// This transformation stage transforms IR instructions into their equivalent X86 sequences.
 	/// </remarks>
-	public sealed class IRTransformationStage :
-		BaseTransformationStage,
-		IR.IIRVisitor,
-		IMethodCompilerStage,
-		IPlatformTransformationStage
+	public sealed class IRTransformationStage : BaseTransformationStage, IR.IIRVisitor, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
 	{
 
 		#region IMethodCompilerStage Members
@@ -40,18 +36,18 @@ namespace Mosa.Platforms.x86
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public override string Name
-		{
-			get { return @"X86.IRTransformationStage"; }
-		}
+		string IPipelineStage.Name { get { return @"X86.IRTransformationStage"; } }
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunAfter<CILTransformationStage>(this);
+			get
+			{
+				return PipelineStageOrder.CreatePipelineOrder(typeof(CILTransformationStage), typeof(TweakTransformationStage));
+			}
 		}
 
 		#endregion // IMethodCompilerStage Members
@@ -122,7 +118,7 @@ namespace Mosa.Platforms.x86
 			Operand source = EmitConstant(ctx.Operand2);
 			Operand destination = EmitConstant(ctx.Operand3);
 			IR.ConditionCode setcc = IR.ConditionCode.Equal;
-            IR.ConditionCode code = ctx.ConditionCode;
+			IR.ConditionCode code = ctx.ConditionCode;
 			ctx.Remove();
 
 			// Swap the operands if necessary...
@@ -133,8 +129,7 @@ namespace Mosa.Platforms.x86
 			}
 
 			// x86 is messed up :(
-            switch (code)
-            {
+			switch (code) {
 				case IR.ConditionCode.Equal: break;
 				case IR.ConditionCode.NotEqual: break;
 				case IR.ConditionCode.UnsignedGreaterOrEqual: setcc = IR.ConditionCode.GreaterOrEqual; break;
@@ -160,8 +155,7 @@ namespace Mosa.Platforms.x86
 			}
 
 			if (source.Type.Type == CilElementType.R4) {
-                switch (code)
-                {
+				switch (code) {
 					case IR.ConditionCode.Equal:
 						ctx.AppendInstruction(CPUx86.Instruction.UcomissInstruction, source, destination);
 						break;
@@ -179,8 +173,7 @@ namespace Mosa.Platforms.x86
 				}
 			}
 			else {
-                switch (code)
-                {
+				switch (code) {
 					case IR.ConditionCode.Equal:
 						ctx.AppendInstruction(CPUx86.Instruction.UcomisdInstruction, source, destination);
 						break;
@@ -330,14 +323,14 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
 			// int 3
-            ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
-            ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
+			ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
+			ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 
 			// Uncomment this line to enable breakpoints within Bochs
 			//ctx.XXX(CPUx86.Instruction.BochsDebug);
 
 			// push ebp
-            //ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
+			//ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 			// mov ebp, esp
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, esp);
 			// sub esp, localsSize
@@ -512,54 +505,53 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.BranchInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.BranchInstruction(Context context) 
-        {
-            switch (context.ConditionCode)
-            {
-                case IR.ConditionCode.Equal:
-                    context.ReplaceInstructionOnly(CPUx86.Instruction.JeInstruction);
-                    break;
-                    
-                case IR.ConditionCode.GreaterOrEqual:
-                    context.ReplaceInstructionOnly(CPUx86.Instruction.JgeInstruction);
-                    break;
+		void IR.IIRVisitor.BranchInstruction(Context context)
+		{
+			switch (context.ConditionCode) {
+				case IR.ConditionCode.Equal:
+					context.ReplaceInstructionOnly(CPUx86.Instruction.JeInstruction);
+					break;
 
-                case IR.ConditionCode.GreaterThan:
-                    context.ReplaceInstructionOnly(CPUx86.Instruction.JgInstruction);
-                    break;
+				case IR.ConditionCode.GreaterOrEqual:
+					context.ReplaceInstructionOnly(CPUx86.Instruction.JgeInstruction);
+					break;
 
-                case IR.ConditionCode.LessOrEqual:
-                    context.ReplaceInstructionOnly(CPUx86.Instruction.JleInstruction);
-                    break;
+				case IR.ConditionCode.GreaterThan:
+					context.ReplaceInstructionOnly(CPUx86.Instruction.JgInstruction);
+					break;
 
-                case IR.ConditionCode.LessThan:
-                    context.ReplaceInstructionOnly(CPUx86.Instruction.JlInstruction);
-                    break;
+				case IR.ConditionCode.LessOrEqual:
+					context.ReplaceInstructionOnly(CPUx86.Instruction.JleInstruction);
+					break;
 
-                case IR.ConditionCode.NotEqual:
-                    context.ReplaceInstructionOnly(CPUx86.Instruction.JneInstruction);
-                    break;
+				case IR.ConditionCode.LessThan:
+					context.ReplaceInstructionOnly(CPUx86.Instruction.JlInstruction);
+					break;
 
-                case IR.ConditionCode.UnsignedGreaterOrEqual:
-                    context.ReplaceInstructionOnly(CPUx86.Instruction.JaeInstruction);
-                    break;
+				case IR.ConditionCode.NotEqual:
+					context.ReplaceInstructionOnly(CPUx86.Instruction.JneInstruction);
+					break;
 
-                case IR.ConditionCode.UnsignedGreaterThan:
-                    context.ReplaceInstructionOnly(CPUx86.Instruction.JaInstruction);
-                    break;
+				case IR.ConditionCode.UnsignedGreaterOrEqual:
+					context.ReplaceInstructionOnly(CPUx86.Instruction.JaeInstruction);
+					break;
 
-                case IR.ConditionCode.UnsignedLessOrEqual:
-                    context.ReplaceInstructionOnly(CPUx86.Instruction.JbeInstruction);
-                    break;
+				case IR.ConditionCode.UnsignedGreaterThan:
+					context.ReplaceInstructionOnly(CPUx86.Instruction.JaInstruction);
+					break;
 
-                case IR.ConditionCode.UnsignedLessThan:
-                    context.ReplaceInstructionOnly(CPUx86.Instruction.JbInstruction);
-                    break;
+				case IR.ConditionCode.UnsignedLessOrEqual:
+					context.ReplaceInstructionOnly(CPUx86.Instruction.JbeInstruction);
+					break;
 
-                default:
-                    throw new NotSupportedException();
-            }
-        }
+				case IR.ConditionCode.UnsignedLessThan:
+					context.ReplaceInstructionOnly(CPUx86.Instruction.JbInstruction);
+					break;
+
+				default:
+					throw new NotSupportedException();
+			}
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.

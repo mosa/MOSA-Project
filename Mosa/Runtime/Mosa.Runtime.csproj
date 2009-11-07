@@ -228,6 +228,7 @@
     <Compile Include="CompilerFramework\InstructionSet.cs" />
     <Compile Include="CompilerFramework\InstructionData.cs" />
     <Compile Include="CompilerFramework\CIL\BaseInstruction.cs" />
+    <Compile Include="CompilerFramework\PipelineStageOrder.cs" />
     <Compile Include="CompilerFramework\ReverseBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\OperandDeterminationStage.cs" />
     <Compile Include="CompilerFramework\RuntimeMethodData.cs" />

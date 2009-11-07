@@ -30,7 +30,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
 	/// </remarks>
-	public sealed class CILTransformationStage : CodeTransformationStage, CIL.ICILVisitor
+	public sealed class CILTransformationStage : CodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
 		#region IMethodCompilerStage Members
 
@@ -38,17 +38,21 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public override string Name
-		{
-			get { return @"IR.CILTransformationStage"; }
-		}
+		string IPipelineStage.Name { get { return @"IR.CILTransformationStage"; } }
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		public override void SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
+			get
+			{
+				return new PipelineStageOrder[] {
+					//new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
 		#endregion // IMethodCompilerStage Members

@@ -25,34 +25,30 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class TweakTransformationStage :
-		BaseTransformationStage,
-		CPUx86.IX86Visitor,
-		IMethodCompilerStage,
-		IPlatformTransformationStage
+	public sealed class TweakTransformationStage : BaseTransformationStage, CPUx86.IX86Visitor, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
 	{
 
-		#region IMethodCompilerStage Members
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public override string Name
-		{
-			get { return @"X86.TweakTransformationStage"; }
-		}
+		string IPipelineStage.Name { get { return @"X86.TweakTransformationStage"; } }
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunBefore<AddressModeConversionStage>(this);
+			get
+			{
+				return PipelineStageOrder.CreatePipelineOrder(typeof(IRTransformationStage), typeof(AddressModeConversionStage));
+			}
 		}
 
-		#endregion // IMethodCompilerStage Members
+		#endregion // IPipelineStage Members
 
 		#region IX86Visitor
 
@@ -73,7 +69,7 @@ namespace Mosa.Platforms.x86
 
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Mul"/> instructions.
-			/// </summary>
+		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Mul(Context ctx)
 		{

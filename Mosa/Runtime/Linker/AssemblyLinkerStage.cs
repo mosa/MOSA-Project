@@ -73,12 +73,6 @@ namespace Mosa.Runtime.Linker
 		#region IAssemblyCompilerStage Members
 
 		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public abstract string Name { get; }
-
-		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>

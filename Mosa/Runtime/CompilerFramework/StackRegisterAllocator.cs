@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <para />
 	/// - EAX and ECX are not touched for floating point. They keep their last state.
 	/// </remarks>
-	public class StackRegisterAllocator : BaseStage, IMethodCompilerStage
+	public class StackRegisterAllocator : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// Holds the number of registers used for the evaluation stack.
@@ -86,18 +86,21 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
-		{
-			get { return @"StackRegisterAllocator"; }
-		}
+		string IPipelineStage.Name { get { return @"StackRegisterAllocator"; } }
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunBefore<ICodeGenerationStage>(this);
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(ICodeGenerationStage)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
 		/// <summary>

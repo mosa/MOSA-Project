@@ -29,7 +29,7 @@ namespace Mosa.Tools.Compiler.Metadata
     /// an additional metadata heap, which contains tables similar to the CLI metadata tables. This additional
     /// heap maps the compiled code to the CLI metadata.
     /// </remarks>
-    public sealed partial class MetadataBuilderStage : IAssemblyCompilerStage
+    public sealed partial class MetadataBuilderStage : IAssemblyCompilerStage, IPipelineStage
     {
         /// <summary>
         /// Holds the signature of the metadata.

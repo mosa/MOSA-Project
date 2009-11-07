@@ -24,7 +24,7 @@ namespace Mosa.Tools.Compiler.Linkers
     /// <summary>
     /// Proxy type, which selects the appropriate linker for an output format.
     /// </summary>
-    public sealed class LinkerFormatSelector : IAssemblyLinker, IAssemblyCompilerStage, IHasOptions
+    public sealed class LinkerFormatSelector : IAssemblyLinker, IAssemblyCompilerStage, IHasOptions, IPipelineStage
     {
         #region Data Members
 
@@ -121,21 +121,29 @@ namespace Mosa.Tools.Compiler.Linkers
             }
         }
         
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value>The name of the compilation stage.</value>
-        public string Name
-        {
-            get
-            {
-                IAssemblyCompilerStage acs = this.implementation as IAssemblyCompilerStage;
-                if (acs == null)
-                    return @"Linker Selector";
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name
+		{
+			get
+			{
+				if (implementation == null)
+					return @"Not bootable";
 
-                return acs.Name;
-            }
-        }
+				return ((IPipelineStage)implementation).Name;
+			}
+		}
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get { return ((IPipelineStage)implementation).PipelineStageOrder; }
+		}
 
         #endregion // IAssemblyCompilerStage Members
 

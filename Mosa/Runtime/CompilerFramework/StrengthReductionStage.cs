@@ -17,27 +17,30 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Performs IR constant folding of arithmetic instructions to optimize
 	/// the code down to fewer calculations.
 	/// </summary>
-	public sealed class StrengthReductionStage : CodeTransformationStage, CIL.ICILVisitor
+	public sealed class StrengthReductionStage : CodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
 
-		#region IMethodCompilerStage
+		#region IPipelineStage
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public override string Name
-		{
-			get { return @"Strength Reduction"; }
-		}
+		string IPipelineStage.Name { get { return @"Strength Reduction"; } }
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		public override void SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunBefore<IR.CILTransformationStage>(this);
+			get
+			{
+				return new PipelineStageOrder[] {
+					//new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
 		#endregion

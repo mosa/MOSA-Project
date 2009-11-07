@@ -53,7 +53,7 @@ namespace Mosa.Tools.Compiler.Boot
 	/// the specification at 
 	/// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.
 	/// </remarks>
-	public sealed class Multiboot0695AssemblyStage : IAssemblyCompilerStage, IHasOptions
+	public sealed class Multiboot0695AssemblyStage : IAssemblyCompilerStage, IHasOptions, IPipelineStage
 	{
 		#region Constants
 
@@ -134,16 +134,26 @@ namespace Mosa.Tools.Compiler.Boot
 
 		#endregion // Construction
 
-		#region IAssemblyCompilerStage Members
+		#region IPipelineStage
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name { get { return @"MultibootAssemblyStage"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			get { return @"MultibootAssemblyStage"; }
+			get { return null; }
 		}
+
+		#endregion // IPipelineStage Members
+
+		#region IAssemblyCompilerStage Members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.

@@ -29,7 +29,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// representation. The instructions are grouped into basic Blocks
 	/// for easier local optimizations in later compiler stages.
 	/// </remarks>
-	public sealed partial class DecodingStage : BaseStage, IMethodCompilerStage, IInstructionDecoder
+	public sealed class DecodingStage : BaseStage, IMethodCompilerStage, IInstructionDecoder, IPipelineStage
 	{
 		private readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
 
@@ -69,9 +69,21 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name { get { return @"CIL decoder"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			get { return @"CIL decoder"; }
+			get
+			{
+				return new PipelineStageOrder[] {
+					//new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
 		/// <summary>
@@ -89,7 +101,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 				// Initalize the instruction, setting the initalize size to 10 times the code stream
 				compiler.InstructionSet = new InstructionSet((int)code.Length * 10);
-				
+
 				// update the base class 
 				InstructionSet = compiler.InstructionSet;
 
@@ -117,15 +129,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					_compiler = null;
 				}
 			}
-		}
-
-		/// <summary>
-		/// Sets the position of the stage within the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.Add(this);
 		}
 
 		#endregion // IMethodCompilerStage Members

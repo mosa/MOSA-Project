@@ -31,10 +31,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// created by invoking CreateMethodCompiler on a specific compiler
 	/// instance.
 	/// </remarks>
-	public class MethodCompilerBase :
-		CompilerBase<IMethodCompilerStage>,
-		IMethodCompiler,
-		IDisposable
+	public class MethodCompilerBase : CompilerBase, IMethodCompiler, IDisposable
 	{
 
 		#region Data Members
@@ -213,7 +210,9 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Compile()
 		{
 			BeginCompile();
-			Pipeline.Execute(delegate(IMethodCompilerStage stage) { stage.Run(this); });
+
+			Pipeline.Execute<IMethodCompilerStage>(delegate(IMethodCompilerStage stage) { stage.Run(this); });
+
 			EndCompile();
 		}
 
@@ -336,7 +335,7 @@ namespace Mosa.Runtime.CompilerFramework
 			IList<RuntimeParameter> parameters = _method.Parameters;
 			Debug.Assert(parameters != null, @"Method doesn't have arguments.");
 			Debug.Assert(index < parameters.Count, @"Invalid argument index requested.");
-			if (parameters == null || parameters.Count <= index) 
+			if (parameters == null || parameters.Count <= index)
 				throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
 
 			Operand param = null;

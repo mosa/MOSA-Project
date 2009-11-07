@@ -15,7 +15,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// MethodCompilationStageComposite composes several MethodCompilerStages into 
     /// one stage and forwards calls to the stage to multiple _stages.
     /// </summary>
-    public class MethodCompilationStageComposite : IMethodCompilerStage
+	public class MethodCompilationStageComposite : IMethodCompilerStage, IPipelineStage
     {
         /// <summary>
         /// List of _stages
@@ -31,9 +31,10 @@ namespace Mosa.Runtime.CompilerFramework
             get { return _stages; }
             set { _stages = value; }
         }
-        /// <summary>
-        /// 
-        /// </summary>
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MethodCompilationStageComposite"/> class.
+		/// </summary>
         public MethodCompilationStageComposite()
         {
         }
@@ -55,12 +56,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// Retrieves the name of the compilation stage.
         /// </summary>
         /// <value></value>
-        public string Name
+		string IPipelineStage.Name
         {
             get
             {
                 string result = "[";
-                foreach (IMethodCompilerStage stage in Stages)
+                foreach (IPipelineStage stage in Stages)
                     result += stage.Name + ",";
 
                 if (result.Length > 1)
@@ -71,6 +72,21 @@ namespace Mosa.Runtime.CompilerFramework
                 return result;
             }
         }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get
+			{
+				return new PipelineStageOrder[] {
+					//new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
+		}
 
         /// <summary>
         /// Performs stage specific processing on the compiler context.
@@ -83,14 +99,5 @@ namespace Mosa.Runtime.CompilerFramework
                 stage.Run(compiler);
         }
 
-		/// <summary>
-		/// Sets the position of the stage within the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-        void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-        {
-            foreach (IMethodCompilerStage stage in Stages)
-                stage.SetPipelinePosition(pipeline);
-        }
     }
 }

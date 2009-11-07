@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// This stage just saves statistics about the code we're compiling, for example
 	/// ratio of IL to IR code, number of compiled instructions, etc.
 	/// </summary>
-	public class InstructionStatisticsStage : BaseStage, IMethodCompilerStage
+	public class InstructionStatisticsStage : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// 
@@ -55,7 +55,23 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name { get { return "InstructionStatisticsStage"; } }
+		string IPipelineStage.Name { get { return "InstructionStatisticsStage"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage)),
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IPlatformTransformationStage)),
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage))
+				};
+			}
+		}
 
 		/// <summary>
 		/// Visitation method for instructions not caught by more specific visitation methods.
@@ -79,17 +95,6 @@ namespace Mosa.Runtime.CompilerFramework
 				_namespaces.Add(ctx.Instruction.GetType().Namespace, 1);
 
 			++_numberOfInstructions;
-		}
-
-		/// <summary>
-		/// Sets the position of the stage within the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.RunAfter<IR.CILTransformationStage>(this);
-			pipeline.RunAfter<IPlatformTransformationStage>(this);
-			pipeline.RunBefore<CodeGenerationStage>(this);
 		}
 
 		/// <summary>

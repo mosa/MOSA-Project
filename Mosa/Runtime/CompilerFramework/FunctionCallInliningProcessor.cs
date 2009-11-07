@@ -17,11 +17,8 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Determines if the target of a function call can be inlined.
 	/// </summary>
-	public sealed class FunctionCallInliningProcessor : IMethodCompilerStage {
-
-		#region Data members
-
-		#endregion // Data members
+	public sealed class FunctionCallInliningProcessor : IMethodCompilerStage, IPipelineStage
+	{
 
 		#region Construction
 
@@ -34,32 +31,39 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Construction
 
-		#region IMethodCompilerStage Members
+		#region IPipelineStage Members
 
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value>The name of the compilation stage.</value>
-		public string Name
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name
 		{
 			get { return @"Inlining optimization"; }
 		}
 
-        /// <summary>
-        /// Performs stage specific processing on the compiler context.
-        /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(IMethodCompiler compiler)
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
+			get
+			{
+				return new PipelineStageOrder[] {
+					//new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-        void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-        {
-        }
+		/// <param name="compiler">The compiler context to perform processing in.</param>
+		public void Run(IMethodCompiler compiler)
+		{
+		}
 
 		#endregion
 	}

@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The Operand Determination Stage determines the operands for each instructions.
 	/// </summary>
-	public class OperandDeterminationStage : BaseStage, IMethodCompilerStage
+	public class OperandDeterminationStage : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Data members
 
@@ -46,18 +46,33 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion
 
-		#region Properties
+		#region IPipelineStage
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name
 		{
 			get { return @"Operand Determination Stage"; }
 		}
 
-		#endregion
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get
+			{
+				return new PipelineStageOrder[] {
+					//new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
+		}
+
+		#endregion // IPipelineStage
 
 		#region IMethodCompilerStage Members
 
@@ -176,15 +191,6 @@ namespace Mosa.Runtime.CompilerFramework
 			if ((ctx.Instruction as ICILInstruction).PushResult)
 				foreach (Operand operand in ctx.Results)
 					currentStack.Add(operand);
-		}
-
-		/// <summary>
-		/// Adds to pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.RunBefore<IR.CILTransformationStage>(this);
 		}
 
 		#endregion // Methods

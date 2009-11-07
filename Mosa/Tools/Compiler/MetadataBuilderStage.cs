@@ -20,22 +20,25 @@ namespace Mosa.Tools.Compiler
 	/// <summary>
 	/// This stage adds the CIL metadata and MOSA AOT metadata to the compiled assembly.
 	/// </summary>
-	sealed class MetadataBuilderStage : IAssemblyCompilerStage
+	sealed class MetadataBuilderStage : IAssemblyCompilerStage, IPipelineStage
 	{
 		#region Data Members
 
 		#endregion // Data Members
 
-		#region IAssemblyCompilerStage Members
+		#region IPipelineStage members
+
+		string IPipelineStage.Name { get { return @"Metadata Builder Stage"; } }
 
 		/// <summary>
-		/// Retrieves the name of the compilation stage.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public string Name
-		{
-			get { return @"Metadata Builder Stage"; }
-		}
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
+
+		#endregion // IPipelineStage members
+
+		#region IAssemblyCompilerStage Members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.

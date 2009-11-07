@@ -17,8 +17,9 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Base class for code generation stages.
 	/// </summary>
-	public class CodeGenerationStage : ICodeGenerationStage, IMethodCompilerStage
+	public class CodeGenerationStage : ICodeGenerationStage, IMethodCompilerStage, IPipelineStage
 	{
+
 		#region Data members
 
 		/// <summary>
@@ -33,16 +34,23 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IMethodCompilerStage members
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public string Name
-		{
-			get { return @"CodeGenerationStage"; }
-		}
+		/// <value></value>
+		string IPipelineStage.Name { get { return @"CodeGenerationStage"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
+
+		#endregion // IPipelineStage Members
+
+		#region Methods
 
 		/// <summary>
 		/// 
@@ -76,19 +84,6 @@ namespace Mosa.Runtime.CompilerFramework
 				EndGenerate();
 			}
 		}
-
-		/// <summary>
-		/// Sets the position of the stage within the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.Add(this);
-		}
-
-		#endregion // IMethodCompilerStage members
-
-		#region Methods
 
 		/// <summary>
 		/// Called to emit a list of instructions offered by the instruction provider.

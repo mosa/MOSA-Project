@@ -25,10 +25,7 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class SimplePeepholeOptimizationStage :
-		BaseTransformationStage,
-		IMethodCompilerStage,
-		IPlatformTransformationStage
+	public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
 	{
 
 		#region IMethodCompilerStage Members
@@ -37,18 +34,18 @@ namespace Mosa.Platforms.x86
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public override string Name
-		{
-			get { return @"X86.SimplePeepholeOptimizationStage"; }
-		}
+		string IPipelineStage.Name { get { return @"X86.SimplePeepholeOptimizationStage"; } }
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunAfter<TweakTransformationStage>(this);
+			get
+			{
+				return PipelineStageOrder.CreatePipelineOrder(typeof(MemToMemConversionStage), typeof(StackLayoutStage));
+			}
 		}
 
 		#endregion // IMethodCompilerStage Members
@@ -106,10 +103,10 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// 
+		/// Removes the single line jump.
 		/// </summary>
-		/// <param name="current"></param>
-		/// <param name="previous"></param>
+		/// <param name="current">The current.</param>
+		/// <param name="previous">The previous.</param>
 		/// <returns></returns>
 		private bool RemoveSingleLineJump(Context current, Context previous)
 		{

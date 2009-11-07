@@ -147,7 +147,7 @@ namespace Mosa.Platforms.x86
 		/// Extends the assembly compiler pipeline with x86 specific stages.
 		/// </summary>
 		/// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
-		public override void ExtendAssemblyCompilerPipeline(CompilerPipeline<IAssemblyCompilerStage> assemblyCompilerPipeline)
+		public override void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyCompilerPipeline)
 		{
 		}
 
@@ -155,7 +155,7 @@ namespace Mosa.Platforms.x86
 		/// Extends the method compiler pipeline with x86 specific stages.
 		/// </summary>
 		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(CompilerPipeline<IMethodCompilerStage> methodCompilerPipeline)
+		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
 		{
 			// FIXME: Create a specific code generator instance using requested feature flags.
 			// FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
@@ -252,7 +252,7 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public override ICodeEmitter GetCodeEmitter()
 		{
-			return new MachineCodeEmitter();	
+			return new MachineCodeEmitter();
 		}
 	}
 }

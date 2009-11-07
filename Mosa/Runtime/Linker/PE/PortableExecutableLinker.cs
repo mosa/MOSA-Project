@@ -22,7 +22,7 @@ namespace Mosa.Runtime.Linker.PE
 	/// <summary>
 	/// A Linker, which creates portable executable files.
 	/// </summary>
-	public sealed class PortableExecutableLinker : AssemblyLinkerStageBase
+	public sealed class PortableExecutableLinker : AssemblyLinkerStageBase, IPipelineStage
 	{
 		#region Constants
 
@@ -157,6 +157,26 @@ namespace Mosa.Runtime.Linker.PE
 
 		#endregion // Properties
 
+		#region IPipelineStage
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+
+		string IPipelineStage.Name { get { return @"Portable Executable File Linker"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get { return null; }
+		}
+
+		#endregion // IPipelineStage Members
+
 		#region AssembyLinkerStageBase Overrides
 
 		/// <summary>
@@ -222,15 +242,6 @@ namespace Mosa.Runtime.Linker.PE
 		public override long LoadSectionAlignment
 		{
 			get { return this.fileAlignment; }
-		}
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public override string Name
-		{
-			get { return @"Portable Executable File Linker"; }
 		}
 
 		/// <summary>

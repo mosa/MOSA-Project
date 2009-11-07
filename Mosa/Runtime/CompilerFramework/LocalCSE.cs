@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// according to Steven S. Muchnick, Advanced Compiler Design 
 	/// and Implementation (Morgan Kaufmann, 1997) pp. 378-396
 	/// </summary>
-	public class LocalCSE : BaseStage, IMethodCompilerStage
+	public class LocalCSE : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// 
@@ -98,18 +98,24 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name
 		{
 			get { return @"Local Common Subexpression Elimination Stage"; }
 		}
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunAfter<CILConstantFoldingStage>(this);
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(CILConstantFoldingStage)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
 		/// <summary>

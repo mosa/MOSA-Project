@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Performs memory layout of a type for compilation.
     /// </summary>
-    public sealed class TypeLayoutStage : IAssemblyCompilerStage
+    public sealed class TypeLayoutStage : IAssemblyCompilerStage, IPipelineStage
     {
         #region Data members
 
@@ -43,10 +43,17 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region IAssemblyCompilerStage members
 
-        string IAssemblyCompilerStage.Name
-        {
-            get { return @"Type Layout"; }
-        }
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name        {            get { return @"Type Layout"; }}
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
 
         void IAssemblyCompilerStage.Run(AssemblyCompiler compiler)
         {

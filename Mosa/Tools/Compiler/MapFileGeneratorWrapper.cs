@@ -21,7 +21,7 @@ namespace Mosa.Tools.Compiler
     /// <summary>
     /// Wraps the map file generation stage and adds options to configure it.
     /// </summary>
-    public sealed class MapFileGeneratorWrapper : IAssemblyCompilerStage, IHasOptions
+	public sealed class MapFileGeneratorWrapper : IAssemblyCompilerStage, IHasOptions, IPipelineStage
     {
         #region Data Members
 
@@ -43,18 +43,21 @@ namespace Mosa.Tools.Compiler
 
         #endregion // Construction
 
+		#region IPipelineStage members
+
+		string IPipelineStage.Name { get { return @"Map File Generator Wrapper"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
+
+		#endregion // IPipelineStage members
+
         #region IAssemblyCompilerStage Members
 
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value>The name of the compilation stage.</value>
-        public string Name
-        {
-            get { return @"Map File Generator Wrapper"; }
-        }
-
-        /// <summary>
+		/// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>

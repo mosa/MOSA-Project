@@ -15,35 +15,33 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// This class orders blocks in reverse order. This stage is used for testing.
 	/// </summary>
-	public class ReverseBlockOrderStage : BaseStage, IMethodCompilerStage
+	public class ReverseBlockOrderStage : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
-		#region Data members
 
-		#endregion // Data members
-
-		#region Properties
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		 string IPipelineStage.Name
 		{
 			get { return @"ReverseBlockOrderStage"; }
 		}
 
-		#endregion // Properties
-
-		#region IMethodCompilerStage Members
-
 		/// <summary>
-		/// Sets the pipeline position.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunAfter<IPlatformTransformationStage>(this);
-			pipeline.RunBefore<CodeGenerationStage>(this);
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IPlatformTransformationStage)),
+					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
+				};
+			}
 		}
 
 		/// <summary>

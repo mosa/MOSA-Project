@@ -62,7 +62,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="assemblyPipeline">
 		/// The pipeline of the assembly compiler to add architecture specific compilation stages to.
 		/// </param>
-		void ExtendAssemblyCompilerPipeline(CompilerPipeline<IAssemblyCompilerStage> assemblyPipeline);
+		void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyPipeline);
 
 		/// <summary>
 		/// Requests the architecture to add architecture specific compilation stages to the pipeline. These
@@ -71,7 +71,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="methodPipeline">
 		/// The pipeline of the method compiler to add architecture specific compilation stages to.
 		/// </param>
-		void ExtendMethodCompilerPipeline(CompilerPipeline<IMethodCompilerStage> methodPipeline);
+		void ExtendMethodCompilerPipeline(CompilerPipeline methodPipeline);
 
 		/// <summary>
 		/// Factory method for result operands of instructions.

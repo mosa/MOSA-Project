@@ -4,15 +4,22 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IPipelineStage
-    {
+	{
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Retrieves the name of the compilation stage.
 		/// </summary>
-		/// <param name="pipeline">The pipeline for which this stage is a member of.</param>
-		void SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline);
-    }
+		/// <value>The name of the compilation stage.</value>
+		string Name { get; }	
+		
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] PipelineStageOrder { get; }
+
+	}
 }

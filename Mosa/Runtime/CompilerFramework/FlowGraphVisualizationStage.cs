@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The FlowGraph Visualization Stage emits flowgraphs for graphviz.
 	/// </summary>
-	public class FlowGraphVisualizationStage : BaseStage, IMethodCompilerStage
+	public class FlowGraphVisualizationStage : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Data members
 
@@ -42,25 +42,40 @@ namespace Mosa.Runtime.CompilerFramework
 		/// 
 		/// </summary>
 		static protected Dictionary<string, int> methodCount = new Dictionary<string, int>();
-        /// <summary>
-        /// 
-        /// </summary>
-        System.IO.StreamWriter dotFile = null;
+		/// <summary>
+		/// 
+		/// </summary>
+		System.IO.StreamWriter dotFile = null;
 
 		#endregion // Data members
 
-		#region Properties
+		#region IPipelineStage
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name
 		{
 			get { return @"FlowGraph Visualization Stage"; }
 		}
 
-		#endregion // Properties
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get
+			{
+				return new PipelineStageOrder[] {
+					//new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
+		}
+
+		#endregion // IPipelineStage
 
 		#region IMethodCompilerStage Members
 
@@ -89,7 +104,7 @@ namespace Mosa.Runtime.CompilerFramework
 			workList.Push(firstBlock);
 			workArray = new BitArray(BasicBlocks.Count);
 
-			IMethodCompilerStage previousStage = compiler.GetPreviousStage<IMethodCompilerStage>();
+			IPipelineStage previousStage = compiler.GetPreviousStage(typeof(IMethodCompilerStage));
 			dotFile.WriteLine("digraph " + compiler.Method.Name + "_FlowGraph {");
 			dotFile.WriteLine("label = \"Method: " + compiler.Method.Name + "(" + compiler.Method.Signature + ") after " + previousStage.Name + "\";");
 			dotFile.WriteLine("graph [rankdir = \"TB\"];");
@@ -158,37 +173,26 @@ namespace Mosa.Runtime.CompilerFramework
 			dotFile.WriteLine("};");
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Open()
-        {
-            try
-            {
-                //dotFile = new System.IO.StreamWriter("dotGraph_" + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + ".dot");
-                dotFile = new System.IO.StreamWriter("dotGraph.dot");
-            }
-            catch (System.Exception)
-            {
-                return;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Close()
-        {
-            dotFile.Close();
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Open()
+		{
+			try {
+				//dotFile = new System.IO.StreamWriter("dotGraph_" + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + ".dot");
+				dotFile = new System.IO.StreamWriter("dotGraph.dot");
+			}
+			catch (System.Exception) {
+				return;
+			}
+		}
 
 		/// <summary>
-		/// Adds to pipeline.
+		/// 
 		/// </summary>
-		/// <param name="pipeline">The pipeline.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		public void Close()
 		{
-			pipeline.RunBefore<IR.CILTransformationStage>(this);
+			dotFile.Close();
 		}
 
 		#endregion // Methods

@@ -13,77 +13,86 @@ using NDesk.Options;
 
 namespace Mosa.Tools.Compiler
 {
-    /// <summary>
-    /// Abstract base class for assembly compiler stage wrappers.
-    /// </summary>
-    /// <typeparam name="WrappedType">The type of the rapped type.</typeparam>
-    public abstract class AssemblyCompilerStageWrapper<WrappedType> : IAssemblyCompilerStage, IHasOptions
-        where WrappedType: IAssemblyCompilerStage, new()
-    {
-        #region Data Members
+	/// <summary>
+	/// Abstract base class for assembly compiler stage wrappers.
+	/// </summary>
+	/// <typeparam name="WrappedType">The type of the rapped type.</typeparam>
+	public abstract class AssemblyCompilerStageWrapper<WrappedType> : IAssemblyCompilerStage, IHasOptions, IPipelineStage
+		where WrappedType : IAssemblyCompilerStage, new()
+	{
+		#region Data Members
 
-        /// <summary>
-        /// Holds the selected compiler stage.
-        /// </summary>
-        private readonly WrappedType wrapped;
+		/// <summary>
+		/// Holds the selected compiler stage.
+		/// </summary>
+		private readonly WrappedType wrapped;
 
-        #endregion // Data Members
+		#endregion // Data Members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssemblyCompilerStageWrapper&lt;WrappedType&gt;"/> class.
-        /// </summary>
-        protected AssemblyCompilerStageWrapper()
-        {
-            this.wrapped = new WrappedType();
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AssemblyCompilerStageWrapper&lt;WrappedType&gt;"/> class.
+		/// </summary>
+		protected AssemblyCompilerStageWrapper()
+		{
+			this.wrapped = new WrappedType();
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets the wrapped assembly compiler stage.
-        /// </summary>
-        /// <value>The wrapped assembly compiler stage.</value>
-        public WrappedType Wrapped
-        {
-            get { return this.wrapped; }
-        }
+		/// <summary>
+		/// Gets the wrapped assembly compiler stage.
+		/// </summary>
+		/// <value>The wrapped assembly compiler stage.</value>
+		public WrappedType Wrapped
+		{
+			get { return this.wrapped; }
+		}
 
-        #endregion // Properties
+		#endregion // Properties
 
-        #region IAssemblyCompilerStage Members
+		#region IAssemblyCompilerStage Members
 
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value>The name of the compilation stage.</value>
-        public string Name
-        {
-            get { return wrapped.Name; }
-        }
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name
+		{
+			get { return ((IPipelineStage)wrapped).Name; }
+		}
 
-        /// <summary>
-        /// Performs stage specific processing on the compiler context.
-        /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(AssemblyCompiler compiler)
-        {
-            wrapped.Run(compiler);
-        }
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get { return ((IPipelineStage)wrapped).PipelineStageOrder; }
+		}
 
-        #endregion // IAssemblyCompilerStage Members
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		/// <param name="compiler">The compiler context to perform processing in.</param>
+		public void Run(AssemblyCompiler compiler)
+		{
+			wrapped.Run(compiler);
+		}
 
-        #region IHasOptions Members
+		#endregion // IAssemblyCompilerStage Members
 
-        /// <summary>
-        /// Adds the additional options for the parsing process to the given OptionSet.
-        /// </summary>
-        /// <param name="optionSet">A given OptionSet to add the options to.</param>
-        public abstract void AddOptions(OptionSet optionSet);
+		#region IHasOptions Members
 
-        #endregion // IHasOptions Members
-    }
+		/// <summary>
+		/// Adds the additional options for the parsing process to the given OptionSet.
+		/// </summary>
+		/// <param name="optionSet">A given OptionSet to add the options to.</param>
+		public abstract void AddOptions(OptionSet optionSet);
+
+		#endregion // IHasOptions Members
+	}
 }

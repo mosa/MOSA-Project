@@ -26,10 +26,7 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class AddressModeConversionStage :
-		BaseTransformationStage,
-		IMethodCompilerStage,
-		IPlatformTransformationStage
+	public sealed class AddressModeConversionStage : BaseTransformationStage, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
 	{
 
 		#region IMethodCompilerStage Members
@@ -38,18 +35,18 @@ namespace Mosa.Platforms.x86
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public override string Name
-		{
-			get { return @"X86.AddressModeConversionStage"; }
-		}
+		string IPipelineStage.Name { get { return @"X86.AddressModeConversionStage"; } }
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunAfter<TweakTransformationStage>(this);
+			get
+			{
+				return PipelineStageOrder.CreatePipelineOrder(typeof(LongOperandTransformationStage), typeof(CILTransformationStage));
+			}
 		}
 
 		#endregion // IMethodCompilerStage Members
@@ -86,7 +83,7 @@ namespace Mosa.Platforms.x86
 
 			ctx.Result = eax;
 			ctx.Operand1 = op2;
-			ctx.Operand2 = null; 
+			ctx.Operand2 = null;
 			ctx.OperandCount = 1;
 
 			//    // Check if we have to sign-extend the operand that's being loaded

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Vm;
 
@@ -19,7 +20,7 @@ namespace Mosa.Jit.SimpleJit
     /// <summary>
     /// A fast runtime linker.
     /// </summary>
-    public sealed class JitLinker : AssemblyLinkerStageBase
+	public sealed class JitLinker : AssemblyLinkerStageBase, IPipelineStage
     {
         #region Construction
 
@@ -31,6 +32,25 @@ namespace Mosa.Jit.SimpleJit
         }
 
         #endregion // Construction
+
+		#region IPipelineStage
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name { get { return @"JIT Linker"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get { return null; }
+		}
+
+		#endregion // IPipelineStage Members
 
         #region AssemblyLinkerStageBase Overrides
 
@@ -60,15 +80,6 @@ namespace Mosa.Jit.SimpleJit
         public override long VirtualSectionAlignment
         {
             get { return 1; }
-        }
-
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value>The name of the compilation stage.</value>
-        public override string Name
-        {
-            get { return @"JIT Linker"; }
         }
 
         /// <summary>

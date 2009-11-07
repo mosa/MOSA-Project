@@ -215,8 +215,8 @@ namespace Mosa.Tools.Compiler
 			sb.Append("Output file: ").AppendLine(this.linkerStage.OutputFile);
 			sb.Append("Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append("Architecture: ").AppendLine(architectureSelector.Architecture.GetType().FullName);
-			sb.Append("Binary format: ").AppendLine(linkerStage.Name);
-			sb.Append("Boot format: ").AppendLine(bootFormatStage.Name);
+			sb.Append("Binary format: ").AppendLine(((IPipelineStage)linkerStage).Name);
+			sb.Append("Boot format: ").AppendLine(((IPipelineStage)bootFormatStage).Name);
 			sb.Append("Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
 		}
@@ -232,7 +232,7 @@ namespace Mosa.Tools.Compiler
 				// Append the paths of the folder to the loader path
 				List<string> paths = new List<string>();
 				foreach (FileInfo assembly in this.inputFiles) {
-					
+
 					string path = Path.GetDirectoryName(assembly.FullName);
 					if (!paths.Contains(path))
 						paths.Add(path);

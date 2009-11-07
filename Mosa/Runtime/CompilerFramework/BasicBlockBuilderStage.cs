@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// This compilation stage is used by method compilers after the
 	/// IL decoding stage to build basic Blocks out of the instruction list.
 	/// </summary>
-	public sealed class BasicBlockBuilderStage : BaseStage, IMethodCompilerStage
+	public sealed class BasicBlockBuilderStage : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Data members
 
@@ -41,9 +41,21 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value></value>
-		public string Name
+		string IPipelineStage.Name { get { return @"Basic Block Builder"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			get { return @"Basic Block Builder"; }
+			get
+			{
+				return new PipelineStageOrder[] {
+					//new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
 		/// <summary>
@@ -202,15 +214,6 @@ namespace Mosa.Runtime.CompilerFramework
 						break;
 				}
 			}
-		}
-
-		/// <summary>
-		/// Sets the position of the stage within the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.RunBefore<IR.CILTransformationStage>(this);
 		}
 
 		/// <summary>

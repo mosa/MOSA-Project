@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// The implementation is based on "A Simple, Fast Dominance Algorithm" by Keith D. Cooper, 
 	/// Timothy J. Harvey, and Ken Kennedy, Rice University in Houston, Texas, USA.
 	/// </remarks>
-	public sealed class DominanceCalculationStage : BaseStage, IMethodCompilerStage, IDominanceProvider
+	public sealed class DominanceCalculationStage : BaseStage, IMethodCompilerStage, IDominanceProvider, IPipelineStage
 	{
 		#region Data members
 
@@ -50,9 +50,21 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name { get { return @"Dominance Calculation"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			get { return @"Dominance Calculation"; }
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
 		/// <summary>
@@ -65,15 +77,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 			CalculateDominance();
 			CalculateDominanceFrontier();
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="pipeline"></param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.RunAfter<IR.CILTransformationStage>(this);
 		}
 
 		/// <summary>
@@ -260,7 +263,7 @@ namespace Mosa.Runtime.CompilerFramework
 			for (Context ctx = new Context(InstructionSet, basicBlock); !ctx.EndOfInstruction; ctx.GotoNext()) {
 				switch (ctx.Instruction.FlowControl) {
 					case FlowControl.Branch:
-						foreach (int target in ctx.Branch.Targets) 
+						foreach (int target in ctx.Branch.Targets)
 							blocks.Add(FindBlock(target));
 						break;
 					case FlowControl.ConditionalBranch:

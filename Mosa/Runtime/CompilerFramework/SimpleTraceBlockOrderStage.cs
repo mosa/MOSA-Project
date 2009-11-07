@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The Simple Trace Block Order Stage reorders Blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class SimpleTraceBlockOrderStage : BaseStage, IMethodCompilerStage
+	public class SimpleTraceBlockOrderStage : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Data members
 
@@ -28,29 +28,30 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region Properties
+		#region IMethodCompilerStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name
 		{
 			get { return @"Simple Trace Block Order"; }
 		}
 
-		#endregion // Properties
-
-		#region IMethodCompilerStage Members
-
 		/// <summary>
-		/// Adds to pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			//pipeline.RunBefore<CodeGenerationStage>(this);
-			pipeline.RunAfter<IPlatformTransformationStage>(this);
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IPlatformTransformationStage)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
 		/// <summary>

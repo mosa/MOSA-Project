@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Builds and schedules method compilers for a type.
     /// </summary>
-    public class MethodCompilerBuilderStage : IAssemblyCompilerStage, IMethodCompilerBuilder
+	public class MethodCompilerBuilderStage : IAssemblyCompilerStage, IMethodCompilerBuilder, IPipelineStage
     {
         #region Data members
 
@@ -24,14 +24,21 @@ namespace Mosa.Runtime.CompilerFramework
 
         #endregion
 
-        #region IAssemblyCompilerStage members
+		#region IPipelineStage members
 
-        string IAssemblyCompilerStage.Name
-        {
-            get { return @"Method Compiler Builder"; }
-        }
+		string IPipelineStage.Name { get { return @"Method Compiler Builder"; } }
 
-        void IAssemblyCompilerStage.Run(AssemblyCompiler compiler)
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
+
+		#endregion // IPipelineStage members
+
+		#region IAssemblyCompilerStage members
+
+		void IAssemblyCompilerStage.Run(AssemblyCompiler compiler)
         {
             // Retrieve the provider provider
             ReadOnlyRuntimeTypeListView types = RuntimeBase.Instance.TypeLoader.GetTypesFromModule(compiler.Assembly);

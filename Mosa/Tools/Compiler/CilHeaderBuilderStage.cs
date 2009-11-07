@@ -23,32 +23,28 @@ namespace Mosa.Tools.Compiler
 	/// <summary>
 	///  Writes the cil _header into the generated binary.
 	/// </summary>
-	public sealed class CilHeaderBuilderStage : IAssemblyCompilerStage
+	public sealed class CilHeaderBuilderStage : IAssemblyCompilerStage, IPipelineStage
 	{
-		#region Constants
-
-		#endregion // Constants
 
 		#region Data members
 
 		private CLI_HEADER _cliHeader;
 
-		#endregion // Data members
+		#endregion // Data members		
 
-		#region Construction
+		#region IPipelineStage members
 
-		#endregion // Construction
-
-		#region IAssemblyCompilerStage Members
+		string IPipelineStage.Name { get { return @"CILHeaderStage"; } }
 
 		/// <summary>
-		/// Retrieves the name of the compilation stage.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public string Name
-		{
-			get { return @"CILHeaderStage"; }
-		}
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
+
+		#endregion // IPipelineStage members
+
+		#region IAssemblyCompilerStage Members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.

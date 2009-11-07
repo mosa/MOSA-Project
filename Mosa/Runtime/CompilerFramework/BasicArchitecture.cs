@@ -72,14 +72,14 @@ namespace Mosa.Runtime.CompilerFramework
         /// Extends the assembly compiler pipeline with architecture specific assembly compiler stages.
         /// </summary>
         /// <param name="assemblyPipeline">The pipeline to extend.</param>
-        public abstract void ExtendAssemblyCompilerPipeline(CompilerPipeline<IAssemblyCompilerStage> assemblyPipeline);
+        public abstract void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyPipeline);
 
         /// <summary>
         /// Requests the architecture to add architecture specific compilation stages to the pipeline. These
         /// may depend upon the current state of the pipeline.
         /// </summary>
         /// <param name="methodPipeline">The pipeline of the method compiler to add architecture specific compilation stages to.</param>
-        public abstract void ExtendMethodCompilerPipeline(CompilerPipeline<IMethodCompilerStage> methodPipeline);
+        public abstract void ExtendMethodCompilerPipeline(CompilerPipeline methodPipeline);
 
         /// <summary>
         /// Retrieves an object, that is able to translate the CIL calling convention into appropriate native code.

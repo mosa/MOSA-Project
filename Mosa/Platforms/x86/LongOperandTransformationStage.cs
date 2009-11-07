@@ -28,7 +28,7 @@ namespace Mosa.Platforms.x86
 	/// This stage translates all 64-bit operations to appropriate 32-bit operations on
 	/// architectures without appropriate 64-bit integral operations.
 	/// </remarks>
-	public sealed class LongOperandTransformationStage : CodeTransformationStage, CIL.ICILVisitor, IR.IIRVisitor
+	public sealed class LongOperandTransformationStage : CodeTransformationStage, CIL.ICILVisitor, IR.IIRVisitor, IPipelineStage
 	{
 		#region IMethodCompilerStage Members
 
@@ -36,19 +36,21 @@ namespace Mosa.Platforms.x86
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public override string Name
-		{
-			get { return @"X86.LongOperandTransformationStage"; }
-		}
+		string IPipelineStage.Name { get { return @"X86.LongOperandTransformationStage"; } }
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		public override void SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunAfter<StackLayoutStage>(this);
-			pipeline.RunBefore<AddressModeConversionStage>(this);
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(StackLayoutStage)),
+					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(AddressModeConversionStage))
+				};
+			}
 		}
 
 		#endregion // IMethodCompilerStage Members

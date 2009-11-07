@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Calculates the layout of the stack of the method.
 	/// </summary>
-	public sealed class StackLayoutStage : BaseStage, IMethodCompilerStage, IStackLayoutProvider
+	public sealed class StackLayoutStage : BaseStage, IMethodCompilerStage, IStackLayoutProvider, IPipelineStage
 	{
 		#region Tracing
 
@@ -47,7 +47,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name
 		{
 			get { return @"StackLayoutStage"; }
 		}
@@ -101,15 +101,21 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunAfter<LeaveSSA>(this);
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(LeaveSSA)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
-		#endregion // IMethodCompilerStage Members
+		#endregion // IPipelineStage Members
 
 		#region IStackLayoutStage Members
 

@@ -14,7 +14,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// This is not a real register allocator. It ensures that operations with register
 	/// constraints are executed properly, but does not assign variables to fixed registers.
 	/// </remarks>
-	public class LinearRegisterAllocator : BaseStage, IMethodCompilerStage
+	public class LinearRegisterAllocator : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Types
 
@@ -82,24 +82,30 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IMethodCompilerStage Members
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value></value>
-		public string Name
+		string IPipelineStage.Name
 		{
 			get { return @"LinearRegisterAllocator"; }
 		}
 
 		/// <summary>
-		/// Sets the pipeline position.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunBefore<ICodeGenerationStage>(this);
+			get
+			{
+				return new PipelineStageOrder[] {
+					//new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(ICodeGenerationStage))
+				};
+			}
 		}
 
 		/// <summary>

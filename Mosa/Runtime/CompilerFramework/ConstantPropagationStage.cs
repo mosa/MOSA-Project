@@ -24,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <para/>
 	/// It is only safe to use this stage on an instruction stream in SSA form.
 	/// </remarks>
-	public sealed class ConstantPropagationStage : BaseStage, IMethodCompilerStage
+	public sealed class ConstantPropagationStage : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region IMethodCompilerStage Members
 
@@ -32,9 +32,21 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name { get { return @"Constant Propagation"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			get { return @"Constant Propagation"; }
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(EnterSSA)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
 		/// <summary>
@@ -82,15 +94,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 				}
 			}
-		}
-
-		/// <summary>
-		/// Sets the position of the stage within the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.RunAfter<EnterSSA>(this);
 		}
 
 		#endregion // IMethodCompilerStage Members

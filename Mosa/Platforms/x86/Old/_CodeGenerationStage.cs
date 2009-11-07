@@ -40,7 +40,7 @@ namespace Mosa.Platforms.x86
 	/// register usage though. This should clearly be done after the results of this approach
 	/// have been validated.
 	/// </remarks>
-	sealed class _CodeGenerationStage : CodeGenerationStage, IPipelineStage, CPUx86.IX86Visitor, IR.IIRVisitor
+	sealed class _CodeGenerationStage : CodeGenerationStage, CPUx86.IX86Visitor, IR.IIRVisitor
 	{
 		#region Data members
 
@@ -85,11 +85,6 @@ namespace Mosa.Platforms.x86
 		protected override void BlockStart(BasicBlock block)
 		{
 			_codeEmitter.Label(block.Label);
-		}
-
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.Add(this);
 		}
 
 		#endregion

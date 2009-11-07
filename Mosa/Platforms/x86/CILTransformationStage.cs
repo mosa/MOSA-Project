@@ -28,11 +28,7 @@ namespace Mosa.Platforms.x86
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent X86 sequences.
 	/// </remarks>
-	public sealed class CILTransformationStage :
-		BaseTransformationStage,
-		CIL.ICILVisitor,
-		IMethodCompilerStage,
-		IPlatformTransformationStage
+	public sealed class CILTransformationStage : BaseTransformationStage, CIL.ICILVisitor, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
 	{
 		#region IMethodCompilerStage Members
 
@@ -40,18 +36,18 @@ namespace Mosa.Platforms.x86
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public override string Name
-		{
-			get { return @"X86.CILTransformationStage"; }
-		}
+		string IPipelineStage.Name { get { return @"X86.CILTransformationStage"; } }
 
 		/// <summary>
-		/// Sets the position of the stage within the pipeline.
+		/// Gets the pipeline stage order.
 		/// </summary>
-		/// <param name="pipeline">The pipeline to add this stage to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			pipeline.RunAfter<LongOperandTransformationStage>(this);
+			get
+			{
+				return PipelineStageOrder.CreatePipelineOrder(typeof(AddressModeConversionStage), typeof(IRTransformationStage));
+			}
 		}
 
 		#endregion // IMethodCompilerStage Members
@@ -376,9 +372,9 @@ namespace Mosa.Platforms.x86
 			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Result))
 				HandleNonCommutativeOperation(ctx, IR.Instruction.UDivInstruction);
 			else if (ctx.Operand1.StackType == StackTypeCode.F)
-                HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
+				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
 			else
-                HandleNonCommutativeOperation(ctx, CPUx86.Instruction.DivInstruction);
+				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.DivInstruction);
 		}
 
 		/// <summary>
@@ -764,7 +760,7 @@ namespace Mosa.Platforms.x86
 		{
 			EmitResultConstants(ctx);
 			EmitOperandConstants(ctx);
-            ctx.ReplaceInstructionOnly(instruction);
+			ctx.ReplaceInstructionOnly(instruction);
 		}
 
 		/// <summary>

@@ -20,18 +20,34 @@ namespace Mosa.Runtime.CompilerFramework
 	/// This transformation simplifies and expands all PHI functions and
 	/// unifies variable version.
 	/// </remarks>
-	public sealed class LeaveSSA : BaseStage, IMethodCompilerStage
+	public sealed class LeaveSSA : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
-		#region IMethodCompilerStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name
 		{
 			get { return @"LeaveSSA"; }
 		}
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(CILConstantFoldingStage)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
+		}
+
+		#region IMethodCompilerStage Members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -115,15 +131,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 			//    }
 			//}
-		}
-
-		/// <summary>
-		/// Sets the position of the stage within the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.RunAfter<CILConstantFoldingStage>(this);
 		}
 
 		#endregion // IMethodCompilerStage Members

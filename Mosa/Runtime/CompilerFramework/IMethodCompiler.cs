@@ -79,22 +79,15 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>An operand, which represents the temporary.</returns>
         Operand GetParameterOperand(int index);
 
-        /// <summary>
-        /// Gets the previous stage.
-        /// </summary>
-        /// <typeparam name="T">The type of the previous stage. Usually a public interface.</typeparam>
-        /// <returns>The previous compilation stage supporting the requested type or null.</returns>
-        T GetPreviousStage<T>();
-
-        /// <summary>
-        /// Finds a stage, which ran before the current one and supports the specified type.
-        /// </summary>
-        /// <param name="stageType">The (interface) type to look for.</param>
-        /// <returns>The previous compilation stage supporting the requested type.</returns>
-        /// <remarks>
-        /// This method is used by stages to access the results of a previous compilation stage.
-        /// </remarks>
-        object GetPreviousStage(Type stageType);
+		/// <summary>
+		/// Finds a stage, which ran before the current one and supports the specified type.
+		/// </summary>
+		/// <param name="stageType">The (interface) type to look for.</param>
+		/// <returns>The previous compilation stage supporting the requested type.</returns>
+		/// <remarks>
+		/// This method is used by stages to access the results of a previous compilation stage.
+		/// </remarks>
+		IPipelineStage GetPreviousStage(Type stageType);
 
         /// <summary>
         /// Requests a stream to emit native instructions to.

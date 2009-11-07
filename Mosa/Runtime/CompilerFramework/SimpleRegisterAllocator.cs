@@ -21,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <para/>
 	/// The simple register allocator requires register constraints for all instructions it finds.
 	/// </remarks>
-	public sealed class SimpleRegisterAllocator : BaseStage, IMethodCompilerStage
+	public sealed class SimpleRegisterAllocator : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Tracing Switch
 
@@ -56,16 +56,32 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IMethodCompilerStage Members
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name { get { return @"SimpleRegisterAllocator"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			get { return @"SimpleRegisterAllocator"; }
+			get
+			{
+				return new PipelineStageOrder[] {
+					//new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(ICodeGenerationStage))
+				};
+			}
 		}
+
+		#endregion // IPipelineStage Members
+
+		#region IMethodCompilerStage Members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -91,15 +107,6 @@ namespace Mosa.Runtime.CompilerFramework
 				// Spill active registers at the end of a block (they're reloaded in the next, if necessary.)
 				SpillActiveOperands(block);
 			}
-		}
-
-		/// <summary>
-		/// Sets the position of the stage within the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.RunBefore<ICodeGenerationStage>(this);
 		}
 
 		/// <summary>

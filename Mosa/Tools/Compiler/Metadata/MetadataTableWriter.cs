@@ -13,6 +13,7 @@ using System.IO;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
+using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Tools.Compiler.Metadata
 {
@@ -21,6 +22,19 @@ namespace Mosa.Tools.Compiler.Metadata
     /// </summary>
     public sealed partial class MetadataBuilderStage
     {
+
+		#region IPipelineStage members
+
+		string IPipelineStage.Name { get { return @"MetadataBuilderStage"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
+
+		#endregion // IPipelineStage members
+
         /// <summary>
         /// Holds the token types of all tables supported.
         /// </summary>

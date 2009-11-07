@@ -27,7 +27,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 	/// by the high-level language compiler by placing cctors in some order in
 	/// metadata.
 	/// </remarks>
-	public sealed class TypeInitializerSchedulerStage : BaseStage, IAssemblyCompilerStage
+	public sealed class TypeInitializerSchedulerStage : BaseStage, IAssemblyCompilerStage, IPipelineStage
 	{
 		#region Data Members
 
@@ -80,6 +80,25 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 
 		#endregion
 
+		#region IPipelineStage
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name { get { return @"Type Initializer Scheduler"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get { return null; }
+		}
+
+		#endregion // IPipelineStage Members
+
 		#region Methods
 
 		/// <summary>
@@ -95,15 +114,6 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		#endregion // Methods
 
 		#region IAssemblyCompilerStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public string Name
-		{
-			get { return @"Type Initializer Scheduler"; }
-		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.

@@ -16,14 +16,14 @@ using x86 = Mosa.Platforms.x86;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
-    class TestCaseAssemblyCompiler : AssemblyCompiler
-    {
-        private TestCaseAssemblyCompiler(IArchitecture architecture, IMetadataModule module) :
-            base(architecture, module)
-        {
-            // Build the assembly compiler pipeline
-            CompilerPipeline<IAssemblyCompilerStage> pipeline = this.Pipeline;
-            pipeline.AddRange(new IAssemblyCompilerStage[] {
+	class TestCaseAssemblyCompiler : AssemblyCompiler
+	{
+		private TestCaseAssemblyCompiler(IArchitecture architecture, IMetadataModule module) :
+			base(architecture, module)
+		{
+			// Build the assembly compiler pipeline
+			CompilerPipeline pipeline = this.Pipeline;
+			pipeline.AddRange(new IAssemblyCompilerStage[] {
                 new TypeLayoutStage(),
                 new MethodCompilerBuilderStage(),
                 new MethodCompilerRunnerStage(),
@@ -31,22 +31,22 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 // new ObjectFileLayoutStage()
                 new TestAssemblyLinker(),
             });
-            architecture.ExtendAssemblyCompilerPipeline(pipeline);
-        }
+			architecture.ExtendAssemblyCompilerPipeline(pipeline);
+		}
 
-        public static void Compile(IMetadataModule module)
-        {
+		public static void Compile(IMetadataModule module)
+		{
 
-            IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
-            new TestCaseAssemblyCompiler(architecture, module).Compile();
-        }
+			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
+			new TestCaseAssemblyCompiler(architecture, module).Compile();
+		}
 
-        public override MethodCompilerBase CreateMethodCompiler(RuntimeType type, RuntimeMethod method)
-        {
-            IArchitecture arch = this.Architecture;
-            MethodCompilerBase mc = new TestCaseMethodCompiler(this.Pipeline.Find<IAssemblyLinker>(), this.Architecture, this.Assembly, type, method);
-            arch.ExtendMethodCompilerPipeline(mc.Pipeline);
-            return mc;
-        }
-    }
+		public override MethodCompilerBase CreateMethodCompiler(RuntimeType type, RuntimeMethod method)
+		{
+			IArchitecture arch = this.Architecture;
+			MethodCompilerBase mc = new TestCaseMethodCompiler(this.Pipeline.Find<IAssemblyLinker>(), this.Architecture, this.Assembly, type, method);
+			arch.ExtendMethodCompilerPipeline(mc.Pipeline);
+			return mc;
+		}
+	}
 }

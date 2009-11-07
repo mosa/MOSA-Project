@@ -30,7 +30,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
     /// It is similar to the Jit linker. TODO: Move most of this code to the Jit linker and reuse 
     /// the Jit linker.
     /// </remarks>
-    public class TestAssemblyLinker : AssemblyLinkerStageBase
+	public class TestAssemblyLinker : AssemblyLinkerStageBase, IPipelineStage
     {
         #region Data members
 
@@ -55,6 +55,25 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         }
 
         #endregion // Construction
+
+		#region IPipelineStage
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name { get { return @"Test Linker"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get { return null; }
+		}
+
+		#endregion // IPipelineStage Members
 
         #region AssemblyLinkerStageBase Overrides
 
@@ -84,15 +103,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         public override LinkerSection GetSection(SectionKind sectionKind)
         {
             return _sections[(int)sectionKind];
-        }
-
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value>The name of the compilation stage.</value>
-        public override string Name
-        {
-            get { return @"Test Linker"; }
         }
 
         /// <summary>

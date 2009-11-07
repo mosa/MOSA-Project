@@ -15,7 +15,7 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class InstructionSchedulingStage : BaseStage, IMethodCompilerStage
+	public sealed class InstructionSchedulingStage : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		//private static int latencySum = 0;
 
@@ -23,11 +23,17 @@ namespace Mosa.Platforms.x86
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		public string Name { get { return @"InstructionSchedulingStage"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
 			get
 			{
-				return @"InstructionSchedulingStage";
+				return PipelineStageOrder.CreatePipelineOrder(typeof(IRTransformationStage), typeof(AddressModeConversionStage));
 			}
 		}
 
@@ -39,17 +45,8 @@ namespace Mosa.Platforms.x86
 		{
 			base.Run(compiler);
 
-			foreach (BasicBlock block in BasicBlocks) 
+			foreach (BasicBlock block in BasicBlocks)
 				ScheduleBlock(block);
-		}
-
-		/// <summary>
-		/// Sets the position of the stage within the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.RunBefore<LinearRegisterAllocator>(this);
 		}
 
 		/// <summary>

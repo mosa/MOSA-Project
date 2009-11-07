@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Base class for code transformation stages.
 	/// </summary>
-	public abstract class CodeTransformationStage : BaseStage, IMethodCompilerStage, IVisitor
+	public abstract class CodeTransformationStage : BaseStage, IMethodCompilerStage, IVisitor, IPipelineStage
 	{
 
 		#region Data members
@@ -42,13 +42,23 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IMethodCompilerStage Members
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public abstract string Name { get; }
+		/// <value></value>
+		string IPipelineStage.Name { get { return @"CodeTransformationStage"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
+
+		#endregion // IPipelineStage Members
+
+		#region IMethodCompilerStage Members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -66,14 +76,6 @@ namespace Mosa.Runtime.CompilerFramework
 				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null)
 						ctx.Clone().Visit(this);
-		}
-
-		/// <summary>
-		/// Sets the pipeline position.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		public virtual void SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
 		}
 
 		#endregion // IMethodCompilerStage Members

@@ -19,7 +19,7 @@ namespace Mosa.Runtime.Linker
     /// <summary>
     /// An assembly compilation stage, which generates a map file of the built binary file.
     /// </summary>
-    public sealed class MapFileGenerationStage : IAssemblyCompilerStage
+	public sealed class MapFileGenerationStage : IAssemblyCompilerStage, IPipelineStage
     {
         #region Data members
 
@@ -45,16 +45,19 @@ namespace Mosa.Runtime.Linker
 
         #endregion // Construction
 
-        #region IAssemblyCompilerStage Members
+		#region IPipelineStage members
 
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value></value>
-        public string Name
-        {
-            get { return @"MapFileGenerationStage"; }
-        }
+		string IPipelineStage.Name { get { return @"MapFileGenerationStage"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
+
+		#endregion // IPipelineStage members
+
+        #region IAssemblyCompilerStage Members
 
         /// <summary>
         /// Performs stage specific processing on the compiler context.

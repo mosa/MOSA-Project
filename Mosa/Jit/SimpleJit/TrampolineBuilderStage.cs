@@ -44,15 +44,6 @@ namespace Mosa.Jit.SimpleJit
             // we need to compile so we don't have to do anything here.
         }
 
-		/// <summary>
-		/// Sets the position of the stage within the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-        {
-            pipeline.Add(this);
-        }
-
         #endregion // IMethodCompilerStage Members
 
     }

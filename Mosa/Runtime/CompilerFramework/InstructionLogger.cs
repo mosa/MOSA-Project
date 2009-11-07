@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Logs all incoming instructions and forwards them to the next compiler stage.
 	/// </summary>
-	public sealed class InstructionLogger : BaseStage, IMethodCompilerStage
+	public sealed class InstructionLogger : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Data members
 
@@ -30,15 +30,30 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IMethodCompilerStage Members
+		#region IPipelineStage
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name
 		{
-			get { return @"Logger"; }
+			get { return @"InstructionLogger"; }
+		}
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IMethodCompilerStage)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
 		/// <summary>
@@ -50,7 +65,7 @@ namespace Mosa.Runtime.CompilerFramework
 			base.Run(compiler);
 
 			// Previous stage
-			IMethodCompilerStage prevStage = compiler.GetPreviousStage<IMethodCompilerStage>();
+			IPipelineStage prevStage = compiler.GetPreviousStage(typeof(IMethodCompilerStage));
 
 			// Do not dump internal methods
 			if (compiler.Method.Name.Contains("<$>"))
@@ -68,15 +83,6 @@ namespace Mosa.Runtime.CompilerFramework
 				Debug.Unindent();
 				index++;
 			}
-		}
-
-		/// <summary>
-		/// Sets the position of the stage within the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.RunAfter<IMethodCompilerStage>(this);
 		}
 
 		#endregion // IMethodCompilerStage Members

@@ -26,7 +26,7 @@ namespace Mosa.Platforms.x86
 	/// embedding floating point values as immediates inside the code, so these have to be moved outside
 	/// and referenced through a memory offset starting at the 
 	/// </remarks>
-	public sealed class ConstantRemovalStage : BaseStage, IMethodCompilerStage
+	public sealed class ConstantRemovalStage : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Data members
 
@@ -59,15 +59,27 @@ namespace Mosa.Platforms.x86
 
 		#endregion // Properties
 
-		#region IMethodCompilerStage Members
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
+		string IPipelineStage.Name { get { return @"ConstantRemovalStage"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			get { return @"ConstantRemovalStage"; }
+			get
+			{
+				return new PipelineStageOrder[] {
+					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(EnterSSA)),
+					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
+				};
+			}
 		}
 
 		/// <summary>
@@ -86,15 +98,6 @@ namespace Mosa.Platforms.x86
 			// Iterate all blocks and collect locals from all blocks
 			foreach (BasicBlock block in BasicBlocks)
 				ProcessInstructions(arch, new Context(InstructionSet, block), ctxEpilogue);
-		}
-
-		/// <summary>
-		/// Sets the position of the stage within the pipeline.
-		/// </summary>
-		/// <param name="pipeline">The pipeline to add to.</param>
-		void IPipelineStage.SetPipelinePosition(CompilerPipeline<IPipelineStage> pipeline)
-		{
-			pipeline.RunAfter<EnterSSA>(this);
 		}
 
 		#endregion // IMethodCompilerStage Members

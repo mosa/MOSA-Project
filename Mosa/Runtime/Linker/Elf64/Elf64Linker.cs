@@ -10,15 +10,37 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using Mosa.Runtime.Linker;
+using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Runtime.Linker.Elf64
 {
     /// <summary>
     /// 
     /// </summary>
-    public class Elf64Linker : Mosa.Runtime.Linker.AssemblyLinkerStageBase
+	public class Elf64Linker : AssemblyLinkerStageBase, IPipelineStage
     {
+
+		#region IPipelineStage
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name { get { return @"Executable and Linking Format (ELF) Linker"; } }
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		{
+			get { return null; }
+		}
+
+		#endregion // IPipelineStage Members
+
         /// <summary>
         /// 
         /// </summary>
@@ -94,18 +116,6 @@ namespace Mosa.Runtime.Linker.Elf64
         {
             // TODO
             get { throw new NotImplementedException(); }
-        }
-
-        /// <summary>
-        /// Retrieves the name of the compilation stage.
-        /// </summary>
-        /// <value>The name of the compilation stage.</value>
-        public override string Name
-        {
-            get
-            {
-                return @"Executable and Linking Format (ELF) Linker";
-            }
         }
 
         /// <summary>
