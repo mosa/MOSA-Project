@@ -181,14 +181,14 @@ namespace Mosa.Platforms.x86
 			ctx.Result = eax;
 
 			Context start = ctx.InsertBefore();
-			start.SetInstruction(CPUx86.Instruction.PushInstruction, null, eax);
+			//start.SetInstruction(CPUx86.Instruction.PushInstruction, null, eax);
 
 			if ((IsSigned(op0)) && (!Is32Bit(op0)))
-				start.AppendInstruction(CPUx86.Instruction.MovsxInstruction, eax, op0);
+                start.SetInstruction(CPUx86.Instruction.MovsxInstruction, eax, op0);
 			else
-				start.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op0);
+                start.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op0);
 
-			ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
+			//ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
 
 		}
 

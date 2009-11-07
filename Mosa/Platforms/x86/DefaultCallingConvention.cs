@@ -87,7 +87,7 @@ namespace Mosa.Platforms.x86
 
 			if (ctx.InvokeTarget.Signature.HasThis) {
 				RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
-				after.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, ctx.Operand1); 
+				after.AppendInstruction(IR.Instruction.MoveInstruction, ecx, ctx.Operand1); 
 			}
 
 			after.AppendInstruction(IR.Instruction.CallInstruction);
@@ -153,7 +153,7 @@ namespace Mosa.Platforms.x86
 		private void MoveReturnValueTo32Bit(Operand resultOperand, Context ctx)
 		{
 			RegisterOperand eax = new RegisterOperand(resultOperand.Type, GeneralPurposeRegister.EAX);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, resultOperand, eax);
+			ctx.AppendInstruction(IR.Instruction.MoveInstruction, resultOperand, eax);
 		}
 
 		/// <summary>
@@ -174,8 +174,8 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, opL, eax);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, opH, edx);
+			ctx.AppendInstruction(IR.Instruction.MoveInstruction, opL, eax);
+			ctx.AppendInstruction(IR.Instruction.MoveInstruction, opH, edx);
 		}
 
 		/// <summary>
@@ -208,10 +208,10 @@ namespace Mosa.Platforms.x86
 							MemoryOperand opL = new MemoryOperand(I4, mop.Base, mop.Offset);
 							MemoryOperand opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
 
-							ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, opL);
-							ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
-							ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, opH);
-							ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
+							ctx.AppendInstruction(IR.Instruction.MoveInstruction, eax, opL);
+							ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
+							ctx.AppendInstruction(IR.Instruction.MoveInstruction, eax, opH);
+							ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
 						}
 						return;
 
@@ -219,7 +219,7 @@ namespace Mosa.Platforms.x86
 						throw new NotSupportedException();
 				}
 
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, rop, op);
+				ctx.AppendInstruction(IR.Instruction.MoveInstruction, rop, op);
 				op = rop;
 			}
 			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64) {
@@ -228,15 +228,15 @@ namespace Mosa.Platforms.x86
 				RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 				LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, opL);
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, opH);
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
+				ctx.AppendInstruction(IR.Instruction.MoveInstruction, eax, opL);
+				ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
+				ctx.AppendInstruction(IR.Instruction.MoveInstruction, eax, opH);
+				ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
 
 				return;
 			}
 
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op);
+			ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op);
 		}
 
 		/// <summary>
@@ -269,11 +269,11 @@ namespace Mosa.Platforms.x86
 
 			// FIXME: Do not issue a move, if the operand is already the destination register
 			if (4 == size || 2 == size || 1 == size) {
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand);
+				ctx.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand);
 				return;
 			}
 			else if (8 == size && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8)) {
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(operand.Type, SSE2Register.XMM0), operand);
+				ctx.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(operand.Type, SSE2Register.XMM0), operand);
 				return;
 			}
 			else if (8 == size && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8)) {
@@ -314,8 +314,8 @@ namespace Mosa.Platforms.x86
 				}
 
 				// Like Win32: EDX:EAX
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(U4, GeneralPurposeRegister.EAX), opL);
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(I4, GeneralPurposeRegister.EDX), opH);
+				ctx.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(U4, GeneralPurposeRegister.EAX), opL);
+				ctx.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(I4, GeneralPurposeRegister.EDX), opH);
 
 				return;
 			}

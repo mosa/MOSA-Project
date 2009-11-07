@@ -1217,24 +1217,25 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandUnsignedMove(Context ctx)
 		{
-			MemoryOperand op0 = ctx.Operand1 as MemoryOperand;
-			Operand op1 = ctx.Operand2;
+			MemoryOperand op0 = ctx.Result as MemoryOperand;
+			Operand op1 = ctx.Operand1;
 			Debug.Assert(op0 != null, @"I8 not in a memory operand!");
 
 			SigType U4 = new SigType(CilElementType.U4);
-			MemoryOperand op0L = new MemoryOperand(U4, op0.Base, op0.Offset);
-			MemoryOperand op0H = new MemoryOperand(U4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            Operand op0L, op0H, op1L, op1H;
+            SplitLongOperand(op0, out op0L, out op0H);
+            SplitLongOperand(op1, out op1L, out op1H);
 			RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
 
 			switch (op1.Type.Type) {
 				case CilElementType.Boolean:
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0L, op1);
+					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0L, op1L);
 					ctx.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U1:
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1);
+					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
 					ctx.AppendInstruction(CPUx86.Instruction.CdqInstruction);
 					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
 					ctx.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
@@ -1243,20 +1244,21 @@ namespace Mosa.Platforms.x86
 				case CilElementType.U2: goto case CilElementType.U1;
 
 				case CilElementType.I4:
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1);
+					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
 					ctx.AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
 					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
 					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
 					break;
 				case CilElementType.U4:
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1);
+					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
 					ctx.AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
 					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
 					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
 					break;
 
 				case CilElementType.U8:
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0, op1);
+					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0L, op1L);
+                    ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0H, op1H);
 					break;
 
 				case CilElementType.R4:
@@ -1789,7 +1791,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.Int64)
+			if (ctx.Result.StackType == StackTypeCode.Int64)
 				ExpandUnsignedMove(ctx);
 		}
 
