@@ -171,9 +171,9 @@ namespace Mosa.Platforms.x86
 			Operand op0 = ctx.Result;
 			Operand op1 = ctx.Operand1;
 
-			if (((!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) &&
+			/*if (((!(op0 is MemoryOperand) || !(op1 is MemoryOperand)) &&
 				 (!(op0 is ConstantOperand) || !(op1 is ConstantOperand))) && !(op1 is ConstantOperand))
-				return;
+				return;*/
 
 			RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
 			ctx.Result = eax;

@@ -118,7 +118,7 @@ namespace Mosa.Platforms.x86
             Operand destination = EmitConstant(ctx.Result);
 			IR.ConditionCode setcc = IR.ConditionCode.Equal;
 			IR.ConditionCode code = ctx.ConditionCode;
-			//ctx.Remove();
+            //ctx.Remove();
             ctx.Operand1 = destination;
             ctx.Operand2 = source;
 
@@ -200,7 +200,6 @@ namespace Mosa.Platforms.x86
 				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)op0).Register);
 				ctx.AppendInstruction(CPUx86.Instruction.MovzxInstruction, op0, rop);
 			}
-
 		}
 
 		/// <summary>

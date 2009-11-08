@@ -1350,8 +1350,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandLoad(Context ctx)
 		{
-			MemoryOperand op0 = ctx.Operand1 as MemoryOperand;
-			MemoryOperand op1 = ctx.Operand2 as MemoryOperand;
+			MemoryOperand op0 = ctx.Result as MemoryOperand;
+			MemoryOperand op1 = ctx.Operand1 as MemoryOperand;
 			Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -1373,8 +1373,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandStore(Context ctx)
 		{
-			MemoryOperand op0 = ctx.Operand1 as MemoryOperand;
-			MemoryOperand op1 = ctx.Operand2 as MemoryOperand;
+			MemoryOperand op0 = ctx.Result as MemoryOperand;
+			MemoryOperand op1 = ctx.Operand1 as MemoryOperand;
 			Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -1423,8 +1423,8 @@ namespace Mosa.Platforms.x86
 			Context nextBlock = SplitContext(ctx);
 
 			Operand op1H, op1L, op2H, op2L;
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+			SplitLongOperand(ctx.Result, out op1L, out op1H);
+			SplitLongOperand(ctx.Operand1, out op2L, out op2H);
 			IR.ConditionCode code;
 
 			switch (((ctx.Instruction) as CIL.ICILInstruction).OpCode) {
