@@ -115,10 +115,12 @@ namespace Mosa.Platforms.x86
 		{
 			Operand op0 = ctx.Result;
 			Operand source = EmitConstant(ctx.Operand1);
-			Operand destination = EmitConstant(ctx.Operand2);
+            Operand destination = EmitConstant(ctx.Operand2);
 			IR.ConditionCode setcc = IR.ConditionCode.Equal;
 			IR.ConditionCode code = ctx.ConditionCode;
 			ctx.Remove();
+            ctx.Operand1 = destination;
+            ctx.Operand2 = source;
 
 			// Swap the operands if necessary...
 			if (source is MemoryOperand && destination is RegisterOperand) {

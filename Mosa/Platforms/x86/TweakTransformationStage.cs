@@ -60,6 +60,9 @@ namespace Mosa.Platforms.x86
 			if (ctx.Result is ConstantOperand)
 				return;
 
+            if (ctx.Operand1 is ConstantOperand && ctx.Operand1.StackType == StackTypeCode.F)
+                ctx.Operand1 = EmitConstant(ctx.Operand1);
+
 			// Check that we're not dealing with floating point values
 			if (ctx.Result.StackType == StackTypeCode.F || ctx.Operand1.StackType == StackTypeCode.F)
 				if (ctx.Result.Type.Type == CilElementType.R4)

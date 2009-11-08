@@ -72,12 +72,14 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The conversion context.</param>
 		private static void ThreeTwoAddressConversion(Context ctx)
 		{
+            if (ctx.Instruction == IR.Instruction.FloatingPointCompareInstruction)
+                return;
 			Operand result = ctx.Result;
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
 			// Create registers for different data types
-			RegisterOperand eax = new RegisterOperand(result.Type, result.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
+            RegisterOperand eax = new RegisterOperand(op1.Type, op1.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
 			//    RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
 
 			ctx.Result = eax;

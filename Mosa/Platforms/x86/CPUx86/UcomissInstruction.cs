@@ -22,7 +22,17 @@ namespace Mosa.Platforms.x86.CPUx86
     {
    
         #region Methods
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <param name="source"></param>
+        /// <param name="third"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+        {
+            return new OpCode(new byte[] { 0x0F, 0x2E });
+        }
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
