@@ -36,17 +36,16 @@ namespace Mosa.Platforms.x86
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"X86.SimplePeepholeOptimizationStage"; } }
 
+		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(MemToMemConversionStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
+			};
+
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get
-			{
-				return PipelineStageOrder.CreatePipelineOrder(typeof(MemToMemConversionStage), typeof(StackLayoutStage));
-			}
-		}
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		#endregion // IMethodCompilerStage Members
 

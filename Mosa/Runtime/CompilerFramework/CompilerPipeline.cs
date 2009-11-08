@@ -32,8 +32,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private List<IPipelineStage> _pipeline;
 
-		private Dictionary<IPipelineStage, List<Type>> _before;
-		private Dictionary<IPipelineStage, List<Type>> _after;
 		bool _ordered;
 
 		#endregion // Data members
@@ -46,8 +44,6 @@ namespace Mosa.Runtime.CompilerFramework
 		public CompilerPipeline()
 		{
 			_pipeline = new List<IPipelineStage>();
-			_before = new Dictionary<IPipelineStage, List<Type>>();
-			_after = new Dictionary<IPipelineStage, List<Type>>();
 			_ordered = true;
 		}
 
@@ -96,8 +92,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 			_pipeline.Add(stage);
 			_ordered = false;
-			
-			// 
 		}
 
 		/// <summary>
@@ -119,8 +113,6 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Clear()
 		{
 			_pipeline.Clear();
-			_before.Clear();
-			_after.Clear();
 			_ordered = true;
 		}
 
@@ -134,8 +126,6 @@ namespace Mosa.Runtime.CompilerFramework
 				throw new ArgumentNullException(@"stage");
 
 			_pipeline.Remove(stage);
-			_after.Remove(stage);
-			_before.Remove(stage);
 			_ordered = false;
 		}
 
@@ -190,38 +180,31 @@ namespace Mosa.Runtime.CompilerFramework
 			return result;
 		}
 
+
 		/// <summary>
 		/// Finds the last.
 		/// </summary>
-		/// <param name="types">The types.</param>
-		/// <returns></returns>
-		private int FindLast(List<Type> types)
+		/// <param name="stageOrders">The stage orders.</param>
+		/// <param name="first">The first.</param>
+		/// <param name="last">The last.</param>
+		private void Between(PipelineStageOrder[] stageOrders, ref int first, ref int last)
 		{
-			if (types == null || types.Count == 0)
-				return -1;
+			first = Int32.MinValue;
+			last = Int32.MaxValue;
 
-			for (int i = _pipeline.Count; i >= 0; i--)
-				if (types.Contains(_pipeline[i].GetType()))
-					return i;
+			if (stageOrders == null || stageOrders.Length == 0)
+				return;
 
-			return -1;
-		}
+			for (int i = _pipeline.Count - 1; i >= 0; i--)
+				foreach (PipelineStageOrder order in stageOrders)
+					if (order.StageType == _pipeline[i].GetType())
+						if (order.Position == PipelineStageOrder.Location.After)
+							first = Math.Max(first, i);
+						else
+							if (order.Position == PipelineStageOrder.Location.Before)
+								last = Math.Min(last, i);
 
-		/// <summary>
-		/// Finds the first.
-		/// </summary>
-		/// <param name="types">The types.</param>
-		/// <returns></returns>
-		private int FindFirst(List<Type> types)
-		{
-			if (types == null || types.Count == 0)
-				return -1;
-
-			for (int i = 0; i < _pipeline.Count; i++)
-				if (types.Contains(_pipeline[i].GetType()))
-					return i;
-
-			return -1;
+			return;
 		}
 
 		/// <summary>
@@ -239,28 +222,24 @@ namespace Mosa.Runtime.CompilerFramework
 
 				for (int i = 0; i < _pipeline.Count; i++) {
 					IPipelineStage stage = _pipeline[i];
+					PipelineStageOrder[] order = stage.PipelineStageOrder;
 
-					if (_after.ContainsKey(stage)) {
-						int last = FindLast(_after[stage]);
+					int first = -1;
+					int last = -1;
 
-						if (last != -1 && i < last) {
-							_pipeline.Insert(last + 1, stage);
-							_pipeline.RemoveAt(i);
-							changed = true;
-							break;
-						}
-					}
+					Between(order, ref first, ref last);
 
-					if (_before.ContainsKey(stage)) {
-						int first = FindFirst(_before[stage]);
+					if (i > first && i < last)
+						continue;
 
-						if (first == -1 && i > first) {
-							_pipeline.Insert(first - 1, stage);
-							_pipeline.RemoveAt(i + 1);
-							changed = true;
-							break;
-						}
-					}
+					_pipeline.RemoveAt(i);
+
+					if (i > last)
+						_pipeline.Insert(last + 1, stage);
+					else if (i < first)
+						_pipeline.Insert(first, stage);
+
+					changed = true;
 				}
 
 				Debug.Assert(loops < 1000, @"impossible ordering of stages");

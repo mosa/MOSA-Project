@@ -42,11 +42,16 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value></value>
 		string IPipelineStage.Name { get { return @"CodeGenerationStage"; } }
 
+
+		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+			// TODO
+		};
+
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		#endregion // IPipelineStage Members
 
@@ -100,7 +105,7 @@ namespace Mosa.Runtime.CompilerFramework
 							if (instruction != null)
 								instruction.Emit(ctx, _codeEmitter);
 							else
-								Debug.WriteLine("Missing Code Transformation: "+ctx.ToString());
+								Debug.WriteLine("Missing Code Transformation: " + ctx.ToString());
 						}
 
 				BlockEnd(block);

@@ -23,19 +23,17 @@ namespace Mosa.Platforms.x86
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name { get { return @"InstructionSchedulingStage"; } }
+		public string Name { get { return @"X86.InstructionSchedulingStage"; } }
+
+		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+			// TODO
+		};
 
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get
-			{
-				return PipelineStageOrder.CreatePipelineOrder(typeof(IRTransformationStage), typeof(AddressModeConversionStage));
-			}
-		}
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		/// <summary>
 		/// Runs the specified method compiler.

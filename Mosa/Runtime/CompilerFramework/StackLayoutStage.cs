@@ -52,6 +52,17 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return @"StackLayoutStage"; }
 		}
 
+		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IPlatformTransformationStage)),
+			};
+
+		/// <summary>
+		/// Gets the pipeline stage order.
+		/// </summary>
+		/// <value>The pipeline stage order.</value>
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
+
 		/// <summary>
 		/// Runs the specified method compiler.
 		/// </summary>
@@ -98,21 +109,6 @@ namespace Mosa.Runtime.CompilerFramework
 			epilogueCtx.AppendInstruction(IR.Instruction.EpilogueInstruction);
 			epilogueCtx.Other = _localsSize;
 			epilogueCtx.Label = Int32.MaxValue;
-		}
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get
-			{
-				return new PipelineStageOrder[] {
-					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(LeaveSSA)),
-					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
-				};
-			}
 		}
 
 		#endregion // IPipelineStage Members

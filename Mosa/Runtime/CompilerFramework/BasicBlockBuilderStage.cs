@@ -41,22 +41,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value></value>
-		string IPipelineStage.Name { get { return @"Basic Block Builder"; } }
+		string IPipelineStage.Name { get { return @"BasicBlockBuilderStage"; } }
+
+		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(CIL.DecodingStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(OperandDeterminationStage))
+			};
 
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get
-			{
-				return new PipelineStageOrder[] {
-					//new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
-					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
-				};
-			}
-		}
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.

@@ -166,14 +166,15 @@ namespace Mosa.Runtime.Linker.PE
 
 		string IPipelineStage.Name { get { return @"Portable Executable File Linker"; } }
 
+		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+				// TODO
+			};
+
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get { return null; }
-		}
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		#endregion // IPipelineStage Members
 

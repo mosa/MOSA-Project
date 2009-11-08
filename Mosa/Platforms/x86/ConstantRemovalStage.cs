@@ -65,22 +65,17 @@ namespace Mosa.Platforms.x86
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"ConstantRemovalStage"; } }
+		string IPipelineStage.Name { get { return @"X86.ConstantRemovalStage"; } }
+
+		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+				// TODO
+			};
 
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get
-			{
-				return new PipelineStageOrder[] {
-					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(EnterSSA)),
-					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
-				};
-			}
-		}
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		/// <summary>
 		/// Runs the specified method compiler.

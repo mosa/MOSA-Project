@@ -42,20 +42,15 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return @"Inlining optimization"; }
 		}
 
+		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+			// TODO
+		};
+
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get
-			{
-				return new PipelineStageOrder[] {
-					//new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
-					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
-				};
-			}
-		}
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.

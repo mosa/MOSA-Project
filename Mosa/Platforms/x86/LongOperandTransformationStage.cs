@@ -38,20 +38,16 @@ namespace Mosa.Platforms.x86
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"X86.LongOperandTransformationStage"; } }
 
+		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(StackLayoutStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(AddressModeConversionStage))
+			};
+
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get
-			{
-				return new PipelineStageOrder[] {
-					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(StackLayoutStage)),
-					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(AddressModeConversionStage))
-				};
-			}
-		}
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		#endregion // IMethodCompilerStage Members
 

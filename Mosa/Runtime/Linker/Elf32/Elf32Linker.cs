@@ -29,14 +29,15 @@ namespace Mosa.Runtime.Linker.Elf32
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"Executable and Linking Format (ELF) Linker [32 Bit]"; } }
 
+		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+				// TODO
+			};
+
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get { return null; }
-		}
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		#endregion // IPipelineStage Members
 

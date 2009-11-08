@@ -89,20 +89,16 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"LoopAwareBlockOrderStage"; } }
 
+		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IPlatformTransformationStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
+			};
+
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get
-			{
-				return new PipelineStageOrder[] {
-					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IPlatformTransformationStage)),
-					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
-				};
-			}
-		}
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		/// <summary>
 		/// Runs the specified compiler.

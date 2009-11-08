@@ -21,14 +21,6 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public sealed class InstructionLogger : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
-		#region Data members
-
-		/// <summary>
-		/// Static instance of the instruction logger.
-		/// </summary>
-		public static readonly InstructionLogger Instance = new InstructionLogger();
-
-		#endregion // Data members
 
 		#region IPipelineStage
 
@@ -36,24 +28,34 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name
-		{
-			get { return @"InstructionLogger"; }
-		}
+		string IPipelineStage.Name { get { return @"InstructionLogger"; } }
+
+		private PipelineStageOrder[] _pipelineOrder;
 
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InstructionLogger"/> class.
+		/// </summary>
+		/// <param name="after">The after.</param>
+		/// <param name="before">The before.</param>
+		public InstructionLogger(IPipelineStage after, IPipelineStage before)
 		{
-			get
-			{
-				return new PipelineStageOrder[] {
-					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IMethodCompilerStage)),
-					//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
-				};
-			}
+			_pipelineOrder = PipelineStageOrder.CreatePipelineOrder(after.GetType(), before.GetType());
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InstructionLogger"/> class.
+		/// </summary>
+		/// <param name="after">The after.</param>
+		/// <param name="before">The before.</param>
+		public InstructionLogger(Type after, Type before)
+		{
+			_pipelineOrder = PipelineStageOrder.CreatePipelineOrder(after, before);
 		}
 
 		/// <summary>

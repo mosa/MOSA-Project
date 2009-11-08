@@ -32,19 +32,15 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return @"CILConstantFoldingStage"; }
 		}
 
+		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+			// TODO
+		};
+
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get
-			{
-				return new PipelineStageOrder[] {
-					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
-				};
-			}
-		}
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		#endregion // IPipelineStage
 

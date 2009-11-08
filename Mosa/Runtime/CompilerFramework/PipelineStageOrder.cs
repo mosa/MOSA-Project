@@ -43,17 +43,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		public Type Stage;
+		public Type StageType;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PipelineStageOrder"/> class.
 		/// </summary>
 		/// <param name="position">The position.</param>
-		/// <param name="stage">The stage.</param>
-		public PipelineStageOrder(Location position, Type stage)
+		/// <param name="stageType">Type of the stage.</param>
+		public PipelineStageOrder(Location position, Type stageType)
 		{
 			Position = position;
-			Stage = stage;
+			StageType = stageType;
 		}
 
 		/// <summary>
@@ -66,6 +66,17 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString()
+		{
+			return Position.ToString() + " " + StageType.ToString();
+		}
+
+		/// <summary>
 		/// Creates the pipeline order.
 		/// </summary>
 		/// <param name="after">The after.</param>
@@ -74,8 +85,8 @@ namespace Mosa.Runtime.CompilerFramework
 		public static PipelineStageOrder[] CreatePipelineOrder(Type after, Type before)
 		{
 			PipelineStageOrder[] pipeline = new PipelineStageOrder[2];
-			pipeline[0] = new PipelineStageOrder(Location.Before, before);
-			pipeline[1] = new PipelineStageOrder(Location.After, after);
+			pipeline[0] = new PipelineStageOrder(Location.After, after);
+			pipeline[1] = new PipelineStageOrder(Location.Before, before);
 			return pipeline;
 		}
 
