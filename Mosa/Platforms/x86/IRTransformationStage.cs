@@ -114,9 +114,9 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.FloatingPointCompareInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Operand1;
-			Operand source = EmitConstant(ctx.Operand2);
-			Operand destination = EmitConstant(ctx.Operand3);
+			Operand op0 = ctx.Result;
+			Operand source = EmitConstant(ctx.Operand1);
+			Operand destination = EmitConstant(ctx.Operand2);
 			IR.ConditionCode setcc = IR.ConditionCode.Equal;
 			IR.ConditionCode code = ctx.ConditionCode;
 			ctx.Remove();
@@ -323,14 +323,14 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
 			// int 3
-			ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
-			ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
+			//ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
+			//ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 
 			// Uncomment this line to enable breakpoints within Bochs
 			//ctx.XXX(CPUx86.Instruction.BochsDebug);
 
 			// push ebp
-			//ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
+			ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 			// mov ebp, esp
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, esp);
 			// sub esp, localsSize
@@ -370,7 +370,7 @@ namespace Mosa.Platforms.x86
 		{
 			Operand op = ctx.Operand1;
 
-			ctx.Remove();
+			//ctx.Remove();
 
 			if (op != null) {
 				ICallingConvention cc = Architecture.GetCallingConvention(Compiler.Method.Signature.CallingConvention);
