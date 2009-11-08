@@ -72,8 +72,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The conversion context.</param>
 		private static void ThreeTwoAddressConversion(Context ctx)
 		{
-            if (ctx.Instruction == IR.Instruction.FloatingPointCompareInstruction)
-                return;
 			Operand result = ctx.Result;
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
@@ -99,8 +97,15 @@ namespace Mosa.Platforms.x86
 			//    // In any other case just load it
 			//    else
 
-			ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
-
+            if (!Is32Bit(op1) && !(op1.StackType == StackTypeCode.F))
+            {
+                if (IsSigned(op1))
+                    ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovsxInstruction, eax, op1);
+                else
+                    ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovzxInstruction, eax, op1);
+            }
+            else
+                ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
 		}
 

@@ -47,16 +47,16 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-		{
-			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
-			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
-			if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
-			if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
-			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+        {
+            if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
+            if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
+            if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
+            if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
+            if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
 
-			throw new ArgumentException(@"No opcode for operand type.");
-		}
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

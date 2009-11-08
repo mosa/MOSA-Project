@@ -1154,8 +1154,10 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 
-			ctx.SetInstruction(IR.Instruction.LogicalAndInstruction, op0H, op1H, op2H);
-			ctx.AppendInstruction(IR.Instruction.LogicalAndInstruction, op0L, op1L, op2L);
+            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
+            ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, op0H, op2H);
+            ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, op0L, op2L);
 		}
 
 		/// <summary>
@@ -1169,8 +1171,10 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 
-			ctx.SetInstruction(IR.Instruction.LogicalAndInstruction, op0H, op1H, op2H);
-			ctx.AppendInstruction(IR.Instruction.LogicalAndInstruction, op0L, op1L, op2L);
+			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
+            ctx.AppendInstruction(CPUx86.Instruction.OrInstruction, op0H, op2H);
+            ctx.AppendInstruction(CPUx86.Instruction.OrInstruction, op0L, op2L);
 		}
 
 		/// <summary>
@@ -1184,8 +1188,10 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
 			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 
-			ctx.SetInstruction(IR.Instruction.LogicalXorInstruction, op0H, op1H, op2H);
-			ctx.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0L, op1L, op2L);
+            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
+            ctx.AppendInstruction(CPUx86.Instruction.XorInstruction, op0H, op2H);
+            ctx.AppendInstruction(CPUx86.Instruction.XorInstruction, op0L, op2L);
 		}
 
 		/// <summary>
@@ -1277,12 +1283,12 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandSignedMove(Context ctx)
 		{
-			MemoryOperand op0 = ctx.Operand1 as MemoryOperand;
-			Operand op1 = ctx.Operand2;
+			MemoryOperand op0 = ctx.Result as MemoryOperand;
+			Operand op1 = ctx.Operand1;
 			Debug.Assert(op0 != null, @"I8 not in a memory operand!");
 			SigType I4 = new SigType(CilElementType.I4);
-			MemoryOperand op0L = new MemoryOperand(I4, op0.Base, op0.Offset);
-			MemoryOperand op0H = new MemoryOperand(I4, op0.Base, new IntPtr(op0.Offset.ToInt64() + 4));
+            Operand op0L, op0H;
+            SplitLongOperand(op0, out op0L, out op0H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
@@ -1749,7 +1755,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.Int64)
+			if (ctx.Result.StackType == StackTypeCode.Int64)
 				ExpandSignedMove(ctx);
 		}
 

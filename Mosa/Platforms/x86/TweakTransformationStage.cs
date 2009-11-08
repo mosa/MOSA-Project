@@ -248,7 +248,30 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseAdd"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.SseAdd(Context context) { }
+		void CPUx86.IX86Visitor.SseAdd(Context context) 
+        {
+            RegisterOperand xmm0 = new RegisterOperand(context.Result.Type, SSE2Register.XMM3);
+            RegisterOperand xmm1 = new RegisterOperand(context.Operand1.Type, SSE2Register.XMM4);
+            Operand op1 = context.Result;
+            Operand op2 = context.Operand1;
+            Context before = context.InsertBefore();
+            BaseInstruction move = (op1.Type.Type == CilElementType.R8) ? (BaseInstruction)CPUx86.Instruction.MovsdInstruction : (BaseInstruction)CPUx86.Instruction.MovssInstruction;
+
+            if (!(context.Result is RegisterOperand))
+            {
+                before.AppendInstruction(move, xmm0, op1);
+                context.Result = xmm0;
+                context.AppendInstruction(move, op1, xmm0);
+            }
+
+            if (!(context.Operand1 is RegisterOperand))
+            {
+                before.AppendInstruction(move, xmm1, op2);
+                context.Operand1 = xmm0;
+                context.AppendInstruction(move, op2, xmm1);
+            }
+
+        }
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseMul"/> instructions.
 		/// </summary>
