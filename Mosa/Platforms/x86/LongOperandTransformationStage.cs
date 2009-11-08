@@ -1615,11 +1615,11 @@ namespace Mosa.Platforms.x86
 			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 
 			// Success
-			newBlocks[2].SetInstruction(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 1));
+			newBlocks[2].SetInstruction(CPUx86.Instruction.MovsxInstruction, op0, new ConstantOperand(I4, 1));
 			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
 
 			// Failed
-			newBlocks[3].SetInstruction(CPUx86.Instruction.MovInstruction, op0, new ConstantOperand(I4, 0));
+            newBlocks[3].SetInstruction(CPUx86.Instruction.MovsxInstruction, op0, new ConstantOperand(I4, 0));
 			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
 		}
 

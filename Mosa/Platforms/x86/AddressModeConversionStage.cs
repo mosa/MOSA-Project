@@ -98,9 +98,9 @@ namespace Mosa.Platforms.x86
 			//    // In any other case just load it
 			//    else
 
-			ctx.InsertBefore().SetInstruction(IR.Instruction.MoveInstruction, eax, op1);
+			ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
 
-			ctx.AppendInstruction(IR.Instruction.MoveInstruction, result, eax);
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
 		}
 
 	}
