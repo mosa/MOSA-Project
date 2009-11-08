@@ -16,7 +16,7 @@ using System.Collections.Generic;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// The Loop Aware Block Ordering Stage reorders Blocks to optimize loops and reduce the distance of jumps and branches.
+	/// The Loop Aware Block Ordering Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
 	public class LoopAwareBlockOrderStage : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
@@ -51,8 +51,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Properties
 
-		#region IMethodCompilerStage Members
-
 		#region ConnectedBlocks class
 
 		/// <summary>
@@ -83,6 +81,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion
 
+		#region IPipelineStage Members
+
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
@@ -99,6 +99,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
 		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
+
+		#endregion // IPipelineStage Members
+
+		#region IMethodCompilerStage Members
 
 		/// <summary>
 		/// Runs the specified compiler.

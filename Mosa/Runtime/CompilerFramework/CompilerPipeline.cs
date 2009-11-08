@@ -185,25 +185,30 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Finds the last.
 		/// </summary>
 		/// <param name="stageOrders">The stage orders.</param>
-		/// <param name="first">The first.</param>
-		/// <param name="last">The last.</param>
-		private void Between(PipelineStageOrder[] stageOrders, ref int first, ref int last)
+		/// <param name="after">The after.</param>
+		/// <param name="before">The before.</param>
+		private void Between(PipelineStageOrder[] stageOrders, ref int after, ref int before)
 		{
-			first = Int32.MinValue;
-			last = Int32.MaxValue;
+			after = Int32.MinValue;
+			before = Int32.MaxValue;
 
 			if (stageOrders == null || stageOrders.Length == 0)
 				return;
 
-			for (int i = _pipeline.Count - 1; i >= 0; i--)
-				foreach (PipelineStageOrder order in stageOrders)
-					if (order.StageType == _pipeline[i].GetType())
+			for (int i = 0; i < _pipeline.Count; i++)
+				foreach (PipelineStageOrder order in stageOrders) {
+
+					bool same = (order.StageType == _pipeline[i].GetType());
+					bool subclass = _pipeline[i].GetType().IsSubclassOf(order.StageType);
+					bool assignable = order.StageType.IsAssignableFrom(_pipeline[i].GetType());
+
+					if (same || subclass || assignable)
 						if (order.Position == PipelineStageOrder.Location.After)
-							first = Math.Max(first, i);
+							after = Math.Max(after, i);
 						else
 							if (order.Position == PipelineStageOrder.Location.Before)
-								last = Math.Min(last, i);
-
+								before = Math.Min(before, i);
+				}
 			return;
 		}
 
@@ -224,20 +229,20 @@ namespace Mosa.Runtime.CompilerFramework
 					IPipelineStage stage = _pipeline[i];
 					PipelineStageOrder[] order = stage.PipelineStageOrder;
 
-					int first = -1;
-					int last = -1;
+					int after = -1;
+					int before = -1;
 
-					Between(order, ref first, ref last);
+					Between(order, ref after, ref before);
 
-					if (i > first && i < last)
+					if (i > after && i < before)
 						continue;
 
 					_pipeline.RemoveAt(i);
 
-					if (i > last)
-						_pipeline.Insert(last + 1, stage);
-					else if (i < first)
-						_pipeline.Insert(first, stage);
+					if (i < after)
+						_pipeline.Insert(after, stage);
+					else if (i > before)
+						_pipeline.Insert(before + 1, stage);
 
 					changed = true;
 				}

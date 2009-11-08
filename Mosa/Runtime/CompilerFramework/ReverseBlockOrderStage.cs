@@ -40,6 +40,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The pipeline stage order.</value>
 		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
+		#endregion // IPipelineStage Methods
+
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
@@ -54,7 +56,5 @@ namespace Mosa.Runtime.CompilerFramework
 				BasicBlocks[BasicBlocks.Count - i] = temp;
 			}
 		}
-
-		#endregion // Methods
 	}
 }

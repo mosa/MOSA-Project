@@ -28,7 +28,7 @@ namespace Mosa.Platforms.x86
 	/// This stage translates all 64-bit operations to appropriate 32-bit operations on
 	/// architectures without appropriate 64-bit integral operations.
 	/// </remarks>
-	public sealed class LongOperandTransformationStage : CodeTransformationStage, CIL.ICILVisitor, IR.IIRVisitor, IPipelineStage
+	public sealed class LongOperandTransformationStage : CodeTransformationStage, CIL.ICILVisitor, IR.IIRVisitor, IPlatformTransformationStage, IPipelineStage
 	{
 		#region IMethodCompilerStage Members
 

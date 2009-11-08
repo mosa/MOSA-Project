@@ -26,7 +26,7 @@ namespace Mosa.Platforms.x86
 	/// embedding floating point values as immediates inside the code, so these have to be moved outside
 	/// and referenced through a memory offset starting at the 
 	/// </remarks>
-	public sealed class ConstantRemovalStage : BaseStage, IMethodCompilerStage, IPipelineStage
+	public sealed class ConstantRemovalStage : BaseStage, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
 	{
 		#region Data members
 
