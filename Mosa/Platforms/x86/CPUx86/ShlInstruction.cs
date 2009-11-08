@@ -23,9 +23,31 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
 	public sealed class ShlInstruction : TwoOperandInstruction
     {
-       
-        #region Methods
 
+        #region Data Members
+        private static readonly OpCode R_C = new OpCode(new byte[] { 0xC1 }, 4);
+        private static readonly OpCode M_C = new OpCode(new byte[] { 0xC1 }, 4);
+        private static readonly OpCode R = new OpCode(new byte[] { 0xD3 }, 5);
+        private static readonly OpCode M = new OpCode(new byte[] { 0xD3 }, 5);
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <param name="source"></param>
+        /// <param name="third"></param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+        {
+            if (destination is RegisterOperand && source is ConstantOperand) return R_C;
+            if (destination is MemoryOperand && source is ConstantOperand) return M_C;
+            if (destination is RegisterOperand) return R;
+            if (destination is MemoryOperand) return M;
+
+            throw new ArgumentException(@"No opcode for operand type.");
+        }
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>

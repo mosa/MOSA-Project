@@ -55,8 +55,9 @@ namespace Mosa.Platforms.x86.CPUx86
 					if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_X16;
 					if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_X16;
 					break;
+                case CilElementType.Boolean: goto case CilElementType.I1;
 				default:
-					//Emit(destination, source, X86.Move(destination, source));
+					
 					break;
 			}
 

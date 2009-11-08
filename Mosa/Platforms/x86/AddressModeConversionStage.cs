@@ -101,8 +101,10 @@ namespace Mosa.Platforms.x86
             {
                 if (IsSigned(op1))
                     ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovsxInstruction, eax, op1);
-                else
+                else if (IsUnsigned(op1))
                     ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovzxInstruction, eax, op1);
+                else
+                    ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
             }
             else
                 ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
