@@ -50,7 +50,6 @@ namespace Mosa.Tools.Compiler
 				new BasicBlockBuilderStage(),
 				new InstructionLogger(typeof(BasicBlockBuilderStage),typeof(OperandDeterminationStage)),
 				new OperandDeterminationStage(),
-				new InstructionLogger(typeof(OperandDeterminationStage),typeof(CILTransformationStage)),
 				new CILTransformationStage(),
 				new InstructionLogger(typeof(CILTransformationStage),typeof(StackLayoutStage)),
 				//InstructionStatisticsStage.Instance,
@@ -67,13 +66,16 @@ namespace Mosa.Tools.Compiler
 				//InstructionLogger.Instance,
 				//InstructionLogger.Instance,
 				new StackLayoutStage(),
+				new InstructionLogger(typeof(CILTransformationStage),typeof(IPlatformInstruction)),
 				//InstructionLogger.Instance,
 				//new BlockReductionStage(),
 				//new LoopAwareBlockOrderStage(),
+				//new InstructionLogger(typeof(LoopAwareBlockOrderStage),typeof(CodeGenerationStage)),
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),	
-				InstructionStatisticsStage.Instance,
+		//		InstructionStatisticsStage.Instance,
 				//new LocalCSE(),
+				new CodeGenerationStage(),
             });
 		}
 
