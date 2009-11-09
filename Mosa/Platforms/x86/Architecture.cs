@@ -124,9 +124,8 @@ namespace Mosa.Platforms.x86
 		/// </remarks>
 		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
-			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect) {
+			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect) 
 				architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
-			}
 
 			return new Architecture(architectureFeatures);
 		}
@@ -177,7 +176,6 @@ namespace Mosa.Platforms.x86
                     new InstructionLogger(typeof(MemToMemConversionStage),typeof(SimplePeepholeOptimizationStage)),
 					new SimplePeepholeOptimizationStage(),
                     new InstructionLogger(typeof(SimplePeepholeOptimizationStage),typeof(CodeGenerationStage)),
-					new CodeGenerationStage(),
                     //FlowGraphVisualizationStage.Instance,
                 });
 		}

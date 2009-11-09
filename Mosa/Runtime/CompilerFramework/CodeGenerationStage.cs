@@ -42,10 +42,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value></value>
 		string IPipelineStage.Name { get { return @"CodeGenerationStage"; } }
 
-
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-			// TODO
-		};
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IPlatformTransformationStage)),
+			};
 
 		/// <summary>
 		/// Gets the pipeline stage order.

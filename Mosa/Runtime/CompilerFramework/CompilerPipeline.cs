@@ -232,6 +232,9 @@ namespace Mosa.Runtime.CompilerFramework
 					int after = -1;
 					int before = -1;
 
+					if (stage is CodeGenerationStage)
+						Console.WriteLine();
+
 					Between(order, ref after, ref before);
 
 					if (i > after && i < before)
@@ -239,10 +242,11 @@ namespace Mosa.Runtime.CompilerFramework
 
 					_pipeline.RemoveAt(i);
 
-					if (i < after)
-						_pipeline.Insert(after, stage);
-					else if (i > before)
-						_pipeline.Insert(before + 1, stage);
+					if (i > before)
+						_pipeline.Insert(before, stage);
+					else
+						if (i < after)
+							_pipeline.Insert(after, stage);
 
 					changed = true;
 				}
