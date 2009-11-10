@@ -1007,14 +1007,17 @@ namespace Mosa.Platforms.x86
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.CmpInstruction, ecx, new ConstantOperand(I4, 64));
 			newBlocks[0].AppendInstruction(IR.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+			LinkBlocks(newBlocks[0], newBlocks[4], newBlocks[1]);
 
 			newBlocks[1].AppendInstruction(CPUx86.Instruction.CmpInstruction, ecx, new ConstantOperand(I4, 32));
 			newBlocks[1].AppendInstruction(IR.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
 			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
+			LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
 
 			newBlocks[2].AppendInstruction(CPUx86.Instruction.ShldInstruction, edx, eax, cl);
 			newBlocks[2].AppendInstruction(CPUx86.Instruction.ShlInstruction, eax, cl);
 			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			LinkBlocks(newBlocks[2], nextBlock);
 
 			// Handle shifts of between 32 and 63 bits
 			// MORE32:
@@ -1023,21 +1026,20 @@ namespace Mosa.Platforms.x86
 			newBlocks[3].AppendInstruction(CPUx86.Instruction.AndInstruction, ecx, new ConstantOperand(I4, 0x1F));
 			newBlocks[3].AppendInstruction(CPUx86.Instruction.ShlInstruction, edx, ecx);
 			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			LinkBlocks(newBlocks[3], nextBlock);
 
 			// Return double precision 0 or -1, depending on the sign of edx
 			// RETZERO:
 			newBlocks[4].AppendInstruction(CPUx86.Instruction.XorInstruction, eax, eax);
 			newBlocks[4].AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
 			newBlocks[4].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			LinkBlocks(newBlocks[4], nextBlock);
 
 			// done:
 			// ; remaining code from current basic block
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
 			ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
-
-			// Link the created Blocks together
-			LinkBlocks(newBlocks, ctx, nextBlock);
 		}
 
 		/// <summary>

@@ -219,11 +219,12 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (BasicBlock block in current.BasicBlock.NextBlocks)
 				nextBlock.NextBlocks.Add(block);
 
-
 			current.BasicBlock.NextBlocks.Clear();
 			current.BasicBlock.NextBlocks.Add(nextBlock);
 
 			current.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
+
+			// nextBlock.PreviousBlocks.Add(current); // ???
 
 			if (current.IsLastInstruction) {
 				nextBlock.Index = current.Index;
