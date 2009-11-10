@@ -66,7 +66,9 @@ namespace Mosa.Platforms.x86
 			// Check that we're not dealing with floating point values
 			if (ctx.Result.StackType == StackTypeCode.F || ctx.Operand1.StackType == StackTypeCode.F)
 				if (ctx.Result.Type.Type == CilElementType.R4)
-					ctx.SetInstruction(CPUx86.Instruction.MovsdInstruction, ctx.Result, ctx.Operand1);
+					ctx.SetInstruction(CPUx86.Instruction.MovssInstruction, ctx.Result, ctx.Operand1);
+                else if (ctx.Result.Type.Type == CilElementType.R8)
+                    ctx.SetInstruction(CPUx86.Instruction.MovsdInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>

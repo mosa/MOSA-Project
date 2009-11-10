@@ -65,9 +65,9 @@ namespace Mosa.Platforms.x86.CPUx86
 			if ((destination is RegisterOperand) && (source is MemoryOperand))
             {
 				if (IsByte(source) || IsByte(destination))
-                    return R_M_8;
+                    return R_M;
 				if (IsChar(source) || IsShort(source))
-                    return R_M_16;
+                    return R_M;
                 return R_M;
             }
 
@@ -76,7 +76,7 @@ namespace Mosa.Platforms.x86.CPUx86
 			if ((destination is RegisterOperand) && (source is ConstantOperand))
             {
 				if (IsByte(source) || IsByte(destination))
-                    return R_C_8;
+                    return R_C;
                 return R_C;
             }
             throw new ArgumentException(@"No opcode for operand type.");

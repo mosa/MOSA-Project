@@ -194,9 +194,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandMul(Context ctx)
 		{
-			Context nextBlock = SplitContext(ctx);
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 4);
-
 			MemoryOperand op0 = ctx.Result as MemoryOperand;
 			MemoryOperand op1 = ctx.Operand1 as MemoryOperand;
 			MemoryOperand op2 = ctx.Operand2 as MemoryOperand;
@@ -213,6 +210,11 @@ namespace Mosa.Platforms.x86
 			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
+            Context nextBlock = SplitContext(ctx);
+            Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 4);
+            // Link the created Blocks together
+            LinkBlocks(newBlocks, ctx, nextBlock);
+
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, op2H);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.OrInstruction, ecx, eax);
@@ -222,7 +224,7 @@ namespace Mosa.Platforms.x86
 
 			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
 			newBlocks[1].AppendInstruction(CPUx86.Instruction.MulInstruction, null, ecx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+            newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 
 			newBlocks[2].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
 			newBlocks[2].AppendInstruction(CPUx86.Instruction.MulInstruction, null, ecx);
@@ -234,13 +236,11 @@ namespace Mosa.Platforms.x86
 			newBlocks[2].AppendInstruction(CPUx86.Instruction.MulInstruction, null, ecx);
 			newBlocks[2].AppendInstruction(CPUx86.Instruction.AddInstruction, edx, ebx);
 			newBlocks[2].AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+            newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 
-			nextBlock.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-			nextBlock.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
-
-			// Link the created Blocks together
-			LinkBlocks(newBlocks, ctx, nextBlock);
+            newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
+            newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
+            newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
 		}
 
 		/// <summary>

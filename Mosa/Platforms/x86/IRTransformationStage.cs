@@ -143,14 +143,24 @@ namespace Mosa.Platforms.x86
 				case IR.ConditionCode.LessThan: setcc = IR.ConditionCode.UnsignedLessThan; break;
 			}
 
+            if (!(source is RegisterOperand))
+            {
+                RegisterOperand xmm2 = new RegisterOperand(source.Type, SSE2Register.XMM2);
+                if (source.Type.Type == CilElementType.R4)
+                    ctx.AppendInstruction(CPUx86.Instruction.MovssInstruction, xmm2, source);
+                else
+                    ctx.AppendInstruction(CPUx86.Instruction.MovsdInstruction, xmm2, source);
+                source = xmm2;
+            }
+
 			// Compare using the smallest precision
 			if (source.Type.Type == CilElementType.R4 && destination.Type.Type == CilElementType.R8) {
-				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM1);
+				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM4);
 				ctx.AppendInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, rop, destination);
 				destination = rop;
 			}
 			if (source.Type.Type == CilElementType.R8 && destination.Type.Type == CilElementType.R4) {
-				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM0);
+				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM3);
 				ctx.AppendInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, rop, source);
 				source = rop;
 			}
@@ -618,8 +628,8 @@ namespace Mosa.Platforms.x86
 		private static void SwapComparisonOperands(Context ctx)
 		{
 			Operand op1 = ctx.Operand1;
+            ctx.Operand1 = ctx.Operand2;
 			ctx.Operand2 = op1;
-			ctx.Operand1 = ctx.Operand2;
 
 			// Negate the condition code if necessary...
 			switch (ctx.ConditionCode) {
