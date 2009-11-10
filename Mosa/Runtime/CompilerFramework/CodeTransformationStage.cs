@@ -87,6 +87,42 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Block Operations
 
 		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		protected void LinkBlocks(BasicBlock source, BasicBlock destination)
+		{
+			if (!source.NextBlocks.Contains(destination))
+				source.NextBlocks.Add(destination);
+
+			if (!destination.PreviousBlocks.Contains(source))
+				destination.PreviousBlocks.Add(source);
+		}
+
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		protected void LinkBlocks(Context source, Context destination)
+		{
+			LinkBlocks(source.BasicBlock, destination.BasicBlock);
+		}
+
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="destination2">The destination2.</param>
+		protected void LinkBlocks(Context source, Context destination, Context destination2)
+		{
+			LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			LinkBlocks(source.BasicBlock, destination2.BasicBlock);
+		}
+
+		/// <summary>
 		/// Links the new Blocks.
 		/// </summary>
 		/// <param name="blocks">The Blocks.</param>
@@ -107,14 +143,8 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (Context context in blocks)
 				for (Context ctx = new Context(InstructionSet, context.BasicBlock); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null && !ctx.Ignore && ctx.Branch != null)
-						foreach (int target in (ctx.Branch.Targets)) {
-							BasicBlock next = blockLabels[target];
-							if (!ctx.BasicBlock.NextBlocks.Contains(next))
-								ctx.BasicBlock.NextBlocks.Add(next);
-							if (!next.PreviousBlocks.Contains(ctx.BasicBlock))
-								next.PreviousBlocks.Add(ctx.BasicBlock);
-						}
-
+						foreach (int target in ctx.Branch.Targets)
+							LinkBlocks(ctx.BasicBlock, blockLabels[target]);
 		}
 
 		/// <summary>

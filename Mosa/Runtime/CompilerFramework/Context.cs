@@ -471,6 +471,15 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Clones this context 
+		/// </summary>
+		/// <returns></returns>
+		public Context CloneAtStart()
+		{
+			return new Context(_instructionSet, _block, _block.Index);
+		}
+
+		/// <summary>
 		/// Nexts this instance.
 		/// </summary>
 		public void GotoNext()
