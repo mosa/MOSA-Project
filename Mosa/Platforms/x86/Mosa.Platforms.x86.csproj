@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -86,6 +86,7 @@
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="AddressModeConversionStage.cs" />
     <Compile Include="CPUx86\DebugInstruction.cs" />
+    <Compile Include="CPUx86\LeaInstruction.cs" />
     <Compile Include="SimplePeepholeOptimizationStage.cs" />
     <Compile Include="MemToMemConversionStage.cs" />
     <Compile Include="CPUx86\CallInstruction.cs" />

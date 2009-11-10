@@ -69,40 +69,44 @@ namespace Mosa.Platforms.x86
 			 * 
 			 */
 
-			Context after = ctx.Clone();
-
+			Context clone = ctx.Clone();
+            Mosa.Runtime.Vm.RuntimeMethod invokeTarget = clone.InvokeTarget;
+            Operand result = clone.Result;
+            Operand operand1 = clone.Operand1;
+            int resultCount = clone.ResultCount;
 			SigType I = new SigType(CilElementType.I);
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 			int stackSize = CalculateStackSizeForParameters(ctx);
-
+            ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 			if (stackSize != 0) {
-				after.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, stackSize));
-				after.AppendInstruction(CPUx86.Instruction.SubInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
+                ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, stackSize));
+                ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
 
-				Stack<Operand> operandStack = GetOperandStackFromInstruction(ctx, ctx.InvokeTarget.Signature.HasThis);
+                Stack<Operand> operandStack = GetOperandStackFromInstruction(clone, invokeTarget.Signature.HasThis);
 
 				int space = stackSize;
-				CalculateRemainingSpace(after, operandStack, ref space);
+                CalculateRemainingSpace(ctx, operandStack, ref space);
 			}
 
-			if (ctx.InvokeTarget.Signature.HasThis) {
+            if (invokeTarget.Signature.HasThis)
+            {
 				RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
-				after.AppendInstruction(IR.Instruction.MoveInstruction, ecx, ctx.Operand1); 
+                ctx.AppendInstruction(IR.Instruction.MoveInstruction, ecx, operand1); 
 			}
 
-			after.AppendInstruction(IR.Instruction.CallInstruction);
-			after.InvokeTarget = ctx.InvokeTarget; 
+            ctx.AppendInstruction(IR.Instruction.CallInstruction);
+            ctx.InvokeTarget = invokeTarget; 
 
 			if (stackSize != 0)
-				after.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, stackSize));
+                ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, stackSize));
 
-			if (ctx.ResultCount > 0)
-				if (ctx.Result.StackType == StackTypeCode.Int64)
-					MoveReturnValueTo64Bit(ctx.Result, after);
+            if (resultCount > 0)
+                if (result.StackType == StackTypeCode.Int64)
+                    MoveReturnValueTo64Bit(result, ctx);
 				else
-					MoveReturnValueTo32Bit(ctx.Result, after);
+                    MoveReturnValueTo32Bit(result, ctx);
 
-			ctx.Remove();
+			//ctx.Remove();
 		}
 
 		/// <summary>
@@ -168,9 +172,10 @@ namespace Mosa.Platforms.x86
 			MemoryOperand memoryOperand = resultOperand as MemoryOperand;
 
 			if (memoryOperand == null) return;
-
-			MemoryOperand opL = new MemoryOperand(U4, memoryOperand.Base, memoryOperand.Offset);
-			MemoryOperand opH = new MemoryOperand(I4, memoryOperand.Base, new IntPtr(memoryOperand.Offset.ToInt64() + 4));
+            Operand opL, opH;
+            LongOperandTransformationStage.SplitLongOperand(memoryOperand, out opL, out opH);
+			//MemoryOperand opL = new MemoryOperand(U4, memoryOperand.Base, memoryOperand.Offset);
+			//MemoryOperand opH = new MemoryOperand(I4, memoryOperand.Base, new IntPtr(memoryOperand.Offset.ToInt64() + 4));
 			RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
@@ -205,8 +210,10 @@ namespace Mosa.Platforms.x86
 							MemoryOperand mop = op as MemoryOperand;
 							Debug.Assert(null != mop, @"I8/U8 arg is not in a memory operand.");
 							RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-							MemoryOperand opL = new MemoryOperand(I4, mop.Base, mop.Offset);
-							MemoryOperand opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
+                            Operand opL, opH;
+                            LongOperandTransformationStage.SplitLongOperand(mop, out opL, out opH);
+							//MemoryOperand opL = new MemoryOperand(I4, mop.Base, mop.Offset);
+							//MemoryOperand opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
 
 							ctx.AppendInstruction(IR.Instruction.MoveInstruction, eax, opL);
 							ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);

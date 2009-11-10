@@ -59,9 +59,11 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.AddressOfInstruction(Context ctx)
 		{
-			Operand opRes = ctx.Operand1;
+			Operand opRes = ctx.Result;
 			RegisterOperand eax = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
 			ctx.Result = eax;
+            ctx.ReplaceInstructionOnly(CPUx86.Instruction.LeaInstruction);
+            ctx.Ignore = true;
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, opRes, eax);
 		}
 

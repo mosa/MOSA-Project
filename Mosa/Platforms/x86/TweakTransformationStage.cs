@@ -50,7 +50,13 @@ namespace Mosa.Platforms.x86
 		#endregion // IPipelineStage Members
 
 		#region IX86Visitor
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        void CPUx86.IX86Visitor.Lea(Context context)
+        {
+        }
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Mov"/> instructions.
 		/// </summary>

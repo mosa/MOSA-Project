@@ -91,6 +91,11 @@ namespace Mosa.Platforms.x86
 
 		#region IX86Visitor
 
+        void CPUx86.IX86Visitor.Lea(Context ctx)
+        {
+            // DONE
+        }
+
 		void CPUx86.IX86Visitor.Add(Context ctx)
 		{
 			// DONE

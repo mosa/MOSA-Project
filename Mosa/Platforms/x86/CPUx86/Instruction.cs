@@ -371,6 +371,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly JneInstruction JneInstruction = new JneInstruction();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly LeaInstruction LeaInstruction = new LeaInstruction();
 		
 	}
 }

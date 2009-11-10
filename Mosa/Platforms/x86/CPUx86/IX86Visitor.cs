@@ -338,6 +338,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Iretd(Context context);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        void Lea(Context context);
 		/// <summary>
 		/// Load global descriptor table
 		/// </summary>
