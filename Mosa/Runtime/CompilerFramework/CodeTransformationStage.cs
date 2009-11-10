@@ -102,6 +102,19 @@ namespace Mosa.Runtime.CompilerFramework
 
 			AddBlockLabels(blockLabels, nextBlock.BasicBlock);
 			AddBlockLabels(blockLabels, currentBlock.BasicBlock);
+
+			// Update block links
+			foreach (Context context in blocks)
+				for (Context ctx = new Context(InstructionSet, context.BasicBlock); !ctx.EndOfInstruction; ctx.GotoNext())
+					if (ctx.Instruction != null && !ctx.Ignore && ctx.Branch != null)
+						foreach (int target in (ctx.Branch.Targets)) {
+							BasicBlock next = blockLabels[target];
+							if (!ctx.BasicBlock.NextBlocks.Contains(next))
+								ctx.BasicBlock.NextBlocks.Add(next);
+							if (!next.PreviousBlocks.Contains(ctx.BasicBlock))
+								next.PreviousBlocks.Add(ctx.BasicBlock);
+						}
+
 		}
 
 		/// <summary>
