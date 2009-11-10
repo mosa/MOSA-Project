@@ -22,7 +22,12 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class SseAddInstruction : TwoOperandInstruction
     {
-       
+		#region Data Members
+
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF2, 0x0F, 0x58 });
+
+		#endregion // Data Members
+
 		#region Properties
 
 		/// <summary>
@@ -43,7 +48,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// <returns></returns>
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-            return new OpCode(new byte[] { 0xF2, 0x0F, 0x58 });
+			return opcode;
         }
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
