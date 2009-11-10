@@ -175,6 +175,7 @@ namespace Mosa.Platforms.x86
 					new MemToMemConversionStage(),
                     new InstructionLogger(typeof(MemToMemConversionStage),typeof(SimplePeepholeOptimizationStage)),
 					new SimplePeepholeOptimizationStage(),
+                    //FlowGraphVisualizationStage.Instance,
                     new InstructionLogger(typeof(SimplePeepholeOptimizationStage),typeof(CodeGenerationStage)),
                     //FlowGraphVisualizationStage.Instance,
                 });

@@ -61,7 +61,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-			// TODO
+			new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(InstructionLogger)),
 		};
 
 		/// <summary>
@@ -107,62 +107,58 @@ namespace Mosa.Runtime.CompilerFramework
 			string nodes = string.Empty;
 			string edges = string.Empty;
 
-			while (workList.Count != 0) {
-				BasicBlock block = workList.Pop();
+            foreach (BasicBlock block in BasicBlocks)
+            {
+                string nodeName = string.Empty;
+                string nodeContent = string.Empty;
+                string nextNode = string.Empty;
 
-				if (!workArray.Get(block.Index)) {
-					string nodeName = string.Empty;
-					string nodeContent = string.Empty;
-					string nextNode = string.Empty;
+                nodeName = block.ToString();
+                //nodeName = nodeName.Replace("-", "_");
 
-					nodeName = block.Index.ToString() + "_" + block.Label.ToString();
-					nodeName = nodeName.Replace("-", "_");
+                nodeContent += "<tr><td bgcolor=\"#DDDDDD\" align=\"center\" colspan=\"3\"><font face=\"Courier\">L_" + block.Label.ToString("x4") + "</font></td></tr>";
 
-					nodeContent += "<tr><td bgcolor=\"#DDDDDD\" align=\"center\" colspan=\"3\"><font face=\"Courier\">L_" + block.Label.ToString("x4") + "</font></td></tr>";
+                int field = 0;
+                int i = 0;
 
-					int field = 0;
-					int i = 0;
+                for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+                {
+                    if (ctx.Instruction == null)
+                        continue;
 
-					for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
-						string color;
-						string inst = ctx.Instruction.ToString(ctx).Replace("&", "&amp;");
-						inst = inst.Replace("<", "&lt;");
-						inst = inst.Replace(">", "&gt;");
+                    string color;
+                    string inst = ctx.Instruction.ToString(ctx).Replace("&", "&amp;");
+                    inst = inst.Replace("<", "&lt;");
+                    inst = inst.Replace(">", "&gt;");
 
-						if (inst.StartsWith("IL") || inst.StartsWith("T_"))
-							color = "#0000ff5f";
-						else if (inst.StartsWith("IR"))
-							color = "#00ff005f";
-						else
-							color = "#ff00005f";
+                    if (inst.StartsWith("IL") || inst.StartsWith("T_"))
+                        color = "#0000ff5f";
+                    else if (inst.StartsWith("IR"))
+                        color = "#ff00005f";
+                    else
+                        color = "#00ff005f";
+                        
 
-						//nodeContent += (" <f" + field + "> " + inst + " |");
+                    nodeContent += "<tr><td bgcolor=\"white\" align=\"right\">" + (i++) + "</td><td bgcolor=\"" + color + "\" align=\"center\" colspan=\"2\"><font face=\"Courier\">" + inst + "</font></td></tr>";
 
-						nodeContent += "<tr><td bgcolor=\"white\" align=\"right\">" + (i++) + "</td><td bgcolor=\"" + color + "\" align=\"center\" colspan=\"2\"><font face=\"Courier\">" + inst + "</font></td></tr>";
-						//nodeContent = nodeContent.Replace(";", string.Empty);
+                    ++field;
+                }
 
-						++field;
-					}
+                if (nodeContent != string.Empty && nodeContent[nodeContent.Length - 1] == '|')
+                    nodeContent = nodeContent.Substring(0, nodeContent.Length - 2);
 
-					if (nodeContent != string.Empty && nodeContent[nodeContent.Length - 1] == '|')
-						nodeContent = nodeContent.Substring(0, nodeContent.Length - 2);
+                if (nodeContent != string.Empty)
+                    nodes += "\"" + nodeName + "\" [label = <<table border=\"1\" cellborder=\"0\" cellpadding=\"3\" bgcolor=\"white\">" + nodeContent + "</table>> shape = \"Mrecord\"];\r\n";
 
-					if (nodeContent != string.Empty)
-						nodes += "\"" + nodeName + "\" [label = <<table border=\"1\" cellborder=\"0\" cellpadding=\"3\" bgcolor=\"white\">" + nodeContent + "</table>> shape = \"Mrecord\"];\r\n";
 
-					workArray.Set(block.Index, true);
+                foreach (BasicBlock nextBlock in block.NextBlocks)
+                {
+                    nextNode = nextBlock.ToString();
 
-					foreach (BasicBlock nextBlock in block.NextBlocks) {
-						nextNode = nextBlock.Index.ToString() + "_" + nextBlock.Label.ToString();
+                    edges += "\"" + nodeName + "\"" + " -> " + "\"" + nextNode + "\"\r\n";
+                }
+            }
 
-						edges += "\"" + nodeName + "\"" + " -> " + "\"" + nextNode + "\"\r\n";
-
-						if (!workArray.Get(nextBlock.Index)) {
-							workList.Push(nextBlock);
-						}
-					}
-				}
-			}
 			dotFile.WriteLine(nodes);
 			dotFile.WriteLine(edges);
 			dotFile.WriteLine("};");

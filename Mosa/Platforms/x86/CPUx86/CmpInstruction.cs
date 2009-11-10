@@ -25,6 +25,7 @@ namespace Mosa.Platforms.x86.CPUx86
         private static readonly OpCode M_C = new OpCode(new byte[] { 0x81 }, 7);
         private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 7);
         private static readonly OpCode R_C_8 = new OpCode(new byte[] { 0x80 }, 7);
+        private static readonly OpCode R_C_16 = new OpCode(new byte[] { 0x66, 0x81 }, 7);
         private static readonly OpCode M_R_8 = new OpCode(new byte[] { 0x38 });
         private static readonly OpCode R_M_8 = new OpCode(new byte[] { 0x3A });
         private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x39 });
@@ -65,9 +66,9 @@ namespace Mosa.Platforms.x86.CPUx86
 			if ((destination is RegisterOperand) && (source is MemoryOperand))
             {
 				if (IsByte(source) || IsByte(destination))
-                    return R_M;
+                    return R_M_8;
 				if (IsChar(source) || IsShort(source))
-                    return R_M;
+                    return R_M_16;
                 return R_M;
             }
 
@@ -76,7 +77,9 @@ namespace Mosa.Platforms.x86.CPUx86
 			if ((destination is RegisterOperand) && (source is ConstantOperand))
             {
 				if (IsByte(source) || IsByte(destination))
-                    return R_C;
+                    return R_C_8;
+                if (IsChar(source) || IsShort(source))
+                    return R_C_16;
                 return R_C;
             }
             throw new ArgumentException(@"No opcode for operand type.");

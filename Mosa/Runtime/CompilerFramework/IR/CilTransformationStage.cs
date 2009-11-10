@@ -1018,12 +1018,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			if (type == IR.Instruction.LogicalAndInstruction || mask != 0) {
 				Debug.Assert(mask != 0, @"Conversion is an AND, but no mask given.");
 
-				ctx.Remove();
+				//ctx.Remove();
 
-				if (instruction != IR.Instruction.LogicalAndInstruction)
-					ProcessMixedTypeConversion(ctx, instruction, mask, destinationOperand, sourceOperand);
+                if (type != IR.Instruction.LogicalAndInstruction)
+                    ProcessMixedTypeConversion(ctx, type, mask, destinationOperand, sourceOperand);
 				else
-					ProcessSingleTypeTruncation(ctx, instruction, mask, destinationOperand, sourceOperand);
+                    ProcessSingleTypeTruncation(ctx, type, mask, destinationOperand, sourceOperand);
 
 				ExtendAndTruncateResult(ctx, instruction, destinationOperand);
 			}
@@ -1078,18 +1078,18 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		private void ProcessMixedTypeConversion(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
-			ctx.AppendInstruction(instruction, destinationOperand, sourceOperand);
+			ctx.SetInstruction(instruction, destinationOperand, sourceOperand);
 			ctx.AppendInstruction(IR.Instruction.LogicalAndInstruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
 		}
 
 		private void ProcessSingleTypeTruncation(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8) {
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, destinationOperand, sourceOperand);
+                ctx.SetInstruction(IR.Instruction.MoveInstruction, destinationOperand, sourceOperand);
 				ctx.AppendInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
 			}
 			else
-				ctx.AppendInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
+                ctx.SetInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
 		}
 
 		private void ExtendAndTruncateResult(Context ctx, IInstruction instruction, Operand destinationOperand)

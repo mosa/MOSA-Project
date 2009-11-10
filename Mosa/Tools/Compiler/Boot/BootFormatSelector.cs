@@ -111,7 +111,12 @@ namespace Mosa.Tools.Compiler.Boot
 		/// <value>The pipeline stage order.</value>
 		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
 		{
-			get { return ((IPipelineStage)implementation).PipelineStageOrder; }
+			get 
+            {
+                if (implementation == null)
+                    return null;
+                return ((IPipelineStage)implementation).PipelineStageOrder; 
+            }
 		}
 
 		/// <summary>

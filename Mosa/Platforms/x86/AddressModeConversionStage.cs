@@ -78,9 +78,10 @@ namespace Mosa.Platforms.x86
 
 			// Create registers for different data types
             RegisterOperand eax = new RegisterOperand(op1.Type, op1.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
+            RegisterOperand storeOperand = new RegisterOperand(result.Type, result.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
 			//    RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
 
-			ctx.Result = eax;
+            ctx.Result = storeOperand;
 			ctx.Operand1 = op2;
 			ctx.Operand2 = null;
 			ctx.OperandCount = 1;

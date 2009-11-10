@@ -213,7 +213,6 @@ namespace Mosa.Platforms.x86
             Context nextBlock = SplitContext(ctx);
             Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 4);
             // Link the created Blocks together
-            LinkBlocks(newBlocks, ctx, nextBlock);
 
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, op2H);
@@ -241,6 +240,8 @@ namespace Mosa.Platforms.x86
             newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
             newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
             newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+
+            LinkBlocks(newBlocks, ctx, nextBlock);
 		}
 
 		/// <summary>
@@ -1149,15 +1150,23 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandAnd(Context ctx)
 		{
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+            Operand op0H, op1H, op2H, op0L, op1L, op2L;
+            SplitLongOperand(ctx.Result, out op0L, out op0H);
+            SplitLongOperand(ctx.Operand1, out op1L, out op1H);
+            SplitLongOperand(ctx.Operand2, out op2L, out op2H);
 
-            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
-            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
-            ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, op0H, op2H);
-            ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, op0L, op2L);
+            if (ctx.Result.StackType != StackTypeCode.Int64)
+            {
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
+                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, op0L, op2L);
+            }
+            else
+            {
+                ctx.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
+                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, op0H, op2H);
+                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, op0L, op2L);
+            }
 		}
 
 		/// <summary>
@@ -1283,7 +1292,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		private void ExpandSignedMove(Context ctx)
 		{
-			MemoryOperand op0 = ctx.Result as MemoryOperand;
+            Operand op0 = ctx.Result;
 			Operand op1 = ctx.Operand1;
 			Debug.Assert(op0 != null, @"I8 not in a memory operand!");
 			SigType I4 = new SigType(CilElementType.I4);
@@ -1755,7 +1764,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void IR.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
 		{
-			if (ctx.Result.StackType == StackTypeCode.Int64)
+			if (ctx.Operand1.StackType == StackTypeCode.Int64 || ctx.Result.StackType == StackTypeCode.Int64)
 				ExpandSignedMove(ctx);
 		}
 

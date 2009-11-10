@@ -119,8 +119,19 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Movsx(Context context)
 		{
-			if (Is32Bit(context.Operand1))
-				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+            if (Is32Bit(context.Operand1))
+            {
+                context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+            }
+            else
+            {
+                if (!(context.Result is RegisterOperand))
+                {
+                    RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
+                    context.SetInstruction(CPUx86.Instruction.MovsxInstruction, ecx, context.Operand1);
+                    context.AppendInstruction(CPUx86.Instruction.MovInstruction, context.Result, ecx);
+                }
+            }
 		}
 
 		/// <summary>
@@ -155,13 +166,31 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseSub"/> instructions.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CPUx86.IX86Visitor.SseSub(Context ctx)
+        /// <param name="context">The context.</param>
+        void CPUx86.IX86Visitor.SseSub(Context context)
 		{
-			EmitOperandConstants(ctx);
+            EmitOperandConstants(context);
 
-			// FIXME PG - 
-			// ThreeTwoAddressConversion(ctx);
+            RegisterOperand xmm0 = new RegisterOperand(context.Result.Type, SSE2Register.XMM3);
+            RegisterOperand xmm1 = new RegisterOperand(context.Operand1.Type, SSE2Register.XMM4);
+            Operand op1 = context.Result;
+            Operand op2 = context.Operand1;
+            Context before = context.InsertBefore();
+            BaseInstruction move = (op1.Type.Type == CilElementType.R8) ? (BaseInstruction)CPUx86.Instruction.MovsdInstruction : (BaseInstruction)CPUx86.Instruction.MovssInstruction;
+
+            if (!(context.Result is RegisterOperand))
+            {
+                before.AppendInstruction(move, xmm0, op1);
+                context.Result = xmm0;
+                context.AppendInstruction(move, op1, xmm0);
+            }
+
+            if (!(context.Operand1 is RegisterOperand))
+            {
+                before.AppendInstruction(move, xmm1, op2);
+                context.Operand1 = xmm1;
+                context.AppendInstruction(move, op2, xmm1);
+            }
 		}
 
 		/// <summary>

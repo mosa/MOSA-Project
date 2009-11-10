@@ -269,11 +269,11 @@ namespace Mosa.Platforms.x86
 
 			// FIXME: Do not issue a move, if the operand is already the destination register
 			if (4 == size || 2 == size || 1 == size) {
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand);
+                ctx.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand);
 				return;
 			}
 			else if (8 == size && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8)) {
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(operand.Type, SSE2Register.XMM0), operand);
+                ctx.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(operand.Type, SSE2Register.XMM0), operand);
 				return;
 			}
 			else if (8 == size && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8)) {
@@ -314,8 +314,8 @@ namespace Mosa.Platforms.x86
 				}
 
 				// Like Win32: EDX:EAX
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(U4, GeneralPurposeRegister.EAX), opL);
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(I4, GeneralPurposeRegister.EDX), opH);
+                ctx.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(U4, GeneralPurposeRegister.EAX), opL);
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(I4, GeneralPurposeRegister.EDX), opH);
 
 				return;
 			}
