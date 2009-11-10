@@ -1137,8 +1137,8 @@ namespace Mosa.Platforms.x86
 		private void ExpandNot(Context ctx)
 		{
 			Operand op0H, op1H, op0L, op1L;
-			SplitLongOperand(ctx.Operand1, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand2, out op1L, out op1H);
+			SplitLongOperand(ctx.Result, out op0L, out op0H);
+			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
 
 			ctx.SetInstruction(IR.Instruction.LogicalNotInstruction, op0H, op1H);
 			ctx.AppendInstruction(IR.Instruction.LogicalNotInstruction, op0L, op1L);

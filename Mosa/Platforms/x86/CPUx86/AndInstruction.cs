@@ -44,12 +44,12 @@ namespace Mosa.Platforms.x86.CPUx86
 		{
 			if (destination is RegisterOperand) {
 				if (source is ConstantOperand) return R_C;
-				else if (source is MemoryOperand) return R_M;
-				else if (source is RegisterOperand) return R_R;
+				if (source is MemoryOperand) return R_M;
+				if (source is RegisterOperand) return R_R;
 			}
 			else if (destination is MemoryOperand) {
-				if (source is RegisterOperand) return M_C;
-				else if (source is ConstantOperand) return M_C;
+				if (source is RegisterOperand) return M_R;
+				if (source is ConstantOperand) return M_C;
 			}
 
 			throw new ArgumentException(@"No opcode for operand type.");
