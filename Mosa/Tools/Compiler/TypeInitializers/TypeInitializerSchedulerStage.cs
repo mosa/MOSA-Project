@@ -32,11 +32,6 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		#region Data Members
 
 		/// <summary>
-		/// Holds a list of cctors call instructions.
-		/// </summary>
-		private InstructionSet _instructionSet;
-
-		/// <summary>
 		/// Hold the current context
 		/// </summary>
 		private Context _ctx;
@@ -55,8 +50,8 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// </summary>
 		public TypeInitializerSchedulerStage()
 		{
-			_instructionSet = new InstructionSet(1024);
-			_ctx = new Context(_instructionSet, -1);
+			InstructionSet = new InstructionSet(1024);
+			_ctx = CreateContext(-1);
 
 			_ctx.AppendInstruction(IR.Instruction.PrologueInstruction);
 			_ctx.Other = 0; // stacksize
@@ -127,7 +122,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 			_ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);
 			_ctx.Other = 0;
 
-			_method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", _instructionSet);
+			_method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", InstructionSet);
 		}
 
 		#endregion // IAssemblyCompilerStage Members

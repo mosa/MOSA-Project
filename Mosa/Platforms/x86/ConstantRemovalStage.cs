@@ -82,12 +82,12 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		public void Run()
 		{
-			Context ctxEpilogue = new Context(InstructionSet, FindBlock(Int32.MaxValue));
+			Context ctxEpilogue = CreateContext( FindBlock(Int32.MaxValue));
 			ctxEpilogue.GotoLast();
 
 			// Iterate all blocks and collect locals from all blocks
 			foreach (BasicBlock block in BasicBlocks)
-				ProcessInstructions(Architecture, new Context(InstructionSet, block), ctxEpilogue);
+				ProcessInstructions(Architecture, CreateContext( block), ctxEpilogue);
 		}
 
 		#endregion // IMethodCompilerStage Members

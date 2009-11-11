@@ -53,7 +53,7 @@ namespace Mosa.Platforms.x86
 		public override void Run()
 		{
 			foreach (BasicBlock block in BasicBlocks)
-				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = CreateContext( block); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null)
 						if (!ctx.Ignore && ctx.Instruction is CPUx86.IX86Instruction)
 							if (ctx.Result is MemoryOperand && ctx.Operand1 is MemoryOperand)

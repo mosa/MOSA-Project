@@ -352,7 +352,7 @@ namespace Mosa.Runtime.CompilerFramework
 			int ubound = Int32.MaxValue;
 
 			foreach (int index in op.Definitions) {
-				Context ctx = new Context(InstructionSet, index);
+				Context ctx = CreateContext(index);
 				if (ctx.Offset > defLine) {
 					ubound = ctx.Offset;
 					break;
@@ -360,7 +360,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			foreach (int index in op.Uses) {
-				Context ctx = new Context(InstructionSet, index);
+				Context ctx = CreateContext(index);
 				if (ctx.Offset > defLine && ctx.Offset < ubound) {
 					result = ctx.Offset;
 				}
@@ -382,7 +382,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Now find the last use between defLine and ubound
 			foreach (int index in op.Uses) {
-				Context ctx = new Context(InstructionSet, index);
+				Context ctx = CreateContext(index);
 				if (ctx.Offset > line && ctx.Offset < end)
 					result = ctx.Offset;
 			}
@@ -414,7 +414,7 @@ namespace Mosa.Runtime.CompilerFramework
 			int offset = 0;
 
 			foreach (BasicBlock block in BasicBlocks)
-				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
 					ctx.Offset = offset++;
 		}
 

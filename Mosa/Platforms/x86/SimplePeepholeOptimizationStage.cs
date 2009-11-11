@@ -56,7 +56,7 @@ namespace Mosa.Platforms.x86
 		{
 			Context prev = null;
 			foreach (BasicBlock block in BasicBlocks) {
-				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
+				for (Context ctx = CreateContext( block); !ctx.EndOfInstruction; ctx.GotoNext()) {
 					if (ctx.Instruction != null) {
 						if (!ctx.Ignore) {
 							if (prev != null) {
