@@ -25,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		private BasicBlock firstBlock;
+		private BasicBlock _first;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -107,13 +107,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
-
 			// Retreive the first block
-			firstBlock = FindBlock(-1);
+			_first = FindBlock(-1);
 
 			// Create list for loops
 			_loops = new List<ConnectedBlocks>();
@@ -126,6 +123,11 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Order the Blocks based on loop depth
 			DetermineBlockOrder();
+
+			_loops = null;
+			_depths = null;
+
+
 		}
 
 		/// <summary>
@@ -135,7 +137,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			// Create queue for first iteration 
 			Queue<ConnectedBlocks> queue = new Queue<ConnectedBlocks>();
-			queue.Enqueue(new ConnectedBlocks(null, firstBlock));
+			queue.Enqueue(new ConnectedBlocks(null, _first));
 
 			// Flag per basic block
 			Dictionary<BasicBlock, int> visited = new Dictionary<BasicBlock, int>(BasicBlocks.Count);
@@ -174,18 +176,30 @@ namespace Mosa.Runtime.CompilerFramework
 					queue.Enqueue(new ConnectedBlocks(at.to, successor));
 			}
 
-			// Create two-dimensional bit set of Blocks belonging to loops
-			BitArray bitSet = new BitArray(loopHeaderIndexes.Count * BasicBlocks.Count, false);
+			// Create two-dimensional bit set of blocks belonging to loops
+			//BitArray bitSet = new BitArray(loopHeaderIndexes.Count * BasicBlocks.Count, false);
+
+			Dictionary<BasicBlock, List<BasicBlock>> count = new Dictionary<BasicBlock, List<BasicBlock>>();
 
 			// Create stack of Blocks for next step of iterations
 			Stack<BasicBlock> stack = new Stack<BasicBlock>();
 
 			// Second set of iterations
 			foreach (ConnectedBlocks loop in _loops) {
-				int index = loopHeaderIndexes[loop.to];
 
-				// Add loop-tail to bit set
-				bitSet[(index * BasicBlocks.Count) + loop.to.Index] = true;
+				// Add loop-tail to list
+				List<BasicBlock> current;
+
+				if (!count.ContainsKey(loop.to)) {
+					current = new List<BasicBlock>();
+					current.Add(loop.to);
+					count.Add(loop.to, current);
+				}
+				else {
+					current = count[loop.to];
+					if (!current.Contains(loop.to))
+						current.Add(loop.to);
+				}
 
 				//Console.WriteLine(index.ToString() + " : B" + loop.to.Index.ToString());
 
@@ -198,7 +212,7 @@ namespace Mosa.Runtime.CompilerFramework
 				while (stack.Count != 0) {
 					BasicBlock at = stack.Pop();
 
-					// already visited, continue loop
+					// Already visited, continue loop
 					if (visited.ContainsKey(at))
 						continue;
 
@@ -206,8 +220,9 @@ namespace Mosa.Runtime.CompilerFramework
 					if (!visited.ContainsKey(at))
 						visited.Add(at, 0);
 
-					// Set predecessor to bit set
-					bitSet[(index * BasicBlocks.Count) + at.Index] = true;
+					// Add predecessor to list (needed for count)
+					if (!current.Contains(at))
+						current.Add(at);
 
 					//Console.WriteLine(index.ToString() + " : B" + at.Index.ToString());
 
@@ -219,17 +234,11 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Last step, assign LoopIndex and LoopDepth to each basic block
-			foreach (BasicBlock block in BasicBlocks) {
-				// Loop depth is the number of bits that are set for the according block id
-				int depth = 0;
-
-				for (int i = 0; i < loopHeaderIndexes.Count; i++)
-					if (bitSet[(i * BasicBlocks.Count) + block.Index])
-						depth++;
-
-				// Set loop depth
-				_depths.Add(block, depth);
-			}
+			foreach (BasicBlock block in BasicBlocks)
+				if (count.ContainsKey(block))
+					_depths.Add(block, count[block].Count);
+				else
+					_depths.Add(block, 0);
 		}
 
 		#region Priority class
@@ -306,7 +315,7 @@ namespace Mosa.Runtime.CompilerFramework
 			SortedList<Priority, BasicBlock> workList = new SortedList<Priority, BasicBlock>();
 
 			// Start worklist with first block
-			workList.Add(new Priority(0, 0), firstBlock);
+			workList.Add(new Priority(0, 0), _first);
 
 			// Order value helps sorted the worklist
 			int order = 0;
