@@ -36,9 +36,17 @@ namespace Mosa.QuickTest
 		/// <param name="a">A.</param>
 		/// <param name="b">The b.</param>
 		/// <returns></returns>
-		static bool Test(uint expect, byte a, byte b)
-		{
-			return expect == (a + b);
-		}
+        static long AddPtr(long a, long b)
+        {
+            if (a > 2)
+                b = a * 100;
+            else
+                b = a * 1000;
+
+            if (b > a)
+                return (a / b + a);
+
+            return (a + b);
+        }
 	}
 }

@@ -113,7 +113,7 @@ namespace Mosa.Runtime.CompilerFramework
                 nodeName = block.ToString();
                 //nodeName = nodeName.Replace("-", "_");
 
-                nodeContent += "<tr><td bgcolor=\"#DDDDDD\" align=\"center\" colspan=\"3\"><font face=\"Courier\">L_" + block.Label.ToString("x4") + "</font></td></tr>";
+                nodeContent += "<tr><td bgcolor=\"#DDDDDD\" align=\"center\" colspan=\"4\"><font face=\"Courier\">L_" + block.Label.ToString("x4") + "</font></td></tr>";
 
                 int field = 0;
                 int i = 0;
@@ -133,10 +133,10 @@ namespace Mosa.Runtime.CompilerFramework
                     else if (inst.StartsWith("IR"))
                         color = "#ff00005f";
                     else
-                        color = "#00ff005f";
-                        
+                        color = "#cfdbf0ff";
 
-                    nodeContent += "<tr><td bgcolor=\"white\" align=\"right\">" + (i++) + "</td><td bgcolor=\"" + color + "\" align=\"center\" colspan=\"2\"><font face=\"Courier\">" + inst + "</font></td></tr>";
+
+                    nodeContent += "<tr height=\"20\"><td bgcolor=\"white\" align=\"right\" width=\"20\"><img src=\"icon.png\"/></td><td bgcolor=\"white\" align=\"right\">" + (i++) + "</td><td bgcolor=\"" + color + "\" align=\"center\" colspan=\"2\"><font face=\"Courier\">" + inst + "</font></td></tr>";
 
                     ++field;
                 }
