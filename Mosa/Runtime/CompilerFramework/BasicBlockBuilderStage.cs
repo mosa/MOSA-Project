@@ -66,7 +66,7 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
 			ctx.SetBranch(0);
 			ctx.Label = -1;
-			_prologue = new BasicBlock(-1, ctx.Index);
+			_prologue = CreateBlock(-1, ctx.Index);
 
 			// Create the epilogue block
 			ctx = new Context(InstructionSet, -1);
@@ -74,18 +74,12 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.AppendInstruction(null);
 			ctx.Ignore = true;
 			ctx.Label = Int32.MaxValue;
-			_epilogue = new BasicBlock(Int32.MaxValue, ctx.Index);
-
-			MethodCompiler.BasicBlocks = new List<BasicBlock>();
-			BasicBlocks = MethodCompiler.BasicBlocks;
-			BasicBlocks.Add(_prologue);
+			_epilogue = CreateBlock(Int32.MaxValue, ctx.Index);
 
 			SplitIntoBlocks(0);
 
 			// Link all the blocks together
 			BuildBlockLinks(_prologue);
-
-			BasicBlocks.Add(_epilogue);
 		}
 
 		/// <summary>
@@ -137,7 +131,7 @@ namespace Mosa.Runtime.CompilerFramework
 				FlowControl flow;
 
 				if (targets.ContainsKey(ctx.Label)) {
-					BasicBlocks.Add(new BasicBlock(ctx.Label, ctx.Index));
+					CreateBlock(ctx.Label, ctx.Index);
 
 					if (!ctx.IsFirstInstruction) {
 						Context prev = ctx.Previous;
@@ -163,8 +157,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Debug.Assert(targets.Count <= 1);
 
 			if (FindBlock(0) == null)
-				BasicBlocks.Add(new BasicBlock(0, index));
-
+				CreateBlock(0, index);
 		}
 
 		/// <summary>

@@ -104,7 +104,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected BasicBlock CreateBlock(int label, int index)
 		{
-			return new BasicBlock(label, index);
+			BasicBlock basicBlock = new BasicBlock(label, index);
+			BasicBlocks.Add(basicBlock);
+			return basicBlock;
 		}
 
 		/// <summary>
@@ -114,7 +116,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected BasicBlock CreateBlock(int label)
 		{
-			return new BasicBlock(label);
+			BasicBlock basicBlock = new BasicBlock(label, -1);
+			BasicBlocks.Add(basicBlock);
+			return basicBlock;
 		}
 
 		#endregion

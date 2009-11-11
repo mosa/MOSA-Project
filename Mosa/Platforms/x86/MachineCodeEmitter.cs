@@ -165,7 +165,7 @@ namespace Mosa.Platforms.x86
 			int relOffset;
 
 			if (_labels.TryGetValue(label, out pos)) {
-				Debug.Assert(pos == currentPosition);
+//				Debug.Assert(pos == currentPosition);
 				if (pos != currentPosition)
 					throw new ArgumentException(@"Label already defined for another code point.", @"label");
 			}

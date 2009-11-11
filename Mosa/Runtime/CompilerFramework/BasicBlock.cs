@@ -56,17 +56,6 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			_nextBlocks = new List<BasicBlock>();
 			_previousBlocks = new List<BasicBlock>();
-			Index = -1;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="BasicBlock"/>.
-		/// </summary>
-		/// <param name="label">The label of the block (IL instruction offset from the method start.)</param>
-		public BasicBlock(int label) : 
-			this()
-		{
-			_label = label;
 		}
 
 		/// <summary>

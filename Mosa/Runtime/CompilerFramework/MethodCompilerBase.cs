@@ -123,7 +123,7 @@ namespace Mosa.Runtime.CompilerFramework
 			_parameters = new List<Operand>(new Operand[_method.Parameters.Count]);
 			_type = type;
 			_nextStackSlot = 0;
-			_basicBlocks = null; // this will be set later
+			_basicBlocks = new List<BasicBlock>();
 			_instructionSet = null; // this will be set later
 		}
 
