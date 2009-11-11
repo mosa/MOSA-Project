@@ -104,7 +104,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected BasicBlock CreateBlock(int label, int index)
 		{
-			BasicBlock basicBlock = new BasicBlock(label, index);
+			// HACK: BasicBlock.Count for the sequence works for now since blocks are not removed
+			BasicBlock basicBlock = new BasicBlock(BasicBlocks.Count, label, index);
 			BasicBlocks.Add(basicBlock);
 			return basicBlock;
 		}
@@ -116,9 +117,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected BasicBlock CreateBlock(int label)
 		{
-			BasicBlock basicBlock = new BasicBlock(label, -1);
-			BasicBlocks.Add(basicBlock);
-			return basicBlock;
+			return CreateBlock(label, -1);
 		}
 
 		#endregion

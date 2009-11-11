@@ -31,6 +31,11 @@ namespace Mosa.Runtime.CompilerFramework
 		private int _label;
 
 		/// <summary>
+		/// The creation sequence number of the block; unique within a method. (For use with stage that require an integer id for blocks starting from 0).
+		/// </summary>
+		private int _sequence;
+
+		/// <summary>
 		/// Links this block to all Blocks invoked by the final branch instruction.
 		/// </summary>
 		/// <remarks>
@@ -61,11 +66,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Initializes a new instance of <see cref="BasicBlock"/>.
 		/// </summary>
+		/// <param name="sequence">The sequence.</param>
 		/// <param name="label">The label of the block (IL instruction offset from the method start.)</param>
 		/// <param name="index">The index.</param>
-		public BasicBlock(int label, int index) :
+		public BasicBlock(int sequence, int label, int index) :
 			this()
 		{
+			_sequence = sequence;
 			_label = label;
 			Index = index;
 		}
@@ -81,6 +88,15 @@ namespace Mosa.Runtime.CompilerFramework
 		public int Label
 		{
 			get { return _label; }
+		}
+
+		/// <summary>
+		/// Retrieves the label, which uniquely identifies this block.
+		/// </summary>
+		/// <value>The label.</value>
+		public int Sequence
+		{
+			get { return _sequence; }
 		}
 
 		/// <summary>
