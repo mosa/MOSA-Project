@@ -66,19 +66,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Runs the specified method compiler.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
-
 			// Allocate a list of locals
 			List<StackOperand> locals = new List<StackOperand>();
 
-			// Architecture
-			IArchitecture arch = compiler.Architecture;
-
 			// Retrieve the calling convention of the method
-			ICallingConvention cc = compiler.Architecture.GetCallingConvention(compiler.Method.Signature.CallingConvention);
+			ICallingConvention cc = Architecture.GetCallingConvention(MethodCompiler.Method.Signature.CallingConvention);
 			Debug.Assert(null != cc, @"Failed to retrieve the calling convention of the method.");
 
 			// Iterate all Blocks and collect locals From all Blocks
@@ -91,12 +85,12 @@ namespace Mosa.Runtime.CompilerFramework
 			// Now we assign increasing stack offsets to each variable
 			_localsSize = LayoutVariables(locals, cc, cc.OffsetOfFirstLocal, 1);
 			if (TRACING.TraceInfo == true) {
-				Trace.WriteLine(String.Format(@"Stack layout for method {0}", compiler.Method));
+				Trace.WriteLine(String.Format(@"Stack layout for method {0}", MethodCompiler.Method));
 				LogOperands(locals);
 			}
 
 			// Layout parameters
-			LayoutParameters(compiler, cc);
+			LayoutParameters(MethodCompiler, cc);
 
 			// Create a prologue instruction
 			Context prologueCtx = new Context(InstructionSet, FindBlock(-1)).InsertBefore();

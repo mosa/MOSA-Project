@@ -17,9 +17,9 @@ using CIL = Mosa.Runtime.CompilerFramework.CIL;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// Basic base class for other stages
+	/// Basic base class for pipeline stages
 	/// </summary>
-	public abstract class BaseStage 
+	public abstract class BaseStage
 	{
 		#region Data members
 
@@ -27,6 +27,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Hold the method compiler
 		/// </summary>
 		protected IMethodCompiler MethodCompiler;
+
+		/// <summary>
+		/// The architecture of the compilation process.
+		/// </summary>
+		protected IArchitecture Architecture;
 
 		/// <summary>
 		/// Holds the instruction set
@@ -40,13 +45,13 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region Methods
+		#region IMethodCompilerStage members
 
 		/// <summary>
-		/// Sets the internals.
+		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		protected void SetInternals(IMethodCompiler compiler)
+		public void Setup(IMethodCompiler compiler)
 		{
 			if (compiler == null)
 				throw new ArgumentNullException(@"compiler");
@@ -54,7 +59,12 @@ namespace Mosa.Runtime.CompilerFramework
 			MethodCompiler = compiler;
 			InstructionSet = compiler.InstructionSet;
 			BasicBlocks = compiler.BasicBlocks;
+			Architecture = compiler.Architecture;
 		}
+
+		#endregion
+
+		#region Methods
 
 		/// <summary>
 		/// Gets block by label
@@ -66,17 +76,45 @@ namespace Mosa.Runtime.CompilerFramework
 			return MethodCompiler.FromLabel(label);
 		}
 
-		#endregion
-
-		#region IMethodCompilerStage members
+		/// <summary>
+		/// Creates the context.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <returns></returns>
+		protected Context CreateContext(BasicBlock block)
+		{
+			return new Context(InstructionSet, block);
+		}
 
 		/// <summary>
-		/// Performs stage specific processing on the compiler context.
+		/// Creates the context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public virtual void Run(IMethodCompiler compiler)
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		protected Context CreateContext(int index)
 		{
-			SetInternals(compiler);
+			return new Context(InstructionSet, index);
+		}
+
+		/// <summary>
+		/// Creates the block.
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		protected BasicBlock CreateBlock(int label, int index)
+		{
+			return new BasicBlock(label, index);
+		}
+
+		/// <summary>
+		/// Creates the block.
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <returns></returns>
+		protected BasicBlock CreateBlock(int label)
+		{
+			return new BasicBlock(label);
 		}
 
 		#endregion

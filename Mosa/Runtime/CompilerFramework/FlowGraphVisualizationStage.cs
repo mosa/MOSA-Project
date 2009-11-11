@@ -82,15 +82,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
+			if (!methodCount.ContainsKey(MethodCompiler.Method.Name))
+				methodCount[MethodCompiler.Method.Name] = 0;
 
-			if (!methodCount.ContainsKey(compiler.Method.Name))
-				methodCount[compiler.Method.Name] = 0;
-
-			++methodCount[compiler.Method.Name];
+			++methodCount[MethodCompiler.Method.Name];
 
 			// Retreive the first block
 			firstBlock = FindBlock(-1);
@@ -99,9 +96,9 @@ namespace Mosa.Runtime.CompilerFramework
 			workList.Push(firstBlock);
 			workArray = new BitArray(BasicBlocks.Count);
 
-			IPipelineStage previousStage = compiler.GetPreviousStage(typeof(IMethodCompilerStage));
-			dotFile.WriteLine("digraph " + compiler.Method.Name + "_FlowGraph {");
-			dotFile.WriteLine("label = \"Method: " + compiler.Method.Name + "(" + compiler.Method.Signature + ") after " + previousStage.Name + "\";");
+			IPipelineStage previousStage = MethodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
+			dotFile.WriteLine("digraph " + MethodCompiler.Method.Name + "_FlowGraph {");
+			dotFile.WriteLine("label = \"Method: " + MethodCompiler.Method.Name + "(" + MethodCompiler.Method.Signature + ") after " + previousStage.Name + "\";");
 			dotFile.WriteLine("graph [rankdir = \"TB\"];");
 
 			string nodes = string.Empty;

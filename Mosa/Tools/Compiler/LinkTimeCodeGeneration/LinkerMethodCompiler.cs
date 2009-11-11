@@ -33,7 +33,8 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 		{
 			InstructionSet = instructionSet;
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
-				new BasicBlockBuilderStage()
+				new BasicBlockBuilderStage(),
+				new CodeGenerationStage(),
             });
 			compiler.Architecture.ExtendMethodCompilerPipeline(this.Pipeline);
 		}

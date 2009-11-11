@@ -21,9 +21,9 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Data members
 
 		/// <summary>
-		/// The block index.
+		/// The index of the block within the InstructionSet
 		/// </summary>
-		private int _index;
+		public int Index;
 
 		/// <summary>
 		/// The label of the block. (For simplicity this is actually the original instruction offset.)
@@ -56,7 +56,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			_nextBlocks = new List<BasicBlock>();
 			_previousBlocks = new List<BasicBlock>();
-			_index = -1;
+			Index = -1;
 		}
 
 		/// <summary>
@@ -78,22 +78,12 @@ namespace Mosa.Runtime.CompilerFramework
 			this()
 		{
 			_label = label;
-			_index = index;
+			Index = index;
 		}
 
 		#endregion // Construction
 
 		#region Properties
-
-		/// <summary>
-		/// Gets/Sets the index of the basic block.
-		/// </summary>
-		/// <value>The index.</value>
-		public int Index
-		{
-			get { return _index; }
-			set { _index = value; }
-		}
 
 		/// <summary>
 		/// Retrieves the label, which uniquely identifies this block.

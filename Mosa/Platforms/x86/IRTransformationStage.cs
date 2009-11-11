@@ -87,8 +87,8 @@ namespace Mosa.Platforms.x86
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 			int stackSize = (int)ctx.Other;
 
-			if (Compiler.Method.Signature.ReturnType.Type == CilElementType.I8 ||
-				Compiler.Method.Signature.ReturnType.Type == CilElementType.U8) {
+			if (MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.I8 ||
+				MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.U8) {
 
 				// add esp, -localsSize
 				ctx.SetInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
@@ -365,11 +365,11 @@ namespace Mosa.Platforms.x86
 			 * the possibility to identify roots into the managed heap. 
 			 */
 			// mov [ebp-4], token
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, Compiler.Method.Token));
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, MethodCompiler.Method.Token));
 
 			// Do not save EDX for non-int64 return values
-			if (Compiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
-				Compiler.Method.Signature.ReturnType.Type != CilElementType.U8) {
+			if (MethodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
+				MethodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8) {
 				// push edx
 				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 			}
@@ -386,7 +386,7 @@ namespace Mosa.Platforms.x86
 			//ctx.Remove();
 
 			if (op != null) {
-				ICallingConvention cc = Architecture.GetCallingConvention(Compiler.Method.Signature.CallingConvention);
+				ICallingConvention cc = Architecture.GetCallingConvention(MethodCompiler.Method.Signature.CallingConvention);
 				cc.MoveReturnValue(ctx, op);
 			}
 

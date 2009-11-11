@@ -19,7 +19,7 @@ namespace Mosa.Tools.Compiler
 	/// Abstract base class for method compiler stage wrappers.
 	/// </summary>
 	/// <typeparam name="WrappedType">The type of the wrapped type.</typeparam>
-	public abstract class MethodCompilerStageWrapper<WrappedType> : IMethodCompilerStage, IHasOptions, IPipelineStage
+	public abstract class MethodCompilerStageWrapper<WrappedType> : BaseStage, IMethodCompilerStage, IHasOptions, IPipelineStage
 		where WrappedType : IMethodCompilerStage, new()
 	{
 
@@ -77,11 +77,12 @@ namespace Mosa.Tools.Compiler
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			if (Enabled)
-				wrapped.Run(compiler);
+			if (Enabled) {
+				wrapped.Setup(MethodCompiler);
+				wrapped.Run();
+			}
 		}
 
 		/// <summary>

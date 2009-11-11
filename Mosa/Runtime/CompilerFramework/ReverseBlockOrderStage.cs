@@ -45,11 +45,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
-
 			for (int i = 1; i <= BasicBlocks.Count / 2; i++) {
 				BasicBlock temp = BasicBlocks[i];
 				BasicBlocks[i] = BasicBlocks[BasicBlocks.Count - i];

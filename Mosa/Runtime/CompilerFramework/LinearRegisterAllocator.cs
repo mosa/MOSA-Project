@@ -66,11 +66,6 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Data members
 
 		/// <summary>
-		/// Holds the architecture to allocate statements with.
-		/// </summary>
-		private IArchitecture _architecture;
-
-		/// <summary>
 		/// List of live ranges found in the method.
 		/// </summary>
 		private List<LiveRange> _liveRanges = new List<LiveRange>();
@@ -106,14 +101,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
-
-			// Retrieve the architecture
-			_architecture = compiler.Architecture;
-
 			// 1st Pass: Number all instructions in the order of appearance
 			NumberInstructions();
 
@@ -296,7 +285,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		private List<Register> FillRegisterList()
 		{
-			return new List<Register>(_architecture.RegisterSet);
+			return new List<Register>(Architecture.RegisterSet);
 		}
 
 		/// <summary>

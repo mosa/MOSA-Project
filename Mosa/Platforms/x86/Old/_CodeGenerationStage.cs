@@ -66,7 +66,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		protected override void BeginGenerate()
 		{
-			_codeEmitter = new _MachineCodeEmitter(_compiler, _codeStream, _compiler.Linker);
+			_codeEmitter = new _MachineCodeEmitter(MethodCompiler, _codeStream, MethodCompiler.Linker);
 		}
 
 		/// <summary>
@@ -836,34 +836,6 @@ namespace Mosa.Platforms.x86
 		}
 
 		#endregion // Internal Helpers
-
-		/// <summary>
-		/// Gets the unsigned condition code.
-		/// </summary>
-		/// <param name="conditionCode">The condition code to get an unsigned form from.</param>
-		/// <returns>The unsigned form of the given condition code.</returns>
-		private IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
-		{
-			IR.ConditionCode cc = conditionCode;
-			switch (conditionCode) {
-				case IR.ConditionCode.Equal: break;
-				case IR.ConditionCode.NotEqual: break;
-				case IR.ConditionCode.GreaterOrEqual: cc = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-				case IR.ConditionCode.GreaterThan: cc = IR.ConditionCode.UnsignedGreaterThan; break;
-				case IR.ConditionCode.LessOrEqual: cc = IR.ConditionCode.UnsignedLessOrEqual; break;
-				case IR.ConditionCode.LessThan: cc = IR.ConditionCode.UnsignedLessThan; break;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: break;
-				case IR.ConditionCode.UnsignedGreaterThan: break;
-				case IR.ConditionCode.UnsignedLessOrEqual: break;
-				case IR.ConditionCode.UnsignedLessThan: break;
-				default:
-					throw new NotSupportedException();
-			}
-			return cc;
-		}
-
-
-
 
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.

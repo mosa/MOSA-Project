@@ -58,12 +58,6 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Data members
 
 		/// <summary>
-		/// The architecture to create the PhiInstructions.
-		/// </summary>
-		private IArchitecture _architecture;
-
-
-		/// <summary>
 		/// Holds the dominance frontier Blocks of the stage.
 		/// </summary>
 		private BasicBlock[] _dominanceFrontierBlocks;
@@ -107,16 +101,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
-
-			_dominanceProvider = (IDominanceProvider)compiler.GetPreviousStage(typeof(IDominanceProvider));
+			_dominanceProvider = (IDominanceProvider)MethodCompiler.GetPreviousStage(typeof(IDominanceProvider));
 			Debug.Assert(null != _dominanceProvider, @"SSA Conversion requires a dominance provider.");
 			if (null == _dominanceProvider)
 				throw new InvalidOperationException(@"SSA Conversion requires a dominance provider.");
-			_architecture = compiler.Architecture;
 
 			// Allocate space for live outs
 			_liveness = new IDictionary<StackOperand, StackOperand>[BasicBlocks.Count];
@@ -135,13 +125,13 @@ namespace Mosa.Runtime.CompilerFramework
 			 */
 			IDictionary<StackOperand, StackOperand> liveIn = new Dictionary<StackOperand, StackOperand>(s_comparer);
 			int i = 0;
-			if (compiler.Method.Signature.HasThis) {
-				StackOperand param = (StackOperand)compiler.GetParameterOperand(0);
+			if (MethodCompiler.Method.Signature.HasThis) {
+				StackOperand param = (StackOperand)MethodCompiler.GetParameterOperand(0);
 				liveIn.Add(param, param);
 				i++;
 			}
-			for (int j = 0; j < compiler.Method.Parameters.Count; j++) {
-				StackOperand param = (StackOperand)compiler.GetParameterOperand(i + j);
+			for (int j = 0; j < MethodCompiler.Method.Parameters.Count; j++) {
+				StackOperand param = (StackOperand)MethodCompiler.GetParameterOperand(i + j);
 				liveIn.Add(param, param);
 			}
 

@@ -32,14 +32,11 @@ namespace Mosa.Jit.SimpleJit
             get { return @"TrampolineBuilderStage"; }
         }
 
-        /// <summary>
-        /// Performs stage specific processing on the compiler context.
-        /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public override void Run(IMethodCompiler compiler)
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+        public void Run()
         {
-			base.Run(compiler);
-
             // Nothing to do here, the jit already gives us a list of instructions 
             // we need to compile so we don't have to do anything here.
         }

@@ -47,11 +47,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
-
 			// FIXME PG - this is too complex to modify at the moment. It's not used so this will be tabled until later.
 
 			//foreach (BasicBlock block in blockProvider) {

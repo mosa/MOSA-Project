@@ -57,11 +57,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
-
 			// Create the prologue block
 			Context ctx = new Context(InstructionSet, -1);
 			// Add a jump instruction to the first block from the prologue
@@ -79,8 +76,8 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.Label = Int32.MaxValue;
 			_epilogue = new BasicBlock(Int32.MaxValue, ctx.Index);
 
-			compiler.BasicBlocks = new List<BasicBlock>();
-			BasicBlocks = compiler.BasicBlocks;
+			MethodCompiler.BasicBlocks = new List<BasicBlock>();
+			BasicBlocks = MethodCompiler.BasicBlocks;
 			BasicBlocks.Add(_prologue);
 
 			SplitIntoBlocks(0);

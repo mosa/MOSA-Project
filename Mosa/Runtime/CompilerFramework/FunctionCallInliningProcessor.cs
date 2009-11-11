@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Determines if the target of a function call can be inlined.
 	/// </summary>
-	public sealed class FunctionCallInliningProcessor : IMethodCompilerStage, IPipelineStage
+	public sealed class FunctionCallInliningProcessor : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 
 		#region Construction
@@ -55,8 +55,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(IMethodCompiler compiler)
+		public void Run()
 		{
 		}
 

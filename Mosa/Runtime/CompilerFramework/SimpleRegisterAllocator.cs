@@ -45,11 +45,6 @@ namespace Mosa.Runtime.CompilerFramework
 		private Context[] _activeOpLastUse;
 
 		/// <summary>
-		/// The compilation target architecture.
-		/// </summary>
-		private IArchitecture _architecture;
-
-		/// <summary>
 		/// Holds the entire register set of the compilation target architecture.
 		/// </summary>
 		private Register[] _registerSet;
@@ -81,12 +76,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-
-			_architecture = compiler.Architecture;
-			_registerSet = _architecture.RegisterSet;
+			_registerSet = Architecture.RegisterSet;
 			_activeOperands = new Operand[_registerSet.Length];
 			Debug.Assert(0 != _activeOperands.Length, @"No registers in the architecture?");
 			_activeOpLastUse = new Context[_registerSet.Length];

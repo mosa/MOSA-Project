@@ -84,25 +84,22 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
-
 			// The size of the code in bytes
 			CIL.MethodHeader header = new CIL.MethodHeader();
 
-			using (Stream code = compiler.GetInstructionStream()) {
+			using (Stream code = MethodCompiler.GetInstructionStream()) {
 
 				// Initalize the instruction, setting the initalize size to 10 times the code stream
-				compiler.InstructionSet = new InstructionSet((int)code.Length * 10);
+				MethodCompiler.InstructionSet = new InstructionSet((int)code.Length * 10);
 
 				// update the base class 
-				InstructionSet = compiler.InstructionSet;
+				InstructionSet = MethodCompiler.InstructionSet;
 
 				using (BinaryReader reader = new BinaryReader(code)) {
-					_compiler = compiler;
-					_method = compiler.Method;
+					_compiler = MethodCompiler;
+					_method = MethodCompiler.Method;
 					_codeReader = reader;
 
 					ReadMethodHeader(reader, ref header);
@@ -112,11 +109,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						StandAloneSigRow row;
 						IMetadataProvider md = _method.Module.Metadata;
 						md.Read(header.localsSignature, out row);
-						compiler.SetLocalVariableSignature(LocalVariableSignature.Parse(md, row.SignatureBlobIdx));
+						MethodCompiler.SetLocalVariableSignature(LocalVariableSignature.Parse(md, row.SignatureBlobIdx));
 					}
 
 					/* Decode the instructions */
-					Decode(compiler, ref header);
+					Decode(MethodCompiler, ref header);
 
 					// When we leave, the operand stack must only contain the locals...
 					//Debug.Assert(_operandStack.Count == _method.Locals.Count);

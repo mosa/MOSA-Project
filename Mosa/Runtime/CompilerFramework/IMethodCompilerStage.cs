@@ -29,10 +29,15 @@ namespace Mosa.Runtime.CompilerFramework
 	public interface IMethodCompilerStage
 	{
 		/// <summary>
-		/// Performs stage specific processing on the compiler context.
+		/// Setup stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>
-		void Run(IMethodCompiler compiler);
+		void Setup(IMethodCompiler compiler);
+
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		void Run();
 
 	}
 }

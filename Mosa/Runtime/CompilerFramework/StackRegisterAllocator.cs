@@ -101,13 +101,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
-
 			// Prepare the registers used for the evaluation stack
-			this.PrepareEvaluationStack(compiler.Architecture);
+			this.PrepareEvaluationStack(Architecture);
 
 			foreach (BasicBlock block in BasicBlocks)
 				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())

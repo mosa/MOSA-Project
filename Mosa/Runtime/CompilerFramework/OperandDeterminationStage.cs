@@ -26,10 +26,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		protected IArchitecture Architecture;
-		/// <summary>
-		/// 
-		/// </summary>
 		private BasicBlock _firstBlock;
 		/// <summary>
 		/// 
@@ -75,11 +71,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
-
 			_firstBlock = FindBlock(-1);
 			_unprocessed = new Stack<BasicBlock>();
 			_stack = new Stack<List<Operand>>();
@@ -95,7 +88,7 @@ namespace Mosa.Runtime.CompilerFramework
 				if (!_processed.ContainsKey(block)) {
 					List<Operand> currentStack = GetCurrentStack(stack);
 
-					ProcessInstructions(block, currentStack, compiler);
+					ProcessInstructions(block, currentStack, MethodCompiler);
 					_processed.Add(block, 0);
 
 					foreach (BasicBlock nextBlock in block.NextBlocks)
@@ -114,7 +107,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 						if (block.Label == Int32.MaxValue) {
 							List<Operand> stack = new List<Operand>();
-							ProcessInstructions(block, stack, compiler);
+							ProcessInstructions(block, stack, MethodCompiler);
 						}
 						else
 							Console.WriteLine(block);

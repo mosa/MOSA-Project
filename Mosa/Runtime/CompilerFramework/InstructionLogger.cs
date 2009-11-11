@@ -61,22 +61,19 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
-
 			// Previous stage
-			IPipelineStage prevStage = compiler.GetPreviousStage(typeof(IMethodCompilerStage));
+			IPipelineStage prevStage = MethodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
 
 			// Do not dump internal methods
-			if (compiler.Method.Name.Contains("<$>"))
+			if (MethodCompiler.Method.Name.Contains("<$>"))
 				return;
 
 			// Line number
 			int index = 1;
 
-			Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", compiler.Method, prevStage.Name));
+			Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", MethodCompiler.Method, prevStage.Name));
 
 			foreach (BasicBlock block in BasicBlocks) {
 				Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));

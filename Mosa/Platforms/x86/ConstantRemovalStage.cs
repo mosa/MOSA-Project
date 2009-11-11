@@ -80,19 +80,14 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Runs the specified method compiler.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(IMethodCompiler compiler)
+		public void Run()
 		{
-			base.Run(compiler);
-
-			IArchitecture arch = compiler.Architecture;
-
 			Context ctxEpilogue = new Context(InstructionSet, FindBlock(Int32.MaxValue));
 			ctxEpilogue.GotoLast();
 
 			// Iterate all blocks and collect locals from all blocks
 			foreach (BasicBlock block in BasicBlocks)
-				ProcessInstructions(arch, new Context(InstructionSet, block), ctxEpilogue);
+				ProcessInstructions(Architecture, new Context(InstructionSet, block), ctxEpilogue);
 		}
 
 		#endregion // IMethodCompilerStage Members

@@ -149,10 +149,10 @@ namespace Mosa.Runtime.Linker
 		/// <value>The output file.</value>
 		public string OutputFile
 		{
-			get { return this._outputFile; }
+			get { return _outputFile; }
 			set
 			{
-				this._outputFile = value;
+				_outputFile = value;
 			}
 		}
 
@@ -180,7 +180,7 @@ namespace Mosa.Runtime.Linker
 		/// <value>The symbol collection.</value>
 		public ICollection<LinkerSymbol> Symbols
 		{
-			get { return this._symbols.Values; }
+			get { return _symbols.Values; }
 		}
 
 		/// <summary>
@@ -228,7 +228,7 @@ namespace Mosa.Runtime.Linker
 				LinkerSymbol symbol = new LinkerSymbol(name, section, stream.Position);
 
 				// Save the symbol for later use
-				this._symbols.Add(symbol.Name, symbol);
+				_symbols.Add(symbol.Name, symbol);
 
 				// Wrap the stream to catch premature disposal
 				stream = new LinkerStream(symbol, stream, size);
@@ -289,7 +289,7 @@ namespace Mosa.Runtime.Linker
 				throw new ArgumentNullException(@"symbolName");
 
 			LinkerSymbol result;
-			if (!this._symbols.TryGetValue(symbolName, out result))
+			if (!_symbols.TryGetValue(symbolName, out result))
 				throw new ArgumentException(@"Symbol not compiled.", @"member");
 
 			return result;

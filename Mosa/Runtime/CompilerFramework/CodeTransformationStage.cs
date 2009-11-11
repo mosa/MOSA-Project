@@ -30,16 +30,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
-		/// <summary>
-		/// The architecture of the compilation process.
-		/// </summary>
-		protected IArchitecture Architecture;
-
-		/// <summary>
-		/// Holds the executing method compiler.
-		/// </summary>
-		protected IMethodCompiler Compiler;
-
 		#endregion // Data members
 
 		#region IPipelineStage Members
@@ -67,15 +57,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(IMethodCompiler compiler)
+		public virtual void Run()
 		{
-			base.Run(compiler);
-
-			// Save the architecture & compiler
-			Architecture = compiler.Architecture;
-			Compiler = compiler;
-
 			for (int index = 0; index < BasicBlocks.Count; index++)
 				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null)
@@ -290,7 +273,7 @@ namespace Mosa.Runtime.CompilerFramework
 				Architecture.GetTypeRequirements(cop.Type, out size, out alignment);
 
 				string name = String.Format("C_{0}", Guid.NewGuid());
-				using (Stream stream = Compiler.Linker.Allocate(name, SectionKind.ROData, size, alignment)) {
+				using (Stream stream = MethodCompiler.Linker.Allocate(name, SectionKind.ROData, size, alignment)) {
 					byte[] buffer;
 
 					switch (cop.Type.Type) {

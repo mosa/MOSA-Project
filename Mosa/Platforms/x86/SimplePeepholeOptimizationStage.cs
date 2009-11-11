@@ -52,11 +52,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(IMethodCompiler compiler)
+		public override void Run()
 		{
-			base.Run(compiler);
-
 			Context prev = null;
 			foreach (BasicBlock block in BasicBlocks) {
 				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
