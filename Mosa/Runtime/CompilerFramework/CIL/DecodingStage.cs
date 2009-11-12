@@ -248,7 +248,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				Debug.Assert(ctx.Instruction != null);
 
 				// Do we need to patch branch targets?
-				if (instruction is IBranchInstruction) {
+				if (instruction is IBranchInstruction && instruction.FlowControl != FlowControl.Return) {
 					int pc = (int)(_codeReader.BaseStream.Position - codeStart);
 
 					for (int i = 0; i < ctx.Branch.Targets.Length; i++)
