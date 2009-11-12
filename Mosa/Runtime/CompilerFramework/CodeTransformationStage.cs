@@ -155,7 +155,7 @@ namespace Mosa.Runtime.CompilerFramework
 		protected Context CreateEmptyBlockContext(int label)
 		{
 			Context ctx = new Context(InstructionSet, -1);
-			BasicBlock block = CreateBlock(BasicBlocks.Count + 0x10000000); 
+			BasicBlock block = CreateBlock(BasicBlocks.Count + 0x10000000);
 			ctx.BasicBlock = block;
 
 			// Need a dummy instruction at the start of each block to establish a starting point of the block
@@ -203,14 +203,12 @@ namespace Mosa.Runtime.CompilerFramework
 			current.BasicBlock.NextBlocks.Clear();
 			current.BasicBlock.NextBlocks.Add(nextBlock);
 
-			current.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
-
-			// nextBlock.PreviousBlocks.Add(current); // ???
+			nextBlock.PreviousBlocks.Add(ctx.BasicBlock);
 
 			if (current.IsLastInstruction) {
-				nextBlock.Index = current.Index;
 				current.AppendInstruction(null);
 				current.Ignore = true;
+				nextBlock.Index = current.Index;
 				current.SliceBefore();
 			}
 			else {
@@ -218,7 +216,9 @@ namespace Mosa.Runtime.CompilerFramework
 				current.SliceAfter();
 			}
 
-			return new Context(InstructionSet, nextBlock);
+			current.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
+
+			return CreateContext(nextBlock);
 		}
 
 		#endregion
