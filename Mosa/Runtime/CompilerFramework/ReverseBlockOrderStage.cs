@@ -15,7 +15,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// This class orders blocks in reverse order. This stage is used for testing.
 	/// </summary>
-	public class ReverseBlockOrderStage : BaseStage, IMethodCompilerStage, IPipelineStage
+	public class ReverseBlockOrderStage : BaseStage, IMethodCompilerStage, IPipelineStage, IBlockReorderStage
 	{
 
 		#region IPipelineStage Members

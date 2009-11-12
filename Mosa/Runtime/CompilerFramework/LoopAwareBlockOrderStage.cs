@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The Loop Aware Block Ordering Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class LoopAwareBlockOrderStage : BaseStage, IMethodCompilerStage, IPipelineStage
+	public class LoopAwareBlockOrderStage : BaseStage, IMethodCompilerStage, IPipelineStage, IBlockReorderStage
 	{
 		#region Data members
 
@@ -90,7 +90,9 @@ namespace Mosa.Runtime.CompilerFramework
 		string IPipelineStage.Name { get { return @"LoopAwareBlockOrderStage"; } }
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IPlatformTransformationStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(StackLayoutStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockOptimizationStage)),				
 				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
 			};
 
@@ -127,7 +129,7 @@ namespace Mosa.Runtime.CompilerFramework
 			_loops = null;
 			_depths = null;
 
-
+			OrderBlocks();
 		}
 
 		/// <summary>
@@ -297,15 +299,17 @@ namespace Mosa.Runtime.CompilerFramework
 		private void DetermineBlockOrder()
 		{
 			// Create an array to hold the forward branch count
-			int[] forwardBranches = new int[BasicBlocks.Count];
+			int[] forward = new int[BasicBlocks.Count];
+
+			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(BasicBlocks.Count);
 
 			// Copy previous branch count to array
 			for (int i = 0; i < BasicBlocks.Count; i++)
-				forwardBranches[i] = BasicBlocks[i].PreviousBlocks.Count;
+				forward[i] = BasicBlocks[i].PreviousBlocks.Count;
 
 			// Calculate forward branch count (PreviousBlock.Count minus loops to head)
 			foreach (ConnectedBlocks connecterBlock in _loops)
-				forwardBranches[connecterBlock.to.Index]--;
+				forward[connecterBlock.to.Sequence]--;
 
 			// Allocate list of ordered Blocks
 			_ordered = new BasicBlock[BasicBlocks.Count];
@@ -324,16 +328,30 @@ namespace Mosa.Runtime.CompilerFramework
 				BasicBlock block = workList.Values[workList.Count - 1];
 				workList.RemoveAt(workList.Count - 1);
 
+				referenced.Add(block, 0);
 				_ordered[orderBlockCnt++] = block;
 
 				foreach (BasicBlock successor in block.NextBlocks) {
-					forwardBranches[successor.Index]--;
+					forward[successor.Sequence]--;
 
-					if (forwardBranches[successor.Index] == 0)
+					if (forward[successor.Sequence] == 0)
 						workList.Add(new Priority(_depths[successor], order++), successor);
 				}
 			}
+			
+			// Place unreferenced blocks at the end of the list
+			foreach (BasicBlock block in BasicBlocks)
+				if (!referenced.ContainsKey(block))
+					_ordered[orderBlockCnt++] = block;
+		}
 
+		/// <summary>
+		/// Orders the blocks.
+		/// </summary>
+		private void OrderBlocks()
+		{
+			for (int i = 0; i < BasicBlocks.Count; i++)
+				BasicBlocks[i] = _ordered[i];
 		}
 
 		#endregion // Methods

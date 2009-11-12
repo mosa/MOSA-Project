@@ -41,7 +41,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IMethodCompilerStage Members
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
@@ -62,6 +62,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
 		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
+
+		#endregion // IPipelineStage Members
 
 		/// <summary>
 		/// Runs the specified method compiler.
@@ -104,8 +106,6 @@ namespace Mosa.Runtime.CompilerFramework
 			epilogueCtx.Other = _localsSize;
 			epilogueCtx.Label = Int32.MaxValue;
 		}
-
-		#endregion // IPipelineStage Members
 
 		#region IStackLayoutStage Members
 

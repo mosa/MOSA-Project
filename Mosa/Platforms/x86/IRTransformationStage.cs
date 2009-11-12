@@ -30,7 +30,7 @@ namespace Mosa.Platforms.x86
 	public sealed class IRTransformationStage : BaseTransformationStage, IR.IIRVisitor, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
 	{
 
-		#region IMethodCompilerStage Members
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
@@ -40,7 +40,9 @@ namespace Mosa.Platforms.x86
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
 				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(CILTransformationStage)),
-				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(TweakTransformationStage))
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(TweakTransformationStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockOptimizationStage)),				
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockReorderStage)),			
 			};
 
 		/// <summary>

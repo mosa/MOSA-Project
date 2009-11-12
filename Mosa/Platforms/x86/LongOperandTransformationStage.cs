@@ -30,7 +30,7 @@ namespace Mosa.Platforms.x86
 	/// </remarks>
 	public sealed class LongOperandTransformationStage : CodeTransformationStage, CIL.ICILVisitor, IR.IIRVisitor, IPlatformTransformationStage, IPipelineStage
 	{
-		#region IMethodCompilerStage Members
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
@@ -40,7 +40,9 @@ namespace Mosa.Platforms.x86
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
 				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(StackLayoutStage)),
-				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(AddressModeConversionStage))
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(AddressModeConversionStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockOptimizationStage)),				
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockReorderStage)),			
 			};
 
 		/// <summary>
@@ -49,7 +51,7 @@ namespace Mosa.Platforms.x86
 		/// <value>The pipeline stage order.</value>
 		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
-		#endregion // IMethodCompilerStage Members
+		#endregion // IPipelineStage Members
 
 		#region Utility Methods
 

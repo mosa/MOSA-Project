@@ -237,7 +237,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 					Between(order, ref after, ref before);
 
-					if (i > after && i < before)
+					if (i > after && i < before) 
 						continue;
 
 					_pipeline.RemoveAt(i);

@@ -25,7 +25,7 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
+	public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage, IBlockOptimizationStage
 	{
 
 		#region IMethodCompilerStage Members
@@ -37,6 +37,7 @@ namespace Mosa.Platforms.x86
 		string IPipelineStage.Name { get { return @"X86.SimplePeepholeOptimizationStage"; } }
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IBlockReorderStage)),
 				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(MemToMemConversionStage)),
 				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
 			};

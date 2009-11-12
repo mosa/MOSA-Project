@@ -95,6 +95,8 @@
     <Compile Include="CompilerFramework\CIL\CastclassInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
+    <Compile Include="CompilerFramework\IBlockOptimizationStage.cs" />
+    <Compile Include="CompilerFramework\IBlockReorderStage.cs" />
     <Compile Include="CompilerFramework\IPipelineStage.cs" />
     <Compile Include="CompilerFramework\IR\CilTransformationStage.cs" />
     <Compile Include="CompilerFramework\CIL\ConstrainedPrefixInstruction.cs" />

@@ -70,7 +70,7 @@ namespace Mosa.Tools.Compiler
 				//InstructionLogger.Instance,
 				//new BlockReductionStage(),
 		//		new LoopAwareBlockOrderStage(),
-				new InstructionLogger(typeof(LoopAwareBlockOrderStage),typeof(CodeGenerationStage)),
+		//		new InstructionLogger(typeof(LoopAwareBlockOrderStage),typeof(CodeGenerationStage)),
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),	
 		//		InstructionStatisticsStage.Instance,
