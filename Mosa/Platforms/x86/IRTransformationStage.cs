@@ -522,50 +522,52 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.BranchInstruction(Context context)
 		{
-			switch (context.ConditionCode) {
-				case IR.ConditionCode.Equal:
-					context.ReplaceInstructionOnly(CPUx86.Instruction.JeInstruction);
-					break;
+            context.ReplaceInstructionOnly(CPUx86.Instruction.BranchInstruction);
 
-				case IR.ConditionCode.GreaterOrEqual:
-					context.ReplaceInstructionOnly(CPUx86.Instruction.JgeInstruction);
-					break;
+            //switch (context.ConditionCode) {
+            //    case IR.ConditionCode.Equal:
+            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JeInstruction);
+            //        break;
 
-				case IR.ConditionCode.GreaterThan:
-					context.ReplaceInstructionOnly(CPUx86.Instruction.JgInstruction);
-					break;
+            //    case IR.ConditionCode.GreaterOrEqual:
+            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JgeInstruction);
+            //        break;
 
-				case IR.ConditionCode.LessOrEqual:
-					context.ReplaceInstructionOnly(CPUx86.Instruction.JleInstruction);
-					break;
+            //    case IR.ConditionCode.GreaterThan:
+            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JgInstruction);
+            //        break;
 
-				case IR.ConditionCode.LessThan:
-					context.ReplaceInstructionOnly(CPUx86.Instruction.JlInstruction);
-					break;
+            //    case IR.ConditionCode.LessOrEqual:
+            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JleInstruction);
+            //        break;
 
-				case IR.ConditionCode.NotEqual:
-					context.ReplaceInstructionOnly(CPUx86.Instruction.JneInstruction);
-					break;
+            //    case IR.ConditionCode.LessThan:
+            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JlInstruction);
+            //        break;
 
-				case IR.ConditionCode.UnsignedGreaterOrEqual:
-					context.ReplaceInstructionOnly(CPUx86.Instruction.JaeInstruction);
-					break;
+            //    case IR.ConditionCode.NotEqual:
+            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JneInstruction);
+            //        break;
 
-				case IR.ConditionCode.UnsignedGreaterThan:
-					context.ReplaceInstructionOnly(CPUx86.Instruction.JaInstruction);
-					break;
+            //    case IR.ConditionCode.UnsignedGreaterOrEqual:
+            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JaeInstruction);
+            //        break;
 
-				case IR.ConditionCode.UnsignedLessOrEqual:
-					context.ReplaceInstructionOnly(CPUx86.Instruction.JbeInstruction);
-					break;
+            //    case IR.ConditionCode.UnsignedGreaterThan:
+            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JaInstruction);
+            //        break;
 
-				case IR.ConditionCode.UnsignedLessThan:
-					context.ReplaceInstructionOnly(CPUx86.Instruction.JbInstruction);
-					break;
+            //    case IR.ConditionCode.UnsignedLessOrEqual:
+            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JbeInstruction);
+            //        break;
 
-				default:
-					throw new NotSupportedException();
-			}
+            //    case IR.ConditionCode.UnsignedLessThan:
+            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JbInstruction);
+            //        break;
+
+            //    default:
+            //        throw new NotSupportedException();
+            //}
 		}
 
 		/// <summary>

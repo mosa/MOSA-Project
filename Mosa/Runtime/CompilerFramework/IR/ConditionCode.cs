@@ -64,5 +64,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// Unsigned less than or equal comparison.
         /// </summary>
         UnsignedLessOrEqual,
+
+        /// <summary>
+        /// Not unsigned 
+        /// </summary>
+        NotSigned,
+
+        /// <summary>
+        /// signed
+        /// </summary>
+        Signed, 
     }
 }

@@ -35,6 +35,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private int _sequence;
 
+        /// <summary>
+        /// Hints at which target the block will most likely branch to
+        /// </summary>
+        public int HintTarget;
+
 		/// <summary>
 		/// Links this block to all Blocks invoked by the final branch instruction.
 		/// </summary>
@@ -75,6 +80,7 @@ namespace Mosa.Runtime.CompilerFramework
 			_sequence = sequence;
 			_label = label;
 			Index = index;
+            HintTarget = -1;
 		}
 
 		#endregion // Construction

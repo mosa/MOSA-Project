@@ -179,7 +179,7 @@ namespace Mosa.Platforms.x86
 			SigType I4 = new SigType(CilElementType.I4);
 			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, new RegisterOperand(I4, GeneralPurposeRegister.EAX), new ConstantOperand(I4, 0));
 
-			ctx.AppendInstruction(CPUx86.Instruction.JneInstruction);
+            ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual);
 
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
 				ctx.SetBranch(branch.Targets[0]);

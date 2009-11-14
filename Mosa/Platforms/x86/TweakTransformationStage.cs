@@ -604,56 +604,11 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Call(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Jae"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Jae(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Ja"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Ja(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Jbe"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Jbe(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Jb"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Jb(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Je"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Je(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Jge"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Jge(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Jg"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Jg(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Jle"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Jle(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Jl"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Jl(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Jne"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Jne(Context context) { }
+        /// <summary>
+        /// Visitation function for <see cref="CPUx86.IX86Visitor.Branch"/> instructions.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        void CPUx86.IX86Visitor.Branch(Context context) { }
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Not"/> instructions.
 		/// </summary>

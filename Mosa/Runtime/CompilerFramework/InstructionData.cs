@@ -101,6 +101,15 @@ namespace Mosa.Runtime.CompilerFramework
 			set { if (value) _packed = _packed | 0x02; else _packed = (uint)(_packed & ~0x2); }
 		}
 
+        /// <summary>
+        /// Gets or sets the branch hint (true means branch likely)
+        /// </summary>
+        public bool BranchHint
+        {
+            get { return (_packed & 0x04) == 0x04; }
+            set { if (value) _packed = _packed | 0x04; else _packed = (uint)(_packed & ~0x04); }
+        }
+
 		/// <summary>
 		/// Gets or sets the number of operand results
 		/// </summary>
