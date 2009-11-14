@@ -703,6 +703,19 @@ namespace Mosa.Runtime.CompilerFramework
         /// Sets the instruction.
         /// </summary>
         /// <param name="instruction">The instruction.</param>
+        /// <param name="code">The code.</param>
+        /// <param name="block">The block.</param>
+        /// <param name="branchHint">if set to <c>true</c> [branch hint].</param>
+        public void SetInstruction(IInstruction instruction, IR.ConditionCode code, BasicBlock block, bool branchHint)
+        {
+            SetInstruction(instruction, code, block);
+            BranchHint = branchHint;
+        }
+
+        /// <summary>
+        /// Sets the instruction.
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
         /// <param name="result">The result.</param>
         public void SetInstruction(IInstruction instruction, Operand result)
         {
@@ -831,6 +844,19 @@ namespace Mosa.Runtime.CompilerFramework
         {
             AppendInstruction();
             SetInstruction(instruction, code, block);
+        }
+
+        /// <summary>
+        /// Inserts the instruction after.
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="code">The code.</param>
+        /// <param name="block">The block.</param>
+        /// <param name="branchHint">if set to <c>true</c> [branch hint].</param>
+        public void AppendInstruction(IInstruction instruction, IR.ConditionCode code, BasicBlock block, bool branchHint)
+        {
+            AppendInstruction(instruction, code, block);
+            BranchHint = branchHint;
         }
 
         /// <summary>

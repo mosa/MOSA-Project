@@ -30,8 +30,10 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-					new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IPlatformTransformationStage)),
-					new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(StackLayoutStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockOptimizationStage)),				
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
 			};
 
 		/// <summary>

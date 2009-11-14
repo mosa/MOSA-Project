@@ -236,6 +236,7 @@ namespace Mosa.Runtime.CompilerFramework
 			this._packed = 0;
 			this.Branch = null;
 			this.Other = null;
+            this.BranchHint = false;
 		}
 
 		/// <summary>
