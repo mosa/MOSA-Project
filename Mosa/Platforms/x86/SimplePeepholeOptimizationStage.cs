@@ -50,31 +50,140 @@ namespace Mosa.Platforms.x86
 
         #endregion // IMethodCompilerStage Members
 
+        #region Window Class
+
+        /// <summary>
+        /// Window Class
+        /// </summary>
+        public class Window
+        {
+            private int _size;
+            private Context[] _history;
+            private int _count;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Window"/> class.
+            /// </summary>
+            /// <param name="size">The size.</param>
+            public Window(int size)
+            {
+                _size = size;
+                _history = new Context[size];
+                _count = 0;
+            }
+
+            /// <summary>
+            /// Nexts the specified CTX.
+            /// </summary>
+            /// <param name="ctx">The CTX.</param>
+            public void Next(Context ctx)
+            {
+                for (int i = Math.Min(_count, _size) - 1; i > 0; i--)
+                    _history[i] = _history[i - 1];
+
+                _history[0] = ctx.Clone();
+                if (_count < _size)
+                    _count++;
+            }
+
+            /// <summary>
+            /// Deletes the current.
+            /// </summary>
+            public void DeleteCurrent()
+            {
+                _history[0].Remove();
+                _count--;
+                for (int i = 0; i < _count; i++)
+                    _history[i] = _history[i + 1];
+            }
+
+            /// <summary>
+            /// Deletes the previous.
+            /// </summary>
+            public void DeletePrevious()
+            {
+                _history[1].Remove();
+                _count--;
+                for (int i = 1; i < _count; i++)
+                    _history[i] = _history[i + 1];
+            }
+
+            /// <summary>
+            /// Deletes the previous previous.
+            /// </summary>
+            public void DeletePreviousPrevious()
+            {
+                _history[2].Remove();
+                _count--;
+                for (int i = 2; i < _count; i++)
+                    _history[i] = _history[i + 1];
+            }
+
+            /// <summary>
+            /// Gets the current.
+            /// </summary>
+            /// <value>The current.</value>
+            public Context Current
+            {
+                get
+                {
+                    if (_count == 0)
+                        return null;
+                    else
+                        return _history[0];
+                }
+            }
+
+            /// <summary>
+            /// Gets the previous.
+            /// </summary>
+            /// <value>The previous.</value>
+            public Context Previous
+            {
+                get
+                {
+                    if (_count < 2)
+                        return null;
+                    else
+                        return _history[1];
+                }
+            }
+
+            /// <summary>
+            /// Gets the previous previous.
+            /// </summary>
+            /// <value>The previous previous.</value>
+            public Context PreviousPrevious
+            {
+                get
+                {
+                    if (_count < 3)
+                        return null;
+                    else
+                        return _history[2];
+                }
+            }
+        }
+
+        #endregion  // Windows Class
+
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         public override void Run()
         {
-            Context prev = null;
-            foreach (BasicBlock block in BasicBlocks)
-            {
-                for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
-                {
-                    if (ctx.Instruction != null)
-                    {
-                        if (!ctx.Ignore)
-                        {
-                            if (prev != null)
-                            {
-                                if (RemoveMultipleStores(ctx, prev)) continue;
-                                else if (RemoveSingleLineJump(ctx, prev)) { prev = ctx.Clone(); continue; }
-                            }
+            Window window = new Window(5);
 
-                            prev = ctx.Clone();
-                        }
+            foreach (BasicBlock block in BasicBlocks)
+                for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
+                    if (ctx.Instruction != null && !ctx.Ignore)
+                    {
+                        window.Next(ctx);
+
+                        RemoveMultipleStores(window);
+                        RemoveSingleLineJump(window);
+                        ImproveBranchAndJump(window);
                     }
-                }
-            }
         }
 
         /// <summary>
@@ -88,20 +197,24 @@ namespace Mosa.Platforms.x86
         /// mov eax, operand
         /// </code>
         /// </summary>
-        /// <param name="current">The current context</param>
-        /// <param name="previous">The previous context</param>
+        /// <param name="window">The window.</param>
         /// <returns>True if an instruction has been removed</returns>
-        private bool RemoveMultipleStores(Context current, Context previous)
+        private bool RemoveMultipleStores(Window window)
         {
-            if (current.BasicBlock == previous.BasicBlock)
-                if (current.Instruction is CPUx86.MovInstruction && previous.Instruction is CPUx86.MovInstruction)
+            if (window.Current == null || window.Previous == null)
+                return false;
+
+            if (window.Current.BasicBlock != window.Previous.BasicBlock)
+                return false;
+
+            if (window.Current.Instruction is CPUx86.MovInstruction && window.Previous.Instruction is CPUx86.MovInstruction)
+            {
+                if (window.Previous.Result == window.Current.Operand1 && window.Previous.Operand1 == window.Current.Result)
                 {
-                    if (previous.Result == current.Operand1 && previous.Operand1 == current.Result)
-                    {
-                        current.Remove();
-                        return true;
-                    }
+                    window.DeleteCurrent();
+                    return true;
                 }
+            }
 
             return false;
         }
@@ -109,16 +222,18 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Removes the single line jump.
         /// </summary>
-        /// <param name="current">The current.</param>
-        /// <param name="previous">The previous.</param>
+        /// <param name="window">The window.</param>
         /// <returns></returns>
-        private bool RemoveSingleLineJump(Context current, Context previous)
+        private bool RemoveSingleLineJump(Window window)
         {
-            if (previous.Instruction is CPUx86.JmpInstruction)
-                if (current.BasicBlock != previous.BasicBlock)	// should always be true
-                    if (previous.Branch.Targets[0] == current.BasicBlock.Label)
+            if (window.Current == null || window.Previous == null)
+                return false;
+
+            if (window.Previous.Instruction is CPUx86.JmpInstruction)
+                if (window.Current.BasicBlock != window.Previous.BasicBlock)	// should always be true
+                    if (window.Previous.Branch.Targets[0] == window.Current.BasicBlock.Label)
                     {
-                        previous.Remove();
+                        window.DeletePrevious();
                         return true;
                     }
 
@@ -128,18 +243,32 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Removes the single line jump.
         /// </summary>
-        /// <param name="current">The current.</param>
-        /// <param name="previous">The previous.</param>
+        /// <param name="window">The window.</param>
         /// <returns></returns>
-        private bool ImproveBranchAndJump(Context current, Context previous)
+        private bool ImproveBranchAndJump(Window window)
         {
-            if (current.Instruction is CPUx86.JmpInstruction)
-                if (previous.Instruction is CPUx86.BranchInstruction)
-                {
-                    // TODO
-                    // Swap branch target of jump and branch
-                    // Negate branch condition
-                }
+            if (window.Current == null || window.Previous == null || window.PreviousPrevious == null)
+                return false;
+
+            if (window.Previous.Instruction is CPUx86.JmpInstruction)
+                if (window.PreviousPrevious.Instruction is CPUx86.BranchInstruction)
+                    if (window.Previous.BasicBlock == window.PreviousPrevious.BasicBlock)
+                        if (window.Current.BasicBlock != window.Previous.BasicBlock)
+                            if (window.PreviousPrevious.Branch.Targets[0] == window.Current.BasicBlock.Label)
+                            {
+                                Debug.Assert(window.PreviousPrevious.Branch.Targets.Length == 1);
+
+                                // Negate branch condition
+                                window.PreviousPrevious.ConditionCode = GetOppositeConditionCode(window.PreviousPrevious.ConditionCode);
+
+                                // Change branch target
+                                window.PreviousPrevious.Branch.Targets[0] = window.Previous.Branch.Targets[0];
+
+                                // Delete jump
+                                window.DeletePrevious();
+
+                                return true;
+                            }
 
             return false;
         }
