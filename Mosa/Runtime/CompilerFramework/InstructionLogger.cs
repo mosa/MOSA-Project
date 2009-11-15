@@ -16,102 +16,113 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-	/// <summary>
-	/// Logs all incoming instructions and forwards them to the next compiler stage.
-	/// </summary>
-	public sealed class InstructionLogger : BaseStage, IMethodCompilerStage, IPipelineStage
-	{
+    /// <summary>
+    /// Logs all incoming instructions and forwards them to the next compiler stage.
+    /// </summary>
+    public sealed class InstructionLogger : BaseStage, IMethodCompilerStage, IPipelineStage
+    {
 
-		#region IPipelineStage
+        #region IPipelineStage
 
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"InstructionLogger"; } }
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+        string IPipelineStage.Name { get { return @"InstructionLogger"; } }
 
-		private PipelineStageOrder[] _pipelineOrder;
+        private PipelineStageOrder[] _pipelineOrder;
 
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
+        /// <summary>
+        /// Gets the pipeline stage order.
+        /// </summary>
+        /// <value>The pipeline stage order.</value>
+        PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="InstructionLogger"/> class.
-		/// </summary>
-		/// <param name="after">The after.</param>
-		/// <param name="before">The before.</param>
-		public InstructionLogger(IPipelineStage after, IPipelineStage before)
-		{
-			_pipelineOrder = PipelineStageOrder.CreatePipelineOrder(after.GetType(), before.GetType());
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstructionLogger"/> class.
+        /// </summary>
+        /// <param name="immediateAfter">The immediate after.</param>
+        public InstructionLogger(Type immediateAfter)
+        {
+            _pipelineOrder = PipelineStageOrder.CreatePipelineOrder(immediateAfter);
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="InstructionLogger"/> class.
-		/// </summary>
-		/// <param name="after">The after.</param>
-		/// <param name="before">The before.</param>
-		public InstructionLogger(Type after, Type before)
-		{
-			_pipelineOrder = PipelineStageOrder.CreatePipelineOrder(after, before);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstructionLogger"/> class.
+        /// </summary>
+        /// <param name="after">The after.</param>
+        /// <param name="before">The before.</param>
+        public InstructionLogger(IPipelineStage after, IPipelineStage before)
+        {
+            _pipelineOrder = PipelineStageOrder.CreatePipelineOrder(after.GetType(), before.GetType());
+        }
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		public void Run()
-		{
-			// Previous stage
-			IPipelineStage prevStage = MethodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstructionLogger"/> class.
+        /// </summary>
+        /// <param name="after">The after.</param>
+        /// <param name="before">The before.</param>
+        public InstructionLogger(Type after, Type before)
+        {
+            _pipelineOrder = PipelineStageOrder.CreatePipelineOrder(after, before);
+        }
 
-			// Do not dump internal methods
-			if (MethodCompiler.Method.Name.Contains("<$>"))
-				return;
+        /// <summary>
+        /// Performs stage specific processing on the compiler context.
+        /// </summary>
+        public void Run()
+        {
+            // Previous stage
+            IPipelineStage prevStage = MethodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
 
-			// Line number
-			int index = 1;
+            // Do not dump internal methods
+            if (MethodCompiler.Method.Name.Contains("<$>"))
+                return;
 
-			Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", MethodCompiler.Method, prevStage.Name));
+            // Line number
+            int index = 1;
 
-			foreach (BasicBlock block in BasicBlocks) {
-				Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
-				Debug.Indent();
-				LogInstructions(new Context(InstructionSet, block));
-				Debug.Unindent();
-				index++;
-			}
-		}
+            Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", MethodCompiler.Method, prevStage.Name));
 
-		#endregion // IMethodCompilerStage Members
+            foreach (BasicBlock block in BasicBlocks)
+            {
+                Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
+                Debug.Indent();
+                LogInstructions(new Context(InstructionSet, block));
+                Debug.Unindent();
+                index++;
+            }
+        }
 
-		#region Internals
+        #endregion // IMethodCompilerStage Members
 
-		/// <summary>
-		/// Logs the instructions in the given enumerable to the trace.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void LogInstructions(Context ctx)
-		{
-			StringBuilder text = new StringBuilder();
+        #region Internals
 
-			for (; !ctx.EndOfInstruction; ctx.GotoNext()) {
+        /// <summary>
+        /// Logs the instructions in the given enumerable to the trace.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        private void LogInstructions(Context ctx)
+        {
+            StringBuilder text = new StringBuilder();
 
-				text.Length = 0;
+            for (; !ctx.EndOfInstruction; ctx.GotoNext())
+            {
 
-				if (ctx.Instruction == null)
-					continue;
+                text.Length = 0;
 
-				if (ctx.Ignore)
-					text.Append("; ");
+                if (ctx.Instruction == null)
+                    continue;
 
-				text.AppendFormat("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx));
+                if (ctx.Ignore)
+                    text.Append("; ");
 
-				Debug.WriteLine(text.ToString());
-			}
-		}
+                text.AppendFormat("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx));
 
-		#endregion // Internals
-	}
+                Debug.WriteLine(text.ToString());
+            }
+        }
+
+        #endregion // Internals
+    }
 }

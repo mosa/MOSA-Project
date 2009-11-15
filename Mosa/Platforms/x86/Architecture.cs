@@ -21,16 +21,16 @@ using CPUx86 = Mosa.Platforms.x86.CPUx86;
 namespace Mosa.Platforms.x86
 {
 
-	/// <summary>
-	/// This class provides a common base class for architecture
-	/// specific operations.
-	/// </summary>
-	public class Architecture : BasicArchitecture
-	{
-		/// <summary>
-		/// Defines the register set of the target architecture.
-		/// </summary>
-		private static readonly Register[] Registers = new Register[]
+    /// <summary>
+    /// This class provides a common base class for architecture
+    /// specific operations.
+    /// </summary>
+    public class Architecture : BasicArchitecture
+    {
+        /// <summary>
+        /// Defines the register set of the target architecture.
+        /// </summary>
+        private static readonly Register[] Registers = new Register[]
         {
             ////////////////////////////////////////////////////////
             // 32-bit general purpose registers
@@ -55,10 +55,10 @@ namespace Mosa.Platforms.x86
             SSE2Register.XMM7
         };
 
-		/// <summary>
-		/// Maps constraints to an instruction. Deprecated.
-		/// </summary>
-		private static readonly Dictionary<Type, Type> Constraints = new Dictionary<Type, Type>()
+        /// <summary>
+        /// Maps constraints to an instruction. Deprecated.
+        /// </summary>
+        private static readonly Dictionary<Type, Type> Constraints = new Dictionary<Type, Type>()
         {
             { typeof(CPUx86.AddInstruction), typeof(GPRConstraint) },
             { typeof(CPUx86.AdcInstruction), typeof(GPRConstraint) },
@@ -74,182 +74,183 @@ namespace Mosa.Platforms.x86
             { typeof(CPUx86.SubInstruction), typeof(GPRConstraint) },
         };
 
-		/// <summary>
-		/// Specifies the architecture features to use in generated code.
-		/// </summary>
-		private ArchitectureFeatureFlags architectureFeatures;
+        /// <summary>
+        /// Specifies the architecture features to use in generated code.
+        /// </summary>
+        private ArchitectureFeatureFlags architectureFeatures;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Architecture"/> class.
-		/// </summary>
-		/// <param name="architectureFeatures">The features this architecture supports.</param>
-		protected Architecture(ArchitectureFeatureFlags architectureFeatures)
-		{
-			this.architectureFeatures = architectureFeatures;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Architecture"/> class.
+        /// </summary>
+        /// <param name="architectureFeatures">The features this architecture supports.</param>
+        protected Architecture(ArchitectureFeatureFlags architectureFeatures)
+        {
+            this.architectureFeatures = architectureFeatures;
+        }
 
-		/// <summary>
-		/// Retrieves the native integer size of the x86 platform.
-		/// </summary>
-		/// <value>This property always returns 32.</value>
-		public override int NativeIntegerSize
-		{
-			get { return 32; }
-		}
+        /// <summary>
+        /// Retrieves the native integer size of the x86 platform.
+        /// </summary>
+        /// <value>This property always returns 32.</value>
+        public override int NativeIntegerSize
+        {
+            get { return 32; }
+        }
 
-		/// <summary>
-		/// Retrieves the register set of the x86 platform.
-		/// </summary>
-		public override Register[] RegisterSet
-		{
-			get { return Registers; }
-		}
+        /// <summary>
+        /// Retrieves the register set of the x86 platform.
+        /// </summary>
+        public override Register[] RegisterSet
+        {
+            get { return Registers; }
+        }
 
-		/// <summary>
-		/// Retrieves the stack frame register of the x86.
-		/// </summary>
-		public override Register StackFrameRegister
-		{
-			get { return GeneralPurposeRegister.EBP; }
-		}
+        /// <summary>
+        /// Retrieves the stack frame register of the x86.
+        /// </summary>
+        public override Register StackFrameRegister
+        {
+            get { return GeneralPurposeRegister.EBP; }
+        }
 
-		/// <summary>
-		/// Factory method for the Architecture class.
-		/// </summary>
-		/// <returns>The created architecture instance.</returns>
-		/// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
-		/// <remarks>
-		/// This method creates an instance of an appropriate architecture class, which supports the specific
-		/// architecture features.
-		/// </remarks>
-		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
-		{
-			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect) 
-				architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
+        /// <summary>
+        /// Factory method for the Architecture class.
+        /// </summary>
+        /// <returns>The created architecture instance.</returns>
+        /// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
+        /// <remarks>
+        /// This method creates an instance of an appropriate architecture class, which supports the specific
+        /// architecture features.
+        /// </remarks>
+        public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
+        {
+            if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
+                architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
 
-			return new Architecture(architectureFeatures);
-		}
+            return new Architecture(architectureFeatures);
+        }
 
-		/// <summary>
-		/// Creates a new result operand of the requested type.
-		/// </summary>
-		/// <param name="signatureType">The type requested.</param>
-		/// <param name="instructionLabel">The label of the instruction requesting the operand.</param>
-		/// <param name="operandStackIndex">The stack index of the operand.</param>
-		/// <returns>A new operand usable as a result operand.</returns>
-		public override Operand CreateResultOperand(SigType signatureType, int instructionLabel, int operandStackIndex)
-		{
-			return new RegisterOperand(signatureType, GeneralPurposeRegister.EAX);
-		}
+        /// <summary>
+        /// Creates a new result operand of the requested type.
+        /// </summary>
+        /// <param name="signatureType">The type requested.</param>
+        /// <param name="instructionLabel">The label of the instruction requesting the operand.</param>
+        /// <param name="operandStackIndex">The stack index of the operand.</param>
+        /// <returns>A new operand usable as a result operand.</returns>
+        public override Operand CreateResultOperand(SigType signatureType, int instructionLabel, int operandStackIndex)
+        {
+            return new RegisterOperand(signatureType, GeneralPurposeRegister.EAX);
+        }
 
-		/// <summary>
-		/// Extends the assembly compiler pipeline with x86 specific stages.
-		/// </summary>
-		/// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
-		public override void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyCompilerPipeline)
-		{
-		}
+        /// <summary>
+        /// Extends the assembly compiler pipeline with x86 specific stages.
+        /// </summary>
+        /// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
+        public override void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyCompilerPipeline)
+        {
+        }
 
-		/// <summary>
-		/// Extends the method compiler pipeline with x86 specific stages.
-		/// </summary>
-		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
-		{
-			// FIXME: Create a specific code generator instance using requested feature flags.
-			// FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
-			// and packed operations available with MMX/SSE extensions
-			methodCompilerPipeline.AddRange(
-				new IMethodCompilerStage[]
+        /// <summary>
+        /// Extends the method compiler pipeline with x86 specific stages.
+        /// </summary>
+        /// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
+        public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
+        {
+            // FIXME: Create a specific code generator instance using requested feature flags.
+            // FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
+            // and packed operations available with MMX/SSE extensions
+            methodCompilerPipeline.AddRange(
+                new IMethodCompilerStage[]
                 {
                     new LongOperandTransformationStage(),
-                    new InstructionLogger(typeof(LongOperandTransformationStage),typeof(AddressModeConversionStage)),
+                    new InstructionLogger(typeof(LongOperandTransformationStage)),
                     new AddressModeConversionStage(),
-                    new InstructionLogger(typeof(AddressModeConversionStage),typeof(CILTransformationStage)),
+                    new InstructionLogger(typeof(AddressModeConversionStage)),
                     new CILTransformationStage(),
-                    new InstructionLogger(typeof(CILTransformationStage),typeof(IRTransformationStage)),
+                    new InstructionLogger(typeof(CILTransformationStage)),
                     new IRTransformationStage(),
-                    new InstructionLogger(typeof(IRTransformationStage),typeof(TweakTransformationStage)),
+                    new InstructionLogger(typeof(IRTransformationStage)),
 					new TweakTransformationStage(),
-                    new InstructionLogger(typeof(TweakTransformationStage),typeof(MemToMemConversionStage)),
+                    new InstructionLogger(typeof(TweakTransformationStage)),
 					new MemToMemConversionStage(),
-                    new InstructionLogger(typeof(MemToMemConversionStage),typeof(SimplePeepholeOptimizationStage)),
+                    new InstructionLogger(typeof(MemToMemConversionStage)),
 					new SimplePeepholeOptimizationStage(),
-                    //FlowGraphVisualizationStage.Instance,
-                    new InstructionLogger(typeof(SimplePeepholeOptimizationStage),typeof(CodeGenerationStage)),
+                    new InstructionLogger(typeof(SimplePeepholeOptimizationStage)),
                     //FlowGraphVisualizationStage.Instance,
                 });
-		}
+        }
 
-		/// <summary>
-		/// Retrieves a calling convention object for the requested calling convention.
-		/// </summary>
-		/// <param name="callingConvention">One of the defined calling conventions.</param>
-		/// <returns>An instance of <see cref="ICallingConvention"/>.</returns>
-		/// <exception cref="System.NotSupportedException"><paramref name="callingConvention"/> is not a supported calling convention.</exception>
-		public override ICallingConvention GetCallingConvention(CallingConvention callingConvention)
-		{
-			switch (callingConvention) {
-				case CallingConvention.Default:
-					return new DefaultCallingConvention(this);
+        /// <summary>
+        /// Retrieves a calling convention object for the requested calling convention.
+        /// </summary>
+        /// <param name="callingConvention">One of the defined calling conventions.</param>
+        /// <returns>An instance of <see cref="ICallingConvention"/>.</returns>
+        /// <exception cref="System.NotSupportedException"><paramref name="callingConvention"/> is not a supported calling convention.</exception>
+        public override ICallingConvention GetCallingConvention(CallingConvention callingConvention)
+        {
+            switch (callingConvention)
+            {
+                case CallingConvention.Default:
+                    return new DefaultCallingConvention(this);
 
-				default:
-					throw new NotSupportedException();
-			}
-		}
+                default:
+                    throw new NotSupportedException();
+            }
+        }
 
-		/// <summary>
-		/// Gets the type memory requirements.
-		/// </summary>
-		/// <param name="signatureType">The signature type.</param>
-		/// <param name="memorySize">Receives the memory size of the type.</param>
-		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
-		{
-			if (signatureType == null)
-				throw new ArgumentNullException(@"type");
+        /// <summary>
+        /// Gets the type memory requirements.
+        /// </summary>
+        /// <param name="signatureType">The signature type.</param>
+        /// <param name="memorySize">Receives the memory size of the type.</param>
+        /// <param name="alignment">Receives alignment requirements of the type.</param>
+        public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
+        {
+            if (signatureType == null)
+                throw new ArgumentNullException(@"type");
 
-			switch (signatureType.Type) {
-				case CilElementType.R4:
-					memorySize = alignment = 4;
-					break;
-				case CilElementType.R8:
-					// Default alignment and size are 4
-					memorySize = alignment = 8;
-					break;
+            switch (signatureType.Type)
+            {
+                case CilElementType.R4:
+                    memorySize = alignment = 4;
+                    break;
+                case CilElementType.R8:
+                    // Default alignment and size are 4
+                    memorySize = alignment = 8;
+                    break;
 
-				case CilElementType.I8:
-					goto case CilElementType.U8;
-				case CilElementType.U8:
-					memorySize = alignment = 8;
-					break;
+                case CilElementType.I8:
+                    goto case CilElementType.U8;
+                case CilElementType.U8:
+                    memorySize = alignment = 8;
+                    break;
 
-				case CilElementType.ValueType:
-					memorySize = alignment = 4; // FIXME: HACK!
-					break;
-				default:
-					memorySize = alignment = 4;
-					break;
-			}
-		}
+                case CilElementType.ValueType:
+                    memorySize = alignment = 4; // FIXME: HACK!
+                    break;
+                default:
+                    memorySize = alignment = 4;
+                    break;
+            }
+        }
 
-		/// <summary>
-		/// Gets the intrinsics instruction by type
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public override IInstruction GetIntrinsicIntruction(Type type)
-		{
-			return CPUx86.Intrinsics.Get(type);
-		}
+        /// <summary>
+        /// Gets the intrinsics instruction by type
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        public override IInstruction GetIntrinsicIntruction(Type type)
+        {
+            return CPUx86.Intrinsics.Get(type);
+        }
 
-		/// <summary>
-		/// Gets the code emitter.
-		/// </summary>
-		/// <returns></returns>
-		public override ICodeEmitter GetCodeEmitter()
-		{
-			return new MachineCodeEmitter();
-		}
-	}
+        /// <summary>
+        /// Gets the code emitter.
+        /// </summary>
+        /// <returns></returns>
+        public override ICodeEmitter GetCodeEmitter()
+        {
+            return new MachineCodeEmitter();
+        }
+    }
 }
