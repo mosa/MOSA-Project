@@ -19,32 +19,36 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	/// <remarks>
 	/// Constant propagation has a couple of advantages: First of all it removes
-	/// a local variable From the stack and secondly it reduces the register pressure
+	/// a local variable from the stack and secondly it reduces the register pressure
 	/// on systems with only a small number of registers (x86).
 	/// <para/>
 	/// It is only safe to use this stage on an instruction stream in SSA form.
 	/// </remarks>
 	public sealed class ConstantPropagationStage : BaseStage, IMethodCompilerStage, IPipelineStage
-	{
-		#region IMethodCompilerStage Members
+    {
+        #region IPipelineStage Members
 
-		/// <summary>
+        /// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"Constant Propagation"; } }
+	    string IPipelineStage.Name { get { return @"ConstantPropagationStage"; } }
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
 			// TODO
-		};
+	   	};
 
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
 		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
+              
+        #endregion // IPipelineStage Members
 
-		/// <summary>
+        #region IMethodCompilerStage Members
+
+        /// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		public void Run()

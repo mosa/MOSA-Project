@@ -10,6 +10,7 @@
 using System;
 
 using Mosa.Runtime.CompilerFramework;
+using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 using NDesk.Options;
 
@@ -20,7 +21,7 @@ namespace Mosa.Tools.Compiler
     /// 
     /// TODO: put this wrapper stage somewhere in the actual pipeline.
     /// </summary>
-    public class InstructionSchedulingWrapper : MethodCompilerStageWrapper<CILConstantFoldingStage>
+    public class InstructionSchedulingWrapper : MethodCompilerStageWrapper<CIL.ConstantFoldingStage>
     {
         /// <summary>
         /// Initializes a new instance of the InstructionSchedulingWrapper class.

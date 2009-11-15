@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+using IR = Mosa.Runtime.CompilerFramework.IR;
+
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
@@ -44,16 +46,16 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IMethodCompilerStage Members
+        #region IPipelineStage Members
 
-		/// <summary>
+        /// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"Dominance Calculation"; } }
+        string IPipelineStage.Name { get { return @"DominanceCalculationStage"; } }
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-			// TODO
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage))
 		};
 
 		/// <summary>
@@ -62,7 +64,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The pipeline stage order.</value>
 		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
-		/// <summary>
+        #endregion // IPipelineStage Members
+
+        #region IMethodCompilerStage Members
+
+        /// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		public void Run()

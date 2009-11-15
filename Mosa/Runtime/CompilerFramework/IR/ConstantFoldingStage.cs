@@ -11,22 +11,22 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.IR
 {
 	/// <summary>
 	/// Performs IR constant folding of arithmetic instructions to optimize
 	/// the code down to fewer calculations.
 	/// </summary>
 	public sealed class IRConstantFoldingStage : CodeTransformationStage, IR.IIRVisitor, IPipelineStage
-	{
+    {
 
-		#region IMethodCompilerStage
+        #region IPipelineStage
 
-		/// <summary>
+        /// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"IR Constant Folding"; } }
+        string IPipelineStage.Name { get { return @"IR.ConstantFoldingStage"; } }
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
 			// TODO

@@ -98,7 +98,7 @@
     <Compile Include="CompilerFramework\IBlockOptimizationStage.cs" />
     <Compile Include="CompilerFramework\IBlockReorderStage.cs" />
     <Compile Include="CompilerFramework\IPipelineStage.cs" />
-    <Compile Include="CompilerFramework\IR\CilTransformationStage.cs" />
+    <Compile Include="CompilerFramework\IR\CilTransformationStage2.cs" />
     <Compile Include="CompilerFramework\CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ConversionInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\Instruction.cs" />
@@ -218,7 +218,7 @@
     <Compile Include="CompilerFramework\IR\UDivInstruction.cs" />
     <Compile Include="CompilerFramework\IR\URemInstruction.cs" />
     <Compile Include="CompilerFramework\IR\ZeroExtendedMoveInstruction.cs" />
-    <Compile Include="CompilerFramework\IRConstantFoldingStage.cs" />
+    <Compile Include="CompilerFramework\IR\ConstantFoldingStage.cs" />
     <Compile Include="CompilerFramework\IVisitor.cs" />
     <Compile Include="CompilerFramework\IBranch.cs" />
     <Compile Include="CompilerFramework\IIRnstruction.cs" />
@@ -295,7 +295,7 @@
     <Compile Include="CompilerFramework\CompilerSupportFunction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\CILConstantFoldingStage.cs">
+    <Compile Include="CompilerFramework\CIL\ConstantFoldingStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\ConstantOperand.cs">

@@ -10,15 +10,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
 	/// Performs IR constant folding of arithmetic instructions to optimize
 	/// the code down to fewer calculations.
 	/// </summary>
-	public sealed class CILConstantFoldingStage : CodeTransformationStage, CIL.ICILVisitor, IPipelineStage
+	public sealed class ConstantFoldingStage : CodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
 
 		#region IPipelineStage
@@ -29,7 +28,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name
 		{
-			get { return @"CILConstantFoldingStage"; }
+			get { return @"CIL.ConstantFoldingStage"; }
 		}
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
