@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Retrieves the architecture to compile for.
         /// </summary>
-        /// <value>The compilation target architecture. This may differ From the current execution architecture.</value>
+        /// <value>The compilation target architecture. This may differ from the current execution architecture.</value>
         IArchitecture Architecture { get; }
 
         /// <summary>

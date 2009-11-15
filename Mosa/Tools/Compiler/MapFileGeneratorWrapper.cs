@@ -67,7 +67,7 @@ namespace Mosa.Tools.Compiler
         /// <param name="compiler">The compiler context to perform processing in.</param>
         public void Run(AssemblyCompiler compiler)
         {
-            if (null != this.mapFile)
+            if (this.mapFile != null)
             {
                 try
                 {
