@@ -152,7 +152,7 @@ namespace Mosa.Runtime.CompilerFramework
                 // Transform the block
                 BasicBlock block = workItem.block;
                 bool schedule = TransformToSsaForm(new Context(InstructionSet, block), workItem.caller, workItem.liveIn, out liveIn);
-                _liveness[block.Index] = liveIn;
+                _liveness[block.Sequence] = liveIn;
 
                 if (schedule)
                 {
@@ -202,14 +202,14 @@ namespace Mosa.Runtime.CompilerFramework
 
             // Save the in versions to force a merge later
             if (null != liveIn)
-                _liveness[epilogue.Index] = liveIn;
+                _liveness[epilogue.Sequence] = liveIn;
         }
 
         private bool TransformToSsaForm(Context ctx, BasicBlock caller, IDictionary<StackOperand, StackOperand> liveIn, out IDictionary<StackOperand, StackOperand> liveOut)
         {
             // Is this another entry for this block?
-            IDictionary<StackOperand, StackOperand> liveOutPrev = _liveness[ctx.BasicBlock.Index];
-            if (null != liveOutPrev)
+            IDictionary<StackOperand, StackOperand> liveOutPrev = _liveness[ctx.BasicBlock.Sequence];
+            if (liveOutPrev != null)
             {
                 // FIXME: Merge PHIs with new incoming variables, add new incoming variables to out set
                 // and schedule the remaining out nodes/quit
@@ -231,16 +231,14 @@ namespace Mosa.Runtime.CompilerFramework
                 liveOut = new Dictionary<StackOperand, StackOperand>(s_comparer);
 
             // Iterate each instruction in the block
-            for (Context ctxBlock = new Context(InstructionSet, ctx.BasicBlock); !ctxBlock.EndOfInstruction; ctxBlock.GotoNext())
+            for (Context ctxBlock = CreateContext(ctx.BasicBlock); !ctxBlock.EndOfInstruction; ctxBlock.GotoNext())
             {
-                // FIXME PG - ctx or ctxBlock below?
-
                 // Replace all operands with their current SSA version
-                UpdateUses(ctx, liveOut);
+                UpdateUses(ctxBlock, liveOut);
 
                 // Is this an instruction we ignore?
                 if (!ctx.Ignore)
-                    RenameStackOperands(ctx, liveOut);
+                    RenameStackOperands(ctxBlock, liveOut);
             }
 
             return true;
@@ -275,7 +273,6 @@ namespace Mosa.Runtime.CompilerFramework
 
         private void RenameStackOperands(Context ctx, IDictionary<StackOperand, StackOperand> liveOut)
         {
-            // FIXME PG - might be an issue, is Ctx.Results count always less 2 ?
             int index = 0;
 
             // Create new SSA variables for newly defined operands
@@ -302,7 +299,6 @@ namespace Mosa.Runtime.CompilerFramework
 
         private void UpdateUses(Context ctx, IDictionary<StackOperand, StackOperand> liveOut)
         {
-            // FIXME PG - might be an issue, is Ctx.Results count always less 2 ?
             int index = 0;
 
             foreach (Operand op1 in ctx.Operands)
