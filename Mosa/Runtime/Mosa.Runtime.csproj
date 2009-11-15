@@ -98,7 +98,7 @@
     <Compile Include="CompilerFramework\IBlockOptimizationStage.cs" />
     <Compile Include="CompilerFramework\IBlockReorderStage.cs" />
     <Compile Include="CompilerFramework\IPipelineStage.cs" />
-    <Compile Include="CompilerFramework\IR\CilTransformationStage2.cs" />
+    <Compile Include="CompilerFramework\IR\CILTransformationStage.cs" />
     <Compile Include="CompilerFramework\CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ConversionInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\Instruction.cs" />
