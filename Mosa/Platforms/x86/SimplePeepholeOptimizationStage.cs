@@ -87,7 +87,7 @@ namespace Mosa.Platforms.x86
             /// <param name="ctx">The CTX.</param>
             public void Add(Context ctx)
             {
-                for (int i = Math.Min(_size, _length) - 1; i > 0; i--)
+                for (int i = _length - 1; i > 0; i--)
                     _history[i] = _history[i - 1];
 
                 _history[0] = ctx.Clone();
