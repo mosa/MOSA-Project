@@ -57,33 +57,42 @@ namespace Mosa.Platforms.x86
         /// </summary>
         public class Window
         {
-            private int _size;
+            private int _length;
             private Context[] _history;
-            private int _count;
+            private int _size;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Window"/> class.
             /// </summary>
-            /// <param name="size">The size.</param>
-            public Window(int size)
+            /// <param name="length">The length.</param>
+            public Window(int length)
             {
-                _size = size;
-                _history = new Context[size];
-                _count = 0;
+                _length = length;
+                _history = new Context[length];
+                _size = 0;
+            }
+
+            /// <summary>
+            /// Gets the size.
+            /// </summary>
+            /// <value>The size.</value>
+            public int Size
+            {
+                get { return _size; }
             }
 
             /// <summary>
             /// Nexts the specified CTX.
             /// </summary>
             /// <param name="ctx">The CTX.</param>
-            public void Next(Context ctx)
+            public void Add(Context ctx)
             {
-                for (int i = Math.Min(_count, _size) - 1; i > 0; i--)
+                for (int i = Math.Min(_size, _length) - 1; i > 0; i--)
                     _history[i] = _history[i - 1];
 
                 _history[0] = ctx.Clone();
-                if (_count < _size)
-                    _count++;
+                if (_size < _length)
+                    _size++;
             }
 
             /// <summary>
@@ -92,8 +101,8 @@ namespace Mosa.Platforms.x86
             public void DeleteCurrent()
             {
                 _history[0].Remove();
-                _count--;
-                for (int i = 0; i < _count; i++)
+                _size--;
+                for (int i = 0; i < _size; i++)
                     _history[i] = _history[i + 1];
             }
 
@@ -103,8 +112,8 @@ namespace Mosa.Platforms.x86
             public void DeletePrevious()
             {
                 _history[1].Remove();
-                _count--;
-                for (int i = 1; i < _count; i++)
+                _size--;
+                for (int i = 1; i < _size; i++)
                     _history[i] = _history[i + 1];
             }
 
@@ -114,8 +123,8 @@ namespace Mosa.Platforms.x86
             public void DeletePreviousPrevious()
             {
                 _history[2].Remove();
-                _count--;
-                for (int i = 2; i < _count; i++)
+                _size--;
+                for (int i = 2; i < _size; i++)
                     _history[i] = _history[i + 1];
             }
 
@@ -127,7 +136,7 @@ namespace Mosa.Platforms.x86
             {
                 get
                 {
-                    if (_count == 0)
+                    if (_size == 0)
                         return null;
                     else
                         return _history[0];
@@ -142,7 +151,7 @@ namespace Mosa.Platforms.x86
             {
                 get
                 {
-                    if (_count < 2)
+                    if (_size < 2)
                         return null;
                     else
                         return _history[1];
@@ -157,7 +166,7 @@ namespace Mosa.Platforms.x86
             {
                 get
                 {
-                    if (_count < 3)
+                    if (_size < 3)
                         return null;
                     else
                         return _history[2];
@@ -178,7 +187,7 @@ namespace Mosa.Platforms.x86
                 for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
                     if (ctx.Instruction != null && !ctx.Ignore)
                     {
-                        window.Next(ctx);
+                        window.Add(ctx);
 
                         RemoveMultipleStores(window);
                         RemoveSingleLineJump(window);
@@ -201,7 +210,7 @@ namespace Mosa.Platforms.x86
         /// <returns>True if an instruction has been removed</returns>
         private bool RemoveMultipleStores(Window window)
         {
-            if (window.Current == null || window.Previous == null)
+            if (window.Size < 2)
                 return false;
 
             if (window.Current.BasicBlock != window.Previous.BasicBlock)
@@ -226,7 +235,7 @@ namespace Mosa.Platforms.x86
         /// <returns></returns>
         private bool RemoveSingleLineJump(Window window)
         {
-            if (window.Current == null || window.Previous == null)
+            if (window.Size < 2)
                 return false;
 
             if (window.Previous.Instruction is CPUx86.JmpInstruction)
@@ -247,7 +256,7 @@ namespace Mosa.Platforms.x86
         /// <returns></returns>
         private bool ImproveBranchAndJump(Window window)
         {
-            if (window.Current == null || window.Previous == null || window.PreviousPrevious == null)
+            if (window.Size < 3)
                 return false;
 
             if (window.Previous.Instruction is CPUx86.JmpInstruction)
