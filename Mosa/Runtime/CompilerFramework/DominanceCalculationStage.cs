@@ -149,7 +149,6 @@ namespace Mosa.Runtime.CompilerFramework
                 }
             }
 
-            Debug.WriteLine(@"Computed dominance frontiers");
             int idx = 0;
             _domFrontierOfBlock = new BasicBlock[BasicBlocks.Count][];
             foreach (List<BasicBlock> frontier in domFrontiers)

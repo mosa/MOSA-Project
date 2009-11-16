@@ -68,6 +68,8 @@ namespace Mosa.Runtime.CompilerFramework
             ctx.Label = -1;
             _prologue = CreateBlock(-1, ctx.Index);
 
+            SplitIntoBlocks(0);
+
             // Create the epilogue block
             ctx = new Context(InstructionSet, -1);
             // Add null instruction, necessary to generate a block index
@@ -75,8 +77,6 @@ namespace Mosa.Runtime.CompilerFramework
             ctx.Ignore = true;
             ctx.Label = Int32.MaxValue;
             _epilogue = CreateBlock(Int32.MaxValue, ctx.Index);
-
-            SplitIntoBlocks(0);
 
             // Link all the blocks together
             BuildBlockLinks(_prologue);
