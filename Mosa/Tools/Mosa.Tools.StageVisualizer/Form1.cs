@@ -54,7 +54,6 @@ namespace Mosa.Tools.StageVisualizer
         private void cbStages_SelectionChangeCommitted(object sender, EventArgs e)
         {
             cbStage.Checked = true;
-            cbLabels.Items.Clear();
 
             string method = cbMethods.SelectedItem.ToString();
             string stage = string.Empty;
@@ -66,6 +65,8 @@ namespace Mosa.Tools.StageVisualizer
 
             if (cbLabels.SelectedItem != null)
                 label = cbLabels.SelectedItem.ToString();
+
+            cbLabels.Items.Clear();
 
             foreach (string item in output.GetLabels(method, stage))
                 cbLabels.Items.Add(item);
