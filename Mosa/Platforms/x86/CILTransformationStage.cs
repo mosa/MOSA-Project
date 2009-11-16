@@ -358,10 +358,10 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Mul(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.F)
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseMulInstruction);
-			else
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.MulInstruction);
+            if (ctx.Operand1.StackType == StackTypeCode.F)
+                HandleCommutativeOperation(ctx, CPUx86.Instruction.SseMulInstruction);
+            else
+                HandleCommutativeOperation(ctx, CPUx86.Instruction.MulInstruction);
 		}
 
 		/// <summary>

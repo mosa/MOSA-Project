@@ -73,6 +73,13 @@ namespace Mosa.Platforms.x86
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
+            if (!(op1 is ConstantOperand) && (op2 is ConstantOperand))
+            {
+                Operand temp = op1;
+                op1 = op2;
+                op2 = temp;
+            }
+
 			// Create registers for different data types
             RegisterOperand eax = new RegisterOperand(op1.Type, op1.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
             RegisterOperand storeOperand = new RegisterOperand(result.Type, result.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
