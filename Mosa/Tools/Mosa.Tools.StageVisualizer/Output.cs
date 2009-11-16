@@ -75,7 +75,7 @@ namespace Mosa.Tools.StageVisualizer
                     int mid = line.IndexOf(method2);
 
                     method = line.Substring(method1.Length, mid - method1.Length);
-                    stage = line.Substring(mid);
+                    stage = line.Substring(mid + method2.Length);
 
                     block = -1;
                     label = string.Empty;
@@ -92,7 +92,7 @@ namespace Mosa.Tools.StageVisualizer
                         string blk = line.Substring(block1.Length, mid - block1.Length);
                         block = Convert.ToInt32(blk);
 
-                        label = line.Substring(mid);
+                        label = line.Substring(mid + block2.Length);
                     }
             }
         }
@@ -118,9 +118,9 @@ namespace Mosa.Tools.StageVisualizer
             Dictionary<string, int> list1 = new Dictionary<string, int>();
 
             foreach (Section section in Sections)
-                if (section.Method.Equals(method))
+                if (section.Method == method)
                     if (!list1.ContainsKey(section.Stage))
-                        list1.Add(section.Method, 0);
+                        list1.Add(section.Stage, 0);
 
             List<string> list = new List<string>();
 
@@ -128,6 +128,50 @@ namespace Mosa.Tools.StageVisualizer
                 list.Add(entry);
 
             return list;
+        }
+
+        public List<string> GetLabels(string method, string stage)
+        {
+            Dictionary<string, int> list1 = new Dictionary<string, int>();
+
+            foreach (Section section in Sections)
+                if (section.Method == method && (section.Stage == stage || string.IsNullOrEmpty(stage)))
+                    if (!list1.ContainsKey(section.Label))
+                        list1.Add(section.Label, 0);
+
+            List<string> list = new List<string>();
+
+            foreach (string entry in list1.Keys)
+                list.Add(entry);
+
+            return list;
+        }
+
+        public List<string> GetBlocks(string method, string stage)
+        {
+            List<string> blocks = new List<string>();
+
+            foreach (Section section in Sections)
+                if (section.Method == method && section.Stage == stage)
+                    blocks.Add(section.Block.ToString());
+
+            return blocks;
+        }
+
+        public List<string> GetText(string method, string stage, string label)
+        {
+            List<string> lines = new List<string>();
+
+            foreach (Section section in Sections)
+                if (section.Method == method
+                    && (section.Stage == stage || string.IsNullOrEmpty(stage))
+                    && (section.Label == label || string.IsNullOrEmpty(label)))
+                {
+                    for (int i = section.Start; i < section.End; i++)
+                        lines.Add(Lines[i]);
+                }
+
+            return lines;
         }
     }
 }
