@@ -48,6 +48,7 @@ namespace Mosa.Tools.StageVisualizer
 
         private void cbStages_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            cbStage.Checked = true;
             cbLabels.Items.Clear();
 
             string method = cbMethods.SelectedItem.ToString();
@@ -64,6 +65,12 @@ namespace Mosa.Tools.StageVisualizer
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
+            if (cbMethods.SelectedItem == null)
+            {
+                tbResult.Lines = new string[0];
+                return;
+            }
+
             string method = cbMethods.SelectedItem.ToString();
             string stage = string.Empty;
             string label = string.Empty;
@@ -74,6 +81,12 @@ namespace Mosa.Tools.StageVisualizer
             if (cbLabels.SelectedItem != null)
                 label = cbLabels.SelectedItem.ToString();
 
+            if (!cbLabel.Checked)
+                label = string.Empty;
+
+            if (!cbStage.Checked)
+                stage = string.Empty;
+
             List<string> lines = output.GetText(method, stage, label);
 
             string[] final = new string[lines.Count];
@@ -82,6 +95,12 @@ namespace Mosa.Tools.StageVisualizer
                 final[i] = lines[i];
 
             tbResult.Lines = final;
+        }
+
+        private void cbLabels_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            cbLabel.Checked = true;
+            btnUpdate_Click(sender, e);
         }
     }
 }

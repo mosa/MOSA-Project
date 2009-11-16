@@ -46,10 +46,11 @@ namespace Mosa.Tools.Compiler
             aotCompiler = compiler;
             Pipeline.AddRange(new IMethodCompilerStage[] {
 				new DecodingStage(),
-				//InstructionLogger.Instance,
+				new InstructionLogger(typeof(DecodingStage)),
 				new BasicBlockBuilderStage(),
 				new InstructionLogger(typeof(BasicBlockBuilderStage)),
 				new OperandDeterminationStage(),
+				new InstructionLogger(typeof(OperandDeterminationStage)),
 				new CILTransformationStage(),
 				new InstructionLogger(typeof(CILTransformationStage)),
 				//InstructionStatisticsStage.Instance,

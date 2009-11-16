@@ -17,7 +17,10 @@ namespace Mosa.QuickTest
         /// </summary>
         public static void Main()
         {
+            int a = 5;
+            int b = 4;
 
+            int c = a + b;
         }
         /// <summary>
         /// Muls the constant C right.
@@ -31,9 +34,15 @@ namespace Mosa.QuickTest
             return expect == a * (char)3;
         }
 
-        //public static bool Ceq(long a, long b)
-        //{
-        //    return (a == b);
-        //}
+        /// <summary>
+        /// Ceqs the specified a.
+        /// </summary>
+        /// <param name="a">A.</param>
+        /// <param name="b">The b.</param>
+        /// <returns></returns>
+        public static bool Ceq(long a, long b)
+        {
+            return (a == b);
+        }
     }
 }

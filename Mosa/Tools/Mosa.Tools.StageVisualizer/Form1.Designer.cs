@@ -30,10 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.cbStage = new System.Windows.Forms.CheckBox();
+            this.cbBlock = new System.Windows.Forms.CheckBox();
             this.cbBlocks = new System.Windows.Forms.ComboBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.cbLabel = new System.Windows.Forms.CheckBox();
             this.cbLabels = new System.Windows.Forms.ComboBox();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -54,10 +54,10 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.checkBox3);
-            this.panel1.Controls.Add(this.checkBox2);
+            this.panel1.Controls.Add(this.cbStage);
+            this.panel1.Controls.Add(this.cbBlock);
             this.panel1.Controls.Add(this.cbBlocks);
-            this.panel1.Controls.Add(this.checkBox1);
+            this.panel1.Controls.Add(this.cbLabel);
             this.panel1.Controls.Add(this.cbLabels);
             this.panel1.Controls.Add(this.btnUpdate);
             this.panel1.Controls.Add(this.label2);
@@ -69,25 +69,29 @@
             this.panel1.Size = new System.Drawing.Size(221, 439);
             this.panel1.TabIndex = 1;
             // 
-            // checkBox3
+            // cbStage
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(11, 118);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(57, 17);
-            this.checkBox3.TabIndex = 11;
-            this.checkBox3.Text = "Stage:";
-            this.checkBox3.UseVisualStyleBackColor = true;
+            this.cbStage.AutoSize = true;
+            this.cbStage.Checked = true;
+            this.cbStage.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbStage.Location = new System.Drawing.Point(11, 118);
+            this.cbStage.Name = "cbStage";
+            this.cbStage.Size = new System.Drawing.Size(57, 17);
+            this.cbStage.TabIndex = 11;
+            this.cbStage.Text = "Stage:";
+            this.cbStage.UseVisualStyleBackColor = true;
+            this.cbStage.CheckedChanged += new System.EventHandler(this.btnUpdate_Click);
             // 
-            // checkBox2
+            // cbBlock
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(11, 212);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(56, 17);
-            this.checkBox2.TabIndex = 10;
-            this.checkBox2.Text = "Block:";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.cbBlock.AutoSize = true;
+            this.cbBlock.Location = new System.Drawing.Point(11, 212);
+            this.cbBlock.Name = "cbBlock";
+            this.cbBlock.Size = new System.Drawing.Size(56, 17);
+            this.cbBlock.TabIndex = 10;
+            this.cbBlock.Text = "Block:";
+            this.cbBlock.UseVisualStyleBackColor = true;
+            this.cbBlock.CheckedChanged += new System.EventHandler(this.btnUpdate_Click);
             // 
             // cbBlocks
             // 
@@ -99,15 +103,16 @@
             this.cbBlocks.Size = new System.Drawing.Size(202, 21);
             this.cbBlocks.TabIndex = 9;
             // 
-            // checkBox1
+            // cbLabel
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(11, 165);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(55, 17);
-            this.checkBox1.TabIndex = 8;
-            this.checkBox1.Text = "Label:";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.cbLabel.AutoSize = true;
+            this.cbLabel.Location = new System.Drawing.Point(11, 165);
+            this.cbLabel.Name = "cbLabel";
+            this.cbLabel.Size = new System.Drawing.Size(55, 17);
+            this.cbLabel.TabIndex = 8;
+            this.cbLabel.Text = "Label:";
+            this.cbLabel.UseVisualStyleBackColor = true;
+            this.cbLabel.CheckedChanged += new System.EventHandler(this.btnUpdate_Click);
             // 
             // cbLabels
             // 
@@ -118,6 +123,7 @@
             this.cbLabels.Name = "cbLabels";
             this.cbLabels.Size = new System.Drawing.Size(202, 21);
             this.cbLabels.TabIndex = 6;
+            this.cbLabels.SelectionChangeCommitted += new System.EventHandler(this.cbLabels_SelectionChangeCommitted);
             // 
             // btnUpdate
             // 
@@ -179,8 +185,8 @@
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.Source);
             this.tabControl1.Controls.Add(this.Result);
+            this.tabControl1.Controls.Add(this.Source);
             this.tabControl1.Location = new System.Drawing.Point(228, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -233,6 +239,7 @@
             this.tbResult.Size = new System.Drawing.Size(543, 413);
             this.tbResult.TabIndex = 2;
             this.tbResult.Text = "";
+            this.tbResult.WordWrap = false;
             // 
             // openFileDialog1
             // 
@@ -265,10 +272,10 @@
         private System.Windows.Forms.ComboBox cbStages;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox cbLabel;
         private System.Windows.Forms.ComboBox cbLabels;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox cbStage;
+        private System.Windows.Forms.CheckBox cbBlock;
         private System.Windows.Forms.ComboBox cbBlocks;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage Result;

@@ -35,7 +35,7 @@ namespace Mosa.Tools.StageVisualizer
 
         protected void NewSection(string method, string stage, int block, string label, int start, int end)
         {
-            if (string.IsNullOrEmpty(method) || start < 0)
+            if (string.IsNullOrEmpty(method) || string.IsNullOrEmpty(label) || start < 0)
                 return;
 
             Section section = new Section();
@@ -71,7 +71,7 @@ namespace Mosa.Tools.StageVisualizer
                 {
                     end = i - 1;
                     NewSection(method, stage, block, label, start, end);
-                    start = i + 1;
+                    start = i; // +1;
                     int mid = line.IndexOf(method2);
 
                     method = line.Substring(method1.Length, mid - method1.Length);
@@ -167,7 +167,7 @@ namespace Mosa.Tools.StageVisualizer
                     && (section.Stage == stage || string.IsNullOrEmpty(stage))
                     && (section.Label == label || string.IsNullOrEmpty(label)))
                 {
-                    for (int i = section.Start; i < section.End; i++)
+                    for (int i = section.Start; i <= section.End; i++)
                         lines.Add(Lines[i]);
                 }
 
