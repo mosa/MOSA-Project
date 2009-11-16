@@ -402,6 +402,9 @@ namespace Mosa.Platforms.x86
             {
                 ICallingConvention cc = Architecture.GetCallingConvention(MethodCompiler.Method.Signature.CallingConvention);
                 cc.MoveReturnValue(ctx, op);
+                ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction);
+                ctx.SetBranch(Int32.MaxValue);
+                return;
             }
 
             ctx.SetInstruction(CPUx86.Instruction.JmpInstruction);
