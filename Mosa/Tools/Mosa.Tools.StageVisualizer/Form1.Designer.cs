@@ -91,6 +91,7 @@
             this.cbBlock.TabIndex = 10;
             this.cbBlock.Text = "Block:";
             this.cbBlock.UseVisualStyleBackColor = true;
+            this.cbBlock.Visible = false;
             this.cbBlock.CheckedChanged += new System.EventHandler(this.btnUpdate_Click);
             // 
             // cbBlocks
@@ -102,6 +103,7 @@
             this.cbBlocks.Name = "cbBlocks";
             this.cbBlocks.Size = new System.Drawing.Size(202, 21);
             this.cbBlocks.TabIndex = 9;
+            this.cbBlocks.Visible = false;
             // 
             // cbLabel
             // 
@@ -129,7 +131,7 @@
             // 
             this.btnUpdate.Image = ((System.Drawing.Image)(resources.GetObject("btnUpdate.Image")));
             this.btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnUpdate.Location = new System.Drawing.Point(17, 308);
+            this.btnUpdate.Location = new System.Drawing.Point(17, 270);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(190, 41);
             this.btnUpdate.TabIndex = 5;

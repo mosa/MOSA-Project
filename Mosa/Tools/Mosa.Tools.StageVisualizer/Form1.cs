@@ -30,6 +30,11 @@ namespace Mosa.Tools.StageVisualizer
 
                 foreach (string item in output.GetMethods())
                     cbMethods.Items.Add(item);
+
+                cbMethods.SelectedIndex = 0;
+                cbStages.SelectedItem = 0;
+
+                cbMethods_SelectionChangeCommitted(sender, e);
             }
         }
 
@@ -57,8 +62,17 @@ namespace Mosa.Tools.StageVisualizer
             if (cbStages.SelectedItem != null)
                 stage = cbStages.SelectedItem.ToString();
 
+            string label = string.Empty;
+
+            if (cbLabels.SelectedItem != null)
+                label = cbLabels.SelectedItem.ToString();
+
             foreach (string item in output.GetLabels(method, stage))
                 cbLabels.Items.Add(item);
+
+            if (!string.IsNullOrEmpty(label))
+                if (cbLabels.Items.Contains(label))
+                    cbLabels.SelectedItem = label;
 
             btnUpdate_Click(sender, e);
         }
@@ -73,10 +87,11 @@ namespace Mosa.Tools.StageVisualizer
 
             string method = cbMethods.SelectedItem.ToString();
             string stage = string.Empty;
-            string label = string.Empty;
 
             if (cbStages.SelectedItem != null)
                 stage = cbStages.SelectedItem.ToString();
+
+            string label = string.Empty;
 
             if (cbLabels.SelectedItem != null)
                 label = cbLabels.SelectedItem.ToString();
