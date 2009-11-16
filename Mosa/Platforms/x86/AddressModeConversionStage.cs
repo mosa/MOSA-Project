@@ -73,7 +73,7 @@ namespace Mosa.Platforms.x86
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
-            if (ctx.Instruction is CIL.BaseInstruction || ctx.Instruction is IR.BaseInstruction)
+            if (ctx.Instruction is CIL.MulInstruction || ctx.Instruction is CIL.DivInstruction)
                 if (!(op1 is ConstantOperand) && (op2 is ConstantOperand))
                 {
                     Operand temp = op1;
@@ -103,7 +103,7 @@ namespace Mosa.Platforms.x86
 			//    // In any other case just load it
 			//    else
 
-            if (!Is32Bit(op1) && !(op1.StackType == StackTypeCode.F))
+            if (/*!Is32Bit(op1) &&*/ !(op1.StackType == StackTypeCode.F))
             {
                 if (IsSigned(op1))
                     ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovsxInstruction, eax, op1);

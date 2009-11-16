@@ -76,7 +76,7 @@ namespace Mosa.Platforms.x86
             int resultCount = clone.ResultCount;
 			SigType I = new SigType(CilElementType.I);
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
-			int stackSize = CalculateStackSizeForParameters(ctx);
+            int stackSize = CalculateStackSizeForParameters(clone);
             ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 			if (stackSize != 0) {
                 ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, stackSize));
@@ -102,9 +102,9 @@ namespace Mosa.Platforms.x86
 
             if (resultCount > 0)
                 if (result.StackType == StackTypeCode.Int64)
-                    MoveReturnValueTo64Bit(result, ctx);
+                    MoveReturnValueTo64Bit(result, clone);
 				else
-                    MoveReturnValueTo32Bit(result, ctx);
+                    MoveReturnValueTo32Bit(result, clone);
 
 			//ctx.Remove();
 		}

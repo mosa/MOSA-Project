@@ -239,7 +239,7 @@ namespace Mosa.Platforms.x86
 
             ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Result, ctx.Operand1);
 
-            if (IsUnsigned(ctx.Result))
+            if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Result))
                 ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(condition), ctx.Result);
             else
                 ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, condition, ctx.Result);
