@@ -32,8 +32,6 @@ namespace Mosa.Tools.StageVisualizer
                     cbMethods.Items.Add(item);
 
                 cbMethods.SelectedIndex = 0;
-                cbStages.SelectedItem = 0;
-
                 cbMethods_SelectionChangeCommitted(sender, e);
             }
         }
@@ -46,6 +44,8 @@ namespace Mosa.Tools.StageVisualizer
 
                 foreach (string item in output.GetStages(cbMethods.SelectedItem.ToString()))
                     cbStages.Items.Add(item);
+
+                cbStages.SelectedIndex = 0;
 
                 cbStages_SelectionChangeCommitted(sender, e);
             }
