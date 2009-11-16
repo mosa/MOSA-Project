@@ -15,5 +15,10 @@ namespace Mosa.Tools.StageVisualizer
         {
             InitializeComponent();
         }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
