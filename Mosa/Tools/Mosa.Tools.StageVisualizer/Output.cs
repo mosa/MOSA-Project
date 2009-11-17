@@ -95,6 +95,9 @@ namespace Mosa.Tools.StageVisualizer
                         label = line.Substring(mid + block2.Length);
                     }
             }
+            end = Lines.Length - 1;
+            NewSection(method, stage, block, label, start, end);
+
         }
 
         public List<string> GetMethods()

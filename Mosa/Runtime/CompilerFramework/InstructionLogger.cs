@@ -87,9 +87,17 @@ namespace Mosa.Runtime.CompilerFramework
             foreach (BasicBlock block in BasicBlocks)
             {
                 Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
+
+                foreach (BasicBlock prev in block.PreviousBlocks)
+                    Debug.WriteLine(String.Format("  Prev: L_{0:X4}", prev.Label));
+
                 Debug.Indent();
                 LogInstructions(new Context(InstructionSet, block));
                 Debug.Unindent();
+                
+                foreach (BasicBlock next in block.NextBlocks)
+                    Debug.WriteLine(String.Format("  Next: L_{0:X4}", next.Label));
+                
                 index++;
             }
         }
