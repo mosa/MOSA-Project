@@ -98,7 +98,7 @@ namespace Mosa.Platforms.x86
                 // pop ebp
                 ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ebp);
                 // ret
-                ctx.AppendInstruction(IR.Instruction.ReturnInstruction);
+                ctx.AppendInstruction(CPUx86.Instruction.RetInstruction);
             }
             else
             {
