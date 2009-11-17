@@ -33,6 +33,8 @@ namespace Mosa.Tools.StageVisualizer
 
                 cbMethods.SelectedIndex = 0;
                 cbMethods_SelectionChangeCommitted(sender, e);
+
+                lbStatus.Text = openFileDialog1.FileName;
             }
         }
 

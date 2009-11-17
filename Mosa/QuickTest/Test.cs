@@ -44,5 +44,17 @@ namespace Mosa.QuickTest
         {
             return (a == b);
         }
+
+        /// <summary>
+        /// Adds the u1.
+        /// </summary>
+        /// <param name="expect">The expect.</param>
+        /// <param name="a">A.</param>
+        /// <param name="b">The b.</param>
+        /// <returns></returns>
+        static bool AddU1(byte expect, uint a, uint b)
+        {
+            return expect == (a + b);
+        }
     }
 }

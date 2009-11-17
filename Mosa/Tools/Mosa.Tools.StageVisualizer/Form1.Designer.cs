@@ -41,15 +41,18 @@
             this.btnLoad = new System.Windows.Forms.Button();
             this.cbStages = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.Source = new System.Windows.Forms.TabPage();
-            this.tbSource = new System.Windows.Forms.RichTextBox();
             this.Result = new System.Windows.Forms.TabPage();
             this.tbResult = new System.Windows.Forms.RichTextBox();
+            this.Source = new System.Windows.Forms.TabPage();
+            this.tbSource = new System.Windows.Forms.RichTextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.lbStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            this.Source.SuspendLayout();
             this.Result.SuspendLayout();
+            this.Source.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -195,6 +198,30 @@
             this.tabControl1.Size = new System.Drawing.Size(554, 439);
             this.tabControl1.TabIndex = 2;
             // 
+            // Result
+            // 
+            this.Result.Controls.Add(this.tbResult);
+            this.Result.Location = new System.Drawing.Point(4, 22);
+            this.Result.Name = "Result";
+            this.Result.Padding = new System.Windows.Forms.Padding(3);
+            this.Result.Size = new System.Drawing.Size(546, 413);
+            this.Result.TabIndex = 0;
+            this.Result.Text = "Result";
+            this.Result.UseVisualStyleBackColor = true;
+            // 
+            // tbResult
+            // 
+            this.tbResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbResult.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbResult.Location = new System.Drawing.Point(2, 0);
+            this.tbResult.Name = "tbResult";
+            this.tbResult.Size = new System.Drawing.Size(543, 395);
+            this.tbResult.TabIndex = 2;
+            this.tbResult.Text = "";
+            this.tbResult.WordWrap = false;
+            // 
             // Source
             // 
             this.Source.Controls.Add(this.tbSource);
@@ -219,33 +246,25 @@
             this.tbSource.Text = "";
             this.tbSource.WordWrap = false;
             // 
-            // Result
-            // 
-            this.Result.Controls.Add(this.tbResult);
-            this.Result.Location = new System.Drawing.Point(4, 22);
-            this.Result.Name = "Result";
-            this.Result.Padding = new System.Windows.Forms.Padding(3);
-            this.Result.Size = new System.Drawing.Size(546, 413);
-            this.Result.TabIndex = 0;
-            this.Result.Text = "Result";
-            this.Result.UseVisualStyleBackColor = true;
-            // 
-            // tbResult
-            // 
-            this.tbResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbResult.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbResult.Location = new System.Drawing.Point(2, 0);
-            this.tbResult.Name = "tbResult";
-            this.tbResult.Size = new System.Drawing.Size(543, 413);
-            this.tbResult.TabIndex = 2;
-            this.tbResult.Text = "";
-            this.tbResult.WordWrap = false;
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lbStatus});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 422);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(782, 22);
+            this.statusStrip1.TabIndex = 3;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // lbStatus
+            // 
+            this.lbStatus.Name = "lbStatus";
+            this.lbStatus.Size = new System.Drawing.Size(109, 17);
+            this.lbStatus.Text = "toolStripStatusLabel1";
             // 
             // frmMain
             // 
@@ -253,6 +272,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(782, 444);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel1);
             this.Name = "frmMain";
@@ -260,9 +280,12 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
-            this.Source.ResumeLayout(false);
             this.Result.ResumeLayout(false);
+            this.Source.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -285,6 +308,8 @@
         private System.Windows.Forms.RichTextBox tbSource;
         private System.Windows.Forms.RichTextBox tbResult;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel lbStatus;
     }
 }
 
