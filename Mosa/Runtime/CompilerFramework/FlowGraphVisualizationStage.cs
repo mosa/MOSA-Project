@@ -61,7 +61,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-			new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(InstructionLogger)),
+			new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
 		};
 
 		/// <summary>
@@ -96,10 +96,15 @@ namespace Mosa.Runtime.CompilerFramework
 			workList.Push(firstBlock);
 			workArray = new BitArray(BasicBlocks.Count);
 
+            string methodName = MethodCompiler.Method.Name;
+            methodName = methodName.Replace("<", "");
+            methodName = methodName.Replace(">", "");
+            methodName = methodName.Replace("$", "");
+            methodName = methodName.Replace(".", "");
 			IPipelineStage previousStage = MethodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
-			dotFile.WriteLine("digraph " + MethodCompiler.Method.Name + "_FlowGraph {");
-			dotFile.WriteLine("label = \"Method: " + MethodCompiler.Method.Name + "(" + MethodCompiler.Method.Signature + ") after " + previousStage.Name + "\";");
-			dotFile.WriteLine("graph [rankdir = \"TB\"];");
+            dotFile.WriteLine("subgraph cluster" + methodName + "_FlowGraph {");
+            dotFile.WriteLine("label = \"Method: " + methodName + "(" + MethodCompiler.Method.Signature + ") after " + previousStage.Name + "\"");
+			//dotFile.WriteLine("graph [rankdir = \"TB\"];");
 
 			string nodes = string.Empty;
 			string edges = string.Empty;
@@ -110,10 +115,10 @@ namespace Mosa.Runtime.CompilerFramework
                 string nodeContent = string.Empty;
                 string nextNode = string.Empty;
 
-                nodeName = block.ToString();
+                nodeName = methodName + "_" + block.ToString();
                 //nodeName = nodeName.Replace("-", "_");
 
-                nodeContent += "<tr><td bgcolor=\"#DDDDDD\" align=\"center\" colspan=\"4\"><font face=\"Courier\">L_" + block.Label.ToString("x4") + "</font></td></tr>";
+                nodeContent += "<tr><td bgcolor=\"black\" align=\"center\" colspan=\"4\"><font face=\"Courier\" color=\"white\">L_" + block.Label.ToString("x4") + "</font></td></tr>";
 
                 int field = 0;
                 int i = 0;
@@ -133,7 +138,7 @@ namespace Mosa.Runtime.CompilerFramework
                     else if (inst.StartsWith("IR"))
                         color = "#ff00005f";
                     else
-                        color = "#cfdbf0ff";
+                        color = "#CFD6CEff";
 
 
                     nodeContent += "<tr height=\"20\"><td bgcolor=\"white\" align=\"right\" width=\"20\"><img src=\"icon.png\"/></td><td bgcolor=\"white\" align=\"right\">" + (i++) + "</td><td bgcolor=\"" + color + "\" align=\"center\" colspan=\"2\"><font face=\"Courier\">" + inst + "</font></td></tr>";
@@ -150,9 +155,9 @@ namespace Mosa.Runtime.CompilerFramework
 
                 foreach (BasicBlock nextBlock in block.NextBlocks)
                 {
-                    nextNode = nextBlock.ToString();
+                    nextNode = methodName + "_" + nextBlock.ToString();
 
-                    edges += "\"" + nodeName + "\"" + " -> " + "\"" + nextNode + "\"\r\n";
+                    edges += "\"" + nodeName + "\"" + " -> " + "\"" + nextNode + "\";\r\n";
                 }
             }
 
@@ -169,6 +174,8 @@ namespace Mosa.Runtime.CompilerFramework
 			try {
 				//dotFile = new System.IO.StreamWriter("dotGraph_" + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + ".dot");
 				dotFile = new System.IO.StreamWriter("dotGraph.dot");
+                dotFile.WriteLine("digraph \"\" {");
+                dotFile.WriteLine("label = \"" + MethodCompiler.Assembly.Name + "\"");
 			}
 			catch (System.Exception) {
 				return;
@@ -180,6 +187,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Close()
 		{
+            dotFile.WriteLine("}");
 			dotFile.Close();
 		}
 
