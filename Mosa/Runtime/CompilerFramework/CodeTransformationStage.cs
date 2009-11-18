@@ -82,6 +82,15 @@ namespace Mosa.Runtime.CompilerFramework
 			if (!destination.PreviousBlocks.Contains(source))
 				destination.PreviousBlocks.Add(source);
 		}
+        /// <summary>
+        /// Links the blocks.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="destination">The destination.</param>
+        protected void LinkBlocks(Context source, BasicBlock destination)
+        {
+            LinkBlocks(source.BasicBlock, destination);
+        }
 
 		/// <summary>
 		/// Links the blocks.
@@ -103,48 +112,6 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			LinkBlocks(source.BasicBlock, destination.BasicBlock);
 			LinkBlocks(source.BasicBlock, destination2.BasicBlock);
-		}
-
-		/// <summary>
-		/// Links the new Blocks.
-		/// </summary>
-		/// <param name="blocks">The Blocks.</param>
-		/// <param name="currentBlock">The current block.</param>
-		/// <param name="nextBlock">The next block.</param>
-		protected void LinkBlocks(Context[] blocks, Context currentBlock, Context nextBlock)
-		{
-			// Create label to block dictionary
-			Dictionary<int, BasicBlock> blockLabels = new Dictionary<int, BasicBlock>();
-
-			foreach (Context ctx in blocks)
-				blockLabels.Add(ctx.BasicBlock.Label, ctx.BasicBlock);
-
-			AddBlockLabels(blockLabels, nextBlock.BasicBlock);
-			AddBlockLabels(blockLabels, currentBlock.BasicBlock);
-
-			// Update block links
-			foreach (Context context in blocks)
-				for (Context ctx = new Context(InstructionSet, context.BasicBlock); !ctx.EndOfInstruction; ctx.GotoNext())
-					if (ctx.Instruction != null && !ctx.Ignore && ctx.Branch != null)
-						foreach (int target in ctx.Branch.Targets)
-							LinkBlocks(ctx.BasicBlock, blockLabels[target]);
-		}
-
-		/// <summary>
-		/// Adds the block labels.
-		/// </summary>
-		/// <param name="blockLabels">The block labels.</param>
-		/// <param name="basicBlock">The basic block.</param>
-		private static void AddBlockLabels(IDictionary<int, BasicBlock> blockLabels, BasicBlock basicBlock)
-		{
-			if (basicBlock != null) {
-				foreach (BasicBlock block in basicBlock.NextBlocks)
-					if (!blockLabels.ContainsKey(block.Label))
-						blockLabels.Add(block.Label, block);
-
-				if (!blockLabels.ContainsKey(basicBlock.Label))
-					blockLabels.Add(basicBlock.Label, basicBlock);
-			}
 		}
 
 		/// <summary>
@@ -184,12 +151,13 @@ namespace Mosa.Runtime.CompilerFramework
 			return result;
 		}
 
-		/// <summary>
-		/// Splits the block.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <returns></returns>
-		protected Context SplitContext(Context ctx)
+        /// <summary>
+        /// Splits the block.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        /// <param name="addJump">if set to <c>true</c> [add jump].</param>
+        /// <returns></returns>
+		protected Context SplitContext(Context ctx, bool addJump)
 		{
 			Context current = ctx.Clone();
 
@@ -201,9 +169,12 @@ namespace Mosa.Runtime.CompilerFramework
 				nextBlock.NextBlocks.Add(block);
 
 			current.BasicBlock.NextBlocks.Clear();
-			current.BasicBlock.NextBlocks.Add(nextBlock);
 
-			nextBlock.PreviousBlocks.Add(ctx.BasicBlock);
+            if (addJump)
+            {
+                current.BasicBlock.NextBlocks.Add(nextBlock);
+                nextBlock.PreviousBlocks.Add(ctx.BasicBlock);
+            }
 
 			if (current.IsLastInstruction) {
 				current.AppendInstruction(null);
@@ -216,7 +187,8 @@ namespace Mosa.Runtime.CompilerFramework
 				current.SliceAfter();
 			}
 
-			current.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
+            if (addJump)
+    			current.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
 
 			return CreateContext(nextBlock);
 		}
