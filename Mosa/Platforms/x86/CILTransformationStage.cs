@@ -92,7 +92,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Call(Context ctx)
 		{
-			HandleInvokeInstruction(ctx.Clone());
+			HandleInvokeInstruction(ctx);
 
 			return;
 
@@ -203,92 +203,97 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.BinaryBranch(Context ctx)
 		{
-			// FIXME PG
+			bool swap = ctx.Operand1 is ConstantOperand;
+			IBranch branch = ctx.Branch;
+            CIL.OpCode opcode = (ctx.Instruction as CIL.ICILInstruction).OpCode;
+            IR.ConditionCode conditionCode;
 
-			//bool swap = ctx.Operand1 is ConstantOperand;
-			//int[] targets = ctx.Branch.Targets;
-			//if (swap) {
-			//    int tmp = targets[0];
-			//    targets[0] = targets[1];
-			//    targets[1] = tmp;
+			if (swap) {
+                int tmp = branch.Targets[0];
+                branch.Targets[0] = branch.Targets[1];
+                branch.Targets[1] = tmp;
 
-			//    _codeEmitter.Cmp(ctx.Operand2, ctx.Operand1);
+                ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand2, ctx.Operand1);
 
-			//    CIL.OpCode opcode = ((ctx.Instruction) as CIL.ICILInstruction).OpCode;
+                switch (opcode)
+                {
+                    // Signed
+                    case CIL.OpCode.Beq_s: conditionCode = IR.ConditionCode.NotEqual; break;
+                    case CIL.OpCode.Bge_s: conditionCode = IR.ConditionCode.LessThan; break;
+                    case CIL.OpCode.Bgt_s: conditionCode = IR.ConditionCode.LessOrEqual; break;
+                    case CIL.OpCode.Ble_s: conditionCode = IR.ConditionCode.GreaterThan; break;
+                    case CIL.OpCode.Blt_s: conditionCode = IR.ConditionCode.GreaterOrEqual; break;
 
-			//    switch (opcode) {
-			//        // Signed
-			//        case CIL.OpCode.Beq_s: _codeEmitter.Jne(targets[0]); break;
-			//        case CIL.OpCode.Bge_s: _codeEmitter.Jl(targets[0]); break;
-			//        case CIL.OpCode.Bgt_s: _codeEmitter.Jle(targets[0]); break;
-			//        case CIL.OpCode.Ble_s: _codeEmitter.Jg(targets[0]); break;
-			//        case CIL.OpCode.Blt_s: _codeEmitter.Jge(targets[0]); break;
+                    // Unsigned
+                    case CIL.OpCode.Bne_un_s: conditionCode = IR.ConditionCode.Equal; break;
+                    case CIL.OpCode.Bge_un_s: conditionCode = IR.ConditionCode.UnsignedLessThan; break;
+                    case CIL.OpCode.Bgt_un_s: conditionCode = IR.ConditionCode.UnsignedLessOrEqual; break;
+                    case CIL.OpCode.Ble_un_s: conditionCode = IR.ConditionCode.UnsignedGreaterThan; break;
+                    case CIL.OpCode.Blt_un_s: conditionCode = IR.ConditionCode.UnsignedGreaterOrEqual; break;
 
-			//        // Unsigned
-			//        case CIL.OpCode.Bne_un_s: _codeEmitter.Je(targets[0]); break;
-			//        case CIL.OpCode.Bge_un_s: _codeEmitter.Jb(targets[0]); break;
-			//        case CIL.OpCode.Bgt_un_s: _codeEmitter.Jbe(targets[0]); break;
-			//        case CIL.OpCode.Ble_un_s: _codeEmitter.Ja(targets[0]); break;
-			//        case CIL.OpCode.Blt_un_s: _codeEmitter.Jae(targets[0]); break;
+                    // Long form signed
+                    case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
+                    case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
+                    case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
+                    case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
+                    case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
 
-			//        // Long form signed
-			//        case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
-			//        case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
-			//        case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
-			//        case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
-			//        case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
+                    // Long form unsigned
+                    case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
+                    case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
+                    case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
+                    case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
+                    case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
 
-			//        // Long form unsigned
-			//        case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
-			//        case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
-			//        case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
-			//        case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
-			//        case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
+                    default:
+                        throw new NotImplementedException();
+                }
+                ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, conditionCode);
+                ctx.SetBranch(branch.Targets[0]);
+            }
+            else
+            {
+                ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand1, ctx.Operand2);
 
-			//        default:
-			//            throw new NotImplementedException();
-			//    }
-			//}
-			//else {
-			//    _codeEmitter.Cmp(ctx.Operand1, ctx.Operand2);
-			//    CIL.OpCode opcode = ((ctx.Instruction) as CIL.ICILInstruction).OpCode;
+                switch (opcode)
+                {
+                    // Signed
+                    case CIL.OpCode.Beq_s: conditionCode = IR.ConditionCode.Equal; break;
+                    case CIL.OpCode.Bge_s: conditionCode = IR.ConditionCode.GreaterOrEqual; break;
+                    case CIL.OpCode.Bgt_s: conditionCode = IR.ConditionCode.GreaterThan; break;
+                    case CIL.OpCode.Ble_s: conditionCode = IR.ConditionCode.LessOrEqual; break;
+                    case CIL.OpCode.Blt_s: conditionCode = IR.ConditionCode.LessThan; break;
 
-			//    switch (opcode) {
-			//        // Signed
-			//        case CIL.OpCode.Beq_s: _codeEmitter.Je(targets[0]); break;
-			//        case CIL.OpCode.Bge_s: _codeEmitter.Jge(targets[0]); break;
-			//        case CIL.OpCode.Bgt_s: _codeEmitter.Jg(targets[0]); break;
-			//        case CIL.OpCode.Ble_s: _codeEmitter.Jle(targets[0]); break;
-			//        case CIL.OpCode.Blt_s: _codeEmitter.Jl(targets[0]); break;
+                    // Unsigned
+                    case CIL.OpCode.Bne_un_s: conditionCode = IR.ConditionCode.NotEqual; break;
+                    case CIL.OpCode.Bge_un_s: conditionCode = IR.ConditionCode.UnsignedGreaterOrEqual; break;
+                    case CIL.OpCode.Bgt_un_s: conditionCode = IR.ConditionCode.UnsignedGreaterThan; break;
+                    case CIL.OpCode.Ble_un_s: conditionCode = IR.ConditionCode.UnsignedLessOrEqual; break;
+                    case CIL.OpCode.Blt_un_s: conditionCode = IR.ConditionCode.UnsignedLessThan; break;
 
-			//        // Unsigned
-			//        case CIL.OpCode.Bne_un_s: _codeEmitter.Jne(targets[0]); break;
-			//        case CIL.OpCode.Bge_un_s: _codeEmitter.Jae(targets[0]); break;
-			//        case CIL.OpCode.Bgt_un_s: _codeEmitter.Ja(targets[0]); break;
-			//        case CIL.OpCode.Ble_un_s: _codeEmitter.Jbe(targets[0]); break;
-			//        case CIL.OpCode.Blt_un_s: _codeEmitter.Jb(targets[0]); break;
+                    // Long form signed
+                    case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
+                    case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
+                    case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
+                    case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
+                    case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
 
-			//        // Long form signed
-			//        case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
-			//        case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
-			//        case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
-			//        case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
-			//        case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
+                    // Long form unsigned
+                    case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
+                    case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
+                    case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
+                    case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
+                    case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
 
-			//        // Long form unsigned
-			//        case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
-			//        case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
-			//        case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
-			//        case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
-			//        case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
+                    default:
+                        throw new NotImplementedException();
+                }
+                ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, conditionCode);
+                ctx.SetBranch(branch.Targets[0]);
+            }
 
-			//        default:
-			//            throw new NotImplementedException();
-			//    }
-			//}
-
-			//// Emit a regular jump for the second case
-			//_codeEmitter.Jmp(targets[1]);
+            ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction);
+            ctx.SetBranch(branch.Targets[1]);
 		}
 
 		/// <summary>

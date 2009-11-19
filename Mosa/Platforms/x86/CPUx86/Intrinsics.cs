@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -61,6 +62,7 @@ namespace Mosa.Platforms.x86.CPUx86
 			map.Add(typeof(CpuIdInstruction), CPUx86.Instruction.CpuIdInstruction);
 			map.Add(typeof(InvlpgInstruction), CPUx86.Instruction.InvlpgInstruction);
 			map.Add(typeof(NopInstruction), CPUx86.Instruction.NopInstruction);
+            map.Add(typeof(IR.MoveInstruction), IR.Instruction.MoveInstruction);
 
 			// TODO - finsh up the list
 

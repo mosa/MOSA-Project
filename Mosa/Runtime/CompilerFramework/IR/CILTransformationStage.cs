@@ -1131,7 +1131,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 								return;
 							}
 							catch (Exception e) {
-								Trace.WriteLine("Failed to replace intrinsic call with its instruction:");
+								Trace.WriteLine("Failed to replace intrinsic call with its instruction: " + ia.InstructionType.ToString());
 								Trace.WriteLine(e);
 							}
 						}
