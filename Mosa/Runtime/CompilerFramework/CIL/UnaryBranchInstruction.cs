@@ -102,11 +102,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		protected override string GetModifier(Context context)
 		{
-			switch (((context.Instruction) as CIL.ICILInstruction).OpCode) {
+            OpCode opCode = ((context.Instruction) as CIL.ICILInstruction).OpCode;
+			switch (opCode) {
 				case OpCode.Brtrue: return @"true";
 				case OpCode.Brtrue_s: return @"true";
 				case OpCode.Brfalse: return @"false";
 				case OpCode.Brfalse_s: return @"false";
+                case OpCode.Switch: return @"switch";
 				default: throw new InvalidOperationException(@"Opcode not set.");
 			}
 		}

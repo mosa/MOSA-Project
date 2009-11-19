@@ -186,6 +186,13 @@ namespace Mosa.Platforms.x86
 			else
 				ctx.SetBranch(branch.Targets[1]);
 
+            ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);
+
+            if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
+                ctx.SetBranch(branch.Targets[1]);
+            else
+                ctx.SetBranch(branch.Targets[0]);
+
 			//ctx.InsertInstructionAfter(CPUx86.Instruction.JmpInstruction);
 			//ctx.SetBranch(branch.Targets[1]);
 		}
@@ -290,6 +297,18 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Switch(Context ctx)
 		{
+            IBranch branch = ctx.Branch;
+            Operand operand = ctx.Operand1;
+
+            ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
+            for (int i = 0; i < branch.Targets.Length - 1; ++i)
+            {
+                ctx.AppendInstruction(CPUx86.Instruction.CmpInstruction, operand, new ConstantOperand(new SigType(CilElementType.I), i));
+                ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);
+                ctx.SetBranch(branch.Targets[i]);
+            }
+            ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction);
+            ctx.SetBranch(branch.Targets[branch.Targets.Length - 1]);
 			// FIXME PG
 
 			//for (int i = 0; i < ctx.Branch.Targets.Length - 1; i++) {
@@ -299,11 +318,11 @@ namespace Mosa.Platforms.x86
 			//_codeEmitter.Jmp(ctx.Branch.Targets[ctx.Branch.Targets.Length - 1]);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Calli"/>.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Calli(Context ctx)
+        /// <summary>
+        /// Visitation function for <see cref="CIL.ICILVisitor.Calli"/>.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        void CIL.ICILVisitor.Calli(Context ctx)
 		{
 			HandleInvokeInstruction(ctx);
 		}
