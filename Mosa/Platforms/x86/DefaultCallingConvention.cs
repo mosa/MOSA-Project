@@ -72,7 +72,9 @@ namespace Mosa.Platforms.x86
             Mosa.Runtime.Vm.RuntimeMethod invokeTarget = ctx.InvokeTarget;
             Operand result = ctx.Result;
             Operand operand1 = ctx.Operand1;
-            IEnumerable<Operand> operands = ctx.Operands;
+
+            List<Operand> operands = new List<Operand>();
+            operands.AddRange(ctx.Operands);
 
             int resultCount = ctx.ResultCount;
             int operandCount = ctx.OperandCount;
