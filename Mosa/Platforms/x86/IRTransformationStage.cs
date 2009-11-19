@@ -350,14 +350,14 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
             // int 3
-            //ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
-            //ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
+            ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
+            ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 
             // Uncomment this line to enable breakpoints within Bochs
             //ctx.XXX(CPUx86.Instruction.BochsDebug);
 
             // push ebp
-            ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
+            //ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
             // mov ebp, esp
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, esp);
             // sub esp, localsSize
@@ -367,7 +367,7 @@ namespace Mosa.Platforms.x86
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edi, esp);
             ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
             ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, edi, new ConstantOperand(I, 4));
-            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I, (-stackSize) / 4));
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I, -(int)(stackSize >>2)));
             ctx.AppendInstruction(CPUx86.Instruction.XorInstruction, eax, eax);
             ctx.AppendInstruction(CPUx86.Instruction.RepInstruction);
             ctx.AppendInstruction(CPUx86.Instruction.StosdInstruction);
