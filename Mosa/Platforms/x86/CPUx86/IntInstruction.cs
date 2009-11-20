@@ -17,7 +17,14 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
 	public sealed class IntInstruction : OneOperandInstruction
     {
+		#region Data Members
+
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0xCD });
+
+		#endregion // Data Members
+
         #region Methods
+
         /// <summary>
         /// 
         /// </summary>
@@ -27,7 +34,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// <returns></returns>
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-            return new OpCode(new byte[] { 0xCD });
+			return opcode;
         }
 
 		/// <summary>
