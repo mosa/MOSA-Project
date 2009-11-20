@@ -69,5 +69,20 @@ namespace Mosa.QuickTest
         {
             return expect == (a % b);
         }
+
+
+        /// <summary>
+        /// Adds the u1.
+        /// </summary>
+        /// <param name="expect">The expect.</param>
+        /// <param name="a">A.</param>
+        /// <param name="b">The b.</param>
+        /// <returns></returns>
+        static int RemU4a(int expect)
+        {
+            int a = 1;
+            int b = 2;
+            return a % b;
+        }
     }
 }

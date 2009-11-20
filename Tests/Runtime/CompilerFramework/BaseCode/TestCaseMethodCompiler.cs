@@ -41,7 +41,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 //new LeaveSSA(),
 				new StackLayoutStage(),
 				//new BlockReductionStage(),
-				//new LoopAwareBlockOrderStage(),
+				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
 				//new BasicBlockOrderStage()	
