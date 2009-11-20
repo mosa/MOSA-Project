@@ -20,18 +20,24 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public class UcomissInstruction : TwoOperandInstruction
     {
-   
+		#region Data Members
+
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0x2E });
+
+		#endregion // Data Members
+
         #region Methods
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="destination"></param>
-        /// <param name="source"></param>
-        /// <param name="third"></param>
-        /// <returns></returns>
+		
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-            return new OpCode(new byte[] { 0x0F, 0x2E });
+			return opcode;
         }
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

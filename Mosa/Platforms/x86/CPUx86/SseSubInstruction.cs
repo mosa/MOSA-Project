@@ -22,6 +22,12 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// </summary>
 	public sealed class SseSubInstruction : TwoOperandInstruction
 	{
+		#region Data Members
+
+		private static readonly OpCode F = new OpCode(new byte[] { 0xF3, 0x0F, 0x5C });
+		private static readonly OpCode I = new OpCode(new byte[] { 0xF2, 0x0F, 0x5C });
+
+		#endregion // Data Members
 
 		#region Properties
 
@@ -34,19 +40,19 @@ namespace Mosa.Platforms.x86.CPUx86
 		#endregion // Properties
 
 		#region Methods
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="destination"></param>
-        /// <param name="source"></param>
-        /// <param name="third"></param>
-        /// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-        {
-            if (source.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-                return new OpCode(new byte[] { 0xF3, 0x0F, 0x5C });
-            return new OpCode(new byte[] { 0xF2, 0x0F, 0x5C });
-        }
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
+			if (source.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
+				return F;
+			return I;
+		}
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
