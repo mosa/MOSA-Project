@@ -243,7 +243,15 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Div(Context context)
 		{
-			context.InsertBefore().SetInstruction(CPUx86.Instruction.CdqInstruction);
+            Context before = context.InsertBefore();
+			before.SetInstruction(CPUx86.Instruction.CdqInstruction);
+
+            if (context.Operand1 is ConstantOperand)
+            {
+                RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
+                before.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
+                context.Operand1 = ecx;
+            }
 		}
 
 		#endregion // IX86Visitor
@@ -296,7 +304,16 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.UDiv(Context context) 
         {
-            context.InsertBefore().SetInstruction(CPUx86.Instruction.CdqInstruction);
+            RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX);
+            Context before = context.InsertBefore();
+            before.SetInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
+
+            if (context.Operand1 is ConstantOperand)
+            {
+                RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
+                before.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
+                context.Operand1 = ecx;
+            }
         }
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseAdd"/> instructions.

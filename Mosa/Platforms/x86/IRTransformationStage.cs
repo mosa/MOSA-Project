@@ -452,12 +452,7 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.UDivInstruction(Context ctx)
         {
-            //Operand op1 = ctx.Operand1;
-            //Operand op2 = ctx.Operand2;
-
-            //RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
-            //ctx.InsertInstructionAfter(CPUx86.Instruction.XorInstruction, edx, edx);
-            //ctx.InsertInstructionAfter(CPUx86.Instruction.DivInstruction, op1, op2);
+            ctx.ReplaceInstructionOnly(CPUx86.Instruction.UDivInstruction);
         }
 
         /// <summary>
