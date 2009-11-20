@@ -20,11 +20,13 @@ namespace Mosa.Platforms.x86.CPUx86
     public class ComisdInstruction : TwoOperandInstruction
     {
         #region Data Members
+
         private static readonly OpCode R_R = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
         private static readonly OpCode R_M = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
         private static readonly OpCode R_L = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
         private static readonly OpCode R_C = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
-        #endregion
+        
+		#endregion
 
         #region Methods
 
