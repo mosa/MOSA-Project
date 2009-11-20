@@ -294,7 +294,10 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.UDiv"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.UDiv(Context context) { }
+		void CPUx86.IX86Visitor.UDiv(Context context) 
+        {
+            context.InsertBefore().SetInstruction(CPUx86.Instruction.CdqInstruction);
+        }
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseAdd"/> instructions.
 		/// </summary>

@@ -350,6 +350,7 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
             // int 3
+            //ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
             //ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 
             // Uncomment this line to enable breakpoints within Bochs
@@ -357,7 +358,7 @@ namespace Mosa.Platforms.x86
 
             // push ebp
             ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
-            ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
+
             // mov ebp, esp
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, esp);
             // sub esp, localsSize
@@ -465,7 +466,17 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.URemInstruction(Context ctx)
         {
-            ctx.ReplaceInstructionOnly(IR.Instruction.UDivInstruction);
+            Operand result = ctx.Result;
+            Operand operand = ctx.Operand1;
+            RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
+            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.ECX);
+            RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+            RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
+
+            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, result);
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, operand);
+            ctx.AppendInstruction(CPUx86.Instruction.UDivInstruction, eax, ecx);
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
         }
 
         /// <summary>

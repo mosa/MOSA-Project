@@ -410,10 +410,29 @@ namespace Mosa.Platforms.x86
 		{
             Operand result = ctx.Result;
             Operand operand = ctx.Operand1;
-            RegisterOperand eax = new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX);
-            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, result);
-            ctx.AppendInstruction(CPUx86.Instruction.DivInstruction, result, operand);
-            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(result.Type, GeneralPurposeRegister.EDX));
+            RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.ECX);
+            RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+            RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
+
+            ctx.SetInstruction(IR.Instruction.MoveInstruction, eaxSource, result);
+            if (IsUnsigned(result))
+                ctx.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, eaxSource);
+            else
+                ctx.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, eaxSource);
+
+            ctx.AppendInstruction(IR.Instruction.MoveInstruction, ecxSource, operand);
+            if (IsUnsigned(operand))
+                ctx.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
+            else
+                ctx.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, ecx, ecxSource);
+
+            if (IsUnsigned(result) && IsUnsigned(operand))
+                ctx.AppendInstruction(CPUx86.Instruction.UDivInstruction, eax, ecx);
+            else
+                ctx.AppendInstruction(CPUx86.Instruction.DivInstruction, eax, ecx);
+
+            ctx.AppendInstruction(IR.Instruction.MoveInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
 		}
 
 		#endregion // Members
