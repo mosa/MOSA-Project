@@ -66,6 +66,14 @@ namespace Mosa.Platforms.x86.CPUx86
         /// <summary>
         /// 
         /// </summary>
+        public static readonly Cvttsd2siInstruction Cvttsd2siInstruction = new Cvttsd2siInstruction();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly Cvttss2siInstruction Cvttss2siInstruction = new Cvttss2siInstruction();
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly DebugInstruction DebugInstruction = new DebugInstruction();
 		/// <summary>
 		/// 
@@ -75,6 +83,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly DivInstruction DivInstruction = new DivInstruction();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly UDivInstruction UDivInstruction = new UDivInstruction();
 		/// <summary>
 		/// 
 		/// </summary>

@@ -367,6 +367,14 @@ namespace Mosa.Platforms.x86
 			_codeEmitter.Cvtss2sd(ctx.Operand1, ctx.Operand2);
 		}
 
+        void CPUx86.IX86Visitor.Cvttsd2si(Context ctx)
+        {
+        }
+
+        void CPUx86.IX86Visitor.Cvttss2si(Context ctx)
+        {
+        }
+
 		void CPUx86.IX86Visitor.Cvtsd2ss(Context ctx)
 		{
 			_codeEmitter.Cvtsd2ss(ctx.Operand1, ctx.Operand2);

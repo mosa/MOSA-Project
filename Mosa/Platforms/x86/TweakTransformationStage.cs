@@ -105,6 +105,38 @@ namespace Mosa.Platforms.x86
 				ctx.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, ctx.Operand1, EmitConstant(ctx.Operand2));
 		}
 
+        /// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cvttsd2si"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+        void CPUx86.IX86Visitor.Cvttsd2si(Context ctx)
+        {
+            Operand result = ctx.Result;
+            RegisterOperand register = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+
+            if (!(result is RegisterOperand))
+            {
+                ctx.Result = register;
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, register);
+            }
+        }
+
+        /// <summary>
+        /// Visitation function for <see cref="CPUx86.IX86Visitor.Cvttss2si"/> instructions.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        void CPUx86.IX86Visitor.Cvttss2si(Context ctx)
+        {
+            Operand result = ctx.Result;
+            RegisterOperand register = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+
+            if (!(result is RegisterOperand))
+            {
+                ctx.Result = register;
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, register);
+            }
+        }
+
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.In"/> instructions.
 		/// </summary>
@@ -253,7 +285,10 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Div"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Div(Context context) { }
+		void CPUx86.IX86Visitor.Div(Context context) 
+        {
+            context.InsertBefore().SetInstruction(CPUx86.Instruction.CdqInstruction);
+        }
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.UDiv"/> instructions.
 		/// </summary>

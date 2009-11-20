@@ -1018,8 +1018,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			if (type == IR.Instruction.LogicalAndInstruction || mask != 0) {
 				Debug.Assert(mask != 0, @"Conversion is an AND, but no mask given.");
 
-				//ctx.Remove();
-
                 if (type != IR.Instruction.LogicalAndInstruction)
                     ProcessMixedTypeConversion(ctx, type, mask, destinationOperand, sourceOperand);
 				else
@@ -1033,8 +1031,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		private IInstruction ComputeExtensionTypeAndMask(ConvType destinationType, ref uint mask)
 		{
-			mask = 0;
-
 			switch (destinationType) {
 				case ConvType.I1:
 					mask = 0xFF;
@@ -1079,7 +1075,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		private void ProcessMixedTypeConversion(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			ctx.SetInstruction(instruction, destinationOperand, sourceOperand);
-			ctx.AppendInstruction(IR.Instruction.LogicalAndInstruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
+			ctx.AppendInstruction(IR.Instruction.LogicalAndInstruction, destinationOperand, /*sourceOperand,*/ new ConstantOperand(new SigType(CilElementType.U4), mask));
 		}
 
 		private void ProcessSingleTypeTruncation(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)

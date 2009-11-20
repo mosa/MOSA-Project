@@ -205,7 +205,7 @@ namespace Mosa.Platforms.x86
 		{
 			bool swap = ctx.Operand1 is ConstantOperand;
 			IBranch branch = ctx.Branch;
-            CIL.OpCode opcode = (ctx.Instruction as CIL.ICILInstruction).OpCode;
+            CIL.OpCode opcode = (ctx.Instruction as CIL.BinaryBranchInstruction).OpCode;
             IR.ConditionCode conditionCode;
 
 			if (swap) {
@@ -395,7 +395,7 @@ namespace Mosa.Platforms.x86
 		void CIL.ICILVisitor.Div(Context ctx)
 		{
 			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Result))
-				HandleNonCommutativeOperation(ctx, IR.Instruction.UDivInstruction);
+				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.UDivInstruction);
 			else if (ctx.Operand1.StackType == StackTypeCode.F)
 				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
 			else

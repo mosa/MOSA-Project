@@ -350,7 +350,6 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
             // int 3
-            //ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
             //ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 
             // Uncomment this line to enable breakpoints within Bochs
@@ -358,6 +357,7 @@ namespace Mosa.Platforms.x86
 
             // push ebp
             ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
+            //ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
             // mov ebp, esp
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, esp);
             // sub esp, localsSize
@@ -590,7 +590,39 @@ namespace Mosa.Platforms.x86
         /// Visitation function for <see cref="IR.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.
         /// </summary>
         /// <param name="context">The context.</param>
-        void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) { }
+        void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) 
+        {
+            Operand source = context.Operand1;
+            Operand destination = context.Result;
+            switch (destination.Type.Type)
+            {
+                case CilElementType.I1: goto case CilElementType.I4;
+                case CilElementType.I2: goto case CilElementType.I4;
+                case CilElementType.I4:
+                    if (source.Type.Type == CilElementType.R8)
+                        context.ReplaceInstructionOnly(CPUx86.Instruction.Cvttsd2siInstruction);
+                    else
+                        context.ReplaceInstructionOnly(CPUx86.Instruction.Cvttss2siInstruction);
+                    break;
+
+                case CilElementType.I8:
+                    throw new NotSupportedException();
+
+                case CilElementType.U1: goto case CilElementType.U4;
+                case CilElementType.U2: goto case CilElementType.U4;
+                case CilElementType.U4:
+                    throw new NotSupportedException();
+
+                case CilElementType.U8:
+                    throw new NotSupportedException();
+
+                case CilElementType.I:
+                    goto case CilElementType.I4;
+
+                case CilElementType.U:
+                    goto case CilElementType.U4;
+            }
+        }
 
         /// <summary>
         /// Visitation function for <see cref="IR.IIRVisitor.IntegerToFloatingPointConversionInstruction"/> instruction.

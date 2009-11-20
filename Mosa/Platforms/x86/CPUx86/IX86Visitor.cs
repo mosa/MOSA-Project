@@ -154,6 +154,16 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Cvtss2sd(Context context);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        void Cvttsd2si(Context context);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        void Cvttss2si(Context context);
 		/// <summary>
 		/// Setccs the specified context.
 		/// </summary>

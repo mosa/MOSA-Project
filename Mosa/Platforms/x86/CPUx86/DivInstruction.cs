@@ -19,7 +19,7 @@ namespace Mosa.Platforms.x86.CPUx86
     {
 		#region Data Members
 
-		private static readonly OpCode DIV = new OpCode(new byte[] { 0xF7 }, 6);
+		private static readonly OpCode DIV = new OpCode(new byte[] { 0xF7 }, 7);
 
 		#endregion // Data Members
 

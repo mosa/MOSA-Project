@@ -70,14 +70,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				_opcode == OpCode.Blt_un_s || _opcode == OpCode.Bne_un_s) {
 				sbyte target;
 				decoder.Decode(out target);
-				ctx.SetBranch(target);
+				ctx.SetBranch(target, 0);
 			}
 			else if (_opcode == OpCode.Beq || _opcode == OpCode.Bge || _opcode == OpCode.Bge_un || _opcode == OpCode.Bgt ||
 				_opcode == OpCode.Bgt_un || _opcode == OpCode.Ble || _opcode == OpCode.Ble_un || _opcode == OpCode.Blt ||
 				_opcode == OpCode.Blt_un || _opcode == OpCode.Bne_un) {
 				int target;
 				decoder.Decode(out target);
-				ctx.SetBranch(target);
+				ctx.SetBranch(target, 0);
 			}
 			else {
 				throw new NotSupportedException(@"Invalid branch opcode specified for BinaryBranchInstruction");
