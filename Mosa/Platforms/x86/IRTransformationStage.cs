@@ -357,7 +357,7 @@ namespace Mosa.Platforms.x86
 
             // push ebp
             ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
-            //ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
+            ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
             // mov ebp, esp
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, esp);
             // sub esp, localsSize

@@ -408,19 +408,12 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Rem(Context ctx)
 		{
-			ctx.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), ctx.Operand1);
-
-			if (IsUnsigned(ctx.Operand1))
-				ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
-			else
-				ctx.SetInstruction(IR.Instruction.SignExtendedMoveInstruction, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX), new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX));
-
-			if (IsUnsigned(ctx.Operand1) && IsUnsigned(ctx.Operand2))
-				ctx.AppendInstruction(IR.Instruction.UDivInstruction, ctx.Operand1, ctx.Operand2);
-			else
-				ctx.AppendInstruction(CPUx86.Instruction.DivInstruction, ctx.Operand1, ctx.Operand2);
-
-			ctx.AppendInstruction(IR.Instruction.MoveInstruction, ctx.Result, new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EDX));
+            Operand result = ctx.Result;
+            Operand operand = ctx.Operand1;
+            RegisterOperand eax = new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX);
+            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, result);
+            ctx.AppendInstruction(CPUx86.Instruction.DivInstruction, result, operand);
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(result.Type, GeneralPurposeRegister.EDX));
 		}
 
 		#endregion // Members

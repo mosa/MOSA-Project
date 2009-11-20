@@ -73,7 +73,7 @@ namespace Mosa.Platforms.x86
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
-            if (ctx.Instruction is CIL.MulInstruction || ctx.Instruction is CIL.DivInstruction)
+            if (ctx.Instruction is CIL.MulInstruction /*|| ctx.Instruction is CIL.DivInstruction*/)
                 if (!(op1 is ConstantOperand) && (op2 is ConstantOperand))
                 {
                     Operand temp = op1;
