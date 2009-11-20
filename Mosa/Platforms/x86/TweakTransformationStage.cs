@@ -236,6 +236,15 @@ namespace Mosa.Platforms.x86
 			//ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
 
 		}
+		
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Div"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Div(Context context)
+		{
+			context.InsertBefore().SetInstruction(CPUx86.Instruction.CdqInstruction);
+		}
 
 		#endregion // IX86Visitor
 
@@ -281,14 +290,6 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.DirectDivision(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Div"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Div(Context context) 
-        {
-            context.InsertBefore().SetInstruction(CPUx86.Instruction.CdqInstruction);
-        }
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.UDiv"/> instructions.
 		/// </summary>
