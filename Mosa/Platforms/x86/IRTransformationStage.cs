@@ -528,101 +528,118 @@ namespace Mosa.Platforms.x86
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, ebx);
         }
 
+		/// <summary>
+		/// Visitation function for <see cref="IR.IIRVisitor.BranchInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.BranchInstruction(Context context)
+		{
+			context.ReplaceInstructionOnly(CPUx86.Instruction.BranchInstruction);
+
+			//switch (context.ConditionCode) {
+			//    case IR.ConditionCode.Equal:
+			//        context.ReplaceInstructionOnly(CPUx86.Instruction.JeInstruction);
+			//        break;
+
+			//    case IR.ConditionCode.GreaterOrEqual:
+			//        context.ReplaceInstructionOnly(CPUx86.Instruction.JgeInstruction);
+			//        break;
+
+			//    case IR.ConditionCode.GreaterThan:
+			//        context.ReplaceInstructionOnly(CPUx86.Instruction.JgInstruction);
+			//        break;
+
+			//    case IR.ConditionCode.LessOrEqual:
+			//        context.ReplaceInstructionOnly(CPUx86.Instruction.JleInstruction);
+			//        break;
+
+			//    case IR.ConditionCode.LessThan:
+			//        context.ReplaceInstructionOnly(CPUx86.Instruction.JlInstruction);
+			//        break;
+
+			//    case IR.ConditionCode.NotEqual:
+			//        context.ReplaceInstructionOnly(CPUx86.Instruction.JneInstruction);
+			//        break;
+
+			//    case IR.ConditionCode.UnsignedGreaterOrEqual:
+			//        context.ReplaceInstructionOnly(CPUx86.Instruction.JaeInstruction);
+			//        break;
+
+			//    case IR.ConditionCode.UnsignedGreaterThan:
+			//        context.ReplaceInstructionOnly(CPUx86.Instruction.JaInstruction);
+			//        break;
+
+			//    case IR.ConditionCode.UnsignedLessOrEqual:
+			//        context.ReplaceInstructionOnly(CPUx86.Instruction.JbeInstruction);
+			//        break;
+
+			//    case IR.ConditionCode.UnsignedLessThan:
+			//        context.ReplaceInstructionOnly(CPUx86.Instruction.JbInstruction);
+			//        break;
+
+			//    default:
+			//        throw new NotSupportedException();
+			//}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IR.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context)
+		{
+			Operand source = context.Operand1;
+			Operand destination = context.Result;
+			switch (destination.Type.Type) {
+				case CilElementType.I1: goto case CilElementType.I4;
+				case CilElementType.I2: goto case CilElementType.I4;
+				case CilElementType.I4:
+					if (source.Type.Type == CilElementType.R8)
+						context.ReplaceInstructionOnly(CPUx86.Instruction.Cvttsd2siInstruction);
+					else
+						context.ReplaceInstructionOnly(CPUx86.Instruction.Cvttss2siInstruction);
+					break;
+
+				case CilElementType.I8:
+					throw new NotSupportedException();
+
+				case CilElementType.U1: goto case CilElementType.U4;
+				case CilElementType.U2: goto case CilElementType.U4;
+				case CilElementType.U4:
+					throw new NotSupportedException();
+
+				case CilElementType.U8:
+					throw new NotSupportedException();
+
+				case CilElementType.I:
+					goto case CilElementType.I4;
+
+				case CilElementType.U:
+					goto case CilElementType.U4;
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IR.IIRVisitor.PopInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.PopInstruction(Context context)
+		{
+			context.ReplaceInstructionOnly(CPUx86.Instruction.PopInstruction);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IR.IIRVisitor.PushInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.PushInstruction(Context context)
+		{
+			context.ReplaceInstructionOnly(CPUx86.Instruction.PushInstruction);
+		}
+
         #endregion //  IIRVisitor
 
         #region IIRVisitor - Unused
-
-        /// <summary>
-        /// Visitation function for <see cref="IR.IIRVisitor.BranchInstruction"/> instructions.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        void IR.IIRVisitor.BranchInstruction(Context context)
-        {
-            context.ReplaceInstructionOnly(CPUx86.Instruction.BranchInstruction);
-
-            //switch (context.ConditionCode) {
-            //    case IR.ConditionCode.Equal:
-            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JeInstruction);
-            //        break;
-
-            //    case IR.ConditionCode.GreaterOrEqual:
-            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JgeInstruction);
-            //        break;
-
-            //    case IR.ConditionCode.GreaterThan:
-            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JgInstruction);
-            //        break;
-
-            //    case IR.ConditionCode.LessOrEqual:
-            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JleInstruction);
-            //        break;
-
-            //    case IR.ConditionCode.LessThan:
-            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JlInstruction);
-            //        break;
-
-            //    case IR.ConditionCode.NotEqual:
-            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JneInstruction);
-            //        break;
-
-            //    case IR.ConditionCode.UnsignedGreaterOrEqual:
-            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JaeInstruction);
-            //        break;
-
-            //    case IR.ConditionCode.UnsignedGreaterThan:
-            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JaInstruction);
-            //        break;
-
-            //    case IR.ConditionCode.UnsignedLessOrEqual:
-            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JbeInstruction);
-            //        break;
-
-            //    case IR.ConditionCode.UnsignedLessThan:
-            //        context.ReplaceInstructionOnly(CPUx86.Instruction.JbInstruction);
-            //        break;
-
-            //    default:
-            //        throw new NotSupportedException();
-            //}
-        }
-
-        /// <summary>
-        /// Visitation function for <see cref="IR.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) 
-        {
-            Operand source = context.Operand1;
-            Operand destination = context.Result;
-            switch (destination.Type.Type)
-            {
-                case CilElementType.I1: goto case CilElementType.I4;
-                case CilElementType.I2: goto case CilElementType.I4;
-                case CilElementType.I4:
-                    if (source.Type.Type == CilElementType.R8)
-                        context.ReplaceInstructionOnly(CPUx86.Instruction.Cvttsd2siInstruction);
-                    else
-                        context.ReplaceInstructionOnly(CPUx86.Instruction.Cvttss2siInstruction);
-                    break;
-
-                case CilElementType.I8:
-                    throw new NotSupportedException();
-
-                case CilElementType.U1: goto case CilElementType.U4;
-                case CilElementType.U2: goto case CilElementType.U4;
-                case CilElementType.U4:
-                    throw new NotSupportedException();
-
-                case CilElementType.U8:
-                    throw new NotSupportedException();
-
-                case CilElementType.I:
-                    goto case CilElementType.I4;
-
-                case CilElementType.U:
-                    goto case CilElementType.U4;
-            }
-        }
 
         /// <summary>
         /// Visitation function for <see cref="IR.IIRVisitor.IntegerToFloatingPointConversionInstruction"/> instruction.
@@ -642,29 +659,11 @@ namespace Mosa.Platforms.x86
         /// <param name="context">The context.</param>
         void IR.IIRVisitor.PhiInstruction(Context context) { }
 
-        /// <summary>
-        /// Visitation function for <see cref="IR.IIRVisitor.PopInstruction"/> instructions.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        void IR.IIRVisitor.PopInstruction(Context context)
-        {
-            context.ReplaceInstructionOnly(CPUx86.Instruction.PopInstruction);
-        }
+		#endregion // IIRVisitor - Unused
 
-        /// <summary>
-        /// Visitation function for <see cref="IR.IIRVisitor.PushInstruction"/> instructions.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        void IR.IIRVisitor.PushInstruction(Context context)
-        {
-            context.ReplaceInstructionOnly(CPUx86.Instruction.PushInstruction);
-        }
+		#region Internals
 
-        #endregion // IIRVisitor
-
-        #region Internals
-
-        /// <summary>
+		/// <summary>
         /// Special handling for shift operations, which require the shift amount in the ECX or as a constant register.
         /// </summary>
         /// <param name="ctx">The transformation context.</param>
