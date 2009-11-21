@@ -75,7 +75,7 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx)
         {
-            HandleShiftOperation(ctx, CPUx86.Instruction.SarInstruction);
+            HandleShiftOperation(ctx, CPUx86.Instruction.ShrInstruction);
         }
 
         /// <summary>

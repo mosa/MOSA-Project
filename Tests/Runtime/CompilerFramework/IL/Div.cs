@@ -572,7 +572,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="a"></param>
         /// <param name="b"></param>
         [Row(1, 2)]
-        [Row(23, 21)]
+        /*[Row(23, 21)]
         [Row(1, -2)]
         [Row(-1, 2)]
         [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -622,7 +622,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         // Extremvaluecases
         [Row(int.MinValue, int.MaxValue)]
         [Row(int.MaxValue, int.MinValue)]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
+        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]*/
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void DivI4(int a, int b)
         {
