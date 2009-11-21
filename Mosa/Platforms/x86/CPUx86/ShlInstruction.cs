@@ -25,10 +25,10 @@ namespace Mosa.Platforms.x86.CPUx86
     {
 
         #region Data Members
-        private static readonly OpCode R_C = new OpCode(new byte[] { 0xC1 }, 4);
-        private static readonly OpCode M_C = new OpCode(new byte[] { 0xC1 }, 4);
-        private static readonly OpCode R = new OpCode(new byte[] { 0xD3 }, 5);
-        private static readonly OpCode M = new OpCode(new byte[] { 0xD3 }, 5);
+        private static readonly OpCode R_C = new OpCode(new byte[] { 0xC1 }, 7);
+        private static readonly OpCode M_C = new OpCode(new byte[] { 0xC1 }, 7);
+        private static readonly OpCode R = new OpCode(new byte[] { 0xD3 }, 4);
+        private static readonly OpCode M = new OpCode(new byte[] { 0xD3 }, 4);
         #endregion
 
         #region Methods
@@ -48,6 +48,18 @@ namespace Mosa.Platforms.x86.CPUx86
 
             throw new ArgumentException(@"No opcode for operand type.");
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="emitter"></param>
+        public override void Emit(Context ctx, MachineCodeEmitter emitter)
+        {
+            OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
+            emitter.Emit(opCode, ctx.Operand1, null);
+        }
+
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
