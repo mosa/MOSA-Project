@@ -42,6 +42,20 @@ namespace Mosa.Platforms.x86.CPUx86
             throw new ArgumentException(@"No opcode for operand type.");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="emitter"></param>
+        public override void Emit(Context ctx, MachineCodeEmitter emitter)
+        {
+            OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
+            if (ctx.Operand2 is ConstantOperand)
+                emitter.Emit(opCode, ctx.Result, ctx.Operand1, ctx.Operand2);
+            else
+                emitter.Emit(opCode, ctx.Result, ctx.Operand1);
+        }
+
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
