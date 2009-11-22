@@ -89,6 +89,8 @@ namespace Mosa.Runtime.CompilerFramework
 
         private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
 			new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(DominanceCalculationStage)),
+			new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(StackLayoutStage)),
+			new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IPlatformInstruction)),
 		};
 
         /// <summary>
@@ -108,7 +110,7 @@ namespace Mosa.Runtime.CompilerFramework
         {
             _dominanceProvider = (IDominanceProvider)MethodCompiler.GetPreviousStage(typeof(IDominanceProvider));
             Debug.Assert(null != _dominanceProvider, @"SSA Conversion requires a dominance provider.");
-            if (null == _dominanceProvider)
+            if (_dominanceProvider == null)
                 throw new InvalidOperationException(@"SSA Conversion requires a dominance provider.");
 
             // Allocate space for live outs
@@ -201,7 +203,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
 
             // Save the in versions to force a merge later
-            if (null != liveIn)
+            if (liveIn != null)
                 _liveness[epilogue.Sequence] = liveIn;
         }
 
@@ -225,7 +227,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
 
             // Create a new live out dictionary
-            if (null != liveIn)
+            if (liveIn != null)
                 liveOut = new Dictionary<StackOperand, StackOperand>(liveIn, s_comparer);
             else
                 liveOut = new Dictionary<StackOperand, StackOperand>(s_comparer);

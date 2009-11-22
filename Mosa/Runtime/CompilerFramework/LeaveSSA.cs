@@ -23,6 +23,8 @@ namespace Mosa.Runtime.CompilerFramework
 	public sealed class LeaveSSA : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
 
+		#region IPipelineStage Members
+
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
@@ -33,14 +35,18 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				// TODO
-			};
+			new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(EnterSSA)),
+			new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(StackLayoutStage)),
+			new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IPlatformTransformationStage)),
+		};
 
 		/// <summary>
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
 		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
+
+		#endregion IPipelineStage Members
 
 		#region IMethodCompilerStage Members
 

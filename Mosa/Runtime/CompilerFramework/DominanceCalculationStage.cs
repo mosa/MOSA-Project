@@ -55,7 +55,10 @@ namespace Mosa.Runtime.CompilerFramework
         string IPipelineStage.Name { get { return @"DominanceCalculationStage"; } }
 
         private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage))
+			new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
+			new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(EnterSSA)),
+			new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(StackLayoutStage)),
+			new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IPlatformInstruction)),
 		};
 
         /// <summary>
