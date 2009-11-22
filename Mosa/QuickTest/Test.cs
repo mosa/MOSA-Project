@@ -22,6 +22,56 @@ namespace Mosa.QuickTest
 
             int c = a + b;
         }
+
+        static bool Rem(sbyte expect, sbyte a, sbyte b)
+                    {
+                        return expect == (a % b);
+                    }
+        /*
+        static bool SwitchI4(int expect, int a) { return expect == Switch_Target(a); }
+        static int Switch_Target(int a)
+        {
+            switch (a)
+            {
+                case 0:
+                    return 0;
+                    break;
+                case 1:
+                    return 1;
+                    break;
+                case -1:
+                    return -1;
+                    break;
+                case 2:
+                    return 2;
+                    break;
+                case -2:
+                    return -2;
+                    break;
+                case 23:
+                    return 23;
+                    break;
+                case int.MinValue:
+                    return int.MinValue;
+                    break;
+                case int.MaxValue:
+                    return int.MaxValue;
+                    break;
+                default:
+                    return 42;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        public static void Div(long a, long b)
+        {
+            long c = a / b;
+        }
         /// <summary>
         /// Muls the constant C right.
         /// </summary>
@@ -55,7 +105,7 @@ namespace Mosa.QuickTest
         static bool AddU1(byte expect, uint a, uint b)
         {
             return expect == (a + b);
-        }
+        }*/
 
 
         /// <summary>
