@@ -120,21 +120,25 @@ namespace Mosa.Platforms.x86
         void IR.IIRVisitor.FloatingPointCompareInstruction(Context ctx)
         {
             Operand op0 = ctx.Result;
-            Operand source = EmitConstant(ctx.Operand1);
-            Operand destination = EmitConstant(ctx.Result);
-            IR.ConditionCode setcc = IR.ConditionCode.Equal;
-            IR.ConditionCode code = ctx.ConditionCode;
+            Operand left = EmitConstant(ctx.Operand1);
+            Operand right = EmitConstant(ctx.Operand2);
             //ctx.Remove();
-            ctx.Operand1 = destination;
-            ctx.Operand2 = source;
+            ctx.Operand1 = left;
+            ctx.Operand2 = right;
+
 
             // Swap the operands if necessary...
-            if (source is MemoryOperand && destination is RegisterOperand)
+            if (left is MemoryOperand && right is RegisterOperand)
             {
                 SwapComparisonOperands(ctx);
-                source = ctx.Operand1;
-                destination = ctx.Operand2;
+                left = ctx.Operand1;
+                right = ctx.Operand2;
             }
+
+            IR.ConditionCode setcc = IR.ConditionCode.Equal;
+            IR.ConditionCode code = ctx.ConditionCode;
+
+            ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 
             // x86 is messed up :(
             switch (code)
@@ -151,36 +155,36 @@ namespace Mosa.Platforms.x86
                 case IR.ConditionCode.LessThan: setcc = IR.ConditionCode.UnsignedLessThan; break;
             }
 
-            if (!(source is RegisterOperand))
+            if (!(left is RegisterOperand))
             {
-                RegisterOperand xmm2 = new RegisterOperand(source.Type, SSE2Register.XMM2);
-                if (source.Type.Type == CilElementType.R4)
-                    ctx.AppendInstruction(CPUx86.Instruction.MovssInstruction, xmm2, source);
+                RegisterOperand xmm2 = new RegisterOperand(left.Type, SSE2Register.XMM2);
+                if (left.Type.Type == CilElementType.R4)
+                    ctx.AppendInstruction(CPUx86.Instruction.MovssInstruction, xmm2, left);
                 else
-                    ctx.AppendInstruction(CPUx86.Instruction.MovsdInstruction, xmm2, source);
-                source = xmm2;
+                    ctx.AppendInstruction(CPUx86.Instruction.MovsdInstruction, xmm2, left);
+                left = xmm2;
             }
 
             // Compare using the smallest precision
-            if (source.Type.Type == CilElementType.R4 && destination.Type.Type == CilElementType.R8)
+            if (left.Type.Type == CilElementType.R4 && right.Type.Type == CilElementType.R8)
             {
                 RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM4);
-                ctx.AppendInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, rop, destination);
-                destination = rop;
+                ctx.AppendInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, rop, right);
+                right = rop;
             }
-            if (source.Type.Type == CilElementType.R8 && destination.Type.Type == CilElementType.R4)
+            if (left.Type.Type == CilElementType.R8 && right.Type.Type == CilElementType.R4)
             {
                 RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM3);
-                ctx.AppendInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, rop, source);
-                source = rop;
+                ctx.AppendInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, rop, left);
+                left = rop;
             }
 
-            if (source.Type.Type == CilElementType.R4)
+            if (left.Type.Type == CilElementType.R4)
             {
                 switch (code)
                 {
                     case IR.ConditionCode.Equal:
-                        ctx.AppendInstruction(CPUx86.Instruction.UcomissInstruction, source, destination);
+                        ctx.AppendInstruction(CPUx86.Instruction.UcomissInstruction, left, right);
                         break;
                     case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
                     case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
@@ -188,7 +192,7 @@ namespace Mosa.Platforms.x86
                     case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
                     case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
                     case IR.ConditionCode.GreaterOrEqual:
-                        ctx.AppendInstruction(CPUx86.Instruction.ComissInstruction, source, destination);
+                ctx.AppendInstruction(CPUx86.Instruction.ComissInstruction, left, right);
                         break;
                     case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
                     case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
@@ -200,7 +204,7 @@ namespace Mosa.Platforms.x86
                 switch (code)
                 {
                     case IR.ConditionCode.Equal:
-                        ctx.AppendInstruction(CPUx86.Instruction.UcomisdInstruction, source, destination);
+                        ctx.AppendInstruction(CPUx86.Instruction.UcomisdInstruction, left, right);
                         break;
                     case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
                     case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
@@ -208,7 +212,7 @@ namespace Mosa.Platforms.x86
                     case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
                     case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
                     case IR.ConditionCode.GreaterOrEqual:
-                        ctx.AppendInstruction(CPUx86.Instruction.ComisdInstruction, source, destination);
+                ctx.AppendInstruction(CPUx86.Instruction.ComisdInstruction, left, right);
                         break;
                     case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
                     case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;

@@ -89,6 +89,8 @@
     <Compile Include="CPUx86\Cvttsd2siInstruction.cs" />
     <Compile Include="CPUx86\Cvttss2si.cs" />
     <Compile Include="CPUx86\DebugInstruction.cs" />
+    <Compile Include="CPUx86\DirectCompareInstruction.cs" />
+    <Compile Include="CPUx86\DirectDivisionInstruction.cs" />
     <Compile Include="CPUx86\JmpInstruction.cs" />
     <Compile Include="CPUx86\LeaInstruction.cs" />
     <Compile Include="CPUx86\UDivInstruction.cs" />

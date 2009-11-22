@@ -73,6 +73,9 @@ namespace Mosa.Platforms.x86
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
+            if (ctx.Instruction is IR.FloatingPointCompareInstruction)
+                return;
+
             if (ctx.Instruction is CIL.MulInstruction /*|| ctx.Instruction is CIL.DivInstruction*/)
                 if (!(op1 is ConstantOperand) && (op2 is ConstantOperand))
                 {
@@ -113,7 +116,21 @@ namespace Mosa.Platforms.x86
                     ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
             }
             else
-                ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+            {
+                if (op1.Type.Type == CilElementType.R4)
+                {
+                    if (op1 is ConstantOperand)
+                    {
+                        Context before = ctx.InsertBefore();
+                        before.SetInstruction(IR.Instruction.MoveInstruction, eax, op1);
+                        before.AppendInstruction(CPUx86.Instruction.Cvtss2sdInstruction, eax, eax);
+                    }
+                    else
+                        ctx.InsertBefore().SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, eax, op1);
+                }
+                else
+                    ctx.InsertBefore().SetInstruction(IR.Instruction.MoveInstruction, eax, op1);
+            }
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
 		}
 

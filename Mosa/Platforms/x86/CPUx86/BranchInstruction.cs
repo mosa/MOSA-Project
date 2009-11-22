@@ -70,11 +70,11 @@ namespace Mosa.Platforms.x86.CPUx86
                     break;
 
                 case IR.ConditionCode.NotEqual:
-                    emitter.EmitBranch(JAE, ctx.Branch.Targets[0]);
+                    emitter.EmitBranch(JNE, ctx.Branch.Targets[0]);
                     break;
 
                 case IR.ConditionCode.UnsignedGreaterOrEqual:
-                    emitter.EmitBranch(JNE, ctx.Branch.Targets[0]);
+                    emitter.EmitBranch(JAE, ctx.Branch.Targets[0]);
                     break;
 
                 case IR.ConditionCode.UnsignedGreaterThan:

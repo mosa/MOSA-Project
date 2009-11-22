@@ -64,14 +64,14 @@ namespace Mosa.Platforms.x86.CPUx86
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
             if (source is ConstantOperand)
-                if (IsShort(source) || IsChar(source))
-                    return O_C_16;
-                else
+                //if (IsShort(source) || IsChar(source))
+                //    return O_C_16;
+                //else
                     return O_C;
 			if (destination is RegisterOperand)
-                if (IsShort(source) || IsChar(source))
-                    return R_O_16;
-                else
+                //if (IsShort(source) || IsChar(source))
+                //    return R_O_16;
+                //else
                     return R_O;
 			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
 

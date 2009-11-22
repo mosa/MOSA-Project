@@ -39,6 +39,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly CmpInstruction CmpInstruction = new CmpInstruction();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly DirectCompareInstruction DirectCompareInstruction = new DirectCompareInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -83,6 +87,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly DivInstruction DivInstruction = new DivInstruction();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly DirectDivisionInstruction DirectDivisionInstruction = new DirectDivisionInstruction();
         /// <summary>
         /// 
         /// </summary>

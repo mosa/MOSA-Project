@@ -39,6 +39,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Call(Context context);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        void DirectCompare(Context context);
 		/// <summary>
 		/// Or the specified context.
 		/// </summary>

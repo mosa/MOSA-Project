@@ -196,6 +196,10 @@ namespace Mosa.Platforms.x86
 			_codeEmitter.Cdq();
 		}
 
+        void CPUx86.IX86Visitor.DirectCompare(Context context)
+        {
+        }
+
 		void CPUx86.IX86Visitor.Cmp(Context ctx)
 		{
 			Operand op0 = ctx.Operand1;

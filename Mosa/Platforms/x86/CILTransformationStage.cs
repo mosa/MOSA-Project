@@ -357,10 +357,13 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Add(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.F)
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseAddInstruction);
-			else
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.AddInstruction);
+            if (ctx.Operand1.StackType == StackTypeCode.F)
+            {
+                HandleCommutativeOperation(ctx, CPUx86.Instruction.SseAddInstruction);
+                ExtendToR8(ctx);
+            }
+            else
+                HandleCommutativeOperation(ctx, CPUx86.Instruction.AddInstruction);
 		}
 
 		/// <summary>
@@ -369,10 +372,13 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Sub(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.F)
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseSubInstruction);
-			else
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SubInstruction);
+            if (ctx.Operand1.StackType == StackTypeCode.F)
+            {
+                HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseSubInstruction);
+                ExtendToR8(ctx);
+            }
+            else
+                HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SubInstruction);
 
 		}
 
@@ -383,7 +389,10 @@ namespace Mosa.Platforms.x86
 		void CIL.ICILVisitor.Mul(Context ctx)
 		{
             if (ctx.Operand1.StackType == StackTypeCode.F)
+            {
                 HandleCommutativeOperation(ctx, CPUx86.Instruction.SseMulInstruction);
+                ExtendToR8(ctx);
+            }
             else
                 HandleCommutativeOperation(ctx, CPUx86.Instruction.MulInstruction);
 		}
@@ -396,10 +405,13 @@ namespace Mosa.Platforms.x86
 		{
 			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Result))
 				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.UDivInstruction);
-			else if (ctx.Operand1.StackType == StackTypeCode.F)
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
-			else
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.DivInstruction);
+            else if (ctx.Operand1.StackType == StackTypeCode.F)
+            {
+                HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
+                ExtendToR8(ctx);
+            }
+            else
+                HandleNonCommutativeOperation(ctx, CPUx86.Instruction.DivInstruction);
 		}
 
 		/// <summary>
@@ -771,6 +783,29 @@ namespace Mosa.Platforms.x86
 		#endregion // ICILVisitor - Unused
 
 		#region Internals
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        private void ExtendToR8(Context ctx)
+        {
+            RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
+            RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
+            Context before = ctx.InsertBefore();
+            before.SetInstruction(CPUx86.Instruction.NopInstruction);
+
+            if (ctx.Result.Type.Type == CilElementType.R4)
+            {
+                before.AppendInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm5, ctx.Result);
+                ctx.Result = xmm5;
+            }
+
+            if (ctx.Operand1.Type.Type == CilElementType.R4)
+            {
+                before.AppendInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm6, ctx.Operand1);
+                ctx.Operand1 = xmm6;
+            }
+        }
 
 		/// <summary>
 		/// Special handling for commutative operations.

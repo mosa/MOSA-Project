@@ -238,7 +238,7 @@ namespace Mosa.Runtime.CompilerFramework
 		protected Operand EmitConstant(Operand op)
 		{
 			ConstantOperand cop = op as ConstantOperand;
-			if (cop != null && cop.StackType == StackTypeCode.F) {
+			if (cop != null && (cop.StackType == StackTypeCode.F || cop.StackType == StackTypeCode.Int64)) {
 				int size, alignment;
 				Architecture.GetTypeRequirements(cop.Type, out size, out alignment);
 
@@ -255,6 +255,13 @@ namespace Mosa.Runtime.CompilerFramework
 							buffer = LittleEndianBitConverter.GetBytes((double)cop.Value);
 							break;
 
+                        case CilElementType.I8:
+                            buffer = LittleEndianBitConverter.GetBytes((long)cop.Value);
+                            break;
+
+                        case CilElementType.U8:
+                            buffer = LittleEndianBitConverter.GetBytes((ulong)cop.Value);
+                            break;
 						default:
 							throw new NotSupportedException();
 					}
