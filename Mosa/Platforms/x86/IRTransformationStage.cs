@@ -624,8 +624,7 @@ namespace Mosa.Platforms.x86
 			//        context.ReplaceInstructionOnly(CPUx86.Instruction.JbInstruction);
 			//        break;
 
-			//    default:
-			//        throw new NotSupportedException();
+			//    default: throw new NotSupportedException();
 			//}
 		}
 
