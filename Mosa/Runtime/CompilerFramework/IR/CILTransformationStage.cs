@@ -1129,7 +1129,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 							try {
 								ctx.ReplaceInstructionOnly(Architecture.GetIntrinsicIntruction(ia.InstructionType));
 
-								// TODO: Invoke Target
+								// TODO: Handle Invoke Target operands
 
 								return;
 							}
