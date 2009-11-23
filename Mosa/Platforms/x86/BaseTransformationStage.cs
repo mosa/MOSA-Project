@@ -39,7 +39,7 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		public static bool Is32Bit(Operand operand)
 		{
-			return (operand.Type.Type == CilElementType.U4) || (operand.Type.Type == CilElementType.I4);
+			return (operand.Type.Type == CilElementType.U4) || (operand.Type.Type == CilElementType.I4) || IsPointer(operand);
 		}
 
 		/// <summary>
@@ -63,7 +63,7 @@ namespace Mosa.Platforms.x86
 		/// </returns>
 		public static bool IsSigned(Operand operand)
 		{
-			return IsSByte(operand) || IsSShort(operand) || IsInt(operand);
+			return IsSByte(operand) || IsSShort(operand) || IsInt(operand) || IsPointer(operand);
 		}
 
 		/// <summary>
@@ -172,6 +172,18 @@ namespace Mosa.Platforms.x86
 		private static bool IsUInt(Operand operand)
 		{
 			return (operand.Type.Type == CilElementType.U4);
+		}
+
+		/// <summary>
+		/// Determines whether the specified operand is a pointer.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified operand is a pointer; otherwise, <c>false</c>.
+		/// </returns>
+		private static bool IsPointer(Operand operand)
+		{
+			return operand.Type.Type == CilElementType.Ptr;
 		}
 
 		#endregion // X86 Internals
