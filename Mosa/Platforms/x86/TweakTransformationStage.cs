@@ -52,34 +52,27 @@ namespace Mosa.Platforms.x86
 		#endregion // IPipelineStage Members
 
 		#region IX86Visitor
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        void CPUx86.IX86Visitor.Lea(Context context)
-        {
-        }
+
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Mov"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Mov(Context ctx)
 		{
-			if (ctx.Result is ConstantOperand)
-            {
-                ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
-                return;
-            }
+			if (ctx.Result is ConstantOperand) {
+				ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
+				return;
+			}
 
-            if (ctx.Operand1 is ConstantOperand && ctx.Operand1.StackType == StackTypeCode.F)
-                ctx.Operand1 = EmitConstant(ctx.Operand1);
+			if (ctx.Operand1 is ConstantOperand && ctx.Operand1.StackType == StackTypeCode.F)
+				ctx.Operand1 = EmitConstant(ctx.Operand1);
 
 			// Check that we're not dealing with floating point values
 			if (ctx.Result.StackType == StackTypeCode.F || ctx.Operand1.StackType == StackTypeCode.F)
 				if (ctx.Result.Type.Type == CilElementType.R4)
 					ctx.SetInstruction(CPUx86.Instruction.MovssInstruction, ctx.Result, ctx.Operand1);
-                else if (ctx.Result.Type.Type == CilElementType.R8)
-                    ctx.SetInstruction(CPUx86.Instruction.MovsdInstruction, ctx.Result, ctx.Operand1);
+				else if (ctx.Result.Type.Type == CilElementType.R8)
+					ctx.SetInstruction(CPUx86.Instruction.MovsdInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -108,37 +101,35 @@ namespace Mosa.Platforms.x86
 				ctx.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, ctx.Operand1, EmitConstant(ctx.Operand2));
 		}
 
-        /// <summary>
+		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cvttsd2si"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-        void CPUx86.IX86Visitor.Cvttsd2si(Context ctx)
-        {
-            Operand result = ctx.Result;
-            RegisterOperand register = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+		void CPUx86.IX86Visitor.Cvttsd2si(Context ctx)
+		{
+			Operand result = ctx.Result;
+			RegisterOperand register = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 
-            if (!(result is RegisterOperand))
-            {
-                ctx.Result = register;
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, register);
-            }
-        }
+			if (!(result is RegisterOperand)) {
+				ctx.Result = register;
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, register);
+			}
+		}
 
-        /// <summary>
-        /// Visitation function for <see cref="CPUx86.IX86Visitor.Cvttss2si"/> instructions.
-        /// </summary>
-        /// <param name="ctx">The context.</param>
-        void CPUx86.IX86Visitor.Cvttss2si(Context ctx)
-        {
-            Operand result = ctx.Result;
-            RegisterOperand register = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cvttss2si"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void CPUx86.IX86Visitor.Cvttss2si(Context ctx)
+		{
+			Operand result = ctx.Result;
+			RegisterOperand register = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 
-            if (!(result is RegisterOperand))
-            {
-                ctx.Result = register;
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, register);
-            }
-        }
+			if (!(result is RegisterOperand)) {
+				ctx.Result = register;
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, register);
+			}
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.In"/> instructions.
@@ -162,19 +153,16 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Movsx(Context context)
 		{
-            if (Is32Bit(context.Operand1))
-            {
-                context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
-            }
-            else
-            {
-                if (!(context.Result is RegisterOperand))
-                {
-                    RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
-                    context.SetInstruction(CPUx86.Instruction.MovsxInstruction, ecx, context.Operand1);
-                    context.AppendInstruction(CPUx86.Instruction.MovInstruction, context.Result, ecx);
-                }
-            }
+			if (Is32Bit(context.Operand1)) {
+				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+			}
+			else {
+				if (!(context.Result is RegisterOperand)) {
+					RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
+					context.SetInstruction(CPUx86.Instruction.MovsxInstruction, ecx, context.Operand1);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, context.Result, ecx);
+				}
+			}
 		}
 
 		/// <summary>
@@ -207,18 +195,6 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseSub"/> instructions.
-		/// </summary>
-        /// <param name="context">The context.</param>
-        void CPUx86.IX86Visitor.SseSub(Context context)	{ }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        void CPUx86.IX86Visitor.DirectCompare(Context context) { }
-
-		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Cmp"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -234,35 +210,122 @@ namespace Mosa.Platforms.x86
 			start.SetInstruction(CPUx86.Instruction.PushInstruction, null, eax);
 
 			if ((IsSigned(op0)) && (!Is32Bit(op0)))
-                start.AppendInstruction(CPUx86.Instruction.MovsxInstruction, eax, op0);
+				start.AppendInstruction(CPUx86.Instruction.MovsxInstruction, eax, op0);
 			else
-                start.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op0);
+				start.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op0);
 
 			ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
 
 		}
-		
+
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Div"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Div(Context context)
 		{
-            Context before = context.InsertBefore();
+			Context before = context.InsertBefore();
 			before.SetInstruction(CPUx86.Instruction.CdqInstruction);
 
-            if (context.Operand1 is ConstantOperand)
-            {
-                RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
-                before.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
-                context.Operand1 = ecx;
-            }
+			if (context.Operand1 is ConstantOperand) {
+				RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
+				before.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
+				context.Operand1 = ecx;
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.UDiv"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.UDiv(Context context)
+		{
+			RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX);
+			Context before = context.InsertBefore();
+			before.SetInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
+
+			if (context.Operand1 is ConstantOperand) {
+				RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
+				before.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
+				context.Operand1 = ecx;
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Sar"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Sar(Context context)
+		{
+			if (context.Operand1 is ConstantOperand)
+				return;
+			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
+			Context before = context.InsertBefore();
+			before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
+			context.Operand1 = context.Result;
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Shl"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Shl(Context context)
+		{
+			if (context.Operand1 is ConstantOperand)
+				return;
+			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
+			Context before = context.InsertBefore();
+			before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
+			context.Operand1 = context.Result;
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Shr"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Shr(Context context)
+		{
+			if (context.Operand1 is ConstantOperand)
+				return;
+			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
+			Context before = context.InsertBefore();
+			before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
+			context.Operand1 = context.Result;
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Out"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Out(Context context)
+		{
+			if (context.Operand2 is MemoryOperand || context.Operand2 is ConstantOperand) {
+				Operand op = context.Operand2;
+				RegisterOperand reg = new RegisterOperand(context.Operand2.Type, GeneralPurposeRegister.EAX);
+				context.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, reg, op);
+				context.Operand2 = reg;
+			}
 		}
 
 		#endregion // IX86Visitor
 
 		#region IX86Visitor - Unused
 
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Lea"/> instructions.
+		/// </summary>
+		/// <param name="context"></param>
+		void CPUx86.IX86Visitor.Lea(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseSub"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.SseSub(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.DirectCompare"/> instructions.
+		/// </summary>
+		/// <param name="context"></param>
+		void CPUx86.IX86Visitor.DirectCompare(Context context) { }
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Add"/> instructions.
 		/// </summary>
@@ -304,23 +367,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.DirectDivision(Context context) { }
 		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.UDiv"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.UDiv(Context context) 
-        {
-            RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX);
-            Context before = context.InsertBefore();
-            before.SetInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-
-            if (context.Operand1 is ConstantOperand)
-            {
-                RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
-                before.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
-                context.Operand1 = ecx;
-            }
-        }
-		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.SseAdd"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -336,49 +382,10 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.SseDiv(Context context) { }
 		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Sar"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Sar(Context context) 
-        {
-            if (context.Operand1 is ConstantOperand)
-                return;
-            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
-            Context before = context.InsertBefore();
-            before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
-            context.Operand1 = context.Result;
-        }
-		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Sal"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Sal(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Shl"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Shl(Context context) 
-        {
-            if (context.Operand1 is ConstantOperand)
-                return;
-            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
-            Context before = context.InsertBefore();
-            before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
-            context.Operand1 = context.Result;
-        }
-		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Shr"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Shr(Context context) 
-        {
-            if (context.Operand1 is ConstantOperand)
-                return;
-            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
-            Context before = context.InsertBefore();
-            before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
-            context.Operand1 = context.Result;
-        }
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Rcr"/> instructions.
 		/// </summary>
@@ -545,19 +552,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Nop(Context context) { }
 		/// <summary>
-		/// Visitation function for <see cref="CPUx86.IX86Visitor.Out"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Out(Context context)
-		{
-			if (context.Operand2 is MemoryOperand || context.Operand2 is ConstantOperand) {
-				Operand op = context.Operand2;
-				RegisterOperand reg = new RegisterOperand(context.Operand2.Type, GeneralPurposeRegister.EAX);
-				context.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, reg, op);
-				context.Operand2 = reg;
-			}
-		}
-		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Pause"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -642,11 +636,11 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Call(Context context) { }
-        /// <summary>
-        /// Visitation function for <see cref="CPUx86.IX86Visitor.Branch"/> instructions.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        void CPUx86.IX86Visitor.Branch(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="CPUx86.IX86Visitor.Branch"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CPUx86.IX86Visitor.Branch(Context context) { }
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Not"/> instructions.
 		/// </summary>
