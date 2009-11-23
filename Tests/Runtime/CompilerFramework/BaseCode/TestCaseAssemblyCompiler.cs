@@ -36,7 +36,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
 		public static void Compile(IMetadataModule module)
 		{
-
 			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
 			new TestCaseAssemblyCompiler(architecture, module).Compile();
 		}
