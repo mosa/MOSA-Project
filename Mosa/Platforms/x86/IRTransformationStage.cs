@@ -65,7 +65,7 @@ namespace Mosa.Platforms.x86
             RegisterOperand eax = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
             ctx.Result = eax;
             ctx.ReplaceInstructionOnly(CPUx86.Instruction.LeaInstruction);
-            ctx.Ignore = true;
+//            ctx.Ignore = true;
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, opRes, eax);
         }
 
@@ -272,9 +272,11 @@ namespace Mosa.Platforms.x86
         {
             //RegisterOperand eax = new RegisterOperand(Architecture.NativeType, GeneralPurposeRegister.EAX);
             RegisterOperand eax = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX);
-            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, ctx.Operand1);
-            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new MemoryOperand(ctx.Result.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
-            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ctx.Result, eax);
+            Operand result = ctx.Result;
+            Operand operand = ctx.Operand1;
+            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, operand);
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new MemoryOperand(result.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
         }
 
         /// <summary>
@@ -328,8 +330,22 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.MoveInstruction(Context ctx)
         {
-            EmitConstant(ctx.Operand1);
-            ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+            ctx.Operand1 = EmitConstant(ctx.Operand1);
+            if (ctx.Result.Type.Type == CilElementType.R4)
+                MoveFloatingPoint(ctx, CPUx86.Instruction.MovssInstruction);
+            else if (ctx.Result.Type.Type == CilElementType.R8)
+                MoveFloatingPoint(ctx, CPUx86.Instruction.MovsdInstruction);
+            else
+                ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+        }
+
+        private void MoveFloatingPoint(Context ctx, CPUx86.BaseInstruction instruction)
+        {
+            RegisterOperand xmm0 = new RegisterOperand(ctx.Result.Type, SSE2Register.XMM0);
+            Operand result = ctx.Result;
+            Operand operand = ctx.Operand1;
+            ctx.SetInstruction(instruction, xmm0, operand);
+            ctx.AppendInstruction(instruction, result, xmm0);
         }
 
         /// <summary>

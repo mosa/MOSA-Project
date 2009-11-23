@@ -83,7 +83,7 @@ namespace Mosa.Platforms.x86
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
             int stackSize = CalculateStackSizeForParameters(operands, invokeTarget.Signature.HasThis);
 
-            //ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
+            ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 			if (stackSize != 0) {
                 ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, stackSize));
                 ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);

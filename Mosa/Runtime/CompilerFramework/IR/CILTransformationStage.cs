@@ -70,8 +70,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldarga(Context ctx)
 		{
-			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction(ctx.InstructionSet.Data[ctx.Index].Result, ctx.InstructionSet.Data[ctx.Index].Operand1));
-			ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
+            ctx.ReplaceInstructionOnly(IR.Instruction.AddressOfInstruction);
+			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>

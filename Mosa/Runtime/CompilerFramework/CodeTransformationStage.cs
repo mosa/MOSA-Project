@@ -270,7 +270,7 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 
 				// FIXME: Attach the label operand to the linker symbol
-				// FIXME: Rename the LabelOperand to SymbolOperand
+				// FIXME: Rename the operand to SymbolOperand
 				// FIXME: Use the provided name to link
 				LabelOperand lop = new LabelOperand(cop.Type, name);
 				op = lop;
