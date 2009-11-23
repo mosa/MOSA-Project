@@ -54,7 +54,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			visitor.Movzx(context);
+			visitor.Movss(context);
 		}
 
 		#endregion

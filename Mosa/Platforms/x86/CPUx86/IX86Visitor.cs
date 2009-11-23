@@ -341,6 +341,16 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Movsx(Context context);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        void Movss(Context context);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        void Movsd(Context context);
 		/// <summary>
 		/// Move with Zero-Extension
 		/// </summary>

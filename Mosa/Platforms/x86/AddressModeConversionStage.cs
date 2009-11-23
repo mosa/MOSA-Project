@@ -110,7 +110,7 @@ namespace Mosa.Platforms.x86
             {
                 if (IsSigned(op1) && !(op1 is ConstantOperand))
                     ctx.InsertBefore().SetInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, op1);
-                else if (IsUnsigned(op1) && !(op1 is ConstantOperand) && eax.Type != op1.Type)
+                else if (IsUnsigned(op1) && !(op1 is ConstantOperand))
                     ctx.InsertBefore().SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1);
                 else
                     ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);

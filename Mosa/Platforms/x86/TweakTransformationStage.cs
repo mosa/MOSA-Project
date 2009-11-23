@@ -163,6 +163,22 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        void CPUx86.IX86Visitor.Movss(Context context)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        void CPUx86.IX86Visitor.Movsd(Context context)
+        {
+        }
+
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Movzx"/> instructions.
 		/// </summary>
@@ -221,6 +237,16 @@ namespace Mosa.Platforms.x86
 			//    start.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op0);
 
 			//ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
+            Operand left = ctx.Result;
+            Operand right = ctx.Operand1;
+
+            if (left is ConstantOperand)
+            {
+                RegisterOperand ecx = new RegisterOperand(left.Type, GeneralPurposeRegister.ECX);
+                Context before = ctx.InsertBefore();
+                before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, left);
+                ctx.Result = ecx;
+            }
 		}
 
 		/// <summary>
