@@ -120,7 +120,7 @@ namespace Mosa.Runtime.CompilerFramework
 			//             */
 			//            phi.Ignore = true;
 
-			//             HACK: Remove phi From the operand def list
+			//             HACK: Remove phi from the operand def list
 			//            res.Definitions.Remove(phi);
 
 			//            ctx.GotoNext();
