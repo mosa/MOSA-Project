@@ -75,7 +75,7 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx)
         {
-            HandleShiftOperation(ctx, CPUx86.Instruction.ShrInstruction);
+            HandleShiftOperation(ctx, CPUx86.Instruction.SarInstruction);
         }
 
         /// <summary>
@@ -336,7 +336,17 @@ namespace Mosa.Platforms.x86
             else if (ctx.Result.Type.Type == CilElementType.R8)
                 MoveFloatingPoint(ctx, CPUx86.Instruction.MovsdInstruction);
             else
-                ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+            {
+                if (!Is32Bit(ctx.Operand1))
+                {
+                    if (IsSigned(ctx.Result))
+                        ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovsxInstruction);
+                    else
+                        ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovzxInstruction);
+                }
+                else
+                    ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+            }
         }
 
         private void MoveFloatingPoint(Context ctx, CPUx86.BaseInstruction instruction)
@@ -370,14 +380,14 @@ namespace Mosa.Platforms.x86
                  * appear.
                  */
             // int 3
-            //ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
-            //ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
+            ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
+            ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 
             // Uncomment this line to enable breakpoints within Bochs
             //ctx.XXX(CPUx86.Instruction.BochsDebug);
 
             // push ebp
-            ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
+            //ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 
             // mov ebp, esp
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, esp);

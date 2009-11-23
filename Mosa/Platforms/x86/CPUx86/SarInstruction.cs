@@ -23,12 +23,11 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
 	public sealed class SarInstruction : TwoOperandInstruction
     {
-        #region Codees
+        #region Codes
         private static readonly OpCode R = new OpCode(new byte[] { 0xD3 }, 7);
         private static readonly OpCode M = new OpCode(new byte[] { 0xD3 }, 7);
         private static readonly OpCode R_C = new OpCode(new byte[] { 0xC1 }, 7);
         private static readonly OpCode M_C = new OpCode(new byte[] { 0xC1 }, 7);
-        private static readonly OpCode R_CL = new OpCode(new byte[] { 0xD3 }, 7);
         #endregion 
 
         #region Methods
@@ -46,6 +45,24 @@ namespace Mosa.Platforms.x86.CPUx86
             if (destination is RegisterOperand) return R;
             if (destination is MemoryOperand) return M;
             throw new ArgumentException(@"No opcode for operand type.");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="emitter"></param>
+        public override void Emit(Context ctx, MachineCodeEmitter emitter)
+        {
+            OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
+            if (ctx.Operand1 is ConstantOperand)
+            {
+                ConstantOperand op = ctx.Operand1 as ConstantOperand;
+                op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.U1), op.Value);
+                emitter.Emit(opCode, ctx.Result, op);
+            }
+            else
+                emitter.Emit(opCode, ctx.Operand1, null);
         }
 
 		/// <summary>

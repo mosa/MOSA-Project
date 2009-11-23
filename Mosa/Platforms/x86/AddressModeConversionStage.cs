@@ -113,7 +113,7 @@ namespace Mosa.Platforms.x86
                 else if (IsUnsigned(op1))
                     ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovzxInstruction, eax, op1);
                 else
-                    ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+                    ctx.InsertBefore().SetInstruction(IR.Instruction.MoveInstruction, eax, op1);
             }
             else
             {
@@ -131,7 +131,7 @@ namespace Mosa.Platforms.x86
                 else
                     ctx.InsertBefore().SetInstruction(IR.Instruction.MoveInstruction, eax, op1);
             }
-            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
+            ctx.AppendInstruction(IR.Instruction.MoveInstruction, result, eax);
 		}
 
 	}

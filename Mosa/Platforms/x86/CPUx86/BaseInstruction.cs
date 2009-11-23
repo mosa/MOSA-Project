@@ -259,6 +259,25 @@ namespace Mosa.Platforms.x86.CPUx86
 			return IsUnsignedLong(operand) || IsSignedLong(operand);
 		}
 
+        /*/// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operand"></param>
+        /// <returns></returns>
+        public static byte GetConstantShiftOperand(Operand operand)
+        {
+            System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
+            ConstantOperand op = operand as ConstantOperand;
+            byte val = 0;
+            if (IsSignedByte(op))
+                val = LittleEndianBitConverter.GetBytes((sbyte)op.Value)[0];
+            else if (IsChar(op))
+                val = LittleEndianBitConverter.GetBytes((char)op.Value)[0];
+            else if (IsSignedInt(op))
+                val = LittleEndianBitConverter.GetBytes((int)op.Value)[0];
+            return (byte)(val & 0x1F);
+        }*/
+
 		#endregion
 	}
 }

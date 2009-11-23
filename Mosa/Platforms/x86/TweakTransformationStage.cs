@@ -339,7 +339,15 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Sar"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Sar(Context context) { }
+		void CPUx86.IX86Visitor.Sar(Context context) 
+        {
+            if (context.Operand1 is ConstantOperand)
+                return;
+            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
+            Context before = context.InsertBefore();
+            before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
+            context.Operand1 = context.Result;
+        }
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Sal"/> instructions.
 		/// </summary>
@@ -351,6 +359,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Shl(Context context) 
         {
+            if (context.Operand1 is ConstantOperand)
+                return;
             RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
             Context before = context.InsertBefore();
             before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);

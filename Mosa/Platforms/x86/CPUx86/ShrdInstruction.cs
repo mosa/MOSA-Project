@@ -51,7 +51,12 @@ namespace Mosa.Platforms.x86.CPUx86
         {
             OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
             if (ctx.Operand2 is ConstantOperand)
+            {
+                ConstantOperand op = ctx.Operand2 as ConstantOperand;
+                op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.U1), op.Value);
+                emitter.Emit(opCode, ctx.Result, ctx.Operand1, op);
                 emitter.Emit(opCode, ctx.Result, ctx.Operand1, ctx.Operand2);
+            }
             else
                 emitter.Emit(opCode, ctx.Result, ctx.Operand1);
         }
