@@ -378,7 +378,9 @@ namespace Mosa.Platforms.x86
                 ExtendToR8(ctx);
             }
             else
+            {
                 HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SubInstruction);
+            }
 
 		}
 

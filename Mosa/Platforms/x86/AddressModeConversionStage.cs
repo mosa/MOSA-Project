@@ -108,12 +108,12 @@ namespace Mosa.Platforms.x86
 
             if (/*!Is32Bit(op1) &&*/ !(op1.StackType == StackTypeCode.F))
             {
-                if (IsSigned(op1))
+                if (IsSigned(op1) && !(op1 is ConstantOperand))
                     ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovsxInstruction, eax, op1);
-                else if (IsUnsigned(op1))
+                else if (IsUnsigned(op1) && !(op1 is ConstantOperand))
                     ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovzxInstruction, eax, op1);
                 else
-                    ctx.InsertBefore().SetInstruction(IR.Instruction.MoveInstruction, eax, op1);
+                    ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
             }
             else
             {
@@ -131,7 +131,7 @@ namespace Mosa.Platforms.x86
                 else
                     ctx.InsertBefore().SetInstruction(IR.Instruction.MoveInstruction, eax, op1);
             }
-            ctx.AppendInstruction(IR.Instruction.MoveInstruction, result, eax);
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
 		}
 
 	}

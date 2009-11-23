@@ -166,7 +166,7 @@ namespace Mosa.Platforms.x86
 		private void MoveReturnValueTo32Bit(Operand resultOperand, Context ctx)
 		{
 			RegisterOperand eax = new RegisterOperand(resultOperand.Type, GeneralPurposeRegister.EAX);
-			ctx.AppendInstruction(IR.Instruction.MoveInstruction, resultOperand, eax);
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, resultOperand, eax);
 		}
 
 		/// <summary>

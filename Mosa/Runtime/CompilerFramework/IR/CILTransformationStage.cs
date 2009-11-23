@@ -287,7 +287,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Neg(Context ctx)
 		{
-			ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, ctx.Operand1);
+            if (ctx.Operand1.Type.Type == CilElementType.I8)
+                ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, new ConstantOperand(ctx.Operand1.Type, (long)0), ctx.Operand1);
+            else if (ctx.Operand1.Type.Type == CilElementType.U8)
+                ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, new ConstantOperand(ctx.Operand1.Type, (ulong)0), ctx.Operand1);
+            else
+			    ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, new ConstantOperand(new SigType(CilElementType.I4), (int)0), ctx.Operand1);
 		}
 
 		/// <summary>

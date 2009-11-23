@@ -1333,7 +1333,7 @@ namespace Mosa.Platforms.x86
                     break;
                 case CilElementType.U4:
                     ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
-                    ctx.AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
+                    ctx.AppendInstruction(CPUx86.Instruction.CdqInstruction);
                     ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
                     ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
                     break;
@@ -2050,6 +2050,15 @@ namespace Mosa.Platforms.x86
         {
             if (ctx.Operand1.StackType == StackTypeCode.Int64)
                 ExpandSub(ctx);
+            else
+            {
+                if (ctx.Operand2 is ConstantOperand && ctx.Operand1.Type.Type == CilElementType.Char)
+                {
+                    RegisterOperand ecx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.ECX);
+                    ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, ecx, ctx.Operand2);
+                    ctx.Operand2 = ecx;
+                }
+            }
         }
 
         /// <summary>

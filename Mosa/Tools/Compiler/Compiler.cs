@@ -66,6 +66,10 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		private OptionSet optionSet;
 
+        private readonly int majorVersion = 0;
+        private readonly int minorVersion = 6;
+        private readonly string codeName = @"Tanigawa";
+
 		/// <summary>
 		/// A string holding a simple usage description.
 		/// </summary>
@@ -154,7 +158,7 @@ namespace Mosa.Tools.Compiler
 		public void Run(string[] args)
 		{
 			// always print _header with version information
-			Console.WriteLine("MOSA AOT Compiler, Version 0.5 'Firefly'");
+			Console.WriteLine("MOSA AOT Compiler, Version {0}.{1} '{2}'", majorVersion, minorVersion, codeName);
 			Console.WriteLine("Copyright 2009 by the MOSA Project. Licensed under the New BSD License.");
 			Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();

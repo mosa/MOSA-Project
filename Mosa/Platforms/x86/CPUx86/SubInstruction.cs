@@ -65,16 +65,16 @@ namespace Mosa.Platforms.x86.CPUx86
 		{
             if (source is ConstantOperand)
             {
-                //if (IsUnsignedShort(source) || IsChar(source))
-                //    return O_C_16;
+                //if (IsChar(source))
+                    //return O_C_16;
                 //else
                     return O_C;
             }
             if (destination is RegisterOperand)
             {
-                /*if (IsUnsignedShort(source) || IsChar(source))
+                if (IsChar(source))
                     return R_O_16;
-                else*/
+                else
                     return R_O;
             }
 			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
