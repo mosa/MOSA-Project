@@ -70,7 +70,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldarga(Context ctx)
 		{
-            ctx.ReplaceInstructionOnly(IR.Instruction.AddressOfInstruction);
+			ctx.ReplaceInstructionOnly(IR.Instruction.AddressOfInstruction);
 			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
 		}
 
@@ -271,7 +271,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 					ctx.SetInstruction(IR.Instruction.ShiftLeftInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				case OpCode.Shr:
-                    ctx.SetInstruction(IR.Instruction.ArithmeticShiftRightInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+					ctx.SetInstruction(IR.Instruction.ArithmeticShiftRightInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				case OpCode.Shr_un:
 					ctx.SetInstruction(IR.Instruction.ShiftRightInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
@@ -287,12 +287,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Neg(Context ctx)
 		{
-            if (ctx.Operand1.Type.Type == CilElementType.I8)
-                ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, new ConstantOperand(ctx.Operand1.Type, (long)0), ctx.Operand1);
-            else if (ctx.Operand1.Type.Type == CilElementType.U8)
-                ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, new ConstantOperand(ctx.Operand1.Type, (ulong)0), ctx.Operand1);
-            else
-			    ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, new ConstantOperand(new SigType(CilElementType.I4), (int)0), ctx.Operand1);
+			if (ctx.Operand1.Type.Type == CilElementType.I8)
+				ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, new ConstantOperand(ctx.Operand1.Type, (long)0), ctx.Operand1);
+			else if (ctx.Operand1.Type.Type == CilElementType.U8)
+				ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, new ConstantOperand(ctx.Operand1.Type, (ulong)0), ctx.Operand1);
+			else
+				ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, new ConstantOperand(new SigType(CilElementType.I4), (int)0), ctx.Operand1);
 		}
 
 		/// <summary>
@@ -1023,10 +1023,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			if (type == IR.Instruction.LogicalAndInstruction || mask != 0) {
 				Debug.Assert(mask != 0, @"Conversion is an AND, but no mask given.");
 
-                if (type != IR.Instruction.LogicalAndInstruction)
-                    ProcessMixedTypeConversion(ctx, type, mask, destinationOperand, sourceOperand);
+				if (type != IR.Instruction.LogicalAndInstruction)
+					ProcessMixedTypeConversion(ctx, type, mask, destinationOperand, sourceOperand);
 				else
-                    ProcessSingleTypeTruncation(ctx, type, mask, destinationOperand, sourceOperand);
+					ProcessSingleTypeTruncation(ctx, type, mask, destinationOperand, sourceOperand);
 
 				ExtendAndTruncateResult(ctx, instruction, destinationOperand);
 			}
@@ -1086,11 +1086,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		private void ProcessSingleTypeTruncation(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8) {
-                ctx.SetInstruction(IR.Instruction.MoveInstruction, destinationOperand, sourceOperand);
+				ctx.SetInstruction(IR.Instruction.MoveInstruction, destinationOperand, sourceOperand);
 				ctx.AppendInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
 			}
 			else
-                ctx.SetInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
+				ctx.SetInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
 		}
 
 		private void ExtendAndTruncateResult(Context ctx, IInstruction instruction, Operand destinationOperand)
@@ -1232,18 +1232,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <returns>The IR condition code.</returns>
 		private IR.ConditionCode GetConditionCode(CIL.OpCode opCode)
 		{
-			IR.ConditionCode result;
 			switch (opCode) {
-				case OpCode.Ceq: result = IR.ConditionCode.Equal; break;
-				case OpCode.Cgt: result = IR.ConditionCode.GreaterThan; break;
-				case OpCode.Cgt_un: result = IR.ConditionCode.UnsignedGreaterThan; break;
-				case OpCode.Clt: result = IR.ConditionCode.LessThan; break;
-				case OpCode.Clt_un: result = IR.ConditionCode.UnsignedLessThan; break;
-
-				default:
-					throw new NotSupportedException();
+				case OpCode.Ceq: return IR.ConditionCode.Equal;
+				case OpCode.Cgt: return IR.ConditionCode.GreaterThan;
+				case OpCode.Cgt_un: return IR.ConditionCode.UnsignedGreaterThan;
+				case OpCode.Clt: return IR.ConditionCode.LessThan;
+				case OpCode.Clt_un: return IR.ConditionCode.UnsignedLessThan;
+				default: throw new NotSupportedException();
 			}
-			return result;
 		}
 
 		/// <summary>
@@ -1269,12 +1265,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <returns></returns>
 		private RuntimeMethod FindMethod(RuntimeType rt, string name)
 		{
-			//name[0] = Char.ToUpper(name[0]);
-			foreach (RuntimeMethod method in rt.Methods) {
-				if (name == method.Name) {
+			foreach (RuntimeMethod method in rt.Methods) 
+				if (name == method.Name) 
 					return method;
-				}
-			}
 
 			throw new MissingMethodException(rt.Name, name);
 		}
