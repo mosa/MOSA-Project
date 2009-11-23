@@ -49,6 +49,7 @@ namespace Mosa.Platforms.x86.CPUx86
 						if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_X8;
 					}
 					break;
+                case CilElementType.Char: goto case CilElementType.U2;
 				case CilElementType.U2: goto case CilElementType.I2;
 				case CilElementType.I2:
 					if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_X16;

@@ -188,8 +188,8 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
-			ctx.AppendInstruction(IR.Instruction.MoveInstruction, opL, eax);
-			ctx.AppendInstruction(IR.Instruction.MoveInstruction, opH, edx);
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, opL, eax);
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, opH, edx);
 		}
 
 		/// <summary>

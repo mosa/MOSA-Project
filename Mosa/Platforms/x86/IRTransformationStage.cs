@@ -337,14 +337,25 @@ namespace Mosa.Platforms.x86
                 MoveFloatingPoint(ctx, CPUx86.Instruction.MovsdInstruction);
             else
             {
-                if (!Is32Bit(ctx.Operand1))
+                /*if (!Is32Bit(ctx.Operand1) && ctx.Result is RegisterOperand)
                 {
                     if (IsSigned(ctx.Result))
                         ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovsxInstruction);
-                    else
+                    else if (IsUnsigned(ctx.Result))
                         ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovzxInstruction);
+                    else
+                        ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
                 }
-                else
+                else if (!Is32Bit(ctx.Operand1) && (ctx.Result.Type.Type != ctx.Operand1.Type.Type))
+                {
+                    if (IsSigned(ctx.Result))
+                        ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovsxInstruction);
+                    else if (IsUnsigned(ctx.Result))
+                        ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovzxInstruction);
+                    else
+                        ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+                }
+                else*/
                     ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
             }
         }
