@@ -28,7 +28,7 @@ namespace Mosa.Platforms.x86
 	public sealed class MemToMemConversionStage : BaseTransformationStage, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
 	{
 
-		#region IMethodCompilerStage Members
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
@@ -38,9 +38,9 @@ namespace Mosa.Platforms.x86
 
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
 				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(TweakTransformationStage)),
-				//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(SimplePeepholeOptimizationStage)),
-				//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockOptimizationStage)),				
-				//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockReorderStage)),	
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(SimplePeepholeOptimizationStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockOptimizationStage)),				
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockReorderStage)),	
 		        new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
 			};
 
@@ -50,13 +50,17 @@ namespace Mosa.Platforms.x86
 		/// <value>The pipeline stage order.</value>
 		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
+		#endregion // IPipelineStage Members
+
+		#region IMethodCompilerStage Members
+
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		public override void Run()
 		{
 			foreach (BasicBlock block in BasicBlocks)
-				for (Context ctx = CreateContext( block); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null)
 						if (!ctx.Ignore && ctx.Instruction is CPUx86.IX86Instruction)
 							if (ctx.Result is MemoryOperand && ctx.Operand1 is MemoryOperand)

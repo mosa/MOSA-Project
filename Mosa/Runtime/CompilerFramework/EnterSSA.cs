@@ -109,7 +109,7 @@ namespace Mosa.Runtime.CompilerFramework
         public void Run()
         {
             _dominanceProvider = (IDominanceProvider)MethodCompiler.GetPreviousStage(typeof(IDominanceProvider));
-            Debug.Assert(null != _dominanceProvider, @"SSA Conversion requires a dominance provider.");
+            Debug.Assert(_dominanceProvider != null, @"SSA Conversion requires a dominance provider.");
             if (_dominanceProvider == null)
                 throw new InvalidOperationException(@"SSA Conversion requires a dominance provider.");
 
@@ -146,7 +146,7 @@ namespace Mosa.Runtime.CompilerFramework
             workList.Enqueue(new WorkItem(BasicBlocks[0], null, liveIn));
 
             // Iterate until the worklist is empty
-            while (0 != workList.Count)
+            while (workList.Count != 0)
             {
                 // Remove the block From the queue
                 WorkItem workItem = workList.Dequeue();
@@ -222,9 +222,7 @@ namespace Mosa.Runtime.CompilerFramework
             }
             // Is this a dominance frontier block?
             if (Array.IndexOf(_dominanceFrontierBlocks, ctx.BasicBlock) != -1)
-            {
                 InsertPhiInstructions(ctx, caller, liveIn);
-            }
 
             // Create a new live out dictionary
             if (liveIn != null)
