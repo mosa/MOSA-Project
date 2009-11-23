@@ -903,8 +903,8 @@ namespace Mosa.Platforms.x86
             newBlocks[1].AppendInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ecx);
             newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, edx);
             newBlocks[1].AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-            newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
-            LinkBlocks(newBlocks[1], nextBlock);
+            newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
+            LinkBlocks(newBlocks[1], newBlocks[10]);
 
             // L1:
             newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, eax);
