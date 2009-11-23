@@ -177,7 +177,7 @@ namespace Mosa.Platforms.x86
 			CIL.OpCode opcode = (ctx.Instruction as CIL.ICILInstruction).OpCode;
 			Operand op = ctx.Operand1;
 
-			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand1, new ConstantOperand(new SigType(CilElementType.I4), 0));
+			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, new ConstantOperand(new SigType(CilElementType.I4), 0), ctx.Operand1);
 
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
 				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);

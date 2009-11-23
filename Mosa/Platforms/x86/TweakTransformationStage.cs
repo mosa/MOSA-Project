@@ -139,11 +139,9 @@ namespace Mosa.Platforms.x86
 		{
 			if (context.Result is MemoryOperand) {
 				Operand op = context.Result;
-				// FIX: Push EAX
 				RegisterOperand eax = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.EAX);
 				context.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op);
 				context.Result = eax;
-				// FIX: Pop EAX
 			}
 		}
 
@@ -153,14 +151,14 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Movsx(Context context)
 		{
-			if (Is32Bit(context.Operand1)) {
+			if (Is32Bit(context.Operand1))
 				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
-			}
 			else {
-				if (!(context.Result is RegisterOperand)) {
+				Operand result = context.Result;
+				if (!(result is RegisterOperand)) {
 					RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
 					context.SetInstruction(CPUx86.Instruction.MovsxInstruction, ecx, context.Operand1);
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, context.Result, ecx);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, ecx);
 				}
 			}
 		}
@@ -173,6 +171,14 @@ namespace Mosa.Platforms.x86
 		{
 			if (Is32Bit(context.Operand1))
 				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+			else {
+				Operand result = context.Result;
+				if (!(result is RegisterOperand)) {
+					RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
+					context.SetInstruction(CPUx86.Instruction.MovsxInstruction, ecx, context.Operand1);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, ecx);
+				}
+			}
 		}
 
 		/// <summary>
@@ -200,22 +206,21 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Cmp(Context ctx)
 		{
-			Operand op0 = ctx.Result;
-			Operand op1 = ctx.Operand1;
+			//Operand op0 = ctx.Result;
+			//Operand op1 = ctx.Operand1;
 
-			RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
-			ctx.Result = eax;
+			//RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
+			//ctx.Result = eax;
 
-			Context start = ctx.InsertBefore();
-			start.SetInstruction(CPUx86.Instruction.PushInstruction, null, eax);
+			//Context start = ctx.InsertBefore();
+			//start.SetInstruction(CPUx86.Instruction.PushInstruction, null, eax);
 
-			if ((IsSigned(op0)) && (!Is32Bit(op0)))
-				start.AppendInstruction(CPUx86.Instruction.MovsxInstruction, eax, op0);
-			else
-				start.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op0);
+			//if ((IsSigned(op0)) && (!Is32Bit(op0)))
+			//    start.AppendInstruction(CPUx86.Instruction.MovsxInstruction, eax, op0);
+			//else
+			//    start.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op0);
 
-			ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
-
+			//ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
 		}
 
 		/// <summary>
