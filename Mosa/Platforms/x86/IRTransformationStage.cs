@@ -720,7 +720,6 @@ namespace Mosa.Platforms.x86
             ctx.ReplaceInstructionOnly(instruction);
         }
 
-
         /// <summary>
         /// Swaps the comparison operands.
         /// </summary>
