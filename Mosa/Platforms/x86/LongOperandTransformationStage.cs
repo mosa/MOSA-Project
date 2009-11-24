@@ -1750,7 +1750,7 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.LoadInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
+            if (ctx.Operand1.StackType == StackTypeCode.Int64 || ctx.Result.StackType == StackTypeCode.Int64)
                 ExpandLoad(ctx);
         }
 

@@ -330,6 +330,8 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.MoveInstruction(Context ctx)
         {
+            Operand result = ctx.Result;
+            Operand operand = ctx.Operand1;
             ctx.Operand1 = EmitConstant(ctx.Operand1);
             if (ctx.Result.Type.Type == CilElementType.R4)
                 MoveFloatingPoint(ctx, CPUx86.Instruction.MovssInstruction);
@@ -337,25 +339,22 @@ namespace Mosa.Platforms.x86
                 MoveFloatingPoint(ctx, CPUx86.Instruction.MovsdInstruction);
             else
             {
-                /*if (!Is32Bit(ctx.Operand1) && ctx.Result is RegisterOperand)
+                if (ctx.Result is MemoryOperand && ctx.Operand1 is MemoryOperand)
                 {
-                    if (IsSigned(ctx.Result))
-                        ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovsxInstruction);
-                    else if (IsUnsigned(ctx.Result))
-                        ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovzxInstruction);
+                    RegisterOperand load = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
+                    RegisterOperand store = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
+
+                    ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, load);
+                    if (!Is32Bit(operand) && IsSigned(operand))
+                        ctx.AppendInstruction(CPUx86.Instruction.MovsxInstruction, load, operand);
+                    else if (!Is32Bit(operand) && IsUnsigned(operand))
+                        ctx.AppendInstruction(CPUx86.Instruction.MovzxInstruction, load, operand);
                     else
-                        ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+                        ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, load, operand);
+                    ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, store);
+                    ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, load);
                 }
-                else if (!Is32Bit(ctx.Operand1) && (ctx.Result.Type.Type != ctx.Operand1.Type.Type))
-                {
-                    if (IsSigned(ctx.Result))
-                        ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovsxInstruction);
-                    else if (IsUnsigned(ctx.Result))
-                        ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovzxInstruction);
-                    else
-                        ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
-                }
-                else*/
+                else
                     ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
             }
         }

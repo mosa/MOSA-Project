@@ -161,7 +161,8 @@ namespace Mosa.Platforms.x86
 				Operand result = context.Result;
 				if (!(result is RegisterOperand)) {
 					RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
-					context.SetInstruction(CPUx86.Instruction.MovsxInstruction, ecx, context.Operand1);
+                    context.Result = ecx;
+					//context.SetInstruction(CPUx86.Instruction.MovsxInstruction, ecx, context.Operand1);
 					context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, ecx);
 				}
 			}
@@ -248,8 +249,22 @@ namespace Mosa.Platforms.x86
             {
                 RegisterOperand ecx = new RegisterOperand(left.Type, GeneralPurposeRegister.ECX);
                 Context before = ctx.InsertBefore();
-                before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, left);
+                before.SetInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
+                before.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, left);
                 ctx.Result = ecx;
+                ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
+            }
+            if (right is ConstantOperand && !Is32Bit(left))
+            {
+                RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
+                Context before = ctx.InsertBefore();
+                before.SetInstruction(CPUx86.Instruction.PushInstruction, null, edx);
+                if (IsSigned(left))
+                    before.AppendInstruction(CPUx86.Instruction.MovsxInstruction, edx, left);
+                else
+                    before.AppendInstruction(CPUx86.Instruction.MovzxInstruction, edx, left);
+                ctx.Result = edx;
+                ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, edx);
             }
 		}
 

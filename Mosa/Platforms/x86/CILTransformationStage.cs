@@ -295,7 +295,7 @@ namespace Mosa.Platforms.x86
 
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 			for (int i = 0; i < branch.Targets.Length - 1; ++i) {
-				ctx.AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, operand, new ConstantOperand(new SigType(CilElementType.I), i));
+				ctx.AppendInstruction(CPUx86.Instruction.CmpInstruction, operand, new ConstantOperand(new SigType(CilElementType.I), i));
 				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);
 				ctx.SetBranch(branch.Targets[i]);
 			}
