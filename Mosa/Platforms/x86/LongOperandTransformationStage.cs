@@ -1504,86 +1504,6 @@ namespace Mosa.Platforms.x86
             int[] targets = ctx.Branch.Targets;
 
             Operand op1H, op1L, op2H, op2L;
-            SplitLongOperand(ctx.Result, out op1L, out op1H);
-            SplitLongOperand(ctx.Operand1, out op2L, out op2H);
-            IR.ConditionCode code;
-
-            switch (((ctx.Instruction) as CIL.ICILInstruction).OpCode)
-            {
-                // Signed
-                case CIL.OpCode.Beq_s: code = IR.ConditionCode.Equal; break;
-                case CIL.OpCode.Bge_s: code = IR.ConditionCode.GreaterOrEqual; break;
-                case CIL.OpCode.Bgt_s: code = IR.ConditionCode.GreaterThan; break;
-                case CIL.OpCode.Ble_s: code = IR.ConditionCode.LessOrEqual; break;
-                case CIL.OpCode.Blt_s: code = IR.ConditionCode.LessThan; break;
-
-                // Unsigned
-                case CIL.OpCode.Bne_un_s: code = IR.ConditionCode.NotEqual; break;
-                case CIL.OpCode.Bge_un_s: code = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-                case CIL.OpCode.Bgt_un_s: code = IR.ConditionCode.UnsignedGreaterThan; break;
-                case CIL.OpCode.Ble_un_s: code = IR.ConditionCode.UnsignedLessOrEqual; break;
-                case CIL.OpCode.Blt_un_s: code = IR.ConditionCode.UnsignedLessThan; break;
-
-                // Long form signed
-                case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
-                case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
-                case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
-                case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
-                case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
-
-                // Long form unsigned
-                case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
-                case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
-                case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
-                case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
-                case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
-                default: throw new NotImplementedException();
-            }
-
-            IR.ConditionCode conditionHigh = GetHighCondition(code);
-
-            Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 2);
-            Context nextBlock = SplitContext(ctx, false);
-
-            // Compare high dwords
-            newBlocks[0].AppendInstruction(CPUx86.Instruction.CmpInstruction, op1H, op2H);
-            // Branch if check already gave results
-            newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal, nextBlock.BasicBlock);
-            newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
-            LinkBlocks(newBlocks[0], newBlocks[1], nextBlock);
-
-            newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, code);
-            newBlocks[1].Branch.Targets[0] = targets[0];
-            newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction);
-            newBlocks[1].Branch.Targets[0] = targets[1];
-            LinkBlocks(newBlocks[1], FindBlock(targets[0]));
-            LinkBlocks(newBlocks[1], FindBlock(targets[1]));
-
-            // Compare low dwords
-            ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, op1L, op2L);
-            // Set the unsigned result...
-            ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, code);
-            ctx.SetBranch(targets[0]);
-            ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction);
-            ctx.SetBranch(targets[1]);
-            LinkBlocks(ctx, FindBlock(targets[0]));
-            LinkBlocks(ctx, FindBlock(targets[1]));
-        }
-
-        /// <summary>
-        /// Expands the binary branch instruction for 64-bits.
-        /// </summary>
-        /// <param name="ctx">The context.</param>
-        private void ExpandBinaryBranch(Context ctx)
-        {
-            Debug.Assert(ctx.Branch.Targets.Length == 2);
-
-            int[] targets = ctx.Branch.Targets;
-
-            Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 2);
-            Context nextBlock = SplitContext(ctx, false);
-
-            Operand op1H, op1L, op2H, op2L;
             SplitLongOperand(ctx.Operand1, out op1L, out op1H);
             SplitLongOperand(ctx.Operand2, out op2L, out op2H);
             IR.ConditionCode code;
@@ -1617,17 +1537,101 @@ namespace Mosa.Platforms.x86
                 case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
                 case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
                 case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
+                default: throw new NotImplementedException();
+            }
+
+            IR.ConditionCode conditionHigh = GetHighCondition(code);
+
+            Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 3);
+            Context nextBlock = SplitContext(ctx, false);
+
+            ctx.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+            LinkBlocks(ctx, newBlocks[0]);
+            // Compare high dwords
+            newBlocks[0].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, op1H, op2H);
+            // Branch if check already gave results
+            newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[2].BasicBlock);
+            newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+            LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
+
+            newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, code);
+            newBlocks[1].Branch.Targets[0] = targets[0];
+            newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction);
+            newBlocks[1].Branch.Targets[0] = targets[1];
+            LinkBlocks(newBlocks[1], FindBlock(targets[0]));
+            LinkBlocks(newBlocks[1], FindBlock(targets[1]));
+
+            // Compare low dwords
+            newBlocks[2].SetInstruction(CPUx86.Instruction.DirectCompareInstruction, op1L, op2L);
+            // Set the unsigned result...
+            newBlocks[2].AppendInstruction(CPUx86.Instruction.BranchInstruction, code);
+            newBlocks[2].SetBranch(targets[0]);
+            newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction);
+            newBlocks[2].SetBranch(targets[1]);
+            LinkBlocks(newBlocks[2], FindBlock(targets[0]));
+            LinkBlocks(newBlocks[2], FindBlock(targets[1]));
+        }
+
+        /// <summary>
+        /// Expands the binary branch instruction for 64-bits.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        private void ExpandBinaryBranch(Context ctx)
+        {
+            Debug.Assert(ctx.Branch.Targets.Length == 2);
+
+            int[] targets = ctx.Branch.Targets;
+
+            Operand op1H, op1L, op2H, op2L;
+            SplitLongOperand(ctx.Operand1, out op1L, out op1H);
+            SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+            IR.ConditionCode code;
+
+            Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 3);
+            Context nextBlock = SplitContext(ctx, false);
+
+            switch (((ctx.Instruction) as CIL.ICILInstruction).OpCode)
+            {
+                // Signed
+                case CIL.OpCode.Beq_s: code = IR.ConditionCode.Equal; break;
+                case CIL.OpCode.Bge_s: code = IR.ConditionCode.GreaterOrEqual; break;
+                case CIL.OpCode.Bgt_s: code = IR.ConditionCode.GreaterThan; break;
+                case CIL.OpCode.Ble_s: code = IR.ConditionCode.LessOrEqual; break;
+                case CIL.OpCode.Blt_s: code = IR.ConditionCode.LessThan; break;
+
+                // Unsigned
+                case CIL.OpCode.Bne_un_s: code = IR.ConditionCode.NotEqual; break;
+                case CIL.OpCode.Bge_un_s: code = IR.ConditionCode.UnsignedGreaterOrEqual; break;
+                case CIL.OpCode.Bgt_un_s: code = IR.ConditionCode.UnsignedGreaterThan; break;
+                case CIL.OpCode.Ble_un_s: code = IR.ConditionCode.UnsignedLessOrEqual; break;
+                case CIL.OpCode.Blt_un_s: code = IR.ConditionCode.UnsignedLessThan; break;
+
+                // Long form signed
+                case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
+                case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
+                case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
+                case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
+                case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
+
+                // Long form unsigned
+                case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
+                case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
+                case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
+                case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
+                case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
 
                 default: throw new NotImplementedException();
             }
 
             IR.ConditionCode conditionHigh = GetHighCondition(code);
 
+            ctx.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+            LinkBlocks(ctx, newBlocks[0]);
             // Compare high dwords
-            newBlocks[0].AppendInstruction(CPUx86.Instruction.CmpInstruction, op1H, op2H);
-            newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal, nextBlock.BasicBlock);
+            newBlocks[0].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, op1H, op2H);
+            newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[2].BasicBlock);
             newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
-            LinkBlocks(newBlocks[0], newBlocks[1], nextBlock);
+            LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
 
             // Branch if check already gave results
             newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, code);
@@ -1638,15 +1642,15 @@ namespace Mosa.Platforms.x86
             LinkBlocks(newBlocks[1], FindBlock(targets[1]));
 
             // Compare low dwords
-            ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, op1L, op2L);
+            newBlocks[2].SetInstruction(CPUx86.Instruction.DirectCompareInstruction, op1L, op2L);
             // Set the unsigned result...
-            ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, code);
-            ctx.SetBranch(targets[0]);
-            ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction);
-            ctx.SetBranch(targets[1]);
-            ctx.SetBranch(targets[1]);
-            LinkBlocks(ctx, FindBlock(targets[0]));
-            LinkBlocks(ctx, FindBlock(targets[1]));
+            newBlocks[2].AppendInstruction(CPUx86.Instruction.BranchInstruction, code);
+            newBlocks[2].SetBranch(targets[0]);
+            newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction);
+            newBlocks[2].SetBranch(targets[1]);
+
+            LinkBlocks(newBlocks[2], FindBlock(targets[0]));
+            LinkBlocks(newBlocks[2], FindBlock(targets[1]));
         }
 
         /// <summary>

@@ -315,6 +315,9 @@ namespace Mosa.Platforms.x86
 				SigType I4 = new SigType(CilElementType.I4);
 				SigType U4 = new SigType(CilElementType.U4);
 
+                Operand opL, opH;
+                LongOperandTransformationStage.SplitLongOperand(operand, out opL, out opH);
+                /*
 				// Store if the operand is signed or unsigned by storing the type
 				SigType HighType = operand.Type.Type == CilElementType.I8 ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
 
@@ -346,7 +349,7 @@ namespace Mosa.Platforms.x86
 						opL = new MemoryOperand(U4, mop.Base, mop.Offset);
 						opH = new MemoryOperand(HighType, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
 					}
-				}
+				}*/
 
 				// Like Win32: EDX:EAX
                 ctx.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(U4, GeneralPurposeRegister.EAX), opL);
