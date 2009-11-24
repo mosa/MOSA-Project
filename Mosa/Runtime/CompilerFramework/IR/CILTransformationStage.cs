@@ -1127,7 +1127,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 						if (ia.Architecture.IsInstanceOfType(Architecture)) {
 							// Found a replacement for the call...
 							try {
-								ctx.ReplaceInstructionOnly(Architecture.GetIntrinsicIntruction(ia.InstructionType));
+                                Operand result = ctx.Result;
+                                Operand op1 = ctx.Operand1;
+                                Operand op2 = ctx.Operand2;
+                                Operand op3 = ctx.Operand3;
+								ctx.SetInstruction(Architecture.GetIntrinsicIntruction(ia.InstructionType), result, op1, op2, op3);
 
 								// TODO: Handle Invoke Target operands
 

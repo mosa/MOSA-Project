@@ -23,11 +23,11 @@ namespace Mosa.HelloWorld
 		public static byte Get(byte index)
 		{
 			//Native.Cli();
-			Native.Out8(0x70, index);
+			Native.Out(0x70, index);
 			Native.Nop();
 			Native.Nop();
 			Native.Nop();
-			byte result = Native.In8(0x71);
+			byte result = Native.In(0x71);
 			//Native.Sti();
 			return result;
 		}
@@ -41,11 +41,11 @@ namespace Mosa.HelloWorld
 		public static void Set(byte index, byte value)
 		{
 			//Native.Cli();
-			Native.Out8(0x70, index);
+			Native.Out(0x70, index);
 			Native.Nop();
 			Native.Nop();
 			Native.Nop();
-			Native.Out8(0x71, value);
+			Native.Out(0x71, value);
 			//Native.Sti();
 		}
 
@@ -54,8 +54,8 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		private static void Delay()
 		{
-			Native.In8(0x80);
-			Native.Out8(0x80, 0);
+			Native.In(0x80);
+			Native.Out(0x80, 0);
 		}
 
 		/// <summary>

@@ -33,17 +33,16 @@ namespace Mosa.Platforms.x86.CPUx86
 		#endregion // Data Members
 
 		#region Methods
-		
 		/// <summary>
-		/// Computes the opcode.
+		/// 
 		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
+		/// <param name="destination"></param>
+		/// <param name="source"></param>
+		/// <param name="empty"></param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand empty)
         {
-            if (IsByte(destination))
+            if (IsByte(source))
             {
                 if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C_8;
                 if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_8;
