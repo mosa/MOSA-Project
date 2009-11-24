@@ -39,8 +39,8 @@ namespace Mosa.Platforms.x86
 		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
 				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IRTransformationStage)),
 				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(MemToMemConversionStage)),
-				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockOptimizationStage)),				
-				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockReorderStage)),			
+				//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockOptimizationStage)),				
+				//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockReorderStage)),			
 			};
 
 		/// <summary>
