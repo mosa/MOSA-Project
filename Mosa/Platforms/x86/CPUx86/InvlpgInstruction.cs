@@ -14,7 +14,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 push instruction.
     /// </summary>
-    public sealed class InvlpgInstruction : OneOperandInstruction
+	public sealed class InvlpgInstruction : OneOperandInstruction, IIntrinsicInstruction
     {
 		#region Data Members
 
@@ -44,6 +44,15 @@ namespace Mosa.Platforms.x86.CPUx86
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
 			visitor.Invlpg(context);
+		}
+
+		/// <summary>
+		/// Replaces the instrinsic call site
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void ReplaceIntrinsicCall(Context context)
+		{
+			context.SetInstruction(CPUx86.Instruction.InvlpgInstruction, null, context.Operand1);
 		}
 
         #endregion // Methods

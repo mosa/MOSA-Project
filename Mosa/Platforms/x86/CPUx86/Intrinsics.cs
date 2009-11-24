@@ -22,7 +22,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	{
 		#region Static Data
 
-		private static Dictionary<Type, IInstruction> _map = null; 
+		private static Dictionary<Type, IIntrinsicInstruction> _map = null; 
 
 		/// <summary>
 		/// 
@@ -36,7 +36,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public static IInstruction Get(Type type)
+		public static IIntrinsicInstruction Get(Type type)
 		{
 			if (_map == null)
 				_map = Initialize();
@@ -48,9 +48,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// Initializes this instance.
 		/// </summary>
 		/// <returns></returns>
-		public static Dictionary<Type, IInstruction> Initialize()
+		public static Dictionary<Type, IIntrinsicInstruction> Initialize()
 		{
-			Dictionary<Type, IInstruction> map = new Dictionary<Type, IInstruction>();
+			Dictionary<Type, IIntrinsicInstruction> map = new Dictionary<Type, IIntrinsicInstruction>();
 
 			map.Add(typeof(BochsDebug), BochsDebug);
 			map.Add(typeof(OutInstruction), CPUx86.Instruction.OutInstruction);
@@ -62,7 +62,7 @@ namespace Mosa.Platforms.x86.CPUx86
 			map.Add(typeof(CpuIdInstruction), CPUx86.Instruction.CpuIdInstruction);
 			map.Add(typeof(InvlpgInstruction), CPUx86.Instruction.InvlpgInstruction);
 			map.Add(typeof(NopInstruction), CPUx86.Instruction.NopInstruction);
-            map.Add(typeof(IR.MoveInstruction), IR.Instruction.MoveInstruction);
+            //map.Add(typeof(IR.MoveInstruction), IR.Instruction.MoveInstruction);
 
 			// TODO - finish up the list
 

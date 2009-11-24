@@ -239,7 +239,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        public override IInstruction GetIntrinsicIntruction(Type type)
+		public override IIntrinsicInstruction GetIntrinsicIntruction(Type type)
         {
             return CPUx86.Intrinsics.Get(type);
         }

@@ -12,19 +12,21 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 out instruction.
-    /// </summary>
-    public sealed class OutInstruction : ThreeOperandInstruction
-    {
-        #region Codes
-        private static readonly OpCode C_R_8 = new OpCode(new byte[] { 0xE6 });
-        private static readonly OpCode R_R_8 = new OpCode(new byte[] { 0xEE });
-        private static readonly OpCode C_R_32 = new OpCode(new byte[] { 0xE7 });
-        private static readonly OpCode R_R_32 = new OpCode(new byte[] { 0xEF });
-        #endregion 
+	/// <summary>
+	/// Representations the x86 out instruction.
+	/// </summary>
+	public sealed class OutInstruction : ThreeOperandInstruction, IIntrinsicInstruction
+	{
+		#region Data Members
 
-        #region Methods
+		private static readonly OpCode C_R_8 = new OpCode(new byte[] { 0xE6 });
+		private static readonly OpCode R_R_8 = new OpCode(new byte[] { 0xEE });
+		private static readonly OpCode C_R_32 = new OpCode(new byte[] { 0xE7 });
+		private static readonly OpCode R_R_32 = new OpCode(new byte[] { 0xEF });
+
+		#endregion // Data Members
+
+		#region Methods
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>
@@ -32,20 +34,18 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand empty, Operand destination, Operand source)
-        {
-            if (IsByte(source))
-            {
-                if ((destination is ConstantOperand) && (source is RegisterOperand)) return C_R_8;
-                if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_8;
-            }
-            else
-            {
-                if ((destination is ConstantOperand) && (source is RegisterOperand)) return C_R_32;
-                if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_32;
-            }
-            throw new ArgumentException(@"No opcode for operand type.");
-        }
+		protected override OpCode ComputeOpCode(Operand empty, Operand destination, Operand source)
+		{
+			if (IsByte(source)) {
+				if ((destination is ConstantOperand) && (source is RegisterOperand)) return C_R_8;
+				if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_8;
+			}
+			else {
+				if ((destination is ConstantOperand) && (source is RegisterOperand)) return C_R_32;
+				if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_32;
+			}
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -57,6 +57,15 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Out(context);
 		}
 
-        #endregion // Methods
-    }
+		/// <summary>
+		/// Replaces the instrinsic call site
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void ReplaceIntrinsicCall(Context context)
+		{
+			context.SetInstruction(CPUx86.Instruction.OutInstruction, null, context.Operand1);
+		}
+
+		#endregion // Methods
+	}
 }
