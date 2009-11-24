@@ -63,7 +63,15 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		public void ReplaceIntrinsicCall(Context context)
 		{
-			context.SetInstruction(CPUx86.Instruction.OutInstruction, null, context.Operand1);
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+
+			RegisterOperand edx = new RegisterOperand(operand1.Type, GeneralPurposeRegister.EDX);
+			RegisterOperand eax = new RegisterOperand(operand2.Type, GeneralPurposeRegister.EAX);
+
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, edx, operand1);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, operand2);
+			context.AppendInstruction(CPUx86.Instruction.OutInstruction, null, edx, eax);
 		}
 
 		#endregion // Methods
