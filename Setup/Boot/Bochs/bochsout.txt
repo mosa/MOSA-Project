@@ -1,0 +1,143 @@
+00000000000i[     ] Bochs x86 Emulator 2.3.7
+00000000000i[     ]   Build from CVS snapshot, on June 3, 2008
+00000000000i[     ] System configuration
+00000000000i[     ]   processors: 1 (cores=1, HT threads=1)
+00000000000i[     ]   A20 line support: yes
+00000000000i[     ]   APIC support: yes
+00000000000i[     ] CPU configuration
+00000000000i[     ]   level: 6
+00000000000i[     ]   SMP support: no
+00000000000i[     ]   FPU support: yes
+00000000000i[     ]   MMX support: yes
+00000000000i[     ]   SSE support: 2
+00000000000i[     ]   CLFLUSH support: yes
+00000000000i[     ]   VME support: yes
+00000000000i[     ]   3dnow! support: no
+00000000000i[     ]   PAE support: yes
+00000000000i[     ]   PGE support: yes
+00000000000i[     ]   PSE support: yes
+00000000000i[     ]   x86-64 support: yes
+00000000000i[     ]   SEP support: yes
+00000000000i[     ]   MWAIT support: no
+00000000000i[     ]   XSAVE support: no
+00000000000i[     ]   AES support: no
+00000000000i[     ] Optimization configuration
+00000000000i[     ]   Guest2HostTLB support: yes
+00000000000i[     ]   RepeatSpeedups support: yes
+00000000000i[     ]   Icache support: yes
+00000000000i[     ]   Trace cache support: yes
+00000000000i[     ]   Fast function calls: yes
+00000000000i[     ] Devices configuration
+00000000000i[     ]   ACPI support: yes
+00000000000i[     ]   NE2000 support: yes
+00000000000i[     ]   PCI support: yes
+00000000000i[     ]   SB16 support: yes
+00000000000i[     ]   USB support: yes
+00000000000i[     ]   VGA extension support: vbe cirrus
+00000000000i[MEM0 ] allocated memory at 02DA0020. after alignment, vector=02DA1000
+00000000000i[MEM0 ] 32.00MB
+00000000000i[MEM0 ] rom at 0xfffe0000/131072 ('..\..\..\Tools\Bochs\BIOS-bochs-latest')
+00000000000i[MEM0 ] rom at 0xc0000/38400 ('..\..\..\Tools\Bochs\VGABIOS-lgpl-latest')
+00000000000i[APIC?] set APIC ID to 0
+00000000000i[APIC0] 80686
+00000000000i[APIC0] local apic in CPU apicid=00 initializing
+00000000000i[IOAP ] initializing I/O APIC
+00000000000i[IOAP ] set APIC ID to 1
+00000000000i[MEM0 ] Register memory access handlers: 0xfec00000 - 0xfec00fff
+00000000000i[CMOS ] Using local time for initial clock
+00000000000i[CMOS ] Setting initial clock to: Wed Jul 22 22:17:07 2009 (time0=1248326227)
+00000000000i[DMA  ] channel 4 used by cascade
+00000000000i[DMA  ] channel 2 used by Floppy Drive
+00000000000i[FDD  ] tried to open 'floppya.img' read/write: No such file or directory
+00000000000i[FDD  ] tried to open 'floppya.img' read only: No such file or directory
+00000000000i[FDD  ] tried to open 'floppyb.img' read/write: No such file or directory
+00000000000i[FDD  ] tried to open 'floppyb.img' read only: No such file or directory
+00000000000i[PCI  ] 440FX Host bridge present at device 0, function 0
+00000000000i[PCI  ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
+00000000000i[MEM0 ] Register memory access handlers: 0x000a0000 - 0x000bffff
+00000000000i[WGUI ] Desktop Window dimensions: 1440 x 900
+00000000000i[WGUI ] Number of Mouse Buttons = 3
+00000000000i[WGUI ] IME disabled
+00000000000i[MEM0 ] Register memory access handlers: 0xe0000000 - 0xe07fffff
+00000000000i[CLVGA] VBE Bochs Display Extension Enabled
+00000000000i[CLVGA] interval=40000
+00000000000i[     ] init_mem of 'harddrv' plugin device by virtual method
+00000000000i[     ] init_mem of 'keyboard' plugin device by virtual method
+00000000000i[     ] init_mem of 'serial' plugin device by virtual method
+00000000000i[     ] init_mem of 'parallel' plugin device by virtual method
+00000000000i[     ] init_mem of 'extfpuirq' plugin device by virtual method
+00000000000i[     ] init_mem of 'gameport' plugin device by virtual method
+00000000000i[     ] init_mem of 'speaker' plugin device by virtual method
+00000000000i[     ] init_mem of 'pci_ide' plugin device by virtual method
+00000000000i[     ] init_mem of 'acpi' plugin device by virtual method
+00000000000i[     ] init_dev of 'harddrv' plugin device by virtual method
+00000000000i[HD   ] HD on ata0-0: '..\build\bootimage.img' 'flat' mode 
+00000000000p[HD   ] >>PANIC<< ata0-0: could not open hard drive image file '..\build\bootimage.img'
+00000000000i[HD   ] translation on ata0-0 set to 'none'
+00000000000i[HD   ] Using boot sequence disk, none, none
+00000000000i[HD   ] Floppy boot signature check is enabled
+00000000000i[     ] init_dev of 'keyboard' plugin device by virtual method
+00000000000i[KBD  ] will paste characters every 1000 keyboard ticks
+00000000000i[     ] init_dev of 'serial' plugin device by virtual method
+00000000000i[SER  ] com1 at 0x03f8 irq 4
+00000000000i[     ] init_dev of 'parallel' plugin device by virtual method
+00000000000i[PAR  ] parallel port 1 at 0x0378 irq 7
+00000000000i[     ] init_dev of 'extfpuirq' plugin device by virtual method
+00000000000i[     ] init_dev of 'gameport' plugin device by virtual method
+00000000000i[     ] init_dev of 'speaker' plugin device by virtual method
+00000000000i[     ] init_dev of 'pci_ide' plugin device by virtual method
+00000000000i[PCI  ] PIIX3 PCI IDE controller present at device 1, function 1
+00000000000i[     ] init_dev of 'acpi' plugin device by virtual method
+00000000000i[PCI  ] ACPI Controller present at device 1, function 3
+00000000000i[     ] register state of 'harddrv' plugin device by virtual method
+00000000000i[     ] register state of 'keyboard' plugin device by virtual method
+00000000000i[     ] register state of 'serial' plugin device by virtual method
+00000000000i[     ] register state of 'parallel' plugin device by virtual method
+00000000000i[     ] register state of 'extfpuirq' plugin device by virtual method
+00000000000i[     ] register state of 'gameport' plugin device by virtual method
+00000000000i[     ] register state of 'speaker' plugin device by virtual method
+00000000000i[     ] register state of 'pci_ide' plugin device by virtual method
+00000000000i[     ] register state of 'acpi' plugin device by virtual method
+00000000000i[SYS  ] bx_pc_system_c::Reset(HARDWARE) called
+00000000000i[CPU0 ] cpu hardware reset
+00000000000i[APIC0] local apic in CPU 0 initializing
+00000000000i[     ] reset of 'harddrv' plugin device by virtual method
+00000000000i[     ] reset of 'keyboard' plugin device by virtual method
+00000000000i[     ] reset of 'serial' plugin device by virtual method
+00000000000i[     ] reset of 'parallel' plugin device by virtual method
+00000000000i[     ] reset of 'extfpuirq' plugin device by virtual method
+00000000000i[     ] reset of 'gameport' plugin device by virtual method
+00000000000i[     ] reset of 'speaker' plugin device by virtual method
+00000000000i[     ] reset of 'pci_ide' plugin device by virtual method
+00000000000i[     ] reset of 'acpi' plugin device by virtual method
+00000002000p[WGUI ] >>PANIC<< Window closed, exiting!
+00000002000i[CPU0 ] CPU is in real mode (active)
+00000002000i[CPU0 ] CS.d_b = 16 bit
+00000002000i[CPU0 ] SS.d_b = 16 bit
+00000002000i[CPU0 ] EFER   = 0x00000000
+00000002000i[CPU0 ] | RAX=0000000000000030  RBX=000000000000fff8
+00000002000i[CPU0 ] | RCX=0000000000000000  RDX=0000000000000f20
+00000002000i[CPU0 ] | RSP=000000000000ffca  RBP=000000000000ffd0
+00000002000i[CPU0 ] | RSI=0000000000000000  RDI=0000000000000500
+00000002000i[CPU0 ] |  R8=0000000000000000   R9=0000000000000000
+00000002000i[CPU0 ] | R10=0000000000000000  R11=0000000000000000
+00000002000i[CPU0 ] | R12=0000000000000000  R13=0000000000000000
+00000002000i[CPU0 ] | R14=0000000000000000  R15=0000000000000000
+00000002000i[CPU0 ] | IOPL=0 id vip vif ac vm rf nt of df if tf sf ZF af PF cf
+00000002000i[CPU0 ] | SEG selector     base    limit G D
+00000002000i[CPU0 ] | SEG sltr(index|ti|rpl)     base    limit G D
+00000002000i[CPU0 ] |  CS:f000( 1e00| 0|  0) 000f0000 0000ffff 0 0
+00000002000i[CPU0 ] |  DS:0000( 0000| 0|  0) 00000000 0000ffff 0 0
+00000002000i[CPU0 ] |  SS:0000( 0000| 0|  0) 00000000 0000ffff 0 0
+00000002000i[CPU0 ] |  ES:0000( 0000| 0|  0) 00000000 0000ffff 0 0
+00000002000i[CPU0 ] |  FS:0000( 0000| 0|  0) 00000000 0000ffff 0 0
+00000002000i[CPU0 ] |  GS:0000( 0000| 0|  0) 00000000 0000ffff 0 0
+00000002000i[CPU0 ] |  MSR_FS_BASE:0000000000000000
+00000002000i[CPU0 ] |  MSR_GS_BASE:0000000000000000
+00000002000i[CPU0 ] | RIP=0000000000000886 (0000000000000886)
+00000002000i[CPU0 ] | CR0=0x60000010 CR1=0x0 CR2=0x0000000000000000
+00000002000i[CPU0 ] | CR3=0x00000000 CR4=0x00000000
+00000002000i[CPU0 ] >> call .+0xfdd7 (0x000f0660) : E8D7FD
+00000002000i[CMOS ] Last time is 1248326227 (Wed Jul 22 22:17:07 2009)
+00000002000i[     ] restoring default signal behavior
+00000002000i[CTRL ] quit_sim called with exit code 1
