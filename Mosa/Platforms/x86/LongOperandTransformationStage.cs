@@ -1111,6 +1111,7 @@ namespace Mosa.Platforms.x86
             newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
             newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
             newBlocks[5].AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
+            newBlocks[5].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
             LinkBlocks(newBlocks[5], nextBlock);
         }
 
