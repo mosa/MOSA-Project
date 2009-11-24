@@ -987,8 +987,8 @@ namespace Mosa.Platforms.x86
             Operand count = ctx.Operand2;
 
             Operand op0H, op1H, op0L, op1L;
-            SplitLongOperand(ctx.Operand1, out op0L, out op0H);
-            SplitLongOperand(ctx.Operand2, out op1L, out op1H);
+            SplitLongOperand(ctx.Result, out op0L, out op0H);
+            SplitLongOperand(ctx.Operand1, out op1L, out op1H);
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
             RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
@@ -1016,7 +1016,7 @@ namespace Mosa.Platforms.x86
             newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
             LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
 
-            newBlocks[2].AppendInstruction(CPUx86.Instruction.ShrdInstruction, eax, edx, ecx);
+            newBlocks[2].AppendInstruction(CPUx86.Instruction.ShrdInstruction, edx, eax, ecx);
             newBlocks[2].AppendInstruction(CPUx86.Instruction.SarInstruction, edx, ecx);
             newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
             LinkBlocks(newBlocks[2], newBlocks[5]);
@@ -1056,8 +1056,8 @@ namespace Mosa.Platforms.x86
             Operand count = ctx.Operand2;  //  FIXME PG
 
             Operand op0H, op1H, op0L, op1L;
-            SplitLongOperand(ctx.Operand1, out op0L, out op0H);
-            SplitLongOperand(ctx.Operand2, out op1L, out op1H);
+            SplitLongOperand(ctx.Result, out op0L, out op0H);
+            SplitLongOperand(ctx.Operand1, out op1L, out op1H);
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
             RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
@@ -1085,7 +1085,7 @@ namespace Mosa.Platforms.x86
             newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
             LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
 
-            newBlocks[2].AppendInstruction(CPUx86.Instruction.ShldInstruction, edx, eax, cl);
+            newBlocks[2].AppendInstruction(CPUx86.Instruction.ShldInstruction, eax, edx, cl);
             newBlocks[2].AppendInstruction(CPUx86.Instruction.ShlInstruction, eax, cl);
             newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
             LinkBlocks(newBlocks[2], newBlocks[5]);
