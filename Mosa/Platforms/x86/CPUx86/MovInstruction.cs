@@ -13,9 +13,9 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Platforms.x86.CPUx86
 {
 	/// <summary>
-	/// Representations the x86 move instruction.
+	/// Representations the x86 mov instruction.
 	/// </summary>
-	public sealed class MovInstruction : TwoOperandInstruction
+	public sealed class MovInstruction : TwoOperandInstruction, IIntrinsicInstruction
 	{
 		#region Data Members
 
@@ -31,7 +31,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		private static readonly OpCode M_R_U8 = new OpCode(new byte[] { 0x88 }); // Move R8 to r/rm8
 		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
 
-		#endregion
+		#endregion // Data Members
 
 		#region Methods
 
@@ -75,6 +75,15 @@ namespace Mosa.Platforms.x86.CPUx86
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
 			visitor.Mov(context);
+		}
+
+		/// <summary>
+		/// Replaces the instrinsic call site
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void ReplaceIntrinsicCall(Context context)
+		{
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, context.Result, context.Operand1);
 		}
 
 		#endregion

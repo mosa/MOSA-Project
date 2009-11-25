@@ -62,7 +62,7 @@ namespace Mosa.Platforms.x86.CPUx86
 			map.Add(typeof(CpuIdInstruction), CPUx86.Instruction.CpuIdInstruction);
 			map.Add(typeof(InvlpgInstruction), CPUx86.Instruction.InvlpgInstruction);
 			map.Add(typeof(NopInstruction), CPUx86.Instruction.NopInstruction);
-            //map.Add(typeof(IR.MoveInstruction), IR.Instruction.MoveInstruction);
+            map.Add(typeof(MovInstruction), CPUx86.Instruction.MovInstruction);
 
 			// TODO - finish up the list
 

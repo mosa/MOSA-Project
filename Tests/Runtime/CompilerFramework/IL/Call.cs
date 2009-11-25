@@ -368,7 +368,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                         return (arg == CallMov(arg));
                     }
 
-                    [Mosa.Runtime.CompilerFramework.IntrinsicAttribute(typeof(Mosa.Platforms.x86.Architecture), typeof(Mosa.Runtime.CompilerFramework.IR.MoveInstruction))]
+                    [Mosa.Runtime.CompilerFramework.IntrinsicAttribute(typeof(Mosa.Platforms.x86.Architecture), typeof(Mosa.Platforms.x86.CPUx86.MovInstruction))]
                     static int CallMov(int arg) {
                         return 0;
                     }
