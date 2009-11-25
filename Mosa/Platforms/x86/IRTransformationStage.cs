@@ -344,7 +344,6 @@ namespace Mosa.Platforms.x86
                     RegisterOperand load = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
                     RegisterOperand store = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
 
-                    ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, load);
                     if (!Is32Bit(operand) && IsSigned(operand))
                         ctx.AppendInstruction(CPUx86.Instruction.MovsxInstruction, load, operand);
                     else if (!Is32Bit(operand) && IsUnsigned(operand))
@@ -352,7 +351,6 @@ namespace Mosa.Platforms.x86
                     else
                         ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, load, operand);
                     ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, store);
-                    ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, load);
                 }
                 else
                     ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
