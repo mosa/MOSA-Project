@@ -141,12 +141,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.In(Context context)
 		{
-			if (context.Result is MemoryOperand) {
-				Operand op = context.Result;
-				RegisterOperand eax = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.EAX);
-				context.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op);
-				context.Result = eax;
-			}
 		}
 
 		/// <summary>
@@ -349,12 +343,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Out(Context context)
 		{
-			if (context.Operand2 is MemoryOperand || context.Operand2 is ConstantOperand) {
-				Operand op = context.Operand2;
-				RegisterOperand reg = new RegisterOperand(context.Operand2.Type, GeneralPurposeRegister.EAX);
-				context.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, reg, op);
-				context.Operand2 = reg;
-			}
 		}
 
 		#endregion // IX86Visitor

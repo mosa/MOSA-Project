@@ -47,6 +47,16 @@ namespace Mosa.Platforms.x86.CPUx86
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="emitter"></param>
+        public override void Emit(Context context, MachineCodeEmitter emitter)
+        {
+            emitter.Emit(new OpCode(new byte[] { 0xEE }), null, null);
+        }
+
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>

@@ -52,20 +52,20 @@ namespace Mosa.HelloWorld
 			Screen.Write(' ');
 			Screen.Write('0');
 			Screen.Write('.');
-			Screen.Write('1');
+			Screen.Write('6');
 			Screen.Write(' ');
 			Screen.Write('\'');
 			Screen.Color = 0x0C;
-			Screen.Write('W');
+			Screen.Write('T');
 			Screen.Write('a');
-			Screen.Write('k');
-			Screen.Write('e');
+			Screen.Write('n');
+			Screen.Write('i');
+            Screen.Write('g');
+            Screen.Write('a');
+            Screen.Write('w');
+            Screen.Write('a');
 			Screen.Color = 0x0E;
 			Screen.Write('\'');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
 			Screen.Write(' ');
 			Screen.Write(' ');
 			Screen.Write(' ');
@@ -296,7 +296,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(' ');
 			Screen.Write(' ');
 			Screen.Color = 0x0F;
-/*
+
 			int identifier = Platforms.x86.Native.CpuIdEbx(0);
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
@@ -308,7 +308,7 @@ namespace Mosa.HelloWorld
 			identifier = Platforms.x86.Native.CpuIdEcx(0);
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
-            */
+            
 			Screen.NextLine();
 			#endregion
 
@@ -332,8 +332,7 @@ namespace Mosa.HelloWorld
 			Screen.NextLine();
 			#endregion
 
-			//int info = Platforms.x86.Native.CpuIdEax(1);
-		    int info = 0;
+			int info = Platforms.x86.Native.CpuIdEax(1);
 			#region Stepping
 			Screen.Color = 0x0A;
 			Screen.Write('S');
@@ -462,7 +461,7 @@ namespace Mosa.HelloWorld
 
 			byte bcd = 10;
 
-			if (CMOS.BCD)
+			//if (CMOS.BCD)
 				bcd = 16;
 
 			Screen.Color = 0x0F;
@@ -500,7 +499,7 @@ namespace Mosa.HelloWorld
 		/// <param name="param">The param.</param>
 		private static void PrintBrand(uint param)
 		{
-			/*int identifier = Platforms.x86.Native.CpuIdEax(param);
+			int identifier = Platforms.x86.Native.CpuIdEax(param);
             if (identifier != 0x20202020)
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
@@ -518,7 +517,7 @@ namespace Mosa.HelloWorld
 			identifier = Platforms.x86.Native.CpuIdEdx(param);
             if (identifier != 0x20202020)
 			for (int i = 0; i < 4; ++i)
-				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));*/
+				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 		}
 
 	}

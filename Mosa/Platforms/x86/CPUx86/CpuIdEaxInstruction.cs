@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Scott Balmos <sbalmos@fastmail.fm>
+ *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
 using System;
@@ -25,6 +25,15 @@ namespace Mosa.Platforms.x86.CPUx86
     {
 
         #region Methods
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="emitter"></param>
+        public override void Emit(Context ctx, MachineCodeEmitter emitter)
+        {
+            emitter.Emit(new OpCode(new byte[] { 0x0F, 0xA2 }), null, null);
+        }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -42,7 +51,15 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		public void ReplaceIntrinsicCall(Context context)
 		{
-			context.SetInstruction(CPUx86.Instruction.CpuIdEaxInstruction, context.Result, context.Operand1);
+            Operand result = context.Result;
+            Operand operand = context.Operand1;
+            RegisterOperand eax = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.EAX);
+            RegisterOperand ecx = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.ECX);
+            RegisterOperand reg = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.EAX);
+            context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, operand);
+            context.AppendInstruction(CPUx86.Instruction.XorInstruction, ecx, ecx);
+            context.AppendInstruction(CPUx86.Instruction.CpuIdEaxInstruction);
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, reg);
 		}
 
         #endregion // Methods

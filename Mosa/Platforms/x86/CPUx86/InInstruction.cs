@@ -35,8 +35,12 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region Methods
 
 		/// <summary>
-		/// 		/// </summary>
-		/// <param name="destination"></param>		/// <param name="source"></param>		/// <param name="empty"></param>		/// <returns></returns>
+		/// 		
+        /// </summary>
+		/// <param name="destination"></param>
+        /// <param name="source"></param>		
+        /// <param name="empty"></param>		
+        /// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand empty)
 		{
 			if (IsByte(source)) {
@@ -49,6 +53,17 @@ namespace Mosa.Platforms.x86.CPUx86
 			}
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="emitter"></param>
+        public override void Emit(Context ctx, MachineCodeEmitter emitter)
+        {
+            emitter.Emit(new OpCode(new byte[] { 0xEC }), null, null);
+        }
+
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>

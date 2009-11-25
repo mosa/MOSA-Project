@@ -27,7 +27,7 @@ namespace Mosa.HelloWorld
 			Native.Nop();
 			Native.Nop();
 			Native.Nop();
-			byte result = Native.In(0x71);
+			byte result = (byte)Native.In(0x71);
 			//Native.Sti();
 			return result;
 		}

@@ -18,7 +18,7 @@ namespace Mosa.Platforms.x86.CPUx86
     {
 		#region Data Members
 
-		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0x01 });
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0x01 }, 7);
 
 		#endregion // Data Members
 
@@ -34,6 +34,17 @@ namespace Mosa.Platforms.x86.CPUx86
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
 			return opcode;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="emitter"></param>
+        public override void Emit(Context ctx, MachineCodeEmitter emitter)
+        {
+            OpCode code = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
+            emitter.Emit(code, ctx.Operand1, null);
         }
 
 		/// <summary>
