@@ -122,14 +122,14 @@ namespace Mosa.Platforms.x86
                     if (op1 is ConstantOperand)
                     {
                         Context before = ctx.InsertBefore();
-                        before.SetInstruction(IR.Instruction.MoveInstruction, eax, op1);
+						before.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
                         before.AppendInstruction(CPUx86.Instruction.Cvtss2sdInstruction, eax, eax);
                     }
                     else
                         ctx.InsertBefore().SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, eax, op1);
                 }
                 else
-                    ctx.InsertBefore().SetInstruction(IR.Instruction.MoveInstruction, eax, op1);
+					ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
             }
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
 		}

@@ -154,7 +154,7 @@ namespace Mosa.Platforms.x86
 				}
 
 				if (!eax)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX), retval);
+					ctx.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX), retval);
 			}
 		}
 
@@ -301,13 +301,6 @@ namespace Mosa.Platforms.x86
 			}
 			ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction);
 			ctx.SetBranch(branch.Targets[branch.Targets.Length - 1]);
-			// FIXME PG
-
-			//for (int i = 0; i < ctx.Branch.Targets.Length - 1; i++) {
-			//    _codeEmitter.Cmp(ctx.Operand1, new ConstantOperand(new SigType(CilElementType.I), i));
-			//    _codeEmitter.Je(ctx.Branch.Targets[i]);
-			//}
-			//_codeEmitter.Jmp(ctx.Branch.Targets[ctx.Branch.Targets.Length - 1]);
 		}
 
 		/// <summary>
@@ -362,10 +355,8 @@ namespace Mosa.Platforms.x86
 				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseSubInstruction);
 				ExtendToR8(ctx);
 			}
-			else {
+			else 
 				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SubInstruction);
-			}
-
 		}
 
 		/// <summary>
@@ -411,13 +402,13 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 			RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
 
-			ctx.SetInstruction(IR.Instruction.MoveInstruction, eaxSource, result);
+			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eaxSource, result);
 			if (IsUnsigned(result))
 				ctx.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, eaxSource);
 			else
 				ctx.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, eaxSource);
 
-			ctx.AppendInstruction(IR.Instruction.MoveInstruction, ecxSource, operand);
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecxSource, operand);
 			if (IsUnsigned(operand))
 				ctx.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
 			else
@@ -428,7 +419,7 @@ namespace Mosa.Platforms.x86
 			else
 				ctx.AppendInstruction(CPUx86.Instruction.DivInstruction, eax, ecx);
 
-			ctx.AppendInstruction(IR.Instruction.MoveInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
 		}
 
 		#endregion // Members
@@ -776,7 +767,7 @@ namespace Mosa.Platforms.x86
 			RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
 			RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
 			Context before = ctx.InsertBefore();
-			before.SetInstruction(CPUx86.Instruction.NopInstruction);
+			//before.SetInstruction(CPUx86.Instruction.NopInstruction);
 
 			if (ctx.Result.Type.Type == CilElementType.R4) {
 				before.AppendInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm5, ctx.Result);
