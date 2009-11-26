@@ -476,7 +476,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldstr"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldstr(Context ctx) { }
+		void ICILVisitor.Ldstr(Context ctx) 
+        {
+            return;
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldfld"/>.
