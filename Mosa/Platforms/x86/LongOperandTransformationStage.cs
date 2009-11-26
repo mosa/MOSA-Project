@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -1501,16 +1501,19 @@ namespace Mosa.Platforms.x86
         {
             Debug.Assert(ctx.Branch.Targets.Length == 2);
 
-            int[] targets = ctx.Branch.Targets;
+            int target = ctx.Branch.Targets[0];
 
             Operand op1H, op1L, op2H, op2L;
+            Operand zero = new ConstantOperand(new SigType(CilElementType.I4), (int)0);
             SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-            SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+            SplitLongOperand(zero, out op2L, out op2H);
             IR.ConditionCode code;
 
             switch (((ctx.Instruction) as CIL.ICILInstruction).OpCode)
             {
                 // Signed
+                case CIL.OpCode.Brtrue: code = IR.ConditionCode.NotEqual; break;
+                case CIL.OpCode.Brfalse: code = IR.ConditionCode.Equal; break;
                 case CIL.OpCode.Beq_s: code = IR.ConditionCode.Equal; break;
                 case CIL.OpCode.Bge_s: code = IR.ConditionCode.GreaterOrEqual; break;
                 case CIL.OpCode.Bgt_s: code = IR.ConditionCode.GreaterThan; break;
@@ -1554,22 +1557,22 @@ namespace Mosa.Platforms.x86
             newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
             LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
 
-            newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, code);
-            newBlocks[1].Branch.Targets[0] = targets[0];
+            newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, code, FindBlock(target));
+//            newBlocks[1].SetBranch(target);
             newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction);
-            newBlocks[1].Branch.Targets[0] = targets[1];
-            LinkBlocks(newBlocks[1], FindBlock(targets[0]));
-            LinkBlocks(newBlocks[1], FindBlock(targets[1]));
+            newBlocks[1].SetBranch(nextBlock.BasicBlock);
+            LinkBlocks(newBlocks[1], FindBlock(target));
+            LinkBlocks(newBlocks[1], nextBlock);
 
             // Compare low dwords
             newBlocks[2].SetInstruction(CPUx86.Instruction.DirectCompareInstruction, op1L, op2L);
             // Set the unsigned result...
-            newBlocks[2].AppendInstruction(CPUx86.Instruction.BranchInstruction, code);
-            newBlocks[2].SetBranch(targets[0]);
+            newBlocks[2].AppendInstruction(CPUx86.Instruction.BranchInstruction, code, FindBlock(target));
+//            newBlocks[1].SetBranch(target);
             newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction);
-            newBlocks[2].SetBranch(targets[1]);
-            LinkBlocks(newBlocks[2], FindBlock(targets[0]));
-            LinkBlocks(newBlocks[2], FindBlock(targets[1]));
+            newBlocks[2].SetBranch(nextBlock.BasicBlock);
+            LinkBlocks(newBlocks[2], FindBlock(target));
+            LinkBlocks(newBlocks[2], nextBlock);
         }
 
         /// <summary>
