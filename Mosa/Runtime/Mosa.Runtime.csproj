@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -68,6 +68,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kernel\Mosa.Kernel.csproj">
@@ -231,6 +232,7 @@
     <Compile Include="CompilerFramework\InstructionSet.cs" />
     <Compile Include="CompilerFramework\InstructionData.cs" />
     <Compile Include="CompilerFramework\CIL\BaseInstruction.cs" />
+    <Compile Include="CompilerFramework\Operands\StringOperand.cs" />
     <Compile Include="CompilerFramework\PipelineStageOrder.cs" />
     <Compile Include="CompilerFramework\ReverseBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\OperandDeterminationStage.cs" />
@@ -299,7 +301,7 @@
     <Compile Include="CompilerFramework\CIL\ConstantFoldingStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\ConstantOperand.cs">
+    <Compile Include="CompilerFramework\Operands\ConstantOperand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\ConstantPropagationStage.cs">
@@ -362,7 +364,7 @@
     <Compile Include="CompilerFramework\JitTrampolineAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\LabelOperand.cs">
+    <Compile Include="CompilerFramework\Operands\LabelOperand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\LeaveSSA.cs">
@@ -371,10 +373,10 @@
     <Compile Include="CompilerFramework\LinearRegisterAllocator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\MemberOperand.cs">
+    <Compile Include="CompilerFramework\Operands\MemberOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\MemoryOperand.cs">
+    <Compile Include="CompilerFramework\Operands\MemoryOperand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\MethodCompilerBase.cs">
@@ -389,22 +391,22 @@
     <Compile Include="CompilerFramework\NakedAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\ObjectFieldOperand.cs">
+    <Compile Include="CompilerFramework\Operands\ObjectFieldOperand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\ObjectFileBuilderBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operand.cs">
+    <Compile Include="CompilerFramework\Operands\Operand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\ParameterOperand.cs">
+    <Compile Include="CompilerFramework\Operands\ParameterOperand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\Register.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\RegisterOperand.cs">
+    <Compile Include="CompilerFramework\Operands\RegisterOperand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\RuntimeSupportAttribute.cs">
@@ -416,16 +418,16 @@
     <Compile Include="CompilerFramework\StackLayoutStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\StackOperand.cs">
+    <Compile Include="CompilerFramework\Operands\StackOperand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\StackTypeCode.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\StaticFieldOperand.cs">
+    <Compile Include="CompilerFramework\Operands\StaticFieldOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\TemporaryOperand.cs">
+    <Compile Include="CompilerFramework\Operands\TemporaryOperand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\TypeLayoutStage.cs">
