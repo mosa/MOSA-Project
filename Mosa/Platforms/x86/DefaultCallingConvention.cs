@@ -224,10 +224,10 @@ namespace Mosa.Platforms.x86
 							//MemoryOperand opL = new MemoryOperand(I4, mop.Base, mop.Offset);
 							//MemoryOperand opH = new MemoryOperand(I4, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
 
-							ctx.AppendInstruction(IR.Instruction.MoveInstruction, eax, opL);
-							ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
-							ctx.AppendInstruction(IR.Instruction.MoveInstruction, eax, opH);
-							ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
+							ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, opL);
+							ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
+							ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, opH);
+							ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
 						}
 						return;
 
@@ -235,7 +235,7 @@ namespace Mosa.Platforms.x86
 						throw new NotSupportedException();
 				}
 
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, rop, op);
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, rop, op);
 				op = rop;
 			}
 			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64) {
@@ -244,10 +244,10 @@ namespace Mosa.Platforms.x86
 				RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 				LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, eax, opL);
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, eax, opH);
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, opL);
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, opH);
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
 
 				return;
 			}
