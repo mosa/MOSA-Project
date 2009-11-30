@@ -10,9 +10,7 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Gallio.Framework;
 using MbUnit.Framework;
-using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
@@ -56,9 +54,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
             CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("sbyte","I1");
             UnsafeCode = true;
 
-            void* address = (void*)Marshal.AllocHGlobal(sizeof(sbyte));
-            bool runResult = (bool)Run<I1>("", "Test", "DereffedVoidPtrAssign_I1", a, (IntPtr)address);
-            bool success = (*(sbyte*)address == a);
+            var address = (void*)Marshal.AllocHGlobal(sizeof(sbyte));
+            var runResult = (bool)Run<I1>("", "Test", "DereffedVoidPtrAssign_I1", a, (IntPtr)address);
+            var success = (*(sbyte*)address == a);
             Marshal.FreeHGlobal((IntPtr)address);
 
             Assert.IsTrue(success, "DereffedVoidPtrAssign_I1");
@@ -219,18 +217,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         [Row(uint.MinValue)]
-        [Row((uint.MaxValue / 2))]
+        [Row(uint.MaxValue / 2)]
         [Row((uint.MaxValue / 2) + 1)]
         [Row(uint.MaxValue)]
         [Test, Author("illuminus", "illuminus86@gmail.com")]
-        public unsafe void DereffedVoidPtrAssign_U4(uint a)
+        public void DereffedVoidPtrAssign_U4(uint a)
         {
             CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("uint","U4");
             UnsafeCode = true;
 
-            void* address = (void*)Marshal.AllocHGlobal(sizeof(uint));
-            bool runResult = (bool)Run<U4>("", "Test", "DereffedVoidPtrAssign_U4", a, (IntPtr)address);
-            bool success = (*(uint*)address == a);
+            var address = (void*)Marshal.AllocHGlobal(sizeof(uint));
+            var runResult = (bool)Run<U4>("", "Test", "DereffedVoidPtrAssign_U4", a, (IntPtr)address);
+            var success = (*(uint*)address == a);
             Marshal.FreeHGlobal((IntPtr)address);
 
             Assert.IsTrue(success, "DereffedVoidPtrAssign_U4");

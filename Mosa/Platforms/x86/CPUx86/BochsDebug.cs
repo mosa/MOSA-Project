@@ -1,5 +1,6 @@
 ﻿using System;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Platforms.x86.CPUx86
@@ -34,7 +35,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		public override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
 			ctx.Result = new RegisterOperand(new SigType(Runtime.Metadata.CilElementType.I2), GeneralPurposeRegister.EBX);
 			ctx.Operand1 = new RegisterOperand(new SigType(Runtime.Metadata.CilElementType.I2), GeneralPurposeRegister.EBX);

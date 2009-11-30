@@ -14,7 +14,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-
+using Mosa.Runtime.CompilerFramework.Operands;
 using NDesk.Options;
 
 using Mosa.Runtime.CompilerFramework;

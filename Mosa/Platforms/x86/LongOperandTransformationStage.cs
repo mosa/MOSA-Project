@@ -1,4 +1,4 @@
-/*
+﻿/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -14,6 +14,7 @@ using System;
 using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;

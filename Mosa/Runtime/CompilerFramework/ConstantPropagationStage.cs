@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework
 {

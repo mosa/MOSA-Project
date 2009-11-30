@@ -7,52 +7,53 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.Operands
 {
     /// <summary>
     /// An operand, which represents a parameter of a method.
     /// </summary>
     public sealed class ParameterOperand : StackOperand
     {
-		#region Data members
+        #region Data members
 
         /// <summary>
         /// The parameter object of the operand.
         /// </summary>
         private RuntimeParameter _parameter;
 
-		#endregion // Data members
+        #endregion // Data members
 
-		#region Construction
+        #region Construction
 
-		/// <summary>
-		/// Initializes a new instance of <see cref="ParameterOperand"/>.
-		/// </summary>
+        /// <summary>
+        /// Initializes a new instance of <see cref="ParameterOperand"/>.
+        /// </summary>
         /// <param name="register">The stack frame register.</param>
-		/// <param name="param">The runtime parameter object, that represents this parameter.</param>
-		/// <param name="type">The parameter type.</param>
-		public ParameterOperand(Register register, RuntimeParameter param, SigType type)
-			: base(type, register, param.Position)
-		{
+        /// <param name="param">The runtime parameter object, that represents this parameter.</param>
+        /// <param name="type">The parameter type.</param>
+        public ParameterOperand(Register register, RuntimeParameter param, SigType type)
+            : base(type, register, param.Position)
+        {
             _parameter = param;
-		}
+        }
 
-		#endregion // Construction
+        #endregion // Construction
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// Returns the runtime parameter structure of this operand.
-		/// </summary>
+        /// <summary>
+        /// Returns the runtime parameter structure of this operand.
+        /// </summary>
         public RuntimeParameter Parameter
-		{
+        {
             get { return _parameter; }
-		}
+        }
 
-		#endregion // Properties
+        #endregion // Properties
 
         #region StackOperand overrides
 
@@ -77,3 +78,5 @@ namespace Mosa.Runtime.CompilerFramework
         #endregion // StackOperand overrides
     }
 }
+
+

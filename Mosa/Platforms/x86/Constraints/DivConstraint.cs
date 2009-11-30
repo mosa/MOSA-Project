@@ -8,6 +8,7 @@
  */
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platforms.x86.Constraints
 {

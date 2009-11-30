@@ -9,15 +9,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Diagnostics;
-using System.IO;
-
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Linker;
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
@@ -26,7 +20,7 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class AddressModeConversionStage : BaseTransformationStage, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
+	public sealed class AddressModeConversionStage : BaseTransformationStage, IPipelineStage
 	{
 
 		#region IMethodCompilerStage Members
@@ -37,7 +31,7 @@ namespace Mosa.Platforms.x86
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"X86.AddressModeConversionStage"; } }
 
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+		private static readonly PipelineStageOrder[] PipelineOrder = new[] {
 				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(LongOperandTransformationStage)),
 				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CILTransformationStage))
 			};
@@ -46,7 +40,7 @@ namespace Mosa.Platforms.x86
 		/// Gets the pipeline stage order.
 		/// </summary>
 		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
+		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return PipelineOrder; } }
 
 		#endregion // IMethodCompilerStage Members
 
@@ -94,19 +88,7 @@ namespace Mosa.Platforms.x86
 			ctx.Operand2 = null;
 			ctx.OperandCount = 1;
 
-			//    // Check if we have to sign-extend the operand that's being loaded
-			//    if (IsSigned(op1) && !(op1 is ConstantOperand)) {
-			//        // Sign extend it
-			//        ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovsxInstruction, eaxL, op1);
-			//    }
-			//    // Check if the operand has to be zero-extended
-			//    else if (IsUnsigned(op1) && !(op1 is ConstantOperand) && op1.StackType != StackTypeCode.F) {
-			//        ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovzxInstruction, eaxL, op1);
-			//    }
-			//    // In any other case just load it
-			//    else
-
-            if (/*!Is32Bit(op1) &&*/ !(op1.StackType == StackTypeCode.F))
+            if (op1.StackType != StackTypeCode.F)
             {
                 if (IsSigned(op1) && !(op1 is ConstantOperand))
                     ctx.InsertBefore().SetInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, op1);

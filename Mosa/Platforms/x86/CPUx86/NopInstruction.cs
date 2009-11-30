@@ -23,7 +23,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		public override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
             emitter.Emit(new OpCode(new byte[] { 0x90 }), null, null);
 		}

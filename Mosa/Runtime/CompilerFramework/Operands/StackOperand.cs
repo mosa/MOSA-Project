@@ -7,13 +7,11 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
+using System;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.Operands
 {
     /// <summary>
     /// Represents an operand, that is located on the relative to the current stack frame.
@@ -100,3 +98,5 @@ namespace Mosa.Runtime.CompilerFramework
         #endregion // ICloneable Members
     }
 }
+
+

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using Mosa.Runtime.CompilerFramework.Operands;
 
 
 namespace Mosa.Runtime.CompilerFramework.IR

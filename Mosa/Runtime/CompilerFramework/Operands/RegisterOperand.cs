@@ -7,10 +7,11 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+
 using System;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.Operands
 {
     /// <summary>
     /// Represents an operand stored in a machine specific register.
@@ -89,3 +90,5 @@ namespace Mosa.Runtime.CompilerFramework
         #endregion // Operand Overrides
     }
 }
+
+

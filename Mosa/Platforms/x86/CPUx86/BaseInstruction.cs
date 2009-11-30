@@ -8,13 +8,14 @@
  */
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class BaseInstruction : Runtime.CompilerFramework.BaseInstruction, IX86Instruction, IPlatformInstruction
+	public abstract class BaseInstruction : Runtime.CompilerFramework.BaseInstruction, IX86Instruction
 	{
 
 		#region Construction
@@ -22,7 +23,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
 		/// </summary>
-		public BaseInstruction()
+		protected BaseInstruction()
 		{
 		}
 
@@ -99,7 +100,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		public virtual void Emit(Context context, MachineCodeEmitter emitter)
+		protected virtual void Emit(Context context, MachineCodeEmitter emitter)
 		{
 			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
 			emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
@@ -134,7 +135,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operand">The operand to check</param>
 		/// <returns>True if it is an unsigned byte</returns>
-		public static bool IsUnsignedByte(Operand operand)
+		private static bool IsUnsignedByte(Operand operand)
 		{
 			return (operand.Type.Type == Runtime.Metadata.CilElementType.U1);
 		}
@@ -144,7 +145,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operand">The operand to check</param>
 		/// <returns>True if it is a signed byte</returns>
-		public static bool IsSignedByte(Operand operand)
+		private static bool IsSignedByte(Operand operand)
 		{
 			return (operand.Type.Type == Runtime.Metadata.CilElementType.I1);
 		}
@@ -154,7 +155,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operand">The operand to check</param>
 		/// <returns>True if it is an unsigned short</returns>
-		public static bool IsUnsignedShort(Operand operand)
+		private static bool IsUnsignedShort(Operand operand)
 		{
 			return (operand.Type.Type == Runtime.Metadata.CilElementType.U2);
 		}
@@ -164,7 +165,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operand">The operand to check</param>
 		/// <returns>True if it is a signed short</returns>
-		public static bool IsSignedShort(Operand operand)
+		private static bool IsSignedShort(Operand operand)
 		{
 			return (operand.Type.Type == Runtime.Metadata.CilElementType.I2);
 		}
@@ -174,7 +175,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operand">The operand to check</param>
 		/// <returns>True if it is an unsigned integer</returns>
-		public static bool IsUnsignedInt(Operand operand)
+		private static bool IsUnsignedInt(Operand operand)
 		{
 			return (operand.Type.Type == Runtime.Metadata.CilElementType.U4);
 		}
@@ -184,7 +185,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operand">The operand to check</param>
 		/// <returns>True if it is a signed integer</returns>
-		public static bool IsSignedInt(Operand operand)
+		private static bool IsSignedInt(Operand operand)
 		{
 			return (operand.Type.Type == Runtime.Metadata.CilElementType.I4);
 		}
@@ -194,7 +195,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operand">The operand to check</param>
 		/// <returns>True if it is an unsigned long</returns>
-		public static bool IsUnsignedLong(Operand operand)
+		private static bool IsUnsignedLong(Operand operand)
 		{
 			return (operand.Type.Type == Runtime.Metadata.CilElementType.U8);
 		}
@@ -204,7 +205,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operand">The operand to check</param>
 		/// <returns>True if it is a signed long</returns>
-		public static bool IsSignedLong(Operand operand)
+		private static bool IsSignedLong(Operand operand)
 		{
 			return (operand.Type.Type == Runtime.Metadata.CilElementType.I8);
 		}
@@ -214,7 +215,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operand">The operand to check</param>
 		/// <returns>True if it is a byte</returns>
-		public static bool IsByte(Operand operand)
+		protected static bool IsByte(Operand operand)
 		{
 			return IsUnsignedByte(operand) || IsSignedByte(operand);
 		}
@@ -224,7 +225,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operand">The operand to check</param>
 		/// <returns>True if it is a short</returns>
-		public static bool IsShort(Operand operand)
+		protected static bool IsShort(Operand operand)
 		{
 			return IsUnsignedShort(operand) || IsSignedShort(operand);
 		}
@@ -234,7 +235,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operand">The operand to check</param>
 		/// <returns>True if it is a char</returns>
-		public static bool IsChar(Operand operand)
+		protected static bool IsChar(Operand operand)
 		{
 			return operand.Type.Type == Runtime.Metadata.CilElementType.Char;
 		}
@@ -244,7 +245,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="operand">The operand to check</param>
 		/// <returns>True if it is an integer</returns>
-		public static bool IsInt(Operand operand)
+		protected static bool IsInt(Operand operand)
 		{
 			return IsUnsignedInt(operand) || IsSignedInt(operand);
 		}
@@ -258,25 +259,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		{
 			return IsUnsignedLong(operand) || IsSignedLong(operand);
 		}
-
-        /*/// <summary>
-        /// 
-        /// </summary>
-        /// <param name="operand"></param>
-        /// <returns></returns>
-        public static byte GetConstantShiftOperand(Operand operand)
-        {
-            System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
-            ConstantOperand op = operand as ConstantOperand;
-            byte val = 0;
-            if (IsSignedByte(op))
-                val = LittleEndianBitConverter.GetBytes((sbyte)op.Value)[0];
-            else if (IsChar(op))
-                val = LittleEndianBitConverter.GetBytes((char)op.Value)[0];
-            else if (IsSignedInt(op))
-                val = LittleEndianBitConverter.GetBytes((int)op.Value)[0];
-            return (byte)(val & 0x1F);
-        }*/
 
 		#endregion
 	}

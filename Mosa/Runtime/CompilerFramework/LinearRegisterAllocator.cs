@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mosa.Runtime.CompilerFramework.Operands;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Vm;
 using System.Diagnostics;

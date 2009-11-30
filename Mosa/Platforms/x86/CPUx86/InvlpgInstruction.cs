@@ -8,6 +8,7 @@
  */
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -41,7 +42,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="emitter"></param>
-        public override void Emit(Context ctx, MachineCodeEmitter emitter)
+        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
         {
             OpCode code = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
             emitter.Emit(code, ctx.Operand1, null);

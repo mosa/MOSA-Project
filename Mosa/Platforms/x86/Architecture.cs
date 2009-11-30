@@ -12,11 +12,10 @@ using System;
 using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Platforms.x86.Constraints;
-
-using CPUx86 = Mosa.Platforms.x86.CPUx86;
 
 namespace Mosa.Platforms.x86
 {
@@ -58,7 +57,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Maps constraints to an instruction. Deprecated.
         /// </summary>
-        private static readonly Dictionary<Type, Type> Constraints = new Dictionary<Type, Type>()
+        private static readonly Dictionary<Type, Type> Constraints = new Dictionary<Type, Type>
         {
             { typeof(CPUx86.AddInstruction), typeof(GPRConstraint) },
             { typeof(CPUx86.AdcInstruction), typeof(GPRConstraint) },
@@ -77,15 +76,15 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Specifies the architecture features to use in generated code.
         /// </summary>
-        private ArchitectureFeatureFlags architectureFeatures;
+        private ArchitectureFeatureFlags _architectureFeatures;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Architecture"/> class.
         /// </summary>
         /// <param name="architectureFeatures">The features this architecture supports.</param>
-        protected Architecture(ArchitectureFeatureFlags architectureFeatures)
+        private Architecture(ArchitectureFeatureFlags architectureFeatures)
         {
-            this.architectureFeatures = architectureFeatures;
+            _architectureFeatures = architectureFeatures;
         }
 
         /// <summary>
@@ -207,7 +206,7 @@ namespace Mosa.Platforms.x86
         public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
         {
             if (signatureType == null)
-                throw new ArgumentNullException(@"type");
+                throw new ArgumentNullException("signatureType");
 
             switch (signatureType.Type)
             {

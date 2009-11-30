@@ -7,6 +7,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Runtime.CompilerFramework.Operands;
+
 namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>

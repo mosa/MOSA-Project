@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework
 {

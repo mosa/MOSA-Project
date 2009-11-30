@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
 using IR = Mosa.Runtime.CompilerFramework.IR;

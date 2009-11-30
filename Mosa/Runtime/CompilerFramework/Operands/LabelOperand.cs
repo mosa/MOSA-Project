@@ -7,12 +7,11 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.Operands
 {
     /// <summary>
     /// An operand, which represents a label in the program data.
@@ -94,3 +93,5 @@ namespace Mosa.Runtime.CompilerFramework
         #endregion // Object Overrides
     }
 }
+
+

@@ -8,6 +8,7 @@
  */
 
 using System;
+using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {

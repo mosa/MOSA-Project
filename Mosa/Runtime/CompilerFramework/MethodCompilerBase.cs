@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;

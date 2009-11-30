@@ -7,14 +7,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.Operands
 {
     /// <summary>
     /// A temporary stack local operand used to capture results From CIL operations.
@@ -30,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Stores the label of the instruction, that created the temporary operand.
         /// </summary>
-        private int _label;
+        private readonly int _label;
 
         #endregion // Data members
 
@@ -81,9 +77,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>A new instance of TemporaryOperand.</returns>
         public override object Clone()
         {
-            return new TemporaryOperand(_label, _type, base.Base, base.Offset.ToInt32());
+            return new TemporaryOperand(_label, _type, Base, Offset.ToInt32());
         }
 
         #endregion // ICloneable Members        
     }
 }
+
+

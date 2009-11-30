@@ -9,14 +9,10 @@
 
 using System;
 using System.Diagnostics;
-using System.IO;
-
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Linker;
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
-
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
@@ -28,7 +24,7 @@ namespace Mosa.Platforms.x86
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent X86 sequences.
 	/// </remarks>
-	public sealed class CILTransformationStage : BaseTransformationStage, CIL.ICILVisitor, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
+	public sealed class CILTransformationStage : BaseTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
 		#region IPipelineStage Members
 
@@ -762,20 +758,19 @@ namespace Mosa.Platforms.x86
 		/// 
 		/// </summary>
 		/// <param name="ctx"></param>
-		private void ExtendToR8(Context ctx)
+		private static void ExtendToR8(Context ctx)
 		{
 			RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
 			RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
 			Context before = ctx.InsertBefore();
-			//before.SetInstruction(CPUx86.Instruction.NopInstruction);
-
+			
 			if (ctx.Result.Type.Type == CilElementType.R4) {
-				before.AppendInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm5, ctx.Result);
+				before.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm5, ctx.Result);
 				ctx.Result = xmm5;
 			}
 
 			if (ctx.Operand1.Type.Type == CilElementType.R4) {
-				before.AppendInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm6, ctx.Operand1);
+                before.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm6, ctx.Operand1);
 				ctx.Operand1 = xmm6;
 			}
 		}

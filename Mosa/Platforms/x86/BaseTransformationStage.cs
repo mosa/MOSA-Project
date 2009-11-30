@@ -10,15 +10,9 @@
  */
 
 using System;
-using System.Diagnostics;
-using System.IO;
-
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Linker;
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
 {
@@ -26,9 +20,9 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class BaseTransformationStage : CodeTransformationStage, IMethodCompilerStage, IPlatformTransformationStage
+	public abstract class BaseTransformationStage : CodeTransformationStage, IPlatformTransformationStage
 	{
-		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
+		private readonly DataConverter _littleEndianBitConverter = DataConverter.LittleEndian;
 
 		#region X86 Internals
 
@@ -37,7 +31,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="operand">The operand.</param>
 		/// <returns></returns>
-		public static bool Is32Bit(Operand operand)
+		protected static bool Is32Bit(Operand operand)
 		{
 			return (operand.Type.Type == CilElementType.U4) || (operand.Type.Type == CilElementType.I4) || IsPointer(operand);
 		}
@@ -49,7 +43,7 @@ namespace Mosa.Platforms.x86
 		/// <returns>
 		/// 	<c>true</c> if the specified operand is unsigned; otherwise, <c>false</c>.
 		/// </returns>
-		public static bool IsUnsigned(Operand operand)
+		protected static bool IsUnsigned(Operand operand)
 		{
 			return IsUByte(operand) || IsUShort(operand) || IsUInt(operand) || IsChar(operand);
 		}
@@ -61,7 +55,7 @@ namespace Mosa.Platforms.x86
 		/// <returns>
 		/// 	<c>true</c> if the specified operand is signed; otherwise, <c>false</c>.
 		/// </returns>
-		public static bool IsSigned(Operand operand)
+		protected static bool IsSigned(Operand operand)
 		{
 			return IsSByte(operand) || IsSShort(operand) || IsInt(operand) || IsPointer(operand);
 		}

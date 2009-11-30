@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Operands;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata;
 
@@ -56,7 +57,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="emitter"></param>
-        public override void Emit(Context ctx, MachineCodeEmitter emitter)
+        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
         {
             OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
             if (ctx.Operand1 is ConstantOperand)

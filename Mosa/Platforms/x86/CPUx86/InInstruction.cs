@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Operands;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using System.Diagnostics;
@@ -59,7 +60,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="emitter"></param>
-        public override void Emit(Context ctx, MachineCodeEmitter emitter)
+        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
         {
             emitter.Emit(new OpCode(new byte[] { 0xEC }), null, null);
         }

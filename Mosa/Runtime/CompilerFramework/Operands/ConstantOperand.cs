@@ -7,59 +7,60 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+
 using System;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.Operands
 {
 
-	/// <summary>
-	/// Represent a constant operand.
-	/// </summary>
-	public sealed class ConstantOperand : Operand
+    /// <summary>
+    /// Represent a constant operand.
+    /// </summary>
+    public sealed class ConstantOperand : Operand
     {
-		#region Static data members
+        #region Static data members
 
         private static SigType _sObject;
 
-		#endregion // Static data members
+        #endregion // Static data members
 
-		#region Data members
+        #region Data members
 
-		/// <summary>
-		/// Constant value.
-		/// </summary>
-		private object _value;
+        /// <summary>
+        /// Constant value.
+        /// </summary>
+        private object _value;
 
-		#endregion // Data members
+        #endregion // Data members
 
-		#region Construction
+        #region Construction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConstantOperand"/> class.
         /// </summary>
         /// <param name="typeRef">The type ref.</param>
         /// <param name="value">The value of the contant.</param>
-		public ConstantOperand(SigType typeRef, object value) 
-			: base(typeRef)
-		{
-			_value = value;
-		}
+        public ConstantOperand(SigType typeRef, object value) 
+            : base(typeRef)
+        {
+            _value = value;
+        }
 
-		#endregion // Construction
+        #endregion // Construction
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// Returns the value of the constant.
-		/// </summary>
-		public object Value
-		{
-			get { return _value; }
-		}
+        /// <summary>
+        /// Returns the value of the constant.
+        /// </summary>
+        public object Value
+        {
+            get { return _value; }
+        }
 
-		#endregion // Properties
+        #endregion // Properties
 
         #region Methods
 
@@ -106,9 +107,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>A string representation of the operand.</returns>
         public override string ToString()
         {
-			return String.Format("const {0} [Type: {1}]", _value, _type);
+            return String.Format("const {0} [Type: {1}]", _value, _type);
         }
 
         #endregion // Operand Overrides
     }
 }
+
+

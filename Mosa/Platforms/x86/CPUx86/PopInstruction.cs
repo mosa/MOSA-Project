@@ -8,6 +8,7 @@
  */
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -29,7 +30,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		public override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
             if (ctx.Result is RegisterOperand)
 				emitter.WriteByte((byte)(0x58 + (ctx.Result as RegisterOperand).Register.RegisterCode));

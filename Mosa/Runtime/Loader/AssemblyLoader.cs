@@ -153,11 +153,9 @@ namespace Mosa.Runtime.Loader
 
 		private IMetadataModule DoLoadAssembly(string name)
 		{
-			IMetadataModule result = DoLoadAssemblyFromPaths(name, _privatePaths);
-			if (result == null)
-				result = DoLoadAssemblyFromPaths(name, _searchPath);
+			IMetadataModule result = DoLoadAssemblyFromPaths(name, _privatePaths) ?? DoLoadAssemblyFromPaths(name, _searchPath);
 
-			return result;
+		    return result;
 		}
 
 		/// <summary>
