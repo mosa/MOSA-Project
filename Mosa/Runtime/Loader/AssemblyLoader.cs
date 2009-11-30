@@ -40,11 +40,12 @@ namespace Mosa.Runtime.Loader
 		public AssemblyLoader(ITypeSystem typeLoader)
 		{
 			// HACK: I can't figure out an easier way to get the framework dir right now...
-			string frameworkDir = Path.GetDirectoryName(typeof(System.Object).Assembly.Location);
-
+            string frameworkDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
+            string frameworkDir32 = frameworkDir.Contains("Framework64") ? frameworkDir.Replace("Framework64", "Framework") : frameworkDir;
 			_searchPath = new[] {
                 AppDomain.CurrentDomain.BaseDirectory,
-                frameworkDir
+                frameworkDir,
+                frameworkDir32
             };
 
 			_typeLoader = typeLoader;
