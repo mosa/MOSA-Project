@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Runtime.Metadata {
 
@@ -21,6 +19,7 @@ namespace Mosa.Runtime.Metadata {
 	/// properly formatted to allow or'ing with a provider id to build
 	/// a fully qualified provider token identifier.
 	/// </remarks>
+	[Flags]
 	public enum TokenTypes {
         /// <summary>
         /// 

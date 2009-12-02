@@ -67,7 +67,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Gets the supported immediate metadata tokens in the instruction.
 		/// </summary>
 		/// <value></value>
-		protected override InvokeInstruction.InvokeSupportFlags InvokeSupport
+		protected override InvokeSupportFlags InvokeSupport
 		{
 			get
 			{
@@ -103,6 +103,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Set the return value, even though constructors return void
 			throw new NotImplementedException();
+
 			//SetResult(0, null);
 			//CreateResultOperand(_invokeTarget.DeclaringType)	
 		}

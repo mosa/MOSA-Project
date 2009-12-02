@@ -113,7 +113,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		public override string ToString()
 		{
-			string inst = this.GetType().ToString();
+			string inst = GetType().ToString();
 			int index = inst.IndexOf("Instruction");
 
 			if (index > 0)
@@ -172,7 +172,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			if (context.InvokeTarget != null)
-				s = s + " " + context.InvokeTarget.ToString();
+				s = s + " " + context.InvokeTarget;
 
 			return s;
 		}
@@ -216,7 +216,7 @@ namespace Mosa.Runtime.CompilerFramework
 				case IR.ConditionCode.UnsignedLessThan: return @"less (U)";
                 case IR.ConditionCode.NotSigned: return @"unsigned";
                 case IR.ConditionCode.Signed: return @"signed";
-				default: throw new System.NotSupportedException();
+				default: throw new NotSupportedException();
 			}
 		}
 

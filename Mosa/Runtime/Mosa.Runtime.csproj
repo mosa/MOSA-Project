@@ -243,6 +243,7 @@
     <Compile Include="CompilerFramework\LoopAwareBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\LocalCSE.cs" />
     <Compile Include="CompilerFramework\IMethodCompiler.cs" />
+    <Compile Include="Loader\PE\StreamHeader.cs" />
     <Compile Include="Metadata\Symbol.cs" />
     <Compile Include="IJitService.cs">
       <SubType>Code</SubType>

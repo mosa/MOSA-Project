@@ -10,6 +10,13 @@ namespace Mosa.QuickTest
     /// <summary>
     /// 
     /// </summary>
+    public struct Struct
+    {
+        private int x;
+    }
+    /// <summary>
+    /// 
+    /// </summary>
     public static class App
     {
         /// <summary>
@@ -17,122 +24,7 @@ namespace Mosa.QuickTest
         /// </summary>
         public static void Main()
         {
-            int a = 5;
-            int b = 4;
-
-            int c = a + b;
-        }
-
-        static bool Rem(sbyte expect, sbyte a, sbyte b)
-                    {
-                        return expect == (a % b);
-                    }
-        /*
-        static bool SwitchI4(int expect, int a) { return expect == Switch_Target(a); }
-        static int Switch_Target(int a)
-        {
-            switch (a)
-            {
-                case 0:
-                    return 0;
-                    break;
-                case 1:
-                    return 1;
-                    break;
-                case -1:
-                    return -1;
-                    break;
-                case 2:
-                    return 2;
-                    break;
-                case -2:
-                    return -2;
-                    break;
-                case 23:
-                    return 23;
-                    break;
-                case int.MinValue:
-                    return int.MinValue;
-                    break;
-                case int.MaxValue:
-                    return int.MaxValue;
-                    break;
-                default:
-                    return 42;
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        public static void Div(long a, long b)
-        {
-            long c = a / b;
-        }
-        /// <summary>
-        /// Muls the constant C right.
-        /// </summary>
-        /// <param name="expect">The expect.</param>
-        /// <param name="a">A.</param>
-        /// <param name="b">The b.</param>
-        /// <returns></returns>
-        static bool MulConstantCRight(char expect, char a)
-        {
-            return expect == a * (char)3;
-        }
-
-        /// <summary>
-        /// Ceqs the specified a.
-        /// </summary>
-        /// <param name="a">A.</param>
-        /// <param name="b">The b.</param>
-        /// <returns></returns>
-        public static bool Ceq(long a, long b)
-        {
-            return (a == b);
-        }
-
-        /// <summary>
-        /// Adds the u1.
-        /// </summary>
-        /// <param name="expect">The expect.</param>
-        /// <param name="a">A.</param>
-        /// <param name="b">The b.</param>
-        /// <returns></returns>
-        static bool AddU1(byte expect, uint a, uint b)
-        {
-            return expect == (a + b);
-        }*/
-
-
-        /// <summary>
-        /// Adds the u1.
-        /// </summary>
-        /// <param name="expect">The expect.</param>
-        /// <param name="a">A.</param>
-        /// <param name="b">The b.</param>
-        /// <returns></returns>
-        static bool RemU4(byte expect, int a, int b)
-        {
-            return expect == (a % b);
-        }
-
-
-        /// <summary>
-        /// Adds the u1.
-        /// </summary>
-        /// <param name="expect">The expect.</param>
-        /// <param name="a">A.</param>
-        /// <param name="b">The b.</param>
-        /// <returns></returns>
-        static int RemU4a(int expect)
-        {
-            int a = 1;
-            int b = 2;
-            return a % b;
+            Struct s = new Struct();
         }
     }
 }

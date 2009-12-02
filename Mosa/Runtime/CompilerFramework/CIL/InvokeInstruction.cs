@@ -146,13 +146,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 		}
 
-		/// <summary>
-		/// Decodes the invocation target.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
-		/// <param name="flags">Flags, which control the</param>
-		protected void DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
+	    /// <summary>
+	    /// Decodes the invocation target.
+	    /// </summary>
+	    /// <param name="ctx">The context.</param>
+	    /// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
+	    /// <param name="flags">Flags, which control the</param>
+	    protected static void DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
 		{
 			// Holds the token of the call target
 			TokenTypes callTarget, targetType;
@@ -192,23 +192,21 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
-		public void SetInvokeTarget(Context ctx, IMethodCompiler compiler, RuntimeMethod method)
+		private static void SetInvokeTarget(Context ctx, IMethodCompiler compiler, RuntimeMethod method)
 		{
 			if (method == null)
 				throw new ArgumentNullException(@"method");
 
 			// Signature of the call target
-			MethodSignature signature;
-			// Number of parameters required for the call
-			byte paramCount = 0;
+		    // Number of parameters required for the call
 
-			ctx.InvokeTarget = method;
+		    ctx.InvokeTarget = method;
 
 			// Retrieve the target signature
-			signature = ctx.InvokeTarget.Signature;
+			MethodSignature signature = ctx.InvokeTarget.Signature;
 
 			// Fix the parameter list
-			paramCount = (byte)signature.Parameters.Length;
+			byte paramCount = (byte)signature.Parameters.Length;
 			if (signature.HasThis && !signature.HasExplicitThis)
 				paramCount++;
 
@@ -231,7 +229,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>
 		/// 	<c>true</c> if [is call target supported] [the specified target type]; otherwise, <c>false</c>.
 		/// </returns>
-		private bool IsCallTargetSupported(TokenTypes targetType, InvokeSupportFlags flags)
+		private static bool IsCallTargetSupported(TokenTypes targetType, InvokeSupportFlags flags)
 		{
 			bool result = false;
 

@@ -8,12 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -50,7 +45,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Retrieve the type reference
 			TokenTypes token;
 			decoder.Decode(out token);
-			throw new NotImplementedException();
+            
+			//throw new NotImplementedException();
+            
 			//_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
 		}
 

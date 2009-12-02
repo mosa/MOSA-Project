@@ -7,10 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Mosa.Runtime.Metadata.Tables
 {
     /// <summary>
@@ -26,22 +22,23 @@ namespace Mosa.Runtime.Metadata.Tables
         private TypeAttributes _flags;
 
         /// <summary>
-        /// 
+        /// An index into the String heap
         /// </summary>
         private TokenTypes _typeNameIdx;
 
         /// <summary>
-        /// 
+        /// An index into the String heap
         /// </summary>
         private TokenTypes _typeNamespaceIdx;
 
         /// <summary>
-        /// 
+        /// Index into a <see cref="TypeDefRow"/>, <see cref="TypeRefRow"/>, or <see cref="TypeSpecRow"/> table.
         /// </summary>
         private TokenTypes _extends;
 
         /// <summary>
-        /// 
+        /// An index into the <see cref="FieldRow"/>, it marks the first of a contiguous run of Fields
+        /// owned by this type.
         /// </summary>
         private TokenTypes _fieldList;
 

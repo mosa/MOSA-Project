@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
         /// <summary>
         /// Holds the base register, if this is a relative memory access.
         /// </summary>
-        private Register _base;
+        private readonly Register _base;
 
         /// <summary>
         /// Holds the address offset if used together with a base register or the absolute address, if register is null.
@@ -95,14 +95,12 @@ namespace Mosa.Runtime.CompilerFramework.Operands
             {
                 if (_offset.ToInt32() > 0)
                     return String.Format("[{0:X}h] {1}", _offset.ToInt32(), base.ToString());
-                else
-                    return String.Format("[-{0:X}h] {1}", -_offset.ToInt32(), base.ToString());
+                return String.Format("[-{0:X}h] {1}", -_offset.ToInt32(), base.ToString());
             }
             {
                 if (_offset.ToInt32() > 0)
-                    return String.Format("[{0}+{1:X}h] {2}", _base.ToString(), _offset.ToInt32(), base.ToString());
-                else
-                    return String.Format("[{0}-{1:X}h] {2}", _base.ToString(), -_offset.ToInt32(), base.ToString());
+                    return String.Format("[{0}+{1:X}h] {2}", _base, _offset.ToInt32(), base.ToString());
+                return String.Format("[{0}-{1:X}h] {2}", _base, -_offset.ToInt32(), base.ToString());
             }
         }
 

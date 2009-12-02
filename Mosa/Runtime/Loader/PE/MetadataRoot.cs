@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -31,7 +29,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// <summary>
 		/// Signature constant of the provider root.
 		/// </summary>
-		private const uint METADATA_ROOT_SIGNATURE = 0x424A5342;
+		private const uint MetadataRootSignature = 0x424A5342;
 
 		#endregion // Constants
 
@@ -40,7 +38,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// <summary>
 		/// Holds the assembly of this provider root.
 		/// </summary>
-		private IMetadataModule _assemblyImage;
+		private readonly IMetadataModule _assemblyImage;
 
 		/// <summary>
 		/// Major version, 1 (ignore on read).
@@ -51,6 +49,11 @@ namespace Mosa.Runtime.Loader.PE
 		/// Minor version, 1 (ignore on read).
 		/// </summary>
 		private ushort MinorVersion;
+
+        /// <summary>
+        /// Reserved, always 0 (according to ISO/IEC 23271:2006 (E), §24.1)
+        /// </summary>
+	    private uint Reserved;
 
 		/// <summary>
 		/// UTF8-encoded version string of the provider format.
@@ -67,12 +70,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// </summary>
 		private Heap[] _streams = new Heap[(int)HeapType.MaxType];
 
-		/// <summary>
-		/// Array of provider streams found in the source file.
-		/// </summary>
-		private byte[] _metadata;
-
-		#endregion // Data members
+	    #endregion // Data members
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MetadataRoot"/> class.
@@ -92,23 +90,21 @@ namespace Mosa.Runtime.Loader.PE
 		/// <returns>True, if the stream contains a valid and supported provider format.</returns>
 		public void Initialize(byte[] metadata)
 		{
-			_metadata = metadata;
+			Metadata = metadata;
 			MemoryStream ms = new MemoryStream(metadata);
 			BinaryReader reader = new BinaryReader(ms);
-			int position, length, offset, size;
-			string name;
-			HeapType kind;
 
-			uint signature = reader.ReadUInt32();
-			if (METADATA_ROOT_SIGNATURE != signature)
+		    uint signature = reader.ReadUInt32();
+			if (MetadataRootSignature != signature)
 				throw new ArgumentException(@"Invalid provider format.", @"provider");
 
 			MajorVersion = reader.ReadUInt16();
 			MinorVersion = reader.ReadUInt16();
 			if (1 != MajorVersion || 1 != MinorVersion)
 				throw new BadImageFormatException("Unsupported provider format.");
+
 			reader.ReadUInt32();
-			length = reader.ReadInt32();
+			int length = reader.ReadInt32();
 			byte[] version = reader.ReadBytes(length);
 			Version = Encoding.UTF8.GetString(version, 0, Array.IndexOf<byte>(version, 0));
 			reader.ReadUInt16();
@@ -116,31 +112,9 @@ namespace Mosa.Runtime.Loader.PE
 
 			// Read stream headers
 			for (ushort i = 0; i < streams; i++) {
-				offset = reader.ReadInt32();
-				size = reader.ReadInt32();
-				position = (int)reader.BaseStream.Position;
-				length = Array.IndexOf<byte>(metadata, 0, position, 32);
-				name = Encoding.ASCII.GetString(metadata, position, length - position);
-				if (name.Equals("#Strings")) {
-					kind = HeapType.String;
-				}
-				else if (name.Equals("#US")) {
-					kind = HeapType.UserString;
-				}
-				else if (name.Equals("#Blob")) {
-					kind = HeapType.Blob;
-				}
-				else if (name.Equals("#GUID")) {
-					kind = HeapType.Guid;
-				}
-				else if (name.Equals("#~")) {
-					kind = HeapType.Tables;
-				}
-				else {
-					throw new NotSupportedException();
-				}
+                StreamHeader header = new StreamHeader(reader, metadata);
 
-				_streams[(int)kind] = Heap.CreateHeap(this, kind, metadata, offset, size);
+				_streams[(int)header.Kind] = Heap.CreateHeap(this, header.Kind, metadata, header.Offset, header.Size);
 
 				// Move to the next stream
 				reader.BaseStream.Position = length + (4 - length % 4);
@@ -167,12 +141,12 @@ namespace Mosa.Runtime.Loader.PE
 
 		IMetadataModule IMetadataProvider.Assembly { get { return _assemblyImage; } }
 
-		/// <summary>
-		/// Retrieves the metadata binary byte array .
-		/// </summary>
-		public byte[] Metadata { get { return _metadata; } }
+	    /// <summary>
+	    /// Retrieves the metadata binary byte array .
+	    /// </summary>
+	    public byte[] Metadata { get; private set; }
 
-		TokenTypes IMetadataProvider.GetMaxTokenValue(TokenTypes tokenType)
+	    TokenTypes IMetadataProvider.GetMaxTokenValue(TokenTypes tokenType)
 		{
 			TokenTypes result = 0;
 			switch ((tokenType & TokenTypes.TableMask)) {
@@ -201,25 +175,28 @@ namespace Mosa.Runtime.Loader.PE
 
 		TokenTypes IMetadataProvider.Read(TokenTypes token, out string result)
 		{
-            if ((TokenTypes.TableMask & token) == TokenTypes.String) 
-            {
-				StringHeap sheap = (StringHeap)_streams[(int)HeapType.String];
-				result = sheap.ReadString(ref token);
-			}
-            else if ((TokenTypes.TableMask & token) == TokenTypes.UserString)
-            {
-				UserStringHeap usheap = (UserStringHeap)_streams[(int)HeapType.UserString];
-				result = usheap.ReadString(ref token);
-			}
-			else 
-            {
-				throw new ArgumentException(@"Invalid token for a string.", @"token");
-			}
+		    switch ((TokenTypes.TableMask & token))
+		    {
+		        case TokenTypes.String:
+		            {
+		                StringHeap sheap = (StringHeap)_streams[(int)HeapType.String];
+		                result = sheap.ReadString(ref token);
+		            }
+		            break;
+		        case TokenTypes.UserString:
+		            {
+		                UserStringHeap usheap = (UserStringHeap)_streams[(int)HeapType.UserString];
+		                result = usheap.ReadString(ref token);
+		            }
+		            break;
+		        default:
+		            throw new ArgumentException(@"Invalid token for a string.", @"token");
+		    }
 
-            return token;
+		    return token;
 		}
 
-		TokenTypes IMetadataProvider.Read(TokenTypes token, out Guid result)
+	    TokenTypes IMetadataProvider.Read(TokenTypes token, out Guid result)
 		{
             if ((TokenTypes.TableMask & token) == TokenTypes.Guid)
             {
