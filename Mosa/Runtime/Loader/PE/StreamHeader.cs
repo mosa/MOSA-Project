@@ -25,12 +25,12 @@ namespace Mosa.Runtime.Loader.PE
         /// Memory offset to start of this stream from start of the metadata 
         /// root (according to ISO/IEC 23271:2006 (E), §24.2.1)
         /// </summary>
-        private int _offset;
+        private readonly int _offset;
 
         /// <summary>
         /// Size of this stream in bytes, shall be a multiple of 4.
         /// </summary>
-        private int _size;
+        private readonly int _size;
 
         /// <summary>
         /// Name of the stream as null-terminated variable length
@@ -38,12 +38,12 @@ namespace Mosa.Runtime.Loader.PE
         /// boundary with \0 characters. The name is limited to
         /// 32 characters.
         /// </summary>
-        private string _name;
+        private readonly string _name;
 
         /// <summary>
         /// 
         /// </summary>
-        private HeapType _kind;
+        private readonly HeapType _kind;
 
         /// <summary>
         /// 
@@ -59,23 +59,23 @@ namespace Mosa.Runtime.Loader.PE
             int length = Array.IndexOf<byte>(metadata, 0, position, 32);
             _name = Encoding.ASCII.GetString(metadata, position, length - position);
 
-            if (Name.Equals("#Strings"))
+            if (_name.Equals("#Strings"))
             {
                 _kind = HeapType.String;
             }
-            else if (Name.Equals("#US"))
+            else if (_name.Equals("#US"))
             {
                 _kind = HeapType.UserString;
             }
-            else if (Name.Equals("#Blob"))
+            else if (_name.Equals("#Blob"))
             {
                 _kind = HeapType.Blob;
             }
-            else if (Name.Equals("#GUID"))
+            else if (_name.Equals("#GUID"))
             {
                 _kind = HeapType.Guid;
             }
-            else if (Name.Equals("#~"))
+            else if (_name.Equals("#~"))
             {
                 _kind = HeapType.Tables;
             }
@@ -100,17 +100,6 @@ namespace Mosa.Runtime.Loader.PE
         public int Size
         {
             get { return _size; }
-        }
-
-        /// <summary>
-        /// Name of the stream as null-terminated variable length
-        /// array of ASCII characters, padded to the next -byte
-        /// boundary with \0 characters. The name is limited to
-        /// 32 characters.
-        /// </summary>
-        public string Name
-        {
-            get { return _name; }
         }
 
         /// <summary>

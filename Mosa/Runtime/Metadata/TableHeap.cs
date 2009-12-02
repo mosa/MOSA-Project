@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -35,25 +34,28 @@ namespace Mosa.Runtime.Metadata {
 
 		#region Static members
 
-		private static int[][] _indexTables = new int[][] {
-			new int[] { (int)TokenTypes.TypeDef, (int)TokenTypes.TypeRef, (int)TokenTypes.TypeSpec },
-			new int[] { (int)TokenTypes.Field, (int)TokenTypes.Param, (int)TokenTypes.Property },
-			new int[] { (int)TokenTypes.MethodDef, (int)TokenTypes.Field, (int)TokenTypes.TypeRef, (int)TokenTypes.TypeDef, (int)TokenTypes.Param, (int)TokenTypes.InterfaceImpl, (int)TokenTypes.MemberRef, (int)TokenTypes.Module, /*(int)TokenTypes.Permission,*/ (int)TokenTypes.Property, (int)TokenTypes.Event, (int)TokenTypes.StandAloneSig, (int)TokenTypes.ModuleRef, (int)TokenTypes.TypeSpec, (int)TokenTypes.Assembly, (int)TokenTypes.AssemblyRef, (int)TokenTypes.File, (int)TokenTypes.ExportedType, (int)TokenTypes.ManifestResource },
-			new int[] { (int)TokenTypes.Field, (int)TokenTypes.Param },
-			new int[] { (int)TokenTypes.TypeDef, (int)TokenTypes.MethodDef, (int)TokenTypes.Assembly },
-			new int[] { (int)TokenTypes.TypeDef, (int)TokenTypes.TypeRef, (int)TokenTypes.ModuleRef, (int)TokenTypes.MethodDef, (int)TokenTypes.TypeSpec },
-			new int[] { (int)TokenTypes.Event, (int)TokenTypes.Property },
-			new int[] { (int)TokenTypes.MethodDef, (int)TokenTypes.MemberRef },
-			new int[] { (int)TokenTypes.Field, (int)TokenTypes.MethodDef },
-			new int[] { (int)TokenTypes.File, (int)TokenTypes.AssemblyRef, (int)TokenTypes.ExportedType },
-			new int[] { -1, -1, (int)TokenTypes.MethodDef, (int)TokenTypes.MemberRef, -1 },
-			new int[] { (int)TokenTypes.Module, (int)TokenTypes.ModuleRef, (int)TokenTypes.AssemblyRef, (int)TokenTypes.TypeRef },
-			new int[] { (int)TokenTypes.TypeDef, (int)TokenTypes.MethodDef }
+		private static readonly int[][] IndexTables = new[]
+		                                                   {
+			new[] { (int)TokenTypes.TypeDef, (int)TokenTypes.TypeRef, (int)TokenTypes.TypeSpec },
+			new[] { (int)TokenTypes.Field, (int)TokenTypes.Param, (int)TokenTypes.Property },
+			new[] { (int)TokenTypes.MethodDef, (int)TokenTypes.Field, (int)TokenTypes.TypeRef, (int)TokenTypes.TypeDef, (int)TokenTypes.Param, (int)TokenTypes.InterfaceImpl, (int)TokenTypes.MemberRef, (int)TokenTypes.Module, /*(int)TokenTypes.Permission,*/ (int)TokenTypes.Property, (int)TokenTypes.Event, (int)TokenTypes.StandAloneSig, (int)TokenTypes.ModuleRef, (int)TokenTypes.TypeSpec, (int)TokenTypes.Assembly, (int)TokenTypes.AssemblyRef, (int)TokenTypes.File, (int)TokenTypes.ExportedType, (int)TokenTypes.ManifestResource },
+			new[] { (int)TokenTypes.Field, (int)TokenTypes.Param },
+			new[] { (int)TokenTypes.TypeDef, (int)TokenTypes.MethodDef, (int)TokenTypes.Assembly },
+			new[] { (int)TokenTypes.TypeDef, (int)TokenTypes.TypeRef, (int)TokenTypes.ModuleRef, (int)TokenTypes.MethodDef, (int)TokenTypes.TypeSpec },
+			new[] { (int)TokenTypes.Event, (int)TokenTypes.Property },
+			new[] { (int)TokenTypes.MethodDef, (int)TokenTypes.MemberRef },
+			new[] { (int)TokenTypes.Field, (int)TokenTypes.MethodDef },
+			new[] { (int)TokenTypes.File, (int)TokenTypes.AssemblyRef, (int)TokenTypes.ExportedType },
+			new[] { -1, -1, (int)TokenTypes.MethodDef, (int)TokenTypes.MemberRef, -1 },
+			new[] { (int)TokenTypes.Module, (int)TokenTypes.ModuleRef, (int)TokenTypes.AssemblyRef, (int)TokenTypes.TypeRef },
+			new[] { (int)TokenTypes.TypeDef, (int)TokenTypes.MethodDef }
 		};
 
-		private static int[] _indexBits = new int[] {
+		private static readonly int[] IndexBits = new[] {
 			2, 2, 5, 1, 2, 3, 1, 1, 1, 2, 3, 2, 1
 		};
+
+        private const int TableCount = (int)TokenTypes.MaxTable >> 24;
 
 		#endregion // Static members
 
@@ -129,57 +131,70 @@ namespace Mosa.Runtime.Metadata {
 				// Adjust the table offset for the _header so far
 				nextTableOffset += 4 + 2 + 1 + 1 + 8 + 8;
 
-				// Create the row count array
-				_rowCounts = new int[(int)TokenTypes.MaxTable >> 24];
-				for (long valid = _valid, i = 0; 0 != valid; valid >>= 1, i++)
-				{
-					if (1 == (valid & 1))
-					{
-						_rowCounts[i] = reader.ReadInt32();
-						nextTableOffset += 4;
-					}
-				}
-
-				// Calculate the index sizes
-				_indexSize = new int[(int)IndexType.IndexCount];
-				for (int i = 0; i < (int)IndexType.CodedIndexCount; i++)
-				{
-					int maxrows = 0;
-					for (int table = 0; table < _indexTables[i].Length; table++)
-					{
-						if (-1 != _indexTables[i][table] && maxrows < _rowCounts[(_indexTables[i][table] >> 24)])
-						{
-							maxrows = _rowCounts[(_indexTables[i][table] >> 24)];
-						}
-					}
-
-					_indexSize[i] = (maxrows < (1 << (16 - _indexBits[i])) ? 2 : 4);
-				}
-
-				// Calculate the heap index sizes...
-				_indexSize[(int)IndexType.StringHeap] = 2+2*(_heapSize & 1);
-				_indexSize[(int)IndexType.GuidHeap] = 2 + (_heapSize & 2);
-				_indexSize[(int)IndexType.BlobHeap] = (0 == (_heapSize & 4) ? 2 : 4);
-
-                int tableCount = (int)TokenTypes.MaxTable >> 24;
-
-                // Calculate the record sizes
-                _recordSize = CalculateRecordSizes(tableCount);
-
-				// Calculate the table offsets
-                _tableOffsets = new int[tableCount];
-                for (int i = 0; i < tableCount; i++)
-				{
-					if (0 != _rowCounts[i])
-					{
-						_tableOffsets[i] = nextTableOffset;
-						nextTableOffset += _recordSize[i] * _rowCounts[i];
-					}
-				}
+                CreateRowCountArray(reader, ref nextTableOffset);
+                CalculateIndexSizes();
+                CalculateHeapIndexSizes();
+                CalculateRecordSizes();
+                CalculateTableOffsets(ref nextTableOffset);
 			}
 
             _metadataProvider = provider;
 		}
+
+        private void CreateRowCountArray(BinaryReader reader, ref int nextTableOffset)
+        {
+            _rowCounts = new int[(int)TokenTypes.MaxTable >> 24];
+            for (long valid = _valid, i = 0; 0 != valid; valid >>= 1, i++)
+            {
+                if (1 != (valid & 1)) 
+                    continue;
+
+                _rowCounts[i] = reader.ReadInt32();
+                nextTableOffset += 4;
+            }
+        }
+
+        private void CalculateIndexSizes()
+        {
+            _indexSize = new int[(int)IndexType.IndexCount];
+            for (int i = 0; i < (int)IndexType.CodedIndexCount; i++)
+            {
+                int maxrows = 0;
+                for (int table = 0; table < IndexTables[i].Length; table++)
+                {
+                    if (-1 != IndexTables[i][table] && maxrows < _rowCounts[(IndexTables[i][table] >> 24)])
+                    {
+                        maxrows = _rowCounts[(IndexTables[i][table] >> 24)];
+                    }
+                }
+
+                _indexSize[i] = (maxrows < (1 << (16 - IndexBits[i])) ? 2 : 4);
+            }
+        }
+
+        private void CalculateHeapIndexSizes()
+        {
+            _indexSize[(int)IndexType.StringHeap] = 2 + 2 * (_heapSize & 1);
+            _indexSize[(int)IndexType.GuidHeap] = 2 + (_heapSize & 2);
+            _indexSize[(int)IndexType.BlobHeap] = (0 == (_heapSize & 4) ? 2 : 4);
+        }
+
+        private void CalculateRecordSizes()
+        {
+            _recordSize = CalculateRecordSizes(TableCount);
+        }
+
+        private void CalculateTableOffsets(ref int nextTableOffset)
+        {
+            _tableOffsets = new int[TableCount];
+            for (int i = 0; i < TableCount; i++)
+            {
+                if (0 == _rowCounts[i]) 
+                    continue;
+                _tableOffsets[i] = nextTableOffset;
+                nextTableOffset += _recordSize[i] * _rowCounts[i];
+            }
+        }
 
         private int[] CalculateRecordSizes(int tableCount)
         {
@@ -188,43 +203,43 @@ namespace Mosa.Runtime.Metadata {
             int gheapIdx = GetIndexSize(IndexType.GuidHeap);
             int bheapIdx = GetIndexSize(IndexType.BlobHeap);
 
-            sizes[(int)TokenTypes.Module >> 24] = (2 + sheapIdx + 3 * gheapIdx);
-            sizes[(int)TokenTypes.TypeRef >> 24] = (GetIndexSize(IndexType.ResolutionScope) + 2 * sheapIdx);
-            sizes[(int)TokenTypes.TypeDef >> 24] = (4 + 2 * sheapIdx + GetIndexSize(IndexType.TypeDefOrRef) + GetIndexSize(TokenTypes.Field) + GetIndexSize(TokenTypes.MethodDef));
-            sizes[(int)TokenTypes.Field >> 24] = (2 + sheapIdx + bheapIdx);
-            sizes[(int)TokenTypes.MethodDef >> 24] = (4 + 2 + 2 + sheapIdx + bheapIdx + GetIndexSize(TokenTypes.Param));
-            sizes[(int)TokenTypes.Param >> 24] = (2 + 2 + sheapIdx);
-            sizes[(int)TokenTypes.InterfaceImpl >> 24] = (GetIndexSize(TokenTypes.TypeDef) + GetIndexSize(IndexType.TypeDefOrRef));
-            sizes[(int)TokenTypes.MemberRef >> 24] = (GetIndexSize(IndexType.MemberRefParent) + sheapIdx + bheapIdx);
-            sizes[(int)TokenTypes.Constant >> 24] = (2 + GetIndexSize(IndexType.HasConstant) + bheapIdx);
-            sizes[(int)TokenTypes.CustomAttribute >> 24] = (GetIndexSize(IndexType.HasCustomAttribute) + GetIndexSize(IndexType.CustomAttributeType) + bheapIdx);
-            sizes[(int)TokenTypes.FieldMarshal >> 24] = (GetIndexSize(IndexType.HasFieldMarshal) + bheapIdx);
-            sizes[(int)TokenTypes.DeclSecurity >> 24] = (2 + GetIndexSize(IndexType.HasDeclSecurity) + bheapIdx);
-            sizes[(int)TokenTypes.ClassLayout >> 24] = (2 + 4 + GetIndexSize(TokenTypes.TypeDef));
-            sizes[(int)TokenTypes.FieldLayout >> 24] = (4 + GetIndexSize(TokenTypes.Field));
-            sizes[(int)TokenTypes.StandAloneSig >> 24] = (bheapIdx);
-            sizes[(int)TokenTypes.EventMap >> 24] = (GetIndexSize(TokenTypes.TypeDef) + GetIndexSize(TokenTypes.Event));
-            sizes[(int)TokenTypes.Event >> 24] = (2 + sheapIdx + GetIndexSize(IndexType.TypeDefOrRef));
-            sizes[(int)TokenTypes.PropertyMap >> 24] = (GetIndexSize(TokenTypes.TypeDef) + GetIndexSize(TokenTypes.Property));
-            sizes[(int)TokenTypes.Property >> 24] = (2 + sheapIdx + bheapIdx);
-            sizes[(int)TokenTypes.MethodSemantics >> 24] = (2 + GetIndexSize(TokenTypes.MethodDef) + GetIndexSize(IndexType.HasSemantics));
-            sizes[(int)TokenTypes.MethodImpl >> 24] = (GetIndexSize(TokenTypes.TypeDef) + 2 * GetIndexSize(IndexType.MethodDefOrRef));
-            sizes[(int)TokenTypes.ModuleRef >> 24] = (sheapIdx);
-            sizes[(int)TokenTypes.TypeSpec >> 24] = (bheapIdx);
-            sizes[(int)TokenTypes.ImplMap >> 24] = (2 + GetIndexSize(IndexType.MemberForwarded) + sheapIdx + GetIndexSize(TokenTypes.ModuleRef));
-            sizes[(int)TokenTypes.FieldRVA >> 24] = (4 + GetIndexSize(TokenTypes.Field));
-            sizes[(int)TokenTypes.Assembly >> 24] = (4 + 2 + 2 + 2 + 2 + 4 + bheapIdx + 2 * sheapIdx);
-            sizes[(int)TokenTypes.AssemblyProcessor >> 24] = (4);
-            sizes[(int)TokenTypes.AssemblyOS >> 24] = (4 + 4 + 4);
-            sizes[(int)TokenTypes.AssemblyRef >> 24] = (2 + 2 + 2 + 2 + 4 + 2 * bheapIdx + 2 * sheapIdx);
+            sizes[(int)TokenTypes.Module >> 24]             = (2 + sheapIdx + 3 * gheapIdx);
+            sizes[(int)TokenTypes.TypeRef >> 24]            = (GetIndexSize(IndexType.ResolutionScope) + 2 * sheapIdx);
+            sizes[(int)TokenTypes.TypeDef >> 24]            = (4 + 2 * sheapIdx + GetIndexSize(IndexType.TypeDefOrRef) + GetIndexSize(TokenTypes.Field) + GetIndexSize(TokenTypes.MethodDef));
+            sizes[(int)TokenTypes.Field >> 24]              = (2 + sheapIdx + bheapIdx);
+            sizes[(int)TokenTypes.MethodDef >> 24]          = (4 + 2 + 2 + sheapIdx + bheapIdx + GetIndexSize(TokenTypes.Param));
+            sizes[(int)TokenTypes.Param >> 24]              = (2 + 2 + sheapIdx);
+            sizes[(int)TokenTypes.InterfaceImpl >> 24]      = (GetIndexSize(TokenTypes.TypeDef) + GetIndexSize(IndexType.TypeDefOrRef));
+            sizes[(int)TokenTypes.MemberRef >> 24]          = (GetIndexSize(IndexType.MemberRefParent) + sheapIdx + bheapIdx);
+            sizes[(int)TokenTypes.Constant >> 24]           = (2 + GetIndexSize(IndexType.HasConstant) + bheapIdx);
+            sizes[(int)TokenTypes.CustomAttribute >> 24]    = (GetIndexSize(IndexType.HasCustomAttribute) + GetIndexSize(IndexType.CustomAttributeType) + bheapIdx);
+            sizes[(int)TokenTypes.FieldMarshal >> 24]       = (GetIndexSize(IndexType.HasFieldMarshal) + bheapIdx);
+            sizes[(int)TokenTypes.DeclSecurity >> 24]       = (2 + GetIndexSize(IndexType.HasDeclSecurity) + bheapIdx);
+            sizes[(int)TokenTypes.ClassLayout >> 24]        = (2 + 4 + GetIndexSize(TokenTypes.TypeDef));
+            sizes[(int)TokenTypes.FieldLayout >> 24]        = (4 + GetIndexSize(TokenTypes.Field));
+            sizes[(int)TokenTypes.StandAloneSig >> 24]      = (bheapIdx);
+            sizes[(int)TokenTypes.EventMap >> 24]           = (GetIndexSize(TokenTypes.TypeDef) + GetIndexSize(TokenTypes.Event));
+            sizes[(int)TokenTypes.Event >> 24]              = (2 + sheapIdx + GetIndexSize(IndexType.TypeDefOrRef));
+            sizes[(int)TokenTypes.PropertyMap >> 24]        = (GetIndexSize(TokenTypes.TypeDef) + GetIndexSize(TokenTypes.Property));
+            sizes[(int)TokenTypes.Property >> 24]           = (2 + sheapIdx + bheapIdx);
+            sizes[(int)TokenTypes.MethodSemantics >> 24]    = (2 + GetIndexSize(TokenTypes.MethodDef) + GetIndexSize(IndexType.HasSemantics));
+            sizes[(int)TokenTypes.MethodImpl >> 24]         = (GetIndexSize(TokenTypes.TypeDef) + 2 * GetIndexSize(IndexType.MethodDefOrRef));
+            sizes[(int)TokenTypes.ModuleRef >> 24]          = (sheapIdx);
+            sizes[(int)TokenTypes.TypeSpec >> 24]           = (bheapIdx);
+            sizes[(int)TokenTypes.ImplMap >> 24]            = (2 + GetIndexSize(IndexType.MemberForwarded) + sheapIdx + GetIndexSize(TokenTypes.ModuleRef));
+            sizes[(int)TokenTypes.FieldRVA >> 24]           = (4 + GetIndexSize(TokenTypes.Field));
+            sizes[(int)TokenTypes.Assembly >> 24]           = (4 + 2 + 2 + 2 + 2 + 4 + bheapIdx + 2 * sheapIdx);
+            sizes[(int)TokenTypes.AssemblyProcessor >> 24]  = (4);
+            sizes[(int)TokenTypes.AssemblyOS >> 24]         = (4 + 4 + 4);
+            sizes[(int)TokenTypes.AssemblyRef >> 24]        = (2 + 2 + 2 + 2 + 4 + 2 * bheapIdx + 2 * sheapIdx);
             sizes[(int)TokenTypes.AssemblyRefProcessor >> 24] = (4 + GetIndexSize(TokenTypes.AssemblyRef));
-            sizes[(int)TokenTypes.AssemblyRefOS >> 24] = (4 + 4 + 4 + GetIndexSize(TokenTypes.AssemblyRef));
-            sizes[(int)TokenTypes.File >> 24] = (4 + sheapIdx + bheapIdx);
-            sizes[(int)TokenTypes.ExportedType >> 24] = (4 + 4 + 2 * sheapIdx + GetIndexSize(IndexType.Implementation));
-            sizes[(int)TokenTypes.ManifestResource >> 24] = (4 + 4 + sheapIdx + GetIndexSize(IndexType.Implementation));
-            sizes[(int)TokenTypes.NestedClass >> 24] = (2 * GetIndexSize(TokenTypes.TypeDef));
-            sizes[(int)TokenTypes.GenericParam >> 24] = (2 + 2 + GetIndexSize(IndexType.TypeOrMethodDef) + sheapIdx);
-            sizes[(int)TokenTypes.MethodSpec >> 24] = (GetIndexSize(IndexType.MethodDefOrRef) + bheapIdx);
+            sizes[(int)TokenTypes.AssemblyRefOS >> 24]      = (4 + 4 + 4 + GetIndexSize(TokenTypes.AssemblyRef));
+            sizes[(int)TokenTypes.File >> 24]               = (4 + sheapIdx + bheapIdx);
+            sizes[(int)TokenTypes.ExportedType >> 24]       = (4 + 4 + 2 * sheapIdx + GetIndexSize(IndexType.Implementation));
+            sizes[(int)TokenTypes.ManifestResource >> 24]   = (4 + 4 + sheapIdx + GetIndexSize(IndexType.Implementation));
+            sizes[(int)TokenTypes.NestedClass >> 24]        = (2 * GetIndexSize(TokenTypes.TypeDef));
+            sizes[(int)TokenTypes.GenericParam >> 24]       = (2 + 2 + GetIndexSize(IndexType.TypeOrMethodDef) + sheapIdx);
+            sizes[(int)TokenTypes.MethodSpec >> 24]         = (GetIndexSize(IndexType.MethodDefOrRef) + bheapIdx);
             sizes[(int)TokenTypes.GenericParamConstraint >> 24] = (GetIndexSize(TokenTypes.GenericParam) + GetIndexSize(IndexType.TypeDefOrRef));
 
             return sizes;
@@ -300,7 +315,7 @@ namespace Mosa.Runtime.Metadata {
 			// Do we need to decode a coded index?
             if (index < IndexType.CodedIndexCount)
             {
-                int bits = _indexBits[(int)index];
+                int bits = IndexBits[(int)index];
                 int mask = 1;
                 for (int i = 1; i < bits; i++) mask = (mask << 1) | 1;
 
@@ -308,7 +323,7 @@ namespace Mosa.Runtime.Metadata {
                 int table = (int)value & mask;
 
                 // Correct the value
-                value = (TokenTypes)(((int)value >> bits) | _indexTables[(int)index][table]);
+                value = (TokenTypes)(((int)value >> bits) | IndexTables[(int)index][table]);
             }
             else
             {
