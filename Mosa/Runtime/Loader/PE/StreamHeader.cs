@@ -81,7 +81,7 @@ namespace Mosa.Runtime.Loader.PE
             }
             else
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException("Offset: " + _offset + " \\ Size: " + _size + " \\ Name: " + _name.ToString());
             }
         }
 

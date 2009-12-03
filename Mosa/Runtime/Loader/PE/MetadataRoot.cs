@@ -93,6 +93,7 @@ namespace Mosa.Runtime.Loader.PE
 			Metadata = metadata;
 			MemoryStream ms = new MemoryStream(metadata);
 			BinaryReader reader = new BinaryReader(ms);
+		    string name;
 
 		    uint signature = reader.ReadUInt32();
 			if (MetadataRootSignature != signature)
@@ -112,9 +113,32 @@ namespace Mosa.Runtime.Loader.PE
 
 			// Read stream headers
 			for (ushort i = 0; i < streams; i++) {
-                StreamHeader header = new StreamHeader(reader, metadata);
+				int offset = reader.ReadInt32();
+				int size = reader.ReadInt32();
+				int position = (int)reader.BaseStream.Position;
+				length = Array.IndexOf<byte>(metadata, 0, position, 32);
+				name = Encoding.ASCII.GetString(metadata, position, length - position);
+			    HeapType kind;
+			    if (name.Equals("#Strings")) {
+					kind = HeapType.String;
+				}
+				else if (name.Equals("#US")) {
+					kind = HeapType.UserString;
+				}
+				else if (name.Equals("#Blob")) {
+					kind = HeapType.Blob;
+				}
+				else if (name.Equals("#GUID")) {
+					kind = HeapType.Guid;
+				}
+				else if (name.Equals("#~")) {
+					kind = HeapType.Tables;
+				}
+				else {
+					throw new NotSupportedException();
+				}
 
-				_streams[(int)header.Kind] = Heap.CreateHeap(this, header.Kind, metadata, header.Offset, header.Size);
+				_streams[(int)kind] = Heap.CreateHeap(this, kind, metadata, offset, size);
 
 				// Move to the next stream
 				reader.BaseStream.Position = length + (4 - length % 4);

@@ -7,11 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-
 namespace Mosa.Runtime.Metadata.Tables 
 {
     /// <summary>
@@ -23,17 +18,17 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <summary>
         /// 
         /// </summary>
-        private FieldAttributes _flags;
+        private readonly FieldAttributes _flags;
 
         /// <summary>
         /// 
         /// </summary>
-        private TokenTypes _nameStringIdx;
+        private readonly TokenTypes _nameStringIdx;
 
         /// <summary>
         /// 
         /// </summary>
-        private TokenTypes _signatureBlobIdx;
+        private readonly TokenTypes _signatureBlobIdx;
 
 		#endregion // Data members
 

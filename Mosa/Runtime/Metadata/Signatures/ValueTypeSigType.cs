@@ -7,10 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Mosa.Runtime.Metadata.Signatures
 {
     /// <summary>
@@ -23,7 +19,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <summary>
         /// Holds the type definition, reference or specification token of the value type.
         /// </summary>
-        private TokenTypes _token;
+        private readonly TokenTypes _token;
 
         #endregion // Data members
 

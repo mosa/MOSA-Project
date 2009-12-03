@@ -7,8 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -45,10 +45,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Retrieve the type reference
 			TokenTypes token;
 			decoder.Decode(out token);
-            
-			//throw new NotImplementedException();
-            
-			//_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
+
+            int size = ComputeSize(token, decoder.Compiler);
+		    Metadata.Tables.FieldRow fieldRow;
+		    decoder.Compiler.Assembly.Metadata.Read(token, out fieldRow);
 		}
 
 		/// <summary>
@@ -60,6 +60,20 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			visitor.InitObj(context);
 		}
+
+        private static int ComputeSize(TokenTypes token, IMethodCompiler compiler)
+        {
+            IMetadataProvider metadata = compiler.Assembly.Metadata;
+
+            Metadata.Tables.FieldRow fieldRow;
+            metadata.Read(token, out fieldRow);
+            FieldSignature signature = Signature.FromMemberRefSignatureToken(metadata, fieldRow.SignatureBlobIdx) as FieldSignature;
+
+            int size, alignment;
+            compiler.Architecture.GetTypeRequirements(signature.Type, out size, out alignment);
+            
+            return size;
+        }
 
 		#endregion Methods
 
