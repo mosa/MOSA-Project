@@ -49,7 +49,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="index">The index.</param>
         protected override void ParseSignature(byte[] buffer, ref int index)
         {
-            if (FIELD != buffer[index]) 
+            if (Field != buffer[index]) 
                 return;
 
             index++;
@@ -60,6 +60,6 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <summary>
         /// 
         /// </summary>
-        private const int FIELD = 0x06;
+        private const int Field = 0x06;
     }
 }

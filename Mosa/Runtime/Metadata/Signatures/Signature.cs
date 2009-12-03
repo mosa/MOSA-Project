@@ -48,7 +48,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <returns></returns>
         public static Signature FromMemberRefSignatureToken(IMetadataProvider provider, TokenTypes token)
         {
-            Signature result = null;
+            Signature result;
             int index = 0;
             byte[] buffer;
             provider.Read(token, out buffer);

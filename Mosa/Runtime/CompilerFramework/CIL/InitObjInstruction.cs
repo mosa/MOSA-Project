@@ -45,10 +45,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Retrieve the type reference
 			TokenTypes token;
 			decoder.Decode(out token);
-           
-            int size = ComputeSize(token, decoder.Compiler);
-		    //Metadata.Tables.FieldRow fieldRow;
-		    //decoder.Compiler.Assembly.Metadata.Read(typeDefinition.FieldList, out fieldRow);
+
+            int size = ComputeTypeSize(token, decoder.Compiler);
 		}
 
 		/// <summary>
@@ -61,18 +59,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			visitor.InitObj(context);
 		}
 
-        private static int ComputeSize(TokenTypes token, IMethodCompiler compiler)
+        private static int ComputeTypeSize(TokenTypes token, IMethodCompiler compiler)
         {
             IMetadataProvider metadata = compiler.Assembly.Metadata;
             Metadata.Tables.TypeDefRow typeDefinition;
             Metadata.Tables.TypeDefRow followingTypeDefinition;
-            compiler.Assembly.Metadata.Read(token,     out typeDefinition);
-            compiler.Assembly.Metadata.Read(token + 1, out followingTypeDefinition);
+            metadata.Read(token, out typeDefinition);
+            metadata.Read(token + 1, out followingTypeDefinition);
 
             int result = 0;
-            TokenTypes field = typeDefinition.FieldList;
-            while (field != followingTypeDefinition.FieldList)
-                result += FieldSize(field++, compiler);
+            TokenTypes fieldList = typeDefinition.FieldList;
+            while (fieldList != followingTypeDefinition.FieldList)
+                result += FieldSize(fieldList++, compiler);
 
             return result;
         }
@@ -83,9 +81,29 @@ namespace Mosa.Runtime.CompilerFramework.CIL
             compiler.Assembly.Metadata.Read(field, out fieldRow);
             FieldSignature signature = Signature.FromMemberRefSignatureToken(compiler.Assembly.Metadata, fieldRow.SignatureBlobIdx) as FieldSignature;
 
+            // If the field is another struct, we have to dig down and compute its size too.
+            if (signature.Type.Type == CilElementType.ValueType)
+            {
+                TokenTypes valueTypeSig = ValueTokenTypeFromSignature(compiler.Assembly.Metadata, fieldRow.SignatureBlobIdx);
+                return ComputeTypeSize(valueTypeSig, compiler);
+            }
+
             int size, alignment;
             compiler.Architecture.GetTypeRequirements(signature.Type, out size, out alignment);
             return size;
+        }
+
+        private static TokenTypes ValueTokenTypeFromSignature(IMetadataProvider metadata, TokenTypes signatureToken)
+        {
+            int index = 1;
+            byte[] buffer;
+            metadata.Read(signatureToken, out buffer);
+
+            // Jump over custom mods
+            CustomMod.ParseCustomMods(buffer, ref index);
+            index++;
+
+            return SigType.ReadTypeDefOrRefEncoded(buffer, ref index);
         }
 
 		#endregion Methods
