@@ -7,10 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Mosa.Runtime.Metadata.Signatures
 {
     /// <summary>
@@ -26,13 +22,6 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// 
         /// </summary>
         private SigType _type;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FieldSignature"/> class.
-        /// </summary>
-        public FieldSignature()
-        {
-        }
 
         /// <summary>
         /// Gets the custom mods.
@@ -60,12 +49,12 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="index">The index.</param>
         protected override void ParseSignature(byte[] buffer, ref int index)
         {
-            if (FIELD == buffer[index])
-            {
-                index++;
-                _customMods = CustomMod.ParseCustomMods(buffer, ref index);
-                _type = SigType.ParseTypeSignature(buffer, ref index);
-            }
+            if (FIELD != buffer[index]) 
+                return;
+
+            index++;
+            _customMods = CustomMod.ParseCustomMods(buffer, ref index);
+            _type = SigType.ParseTypeSignature(buffer, ref index);
         }
 
         /// <summary>

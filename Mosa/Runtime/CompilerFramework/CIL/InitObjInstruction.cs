@@ -45,10 +45,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Retrieve the type reference
 			TokenTypes token;
 			decoder.Decode(out token);
-
+           
             int size = ComputeSize(token, decoder.Compiler);
-		    Metadata.Tables.FieldRow fieldRow;
-		    decoder.Compiler.Assembly.Metadata.Read(token, out fieldRow);
+		    //Metadata.Tables.FieldRow fieldRow;
+		    //decoder.Compiler.Assembly.Metadata.Read(typeDefinition.FieldList, out fieldRow);
 		}
 
 		/// <summary>
@@ -64,14 +64,27 @@ namespace Mosa.Runtime.CompilerFramework.CIL
         private static int ComputeSize(TokenTypes token, IMethodCompiler compiler)
         {
             IMetadataProvider metadata = compiler.Assembly.Metadata;
+            Metadata.Tables.TypeDefRow typeDefinition;
+            Metadata.Tables.TypeDefRow followingTypeDefinition;
+            compiler.Assembly.Metadata.Read(token,     out typeDefinition);
+            compiler.Assembly.Metadata.Read(token + 1, out followingTypeDefinition);
 
+            int result = 0;
+            TokenTypes field = typeDefinition.FieldList;
+            while (field != followingTypeDefinition.FieldList)
+                result += FieldSize(field++, compiler);
+
+            return result;
+        }
+
+        private static int FieldSize(TokenTypes field, IMethodCompiler compiler)
+        {
             Metadata.Tables.FieldRow fieldRow;
-            metadata.Read(token, out fieldRow);
-            FieldSignature signature = Signature.FromMemberRefSignatureToken(metadata, fieldRow.SignatureBlobIdx) as FieldSignature;
+            compiler.Assembly.Metadata.Read(field, out fieldRow);
+            FieldSignature signature = Signature.FromMemberRefSignatureToken(compiler.Assembly.Metadata, fieldRow.SignatureBlobIdx) as FieldSignature;
 
             int size, alignment;
             compiler.Architecture.GetTypeRequirements(signature.Type, out size, out alignment);
-            
             return size;
         }
 

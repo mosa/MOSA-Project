@@ -8,10 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata.Tables;
 
@@ -329,5 +325,12 @@ namespace Mosa.Runtime.Metadata
         /// <param name="token">The generic parameter constraint row token.</param>
         /// <param name="result">Receives the read generic parameter constraint row.</param>
         void Read(TokenTypes token, out GenericParamConstraintRow result);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="result"></param>
+        void Read(TokenTypes token, out FieldRow[] result);
     }
 }

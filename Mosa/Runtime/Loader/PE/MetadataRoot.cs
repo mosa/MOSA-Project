@@ -478,6 +478,12 @@ namespace Mosa.Runtime.Loader.PE
 			theap.Read(token, out result);
 		}
 
+        void IMetadataProvider.Read(TokenTypes token, out FieldRow[] result)
+        {
+            TableHeap theap = (TableHeap) _streams[(int) HeapType.Tables];
+            theap.Read(token, out result);
+        }
+
 		#endregion // IMetadataProvider members
 	}
 }
