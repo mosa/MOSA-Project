@@ -404,7 +404,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // IBasicBlockProvider members
 
-
 		#endregion // Methods
 
 	}

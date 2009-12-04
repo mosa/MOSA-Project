@@ -12,19 +12,25 @@ namespace Mosa.QuickTest
     /// </summary>
     public struct Struct
     {
-        private int x;
+        public int x;
     }
     /// <summary>
     /// 
     /// </summary>
     public static class App
     {
+		static public int y;
+
         /// <summary>
         /// Main
         /// </summary>
         public static void Main()
         {
+			y = 543;
+
             Struct s = new Struct();
+
+			//s.x = 123;
         }
     }
 }

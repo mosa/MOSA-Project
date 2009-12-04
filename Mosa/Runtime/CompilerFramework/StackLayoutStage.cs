@@ -130,7 +130,7 @@ namespace Mosa.Runtime.CompilerFramework
 				// Does this instruction define a new stack variable?
 				foreach (Operand op in ctx.Results) {
 					// The instruction list may not be in SSA form, so we have to check existence again here unfortunately.
-					// FIXME: Allow us to detect the state of Blocks
+					// FIXME: Allow us to detect the state of blocks
 					LocalVariableOperand lvop = op as LocalVariableOperand;
 					if (lvop != null && !locals.Contains(lvop))
 						locals.Add(lvop);

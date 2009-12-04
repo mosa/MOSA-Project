@@ -92,15 +92,6 @@ namespace Mosa.Runtime.CompilerFramework
 			set { if (value) _packed = _packed | 0x01; else _packed = (uint)(_packed & ~0x1); }
 		}
 
-		/// <summary>
-		/// Gets or sets the lock attribute (used for testing)
-		/// </summary>
-		public bool Locked
-		{
-			get { return (_packed & 0x02) == 0x02; }
-			set { if (value) _packed = _packed | 0x02; else _packed = (uint)(_packed & ~0x2); }
-		}
-
         /// <summary>
         /// Gets or sets the branch hint (true means branch likely)
         /// </summary>

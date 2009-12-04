@@ -1257,7 +1257,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
 			RuntimeMethod callTarget = FindMethod(rt, internalCallTarget.ToString());
 
-			//ctx.ReplaceInstructionOnly(CIL.Instruction.Get(OpCode.Call));
 			ctx.ReplaceInstructionOnly(IR.Instruction.CallInstruction);
 			ctx.InvokeTarget = callTarget;
 		}

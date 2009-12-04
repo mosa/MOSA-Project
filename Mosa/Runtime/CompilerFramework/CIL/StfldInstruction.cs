@@ -47,17 +47,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Load the _stackFrameIndex token From the immediate
+			// Load the _stackFrameIndex token from the immediate
 			TokenTypes token;
 			decoder.Decode(out token);
-			throw new NotImplementedException();
-			/*
-				Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) ||
-							 TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
-				MemberDefinition memberDef = MetadataMemberReference.FromToken(decoder.Metadata, token).Resolve();
 
-				_field = memberDef as FieldDefinition;          
-			 */
+			Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) || TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
+
+			//MemberDefinition memberDef = MetadataMemberReference.FromToken(decoder.Metadata, token).Resolve();
+			//_field = memberDef as FieldDefinition;
+
+			throw new NotImplementedException();
 
 			// FIXME: Verification
 		}

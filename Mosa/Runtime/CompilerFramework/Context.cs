@@ -131,8 +131,6 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return _instructionSet.Data[_index].Operand1; }
 			set
 			{
-				Debug.Assert(!Locked, @"Attempting to modify locked instruction");
-
 				Operand current = _instructionSet.Data[_index].Operand1;
 				if (current != null) current.Uses.Remove(_index);
 				if (value != null) value.Uses.Add(_index);
@@ -149,8 +147,6 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return _instructionSet.Data[_index].Operand2; }
 			set
 			{
-				Debug.Assert(!Locked, @"Attempting to modify locked instruction");
-
 				Operand current = _instructionSet.Data[_index].Operand2;
 				if (current != null) current.Uses.Remove(_index);
 				if (value != null) value.Uses.Add(_index);
@@ -167,8 +163,6 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return _instructionSet.Data[_index].Operand3; }
 			set
 			{
-				Debug.Assert(!Locked, @"Attempting to modify locked instruction");
-
 				Operand current = _instructionSet.Data[_index].Operand3;
 				if (current != null) current.Uses.Remove(_index);
 				if (value != null) value.Uses.Add(_index);
@@ -206,8 +200,6 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return _instructionSet.Data[_index].Result; }
 			set
 			{
-				Debug.Assert(!Locked, @"Attempting to modify locked instruction");
-
 				Operand current = _instructionSet.Data[_index].Result;
 				if (current != null) current.Definitions.Remove(_index);
 				if (value != null) value.Definitions.Add(_index);
@@ -277,16 +269,6 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			get { return _instructionSet.Data[_index].Ignore; }
 			set { _instructionSet.Data[_index].Ignore = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether this <see cref="Context"/> is locked.
-		/// </summary>
-		/// <value><c>true</c> if locked; otherwise, <c>false</c>.</value>
-		public bool Locked
-		{
-			get { return _instructionSet.Data[_index].Locked; }
-			set { _instructionSet.Data[_index].Locked = value; }
 		}
 
 		/// <summary>
@@ -591,8 +573,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Remove()
 		{
-			Debug.Assert(!Locked, @"Attempting to modify locked instruction");
-
 			int label = Label;
 			Clear();
 
@@ -621,8 +601,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instruction">The instruction.</param>
 		public void ReplaceInstructionOnly(IInstruction instruction)
 		{
-			Debug.Assert(!Locked, @"Attempting to modify locked instruction");
-
 			NewInstruction = instruction;
 		}
 
@@ -634,9 +612,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="resultCount">The result count.</param>
 		public void SetInstruction(IInstruction instruction, byte operandCount, byte resultCount)
 		{
-			if (_index > 0)
-				Debug.Assert(!Locked, @"Attempting to modify locked instruction");
-
 			int label = -1;
 
 			if (_index == -1)
