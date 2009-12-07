@@ -106,6 +106,5 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion Methods
 
-
 	}
 }

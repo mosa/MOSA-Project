@@ -172,7 +172,10 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			if (context.InvokeTarget != null)
-				s = s + " " + context.InvokeTarget;
+				s = s + " " + context.InvokeTarget.ToString();
+
+			if (context.RuntimeField != null)
+				s = s + " " + context.RuntimeField.ToString();
 
 			return s;
 		}
@@ -214,8 +217,8 @@ namespace Mosa.Runtime.CompilerFramework
 				case IR.ConditionCode.UnsignedGreaterThan: return @"greater (U)";
 				case IR.ConditionCode.UnsignedLessOrEqual: return @"less or equal (U)";
 				case IR.ConditionCode.UnsignedLessThan: return @"less (U)";
-                case IR.ConditionCode.NotSigned: return @"unsigned";
-                case IR.ConditionCode.Signed: return @"signed";
+				case IR.ConditionCode.NotSigned: return @"unsigned";
+				case IR.ConditionCode.Signed: return @"signed";
 				default: throw new NotSupportedException();
 			}
 		}

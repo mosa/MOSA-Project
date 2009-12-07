@@ -57,7 +57,7 @@ namespace Mosa.Runtime.Vm
         void AssemblyLoaded(IMetadataModule module);
 
         /// <summary>
-        /// Gets the types From module.
+        /// Gets the types from module.
         /// </summary>
         /// <param name="module">The module.</param>
         /// <returns></returns>
@@ -71,7 +71,7 @@ namespace Mosa.Runtime.Vm
         ModuleOffsets GetModuleOffset(IMetadataModule module);
 
         /// <summary>
-        /// Finds the type index From token.
+        /// Finds the type index from token.
         /// </summary>
         /// <param name="module">The module.</param>
         /// <param name="token">The token.</param>
