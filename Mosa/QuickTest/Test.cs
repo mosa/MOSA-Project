@@ -13,7 +13,10 @@ namespace Mosa.QuickTest
     public struct Struct
     {
         public int x;
+		public int y;
+		public int z;
     }
+
     /// <summary>
     /// 
     /// </summary>
