@@ -46,7 +46,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <summary>
 		/// Dumps multiboot info.
 		/// </summary>
-		public static void Dump(int row, int col)
+		public static void Dump(uint row, uint col)
 		{
 			uint location = MultibootStructure;
 
@@ -81,7 +81,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <summary>
 		/// Dumps this instance.
 		/// </summary>
-		public static void Dump2(int row, int col)
+		public static void Dump2(uint row, uint col)
 		{
 			uint location = MemoryMapStart;
 

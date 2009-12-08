@@ -77,6 +77,12 @@
     <Compile Include="CMOS.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Multiboot.cs" />
+    <Compile Include="PageFrameAllocator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PageTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Screen.cs" />
   </ItemGroup>
   <ItemGroup>

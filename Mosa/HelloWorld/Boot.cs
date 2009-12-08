@@ -396,12 +396,12 @@ namespace Mosa.HelloWorld
 			//Multiboot.Dump(4,53);
 
 			Screen.Row = 23;
-			for (int index = 0; index < 80; index++) {
+			for (uint index = 0; index < 80; index++) {
 				Screen.Column = index;
 				Screen.Write((char)205);
 			}
 
-			for (int index = 2; index < 24; index++) {
+			for (uint index = 2; index < 24; index++) {
 				Screen.Column = 60;
 				Screen.Row = index;
 

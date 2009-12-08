@@ -5,6 +5,8 @@
  *
  */
 
+using Mosa.Kernel.Memory.X86;
+
 namespace Mosa.HelloWorld
 {
 	/// <summary>
@@ -15,11 +17,11 @@ namespace Mosa.HelloWorld
 		/// <summary>
 		/// 
 		/// </summary>
-		public static int Column = 0;
+		public static uint Column = 0;
 		/// <summary>
 		/// 
 		/// </summary>
-		public static int Row = 0;
+		public static uint Row = 0;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -28,20 +30,20 @@ namespace Mosa.HelloWorld
 		/// <summary>
 		/// 
 		/// </summary>
-		public const int Columns = 80;
+		public const uint Columns = 80;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public const int Rows = 40;
+		public const uint Rows = 40;
 
 		/// <summary>
 		/// Gets the address.
 		/// </summary>
 		/// <returns></returns>
-		private unsafe static byte* GetAddress()
+		private static uint GetAddress()
 		{
-			return (byte*)(0xB8000 + ((Row * Columns + Column) * 2));
+			return (0x0B8000 + ((Row * Columns + Column) * 2));
 		}
 
 		/// <summary>
@@ -71,12 +73,12 @@ namespace Mosa.HelloWorld
 		/// Writes the character.
 		/// </summary>
 		/// <param name="chr">The character.</param>
-		public unsafe static void Write(char chr)
+		public static void Write(char chr)
 		{
-			byte* address = GetAddress();
+			uint address = GetAddress();
 
-			*address = (byte)chr;
-			*(address + 1) = Color;
+			Memory.Set8(address, (byte)chr);
+			Memory.Set8(address + 1, Color);
 
 			Next();
 		}
@@ -121,7 +123,7 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		/// <param name="row">The row.</param>
 		/// <param name="col">The col.</param>
-		public static void SetCursor(int row, int col)
+		public static void SetCursor(uint row, uint col)
 		{
 			Row = row;
 			Column = col;
@@ -145,7 +147,7 @@ namespace Mosa.HelloWorld
 		public static void Write(ulong val, byte digits, int size)
 		{
 			uint count = 0;
-            ulong temp = val;
+			ulong temp = val;
 
 			do {
 				temp /= digits;
@@ -155,12 +157,12 @@ namespace Mosa.HelloWorld
 			if (size != -1)
 				count = (uint)size;
 
-			int x = Column;
-			int y = Row;
+			uint x = Column;
+			uint y = Row;
 
 			for (uint i = 0; i < count; i++) {
-				uint digit = (uint) (val % digits);
-				Column = x; 
+				uint digit = (uint)(val % digits);
+				Column = x;
 				Row = y;
 				Skip(count - 1 - i);
 				if (digit < 10)
@@ -175,16 +177,5 @@ namespace Mosa.HelloWorld
 			Skip(count);
 		}
 
-		/// <summary>
-		/// Writes the string.
-		/// </summary>
-		/// <param name="str">The string.</param>
-		public static unsafe void Write(byte* str)
-		{
-			while (*str != 0) {
-				Write(*str);
-				str++;
-			}
-		}
 	}
 }

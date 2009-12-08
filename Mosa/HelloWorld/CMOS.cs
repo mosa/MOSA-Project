@@ -103,7 +103,7 @@ namespace Mosa.HelloWorld
 		/// <summary>
 		/// Dump multiboot info.
 		/// </summary>
-		public static void Dump(int row, int col)
+		public static void Dump(uint row, uint col)
 		{
 			Screen.Row = row;
 			Screen.Column = col;
