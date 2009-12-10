@@ -48,6 +48,11 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <summary>
 		/// 
 		/// </summary>
+		public const uint StandardMemorySize = 0x10000;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ushort ioBase;
 
 		/// <summary>
@@ -78,7 +83,7 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <summary>
 		/// 
 		/// </summary>
-		protected byte[] memory = new byte[0x10000];
+		protected byte[] memory = new byte[StandardMemorySize];
 
 		/// <summary>
 		/// 
@@ -113,7 +118,7 @@ namespace Mosa.EmulatedDevices.Emulated
 			ioBase = StandardIOBase;
 			baseAddress = StandardAddressBase;
 
-			MemoryDispatch.RegisterMemory(baseAddress, 0x10000, Read8, Write8);
+			MemoryDispatch.RegisterMemory(baseAddress, StandardMemorySize, Read8, Write8);
 
 			width = 80;
 			height = 25;
@@ -155,12 +160,6 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <returns></returns>
 		public byte Read8(ushort port)
 		{
-			// 0x03B0
-			//crtControllerIndex = new byte(0x3B4, 0, null, CommandWrite);
-			//crtControllerData = new byte(0x3B5, 0, null, IndexWrite);
-			//crtControllerIndexColor = new byte(0x3D4, 0, null, CommandWriteColor);
-			//crtControllerDataColor = new byte(0x3D5, 0, null, IndexWrite);
-
 			switch (port - ioBase) {
 				case 0x04: return ReadIndex();
 				case 0x1C: return miscellaneous;

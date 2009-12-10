@@ -22,7 +22,7 @@ namespace Mosa.EmulatedKernel
 		/// <summary>
 		/// 
 		/// </summary>
-		private static List<MemoryHandler> dispatches = new List<MemoryHandler>();
+		public static List<MemoryHandler> MemorySegments = new List<MemoryHandler>();
 
 		/// <summary>
 		/// Registers the memory.
@@ -33,7 +33,7 @@ namespace Mosa.EmulatedKernel
 		/// <param name="write8">The write8 delegate.</param>
 		public static void RegisterMemory(uint address, uint size, MemoryRead8 read8, MemoryWrite8 write8)
 		{
-			dispatches.Add(new MemoryHandler(address, size, read8, write8));
+			MemorySegments.Add(new MemoryHandler(address, size, read8, write8));
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public static MemoryHandler Find(uint address)
 		{
-			foreach (MemoryHandler memoryRange in dispatches)
+			foreach (MemoryHandler memoryRange in MemorySegments)
 				if (memoryRange.Contains(address))
 					return memoryRange;
 
@@ -116,41 +116,40 @@ namespace Mosa.EmulatedKernel
 			return 0;
 		}
 
-        /// <summary>
-        /// Writes a short to the specified address.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="value">The value.</param>
-        public static void Write24(uint address, uint value)
-        {
-            MemoryHandler memoryRange = Find(address);
+		/// <summary>
+		/// Writes a short to the specified address.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <param name="value">The value.</param>
+		public static void Write24(uint address, uint value)
+		{
+			MemoryHandler memoryRange = Find(address);
 
-            if (memoryRange != null)
-                if (memoryRange.write8 != null)
-                {
-                    memoryRange.write8(address, (byte)value);
-                    memoryRange.write8(address + 1, (byte)(value >>  8));
-                    memoryRange.write8(address + 2, (byte)(value >> 16));
-                }
+			if (memoryRange != null)
+				if (memoryRange.write8 != null) {
+					memoryRange.write8(address, (byte)value);
+					memoryRange.write8(address + 1, (byte)(value >> 8));
+					memoryRange.write8(address + 2, (byte)(value >> 16));
+				}
 
-            return;
-        }
+			return;
+		}
 
-        /// <summary>
-        /// Reads a short from the specified address.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <returns></returns>
-        public static ushort Read24(uint address)
-        {
-            MemoryHandler memoryRange = Find(address);
+		/// <summary>
+		/// Reads a short from the specified address.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		public static ushort Read24(uint address)
+		{
+			MemoryHandler memoryRange = Find(address);
 
-            if (memoryRange != null)
-                if (memoryRange.read8 != null)
-                    return (ushort)(memoryRange.read8(address) | (memoryRange.read8(address + 1) << 8) | (memoryRange.read8(address + 2) << 16));
+			if (memoryRange != null)
+				if (memoryRange.read8 != null)
+					return (ushort)(memoryRange.read8(address) | (memoryRange.read8(address + 1) << 8) | (memoryRange.read8(address + 2) << 16));
 
-            return 0;
-        }
+			return 0;
+		}
 
 		/// <summary>
 		/// Reads an integer from the specified address.

@@ -89,6 +89,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Emulated\RAMChip.cs" />
+    <Compile Include="Multiboot.cs" />
     <Compile Include="Setup.cs">
       <SubType>Code</SubType>
     </Compile>

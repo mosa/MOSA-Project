@@ -76,8 +76,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public IMemory AllocateMemory(uint size, uint alignment)
 		{
-			System.IntPtr ptr = System.Runtime.InteropServices.Marshal.AllocHGlobal((int)(size + alignment - 1));
-			return new Memory((uint)(ptr.ToInt64() & ~(alignment - 1)), size);
+			return null;
 		}
 
 	}

@@ -16,9 +16,9 @@ namespace Mosa.EmulatedKernel
 	/// </summary>
 	public class Memory : IMemory
 	{
-		private uint address;
-		private uint size;
-		private uint end;
+		private uint _address;
+		private uint _size;
+		private uint _end;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Memory"/> class.
@@ -27,22 +27,22 @@ namespace Mosa.EmulatedKernel
 		/// <param name="size">The size.</param>
 		public Memory(uint address, uint size)
 		{
-			this.address = address;
-			this.size = size;
-			this.end = address + size - 1;
+			_address = address;
+			_size = size;
+			_end = address + size - 1;
 		}
 
 		/// <summary>
 		/// Gets the address.
 		/// </summary>
 		/// <value>The address.</value>
-		public uint Address { get { return address; } }
+		public uint Address { get { return _address; } }
 
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
 		/// <value>The size.</value>
-		public uint Size { get { return size; } }
+		public uint Size { get { return _size; } }
 
 		/// <summary>
 		/// Gets or sets the <see cref="System.Byte"/> at the specified index.
@@ -53,11 +53,11 @@ namespace Mosa.EmulatedKernel
 		{
 			get
 			{
-				return MemoryDispatch.Read8((uint)(address + index));
+				return MemoryDispatch.Read8((uint)(_address + index));
 			}
 			set
 			{
-				MemoryDispatch.Write8((uint)(address + index), value);
+				MemoryDispatch.Write8((uint)(_address + index), value);
 			}
 		}
 
@@ -68,7 +68,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public byte Read8(uint index)
 		{
-			return MemoryDispatch.Read8((uint)(address + index));
+			return MemoryDispatch.Read8((uint)(_address + index));
 		}
 
 		/// <summary>
@@ -78,7 +78,7 @@ namespace Mosa.EmulatedKernel
 		/// <param name="value">The value.</param>
 		public void Write8(uint index, byte value)
 		{
-			MemoryDispatch.Write8((uint)(address + index), value);
+			MemoryDispatch.Write8((uint)(_address + index), value);
 		}
 
 		/// <summary>
@@ -88,7 +88,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public ushort Read16(uint index)
 		{
-			return MemoryDispatch.Read16((uint)(address + index));
+			return MemoryDispatch.Read16((uint)(_address + index));
 		}
 
 		/// <summary>
@@ -98,7 +98,7 @@ namespace Mosa.EmulatedKernel
 		/// <param name="value">The value.</param>
 		public void Write16(uint index, ushort value)
 		{
-			MemoryDispatch.Write16((uint)(address + index), value);
+			MemoryDispatch.Write16((uint)(_address + index), value);
 		}
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Mosa.EmulatedKernel
         /// <returns></returns>
 		public uint Read24(uint index)
         {
-            return MemoryDispatch.Read24((uint)(address + index));
+            return MemoryDispatch.Read24((uint)(_address + index));
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Mosa.EmulatedKernel
         /// <param name="value">The value.</param>
 		public void Write24(uint index, uint value)
         {
-            MemoryDispatch.Write24((uint)(address + index), value);
+            MemoryDispatch.Write24((uint)(_address + index), value);
         }
 
 		/// <summary>
@@ -128,7 +128,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public uint Read32(uint index)
 		{
-			return MemoryDispatch.Read16((uint)(address + index));
+			return MemoryDispatch.Read16((uint)(_address + index));
 		}
 
 		/// <summary>
@@ -138,7 +138,7 @@ namespace Mosa.EmulatedKernel
 		/// <param name="value">The value.</param>
 		public void Write32(uint index, uint value)
 		{
-			MemoryDispatch.Write32((uint)(address + index), value);
+			MemoryDispatch.Write32((uint)(_address + index), value);
 		}
 
 		/// <summary>
@@ -149,7 +149,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public uint Read32(uint index, byte count)
 		{
-			uint offset = address + index;
+			uint offset = _address + index;
 			uint value = 0;
 
 			if (count == 1)
@@ -172,7 +172,7 @@ namespace Mosa.EmulatedKernel
 		/// <param name="count">The count.</param>
 		public void Write32(uint index, uint value, byte count)
 		{
-			uint offset = address + index;
+			uint offset = _address + index;
 
 			if (count == 1) {
 				MemoryDispatch.Write8(offset, (byte)value);

@@ -17,7 +17,7 @@ using Mosa.EmulatedDevices.Synthetic;
 
 namespace Mosa.Emulator
 {
-    
+
 	/// <summary>
 	/// Program with CLR emulated devices
 	/// </summary>
@@ -78,7 +78,7 @@ namespace Mosa.Emulator
 
 			// Create disk controller manager
 			DiskControllerManager diskControllerManager = new DiskControllerManager(Mosa.DeviceSystem.Setup.DeviceManager);
-	
+
 			// Create disk devices from disk controller devices
 			diskControllerManager.CreateDiskDevices();
 
@@ -238,12 +238,12 @@ namespace Mosa.Emulator
 				}
 			}
 
-            EmulatorDemo.StartDemo();
+			// EmulatorDemo.StartDemo();
 
 
 			//Key key = keyboard.GetKeyPressed();
 
-			//return;
+			return;
 		}
 
 	}
