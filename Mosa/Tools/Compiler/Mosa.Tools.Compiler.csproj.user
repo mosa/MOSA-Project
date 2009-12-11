@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <StartArguments>-a=x86 -f=PE -pe-file-alignment=4096 --map=hello.map -o Kernel.bin Mosa.QuickTest.exe</StartArguments>
-    <StartWorkingDirectory>C:\Code\Mosa\Mosa\bin\</StartWorkingDirectory>
+    <StartWorkingDirectory>X:\mosa\Mosa\bin\</StartWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <StartArguments>-a=x86 -f=PE -pe-file-alignment=4096 Mosa.QuickTest.exe -o quiktest.exe</StartArguments>

@@ -20,18 +20,6 @@
     </AppDesignerFolder>
     <RootNamespace>Mosa.Emulator</RootNamespace>
     <StartupObject>Mosa.Emulator.Program</StartupObject>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -43,7 +31,7 @@
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <WarningLevel>4</WarningLevel>
@@ -58,7 +46,7 @@
     <DocumentationFile>Mosa.Emulator.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

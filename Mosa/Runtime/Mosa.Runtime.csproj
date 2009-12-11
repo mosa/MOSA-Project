@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -16,21 +16,7 @@
     <DelaySign>false</DelaySign>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>
-    </AppDesignerFolder>
     <RootNamespace>Mosa.Runtime</RootNamespace>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -42,7 +28,7 @@
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -58,7 +44,7 @@
     <DocumentationFile>Mosa.Runtime.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

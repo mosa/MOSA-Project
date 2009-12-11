@@ -22,12 +22,6 @@
     <RootNamespace>Mosa.Tools.Compiler</RootNamespace>
     <StartupObject>
     </StartupObject>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
@@ -40,7 +34,7 @@
     <DebugSymbols>True</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <Optimize>False</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
+    <OutputPath>..\..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
@@ -60,7 +54,7 @@
     <DebugSymbols>False</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <Optimize>True</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
+    <OutputPath>..\..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>

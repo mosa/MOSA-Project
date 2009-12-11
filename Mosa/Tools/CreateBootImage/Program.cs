@@ -350,6 +350,7 @@ namespace Mosa.Tools.CreateBootImage
 			/// Initializes a new instance of the <see cref="IncludeFile"/> class.
 			/// </summary>
 			/// <param name="filename">The filename.</param>
+			/// <param name="newname">The newname.</param>
 			public IncludeFile(string filename, string newname)
 			{
 				Filename = filename;

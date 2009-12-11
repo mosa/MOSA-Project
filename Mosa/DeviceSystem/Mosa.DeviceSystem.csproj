@@ -16,21 +16,7 @@
     <DelaySign>false</DelaySign>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>
-    </AppDesignerFolder>
     <RootNamespace>Mosa.DeviceSystem</RootNamespace>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <BaseAddress>285212672</BaseAddress>
@@ -41,7 +27,7 @@
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -56,7 +42,7 @@
     <DocumentationFile>Mosa.DeviceSystem.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
