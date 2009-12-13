@@ -18,11 +18,12 @@ namespace Mosa.Kernel.Memory.X86
 		private const uint StartLocation = 1024 * 1024 * 16;
 		// Reserve memory up to 24Mb
 		private const uint ReserveMemory = 1024 * 1024 * 24;
-		// Maximum Memory Usage (4Gb)
+		// Maximum memory Usage (4Gb)
 		private const uint MaximumMemory = 0xFFFFFFFF;
 
 		// Start of memory map
 		private static uint _map;
+		// Current position in map data structure
 		private static uint _at;
 
 		private static uint _totalPages;
@@ -45,43 +46,50 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		private static void SetupFreeMemory()
 		{
+			uint cnt = 0;
+
 			if (!Multiboot.IsMultiboot())
 				return;
 
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
 				uint value = (uint)Multiboot.GetMemoryMapType(index);
 
+				Mosa.HelloWorld.Screen.SetCursor(22, index);
+				Mosa.HelloWorld.Screen.Write(value);
+
+				ulong start = Multiboot.GetMemoryMapBase(index);
+				ulong size = Multiboot.GetMemoryMapLength(index);
+
 				if (value == 1)
-					AddFreeMemory(Multiboot.GetMemoryMapBase(index), Multiboot.GetMemoryMapLength(index));
+					AddFreeMemory(cnt++, (uint)start, (uint)size);
 			}
 		}
 
 		/// <summary>
 		/// Adds the free memory.
 		/// </summary>
+		/// <param name="cnt">The count.</param>
 		/// <param name="start">The start.</param>
 		/// <param name="size">The size.</param>
-		public static void AddFreeMemory(ulong start, ulong size)
+		public static void AddFreeMemory(uint cnt, uint start, uint size)
 		{
-			if (start > MaximumMemory)
+			if ((start > MaximumMemory) || (start + size < ReserveMemory))
 				return;
-
-			if ((start + size) > MaximumMemory)
-				size = MaximumMemory - start;
-
-			if (size < PageSize)
-				return;
+			
+			//if ((start + size) > MaximumMemory)
+			//    size = MaximumMemory - start;
 
 			// Normalize 
 			uint normstart = (uint)((start + PageSize - 1) & ~(PageSize - 1));
-			uint normsize = (uint)(size - (normstart - start));
+			uint normend = (uint)((start + size) & ~(PageSize - 1));
+			uint normsize = (uint)(normend - normstart);
 
 			// Adjust if memory below is reserved
 			if (normstart < ReserveMemory) {
+				normsize = (normstart + normsize) - ReserveMemory;
 				normstart = ReserveMemory;
-				normsize = normsize - normstart;
 
-				if (normsize < 0)
+				if (normsize <= 0)
 					return;
 			}
 

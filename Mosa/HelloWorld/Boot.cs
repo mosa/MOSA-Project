@@ -23,14 +23,15 @@ namespace Mosa.HelloWorld
 			Screen.Color = 0x0E;
 
 			Screen.SetCursor(24, 0);
-			Screen.Write('.');
+			Screen.Write('1');
 			Multiboot.SetMultibootLocation(Memory.Get32(0x200004), Memory.Get32(0x200000));
 			Screen.SetCursor(24, 1);
-			Screen.Write('.');
-			Screen.Write('.');
-			
+			Screen.Write('2');
+			PageFrameAllocator.Setup();
 			Screen.SetCursor(24, 2);
-			Screen.Write('.');
+			Screen.Write('3');
+			Screen.SetCursor(24, 3);
+			Screen.Write('4');
 
 			Screen.GotoTop();
 			Screen.Color = 0x0E;

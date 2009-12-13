@@ -27,7 +27,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <summary>
 		/// Sets up the page directory.
 		/// </summary>
-		public static void SetupPageDirectory()
+		private static void SetupPageDirectory()
 		{
 			// Get Page for Page Directory
 			_pageDirectory = PageFrameAllocator.Allocate();

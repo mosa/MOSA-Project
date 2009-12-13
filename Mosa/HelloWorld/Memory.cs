@@ -94,5 +94,6 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			Native.Invlpg(address);
 		}
+
 	}
 }
