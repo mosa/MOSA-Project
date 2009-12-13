@@ -74,6 +74,8 @@
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="AddressModeConversionStage.cs" />
     <Compile Include="CPUx86\BranchInstruction.cs" />
+    <Compile Include="CPUx86\SetRC1Instruction.cs" />
+    <Compile Include="CPUx86\SetRC0Instruction.cs" />
     <Compile Include="CPUx86\Cvttsd2siInstruction.cs" />
     <Compile Include="CPUx86\Cvttss2si.cs" />
     <Compile Include="CPUx86\DebugInstruction.cs" />
