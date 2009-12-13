@@ -22,6 +22,15 @@ namespace Mosa.EmulatedKernel
 		/// <summary>
 		/// 
 		/// </summary>
+		public static byte CR0;
+		/// <summary>
+		/// 
+		/// </summary>
+		public static byte CR3;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public static List<MemoryHandler> MemorySegments = new List<MemoryHandler>();
 
 		/// <summary>

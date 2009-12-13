@@ -29,6 +29,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="state">The state.</param>
 		public static void SetCR0(byte state) 
 		{
+			EmulatedKernel.MemoryDispatch.CR0 = state;
 		}
 
 		/// <summary>
@@ -37,6 +38,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="state">The state.</param>
 		public static void SetCR3(byte state)
 		{
+			EmulatedKernel.MemoryDispatch.CR3 = state;
 		}
 
 	}
