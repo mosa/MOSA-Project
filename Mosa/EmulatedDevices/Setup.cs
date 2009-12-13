@@ -41,7 +41,7 @@ namespace Mosa.EmulatedDevices
 
 			// Add IDE Controller
 			string[] files = new string[1];
-			files[0] = @"..\..\Data\HardDriveImage\hd.img";
+			files[0] = @"..\Data\HardDriveImage\hd.img";
 
 			// Fix for Linux
 			files[0] = files[0].Replace('\\', System.IO.Path.DirectorySeparatorChar);

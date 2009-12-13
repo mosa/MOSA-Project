@@ -78,7 +78,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns>
 		/// 	<c>true</c> if [contains] [the specified address]; otherwise, <c>false</c>.
 		/// </returns>
-		public bool Contains(uint address)
+		public bool Contains(ulong address)
 		{
 			return ((address >= this.Address) && (address < (this.Address + this.Size)));
 		}

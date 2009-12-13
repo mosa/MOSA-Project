@@ -50,7 +50,7 @@ namespace Mosa.EmulatedKernel
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
-		public static MemoryHandler Find(uint address)
+		public static MemoryHandler Find(ulong address)
 		{
 			foreach (MemoryHandler memoryRange in MemorySegments)
 				if (memoryRange.Contains(address))
@@ -165,13 +165,30 @@ namespace Mosa.EmulatedKernel
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
-		public static ushort Read32(uint address)
+		public static uint Read32(uint address)
 		{
 			MemoryHandler memoryRange = Find(address);
 
 			if (memoryRange != null)
 				if (memoryRange.write8 != null)
-					return (ushort)(memoryRange.read8(address) | (memoryRange.read8(address + 1) << 8) | (memoryRange.read8(address + 2) << 16) | (memoryRange.read8(address + 3) << 24));
+					return (uint)(memoryRange.read8(address) | (memoryRange.read8(address + 1) << 8) | (memoryRange.read8(address + 2) << 16) | (memoryRange.read8(address + 3) << 24));
+
+			return 0;
+		}
+
+		/// <summary>
+		/// Reads an integer from the specified address.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		public static ulong Read64(uint address)
+		{
+			MemoryHandler memoryRange = Find(address);
+
+			if (memoryRange != null)
+				if (memoryRange.write8 != null)
+					return (ulong)(memoryRange.read8(address) | (memoryRange.read8(address + 1) << 8) | (memoryRange.read8(address + 2) << 16) | (memoryRange.read8(address + 3) << 24) |
+						 memoryRange.read8(address + 4) << 32 | (memoryRange.read8(address + 5) << 40) | (memoryRange.read8(address + 6) << 48) | (memoryRange.read8(address + 7) << 56));
 
 			return 0;
 		}

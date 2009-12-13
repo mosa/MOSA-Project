@@ -104,7 +104,7 @@ namespace Mosa.EmulatedDevices.Emulated
 		public void Write8(ushort port, byte data)
 		{
 			switch (port - ioBase) {
-				case 1: index = data; return;
+				case 0: index = data; return;
 				default: return;
 			}
 		}
@@ -150,17 +150,17 @@ namespace Mosa.EmulatedDevices.Emulated
 		{
 			switch (index & 0x1F) {  // mask out last three bits
 				case 0x00: return (byte)DateTime.Now.Second;
-				case 0x01: return (byte)DateTime.Now.Second;
+				case 0x01: return 0;
 				case 0x02: return (byte)DateTime.Now.Minute;
-				case 0x03: return (byte)DateTime.Now.Minute;
+				case 0x03: return 0;
 				case 0x04: return (byte)DateTime.Now.Hour;
-				case 0x05: return (byte)DateTime.Now.Hour;
+				case 0x05: return 0;
 				case 0x06: return (byte)DateTime.Now.DayOfWeek;
 				case 0x07: return (byte)DateTime.Now.Day;
 				case 0x08: return (byte)DateTime.Now.Month;
-				case 0x09: return (byte)DateTime.Now.Year;
+				case 0x09: return (byte)(DateTime.Now.Year % 100);
 				case 0x0A: return 0;  // Status Register A
-				case 0x0B: return 0x04;  // Status Register B (data mode - binary)
+				case 0x0B: return 0x00;  // Status Register B (data mode - binary)
 				case 0x0C: return 0;  // Status Register C
 				case 0x0D: return 0x80;  // Status Register D (battery power good)
 				case 0x0E: return 0;  // Diagnostic Status

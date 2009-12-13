@@ -94,6 +94,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelloWorld\Boot.cs" />
+    <Compile Include="HelloWorld\CMOS.cs" />
+    <Compile Include="Memory.cs" />
+    <Compile Include="HelloWorld\Multiboot.cs" />
+    <Compile Include="HelloWorld\PageFrameAllocator.cs" />
+    <Compile Include="HelloWorld\PageTable.cs" />
+    <Compile Include="HelloWorld\Screen.cs" />
     <Compile Include="PlatformSpecificWindow.cs">
       <SubType>Form</SubType>
     </Compile>
