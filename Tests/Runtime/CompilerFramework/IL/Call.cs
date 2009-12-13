@@ -568,6 +568,27 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		/// <summary>
 		/// 
 		/// </summary>
+		private delegate bool B_U4_U8_U8_U8(uint a, ulong b, ulong c, ulong d);
+
+		/// <summary>
+		/// Checks the method call parameter order.
+		/// </summary>
+		[Test, Author(@"tgiphil", @"phil@thinkedge.com")]
+		public void CallOrderU4_U8_U8_U8()
+		{
+			CodeSource = @"
+                static class Test {
+                    static bool CallOrderU4_U8_U8_U8(uint a, ulong b, ulong c, ulong d) {
+                        return (a == 1 && b == 2 && c == 3 && d == 4);
+                    }
+                }
+            ";
+
+			Assert.IsTrue((bool)Run<B_U4_U8_U8_U8>(@"", @"Test", @"CallOrderU4_U8_U8_U8", (uint)1, (ulong)2, (ulong)3, (ulong)4));
+		}
+		/// <summary>
+		/// 
+		/// </summary>
 		private delegate bool B_I4(int arg);
 
 		/// <summary>
