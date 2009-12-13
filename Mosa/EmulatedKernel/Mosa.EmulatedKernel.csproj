@@ -81,6 +81,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Native.cs" />
     <Compile Include="IOPort.cs">
       <SubType>Code</SubType>
     </Compile>
