@@ -202,14 +202,14 @@ namespace Mosa.Platforms.x86
 		/// Sets the cr0.
 		/// </summary>
 		/// <param name="state">The state.</param>
-		[Intrinsic(typeof(Architecture), typeof(CPUx86.BochsDebug))]
+		[Intrinsic(typeof(Architecture), typeof(CPUx86.SetRC0Instruction))]
 		public static void SetCR0(byte state) { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Sets the cr3.
 		/// </summary>
 		/// <param name="state">The state.</param>
-		[Intrinsic(typeof(Architecture), typeof(CPUx86.BochsDebug))]
+		[Intrinsic(typeof(Architecture), typeof(CPUx86.SetRC3Instruction))]
 		public static void SetCR3(byte state) { ThrowPlatformNotSupported(); return; }
 
         #endregion
