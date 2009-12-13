@@ -26,21 +26,26 @@ namespace Mosa.EmulatedDevices
 		{
 			uint mem = 0x1000000;
 
+			MemoryDispatch.Write32(0x200000, 0x2BADB002);
+			MemoryDispatch.Write32(0x200004, mem);
+
 			uint mem_upper = 0;
 			foreach (MemoryHandler segment in MemoryDispatch.MemorySegments)
-				if (segment.Address + segment.Size - 1024 * 1024 > mem_upper)
-					mem_upper = segment.Address + segment.Size - 1024 * 1024;
+				if (segment.Address + segment.Size > mem_upper)
+					mem_upper = segment.Address + segment.Size;
+
+			mem_upper = mem_upper - (1024 * 1024);
 
 			MemoryDispatch.Write32(mem + 0, 0x01 | 0x40);	// flags
-			MemoryDispatch.Write32(mem + 4, 640 * 1024);	// mem_lower - assuming at least 640k
-			MemoryDispatch.Write32(mem + 8, mem_upper);	// mem_upper
+			MemoryDispatch.Write32(mem + 4, 640);	// mem_lower - assuming at least 640k
+			MemoryDispatch.Write32(mem + 8, mem_upper / 1024);	// mem_upper
 			MemoryDispatch.Write32(mem + 12, 0x0);	// boot_device
 			MemoryDispatch.Write32(mem + 16, 0x0);	// cmdline
 			MemoryDispatch.Write32(mem + 20, 0x0);	// mods_count
 			MemoryDispatch.Write32(mem + 24, 0x0);	// mods_addr
 			MemoryDispatch.Write32(mem + 28, 0x0);	// syms
-			MemoryDispatch.Write32(mem + 44, 0x0);	// mmap_length
-			MemoryDispatch.Write32(mem + 48, 0x0);	// mmap_addr
+			MemoryDispatch.Write32(mem + 44, (uint)(MemoryDispatch.MemorySegments.Count * 24));	// mmap_length
+			MemoryDispatch.Write32(mem + 48, 96);	// mmap_addr
 			MemoryDispatch.Write32(mem + 52, 0x0);	// drives_length
 			MemoryDispatch.Write32(mem + 56, 0x0);	// drives_addr
 			MemoryDispatch.Write32(mem + 60, 0x0);	// config_table
@@ -55,7 +60,7 @@ namespace Mosa.EmulatedDevices
 
 			mem = 96;
 			foreach (MemoryHandler segment in MemoryDispatch.MemorySegments) {
-				MemoryDispatch.Write32(mem + 0, 0x08);		// Size
+				MemoryDispatch.Write32(mem + 0, 20);		// Size
 				MemoryDispatch.Write32(mem + 4, segment.Address);	// base_addr_low
 				MemoryDispatch.Write32(mem + 8, 0x00);	// base_addr_high
 				MemoryDispatch.Write32(mem + 12, segment.Size);	// length_low

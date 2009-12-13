@@ -122,121 +122,121 @@ namespace Mosa.Emulator
 			devices = Mosa.DeviceSystem.Setup.DeviceManager.GetAllDevices();
 
 			// Print them 
-			//screen.WriteLine("Devices: ");
-			//foreach (IDevice device in devices) {
+			screen.WriteLine("Devices: ");
+			foreach (IDevice device in devices) {
 
-			//    screen.Write(device.Name);
-			//    screen.Write(" [");
+			    screen.Write(device.Name);
+			    screen.Write(" [");
 
-			//    switch (device.Status) {
-			//        case DeviceStatus.Online: screen.Write("Online"); break;
-			//        case DeviceStatus.Available: screen.Write("Available"); break;
-			//        case DeviceStatus.Initializing: screen.Write("Initializing"); break;
-			//        case DeviceStatus.NotFound: screen.Write("Not Found"); break;
-			//        case DeviceStatus.Error: screen.Write("Error"); break;
-			//    }
-			//    screen.Write("]");
+			    switch (device.Status) {
+			        case DeviceStatus.Online: screen.Write("Online"); break;
+			        case DeviceStatus.Available: screen.Write("Available"); break;
+			        case DeviceStatus.Initializing: screen.Write("Initializing"); break;
+			        case DeviceStatus.NotFound: screen.Write("Not Found"); break;
+			        case DeviceStatus.Error: screen.Write("Error"); break;
+			    }
+			    screen.Write("]");
 
-			//    if (device.Parent != null) {
-			//        screen.Write(" - Parent: ");
-			//        screen.Write(device.Parent.Name);
-			//    }
-			//    screen.WriteLine();
+			    if (device.Parent != null) {
+			        screen.Write(" - Parent: ");
+			        screen.Write(device.Parent.Name);
+			    }
+			    screen.WriteLine();
 
-			//    if (device is IPartitionDevice) {
-			//        FileSystem.FAT.FatFileSystem fat = new Mosa.FileSystem.FAT.FatFileSystem(device as IPartitionDevice);
+			    if (device is IPartitionDevice) {
+			        FileSystem.FAT.FatFileSystem fat = new Mosa.FileSystem.FAT.FatFileSystem(device as IPartitionDevice);
 
-			//        screen.Write("  File System: ");
-			//        if (fat.IsValid) {
-			//            switch (fat.FATType) {
-			//                case FatType.FAT12: screen.WriteLine("FAT12"); break;
-			//                case FatType.FAT16: screen.WriteLine("FAT16"); break;
-			//                case FatType.FAT32: screen.WriteLine("FAT32"); break;
-			//                default: screen.WriteLine("Unknown"); break;
-			//            }
-			//            screen.WriteLine("  Volume Name: " + fat.VolumeLabel);
-			//        }
-			//        else
-			//            screen.WriteLine("Unknown");
-			//    }
+			        screen.Write("  File System: ");
+			        if (fat.IsValid) {
+			            switch (fat.FATType) {
+			                case FatType.FAT12: screen.WriteLine("FAT12"); break;
+			                case FatType.FAT16: screen.WriteLine("FAT16"); break;
+			                case FatType.FAT32: screen.WriteLine("FAT32"); break;
+			                default: screen.WriteLine("Unknown"); break;
+			            }
+			            screen.WriteLine("  Volume Name: " + fat.VolumeLabel);
+			        }
+			        else
+			            screen.WriteLine("Unknown");
+			    }
 
-			//    if (device is PCIDevice) {
-			//        PCIDevice pciDevice = (device as PCIDevice);
+			    if (device is PCIDevice) {
+			        PCIDevice pciDevice = (device as PCIDevice);
 
-			//        screen.Write("  Vendor:0x");
-			//        screen.Write(pciDevice.VendorID.ToString("X"));
-			//        screen.Write(" [");
-			//        screen.Write(DeviceTable.Lookup(pciDevice.VendorID));
-			//        screen.WriteLine("]");
+			        screen.Write("  Vendor:0x");
+			        screen.Write(pciDevice.VendorID.ToString("X"));
+			        screen.Write(" [");
+			        screen.Write(DeviceTable.Lookup(pciDevice.VendorID));
+			        screen.WriteLine("]");
 
-			//        screen.Write("  Device:0x");
-			//        screen.Write(pciDevice.DeviceID.ToString("X"));
-			//        screen.Write(" Rev:0x");
-			//        screen.Write(pciDevice.RevisionID.ToString("X"));
-			//        screen.Write(" [");
-			//        screen.Write(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID));
-			//        screen.WriteLine("]");
+			        screen.Write("  Device:0x");
+			        screen.Write(pciDevice.DeviceID.ToString("X"));
+			        screen.Write(" Rev:0x");
+			        screen.Write(pciDevice.RevisionID.ToString("X"));
+			        screen.Write(" [");
+			        screen.Write(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID));
+			        screen.WriteLine("]");
 
-			//        screen.Write("  Class:0x");
-			//        screen.Write(pciDevice.ClassCode.ToString("X"));
-			//        screen.Write(" [");
-			//        screen.Write(ClassCodeTable.Lookup(pciDevice.ClassCode));
-			//        screen.WriteLine("]");
+			        screen.Write("  Class:0x");
+			        screen.Write(pciDevice.ClassCode.ToString("X"));
+			        screen.Write(" [");
+			        screen.Write(ClassCodeTable.Lookup(pciDevice.ClassCode));
+			        screen.WriteLine("]");
 
-			//        screen.Write("  SubClass:0x");
-			//        screen.Write(pciDevice.SubClassCode.ToString("X"));
-			//        screen.Write(" [");
-			//        screen.Write(SubClassCodeTable.Lookup(pciDevice.ClassCode, pciDevice.SubClassCode, pciDevice.ProgIF));
-			//        screen.WriteLine("]");
+			        screen.Write("  SubClass:0x");
+			        screen.Write(pciDevice.SubClassCode.ToString("X"));
+			        screen.Write(" [");
+			        screen.Write(SubClassCodeTable.Lookup(pciDevice.ClassCode, pciDevice.SubClassCode, pciDevice.ProgIF));
+			        screen.WriteLine("]");
 
-			//        //					screen.Write("  ");
-			//        //					screen.WriteLine(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID, pciDevice.SubDeviceID, pciDevice.SubVendorID));
+			        //					screen.Write("  ");
+			        //					screen.WriteLine(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID, pciDevice.SubDeviceID, pciDevice.SubVendorID));
 
-			//        foreach (BaseAddress address in pciDevice.BaseAddresses) {
-			//            if (address == null)
-			//                continue;
+			        foreach (BaseAddress address in pciDevice.BaseAddresses) {
+			            if (address == null)
+			                continue;
 
-			//            if (address.Address == 0)
-			//                continue;
+			            if (address.Address == 0)
+			                continue;
 
-			//            screen.Write("    ");
+			            screen.Write("    ");
 
-			//            if (address.Region == AddressType.IO)
-			//                screen.Write("I/O Port at 0x");
-			//            else
-			//                screen.Write("Memory at 0x");
+			            if (address.Region == AddressType.IO)
+			                screen.Write("I/O Port at 0x");
+			            else
+			                screen.Write("Memory at 0x");
 
-			//            screen.Write(address.Address.ToString("X"));
+			            screen.Write(address.Address.ToString("X"));
 
-			//            screen.Write(" [size=");
+			            screen.Write(" [size=");
 
-			//            if ((address.Size & 0xFFFFF) == 0) {
-			//                screen.Write((address.Size >> 20).ToString());
-			//                screen.Write("M");
-			//            }
-			//            else if ((address.Size & 0x3FF) == 0) {
-			//                screen.Write((address.Size >> 10).ToString());
-			//                screen.Write("K");
-			//            }
-			//            else
-			//                screen.Write(address.Size.ToString());
+			            if ((address.Size & 0xFFFFF) == 0) {
+			                screen.Write((address.Size >> 20).ToString());
+			                screen.Write("M");
+			            }
+			            else if ((address.Size & 0x3FF) == 0) {
+			                screen.Write((address.Size >> 10).ToString());
+			                screen.Write("K");
+			            }
+			            else
+			                screen.Write(address.Size.ToString());
 
-			//            screen.Write("]");
+			            screen.Write("]");
 
-			//            if (address.Prefetchable)
-			//                screen.Write("(prefetchable)");
+			            if (address.Prefetchable)
+			                screen.Write("(prefetchable)");
 
-			//            screen.WriteLine();
-			//        }
+			            screen.WriteLine();
+			        }
 
-			//        if (pciDevice.IRQ != 0) {
-			//            screen.Write("    ");
-			//            screen.Write("IRQ at ");
-			//            screen.Write(pciDevice.IRQ.ToString());
-			//            screen.WriteLine();
-			//        }
-			//    }
-			//}
+			        if (pciDevice.IRQ != 0) {
+			            screen.Write("    ");
+			            screen.Write("IRQ at ");
+			            screen.Write(pciDevice.IRQ.ToString());
+			            screen.WriteLine();
+			        }
+			    }
+			}
 
 			//Key key = keyboard.GetKeyPressed();
 
