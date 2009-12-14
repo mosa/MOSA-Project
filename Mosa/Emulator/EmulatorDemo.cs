@@ -156,7 +156,6 @@ namespace Mosa.Emulator
 			base.OnDraw();
 		}
 
-
 		public override void OnMouseDown(Pictor.UI.MouseEventArgs mouseEvent)
 		{
 			if (mouseEvent.Button == Pictor.UI.MouseButtons.Left) {

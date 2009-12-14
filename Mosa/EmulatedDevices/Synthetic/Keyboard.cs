@@ -42,7 +42,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 			base.name = "EmulatedKeyboard";
 			base.parent = null;
 			base.deviceStatus = DeviceStatus.Online;
-			//display.onKeyPressed = this.AcceptKey;
+			display.onKeyPressed = this.AcceptKey;
 		}
 
 		private Queue<Key> keys = new Queue<Key>();
@@ -60,7 +60,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// Gets the key.
 		/// </summary>
 		/// <returns></returns>
-		public Key GetKeyPressed2()
+		public Key GetKeyPressed()
 		{
 			if (keys.Count == 0)
 				return null;
@@ -72,7 +72,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// Gets the key pressed.
 		/// </summary>
 		/// <returns></returns>
-		public Key GetKeyPressed()
+		public Key GetKeyPressed_OLD()
 		{
 			Key key = new Key();
 

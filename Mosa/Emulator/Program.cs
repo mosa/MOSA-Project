@@ -96,7 +96,7 @@ namespace Mosa.Emulator
 			// Create synthetic keyboard device
 			Mosa.EmulatedDevices.Synthetic.Keyboard keyboard = new Mosa.EmulatedDevices.Synthetic.Keyboard(Mosa.EmulatedDevices.Setup.PrimaryDisplayForm);
 
-			// Add the emulated keyboard device to the device drivers
+			// Add the synthetic keyboard device to the device drivers
 			Mosa.DeviceSystem.Setup.DeviceManager.Add(keyboard);
 
 			// Create master boot block record
@@ -249,12 +249,11 @@ namespace Mosa.Emulator
 				}
 			}
 
-			//while (keyboard.GetKeyPressed2() == null)
-			//    ;
+			//while (keyboard.GetKeyPressed() == null) ;
 
 			Mosa.HelloWorld.Boot.Main();
 
-			// EmulatorDemo.StartDemo();
+			//EmulatorDemo.StartDemo();
 
 			return;
 		}

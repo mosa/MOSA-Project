@@ -38,6 +38,7 @@
 			this.Text = "MOSA Emulator";
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.DisplayForm_Paint);
 			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DisplayForm_KeyPress);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DisplayForm_FormClosing);
 			this.ResumeLayout(false);
 
 		}

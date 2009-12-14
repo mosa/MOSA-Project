@@ -103,10 +103,15 @@ namespace Mosa.EmulatedDevices.Synthetic
 
 		private void DisplayForm_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			//			if (onKeyPressed != null)
-			//				onKeyPressed(new Key(e.KeyChar));
+			if (onKeyPressed != null)
+				onKeyPressed(new Key(e.KeyChar));
 		}
 
+		private void DisplayForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (this == Setup.PrimaryDisplayForm)
+				Environment.Exit(0);
+		}
 
 	}
 }
