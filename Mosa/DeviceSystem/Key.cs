@@ -54,6 +54,18 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="Key"/> class.
+		/// </summary>
+		public Key(char key)
+		{
+			keyType = KeyType.RegularKey;
+			character = key;
+			control = false;
+			alt = false;
+			shift = char.IsUpper(key);
+		}
+
+		/// <summary>
 		/// Gets or sets the special key.
 		/// </summary>
 		/// <value>The special key.</value>

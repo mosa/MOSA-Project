@@ -9,8 +9,12 @@
 
 using System;
 using System.IO;
+using System.Windows.Forms;
+using System.Drawing;
+
 using Mosa.ClassLib;
 using Mosa.EmulatedKernel;
+using Mosa.EmulatedDevices.Synthetic;
 
 namespace Mosa.EmulatedDevices.Emulated
 {
@@ -18,8 +22,17 @@ namespace Mosa.EmulatedDevices.Emulated
 	/// <summary>
 	/// Represents an emulated VGA Text Device
 	/// </summary>
-	public class VGAText : IHardwareDevice, IIOPortDevice
+	public class VGAConsole : IHardwareDevice, IIOPortDevice
 	{
+		private DisplayForm dislayForm;
+		private Font font;
+		private int fontWidth;
+		private int fontHeight;
+		private Mosa.DeviceSystem.ColorPalette palette;
+
+		private int cursorX = 0;
+		private int cursorY = 0;
+
 		#region Definitions
 
 		internal struct CRTCommands
@@ -34,6 +47,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		}
 
 		#endregion
+
+		#region Variables
 
 		/// <summary>
 		/// 
@@ -110,30 +125,36 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// </summary>
 		protected byte lastCommand;
 
+		#endregion
+
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VGAText"/> class.
+		/// Initializes a new instance of the <see cref="VGAConsole"/> class.
 		/// </summary>
-		public VGAText()
+		public VGAConsole(DisplayForm dislayForm)
 		{
 			ioBase = StandardIOBase;
 			baseAddress = StandardAddressBase;
 
-			MemoryDispatch.RegisterMemory(baseAddress, StandardMemorySize, Read8, Write8);
-
 			width = 80;
-			height = 25;
+			height = 27;
+
+			cursorX = cursorY = 0;
 			cursorPosition = 0;
 			lastCommand = 0;
 
-			Console.Clear();
-			Console.SetWindowPosition(0, 0);
-			Console.SetCursorPosition(0, 0);
-			Console.SetWindowSize(width, height + 1);
-			//Console.SetBufferSize(width, height + 1);
-			Console.CursorSize = 1;
+			font = new Font("Courier New", 9, FontStyle.Regular);
+			fontWidth = (int)font.SizeInPoints;
+			fontHeight = (int)font.SizeInPoints + 5;
+			palette = Mosa.DeviceSystem.ColorPalette.CreateStandard16ColorPalette();
+
+			this.dislayForm = dislayForm;
+			dislayForm.SetSize(fontWidth * width + 12, fontHeight * height + 10);
+			
+			MemoryDispatch.RegisterMemory(baseAddress, StandardMemorySize, Read8, Write8);
 
 			Initialize();
 		}
+
 
 		/// <summary>
 		/// Initializes this instance.
@@ -244,15 +265,21 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
 		/// <param name="c">The c.</param>
-		protected void PutChar(ushort x, ushort y, char c)
+		/// <param name="colorindex">The colorindex.</param>
+		/// <param name="backgroundindex">The backgroundindex.</param>
+		protected void PutChar(ushort x, ushort y, char c, byte colorindex, byte backgroundindex)
 		{
-			int cl = Console.CursorLeft;
-			int ct = Console.CursorTop;
+			Mosa.DeviceSystem.Color palettecolor = palette.GetColor(colorindex);
+			Mosa.DeviceSystem.Color palettebackground = palette.GetColor(backgroundindex);
 
-			Console.SetCursorPosition(x, y);
-			Console.Write(c);
+			Brush color = new SolidBrush(Color.FromArgb(palettecolor.Red, palettecolor.Green, palettecolor.Blue));
+			Brush background = new SolidBrush(Color.FromArgb(palettebackground.Red, palettebackground.Green, palettebackground.Blue));
 
-			Console.SetCursorPosition(cl, ct);
+			lock (dislayForm.bitmap) {
+				dislayForm.graphic.FillRectangle(background, new Rectangle(x * fontWidth, y * fontHeight, fontWidth + 1, fontHeight + 1));
+				dislayForm.graphic.DrawString(c.ToString(), font, color, x * fontWidth, y * fontHeight);
+			}
+			dislayForm.Changed = true;
 		}
 
 		/// <summary>
@@ -272,20 +299,24 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <param name="value">The value.</param>
 		protected void Write8(uint address, byte value)
 		{
-			if ((value != 0) && (memory[address - baseAddress] == value))
+			if (memory[address - baseAddress] == value)
 				return;
 
 			memory[address - baseAddress] = value;
+
+			if (address % 2 == 1)
+				address--;
+
+			int text = memory[address - baseAddress];
+			int color = memory[address - baseAddress + 1];
 
 			uint index = address - baseAddress - 0x8000;
 
 			ushort y = (ushort)(index / ((uint)width * 2));
 			ushort x2 = (ushort)(index - (y * (uint)width * 2));
-
 			ushort x = (ushort)(x2 >> 1);
 
-			if (x2 % 2 == 0)
-				PutChar(x, y, (char)value);
+			PutChar(x, y, (char)text, (byte)(color & 0x0F), (byte)(color >> 4));
 		}
 
 		/// <summary>
@@ -293,14 +324,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// </summary>
 		protected void SetCursor()
 		{
-			int y = (int)(cursorPosition / width);
-			int x = (int)(cursorPosition - (y * width));
-
-			if (x >= Console.BufferWidth)
-				x = Console.BufferWidth - 1;
-			if (y >= Console.BufferHeight)
-				y = Console.BufferHeight - 1;
-			Console.SetCursorPosition(x, y);
+			cursorY = (int)(cursorPosition / width);
+			cursorX = (int)(cursorPosition - (cursorY * width));
 		}
 
 		/// <summary>
@@ -354,7 +379,7 @@ namespace Mosa.EmulatedDevices.Emulated
 		{
 			switch (lastCommand) {
 				case CRTCommands.HorizontalDisplayEnableEnd: return (byte)(width - 1);
-				case CRTCommands.VerticalDisplayEnableEnd: return (byte)(height - 1);	
+				case CRTCommands.VerticalDisplayEnableEnd: return (byte)(height - 1);
 				default: return 0xFF;
 			}
 		}

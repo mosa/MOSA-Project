@@ -36,8 +36,8 @@
 			this.ClientSize = new System.Drawing.Size(640, 460);
 			this.Name = "DisplayForm";
 			this.Text = "MOSA Emulator";
-			this.Load += new System.EventHandler(this.DisplayForm_Load);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.DisplayForm_Paint);
+			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DisplayForm_KeyPress);
 			this.ResumeLayout(false);
 
 		}

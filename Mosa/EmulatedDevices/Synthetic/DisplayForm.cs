@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+using Mosa.DeviceSystem;
+
 namespace Mosa.EmulatedDevices.Synthetic
 {
 	/// <summary>
@@ -15,38 +17,77 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// <summary>
 		/// 
 		/// </summary>
+		public Bitmap bitmap;
+		/// <summary>
+		/// 
+		/// </summary>
+		public Graphics graphic;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public volatile bool Changed = false;
 
-		private Bitmap bitmap;
+		/// <summary>
+		/// 
+		/// </summary>
+		private volatile bool Resized = false;
+		/// <summary>
+		/// 
+		/// </summary>
+		public Keyboard.KeyPressed onKeyPressed;
+
 		private Timer timer;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DisplayForm"/> class.
 		/// </summary>
-		public DisplayForm(Bitmap bitmap)
+		public DisplayForm(int width, int height)
 		{
-			this.bitmap = bitmap;
-			timer = new Timer();
 			InitializeComponent();
-			timer.Interval = 1000;
+			SetSize(width, height);
+			DoubleBuffered = true;
+		}
+
+		/// <summary>
+		/// Sets the size.
+		/// </summary>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		public void SetSize(int width, int height)
+		{
+			bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+			graphic = Graphics.FromImage(bitmap);
+			Resized = true;
+		}
+
+		/// <summary>
+		/// Starts the timer.
+		/// </summary>
+		public void StartTimer()
+		{
+			timer = new Timer();
+			timer.Interval = 250;
+			timer.Tick += new EventHandler(Timer_Tick);
 			timer.Start();
-			//timer.Tick += new EventHandler(Timer_Tick);
-			this.DoubleBuffered = true;
 		}
 
 		private void Timer_Tick(object sender, EventArgs eArgs)
 		{
 			if (sender == timer)
-				if (Changed) {
+				if (Changed)
 					this.Refresh();
-				}
-
 		}
 
 		private void DisplayForm_Paint(object sender, PaintEventArgs e)
 		{
 			lock (bitmap) {
 				e.Graphics.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+				if (Resized) {
+					Width = bitmap.Width + 12;
+					Height = bitmap.Height + 10;
+					Resized = true;
+				}
 				Changed = false;
 			}
 		}
@@ -60,14 +101,12 @@ namespace Mosa.EmulatedDevices.Synthetic
 			//base.OnPaintBackground(e);
 		}
 
-		/// <summary>
-		/// Handles the Load event of the DisplayForm control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-		private void DisplayForm_Load(object sender, EventArgs e)
+		private void DisplayForm_KeyPress(object sender, KeyPressEventArgs e)
 		{
-
+			//			if (onKeyPressed != null)
+			//				onKeyPressed(new Key(e.KeyChar));
 		}
+
+
 	}
 }

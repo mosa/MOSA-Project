@@ -7,8 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Threading;
+using System.Windows.Forms;
+using System.Drawing;
+
 using Mosa.EmulatedKernel;
 using Mosa.EmulatedDevices.Emulated;
+using Mosa.EmulatedDevices.Synthetic;
 
 namespace Mosa.EmulatedDevices
 {
@@ -18,10 +23,17 @@ namespace Mosa.EmulatedDevices
 	public static class Setup
 	{
 		/// <summary>
+		/// Primary Display Form (necessary for synthetic keyboard)
+		/// </summary>
+		public static DisplayForm PrimaryDisplayForm;
+
+		/// <summary>
 		/// Initializes this instance.
 		/// </summary>
 		public static void Initialize()
 		{
+			SetupPrimaryDisplayForm();
+
 			// Emulate a ram chip (128Mb)
 			Mosa.EmulatedDevices.Emulated.RAMChip ramChip1 = new Mosa.EmulatedDevices.Emulated.RAMChip(0, 1024 * 640);
 			Mosa.EmulatedDevices.Emulated.RAMChip ramChip2 = new Mosa.EmulatedDevices.Emulated.RAMChip(1024 * 1024, 1024 * 1024 * 127);
@@ -37,7 +49,7 @@ namespace Mosa.EmulatedDevices
 			IOPortDispatch.RegisterDevice(new CMOS(CMOS.StandardIOBase));
 			
 			// Add VGA Controller
-			IOPortDispatch.RegisterDevice(new VGAText());
+			IOPortDispatch.RegisterDevice(new VGAConsole(PrimaryDisplayForm));
 
 			// Add IDE Controller
 			string[] files = new string[1];
@@ -50,6 +62,26 @@ namespace Mosa.EmulatedDevices
 
 			// Simulate multiboot
 			Mosa.EmulatedDevices.Multiboot.Setup();
+		}
+
+		/// <summary>
+		/// Setups the primary display form.
+		/// </summary>
+		public static void SetupPrimaryDisplayForm()
+		{
+			PrimaryDisplayForm = new DisplayForm(800, 600);
+
+			Thread thread = new Thread(new ThreadStart(CreatePrimaryDisplayForm));
+			thread.Start();
+		}
+
+		/// <summary>
+		/// Creates the form.
+		/// </summary>
+		private static void CreatePrimaryDisplayForm()
+		{
+			PrimaryDisplayForm.StartTimer();
+			Application.Run(PrimaryDisplayForm);
 		}
 	}
 }
