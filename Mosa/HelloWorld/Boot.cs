@@ -25,7 +25,7 @@ namespace Mosa.HelloWorld
 			Screen.SetCursor(24, 0);
 			Screen.Write('1');
 			Multiboot.SetMultibootLocation(Memory.Get32(0x200004), Memory.Get32(0x200000));
-			Screen.SetCursor(24, 1);
+//			Screen.SetCursor(24, 1);
 			Screen.Write('2');
 			PageFrameAllocator.Setup();
 			Screen.SetCursor(24, 2);

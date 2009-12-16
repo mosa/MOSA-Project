@@ -198,8 +198,10 @@ namespace Mosa.Runtime.Vm
         {
             StringBuilder result = new StringBuilder();
 
-            result.Append(this.Name);
-            result.Append('(');
+			result.Append(this.DeclaringType.ToString());
+			result.Append('.');
+			result.Append(this.Name);
+			result.Append('(');
 
             if (0 != this.Parameters.Count)
             {

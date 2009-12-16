@@ -37,8 +37,8 @@ namespace Mosa.Platforms.x86
         string IPipelineStage.Name { get { return @"X86.SimplePeepholeOptimizationStage"; } }
 
         private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IBlockReorderStage)),
 				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(MemToMemConversionStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockReorderStage)),
 				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
 			};
 

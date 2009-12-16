@@ -343,12 +343,12 @@ namespace Mosa.Runtime.Vm
 
         #region Object Overrides
 
-        /// <summary>
-        /// Gibt einen <see cref="T:System.String"/> zurück, der den aktuellen <see cref="T:System.Object"/> darstellt.
-        /// </summary>
-        /// <returns>
-        /// Ein <see cref="T:System.String"/>, der den aktuellen <see cref="T:System.Object"/> darstellt.
-        /// </returns>
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
         public override string ToString()
         {
             return this.FullName;
