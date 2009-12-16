@@ -194,90 +194,18 @@ namespace Mosa.Platforms.x86
 		{
 			bool swap = ctx.Operand1 is ConstantOperand;
 			IBranch branch = ctx.Branch;
-			CIL.OpCode opcode = (ctx.Instruction as CIL.BinaryBranchInstruction).OpCode;
-			IR.ConditionCode conditionCode;
+			IR.ConditionCode conditionCode = ConvertCondition((ctx.Instruction as CIL.BinaryBranchInstruction).OpCode);
 
 			if (swap) {
-				int tmp = branch.Targets[0];
-				branch.Targets[0] = branch.Targets[1];
-				branch.Targets[1] = tmp;
-
 				ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand2, ctx.Operand1);
-
-				switch (opcode) {
-					// Signed
-					case CIL.OpCode.Beq_s: conditionCode = IR.ConditionCode.NotEqual; break;
-					case CIL.OpCode.Bge_s: conditionCode = IR.ConditionCode.LessThan; break;
-					case CIL.OpCode.Bgt_s: conditionCode = IR.ConditionCode.LessOrEqual; break;
-					case CIL.OpCode.Ble_s: conditionCode = IR.ConditionCode.GreaterThan; break;
-					case CIL.OpCode.Blt_s: conditionCode = IR.ConditionCode.GreaterOrEqual; break;
-
-					// Unsigned
-					case CIL.OpCode.Bne_un_s: conditionCode = IR.ConditionCode.Equal; break;
-					case CIL.OpCode.Bge_un_s: conditionCode = IR.ConditionCode.UnsignedLessThan; break;
-					case CIL.OpCode.Bgt_un_s: conditionCode = IR.ConditionCode.UnsignedLessOrEqual; break;
-					case CIL.OpCode.Ble_un_s: conditionCode = IR.ConditionCode.UnsignedGreaterThan; break;
-					case CIL.OpCode.Blt_un_s: conditionCode = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-
-					// Long form signed
-					case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
-					case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
-					case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
-					case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
-					case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
-
-					// Long form unsigned
-					case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
-					case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
-					case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
-					case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
-					case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
-
-					default: throw new NotImplementedException();
-				}
-				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, conditionCode);
-				ctx.SetBranch(branch.Targets[0]);
+				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, GetOppositeConditionCode(conditionCode));
 			}
 			else {
 				ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand1, ctx.Operand2);
-
-				switch (opcode) {
-					// Signed
-					case CIL.OpCode.Beq_s: conditionCode = IR.ConditionCode.Equal; break;
-					case CIL.OpCode.Bge_s: conditionCode = IR.ConditionCode.GreaterOrEqual; break;
-					case CIL.OpCode.Bgt_s: conditionCode = IR.ConditionCode.GreaterThan; break;
-					case CIL.OpCode.Ble_s: conditionCode = IR.ConditionCode.LessOrEqual; break;
-					case CIL.OpCode.Blt_s: conditionCode = IR.ConditionCode.LessThan; break;
-
-					// Unsigned
-					case CIL.OpCode.Bne_un_s: conditionCode = IR.ConditionCode.NotEqual; break;
-					case CIL.OpCode.Bge_un_s: conditionCode = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-					case CIL.OpCode.Bgt_un_s: conditionCode = IR.ConditionCode.UnsignedGreaterThan; break;
-					case CIL.OpCode.Ble_un_s: conditionCode = IR.ConditionCode.UnsignedLessOrEqual; break;
-					case CIL.OpCode.Blt_un_s: conditionCode = IR.ConditionCode.UnsignedLessThan; break;
-
-					// Long form signed
-					case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
-					case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
-					case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
-					case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
-					case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
-
-					// Long form unsigned
-					case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
-					case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
-					case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
-					case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
-					case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
-
-					default: throw new NotImplementedException();
-				}
 				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, conditionCode);
-				ctx.SetBranch(branch.Targets[0]);
 			}
 
-			ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction);
-			ctx.SetBranch(branch.Targets[1]);
+			ctx.SetBranch(branch.Targets[0]);
 		}
 
 		/// <summary>
@@ -289,14 +217,13 @@ namespace Mosa.Platforms.x86
 			IBranch branch = ctx.Branch;
 			Operand operand = ctx.Operand1;
 
-			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
+			ctx.Remove();
+
 			for (int i = 0; i < branch.Targets.Length - 1; ++i) {
 				ctx.AppendInstruction(CPUx86.Instruction.CmpInstruction, operand, new ConstantOperand(new SigType(CilElementType.I), i));
 				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);
 				ctx.SetBranch(branch.Targets[i]);
 			}
-			ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction);
-			ctx.SetBranch(branch.Targets[branch.Targets.Length - 1]);
 		}
 
 		/// <summary>
@@ -351,7 +278,7 @@ namespace Mosa.Platforms.x86
 				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseSubInstruction);
 				ExtendToR8(ctx);
 			}
-			else 
+			else
 				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SubInstruction);
 		}
 
@@ -754,23 +681,24 @@ namespace Mosa.Platforms.x86
 		#endregion // ICILVisitor - Unused
 
 		#region Internals
+
 		/// <summary>
-		/// 
+		/// Extends to r8.
 		/// </summary>
-		/// <param name="ctx"></param>
+		/// <param name="ctx">The context.</param>
 		private static void ExtendToR8(Context ctx)
 		{
 			RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
 			RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
 			Context before = ctx.InsertBefore();
-			
+
 			if (ctx.Result.Type.Type == CilElementType.R4) {
 				before.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm5, ctx.Result);
 				ctx.Result = xmm5;
 			}
 
 			if (ctx.Operand1.Type.Type == CilElementType.R4) {
-                before.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm6, ctx.Operand1);
+				before.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm6, ctx.Operand1);
 				ctx.Operand1 = xmm6;
 			}
 		}

@@ -4,7 +4,9 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
  *  Kai P. Reisert <kpreisert@googlemail.com>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;

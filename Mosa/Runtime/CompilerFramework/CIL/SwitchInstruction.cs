@@ -69,9 +69,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ctx.Branch = new Branch(count + 1);
 
 			// Populate the array
-			for (uint i = 0; i < count; i++) {
+			for (uint i = 0; i < count; i++) 
 				decoder.Decode(out ctx.Branch.Targets[i]);
-			}
 		}
 
 		/// <summary>

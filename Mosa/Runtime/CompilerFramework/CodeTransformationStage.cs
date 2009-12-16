@@ -116,6 +116,30 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="destination2">The destination2.</param>
+		protected void LinkBlocks(Context source, Context destination, BasicBlock destination2)
+		{
+			LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			LinkBlocks(source.BasicBlock, destination2);
+		}
+
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="destination2">The destination2.</param>
+		protected void LinkBlocks(Context source, BasicBlock destination, BasicBlock destination2)
+		{
+			LinkBlocks(source.BasicBlock, destination);
+			LinkBlocks(source.BasicBlock, destination2);
+		}
+
+		/// <summary>
 		/// Create an empty block.
 		/// </summary>
 		/// <param name="label">The label.</param>

@@ -124,6 +124,42 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Utility Methods
 
+		/// <summary>
+		/// Converts the specified opcode.
+		/// </summary>
+		/// <param name="opcode">The opcode.</param>
+		/// <returns></returns>
+		public static IR.ConditionCode ConvertCondition(CIL.OpCode opcode)
+		{
+			switch (opcode) {
+				// Signed
+				case CIL.OpCode.Beq_s: return IR.ConditionCode.Equal;
+				case CIL.OpCode.Bge_s: return IR.ConditionCode.GreaterOrEqual;
+				case CIL.OpCode.Bgt_s: return IR.ConditionCode.GreaterThan;
+				case CIL.OpCode.Ble_s: return IR.ConditionCode.LessOrEqual;
+				case CIL.OpCode.Blt_s: return IR.ConditionCode.LessThan;
+				// Unsigned
+				case CIL.OpCode.Bne_un_s: return IR.ConditionCode.NotEqual;
+				case CIL.OpCode.Bge_un_s: return IR.ConditionCode.UnsignedGreaterOrEqual;
+				case CIL.OpCode.Bgt_un_s: return IR.ConditionCode.UnsignedGreaterThan;
+				case CIL.OpCode.Ble_un_s: return IR.ConditionCode.UnsignedLessOrEqual;
+				case CIL.OpCode.Blt_un_s: return IR.ConditionCode.UnsignedLessThan;
+				// Long form signed
+				case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
+				case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
+				case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
+				case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
+				case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
+				// Long form unsigned
+				case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
+				case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
+				case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
+				case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
+				case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
+				default: throw new NotImplementedException();
+			}
+		}
+
         /// <summary>
         /// Gets the unsigned condition code.
         /// </summary>
