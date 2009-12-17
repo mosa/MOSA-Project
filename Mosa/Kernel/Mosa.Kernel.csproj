@@ -61,42 +61,13 @@
     <Compile Include="Boot.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PhysicalPageManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Memory\IMemoryPageManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Memory\IPhysicalPageManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Memory\IVirtualPageManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="IMemoryPageManager.cs" />
     <Compile Include="Memory\PageAccessFlags.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Memory\X86\DumbVirtualPageAllocator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Memory\X86\Memory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Memory\X86\Multiboot.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Memory\X86\PageFrameAllocator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Memory\X86\PageTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Memory\X86\PhysicalPageManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Memory\X86\VirtualPageManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Memory\X86\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

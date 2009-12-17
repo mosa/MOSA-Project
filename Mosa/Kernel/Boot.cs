@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Kernel.Memory.X86;
-
 namespace Mosa.Kernel
 {
 	/// <summary>
@@ -23,13 +21,13 @@ namespace Mosa.Kernel
 		public static void Start(uint eax, uint ebx)
 		{
 			// Set Multiboot Structure Location
-			Multiboot.SetMultibootLocation(ebx, eax); 
+			//Multiboot.SetMultibootLocation(ebx, eax); 
 
 			// Setup Page Frame Allocator
-			PageFrameAllocator.Setup();
+			//PageFrameAllocator.Setup();
 
 			// Setup Page Table
-			PageTable.Setup();
+			//PageTable.Setup();
 
 			// Setup Stack
 			// Setup Global Descriptor Table (GDT)
