@@ -156,6 +156,13 @@ namespace Mosa.Runtime.CompilerFramework
 				case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
 				case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
 				case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
+				// Compare
+				case CIL.OpCode.Ceq: return IR.ConditionCode.Equal;
+				case CIL.OpCode.Cgt: return IR.ConditionCode.GreaterThan;
+				case CIL.OpCode.Cgt_un: return IR.ConditionCode.UnsignedGreaterThan;
+				case CIL.OpCode.Clt: return IR.ConditionCode.LessThan;
+				case CIL.OpCode.Clt_un: return IR.ConditionCode.UnsignedLessThan;
+
 				default: throw new NotImplementedException();
 			}
 		}

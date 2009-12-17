@@ -407,7 +407,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.BinaryComparison(Context ctx)
 		{
-			IR.ConditionCode code = GetConditionCode((ctx.Instruction as CIL.BaseInstruction).OpCode);
+			IR.ConditionCode code = ConvertCondition((ctx.Instruction as CIL.BaseInstruction).OpCode);
 
 			if (ctx.Operand1.StackType == StackTypeCode.F)
 				ctx.SetInstruction(IR.Instruction.FloatingPointCompareInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
@@ -1229,30 +1229,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
 		}
 
-
-		/// <summary>
-		/// Gets the condition code for an opcode.
-		/// </summary>
-		/// <param name="opCode">The opcode.</param>
-		/// <returns>The IR condition code.</returns>
-		private IR.ConditionCode GetConditionCode(CIL.OpCode opCode)
-		{
-			switch (opCode) {
-				case OpCode.Ceq: return IR.ConditionCode.Equal;
-				case OpCode.Cgt: return IR.ConditionCode.GreaterThan;
-				case OpCode.Cgt_un: return IR.ConditionCode.UnsignedGreaterThan;
-				case OpCode.Clt: return IR.ConditionCode.LessThan;
-				case OpCode.Clt_un: return IR.ConditionCode.UnsignedLessThan;
-				default: throw new NotSupportedException();
-			}
-		}
-
 		/// <summary>
 		/// Replaces the instruction with an internal call.
 		/// </summary>
 		/// <param name="ctx">The transformation context.</param>
 		/// <param name="internalCallTarget">The internal call target.</param>
-		private void ReplaceWithInternalCall(Context ctx, object internalCallTarget)
+		private void ReplaceWithInternalCall(Context ctx, VmCall internalCallTarget)
 		{
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
 			RuntimeMethod callTarget = FindMethod(rt, internalCallTarget.ToString());
@@ -1264,7 +1246,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <summary>
 		/// Finds the method.
 		/// </summary>
-		/// <param name="rt">The rt.</param>
+		/// <param name="rt">The runtime type.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
 		private RuntimeMethod FindMethod(RuntimeType rt, string name)
