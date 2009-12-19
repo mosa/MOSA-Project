@@ -101,6 +101,12 @@
     <Compile Include="HelloWorld\PageFrameAllocator.cs" />
     <Compile Include="HelloWorld\PageTable.cs" />
     <Compile Include="HelloWorld\Screen.cs" />
+    <Compile Include="MemoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MemoryForm.Designer.cs">
+      <DependentUpon>MemoryForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PlatformSpecificWindow.cs">
       <SubType>Form</SubType>
     </Compile>

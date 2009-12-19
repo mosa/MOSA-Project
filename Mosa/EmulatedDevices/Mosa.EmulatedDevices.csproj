@@ -111,11 +111,6 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Synthetic\DisplayForm.resx">
-      <DependentUpon>DisplayForm.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>
