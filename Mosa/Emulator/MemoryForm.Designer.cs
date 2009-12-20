@@ -37,14 +37,14 @@ namespace Mosa.Emulator
 		private void InitializeComponent()
 		{
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+			this.cbSelect = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
 			this.tbMemory = new System.Windows.Forms.ToolStripTextBox();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.lbMemory = new System.Windows.Forms.TextBox();
-			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			this.cbSelect = new System.Windows.Forms.ToolStripComboBox();
-			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -64,6 +64,29 @@ namespace Mosa.Emulator
 			this.toolStrip1.Size = new System.Drawing.Size(517, 25);
 			this.toolStrip1.TabIndex = 0;
 			this.toolStrip1.Text = "toolStrip1";
+			// 
+			// toolStripLabel2
+			// 
+			this.toolStripLabel2.Name = "toolStripLabel2";
+			this.toolStripLabel2.Size = new System.Drawing.Size(36, 22);
+			this.toolStripLabel2.Text = "Goto:";
+			// 
+			// cbSelect
+			// 
+			this.cbSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbSelect.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+			this.cbSelect.Items.AddRange(new object[] {
+            "VGA Memory",
+            "Multiboot Structure",
+            "PageFrame Map"});
+			this.cbSelect.Name = "cbSelect";
+			this.cbSelect.Size = new System.Drawing.Size(160, 25);
+			this.cbSelect.SelectedIndexChanged += new System.EventHandler(this.cbSelect_SelectedIndexChanged);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
 			// 
 			// toolStripLabel1
 			// 
@@ -97,34 +120,15 @@ namespace Mosa.Emulator
 			// 
 			// lbMemory
 			// 
+			this.lbMemory.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.lbMemory.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lbMemory.Location = new System.Drawing.Point(0, 28);
 			this.lbMemory.Multiline = true;
 			this.lbMemory.Name = "lbMemory";
 			this.lbMemory.Size = new System.Drawing.Size(517, 371);
 			this.lbMemory.TabIndex = 1;
-			// 
-			// toolStripSeparator2
-			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-			// 
-			// cbSelect
-			// 
-			this.cbSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbSelect.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
-			this.cbSelect.Items.AddRange(new object[] {
-            "VGA Memory",
-            "Multiboot Structure"});
-			this.cbSelect.Name = "cbSelect";
-			this.cbSelect.Size = new System.Drawing.Size(160, 25);
-			this.cbSelect.SelectedIndexChanged += new System.EventHandler(this.cbSelect_SelectedIndexChanged);
-			// 
-			// toolStripLabel2
-			// 
-			this.toolStripLabel2.Name = "toolStripLabel2";
-			this.toolStripLabel2.Size = new System.Drawing.Size(36, 22);
-			this.toolStripLabel2.Text = "Goto:";
 			// 
 			// MemoryForm
 			// 

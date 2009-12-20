@@ -35,6 +35,7 @@ namespace Mosa.Kernel.Memory.X86
 		public static void Setup()
 		{
 			_map = StartLocation;
+			_at = StartLocation;
 			_totalPages = 0;
 			_totalUsedPages = 0;
 
@@ -52,10 +53,7 @@ namespace Mosa.Kernel.Memory.X86
 				return;
 
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
-				uint value = (uint)Multiboot.GetMemoryMapType(index);
-
-				Mosa.HelloWorld.Screen.SetCursor(22, index);
-				Mosa.HelloWorld.Screen.Write(value);
+				byte value = Multiboot.GetMemoryMapType(index);
 
 				ulong start = Multiboot.GetMemoryMapBase(index);
 				ulong size = Multiboot.GetMemoryMapLength(index);
@@ -75,9 +73,6 @@ namespace Mosa.Kernel.Memory.X86
 		{
 			if ((start > MaximumMemory) || (start + size < ReserveMemory))
 				return;
-			
-			//if ((start + size) > MaximumMemory)
-			//    size = MaximumMemory - start;
 
 			// Normalize 
 			uint normstart = (uint)((start + PageSize - 1) & ~(PageSize - 1));
@@ -94,7 +89,7 @@ namespace Mosa.Kernel.Memory.X86
 			}
 
 			// Populate free table
-			for (uint mem = normstart; mem < normstart + normsize; mem = mem + PageSize, _at = _at + sizeof(int))
+			for (uint mem = normstart; mem < normstart + normsize; mem = mem + PageSize, _at = _at + 4)
 				Memory.Set32(_at, mem);
 
 			_totalPages = _totalPages + (normsize / PageSize);
