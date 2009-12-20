@@ -43,7 +43,7 @@ namespace Mosa.Emulator
 			}
 
 			uint at = Convert.ToUInt32(nbr, digits);
-			Dump(at, lbMemory.Height / (lbMemory.Font.Height + 1));
+			Dump(at, lbMemory.Height / (lbMemory.Font.Height + 2));
 		}
 
 		private void Dump(uint start, int lines)
@@ -51,7 +51,7 @@ namespace Mosa.Emulator
 			uint at = start;
 			int line = 0;
 
-			lbMemory.Items.Clear();
+			lbMemory.Clear();
 
 			while (line < lines) {
 				string l = at.ToString("X").PadLeft(8, '0') + ':';
@@ -65,7 +65,7 @@ namespace Mosa.Emulator
 					at++;
 				}
 				line++;
-				lbMemory.Items.Add(l + ' ' + d + '\n');
+				lbMemory.AppendText(l + ' ' + d + '\n');
 			}
 
 		}
@@ -82,6 +82,19 @@ namespace Mosa.Emulator
 
 		private void MemoryForm_Resize(object sender, EventArgs e)
 		{
+			Update();
+		}
+
+
+		private void cbSelect_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			switch( cbSelect.SelectedIndex)
+			{
+				case 0 : tbMemory.Text = "0x200000"; break;
+				case 1: tbMemory.Text = "0xB8000"; break;
+				default: break;
+				
+			}
 			Update();
 		}
 
