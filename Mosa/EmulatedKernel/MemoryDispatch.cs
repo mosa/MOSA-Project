@@ -38,6 +38,7 @@ namespace Mosa.EmulatedKernel
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
+		/// <param name="type">The type.</param>
 		/// <param name="read8">The read8 delegate.</param>
 		/// <param name="write8">The write8 delegate.</param>
 		public static void RegisterMemory(uint address, uint size, byte type, MemoryRead8 read8, MemoryWrite8 write8)
