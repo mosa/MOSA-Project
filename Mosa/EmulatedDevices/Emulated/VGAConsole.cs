@@ -149,8 +149,8 @@ namespace Mosa.EmulatedDevices.Emulated
 
 			this.dislayForm = dislayForm;
 			dislayForm.SetSize(fontWidth * width + 12, fontHeight * height + 10);
-			
-			MemoryDispatch.RegisterMemory(baseAddress, StandardMemorySize, Read8, Write8);
+
+			MemoryDispatch.RegisterMemory(baseAddress, StandardMemorySize, 2, Read8, Write8);
 
 			Initialize();
 		}

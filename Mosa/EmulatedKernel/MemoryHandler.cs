@@ -43,22 +43,6 @@ namespace Mosa.EmulatedKernel
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
-		/// <param name="read8">The read8.</param>
-		/// <param name="write8">The write8.</param>
-		public MemoryHandler(uint address, uint size, MemoryDispatch.MemoryRead8 read8, MemoryDispatch.MemoryWrite8 write8)
-		{
-			Address = address;
-			Size = size;
-			Type = 1;
-			this.read8 = read8;
-			this.write8 = write8;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MemoryHandler"/> class.
-		/// </summary>
-		/// <param name="address">The address.</param>
-		/// <param name="size">The size.</param>
 		/// <param name="type">The type.</param>
 		/// <param name="read8">The read8.</param>
 		/// <param name="write8">The write8.</param>

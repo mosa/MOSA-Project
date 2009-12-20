@@ -28,10 +28,10 @@ namespace Mosa.Emulator
 		public MemoryForm()
 		{
 			InitializeComponent();
-			Update();
+			UpdateForm();
 		}
-
-		private void Update()
+	
+		private void UpdateForm()
 		{
 			string nbr = tbMemory.Text.ToUpper().Trim();
 			int digits = 10;
@@ -42,8 +42,12 @@ namespace Mosa.Emulator
 				nbr = nbr.Substring(where + 1);
 			}
 
-			uint at = Convert.ToUInt32(nbr, digits);
-			Dump(at, lbMemory.Height / (lbMemory.Font.Height + 2));
+			try {
+				uint at = Convert.ToUInt32(nbr, digits);
+				Dump(at, lbMemory.Height / (lbMemory.Font.Height + 2));
+			}
+			catch {
+			}
 		}
 
 		private void Dump(uint start, int lines)
@@ -72,30 +76,28 @@ namespace Mosa.Emulator
 
 		private void tbMemory_TextChanged(object sender, EventArgs e)
 		{
-			Update();
+			UpdateForm();
 		}
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			Update();
+			UpdateForm();
 		}
 
 		private void MemoryForm_Resize(object sender, EventArgs e)
 		{
-			Update();
+			UpdateForm();
 		}
-
 
 		private void cbSelect_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			switch( cbSelect.SelectedIndex)
-			{
-				case 0 : tbMemory.Text = "0x200000"; break;
-				case 1: tbMemory.Text = "0xB8000"; break;
+			switch (cbSelect.SelectedIndex) {
+				case 0: tbMemory.Text = "0xB8000"; break;
+				case 1: tbMemory.Text = "0x" + Mosa.EmulatedKernel.MemoryDispatch.Read32(0x200004).ToString("X"); break;
+				//case 2 : tbMemory.Text = "0x200000"; break;
 				default: break;
-				
 			}
-			Update();
+			UpdateForm();
 		}
 
 	}

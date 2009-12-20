@@ -35,7 +35,7 @@ namespace Mosa.EmulatedDevices.Emulated
 		{
 			this.addressBase = addressBase;
 			memory = new byte[size];
-			MemoryDispatch.RegisterMemory(addressBase, size, Read8, Write8);
+			MemoryDispatch.RegisterMemory(addressBase, size, 1, Read8, Write8);
 		}
 
 		/// <summary>

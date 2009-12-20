@@ -44,6 +44,7 @@ namespace Mosa.Emulator
 			this.lbMemory = new System.Windows.Forms.TextBox();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.cbSelect = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -51,6 +52,7 @@ namespace Mosa.Emulator
 			// 
 			this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel2,
             this.cbSelect,
             this.toolStripSeparator2,
             this.toolStripLabel1,
@@ -59,7 +61,7 @@ namespace Mosa.Emulator
             this.toolStripButton1});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(473, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(517, 25);
 			this.toolStrip1.TabIndex = 0;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -99,7 +101,7 @@ namespace Mosa.Emulator
 			this.lbMemory.Location = new System.Drawing.Point(0, 28);
 			this.lbMemory.Multiline = true;
 			this.lbMemory.Name = "lbMemory";
-			this.lbMemory.Size = new System.Drawing.Size(473, 395);
+			this.lbMemory.Size = new System.Drawing.Size(517, 371);
 			this.lbMemory.TabIndex = 1;
 			// 
 			// toolStripSeparator2
@@ -110,18 +112,25 @@ namespace Mosa.Emulator
 			// cbSelect
 			// 
 			this.cbSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbSelect.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
 			this.cbSelect.Items.AddRange(new object[] {
-            "Multiboot Structure",
-            "VGA Memory"});
+            "VGA Memory",
+            "Multiboot Structure"});
 			this.cbSelect.Name = "cbSelect";
 			this.cbSelect.Size = new System.Drawing.Size(160, 25);
 			this.cbSelect.SelectedIndexChanged += new System.EventHandler(this.cbSelect_SelectedIndexChanged);
+			// 
+			// toolStripLabel2
+			// 
+			this.toolStripLabel2.Name = "toolStripLabel2";
+			this.toolStripLabel2.Size = new System.Drawing.Size(36, 22);
+			this.toolStripLabel2.Text = "Goto:";
 			// 
 			// MemoryForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(473, 425);
+			this.ClientSize = new System.Drawing.Size(517, 392);
 			this.Controls.Add(this.lbMemory);
 			this.Controls.Add(this.toolStrip1);
 			this.Name = "MemoryForm";
@@ -144,5 +153,6 @@ namespace Mosa.Emulator
 		private System.Windows.Forms.TextBox lbMemory;
 		private System.Windows.Forms.ToolStripComboBox cbSelect;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel2;
 	}
 }

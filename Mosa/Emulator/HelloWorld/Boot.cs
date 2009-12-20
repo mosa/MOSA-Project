@@ -25,9 +25,9 @@ namespace Mosa.HelloWorld
 			Screen.SetCursor(24, 0);
 			Screen.Write('1');
 			Multiboot.SetMultibootLocation(Memory.Get32(0x200004), Memory.Get32(0x200000));
-			Screen.SetCursor(24, 1);
+			//			Screen.SetCursor(24, 1);
 			Screen.Write('2');
-			PageFrameAllocator.Setup();
+			//			PageFrameAllocator.Setup();
 			Screen.SetCursor(24, 2);
 			Screen.Write('3');
 			Screen.SetCursor(24, 3);
@@ -61,10 +61,10 @@ namespace Mosa.HelloWorld
 			Screen.Write('a');
 			Screen.Write('n');
 			Screen.Write('i');
-            Screen.Write('g');
-            Screen.Write('a');
-            Screen.Write('w');
-            Screen.Write('a');
+			Screen.Write('g');
+			Screen.Write('a');
+			Screen.Write('w');
+			Screen.Write('a');
 			Screen.Color = 0x0E;
 			Screen.Write('\'');
 			Screen.Write(' ');
@@ -233,9 +233,9 @@ namespace Mosa.HelloWorld
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;
-			for (uint index = 0; index < 60; index++) {
+			for (uint index = 0; index < 60; index++) 
 				Screen.Write((char)205);
-			}
+			
 			Screen.NextLine();
 
 			Screen.Color = 0x0A;
@@ -252,17 +252,17 @@ namespace Mosa.HelloWorld
 			Screen.Write(':');
 			Screen.NextLine();
 
-			for (uint index = 0; index < (Multiboot.MemoryMapCount & 7); index++) {
+			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
 				Screen.Color = 0x0F;
-				Screen.Write(Multiboot.GetMemoryMapBaseLow(index), 16, 10);
+				Screen.Write(Multiboot.GetMemoryMapBase(index), 16, 10);
 				Screen.Write(' ');
 				Screen.Write('-');
 				Screen.Write(' ');
-				Screen.Write(Multiboot.GetMemoryMapBaseLow(index) + Multiboot.GetMemoryMapLengthLow(index), 16, 10);
+				Screen.Write(Multiboot.GetMemoryMapBase(index) + Multiboot.GetMemoryMapLength(index) - 1, 16, 10);
 				Screen.Write(' ');
 				Screen.Write('(');
 				Screen.Color = 0x07;
-				Screen.Write(Multiboot.GetMemoryMapLengthLow(index), 16, 10);
+				Screen.Write(Multiboot.GetMemoryMapLength(index), 16, 10);
 				Screen.Color = 0x0F;
 				Screen.Write(')');
 				Screen.Write(' ');
@@ -277,11 +277,12 @@ namespace Mosa.HelloWorld
 				Screen.NextLine();
 			}
 
+			Screen.SetCursor(18, 0);
+
 			Screen.Color = 0x0F;
-			for (uint index = 0; index < 60; index++) {
+			for (uint index = 0; index < 60; index++)
 				Screen.Write((char)205);
-			}
-			Screen.NextLine();
+
 			Screen.NextLine();
 
 			#region Vendor
@@ -309,7 +310,7 @@ namespace Mosa.HelloWorld
 			identifier = Platforms.x86.Native.CpuIdEcx(0);
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
-            
+
 			Screen.NextLine();
 			#endregion
 
@@ -409,8 +410,8 @@ namespace Mosa.HelloWorld
 				Screen.Color = 0x0F;
 				if (index == 7)
 					Screen.Write((char)185);
-                else if (index == 15)
-                    Screen.Write((char)185);
+				else if (index == 18)
+					Screen.Write((char)185);
 				else if (index == 23)
 					Screen.Write((char)202);
 				else
@@ -501,24 +502,24 @@ namespace Mosa.HelloWorld
 		private static void PrintBrand(uint param)
 		{
 			int identifier = Platforms.x86.Native.CpuIdEax(param);
-            if (identifier != 0x20202020)
-			for (int i = 0; i < 4; ++i)
-				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
+			if (identifier != 0x20202020)
+				for (int i = 0; i < 4; ++i)
+					Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
 			identifier = Platforms.x86.Native.CpuIdEbx(param);
-            if (identifier != 0x20202020)
-			for (int i = 0; i < 4; ++i)
-				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
+			if (identifier != 0x20202020)
+				for (int i = 0; i < 4; ++i)
+					Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
 			identifier = Platforms.x86.Native.CpuIdEcx(param);
-            if (identifier != 0x20202020)
-			for (int i = 0; i < 4; ++i)
-				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
+			if (identifier != 0x20202020)
+				for (int i = 0; i < 4; ++i)
+					Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
 			identifier = Platforms.x86.Native.CpuIdEdx(param);
-            if (identifier != 0x20202020)
-			for (int i = 0; i < 4; ++i)
-				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
+			if (identifier != 0x20202020)
+				for (int i = 0; i < 4; ++i)
+					Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 		}
 
 	}

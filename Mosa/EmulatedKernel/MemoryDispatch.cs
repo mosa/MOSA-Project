@@ -40,9 +40,9 @@ namespace Mosa.EmulatedKernel
 		/// <param name="size">The size.</param>
 		/// <param name="read8">The read8 delegate.</param>
 		/// <param name="write8">The write8 delegate.</param>
-		public static void RegisterMemory(uint address, uint size, MemoryRead8 read8, MemoryWrite8 write8)
+		public static void RegisterMemory(uint address, uint size, byte type, MemoryRead8 read8, MemoryWrite8 write8)
 		{
-			MemorySegments.Add(new MemoryHandler(address, size, read8, write8));
+			MemorySegments.Add(new MemoryHandler(address, size, type, read8, write8));
 		}
 
 		/// <summary>

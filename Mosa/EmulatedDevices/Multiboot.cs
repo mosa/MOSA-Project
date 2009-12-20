@@ -24,7 +24,7 @@ namespace Mosa.EmulatedDevices
 		/// </summary>
 		public static void Setup()
 		{
-			uint mem = 0x1000000;
+			uint mem = 0x10090; // same as QEMU
 
 			MemoryDispatch.Write32(0x200000, 0x2BADB002);
 			MemoryDispatch.Write32(0x200004, mem);
@@ -45,7 +45,7 @@ namespace Mosa.EmulatedDevices
 			MemoryDispatch.Write32(mem + 24, 0x0);	// mods_addr
 			MemoryDispatch.Write32(mem + 28, 0x0);	// syms
 			MemoryDispatch.Write32(mem + 44, (uint)(MemoryDispatch.MemorySegments.Count * 24));	// mmap_length
-			MemoryDispatch.Write32(mem + 48, 96);	// mmap_addr
+			MemoryDispatch.Write32(mem + 48, mem + 96);	// mmap_addr
 			MemoryDispatch.Write32(mem + 52, 0x0);	// drives_length
 			MemoryDispatch.Write32(mem + 56, 0x0);	// drives_addr
 			MemoryDispatch.Write32(mem + 60, 0x0);	// config_table
@@ -58,7 +58,7 @@ namespace Mosa.EmulatedDevices
 			MemoryDispatch.Write32(mem + 88, 0x0);	// vbe_interface_off
 			MemoryDispatch.Write32(mem + 92, 0x0);	// vbe_interface_len
 
-			mem = 96;
+			mem = mem + 96;
 			foreach (MemoryHandler segment in MemoryDispatch.MemorySegments) {
 				MemoryDispatch.Write32(mem + 0, 20);		// Size
 				MemoryDispatch.Write32(mem + 4, segment.Address);	// base_addr_low

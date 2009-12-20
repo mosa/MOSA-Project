@@ -52,7 +52,7 @@ namespace Mosa.Kernel.Memory.X86
 				return;
 
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
-				uint value = (uint)Multiboot.GetMemoryMapType(index);
+				byte value = Multiboot.GetMemoryMapType(index);
 
 				Mosa.HelloWorld.Screen.SetCursor(22, index);
 				Mosa.HelloWorld.Screen.Write(value);
