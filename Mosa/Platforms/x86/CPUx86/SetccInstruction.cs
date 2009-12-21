@@ -76,28 +76,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		}
 
 		/// <summary>
-		/// Gets the instruction modifier.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns></returns>
-		protected override string GetModifier(Context context)
-		{
-			switch (context.ConditionCode) {
-				case IR.ConditionCode.Equal: return @"e";
-				case IR.ConditionCode.GreaterOrEqual: return @"ge";
-				case IR.ConditionCode.GreaterThan: return @"g";
-				case IR.ConditionCode.LessOrEqual: return @"le";
-				case IR.ConditionCode.LessThan: return @"l";
-				case IR.ConditionCode.NotEqual: return @"ne";
-				case IR.ConditionCode.UnsignedGreaterOrEqual: return @"ae";
-				case IR.ConditionCode.UnsignedGreaterThan: return @"a";
-				case IR.ConditionCode.UnsignedLessOrEqual: return @"be";
-				case IR.ConditionCode.UnsignedLessThan: return @"b";
-				default: throw new NotSupportedException();
-			}
-		}
-
-		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>

@@ -222,21 +222,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Cmp(Context ctx)
 		{
-			//Operand op0 = ctx.Result;
-			//Operand op1 = ctx.Operand1;
-
-			//RegisterOperand eax = new RegisterOperand(op0.Type, GeneralPurposeRegister.EAX);
-			//ctx.Result = eax;
-
-			//Context start = ctx.InsertBefore();
-			//start.SetInstruction(CPUx86.Instruction.PushInstruction, null, eax);
-
-			//if ((IsSigned(op0)) && (!Is32Bit(op0)))
-			//    start.AppendInstruction(CPUx86.Instruction.MovsxInstruction, eax, op0);
-			//else
-			//    start.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op0);
-
-			//ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
             Operand left = ctx.Result;
             Operand right = ctx.Operand1;
 
