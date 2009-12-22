@@ -78,7 +78,8 @@ namespace Mosa.Emulator
 			this.cbSelect.Items.AddRange(new object[] {
             "VGA Memory",
             "Multiboot Structure",
-            "PageFrame Map"});
+            "PageFrame Map",
+            "Page Directory (CR3)"});
 			this.cbSelect.Name = "cbSelect";
 			this.cbSelect.Size = new System.Drawing.Size(160, 25);
 			this.cbSelect.SelectedIndexChanged += new System.EventHandler(this.cbSelect_SelectedIndexChanged);

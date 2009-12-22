@@ -92,6 +92,7 @@ namespace Mosa.Kernel.Memory.X86
 			for (uint mem = normstart; mem < normstart + normsize; mem = mem + PageSize, _at = _at + 4)
 				Memory.Set32(_at, mem);
 
+			_at = _at - 4;
 			_totalPages = _totalPages + (normsize / PageSize);
 		}
 

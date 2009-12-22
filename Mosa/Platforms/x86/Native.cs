@@ -201,16 +201,16 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Sets the cr0.
 		/// </summary>
-		/// <param name="state">The state.</param>
+		/// <param name="pagedirectory">The pagedirectory.</param>
 		[Intrinsic(typeof(Architecture), typeof(CPUx86.SetRC0Instruction))]
-		public static void SetCR0(byte state) { ThrowPlatformNotSupported(); return; }
+		public static void SetCR0(uint pagedirectory) { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Sets the cr3.
 		/// </summary>
-		/// <param name="state">The state.</param>
+		/// <param name="pagedirectory">The pagedirectory.</param>
 		[Intrinsic(typeof(Architecture), typeof(CPUx86.SetRC3Instruction))]
-		public static void SetCR3(byte state) { ThrowPlatformNotSupported(); return; }
+		public static void SetCR3(uint pagedirectory) { ThrowPlatformNotSupported(); return; }
 
         #endregion
 

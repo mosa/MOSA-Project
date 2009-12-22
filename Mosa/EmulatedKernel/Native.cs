@@ -27,10 +27,10 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Sets the cr3.
 		/// </summary>
-		/// <param name="state">The state.</param>
-		public static void SetCR3(byte state)
+		/// <param name="pagetable">The pagetable.</param>
+		public static void SetCR3(uint pagetable)
 		{
-			EmulatedKernel.MemoryDispatch.CR3 = state;
+			EmulatedKernel.MemoryDispatch.CR3 = pagetable;
 		}
 
 		/// <summary>

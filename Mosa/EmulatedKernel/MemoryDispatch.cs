@@ -22,11 +22,11 @@ namespace Mosa.EmulatedKernel
 		/// <summary>
 		/// 
 		/// </summary>
-		public static byte CR0;
+		public static uint CR0;
 		/// <summary>
 		/// 
 		/// </summary>
-		public static byte CR3;
+		public static uint CR3;
 
 		/// <summary>
 		/// 

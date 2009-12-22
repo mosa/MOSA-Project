@@ -23,12 +23,8 @@ namespace Mosa.Kernel.Memory.X86
 		/// <param name="bytes">The bytes.</param>
 		public unsafe static void Clear(uint start, uint bytes)
 		{
-			byte* at = (byte*)start;
-			byte* end = at + bytes;
-			while (at <= end) {
-				*at = 0;
-				at++;
-			}
+			for (uint at = start; (at < (start + bytes)); at++)
+				Mosa.EmulatedKernel.MemoryDispatch.Write8(at, 0);
 		}
 
 		/// <summary>
