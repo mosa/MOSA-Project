@@ -19,7 +19,7 @@ namespace Mosa.Platforms.x86
 		/// Sets the cr0.
 		/// </summary>
 		/// <param name="state">The state.</param>
-		public static void SetCR0(byte state)
+		public static void SetCR0(uint state)
 		{
 			EmulatedKernel.MemoryDispatch.CR0 = state;
 		}

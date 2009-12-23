@@ -67,6 +67,7 @@ namespace Mosa.EmulatedKernel
 		/// <param name="value">The value.</param>
 		public static void Write8(uint address, byte value)
 		{
+			address = TranslateToPhysical(address);
 			MemoryHandler memoryRange = Find(address);
 
 			if (memoryRange != null)
@@ -82,6 +83,23 @@ namespace Mosa.EmulatedKernel
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
 		public static byte Read8(uint address)
+		{
+			address = TranslateToPhysical(address);
+			MemoryHandler memoryRange = Find(address);
+
+			if (memoryRange != null)
+				if (memoryRange.read8 != null)
+					return memoryRange.read8(address);
+
+			return 0;
+		}
+
+		/// <summary>
+		/// Reads a byte from the specified address.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		private static byte PhysicalRead8(uint address)
 		{
 			MemoryHandler memoryRange = Find(address);
 
@@ -99,15 +117,8 @@ namespace Mosa.EmulatedKernel
 		/// <param name="value">The value.</param>
 		public static void Write16(uint address, ushort value)
 		{
-			MemoryHandler memoryRange = Find(address);
-
-			if (memoryRange != null)
-				if (memoryRange.write8 != null) {
-					memoryRange.write8(address, (byte)value);
-					memoryRange.write8(address + 1, (byte)(value >> 8));
-				}
-
-			return;
+			Write8(address, (byte)value);
+			Write8(address + 1, (byte)(value >> 8));
 		}
 
 		/// <summary>
@@ -117,13 +128,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public static ushort Read16(uint address)
 		{
-			MemoryHandler memoryRange = Find(address);
-
-			if (memoryRange != null)
-				if (memoryRange.read8 != null)
-					return (ushort)(memoryRange.read8(address) | (memoryRange.read8(address + 1) << 8));
-
-			return 0;
+			return (ushort)(Read8(address) | (Read8(address + 1) << 8));
 		}
 
 		/// <summary>
@@ -133,16 +138,9 @@ namespace Mosa.EmulatedKernel
 		/// <param name="value">The value.</param>
 		public static void Write24(uint address, uint value)
 		{
-			MemoryHandler memoryRange = Find(address);
-
-			if (memoryRange != null)
-				if (memoryRange.write8 != null) {
-					memoryRange.write8(address, (byte)value);
-					memoryRange.write8(address + 1, (byte)(value >> 8));
-					memoryRange.write8(address + 2, (byte)(value >> 16));
-				}
-
-			return;
+			Write8(address, (byte)value);
+			Write8(address + 1, (byte)(value >> 8));
+			Write8(address + 2, (byte)(value >> 16));
 		}
 
 		/// <summary>
@@ -150,15 +148,9 @@ namespace Mosa.EmulatedKernel
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
-		public static ushort Read24(uint address)
+		public static uint Read24(uint address)
 		{
-			MemoryHandler memoryRange = Find(address);
-
-			if (memoryRange != null)
-				if (memoryRange.read8 != null)
-					return (ushort)(memoryRange.read8(address) | (memoryRange.read8(address + 1) << 8) | (memoryRange.read8(address + 2) << 16));
-
-			return 0;
+			return (uint)(Read8(address) | (Read8(address + 1) << 8) | (Read8(address + 2) << 16));
 		}
 
 		/// <summary>
@@ -168,13 +160,7 @@ namespace Mosa.EmulatedKernel
 		/// <returns></returns>
 		public static uint Read32(uint address)
 		{
-			MemoryHandler memoryRange = Find(address);
-
-			if (memoryRange != null)
-				if (memoryRange.write8 != null)
-					return (uint)(memoryRange.read8(address) | (memoryRange.read8(address + 1) << 8) | (memoryRange.read8(address + 2) << 16) | (memoryRange.read8(address + 3) << 24));
-
-			return 0;
+			return (uint)(Read8(address) | (Read8(address + 1) << 8) | (Read8(address + 2) << 16) | (Read8(address + 3) << 24));
 		}
 
 		/// <summary>
@@ -182,16 +168,9 @@ namespace Mosa.EmulatedKernel
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
-		public static ulong Read64(uint address)
+		public static uint PhysicalRead32(uint address)
 		{
-			MemoryHandler memoryRange = Find(address);
-
-			if (memoryRange != null)
-				if (memoryRange.write8 != null)
-					return (ulong)(memoryRange.read8(address) | (memoryRange.read8(address + 1) << 8) | (memoryRange.read8(address + 2) << 16) | (memoryRange.read8(address + 3) << 24) |
-						 memoryRange.read8(address + 4) << 32 | (memoryRange.read8(address + 5) << 40) | (memoryRange.read8(address + 6) << 48) | (memoryRange.read8(address + 7) << 56));
-
-			return 0;
+			return (uint)(PhysicalRead8(address) | (PhysicalRead8(address + 1) << 8) | (PhysicalRead8(address + 2) << 16) | (PhysicalRead8(address + 3) << 24));
 		}
 
 		/// <summary>
@@ -201,16 +180,37 @@ namespace Mosa.EmulatedKernel
 		/// <param name="value">The value.</param>
 		public static void Write32(uint address, uint value)
 		{
-			MemoryHandler memoryRange = Find(address);
+			Write8(address, (byte)value);
+			Write8(address + 1, (byte)(value >> 8));
+			Write8(address + 2, (byte)(value >> 16));
+			Write8(address + 3, (byte)(value >> 24));
+		}
 
-			if (memoryRange != null)
-				if (memoryRange.write8 != null) {
-					memoryRange.write8(address, (byte)value);
-					memoryRange.write8(address + 1, (byte)(value >> 8));
-					memoryRange.write8(address + 2, (byte)(value >> 16));
-					memoryRange.write8(address + 3, (byte)(value >> 24));
-				}
-			return;
+		/// <summary>
+		/// Reads an integer from the specified address.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		public static ulong Read64(uint address)
+		{
+			return (ulong)(Read8(address) | (Read8(address + 1) << 8) | (Read8(address + 2) << 16) | (Read8(address + 3) << 24) |
+					Read8(address + 4) << 32 | (Read8(address + 5) << 40) | (Read8(address + 6) << 48) | (Read8(address + 7) << 56));
+		}
+
+		/// <summary>
+		/// Translates to physical address.
+		/// </summary>
+		/// <param name="memory">The memory.</param>
+		/// <returns></returns>
+		public static uint TranslateToPhysical(uint memory)
+		{
+			if ((CR0 & 0x80000000) == 0)
+				return memory;
+
+			uint pdentry = PhysicalRead32(CR3 + ((memory >> 22) * sizeof(uint)));
+			uint ptentry = PhysicalRead32((pdentry & 0xFFFFF000) + ((memory >> 12 & 0x03FF) * sizeof(uint)));
+
+			return (memory & 0xFFF) | (ptentry & 0xFFFFF000);
 		}
 
 		/// <summary>

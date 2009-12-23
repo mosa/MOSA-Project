@@ -41,8 +41,11 @@ namespace Mosa.Kernel.Memory.X86
 			// Map the first 24Mb of memory
 			SetupIdentityPages(0, 1024 * 1024 * 24, false);
 
-			// Set CR3 register on processor
+			// Set CR3 register on processor - sets page directory
 			Mosa.Platforms.x86.Native.SetCR3(_pageDirectory);
+
+			// Set CR0 register on processor - turns on virtual memory
+			Mosa.Platforms.x86.Native.SetCR0(0x80000000); // TODO: Only set this bit! Leave all others as-is.
 		}
 
 		/// <summary>
