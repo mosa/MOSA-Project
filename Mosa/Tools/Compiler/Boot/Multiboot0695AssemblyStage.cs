@@ -142,16 +142,6 @@ namespace Mosa.Tools.Compiler.Boot
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"MultibootAssemblyStage"; } }
 
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				// TODO
-			};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
-
 		#endregion // IPipelineStage Members
 
 		#region IAssemblyCompilerStage Members
@@ -165,7 +155,7 @@ namespace Mosa.Tools.Compiler.Boot
 			if (compiler == null)
 				throw new ArgumentNullException(@"compiler");
 
-			IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
+			IAssemblyLinker linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
 			Debug.Assert(linker != null, @"No linker??");
 
 			if (!secondStage) {
@@ -174,7 +164,7 @@ namespace Mosa.Tools.Compiler.Boot
 				secondStage = true;
 			}
 			else {
-				TypeInitializerSchedulerStage typeInitializerSchedulerStage = compiler.Pipeline.Find<TypeInitializerSchedulerStage>();
+				TypeInitializerSchedulerStage typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 				SigType I4 = new SigType(CilElementType.I4);
 

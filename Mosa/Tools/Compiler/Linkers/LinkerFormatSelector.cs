@@ -136,15 +136,6 @@ namespace Mosa.Tools.Compiler.Linkers
 			}
 		}
 
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get { return ((IPipelineStage)implementation).PipelineStageOrder; }
-		}
-
         #endregion // IAssemblyCompilerStage Members
 
         #region IHasOptions Members

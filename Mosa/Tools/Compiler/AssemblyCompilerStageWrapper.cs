@@ -65,14 +65,6 @@ namespace Mosa.Tools.Compiler
 			get { return ((IPipelineStage)wrapped).Name; }
 		}
 
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get { return ((IPipelineStage)wrapped).PipelineStageOrder; }
-		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.

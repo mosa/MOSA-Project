@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Text;
 
 using Mosa.ClassLib;
 using Mosa.EmulatedKernel;
@@ -142,7 +143,7 @@ namespace Mosa.EmulatedDevices.Emulated
 			cursorPosition = 0;
 			lastCommand = 0;
 
-			font = new Font("Courier New", 9, FontStyle.Regular);
+			font = new Font("Lucida Console", 9, FontStyle.Regular);	
 			fontWidth = (int)font.SizeInPoints;
 			fontHeight = (int)font.SizeInPoints + 5;
 			palette = Mosa.DeviceSystem.ColorPalette.CreateStandard16ColorPalette();

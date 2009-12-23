@@ -16,12 +16,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value></value>
 		string IPipelineStage.Name { get { return @"Method Compiler Runner"; } }
 
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
-
 		#endregion // IPipelineStage Members
 
 		#region IAssemblyCompilerStage Members
@@ -32,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="compiler">The compiler context to perform processing in.</param>
 		void IAssemblyCompilerStage.Run(AssemblyCompiler compiler)
 		{
-			IMethodCompilerBuilder mcb = compiler.Pipeline.Find<IMethodCompilerBuilder>();
+			IMethodCompilerBuilder mcb = compiler.Pipeline.FindFirst<IMethodCompilerBuilder>();
 			Debug.Assert(null != mcb, @"Failed to find a method compiler builder stage.");
 			foreach (MethodCompilerBase mc in mcb.Scheduled) {
 				try {

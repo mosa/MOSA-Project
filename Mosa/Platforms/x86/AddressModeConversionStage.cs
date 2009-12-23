@@ -31,17 +31,6 @@ namespace Mosa.Platforms.x86
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"X86.AddressModeConversionStage"; } }
 
-		private static readonly PipelineStageOrder[] PipelineOrder = new[] {
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(LongOperandTransformationStage)),
-				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CILTransformationStage))
-			};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return PipelineOrder; } }
-
 		#endregion // IMethodCompilerStage Members
 
 		/// <summary>

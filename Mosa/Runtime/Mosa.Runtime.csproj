@@ -82,9 +82,9 @@
     <Compile Include="CompilerFramework\CIL\CastclassInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
+    <Compile Include="CompilerFramework\PlatformStubStage.cs" />
     <Compile Include="CompilerFramework\IIntrinsicInstruction.cs" />
-    <Compile Include="CompilerFramework\IBlockOptimizationStage.cs" />
-    <Compile Include="CompilerFramework\IBlockReorderStage.cs" />
+    <Compile Include="CompilerFramework\IBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\IPipelineStage.cs" />
     <Compile Include="CompilerFramework\IR\CILTransformationStage.cs" />
     <Compile Include="CompilerFramework\CIL\ConstrainedPrefixInstruction.cs" />
@@ -219,7 +219,6 @@
     <Compile Include="CompilerFramework\InstructionData.cs" />
     <Compile Include="CompilerFramework\CIL\BaseInstruction.cs" />
     <Compile Include="CompilerFramework\Operands\StringOperand.cs" />
-    <Compile Include="CompilerFramework\PipelineStageOrder.cs" />
     <Compile Include="CompilerFramework\ReverseBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\OperandDeterminationStage.cs" />
     <Compile Include="CompilerFramework\RuntimeMethodData.cs" />
@@ -339,7 +338,7 @@
     <Compile Include="CompilerFramework\IntrinsicAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IPlatformTransformationStage.cs">
+    <Compile Include="CompilerFramework\IPlatformStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\IRegisterConstraint.cs">

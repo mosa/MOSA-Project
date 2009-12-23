@@ -29,16 +29,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <value>The name of the compilation stage.</value>
         string IPipelineStage.Name { get { return @"IR.ConstantFoldingStage"; } }
 
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-			// TODO
-		};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
-
 		#endregion
 
 		#region IIRVisitor

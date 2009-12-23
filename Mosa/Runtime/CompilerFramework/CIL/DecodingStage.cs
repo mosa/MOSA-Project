@@ -57,17 +57,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
         /// <value>The name of the compilation stage.</value>
         string IPipelineStage.Name { get { return @"CIL.DecodingStage"; } }
 
-        private static readonly PipelineStageOrder[] _pipelineOrder = new[] {
-				new PipelineStageOrder(PipelineStageOrder.Location.First)
-//				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(BasicBlockBuilderStage))
-			};
-
-        /// <summary>
-        /// Gets the pipeline stage order.
-        /// </summary>
-        /// <value>The pipeline stage order.</value>
-        PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
-
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>

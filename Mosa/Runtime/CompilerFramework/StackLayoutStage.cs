@@ -53,17 +53,6 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return @"StackLayoutStage"; }
 		}
 
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
-				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IPlatformTransformationStage)),
-			};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
-
 		#endregion // IPipelineStage Members
 
 		/// <summary>

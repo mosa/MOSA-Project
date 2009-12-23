@@ -40,17 +40,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"IR.CILTransformationStage"; } }
 
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(OperandDeterminationStage)),
-				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(StackLayoutStage))
-			};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
-
 		#endregion // IMethodCompilerStage Members
 
 		#region ICILVisitor

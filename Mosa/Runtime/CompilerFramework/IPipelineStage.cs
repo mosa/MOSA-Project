@@ -15,11 +15,5 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The name of the compilation stage.</value>
 		string Name { get; }	
 		
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] PipelineStageOrder { get; }
-
 	}
 }

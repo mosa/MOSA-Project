@@ -26,7 +26,7 @@ namespace Mosa.Platforms.x86
     /// embedding floating point values as immediates inside the code, so these have to be moved outside
     /// and referenced through a memory offset starting at the 
     /// </remarks>
-    public sealed class ConstantRemovalStage : BaseStage, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
+    public sealed class ConstantRemovalStage : BaseStage, IMethodCompilerStage, IPlatformStage, IPipelineStage
     {
         #region Data members
 
@@ -66,16 +66,6 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <value>The name of the compilation stage.</value>
         string IPipelineStage.Name { get { return @"X86.ConstantRemovalStage"; } }
-
-        private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				// TODO
-			};
-
-        /// <summary>
-        /// Gets the pipeline stage order.
-        /// </summary>
-        /// <value>The pipeline stage order.</value>
-        PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
         #endregion // IPipelineStage Members
 

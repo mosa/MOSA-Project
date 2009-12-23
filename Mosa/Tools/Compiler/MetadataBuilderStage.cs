@@ -30,16 +30,6 @@ namespace Mosa.Tools.Compiler
 
 		string IPipelineStage.Name { get { return @"Metadata Builder Stage"; } }
 
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				// TODO
-			};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
-
 		#endregion // IPipelineStage members
 
 		#region IAssemblyCompilerStage Members
@@ -50,7 +40,7 @@ namespace Mosa.Tools.Compiler
 		/// <param name="compiler">The compiler context to perform processing in.</param>
 		public void Run(AssemblyCompiler compiler)
 		{
-			IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
+			IAssemblyLinker linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
 			if (linker == null)
 				throw new InvalidOperationException(@"Can't run without a linker.");
 

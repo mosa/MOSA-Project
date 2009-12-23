@@ -36,16 +36,6 @@ namespace Mosa.Tools.Compiler
 
 		string IPipelineStage.Name { get { return @"CILHeaderStage"; } }
 
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				// TODO
-			};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
-
 		#endregion // IPipelineStage members
 
 		#region IAssemblyCompilerStage Members
@@ -59,7 +49,7 @@ namespace Mosa.Tools.Compiler
 			if (compiler == null)
 				throw new ArgumentNullException(@"compiler");
 
-			IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
+			IAssemblyLinker linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
 			Debug.Assert(linker != null, @"No linker??");
 
 			_cliHeader.Cb = 0x48;

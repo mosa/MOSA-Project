@@ -241,7 +241,7 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <returns>The retrieved assembly linker.</returns>
         private static IAssemblyLinker RetrieveAssemblyLinkerFromCompiler(AssemblyCompiler compiler)
         {
-            return compiler.Pipeline.Find<IAssemblyLinker>();
+            return compiler.Pipeline.FindFirst<IAssemblyLinker>();
         }
 
         /// <summary>

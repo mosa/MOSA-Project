@@ -158,25 +158,31 @@ namespace Mosa.Platforms.x86
 			// FIXME: Create a specific code generator instance using requested feature flags.
 			// FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
 			// and packed operations available with MMX/SSE extensions
-			methodCompilerPipeline.AddRange(
+			methodCompilerPipeline.InsertAfter<PlatformStubStage>(
 				new IMethodCompilerStage[]
                 {
                     new LongOperandTransformationStage(),
-					new InstructionLogger(typeof(LongOperandTransformationStage)),
+					new InstructionLogger(),
                     new AddressModeConversionStage(),
-					new InstructionLogger(typeof(AddressModeConversionStage)),
+					new InstructionLogger(),
                     new CILTransformationStage(),
-					new InstructionLogger(typeof(CILTransformationStage)),
+					new InstructionLogger(),
                     new IRTransformationStage(),
-					new InstructionLogger(typeof(IRTransformationStage)),
+					new InstructionLogger(),
 					new TweakTransformationStage(),
-					new InstructionLogger(typeof(TweakTransformationStage)),
+					new InstructionLogger(),
 					new MemToMemConversionStage(),
-					new InstructionLogger(typeof(MemToMemConversionStage)),
-                    new SimplePeepholeOptimizationStage(),
-					new InstructionLogger(typeof(SimplePeepholeOptimizationStage)),
-                    //FlowGraphVisualizationStage.Instance,
+					new InstructionLogger(),
                 });
+
+			methodCompilerPipeline.InsertAfter<IBlockOrderStage>(
+				new IMethodCompilerStage[]
+                {                   
+                    new SimplePeepholeOptimizationStage(),
+					new InstructionLogger(),
+                });
+
+			//FlowGraphVisualizationStage.Instance,
 		}
 
 		/// <summary>

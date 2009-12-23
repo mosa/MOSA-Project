@@ -20,7 +20,7 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class BaseTransformationStage : CodeTransformationStage, IPlatformTransformationStage
+	public abstract class BaseTransformationStage : CodeTransformationStage, IPlatformStage
 	{
 		private readonly DataConverter _littleEndianBitConverter = DataConverter.LittleEndian;
 

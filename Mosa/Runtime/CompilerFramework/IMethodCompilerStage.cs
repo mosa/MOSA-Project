@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// In addition to the IMethodCompilerStage interface other compilation stage specific interfaces
 	/// must be implemented.
 	/// </remarks>
-	public interface IMethodCompilerStage
+	public interface IMethodCompilerStage : IPipelineStage
 	{
 		/// <summary>
 		/// Setup stage specific processing on the compiler context.

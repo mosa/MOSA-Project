@@ -28,12 +28,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		string IPipelineStage.Name { get { return @"Method Compiler Builder"; } }
 
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
-
 		#endregion // IPipelineStage members
 
 		#region IAssemblyCompilerStage members

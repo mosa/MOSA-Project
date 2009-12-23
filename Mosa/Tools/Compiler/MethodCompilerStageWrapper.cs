@@ -56,22 +56,7 @@ namespace Mosa.Tools.Compiler
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name
 		{
-			get
-			{
-				return ((IPipelineStage)wrapped).Name + (Enabled ? String.Empty : " (Disabled)");
-			}
-		}
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get
-			{
-				return ((IPipelineStage)wrapped).PipelineStageOrder;
-			}
+			get { return ((IPipelineStage)wrapped).Name + (Enabled ? String.Empty : " (Disabled)"); }
 		}
 
 		/// <summary>

@@ -49,16 +49,6 @@ namespace Mosa.Runtime.Linker
 
 		string IPipelineStage.Name { get { return @"MapFileGenerationStage"; } }
 
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				// TODO
-			};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
-
 		#endregion // IPipelineStage members
 
         #region IAssemblyCompilerStage Members
@@ -70,7 +60,7 @@ namespace Mosa.Runtime.Linker
         public void Run(AssemblyCompiler compiler)
         {
             // Retrieve the linker
-            IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
+            IAssemblyLinker linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
 
             // Emit map file _header
             this.writer.WriteLine(linker.OutputFile);

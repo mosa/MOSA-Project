@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// The Loop Aware Block Ordering Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
     /// </summary>
-    public class LoopAwareBlockOrderStage : BaseStage, IMethodCompilerStage, IPipelineStage, IBlockReorderStage
+    public class LoopAwareBlockOrderStage : BaseStage, IMethodCompilerStage, IPipelineStage, IBlockOrderStage
     {
         #region Data members
 
@@ -145,20 +145,6 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <value>The name of the compilation stage.</value>
         string IPipelineStage.Name { get { return @"LoopAwareBlockOrderStage"; } }
-
-        private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(StackLayoutStage)),
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IR.CILTransformationStage)),
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IPlatformTransformationStage)),				
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IBlockOptimizationStage)),				
-				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
-			};
-
-        /// <summary>
-        /// Gets the pipeline stage order.
-        /// </summary>
-        /// <value>The pipeline stage order.</value>
-        PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
         #endregion // IPipelineStage Members
 

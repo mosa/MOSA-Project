@@ -26,7 +26,7 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class TweakTransformationStage : BaseTransformationStage, CPUx86.IX86Visitor, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
+	public sealed class TweakTransformationStage : BaseTransformationStage, CPUx86.IX86Visitor, IMethodCompilerStage, IPlatformStage, IPipelineStage
 	{
 
 		#region IPipelineStage Members
@@ -36,19 +36,6 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"X86.TweakTransformationStage"; } }
-
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(IRTransformationStage)),
-				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(MemToMemConversionStage)),
-				//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockOptimizationStage)),				
-				//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockReorderStage)),			
-			};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		#endregion // IPipelineStage Members
 

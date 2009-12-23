@@ -34,18 +34,6 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return @"LeaveSSA"; }
 		}
 
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-			new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(EnterSSA)),
-			new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(StackLayoutStage)),
-			new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IPlatformTransformationStage)),
-		};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
-
 		#endregion IPipelineStage Members
 
 		#region IMethodCompilerStage Members

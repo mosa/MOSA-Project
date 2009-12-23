@@ -31,10 +31,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 new DecodingStage(),
                 new BasicBlockBuilderStage(),
 				new OperandDeterminationStage(),
-                new InstructionLogger(typeof(OperandDeterminationStage)),
+                new InstructionLogger(),
                 //new ConstantFoldingStage(),
                 new CILTransformationStage(),
-                //new InstructionLogger(typeof(CILTransformationStage)),
+                //new InstructionLogger(),
 				//InstructionStatisticsStage.Instance,
                 //new DominanceCalculationStage(),
                 //new EnterSSA(),
@@ -42,15 +42,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 //new ConstantFoldingStage(),
                 //new LeaveSSA(),
 				new StackLayoutStage(),
-                new InstructionLogger(typeof(StackLayoutStage)),
+                new InstructionLogger(),
 				//new BlockReductionStage(),
 				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
 				//new BasicBlockOrderStage()	
 				new CodeGenerationStage(),
-                //new InstructionLogger(typeof(CodeGenerationStage)),
-               // new InstructionLogger(typeof(CodeGenerationStage)),
+                //new InstructionLogger(),
             });
         }
 

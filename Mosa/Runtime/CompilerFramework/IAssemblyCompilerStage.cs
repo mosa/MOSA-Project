@@ -12,7 +12,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// This interface represents a stage of compilation of an assembly.
     /// </summary>
-    public interface IAssemblyCompilerStage
+    public interface IAssemblyCompilerStage : IPipelineStage
     {
         /// <summary>
         /// Performs stage specific processing on the compiler context.

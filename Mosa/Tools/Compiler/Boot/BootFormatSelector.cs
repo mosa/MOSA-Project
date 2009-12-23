@@ -106,20 +106,6 @@ namespace Mosa.Tools.Compiler.Boot
 		}
 
 		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get 
-            {
-                if (implementation == null)
-                    return null;
-                return ((IPipelineStage)implementation).PipelineStageOrder; 
-            }
-		}
-
-		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="compiler">The compiler context to perform processing in.</param>

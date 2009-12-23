@@ -60,16 +60,6 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return @"FlowGraph Visualization Stage"; }
 		}
 
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-			new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IR.CILTransformationStage))
-		};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
-
 		#endregion // IPipelineStage
 
 		#region IMethodCompilerStage Members

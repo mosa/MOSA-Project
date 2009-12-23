@@ -89,16 +89,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"StackRegisterAllocator"; } }
 
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				// TODO
-			};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
-
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>

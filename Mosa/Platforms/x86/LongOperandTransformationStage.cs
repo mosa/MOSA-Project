@@ -29,7 +29,7 @@ namespace Mosa.Platforms.x86
     /// This stage translates all 64-bit operations to appropriate 32-bit operations on
     /// architectures without appropriate 64-bit integral operations.
     /// </remarks>
-    public sealed class LongOperandTransformationStage : CodeTransformationStage, CIL.ICILVisitor, IR.IIRVisitor, IPlatformTransformationStage, IPipelineStage
+    public sealed class LongOperandTransformationStage : CodeTransformationStage, CIL.ICILVisitor, IR.IIRVisitor, IPlatformStage, IPipelineStage
     {
         #region IPipelineStage Members
 
@@ -38,19 +38,6 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <value>The name of the compilation stage.</value>
         string IPipelineStage.Name { get { return @"X86.LongOperandTransformationStage"; } }
-
-        private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(StackLayoutStage)),
-				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(AddressModeConversionStage)),
-				//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockOptimizationStage)),				
-				//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockReorderStage)),			
-			};
-
-        /// <summary>
-        /// Gets the pipeline stage order.
-        /// </summary>
-        /// <value>The pipeline stage order.</value>
-        PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
         #endregion // IPipelineStage Members
 

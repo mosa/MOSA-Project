@@ -41,23 +41,23 @@ namespace Mosa.Tools.Compiler
         /// <param name="type">The type.</param>
         /// <param name="method">The method.</param>
         public AotMethodCompiler(AotCompiler compiler, RuntimeType type, RuntimeMethod method)
-            : base(compiler.Pipeline.Find<IAssemblyLinker>(), compiler.Architecture, compiler.Assembly, type, method)
+            : base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compiler.Assembly, type, method)
         {
             aotCompiler = compiler;
             Pipeline.AddRange(new IMethodCompilerStage[] {
 				new DecodingStage(),
-				new InstructionLogger(typeof(DecodingStage)),
+				new InstructionLogger(),
 				new BasicBlockBuilderStage(),
-				new InstructionLogger(typeof(BasicBlockBuilderStage)),
+				new InstructionLogger(),
 				new OperandDeterminationStage(),
-				new InstructionLogger(typeof(OperandDeterminationStage)),
+				new InstructionLogger(),
 				new CILTransformationStage(),
-				new InstructionLogger(typeof(CILTransformationStage)),
+				new InstructionLogger(),
 				//InstructionStatisticsStage.Instance,
-				new DominanceCalculationStage(),
-				new InstructionLogger(typeof(DominanceCalculationStage)),
+				//new DominanceCalculationStage(),
+				new InstructionLogger(),
 				//new EnterSSA(),
-				//new InstructionLogger(typeof(EnterSSA)),
+				//new InstructionLogger(),
 				//new ConstantPropagationStage(),
 				//InstructionLogger.Instance,
 				//new ConstantFoldingStage(),
@@ -67,11 +67,12 @@ namespace Mosa.Tools.Compiler
 				//InstructionLogger.Instance,
 				//InstructionLogger.Instance,
 				new StackLayoutStage(),
-				new InstructionLogger(typeof(StackLayoutStage)),
+				new PlatformStubStage(),
+				new InstructionLogger(),
 				//InstructionLogger.Instance,
 				//new BlockReductionStage(),
 				new LoopAwareBlockOrderStage(),
-				new InstructionLogger(typeof(LoopAwareBlockOrderStage)),
+				new InstructionLogger(),
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),	
 		//		InstructionStatisticsStage.Instance,
@@ -93,7 +94,7 @@ namespace Mosa.Tools.Compiler
             MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
             if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
             {
-                TypeInitializers.TypeInitializerSchedulerStage tiss = aotCompiler.Pipeline.Find<TypeInitializers.TypeInitializerSchedulerStage>();
+                TypeInitializers.TypeInitializerSchedulerStage tiss = aotCompiler.Pipeline.FindFirst<TypeInitializers.TypeInitializerSchedulerStage>();
                 tiss.Schedule(Method);
             }
 

@@ -113,19 +113,6 @@ namespace Mosa.Tools.Compiler
 		}
 
 		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-		{
-			get
-			{
-				CheckImplementation();
-				return ((IPipelineStage)implementation).PipelineStageOrder;
-			}
-		}
-
-		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		public void Run()

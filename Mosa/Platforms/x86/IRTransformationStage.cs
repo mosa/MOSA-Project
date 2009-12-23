@@ -28,7 +28,7 @@ namespace Mosa.Platforms.x86
 	/// <remarks>
 	/// This transformation stage transforms IR instructions into their equivalent X86 sequences.
 	/// </remarks>
-	public sealed class IRTransformationStage : BaseTransformationStage, IR.IIRVisitor, IMethodCompilerStage, IPlatformTransformationStage, IPipelineStage
+	public sealed class IRTransformationStage : BaseTransformationStage, IR.IIRVisitor, IMethodCompilerStage, IPlatformStage, IPipelineStage
 	{
 
 		#region IPipelineStage Members
@@ -38,19 +38,6 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"X86.IRTransformationStage"; } }
-
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(CILTransformationStage)),
-				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(TweakTransformationStage)),
-				//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockOptimizationStage)),				
-				//new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockReorderStage)),			
-			};
-
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
 		#endregion // IMethodCompilerStage Members
 
