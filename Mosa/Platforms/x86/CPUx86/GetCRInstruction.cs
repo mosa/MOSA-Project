@@ -15,7 +15,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 move cr0 instruction.
     /// </summary>
-	public sealed class SetCR0Instruction : OneOperandInstruction, IIntrinsicInstruction
+	public sealed class GetCRInstruction : OneOperandInstruction, IIntrinsicInstruction
     {
 		#region Data Members
 
