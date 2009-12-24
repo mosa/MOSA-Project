@@ -47,6 +47,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		public void ReplaceIntrinsicCall(Context context)
 		{
+			context.Remove();
 		}
 
         #endregion // Methods
