@@ -42,6 +42,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 //new ConstantFoldingStage(),
                 //new LeaveSSA(),
 				new StackLayoutStage(),
+				new PlatformStubStage(),
                 new InstructionLogger(),
 				//new BlockReductionStage(),
 				new LoopAwareBlockOrderStage(),
