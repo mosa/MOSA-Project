@@ -161,6 +161,7 @@ namespace Mosa.Platforms.x86
 			methodCompilerPipeline.InsertAfter<PlatformStubStage>(
 				new IMethodCompilerStage[]
                 {
+					new InstructionLogger(),
                     new LongOperandTransformationStage(),
 					new InstructionLogger(),
                     new AddressModeConversionStage(),
