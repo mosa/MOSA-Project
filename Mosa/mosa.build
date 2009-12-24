@@ -9,7 +9,7 @@
 	<property name="debug" value="none" overwrite="false"/>
 	
 	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="${project::get-base-directory()}/Bin"/>
+	<property name="outputDirectory" value="${project::get-base-directory()}/../Bin"/>
 	
 	<!-- Remove output directory -->
 	<target name="clean">
@@ -36,9 +36,8 @@
 	<target name="tools" depends="init, classlib, devicesystem, devicedrivers, filesystem, emulateddevices, kernel, platforms, runtime"><nant buildfile="Tools/mosa.build"/></target>
 	<target name="helloworld" depends="init"><nant buildfile="HelloWorld/mosa.build"/></target>
 	<target name="emulator" depends="init, devicesystem, devicedrivers, emulatedkernel, filesystem, emulateddevices, classlib, pictor, pictor.ui"><nant buildfile="Emulator/mosa.build"/></target>
-	<target name="unittests" depends="runtime"><nant buildfile="UnitTests/mosa.build"/></target>
 	<!-- meta target -->
-	<target name="all" depends="classlib, devicesystem, devicedrivers, filesystem, emulatedkernel, emulateddevices, kernel, pictor, pictor.ui, platforms, runtime, tools, helloworld, emulator, unittests"/>
+	<target name="all" depends="classlib, devicesystem, devicedrivers, filesystem, emulatedkernel, emulateddevices, kernel, pictor, pictor.ui, platforms, runtime, tools, helloworld, emulator"/>
 
 		
 </project>
