@@ -197,20 +197,19 @@ namespace Mosa.Platforms.x86
         [Intrinsic(typeof(Architecture), typeof(CPUx86.BochsDebug))]
         public static void BochsDebug() { ThrowPlatformNotSupported(); return; }
 
-
 		/// <summary>
 		/// Sets the cr0.
 		/// </summary>
-		/// <param name="pagedirectory">The pagedirectory.</param>
-		[Intrinsic(typeof(Architecture), typeof(CPUx86.SetRC0Instruction))]
-		public static void SetCR0(uint pagedirectory) { ThrowPlatformNotSupported(); return; }
+		/// <param name="status">The status.</param>
+		[Intrinsic(typeof(Architecture), typeof(CPUx86.SetCR0Instruction))]
+		public static void SetCR0(uint status) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Sets the cr3.
 		/// </summary>
 		/// <param name="pagedirectory">The pagedirectory.</param>
-		[Intrinsic(typeof(Architecture), typeof(CPUx86.SetRC3Instruction))]
-		public static void SetCR3(uint pagedirectory) { ThrowPlatformNotSupported(); return; }
+		[Intrinsic(typeof(Architecture), typeof(CPUx86.SetCR3Instruction))]
+		public static void SetCR3(uint pagedirectory) { ThrowPlatformNotSupported(); }
 
         #endregion
 

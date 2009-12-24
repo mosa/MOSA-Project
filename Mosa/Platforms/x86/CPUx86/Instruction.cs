@@ -274,11 +274,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly SetRC0Instruction SetRC0Instruction = new SetRC0Instruction();
+		public static readonly SetCR0Instruction SetCR0Instruction = new SetCR0Instruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly SetRC3Instruction SetRC3Instruction = new SetRC3Instruction();
+		public static readonly SetCR3Instruction SetCR3Instruction = new SetCR3Instruction();
 		/// <summary>
 		/// 
 		/// </summary>
