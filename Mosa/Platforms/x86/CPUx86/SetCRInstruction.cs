@@ -12,25 +12,25 @@ using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-	/// <summary>
-	/// Representations the x86 move cr3 instruction.
-	/// </summary>
-	public sealed class SetCR3Instruction : OneOperandInstruction, IIntrinsicInstruction
-	{
+    /// <summary>
+    /// Representations the x86 move cr0 instruction.
+    /// </summary>
+	public sealed class SetCR0Instruction : OneOperandInstruction, IIntrinsicInstruction
+    {
 		#region Data Members
 
 		#endregion // Data Members
 
-		#region Methods
+        #region Methods
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="ctx"></param>
-		/// <param name="emitter"></param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-		{
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="emitter"></param>
+        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+        {
+        }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -50,6 +50,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			context.Remove();
 		}
 
-		#endregion // Methods
-	}
+        #endregion // Methods
+    }
 }
