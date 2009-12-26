@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Mosa.Kernel.Memory;
+using Mosa.Runtime.Memory;
 using Mosa.Runtime;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;

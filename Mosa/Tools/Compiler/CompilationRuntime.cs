@@ -12,10 +12,10 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime;
-using Mosa.Kernel.Memory;
+using Mosa.Runtime.Memory;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Loader;
-//using Mosa.Runtime.Jit;
+using Mosa.Runtime.Memory;
 
 namespace Mosa.Tools.Compiler
 {

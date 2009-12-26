@@ -18,11 +18,16 @@ namespace Mosa.Kernel
 		/// <summary>
 		/// Entry point for the Kernel 
 		/// </summary>
-		public static void Start(uint eax, uint ebx)
+		public static void Start()
 		{
-			// Set Multiboot Structure Location
-			//Multiboot.SetMultibootLocation(ebx, eax); 
+			// Clear Screen
+			//Screen.Clear();
+			//Screen.SetCursor(0, 0);
+			//Screen.Color = 0x0E;
 
+			// Set Multiboot Structure Location
+			//Multiboot.SetMultibootLocation(Memory.Get32(0x200004), Memory.Get32(0x200000));
+			
 			// Setup Page Frame Allocator
 			//PageFrameAllocator.Setup();
 

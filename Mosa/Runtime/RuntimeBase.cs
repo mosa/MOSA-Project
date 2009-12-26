@@ -9,7 +9,7 @@
 
 using System;
 using Mosa.Runtime.Vm;
-using Mosa.Kernel.Memory;
+using Mosa.Runtime.Memory;
 using Mosa.Runtime.Loader;
 using System.Runtime.CompilerServices;
 

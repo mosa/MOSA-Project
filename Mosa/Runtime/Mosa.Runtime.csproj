@@ -57,12 +57,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Kernel\Mosa.Kernel.csproj">
-      <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
-      <Name>Mosa.Kernel</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="CompilerFramework\BaseInstruction.cs" />
     <Compile Include="CompilerFramework\BasicBlockBuilderStage.cs" />
     <Compile Include="CompilerFramework\CIL\AddInstruction.cs" />
@@ -229,6 +223,8 @@
     <Compile Include="CompilerFramework\LocalCSE.cs" />
     <Compile Include="CompilerFramework\IMethodCompiler.cs" />
     <Compile Include="Loader\PE\StreamHeader.cs" />
+    <Compile Include="Memory\IMemoryPageManager.cs" />
+    <Compile Include="Memory\PageAccessFlags.cs" />
     <Compile Include="Metadata\Symbol.cs" />
     <Compile Include="IJitService.cs">
       <SubType>Code</SubType>

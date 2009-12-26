@@ -10,9 +10,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
-using Mosa.Kernel.Memory;
 using System.Runtime.InteropServices;
+
+using Mosa.Runtime.Memory;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {

@@ -8,7 +8,7 @@
  */
 
 using System;
-using Mosa.Kernel.Memory;
+using Mosa.Runtime.Memory;
 
 namespace Mosa.Tools.Compiler
 {

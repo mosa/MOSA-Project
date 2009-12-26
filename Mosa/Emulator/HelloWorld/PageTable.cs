@@ -21,14 +21,6 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		public static void Setup()
 		{
-			SetupPageDirectory();
-		}
-
-		/// <summary>
-		/// Sets up the page directory.
-		/// </summary>
-		private static void SetupPageDirectory()
-		{
 			// Get Page for Page Directory
 			_pageDirectory = PageFrameAllocator.Allocate();
 
@@ -42,10 +34,10 @@ namespace Mosa.Kernel.Memory.X86
 			SetupIdentityPages(0, 1024 * 1024 * 24, false);
 
 			// Set CR3 register on processor - sets page directory
-			Mosa.Platforms.x86.Native.SetCR3(_pageDirectory);
+			Memory.CR3 = _pageDirectory;
 
 			// Set CR0 register on processor - turns on virtual memory
-			Mosa.Platforms.x86.Native.SetCR0(0x80000000); // TODO: Only set this bit! Leave all others as-is.
+			Memory.CR0 = Memory.CR0 | 0x80000000;
 		}
 
 		/// <summary>

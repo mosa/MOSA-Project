@@ -99,7 +99,35 @@ namespace Mosa.Platforms.x86
 		/// <param name="address">The address.</param>
 		public static void Invlpg(uint address)
 		{
-			return; // Nothing to do
+			return; // Nothing to do, emulator doesn't emulator or cache TLB entries
+		}
+
+		/// <summary>
+		/// Sets the control register.
+		/// </summary>
+		/// <param name="register">The control register</param>
+		/// <param name="status">The status.</param>
+		public static void SetControlRegister(byte register, uint status)
+		{
+			switch (register) {
+				case 0: Mosa.EmulatedKernel.MemoryDispatch.CR0 = status; return;
+				case 3: Mosa.EmulatedKernel.MemoryDispatch.CR3 = status; return;
+				default: return;
+			}
+		}
+
+		/// <summary>
+		/// Gets the control register.
+		/// </summary>
+		/// <param name="register">The pagedirectory.</param>
+		/// <returns></returns>
+		public static uint GetControlRegister(byte register)
+		{
+			switch (register) {
+				case 0: return Mosa.EmulatedKernel.MemoryDispatch.CR0;
+				case 3: return Mosa.EmulatedKernel.MemoryDispatch.CR3;
+				default: return 0;
+			}
 		}
 
 	}

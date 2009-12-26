@@ -12,7 +12,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using Mosa.Kernel.Memory;
+
+using Mosa.Runtime.Memory;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
