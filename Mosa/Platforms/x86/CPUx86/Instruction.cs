@@ -363,6 +363,14 @@ namespace Mosa.Platforms.x86.CPUx86
         /// 
         /// </summary>
         public static readonly LeaInstruction LeaInstruction = new LeaInstruction();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly MoveRegToCRInstruction MoveRegToCRInstruction = new MoveRegToCRInstruction();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly MoveCRToRegInstruction MoveCRToRegInstruction = new MoveCRToRegInstruction();
 		
 	}
 }
