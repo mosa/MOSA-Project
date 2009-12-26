@@ -9,46 +9,32 @@
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
     /// Representations the x86 move cr0 instruction.
     /// </summary>
-	public sealed class GetCRInstruction : OneOperandInstruction, IIntrinsicInstruction
+    public sealed class GetCRInstruction : TwoOperandInstruction, IIntrinsicInstruction
     {
-		#region Data Members
-
-		#endregion // Data Members
-
         #region Methods
 
         /// <summary>
-        /// 
+        /// Replaces the instrinsic call site
         /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="emitter"></param>
-        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+        /// <param name="context">The context.</param>
+        public void ReplaceIntrinsicCall(Context context)
         {
+            if (!(context.Operand1 is ConstantOperand))
+                return;
+
+            Operand result = context.Result;
+            Operand operand1 = context.Operand1;
+
+            context.SetInstruction(Instruction.MoveCRToRegInstruction, new RegisterOperand(result.Type, GeneralPurposeRegister.EAX), operand1);
+            context.AppendInstruction(IR.Instruction.MoveInstruction, result, new RegisterOperand(result.Type, GeneralPurposeRegister.EAX));
         }
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor object.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IX86Visitor visitor, Context context)
-		{
-		}
-
-		/// <summary>
-		/// Replaces the instrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
-		{
-			context.Remove();
-		}
 
         #endregion // Methods
     }

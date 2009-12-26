@@ -82,6 +82,8 @@
     <Compile Include="CPUx86\GetCRInstruction.cs" />
     <Compile Include="CPUx86\JmpInstruction.cs" />
     <Compile Include="CPUx86\LeaInstruction.cs" />
+    <Compile Include="CPUx86\MoveCRToReg.cs" />
+    <Compile Include="CPUx86\MoveRegToCRInstruction.cs" />
     <Compile Include="CPUx86\SetCRInstruction.cs" />
     <Compile Include="CPUx86\UDivInstruction.cs" />
     <Compile Include="SimplePeepholeOptimizationStage.cs" />
