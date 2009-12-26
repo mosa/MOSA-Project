@@ -200,16 +200,18 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Sets the cr0.
 		/// </summary>
+		/// <param name="register">The control register</param>
 		/// <param name="status">The status.</param>
 		[Intrinsic(typeof(Architecture), typeof(CPUx86.SetCRInstruction))]
-		public static void SetControlRegister(uint status) { ThrowPlatformNotSupported(); }
+		public static void SetControlRegister(byte register, uint status) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Sets the cr3.
 		/// </summary>
-		/// <param name="pagedirectory">The pagedirectory.</param>
+        /// <param name="register">The pagedirectory.</param>
 		[Intrinsic(typeof(Architecture), typeof(CPUx86.GetCRInstruction))]
-		public static void GetControlRegister(uint pagedirectory) { ThrowPlatformNotSupported(); }
+        public static uint GetControlRegister(byte register) { ThrowPlatformNotSupported();
+		    return 0;  }
 
         #endregion
 

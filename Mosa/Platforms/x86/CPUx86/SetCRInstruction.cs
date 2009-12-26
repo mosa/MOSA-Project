@@ -9,37 +9,16 @@
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
+using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
     /// Representations the x86 move cr0 instruction.
     /// </summary>
-	public sealed class SetCRInstruction : OneOperandInstruction, IIntrinsicInstruction
+	public sealed class SetCRInstruction : TwoOperandInstruction, IIntrinsicInstruction
     {
-		#region Data Members
-
-		#endregion // Data Members
-
         #region Methods
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="emitter"></param>
-        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
-        }
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor object.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IX86Visitor visitor, Context context)
-		{
-		}
 
 		/// <summary>
 		/// Replaces the instrinsic call site
@@ -47,7 +26,13 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		public void ReplaceIntrinsicCall(Context context)
 		{
-			context.Remove();
+            if (!(context.Operand1 is ConstantOperand))
+                return;
+
+		    Operand operand1 = context.Operand1;
+		    Operand operand2 = context.Operand2;
+            context.SetInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(operand2.Type, GeneralPurposeRegister.EAX), operand2);
+            context.AppendInstruction(Instruction.MoveRegToCRInstruction, operand1, new RegisterOperand(operand2.Type, GeneralPurposeRegister.EAX));
 		}
 
         #endregion // Methods

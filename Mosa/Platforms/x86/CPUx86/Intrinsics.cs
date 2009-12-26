@@ -53,18 +53,18 @@ namespace Mosa.Platforms.x86.CPUx86
 			Dictionary<Type, IIntrinsicInstruction> map = new Dictionary<Type, IIntrinsicInstruction>();
 
 			map.Add(typeof(BochsDebug), BochsDebug);
-			map.Add(typeof(OutInstruction), CPUx86.Instruction.OutInstruction);
-			map.Add(typeof(InInstruction), CPUx86.Instruction.InInstruction);
-			map.Add(typeof(CpuIdEaxInstruction), CPUx86.Instruction.CpuIdEaxInstruction);
-			map.Add(typeof(CpuIdEbxInstruction), CPUx86.Instruction.CpuIdEbxInstruction);
-			map.Add(typeof(CpuIdEcxInstruction), CPUx86.Instruction.CpuIdEcxInstruction);
-			map.Add(typeof(CpuIdEdxInstruction), CPUx86.Instruction.CpuIdEdxInstruction);
-			map.Add(typeof(CpuIdInstruction), CPUx86.Instruction.CpuIdInstruction);
-			map.Add(typeof(InvlpgInstruction), CPUx86.Instruction.InvlpgInstruction);
-			map.Add(typeof(NopInstruction), CPUx86.Instruction.NopInstruction);
-            map.Add(typeof(MovInstruction), CPUx86.Instruction.MovInstruction);
-            map.Add(typeof(SetCRInstruction), CPUx86.Instruction.SetCRInstruction);
-			map.Add(typeof(GetCRInstruction), CPUx86.Instruction.GetCRInstruction);
+			map.Add(typeof(OutInstruction), Instruction.OutInstruction);
+			map.Add(typeof(InInstruction), Instruction.InInstruction);
+			map.Add(typeof(CpuIdEaxInstruction), Instruction.CpuIdEaxInstruction);
+			map.Add(typeof(CpuIdEbxInstruction), Instruction.CpuIdEbxInstruction);
+			map.Add(typeof(CpuIdEcxInstruction), Instruction.CpuIdEcxInstruction);
+			map.Add(typeof(CpuIdEdxInstruction), Instruction.CpuIdEdxInstruction);
+			map.Add(typeof(CpuIdInstruction), Instruction.CpuIdInstruction);
+			map.Add(typeof(InvlpgInstruction), Instruction.InvlpgInstruction);
+			map.Add(typeof(NopInstruction), Instruction.NopInstruction);
+            map.Add(typeof(MovInstruction), Instruction.MovInstruction);
+            map.Add(typeof(SetCRInstruction), Instruction.SetCRInstruction);
+			map.Add(typeof(GetCRInstruction), Instruction.GetCRInstruction);
 
 			// TODO - finish up the list
 
