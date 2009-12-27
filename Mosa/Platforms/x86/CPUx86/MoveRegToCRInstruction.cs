@@ -19,16 +19,22 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class MoveRegToCRInstruction : TwoOperandInstruction
     {
+		#region Data Members
+
+		private static readonly byte[] MOVCR = new byte[] { 0x0F, 0x22 };
+
+		#endregion
+
         #region Methods
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="emitter"></param>
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
         protected override void Emit(Context ctx, MachineCodeEmitter emitter)
         {
-            emitter.Emit(new byte[] { 0x0F, 0x22 }, Convert.ToByte((ctx.Result as ConstantOperand).Value), ctx.Operand1, null);
+			emitter.Emit(MOVCR, Convert.ToByte((ctx.Result as ConstantOperand).Value), ctx.Operand1, null);
         }
         #endregion // Methods
     }
