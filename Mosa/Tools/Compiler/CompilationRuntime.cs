@@ -15,7 +15,6 @@ using Mosa.Runtime;
 using Mosa.Runtime.Memory;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Loader;
-using Mosa.Runtime.Memory;
 
 namespace Mosa.Tools.Compiler
 {

@@ -14,10 +14,10 @@ namespace Mosa.Kernel.Memory.X86
 	/// </summary>
 	public static class PageFrameAllocator
 	{
-		// Location for memory map starts at 16Mb
-		private const uint StartLocation = 1024 * 1024 * 16;
-		// Reserve memory up to 24Mb
-		private const uint ReserveMemory = 1024 * 1024 * 24;
+		// Location for memory map starts at 28Mb
+		private const uint StartLocation = 1024 * 1024 * 28;
+		// Reserve memory up to 32Mb
+		private const uint ReserveMemory = 1024 * 1024 * 32;
 		// Maximum memory Usage (4Gb)
 		private const uint MaximumMemory = 0xFFFFFFFF;
 

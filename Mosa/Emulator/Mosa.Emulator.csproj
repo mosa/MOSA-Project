@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="HelloWorld\Boot.cs" />
     <Compile Include="HelloWorld\CMOS.cs" />
+    <Compile Include="HelloWorld\Kernel.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="HelloWorld\Multiboot.cs" />
     <Compile Include="HelloWorld\PageFrameAllocator.cs" />

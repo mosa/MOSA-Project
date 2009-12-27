@@ -14,24 +14,24 @@ namespace Mosa.Kernel.Memory.X86
 	/// </summary>
 	public static class PageTable
 	{
-		private static uint _pageDirectory;
+		// Location for page directory starts at 20Mb
+		private static uint _pageDirectory = 1024 * 1024 * 20; // 0x1400000
+
+		// Location for page tables start at 16Mb
+		private static uint _pageTable = 1024 * 1024 * 16;	// 0x1000000
 
 		/// <summary>
 		/// Sets up the PageTable
 		/// </summary>
 		public static void Setup()
 		{
-			// Get Page for Page Directory
-			_pageDirectory = PageFrameAllocator.Allocate();
+			// Setup Page Directory
+			for (int index = 0; index < 1024; index++)
+				Memory.Set32((uint)(_pageDirectory + (index * 4)), (uint)(_pageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
 
-			// Clear out that page
-			Memory.Clear(_pageDirectory, 4096);
-
-			// Map Page Directory
-			SetupIdentityPages(_pageDirectory, 4096, false);
-
-			// Map the first 24Mb of memory
-			SetupIdentityPages(0, 1024 * 1024 * 24, false);
+			// Map the first 32Mb of memory (8192 4K pages)
+			for (int index = 0; index < 8192; index++)
+				Memory.Set32((uint)(_pageTable + (index * 4)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 
 			// Set CR3 register on processor - sets page directory
 			Memory.CR3 = _pageDirectory;
@@ -41,86 +41,13 @@ namespace Mosa.Kernel.Memory.X86
 		}
 
 		/// <summary>
-		/// Sets up the identity pages.
-		/// </summary>
-		/// <param name="start">The start.</param>
-		/// <param name="size">The size.</param>
-		/// <param name="readOnly">if set to <c>true</c> [read only].</param>
-		public static void SetupIdentityPages(uint start, uint size, bool readOnly)
-		{
-			if (size == 0) return;
-
-			// force alignment to 4Kb page boundary
-			start = (uint)(start & ~(0xFFF));
-			size = (uint)((size + 0xFFF - 1) & ~(0xFFF));
-
-			uint flag = (uint)(readOnly ? 0x00 : 0x02);
-
-			for (uint mem = start; mem < start + size; mem = mem + 4096)
-				MapVirtualAddressToPhysical(mem, mem, flag);
-		}
-
-		/// <summary>
 		/// Maps the virtual address to physical.
 		/// </summary>
+		/// <param name="virtualAddress">The virtual address.</param>
 		/// <param name="physicalAddress">The physical address.</param>
-		/// <param name="virtualAddress">The virtual address.</param>
-		/// <param name="flags">The flags.</param>
-		public static void MapVirtualAddressToPhysical(uint physicalAddress, uint virtualAddress, uint flags)
+		public static void MapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress)
 		{
-			uint pageTable = GetPageTable(virtualAddress);
-			uint pageTableIndex = virtualAddress >> 12 & 0x03FF;
-
-			Memory.Set32(pageTable + (pageTableIndex * 4), (uint)(physicalAddress | (flags & 0xFFF) | 0x01));
+			Memory.Set32(_pageTable + ((virtualAddress >> 12) * 4), (uint)(physicalAddress | 0x04 | 0x02 | 0x01));
 		}
-
-		/// <summary>
-		/// Gets the page table.
-		/// </summary>
-		/// <param name="virtualAddress">The virtual address.</param>
-		/// <returns></returns>
-		public static uint GetPageTable(uint virtualAddress)
-		{
-			uint index = virtualAddress >> 22;
-
-			uint entry = Memory.Get32(_pageDirectory + (index * sizeof(uint)));
-
-			// Check if Page Directory Entry does exist
-			if ((entry >> 12) != 0)
-				return (uint)(entry & ~(0x03FF));
-
-			// Page Directory Entry does not exists, so create one
-
-			// Get Page for Page Table Entry
-			uint pageEntry = PageFrameAllocator.Allocate();
-
-			// Clear out that page
-			Memory.Clear(pageEntry, 4096);
-
-			// Set the Page Directory Entry to the new Page Table
-			// 0x02 = Read/Write, 0x01 = Present, 0x100 = Available (used to mark this page is not swappable to disk)
-			Memory.Set32(_pageDirectory + (index * sizeof(uint)), (uint)(pageEntry & ~(0x03FF)) | 0x02 | 0x01 | 0x100);
-
-			// Map Page Table Entry
-			SetupIdentityPages(pageEntry, 4096, false);
-
-			// Flush TLB
-			Memory.FlushTLB(virtualAddress);
-
-			return pageEntry;
-		}
-
-		/// <summary>
-		/// Releases the virtual address.
-		/// </summary>
-		/// <param name="virtualAddress">The virtual address.</param>
-		public static void ReleaseVirtualAddress(uint virtualAddress)
-		{
-			uint pageTable = GetPageTable(virtualAddress);
-			uint pageTableIndex = virtualAddress >> 12 & 0x03FF;
-
-			Memory.Set32(pageTable + (pageTableIndex * 4), 0x00);
-		}
-
 	}
 }

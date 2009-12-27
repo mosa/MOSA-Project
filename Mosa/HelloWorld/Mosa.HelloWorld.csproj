@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Boot.cs" />
     <Compile Include="CMOS.cs" />
+    <Compile Include="Kernel.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Multiboot.cs" />
     <Compile Include="PageFrameAllocator.cs">

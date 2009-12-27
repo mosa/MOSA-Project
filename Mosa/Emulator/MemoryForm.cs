@@ -93,11 +93,16 @@ namespace Mosa.Emulator
 			switch (cbSelect.SelectedIndex) {
 				case 0: tbMemory.Text = "0xB8000"; break;
 				case 1: tbMemory.Text = "0x" + Mosa.EmulatedKernel.MemoryDispatch.Read32(0x200004).ToString("X"); break;
-				case 2: tbMemory.Text = "0x01000000"; break;
-				case 3: tbMemory.Text = "0x" + Mosa.EmulatedKernel.MemoryDispatch.CR3.ToString("X"); break;
+				case 2: tbMemory.Text = "0x" + Mosa.EmulatedKernel.MemoryDispatch.CR3.ToString("X"); break;
+				case 3: tbMemory.Text = "0x" + Mosa.EmulatedKernel.MemoryDispatch.Read32(1024 * 1024 * 28).ToString("X"); break;
 				default: break;
 			}
 			UpdateForm();
+		}
+
+		private void cbSelect_Click(object sender, EventArgs e)
+		{
+
 		}
 
 	}

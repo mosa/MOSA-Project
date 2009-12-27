@@ -33,6 +33,9 @@ namespace Mosa.HelloWorld
 			PageTable.Setup();
 			Screen.SetCursor(24, 3);
 			Screen.Write('4');
+			//Kernel.Setup();
+			Screen.SetCursor(24, 3);
+			Screen.Write('5');
 
 			Screen.GotoTop();
 			Screen.Color = 0x0E;
