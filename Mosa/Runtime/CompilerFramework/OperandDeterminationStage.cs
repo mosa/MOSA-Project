@@ -71,28 +71,7 @@ namespace Mosa.Runtime.CompilerFramework
 			_unprocessed.Push(_firstBlock);
 			_stack.Push(new List<Operand>());
 
-			while (_unprocessed.Count != 0) 
-            {
-				BasicBlock block = _unprocessed.Pop();
-				List<Operand> stack = _stack.Pop();
-
-			    if (_processed.ContainsKey(block)) 
-                    continue;
-
-			    List<Operand> currentStack = GetCurrentStack(stack);
-
-			    ProcessInstructions(block, currentStack, MethodCompiler);
-			    _processed.Add(block, 0);
-
-                foreach (BasicBlock nextBlock in block.NextBlocks)
-                {
-                    if (!_processed.ContainsKey(nextBlock))
-                    {
-                        _unprocessed.Push(nextBlock);
-                        _stack.Push(currentStack);
-                    }
-                }
-            }
+		    ProcessUnprocessedItems();
 
 			if (_processed.Count != BasicBlocks.Count) 
             {
@@ -117,6 +96,35 @@ namespace Mosa.Runtime.CompilerFramework
 			_stack = null;
 			_processed = null;
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void ProcessUnprocessedItems()
+        {
+            while (_unprocessed.Count != 0)
+            {
+                BasicBlock block = _unprocessed.Pop();
+                List<Operand> stack = _stack.Pop();
+
+                if (_processed.ContainsKey(block))
+                    continue;
+
+                List<Operand> currentStack = GetCurrentStack(stack);
+
+                ProcessInstructions(block, currentStack, MethodCompiler);
+                _processed.Add(block, 0);
+
+                foreach (BasicBlock nextBlock in block.NextBlocks)
+                {
+                    if (_processed.ContainsKey(nextBlock))
+                        continue;
+
+                    _unprocessed.Push(nextBlock);
+                    _stack.Push(currentStack);
+                }
+            }
+        }
 
 		/// <summary>
 		/// Gets the current stack.
