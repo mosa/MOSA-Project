@@ -166,7 +166,7 @@ namespace Mosa.Platforms.x86
 			int relOffset;
 
 			if (_labels.TryGetValue(label, out pos)) {
-//				Debug.Assert(pos == currentPosition);
+				//				Debug.Assert(pos == currentPosition);
 				if (pos != currentPosition)
 					throw new ArgumentException(@"Label already defined for another code point.", @"label");
 			}
@@ -352,7 +352,7 @@ namespace Mosa.Platforms.x86
 			// Write the opcode
 			_codeStream.Write(code, 0, code.Length);
 
-			if (null == dest && null == src)
+			if (dest == null && src == null)
 				return;
 
 			// Write the mod R/M byte
@@ -365,7 +365,7 @@ namespace Mosa.Platforms.x86
 			}
 
 			// Add displacement to the code
-			if (null != displacement)
+			if (displacement != null)
 				EmitDisplacement(displacement);
 
 			// Add immediate bytes
@@ -391,12 +391,12 @@ namespace Mosa.Platforms.x86
 			// Write the opcode
 			_codeStream.Write(code, 0, code.Length);
 
-			if (null == dest && null == src)
+			if (dest == null && src == null)
 				return;
 
 			// Write the mod R/M byte
 			modRM = CalculateModRM(regField, dest, src, out sib, out displacement);
-			if (null != modRM) {
+			if (modRM != null) {
 				_codeStream.WriteByte(modRM.Value);
 				if (sib.HasValue) {
 					_codeStream.WriteByte(sib.Value);
@@ -404,7 +404,7 @@ namespace Mosa.Platforms.x86
 			}
 
 			// Add displacement to the code
-			if (null != displacement)
+			if (displacement != null)
 				EmitDisplacement(displacement);
 
 			// Add immediate bytes
@@ -426,7 +426,7 @@ namespace Mosa.Platforms.x86
 			// Write the opcode
 			_codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
-			if (null == dest && null == src)
+			if (dest == null && src == null)
 				return;
 
 			// Write the mod R/M byte
@@ -439,7 +439,7 @@ namespace Mosa.Platforms.x86
 			}
 
 			// Add displacement to the code
-			if (null != displacement)
+			if (displacement != null)
 				WriteDisplacement(displacement);
 
 			// Add immediate bytes
@@ -477,7 +477,7 @@ namespace Mosa.Platforms.x86
 			}
 
 			// Add displacement to the code
-			if (null != displacement)
+			if (displacement != null)
 				WriteDisplacement(displacement);
 
 			// Add immediate bytes
@@ -745,55 +745,50 @@ namespace Mosa.Platforms.x86
 			MemoryOperand mop1 = op1 as MemoryOperand, mop2 = op2 as MemoryOperand;
 
 			// Normalize the operand order
-			if (null == rop1 && null != rop2) {
+			if (rop1 == null && rop2 != null) {
 				// Swap the memory operands
 				rop1 = rop2; rop2 = null;
 				mop2 = mop1; mop1 = null;
 			}
 
-			if (null != regField)
+			if (regField != null)
 				modRM = (byte)(regField.Value << 3);
 
-			if (null != rop1 && null != rop2) {
+			if (rop1 != null && rop2 != null) {
 				// mod = 11b, reg = rop1, r/m = rop2
 				modRM = (byte)((3 << 6) | (rop1.Register.RegisterCode << 3) | rop2.Register.RegisterCode);
 			}
 			// Check for register/memory combinations
-			else if (null != mop2 && null != mop2.Base) {
+			else if (mop2 != null && mop2.Base != null) {
 				// mod = 10b, reg = rop1, r/m = mop2
 				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | (byte)mop2.Base.RegisterCode);
-				if (null != rop1) {
+				if (rop1 != null)
 					modRM |= (byte)(rop1.Register.RegisterCode << 3);
-				}
 				displacement = mop2;
 			}
-			else if (null != mop2) {
+			else if (mop2 != null) {
 				// mod = 10b, r/m = mop1, reg = rop2
 				modRM = (byte)(modRM.GetValueOrDefault() | 5);
-				if (null != rop1) {
+				if (rop1 != null)
 					modRM |= (byte)(rop1.Register.RegisterCode << 3);
-				}
 				displacement = mop2;
 			}
-			else if (null != mop1 && null != mop1.Base) {
+			else if (mop1 != null && mop1.Base != null) {
 				// mod = 10b, r/m = mop1, reg = rop2
 				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | mop1.Base.RegisterCode);
-				if (null != rop2) {
+				if (rop2 != null)
 					modRM |= (byte)(rop2.Register.RegisterCode << 3);
-				}
 				displacement = mop1;
 			}
-			else if (null != mop1) {
+			else if (mop1 != null) {
 				// mod = 10b, r/m = mop1, reg = rop2
 				modRM = (byte)(modRM.GetValueOrDefault() | 5);
-				if (null != rop2) {
+				if (rop2 != null)
 					modRM |= (byte)(rop2.Register.RegisterCode << 3);
-				}
 				displacement = mop1;
 			}
-			else if (null != rop1) {
+			else if (null != rop1)
 				modRM = (byte)(modRM.GetValueOrDefault() | (3 << 6) | rop1.Register.RegisterCode);
-			}
 
 			return modRM;
 		}

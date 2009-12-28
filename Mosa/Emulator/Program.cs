@@ -270,7 +270,7 @@ namespace Mosa.Emulator
 
 			//while (keyboard.GetKeyPressed() == null) ;
 
-			Mosa.HelloWorld.Boot.EmulatorMain();
+			Mosa.HelloWorld.Boot.Main();
 
 			//EmulatorDemo.StartDemo();
 

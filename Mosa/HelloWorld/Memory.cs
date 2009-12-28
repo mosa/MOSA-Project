@@ -47,6 +47,17 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <param name="value">The value.</param>
+		public unsafe static void Set16(uint location, ushort value)
+		{
+			ushort* at = (ushort*)location;
+			*at = value;
+		}
+
+		/// <summary>
+		/// Sets the specified value at location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <param name="value">The value.</param>
 		public unsafe static void Set8(uint location, byte value)
 		{
 			byte* at = (byte*)location;
@@ -61,6 +72,17 @@ namespace Mosa.Kernel.Memory.X86
 		public unsafe static uint Get32(uint location)
 		{
 			uint* at = (uint*)location;
+			return *at;
+		}
+
+		/// <summary>
+		/// Gets the value at specified location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <returns></returns>
+		public unsafe static ushort Get16(uint location)
+		{
+			ushort* at = (ushort*)location;
 			return *at;
 		}
 

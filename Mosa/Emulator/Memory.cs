@@ -48,6 +48,16 @@ namespace Mosa.Kernel.Memory.X86
 		}
 
 		/// <summary>
+		/// Sets the specified value at location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <param name="value">The value.</param>
+		public static void Set16(uint location, ushort value)
+		{
+			Mosa.EmulatedKernel.MemoryDispatch.Write16(location, value);
+		}
+
+		/// <summary>
 		/// Gets the value at specified location.
 		/// </summary>
 		/// <param name="location">The location.</param>

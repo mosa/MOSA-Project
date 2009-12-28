@@ -61,6 +61,8 @@ namespace Mosa.Platforms.x86.CPUx86
 			map.Add(typeof(CpuIdEdxInstruction), Instruction.CpuIdEdxInstruction);
 			map.Add(typeof(CpuIdInstruction), Instruction.CpuIdInstruction);
 			map.Add(typeof(InvlpgInstruction), Instruction.InvlpgInstruction);
+			map.Add(typeof(LgdtInstruction), Instruction.LgdtInstruction);
+			map.Add(typeof(LidtInstruction), Instruction.LidtInstruction);
 			map.Add(typeof(NopInstruction), Instruction.NopInstruction);
             map.Add(typeof(MovInstruction), Instruction.MovInstruction);
             map.Add(typeof(SetCRInstruction), Instruction.SetCRInstruction);

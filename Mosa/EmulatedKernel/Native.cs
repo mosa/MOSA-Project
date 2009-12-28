@@ -66,7 +66,13 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		public static int CpuIdEax(uint function)
 		{
-			return 0;
+			switch (function) {
+				case 1: return 0x01020304;
+				case 2147483650: return 0x41534F4D;
+				case 2147483651: return 0x0;
+				case 2147483652: return 0x0;
+				default: return 0x0;
+			}
 		}
 
 		/// <summary>
@@ -74,7 +80,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		public static int CpuIdEbx(uint function)
 		{
-			return 0;
+			return 0x0;
 		}
 
 		/// <summary>
@@ -82,7 +88,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		public static int CpuIdEcx(uint function)
 		{
-			return 0;
+			return 0x0;
 		}
 
 		/// <summary>
@@ -90,7 +96,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		public static int CpuIdEdx(uint function)
 		{
-			return 0;
+			return 0x0;
 		}
 
 		/// <summary>
@@ -100,6 +106,15 @@ namespace Mosa.Platforms.x86
 		public static void Invlpg(uint address)
 		{
 			return; // Nothing to do, emulator doesn't emulator or cache TLB entries
+		}
+
+		/// <summary>
+		/// Loads the GDT
+		/// </summary>
+		/// <param name="address">The address.</param>
+		public static void Lgdt(uint address)
+		{
+			return; // Nothing to do, emulator doesn't emulator the GDT
 		}
 
 		/// <summary>

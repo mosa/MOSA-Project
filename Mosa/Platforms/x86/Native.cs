@@ -51,7 +51,7 @@ namespace Mosa.Platforms.x86
 		/// Wraps the x86 lgdt instruction to load global descriptor table
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(CPUx86.LgdtInstruction))]
-		public static void Lgdt(IntPtr gdt) { ThrowPlatformNotSupported(); return; }
+		public static void Lgdt(uint address) { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Wraps the x86 pop instruction to pop a value from the stack

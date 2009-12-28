@@ -17,7 +17,7 @@ namespace Mosa.HelloWorld
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>
-		public static void EmulatorMain()
+		public static void Main()
 		{
 			Screen.Clear();
 			Screen.Color = 0x0E;
@@ -34,7 +34,7 @@ namespace Mosa.HelloWorld
 			Screen.SetCursor(24, 3);
 			Screen.Write('4');
 			//Kernel.Setup();
-			Screen.SetCursor(24, 3);
+			Screen.SetCursor(24, 4);
 			Screen.Write('5');
 
 			Screen.GotoTop();
@@ -237,9 +237,9 @@ namespace Mosa.HelloWorld
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;
-			for (uint index = 0; index < 60; index++) 
+			for (uint index = 0; index < 60; index++)
 				Screen.Write((char)205);
-			
+
 			Screen.NextLine();
 
 			Screen.Color = 0x0A;

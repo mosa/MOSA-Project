@@ -13,7 +13,7 @@ using Mosa.Runtime.CompilerFramework.Operands;
 namespace Mosa.Platforms.x86.CPUx86
 {
     /// <summary>
-    /// Representations the x86 push instruction.
+	/// Representations the x86 Invlpg instruction.
     /// </summary>
 	public sealed class InvlpgInstruction : OneOperandInstruction, IIntrinsicInstruction
     {
@@ -37,11 +37,11 @@ namespace Mosa.Platforms.x86.CPUx86
 			return opcode;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="emitter"></param>
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
         protected override void Emit(Context ctx, MachineCodeEmitter emitter)
         {
             OpCode code = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
