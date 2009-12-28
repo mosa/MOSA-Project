@@ -1,9 +1,9 @@
 ###############################################################
-# bochsrc.txt file for DLX Linux disk image.
+# bochsrc.txt file for MOSA disk image.
 ###############################################################
 
 # how much memory the emulated machine will have
-megs: 32
+megs: 64
 
 # filename of ROM images
 romimage: file=..\..\Tools\Bochs\BIOS-bochs-latest
@@ -15,7 +15,7 @@ floppyb: 1_44=floppyb.img, status=inserted
 
 # hard disk
 ata0: enabled=1, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
-ata0-master: type=disk, mode=flat, path="..\build\bootimage.img", cylinders=306, heads=4, spt=17
+ata0-master: type=disk, path="..\build\bootimage.img" 
 
 # choose the boot disk.
 boot: c
@@ -31,16 +31,4 @@ boot: c
 log: bochsout.txt
 
 # disable the mouse, since DLX is text only
-mouse: enabled=0
-
-# enable key mapping, using US layout as default.
-#
-# NOTE: In Bochs 1.4, keyboard mapping is only 100% implemented on X windows.
-# However, the key mapping tables are used in the paste function, so 
-# in the DLX Linux example I'm enabling keyboard_mapping so that paste 
-# will work.  Cut&Paste is currently implemented on win32 and X windows only.
-
-#keyboard_mapping: enabled=1, map=$BXSHARE/keymaps/x11-pc-us.map
-#keyboard_mapping: enabled=1, map=$BXSHARE/keymaps/x11-pc-fr.map
-#keyboard_mapping: enabled=1, map=$BXSHARE/keymaps/x11-pc-de.map
-#keyboard_mapping: enabled=1, map=$BXSHARE/keymaps/x11-pc-es.map
+mouse: enabled=1
