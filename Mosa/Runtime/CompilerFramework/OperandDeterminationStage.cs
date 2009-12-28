@@ -71,38 +71,45 @@ namespace Mosa.Runtime.CompilerFramework
 			_unprocessed.Push(_firstBlock);
 			_stack.Push(new List<Operand>());
 
-			while (_unprocessed.Count != 0) {
+			while (_unprocessed.Count != 0) 
+            {
 				BasicBlock block = _unprocessed.Pop();
 				List<Operand> stack = _stack.Pop();
 
-				if (!_processed.ContainsKey(block)) {
-					List<Operand> currentStack = GetCurrentStack(stack);
+			    if (_processed.ContainsKey(block)) 
+                    continue;
 
-					ProcessInstructions(block, currentStack, MethodCompiler);
-					_processed.Add(block, 0);
+			    List<Operand> currentStack = GetCurrentStack(stack);
 
-					foreach (BasicBlock nextBlock in block.NextBlocks)
-						if (!_processed.ContainsKey(nextBlock)) {
-							_unprocessed.Push(nextBlock);
-							_stack.Push(currentStack);
-						}
+			    ProcessInstructions(block, currentStack, MethodCompiler);
+			    _processed.Add(block, 0);
 
-				}
-			}
+                foreach (BasicBlock nextBlock in block.NextBlocks)
+                {
+                    if (!_processed.ContainsKey(nextBlock))
+                    {
+                        _unprocessed.Push(nextBlock);
+                        _stack.Push(currentStack);
+                    }
+                }
+            }
 
-			if (_processed.Count != BasicBlocks.Count) {
-
-				foreach (BasicBlock block in BasicBlocks)
-					if (!_processed.ContainsKey(block)) {
-
-						if (block.Label == Int32.MaxValue) {
-							List<Operand> stack = new List<Operand>();
-							ProcessInstructions(block, stack, MethodCompiler);
-						}
-						else
-							Console.WriteLine(block);
-					}
-			}
+			if (_processed.Count != BasicBlocks.Count) 
+            {
+                foreach (BasicBlock block in BasicBlocks)
+                {
+                    if (_processed.ContainsKey(block)) 
+                        continue;
+                    
+                    if (block.Label == Int32.MaxValue)
+                    {
+                        List<Operand> stack = new List<Operand>();
+                        ProcessInstructions(block, stack, MethodCompiler);
+                    }
+                    else
+                        Console.WriteLine(block);
+                }
+            }
 
 			//Debug.Assert(_processed.Count == BasicBlocks.Count, @"Did not process all blocks!");
 
@@ -132,7 +139,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="compiler">The compiler.</param>
 		private void ProcessInstructions(BasicBlock block, IList<Operand> currentStack, IMethodCompiler compiler)
 		{
-			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
+			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) 
+            {
 				if (!(ctx.Instruction is CIL.ICILInstruction))
 					continue;
 
@@ -151,12 +159,14 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="currentStack">The current stack.</param>
 		private static void AssignOperandsFromCILStack(Context ctx, IList<Operand> currentStack)
 		{
-			for (int index = ctx.OperandCount - 1; index >= 0; --index) {
-				if (ctx.GetOperand(index) == null) {
-					Operand operand = currentStack[currentStack.Count - 1];
-					currentStack.RemoveAt(currentStack.Count - 1);
-					ctx.SetOperand(index, operand);
-				}
+			for (int index = ctx.OperandCount - 1; index >= 0; --index) 
+            {
+			    if (ctx.GetOperand(index) != null) 
+                    continue;
+
+			    Operand operand = currentStack[currentStack.Count - 1];
+			    currentStack.RemoveAt(currentStack.Count - 1);
+			    ctx.SetOperand(index, operand);
 			}
 		}
 
