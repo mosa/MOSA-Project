@@ -1,4 +1,4 @@
 CALL CompileHelloWorld.bat
 ..\..\bin\Mosa.Tools.CreateBootImage.exe IMG\mosaboot-img.config build\bootimage.img
-CD qemu
-CALL LaunchQemu.bat
+CD jpc
+CALL LaunchJPC.bat

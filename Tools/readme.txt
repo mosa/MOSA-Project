@@ -23,3 +23,7 @@ wget
 grub
 - GNU License
 - http://www.gnu.org/software/grub/
+
+JPC
+- GNU License
+- http://www-jpc.physics.ox.ac.uk
