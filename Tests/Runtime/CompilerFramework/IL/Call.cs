@@ -601,11 +601,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			CodeSource = @"
                 static class Test {
                     static bool CallIntrinsic(int arg) {
-                        return (arg == CallMov(arg));
+                        return (arg == CallIntrinsicTest(arg));
                     }
 
-                    [Mosa.Runtime.CompilerFramework.IntrinsicAttribute(typeof(Mosa.Platforms.x86.Architecture), typeof(Mosa.Platforms.x86.CPUx86.MovInstruction))]
-                    static int CallMov(int arg) {
+                    [Mosa.Runtime.CompilerFramework.IntrinsicAttribute(typeof(Mosa.Platforms.x86.Architecture), typeof(Mosa.Platforms.x86.CPUx86.IntrinsicTestInstruction))]
+                    static int CallIntrinsicTest(int arg) {
                         return 0;
                     }
                 }

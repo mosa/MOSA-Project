@@ -787,7 +787,7 @@ namespace Mosa.Platforms.x86
 					modRM |= (byte)(rop2.Register.RegisterCode << 3);
 				displacement = mop1;
 			}
-			else if (null != rop1)
+			else if (rop1 != null)
 				modRM = (byte)(modRM.GetValueOrDefault() | (3 << 6) | rop1.Register.RegisterCode);
 
 			return modRM;

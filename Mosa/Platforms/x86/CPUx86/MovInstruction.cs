@@ -16,7 +16,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// Representations the x86 mov instruction.
 	/// </summary>
-	public sealed class MovInstruction : TwoOperandInstruction, IIntrinsicInstruction
+	public sealed class MovInstruction : TwoOperandInstruction
 	{
 		#region Data Members
 
@@ -76,15 +76,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
 			visitor.Mov(context);
-		}
-
-		/// <summary>
-		/// Replaces the instrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
-		{
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, context.Result, context.Operand1);
 		}
 
 		#endregion

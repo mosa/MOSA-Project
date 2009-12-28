@@ -56,10 +56,11 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>Test.Mosa.Runtime.CompilerFramework.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\..\Mosa\bin\</OutputPath>
+    <OutputPath>..\..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -105,6 +106,7 @@
     <Compile Include="CodeDomTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IL\ConditionalOperator.cs" />
     <Compile Include="IL\Stind.cs" />
     <Compile Include="MosaCompilerTestRunner.cs">
       <SubType>Code</SubType>

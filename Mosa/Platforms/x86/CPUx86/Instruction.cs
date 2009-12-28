@@ -39,10 +39,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly CmpInstruction CmpInstruction = new CmpInstruction();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly DirectCompareInstruction DirectCompareInstruction = new DirectCompareInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly DirectCompareInstruction DirectCompareInstruction = new DirectCompareInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -67,18 +67,18 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly Cvtss2sdInstruction Cvtss2sdInstruction = new Cvtss2sdInstruction();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly Cvttsd2siInstruction Cvttsd2siInstruction = new Cvttsd2siInstruction();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly Cvttss2siInstruction Cvttss2siInstruction = new Cvttss2siInstruction();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly DebugInstruction DebugInstruction = new DebugInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly Cvttsd2siInstruction Cvttsd2siInstruction = new Cvttsd2siInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly Cvttss2siInstruction Cvttss2siInstruction = new Cvttss2siInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly DebugInstruction DebugInstruction = new DebugInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -87,14 +87,14 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly DivInstruction DivInstruction = new DivInstruction();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly DirectDivisionInstruction DirectDivisionInstruction = new DirectDivisionInstruction();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly UDivInstruction UDivInstruction = new UDivInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly DirectDivisionInstruction DirectDivisionInstruction = new DirectDivisionInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly UDivInstruction UDivInstruction = new UDivInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -106,7 +106,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-        public static readonly BranchInstruction BranchInstruction = new BranchInstruction();
+		public static readonly BranchInstruction BranchInstruction = new BranchInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -359,19 +359,22 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly XchgInstruction XchgInstruction = new XchgInstruction();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly LeaInstruction LeaInstruction = new LeaInstruction();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly MoveRegToCRInstruction MoveRegToCRInstruction = new MoveRegToCRInstruction();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly MoveCRToRegInstruction MoveCRToRegInstruction = new MoveCRToRegInstruction();
-		
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly LeaInstruction LeaInstruction = new LeaInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly IntrinsicTestInstruction IntrinsicTestInstruction = new IntrinsicTestInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly MoveRegToCRInstruction MoveRegToCRInstruction = new MoveRegToCRInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly MoveCRToRegInstruction MoveCRToRegInstruction = new MoveCRToRegInstruction();
 	}
 }
 
