@@ -8,10 +8,7 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.Operands;
 
@@ -20,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The Operand Determination Stage determines the operands for each instructions.
 	/// </summary>
-	public class OperandDeterminationStage : BaseStage, IMethodCompilerStage, IPipelineStage
+	public class OperandDeterminationStage : BaseStage, IMethodCompilerStage
 	{
 		#region Data members
 
@@ -31,15 +28,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		protected Dictionary<BasicBlock, int> _processed;
+		private Dictionary<BasicBlock, int> _processed;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected Stack<BasicBlock> _unprocessed;
+		private Stack<BasicBlock> _unprocessed;
 		/// <summary>
 		/// 
 		/// </summary>
-		protected Stack<List<Operand>> _stack;
+		private Stack<List<Operand>> _stack;
 
 		#endregion
 
@@ -149,7 +146,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) 
             {
-				if (!(ctx.Instruction is CIL.ICILInstruction))
+				if (!(ctx.Instruction is ICILInstruction))
 					continue;
 
 				AssignOperandsFromCILStack(ctx, currentStack);

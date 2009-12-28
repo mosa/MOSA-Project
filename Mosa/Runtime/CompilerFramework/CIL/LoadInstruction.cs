@@ -7,11 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>

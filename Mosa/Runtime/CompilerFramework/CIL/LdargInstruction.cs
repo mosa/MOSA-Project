@@ -8,9 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -84,7 +81,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Push the loaded value onto the evaluation stack
 			ctx.Result = decoder.Compiler.GetParameterOperand(argIdx);
-			ctx.Ignore = true;
+			//ctx.Ignore = true;
 		}
 
 		/// <summary>
