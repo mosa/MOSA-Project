@@ -76,9 +76,9 @@ namespace Mosa.Runtime.CompilerFramework
 				List<Operand> stack = _stack.Pop();
 
 				if (!_processed.ContainsKey(block)) {
-					List<Operand> currentStack = GetCurrentStack(stack);
+					List<Operand> currentStack = CopyStack(stack);
 
-					ProcessInstructions(block, currentStack, MethodCompiler);
+					ProcessInstructions(block, currentStack);
 					_processed.Add(block, 0);
 
 					foreach (BasicBlock nextBlock in block.NextBlocks)
@@ -97,10 +97,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 						if (block.Label == Int32.MaxValue) {
 							List<Operand> stack = new List<Operand>();
-							ProcessInstructions(block, stack, MethodCompiler);
+							ProcessInstructions(block, stack);
 						}
 						else
-							Console.WriteLine(block);
+							Debug.Assert(false, "Shouldn't get here");
 					}
 			}
 
@@ -112,11 +112,11 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the current stack.
+		/// Copies the stack.
 		/// </summary>
 		/// <param name="stack">The stack.</param>
 		/// <returns></returns>
-		private static List<Operand> GetCurrentStack(IList<Operand> stack)
+		private static List<Operand> CopyStack(IList<Operand> stack)
 		{
 			List<Operand> currentStack = new List<Operand>();
 			foreach (Operand operand in stack)
@@ -128,19 +128,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Processes the instructions.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		/// <param name="currentStack">The current stack.</param>
-		/// <param name="compiler">The compiler.</param>
-		private void ProcessInstructions(BasicBlock block, IList<Operand> currentStack, IMethodCompiler compiler)
+		/// <param name="stack">The stack.</param>
+		private void ProcessInstructions(BasicBlock block, IList<Operand> stack)
 		{
 			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
 				if (!(ctx.Instruction is CIL.ICILInstruction))
 					continue;
 
-				AssignOperandsFromCILStack(ctx, currentStack);
+				AssignOperandsFromCILStack(ctx, stack);
 
-				(ctx.Instruction as ICILInstruction).Validate(ctx, compiler);
+				(ctx.Instruction as ICILInstruction).Validate(ctx, MethodCompiler);
 
-				PushResultOperands(ctx, currentStack);
+				PushResultOperands(ctx, stack);
 			}
 		}
 
@@ -148,13 +147,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Assigns the operands from CIL stack.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		/// <param name="currentStack">The current stack.</param>
-		private static void AssignOperandsFromCILStack(Context ctx, IList<Operand> currentStack)
+		/// <param name="stack">The stack.</param>
+		private static void AssignOperandsFromCILStack(Context ctx, IList<Operand> stack)
 		{
 			for (int index = ctx.OperandCount - 1; index >= 0; --index) {
 				if (ctx.GetOperand(index) == null) {
-					Operand operand = currentStack[currentStack.Count - 1];
-					currentStack.RemoveAt(currentStack.Count - 1);
+					Operand operand = stack[stack.Count - 1];
+					stack.RemoveAt(stack.Count - 1);
 					ctx.SetOperand(index, operand);
 				}
 			}
@@ -164,12 +163,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Pushes the result operands on to the stack
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		/// <param name="currentStack">The current stack.</param>
-		private static void PushResultOperands(Context ctx, IList<Operand> currentStack)
+		/// <param name="stack">The stack.</param>
+		private static void PushResultOperands(Context ctx, IList<Operand> stack)
 		{
 			if ((ctx.Instruction as ICILInstruction).PushResult)
 				foreach (Operand operand in ctx.Results)
-					currentStack.Add(operand);
+					stack.Add(operand);
 		}
 
 		#endregion // Methods

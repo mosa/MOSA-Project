@@ -29,7 +29,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public BinaryComparisonInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 1)
 		{
 		}
 

@@ -104,7 +104,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Pops the operands of an instruction From the evaluation stack.
+		/// Pops the operands of an instruction from the evaluation stack.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <returns>The number of operands popped.</returns>
