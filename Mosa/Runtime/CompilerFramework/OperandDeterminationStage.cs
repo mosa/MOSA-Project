@@ -7,170 +7,248 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-	/// <summary>
-	/// The Operand Determination Stage determines the operands for each instructions.
-	/// </summary>
-	public class OperandDeterminationStage : BaseStage, IMethodCompilerStage, IPipelineStage
-	{
-		#region Data members
+    /// <summary>
+    /// The Operand Determination Stage determines the operands for each instructions.
+    /// </summary>
+    public class OperandDeterminationStage : BaseStage, IMethodCompilerStage
+    {
+        #region Data members
 
-		/// <summary>
-		/// 
-		/// </summary>
-		private BasicBlock _firstBlock;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected Dictionary<BasicBlock, int> _processed;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected Stack<BasicBlock> _unprocessed;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected Stack<List<Operand>> _stack;
+        /// <summary>
+        /// 
+        /// </summary>
+        private Stack<Operand> _operandStack = new Stack<Operand>();
+        /// <summary>
+        /// 
+        /// </summary>
+        private List<BasicBlock> _processed = new List<BasicBlock>();
 
-		#endregion
+        #endregion
 
-		#region IPipelineStage
+        #region IPipelineStage
 
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name
-		{
-			get { return @"Operand Determination Stage"; }
-		}
+        /// <summary>
+        /// Retrieves the name of the compilation stage.
+        /// </summary>
+        /// <value>The name of the compilation stage.</value>
+        string IPipelineStage.Name
+        {
+            get { return "Operand Determination Stage"; }
+        }
 
-		#endregion // IPipelineStage
+        #endregion
 
-		#region IMethodCompilerStage Members
+        #region IMethodCompilerStage Members
 
-		/// <summary>
-		/// Runs the specified compiler.
-		/// </summary>
-		public void Run()
-		{
-			_firstBlock = FindBlock(-1);
-			_unprocessed = new Stack<BasicBlock>();
-			_stack = new Stack<List<Operand>>();
-			_processed = new Dictionary<BasicBlock, int>();
+        /// <summary>
+        /// Runs the specified compiler.
+        /// </summary>
+        public void Run ()
+        {
+            BasicBlock firstBlock = FindBlock(-1);
 
-			_unprocessed.Push(_firstBlock);
-			_stack.Push(new List<Operand>());
+            AssignOperands(firstBlock);
+        }
 
-			while (_unprocessed.Count != 0) {
-				BasicBlock block = _unprocessed.Pop();
-				List<Operand> stack = _stack.Pop();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block"></param>
+        private void AssignOperands (BasicBlock block)
+        {
+            for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+            {
+                if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is ICILInstruction))
+                    continue;
 
-				if (!_processed.ContainsKey(block)) {
-					List<Operand> currentStack = CopyStack(stack);
+                if (!(ctx.Instruction is IR.JmpInstruction))
+                {
+                    AssignOperandsFromCILStack(ctx, _operandStack);
+                    (ctx.Instruction as ICILInstruction).Validate(ctx, MethodCompiler);
+                    PushResultOperands(ctx, _operandStack);
+                }
 
-					ProcessInstructions(block, currentStack);
-					_processed.Add(block, 0);
+                if (ctx.Instruction is IBranchInstruction)
+                {
+                    Stack<Operand> initialStack = GetCurrentStack(_operandStack);
+                    CreateTemporaryMoves(ctx, block, initialStack);
+                    break;
+                }
+            }
 
-					foreach (BasicBlock nextBlock in block.NextBlocks)
-						if (!_processed.ContainsKey(nextBlock)) {
-							_unprocessed.Push(nextBlock);
-							_stack.Push(currentStack);
-						}
+            MarkAsProcessed(block);
 
-				}
-			}
+            foreach (BasicBlock b in block.NextBlocks)
+            {
+                if (IsNotProcessed (b))
+                    AssignOperands(b);
+            }
+        }
 
-			if (_processed.Count != BasicBlocks.Count) {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block"></param>
+        private void MarkAsProcessed (BasicBlock block)
+        {
+            if (_processed.Contains(block))
+                return;
+            _processed.Add(block);
+        }
 
-				foreach (BasicBlock block in BasicBlocks)
-					if (!_processed.ContainsKey(block)) {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block"></param>
+        /// <returns></returns>
+        private bool IsNotProcessed(BasicBlock block)
+        {
+            return !_processed.Contains(block);
+        }
 
-						if (block.Label == Int32.MaxValue) {
-							List<Operand> stack = new List<Operand>();
-							ProcessInstructions(block, stack);
-						}
-						else
-							Debug.Assert(false, "Shouldn't get here");
-					}
-			}
+        /// <summary>
+        /// Gets the current stack.
+        /// </summary>
+        /// <param name="stack">The stack.</param>
+        /// <returns></returns>
+        private static Stack<Operand> GetCurrentStack (Stack<Operand> stack)
+        {
+            Stack<Operand> result = new Stack<Operand>();
+            Operand[] copy = new Operand[stack.Count];
+            stack.CopyTo(copy, 0);
 
-			//Debug.Assert(_processed.Count == BasicBlocks.Count, @"Did not process all blocks!");
+            foreach (Operand operand in copy)
+                result.Push(operand);
+            return result;
+        }
 
-			_unprocessed = null;
-			_stack = null;
-			_processed = null;
-		}
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="ctx">A <see cref="Context"/></param>
+        /// <param name="block">A <see cref="BasicBlock"/></param>
+        /// <param name="stack"></param>
+        private void CreateTemporaryMoves (Context ctx, BasicBlock block, Stack<Operand> stack)
+        {
+            Context context = ctx.InsertBefore();
+            context.SetInstruction(IR.Instruction.NopInstruction);
 
-		/// <summary>
-		/// Copies the stack.
-		/// </summary>
-		/// <param name="stack">The stack.</param>
-		/// <returns></returns>
-		private static List<Operand> CopyStack(IList<Operand> stack)
-		{
-			List<Operand> currentStack = new List<Operand>();
-			foreach (Operand operand in stack)
-				currentStack.Add(operand);
-			return currentStack;
-		}
+            BasicBlock nextBlock;
 
-		/// <summary>
-		/// Processes the instructions.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="stack">The stack.</param>
-		private void ProcessInstructions(BasicBlock block, IList<Operand> stack)
-		{
-			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
-				if (!(ctx.Instruction is CIL.ICILInstruction))
-					continue;
+            //if (block.InitialStack == null)
+            //    block.InitialStack = stack;
 
-				AssignOperandsFromCILStack(ctx, stack);
+            if (NextBlockHasInitialStack (block, out nextBlock))
+                LinkTemporaryMoves(context, block, nextBlock, stack);
+            else
+                CreateNewTemporaryMoves(context, block, stack);
+        }
 
-				(ctx.Instruction as ICILInstruction).Validate(ctx, MethodCompiler);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="block">A <see cref="BasicBlock"/></param>
+        /// <param name="nextBlock">A <see cref="BasicBlock"/></param>
+        /// <returns>A <see cref="System.Boolean"/></returns>
+        private static bool NextBlockHasInitialStack (BasicBlock block, out BasicBlock nextBlock)
+        {
+            nextBlock = null;
+            foreach (BasicBlock b in block.NextBlocks)
+            {
+                if (b.InitialStack == null) 
+                    continue;
 
-				PushResultOperands(ctx, stack);
-			}
-		}
+                nextBlock = b;
+                return true;
+            }
+            return false;
+        }
 
-		/// <summary>
-		/// Assigns the operands from CIL stack.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="stack">The stack.</param>
-		private static void AssignOperandsFromCILStack(Context ctx, IList<Operand> stack)
-		{
-			for (int index = ctx.OperandCount - 1; index >= 0; --index) {
-				if (ctx.GetOperand(index) == null) {
-					Operand operand = stack[stack.Count - 1];
-					stack.RemoveAt(stack.Count - 1);
-					ctx.SetOperand(index, operand);
-				}
-			}
-		}
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="ctx">A <see cref="Context"/></param>
+        /// <param name="block">A <see cref="BasicBlock"/></param>
+        /// <param name="nextBlock">A <see cref="BasicBlock"/></param>
+        /// <param name="stack"></param>
+        private void LinkTemporaryMoves(Context ctx, BasicBlock block, BasicBlock nextBlock, Stack<Operand> stack)
+        {
+            Stack<Operand> initialStack = GetCurrentStack(stack);
+            Stack<Operand> nextInitialStack = GetCurrentStack(nextBlock.InitialStack);
 
-		/// <summary>
-		/// Pushes the result operands on to the stack
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="stack">The stack.</param>
-		private static void PushResultOperands(Context ctx, IList<Operand> stack)
-		{
-			if ((ctx.Instruction as ICILInstruction).PushResult)
-				foreach (Operand operand in ctx.Results)
-					stack.Add(operand);
-		}
+            for (int i = 0; i < nextBlock.InitialStack.Count; ++i)
+                ctx.AppendInstruction(IR.Instruction.MoveInstruction, nextInitialStack.Pop(), initialStack.Pop());
 
-		#endregion // Methods
-	}
+            if (nextBlock.InitialStack.Count > 0)
+                foreach (BasicBlock nBlock in block.NextBlocks)
+                    nBlock.InitialStack = GetCurrentStack (nextBlock.InitialStack);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="ctx">A <see cref="Context"/></param>
+        /// <param name="block">A <see cref="BasicBlock"/></param>
+        /// <param name="stack"></param>
+        private void CreateNewTemporaryMoves (Context ctx, BasicBlock block, Stack<Operand> stack)
+        {
+            Stack<Operand> initialStack = GetCurrentStack(stack);
+            Stack<Operand> nextStack = new Stack<Operand>();
+            for (int i = 0; i < stack.Count; ++i)
+            {
+                Operand operand = initialStack.Pop();
+                Operand temp = MethodCompiler.CreateTemporary(operand.Type);
+                nextStack.Push(temp);
+                _operandStack.Pop();
+                ctx.AppendInstruction(IR.Instruction.MoveInstruction, temp, operand);
+            }
+
+            if (nextStack.Count > 0)
+                foreach (BasicBlock nextBlock in block.NextBlocks)
+                    nextBlock.InitialStack = GetCurrentStack(nextStack);
+        }
+
+        /// <summary>
+        /// Assigns the operands from CIL stack.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        /// <param name="currentStack">The current stack.</param>
+        private void AssignOperandsFromCILStack (Context ctx, Stack<Operand> currentStack)
+        {
+            for (int index = ctx.OperandCount - 1; index >= 0; --index)
+            {
+                if (ctx.GetOperand (index) != null)
+                    continue;
+         
+                if (ctx.BasicBlock.InitialStack != null && ctx.BasicBlock.InitialStack.Count > 0)
+                    ctx.SetOperand (index, ctx.BasicBlock.InitialStack.Pop());
+                else if (currentStack.Count > 0)
+                    ctx.SetOperand (index, currentStack.Pop());
+            }
+
+            if (ctx.BasicBlock.InitialStack != null)
+                foreach (Operand operand in ctx.BasicBlock.InitialStack)
+                    _operandStack.Push(operand);
+        }
+
+        /// <summary>
+        /// Pushes the result operands on to the stack
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        /// <param name="currentStack">The current stack.</param>
+        private static void PushResultOperands (Context ctx, Stack<Operand> currentStack)
+        {
+            if ((ctx.Instruction as ICILInstruction).PushResult)
+                foreach (Operand operand in ctx.Results)
+                    currentStack.Push (operand);
+        }
+        
+        #endregion
+    }
 }
