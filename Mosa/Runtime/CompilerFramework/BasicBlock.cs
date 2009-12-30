@@ -59,7 +59,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         ///
         /// </summary>
-        private List<Operand> _initialStack;
+        private Stack<Operand> _initialStack;
 
         #endregion
 
@@ -146,7 +146,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Gets or sets the initial ingoing operand stack
         /// </summary>
-        public List<Operand> InitialStack
+        public Stack<Operand> InitialStack
         {
             get { return _initialStack; }
             set { _initialStack = value; }
