@@ -13,9 +13,9 @@ using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    /// <summary>
-    /// The Operand Determination Stage determines the operands for each instructions.
-    /// </summary>
+	/// <summary>
+	/// The Operand Determination Stage determines the operands for each instructions.
+	/// </summary>
     public class OperandDeterminationStage : BaseStage, IMethodCompilerStage
     {
         #region Data members
@@ -56,10 +56,11 @@ namespace Mosa.Runtime.CompilerFramework
             AssignOperands(firstBlock);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
+
+		/// <summary>
+		/// Assigns the operands.
+		/// </summary>
+		/// <param name="block">The block.</param>
         private void AssignOperands(BasicBlock block)
         {
             for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
@@ -91,10 +92,10 @@ namespace Mosa.Runtime.CompilerFramework
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
+		/// <summary>
+		/// Marks as processed.
+		/// </summary>
+		/// <param name="block">The block.</param>
         private void MarkAsProcessed(BasicBlock block)
         {
             if (_processed.Contains(block))
@@ -102,21 +103,23 @@ namespace Mosa.Runtime.CompilerFramework
             _processed.Add(block);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="block"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Determines whether [is not processed] [the specified block].
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <returns>
+		/// 	<c>true</c> if [is not processed] [the specified block]; otherwise, <c>false</c>.
+		/// </returns>
         private bool IsNotProcessed(BasicBlock block)
         {
             return !_processed.Contains(block);
         }
 
-        /// <summary>
-        /// Gets the current stack.
-        /// </summary>
-        /// <param name="stack">The stack.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the current stack.
+		/// </summary>
+		/// <param name="stack">The stack.</param>
+		/// <returns></returns>
         private static Stack<Operand> GetCurrentStack(Stack<Operand> stack)
         {
             Stack<Operand> result = new Stack<Operand>();
@@ -126,13 +129,13 @@ namespace Mosa.Runtime.CompilerFramework
             return result;
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="ctx">A <see cref="Context"/></param>
-        /// <param name="block">A <see cref="BasicBlock"/></param>
-        /// <param name="stack"></param>
-        private void CreateTemporaryMoves(Context ctx, BasicBlock block, Stack<Operand> stack)
+		/// <summary>
+		/// Creates the temporary moves.
+		/// </summary>
+		/// <param name="ctx">The CTX.</param>
+		/// <param name="block">The block.</param>
+		/// <param name="stack">The stack.</param>
+       private void CreateTemporaryMoves(Context ctx, BasicBlock block, Stack<Operand> stack)
         {
             Context context = ctx.InsertBefore();
             context.SetInstruction(IR.Instruction.NopInstruction);
@@ -148,12 +151,12 @@ namespace Mosa.Runtime.CompilerFramework
                 CreateNewTemporaryMoves(context, block, stack);
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="block">A <see cref="BasicBlock"/></param>
-        /// <param name="nextBlock">A <see cref="BasicBlock"/></param>
-        /// <returns>A <see cref="System.Boolean"/></returns>
+	   /// <summary>
+	   /// Nexts the block has initial stack.
+	   /// </summary>
+	   /// <param name="block">The block.</param>
+	   /// <param name="nextBlock">The next block.</param>
+	   /// <returns></returns>
         private static bool NextBlockHasInitialStack(BasicBlock block, out BasicBlock nextBlock)
         {
             nextBlock = null;
@@ -168,13 +171,13 @@ namespace Mosa.Runtime.CompilerFramework
             return false;
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="ctx">A <see cref="Context"/></param>
-        /// <param name="block">A <see cref="BasicBlock"/></param>
-        /// <param name="nextBlock">A <see cref="BasicBlock"/></param>
-        /// <param name="stack"></param>
+		/// <summary>
+		/// Links the temporary moves.
+		/// </summary>
+		/// <param name="ctx">The CTX.</param>
+		/// <param name="block">The block.</param>
+		/// <param name="nextBlock">The next block.</param>
+		/// <param name="stack">The stack.</param>
         private void LinkTemporaryMoves(Context ctx, BasicBlock block, BasicBlock nextBlock, Stack<Operand> stack)
         {
             Stack<Operand> initialStack = GetCurrentStack(stack);
@@ -188,12 +191,12 @@ namespace Mosa.Runtime.CompilerFramework
                     nBlock.InitialStack = GetCurrentStack(nextBlock.InitialStack);
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="ctx">A <see cref="Context"/></param>
-        /// <param name="block">A <see cref="BasicBlock"/></param>
-        /// <param name="stack"></param>
+		/// <summary>
+		/// Creates the new temporary moves.
+		/// </summary>
+		/// <param name="ctx">The CTX.</param>
+		/// <param name="block">The block.</param>
+		/// <param name="stack">The stack.</param>
         private void CreateNewTemporaryMoves(Context ctx, BasicBlock block, Stack<Operand> stack)
         {
             Stack<Operand> nextStack = new Stack<Operand>();
