@@ -38,7 +38,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
 			ctx.Result = new RegisterOperand(new SigType(Runtime.Metadata.CilElementType.I2), GeneralPurposeRegister.EBX);
-			ctx.Operand1 = new RegisterOperand(new SigType(Runtime.Metadata.CilElementType.I2), GeneralPurposeRegister.EBX);
+			ctx.Operand1 = ctx.Result;
 			base.Emit(ctx, emitter);
 		}
 
@@ -50,7 +50,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </returns>
 		public override string ToString()
 		{
-			return String.Format(@"X86.Xchg bx, bx ; [BochsDebug]");
+			return base.ToString() + " [BochsDebug]";
 		}
 
 		/// <summary>

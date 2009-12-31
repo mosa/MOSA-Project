@@ -64,8 +64,13 @@ namespace Mosa.Platforms.x86.CPUx86
 			map.Add(typeof(LgdtInstruction), Instruction.LgdtInstruction);
 			map.Add(typeof(LidtInstruction), Instruction.LidtInstruction);
 			map.Add(typeof(NopInstruction), Instruction.NopInstruction);
+			map.Add(typeof(PushadInstruction), Instruction.PushadInstruction);
+			map.Add(typeof(PopadInstruction), Instruction.PopadInstruction);
 			map.Add(typeof(IntrinsicTestInstruction), Instruction.IntrinsicTestInstruction);
-            map.Add(typeof(SetCRInstruction), Instruction.SetCRInstruction);
+			map.Add(typeof(CliInstruction), Instruction.CliInstruction);
+			map.Add(typeof(StiInstruction), Instruction.StiInstruction);
+
+			map.Add(typeof(SetCRInstruction), Instruction.SetCRInstruction);
 			map.Add(typeof(GetCRInstruction), Instruction.GetCRInstruction);
 
 			// TODO - finish up the list

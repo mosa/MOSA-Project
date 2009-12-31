@@ -17,7 +17,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 cli instruction.
     /// </summary>
-    public sealed class CliInstruction : BaseInstruction
+	public sealed class CliInstruction : BaseInstruction, IIntrinsicInstruction
     {
 		#region Properties
 
@@ -29,7 +29,7 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion // Properties
 
-        #region CliInstruction Overrides
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -51,6 +51,15 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Cli(context);
 		}
 
-        #endregion // CliInstruction Overrides
+		/// <summary>
+		/// Replaces the instrinsic call site
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void ReplaceIntrinsicCall(Context context)
+		{
+			context.SetInstruction(CPUx86.Instruction.CliInstruction);
+		}
+
+        #endregion // Methods
     }
 }

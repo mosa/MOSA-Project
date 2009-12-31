@@ -16,14 +16,14 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 sti instruction.
     /// </summary>
-    public sealed class StiInstruction : BaseInstruction
+	public sealed class StiInstruction : BaseInstruction, IIntrinsicInstruction
     {
         #region Methods
 
 		/// <summary>
-		/// Emits the specified CTX.
+		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
         {
@@ -38,6 +38,15 @@ namespace Mosa.Platforms.x86.CPUx86
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
 			visitor.Sti(context);
+		}
+
+		/// <summary>
+		/// Replaces the instrinsic call site
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void ReplaceIntrinsicCall(Context context)
+		{
+			context.SetInstruction(CPUx86.Instruction.StiInstruction);
 		}
 
         #endregion // Methods

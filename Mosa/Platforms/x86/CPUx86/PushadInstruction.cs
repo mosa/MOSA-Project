@@ -21,10 +21,20 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 cli instruction.
     /// </summary>
-    public sealed class PushadInstruction : BaseInstruction
+	public sealed class PushadInstruction : BaseInstruction, IIntrinsicInstruction
     {
 
         #region Methods
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
+			emitter.WriteByte(0x60);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -34,6 +44,15 @@ namespace Mosa.Platforms.x86.CPUx86
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
 			visitor.Pushad(context);
+		}
+
+		/// <summary>
+		/// Replaces the instrinsic call site
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void ReplaceIntrinsicCall(Context context)
+		{
+			context.SetInstruction(CPUx86.Instruction.PushadInstruction);
 		}
 
         #endregion // Methods
