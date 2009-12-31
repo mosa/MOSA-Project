@@ -74,7 +74,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the next free stack slot index.
 		/// </summary>
-		private int _nextStackSlot;
+		protected int _nextStackSlot;
 
 		/// <summary>
 		/// Holds the _type, which owns the _method.
