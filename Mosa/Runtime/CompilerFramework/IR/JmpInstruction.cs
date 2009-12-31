@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// <summary>
     /// Intermediate representation of an unconditional branch context.
     /// </summary>
-    public sealed class JmpInstruction : BaseInstruction
+    public sealed class JmpInstruction : BaseInstruction, CIL.IBranchInstruction
     {
         #region Construction
 
@@ -44,6 +44,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			get { return FlowControl.Branch; }
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsConditional
+        {
+            get { return false; }
+        }
 
 		#endregion // Properties
 
