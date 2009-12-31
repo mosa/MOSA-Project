@@ -93,8 +93,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// <param name="method">The method.</param>
 		public void Schedule(RuntimeMethod method)
 		{
-			_ctx.AppendInstruction(IR.Instruction.CallInstruction);
-			_ctx.InvokeTarget = method;
+			_ctx.AppendInstruction(IR.Instruction.CallInstruction, method);
 		}
 
 		#endregion // Methods
@@ -107,8 +106,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// <param name="compiler">The compiler context to perform processing in.</param>
 		public void Run(AssemblyCompiler compiler)
 		{
-			_ctx.AppendInstruction(IR.Instruction.CallInstruction);
-			_ctx.InvokeTarget = compiler.Assembly.EntryPoint;
+			_ctx.AppendInstruction(IR.Instruction.CallInstruction, compiler.Assembly.EntryPoint);
 			_ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);
 			_ctx.Other = 0;
 

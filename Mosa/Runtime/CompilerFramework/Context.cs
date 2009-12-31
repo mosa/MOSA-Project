@@ -644,6 +644,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="target">The target.</param>
+		public void SetInstruction(IInstruction instruction, RuntimeMethod target)
+		{
+			SetInstruction(instruction);
+			InvokeTarget = target;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		/// <param name="block">The block.</param>
 		public void SetInstruction(IInstruction instruction, BasicBlock block)
 		{
@@ -796,6 +807,17 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			AppendInstruction();
 			SetInstruction(instruction);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="target">The target.</param>
+		public void AppendInstruction(IInstruction instruction, RuntimeMethod target)
+		{
+			AppendInstruction(instruction);
+			InvokeTarget = target;
 		}
 
 		/// <summary>
