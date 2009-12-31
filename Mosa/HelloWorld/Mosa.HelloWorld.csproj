@@ -64,6 +64,7 @@
     <Compile Include="Boot.cs" />
     <Compile Include="CMOS.cs" />
     <Compile Include="GDT.cs" />
+    <Compile Include="IDT.cs" />
     <Compile Include="Kernel.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Multiboot.cs" />

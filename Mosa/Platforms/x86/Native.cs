@@ -25,9 +25,9 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Wraps the x86 ldit instruction to load the interrupt descriptor table.
 		/// </summary>
-		/// <param name="idt">A pointer to the interrupt descriptor table.</param>
+		/// <param name="address">The address.</param>
 		[Intrinsic(typeof(Architecture), typeof(CPUx86.LidtInstruction))]
-		public static void Ldit(IntPtr idt) { ThrowPlatformNotSupported(); return; }
+		public static void Lidt(uint address) { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Wraps the x86 cli instruction to disable interrupts
@@ -57,6 +57,12 @@ namespace Mosa.Platforms.x86
 		/// Wraps the x86 pop instruction to pop a value from the stack
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(CPUx86.PopInstruction))]
+		public static short Pop8() { ThrowPlatformNotSupported(); return 0; }
+
+		/// <summary>
+		/// Wraps the x86 pop instruction to pop a value from the stack
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(CPUx86.PopInstruction))]
 		public static short Pop16() { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
@@ -70,6 +76,12 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(CPUx86.PopadInstruction))]
 		public static void Popad() { ThrowPlatformNotSupported(); return; }
+
+		/// <summary>
+		/// Wraps the x86 push instruction to push a value on the stack
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(CPUx86.PushInstruction))]
+		public static void Push8(byte value) { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Wraps the x86 push instruction to push a value on the stack
