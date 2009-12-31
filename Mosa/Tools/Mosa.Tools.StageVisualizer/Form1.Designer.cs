@@ -48,6 +48,8 @@
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.lbStatus = new System.Windows.Forms.ToolStripStatusLabel();
+			this.cbRemoveNextPrev = new System.Windows.Forms.CheckBox();
+			this.cbSpace = new System.Windows.Forms.CheckBox();
 			this.panel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.Result.SuspendLayout();
@@ -57,6 +59,8 @@
 			// 
 			// panel1
 			// 
+			this.panel1.Controls.Add(this.cbSpace);
+			this.panel1.Controls.Add(this.cbRemoveNextPrev);
 			this.panel1.Controls.Add(this.cbStage);
 			this.panel1.Controls.Add(this.cbBlock);
 			this.panel1.Controls.Add(this.cbBlocks);
@@ -88,7 +92,7 @@
 			// cbBlock
 			// 
 			this.cbBlock.AutoSize = true;
-			this.cbBlock.Location = new System.Drawing.Point(11, 212);
+			this.cbBlock.Location = new System.Drawing.Point(10, 368);
 			this.cbBlock.Name = "cbBlock";
 			this.cbBlock.Size = new System.Drawing.Size(56, 17);
 			this.cbBlock.TabIndex = 10;
@@ -102,7 +106,7 @@
 			this.cbBlocks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbBlocks.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbBlocks.FormattingEnabled = true;
-			this.cbBlocks.Location = new System.Drawing.Point(5, 232);
+			this.cbBlocks.Location = new System.Drawing.Point(4, 388);
 			this.cbBlocks.MaxDropDownItems = 20;
 			this.cbBlocks.Name = "cbBlocks";
 			this.cbBlocks.Size = new System.Drawing.Size(245, 23);
@@ -112,7 +116,7 @@
 			// cbLabel
 			// 
 			this.cbLabel.AutoSize = true;
-			this.cbLabel.Location = new System.Drawing.Point(11, 165);
+			this.cbLabel.Location = new System.Drawing.Point(11, 174);
 			this.cbLabel.Name = "cbLabel";
 			this.cbLabel.Size = new System.Drawing.Size(55, 17);
 			this.cbLabel.TabIndex = 8;
@@ -125,7 +129,7 @@
 			this.cbLabels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbLabels.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbLabels.FormattingEnabled = true;
-			this.cbLabels.Location = new System.Drawing.Point(5, 185);
+			this.cbLabels.Location = new System.Drawing.Point(6, 197);
 			this.cbLabels.MaxDropDownItems = 20;
 			this.cbLabels.Name = "cbLabels";
 			this.cbLabels.Size = new System.Drawing.Size(245, 23);
@@ -136,7 +140,7 @@
 			// 
 			this.btnUpdate.Image = ((System.Drawing.Image)(resources.GetObject("btnUpdate.Image")));
 			this.btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnUpdate.Location = new System.Drawing.Point(17, 270);
+			this.btnUpdate.Location = new System.Drawing.Point(17, 304);
 			this.btnUpdate.Name = "btnUpdate";
 			this.btnUpdate.Size = new System.Drawing.Size(213, 41);
 			this.btnUpdate.TabIndex = 5;
@@ -245,14 +249,11 @@
 			this.tbSource.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tbSource.Location = new System.Drawing.Point(0, 0);
 			this.tbSource.Name = "tbSource";
-			this.tbSource.Size = new System.Drawing.Size(543, 413);
+			this.tbSource.Size = new System.Drawing.Size(521, 413);
 			this.tbSource.TabIndex = 1;
 			this.tbSource.Text = "";
 			this.tbSource.WordWrap = false;
-			// 
-			// openFileDialog1
-			// 
-			this.openFileDialog1.FileName = "openFileDialog1";
+			this.tbSource.TextChanged += new System.EventHandler(this.tbSource_TextChanged);
 			// 
 			// statusStrip1
 			// 
@@ -269,6 +270,32 @@
 			this.lbStatus.Name = "lbStatus";
 			this.lbStatus.Size = new System.Drawing.Size(118, 17);
 			this.lbStatus.Text = "toolStripStatusLabel1";
+			// 
+			// cbRemoveNextPrev
+			// 
+			this.cbRemoveNextPrev.AutoSize = true;
+			this.cbRemoveNextPrev.Checked = true;
+			this.cbRemoveNextPrev.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbRemoveNextPrev.Location = new System.Drawing.Point(11, 238);
+			this.cbRemoveNextPrev.Name = "cbRemoveNextPrev";
+			this.cbRemoveNextPrev.Size = new System.Drawing.Size(169, 17);
+			this.cbRemoveNextPrev.TabIndex = 12;
+			this.cbRemoveNextPrev.Text = "Remove next/prev information";
+			this.cbRemoveNextPrev.UseVisualStyleBackColor = true;
+			this.cbRemoveNextPrev.CheckStateChanged += new System.EventHandler(this.btnUpdate_Click);
+			// 
+			// cbSpace
+			// 
+			this.cbSpace.AutoSize = true;
+			this.cbSpace.Checked = true;
+			this.cbSpace.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbSpace.Location = new System.Drawing.Point(11, 261);
+			this.cbSpace.Name = "cbSpace";
+			this.cbSpace.Size = new System.Drawing.Size(130, 17);
+			this.cbSpace.TabIndex = 13;
+			this.cbSpace.Text = "Add space after block";
+			this.cbSpace.UseVisualStyleBackColor = true;
+			this.cbSpace.CheckedChanged += new System.EventHandler(this.btnUpdate_Click);
 			// 
 			// frmMain
 			// 
@@ -314,6 +341,8 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel lbStatus;
+		private System.Windows.Forms.CheckBox cbRemoveNextPrev;
+		private System.Windows.Forms.CheckBox cbSpace;
     }
 }
 

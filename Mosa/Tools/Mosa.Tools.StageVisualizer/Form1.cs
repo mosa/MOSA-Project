@@ -9,116 +9,122 @@ using System.Windows.Forms;
 
 namespace Mosa.Tools.StageVisualizer
 {
-    public partial class frmMain : Form
-    {
-        Output output;
+	public partial class frmMain : Form
+	{
+		Output output;
 
-        public frmMain()
-        {
-            InitializeComponent();
-        }
+		public frmMain()
+		{
+			InitializeComponent();
+		}
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                output = new Output(openFileDialog1.FileName);
+		private void button1_Click(object sender, EventArgs e)
+		{
+			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				output = new Output(openFileDialog1.FileName);
+				tbSource.Lines = output.Lines;
+				UpdateText(sender, e);
+				lbStatus.Text = openFileDialog1.FileName;
+			}
+		}
 
-                tbSource.Lines = output.Lines;
+		private void UpdateText(object sender, EventArgs e)
+		{
+			cbMethods.Items.Clear();
 
-                cbMethods.Items.Clear();
+			foreach (string item in output.GetMethods())
+				cbMethods.Items.Add(item);
 
-                foreach (string item in output.GetMethods())
-                    cbMethods.Items.Add(item);
+			cbMethods.SelectedIndex = 0;
+			cbMethods_SelectionChangeCommitted(sender, e);
+		}
 
-                cbMethods.SelectedIndex = 0;
-                cbMethods_SelectionChangeCommitted(sender, e);
+		private void cbMethods_SelectionChangeCommitted(object sender, EventArgs e)
+		{
+			if (output != null) {
+				cbStages.Items.Clear();
 
-                lbStatus.Text = openFileDialog1.FileName;
-            }
-        }
+				foreach (string item in output.GetStages(cbMethods.SelectedItem.ToString()))
+					cbStages.Items.Add(item);
 
-        private void cbMethods_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            if (output != null)
-            {
-                cbStages.Items.Clear();
+				cbStages.SelectedIndex = 0;
 
-                foreach (string item in output.GetStages(cbMethods.SelectedItem.ToString()))
-                    cbStages.Items.Add(item);
+				cbStages_SelectionChangeCommitted(sender, e);
+			}
+		}
 
-                cbStages.SelectedIndex = 0;
+		private void cbStages_SelectionChangeCommitted(object sender, EventArgs e)
+		{
+			cbStage.Checked = true;
 
-                cbStages_SelectionChangeCommitted(sender, e);
-            }
-        }
+			string method = cbMethods.SelectedItem.ToString();
+			string stage = string.Empty;
 
-        private void cbStages_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            cbStage.Checked = true;
+			if (cbStages.SelectedItem != null)
+				stage = cbStages.SelectedItem.ToString();
 
-            string method = cbMethods.SelectedItem.ToString();
-            string stage = string.Empty;
+			string label = string.Empty;
 
-            if (cbStages.SelectedItem != null)
-                stage = cbStages.SelectedItem.ToString();
+			if (cbLabels.SelectedItem != null)
+				label = cbLabels.SelectedItem.ToString();
 
-            string label = string.Empty;
+			cbLabels.Items.Clear();
 
-            if (cbLabels.SelectedItem != null)
-                label = cbLabels.SelectedItem.ToString();
+			foreach (string item in output.GetLabels(method, stage))
+				cbLabels.Items.Add(item);
 
-            cbLabels.Items.Clear();
+			if (!string.IsNullOrEmpty(label))
+				if (cbLabels.Items.Contains(label))
+					cbLabels.SelectedItem = label;
 
-            foreach (string item in output.GetLabels(method, stage))
-                cbLabels.Items.Add(item);
+			btnUpdate_Click(sender, e);
+		}
 
-            if (!string.IsNullOrEmpty(label))
-                if (cbLabels.Items.Contains(label))
-                    cbLabels.SelectedItem = label;
+		private void btnUpdate_Click(object sender, EventArgs e)
+		{
+			if (cbMethods.SelectedItem == null) {
+				tbResult.Lines = new string[0];
+				return;
+			}
 
-            btnUpdate_Click(sender, e);
-        }
+			string method = cbMethods.SelectedItem.ToString();
+			string stage = string.Empty;
 
-        private void btnUpdate_Click(object sender, EventArgs e)
-        {
-            if (cbMethods.SelectedItem == null)
-            {
-                tbResult.Lines = new string[0];
-                return;
-            }
+			if (cbStages.SelectedItem != null)
+				stage = cbStages.SelectedItem.ToString();
 
-            string method = cbMethods.SelectedItem.ToString();
-            string stage = string.Empty;
+			string label = string.Empty;
 
-            if (cbStages.SelectedItem != null)
-                stage = cbStages.SelectedItem.ToString();
+			if (cbLabels.SelectedItem != null)
+				label = cbLabels.SelectedItem.ToString();
 
-            string label = string.Empty;
+			if (!cbLabel.Checked)
+				label = string.Empty;
 
-            if (cbLabels.SelectedItem != null)
-                label = cbLabels.SelectedItem.ToString();
+			if (!cbStage.Checked)
+				stage = string.Empty;
 
-            if (!cbLabel.Checked)
-                label = string.Empty;
+			List<string> lines = output.GetText(method, stage, label, cbRemoveNextPrev.Checked, cbSpace.Checked);
 
-            if (!cbStage.Checked)
-                stage = string.Empty;
+			string[] final = new string[lines.Count];
 
-            List<string> lines = output.GetText(method, stage, label);
+			for (int i = 0; i < lines.Count; i++)
+				final[i] = lines[i];
 
-            string[] final = new string[lines.Count];
+			tbResult.Lines = final;
+		}
 
-            for (int i = 0; i < lines.Count; i++)
-                final[i] = lines[i];
+		private void cbLabels_SelectionChangeCommitted(object sender, EventArgs e)
+		{
+			cbLabel.Checked = true;
+			btnUpdate_Click(sender, e);
+		}
 
-            tbResult.Lines = final;
-        }
-
-        private void cbLabels_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            cbLabel.Checked = true;
-            btnUpdate_Click(sender, e);
-        }
-    }
+		private void tbSource_TextChanged(object sender, EventArgs e)
+		{
+			output = new Output(tbSource.Lines);
+			UpdateText(sender, e);
+			lbStatus.Text = DateTime.Now.ToString();
+		}
+	}
 }
