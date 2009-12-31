@@ -1,6 +1,6 @@
-*.exe
 *.pdb
 *.vcproj.*.user
+*.resharper.user
 *.suo
 *.ncb
 *.aps
@@ -8,8 +8,9 @@
 *.ccscc
 *.cache
 *.bak
-*/bin/*
-*/Bin/*
-*/obj/*
-*/Obj/*
+*.swp
+/bin/*
+/Bin/*
 Thumbs.db
+*.FileListAbsolute.txt
+*.Cache
