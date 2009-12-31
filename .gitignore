@@ -1,0 +1,15 @@
+*.exe
+*.pdb
+*.vcproj.*.user
+*.suo
+*.ncb
+*.aps
+*.user
+*.ccscc
+*.cache
+*.bak
+*/bin/*
+*/Bin/*
+*/obj/*
+*/Obj/*
+Thumbs.db
