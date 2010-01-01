@@ -176,6 +176,15 @@ namespace Mosa.Platforms.x86
 					type.Type == CilElementType.Object);
 		}
 
+		/// <summary>
+		/// Returns the name of the segment register.
+		/// </summary>
+		/// <returns>The name of the segment register.</returns>
+		public override string ToString()
+		{
+			return _segment.ToString();
+		}
+
 		#endregion // Methods
 	}
 }

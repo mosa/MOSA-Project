@@ -31,10 +31,43 @@ namespace Mosa.Platforms.x86.CPUx86
 		private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x89 });
 		private static readonly OpCode M_R_U8 = new OpCode(new byte[] { 0x88 }); // Move R8 to r/rm8
 		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
+		private static readonly byte[] R_CR = new byte[] { 0x0F, 0x20 };
+		private static readonly byte[] CR_R = new byte[] { 0x0F, 0x22 };
 
 		#endregion // Data Members
 
 		#region Methods
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			Operand destination = context.Result;
+			Operand source = context.Operand1;
+
+			if (destination is RegisterOperand) {
+				if ((destination as RegisterOperand).Register is ControlRegister) {
+					emitter.Emit(CR_R, (byte)(destination as RegisterOperand).Register.Index, source, null);
+					return;
+				}
+				else if ((destination as RegisterOperand).Register is SegmentRegister)
+					throw new ArgumentException(@"TODO: No opcode for move to segment register");
+			}
+			if (source is RegisterOperand) {
+				if ((source as RegisterOperand).Register is ControlRegister) {
+					emitter.Emit(R_CR, (byte)(source as RegisterOperand).Register.Index, destination, null);
+					return;
+				}
+				else if ((source as RegisterOperand).Register is SegmentRegister)
+					throw new ArgumentException(@"TODO: No opcode for move from segment register");
+			}
+
+			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
+			emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
+		}
 
 		/// <summary>
 		/// Computes the opcode.
@@ -45,10 +78,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination is RegisterOperand && (destination as RegisterOperand).Register is SegmentRegister))
-				throw new ArgumentException(@"TODO: No opcode for move to segment register");
-			if ((source is RegisterOperand && (source as RegisterOperand).Register is SegmentRegister))
-				throw new ArgumentException(@"TODO: No opcode for move from segment register");
 			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
 			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
 			if ((destination is RegisterOperand) && (source is RegisterOperand)) {
