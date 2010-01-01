@@ -92,7 +92,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
 		protected virtual OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			throw new System.Exception("Missed something!");
+			throw new System.Exception("opcode not implemented for this instruction");
 		}
 
 		/// <summary>

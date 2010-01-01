@@ -406,7 +406,7 @@ namespace Mosa.Runtime.Linker
         /// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (null == this.stream)
+            if (this.stream == null)
                 throw new ObjectDisposedException(@"LinkerStream");
             if (buffer == null)
                 throw new ArgumentNullException(@"buffer");
@@ -418,7 +418,7 @@ namespace Mosa.Runtime.Linker
                 throw new ArgumentException(@"Buffer too small.", @"buffer");
 
             // Check that we're not writing past the end of our stream
-            if (0 != this.length && count + this.Position > this.Length)
+            if (this.length != 0 && count + this.Position > this.Length)
                 throw new IOException(@"Can't fit buffer in the remaining space for the current symbol.");
 
             this.stream.Write(buffer, offset, count);

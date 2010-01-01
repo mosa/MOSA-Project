@@ -30,7 +30,7 @@ namespace Mosa.Platforms.x86.CPUx86
             MemoryOperand mop = (MemoryOperand)ctx.Operand1;
             byte[] code;
 
-            if (null != mop.Base)
+            if (mop.Base != null)
             {
                 code = new byte[] { 0x8D, 0x84, (4 << 3) };
                 code[1] |= (byte)((rop.Register.RegisterCode & 0x07));
