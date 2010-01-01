@@ -41,12 +41,12 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-			Operand destination = context.Result;
-			Operand source = context.Operand1;
+			Operand destination = ctx.Result;
+			Operand source = ctx.Operand1;
 
 			if (destination is RegisterOperand) {
 				if ((destination as RegisterOperand).Register is ControlRegister) {
@@ -65,8 +65,8 @@ namespace Mosa.Platforms.x86.CPUx86
 					throw new ArgumentException(@"TODO: No opcode for move from segment register");
 			}
 
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
-			emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
+			OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, null);
+			emitter.Emit(opCode, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
