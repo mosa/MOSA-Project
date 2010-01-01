@@ -7,6 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
+using System;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 
@@ -53,8 +54,21 @@ namespace Mosa.Platforms.x86.CPUx86
 				else if (IsInt(ctx.Result))
 					emitter.Emit(Const_32.Code, null, ctx.Operand1, null);
 			}
-			else
+			else {
+				if (ctx.Operand1 is RegisterOperand) {
+					if ((ctx.Operand1 as RegisterOperand).Register is SegmentRegister)
+						switch (((ctx.Operand1 as RegisterOperand).Register as SegmentRegister).Segment) {
+							case SegmentRegister.SegmentType.CS: emitter.WriteByte(0x0E);  return;
+							case SegmentRegister.SegmentType.SS: emitter.WriteByte(0x16); return;
+							case SegmentRegister.SegmentType.DS: emitter.WriteByte(0x1E); return;
+							case SegmentRegister.SegmentType.ES: emitter.WriteByte(0x06); return;
+							case SegmentRegister.SegmentType.FS: emitter.WriteByte(0x0F); emitter.WriteByte(0xA0); return;
+							case SegmentRegister.SegmentType.GS: emitter.WriteByte(0x0F); emitter.WriteByte(0xA8); return;
+							default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
+						}
+				}
 				emitter.Emit(PUSH.Code, 6, ctx.Operand1, null);
+			}
 		}
 
 		/// <summary>

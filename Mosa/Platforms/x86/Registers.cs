@@ -7,6 +7,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+// Note: This file is currently unused.
+
 namespace Mosa.Platforms.x86
 {
     /// <summary>

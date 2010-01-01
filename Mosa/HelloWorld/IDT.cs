@@ -72,8 +72,8 @@ namespace Mosa.Kernel.Memory.X86
 		// TODO: Build this w/o any calling convention
 		private static void IRQ0() 
 		{
-			Native.Push8(0);
-			Native.Push8(0);
+			//Native.Push8(0);
+			//Native.Push8(0);
 			//Native.Jmp(CommonInterruptHandler);
 		}
 
