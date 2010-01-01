@@ -259,14 +259,7 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		private int CalculateStackSizeForParameters(Context ctx)
 		{
-			int result = (ctx.InvokeTarget.Signature.HasThis ? -4 : 0);
-			int size, alignment;
-
-			foreach (Operand op in ctx.Operands) {
-				this.architecture.GetTypeRequirements(op.Type, out size, out alignment);
-				result += size;
-			}
-			return result;
+            return CalculateStackSizeForParameters(ctx.Operands, ctx.InvokeTarget.Signature.HasThis);
 		}
 
 		/// <summary>
@@ -308,48 +301,15 @@ namespace Mosa.Platforms.x86
 				return;
 			}
 			else if (8 == size && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8)) {
-				SigType I4 = new SigType(CilElementType.I4);
+                SigType HighType = (operand.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
 				SigType U4 = new SigType(CilElementType.U4);
 
 				Operand opL, opH;
 				LongOperandTransformationStage.SplitLongOperand(operand, out opL, out opH);
-				/*
-				// Store if the operand is signed or unsigned by storing the type
-				SigType HighType = operand.Type.Type == CilElementType.I8 ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
-
-				// Is it a constant operand?
-				ConstantOperand cop = operand as ConstantOperand;
-				Operand opL, opH;
-
-				// If it's constant
-				if (cop != null) {
-					long value = (long)cop.Value;
-					opL = new ConstantOperand(U4, (uint)(value & 0xFFFFFFFF));
-					if (HighType.Type == CilElementType.I8)
-						opH = new ConstantOperand(HighType, (int)((value >> 32) & 0xFFFFFFFF));
-					else
-						opH = new ConstantOperand(HighType, (uint)((value >> 32) & 0xFFFFFFFF));
-				}
-				else {
-					// No, could be a member or a plain memory operand
-					MemberOperand memberOp = operand as MemberOperand;
-					if (memberOp != null) {
-						// We need to keep the member reference, otherwise the linker can't fixup
-						// the member address.
-						opL = new MemberOperand(memberOp.Member, U4, memberOp.Offset);
-						opH = new MemberOperand(memberOp.Member, HighType, new IntPtr(memberOp.Offset.ToInt64() + 4));
-					}
-					else {
-						// Plain memory, we can handle it here
-						MemoryOperand mop = (MemoryOperand)operand;
-						opL = new MemoryOperand(U4, mop.Base, mop.Offset);
-						opH = new MemoryOperand(HighType, mop.Base, new IntPtr(mop.Offset.ToInt64() + 4));
-					}
-				}*/
 
 				// Like Win32: EDX:EAX
 				ctx.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(U4, GeneralPurposeRegister.EAX), opL);
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(I4, GeneralPurposeRegister.EDX), opH);
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(HighType, GeneralPurposeRegister.EDX), opH);
 
 				return;
 			}
