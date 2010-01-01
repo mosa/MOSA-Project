@@ -17,7 +17,7 @@ namespace Mosa.HelloWorld
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>
-		public static void Main()
+		public static void EmulatorMain()
 		{
 			Screen.Clear();
 			Screen.Color = 0x0E;
