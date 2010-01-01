@@ -109,15 +109,6 @@ namespace Mosa.Kernel.Memory.X86
 		}
 
 		/// <summary>
-		/// Flushes the Translation Lookaside Buffer (TLB).
-		/// </summary>
-		/// <param name="address">The address.</param>
-		public static void FlushTLB(uint address)
-		{
-			Native.Invlpg(address);
-		}
-
-		/// <summary>
 		/// Gets or sets the Control Register 0.
 		/// </summary>
 		/// <value>The CR0.</value>
@@ -134,6 +125,15 @@ namespace Mosa.Kernel.Memory.X86
 		public static uint CR3
 		{
 			set { Native.SetControlRegister(3, value); }
+		}
+
+		/// <summary>
+		/// Flushes the Translation Lookaside Buffer (TLB).
+		/// </summary>
+		/// <param name="address">The address.</param>
+		public static void FlushTLB(uint address)
+		{
+			Native.Invlpg(address);
 		}
 
 	}
