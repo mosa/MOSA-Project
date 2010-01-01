@@ -72,7 +72,7 @@ namespace Mosa.Platforms.x86.CPUx86
 				default: throw new NotSupportedException();
 			}
 
-			emitter.Emit(opcode, ctx.Result, null, null);
+			emitter.Emit(opcode, ctx.Result, null);
 		}
 
 		/// <summary>

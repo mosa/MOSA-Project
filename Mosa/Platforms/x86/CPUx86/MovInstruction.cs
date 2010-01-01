@@ -31,43 +31,12 @@ namespace Mosa.Platforms.x86.CPUx86
 		private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x89 });
 		private static readonly OpCode M_R_U8 = new OpCode(new byte[] { 0x88 }); // Move R8 to r/rm8
 		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
-		private static readonly byte[] R_CR = new byte[] { 0x0F, 0x20 };
-		private static readonly byte[] CR_R = new byte[] { 0x0F, 0x22 };
+		private static readonly OpCode R_CR = new OpCode(new byte[] { 0x0F, 0x20 }); 
+		private static readonly OpCode CR_R = new OpCode(new byte[] { 0x0F, 0x22 });
 
 		#endregion // Data Members
 
 		#region Methods
-
-		/// <summary>
-		/// Emits the specified platform instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-		{
-			Operand destination = ctx.Result;
-			Operand source = ctx.Operand1;
-
-			if (destination is RegisterOperand) {
-				if ((destination as RegisterOperand).Register is ControlRegister) {
-					emitter.Emit(CR_R, (byte)(destination as RegisterOperand).Register.Index, source, null);
-					return;
-				}
-				else if ((destination as RegisterOperand).Register is SegmentRegister)
-					throw new ArgumentException(@"TODO: No opcode for move to segment register");
-			}
-			if (source is RegisterOperand) {
-				if ((source as RegisterOperand).Register is ControlRegister) {
-					emitter.Emit(R_CR, (byte)(source as RegisterOperand).Register.Index, destination, null);
-					return;
-				}
-				else if ((source as RegisterOperand).Register is SegmentRegister)
-					throw new ArgumentException(@"TODO: No opcode for move from segment register");
-			}
-
-			OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, null);
-			emitter.Emit(opCode, ctx.Result, ctx.Operand1);
-		}
 
 		/// <summary>
 		/// Computes the opcode.
@@ -78,6 +47,21 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
+			if (destination is RegisterOperand) {
+				if ((destination as RegisterOperand).Register is ControlRegister) {
+					return CR_R;
+				}
+				else if ((destination as RegisterOperand).Register is SegmentRegister)
+					throw new ArgumentException(@"TODO: No opcode for move to segment register");
+			}
+			if (source is RegisterOperand) {
+				if ((source as RegisterOperand).Register is ControlRegister) {
+					return R_CR;
+				}
+				else if ((source as RegisterOperand).Register is SegmentRegister)
+					throw new ArgumentException(@"TODO: No opcode for move from segment register");
+			}
+
 			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
 			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
 			if ((destination is RegisterOperand) && (source is RegisterOperand)) {

@@ -311,17 +311,6 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Emits the specified op code.
-		/// </summary>
-		/// <param name="dest">The dest.</param>
-		/// <param name="src">The SRC.</param>
-		/// <param name="opCode">The op code.</param>
-		public void Emit(Operand dest, Operand src, OpCode opCode)
-		{
-			Emit(opCode.Code, opCode.RegField, dest, src);
-		}
-
-		/// <summary>
 		/// Calls the specified target.
 		/// </summary>
 		/// <param name="target">The target.</param>
@@ -335,81 +324,6 @@ namespace Mosa.Platforms.x86
 				target,
 				IntPtr.Zero
 			);
-		}
-
-		/// <summary>
-		/// Emits the given code.
-		/// </summary>
-		/// <param name="code">The opcode bytes.</param>
-		/// <param name="regField">The modR/M regfield.</param>
-		/// <param name="dest">The destination operand.</param>
-		/// <param name="src">The source operand.</param>
-		public void Emit(byte[] code, byte? regField, Operand dest, Operand src)
-		{
-			byte? sib = null, modRM = null;
-			MemoryOperand displacement = null;
-
-			// Write the opcode
-			_codeStream.Write(code, 0, code.Length);
-
-			if (dest == null && src == null)
-				return;
-
-			// Write the mod R/M byte
-			modRM = CalculateModRM(regField, dest, src, out sib, out displacement);
-			if (null != modRM) {
-				_codeStream.WriteByte(modRM.Value);
-				if (sib.HasValue) {
-					_codeStream.WriteByte(sib.Value);
-				}
-			}
-
-			// Add displacement to the code
-			if (displacement != null)
-				EmitDisplacement(displacement);
-
-			// Add immediate bytes
-			if (dest is ConstantOperand)
-				EmitImmediate(dest);
-			if (src is ConstantOperand)
-				EmitImmediate(src);
-		}
-
-		/// <summary>
-		/// Emits the given code.
-		/// </summary>
-		/// <param name="code">The opcode bytes.</param>
-		/// <param name="regField">The modR/M regfield.</param>
-		/// <param name="dest">The destination operand.</param>
-		/// <param name="src">The source operand.</param>
-		/// <param name="op3">The third operand.</param>
-		public void Emit(byte[] code, byte? regField, Operand dest, Operand src, Operand op3)
-		{
-			byte? sib = null, modRM = null;
-			MemoryOperand displacement = null;
-
-			// Write the opcode
-			_codeStream.Write(code, 0, code.Length);
-
-			if (dest == null && src == null)
-				return;
-
-			// Write the mod R/M byte
-			modRM = CalculateModRM(regField, dest, src, out sib, out displacement);
-			if (modRM != null) {
-				_codeStream.WriteByte(modRM.Value);
-				if (sib.HasValue) {
-					_codeStream.WriteByte(sib.Value);
-				}
-			}
-
-			// Add displacement to the code
-			if (displacement != null)
-				EmitDisplacement(displacement);
-
-			// Add immediate bytes
-			if (op3 is ConstantOperand)
-				EmitImmediate(dest);
 		}
 
 		/// <summary>
@@ -431,11 +345,10 @@ namespace Mosa.Platforms.x86
 
 			// Write the mod R/M byte
 			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
-			if (null != modRM) {
+			if (modRM != null) {
 				_codeStream.WriteByte(modRM.Value);
-				if (sib.HasValue) {
+				if (sib.HasValue)
 					_codeStream.WriteByte(sib.Value);
-				}
 			}
 
 			// Add displacement to the code
@@ -453,10 +366,10 @@ namespace Mosa.Platforms.x86
 		/// Emits the given code.
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
-		/// <param name="result">The destination operand.</param>
-		/// <param name="leftOperand">The source operand.</param>
-		/// <param name="rightOperand">The third operand.</param>
-		public void Emit(OpCode opCode, Operand result, Operand leftOperand, Operand rightOperand)
+		/// <param name="dest">The dest.</param>
+		/// <param name="src">The source.</param>
+		/// <param name="third">The third.</param>
+		public void Emit(OpCode opCode, Operand dest, Operand src, Operand third)
 		{
 			byte? sib = null, modRM = null;
 			MemoryOperand displacement = null;
@@ -464,16 +377,15 @@ namespace Mosa.Platforms.x86
 			// Write the opcode
 			_codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
-			if (null == result && null == leftOperand)
+			if (dest == null && src == null)
 				return;
 
 			// Write the mod R/M byte
-			modRM = CalculateModRM(opCode.RegField, result, leftOperand, out sib, out displacement);
-			if (null != modRM) {
+			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
+			if (modRM != null) {
 				_codeStream.WriteByte(modRM.Value);
-				if (sib.HasValue) {
+				if (sib.HasValue)
 					_codeStream.WriteByte(sib.Value);
-				}
 			}
 
 			// Add displacement to the code
@@ -481,8 +393,8 @@ namespace Mosa.Platforms.x86
 				WriteDisplacement(displacement);
 
 			// Add immediate bytes
-			if (rightOperand is ConstantOperand)
-				WriteImmediate(rightOperand);
+			if (third is ConstantOperand)
+				WriteImmediate(third);
 		}
 
 		/// <summary>

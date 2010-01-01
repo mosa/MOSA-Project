@@ -19,12 +19,14 @@ namespace Mosa.Platforms.x86.CPUx86
 	public sealed class AdcInstruction : TwoOperandInstruction
     {
         #region Data members
-        private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 2);
-        private static readonly OpCode M_C = new OpCode(new byte[] { 0x81 }, 2);
+        
+		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 2);
+		private static readonly OpCode M_C = R_C;
         private static readonly OpCode R_R = new OpCode(new byte[] { 0x11 });
-        private static readonly OpCode R_M = new OpCode(new byte[] { 0x13 });
-        private static readonly OpCode M_R = new OpCode(new byte[] { 0x11 });
-        #endregion
+		private static readonly OpCode M_R = R_R;
+		private static readonly OpCode R_M = new OpCode(new byte[] { 0x13 });
+        
+		#endregion
 
         #region Properties
 

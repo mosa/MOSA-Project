@@ -46,8 +46,10 @@ namespace Mosa.Platforms.x86.CPUx86
 
 			RegisterOperand imm = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
 
-			context.SetInstruction(IR.Instruction.MoveInstruction, imm, operand2);
+			context.SetInstruction(IR.Instruction.NopInstruction);
+			context.AppendInstruction(IR.Instruction.MoveInstruction, imm, operand2);
 			context.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(new SigType(CilElementType.U4), control), imm);
+			context.AppendInstruction(IR.Instruction.NopInstruction);
 		}
 
 		#endregion // Methods
