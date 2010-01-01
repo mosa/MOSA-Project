@@ -156,6 +156,15 @@ namespace Mosa.Platforms.x86
 					type.Type == CilElementType.Object);
 		}
 
+		/// <summary>
+		/// Returns the name of the control register.
+		/// </summary>
+		/// <returns>The name of the control register.</returns>
+		public override string ToString()
+		{
+			return _control.ToString();
+		}
+
 		#endregion // Methods
 	}
 }

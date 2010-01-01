@@ -20,7 +20,12 @@ namespace Mosa.Platforms.x86.CPUx86
 	{
 		#region Data Members
 
-		private static readonly OpCode POP = new OpCode(new byte[] { 0x8F });
+		private static readonly OpCode POP = new OpCode(new byte[] { 0x8F }, 0);
+		private static readonly OpCode POP_DS = new OpCode(new byte[] { 0x1F });
+		private static readonly OpCode POP_ES = new OpCode(new byte[] { 0x07 });
+		private static readonly OpCode POP_FS = new OpCode(new byte[] { 0x17 });
+		private static readonly OpCode POP_GS = new OpCode(new byte[] { 0x0F, 0xA1 });
+		private static readonly OpCode POP_SS = new OpCode(new byte[] { 0x0F, 0xA9 });
 
 		#endregion
 
@@ -36,18 +41,18 @@ namespace Mosa.Platforms.x86.CPUx86
 			if (ctx.Result is RegisterOperand) {
 				if ((ctx.Result as RegisterOperand).Register is SegmentRegister)
 					switch (((ctx.Result as RegisterOperand).Register as SegmentRegister).Segment) {
-						case SegmentRegister.SegmentType.DS: emitter.WriteByte(0x1F); return;
-						case SegmentRegister.SegmentType.ES: emitter.WriteByte(0x07); return;
-						case SegmentRegister.SegmentType.FS: emitter.WriteByte(0x17); return;
-						case SegmentRegister.SegmentType.GS: emitter.WriteByte(0x0F); emitter.WriteByte(0xA1); return;
-						case SegmentRegister.SegmentType.SS: emitter.WriteByte(0x0F); emitter.WriteByte(0xA9); return;
+						case SegmentRegister.SegmentType.DS: emitter.Emit(POP_DS, null, null); return;
+						case SegmentRegister.SegmentType.ES: emitter.Emit(POP_ES, null, null); return;
+						case SegmentRegister.SegmentType.FS: emitter.Emit(POP_FS, null, null); return;
+						case SegmentRegister.SegmentType.GS: emitter.Emit(POP_GS, null, null); return;
+						case SegmentRegister.SegmentType.SS: emitter.Emit(POP_SS, null, null); return;
 						default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
 					}
 				else
 					emitter.WriteByte((byte)(0x58 + (ctx.Result as RegisterOperand).Register.RegisterCode));
 			}
 			else
-				emitter.Emit(POP.Code, 0, ctx.Result, null);
+				emitter.Emit(POP, ctx.Result, null);
 		}
 
 		/// <summary>

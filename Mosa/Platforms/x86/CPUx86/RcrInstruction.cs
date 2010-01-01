@@ -39,11 +39,11 @@ namespace Mosa.Platforms.x86.CPUx86
             throw new ArgumentException(@"No opcode for operand type.");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="emitter"></param>
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
         protected override void Emit(Context ctx, MachineCodeEmitter emitter)
         {
             OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);

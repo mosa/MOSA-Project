@@ -20,10 +20,17 @@ namespace Mosa.Platforms.x86.CPUx86
 	{
 		#region Data Members
 
-		private static readonly OpCode PUSH = new OpCode(new byte[] { 0xFF });
-		private static readonly OpCode Const_8 = new OpCode(new byte[] { 0x6A });
-		private static readonly OpCode Const_16 = new OpCode(new byte[] { 0x66, 0x68 });
-		private static readonly OpCode Const_32 = new OpCode(new byte[] { 0x68 });
+		private static readonly OpCode PUSH = new OpCode(new byte[] { 0xFF }, 6);
+		private static readonly OpCode CONST8 = new OpCode(new byte[] { 0x6A });
+		private static readonly OpCode CONST16 = new OpCode(new byte[] { 0x66, 0x68 });
+		private static readonly OpCode CONST32 = new OpCode(new byte[] { 0x68 });
+		private static readonly OpCode PUSH_CS = new OpCode(new byte[] { 0x0E });
+		private static readonly OpCode PUSH_SS = new OpCode(new byte[] { 0x16 });
+		private static readonly OpCode PUSH_DS = new OpCode(new byte[] { 0x1E });
+		private static readonly OpCode PUSH_ES = new OpCode(new byte[] { 0x06 });
+		private static readonly OpCode PUSH_FS = new OpCode(new byte[] { 0x0F, 0xA0 });
+		private static readonly OpCode PUSH_GS = new OpCode(new byte[] { 0x0F, 0xA8 });
+
 
 		#endregion
 
@@ -48,26 +55,26 @@ namespace Mosa.Platforms.x86.CPUx86
 		{
 			if (ctx.Operand1 is ConstantOperand) {
 				if (IsByte(ctx.Result))
-					emitter.Emit(Const_8.Code, null, ctx.Operand1, null);
+					emitter.Emit(CONST8, ctx.Operand1, null);
 				else if (IsShort(ctx.Operand1) || IsChar(ctx.Operand1))
-					emitter.Emit(Const_16.Code, null, ctx.Operand1, null);
+					emitter.Emit(CONST16, ctx.Operand1, null);
 				else if (IsInt(ctx.Result))
-					emitter.Emit(Const_32.Code, null, ctx.Operand1, null);
+					emitter.Emit(CONST32, ctx.Operand1, null);
 			}
 			else {
 				if (ctx.Operand1 is RegisterOperand) {
 					if ((ctx.Operand1 as RegisterOperand).Register is SegmentRegister)
 						switch (((ctx.Operand1 as RegisterOperand).Register as SegmentRegister).Segment) {
-							case SegmentRegister.SegmentType.CS: emitter.WriteByte(0x0E);  return;
-							case SegmentRegister.SegmentType.SS: emitter.WriteByte(0x16); return;
-							case SegmentRegister.SegmentType.DS: emitter.WriteByte(0x1E); return;
-							case SegmentRegister.SegmentType.ES: emitter.WriteByte(0x06); return;
-							case SegmentRegister.SegmentType.FS: emitter.WriteByte(0x0F); emitter.WriteByte(0xA0); return;
-							case SegmentRegister.SegmentType.GS: emitter.WriteByte(0x0F); emitter.WriteByte(0xA8); return;
+							case SegmentRegister.SegmentType.CS: emitter.Emit(PUSH_CS, null, null); return;
+							case SegmentRegister.SegmentType.SS: emitter.Emit(PUSH_SS, null, null); return;
+							case SegmentRegister.SegmentType.DS: emitter.Emit(PUSH_DS, null, null); return;
+							case SegmentRegister.SegmentType.ES: emitter.Emit(PUSH_ES, null, null); return;
+							case SegmentRegister.SegmentType.FS: emitter.Emit(PUSH_FS, null, null); return;
+							case SegmentRegister.SegmentType.GS: emitter.Emit(PUSH_GS, null, null); return;
 							default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
 						}
 				}
-				emitter.Emit(PUSH.Code, 6, ctx.Operand1, null);
+				emitter.Emit(PUSH, ctx.Operand1, null);
 			}
 		}
 

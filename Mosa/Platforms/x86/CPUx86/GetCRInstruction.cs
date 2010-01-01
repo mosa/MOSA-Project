@@ -7,8 +7,11 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
+using System;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
@@ -26,15 +29,28 @@ namespace Mosa.Platforms.x86.CPUx86
         /// <param name="context">The context.</param>
         public void ReplaceIntrinsicCall(Context context)
         {
-            if (!(context.Operand1 is ConstantOperand))
-                return;
+			if (!(context.Operand1 is ConstantOperand))
+				throw new InvalidOperationException();
 
             Operand result = context.Result;
-            Operand operand1 = context.Operand1;
 
-            context.SetInstruction(Instruction.MoveCRToRegInstruction, new RegisterOperand(result.Type, GeneralPurposeRegister.EAX), operand1);
-            context.AppendInstruction(IR.Instruction.MoveInstruction, result, new RegisterOperand(result.Type, GeneralPurposeRegister.EAX));
-        }
+			ControlRegister control;
+
+			switch ((int)(context.Operand1 as ConstantOperand).Value) {
+				case 0: control = ControlRegister.CR0; break;
+				case 2: control = ControlRegister.CR2; break;
+				case 3: control = ControlRegister.CR3; break;
+				case 4: control = ControlRegister.CR4; break;
+				default: throw new InvalidOperationException();
+			}
+
+			RegisterOperand imm = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
+
+			context.SetInstruction(IR.Instruction.NopInstruction);
+			context.AppendInstruction(IR.Instruction.MoveInstruction, imm, new RegisterOperand(new SigType(CilElementType.U4), control));
+			context.AppendInstruction(IR.Instruction.MoveInstruction, result, imm);
+			context.AppendInstruction(IR.Instruction.NopInstruction);
+		}
 
         #endregion // Methods
     }
