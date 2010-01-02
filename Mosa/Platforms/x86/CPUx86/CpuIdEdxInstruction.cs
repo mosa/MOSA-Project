@@ -25,15 +25,22 @@ namespace Mosa.Platforms.x86.CPUx86
     public sealed class CpuIdEdxInstruction : TwoOperandInstruction, IIntrinsicInstruction
     {
 
+		#region Data Members
+
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0xA2 }); // Move imm32 to r/m32
+
+		#endregion // Data Members
+
         #region Methods
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="emitter"></param>
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
         protected override void Emit(Context ctx, MachineCodeEmitter emitter)
         {
-            emitter.Emit(new OpCode(new byte[] { 0x0F, 0xA2 }), null, null);
+			emitter.Emit(opcode, null, null);
         }
 
         /// <summary>
