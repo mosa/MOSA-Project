@@ -138,12 +138,8 @@ namespace Mosa.Runtime.CompilerFramework
        private void CreateTemporaryMoves(Context ctx, BasicBlock block, Stack<Operand> stack)
         {
             Context context = ctx.InsertBefore();
-            context.SetInstruction(IR.Instruction.NopInstruction);
 
             BasicBlock nextBlock;
-
-            //if (block.InitialStack == null)
-            //    block.InitialStack = stack;
 
             if (NextBlockHasInitialStack(block, out nextBlock))
                 LinkTemporaryMoves(context, block, nextBlock, stack);

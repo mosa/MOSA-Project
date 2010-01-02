@@ -31,7 +31,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public LdstrInstruction(OpCode opCode)
 			: base(opCode)
 		{
-            return;
+			return;
 		}
 
 		#endregion // Construction
@@ -59,18 +59,20 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Set the result
 			ctx.String = value;
-            ctx.Result = decoder.Compiler.CreateTemporary(new SigType(CilElementType.String));
+			ctx.Result = decoder.Compiler.CreateTemporary(new SigType(CilElementType.String));
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        public override string ToString(Context context)
-        {
-            return String.Format("{0} = \"{1}\"", context.Result, context.String);
-        }
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString(Context context)
+		{
+			return base.ToString(context) + " \"" + context.String + "\"";
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
