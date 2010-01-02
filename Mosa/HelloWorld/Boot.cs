@@ -30,12 +30,15 @@ namespace Mosa.HelloWorld
 			PageFrameAllocator.Setup();
 			Screen.SetCursor(24, 2);
 			Screen.Write('3');
-			//PageTable.Setup();
-			Screen.SetCursor(24, 3);
+			//GDT.Setup();
+			Screen.SetCursor(24, 2);
 			Screen.Write('4');
+			PageTable.Setup();
+			Screen.SetCursor(24, 3);
+			Screen.Write('5');
 			//Kernel.Setup();
 			Screen.SetCursor(24, 4);
-			Screen.Write('5');
+			Screen.Write('6');
 
 			Screen.GotoTop();
 			Screen.Color = 0x0E;
