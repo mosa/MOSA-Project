@@ -63,6 +63,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The block.</param>
         private void AssignOperands(BasicBlock block)
         {
+            if (block.InitialStack != null)
+                foreach (Operand operand in block.InitialStack)
+                    _operandStack.Push(operand);
+
             for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
             {
                 if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is ICILInstruction))
@@ -138,6 +142,8 @@ namespace Mosa.Runtime.CompilerFramework
        private void CreateTemporaryMoves(Context ctx, BasicBlock block, Stack<Operand> stack)
         {
             Context context = ctx.InsertBefore();
+
+            context.SetInstruction(IR.Instruction.NopInstruction);
 
             BasicBlock nextBlock;
 
@@ -216,13 +222,6 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="currentStack">The current stack.</param>
         private void AssignOperandsFromCILStack(Context ctx, Stack<Operand> currentStack)
         {
-            if (ctx.BasicBlock.InitialStack != null)
-            {
-                foreach (Operand operand in ctx.BasicBlock.InitialStack)
-                    _operandStack.Push(operand);
-                ctx.BasicBlock.InitialStack.Clear();
-            }
-
             for (int index = ctx.OperandCount - 1; index >= 0; --index)
             {
                 if (ctx.GetOperand(index) != null)
