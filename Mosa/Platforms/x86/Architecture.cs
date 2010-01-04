@@ -218,11 +218,11 @@ namespace Mosa.Platforms.x86
 				case CilElementType.U1: memorySize = alignment = 4; break;
 				case CilElementType.U2: memorySize = alignment = 4; break;
 				case CilElementType.U4: memorySize = alignment = 4; break;
-				case CilElementType.U8: memorySize = alignment = 8; break;
+                case CilElementType.U8: memorySize = 8; alignment = 4; break;
 				case CilElementType.I1: memorySize = alignment = 4; break;
 				case CilElementType.I2: memorySize = alignment = 4; break;
 				case CilElementType.I4: memorySize = alignment = 4; break;
-				case CilElementType.I8: memorySize = alignment = 8; break;
+                case CilElementType.I8: memorySize = 8; alignment = 4; break;
 				case CilElementType.R4: memorySize = alignment = 4; break;
 				case CilElementType.R8: memorySize = alignment = 8; break;
 				case CilElementType.Boolean: memorySize = alignment = 4; break;
