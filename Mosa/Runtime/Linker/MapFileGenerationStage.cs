@@ -26,7 +26,7 @@ namespace Mosa.Runtime.Linker
         /// <summary>
         /// Holds the text writer used to emit the map file.
         /// </summary>
-        private TextWriter writer;
+        private TextWriter _writer;
 
         #endregion // Data members
 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Linker
             if (null == writer)
                 throw new ArgumentNullException(@"writer");
 
-            this.writer = writer;
+            _writer = writer;
         }
 
         #endregion // Construction
@@ -63,16 +63,16 @@ namespace Mosa.Runtime.Linker
             IAssemblyLinker linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
 
             // Emit map file _header
-            this.writer.WriteLine(linker.OutputFile);
-            this.writer.WriteLine();
-            this.writer.WriteLine("Timestamp is {0}", linker.TimeStamp);
-            this.writer.WriteLine();
-            this.writer.WriteLine("Preferred load address is {0:x16}", linker.BaseAddress);
-            this.writer.WriteLine();
+            _writer.WriteLine(linker.OutputFile);
+            _writer.WriteLine();
+            _writer.WriteLine("Timestamp is {0}", linker.TimeStamp);
+            _writer.WriteLine();
+            _writer.WriteLine("Preferred load address is {0:x16}", linker.BaseAddress);
+            _writer.WriteLine();
 
             // Emit the sections
             EmitSections(linker);
-            this.writer.WriteLine();
+            _writer.WriteLine();
 
             // Emit all symbols
             EmitSymbols(linker);
@@ -88,10 +88,10 @@ namespace Mosa.Runtime.Linker
         /// <param name="linker">The assembly linker.</param>
         private void EmitSections(IAssemblyLinker linker)
         {
-            this.writer.WriteLine("Offset           Virtual          Length           Name                             Class");
+            _writer.WriteLine("Offset           Virtual          Length           Name                             Class");
             foreach (LinkerSection section in linker.Sections)
             {
-                this.writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.Offset, section.VirtualAddress.ToInt64(), section.Length, section.Name.PadRight(32), section.SectionKind);
+                _writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.Offset, section.VirtualAddress.ToInt64(), section.Length, section.Name.PadRight(32), section.SectionKind);
             }
         }
 
@@ -101,19 +101,17 @@ namespace Mosa.Runtime.Linker
         /// <param name="linker">The assembly linker.</param>
         private void EmitSymbols(IAssemblyLinker linker)
         {
-			this.writer.WriteLine("Offset           Virtual          Length           Symbol");
+			_writer.WriteLine("Offset           Virtual          Length           Symbol");
             foreach (LinkerSymbol symbol in linker.Symbols)
-            {
-				this.writer.WriteLine("{0:x16} {1:x16} {2:x16} {3}", symbol.Offset, symbol.VirtualAddress.ToInt64(), symbol.Length, symbol.Name);
-            }
+				_writer.WriteLine("{0:x16} {1:x16} {2:x16} {3}", symbol.Offset, symbol.VirtualAddress.ToInt64(), symbol.Length, symbol.Name);
 
             LinkerSymbol entryPoint = linker.EntryPoint;
-            if (null != entryPoint)
+            if (entryPoint != null)
             {
-                this.writer.WriteLine();
-                this.writer.WriteLine("Entry point is {0}", entryPoint.Name);
-                this.writer.WriteLine("\tat offset {0:x16}", entryPoint.Offset);
-                this.writer.WriteLine("\tat virtual address {0:x16}", entryPoint.VirtualAddress.ToInt64());
+                _writer.WriteLine();
+                _writer.WriteLine("Entry point is {0}", entryPoint.Name);
+                _writer.WriteLine("\tat offset {0:x16}", entryPoint.Offset);
+                _writer.WriteLine("\tat virtual address {0:x16}", entryPoint.VirtualAddress.ToInt64());
             }
         }
 

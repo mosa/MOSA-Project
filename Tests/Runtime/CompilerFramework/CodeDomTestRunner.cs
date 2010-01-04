@@ -156,7 +156,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 				throw new NotSupportedException("The language '" + Language + "' is not supported on this machine.");
 			CompilerResults compileResults;
 			CompilerParameters parameters = new CompilerParameters(this.References, Path.GetTempFileName());
-			//parameters.CompilerOptions = "/optimize- /debug+ /debug:full";
+			parameters.CompilerOptions = "/optimize- /debug+ /debug:full";
 
 			if (this.unsafeCode) {
 				if (this.Language == "C#")
