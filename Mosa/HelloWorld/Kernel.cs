@@ -16,8 +16,8 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Kernel
 	{
-		private static uint _processtable = 0x1000;
-		private static uint _threadtable = 0x2000;
+		private static uint _multibootptr = 0x200004;
+		private static uint _multibootsignature = 0x200000;
 
 		public static void Setup()
 		{
@@ -26,24 +26,34 @@ namespace Mosa.HelloWorld
 
 			Screen.SetCursor(24, 0);
 			Screen.Write('1');
-			Multiboot.SetMultibootLocation(Memory.Get32(0x200004), Memory.Get32(0x200000));
+			Multiboot.SetMultibootLocation(Memory.Get32(_multibootptr), Memory.Get32(_multibootsignature));
 			Screen.SetCursor(24, 1);
 			Screen.Write('2');
-			PageFrameAllocator.Setup();
 			Screen.SetCursor(24, 2);
-			Screen.Write('3');
-			GDT.Setup();
+
+			if (Multiboot.IsMultibootEnabled) 
+				Screen.Write('3');			
+			else
+				Screen.Write('*');	// Panic! 
+
+			PageFrameAllocator.Setup();
 			Screen.SetCursor(24, 3);
 			Screen.Write('4');
-			PageTable.Setup();
+			GDT.Setup();
 			Screen.SetCursor(24, 4);
 			Screen.Write('5');
-			//IDT.Setup();
+			PageTable.Setup();
 			Screen.SetCursor(24, 5);
 			Screen.Write('6');
+			//IDT.Setup();
+			Screen.SetCursor(24, 6);
+			Screen.Write('7');
 
 			Screen.GotoTop();
 		}
+
+		private static uint _processtable = 0x1000;
+		private static uint _threadtable = 0x2000;
 
 		public static void Test()
 		{

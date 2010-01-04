@@ -60,6 +60,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Set the result
 			ctx.String = value;
 			ctx.Result = decoder.Compiler.CreateTemporary(new SigType(CilElementType.String));
+
+			// TODO: Add it to the linker (here? or in later stage?)
+			// TODO: Re-use static strings
 		}
 
 		/// <summary>
@@ -85,7 +88,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion Methods
-
 
 	}
 }

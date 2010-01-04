@@ -33,7 +33,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="linker">The linker.</param>
 		void Initialize(IMethodCompiler compiler, Stream codeStream, IAssemblyLinker linker);
 
-
         /// <summary>
         /// Emits a label into the code stream.
         /// </summary>

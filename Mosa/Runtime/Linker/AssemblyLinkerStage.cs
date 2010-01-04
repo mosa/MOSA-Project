@@ -65,7 +65,7 @@ namespace Mosa.Runtime.Linker
 		{
 			this.baseAddress = 0x00400000; // Use the Win32 default for now, FIXME
 			_linkRequests = new Dictionary<string, List<LinkRequest>>();
-			this._symbols = new Dictionary<string, LinkerSymbol>();
+			_symbols = new Dictionary<string, LinkerSymbol>();
 		}
 
 		#endregion // Construction
@@ -571,7 +571,7 @@ namespace Mosa.Runtime.Linker
 			long address = 0;
 			ITypeSystem ts = RuntimeBase.Instance.TypeLoader;
 			RuntimeMethod internalImpl = ts.GetImplementationForInternalCall(method);
-			if (null != internalImpl)
+			if (internalImpl != null)
 				address = internalImpl.Address.ToInt64();
 			return address;
 		}

@@ -29,19 +29,13 @@ namespace Mosa.Kernel.Memory.X86
 		/// <summary>
 		/// 
 		/// </summary>
-		private static uint memoryMapCount = 0;
+		private static uint _memoryMapCount = 0;
 
 		/// <summary>
 		/// Gets the memory map count.
 		/// </summary>
 		/// <value>The memory map count.</value>
-		public static uint MemoryMapCount
-		{
-			get
-			{
-				return memoryMapCount;
-			}
-		}
+		public static uint MemoryMapCount { get { return _memoryMapCount; } }
 
 		/// <summary>
 		/// Dumps multiboot info.
@@ -104,9 +98,7 @@ namespace Mosa.Kernel.Memory.X86
 		public static void SetMultibootLocation(uint address, uint magic)
 		{
 			if (magic == MultibootMagic)
-				MultibootStructure = address;
-
-			CountMemoryMap();
+				SetMultibootLocation(address);
 		}
 
 		/// <summary>
@@ -120,17 +112,14 @@ namespace Mosa.Kernel.Memory.X86
 		}
 
 		/// <summary>
-		/// Determines whether this instance is multiboot.
+		/// Gets a value indicating whether this instance is multiboot enabled.
 		/// </summary>
-		/// <returns>
-		/// 	<c>true</c> if this instance is multiboot; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool IsMultiboot()
+		/// <value>
+		/// 	<c>true</c> if this instance is multiboot enabled; otherwise, <c>false</c>.
+		/// </value>
+		public static bool IsMultibootEnabled
 		{
-			if (MultibootStructure == 0x0)
-				return false;
-			else
-				return true;
+			get { return (MultibootStructure != 0x0); }
 		}
 
 		/// <summary>
@@ -246,11 +235,11 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		private static void CountMemoryMap()
 		{
-			memoryMapCount = 0;
+			_memoryMapCount = 0;
 			uint location = MemoryMapStart;
 
 			while (location < (MemoryMapStart + MemoryMapLength)) {
-				memoryMapCount++;
+				_memoryMapCount++;
 				location = Memory.Get32(location) + location + 4;
 			}
 		}

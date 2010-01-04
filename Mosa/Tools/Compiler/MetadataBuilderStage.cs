@@ -45,7 +45,7 @@ namespace Mosa.Tools.Compiler
 				throw new InvalidOperationException(@"Can't run without a linker.");
 
 			// FIXME: Retrieve the compilation target assembly
-			// HACK: Using Metadata From source assembly, rather than re-create it From scratch From the target assembly
+			// HACK: Using Metadata from source assembly, rather than re-create it from scratch from the target assembly
 			IMetadataModule module = compiler.Assembly;
 
 			ExportCilMetadata(module, linker);
