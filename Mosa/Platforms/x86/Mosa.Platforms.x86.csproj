@@ -75,6 +75,7 @@
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
+    <Compile Include="CPUx86\SetStackPointerInstruction.cs" />
     <Compile Include="SegmentRegister.cs" />
     <Compile Include="CPUx86\BranchInstruction.cs" />
     <Compile Include="CPUx86\IntrinsicTestInstruction.cs" />

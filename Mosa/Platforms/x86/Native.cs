@@ -225,6 +225,14 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(CPUx86.GetCRInstruction))]
 		public static uint GetControlRegister(byte register) { ThrowPlatformNotSupported(); return 0; }
 
+		/// <summary>
+		/// Gets the control register.
+		/// </summary>
+		/// <param name="register">The pagedirectory.</param>
+		/// <returns></returns>
+		[Intrinsic(typeof(Architecture), typeof(CPUx86.SetStackPointerInstruction))]
+		public static uint SetStackPointer(byte register) { ThrowPlatformNotSupported(); return 0; }
+
 		#endregion
 
 		/// <summary>

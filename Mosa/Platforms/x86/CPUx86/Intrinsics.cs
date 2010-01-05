@@ -70,6 +70,7 @@ namespace Mosa.Platforms.x86.CPUx86
 			map.Add(typeof(CliInstruction), Instruction.CliInstruction);
 			map.Add(typeof(StiInstruction), Instruction.StiInstruction);
 
+			map.Add(typeof(SetStackPointerInstruction), Instruction.SetStackPointerInstruction);
 			map.Add(typeof(SetCRInstruction), Instruction.SetCRInstruction);
 			map.Add(typeof(GetCRInstruction), Instruction.GetCRInstruction);
 

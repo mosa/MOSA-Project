@@ -366,6 +366,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
+		public static readonly SetStackPointerInstruction SetStackPointerInstruction = new SetStackPointerInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly IntrinsicTestInstruction IntrinsicTestInstruction = new IntrinsicTestInstruction();
 		
 	}
