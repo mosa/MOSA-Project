@@ -16,3 +16,4 @@ Thumbs.db
 *.Cache
 /Tools/jpc
 /tmp
+build.force
