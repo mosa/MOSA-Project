@@ -214,7 +214,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="register">The control register</param>
 		/// <param name="status">The status.</param>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SetCR))]
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SetControlRegister))]
 		public static void SetControlRegister(byte register, uint status) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
@@ -222,7 +222,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="register">The pagedirectory.</param>
 		/// <returns></returns>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetCR))]
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetControlRegister))]
 		public static uint GetControlRegister(byte register) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
