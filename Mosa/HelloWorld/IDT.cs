@@ -55,26 +55,39 @@ namespace Mosa.Kernel.Memory.X86
 		}
 
 		// TODO: Build this w/o any calling convention
-		private static void GlobalInterruptHandler(byte irq, byte errorcode)
+		private static void ExitInterrupt()
 		{
-			Native.Pushad();	// Push edi,esi,ebp,esp,ebx,edx,ecx,eax
-			//Kernel.ProcessInterrupt();		// Call the Kernel's Interrupt Handler (regular call)
-			//Native.JumpProcessInterrupt();	// or Jump to Kernel's Interrupt Handler (jump)
 			Native.Popad();		// Pop edi,esi,ebp,esp,ebx,edx,ecx,eax
+			Native.Pop8();		// Pop error code
+			Native.Pop8();		// Pop interrupt number
 			Native.Sti();		// Enable Interrupts
 			Native.IRetd();		// Return from Interrupt
 		}
 
 		#region IRQ x 256
 
-		// TODO: Build this w/o any calling convension
-		private static void IRQ0() 
-		{
-			Native.Cli();	// Disable Interrupts
-			Native.Push8(0);
-			Native.Push8(0);
-			Native.JumpGlobalInterruptHandler();
-		}
+		// All IRQ Handler follow this sequence of instructions
+		// Native.Cli();		// Disable Interrupts
+		// Native.Push8(ERROR);	// Push Error Code
+		// Native.Push8(IRQ);	// Push Interrupt Number
+		// Native.Pushad();		// Push edi,esi,ebp,esp,ebx,edx,ecx,eax
+		// Native.JumpProcessInterrupt(); // Jumps to the kernel's interrupt handling function
+
+		// Note: Only interrupts 8, 10, 11, 12, 13, and 14 push error codes onto the stack
+
+		// TODO: Build these w/o any calling convension
+		private static void IRQ0() { Native.Cli(); Native.Push8(0); Native.Push8(0); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		private static void IRQ1() { Native.Cli(); Native.Push8(0); Native.Push8(1); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		private static void IRQ2() { Native.Cli(); Native.Push8(0); Native.Push8(2); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		private static void IRQ3() { Native.Cli(); Native.Push8(0); Native.Push8(3); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		private static void IRQ4() { Native.Cli(); Native.Push8(0); Native.Push8(4); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		private static void IRQ5() { Native.Cli(); Native.Push8(0); Native.Push8(5); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		private static void IRQ6() { Native.Cli(); Native.Push8(0); Native.Push8(6); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		private static void IRQ7() { Native.Cli(); Native.Push8(0); Native.Push8(7); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		private static void IRQ8() { Native.Cli(); Native.Push8(8); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		private static void IRQ9() { Native.Cli(); Native.Push8(0); Native.Push8(9); Native.Pushad(); Native.JumpProcessInterrupt(); }
+
+		// TODO: Add all 256!
 
 		#endregion
 

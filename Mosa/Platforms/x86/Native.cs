@@ -19,7 +19,7 @@ namespace Mosa.Platforms.x86
 	/// <summary>
 	/// Provides stub methods for selected x86 native assembly instructions.
 	/// </summary>
-	public static class Native
+	public static unsafe class Native
 	{
 		#region Instrinsics
 		/// <summary>
@@ -36,13 +36,13 @@ namespace Mosa.Platforms.x86
 		public static void Cli() { ThrowPlatformNotSupported(); return; }
 
 		///// <summary>
-		///// Wraps the x86 cmpxchg instruction to disable interrupts
+		///// Wraps the x86 cmpxchg instruction 
 		///// </summary>
 		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.CmpXchg))]
 		//public static void CmpXchg16(ref short first, short second) { ThrowPlatformNotSupported(); return; }
 
 		///// <summary>
-		///// Wraps the x86 cmpxchg instruction to disable interrupts
+		///// Wraps the x86 cmpxchg instruction 
 		///// </summary>
 		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.CmpXchg))]
 		//public static void CmpXchg32(ref int first, int second) { ThrowPlatformNotSupported(); return; }
@@ -53,23 +53,23 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Lgdt))]
 		public static void Lgdt(uint address) { ThrowPlatformNotSupported(); return; }
 
-		///// <summary>
-		///// Wraps the x86 pop instruction to pop a value from the stack
-		///// </summary>
-		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
-		//public static short Pop8() { ThrowPlatformNotSupported(); return 0; }
+		/// <summary>
+		/// Wraps the x86 pop instruction to pop a value from the stack
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
+		public static byte Pop8() { ThrowPlatformNotSupported(); return 0; }
 
-		///// <summary>
-		///// Wraps the x86 pop instruction to pop a value from the stack
-		///// </summary>
-		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
-		//public static short Pop16() { ThrowPlatformNotSupported(); return 0; }
+		/// <summary>
+		/// Wraps the x86 pop instruction to pop a value from the stack
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
+		public static ushort Pop16() { ThrowPlatformNotSupported(); return 0; }
 
-		///// <summary>
-		///// Wraps the x86 pop instruction to pop a value from the stack
-		///// </summary>
-		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
-		//public static int Pop32() { ThrowPlatformNotSupported(); return 0; }
+		/// <summary>
+		/// Wraps the x86 pop instruction to pop a value from the stack
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
+		public static uint Pop32() { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 popad instruction to pop all GPR from the stack
@@ -87,13 +87,13 @@ namespace Mosa.Platforms.x86
 		/// Wraps the x86 push instruction to push a value on the stack
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
-		public static void Push16(short value) { ThrowPlatformNotSupported(); return; }
+		public static void Push16(ushort value) { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Wraps the x86 push instruction to push a value on the stack
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
-		public static void Push32(int value) { ThrowPlatformNotSupported(); return; }
+		public static void Push32(uint value) { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Wraps the x86 pushad instruction to push all GPR to the stack
@@ -111,55 +111,55 @@ namespace Mosa.Platforms.x86
 		/// Wraps the x86 in instruction to read from an 8-bit port.
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.In))]
-		public static unsafe byte In(byte address) { ThrowPlatformNotSupported(); return 0; }
+		public static byte In(byte address) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from an 8-bit port.
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.In))]
-		public static unsafe byte In8(byte address) { ThrowPlatformNotSupported(); return 0; }
+		public static byte In8(byte address) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from a 16-bit port.
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.In))]
-		public static unsafe ushort In16(ushort address) { ThrowPlatformNotSupported(); return 0; }
+		public static ushort In16(ushort address) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from a 32-bit port.
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.In))]
-		public static unsafe uint In32(uint address) { ThrowPlatformNotSupported(); return 0; }
+		public static uint In32(uint address) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to an 8-bit port.
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Out))]
-		public static unsafe void Out8(byte address, byte value) { ThrowPlatformNotSupported(); }
+		public static void Out8(byte address, byte value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to an 8-bit port.
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Out))]
-		public static unsafe void Out(byte address, byte value) { ThrowPlatformNotSupported(); }
+		public static void Out(byte address, byte value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a 16-bit port.
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Out))]
-		public static unsafe void Out16(ushort address, ushort value) { ThrowPlatformNotSupported(); }
+		public static void Out16(ushort address, ushort value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a 32-bit port.
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Out))]
-		public static unsafe void Out32(uint address, uint value) { ThrowPlatformNotSupported(); }
+		public static void Out32(uint address, uint value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a nop instruction.
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Nop))]
-		public static unsafe void Nop() { ThrowPlatformNotSupported(); }
+		public static void Nop() { ThrowPlatformNotSupported(); }
 
 		///// <summary>
 		///// Wraps the x86 hlt instruction.
@@ -177,7 +177,7 @@ namespace Mosa.Platforms.x86
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.CpuId))]
-		public static unsafe byte* CpuId(uint function) { ThrowPlatformNotSupported(); return null; }
+		public static byte* CpuId(uint function) { ThrowPlatformNotSupported(); return null; }
 
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
@@ -237,8 +237,8 @@ namespace Mosa.Platforms.x86
 		/// Jumps the global interrupt handler.
 		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.JumpGlobalInterruptHandler))]
-		public static void JumpGlobalInterruptHandler() { ThrowPlatformNotSupported(); }
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.JumpProcessInterrupt))]
+		public static void JumpProcessInterrupt() { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Jumps the global interrupt handler.
