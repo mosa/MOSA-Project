@@ -240,6 +240,13 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.JumpGlobalInterruptHandler))]
 		public static void JumpGlobalInterruptHandler() { ThrowPlatformNotSupported(); }
 
+		/// <summary>
+		/// Jumps the global interrupt handler.
+		/// </summary>
+		/// <returns></returns>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.IRetd))]
+		public static void IRetd() { ThrowPlatformNotSupported(); }
+
 		#endregion
 
 		/// <summary>

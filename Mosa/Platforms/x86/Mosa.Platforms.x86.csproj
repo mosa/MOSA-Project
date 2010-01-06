@@ -76,6 +76,7 @@
     <Compile Include="AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
+    <Compile Include="Intrinsic\IRetd.cs" />
     <Compile Include="Intrinsic\CpuIdEax.cs" />
     <Compile Include="Intrinsic\CpuIdEbx.cs" />
     <Compile Include="Intrinsic\CpuIdEcx.cs" />
@@ -148,7 +149,7 @@
     <Compile Include="CPUx86\InInstruction.cs" />
     <Compile Include="Intrinsic\Method.cs" />
     <Compile Include="CPUx86\InvlpgInstruction.cs" />
-    <Compile Include="CPUx86\IretdInstruction.cs" />
+    <Compile Include="CPUx86\IRetdInstruction.cs" />
     <Compile Include="CPUx86\LgdtInstruction.cs" />
     <Compile Include="CPUx86\LidtInstruction.cs" />
     <Compile Include="CPUx86\LockInstruction.cs" />

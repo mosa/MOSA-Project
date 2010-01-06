@@ -22,10 +22,21 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 iretd instruction.
     /// </summary>
-    public sealed class IretdInstruction : BaseInstruction
+    public sealed class IRetdInstruction : BaseInstruction
     {
  
         #region Methods
+
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
+			emitter.WriteByte(0xCF);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

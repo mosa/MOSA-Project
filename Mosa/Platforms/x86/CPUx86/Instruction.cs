@@ -31,7 +31,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-		/// 
 		public static readonly BreakInstruction BreakInstruction = new BreakInstruction();
 		/// <summary>
 		/// 
@@ -272,7 +271,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly IretdInstruction IretdInstruction = new IretdInstruction();
+		public static readonly IRetdInstruction IRetdInstruction = new IRetdInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -353,8 +352,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly LeaInstruction LeaInstruction = new LeaInstruction();
-	
-		
 	}
 }
 
