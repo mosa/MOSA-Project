@@ -604,7 +604,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                         return (arg == CallIntrinsicTest(arg));
                     }
 
-                    [Mosa.Runtime.CompilerFramework.IntrinsicAttribute(typeof(Mosa.Platforms.x86.Architecture), typeof(Mosa.Platforms.x86.CPUx86.IntrinsicTestInstruction))]
+                    [Mosa.Runtime.CompilerFramework.IntrinsicAttribute(typeof(Mosa.Platforms.x86.Architecture), typeof(Mosa.Platforms.x86.Intrinsic.Test))]
                     static int CallIntrinsicTest(int arg) {
                         return 0;
                     }

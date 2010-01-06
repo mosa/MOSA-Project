@@ -35,15 +35,15 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Cli))]
 		public static void Cli() { ThrowPlatformNotSupported(); return; }
 
-		/// <summary>
-		/// Wraps the x86 cmpxchg instruction to disable interrupts
-		/// </summary>
+		///// <summary>
+		///// Wraps the x86 cmpxchg instruction to disable interrupts
+		///// </summary>
 		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.CmpXchg))]
 		//public static void CmpXchg16(ref short first, short second) { ThrowPlatformNotSupported(); return; }
 
-		/// <summary>
-		/// Wraps the x86 cmpxchg instruction to disable interrupts
-		/// </summary>
+		///// <summary>
+		///// Wraps the x86 cmpxchg instruction to disable interrupts
+		///// </summary>
 		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.CmpXchg))]
 		//public static void CmpXchg32(ref int first, int second) { ThrowPlatformNotSupported(); return; }
 
@@ -53,21 +53,21 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Lgdt))]
 		public static void Lgdt(uint address) { ThrowPlatformNotSupported(); return; }
 
-		/// <summary>
-		/// Wraps the x86 pop instruction to pop a value from the stack
-		/// </summary>
+		///// <summary>
+		///// Wraps the x86 pop instruction to pop a value from the stack
+		///// </summary>
 		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
 		//public static short Pop8() { ThrowPlatformNotSupported(); return 0; }
 
-		/// <summary>
-		/// Wraps the x86 pop instruction to pop a value from the stack
-		/// </summary>
+		///// <summary>
+		///// Wraps the x86 pop instruction to pop a value from the stack
+		///// </summary>
 		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
 		//public static short Pop16() { ThrowPlatformNotSupported(); return 0; }
 
-		/// <summary>
-		/// Wraps the x86 pop instruction to pop a value from the stack
-		/// </summary>
+		///// <summary>
+		///// Wraps the x86 pop instruction to pop a value from the stack
+		///// </summary>
 		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
 		//public static int Pop32() { ThrowPlatformNotSupported(); return 0; }
 
@@ -77,21 +77,21 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Popad))]
 		public static void Popad() { ThrowPlatformNotSupported(); return; }
 
-		/// <summary>
-		/// Wraps the x86 push instruction to push a value on the stack
-		/// </summary>
+		///// <summary>
+		///// Wraps the x86 push instruction to push a value on the stack
+		///// </summary>
 		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
 		//public static void Push8(byte value) { ThrowPlatformNotSupported(); return; }
 
-		/// <summary>
-		/// Wraps the x86 push instruction to push a value on the stack
-		/// </summary>
+		///// <summary>
+		///// Wraps the x86 push instruction to push a value on the stack
+		///// </summary>
 		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
 		//public static void Push16(short value) { ThrowPlatformNotSupported(); return; }
 
-		/// <summary>
-		/// Wraps the x86 push instruction to push a value on the stack
-		/// </summary>
+		///// <summary>
+		///// Wraps the x86 push instruction to push a value on the stack
+		///// </summary>
 		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
 		//public static void Push32(int value) { ThrowPlatformNotSupported(); return; }
 
@@ -161,9 +161,9 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Nop))]
 		public static unsafe void Nop() { ThrowPlatformNotSupported(); }
 
-		/// <summary>
-		/// Wraps the x86 hlt instruction.
-		/// </summary>
+		///// <summary>
+		///// Wraps the x86 hlt instruction.
+		///// </summary>
 		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Hlt))]
 		//public static void Hlt() { ThrowPlatformNotSupported(); }
 
@@ -236,11 +236,9 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Jumps the global interrupt handler.
 		/// </summary>
-		/// <param name="register">The register.</param>
 		/// <returns></returns>
-
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.JumpGlobalInterruptHandler))]
-		public static uint JumpGlobalInterruptHandler() { ThrowPlatformNotSupported(); return 0; }
+		public static void JumpGlobalInterruptHandler() { ThrowPlatformNotSupported(); }
 
 		#endregion
 
