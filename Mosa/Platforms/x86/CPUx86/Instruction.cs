@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Platforms.x86.Intrinsic;
+
 namespace Mosa.Platforms.x86.CPUx86
 {
 	/// <summary>
@@ -75,10 +77,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly Cvttss2siInstruction Cvttss2siInstruction = new Cvttss2siInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly DebugInstruction DebugInstruction = new DebugInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -274,14 +272,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly SetCRInstruction SetCRInstruction = new SetCRInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly GetCRInstruction GetCRInstruction = new GetCRInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
 		public static readonly IretdInstruction IretdInstruction = new IretdInstruction();
 		/// <summary>
 		/// 
@@ -363,14 +353,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// 
 		/// </summary>
 		public static readonly LeaInstruction LeaInstruction = new LeaInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly SetStackPointerInstruction SetStackPointerInstruction = new SetStackPointerInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly IntrinsicTestInstruction IntrinsicTestInstruction = new IntrinsicTestInstruction();
+	
 		
 	}
 }

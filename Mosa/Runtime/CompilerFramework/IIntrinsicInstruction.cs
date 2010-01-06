@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Interface to an intrinsic instruction
 	/// </summary>
-	public interface IIntrinsicInstruction
+	public interface IIntrinsicMethod
 	{
 		/// <summary>
 		/// Replaces the instrinsic call site

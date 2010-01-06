@@ -15,7 +15,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 Lgdt instruction.
     /// </summary>
-	public sealed class LgdtInstruction : OneOperandInstruction, IIntrinsicInstruction
+	public sealed class LgdtInstruction : OneOperandInstruction
     {
 		#region Data Members
 

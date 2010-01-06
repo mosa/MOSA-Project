@@ -21,7 +21,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 popad instruction.
     /// </summary>
-	public sealed class PopadInstruction : BaseInstruction, IIntrinsicInstruction
+	public sealed class PopadInstruction : BaseInstruction
     {
 
         #region Methods
@@ -44,15 +44,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
 			visitor.Popad(context);
-		}
-
-		/// <summary>
-		/// Replaces the instrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
-		{
-			context.SetInstruction(CPUx86.Instruction.PopadInstruction);
 		}
 
 		#endregion // Methods

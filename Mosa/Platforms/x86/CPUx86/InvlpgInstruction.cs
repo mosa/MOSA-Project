@@ -15,7 +15,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
 	/// Representations the x86 Invlpg instruction.
     /// </summary>
-	public sealed class InvlpgInstruction : OneOperandInstruction, IIntrinsicInstruction
+	public sealed class InvlpgInstruction : OneOperandInstruction
     {
 		#region Data Members
 

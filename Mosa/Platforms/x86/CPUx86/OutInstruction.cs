@@ -16,7 +16,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// Representations the x86 out instruction.
 	/// </summary>
-	public sealed class OutInstruction : ThreeOperandInstruction, IIntrinsicInstruction
+	public sealed class OutInstruction : ThreeOperandInstruction
 	{
 		#region Data Members
 
@@ -48,11 +48,11 @@ namespace Mosa.Platforms.x86.CPUx86
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="emitter"></param>
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
         protected override void Emit(Context context, MachineCodeEmitter emitter)
         {
             emitter.Emit(new OpCode(new byte[] { 0xEE }), null, null);
@@ -66,23 +66,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
 			visitor.Out(context);
-		}
-
-		/// <summary>
-		/// Replaces the instrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
-		{
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-
-			RegisterOperand edx = new RegisterOperand(operand1.Type, GeneralPurposeRegister.EDX);
-			RegisterOperand eax = new RegisterOperand(operand2.Type, GeneralPurposeRegister.EAX);
-
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, edx, operand1);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, operand2);
-			context.AppendInstruction(CPUx86.Instruction.OutInstruction, null, edx, eax);
 		}
 
 		#endregion // Methods

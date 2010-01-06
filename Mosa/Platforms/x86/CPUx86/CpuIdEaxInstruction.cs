@@ -22,7 +22,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 CPUID instruction.
     /// </summary>
-	public sealed class CpuIdEaxInstruction : TwoOperandInstruction, IIntrinsicInstruction
+	public sealed class CpuIdEaxInstruction : TwoOperandInstruction
     {
 		#region Data Members
 
@@ -50,23 +50,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
 			visitor.CpuIdEax(context);
-		}
-
-		/// <summary>
-		/// Replaces the instrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
-		{
-            Operand result = context.Result;
-            Operand operand = context.Operand1;
-            RegisterOperand eax = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.EAX);
-            RegisterOperand ecx = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.ECX);
-            RegisterOperand reg = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.EAX);
-            context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, operand);
-            context.AppendInstruction(CPUx86.Instruction.XorInstruction, ecx, ecx);
-            context.AppendInstruction(CPUx86.Instruction.CpuIdEaxInstruction);
-            context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, reg);
 		}
 
         #endregion // Methods

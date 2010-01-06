@@ -14,7 +14,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// 
 	/// </summary>
-	public class NopInstruction : BaseInstruction, IIntrinsicInstruction
+	public class NopInstruction : BaseInstruction
 	{
 		#region Data Members
 
@@ -32,15 +32,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
             emitter.Emit(NOP, null, null);
-		}
-
-		/// <summary>
-		/// Replaces the instrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
-		{
-			context.SetInstruction(CPUx86.Instruction.NopInstruction);
 		}
 
 		#endregion // Methods

@@ -15,7 +15,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 Lidt instruction.
     /// </summary>
-	public sealed class LidtInstruction : OneOperandInstruction, IIntrinsicInstruction
+	public sealed class LidtInstruction : OneOperandInstruction
     {
 		#region Data Members
 

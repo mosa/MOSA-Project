@@ -22,7 +22,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// <summary>
 	/// Representations the x86 in instruction.
 	/// </summary>
-	public sealed class InInstruction : TwoOperandInstruction, IIntrinsicInstruction
+	public sealed class InInstruction : TwoOperandInstruction
 	{
 		#region Data Members
 
@@ -36,12 +36,12 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region Methods
 
 		/// <summary>
-		/// 		
-        /// </summary>
-		/// <param name="destination"></param>
-        /// <param name="source"></param>		
-        /// <param name="empty"></param>		
-        /// <returns></returns>
+		/// Computes the op code.
+		/// </summary>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="empty">The empty.</param>
+		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand empty)
 		{
 			if (IsByte(source)) {
@@ -73,23 +73,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
 			visitor.In(context);
-		}
-
-		/// <summary>
-		/// Replaces the instrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
-		{
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-
-			RegisterOperand edx = new RegisterOperand(operand1.Type, GeneralPurposeRegister.EDX);
-			RegisterOperand eax = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
-
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, edx, operand1);
-			context.AppendInstruction(CPUx86.Instruction.InInstruction, eax, edx);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
 		}
 
 		#endregion // Methods

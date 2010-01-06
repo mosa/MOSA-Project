@@ -16,7 +16,7 @@ namespace Mosa.Platforms.x86.CPUx86
     /// <summary>
     /// Representations the x86 sti instruction.
     /// </summary>
-	public sealed class StiInstruction : BaseInstruction, IIntrinsicInstruction
+	public sealed class StiInstruction : BaseInstruction
     {
         #region Methods
 
@@ -38,15 +38,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
 			visitor.Sti(context);
-		}
-
-		/// <summary>
-		/// Replaces the instrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
-		{
-			context.SetInstruction(CPUx86.Instruction.StiInstruction);
 		}
 
         #endregion // Methods

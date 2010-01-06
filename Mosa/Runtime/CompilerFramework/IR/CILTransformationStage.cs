@@ -1119,7 +1119,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 						if (ia.Architecture.IsInstanceOfType(Architecture)) {
 							// Found a replacement for the call...
 							try {
-								IIntrinsicInstruction instrinsic = Architecture.GetIntrinsicIntruction(ia.InstructionType);
+								IIntrinsicMethod instrinsic = Architecture.GetIntrinsicIntruction(ia.InstructionType);
 
 								instrinsic.ReplaceIntrinsicCall(ctx);
 
