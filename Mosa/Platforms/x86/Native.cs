@@ -77,23 +77,23 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Popad))]
 		public static void Popad() { ThrowPlatformNotSupported(); return; }
 
-		///// <summary>
-		///// Wraps the x86 push instruction to push a value on the stack
-		///// </summary>
-		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
-		//public static void Push8(byte value) { ThrowPlatformNotSupported(); return; }
+		/// <summary>
+		/// Wraps the x86 push instruction to push a value on the stack
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
+		public static void Push8(byte value) { ThrowPlatformNotSupported(); return; }
 
-		///// <summary>
-		///// Wraps the x86 push instruction to push a value on the stack
-		///// </summary>
-		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
-		//public static void Push16(short value) { ThrowPlatformNotSupported(); return; }
+		/// <summary>
+		/// Wraps the x86 push instruction to push a value on the stack
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
+		public static void Push16(short value) { ThrowPlatformNotSupported(); return; }
 
-		///// <summary>
-		///// Wraps the x86 push instruction to push a value on the stack
-		///// </summary>
-		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
-		//public static void Push32(int value) { ThrowPlatformNotSupported(); return; }
+		/// <summary>
+		/// Wraps the x86 push instruction to push a value on the stack
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
+		public static void Push32(int value) { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Wraps the x86 pushad instruction to push all GPR to the stack

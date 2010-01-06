@@ -57,19 +57,22 @@ namespace Mosa.Kernel.Memory.X86
 		// TODO: Build this w/o any calling convention
 		private static void GlobalInterruptHandler(byte irq, byte errorcode)
 		{
-			Native.Pushad();// Push edi,esi,ebp,esp,ebx,edx,ecx,eax
-			//Native.Jmp(CommonInterruptHandler);
-			Native.Popad(); // Pop edi,esi,ebp,esp,ebx,edx,ecx,eax
-			Native.Sti();
-			Native.IRetd();
+			Native.Pushad();	// Push edi,esi,ebp,esp,ebx,edx,ecx,eax
+			//Kernel.ProcessInterrupt();		// Call the Kernel's Interrupt Handler (regular call)
+			//Native.JumpProcessInterrupt();	// or Jump to Kernel's Interrupt Handler (jump)
+			Native.Popad();		// Pop edi,esi,ebp,esp,ebx,edx,ecx,eax
+			Native.Sti();		// Enable Interrupts
+			Native.IRetd();		// Return from Interrupt
 		}
 
 		#region IRQ x 256
 
-		// TODO: Build this w/o any calling convention
+		// TODO: Build this w/o any calling convension
 		private static void IRQ0() 
 		{
 			Native.Cli();	// Disable Interrupts
+			Native.Push8(0);
+			Native.Push8(0);
 			Native.JumpGlobalInterruptHandler();
 		}
 

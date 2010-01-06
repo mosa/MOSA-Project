@@ -76,6 +76,8 @@
     <Compile Include="AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
+    <Compile Include="Intrinsic\Pop.cs" />
+    <Compile Include="Intrinsic\Push.cs" />
     <Compile Include="Intrinsic\IRetd.cs" />
     <Compile Include="Intrinsic\CpuIdEax.cs" />
     <Compile Include="Intrinsic\CpuIdEbx.cs" />
