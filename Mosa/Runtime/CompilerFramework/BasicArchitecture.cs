@@ -117,7 +117,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public abstract IIntrinsicMethod GetIntrinsicIntruction(Type type);
+		public abstract IIntrinsicMethod GetIntrinsicMethod(Type type);
 
 		/// <summary>
 		/// Gets the code emitter.

@@ -238,7 +238,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public override IIntrinsicMethod GetIntrinsicIntruction(Type type)
+		public override IIntrinsicMethod GetIntrinsicMethod(Type type)
 		{
 			return Intrinsic.Method.Get(type);
 		}
