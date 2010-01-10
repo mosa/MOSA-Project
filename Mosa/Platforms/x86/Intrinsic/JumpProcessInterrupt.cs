@@ -30,6 +30,7 @@ namespace Mosa.Platforms.x86.Intrinsic
         public void ReplaceIntrinsicCall(Context context)
         {
 //			context.SetInstruction(IR.Instruction.JmpInstruction, );
+			context.Remove();
 		}
 
         #endregion // Methods

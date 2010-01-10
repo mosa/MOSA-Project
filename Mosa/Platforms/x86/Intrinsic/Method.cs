@@ -68,7 +68,10 @@ namespace Mosa.Platforms.x86.Intrinsic
 			map.Add(typeof(SetControlRegister), new SetControlRegister());
 			map.Add(typeof(GetControlRegister), new GetControlRegister());
 			map.Add(typeof(IRetd), new IRetd());
-
+			map.Add(typeof(Push), new Push());
+			map.Add(typeof(Pop), new Pop());
+			map.Add(typeof(JumpProcessInterrupt), new JumpProcessInterrupt());
+		
 			return map;
 		}
 

@@ -54,11 +54,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
 			if (ctx.Operand1 is ConstantOperand) {
-				if (IsByte(ctx.Result))
+				if (IsByte(ctx.Operand1))
 					emitter.Emit(CONST8, ctx.Operand1, null);
 				else if (IsShort(ctx.Operand1) || IsChar(ctx.Operand1))
 					emitter.Emit(CONST16, ctx.Operand1, null);
-				else if (IsInt(ctx.Result))
+				else if (IsInt(ctx.Operand1))
 					emitter.Emit(CONST32, ctx.Operand1, null);
 			}
 			else {

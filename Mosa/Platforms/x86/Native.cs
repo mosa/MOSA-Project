@@ -177,7 +177,7 @@ namespace Mosa.Platforms.x86
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.CpuId))]
-		public static byte* CpuId(uint function) { ThrowPlatformNotSupported(); return null; }
+		public static byte CpuId(uint function) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
