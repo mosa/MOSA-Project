@@ -5,19 +5,20 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class IRetd : IIntrinsicMethod
-	{
-	
-		#region Methods
+    /// <summary>
+    /// Representations the x86 sti instruction.
+    /// </summary>
+	public sealed class Sti : IIntrinsicMethod
+    {
+        #region Methods
 
 		/// <summary>
 		/// Replaces the instrinsic call site
@@ -25,10 +26,9 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// <param name="context">The context.</param>
 		public void ReplaceIntrinsicCall(Context context)
 		{
-			context.SetInstruction(CPUx86.Instruction.IRetdInstruction);
+			context.SetInstruction(CPUx86.Instruction.StiInstruction);
 		}
 
-		#endregion // Methods
-
-	}
+        #endregion // Methods
+    }
 }

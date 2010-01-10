@@ -4,17 +4,19 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
 	/// <summary>
-	/// 
+	/// This instruction is used to test intrinsic calls.
 	/// </summary>
-	public class IRetd : IIntrinsicMethod
+	public sealed class Test : IIntrinsicMethod
 	{
 	
 		#region Methods
@@ -25,10 +27,9 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// <param name="context">The context.</param>
 		public void ReplaceIntrinsicCall(Context context)
 		{
-			context.SetInstruction(CPUx86.Instruction.IRetdInstruction);
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, context.Result, context.Operand1);
 		}
 
-		#endregion // Methods
-
+		#endregion
 	}
 }

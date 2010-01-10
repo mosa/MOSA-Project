@@ -14,7 +14,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 	/// <summary>
 	/// 
 	/// </summary>
-	public class IRetd : IIntrinsicMethod
+	public class Nop : IIntrinsicMethod
 	{
 	
 		#region Methods
@@ -25,7 +25,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// <param name="context">The context.</param>
 		public void ReplaceIntrinsicCall(Context context)
 		{
-			context.SetInstruction(CPUx86.Instruction.IRetdInstruction);
+			context.SetInstruction(CPUx86.Instruction.NopInstruction);
 		}
 
 		#endregion // Methods
