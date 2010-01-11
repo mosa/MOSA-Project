@@ -102,8 +102,8 @@ namespace Mosa.HelloWorld
 			Screen.Write('-');
 			Screen.Write('2');
 			Screen.Write('0');
+			Screen.Write('1');
 			Screen.Write('0');
-			Screen.Write('9');
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;

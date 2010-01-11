@@ -9,6 +9,12 @@ using Mosa.Kernel.Memory.X86;
 
 namespace Mosa.HelloWorld
 {
+    public struct Foo
+    {
+        public char x;
+        public char y;
+    }
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -20,7 +26,6 @@ namespace Mosa.HelloWorld
 		public static void Main()
 		{
 			Kernel.Setup();
-
 			Screen.Color = 0x0E;
 			Screen.Write('M');
 			Screen.Write('O');
@@ -102,8 +107,8 @@ namespace Mosa.HelloWorld
 			Screen.Write('-');
 			Screen.Write('2');
 			Screen.Write('0');
+			Screen.Write('1');
 			Screen.Write('0');
-			Screen.Write('9');
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;
@@ -448,10 +453,10 @@ namespace Mosa.HelloWorld
 			Screen.Write(':');
 			Screen.Write(' ');
 
-			byte bcd = 16;
+			byte bcd = 10;
 
 			if (CMOS.BCD)
-				bcd = 10;
+				bcd = 16;
 
 			Screen.Color = 0x0F;
 			Screen.Write(CMOS.Hour, bcd, 2);
