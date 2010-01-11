@@ -54,8 +54,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) || TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
 
 			ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
-
-			// FIXME: Verification
 		}
 
 		/// <summary>

@@ -486,7 +486,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Stfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Stfld(Context ctx) { }
+		void ICILVisitor.Stfld(Context ctx) 
+        {
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Jmp"/>.

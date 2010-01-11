@@ -370,7 +370,10 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldfld(Context ctx) { }
+		void CIL.ICILVisitor.Ldfld(Context ctx) 
+        {
+            ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address));
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldflda"/>.
@@ -430,7 +433,10 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CIL.ICILVisitor.Stfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stfld(Context ctx) { }
+		void CIL.ICILVisitor.Stfld(Context ctx) 
+        {
+            ctx.SetInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand (new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address), ctx.Operand2);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Stsfld"/>.

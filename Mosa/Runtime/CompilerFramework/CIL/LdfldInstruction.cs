@@ -46,7 +46,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
             // Load the _stackFrameIndex token From the immediate
             TokenTypes token;
             decoder.Decode(out token);
-            throw new NotImplementedException();
+            ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
+            ctx.Result = new Operands.ObjectFieldOperand (ctx.Operand1, ctx.RuntimeField);
 /*
             Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) || 
                          TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
