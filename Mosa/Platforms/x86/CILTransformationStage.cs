@@ -163,10 +163,10 @@ namespace Mosa.Platforms.x86
 			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand1, new ConstantOperand(new SigType(CilElementType.I4), 0));
 
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
-				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);
+				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual);
 			else
 				if (opcode == CIL.OpCode.Brfalse || opcode == CIL.OpCode.Brfalse_s)
-					ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual);
+					ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);
 				else
 					throw new NotImplementedException();
 
