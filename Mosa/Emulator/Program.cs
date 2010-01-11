@@ -254,7 +254,7 @@ namespace Mosa.Emulator
 						screen.Write("]");
 
 						if (address.Prefetchable)
-							screen.Write("(prefetchable)");
+							screen.Write("(prefetchable)");	
 
 						screen.WriteLine();
 					}
