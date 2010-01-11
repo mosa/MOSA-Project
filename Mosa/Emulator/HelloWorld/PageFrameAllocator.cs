@@ -38,7 +38,6 @@ namespace Mosa.Kernel.Memory.X86
 			_at = StartLocation;
 			_totalPages = 0;
 			_totalUsedPages = 0;
-
 			SetupFreeMemory();
 		}
 
@@ -47,11 +46,10 @@ namespace Mosa.Kernel.Memory.X86
 		/// </summary>
 		private static void SetupFreeMemory()
 		{
-			uint cnt = 0;
-
-			if (!Multiboot.IsMultiboot())
+			if (!Multiboot.IsMultibootEnabled)
 				return;
 
+			uint cnt = 0;
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
 				byte value = Multiboot.GetMemoryMapType(index);
 

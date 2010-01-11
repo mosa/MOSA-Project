@@ -17,27 +17,10 @@ namespace Mosa.HelloWorld
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>
-		public static void EmulatorMain()
+		public static void Main()
 		{
-			Screen.Clear();
-			Screen.Color = 0x0E;
+			Kernel.Setup();
 
-			Screen.SetCursor(24, 0);
-			Screen.Write('1');
-			Multiboot.SetMultibootLocation(Memory.Get32(0x200004), Memory.Get32(0x200000));
-			Screen.SetCursor(24, 1);
-			Screen.Write('2');
-			PageFrameAllocator.Setup();
-			Screen.SetCursor(24, 2);
-			Screen.Write('3');
-			PageTable.Setup();
-			Screen.SetCursor(24, 3);
-			Screen.Write('4');
-			//Kernel.Setup();
-			Screen.SetCursor(24, 4);
-			Screen.Write('5');
-
-			Screen.GotoTop();
 			Screen.Color = 0x0E;
 			Screen.Write('M');
 			Screen.Write('O');

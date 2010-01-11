@@ -118,6 +118,76 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
+		/// Loads the IDT
+		/// </summary>
+		/// <param name="address">The address.</param>
+		public static void Lidt(uint address)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Wraps the x86 pop instruction to pop a value from the stack
+		/// </summary>
+		public static byte Pop8() { return 0; }
+
+		/// <summary>
+		/// Wraps the x86 pop instruction to pop a value from the stack
+		/// </summary>
+		public static ushort Pop16() { return 0; }
+
+		/// <summary>
+		/// Wraps the x86 pop instruction to pop a value from the stack
+		/// </summary>
+		public static uint Pop32() { return 0; }
+
+		/// <summary>
+		/// Wraps the x86 popad instruction to pop all GPR from the stack
+		/// </summary>
+		public static void Popad() { return; }
+
+		/// <summary>
+		/// Wraps the x86 push instruction to push a value on the stack
+		/// </summary>
+		public static void Push8(byte value) { return; }
+
+		/// <summary>
+		/// Wraps the x86 push instruction to push a value on the stack
+		/// </summary>
+		public static void Push16(ushort value) { return; }
+
+		/// <summary>
+		/// Wraps the x86 push instruction to push a value on the stack
+		/// </summary>
+		public static void Push32(uint value) { return; }
+
+		/// <summary>
+		/// Wraps the x86 pushad instruction to push all GPR to the stack
+		/// </summary>
+		public static void Pushad() { return; }
+
+		/// <summary>
+		/// Wraps the x86 sti instruction to enable interrupts
+		/// </summary>
+		public static void Sti() { return; }
+
+		/// <summary>
+		/// Wraps the x86 cli instruction to disable interrupts
+		/// </summary>
+		public static void Cli() { return; }
+
+		/// <summary>
+		/// Wraps the x86 cli instruction to disable interrupts
+		/// </summary>
+		public static void IRetd() { return; }
+
+		/// <summary>
+		/// Jumps the global interrupt handler.
+		/// </summary>
+		/// <returns></returns>
+		public static void JumpProcessInterrupt() { }
+
+		/// <summary>
 		/// Sets the control register.
 		/// </summary>
 		/// <param name="register">The control register</param>
