@@ -119,5 +119,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="label">The label of the basic block.</param>
 		/// <returns>The basic block with the given label or null.</returns>
 		BasicBlock FromLabel(int label);
+
+		/// <summary>
+		/// Creates the block.
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		BasicBlock CreateBlock(int label, int index);
     }
 }

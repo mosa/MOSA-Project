@@ -180,6 +180,7 @@
     <Compile Include="TypeInitializers\TypeInitializerSchedulerStage.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="x86\InterruptStage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

@@ -39,7 +39,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
         /// </summary>
         /// <param name="type">The type of data held in the operand.</param>
         /// <param name="base">The base register, if this is an indirect access.</param>
-        /// <param name="offset">The offset From the base register or absolute address to retrieve.</param>
+        /// <param name="offset">The offset from the base register or absolute address to retrieve.</param>
         public MemoryOperand(SigType type, Register @base, IntPtr offset) :
             base(type)
         {

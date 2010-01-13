@@ -204,9 +204,6 @@
     <Compile Include="IL\Sub.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IL\Switch.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IL\Xor.cs">
       <SubType>Code</SubType>
     </Compile>

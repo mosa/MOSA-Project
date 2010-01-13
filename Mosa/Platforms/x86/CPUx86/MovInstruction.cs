@@ -31,7 +31,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x89 });
 		private static readonly OpCode M_R_U8 = new OpCode(new byte[] { 0x88 }); // Move R8 to r/rm8
 		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
-		private static readonly OpCode R_CR = new OpCode(new byte[] { 0x0F, 0x20 }); 
+		private static readonly OpCode R_CR = new OpCode(new byte[] { 0x0F, 0x20 });
 		private static readonly OpCode CR_R = new OpCode(new byte[] { 0x0F, 0x22 });
 
 		#endregion // Data Members
@@ -43,24 +43,18 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="destination">The destination operand.</param>
 		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		protected override OpCode ComputeOpCode(Operand destination, Operand source)
 		{
-			if (destination is RegisterOperand) {
-				if ((destination as RegisterOperand).Register is ControlRegister) {
-					return CR_R;
-				}
+			if (destination is RegisterOperand)
+				if ((destination as RegisterOperand).Register is ControlRegister) return CR_R;
 				else if ((destination as RegisterOperand).Register is SegmentRegister)
 					throw new ArgumentException(@"TODO: No opcode for move to segment register");
-			}
-			if (source is RegisterOperand) {
-				if ((source as RegisterOperand).Register is ControlRegister) {
-					return R_CR;
-				}
+
+			if (source is RegisterOperand)
+				if ((source as RegisterOperand).Register is ControlRegister) return R_CR;
 				else if ((source as RegisterOperand).Register is SegmentRegister)
 					throw new ArgumentException(@"TODO: No opcode for move from segment register");
-			}
 
 			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
 			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
@@ -81,6 +75,21 @@ namespace Mosa.Platforms.x86.CPUx86
 			}
 
 			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
+		}
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
+			if (ctx.Operand1 == null && ctx.Other is int) {
+				// 
+			}
+
+			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
+			emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
 		}
 
 		/// <summary>

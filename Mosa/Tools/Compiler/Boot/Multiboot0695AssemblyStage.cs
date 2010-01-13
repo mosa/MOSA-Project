@@ -14,16 +14,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-using Mosa.Runtime.CompilerFramework.Operands;
 using NDesk.Options;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Linker.Elf32;
 using Mosa.Runtime.Linker.Elf64;
+using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 using Mosa.Platforms.x86;
-using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Tools.Compiler.TypeInitializers;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;

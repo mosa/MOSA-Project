@@ -402,6 +402,20 @@ namespace Mosa.Runtime.CompilerFramework
 			});
 		}
 
+		/// <summary>
+		/// Creates the block.
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public BasicBlock CreateBlock(int label, int index)
+		{
+			// HACK: BasicBlock.Count for the sequence works for now since blocks are not removed
+			BasicBlock basicBlock = new BasicBlock(BasicBlocks.Count, label, index);
+			BasicBlocks.Add(basicBlock);
+			return basicBlock;
+		}
+
 		#endregion // IBasicBlockProvider members
 
 		#endregion // Methods
