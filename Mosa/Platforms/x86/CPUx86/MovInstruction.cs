@@ -44,7 +44,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="destination">The destination operand.</param>
 		/// <param name="source">The source operand.</param>
 		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source)
+		private OpCode ComputeOpCode(Operand destination, Operand source)
 		{
 			if (destination is RegisterOperand)
 				if ((destination as RegisterOperand).Register is ControlRegister) return CR_R;
@@ -88,8 +88,8 @@ namespace Mosa.Platforms.x86.CPUx86
 				// 
 			}
 
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
-			emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
+			OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1);
+			emitter.Emit(opCode, ctx.Result, ctx.Operand1, ctx.Operand2);
 		}
 
 		/// <summary>
