@@ -43,8 +43,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="destination">The destination operand.</param>
 		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		private OpCode ComputeOpCode(Operand destination, Operand source)
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			if (destination is RegisterOperand)
 				if ((destination as RegisterOperand).Register is ControlRegister) return CR_R;
@@ -75,21 +76,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			}
 
 			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
-		}
-
-		/// <summary>
-		/// Emits the specified platform instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-		{
-			if (ctx.Operand1 == null && ctx.Other is int) {
-				// 
-			}
-
-			OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1);
-			emitter.Emit(opCode, ctx.Result, ctx.Operand1, ctx.Operand2);
 		}
 
 		/// <summary>

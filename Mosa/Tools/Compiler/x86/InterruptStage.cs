@@ -32,6 +32,8 @@ namespace Mosa.Tools.Compiler.x86
 	{
 		#region Data Members
 
+		IAssemblyLinker _linker;
+
 		#endregion // Data Members
 
 		#region IPipelineStage
@@ -56,6 +58,8 @@ namespace Mosa.Tools.Compiler.x86
 		/// <param name="compiler">The compiler context to perform processing in.</param>
 		public void Run(AssemblyCompiler compiler)
 		{
+			_linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+
 			CreateISRMethods(compiler);
 			//CreateIVTMethod(compiler);
 		}
@@ -71,7 +75,7 @@ namespace Mosa.Tools.Compiler.x86
 		private void CreateISRMethods(AssemblyCompiler compiler)
 		{
 			// Create Interrupt Service Routines (ISR)
-			RuntimeMethod InterruptMethod = null; // TODO: Look up method, if not found, don't bother with this stage
+			RuntimeMethod InterruptMethod = compiler.Assembly.EntryPoint; // TODO: replace with another entry point
 
 			SigType I1 = new SigType(CilElementType.I1);
 
@@ -83,16 +87,16 @@ namespace Mosa.Tools.Compiler.x86
 				if ((i != 8) && (i < 10 || i > 14)) // For IRQ 8, 10, 11, 12, 13, 14 the cpu automatically pushed the error code
 					ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, new ConstantOperand(I1, 0x0));
 				ctx.AppendInstruction(CPUx86.Instruction.PushadInstruction);
-				ctx.AppendInstruction(IR.Instruction.CallInstruction, InterruptMethod);
-				ctx.Operand1 = new ConstantOperand(I1, i);
-				// ctx.Operand2 = ; // TODO: Operand2 should be the error code, which was pushed on the stack earlier
+				// TODO: Set method parameters 
+				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, InterruptMethod);
 				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.PopadInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.StiInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.IRetdInstruction);
 
-				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"InterruptISR" + i.ToString() + ">", set);
+				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"InterruptISR" + i.ToString(), set);
+				//_linker.EntryPoint = _linker.GetSymbol(method);
 			}
 		}
 
@@ -121,7 +125,7 @@ namespace Mosa.Tools.Compiler.x86
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I4, 0x201000));
 			for (int i = 0; i <= 256; i++) {
 				// REMARKS:
-				// Since the position of the ISRs has not been determined yet, the Operand for the MOV instruction is also indeterminate.
+				// Since the position of the ISRs has not been determined yet, the operand for the MOV instruction is also indeterminate.
 				// This will need to be patched during linking. So we'll leave the operand null and set the Other value to the target label.
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax);
 				//ctx.Other = isrs[i].Label;
