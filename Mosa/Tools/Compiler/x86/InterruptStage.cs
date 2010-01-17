@@ -120,9 +120,10 @@ namespace Mosa.Tools.Compiler.x86
 			RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
 
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I4, 0x201000));
+
 			for (int i = 0; i <= 256; i++) {
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new LabelOperand(I4, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + i.ToString() + "()"));
-				ctx.Label = i;
+				//ctx.Label = i;
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(i * 4)), eax);
 			}
 

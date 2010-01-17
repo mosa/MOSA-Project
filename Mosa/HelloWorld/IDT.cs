@@ -76,16 +76,16 @@ namespace Mosa.Kernel.Memory.X86
 		// Note: Only interrupts 8, 10, 11, 12, 13, and 14 push error codes onto the stack
 
 		// TODO: Build these w/o any calling convension
-		private static void IRQ0() { Native.Cli(); Native.Push8(0); Native.Push8(0); Native.Pushad(); Native.JumpProcessInterrupt(); }
-		private static void IRQ1() { Native.Cli(); Native.Push8(0); Native.Push8(1); Native.Pushad(); Native.JumpProcessInterrupt(); }
-		private static void IRQ2() { Native.Cli(); Native.Push8(0); Native.Push8(2); Native.Pushad(); Native.JumpProcessInterrupt(); }
-		private static void IRQ3() { Native.Cli(); Native.Push8(0); Native.Push8(3); Native.Pushad(); Native.JumpProcessInterrupt(); }
-		private static void IRQ4() { Native.Cli(); Native.Push8(0); Native.Push8(4); Native.Pushad(); Native.JumpProcessInterrupt(); }
-		private static void IRQ5() { Native.Cli(); Native.Push8(0); Native.Push8(5); Native.Pushad(); Native.JumpProcessInterrupt(); }
-		private static void IRQ6() { Native.Cli(); Native.Push8(0); Native.Push8(6); Native.Pushad(); Native.JumpProcessInterrupt(); }
-		private static void IRQ7() { Native.Cli(); Native.Push8(0); Native.Push8(7); Native.Pushad(); Native.JumpProcessInterrupt(); }
-		private static void IRQ8() { Native.Cli(); Native.Push8(8); Native.Pushad(); Native.JumpProcessInterrupt(); }
-		private static void IRQ9() { Native.Cli(); Native.Push8(0); Native.Push8(9); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		//private static void IRQ0() { Native.Cli(); Native.Push8(0); Native.Push8(0); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		//private static void IRQ1() { Native.Cli(); Native.Push8(0); Native.Push8(1); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		//private static void IRQ2() { Native.Cli(); Native.Push8(0); Native.Push8(2); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		//private static void IRQ3() { Native.Cli(); Native.Push8(0); Native.Push8(3); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		//private static void IRQ4() { Native.Cli(); Native.Push8(0); Native.Push8(4); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		//private static void IRQ5() { Native.Cli(); Native.Push8(0); Native.Push8(5); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		//private static void IRQ6() { Native.Cli(); Native.Push8(0); Native.Push8(6); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		//private static void IRQ7() { Native.Cli(); Native.Push8(0); Native.Push8(7); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		//private static void IRQ8() { Native.Cli(); Native.Push8(8); Native.Pushad(); Native.JumpProcessInterrupt(); }
+		//private static void IRQ9() { Native.Cli(); Native.Push8(0); Native.Push8(9); Native.Pushad(); Native.JumpProcessInterrupt(); }
 
 		// TODO: Add all 256!
 
