@@ -60,8 +60,8 @@ namespace Mosa.Tools.Compiler.x86
 		{
 			_linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
 
+			CreateIVTMethod(compiler);
 			CreateISRMethods(compiler);
-			//CreateIVTMethod(compiler);
 		}
 
 		#endregion // IAssemblyCompilerStage Members
@@ -78,6 +78,7 @@ namespace Mosa.Tools.Compiler.x86
 			RuntimeMethod InterruptMethod = compiler.Assembly.EntryPoint; // TODO: replace with another entry point
 
 			SigType I1 = new SigType(CilElementType.I1);
+			SigType I4 = new SigType(CilElementType.I4);
 
 			for (int i = 0; i <= 256; i++) {
 				InstructionSet set = new InstructionSet(100);
@@ -87,6 +88,7 @@ namespace Mosa.Tools.Compiler.x86
 				if ((i != 8) && (i < 10 || i > 14)) // For IRQ 8, 10, 11, 12, 13, 14 the cpu automatically pushed the error code
 					ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, new ConstantOperand(I1, 0x0));
 				ctx.AppendInstruction(CPUx86.Instruction.PushadInstruction);
+				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, new ConstantOperand(I4, i));
 				// TODO: Set method parameters 
 				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, InterruptMethod);
 				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction);
@@ -96,7 +98,6 @@ namespace Mosa.Tools.Compiler.x86
 				ctx.AppendInstruction(CPUx86.Instruction.IRetdInstruction);
 
 				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"InterruptISR" + i.ToString(), set);
-				//_linker.EntryPoint = _linker.GetSymbol(method);
 			}
 		}
 
@@ -112,24 +113,17 @@ namespace Mosa.Tools.Compiler.x86
 			ctx.AppendInstruction(IR.Instruction.PrologueInstruction);
 			ctx.Other = 0; // stacksize
 
-			SigType I1 = new SigType(CilElementType.I1);
-
 			// Create the IVT Table
 			SigType I4 = new SigType(CilElementType.I4);
 			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
 
-			//LabelOperand label = new LabelOperand(I4, "");
-
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I4, 0x201000));
 			for (int i = 0; i <= 256; i++) {
-				// REMARKS:
-				// Since the position of the ISRs has not been determined yet, the operand for the MOV instruction is also indeterminate.
-				// This will need to be patched during linking. So we'll leave the operand null and set the Other value to the target label.
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax);
-				//ctx.Other = isrs[i].Label;
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new LabelOperand(I4, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + i.ToString() + "()"));
+				ctx.Label = i;
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(i * 4)), eax);
 			}
 
 			ctx.SetInstruction(IR.Instruction.EpilogueInstruction);

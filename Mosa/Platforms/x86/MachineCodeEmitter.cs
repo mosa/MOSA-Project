@@ -407,11 +407,11 @@ namespace Mosa.Platforms.x86
 
 			MemberOperand member = displacement as MemberOperand;
 			LabelOperand label = displacement as LabelOperand;
-			if (null != label) {
+			if (label != null) {
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
 				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name, IntPtr.Zero));
 			}
-			else if (null != member) {
+			else if (member != null) {
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
 				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member, member.Offset));
 			}
