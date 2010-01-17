@@ -10,6 +10,8 @@
 using System;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -21,7 +23,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region Data Members
 
 		private static readonly OpCode R_C = new OpCode(new byte[] { 0xC7 }, 0); // Move imm32 to r/m32
-		private static readonly OpCode M_C = new OpCode(new byte[] { 0xC7 }, 0);
+		private static readonly OpCode M_C = R_C;
 		private static readonly OpCode R_R = new OpCode(new byte[] { 0x8B });
 		private static readonly OpCode R_R_16 = new OpCode(new byte[] { 0x66, 0x8B });
 		private static readonly OpCode R_R_U8 = new OpCode(new byte[] { 0x88 });
@@ -59,6 +61,9 @@ namespace Mosa.Platforms.x86.CPUx86
 
 			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
 			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
+			if ((destination is RegisterOperand) && (source is LabelOperand)) return R_C;
+			if ((destination is MemoryOperand) && (source is LabelOperand)) return M_C;
+
 			if ((destination is RegisterOperand) && (source is RegisterOperand)) {
 				if (IsByte(source) || IsByte(destination)) return R_R_U8;
 				if (IsChar(source) || IsChar(destination) || IsShort(source) || IsShort(destination)) return R_R_16;
@@ -76,6 +81,17 @@ namespace Mosa.Platforms.x86.CPUx86
 			}
 
 			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
+		}
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, null);
+			emitter.Emit(opCode, context.Result, context.Operand1);
 		}
 
 		/// <summary>

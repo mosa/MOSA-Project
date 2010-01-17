@@ -59,7 +59,7 @@ namespace Mosa.Platforms.x86.CPUx86
 				else if (IsShort(ctx.Operand1) || IsChar(ctx.Operand1))
 					emitter.Emit(CONST16, ctx.Operand1, null);
 				else if (IsInt(ctx.Operand1))
-					emitter.Emit(CONST32, ctx.Operand1, null);
+					emitter.Emit(CONST32, null, ctx.Operand1);
 			}
 			else {
 				if (ctx.Operand1 is RegisterOperand) {

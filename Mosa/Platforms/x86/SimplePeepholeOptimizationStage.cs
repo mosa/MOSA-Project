@@ -178,8 +178,8 @@ namespace Mosa.Platforms.x86
                         window.Add(ctx);
 
                         //RemoveMultipleStores(window);
-                        //RemoveSingleLineJump(window);
-                        //ImproveBranchAndJump(window);
+                        RemoveSingleLineJump(window);
+                        ImproveBranchAndJump(window);
                     }
         }
 
