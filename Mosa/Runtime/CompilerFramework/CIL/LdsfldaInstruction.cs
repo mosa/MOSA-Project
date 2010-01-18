@@ -53,8 +53,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			//throw new NotImplementedException();
             RuntimeField field = RuntimeBase.Instance.TypeLoader.GetField (decoder.Method.Module, token);
             ctx.RuntimeField = field;
-            ctx.Operand1 = new Operands.StaticFieldOperand(field);
-            ctx.Result = decoder.Compiler.CreateTemporary(field.Type);
+            ctx.Result = decoder.Compiler.CreateTemporary(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.Ptr));
 
 			/*
 				Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) ||

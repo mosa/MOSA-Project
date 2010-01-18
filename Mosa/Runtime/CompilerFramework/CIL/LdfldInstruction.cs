@@ -47,7 +47,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
             TokenTypes token;
             decoder.Decode(out token);
             ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
-            ctx.Result = new Operands.ObjectFieldOperand (ctx.Operand1, ctx.RuntimeField);
+            ///ctx.Result = new Operands.ObjectFieldOperand (ctx.Operand1, ctx.RuntimeField);
+            ctx.Result = decoder.Compiler.CreateTemporary(ctx.RuntimeField.Type);
 /*
             Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) || 
                          TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");

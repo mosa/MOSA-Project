@@ -150,6 +150,11 @@ namespace Mosa.Runtime.CompilerFramework
 			int size, alignment;
 			_architecture.GetTypeRequirements(field.Type, out size, out alignment);
 
+            if (field.Type.Type == CilElementType.ValueType)
+            {
+                size = ObjectModelUtility.ComputeTypeSize((field.Type as Metadata.Signatures.ValueTypeSigType).Token, _compiler.Metadata, _architecture);
+            }
+
 			// Retrieve the linker
 			IAssemblyLinker linker = _compiler.Pipeline.FindFirst<IAssemblyLinker>();
 			// The linker section to move this field into

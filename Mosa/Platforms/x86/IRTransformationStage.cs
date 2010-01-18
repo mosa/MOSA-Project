@@ -53,7 +53,7 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eax = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
 			ctx.Result = eax;
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.LeaInstruction);
-			//            ctx.Ignore = true;
+			//ctx.Ignore = true;
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, opRes, eax);
 		}
 
