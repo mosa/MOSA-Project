@@ -136,7 +136,10 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			List<StackOperand> paramOps = new List<StackOperand>();
 
-			for (int i = 0; i < compiler.Method.Parameters.Count; i++)
+            int offset = 0;
+            if (compiler.Method.Signature.HasThis || compiler.Method.Signature.HasExplicitThis)
+                ++offset;
+			for (int i = offset; i < compiler.Method.Parameters.Count + offset; i++)
 				paramOps.Add((StackOperand)compiler.GetParameterOperand(i));
 
 			LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter, -1);

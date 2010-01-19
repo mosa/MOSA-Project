@@ -85,7 +85,8 @@ namespace Mosa.Platforms.x86
 			int stackSize = CalculateStackSizeForParameters(operands, invokeTarget.Signature.HasThis);
 
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
-			if (stackSize != 0) {
+			if (stackSize != 0) 
+            {
 				ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, stackSize));
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
 
@@ -95,9 +96,12 @@ namespace Mosa.Platforms.x86
 				CalculateRemainingSpace(ctx, operandStack, ref space);
 			}
 
-			if (invokeTarget.Signature.HasThis) {
+			if (invokeTarget.Signature.HasThis) 
+            {
 				RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, operand1);
+                RegisterOperand eax = new RegisterOperand(I, GeneralPurposeRegister.EAX);
+				//ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, operand1);
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, eax);
 			}
 
 			ctx.AppendInstruction(IR.Instruction.CallInstruction, invokeTarget);
@@ -126,8 +130,10 @@ namespace Mosa.Platforms.x86
 			Stack<Operand> operandStack = new Stack<Operand>(operandCount);
 			int thisArg = 1;
 
-			foreach (Operand operand in operands) {
-				if (moveThis && 1 == thisArg) {
+			foreach (Operand operand in operands) 
+            {
+				if (moveThis && 1 == thisArg) 
+                {
 					thisArg = 0;
 					continue;
 				}
