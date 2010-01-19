@@ -13,6 +13,12 @@ namespace Mosa.HelloWorld
     {
         public char x;
         public char y;
+
+        public void Set(char a, char b)
+        {
+            x = a;
+            y = b;
+        }
     }
 
 	/// <summary>
@@ -27,13 +33,12 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		public static void Main()
 		{
-            Foo bar;
 			Kernel.Setup();
 			Screen.Color = 0x0E;
-            foo.x = 'M';
-            bar.y = 'O';
+            foo.Set('M', 'O');
+
             Screen.Write(foo.x);
-            Screen.Write(bar.y);
+            Screen.Write(foo.y);
 			//Screen.Write('M');
 			//Screen.Write('O');
 			Screen.Write('S');
