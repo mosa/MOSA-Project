@@ -61,7 +61,7 @@ namespace Mosa.Platforms.x86
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-		void ICallingConvention.Expand(Context ctx)
+		void ICallingConvention.Expand(Context ctx, IMetadataProvider metadata)
 		{
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
@@ -82,7 +82,7 @@ namespace Mosa.Platforms.x86
 
 			SigType I = new SigType(CilElementType.I);
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
-			int stackSize = CalculateStackSizeForParameters(operands, invokeTarget.Signature.HasThis);
+			int stackSize = CalculateStackSizeForParameters(operands, invokeTarget.Signature.HasThis, metadata);
 
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 			if (stackSize != 0) 
@@ -93,7 +93,7 @@ namespace Mosa.Platforms.x86
 				Stack<Operand> operandStack = GetOperandStackFromInstruction(operands, operandCount, invokeTarget.Signature.HasThis);
 
 				int space = stackSize;
-				CalculateRemainingSpace(ctx, operandStack, ref space);
+				CalculateRemainingSpace(ctx, operandStack, ref space, metadata);
 			}
 
 			if (invokeTarget.Signature.HasThis) 
@@ -149,15 +149,19 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="space">The space.</param>
-		private void CalculateRemainingSpace(Context ctx, Stack<Operand> operandStack, ref int space)
+		private void CalculateRemainingSpace(Context ctx, Stack<Operand> operandStack, ref int space, IMetadataProvider metadata)
 		{
 			while (operandStack.Count != 0) {
 				Operand operand = operandStack.Pop();
 				int size, alignment;
 
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
+
+                if (operand.Type.Type == CilElementType.ValueType)
+                    size = ObjectModelUtility.ComputeTypeSize((operand.Type as ValueTypeSigType).Token, metadata, architecture);
+
 				space -= size;
-				Push(ctx, operand, space);
+				Push(ctx, operand, space, size);
 			}
 		}
 
@@ -201,9 +205,17 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		/// <param name="op">The op.</param>
 		/// <param name="stackSize">Size of the stack.</param>
-		private void Push(Context ctx, Operand op, int stackSize)
+		private void Push(Context ctx, Operand op, int stackSize, int parameterSize)
 		{
 			if (op is MemoryOperand) {
+                if (op.Type.Type == CilElementType.ValueType)
+                {
+                    for (int i = 0; i < parameterSize; i += 4)
+                        ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + i)), new MemoryOperand(op.Type, (op as MemoryOperand).Base, new IntPtr((op as MemoryOperand).Offset.ToInt64() + i)));
+
+                    return;
+                }
+
 				RegisterOperand rop;
 				switch (op.StackType) {
 					case StackTypeCode.O: goto case StackTypeCode.N;
@@ -263,9 +275,9 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <returns></returns>
-		private int CalculateStackSizeForParameters(Context ctx)
+		private int CalculateStackSizeForParameters(Context ctx, IMetadataProvider metadata)
 		{
-            return CalculateStackSizeForParameters(ctx.Operands, ctx.InvokeTarget.Signature.HasThis);
+            return CalculateStackSizeForParameters(ctx.Operands, ctx.InvokeTarget.Signature.HasThis, metadata);
 		}
 
 		/// <summary>
@@ -274,13 +286,19 @@ namespace Mosa.Platforms.x86
 		/// <param name="operands"></param>
 		/// <param name="hasThis"></param>
 		/// <returns></returns>
-		private int CalculateStackSizeForParameters(IEnumerable<Operand> operands, bool hasThis)
+		private int CalculateStackSizeForParameters(IEnumerable<Operand> operands, bool hasThis, IMetadataProvider metadata)
 		{
 			int result = (hasThis ? -4 : 0);
 			int size, alignment;
 
 			foreach (Operand op in operands) {
 				this.architecture.GetTypeRequirements(op.Type, out size, out alignment);
+
+                if (op.Type.Type == CilElementType.ValueType)
+                {
+                    size = ObjectModelUtility.ComputeTypeSize((op.Type as Runtime.Metadata.Signatures.ValueTypeSigType).Token, metadata, architecture);
+                }
+
 				result += size;
 			}
 			return result;

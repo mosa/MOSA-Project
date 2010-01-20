@@ -752,7 +752,7 @@ namespace Mosa.Platforms.x86
 		{
 			ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
 			Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
-			cc.Expand(ctx);
+			cc.Expand(ctx, MethodCompiler.Assembly.Metadata);
 		}
 
 		#endregion // Internals
