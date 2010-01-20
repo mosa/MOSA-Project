@@ -53,7 +53,7 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eax = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
 			ctx.Result = eax;
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.LeaInstruction);
-			//            ctx.Ignore = true;
+			//ctx.Ignore = true;
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, opRes, eax);
 		}
 
@@ -314,8 +314,8 @@ namespace Mosa.Platforms.x86
 				MoveFloatingPoint(ctx, CPUx86.Instruction.MovsdInstruction);
 			else {
 				if (ctx.Result is MemoryOperand && ctx.Operand1 is MemoryOperand) {
-					RegisterOperand load = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
-					RegisterOperand store = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
+					RegisterOperand load = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX);
+					RegisterOperand store = new RegisterOperand(operand.Type, GeneralPurposeRegister.EDX);
 
 					if (!Is32Bit(operand) && IsSigned(operand))
 						ctx.SetInstruction(CPUx86.Instruction.MovsxInstruction, load, operand);

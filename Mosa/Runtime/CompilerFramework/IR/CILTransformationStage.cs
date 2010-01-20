@@ -79,7 +79,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		void ICILVisitor.Ldloca(Context ctx)
 		{
 			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction(ctx.Result, ctx.Operand1));
-			ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
+			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction, new Regis, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -116,7 +116,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldsflda(Context ctx)
 		{
-			ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
+			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, new MemberOperand (ctx.RuntimeField));
+            //ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>

@@ -13,6 +13,12 @@ namespace Mosa.HelloWorld
     {
         public char x;
         public char y;
+
+        public void Set(char a, char b)
+        {
+            x = a;
+            y = b;
+        }
     }
 
 	/// <summary>
@@ -20,6 +26,8 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Boot
 	{
+        public static Foo foo;
+
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>
@@ -27,9 +35,8 @@ namespace Mosa.HelloWorld
 		{
 			Kernel.Setup();
 			Screen.Color = 0x0E;
-            Foo foo;
-            foo.x = 'M';
-            foo.y = 'O';
+            foo.Set('M', 'O');
+
             Screen.Write(foo.x);
             Screen.Write(foo.y);
 			//Screen.Write('M');
@@ -390,6 +397,21 @@ namespace Mosa.HelloWorld
 
 			Screen.Write((ulong)((info & 0x3000) >> 12), 16, 2);
 			Screen.NextLine();
+            Screen.Color = 0x0A;
+            Screen.Write('C');
+            Screen.Write('o');
+            Screen.Write('r');
+            Screen.Write('e');
+            Screen.Write('s');
+            Screen.Write(':');
+            Screen.Write(' ');
+            Screen.Write(' ');
+            Screen.Write(' ');
+            Screen.Write(' ');
+            Screen.Color = 0x0F;
+            
+            info = Platforms.x86.Native.CpuIdEax(4);
+            Screen.Write((ulong)((info >> 26) + 1), 16, 2);
 			#endregion
 
 			//Multiboot.Dump(4,53);

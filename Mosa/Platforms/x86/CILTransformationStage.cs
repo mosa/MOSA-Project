@@ -64,9 +64,10 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldloca(Context ctx)
 		{
-			Operand result = ctx.Result;
-			ctx.SetInstruction(IR.Instruction.MoveInstruction, result, new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EBP));
-			ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, result, new ConstantOperand(ctx.Result.Type, ctx.Label));
+			//Operand result = ctx.Result;
+			//ctx.SetInstruction(IR.Instruction.MoveInstruction, result, new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EBP));
+			//ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, result, new ConstantOperand(ctx.Result.Type, ctx.Label));
+            ctx.SetInstruction(IR.Instruction.AddressOfInstruction, new RegisterOperand (new SigType(CilElementType.I4), GeneralPurposeRegister.EAX), ctx.Operand1);
 		}
 
 		/// <summary>
@@ -372,7 +373,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldfld(Context ctx) 
         {
-            ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address));
+            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ctx.Result, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address));
         }
 
 		/// <summary>
@@ -391,7 +392,13 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsflda"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldsflda(Context ctx) { }
+		void CIL.ICILVisitor.Ldsflda(Context ctx) 
+        {
+            Runtime.Linker.LinkerSymbol symbol = MethodCompiler.Linker.GetSymbol(ctx.RuntimeField);
+            Operand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+            Operand address = new ConstantOperand(new SigType(CilElementType.I4), (int)MethodCompiler.Linker.BaseAddress + symbol.SectionAddress);
+            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, address);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldftn"/>.
@@ -435,7 +442,10 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Stfld(Context ctx) 
         {
-            ctx.SetInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand (new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address), ctx.Operand2);
+            if (ctx.Operand1.Type.Type == CilElementType.Class)
+                ctx.SetInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand (new SigType(CilElementType.Ptr), GeneralPurposeRegister.ECX).Register, ctx.RuntimeField.Address), ctx.Operand2);
+            else
+                ctx.SetInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address), ctx.Operand2);
         }
 
 		/// <summary>
@@ -742,7 +752,7 @@ namespace Mosa.Platforms.x86
 		{
 			ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
 			Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
-			cc.Expand(ctx);
+			cc.Expand(ctx, MethodCompiler.Assembly.Metadata);
 		}
 
 		#endregion // Internals

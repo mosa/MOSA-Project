@@ -325,8 +325,10 @@ namespace Mosa.Runtime.CompilerFramework
 			// stage to a different memory location, it should actually be a new one so sharing object
 			// only saves runtime space/perf.
 			MethodSignature sig = _method.Signature;
-			if (sig.HasThis || sig.HasExplicitThis) {
-				if (index == 0) {
+			if (sig.HasThis || sig.HasExplicitThis) 
+            {
+                if (index == 0) 
+                {
 					return new ParameterOperand(
 						_architecture.StackFrameRegister,
 						new RuntimeParameter(_method.Module, @"this", 0, ParameterAttributes.In),
