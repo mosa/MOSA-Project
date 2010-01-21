@@ -447,16 +447,16 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Stfld(Context ctx) 
         {
-            if (ctx.Operand1.Type.Type == CilElementType.Class)
-            {
+            //if (ctx.Operand1.Type.Type == CilElementType.Class)
+            //{
                 Operand op1 = ctx.Operand1;
                 Operand op2 = ctx.Operand2;
                 IntPtr address = ctx.RuntimeField.Address;
                 ctx.SetInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX), op1);
                 ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(op2.Type, GeneralPurposeRegister.EAX, address), op2);
-            }
-            else
-                ctx.SetInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address), ctx.Operand2);
+            //}
+            //else
+            //    ctx.SetInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address), ctx.Operand2);
         }
 
 		/// <summary>

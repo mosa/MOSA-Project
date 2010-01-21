@@ -50,22 +50,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Read the _stackFrameIndex From the code
 			TokenTypes token;
 			decoder.Decode(out token);
-			//throw new NotImplementedException();
             RuntimeField field = RuntimeBase.Instance.TypeLoader.GetField (decoder.Method.Module, token);
             ctx.RuntimeField = field;
             ctx.Result = decoder.Compiler.CreateTemporary(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.Ptr));
-
-			/*
-				Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) ||
-							 TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
-				MemberDefinition memberDef = MetadataMemberReference.FromToken(decoder.Metadata, token).Resolve();
-
-				DefaultTypeSystem.GetField(decoder.Method.Module, token);
-
-				_field = memberDef as FieldDefinition;
-				Debug.Assert((_field.CustomAttributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static _stackFrameIndex access on non-static _stackFrameIndex.");
-				_results[0] = CreateResultOperand(new ReferenceTypeSpecification(_field.Type));
-			*/
 		}
 
 		/// <summary>
