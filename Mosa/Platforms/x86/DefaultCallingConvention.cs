@@ -100,8 +100,8 @@ namespace Mosa.Platforms.x86
             {
 				RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
                 RegisterOperand eax = new RegisterOperand(I, GeneralPurposeRegister.EAX);
-				//ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, operand1);
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, eax);
+				//ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, operand1);
+                //ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand (new SigType(CilElementType.Ptr), GeneralPurposeRegister.EDX, new IntPtr(0)), eax);
 			}
 
 			ctx.AppendInstruction(IR.Instruction.CallInstruction, invokeTarget);
@@ -135,7 +135,7 @@ namespace Mosa.Platforms.x86
 				if (moveThis && 1 == thisArg) 
                 {
 					thisArg = 0;
-					continue;
+					//continue;
 				}
 				operandStack.Push(operand);
 			}
@@ -288,7 +288,7 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		private int CalculateStackSizeForParameters(IEnumerable<Operand> operands, bool hasThis, IMetadataProvider metadata)
 		{
-			int result = (hasThis ? -4 : 0);
+			int result = (hasThis ? 0 : 0);
 			int size, alignment;
 
 			foreach (Operand op in operands) {

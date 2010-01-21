@@ -362,7 +362,7 @@ namespace Mosa.Platforms.x86
 				 * appear.
 				 */
 			// int 3
-			//ctx.SetInstruction(CPUx86.Instruction.DebugInstruction);
+			//ctx.SetInstruction(CPUx86.Instruction.BreakInstruction);
 			//ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 
 			// Uncomment this line to enable breakpoints within Bochs

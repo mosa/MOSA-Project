@@ -139,10 +139,13 @@ namespace Mosa.Runtime.CompilerFramework
             int offset = 0;
             if (compiler.Method.Signature.HasThis || compiler.Method.Signature.HasExplicitThis)
                 ++offset;
-			for (int i = offset; i < compiler.Method.Parameters.Count + offset; i++)
+			for (int i = 0; i < compiler.Method.Parameters.Count + offset; ++i)
 				paramOps.Add((StackOperand)compiler.GetParameterOperand(i));
 
-			LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter, -1);
+            /*if (compiler.Method.Signature.HasThis || compiler.Method.Signature.HasExplicitThis)
+			    LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter + 4, -1);
+            else*/
+                LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter, -1);
 
 			if (TRACING.TraceInfo)
 				LogOperands(paramOps);

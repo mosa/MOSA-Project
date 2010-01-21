@@ -331,11 +331,11 @@ namespace Mosa.Runtime.CompilerFramework
                 {
 					return new ParameterOperand(
 						_architecture.StackFrameRegister,
-						new RuntimeParameter(_method.Module, @"this", 0, ParameterAttributes.In),
+						new RuntimeParameter(_method.Module, @"this", 2, ParameterAttributes.In),
 						new ClassSigType((TokenTypes)_type.Token));
 				}
 				// Decrement the index, as the caller actually wants a real parameter
-				index--;
+				--index;
 			}
 
 			// A normal argument, decode it...
