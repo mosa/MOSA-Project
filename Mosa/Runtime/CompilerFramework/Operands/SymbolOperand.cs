@@ -4,9 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
-
 
 using System;
 using Mosa.Runtime.Metadata.Signatures;
@@ -14,9 +13,9 @@ using Mosa.Runtime.Metadata.Signatures;
 namespace Mosa.Runtime.CompilerFramework.Operands
 {
 	/// <summary>
-	/// An operand, which represents a string label in the program data.
+	/// An operand, which represents a symbol in the program data.
 	/// </summary>
-	public sealed class StringLabelOperand : Operand
+	public sealed class SymbolOperand : Operand
 	{
 		#region Data members
 
@@ -30,11 +29,11 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StringLabelOperand"/> class.
+		/// Initializes a new instance of the <see cref="SymbolOperand"/> class.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="name">The name.</param>
-		public StringLabelOperand(SigType type, string name)
+		public SymbolOperand(SigType type, string name)
 			: base(type)
 		{
 			this._name = name;
@@ -64,7 +63,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		/// <returns>The return value is true if the operands are equal; false if not.</returns>
 		public override bool Equals(Operand other)
 		{
-			StringLabelOperand lop = other as StringLabelOperand;
+			SymbolOperand lop = other as SymbolOperand;
 
 			if (lop == null || lop.Type != Type)
 				return false;

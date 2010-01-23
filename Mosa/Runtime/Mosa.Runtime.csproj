@@ -78,7 +78,7 @@
     <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\ObjectModelUtility.cs" />
-    <Compile Include="CompilerFramework\Operands\StringLabelOperand.cs" />
+    <Compile Include="CompilerFramework\Operands\SymbolOperand.cs" />
     <Compile Include="CompilerFramework\PlatformStubStage.cs" />
     <Compile Include="CompilerFramework\IIntrinsicInstruction.cs" />
     <Compile Include="CompilerFramework\IBlockOrderStage.cs" />

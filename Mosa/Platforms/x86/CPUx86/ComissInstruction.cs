@@ -21,11 +21,10 @@ namespace Mosa.Platforms.x86.CPUx86
     public class ComissInstruction : TwoOperandInstruction
     {
         #region Data Members
-        private static readonly OpCode R_R = new OpCode(new byte[] { 0x0F, 0x2F });
-        private static readonly OpCode R_M = new OpCode(new byte[] { 0x0F, 0x2F });
-        private static readonly OpCode R_L = new OpCode(new byte[] { 0x0F, 0x2F });
-        private static readonly OpCode R_C = new OpCode(new byte[] { 0x0F, 0x2F });
-        #endregion
+    
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0x2F });
+
+		#endregion
 
         #region Methods
 
@@ -38,10 +37,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
         protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
         {
-			if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
-			if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
-			if ((destination is RegisterOperand) && (source is LabelOperand)) return R_L;
-			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
+			if ((destination is RegisterOperand) && (source is RegisterOperand)) return opcode;
+			if ((destination is RegisterOperand) && (source is MemoryOperand)) return opcode;
+			if ((destination is RegisterOperand) && (source is LabelOperand)) return opcode;
+			if ((destination is RegisterOperand) && (source is SymbolOperand)) return opcode;
+			if ((destination is RegisterOperand) && (source is ConstantOperand)) return opcode;
             throw new ArgumentException(@"No opcode for operand type.");
         }
 
