@@ -14,32 +14,30 @@ using Mosa.Runtime.Metadata.Signatures;
 namespace Mosa.Runtime.CompilerFramework.Operands
 {
 	/// <summary>
-	/// An operand, which represents a label in the program data.
+	/// An operand, which represents a string label in the program data.
 	/// </summary>
-	public sealed class LabelOperand : MemoryOperand
+	public sealed class StringLabelOperand : Operand
 	{
 		#region Data members
 
 		/// <summary>
-		/// Holds the label.
+		/// Holds the name of the label.
 		/// </summary>
-		private int _label;
+		private string _name;
 
 		#endregion // Data members
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="LabelOperand"/>.
+		/// Initializes a new instance of the <see cref="StringLabelOperand"/> class.
 		/// </summary>
-		/// <param name="type">The signature type of the operand data.</param>
-		/// <param name="baseRegister">The base register for label offsets.</param>
-		/// <param name="offset">The default offset From the base register.</param>
-		/// <param name="label">The additional offset as indicated by a label.</param>
-		public LabelOperand(SigType type, Register baseRegister, int offset, int label) :
-			base(type, baseRegister, new IntPtr(offset))
+		/// <param name="type">The type.</param>
+		/// <param name="name">The name.</param>
+		public StringLabelOperand(SigType type, string name)
+			: base(type)
 		{
-			_label = label;
+			this._name = name;
 		}
 
 		#endregion // Construction
@@ -47,12 +45,12 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		#region Properties
 
 		/// <summary>
-		/// Gets the label of the operand.
+		/// Gets the name.
 		/// </summary>
-		/// <value>The label.</value>
-		public int Label
+		/// <value>The name.</value>
+		public string Name
 		{
-			get { return _label; }
+			get { return this._name; }
 		}
 
 		#endregion // Properties
@@ -66,12 +64,15 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		/// <returns>The return value is true if the operands are equal; false if not.</returns>
 		public override bool Equals(Operand other)
 		{
-			LabelOperand lop = other as LabelOperand;
+			StringLabelOperand lop = other as StringLabelOperand;
 
-			if (lop == null || lop.Type != Type || _label != lop._label)
+			if (lop == null || lop.Type != Type)
 				return false;
-			else
+
+			if (_name == null && lop._name == null)
 				return true;
+			else
+				return _name == lop._name;
 		}
 
 		/// <summary>
@@ -80,7 +81,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return base.ToString().Replace("[", String.Format("[L_{0}, ", _label));
+			return base.ToString().Replace("[", _name);
 		}
 
 		#endregion // Object Overrides

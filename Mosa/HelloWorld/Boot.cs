@@ -27,7 +27,7 @@ namespace Mosa.HelloWorld
 	public static class Boot
 	{
         public static Foo foo;
-
+		
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>

@@ -63,6 +63,8 @@ namespace Mosa.Platforms.x86.CPUx86
 			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
 			if ((destination is RegisterOperand) && (source is LabelOperand)) return R_C;
 			if ((destination is MemoryOperand) && (source is LabelOperand)) return M_C;
+			if ((destination is RegisterOperand) && (source is StringLabelOperand)) return R_C;
+			if ((destination is MemoryOperand) && (source is StringLabelOperand)) return M_C;
 
 			if ((destination is RegisterOperand) && (source is RegisterOperand)) {
 				if (IsByte(source) || IsByte(destination)) return R_R_U8;

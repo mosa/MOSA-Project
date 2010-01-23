@@ -335,7 +335,7 @@ namespace Mosa.Platforms.x86
 		public void Emit(OpCode opCode, Operand dest, Operand src)
 		{
 			byte? sib, modRM;
-			MemoryOperand displacement;
+			Operand displacement;
 
 			// Write the opcode
 			_codeStream.Write(opCode.Code, 0, opCode.Code.Length);
@@ -372,7 +372,7 @@ namespace Mosa.Platforms.x86
 		public void Emit(OpCode opCode, Operand dest, Operand src, Operand third)
 		{
 			byte? sib = null, modRM = null;
-			MemoryOperand displacement = null;
+			Operand displacement = null;
 
 			// Write the opcode
 			_codeStream.Write(opCode.Code, 0, opCode.Code.Length);
@@ -401,23 +401,24 @@ namespace Mosa.Platforms.x86
 		/// Emits the displacement operand.
 		/// </summary>
 		/// <param name="displacement">The displacement operand.</param>
-		public void WriteDisplacement(MemoryOperand displacement)
+		public void WriteDisplacement(Operand displacement)
 		{
 			byte[] disp;
 
-			MemberOperand member = displacement as MemberOperand;
-			LabelOperand label = displacement as LabelOperand;
-			if (label != null) {
+			if (displacement is StringLabelOperand) {
+				StringLabelOperand label = displacement as StringLabelOperand;
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
 				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name, IntPtr.Zero));
 			}
-			else if (member != null) {
-				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member, member.Offset));
-			}
-			else {
-				disp = LittleEndianBitConverter.GetBytes(displacement.Offset.ToInt32());
-			}
+			else
+				if (displacement is MemberOperand) {
+					MemberOperand member = displacement as MemberOperand;
+					int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
+					disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member, member.Offset));
+				}
+				else {
+					disp = LittleEndianBitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
+				}
 
 			_codeStream.Write(disp, 0, disp.Length);
 		}
@@ -530,31 +531,6 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Emits the displacement operand.
-		/// </summary>
-		/// <param name="displacement">The displacement operand.</param>
-		private void EmitDisplacement(MemoryOperand displacement)
-		{
-			byte[] disp;
-
-			MemberOperand member = displacement as MemberOperand;
-			LabelOperand label = displacement as LabelOperand;
-			if (null != label) {
-				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name, IntPtr.Zero));
-			}
-			else if (null != member) {
-				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member, member.Offset));
-			}
-			else {
-				disp = LittleEndianBitConverter.GetBytes(displacement.Offset.ToInt32());
-			}
-
-			_codeStream.Write(disp, 0, disp.Length);
-		}
-
-		/// <summary>
 		/// Emits an immediate operand.
 		/// </summary>
 		/// <param name="op">The immediate operand to emit.</param>
@@ -644,7 +620,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="sib">A potential SIB byte to emit.</param>
 		/// <param name="displacement">An immediate displacement to emit.</param>
 		/// <returns>The value of the modR/M byte.</returns>
-		private static byte? CalculateModRM(byte? regField, Operand op1, Operand op2, out byte? sib, out MemoryOperand displacement)
+		private static byte? CalculateModRM(byte? regField, Operand op1, Operand op2, out byte? sib, out Operand displacement)
 		{
 			byte? modRM = null;
 
@@ -699,8 +675,11 @@ namespace Mosa.Platforms.x86
 					modRM |= (byte)(rop2.Register.RegisterCode << 3);
 				displacement = mop1;
 			}
-			else if (rop1 != null)
+			else if (rop1 != null) {
 				modRM = (byte)(modRM.GetValueOrDefault() | (3 << 6) | rop1.Register.RegisterCode);
+				if (op2 is StringLabelOperand)
+					displacement = op2;
+			}
 
 			return modRM;
 		}
