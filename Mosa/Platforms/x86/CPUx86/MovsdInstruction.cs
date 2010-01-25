@@ -41,7 +41,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			if ((destination is RegisterOperand) && (source is LabelOperand)) return R_L;
-			if ((destination is RegisterOperand) && (source is SymbolOperand)) return R_L;
 			if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
 			if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
 			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;

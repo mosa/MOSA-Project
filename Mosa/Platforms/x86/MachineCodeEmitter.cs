@@ -407,51 +407,25 @@ namespace Mosa.Platforms.x86
 
 			MemberOperand member = displacement as MemberOperand;
 			LabelOperand label = displacement as LabelOperand;
-			SymbolOperand stringlabel = displacement as SymbolOperand;
-			if (null != label) {
+			SymbolOperand symbol = displacement as SymbolOperand;
+
+			if (label != null) {
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, (string)null, IntPtr.Zero));
+				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name, IntPtr.Zero));
 			}
-			else if (null != member) {
+			else if (member != null) {
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
 				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member, member.Offset));
 			}
-			else if (null != stringlabel) {
+			else if (symbol != null) {
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, stringlabel.Name, IntPtr.Zero));
+				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, symbol.Name, IntPtr.Zero));
 			}
-			else {
+			else 
 				disp = LittleEndianBitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
-			}
 
 			_codeStream.Write(disp, 0, disp.Length);
 		}
-
-		//public void WriteDisplacement(Operand displacement)
-		//{
-		//    byte[] disp;
-
-		//    if (displacement is StringLabelOperand) {
-		//        StringLabelOperand label = displacement as StringLabelOperand;
-		//        int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-		//        disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name, IntPtr.Zero));
-		//    }
-		//    else if (displacement is LabelOperand) {
-		//        LabelOperand label = displacement as LabelOperand;
-		//        int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-		//        disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, (string)null, IntPtr.Zero));
-		//    }
-		//    else if (displacement is MemberOperand) {
-		//        MemberOperand member = displacement as MemberOperand;
-		//        int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-		//        disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member, member.Offset));
-		//    }
-		//    else {
-		//        disp = LittleEndianBitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
-		//    }
-
-		//    _codeStream.Write(disp, 0, disp.Length);
-		//}
 
 		/// <summary>
 		/// Emits an immediate operand.
@@ -505,6 +479,7 @@ namespace Mosa.Platforms.x86
 					case CilElementType.U2:
 						imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt16(co.Value));
 						break;
+					case CilElementType.Ptr:
 					case CilElementType.U4:
 						imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt32(co.Value));
 						break;

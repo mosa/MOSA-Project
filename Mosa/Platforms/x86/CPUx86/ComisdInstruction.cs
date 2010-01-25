@@ -40,7 +40,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			if ((destination is RegisterOperand) && (source is RegisterOperand)) return opcode;
 			if ((destination is RegisterOperand) && (source is MemoryOperand)) return opcode;
 			if ((destination is RegisterOperand) && (source is LabelOperand)) return opcode;
-			if ((destination is RegisterOperand) && (source is SymbolOperand)) return opcode;
 			if ((destination is RegisterOperand) && (source is ConstantOperand)) return opcode;
             throw new ArgumentException(@"No opcode for operand type.");
         }

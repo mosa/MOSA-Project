@@ -114,16 +114,16 @@ namespace Mosa.Tools.Compiler.x86
 			ctx.Other = 0; // stacksize
 
 			// Create the IVT Table
-			SigType I4 = new SigType(CilElementType.I4);
-			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
-			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-			RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
+			SigType PTR = new SigType(CilElementType.Ptr);
+			RegisterOperand ecx = new RegisterOperand(PTR, GeneralPurposeRegister.ECX);
+			RegisterOperand eax = new RegisterOperand(PTR, GeneralPurposeRegister.EAX);
+			RegisterOperand ebx = new RegisterOperand(PTR, GeneralPurposeRegister.EBX);
 
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I4, 0x201000));
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(PTR, 0x201000));
 
 			for (int i = 0; i <= 256; i++) {
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new SymbolOperand(I4, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + i.ToString() + "()"));
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(i * 4)), eax);
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new SymbolOperand(PTR, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + i.ToString() + "()"));
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(PTR, ecx.Register, new IntPtr(i * 4)), eax);
 			}
 
 			ctx.SetInstruction(IR.Instruction.EpilogueInstruction);

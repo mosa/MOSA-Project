@@ -80,7 +80,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return base.ToString().Replace("[", _name);
+			return _name + " " + base.ToString();
 		}
 
 		#endregion // Object Overrides

@@ -27,17 +27,12 @@ namespace Mosa.QuickTest
 		/// </summary>
 		public static void Main()
 		{
-			bool rest = CallOrderU4_U8_U8_U8(1, 2, 3, 4);
+			bool result = boolAddConstantR4Left(18.2f, 1f);
 		}
 
-		static bool CallOrderU4_U8_U8_U8(uint a, ulong b, ulong c, ulong d)
+		static bool boolAddConstantR4Left(float expect, float x)
 		{
-			return (a == 1 && b == 2 && c == 3 && d == 4);
-		}
-
-		static bool CallOrderU8(ulong a, ulong b, ulong c, ulong d)
-		{
-			return (a == 1 && b == 2 && c == 3 && d == 4);
+			return expect == (17.2f + x);
 		}
 
 	}
