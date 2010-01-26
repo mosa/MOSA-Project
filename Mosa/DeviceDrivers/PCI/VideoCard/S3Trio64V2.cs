@@ -65,7 +65,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
             /// line below and to the right. Setting the number of bytes
             /// to 2048 solves it.
             /// </summary>
-            internal const ushort CursorBytes = 2084;
+            internal const ushort CursorBytes = 2048;
             /// <summary>
             /// 
             /// </summary>
