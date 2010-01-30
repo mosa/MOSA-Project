@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>mosacl</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>
+    </AppDesignerFolder>
+    <RootNamespace>Mosa.Tools.Compiler</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>..\..\..\bin\mosacl.xml</DocumentationFile>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Kernel\Mosa.Kernel.csproj">
+      <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
+      <Name>Mosa.Kernel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Platforms\x86\Mosa.Platforms.x86.csproj">
+      <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
+      <Name>Mosa.Platforms.x86</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Runtime\Mosa.Runtime.csproj">
+      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
+      <Name>Mosa.Runtime</Name>
+    </ProjectReference>
+    <Compile Include="ConstantFoldingWrapper.cs" />
+    <Compile Include="Metadata\MetadataBuilderStage.cs" />
+    <Compile Include="Metadata\MetadataStreamHeader.cs" />
+    <Compile Include="Metadata\MetadataTableCodedIndexWriter.cs" />
+    <Compile Include="Metadata\MetadataTableWriter.cs" />
+    <Compile Include="MethodCompilerStageWrapper.cs" />
+    <Compile Include="RegisterAllocatorSelector.cs" />
+    <Compile Include="AotCompiler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AotMethodCompiler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ArchitectureSelector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyCompilerStageWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CompilationRuntime.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Compiler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IHasOptions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InstructionSchedulingWrapper.cs" />
+    <Compile Include="InstructionStatisticsStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InstructionStatisticsWrapper.cs" />
+    <Compile Include="MapFileGeneratorWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MetadataBuilderStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MockJitService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MockMemoryPageManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CilHeaderBuilderStage.cs" />
+    <Compile Include="Options.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Program.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Boot\BootFormatSelector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Boot\Multiboot0695AssemblyStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linkers\Elf32LinkerWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linkers\Elf64LinkerWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linkers\LinkerFormatSelector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Linkers\PortableExecutableLinkerWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LinkTimeCodeGeneration\LinkerGeneratedMethod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LinkTimeCodeGeneration\LinkerGeneratedType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LinkTimeCodeGeneration\LinkerMethodCompiler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LinkTimeCodeGeneration\LinkTimeCodeGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Symbols\Pdb\CvEntryType.cs" />
+    <Compile Include="Symbols\Pdb\CvFunctionSymbol3.cs" />
+    <Compile Include="Symbols\Pdb\CvGlobalSymbolEnumerator.cs" />
+    <Compile Include="Symbols\Pdb\CvLine.cs" />
+    <Compile Include="Symbols\Pdb\CvLineEnumerator.cs" />
+    <Compile Include="Symbols\Pdb\CvPublicSymbol3.cs" />
+    <Compile Include="Symbols\Pdb\CvStream.cs" />
+    <Compile Include="Symbols\Pdb\CvSymbol.cs" />
+    <Compile Include="Symbols\Pdb\CvSymbol1129.cs" />
+    <Compile Include="Symbols\Pdb\CvSymbolEnumerator.cs" />
+    <Compile Include="Symbols\Pdb\CvUtil.cs" />
+    <Compile Include="Symbols\Pdb\PdbFileHeader.cs" />
+    <Compile Include="Symbols\Pdb\PdbReader.cs" />
+    <Compile Include="Symbols\Pdb\PdbReadType.cs" />
+    <Compile Include="Symbols\Pdb\PdbRootStream.cs" />
+    <Compile Include="Symbols\Pdb\PdbStream.cs" />
+    <Compile Include="Symbols\Pdb\PdbSymbolHeader.cs" />
+    <Compile Include="Symbols\Pdb\PdbSymbolRangeEx.cs" />
+    <Compile Include="Symbols\Pdb\PdbType.cs" />
+    <Compile Include="Symbols\Pdb\PdbTypesHeader.cs" />
+    <Compile Include="TypeInitializers\TypeInitializerSchedulerStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="x86\InterruptStage.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
