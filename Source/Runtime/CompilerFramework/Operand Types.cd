@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Mosa.Runtime.CompilerFramework.Operand">
+    <Position X="9.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AKAAAAAAAIAAAAQEgAAEAAAAAAAAVAAAAUAAAAQAACA=</HashCode>
+      <FileName>CompilerFramework\Operand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Mosa.Runtime.CompilerFramework.TemporaryOperand">
+    <Position X="10.5" Y="11.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAABAAAAQAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>CompilerFramework\TemporaryOperand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mosa.Runtime.CompilerFramework.LocalVariableOperand">
+    <Position X="5.25" Y="11.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>CompilerFramework\VariableOperand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mosa.Runtime.CompilerFramework.ConstantOperand">
+    <Position X="0.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAACAAEgAAAAAAAAAAAAAAEAAAgAAACAAA=</HashCode>
+      <FileName>CompilerFramework\ConstantOperand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mosa.Runtime.CompilerFramework.ParameterOperand">
+    <Position X="8" Y="11.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAQAAAAQAAAAAAAAAAAAABA=</HashCode>
+      <FileName>CompilerFramework\ParameterOperand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mosa.Runtime.CompilerFramework.StaticFieldOperand">
+    <Position X="17.75" Y="8.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompilerFramework\StaticFieldOperand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mosa.Runtime.CompilerFramework.ObjectFieldOperand">
+    <Position X="13" Y="8.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompilerFramework\ObjectFieldOperand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mosa.Runtime.CompilerFramework.StackOperand">
+    <Position X="8" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAEgAAAAAQAAAAAAAAAAACAAAAAABA=</HashCode>
+      <FileName>CompilerFramework\StackOperand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Mosa.Runtime.CompilerFramework.RegisterOperand">
+    <Position X="3" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAEgAABAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompilerFramework\RegisterOperand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mosa.Runtime.CompilerFramework.MemoryOperand">
+    <Position X="11.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAAAAAIAAAAwAA=</HashCode>
+      <FileName>CompilerFramework\MemoryOperand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mosa.Runtime.CompilerFramework.LabelOperand">
+    <Position X="15.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAEABAAAAQAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompilerFramework\LabelOperand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mosa.Runtime.CompilerFramework.MemberOperand">
+    <Position X="10.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAIAIAACAAAAAAAAAA=</HashCode>
+      <FileName>CompilerFramework\MemberOperand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

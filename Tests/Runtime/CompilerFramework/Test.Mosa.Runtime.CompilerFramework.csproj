@@ -81,23 +81,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Mosa\Kernel\Mosa.Kernel.csproj">
+    <ProjectReference Include="..\..\..\Source\Kernel\Mosa.Kernel.csproj">
       <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
       <Name>Mosa.Kernel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Mosa\Platforms\x86\Mosa.Platforms.x86.csproj">
+    <ProjectReference Include="..\..\..\Source\Platforms\x86\Mosa.Platforms.x86.csproj">
       <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
       <Name>Mosa.Platforms.x86</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Mosa\Runtime\Mosa.Runtime.csproj">
+    <ProjectReference Include="..\..\..\Source\Runtime\Mosa.Runtime.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
       <Name>Mosa.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Mosa\Jit\SimpleJit\Mosa.Jit.SimpleJit.csproj">
+    <ProjectReference Include="..\..\..\Source\Jit\SimpleJit\Mosa.Jit.SimpleJit.csproj">
       <Project>{57399D8B-1B6C-4169-A340-B804F240B450}</Project>
       <Name>Mosa.Jit.SimpleJit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Mosa\Tools\Compiler\Mosa.Tools.Compiler.csproj">
+    <ProjectReference Include="..\..\..\Source\Tools\Compiler\Mosa.Tools.Compiler.csproj">
       <Project>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</Project>
       <Name>Mosa.Tools.Compiler</Name>
     </ProjectReference>

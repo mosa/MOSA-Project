@@ -1,5 +1,0 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartArguments>X:\MosaTF\trunk\Setup\Mono\build\mono-2.4.2\mcs\class\corlib\corelib.csproj -s X:\MosaTF\trunk\Setup\Mono\build\mono-2.4.2\mcs\class\corlib\corlib.dll.sources -c NET_2_0 -c NET_1_1 -c INSIDE_CORLIB -c MOSAPROJECT</StartArguments>
-  </PropertyGroup>
-</Project>

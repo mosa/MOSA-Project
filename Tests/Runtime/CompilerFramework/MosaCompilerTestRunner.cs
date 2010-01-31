@@ -24,7 +24,7 @@ using System.IO;
 namespace Test.Mosa.Runtime.CompilerFramework
 {
     /// <summary>
-    /// Interfaceclass for MbUnit3 to run our testcases.
+    /// Interface class for MbUnit3 to run our testcases.
     /// </summary>
     public abstract class MosaCompilerTestRunner : IDisposable
     {
