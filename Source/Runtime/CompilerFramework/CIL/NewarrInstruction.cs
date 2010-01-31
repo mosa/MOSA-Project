@@ -28,7 +28,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public NewarrInstruction(OpCode opcode)
-			: base(opcode, 1)
+			: base(opcode)
 		{
 		}
 
@@ -49,7 +49,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Read the type specification
 			TokenTypes arrayEType;
 			decoder.Decode(out arrayEType);
-			throw new NotImplementedException();
+            ctx.Token = arrayEType;
+
+            Mosa.Runtime.Vm.RuntimeType type = RuntimeBase.Instance.TypeLoader.GetType(decoder.Compiler.Assembly, arrayEType);
+            //ctx.Result = 
 			/*
 				TypeReference eType = MetadataTypeReference.FromToken(decoder.Metadata, arrayEType);
 

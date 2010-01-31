@@ -12,19 +12,25 @@ namespace Mosa.Runtime.CompilerFramework
         /// 
         /// </summary>
         /// <param name="token"></param>
-        /// <param name="metadataProvider"></param>
-        /// <param name="architecture"></param>
+        /// <param name="compiler"></param>
         /// <returns></returns>
         public static int ComputeTypeSize(TokenTypes token, IMetadataProvider metadataProvider, IArchitecture architecture)
         {
             Metadata.Tables.TypeDefRow typeDefinition;
-            Metadata.Tables.TypeDefRow followingTypeDefinition;
+            Metadata.Tables.TypeDefRow followingTypeDefinition = new Mosa.Runtime.Metadata.Tables.TypeDefRow();
             metadataProvider.Read(token, out typeDefinition);
-            metadataProvider.Read(token + 1, out followingTypeDefinition);
+            try
+            {
+                metadataProvider.Read(token + 1, out followingTypeDefinition);
+            }
+            catch (System.Exception)
+            {
+            }
 
             int result = 0;
             TokenTypes fieldList = typeDefinition.FieldList;
-            while (fieldList != followingTypeDefinition.FieldList)
+            TokenTypes last = metadataProvider.GetMaxTokenValue(TokenTypes.Field);
+            while (fieldList != followingTypeDefinition.FieldList && fieldList != last)
                 result += FieldSize(fieldList++, metadataProvider, architecture);
 
             return result;
@@ -34,8 +40,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// 
         /// </summary>
         /// <param name="field"></param>
-        /// <param name="metadataProvider"></param>
-        /// <param name="architecture"></param>
+        /// <param name="compiler"></param>
         /// <returns></returns>
         public static int FieldSize(TokenTypes field, IMetadataProvider metadataProvider, IArchitecture architecture)
         {
@@ -78,8 +83,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// 
         /// </summary>
         /// <param name="token"></param>
-        /// <param name="metadataProvider"></param>
-        /// <param name="architecture"></param>
+        /// <param name="compiler"></param>
         /// <returns></returns>
         public static int ComputeFieldOffset(TokenTypes token, IMetadataProvider metadataProvider, IArchitecture architecture)
         {

@@ -373,7 +373,12 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldfld(Context ctx) 
         {
-            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ctx.Result, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address));
+            Operand op1 = ctx.Operand1;
+            Operand result = ctx.Result;
+            IntPtr address = ctx.RuntimeField.Address;
+            ctx.SetInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX), op1);
+            ctx.AppendInstruction(IR.Instruction.MoveInstruction, result, new MemoryOperand(result.Type, GeneralPurposeRegister.EAX, address));
+           // ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ctx.Result, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address));
         }
 
 		/// <summary>
@@ -395,9 +400,9 @@ namespace Mosa.Platforms.x86
 		void CIL.ICILVisitor.Ldsflda(Context ctx) 
         {
             Runtime.Linker.LinkerSymbol symbol = MethodCompiler.Linker.GetSymbol(ctx.RuntimeField);
-            Operand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+            //Operand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
             Operand address = new ConstantOperand(new SigType(CilElementType.I4), (int)MethodCompiler.Linker.BaseAddress + symbol.SectionAddress);
-            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, address);
+            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ctx.Result, address);
         }
 
 		/// <summary>
@@ -442,10 +447,16 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Stfld(Context ctx) 
         {
-            if (ctx.Operand1.Type.Type == CilElementType.Class)
-                ctx.SetInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand (new SigType(CilElementType.Ptr), GeneralPurposeRegister.ECX).Register, ctx.RuntimeField.Address), ctx.Operand2);
-            else
-                ctx.SetInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address), ctx.Operand2);
+            //if (ctx.Operand1.Type.Type == CilElementType.Class)
+            //{
+                Operand op1 = ctx.Operand1;
+                Operand op2 = ctx.Operand2;
+                IntPtr address = ctx.RuntimeField.Address;
+                ctx.SetInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX), op1);
+                ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(op2.Type, GeneralPurposeRegister.EAX, address), op2);
+            //}
+            //else
+            //    ctx.SetInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address), ctx.Operand2);
         }
 
 		/// <summary>
