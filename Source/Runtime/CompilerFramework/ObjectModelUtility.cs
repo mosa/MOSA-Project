@@ -8,12 +8,13 @@ namespace Mosa.Runtime.CompilerFramework
     /// </summary>
     public static class ObjectModelUtility
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="token"></param>
-        /// <param name="compiler"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Computes the size of the type.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <param name="metadataProvider">The metadata provider.</param>
+		/// <param name="architecture">The architecture.</param>
+		/// <returns></returns>
         public static int ComputeTypeSize(TokenTypes token, IMetadataProvider metadataProvider, IArchitecture architecture)
         {
             Metadata.Tables.TypeDefRow typeDefinition;
@@ -36,12 +37,13 @@ namespace Mosa.Runtime.CompilerFramework
             return result;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="field"></param>
-        /// <param name="compiler"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Fields the size.
+		/// </summary>
+		/// <param name="field">The field.</param>
+		/// <param name="metadataProvider">The metadata provider.</param>
+		/// <param name="architecture">The architecture.</param>
+		/// <returns></returns>
         public static int FieldSize(TokenTypes field, IMetadataProvider metadataProvider, IArchitecture architecture)
         {
             Metadata.Tables.FieldRow fieldRow;
@@ -60,12 +62,12 @@ namespace Mosa.Runtime.CompilerFramework
             return size;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="metadata"></param>
-        /// <param name="signatureToken"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Values the token type from signature.
+		/// </summary>
+		/// <param name="metadata">The metadata.</param>
+		/// <param name="signatureToken">The signature token.</param>
+		/// <returns></returns>
         public static TokenTypes ValueTokenTypeFromSignature(IMetadataProvider metadata, TokenTypes signatureToken)
         {
             int index = 1;
@@ -79,12 +81,13 @@ namespace Mosa.Runtime.CompilerFramework
             return SigType.ReadTypeDefOrRefEncoded(buffer, ref index);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="token"></param>
-        /// <param name="compiler"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Computes the field offset.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <param name="metadataProvider">The metadata provider.</param>
+		/// <param name="architecture">The architecture.</param>
+		/// <returns></returns>
         public static int ComputeFieldOffset(TokenTypes token, IMetadataProvider metadataProvider, IArchitecture architecture)
         {
             Metadata.Tables.TypeDefRow typeDefinition;
