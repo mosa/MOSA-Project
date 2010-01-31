@@ -1,4 +1,4 @@
-PATH=C:\Program Files\Mono-2.4.;%PATH%
+PATH=C:\Program Files\Mono-2.4.2.3;%PATH%
 
 call gmcs -lib:Bin -target:library -out:Bin\Mosa.ClassLib.dll ClassLib\*.cs 
 call gmcs -lib:Bin -target:library -out:Bin\Mosa.DeviceSystem.dll -d:MONO -reference:Mosa.ClassLib.dll DeviceSystem\*.cs DeviceSystem\PCI\*.cs 
