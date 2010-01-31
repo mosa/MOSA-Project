@@ -9,19 +9,21 @@ using Mosa.Kernel.Memory.X86;
 
 namespace Mosa.HelloWorld
 {
+    public struct Cursor
+    {
+        public uint Column;
+        public uint Row;
+    }
+
 	/// <summary>
 	/// 
 	/// </summary>
 	public static class Screen
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		public static uint Column = 0;
-		/// <summary>
-		/// 
-		/// </summary>
-		public static uint Row = 0;
+        /// <summary>
+        /// 
+        /// </summary>
+        public static Cursor Cursor;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -36,6 +38,24 @@ namespace Mosa.HelloWorld
 		/// 
 		/// </summary>
 		public const uint Rows = 40;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static uint Column
+        {
+            get { return Cursor.Column; }
+            set { Cursor.Column = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static uint Row
+        {
+            get { return Cursor.Row; }
+            set { Cursor.Row = value; }
+        }
 
 		/// <summary>
 		/// Gets the address.

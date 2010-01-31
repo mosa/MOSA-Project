@@ -14,6 +14,12 @@ namespace Mosa.HelloWorld
         public char x;
         public char y;
 
+        public Foo(char a, char b)
+        {
+            x = a;
+            y = b;
+        }
+
         public void Set(char a, char b)
         {
             x = a;
@@ -27,16 +33,17 @@ namespace Mosa.HelloWorld
 	public static class Boot
 	{
         public static Foo foo;
-		
+
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>
 		public static void Main()
 		{
+            Screen.Column = 10;
+            Screen.Row = 11;
 			Kernel.Setup();
 			Screen.Color = 0x0E;
             foo.Set('M', 'O');
-
             Screen.Write(foo.x);
             Screen.Write(foo.y);
 			//Screen.Write('M');
