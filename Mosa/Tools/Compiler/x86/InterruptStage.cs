@@ -81,22 +81,22 @@ namespace Mosa.Tools.Compiler.x86
 			SigType I4 = new SigType(CilElementType.I4);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 
-			for (int i = 0; i <= 256; i++) {
-				InstructionSet set = new InstructionSet(100);
+			for (int i = 0; i <= 256; ++i) {
+				InstructionSet set = new InstructionSet(10);
 				Context ctx = new Context(set, -1);
 
 				ctx.SetInstruction(CPUx86.Instruction.CliInstruction);
 				if ((i != 8) && (i < 10 || i > 14)) // For IRQ 8, 10, 11, 12, 13, 14 the cpu automatically pushed the error code
 					ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I4, 0x0));
 				ctx.AppendInstruction(CPUx86.Instruction.PushadInstruction);
-				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I4, i));
+				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I4, (int)i));
 				// TODO: Set method parameters 
 				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, InterruptMethod);
 				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
 				ctx.AppendInstruction(CPUx86.Instruction.PopadInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
 				ctx.AppendInstruction(CPUx86.Instruction.StiInstruction);
-				//ctx.AppendInstruction(CPUx86.Instruction.IRetdInstruction);
+				ctx.AppendInstruction(CPUx86.Instruction.IRetdInstruction);
 
 				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"InterruptISR" + i.ToString(), set);
 			}
