@@ -39,6 +39,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
+			if (MethodCompiler.Method.Name.Contains("<$>"))
+				return;
+
 			// Previous stage
 			IPipelineStage prevStage = MethodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
 

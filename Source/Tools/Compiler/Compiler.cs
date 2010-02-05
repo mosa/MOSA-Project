@@ -304,10 +304,10 @@ namespace Mosa.Tools.Compiler
 					aot.Pipeline.AddRange(new IAssemblyCompilerStage[] {
                         bootFormatStage,
                         new TypeLayoutStage(),
+						new x86.InterruptBuilderStage(),
                         new MethodCompilerBuilderStage(),
                         new MethodCompilerRunnerStage(),
                         new TypeInitializers.TypeInitializerSchedulerStage(),
-						new x86.InterruptStage(),
 						bootFormatStage,
 						new MetadataBuilderStage(),
 						new CilHeaderBuilderStage(),

@@ -70,7 +70,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 			map.Add(typeof(IRetd), new IRetd());
 			map.Add(typeof(Push), new Push());
 			map.Add(typeof(Pop), new Pop());
-			map.Add(typeof(JumpProcessInterrupt), new JumpProcessInterrupt());
+			map.Add(typeof(GetIDTJumpLocation), new GetIDTJumpLocation());
 		
 			return map;
 		}
