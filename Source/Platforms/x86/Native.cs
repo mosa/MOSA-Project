@@ -237,8 +237,8 @@ namespace Mosa.Platforms.x86
 		/// Jumps the global interrupt handler.
 		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.JumpProcessInterrupt))]
-		public static void JumpProcessInterrupt() { ThrowPlatformNotSupported(); }
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetIDTJumpLocation))]
+		public static uint GetIDTJumpLocation(uint irq) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Jumps the global interrupt handler.

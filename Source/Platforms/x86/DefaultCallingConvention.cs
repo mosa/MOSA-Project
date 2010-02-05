@@ -283,8 +283,9 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Calculates the stack size for parameters.
 		/// </summary>
-		/// <param name="operands"></param>
-		/// <param name="hasThis"></param>
+		/// <param name="operands">The operands.</param>
+		/// <param name="hasThis">if set to <c>true</c> [has this].</param>
+		/// <param name="metadata">The metadata.</param>
 		/// <returns></returns>
 		private int CalculateStackSizeForParameters(IEnumerable<Operand> operands, bool hasThis, IMetadataProvider metadata)
 		{

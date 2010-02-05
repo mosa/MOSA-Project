@@ -86,7 +86,7 @@
     <Compile Include="Intrinsic\CpuId.cs" />
     <Compile Include="Intrinsic\In.cs" />
     <Compile Include="Intrinsic\Invlpg.cs" />
-    <Compile Include="Intrinsic\JumpProcessInterrupt.cs" />
+    <Compile Include="Intrinsic\GetIDTJumpLocation.cs" />
     <Compile Include="Intrinsic\Lgdt.cs" />
     <Compile Include="Intrinsic\Lidt.cs" />
     <Compile Include="Intrinsic\Nop.cs" />

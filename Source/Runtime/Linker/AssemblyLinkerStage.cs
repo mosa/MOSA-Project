@@ -102,7 +102,7 @@ namespace Mosa.Runtime.Linker
 				}
 			}
 
-			Debug.Assert(0 == _linkRequests.Count, @"AssemblyLinker has found unresolved _symbols.");
+			Debug.Assert(_linkRequests.Count == 0, @"AssemblyLinker has found unresolved _symbols.");
 			if (_linkRequests.Count != 0)
 				throw new LinkerException(@"Unresolved _symbols.");
 		}

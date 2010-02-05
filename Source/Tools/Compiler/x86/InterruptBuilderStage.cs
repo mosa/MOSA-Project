@@ -28,7 +28,7 @@ namespace Mosa.Tools.Compiler.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class InterruptStage : IAssemblyCompilerStage, IPipelineStage
+	public sealed class InterruptBuilderStage : IAssemblyCompilerStage, IPipelineStage
 	{
 		#region Data Members
 
@@ -46,10 +46,6 @@ namespace Mosa.Tools.Compiler.x86
 
 		#endregion // IPipelineStage Members
 
-		#region Methods
-
-		#endregion // Methods
-
 		#region IAssemblyCompilerStage Members
 
 		/// <summary>
@@ -60,7 +56,6 @@ namespace Mosa.Tools.Compiler.x86
 		{
 			_linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
 
-			CreateIVTMethod(compiler);
 			CreateISRMethods(compiler);
 		}
 
@@ -99,37 +94,6 @@ namespace Mosa.Tools.Compiler.x86
 
 				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"InterruptISR" + i.ToString(), set);
 			}
-		}
-
-		/// <summary>
-		/// Creates the IVT method.
-		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		private void CreateIVTMethod(AssemblyCompiler compiler)
-		{
-			InstructionSet set = new InstructionSet(4048);
-			Context ctx = new Context(set, -1);
-
-			ctx.AppendInstruction(IR.Instruction.PrologueInstruction);
-			ctx.Other = 0; // stacksize
-
-			// Create the IVT Table
-			SigType PTR = new SigType(CilElementType.Ptr);
-			RegisterOperand ecx = new RegisterOperand(PTR, GeneralPurposeRegister.ECX);
-			RegisterOperand eax = new RegisterOperand(PTR, GeneralPurposeRegister.EAX);
-			RegisterOperand ebx = new RegisterOperand(PTR, GeneralPurposeRegister.EBX);
-
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(PTR, 0x201000));
-
-			for (int i = 0; i <= 256; i++) {
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new SymbolOperand(PTR, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + i.ToString() + "()"));
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(PTR, ecx.Register, new IntPtr(i * 4)), eax);
-			}
-
-			ctx.SetInstruction(IR.Instruction.EpilogueInstruction);
-			ctx.Other = 0;
-
-			CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"InterruptInit", set);
 		}
 
 		#endregion Internal
