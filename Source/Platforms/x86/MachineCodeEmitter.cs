@@ -462,7 +462,8 @@ namespace Mosa.Platforms.x86
 						break;
 
 					case CilElementType.I1:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToSByte(co.Value));
+						//imm = LittleEndianBitConverter.GetBytes(Convert.ToSByte(co.Value));
+						imm = new byte[1] { Convert.ToByte(co.Value) };
 						break;
 
 					case CilElementType.I2:
@@ -570,7 +571,8 @@ namespace Mosa.Platforms.x86
 						break;
 
 					case CilElementType.I1:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToSByte(co.Value));
+						//imm = LittleEndianBitConverter.GetBytes(Convert.ToSByte(co.Value));
+						imm = new byte[1] { Convert.ToByte(co.Value) };
 						break;
 
 					case CilElementType.I2:

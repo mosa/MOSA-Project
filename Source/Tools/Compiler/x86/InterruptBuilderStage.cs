@@ -81,16 +81,21 @@ namespace Mosa.Tools.Compiler.x86
 
 				ctx.AppendInstruction(CPUx86.Instruction.CliInstruction);
 				if ((i != 8) && (i < 10 || i > 14)) // For IRQ 8, 10, 11, 12, 13, 14 the cpu automatically pushed the error code
-					ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, new ConstantOperand(I1, 0x0));
+					ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I1, 0x0));
 				ctx.AppendInstruction(CPUx86.Instruction.PushadInstruction);
-				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, new ConstantOperand(I4, i));
-				// TODO: Set method parameters 
+				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I4, i));
 				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, InterruptMethod);
+				ctx.AppendInstruction(CPUx86.Instruction.NopInstruction);
+				ctx.AppendInstruction(CPUx86.Instruction.NopInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.PopadInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.StiInstruction);
+				ctx.AppendInstruction(CPUx86.Instruction.NopInstruction);
+				ctx.AppendInstruction(CPUx86.Instruction.NopInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.IRetdInstruction);
+				ctx.AppendInstruction(CPUx86.Instruction.NopInstruction);
+				ctx.AppendInstruction(CPUx86.Instruction.NopInstruction);
 
 				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"InterruptISR" + i.ToString(), set);
 			}
