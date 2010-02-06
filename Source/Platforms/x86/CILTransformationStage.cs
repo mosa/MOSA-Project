@@ -64,10 +64,11 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldloca(Context ctx)
 		{
-			//Operand result = ctx.Result;
+			Operand result = ctx.Result;
 			//ctx.SetInstruction(IR.Instruction.MoveInstruction, result, new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EBP));
 			//ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, result, new ConstantOperand(ctx.Result.Type, ctx.Label));
             ctx.SetInstruction(IR.Instruction.AddressOfInstruction, new RegisterOperand (new SigType(CilElementType.I4), GeneralPurposeRegister.EAX), ctx.Operand1);
+			ctx.AppendInstruction(IR.Instruction.MoveInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX));
 		}
 
 		/// <summary>
