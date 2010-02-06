@@ -360,6 +360,8 @@ namespace Mosa.Platforms.x86
 				WriteImmediate(dest);
 			if (src is ConstantOperand)
 				WriteImmediate(src);
+			if (src is SymbolOperand)
+				WriteDisplacement(src);
 		}
 
 		/// <summary>
@@ -684,8 +686,8 @@ namespace Mosa.Platforms.x86
 			}
 			else if (rop1 != null) {
 				modRM = (byte)(modRM.GetValueOrDefault() | (3 << 6) | rop1.Register.RegisterCode);
-				if (op2 is SymbolOperand)
-					displacement = op2;
+				//if (op2 is SymbolOperand)
+				//    displacement = op2;
 			}
 
 			return modRM;
