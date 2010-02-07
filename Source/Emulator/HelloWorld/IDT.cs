@@ -26,19 +26,36 @@ namespace Mosa.Kernel.X86
 		internal const byte IDT_Always0 = 0x04;
 		internal const byte IDT_Flags = 0x05;
 		internal const byte IDT_BaseHigh = 0x06;
-		internal const byte IDT_Size = 0x06;
+		internal const byte IDT_Size = 0x08;
 
 		public static void Setup()
 		{
 			// Setup IDT table
 			Memory.Clear(_idtTable, 6);
-			Memory.Set16(_idtTable, (8 * 256) - 1);
+			Memory.Set16(_idtTable, (IDT_Size * 256) - 1);
 			Memory.Set32(_idtTable + 2, _idtEntries);
 
+			SetTableEntries();
+
+			SetIDT();
+		}
+
+		/// <summary>
+		/// Sets the IDT.
+		/// </summary>
+		private static void SetIDT()
+		{
+			Native.Lidt(_idtTable);
+		}
+
+		/// <summary>
+		/// Sets the IDT.
+		/// </summary>
+		private static void SetTableEntries()
+		{
 			// Clear out idt table
 			Memory.Clear(_idtEntries, IDT_Size * 256);
 
-			// Setup IDT Table
 			// Note: GetIDTJumpLocation parameter must be a constant and not a variable
 			Set(0, Native.GetIDTJumpLocation(0), 0x08, 0x8E);
 			Set(1, Native.GetIDTJumpLocation(1), 0x08, 0x8E);
@@ -296,10 +313,15 @@ namespace Mosa.Kernel.X86
 			Set(253, Native.GetIDTJumpLocation(253), 0x08, 0x8E);
 			Set(254, Native.GetIDTJumpLocation(254), 0x08, 0x8E);
 			Set(255, Native.GetIDTJumpLocation(255), 0x08, 0x8E);
-
-			Native.Lidt(_idtTable);
 		}
 
+		/// <summary>
+		/// Sets the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="address">The address.</param>
+		/// <param name="select">The select.</param>
+		/// <param name="flags">The flags.</param>
 		private static void Set(uint index, uint address, byte select, byte flags)
 		{
 			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseLow, (ushort)(address & 0xFFFF));
