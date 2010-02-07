@@ -5,35 +5,16 @@
  *
  */
 
-using Mosa.Kernel.Memory.X86;
+using Mosa.Kernel.X86;
 
 namespace Mosa.HelloWorld
 {
-    public struct Foo
-    {
-        public char x;
-        public char y;
-
-        public Foo(char a, char b)
-        {
-            x = a;
-            y = b;
-        }
-
-        public void Set(char a, char b)
-        {
-            x = a;
-            y = b;
-        }
-    }
-
+ 
 	/// <summary>
 	/// 
 	/// </summary>
 	public static class Boot
 	{
-        public static Foo foo;
-
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>
@@ -43,11 +24,8 @@ namespace Mosa.HelloWorld
             Screen.Row = 11;
 			Kernel.Setup();
 			Screen.Color = 0x0E;
-            foo.Set('M', 'O');
-            Screen.Write(foo.x);
-            Screen.Write(foo.y);
-			//Screen.Write('M');
-			//Screen.Write('O');
+			Screen.Write('M');
+			Screen.Write('O');
 			Screen.Write('S');
 			Screen.Write('A');
 			Screen.Write(' ');

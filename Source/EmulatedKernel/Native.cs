@@ -215,5 +215,15 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
+		/// <summary>
+		/// Gets the IDT jump location.
+		/// </summary>
+		/// <param name="irq">The irq.</param>
+		/// <returns></returns>
+		public static uint GetIDTJumpLocation(uint irq)
+		{
+			return 0;
+		}
+
 	}
 }

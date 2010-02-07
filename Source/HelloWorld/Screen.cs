@@ -5,9 +5,7 @@
  *
  */
 
-using Mosa.Kernel.Memory.X86;
-
-namespace Mosa.HelloWorld
+namespace Mosa.Kernel.X86
 {
     public struct Cursor
     {

@@ -7,9 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.HelloWorld;
+
 using Mosa.Platforms.x86;
 
-namespace Mosa.Kernel.Memory.X86
+namespace Mosa.Kernel.X86
 {
 	/// <summary>
 	/// 
@@ -305,6 +307,24 @@ namespace Mosa.Kernel.Memory.X86
 			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Select, select);
 			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Always0, 0);
 			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Flags, flags);
+		}
+
+		/// <summary>
+		/// Interrupts the handler.
+		/// </summary>
+		/// <param name="interrupt">The interrupt.</param>
+		/// <param name="errorcode">The errorcode.</param>
+		private static void InterruptHandler(uint interrupt, byte errorcode)
+		{
+			uint c = Screen.Column;
+			uint r = Screen.Row;
+
+			Screen.Column = 30;
+			Screen.Row = 0;
+
+			Screen.Write(interrupt);
+			Screen.Write('-');
+			Screen.Write(errorcode);
 		}
 
 	}

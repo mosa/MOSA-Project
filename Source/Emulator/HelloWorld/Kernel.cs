@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Kernel.Memory.X86;
+using Mosa.Kernel.X86;
 
 namespace Mosa.HelloWorld
 {
@@ -45,7 +45,7 @@ namespace Mosa.HelloWorld
 			PageTable.Setup();
 			Screen.SetCursor(24, 5);
 			Screen.Write('6');
-			//IDT.Setup();
+			IDT.Setup();
 			Screen.SetCursor(24, 6);
 			Screen.Write('7');
 

@@ -10,15 +10,16 @@
 using System;
 using System.Collections.Generic;
 
+using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Vm;
-using Mosa.Platforms.x86;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 using Mosa.Runtime.Linker;
 
+using Mosa.Platforms.x86;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CPUx86 = Mosa.Platforms.x86.CPUx86;
 
@@ -64,13 +65,29 @@ namespace Mosa.Tools.Compiler.x86
 		#region Internal
 
 		/// <summary>
+		/// Finds the method.
+		/// </summary>
+		/// <param name="rt">The runtime type.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		private RuntimeMethod FindMethod(RuntimeType rt, string name)
+		{
+			foreach (RuntimeMethod method in rt.Methods)
+				if (name == method.Name)
+					return method;
+
+			throw new MissingMethodException(rt.Name, name);
+		}
+
+		/// <summary>
 		/// Creates the ISR methods.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		private void CreateISRMethods(AssemblyCompiler compiler)
 		{
-			// Create Interrupt Service Routines (ISR)
-			RuntimeMethod InterruptMethod = compiler.Assembly.EntryPoint; // TODO: replace with another entry point
+			// Get RuntimeMethod for the Mosa.Kernel.X86.IDT.InterruptHandler
+			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Kernel.X86.IDT");
+			RuntimeMethod InterruptMethod = FindMethod(rt, "InterruptHandler");
 
 			SigType I1 = new SigType(CilElementType.I1);
 			SigType I2 = new SigType(CilElementType.I4);
@@ -88,6 +105,7 @@ namespace Mosa.Tools.Compiler.x86
 					ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I1, 0x0));
 				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I2, i));
 				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, InterruptMethod);
+				// TODO: Replace next two instructions with add esp, 5 ;Stack clearing
 				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx2);
 				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx1);
 				ctx.AppendInstruction(CPUx86.Instruction.PopadInstruction);

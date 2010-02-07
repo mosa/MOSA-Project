@@ -9,7 +9,7 @@
 
 using Mosa.Platforms.x86;
 
-namespace Mosa.Kernel.Memory.X86
+namespace Mosa.Kernel.X86
 {
 	/// <summary>
 	/// 

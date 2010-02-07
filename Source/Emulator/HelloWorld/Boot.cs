@@ -5,10 +5,11 @@
  *
  */
 
-using Mosa.Kernel.Memory.X86;
+using Mosa.Kernel.X86;
 
 namespace Mosa.HelloWorld
 {
+ 
 	/// <summary>
 	/// 
 	/// </summary>
@@ -19,8 +20,9 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		public static void Main()
 		{
+            Screen.Column = 10;
+            Screen.Row = 11;
 			Kernel.Setup();
-
 			Screen.Color = 0x0E;
 			Screen.Write('M');
 			Screen.Write('O');
@@ -380,6 +382,21 @@ namespace Mosa.HelloWorld
 
 			Screen.Write((ulong)((info & 0x3000) >> 12), 16, 2);
 			Screen.NextLine();
+            Screen.Color = 0x0A;
+            Screen.Write('C');
+            Screen.Write('o');
+            Screen.Write('r');
+            Screen.Write('e');
+            Screen.Write('s');
+            Screen.Write(':');
+            Screen.Write(' ');
+            Screen.Write(' ');
+            Screen.Write(' ');
+            Screen.Write(' ');
+            Screen.Color = 0x0F;
+            
+            info = Platforms.x86.Native.CpuIdEax(4);
+            Screen.Write((ulong)((info >> 26) + 1), 16, 2);
 			#endregion
 
 			//Multiboot.Dump(4,53);
@@ -448,10 +465,10 @@ namespace Mosa.HelloWorld
 			Screen.Write(':');
 			Screen.Write(' ');
 
-			byte bcd = 16;
+			byte bcd = 10;
 
 			if (CMOS.BCD)
-				bcd = 10;
+				bcd = 16;
 
 			Screen.Color = 0x0F;
 			Screen.Write(CMOS.Hour, bcd, 2);
