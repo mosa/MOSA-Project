@@ -36,16 +36,16 @@ namespace Mosa.HelloWorld
 			else
 				Screen.Write('*');	// Panic! 
 
-			PageFrameAllocator.Setup();
+			GDT.Setup();
 			Screen.SetCursor(24, 3);
 			Screen.Write('4');
-			GDT.Setup();
+			IDT.Setup();
 			Screen.SetCursor(24, 4);
 			Screen.Write('5');
-			PageTable.Setup();
+			PageFrameAllocator.Setup();
 			Screen.SetCursor(24, 5);
 			Screen.Write('6');
-			IDT.Setup();
+			PageTable.Setup();
 			Screen.SetCursor(24, 6);
 			Screen.Write('7');
 
