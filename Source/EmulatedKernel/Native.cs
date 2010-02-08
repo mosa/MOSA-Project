@@ -105,7 +105,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="address">The address.</param>
 		public static void Invlpg(uint address)
 		{
-			return; // Nothing to do, emulator doesn't emulator or cache TLB entries
+			return; // Nothing to do, emulator doesn't emulate or cache TLB entries
 		}
 
 		/// <summary>

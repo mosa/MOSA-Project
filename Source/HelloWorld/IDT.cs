@@ -18,8 +18,8 @@ namespace Mosa.Kernel.X86
 	/// </summary>
 	public static class IDT
 	{
-		private static uint _idtTable = 0x1401000;
-		private static uint _idtEntries = 0x1401000 + 6;
+		private static uint _idtTable = 0x1411000;
+		private static uint _idtEntries = _idtTable + 6;
 
 		internal const byte IDT_BaseLow = 0x00;
 		internal const byte IDT_Select = 0x02;
@@ -37,15 +37,23 @@ namespace Mosa.Kernel.X86
 
 			SetTableEntries();
 
-			SetIDT();
+			Native.Lidt(_idtTable);
 		}
 
 		/// <summary>
-		/// Sets the IDT.
+		/// Sets the specified index.
 		/// </summary>
-		private static void SetIDT()
+		/// <param name="index">The index.</param>
+		/// <param name="address">The address.</param>
+		/// <param name="select">The select.</param>
+		/// <param name="flags">The flags.</param>
+		private static void Set(uint index, uint address, ushort select, byte flags)
 		{
-			Native.Lidt(_idtTable);
+			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseLow, (ushort)(address & 0xFFFF));
+			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseHigh, (ushort)((address >> 16) & 0xFFFF));
+			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_Select, select);
+			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Always0, 0);
+			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Flags, flags);
 		}
 
 		/// <summary>
@@ -313,22 +321,6 @@ namespace Mosa.Kernel.X86
 			Set(253, Native.GetIDTJumpLocation(253), 0x08, 0x8E);
 			Set(254, Native.GetIDTJumpLocation(254), 0x08, 0x8E);
 			Set(255, Native.GetIDTJumpLocation(255), 0x08, 0x8E);
-		}
-
-		/// <summary>
-		/// Sets the specified index.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <param name="address">The address.</param>
-		/// <param name="select">The select.</param>
-		/// <param name="flags">The flags.</param>
-		private static void Set(uint index, uint address, byte select, byte flags)
-		{
-			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseLow, (ushort)(address & 0xFFFF));
-			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseHigh, (ushort)((address >> 16) & 0xFF));
-			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Select, select);
-			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Always0, 0);
-			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Flags, flags);
 		}
 
 		/// <summary>
