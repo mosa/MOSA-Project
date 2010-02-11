@@ -39,13 +39,13 @@ namespace Mosa.HelloWorld
 			GDT.Setup();
 			Screen.SetCursor(24, 3);
 			Screen.Write('4');
-			IDT.Setup();
+			PageFrameAllocator.Setup();
 			Screen.SetCursor(24, 4);
 			Screen.Write('5');
-			PageFrameAllocator.Setup();
+			PageTable.Setup();
 			Screen.SetCursor(24, 5);
 			Screen.Write('6');
-			PageTable.Setup();
+			IDT.Setup();
 			Screen.SetCursor(24, 6);
 			Screen.Write('7');
 
