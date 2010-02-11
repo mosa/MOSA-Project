@@ -48,7 +48,7 @@ namespace Mosa.Kernel.X86
 			Memory.Set8(_gdtEntries + (index * GDT_Size) + GDT_BaseMiddle, (byte)((address >> 16) & 0xFF));
 			Memory.Set8(_gdtEntries + (index * GDT_Size) + GDT_BaseHigh, (byte)((address >> 24) & 0xFF));
 			Memory.Set16(_gdtEntries + (index * GDT_Size) + GDT_LimitLow, (ushort)(limit & 0xFFFF));
-			Memory.Set8(_gdtEntries + (index * GDT_Size) + GDT_Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0x0F)));
+			Memory.Set8(_gdtEntries + (index * GDT_Size) + GDT_Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
 			Memory.Set8(_gdtEntries + (index * GDT_Size) + GDT_Access, access);
 		}
 	}

@@ -334,13 +334,20 @@ namespace Mosa.Kernel.X86
 		{
 			uint c = Screen.Column;
 			uint r = Screen.Row;
+			byte col = Screen.Color;
 
 			Screen.Column = 30;
 			Screen.Row = 0;
+			Screen.Color = 3;
 
 			Screen.Write(interrupt);
 			Screen.Write('-');
 			Screen.Write(errorcode);
+
+			Screen.Column = c;
+			Screen.Row = r;
+			Screen.Color = col;
+
 		}
 
 	}
