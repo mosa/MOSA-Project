@@ -29,12 +29,15 @@ namespace Mosa.Kernel.X86
 
 		public static void Setup()
 		{
-			Memory.Set16(_gdtTable, 3);
+			Memory.Clear(_gdtTable, 6);
+			Memory.Set16(_gdtTable, (GDT_Size * 5) - 1);
 			Memory.Set32(_gdtTable + 2, _gdtEntries);
 
 			Set(0, 0, 0, 0, 0);                // Null segment
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
 			Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
+			Set(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User mode code segment
+			Set(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
 
 			Native.Lgdt(_gdtTable);
 		}
@@ -42,9 +45,9 @@ namespace Mosa.Kernel.X86
 		private static void Set(uint index, uint address, uint limit, byte access, byte granularity)
 		{
 			Memory.Set16(_gdtEntries + (index * GDT_Size) + GDT_BaseLow, (ushort)(address & 0xFFFF));
-			Memory.Set16(_gdtEntries + (index * GDT_Size) + GDT_BaseMiddle, (ushort)((address >> 16) & 0xFF));
+			Memory.Set8(_gdtEntries + (index * GDT_Size) + GDT_BaseMiddle, (byte)((address >> 16) & 0xFF));
 			Memory.Set8(_gdtEntries + (index * GDT_Size) + GDT_BaseHigh, (byte)((address >> 24) & 0xFF));
-			Memory.Set8(_gdtEntries + (index * GDT_Size) + GDT_LimitLow, (byte)(limit & 0xFFFF));
+			Memory.Set16(_gdtEntries + (index * GDT_Size) + GDT_LimitLow, (ushort)(limit & 0xFFFF));
 			Memory.Set8(_gdtEntries + (index * GDT_Size) + GDT_Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0x0F)));
 			Memory.Set8(_gdtEntries + (index * GDT_Size) + GDT_Access, access);
 		}

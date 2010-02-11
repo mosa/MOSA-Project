@@ -38,6 +38,8 @@ namespace Mosa.Kernel.X86
 			SetTableEntries();
 
 			Native.Lidt(_idtTable);
+
+			Native.Sti();
 		}
 
 		/// <summary>
@@ -53,7 +55,7 @@ namespace Mosa.Kernel.X86
 			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseHigh, (ushort)((address >> 16) & 0xFFFF));
 			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_Select, select);
 			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Always0, 0);
-			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Flags, flags);
+			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Flags, (byte)flags); // | 0x60));
 		}
 
 		/// <summary>
