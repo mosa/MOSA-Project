@@ -28,32 +28,32 @@ namespace Mosa.Platforms.x86
 			/// <summary>
 			/// The x86 DS register instruction encoding.
 			/// </summary>
-			DS = 0,
+			DS = 3,
 
 			/// <summary>
 			/// The x86 ES register instruction encoding.
 			/// </summary>
-			ES = 1,
+			ES = 0,
 
 			/// <summary>
 			/// The x86 FS register instruction encoding.
 			/// </summary>
-			FS = 2,
+			FS = 4,
 
 			/// <summary>
 			/// The x86 GS register instruction encoding.
 			/// </summary>
-			GS = 3,
+			GS = 5,
 
 			/// <summary>
 			/// The x86 SS register instruction encoding.
 			/// </summary>
-			SS = 4,
+			SS = 2,
 
 			/// <summary>
 			/// The x86 CS register instruction encoding.
 			/// </summary>
-			CS = 5,
+			CS = 1,
 		}
 
 		#endregion // Types

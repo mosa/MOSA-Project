@@ -35,6 +35,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
 		private static readonly OpCode R_CR = new OpCode(new byte[] { 0x0F, 0x20 });
 		private static readonly OpCode CR_R = new OpCode(new byte[] { 0x0F, 0x22 });
+		private static readonly OpCode SR_R = new OpCode(new byte[] { 0x8E });
 
 		#endregion // Data Members
 
@@ -52,7 +53,7 @@ namespace Mosa.Platforms.x86.CPUx86
 			if (destination is RegisterOperand)
 				if ((destination as RegisterOperand).Register is ControlRegister) return CR_R;
 				else if ((destination as RegisterOperand).Register is SegmentRegister)
-					throw new ArgumentException(@"TODO: No opcode for move to segment register");
+					return SR_R;
 
 			if (source is RegisterOperand)
 				if ((source as RegisterOperand).Register is ControlRegister) return R_CR;
