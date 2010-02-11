@@ -203,6 +203,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
+		public static readonly FarJmpInstruction FarJmpInstruction = new FarJmpInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly MovsxInstruction MovsxInstruction = new MovsxInstruction();
 		/// <summary>
 		/// 

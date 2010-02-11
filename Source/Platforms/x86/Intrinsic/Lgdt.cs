@@ -43,6 +43,9 @@ namespace Mosa.Platforms.x86.Intrinsic
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, fs, ax);
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, gs, ax);
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ss, ax);
+			context.AppendInstruction(CPUx86.Instruction.FarJmpInstruction);
+			context.SetBranch(context.Label);
+			
 		}
 
 		#endregion // Methods
