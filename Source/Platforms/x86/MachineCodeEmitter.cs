@@ -541,11 +541,18 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// 
 		/// </summary>
-		public void EmitJumpToNextInstruction()
+		public void EmitJumpToNextInstruction(int label)
 		{
-			int address = (int)_codeStream.Position + 8;
-			byte[] bytes = LittleEndianBitConverter.GetBytes(address);
 			_codeStream.Write(new byte[] { 0xEA }, 0, 1);
+
+			// The relative offset of the label
+			//int relOffset = 0;
+
+			// Forward jump, we can't resolve yet - store a patch
+			_patches.Add(new Patch(label, _codeStream.Position));
+
+			// Emit the relative jump offset (zero if we don't know it yet!)
+			byte[] bytes = LittleEndianBitConverter.GetBytes((int)(_linker.GetSection(SectionKind.Text).VirtualAddress.ToInt32() + _linker.GetSection(SectionKind.Text).Length + 6));
 			_codeStream.Write(bytes, 0, bytes.Length);
 			_codeStream.Write(new byte[] { 0x08, 0x00 }, 0, 2);
 		}

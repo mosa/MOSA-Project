@@ -35,7 +35,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-			emitter.EmitJumpToNextInstruction();
+			emitter.EmitJumpToNextInstruction(ctx.Branch.Targets[0]);
 		}
 
 		/// <summary>
