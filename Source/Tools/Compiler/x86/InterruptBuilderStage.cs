@@ -90,25 +90,22 @@ namespace Mosa.Tools.Compiler.x86
 			RuntimeMethod InterruptMethod = FindMethod(rt, "InterruptHandler");
 
 			SigType I1 = new SigType(CilElementType.I1);
-			SigType I2 = new SigType(CilElementType.I4);
+			SigType I4 = new SigType(CilElementType.I4);
 
-			RegisterOperand ecx1 = new RegisterOperand(I1, GeneralPurposeRegister.ECX);
-			RegisterOperand ecx2 = new RegisterOperand(I2, GeneralPurposeRegister.ECX);
+			RegisterOperand esp = new RegisterOperand(I4, GeneralPurposeRegister.ESP);
 
-			for (int i = 0; i <= 256; i++) {
+			for (int i = 0; i <= 255; i++) {
 				InstructionSet set = new InstructionSet(100);
 				Context ctx = new Context(set, -1);
 
 				ctx.AppendInstruction(CPUx86.Instruction.CliInstruction);
-				ctx.AppendInstruction(CPUx86.Instruction.PushadInstruction);
-				if ((i != 8) && (i < 10 || i > 14)) // For IRQ 8, 10, 11, 12, 13, 14 the cpu automatically pushed the error code
+				if (i <= 7 || i >= 16 | i == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu automatically pushed the error code
 					ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I1, 0x0));
-				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I2, i));
+				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I1, (byte)i));
+				ctx.AppendInstruction(CPUx86.Instruction.PushadInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, InterruptMethod);
-				// TODO: Replace next two instructions with add esp, 5 ;Stack clearing
-				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx2);
-				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx1);
 				ctx.AppendInstruction(CPUx86.Instruction.PopadInstruction);
+				ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I4, 2));
 				ctx.AppendInstruction(CPUx86.Instruction.StiInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.IRetdInstruction);
 

@@ -328,9 +328,17 @@ namespace Mosa.Kernel.X86
 		/// <summary>
 		/// Interrupts the handler.
 		/// </summary>
+		/// <param name="edi">The edi.</param>
+		/// <param name="esi">The esi.</param>
+		/// <param name="ebp">The ebp.</param>
+		/// <param name="esp">The esp.</param>
+		/// <param name="ebx">The ebx.</param>
+		/// <param name="edx">The edx.</param>
+		/// <param name="ecx">The ecx.</param>
+		/// <param name="eax">The eax.</param>
 		/// <param name="interrupt">The interrupt.</param>
 		/// <param name="errorcode">The errorcode.</param>
-		private static void InterruptHandler(uint interrupt, byte errorcode)
+		private static void InterruptHandler(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, byte interrupt, byte errorcode)
 		{
 			uint c = Screen.Column;
 			uint r = Screen.Row;
@@ -340,14 +348,13 @@ namespace Mosa.Kernel.X86
 			Screen.Row = 0;
 			Screen.Color = 3;
 
-			Screen.Write(interrupt);
+			Screen.Write(interrupt, 16, 2);
 			Screen.Write('-');
-			Screen.Write(errorcode);
+			Screen.Write(errorcode, 16, 2);
 
 			Screen.Column = c;
 			Screen.Row = r;
 			Screen.Color = col;
-
 		}
 
 	}
