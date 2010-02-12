@@ -30,14 +30,14 @@ namespace Mosa.Kernel.X86
 		public static void Setup()
 		{
 			Memory.Clear(_gdtTable, 6);
-			Memory.Set16(_gdtTable, (GDT_Size * 3) - 1);
+			Memory.Set16(_gdtTable, (GDT_Size * 5) - 1);
 			Memory.Set32(_gdtTable + 2, _gdtEntries);
 
 			Set(0, 0, 0, 0, 0);                // Null segment
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
 			Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
-			//Set(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User mode code segment
-			//Set(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
+			Set(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User mode code segment
+			Set(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
 
 			Native.Lgdt(_gdtTable);
 		}
