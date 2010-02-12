@@ -325,6 +325,9 @@ namespace Mosa.Kernel.X86
 			Set(255, Native.GetIDTJumpLocation(255), 0x08, 0x8E);
 		}
 
+
+		private static uint _counter = 0;
+
 		/// <summary>
 		/// Interrupts the handler.
 		/// </summary>
@@ -344,13 +347,18 @@ namespace Mosa.Kernel.X86
 			uint r = Screen.Row;
 			byte col = Screen.Color;
 
+			_counter++;
+
 			Screen.Column = 30;
 			Screen.Row = 0;
 			Screen.Color = 3;
 
+			Screen.Write(_counter, 16, 2);
+			Screen.Write(':');
 			Screen.Write(interrupt, 16, 2);
 			Screen.Write('-');
 			Screen.Write(errorcode, 16, 2);
+
 
 			Screen.Column = c;
 			Screen.Row = r;
