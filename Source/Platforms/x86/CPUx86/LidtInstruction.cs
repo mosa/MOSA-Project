@@ -26,26 +26,13 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region Methods
 
 		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-		{
-			return opcode;
-		}
-
-		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-			OpCode code = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
-			emitter.Emit(code, ctx.Operand1, null);
+			emitter.Emit(opcode, ctx.Operand1, null);
 		}
 
 		/// <summary>
