@@ -31,23 +31,26 @@ namespace Mosa.HelloWorld
 			Screen.Write('2');
 			Screen.SetCursor(24, 2);
 
-			if (Multiboot.IsMultibootEnabled)
-				Screen.Write('3');
+			if (Multiboot.IsMultibootEnabled) 
+				Screen.Write('3');			
 			else
 				Screen.Write('*');	// Panic! 
 
-			GDT.Setup();
+			PIC.Setup();
 			Screen.SetCursor(24, 3);
 			Screen.Write('4');
-			PageFrameAllocator.Setup();
+			GDT.Setup();
 			Screen.SetCursor(24, 4);
 			Screen.Write('5');
-			PageTable.Setup();
+			IDT.Setup();
 			Screen.SetCursor(24, 5);
 			Screen.Write('6');
-			IDT.Setup();
+			PageFrameAllocator.Setup();
 			Screen.SetCursor(24, 6);
 			Screen.Write('7');
+			//PageTable.Setup();
+			Screen.SetCursor(24, 6);
+			Screen.Write('8');
 
 			Screen.GotoTop();
 		}

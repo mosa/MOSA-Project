@@ -101,6 +101,7 @@
     <Compile Include="HelloWorld\GDT.cs" />
     <Compile Include="HelloWorld\IDT.cs" />
     <Compile Include="HelloWorld\Kernel.cs" />
+    <Compile Include="HelloWorld\PIC.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="HelloWorld\Multiboot.cs" />
     <Compile Include="HelloWorld\PageFrameAllocator.cs" />

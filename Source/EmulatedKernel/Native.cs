@@ -44,6 +44,16 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
+		/// Outs the specified address.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <param name="value">The value.</param>
+		public static void Out8(byte address, byte value)
+		{
+			EmulatedKernel.IOPortDispatch.Write8(address, value);
+		}
+
+		/// <summary>
 		/// Ins the specified address.
 		/// </summary>
 		/// <param name="address">The address.</param>

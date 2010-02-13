@@ -55,7 +55,7 @@ namespace Mosa.Kernel.X86
 			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseHigh, (ushort)((address >> 16) & 0xFFFF));
 			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_Select, select);
 			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Always0, 0);
-			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Flags, (byte)(flags | 0x60));
+			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Flags, flags);
 		}
 
 		/// <summary>
@@ -325,29 +325,43 @@ namespace Mosa.Kernel.X86
 			Set(255, Native.GetIDTJumpLocation(255), 0x08, 0x8E);
 		}
 
+		private static uint _counter = 0;
+
 		/// <summary>
 		/// Interrupts the handler.
 		/// </summary>
+		/// <param name="edi">The edi.</param>
+		/// <param name="esi">The esi.</param>
+		/// <param name="ebp">The ebp.</param>
+		/// <param name="esp">The esp.</param>
+		/// <param name="ebx">The ebx.</param>
+		/// <param name="edx">The edx.</param>
+		/// <param name="ecx">The ecx.</param>
+		/// <param name="eax">The eax.</param>
 		/// <param name="interrupt">The interrupt.</param>
 		/// <param name="errorcode">The errorcode.</param>
-		private static void InterruptHandler(uint interrupt, byte errorcode)
+		private static void InterruptHandler(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, byte interrupt, byte errorcode)
 		{
 			uint c = Screen.Column;
 			uint r = Screen.Row;
 			byte col = Screen.Color;
 
-			Screen.Column = 30;
+			_counter++;
+
+			Screen.Column = 32;
 			Screen.Row = 0;
 			Screen.Color = 3;
 
-			Screen.Write(interrupt);
+			Screen.Write(_counter, 16, 8);
+			Screen.Write(':');
+			Screen.Write(interrupt, 16, 2);
 			Screen.Write('-');
-			Screen.Write(errorcode);
+			Screen.Write(errorcode, 16, 2);
+
 
 			Screen.Column = c;
 			Screen.Row = r;
 			Screen.Color = col;
-
 		}
 
 	}
