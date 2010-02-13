@@ -39,7 +39,6 @@ namespace Mosa.Kernel.X86
 
 			Native.Lidt(_idtTable);
 
-			IRQRemap();
 			Native.Sti();
 		}
 
@@ -57,23 +56,6 @@ namespace Mosa.Kernel.X86
 			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_Select, select);
 			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Always0, 0);
 			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Flags, flags);
-		}
-
-		/// <summary>
-		/// IRQs the remap.
-		/// </summary>
-		private static void IRQRemap()
-		{
-			Native.Out8(0x20, 0x11);
-			Native.Out8(0xA0, 0x11);
-			Native.Out8(0x21, 0x20);
-			Native.Out8(0xA1, 0x28);
-			Native.Out8(0x21, 0x04);
-			Native.Out8(0xA1, 0x02);
-			Native.Out8(0x21, 0x01);
-			Native.Out8(0xA1, 0x01);
-			Native.Out8(0x21, 0x0);
-			Native.Out8(0xA1, 0x0);
 		}
 
 		/// <summary>
@@ -343,7 +325,6 @@ namespace Mosa.Kernel.X86
 			Set(255, Native.GetIDTJumpLocation(255), 0x08, 0x8E);
 		}
 
-
 		private static uint _counter = 0;
 
 		/// <summary>
@@ -367,11 +348,11 @@ namespace Mosa.Kernel.X86
 
 			_counter++;
 
-			Screen.Column = 30;
+			Screen.Column = 32;
 			Screen.Row = 0;
 			Screen.Color = 3;
 
-			Screen.Write(_counter, 16, 2);
+			Screen.Write(_counter, 16, 8);
 			Screen.Write(':');
 			Screen.Write(interrupt, 16, 2);
 			Screen.Write('-');
