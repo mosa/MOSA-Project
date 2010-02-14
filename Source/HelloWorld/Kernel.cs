@@ -48,7 +48,7 @@ namespace Mosa.HelloWorld
 			PageFrameAllocator.Setup();
 			Screen.SetCursor(24, 6);
 			Screen.Write('7');
-			//PageTable.Setup();
+			PageTable.Setup();
 			Screen.SetCursor(24, 6);
 			Screen.Write('8');
 
