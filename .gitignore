@@ -14,6 +14,10 @@
 Thumbs.db
 *.FileListAbsolute.txt
 *.Cache
-/Tools/jpc
 /tmp
 build.force
+
+/Tools/jpc/JPCApplication.jar
+/Tools/jpc/JPCDebugger.jar
+/Tools/jpc/breakpoints.jpc
+/Tools/jpc/classes.jar
