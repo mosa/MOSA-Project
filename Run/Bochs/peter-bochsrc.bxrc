@@ -11,7 +11,7 @@ vgaromimage: file=..\..\Tools\Bochs\VGABIOS-lgpl-latest
 
 # hard disk
 ata0: enabled=1, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
-ata0-master: type=disk, path="..\build\bootimage.img"
+ata0-master: type=disk, path="..\..\Run\build\bootimage.img"
 
 # choose the boot disk.
 boot: c
@@ -28,4 +28,3 @@ log: bochsout.txt
 
 # disable the mouse, since DLX is text only
 mouse: enabled=0
-magic_break: enabled=1

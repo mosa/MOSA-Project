@@ -9,10 +9,6 @@ megs: 64
 romimage: file=..\..\Tools\Bochs\BIOS-bochs-latest
 vgaromimage: file=..\..\Tools\Bochs\VGABIOS-lgpl-latest
 
-# what disk images will be used 
-floppya: 1_44=floppya.img, status=inserted
-floppyb: 1_44=floppyb.img, status=inserted
-
 # hard disk
 ata0: enabled=1, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
 ata0-master: type=disk, path="..\build\bootimage.img"
