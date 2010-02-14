@@ -15,7 +15,7 @@ floppyb: 1_44=floppyb.img, status=inserted
 
 # hard disk
 ata0: enabled=1, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
-ata0-master: type=disk, path="..\build\bootimage.img" 
+ata0-master: type=disk, path="..\build\bootimage.img"
 
 # choose the boot disk.
 boot: c
@@ -31,4 +31,4 @@ boot: c
 log: bochsout.txt
 
 # disable the mouse, since DLX is text only
-mouse: enabled=1
+mouse: enabled=0
