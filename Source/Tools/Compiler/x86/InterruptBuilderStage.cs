@@ -105,7 +105,7 @@ namespace Mosa.Tools.Compiler.x86
 				ctx.AppendInstruction(CPUx86.Instruction.PushadInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, InterruptMethod);
 				ctx.AppendInstruction(CPUx86.Instruction.PopadInstruction);
-				ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I4, 2));
+				ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I4, 0x08));
 				ctx.AppendInstruction(CPUx86.Instruction.StiInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.IRetdInstruction);
 
