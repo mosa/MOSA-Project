@@ -18,19 +18,39 @@ namespace Mosa.Kernel.X86
 	/// </summary>
 	public static class PIC
 	{
+		public const byte ICW1_ICW4 = 0x01;
+		public const byte ICW1_SingleCascadeMode = 0x02;
+		public const byte ICW1_Interval4 = 0x04;
+		public const byte ICW1_LevelTriggeredEdgeMode = 0x08;
+		public const byte ICW1_Initialization = 0x10;
+		public const byte ICW4_8086 = 0x01;
+		public const byte ICW4_AutoEndOfInterrupt = 0x02;
+		public const byte ICW4_BufferedSlaveMode = 0x08;
+		public const byte ICW4_BufferedMasterMode = 0x0C;
+		public const byte ICW4_SpecialFullyNested = 0x10;
 
-		public static void Setup()
+		public const byte PIC1_Command = 0x20;
+		public const byte PIC2_Command = 0xA0;
+		public const byte PIC1_Data = 0x21;
+		public const byte PIC2_Data = 0xA1;
+
+		public static void Setup(byte masterOffset, byte slaveOffset)
 		{
-			Native.Out8(0x20, 0x11);
-			Native.Out8(0xA0, 0x11);
-			Native.Out8(0x21, 0x20);
-			Native.Out8(0xA1, 0x28);
-			Native.Out8(0x21, 0x04);
-			Native.Out8(0xA1, 0x02);
-			Native.Out8(0x21, 0x01);
-			Native.Out8(0xA1, 0x01);
-			Native.Out8(0x21, 0x0);
-			Native.Out8(0xA1, 0x0);
+			byte masterMask = Native.In8(PIC1_Data);
+			byte slaveMask = Native.In8(PIC2_Data);
+			byte keyboard = (byte)(Native.In8(PIC1_Data) & 0xFD);
+			Native.Out8(PIC1_Command, ICW1_Initialization + ICW1_ICW4);
+			Native.Out8(PIC2_Command, ICW1_Initialization + ICW1_ICW4);
+			Native.Out8(PIC1_Data, masterOffset);
+			Native.Out8(PIC2_Data, slaveOffset);
+			Native.Out8(PIC1_Data, ICW1_Interval4);
+			Native.Out8(PIC2_Data, ICW4_AutoEndOfInterrupt);
+			Native.Out8(PIC1_Data, ICW4_AutoEndOfInterrupt);
+			Native.Out8(PIC1_Data, ICW4_8086);
+			Native.Out8(PIC2_Data, ICW4_8086);
+			Native.Out8(PIC1_Data, keyboard);
+			Native.Out8(PIC1_Data, masterMask);
+			Native.Out8(PIC2_Data, slaveMask);
 		}
 
 	}
