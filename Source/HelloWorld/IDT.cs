@@ -361,6 +361,11 @@ namespace Mosa.Kernel.X86
 				Screen.Write('-');
 				Screen.Write(errorcode, 16, 2);
 
+				if (interrupt == 0x21) {
+					byte scancode = Keyboard.ReadScanCode();
+					Screen.Write('-');
+					Screen.Write(scancode, 16, 2);
+				}
 			}
 
 			Screen.Column = c;
