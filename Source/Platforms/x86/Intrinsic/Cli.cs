@@ -11,13 +11,12 @@
 using System;
 using Mosa.Runtime.CompilerFramework;
 
-
 namespace Mosa.Platforms.x86.Intrinsic
 {
     /// <summary>
     /// Representations the x86 cli instruction.
     /// </summary>
-	public sealed class Cli :  IIntrinsicMethod
+	public sealed class Cli : IIntrinsicMethod
     {
 
 		#region Methods
@@ -32,5 +31,6 @@ namespace Mosa.Platforms.x86.Intrinsic
 		}
 
         #endregion // Methods
+
     }
 }

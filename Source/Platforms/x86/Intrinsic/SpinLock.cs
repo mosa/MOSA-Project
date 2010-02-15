@@ -10,20 +10,21 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Diagnostics;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Operands;
+using CIL = Mosa.Runtime.CompilerFramework.CIL;
+using IR = Mosa.Runtime.CompilerFramework.IR;
+using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
-    /// <summary>
-    /// Representations the x86 cli instruction.
-    /// </summary>
-	public sealed class Pushad : IIntrinsicMethod
-    {
-
-        #region Methods
+	/// <summary>
+	/// Representations a spin lock
+	/// </summary>
+	public sealed class SpinLock : IIntrinsicMethod
+	{
+		#region Methods
 
 		/// <summary>
 		/// Replaces the instrinsic call site
@@ -31,9 +32,10 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// <param name="context">The context.</param>
 		public void ReplaceIntrinsicCall(Context context)
 		{
-			context.SetInstruction(CPUx86.Instruction.PushadInstruction);
+			// TODO
+			context.Remove();
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

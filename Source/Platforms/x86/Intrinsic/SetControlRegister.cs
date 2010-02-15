@@ -8,6 +8,7 @@
  */
 
 using System;
+
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
@@ -21,6 +22,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 	/// </summary>
 	public sealed class SetControlRegister : IIntrinsicMethod
 	{
+
 		#region Methods
 
 		/// <summary>
@@ -51,5 +53,6 @@ namespace Mosa.Platforms.x86.Intrinsic
 		}
 
 		#endregion // Methods
+
 	}
 }

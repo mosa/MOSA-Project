@@ -4,27 +4,20 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
 using Mosa.Runtime.CompilerFramework;
 
-
 namespace Mosa.Platforms.x86.Intrinsic
 {
-    /// <summary>
-    /// Representations the x86 popad instruction.
-    /// </summary>
-	public sealed class Popad : IIntrinsicMethod
-    {
-
-        #region Methods
+	/// <summary>
+	/// Representations the x86 hlt instruction.
+	/// </summary>
+	public class Hlt : IIntrinsicMethod
+	{
+	
+		#region Methods
 
 		/// <summary>
 		/// Replaces the instrinsic call site
@@ -32,9 +25,10 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// <param name="context">The context.</param>
 		public void ReplaceIntrinsicCall(Context context)
 		{
-			context.SetInstruction(CPUx86.Instruction.PopadInstruction);
+			context.SetInstruction(CPUx86.Instruction.HltInstruction);
 		}
 
 		#endregion // Methods
+
 	}
 }

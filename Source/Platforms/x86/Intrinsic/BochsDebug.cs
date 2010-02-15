@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
@@ -11,6 +20,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 	/// </summary>
 	public sealed class BochsDebug : IIntrinsicMethod
 	{
+
 		#region Methods
 
 		/// <summary>
@@ -24,5 +34,6 @@ namespace Mosa.Platforms.x86.Intrinsic
 		}
 
 		#endregion // Methods
+
 	}
 }

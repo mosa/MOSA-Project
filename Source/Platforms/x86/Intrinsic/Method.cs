@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
@@ -20,6 +19,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 	/// </summary>
 	public static class Method
 	{
+
 		#region Static Data
 
 		private static Dictionary<Type, IIntrinsicMethod> _map = null;
@@ -50,28 +50,26 @@ namespace Mosa.Platforms.x86.Intrinsic
 			map.Add(typeof(BochsDebug), new BochsDebug());
 			map.Add(typeof(Out), new Out());
 			map.Add(typeof(In), new In());
+			map.Add(typeof(Invlpg), new Invlpg());
+			map.Add(typeof(Lgdt), new Lgdt());
+			map.Add(typeof(Lidt), new Lidt());
+			map.Add(typeof(Nop), new Nop());
+			map.Add(typeof(Cli), new Cli());
+			map.Add(typeof(Sti), new Sti());
+			map.Add(typeof(SetControlRegister), new SetControlRegister());
+			map.Add(typeof(GetControlRegister), new GetControlRegister());
+			map.Add(typeof(GetIDTJumpLocation), new GetIDTJumpLocation());
 			map.Add(typeof(CpuIdEax), new CpuIdEax());
 			map.Add(typeof(CpuIdEbx), new CpuIdEbx());
 			map.Add(typeof(CpuIdEcx), new CpuIdEcx());
 			map.Add(typeof(CpuIdEdx), new CpuIdEdx());
 			map.Add(typeof(CpuId), new CpuId());
-			map.Add(typeof(Invlpg), new Invlpg());
-			map.Add(typeof(Lgdt), new Lgdt());
-			map.Add(typeof(Lidt), new Lidt());
-			map.Add(typeof(Nop), new Nop());
-			map.Add(typeof(Pushad), new Pushad());
-			map.Add(typeof(Popad), new Popad());
+			map.Add(typeof(SpinLock), new SpinLock());
+			map.Add(typeof(SpinUnlock), new SpinUnlock());
+			map.Add(typeof(Hlt), new Hlt());
+
 			map.Add(typeof(Test), new Test());
-			map.Add(typeof(Cli), new Cli());
-			map.Add(typeof(Sti), new Sti());
-			map.Add(typeof(SetStackPointer), new SetStackPointer());
-			map.Add(typeof(SetControlRegister), new SetControlRegister());
-			map.Add(typeof(GetControlRegister), new GetControlRegister());
-			map.Add(typeof(IRetd), new IRetd());
-			map.Add(typeof(Push), new Push());
-			map.Add(typeof(Pop), new Pop());
-			map.Add(typeof(GetIDTJumpLocation), new GetIDTJumpLocation());
-		
+
 			return map;
 		}
 

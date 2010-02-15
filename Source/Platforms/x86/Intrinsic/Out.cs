@@ -16,11 +16,11 @@ namespace Mosa.Platforms.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 out instruction.
 	/// </summary>
-	public sealed class Out :  IIntrinsicMethod
+	public sealed class Out : IIntrinsicMethod
 	{
 
 		#region Methods
-		
+
 		/// <summary>
 		/// Replaces the instrinsic call site
 		/// </summary>
@@ -39,5 +39,6 @@ namespace Mosa.Platforms.x86.Intrinsic
 		}
 
 		#endregion // Methods
+
 	}
 }

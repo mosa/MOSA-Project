@@ -11,11 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+
 using Mosa.Runtime.CompilerFramework.Operands;
-using IR = Mosa.Runtime.CompilerFramework.IR;
-
 using Mosa.Runtime.CompilerFramework;
-
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
@@ -45,5 +44,6 @@ namespace Mosa.Platforms.x86.Intrinsic
         }
 
         #endregion // Methods
+
     }
 }

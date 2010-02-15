@@ -54,54 +54,6 @@ namespace Mosa.Platforms.x86
 		public static void Lgdt(uint address) { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
-		/// Wraps the x86 pop instruction to pop a value from the stack
-		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
-		public static byte Pop8() { ThrowPlatformNotSupported(); return 0; }
-
-		/// <summary>
-		/// Wraps the x86 pop instruction to pop a value from the stack
-		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
-		public static ushort Pop16() { ThrowPlatformNotSupported(); return 0; }
-
-		/// <summary>
-		/// Wraps the x86 pop instruction to pop a value from the stack
-		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
-		public static uint Pop32() { ThrowPlatformNotSupported(); return 0; }
-
-		/// <summary>
-		/// Wraps the x86 popad instruction to pop all GPR from the stack
-		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Popad))]
-		public static void Popad() { ThrowPlatformNotSupported(); return; }
-
-		/// <summary>
-		/// Wraps the x86 push instruction to push a value on the stack
-		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
-		public static void Push8(byte value) { ThrowPlatformNotSupported(); return; }
-
-		/// <summary>
-		/// Wraps the x86 push instruction to push a value on the stack
-		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
-		public static void Push16(ushort value) { ThrowPlatformNotSupported(); return; }
-
-		/// <summary>
-		/// Wraps the x86 push instruction to push a value on the stack
-		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
-		public static void Push32(uint value) { ThrowPlatformNotSupported(); return; }
-
-		/// <summary>
-		/// Wraps the x86 pushad instruction to push all GPR to the stack
-		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Pushad))]
-		public static void Pushad() { ThrowPlatformNotSupported(); return; }
-
-		/// <summary>
 		/// Wraps the x86 sti instruction to enable interrupts
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Sti))]
@@ -161,11 +113,11 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Nop))]
 		public static void Nop() { ThrowPlatformNotSupported(); }
 
-		///// <summary>
-		///// Wraps the x86 hlt instruction.
-		///// </summary>
-		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.Hlt))]
-		//public static void Hlt() { ThrowPlatformNotSupported(); }
+		/// <summary>
+		/// Wraps the x86 hlt instruction.
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Hlt))]
+		public static void Hlt() { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// 
@@ -226,14 +178,6 @@ namespace Mosa.Platforms.x86
 		public static uint GetControlRegister(byte register) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
-		/// Gets the control register.
-		/// </summary>
-		/// <param name="register">The pagedirectory.</param>
-		/// <returns></returns>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SetStackPointer))]
-		public static uint SetStackPointer(byte register) { ThrowPlatformNotSupported(); return 0; }
-
-		/// <summary>
 		/// Jumps the global interrupt handler.
 		/// </summary>
 		/// <returns></returns>
@@ -241,11 +185,16 @@ namespace Mosa.Platforms.x86
 		public static uint GetIDTJumpLocation(uint irq) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
-		/// Jumps the global interrupt handler.
+		/// Lock
 		/// </summary>
-		/// <returns></returns>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.IRetd))]
-		public static void IRetd() { ThrowPlatformNotSupported(); }
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SpinLock))]
+		public static void SpinLock(uint address) { ThrowPlatformNotSupported(); }
+
+		/// <summary>
+		/// Unlock
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SpinUnlock))]
+		public static void SpinUnlock(uint address) { ThrowPlatformNotSupported(); }
 
 		#endregion
 

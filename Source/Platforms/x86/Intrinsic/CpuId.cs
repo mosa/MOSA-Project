@@ -35,5 +35,6 @@ namespace Mosa.Platforms.x86.Intrinsic
 		}
 
         #endregion // Methods
+
     }
 }
