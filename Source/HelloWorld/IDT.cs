@@ -340,31 +340,34 @@ namespace Mosa.Kernel.X86
 		/// <param name="eax">The eax.</param>
 		/// <param name="interrupt">The interrupt.</param>
 		/// <param name="errorcode">The errorcode.</param>
-		private static void InterruptHandler(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, byte interrupt, byte errorcode)
+		private static void InterruptHandler(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorcode)
 		{
-			if (interrupt != 0x21)
-				return;
-
 			uint c = Screen.Column;
 			uint r = Screen.Row;
 			byte col = Screen.Color;
-
-			_counter++;
 
 			Screen.Column = 32;
 			Screen.Row = 0;
 			Screen.Color = 3;
 
-			Screen.Write(_counter, 16, 8);
-			Screen.Write(':');
-			Screen.Write(interrupt, 16, 2);
-			Screen.Write('-');
-			Screen.Write(errorcode, 16, 2);
+			_counter++;
+			Screen.Write(_counter, 10, 8);
 
+			if (interrupt != 0x20) {
+				Screen.Write(':');
+				Screen.Write(_counter, 10, 8);
+				Screen.Write(':');
+				Screen.Write(interrupt, 16, 2);
+				Screen.Write('-');
+				Screen.Write(errorcode, 16, 2);
+
+			}
 
 			Screen.Column = c;
 			Screen.Row = r;
 			Screen.Color = col;
+
+			PIC.SendEndOfInterrupt((byte)interrupt);
 		}
 
 	}

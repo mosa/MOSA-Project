@@ -115,7 +115,7 @@ namespace Mosa.DeviceDrivers.ISA
 			// ICW2 - interrupt offset 
 			masterDataPort.Write8(MasterIRQBase);
 			// ICW3
-			masterDataPort.Write8(0x02);
+			masterDataPort.Write8(0x04);
 			// ICW4 - Set 8086 Mode
 			masterDataPort.Write8(0x01);
 
@@ -130,7 +130,7 @@ namespace Mosa.DeviceDrivers.ISA
 
 			// Restore Masks
 			masterDataPort.Write8(masterMask);
-			slaveCommandPort.Write8(slaveMask);
+			slaveDataPort.Write8(slaveMask);
 
 			DisableIRQs();
 
@@ -157,12 +157,11 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
         /// <summary>
-        /// Disables the IR qs.
+		/// Disables the IRQs.
         /// </summary>
 		public void DisableIRQs()
 		{
 			masterInterruptMask = 0xFF;
-
 			masterDataPort.Write8(masterInterruptMask);
 
 			slaveInterruptMask = 0xFF;
@@ -170,20 +169,20 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
         /// <summary>
-        /// Enables the master IRQ.
+        /// Enables the master IRQs.
         /// </summary>
         /// <param name="value">The value.</param>
-		protected void EnableMasterIRQ(byte value)
+		protected void EnableMasterIRQ(byte irq)
 		{
 			// Mask out all but the last three bits
-			value = (byte)(value & 0x07);
+			irq = (byte)(irq & 0x07);
 
 			// Cannot mask IRQ2
-			if (value == 2)
+			if (irq == 2)
 				return;
 
 			// Clear bit
-			masterInterruptMask = (byte)(masterInterruptMask & (~(1 << value)));
+			masterInterruptMask = (byte)(masterInterruptMask & (~(1 << irq)));
 			masterDataPort.Write8(masterInterruptMask);
 		}
 
@@ -191,13 +190,13 @@ namespace Mosa.DeviceDrivers.ISA
         /// Enables the slave IRQ.
         /// </summary>
         /// <param name="value">The value.</param>
-		protected void EnableSlaveIRQ(byte value)
+		protected void EnableSlaveIRQ(byte irq)
 		{
 			// Mask out all but the last three bits
-			value = (byte)(value & 0x07);
+			irq = (byte)(irq & 0x07);
 
 			// Clear bit
-			slaveInterruptMask = (byte)(slaveInterruptMask & (~(1 << value)));
+			slaveInterruptMask = (byte)(slaveInterruptMask & (~(1 << irq)));
 			slaveDataPort.Write8(masterInterruptMask);
 		}
 
@@ -205,13 +204,13 @@ namespace Mosa.DeviceDrivers.ISA
         /// Enables the IRQ.
         /// </summary>
         /// <param name="value">The value.</param>
-		public void EnableIRQ(byte value)
+		public void EnableIRQ(byte irq)
 		{
-			if ((value >= MasterIRQBase) && (value < SlaveIRQBase + IRQBaseSize)) {
-				if (value < SlaveIRQBase)
-					EnableMasterIRQ((byte)(value - MasterIRQBase));
+			if ((irq >= MasterIRQBase) && (irq < SlaveIRQBase + IRQBaseSize)) {
+				if (irq < SlaveIRQBase)
+					EnableMasterIRQ((byte)(irq - MasterIRQBase));
 				else
-					EnableSlaveIRQ((byte)(value - SlaveIRQBase));
+					EnableSlaveIRQ((byte)(irq - SlaveIRQBase));
 			}
 		}
 
@@ -219,17 +218,17 @@ namespace Mosa.DeviceDrivers.ISA
         /// Disables the master IRQ.
         /// </summary>
         /// <param name="value">The value.</param>
-		protected void DisableMasterIRQ(byte value)
+		protected void DisableMasterIRQ(byte irq)
 		{
 			// Mask out all but the last three bits
-			value = (byte)(value & 0x07);
+			irq = (byte)(irq & 0x07);
 
 			// Cannot mask IRQ2
-			if (value == 2)
+			if (irq == 2)
 				return;
 
 			// Set bit
-			masterInterruptMask = (byte)(masterInterruptMask | (1 << value));
+			masterInterruptMask = (byte)(masterInterruptMask | (1 << irq));
 			masterDataPort.Write8(masterInterruptMask);
 		}
 
@@ -237,28 +236,27 @@ namespace Mosa.DeviceDrivers.ISA
         /// Disables the slave IRQ.
         /// </summary>
         /// <param name="value">The value.</param>
-		protected void DisableSlaveIRQ(byte value)
+		protected void DisableSlaveIRQ(byte irq)
 		{
 			// Mask out all but the last three bits
-			value = (byte)(value & 0x07);
+			irq = (byte)(irq & 0x07);
 
 			// Set bit
-			slaveInterruptMask = (byte)(slaveInterruptMask | (1 << value));
-			slaveDataPort.Write8(masterInterruptMask);
+			slaveInterruptMask = (byte)(slaveInterruptMask | (1 << irq));
+			slaveDataPort.Write8(slaveInterruptMask);
 		}
-
 
         /// <summary>
         /// Disables the IRQ.
         /// </summary>
         /// <param name="value">The value.</param>
-		public void DisableIRQ(byte value)
+		public void DisableIRQ(byte irq)
 		{
-			if ((value >= MasterIRQBase) && (value < SlaveIRQBase + IRQBaseSize)) {
-				if (value < SlaveIRQBase)
-					DisableMasterIRQ((byte)(value - MasterIRQBase));
+			if ((irq >= MasterIRQBase) && (irq < SlaveIRQBase + IRQBaseSize)) {
+				if (irq < SlaveIRQBase)
+					DisableMasterIRQ((byte)(irq - MasterIRQBase));
 				else
-					DisableSlaveIRQ((byte)(value - SlaveIRQBase));
+					DisableSlaveIRQ((byte)(irq - SlaveIRQBase));
 			}
 		}
 	}
