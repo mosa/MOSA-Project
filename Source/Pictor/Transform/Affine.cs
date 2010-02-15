@@ -58,7 +58,7 @@ namespace Pictor.Transform
     /// m *= Pictor::trans_affine_rotation(30.0 * 3.1415926 / 180.0);
     /// m *= Pictor::trans_affine_scaling(2.0, 1.5);
     /// m *= Pictor::trans_affine_translation(100.0, 100.0);
-    /// m.Transform(&x, &y);
+    /// m.Transform(x, y);
     ///
     /// The affine matrix is all you need to perform any linear transformation,
     /// but all transformations have origin point (0,0). It means that we need to 

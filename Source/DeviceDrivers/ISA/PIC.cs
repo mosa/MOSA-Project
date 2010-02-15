@@ -168,10 +168,10 @@ namespace Mosa.DeviceDrivers.ISA
 			slaveDataPort.Write8(slaveInterruptMask);
 		}
 
-        /// <summary>
-        /// Enables the master IRQs.
-        /// </summary>
-        /// <param name="value">The value.</param>
+		/// <summary>
+		/// Enables the master IRQs.
+		/// </summary>
+		/// <param name="irq">The irq.</param>
 		protected void EnableMasterIRQ(byte irq)
 		{
 			// Mask out all but the last three bits
@@ -186,10 +186,10 @@ namespace Mosa.DeviceDrivers.ISA
 			masterDataPort.Write8(masterInterruptMask);
 		}
 
-        /// <summary>
-        /// Enables the slave IRQ.
-        /// </summary>
-        /// <param name="value">The value.</param>
+		/// <summary>
+		/// Enables the slave IRQ.
+		/// </summary>
+		/// <param name="irq">The irq.</param>
 		protected void EnableSlaveIRQ(byte irq)
 		{
 			// Mask out all but the last three bits
@@ -200,10 +200,10 @@ namespace Mosa.DeviceDrivers.ISA
 			slaveDataPort.Write8(masterInterruptMask);
 		}
 
-        /// <summary>
-        /// Enables the IRQ.
-        /// </summary>
-        /// <param name="value">The value.</param>
+		/// <summary>
+		/// Enables the IRQ.
+		/// </summary>
+		/// <param name="irq">The irq.</param>
 		public void EnableIRQ(byte irq)
 		{
 			if ((irq >= MasterIRQBase) && (irq < SlaveIRQBase + IRQBaseSize)) {
@@ -214,10 +214,10 @@ namespace Mosa.DeviceDrivers.ISA
 			}
 		}
 
-        /// <summary>
-        /// Disables the master IRQ.
-        /// </summary>
-        /// <param name="value">The value.</param>
+		/// <summary>
+		/// Disables the master IRQ.
+		/// </summary>
+		/// <param name="irq">The irq.</param>
 		protected void DisableMasterIRQ(byte irq)
 		{
 			// Mask out all but the last three bits
@@ -232,10 +232,10 @@ namespace Mosa.DeviceDrivers.ISA
 			masterDataPort.Write8(masterInterruptMask);
 		}
 
-        /// <summary>
-        /// Disables the slave IRQ.
-        /// </summary>
-        /// <param name="value">The value.</param>
+		/// <summary>
+		/// Disables the slave IRQ.
+		/// </summary>
+		/// <param name="irq">The irq.</param>
 		protected void DisableSlaveIRQ(byte irq)
 		{
 			// Mask out all but the last three bits
@@ -246,10 +246,10 @@ namespace Mosa.DeviceDrivers.ISA
 			slaveDataPort.Write8(slaveInterruptMask);
 		}
 
-        /// <summary>
-        /// Disables the IRQ.
-        /// </summary>
-        /// <param name="value">The value.</param>
+		/// <summary>
+		/// Disables the IRQ.
+		/// </summary>
+		/// <param name="irq">The irq.</param>
 		public void DisableIRQ(byte irq)
 		{
 			if ((irq >= MasterIRQBase) && (irq < SlaveIRQBase + IRQBaseSize)) {
