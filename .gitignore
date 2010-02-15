@@ -16,8 +16,3 @@ Thumbs.db
 *.Cache
 /tmp
 build.force
-
-/Tools/jpc/JPCApplication.jar
-/Tools/jpc/JPCDebugger.jar
-/Tools/jpc/breakpoints.jpc
-/Tools/jpc/classes.jar
