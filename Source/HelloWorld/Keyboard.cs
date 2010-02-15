@@ -24,7 +24,7 @@ namespace Mosa.Kernel.X86
 		/// <returns></returns>
 		public static byte ReadScanCode()
 		{
-			return Native.In8(0x64);
+			return Native.In8(0x60);
 		}
 
 	}
