@@ -36,7 +36,7 @@ namespace Mosa.HelloWorld
 			else
 				Screen.Write('*');	// Panic! 
 
-			PIC.Setup();
+			PIC.Setup(0x20, 0x28);
 			Screen.SetCursor(24, 3);
 			Screen.Write('4');
 			GDT.Setup();
@@ -51,7 +51,6 @@ namespace Mosa.HelloWorld
 			PageTable.Setup();
 			Screen.SetCursor(24, 6);
 			Screen.Write('8');
-
 			Screen.GotoTop();
 		}
 

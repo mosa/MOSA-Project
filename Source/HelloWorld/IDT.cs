@@ -342,6 +342,9 @@ namespace Mosa.Kernel.X86
 		/// <param name="errorcode">The errorcode.</param>
 		private static void InterruptHandler(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, byte interrupt, byte errorcode)
 		{
+			if (interrupt != 0x21)
+				return;
+
 			uint c = Screen.Column;
 			uint r = Screen.Row;
 			byte col = Screen.Color;
