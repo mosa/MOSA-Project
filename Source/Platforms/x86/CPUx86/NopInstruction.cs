@@ -16,22 +16,17 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// </summary>
 	public class NopInstruction : BaseInstruction
 	{
-		#region Data Members
-
-		private static readonly OpCode NOP = new OpCode(new byte[] { 0x90 });
-
-		#endregion
 
 		#region Methods
 
 		/// <summary>
-		/// Emits the specified platform instruction.
+		/// Emits the specified CTX.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-            emitter.Emit(NOP, null, null);
+			emitter.WriteByte(0x90);
 		}
 
 		#endregion // Methods

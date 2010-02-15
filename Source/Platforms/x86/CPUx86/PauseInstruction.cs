@@ -27,6 +27,17 @@ namespace Mosa.Platforms.x86.CPUx86
         #region Methods
 
 		/// <summary>
+		/// Emits the specified CTX.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			emitter.WriteByte(0xF3);
+			emitter.WriteByte(0x90);
+		}
+
+		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
@@ -37,5 +48,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		}
 
         #endregion // Methods
+
     }
 }
