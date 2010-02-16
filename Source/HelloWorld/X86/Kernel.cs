@@ -45,7 +45,7 @@ namespace Mosa.HelloWorld
 			IDT.Setup();
 			Screen.SetCursor(24, 5);
 			Screen.Write('6');
-			PageFrameAllocator.Setup();
+			PhysicalPageAllocator.Setup();
 			Screen.SetCursor(24, 6);
 			Screen.Write('7');
 			PageTable.Setup();
@@ -58,14 +58,14 @@ namespace Mosa.HelloWorld
 
 		public static void Test()
 		{
-			uint page1 = PageFrameAllocator.Allocate();
-			uint page2 = PageFrameAllocator.Allocate();
+			uint page1 = PhysicalPageAllocator.Allocate();
+			uint page2 = PhysicalPageAllocator.Allocate();
 
 			PageTable.MapVirtualAddressToPhysical(_processtable, page1);
 			PageTable.MapVirtualAddressToPhysical(_threadtable, page2);
 
-			Memory.Clear(_processtable, PageFrameAllocator.PageSize);
-			Memory.Clear(_threadtable, PageFrameAllocator.PageSize);
+			Memory.Clear(_processtable, PhysicalPageAllocator.PageSize);
+			Memory.Clear(_threadtable, PhysicalPageAllocator.PageSize);
 
 			Memory.Set8(page1, 0xAA);
 			Memory.Set8(page2, 0xBB);

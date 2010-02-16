@@ -14,10 +14,10 @@ namespace Mosa.Kernel.X86
 	/// </summary>
 	public static class PageTable
 	{
-		// Location for page directory starts at 20Mb
+		// Location for page directory starts at 20MB
 		private static uint _pageDirectory = 1024 * 1024 * 20; // 0x1400000
 
-		// Location for page tables start at 16Mb
+		// Location for page tables start at 16MB
 		private static uint _pageTable = 1024 * 1024 * 16;	// 0x1000000
 
 		/// <summary>

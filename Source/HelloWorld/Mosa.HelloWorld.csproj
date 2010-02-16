@@ -70,13 +70,14 @@
     <Compile Include="X86\Kernel.cs" />
     <Compile Include="X86\Memory.cs" />
     <Compile Include="X86\Multiboot.cs" />
-    <Compile Include="X86\PageFrameAllocator.cs">
+    <Compile Include="X86\PhysicalPageAllocator.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="X86\PageTable.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="X86\Screen.cs" />
+    <Compile Include="X86\VirtualPageAllocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Platforms\x86\Mosa.Platforms.x86.csproj">

@@ -64,6 +64,16 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
+		/// Ins the specified address.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		public static byte In8(byte address)
+		{
+			return EmulatedKernel.IOPortDispatch.Read8(address);
+		}
+
+		/// <summary>
 		/// Nop
 		/// </summary>
 		public static void Nop()

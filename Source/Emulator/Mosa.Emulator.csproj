@@ -101,10 +101,12 @@
     <Compile Include="HelloWorld\GDT.cs" />
     <Compile Include="HelloWorld\IDT.cs" />
     <Compile Include="HelloWorld\Kernel.cs" />
+    <Compile Include="HelloWorld\Keyboard.cs" />
+    <Compile Include="HelloWorld\PhysicalPageAllocator.cs" />
     <Compile Include="HelloWorld\PIC.cs" />
+    <Compile Include="HelloWorld\VirtualPageAllocator.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="HelloWorld\Multiboot.cs" />
-    <Compile Include="HelloWorld\PageFrameAllocator.cs" />
     <Compile Include="HelloWorld\PageTable.cs" />
     <Compile Include="HelloWorld\Screen.cs" />
     <Compile Include="MemoryForm.cs">
