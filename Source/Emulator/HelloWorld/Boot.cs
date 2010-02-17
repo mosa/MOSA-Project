@@ -20,9 +20,8 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		public static void Main()
 		{
-            Screen.Column = 10;
-            Screen.Row = 11;
 			Kernel.Setup();
+			Screen.GotoTop();
 			Screen.Color = 0x0E;
 			Screen.Write('M');
 			Screen.Write('O');

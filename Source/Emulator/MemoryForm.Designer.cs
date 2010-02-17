@@ -79,11 +79,11 @@ namespace Mosa.Emulator
             "VGA Memory",
             "Multiboot Structure",
             "Page Directory (CR3)",
-            "Page Frame Map"});
+            "Physical Page Free List",
+            "Virtual Page Bitmap"});
 			this.cbSelect.Name = "cbSelect";
 			this.cbSelect.Size = new System.Drawing.Size(160, 25);
 			this.cbSelect.SelectedIndexChanged += new System.EventHandler(this.cbSelect_SelectedIndexChanged);
-			this.cbSelect.Click += new System.EventHandler(this.cbSelect_Click);
 			// 
 			// toolStripSeparator2
 			// 

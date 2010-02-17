@@ -51,6 +51,9 @@ namespace Mosa.HelloWorld
 			PageTable.Setup();
 			Screen.SetCursor(24, 6);
 			Screen.Write('8');
+			VirtualPageAllocator.Setup();
+			Screen.SetCursor(24, 6);
+			Screen.Write('9');
 		}
 
 		private static uint _processtable = 0x1000;

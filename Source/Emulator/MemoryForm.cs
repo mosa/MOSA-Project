@@ -95,15 +95,12 @@ namespace Mosa.Emulator
 				case 1: tbMemory.Text = "0x" + Mosa.EmulatedKernel.MemoryDispatch.Read32(0x200004).ToString("X"); break;
 				case 2: tbMemory.Text = "0x" + Mosa.EmulatedKernel.MemoryDispatch.CR3.ToString("X"); break;
 				case 3: tbMemory.Text = "0x" + Mosa.EmulatedKernel.MemoryDispatch.Read32(1024 * 1024 * 28).ToString("X"); break;
+				case 4: tbMemory.Text = "0x" + (1024 * 1024 * 21).ToString("X"); break;
 				default: break;
 			}
 			UpdateForm();
 		}
 
-		private void cbSelect_Click(object sender, EventArgs e)
-		{
-
-		}
 
 	}
 }

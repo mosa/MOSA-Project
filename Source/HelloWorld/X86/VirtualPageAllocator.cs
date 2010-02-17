@@ -12,6 +12,9 @@ namespace Mosa.Kernel.X86
 	/// <summary>
 	/// A virtual page allocator.
 	/// </summary>
+	/// <remarks>
+	/// This is a simple bitmap implementation with no optimizations.
+	/// </remarks>
 	public static class VirtualPageAllocator
 	{
 		// Location of bitmap starts at 21MB
@@ -53,9 +56,9 @@ namespace Mosa.Kernel.X86
 			byte value = Memory.Get8(at);
 
 			if (free)
-				value = (byte)(value | mask);
-			else
 				value = (byte)(value & ~mask);
+			else
+				value = (byte)(value | mask);
 
 			Memory.Set8(at, value);
 		}
@@ -81,17 +84,22 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="count">The count.</param>
 		/// <returns></returns>
-		public static uint ReservePages(uint count)
+		public static uint Reserve(uint count)
 		{
 			uint first = 0xFFFFFFFF; // Marker
 
-			for (uint at = 1; at < _pages; at++) {
+			for (uint at = 0; at < _pages; at++) {
 				if (GetPageStatus(at)) {
 					if (first == 0xFFFFFFFF)
 						first = at;
 
-					if (at - first == count)
+					if (at - first == count) {
+
+						for (uint index = 0; index < count; index++)
+							SetPageStatus(first + index, false);
+
 						return (first * PhysicalPageAllocator.PageSize) + PhysicalPageAllocator.ReserveMemory;
+					}
 				}
 				else
 					first = 0xFFFFFFFF;
@@ -105,10 +113,10 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <param name="count">The count.</param>
-		public static void ReleasePages(uint address, uint pages)
+		public static void Release(uint address, uint count)
 		{
 			uint start = GetPageIndex(address);
-			for (uint index = 0; index < pages; index++)
+			for (uint index = 0; index < count; index++)
 				SetPageStatus(start + index, true);
 		}
 
