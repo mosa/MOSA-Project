@@ -74,7 +74,7 @@
     <Compile Include="X86\Kernel.cs" />
     <Compile Include="X86\Memory.cs" />
     <Compile Include="X86\Multiboot.cs" />
-    <Compile Include="X86\PhysicalPageAllocator.cs">
+    <Compile Include="X86\PageFrameAllocator.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="X86\PageTable.cs">

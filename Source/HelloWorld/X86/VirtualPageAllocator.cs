@@ -26,7 +26,7 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		public static void Setup()
 		{
-			_pages = (PhysicalPageAllocator.TotalPages - PhysicalPageAllocator.ReserveMemory) / PhysicalPageAllocator.PageSize;
+			_pages = (PageFrameAllocator.TotalPages - PageFrameAllocator.ReserveMemory) / PageFrameAllocator.PageSize;
 
 			// Bits: 0 = Available, 1 = Not Available
 			Memory.Clear(_bitmap, _pages / 8);
@@ -39,7 +39,7 @@ namespace Mosa.Kernel.X86
 		/// <returns></returns>
 		private static uint GetPageIndex(uint address)
 		{
-			return (address - PhysicalPageAllocator.ReserveMemory) / PhysicalPageAllocator.PageSize;
+			return (address - PageFrameAllocator.ReserveMemory) / PageFrameAllocator.PageSize;
 		}
 
 		/// <summary>
@@ -98,7 +98,7 @@ namespace Mosa.Kernel.X86
 						for (uint index = 0; index < count; index++)
 							SetPageStatus(first + index, false);
 
-						return (first * PhysicalPageAllocator.PageSize) + PhysicalPageAllocator.ReserveMemory;
+						return (first * PageFrameAllocator.PageSize) + PageFrameAllocator.ReserveMemory;
 					}
 				}
 				else

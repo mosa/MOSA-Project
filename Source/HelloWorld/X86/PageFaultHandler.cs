@@ -29,7 +29,7 @@ namespace Mosa.Kernel.X86
 
 			// TODO: acquire lock
 
-			uint physicalpage = PhysicalPageAllocator.Allocate();
+			uint physicalpage = PageFrameAllocator.Allocate();
 
 			if (physicalpage == 0x0)
 				Panic.Now(1);	// Panic! Out of memory

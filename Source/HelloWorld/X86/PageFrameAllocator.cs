@@ -12,7 +12,7 @@ namespace Mosa.Kernel.X86
 	/// <summary>
 	/// A physical page allocator.
 	/// </summary>
-	public static class PhysicalPageAllocator
+	public static class PageFrameAllocator
 	{
 		// Location for memory map starts at 28MB
 		private const uint StartLocation = 1024 * 1024 * 28;
