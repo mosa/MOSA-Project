@@ -29,8 +29,8 @@ namespace Mosa.Kernel.X86
 			for (int index = 0; index < 1024; index++)
 				Memory.Set32((uint)(_pageDirectory + (index * 4)), (uint)(_pageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
 
-			// Map the first 32Mb of memory (8192 4K pages)
-			for (int index = 0; index < 8192 * 16; index++)
+			// Map the first 32MB of memory (8192 4K pages)
+			for (int index = 0; index < 8192 * 16; index++) // FIXME: It's not 32MB
 				Memory.Set32((uint)(_pageTable + (index * 4)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 
 			// Set CR3 register on processor - sets page directory

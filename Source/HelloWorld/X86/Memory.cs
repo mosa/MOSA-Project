@@ -119,6 +119,15 @@ namespace Mosa.Kernel.X86
 		}
 
 		/// <summary>
+		/// Gets or sets the Control Register 2.
+		/// </summary>
+		/// <value>The CR0.</value>
+		public static uint CR2
+		{
+			get { return Native.GetControlRegister(0); }
+		}
+
+		/// <summary>
 		/// Sets the Control Register 3.
 		/// </summary>
 		/// <value>The CR3.</value>

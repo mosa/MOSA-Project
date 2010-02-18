@@ -340,7 +340,7 @@ namespace Mosa.Kernel.X86
 		/// <param name="eax">The eax.</param>
 		/// <param name="interrupt">The interrupt.</param>
 		/// <param name="errorcode">The errorcode.</param>
-		private static void InterruptHandler(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorcode)
+		private static void InterruptHandler(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorCode)
 		{
 			uint c = Screen.Column;
 			uint r = Screen.Row;
@@ -353,13 +353,17 @@ namespace Mosa.Kernel.X86
 			_counter++;
 			Screen.Write(_counter, 10, 8);
 
-			if (interrupt != 0x20) {
+			if (interrupt == 14) {
+				// Page Fault!
+				PageFaultHandler.Fault(errorCode);
+			}
+			else if (interrupt != 0x20) {
 				Screen.Write(':');
 				Screen.Write(_counter, 10, 8);
 				Screen.Write(':');
 				Screen.Write(interrupt, 16, 2);
 				Screen.Write('-');
-				Screen.Write(errorcode, 16, 2);
+				Screen.Write(errorCode, 16, 2);
 
 				if (interrupt == 0x21) {
 					byte scancode = Keyboard.ReadScanCode();
