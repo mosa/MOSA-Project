@@ -15,16 +15,25 @@ namespace Mosa.Kernel.X86
 	/// <summary>
 	/// 
 	/// </summary>
-	[StructLayout(LayoutKind.Explicit)]
+	public static class State
+	{
+		public static readonly int Empty = 0;
+		public static readonly int Running = 1;
+		public static readonly int Terminating = 2;
+		public static readonly int Terminated = 3;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	//[StructLayout(LayoutKind.Explicit)]
 	public struct Process
 	{
-		public enum State { Empty = 0, Running = 1, Terminating = 2, Terminated = 3 } 
-
-		[FieldOffset(0)]
+		//[FieldOffset(0)]
 		public uint ProcessId;
-		[FieldOffset(4)]
+		//[FieldOffset(4)]
 		public uint MemoryMap;
-		[FieldOffset(8)]
-		public State Status;
+		//[FieldOffset(8)]
+		public int Status;
 	}
 }

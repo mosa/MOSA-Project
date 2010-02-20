@@ -42,7 +42,7 @@ namespace Mosa.Kernel.X86
 			Process* process = FindEmptySlot();
 			process->ProcessId = ++_nextid;
 			process->MemoryMap = VirtualPageAllocator.Reserve(32);	// 32 pages for entire 4GB
-			process->Status = Process.State.Running;
+			process->Status = State.Running;
 
 			// TODO: Unlock
 
@@ -71,7 +71,7 @@ namespace Mosa.Kernel.X86
 			for (uint slot = 0; slot < _slots; slot++) {
 				Process* process = (Process*)(_table + sizeof(Process) * slot);
 
-				if (process->Status == Process.State.Empty)
+				if (process->Status == State.Empty)
 					return process;
 			}
 

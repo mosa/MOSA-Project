@@ -1012,7 +1012,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			if (type == null)
 				throw new NotSupportedException();
 
-			uint mask = 0;
+			uint mask = 0xFFFFFFFF;
 			IInstruction instruction = ComputeExtensionTypeAndMask(ctDest, ref mask);
 
 			if (type == IR.Instruction.LogicalAndInstruction || mask != 0) {

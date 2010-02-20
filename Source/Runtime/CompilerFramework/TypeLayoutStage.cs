@@ -124,7 +124,7 @@ namespace Mosa.Runtime.CompilerFramework
 		private void CreateExplicitLayout(RuntimeType type)
 		{
 			Debug.Assert(type != null, @"No type given.");
-			Debug.Assert(type.Size != 0, @"Type size not set for explicit layout.");
+			Debug.Assert(type.BaseType.Size != 0, @"Type size not set for explicit layout.");
 			foreach (RuntimeField field in type.Fields) {
 				if ((field.Attributes & FieldAttributes.Static) == FieldAttributes.Static) {
 					// Assign a memory slot to the static & initialize it, if there's initial data set
