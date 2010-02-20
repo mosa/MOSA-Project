@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Platforms.x86;
+
 namespace Mosa.Kernel.X86
 {
 	/// <summary>
@@ -29,15 +31,15 @@ namespace Mosa.Kernel.X86
 			for (int index = 0; index < 1024; index++)
 				Memory.Set32((uint)(_pageDirectory + (index * 4)), (uint)(_pageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
 
-			// Map the first 32Mb of memory (8192 4K pages)
-			for (int index = 0; index < 8192 * 16; index++)
+			// Map the first 32MB of memory (8192 4K pages)
+			for (int index = 0; index < 8192 * 16; index++) // FIXME: It's not 32MB
 				Memory.Set32((uint)(_pageTable + (index * 4)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 
 			// Set CR3 register on processor - sets page directory
-			Memory.CR3 = _pageDirectory;
+			Native.SetControlRegister(3, _pageDirectory);
 
 			// Set CR0 register on processor - turns on virtual memory
-			Memory.CR0 = Memory.CR0 | 0x80000000;
+			Native.SetControlRegister(0, Native.GetControlRegister(0) | 0x80000000);
 		}
 
 		/// <summary>

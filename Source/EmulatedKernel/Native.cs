@@ -16,24 +16,6 @@ namespace Mosa.Platforms.x86
 	{
 
 		/// <summary>
-		/// Sets the cr0.
-		/// </summary>
-		/// <param name="state">The state.</param>
-		public static void SetCR0(uint state)
-		{
-			EmulatedKernel.MemoryDispatch.CR0 = state;
-		}
-
-		/// <summary>
-		/// Sets the cr3.
-		/// </summary>
-		/// <param name="pagetable">The pagetable.</param>
-		public static void SetCR3(uint pagetable)
-		{
-			EmulatedKernel.MemoryDispatch.CR3 = pagetable;
-		}
-
-		/// <summary>
 		/// Outs the specified address.
 		/// </summary>
 		/// <param name="address">The address.</param>
@@ -141,50 +123,12 @@ namespace Mosa.Platforms.x86
 		/// Loads the IDT
 		/// </summary>
 		/// <param name="address">The address.</param>
-		public static void Lidt(uint address)
-		{
-			// TODO
-		}
+		public static void Lidt(uint address) { return; }
 
 		/// <summary>
-		/// Wraps the x86 pop instruction to pop a value from the stack
+		/// Wraps the x86 hlt instruction
 		/// </summary>
-		public static byte Pop8() { return 0; }
-
-		/// <summary>
-		/// Wraps the x86 pop instruction to pop a value from the stack
-		/// </summary>
-		public static ushort Pop16() { return 0; }
-
-		/// <summary>
-		/// Wraps the x86 pop instruction to pop a value from the stack
-		/// </summary>
-		public static uint Pop32() { return 0; }
-
-		/// <summary>
-		/// Wraps the x86 popad instruction to pop all GPR from the stack
-		/// </summary>
-		public static void Popad() { return; }
-
-		/// <summary>
-		/// Wraps the x86 push instruction to push a value on the stack
-		/// </summary>
-		public static void Push8(byte value) { return; }
-
-		/// <summary>
-		/// Wraps the x86 push instruction to push a value on the stack
-		/// </summary>
-		public static void Push16(ushort value) { return; }
-
-		/// <summary>
-		/// Wraps the x86 push instruction to push a value on the stack
-		/// </summary>
-		public static void Push32(uint value) { return; }
-
-		/// <summary>
-		/// Wraps the x86 pushad instruction to push all GPR to the stack
-		/// </summary>
-		public static void Pushad() { return; }
+		public static void Hlt() { return; }
 
 		/// <summary>
 		/// Wraps the x86 sti instruction to enable interrupts
@@ -195,11 +139,6 @@ namespace Mosa.Platforms.x86
 		/// Wraps the x86 cli instruction to disable interrupts
 		/// </summary>
 		public static void Cli() { return; }
-
-		/// <summary>
-		/// Wraps the x86 cli instruction to disable interrupts
-		/// </summary>
-		public static void IRetd() { return; }
 
 		/// <summary>
 		/// Jumps the global interrupt handler.

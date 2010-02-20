@@ -14,6 +14,9 @@ namespace Mosa.Kernel.X86
 	/// </summary>
 	public static class Multiboot
 	{
+		private static uint _multibootptr = 0x200004;
+		private static uint _multibootsignature = 0x200000;
+
 		/// <summary>
 		/// Location of the Multiboot Structure 
 		/// </summary>
@@ -34,6 +37,14 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <value>The memory map count.</value>
 		public static uint MemoryMapCount { get { return _memoryMapCount; } }
+
+		/// <summary>
+		/// Setups this multiboot.
+		/// </summary>
+		public static void Setup()
+		{
+			SetMultibootLocation(Memory.Get32(_multibootptr), Memory.Get32(_multibootsignature));
+		}
 
 		/// <summary>
 		/// Dumps multiboot info.

@@ -31,8 +31,8 @@ namespace Mosa.HelloWorld
 			Screen.Write('2');
 			Screen.SetCursor(24, 2);
 
-			if (Multiboot.IsMultibootEnabled) 
-				Screen.Write('3');			
+			if (Multiboot.IsMultibootEnabled)
+				Screen.Write('3');
 			else
 				Screen.Write('*');	// Panic! 
 
@@ -45,33 +45,26 @@ namespace Mosa.HelloWorld
 			IDT.Setup();
 			Screen.SetCursor(24, 5);
 			Screen.Write('6');
-			PhysicalPageAllocator.Setup();
+			PageFrameAllocator.Setup();
 			Screen.SetCursor(24, 6);
 			Screen.Write('7');
 			PageTable.Setup();
-			Screen.SetCursor(24, 6);
+			Screen.SetCursor(24, 7);
 			Screen.Write('8');
 			VirtualPageAllocator.Setup();
-			Screen.SetCursor(24, 6);
+			Screen.SetCursor(24, 8);
 			Screen.Write('9');
-		}
 
-		private static uint _processtable = 0x1000;
-		private static uint _threadtable = 0x2000;
+			Test();
+		}
 
 		public static void Test()
 		{
-			uint page1 = PhysicalPageAllocator.Allocate();
-			uint page2 = PhysicalPageAllocator.Allocate();
-
-			PageTable.MapVirtualAddressToPhysical(_processtable, page1);
-			PageTable.MapVirtualAddressToPhysical(_threadtable, page2);
-
-			Memory.Clear(_processtable, PhysicalPageAllocator.PageSize);
-			Memory.Clear(_threadtable, PhysicalPageAllocator.PageSize);
-
-			Memory.Set8(page1, 0xAA);
-			Memory.Set8(page2, 0xBB);
+			uint page1 = VirtualPageAllocator.Reserve(8); // replace with this 1024*1024*512 and it'll panic as expected!
+			Memory.Set32(page1, 0);
+			Screen.Write(':');
+			Screen.Write(page1, 16, 8);
+			Screen.Write(':');
 		}
 
 	}

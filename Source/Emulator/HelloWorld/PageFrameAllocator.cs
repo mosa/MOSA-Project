@@ -105,10 +105,6 @@ namespace Mosa.Kernel.X86
 			_totalUsedPages++;
 			uint avail = Memory.Get32(_at);
 			_at = _at - sizeof(uint);
-
-			// Clear out memory
-			Memory.Clear(avail, PageSize);
-
 			return avail;
 		}
 
@@ -116,11 +112,11 @@ namespace Mosa.Kernel.X86
 		/// Releases a page to the free list
 		/// </summary>
 		/// <param name="page">The page.</param>
-		public static void Free(uint address)
+		public static void Free(uint page)
 		{
 			_totalUsedPages--;
 			_at = _at + sizeof(uint);
-			Memory.Set32(_at, address);
+			Memory.Set32(_at, page);
 		}
 
 		/// <summary>

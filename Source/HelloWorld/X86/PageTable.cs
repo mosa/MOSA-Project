@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Platforms.x86;
+
 namespace Mosa.Kernel.X86
 {
 	/// <summary>
@@ -34,10 +36,10 @@ namespace Mosa.Kernel.X86
 				Memory.Set32((uint)(_pageTable + (index * 4)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 
 			// Set CR3 register on processor - sets page directory
-			Memory.CR3 = _pageDirectory;
+			Native.SetControlRegister(3, _pageDirectory);
 
 			// Set CR0 register on processor - turns on virtual memory
-			Memory.CR0 = Memory.CR0 | 0x80000000;
+			Native.SetControlRegister(0, Native.GetControlRegister(0) | 0x80000000);
 		}
 
 		/// <summary>
@@ -49,5 +51,16 @@ namespace Mosa.Kernel.X86
 		{
 			Memory.Set32(_pageTable + ((virtualAddress >> 12) * 4), (uint)(physicalAddress | 0x04 | 0x02 | 0x01));
 		}
+
+		/// <summary>
+		/// Gets the physical memory.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		public static uint GetPhysicalAddressFromVirtual(uint address)
+		{
+			return Memory.Get32(_pageTable + ((address >> 12) * 4)) & 0xFFF;
+		}
+
 	}
 }

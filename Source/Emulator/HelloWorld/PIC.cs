@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.HelloWorld;
-
 using Mosa.Platforms.x86;
 
 namespace Mosa.Kernel.X86

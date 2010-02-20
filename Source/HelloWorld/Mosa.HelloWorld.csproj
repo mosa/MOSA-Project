@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
+    <Compile Include="X86\Process.cs" />
     <Compile Include="X86\CMOS.cs" />
     <Compile Include="X86\Panic.cs" />
     <Compile Include="X86\PageFaultHandler.cs" />

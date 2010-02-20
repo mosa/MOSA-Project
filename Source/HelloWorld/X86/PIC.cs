@@ -16,23 +16,23 @@ namespace Mosa.Kernel.X86
 	/// </summary>
 	public static class PIC
 	{
-		public const byte ICW1_ICW4 = 0x01;
-		public const byte ICW1_SingleCascadeMode = 0x02;
-		public const byte ICW1_Interval4 = 0x04;
-		public const byte ICW1_LevelTriggeredEdgeMode = 0x08;
-		public const byte ICW1_Initialization = 0x10;
-		public const byte ICW2_MasterOffset = 0x20;
-		public const byte ICW2_SlaveOffset = 0x28;
-		public const byte ICW4_8086 = 0x01;
-		public const byte ICW4_AutoEndOfInterrupt = 0x02;
-		public const byte ICW4_BufferedSlaveMode = 0x08;
-		public const byte ICW4_BufferedMasterMode = 0x0C;
-		public const byte ICW4_SpecialFullyNested = 0x10;
+		private const byte ICW1_ICW4 = 0x01;
+		private const byte ICW1_SingleCascadeMode = 0x02;
+		private const byte ICW1_Interval4 = 0x04;
+		private const byte ICW1_LevelTriggeredEdgeMode = 0x08;
+		private const byte ICW1_Initialization = 0x10;
+		private const byte ICW2_MasterOffset = 0x20;
+		private const byte ICW2_SlaveOffset = 0x28;
+		private const byte ICW4_8086 = 0x01;
+		private const byte ICW4_AutoEndOfInterrupt = 0x02;
+		private const byte ICW4_BufferedSlaveMode = 0x08;
+		private const byte ICW4_BufferedMasterMode = 0x0C;
+		private const byte ICW4_SpecialFullyNested = 0x10;
 
-		public const byte PIC1_Command = 0x20;
-		public const byte PIC2_Command = 0xA0;
-		public const byte PIC1_Data = 0x21;
-		public const byte PIC2_Data = 0xA1;
+		private const byte PIC1_Command = 0x20;
+		private const byte PIC2_Command = 0xA0;
+		private const byte PIC1_Data = 0x21;
+		private const byte PIC2_Data = 0xA1;
 	
 		private const byte EOI = 0x20;
 
