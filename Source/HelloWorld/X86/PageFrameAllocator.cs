@@ -67,7 +67,7 @@ namespace Mosa.Kernel.X86
 		/// <param name="cnt">The count.</param>
 		/// <param name="start">The start.</param>
 		/// <param name="size">The size.</param>
-		public static void AddFreeMemory(uint cnt, uint start, uint size)
+		private static void AddFreeMemory(uint cnt, uint start, uint size)
 		{
 			if ((start > MaximumMemory) || (start + size < ReserveMemory))
 				return;

@@ -49,18 +49,18 @@ namespace Mosa.Kernel.X86
 		/// <param name="free">if set to <c>true</c> [free].</param>
 		private static void SetPageStatus(uint page, bool free)
 		{
-			uint at = (uint)(_bitmap + (page / 8));
-			byte bit = (byte)(page % 8);
-			byte mask = (byte)(1 << bit);
+			uint at = (uint)(_bitmap + (page / 32));
+			byte bit = (byte)(page % 32);
+			uint mask = (byte)(1 << bit);
 
-			byte value = Memory.Get8(at);
+			uint value = Memory.Get32(at);
 
 			if (free)
-				value = (byte)(value & ~mask);
+				value = (uint)(value & ~mask);
 			else
-				value = (byte)(value | mask);
+				value = (uint)(value | mask);
 
-			Memory.Set8(at, value);
+			Memory.Set32(at, value);
 		}
 
 		/// <summary>
