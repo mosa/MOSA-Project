@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Platforms.x86;
+
 namespace Mosa.Kernel.X86
 {
 	/// <summary>
@@ -16,6 +18,7 @@ namespace Mosa.Kernel.X86
 	{
 		private static uint _slots = 4096;
 		private static uint _table;
+		//private static uint _lock = 0;
 
 		#region Data members
 
@@ -32,7 +35,10 @@ namespace Mosa.Kernel.X86
 			public static readonly uint Status = 0;
 			public static readonly uint ProcessID = 4;
 			public static readonly uint MemoryMap = 8;
-			public static readonly uint Last = 12;
+			public static readonly uint DefaultPriority = 12;
+			public static readonly uint MaximumPriority = 16;
+			public static readonly uint Lock = 20;
+			public static readonly uint TotalSize = 24;
 		}
 
 		#endregion
@@ -43,19 +49,17 @@ namespace Mosa.Kernel.X86
 		public unsafe static void Setup()
 		{
 			// Allocate memory for the process table
-			_table = VirtualPageAllocator.Reserve((uint)(_slots * Offset.Last));
+			_table = VirtualPageAllocator.Reserve((uint)(_slots * Offset.TotalSize));
 
 			// Create idle process
-			Memory.Set32(_table + Offset.Status, Status.Running);
-			Memory.Set32(_table + Offset.ProcessID, 0);
-			Memory.Set32(_table + Offset.MemoryMap, VirtualPageAllocator.Reserve(32 * 4096));
+			CreateProcess(0);
 		}
 
 		/// <summary>
 		/// Creates the process.
 		/// </summary>
 		/// <returns></returns>
-		public unsafe static uint CreateProcess()
+		public static uint CreateProcess()
 		{
 			// TODO: Lock
 
@@ -64,13 +68,25 @@ namespace Mosa.Kernel.X86
 			if (slot == 0)
 				Panic.Now(5);
 
+			CreateProcess(slot);
+
+			// TODO: Unlock
+
+			return slot;
+		}
+
+		/// <summary>
+		/// Creates the process.
+		/// </summary>
+		/// <returns></returns>
+		private static uint CreateProcess(uint slot)
+		{
 			uint process = GetProcessLocation(slot);
 
 			Memory.Set32(process + Offset.Status, Status.Running);
 			Memory.Set32(process + Offset.ProcessID, slot);
 			Memory.Set32(process + Offset.MemoryMap, VirtualPageAllocator.Reserve(32 * 4096));
-
-			// TODO: Unlock
+			Memory.Set32(process + Offset.Lock, 0);
 
 			return slot;
 		}
@@ -110,7 +126,7 @@ namespace Mosa.Kernel.X86
 		/// <param name="address">The address.</param>
 		/// <param name="pages">The pages.</param>
 		/// <param name="free">if set to <c>true</c> [free].</param>
-		private unsafe static void UpdateMemoryBitMap(uint slot, uint address, uint size, bool free)
+		private static void UpdateMemoryBitMap(uint slot, uint address, uint size, bool free)
 		{
 			uint process = GetProcessLocation(slot);
 			uint bitmap = Memory.Get32(process + Offset.MemoryMap);
@@ -144,7 +160,7 @@ namespace Mosa.Kernel.X86
 		/// Finds an empty slot in the process table.
 		/// </summary>
 		/// <returns></returns>
-		private unsafe static uint FindEmptySlot()
+		private static uint FindEmptySlot()
 		{
 			for (uint slot = 1; slot < _slots; slot++)
 				if (Memory.Get32(GetProcessLocation(slot) + Offset.Status) == Status.Empty)
@@ -158,9 +174,9 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="slot">The slot.</param>
 		/// <returns></returns>
-		private unsafe static uint GetProcessLocation(uint slot)
+		private static uint GetProcessLocation(uint slot)
 		{
-			return (uint)(_table + (Offset.Last * slot));
+			return (uint)(_table + (Offset.TotalSize * slot));
 		}
 	}
 }
