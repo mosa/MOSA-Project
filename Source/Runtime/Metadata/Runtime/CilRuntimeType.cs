@@ -147,10 +147,47 @@ namespace Mosa.Runtime.Metadata.Runtime
         protected override string GetNamespace()
         {
             string @namespace;
-            this.module.Metadata.Read(this.namespaceIdx, out @namespace);
+			if (IsNested)
+			{
+				TypeDefRow typeDef;
+				TokenTypes enclosingType = GetEnclosingType(Token);
+				this.module.Metadata.Read(enclosingType, out typeDef);
+				string @enclosingNamespace;
+				string @enclosingTypeName;
+				this.module.Metadata.Read(typeDef.TypeNamespaceIdx, out @enclosingNamespace);
+				this.module.Metadata.Read(typeDef.TypeNameIdx, out @enclosingTypeName);
+				@namespace = enclosingNamespace + "." + enclosingTypeName;
+			}
+			else
+			{
+				this.module.Metadata.Read(this.namespaceIdx, out @namespace);
+			}
             Debug.Assert(@namespace != null, @"Failed to retrieve CilRuntimeMethod name.");
             return @namespace;
         }
+
+		private TokenTypes GetEnclosingType(int token)
+		{
+			NestedClassRow row;
+			for (int i = 1; ; ++i)
+			{
+				this.module.Metadata.Read(TokenTypes.NestedClass + i, out row);
+				if (row.NestedClassTableIdx == (TokenTypes)token)
+					break;
+			}
+			return row.EnclosingClassTableIdx;
+		}
+
+		public bool IsNested
+		{
+			get
+			{
+				if ((Attributes & TypeAttributes.NestedPublic) == TypeAttributes.NestedPublic) return true;
+				if ((Attributes & TypeAttributes.NestedPrivate) == TypeAttributes.NestedPrivate) return true;
+				if ((Attributes & TypeAttributes.NestedFamily) == TypeAttributes.NestedFamily) return true;
+				return false;
+			}
+		}
 
         #endregion // Methods
     }
