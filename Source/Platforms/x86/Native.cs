@@ -196,6 +196,24 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SpinUnlock))]
 		public static void SpinUnlock(uint address) { ThrowPlatformNotSupported(); }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
+		public static byte Get8(uint address) { ThrowPlatformNotSupported(); return 0; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
+		public static ushort Get16(uint address) { ThrowPlatformNotSupported(); return 0; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
+		public static byte Get32(uint address) { ThrowPlatformNotSupported(); return 0; }
+
 		#endregion
 
 		/// <summary>

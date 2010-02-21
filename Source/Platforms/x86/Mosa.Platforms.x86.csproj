@@ -77,6 +77,8 @@
     <Compile Include="ControlRegister.cs" />
     <Compile Include="CPUx86\FarJmpInstruction.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
+    <Compile Include="Intrinsic\Get.cs" />
+    <Compile Include="Intrinsic\Set.cs" />
     <Compile Include="Intrinsic\Hlt.cs" />
     <Compile Include="Intrinsic\SpinUnlock.cs" />
     <Compile Include="Intrinsic\SpinLock.cs" />

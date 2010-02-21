@@ -5,6 +5,8 @@
  *
  */
 
+using Mosa.Platforms.x86;
+
 namespace Mosa.Kernel.X86
 {
     public struct Cursor
@@ -94,7 +96,7 @@ namespace Mosa.Kernel.X86
 		public static void Write(char chr)
 		{
 			uint address = GetAddress();
-
+			
 			Memory.Set8(address, (byte)chr);
 			Memory.Set8(address + 1, Color);
 
