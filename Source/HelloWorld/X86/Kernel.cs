@@ -52,7 +52,7 @@ namespace Mosa.HelloWorld
 
 		public static void Test()
 		{
-			uint page1 = VirtualPageAllocator.Reserve(8); // replace with this 1024*1024*512 and it'll panic as expected!
+			uint page1 = VirtualPageAllocator.Reserve(32 * 1024); // replace with this 1024*1024*512 and it'll panic as expected!
 			Memory.Set32(page1, 0);
 			Screen.Write(':');
 			Screen.Write(page1, 16, 8);

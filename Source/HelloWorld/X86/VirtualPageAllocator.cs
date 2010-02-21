@@ -84,18 +84,19 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="count">The count.</param>
 		/// <returns></returns>
-		public static uint Reserve(uint count)
+		public static uint Reserve(uint size)
 		{
 			uint first = 0xFFFFFFFF; // Marker
+			uint pages = ((size - 1) / PageFrameAllocator.PageSize) + 1;
 
 			for (uint at = 0; at < _pages; at++) {
 				if (GetPageStatus(at)) {
 					if (first == 0xFFFFFFFF)
 						first = at;
 
-					if (at - first == count) {
+					if (at - first == pages) {
 
-						for (uint index = 0; index < count; index++)
+						for (uint index = 0; index < pages; index++)
 							SetPageStatus(first + index, false);
 
 						return (first * PageFrameAllocator.PageSize) + PageFrameAllocator.ReserveMemory;
