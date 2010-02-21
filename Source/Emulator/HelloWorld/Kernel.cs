@@ -16,56 +16,41 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Kernel
 	{
-		private static uint _multibootptr = 0x200004;
-		private static uint _multibootsignature = 0x200000;
 
 		public static void Setup()
 		{
 			Screen.Clear();
 			Screen.Color = 0x0E;
-
 			Screen.SetCursor(24, 0);
 			Screen.Write('1');
-			Multiboot.SetMultibootLocation(Memory.Get32(_multibootptr), Memory.Get32(_multibootsignature));
+			Multiboot.Setup();
 			Screen.SetCursor(24, 1);
 			Screen.Write('2');
-			Screen.SetCursor(24, 2);
-
-			if (Multiboot.IsMultibootEnabled)
-				Screen.Write('3');
-			else
-				Screen.Write('*');	// Panic! 
-
 			PIC.Setup();
+			Screen.SetCursor(24, 2);
+			Screen.Write('3');
+			GDT.Setup();
 			Screen.SetCursor(24, 3);
 			Screen.Write('4');
-			GDT.Setup();
+			IDT.Setup();
 			Screen.SetCursor(24, 4);
 			Screen.Write('5');
-			IDT.Setup();
+			PageFrameAllocator.Setup();
 			Screen.SetCursor(24, 5);
 			Screen.Write('6');
-			PageFrameAllocator.Setup();
+			PageTable.Setup();
 			Screen.SetCursor(24, 6);
 			Screen.Write('7');
-			PageTable.Setup();
+			VirtualPageAllocator.Setup();
 			Screen.SetCursor(24, 7);
 			Screen.Write('8');
-			VirtualPageAllocator.Setup();
 			Screen.SetCursor(24, 8);
+			ProcessManager.Setup();
 			Screen.Write('9');
-
-			Test();
+			Screen.SetCursor(24, 9);
+			ProcessManager.Setup();
+			Screen.Write('A');
+			Screen.SetCursor(24, 10);
 		}
-
-		public static void Test()
-		{
-			uint page1 = VirtualPageAllocator.Reserve(8); // replace with this 1024*1024*512 and it'll panic as expected!
-			Memory.Set32(page1, 0);
-			Screen.Write(':');
-			Screen.Write(page1, 16, 8);
-			Screen.Write(':');
-		}
-
 	}
 }

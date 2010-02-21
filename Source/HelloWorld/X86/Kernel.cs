@@ -46,18 +46,11 @@ namespace Mosa.HelloWorld
 			Screen.Write('8');
 			Screen.SetCursor(24, 8);
 			ProcessManager.Setup();
-			Test();
 			Screen.Write('9');
+			Screen.SetCursor(24, 9);
+			ProcessManager.Setup();
+			Screen.Write('A');
+			Screen.SetCursor(24, 10);
 		}
-
-		public static void Test()
-		{
-			uint page1 = VirtualPageAllocator.Reserve(32 * 1024); // replace with this 1024*1024*512 and it'll panic as expected!
-			Memory.Set32(page1, 0);
-			Screen.Write(':');
-			Screen.Write(page1, 16, 8);
-			Screen.Write(':');
-		}
-
 	}
 }

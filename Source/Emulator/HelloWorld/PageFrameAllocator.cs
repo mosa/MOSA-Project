@@ -67,7 +67,7 @@ namespace Mosa.Kernel.X86
 		/// <param name="cnt">The count.</param>
 		/// <param name="start">The start.</param>
 		/// <param name="size">The size.</param>
-		public static void AddFreeMemory(uint cnt, uint start, uint size)
+		private static void AddFreeMemory(uint cnt, uint start, uint size)
 		{
 			if ((start > MaximumMemory) || (start + size < ReserveMemory))
 				return;
@@ -105,6 +105,10 @@ namespace Mosa.Kernel.X86
 			_totalUsedPages++;
 			uint avail = Memory.Get32(_at);
 			_at = _at - sizeof(uint);
+
+			// Clear out memory
+			Memory.Clear(avail, PageSize);
+
 			return avail;
 		}
 
@@ -112,11 +116,11 @@ namespace Mosa.Kernel.X86
 		/// Releases a page to the free list
 		/// </summary>
 		/// <param name="page">The page.</param>
-		public static void Free(uint page)
+		public static void Free(uint address)
 		{
 			_totalUsedPages--;
 			_at = _at + sizeof(uint);
-			Memory.Set32(_at, page);
+			Memory.Set32(_at, address);
 		}
 
 		/// <summary>

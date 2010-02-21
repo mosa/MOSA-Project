@@ -105,10 +105,9 @@
     <Compile Include="HelloWorld\PageFaultHandler.cs" />
     <Compile Include="HelloWorld\PageFrameAllocator.cs" />
     <Compile Include="HelloWorld\Panic.cs" />
-    <Compile Include="HelloWorld\PhysicalPageAllocator.cs" />
     <Compile Include="HelloWorld\PIC.cs" />
     <Compile Include="HelloWorld\ProcessManager.cs" />
-    <Compile Include="HelloWorld\Tasks.cs" />
+    <Compile Include="HelloWorld\TaskManager.cs" />
     <Compile Include="HelloWorld\VirtualPageAllocator.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="HelloWorld\Multiboot.cs" />

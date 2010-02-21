@@ -51,5 +51,16 @@ namespace Mosa.Kernel.X86
 		{
 			Memory.Set32(_pageTable + ((virtualAddress >> 12) * 4), (uint)(physicalAddress | 0x04 | 0x02 | 0x01));
 		}
+
+		/// <summary>
+		/// Gets the physical memory.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		public static uint GetPhysicalAddressFromVirtual(uint address)
+		{
+			return Memory.Get32(_pageTable + ((address >> 12) * 4)) & 0xFFF;
+		}
+
 	}
 }

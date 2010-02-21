@@ -62,11 +62,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
-    <Compile Include="X86\Process.cs" />
     <Compile Include="X86\CMOS.cs" />
     <Compile Include="X86\Panic.cs" />
     <Compile Include="X86\PageFaultHandler.cs" />
-    <Compile Include="X86\Tasks.cs" />
+    <Compile Include="X86\TaskManager.cs" />
     <Compile Include="X86\ProcessManager.cs" />
     <Compile Include="X86\Keyboard.cs" />
     <Compile Include="X86\PIC.cs" />
