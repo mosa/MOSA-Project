@@ -90,7 +90,7 @@ namespace Mosa.Kernel.X86
 
 			// Populate free table
 			for (uint mem = normstart; mem < normstart + normsize; mem = mem + PageSize, _at = _at + 4)
-				Native.Set32(_at, mem);
+				Memory.Set32(_at, mem);
 
 			_at = _at - 4;
 			_totalPages = _totalPages + (normsize / PageSize);
@@ -105,7 +105,7 @@ namespace Mosa.Kernel.X86
 			if (_at == _map) return 0; // out of memory
 
 			_totalUsedPages++;
-			uint avail = Native.Get32(_at);
+			uint avail = Memory.Get32(_at);
 			_at = _at - sizeof(uint);
 
 			// Clear out memory
@@ -122,7 +122,7 @@ namespace Mosa.Kernel.X86
 		{
 			_totalUsedPages--;
 			_at = _at + sizeof(uint);
-			Native.Set32(_at, address);
+			Memory.Set32(_at, address);
 		}
 
 		/// <summary>

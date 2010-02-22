@@ -97,8 +97,8 @@ namespace Mosa.Kernel.X86
 		{
 			uint address = GetAddress();
 			
-			Native.Set8(address, (byte)chr);
-			Native.Set8(address + 1, Color);
+			Memory.Set8(address, (byte)chr);
+			Memory.Set8(address + 1, Color);
 
 			Next();
 		}

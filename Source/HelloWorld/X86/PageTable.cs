@@ -29,11 +29,11 @@ namespace Mosa.Kernel.X86
 		{
 			// Setup Page Directory
 			for (int index = 0; index < 1024; index++)
-				Native.Set32((uint)(_pageDirectory + (index * 4)), (uint)(_pageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
+				Memory.Set32((uint)(_pageDirectory + (index * 4)), (uint)(_pageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
 
 			// Map the first 32MB of memory (8192 4K pages)
 			for (int index = 0; index < 8192 * 16; index++) // FIXME: It's not 32MB
-				Native.Set32((uint)(_pageTable + (index * 4)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
+				Memory.Set32((uint)(_pageTable + (index * 4)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 
 			// Set CR3 register on processor - sets page directory
 			Native.SetControlRegister(3, _pageDirectory);
@@ -49,7 +49,7 @@ namespace Mosa.Kernel.X86
 		/// <param name="physicalAddress">The physical address.</param>
 		public static void MapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress)
 		{
-			Native.Set32(_pageTable + ((virtualAddress >> 12) * 4), (uint)(physicalAddress | 0x04 | 0x02 | 0x01));
+			Memory.Set32(_pageTable + ((virtualAddress >> 12) * 4), (uint)(physicalAddress | 0x04 | 0x02 | 0x01));
 		}
 
 		/// <summary>
@@ -59,7 +59,7 @@ namespace Mosa.Kernel.X86
 		/// <returns></returns>
 		public static uint GetPhysicalAddressFromVirtual(uint address)
 		{
-			return Native.Get32(_pageTable + ((address >> 12) * 4)) & 0xFFF;
+			return Memory.Get32(_pageTable + ((address >> 12) * 4)) & 0xFFF;
 		}
 
 	}

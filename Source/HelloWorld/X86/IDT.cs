@@ -32,8 +32,8 @@ namespace Mosa.Kernel.X86
 		{
 			// Setup IDT table
 			Memory.Clear(_idtTable, 6);
-			Native.Set16(_idtTable, (IDT_Size * 256) - 1);
-			Native.Set32(_idtTable + 2, _idtEntries);
+			Memory.Set16(_idtTable, (IDT_Size * 256) - 1);
+			Memory.Set32(_idtTable + 2, _idtEntries);
 
 			SetTableEntries();
 
@@ -51,11 +51,11 @@ namespace Mosa.Kernel.X86
 		/// <param name="flags">The flags.</param>
 		private static void Set(uint index, uint address, ushort select, byte flags)
 		{
-			Native.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseLow, (ushort)(address & 0xFFFF));
-			Native.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseHigh, (ushort)((address >> 16) & 0xFFFF));
-			Native.Set16(_idtEntries + (index * IDT_Size) + IDT_Select, select);
-			Native.Set8(_idtEntries + (index * IDT_Size) + IDT_Always0, 0);
-			Native.Set8(_idtEntries + (index * IDT_Size) + IDT_Flags, flags);
+			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseLow, (ushort)(address & 0xFFFF));
+			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseHigh, (ushort)((address >> 16) & 0xFFFF));
+			Memory.Set16(_idtEntries + (index * IDT_Size) + IDT_Select, select);
+			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Always0, 0);
+			Memory.Set8(_idtEntries + (index * IDT_Size) + IDT_Flags, flags);
 		}
 
 		/// <summary>

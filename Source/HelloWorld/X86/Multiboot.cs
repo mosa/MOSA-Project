@@ -45,7 +45,7 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		public static void Setup()
 		{
-			SetMultibootLocation(Native.Get32(_multibootptr), Native.Get32(_multibootsignature));
+			SetMultibootLocation(Memory.Get32(_multibootptr), Memory.Get32(_multibootsignature));
 		}
 
 		/// <summary>
@@ -78,7 +78,7 @@ namespace Mosa.Kernel.X86
 				Screen.Write(':');
 				Screen.Write(' ');
 				Screen.Color = 0x07;
-				Screen.Write(Native.Get32(location + i), 16, 16);
+				Screen.Write(Memory.Get32(location + i), 16, 16);
 				Screen.NextLine();
 			}
 		}
@@ -96,7 +96,7 @@ namespace Mosa.Kernel.X86
 				Screen.Write(i, 10, 2);
 				Screen.Write(':');
 				Screen.Write(' ');
-				Screen.Write(Native.Get32(location + i), 16, 8);
+				Screen.Write(Memory.Get32(location + i), 16, 8);
 				Screen.NextLine();
 			}
 		}
@@ -141,7 +141,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 0);
+				return Memory.Get32(MultibootStructure + 0);
 			}
 		}
 
@@ -153,7 +153,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 4);
+				return Memory.Get32(MultibootStructure + 4);
 			}
 		}
 
@@ -165,7 +165,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 8);
+				return Memory.Get32(MultibootStructure + 8);
 			}
 		}
 
@@ -177,7 +177,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 12);
+				return Memory.Get32(MultibootStructure + 12);
 			}
 		}
 
@@ -189,7 +189,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 16);
+				return Memory.Get32(MultibootStructure + 16);
 			}
 		}
 
@@ -201,7 +201,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 20);
+				return Memory.Get32(MultibootStructure + 20);
 			}
 		}
 
@@ -213,7 +213,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 24);
+				return Memory.Get32(MultibootStructure + 24);
 			}
 		}
 
@@ -225,7 +225,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 44);
+				return Memory.Get32(MultibootStructure + 44);
 			}
 		}
 
@@ -237,7 +237,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 48);
+				return Memory.Get32(MultibootStructure + 48);
 			}
 		}
 
@@ -251,7 +251,7 @@ namespace Mosa.Kernel.X86
 
 			while (location < (MemoryMapStart + MemoryMapLength)) {
 				_memoryMapCount++;
-				location = Native.Get32(location) + location + 4;
+				location = Memory.Get32(location) + location + 4;
 			}
 		}
 
@@ -265,7 +265,7 @@ namespace Mosa.Kernel.X86
 			uint location = MemoryMapStart;
 
 			for (uint i = 0; i < index; i++)
-				location = location + Native.Get32(location) + 4;
+				location = location + Memory.Get32(location) + 4;
 
 			return location;
 		}
@@ -277,7 +277,7 @@ namespace Mosa.Kernel.X86
 		/// <returns></returns>
 		public static uint GetMemoryMapBase(uint index)
 		{
-			return Native.Get32(GetMemoryMapIndexLocation(index) + 4);
+			return Memory.Get32(GetMemoryMapIndexLocation(index) + 4);
 		}
 
 		/// <summary>
@@ -287,7 +287,7 @@ namespace Mosa.Kernel.X86
 		/// <returns></returns>
 		public static ulong GetMemoryMapLength(uint index)
 		{
-			return Native.Get32(GetMemoryMapIndexLocation(index) + 12);
+			return Memory.Get32(GetMemoryMapIndexLocation(index) + 12);
 		}
 
 		/// <summary>
@@ -297,7 +297,7 @@ namespace Mosa.Kernel.X86
 		/// <returns></returns>
 		public static byte GetMemoryMapType(uint index)
 		{
-			return Native.Get8(GetMemoryMapIndexLocation(index) + 20);
+			return Memory.Get8(GetMemoryMapIndexLocation(index) + 20);
 		}
 
 		/// <summary>
@@ -308,7 +308,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 52);
+				return Memory.Get32(MultibootStructure + 52);
 			}
 		}
 
@@ -320,7 +320,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 56);
+				return Memory.Get32(MultibootStructure + 56);
 			}
 		}
 
@@ -332,7 +332,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 60);
+				return Memory.Get32(MultibootStructure + 60);
 			}
 		}
 
@@ -344,7 +344,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 64);
+				return Memory.Get32(MultibootStructure + 64);
 			}
 		}
 
@@ -356,7 +356,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 68);
+				return Memory.Get32(MultibootStructure + 68);
 			}
 		}
 
@@ -368,7 +368,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 72);
+				return Memory.Get32(MultibootStructure + 72);
 			}
 		}
 
@@ -380,7 +380,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 72);
+				return Memory.Get32(MultibootStructure + 72);
 			}
 		}
 
@@ -392,7 +392,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 76);
+				return Memory.Get32(MultibootStructure + 76);
 			}
 		}
 
@@ -404,7 +404,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 80);
+				return Memory.Get32(MultibootStructure + 80);
 			}
 		}
 
@@ -416,7 +416,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 84);
+				return Memory.Get32(MultibootStructure + 84);
 			}
 		}
 
@@ -428,7 +428,7 @@ namespace Mosa.Kernel.X86
 		{
 			get
 			{
-				return Native.Get32(MultibootStructure + 86);
+				return Memory.Get32(MultibootStructure + 86);
 			}
 		}
 	}

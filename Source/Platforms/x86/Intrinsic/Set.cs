@@ -41,7 +41,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 			MemoryOperand memory = new MemoryOperand(value.Type, GeneralPurposeRegister.EDX, new IntPtr(0));
 
 			context.SetInstruction(CPUx86.Instruction.MovInstruction, edx, dest);
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, value);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, value);
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, memory, eax);
 		}
 

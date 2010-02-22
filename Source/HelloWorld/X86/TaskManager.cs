@@ -112,26 +112,26 @@ namespace Mosa.Kernel.X86
 			// TODO: Add guard pages before and after stack
 
 			// Setup Task Entry
-			Native.Set32(task + Offset.Status, Status.Running);
-			Native.Set32(task + Offset.ProcessID, processid);
-			Native.Set32(task + Offset.TaskID, slot);
-			Native.Set32(task + Offset.StackTop, stack + _defaultStackSize);
-			Native.Set32(task + Offset.StackBottom, stack);
+			Memory.Set32(task + Offset.Status, Status.Running);
+			Memory.Set32(task + Offset.ProcessID, processid);
+			Memory.Set32(task + Offset.TaskID, slot);
+			Memory.Set32(task + Offset.StackTop, stack + _defaultStackSize);
+			Memory.Set32(task + Offset.StackBottom, stack);
 
 			// Setup Stack
-			Native.Set32(stack + StackSetupOffset.EFLAG, 0);	// TODO
-			Native.Set32(stack + StackSetupOffset.CS, 0);	// TODO
-			Native.Set32(stack + StackSetupOffset.EIP, 0);	// TODO
-			Native.Set32(stack + StackSetupOffset.ErrorCode, 0);
-			Native.Set32(stack + StackSetupOffset.IRQ, 0);
-			Native.Set32(stack + StackSetupOffset.EAX, 0);
-			Native.Set32(stack + StackSetupOffset.ECX, 0);
-			Native.Set32(stack + StackSetupOffset.EDX, 0);
-			Native.Set32(stack + StackSetupOffset.EBX, 0);
-			Native.Set32(stack + StackSetupOffset.ESP, stack);
-			Native.Set32(stack + StackSetupOffset.EBP, stack);
-			Native.Set32(stack + StackSetupOffset.ESI, 0);
-			Native.Set32(stack + StackSetupOffset.EDI, 0);
+			Memory.Set32(stack + StackSetupOffset.EFLAG, 0);	// TODO
+			Memory.Set32(stack + StackSetupOffset.CS, 0);	// TODO
+			Memory.Set32(stack + StackSetupOffset.EIP, 0);	// TODO
+			Memory.Set32(stack + StackSetupOffset.ErrorCode, 0);
+			Memory.Set32(stack + StackSetupOffset.IRQ, 0);
+			Memory.Set32(stack + StackSetupOffset.EAX, 0);
+			Memory.Set32(stack + StackSetupOffset.ECX, 0);
+			Memory.Set32(stack + StackSetupOffset.EDX, 0);
+			Memory.Set32(stack + StackSetupOffset.EBX, 0);
+			Memory.Set32(stack + StackSetupOffset.ESP, stack);
+			Memory.Set32(stack + StackSetupOffset.EBP, stack);
+			Memory.Set32(stack + StackSetupOffset.ESI, 0);
+			Memory.Set32(stack + StackSetupOffset.EDI, 0);
 
 			// TODO: Unlock
 
@@ -158,7 +158,7 @@ namespace Mosa.Kernel.X86
 		private static uint FindEmptySlot()
 		{
 			for (uint slot = 1; slot < _slots; slot++)
-				if (Native.Get32(GetTaskLocation(slot) + Offset.Status) == Status.Empty)
+				if (Memory.Get32(GetTaskLocation(slot) + Offset.Status) == Status.Empty)
 					return slot;
 
 			return 0;
