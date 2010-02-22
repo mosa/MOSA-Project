@@ -218,6 +218,12 @@ namespace Mosa.Platforms.x86
 		/// 
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
+		public static ulong Get64(uint address) { ThrowPlatformNotSupported(); return 0; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
 		public static void Set8(uint address, byte value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
@@ -231,6 +237,12 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
 		public static void Set32(uint address, uint value) { ThrowPlatformNotSupported(); }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
+		public static void Set64(uint address, ulong value) { ThrowPlatformNotSupported(); }
 
 		#endregion
 

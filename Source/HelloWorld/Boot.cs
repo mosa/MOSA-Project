@@ -454,7 +454,7 @@ namespace Mosa.HelloWorld
 		/// <summary>
 		/// Displays the seconds.
 		/// </summary>
-		private unsafe static void DisplayTime()
+		private static void DisplayTime()
 		{
 			Screen.SetCursor(24, 52);
 			Screen.Color = 0x0A;

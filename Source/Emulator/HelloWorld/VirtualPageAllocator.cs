@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Platforms.x86;
+
 namespace Mosa.Kernel.X86
 {
 	/// <summary>
@@ -53,14 +55,14 @@ namespace Mosa.Kernel.X86
 			byte bit = (byte)(page % 32);
 			uint mask = (byte)(1 << bit);
 
-			uint value = Memory.Get32(at);
+			uint value = Native.Get32(at);
 
 			if (free)
 				value = (uint)(value & ~mask);
 			else
 				value = (uint)(value | mask);
 
-			Memory.Set32(at, value);
+			Native.Set32(at, value);
 		}
 
 		/// <summary>
@@ -74,7 +76,7 @@ namespace Mosa.Kernel.X86
 			byte bit = (byte)(page % 8);
 			byte mask = (byte)(1 << bit);
 
-			byte value = Memory.Get8(at);
+			byte value = Native.Get8(at);
 
 			return (value & mask) == 0;
 		}

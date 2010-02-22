@@ -102,6 +102,7 @@
     <Compile Include="HelloWorld\IDT.cs" />
     <Compile Include="HelloWorld\Kernel.cs" />
     <Compile Include="HelloWorld\Keyboard.cs" />
+    <Compile Include="HelloWorld\Memory.cs" />
     <Compile Include="HelloWorld\PageFaultHandler.cs" />
     <Compile Include="HelloWorld\PageFrameAllocator.cs" />
     <Compile Include="HelloWorld\Panic.cs" />
@@ -109,7 +110,6 @@
     <Compile Include="HelloWorld\ProcessManager.cs" />
     <Compile Include="HelloWorld\TaskManager.cs" />
     <Compile Include="HelloWorld\VirtualPageAllocator.cs" />
-    <Compile Include="Memory.cs" />
     <Compile Include="HelloWorld\Multiboot.cs" />
     <Compile Include="HelloWorld\PageTable.cs" />
     <Compile Include="HelloWorld\Screen.cs" />

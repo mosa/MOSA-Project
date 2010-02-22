@@ -56,6 +56,66 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
+		/// Sets the specified value at location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <param name="value">The value.</param>
+		public static void Set32(uint location, uint value)
+		{
+			Mosa.EmulatedKernel.MemoryDispatch.Write32(location, value);
+		}
+
+		/// <summary>
+		/// Sets the specified value at location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <param name="value">The value.</param>
+		public static void Set8(uint location, byte value)
+		{
+			Mosa.EmulatedKernel.MemoryDispatch.Write8(location, value);
+		}
+
+		/// <summary>
+		/// Sets the specified value at location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <param name="value">The value.</param>
+		public static void Set16(uint location, ushort value)
+		{
+			Mosa.EmulatedKernel.MemoryDispatch.Write16(location, value);
+		}
+
+		/// <summary>
+		/// Gets the value at specified location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <returns></returns>
+		public static uint Get32(uint location)
+		{
+			return Mosa.EmulatedKernel.MemoryDispatch.Read32(location);
+		}
+
+		/// <summary>
+		/// Gets the value at specified location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <returns></returns>
+		public static byte Get8(uint location)
+		{
+			return Mosa.EmulatedKernel.MemoryDispatch.Read8(location);
+		}
+
+		/// <summary>
+		/// Gets the value at specified location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <returns></returns>
+		public static ulong Get64(ulong location)
+		{
+			return Mosa.EmulatedKernel.MemoryDispatch.Read64((uint)location);
+		}
+
+		/// <summary>
 		/// Nop
 		/// </summary>
 		public static void Nop()

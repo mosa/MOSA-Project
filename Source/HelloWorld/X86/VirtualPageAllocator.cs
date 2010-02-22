@@ -62,7 +62,7 @@ namespace Mosa.Kernel.X86
 			else
 				value = (uint)(value | mask);
 
-			Memory.Set32(at, value);
+			Native.Set32(at, value);
 		}
 
 		/// <summary>
