@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Platforms.x86;
+
 namespace Mosa.Kernel.X86
 {
 	/// <summary>
@@ -103,7 +105,7 @@ namespace Mosa.Kernel.X86
 			if (_at == _map) return 0; // out of memory
 
 			_totalUsedPages++;
-			uint avail = Memory.Get32(_at);
+			uint avail = Native.Get32(_at);
 			_at = _at - sizeof(uint);
 
 			// Clear out memory

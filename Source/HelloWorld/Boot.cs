@@ -5,6 +5,7 @@
  *
  */
 
+using Mosa.Platforms.x86;
 using Mosa.Kernel.X86;
 
 namespace Mosa.HelloWorld
@@ -137,7 +138,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(':');
 			Screen.Write(' ');
 			Screen.Color = 0x07;
-			Screen.Write(Memory.Get32(0x200004), 16, 8);
+			Screen.Write(Native.Get32(0x200004), 16, 8);
 
 			Screen.NextLine();
 			Screen.Color = 0x0A;
@@ -160,7 +161,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(' ');
 			Screen.Write(' ');
 			Screen.Color = 0x07;
-			Screen.Write(Memory.Get32(0x200000), 16, 8);
+			Screen.Write(Native.Get32(0x200000), 16, 8);
 
 			Screen.NextLine();
 			Screen.Color = 0x0A;

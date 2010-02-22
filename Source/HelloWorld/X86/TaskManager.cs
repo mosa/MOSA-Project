@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Platforms.x86;
+
 namespace Mosa.Kernel.X86
 {
 	/// <summary>
@@ -156,7 +158,7 @@ namespace Mosa.Kernel.X86
 		private static uint FindEmptySlot()
 		{
 			for (uint slot = 1; slot < _slots; slot++)
-				if (Memory.Get32(GetTaskLocation(slot) + Offset.Status) == Status.Empty)
+				if (Native.Get32(GetTaskLocation(slot) + Offset.Status) == Status.Empty)
 					return slot;
 
 			return 0;

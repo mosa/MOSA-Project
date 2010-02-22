@@ -129,7 +129,7 @@ namespace Mosa.Kernel.X86
 		private static void UpdateMemoryBitMap(uint slot, uint address, uint size, bool free)
 		{
 			uint process = GetProcessLocation(slot);
-			uint bitmap = Memory.Get32(process + Offset.MemoryMap);
+			uint bitmap = Native.Get32(process + Offset.MemoryMap);
 
 			for (uint at = address; at < address + size; at = at + PageFrameAllocator.PageSize)
 				SetPageStatus(bitmap, at / PageFrameAllocator.PageSize, free);
@@ -146,7 +146,7 @@ namespace Mosa.Kernel.X86
 			byte bit = (byte)(page % 32);
 			uint mask = (byte)(1 << bit);
 
-			uint value = Memory.Get32(at);
+			uint value = Native.Get32(at);
 
 			if (free)
 				value = (byte)(value & ~mask);
@@ -163,7 +163,7 @@ namespace Mosa.Kernel.X86
 		private static uint FindEmptySlot()
 		{
 			for (uint slot = 1; slot < _slots; slot++)
-				if (Memory.Get32(GetProcessLocation(slot) + Offset.Status) == Status.Empty)
+				if (Native.Get32(GetProcessLocation(slot) + Offset.Status) == Status.Empty)
 					return slot;
 
 			return 0;

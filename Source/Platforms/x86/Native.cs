@@ -212,7 +212,25 @@ namespace Mosa.Platforms.x86
 		/// 
 		/// </summary>
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
-		public static byte Get32(uint address) { ThrowPlatformNotSupported(); return 0; }
+		public static uint Get32(uint address) { ThrowPlatformNotSupported(); return 0; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
+		public static void Set8(uint address, byte value) { ThrowPlatformNotSupported(); }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
+		public static void Set16(uint address, ushort value) { ThrowPlatformNotSupported(); }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
+		public static void Set32(uint address, uint value) { ThrowPlatformNotSupported(); }
 
 		#endregion
 

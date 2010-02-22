@@ -297,7 +297,7 @@ namespace Mosa.Kernel.X86
 		/// <returns></returns>
 		public static byte GetMemoryMapType(uint index)
 		{
-			return Memory.Get8(GetMemoryMapIndexLocation(index) + 20);
+			return Native.Get8(GetMemoryMapIndexLocation(index) + 20);
 		}
 
 		/// <summary>
