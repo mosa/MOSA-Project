@@ -22,7 +22,7 @@ namespace Mosa.Kernel.X86
 
 		#region Data members
 
-		internal struct _Status
+		internal struct Status
 		{
 			public static readonly byte Empty = 0;
 			public static readonly byte Running = 1;
@@ -30,7 +30,7 @@ namespace Mosa.Kernel.X86
 			public static readonly byte Terminated = 3;
 		}
 
-		internal struct _Offset
+		internal struct Offset
 		{
 			public static readonly uint Status = 0;
 			public static readonly uint ProcessID = 4;
@@ -49,7 +49,7 @@ namespace Mosa.Kernel.X86
 		public unsafe static void Setup()
 		{
 			// Allocate memory for the process table
-			_table = VirtualPageAllocator.Reserve((uint)(_slots * _Offset.TotalSize));
+			_table = VirtualPageAllocator.Reserve((uint)(_slots * Offset.TotalSize));
 
 			// Create idle process
 			CreateProcess(0);
@@ -83,10 +83,10 @@ namespace Mosa.Kernel.X86
 		{
 			uint process = GetProcessLocation(slot);
 
-			Memory.Set32(process + _Offset.Status, _Status.Running);
-			Memory.Set32(process + _Offset.ProcessID, slot);
-			Memory.Set32(process + _Offset.MemoryMap, VirtualPageAllocator.Reserve(32 * 4096));
-			Memory.Set32(process + _Offset.Lock, 0);
+			Memory.Set32(process + Offset.Status, Status.Running);
+			Memory.Set32(process + Offset.ProcessID, slot);
+			Memory.Set32(process + Offset.MemoryMap, VirtualPageAllocator.Reserve(32 * 4096));
+			Memory.Set32(process + Offset.Lock, 0);
 
 			return slot;
 		}
@@ -129,7 +129,7 @@ namespace Mosa.Kernel.X86
 		private static void UpdateMemoryBitMap(uint slot, uint address, uint size, bool free)
 		{
 			uint process = GetProcessLocation(slot);
-			uint bitmap = Memory.Get32(process + _Offset.MemoryMap);
+			uint bitmap = Memory.Get32(process + Offset.MemoryMap);
 
 			for (uint at = address; at < address + size; at = at + PageFrameAllocator.PageSize)
 				SetPageStatus(bitmap, at / PageFrameAllocator.PageSize, free);
@@ -163,7 +163,7 @@ namespace Mosa.Kernel.X86
 		private static uint FindEmptySlot()
 		{
 			for (uint slot = 1; slot < _slots; slot++)
-				if (Memory.Get32(GetProcessLocation(slot) + _Offset.Status) == _Status.Empty)
+				if (Memory.Get32(GetProcessLocation(slot) + Offset.Status) == Status.Empty)
 					return slot;
 
 			return 0;
@@ -176,7 +176,7 @@ namespace Mosa.Kernel.X86
 		/// <returns></returns>
 		private static uint GetProcessLocation(uint slot)
 		{
-			return (uint)(_table + (_Offset.TotalSize * slot));
+			return (uint)(_table + (Offset.TotalSize * slot));
 		}
 	}
 }

@@ -69,9 +69,10 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <returns></returns>
-		public static uint Get32(uint location)
+		public unsafe static uint Get32(uint location)
 		{
-			return Native.Get32(location);
+			uint* at = (uint*)location;
+			return *at;
 		}
 
 		/// <summary>
@@ -79,9 +80,10 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <returns></returns>
-		public static ushort Get16(uint location)
+		public unsafe static ushort Get16(uint location)
 		{
-			return Native.Get16(location);
+			ushort* at = (ushort*)location;
+			return *at;
 		}
 
 		/// <summary>
@@ -89,9 +91,10 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <returns></returns>
-		public static byte Get8(uint location)
+		public unsafe static byte Get8(uint location)
 		{
-			return Native.Get8(location);
+			byte* at = (byte*)location;
+			return *at;
 		}
 
 		/// <summary>

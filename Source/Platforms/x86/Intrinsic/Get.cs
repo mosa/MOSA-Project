@@ -35,8 +35,8 @@ namespace Mosa.Platforms.x86.Intrinsic
 		{
 			Operand result = context.Result;
 
-			RegisterOperand tmp = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.EDX);
-			MemoryOperand operand = new MemoryOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Ptr), GeneralPurposeRegister.EDX, new System.IntPtr(0));
+			RegisterOperand tmp = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Ptr), GeneralPurposeRegister.EDX);
+			MemoryOperand operand = new MemoryOperand(context.Operand1.Type, GeneralPurposeRegister.EDX, new System.IntPtr(0));
 
 			context.SetInstruction(CPUx86.Instruction.MovInstruction, tmp, context.Operand1);
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, operand);
