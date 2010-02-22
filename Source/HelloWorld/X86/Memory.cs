@@ -32,26 +32,6 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <param name="value">The value.</param>
-		public static void Set32(uint location, uint value)
-		{
-			Native.Set32(location, value);
-		}
-
-		/// <summary>
-		/// Sets the specified value at location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <param name="value">The value.</param>
-		public static void Set16(uint location, ushort value)
-		{
-			Native.Set16(location, value);
-		}
-
-		/// <summary>
-		/// Sets the specified value at location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <param name="value">The value.</param>
 		public static void Set8(uint location, byte value)
 		{
 			Native.Set8(location, value);
