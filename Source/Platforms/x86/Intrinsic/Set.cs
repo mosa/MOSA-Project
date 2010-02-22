@@ -38,9 +38,11 @@ namespace Mosa.Platforms.x86.Intrinsic
 
 			RegisterOperand edx = new RegisterOperand(dest.Type, GeneralPurposeRegister.EDX);
 			RegisterOperand eax = new RegisterOperand(value.Type, GeneralPurposeRegister.EAX);
+			MemoryOperand memory = new MemoryOperand(value.Type, GeneralPurposeRegister.EDX, new IntPtr(0));
 
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, edx, dest);
 			context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, value);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, dest, eax);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, memory, eax);
 		}
 
 		#endregion // Methods
