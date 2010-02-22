@@ -92,6 +92,10 @@ namespace Mosa.Runtime.Vm
 				this.type = this.GetFieldType();
 				return this.type;
 			}
+			set
+			{
+				type = value;
+			}
 		}
 
 		#endregion // Properties
@@ -102,7 +106,7 @@ namespace Mosa.Runtime.Vm
 		/// Gets the type of the field.
 		/// </summary>
 		/// <returns>The type of the field.</returns>
-		protected abstract SigType GetFieldType();
+		public abstract SigType GetFieldType();
 
 		#endregion // Methods
 

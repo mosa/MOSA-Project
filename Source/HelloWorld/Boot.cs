@@ -10,7 +10,10 @@ using Mosa.Kernel.X86;
 
 namespace Mosa.HelloWorld
 {
- 
+	public struct GenericTestStruct<T>
+	{
+		public T data;
+	}
 	/// <summary>
 	/// 
 	/// </summary>
@@ -21,10 +24,12 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		public static void Main()
 		{
+			GenericTestStruct<char> genericTestStruct;
+			genericTestStruct.data = 'M';
 			Kernel.Setup();
 			Screen.GotoTop();
 			Screen.Color = 0x0E;
-			Screen.Write('M');
+			Screen.Write(genericTestStruct.data);
 			Screen.Write('O');
 			Screen.Write('S');
 			Screen.Write('A');

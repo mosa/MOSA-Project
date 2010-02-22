@@ -80,7 +80,7 @@ namespace Mosa.Runtime.Metadata.Runtime
         /// Gets the type of the field.
         /// </summary>
         /// <returns>The type of the field.</returns>
-        protected override SigType GetFieldType()
+        public override SigType GetFieldType()
         {
             FieldSignature fsig = new FieldSignature();
             fsig.LoadSignature(this.Module.Metadata, this.signature);

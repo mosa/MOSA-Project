@@ -362,18 +362,58 @@ namespace Mosa.Runtime.Vm
             if (TokenTypes.Field != (TokenTypes.TableMask & token) && TokenTypes.MemberRef != (TokenTypes.TableMask & token))
                 throw new ArgumentException(@"Invalid field token.");
 
-            if (TokenTypes.MemberRef == (TokenTypes.TableMask & token))
-            {
-                MemberRefRow row;
-                scope.Metadata.Read(token, out row);
-                throw new NotImplementedException();  
-            }
+			if (TokenTypes.MemberRef == (TokenTypes.TableMask & token))
+			{
+				MemberRefRow row;
+				scope.Metadata.Read(token, out row);
 
-            ModuleOffsets offsets = GetModuleOffset(scope);
-            int fieldIndex = (int)(token & TokenTypes.RowIndexMask) - 1;
-            RuntimeField result = _fields[offsets.FieldOffset + fieldIndex];
-            return result;
+				if (TokenTypes.TypeSpec == (TokenTypes.TableMask & row.ClassTableIdx))
+				{
+					TypeSpecRow typeSpec;
+					byte[] blob;
+					scope.Metadata.Read(row.ClassTableIdx, out typeSpec);
+					TokenTypes signatureToken = scope.Metadata.Read(typeSpec.SignatureBlobIdx, out blob);
+					TokenTypes type = DecodeTypeIndex(blob[2]);
+					TypeDefRow typeDef;
+					scope.Metadata.Read(type, out typeDef);
+					ModuleOffsets offset = GetModuleOffset(scope);
+					token = typeDef.FieldList;
+
+					ModuleOffsets offsets = GetModuleOffset(scope);
+					int fieldIndex = (int)(token & TokenTypes.RowIndexMask) - 1;
+					RuntimeField result = _fields[offsets.FieldOffset + fieldIndex];
+					result.Type = new SigType(GetElementType(blob, offsets.FieldOffset));
+					return result;
+				}
+			}
+			else
+			{
+				ModuleOffsets offsets = GetModuleOffset(scope);
+				int fieldIndex = (int)(token & TokenTypes.RowIndexMask) - 1;
+				RuntimeField result = _fields[offsets.FieldOffset + fieldIndex];
+				return result;
+			}
+			return null;
         }
+
+		protected TokenTypes DecodeTypeIndex(byte signature)
+		{
+			TokenTypes result = TokenTypes.TypeDef;
+			if ((signature & 0x3) == 0x00)
+				result = TokenTypes.TypeDef;
+			else if ((signature & 0x03) == 0x01)
+				result = TokenTypes.TypeRef;
+			else if ((signature & 0x03) == 0x02)
+				result = TokenTypes.TypeSpec;
+
+			result |= (TokenTypes)(signature >> 2);
+			return result;
+		}
+
+		protected CilElementType GetElementType(byte[] blob, int index)
+		{
+			return (CilElementType)(blob[4 + index]);
+		}
 
         RuntimeMethod ITypeSystem.GetMethod(IMetadataModule scope, TokenTypes token)
         {
