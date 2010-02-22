@@ -59,7 +59,7 @@ namespace Mosa.Kernel.X86
 		/// <returns></returns>
 		public static uint GetPhysicalAddressFromVirtual(uint address)
 		{
-			return Memory.Get32(_pageTable + ((address >> 12) * 4)) & 0xFFF;
+			return Native.Get32(_pageTable + ((address >> 12) * 4)) & 0xFFF;
 		}
 
 	}

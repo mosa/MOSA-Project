@@ -55,7 +55,7 @@ namespace Mosa.Kernel.X86
 			byte bit = (byte)(page % 32);
 			uint mask = (byte)(1 << bit);
 
-			uint value = Memory.Get32(at);
+			uint value = Native.Get32(at);
 
 			if (free)
 				value = (uint)(value & ~mask);
@@ -76,7 +76,7 @@ namespace Mosa.Kernel.X86
 			byte bit = (byte)(page % 8);
 			byte mask = (byte)(1 << bit);
 
-			byte value = Memory.Get8(at);
+			byte value = Native.Get8(at);
 
 			return (value & mask) == 0;
 		}

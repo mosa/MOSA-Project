@@ -21,14 +21,10 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="start">The start.</param>
 		/// <param name="bytes">The bytes.</param>
-		public unsafe static void Clear(uint start, uint bytes)
+		public static void Clear(uint start, uint bytes)
 		{
-			byte* at = (byte*)start;
-			byte* end = at + bytes;
-			while (at <= end) {
-				*at = 0;
-				at++;
-			}
+			for (uint at = start; at < (start + bytes); at++)
+				Memory.Set8(at, 0);
 		}
 
 		/// <summary>
@@ -62,50 +58,6 @@ namespace Mosa.Kernel.X86
 		{
 			byte* at = (byte*)location;
 			*at = value;
-		}
-
-		/// <summary>
-		/// Gets the value at specified location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <returns></returns>
-		public unsafe static uint Get32(uint location)
-		{
-			uint* at = (uint*)location;
-			return *at;
-		}
-
-		/// <summary>
-		/// Gets the value at specified location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <returns></returns>
-		public unsafe static ushort Get16(uint location)
-		{
-			ushort* at = (ushort*)location;
-			return *at;
-		}
-
-		/// <summary>
-		/// Gets the value at specified location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <returns></returns>
-		public unsafe static byte Get8(uint location)
-		{
-			byte* at = (byte*)location;
-			return *at;
-		}
-
-		/// <summary>
-		/// Gets the value at specified location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <returns></returns>
-		public unsafe static ulong Get64(ulong location)
-		{
-			ulong* at = (ulong*)location;
-			return *at;
 		}
 
 	}
