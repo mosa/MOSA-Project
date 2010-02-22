@@ -32,10 +32,9 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <param name="value">The value.</param>
-		public unsafe static void Set32(uint location, uint value)
+		public static void Set32(uint location, uint value)
 		{
-			uint* at = (uint*)location;
-			*at = value;
+			Native.Set32(location, value);
 		}
 
 		/// <summary>
@@ -43,10 +42,9 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <param name="value">The value.</param>
-		public unsafe static void Set16(uint location, ushort value)
+		public static void Set16(uint location, ushort value)
 		{
-			ushort* at = (ushort*)location;
-			*at = value;
+			Native.Set16(location, value);
 		}
 
 		/// <summary>
@@ -54,10 +52,9 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <param name="value">The value.</param>
-		public unsafe static void Set8(uint location, byte value)
+		public static void Set8(uint location, byte value)
 		{
-			byte* at = (byte*)location;
-			*at = value;
+			Native.Set8(location, value);
 		}
 
 	}
