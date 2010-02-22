@@ -23,7 +23,7 @@ namespace Mosa.Kernel.X86
 		/// <param name="bytes">The bytes.</param>
 		public static void Clear(uint start, uint bytes)
 		{
-			for (uint at = start; at <= at + bytes; at++)
+			for (uint at = start; at < start + bytes; at++)
 				Native.Set8(at, 0);
 		}
 
