@@ -24,7 +24,7 @@ namespace Mosa.Kernel.X86
 		public static void Clear(uint start, uint bytes)
 		{
 			for (uint at = start; at < (start + bytes); at++)
-				Memory.Set8(at, 0);
+				Native.Set8(at, 0);
 		}
 
 		/// <summary>

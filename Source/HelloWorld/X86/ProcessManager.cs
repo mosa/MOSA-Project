@@ -83,10 +83,10 @@ namespace Mosa.Kernel.X86
 		{
 			uint process = GetProcessLocation(slot);
 
-			Memory.Set32(process + Offset.Status, Status.Running);
-			Memory.Set32(process + Offset.ProcessID, slot);
-			Memory.Set32(process + Offset.MemoryMap, VirtualPageAllocator.Reserve(32 * 4096));
-			Memory.Set32(process + Offset.Lock, 0);
+			Native.Set32(process + Offset.Status, Status.Running);
+			Native.Set32(process + Offset.ProcessID, slot);
+			Native.Set32(process + Offset.MemoryMap, VirtualPageAllocator.Reserve(32 * 4096));
+			Native.Set32(process + Offset.Lock, 0);
 
 			return slot;
 		}
@@ -153,7 +153,7 @@ namespace Mosa.Kernel.X86
 			else
 				value = (byte)(value | mask);
 
-			Memory.Set32(at, value);
+			Native.Set32(at, value);
 		}
 
 		/// <summary>
