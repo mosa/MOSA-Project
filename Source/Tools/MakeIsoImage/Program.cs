@@ -98,7 +98,10 @@ namespace Mosa.Tools.MakeIsoImage
 
 		static private void AddDirectoryTree(Iso9660Generator iso, string root, string virtualPrepend)
 		{
-			DirectoryInfo dirinfo = new DirectoryInfo(root.Replace('/', '\\'));
+			if(Environment.OSVersion.Platform == PlatformID.Win32Windows || Environment.OSVersion.Platform == PlatformID.Win32NT)
+				root = root.Replace('/', '\\');
+			
+			DirectoryInfo dirinfo = new DirectoryInfo(root);
 
 			foreach (FileInfo file in dirinfo.GetFiles())
 				iso.AddFile(virtualPrepend + file.Name, file);

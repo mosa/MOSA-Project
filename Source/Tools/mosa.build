@@ -29,6 +29,16 @@
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
 	    </csc>
 	</target>
+
+	<target name="makeisoimage">
+	    <csc target="exe" output="${outputDirectory}/Mosa.MakeISOImage.exe" debug="${debug}">
+	        <sources>
+	        	<include name="MakeIsoImage/**/*.cs"/>
+	        </sources>
+
+	        <nowarn><warning number="${suppresswarnings}"/></nowarn>
+	    </csc>
+	</target>
 	
 	<!-- mosacl tool -->
 	<target name="mosacl">
@@ -53,6 +63,6 @@
 	</target>
 
 	<!-- Main build target -->
-	<target name="build" depends="createbootimage, mosacl"/>
+	<target name="build" depends="createbootimage, makeisoimage, mosacl"/>
 	
 </project>
