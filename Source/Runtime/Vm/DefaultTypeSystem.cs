@@ -364,27 +364,7 @@ namespace Mosa.Runtime.Vm
 
 			if (TokenTypes.MemberRef == (TokenTypes.TableMask & token))
 			{
-				MemberRefRow row;
-				scope.Metadata.Read(token, out row);
-
-				if (TokenTypes.TypeSpec == (TokenTypes.TableMask & row.ClassTableIdx))
-				{
-					TypeSpecRow typeSpec;
-					byte[] blob;
-					scope.Metadata.Read(row.ClassTableIdx, out typeSpec);
-					TokenTypes signatureToken = scope.Metadata.Read(typeSpec.SignatureBlobIdx, out blob);
-					TokenTypes type = DecodeTypeIndex(blob[2]);
-					TypeDefRow typeDef;
-					scope.Metadata.Read(type, out typeDef);
-					ModuleOffsets offset = GetModuleOffset(scope);
-					token = typeDef.FieldList;
-
-					ModuleOffsets offsets = GetModuleOffset(scope);
-					int fieldIndex = (int)(token & TokenTypes.RowIndexMask) - 1;
-					RuntimeField result = _fields[offsets.FieldOffset + fieldIndex];
-					result.Type = new SigType(GetElementType(blob, offsets.FieldOffset));
-					return result;
-				}
+				return GetFieldForMemberReference(scope, token);
 			}
 			else
 			{
@@ -393,8 +373,34 @@ namespace Mosa.Runtime.Vm
 				RuntimeField result = _fields[offsets.FieldOffset + fieldIndex];
 				return result;
 			}
-			return null;
         }
+
+		protected RuntimeField GetFieldForMemberReference(IMetadataModule scope, TokenTypes token)
+		{
+			MemberRefRow row;
+			scope.Metadata.Read(token, out row);
+
+			if (TokenTypes.TypeSpec == (TokenTypes.TableMask & row.ClassTableIdx))
+			{
+				TypeSpecRow typeSpec;
+				byte[] blob;
+				scope.Metadata.Read(row.ClassTableIdx, out typeSpec);
+				TokenTypes signatureToken = scope.Metadata.Read(typeSpec.SignatureBlobIdx, out blob);
+				TokenTypes type = DecodeTypeIndex(blob[2]);
+				TypeDefRow typeDef;
+				scope.Metadata.Read(type, out typeDef);
+				ModuleOffsets offset = GetModuleOffset(scope);
+				token = typeDef.FieldList;
+
+				ModuleOffsets offsets = GetModuleOffset(scope);
+				int fieldIndex = (int)(token & TokenTypes.RowIndexMask) - 1;
+				RuntimeField result = _fields[offsets.FieldOffset + fieldIndex];
+				result.Type = new SigType(GetElementType(blob, offsets.FieldOffset));
+				return result;
+			}
+
+			return null;
+		}
 
 		protected TokenTypes DecodeTypeIndex(byte signature)
 		{
