@@ -68,7 +68,10 @@ namespace Mosa.Platforms.x86.Intrinsic
 			map.Add(typeof(SpinUnlock), new SpinUnlock());
 			map.Add(typeof(Hlt), new Hlt());
 			map.Add(typeof(Get), new Get());
-			map.Add(typeof(Set), new Set());
+			map.Add(typeof(Set8), new Set8());
+			map.Add(typeof(Set16), new Set16());
+			map.Add(typeof(Set32), new Set32());
+			map.Add(typeof(Set64), new Set64());
 
 			map.Add(typeof(Test), new Test());
 

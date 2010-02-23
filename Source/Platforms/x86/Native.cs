@@ -223,25 +223,25 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set))]
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set8))]
 		public static void Set8(uint address, byte value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set))]
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set16))]
 		public static void Set16(uint address, ushort value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set))]
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set32))]
 		public static void Set32(uint address, uint value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set))]
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set64))]
 		public static void Set64(uint address, ulong value) { ThrowPlatformNotSupported(); }
 
 		#endregion
