@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="exe" output="${outputDirectory}/Emulator.exe" debug="${debug}" unsafe="true">
+	    <csc target="exe" output="${outputDirectory}/Emulator.exe" debug="${debug}" unsafe="true" main="Mosa.Emulator.Program">
 		<sources>
 			<include name="**/*.cs"/>
 		</sources>

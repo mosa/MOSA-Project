@@ -14,7 +14,7 @@
 	<target name="build">
 	    <csc target="exe" output="${outputDirectory}/Mosa.HelloWorld.exe" debug="${debug}" unsafe="true">
 		<sources>
-			<include name="*.cs"/>
+			<include name="**/*.cs"/>
 		</sources>
 		
 		<references>
