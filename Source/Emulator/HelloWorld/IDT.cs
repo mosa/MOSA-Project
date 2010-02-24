@@ -21,24 +21,30 @@ namespace Mosa.Kernel.X86
 		private static uint _idtTable = 0x1411000;
 		private static uint _idtEntries = _idtTable + 6;
 
-		internal const byte IDT_BaseLow = 0x00;
-		internal const byte IDT_Select = 0x02;
-		internal const byte IDT_Always0 = 0x04;
-		internal const byte IDT_Flags = 0x05;
-		internal const byte IDT_BaseHigh = 0x06;
-		internal const byte IDT_Size = 0x08;
+		#region Data members
+
+		internal struct Offset
+		{
+			internal const byte BaseLow = 0x00;
+			internal const byte Select = 0x02;
+			internal const byte Always0 = 0x04;
+			internal const byte Flags = 0x05;
+			internal const byte BaseHigh = 0x06;
+			internal const byte TotalSize = 0x08;
+		}
+
+		#endregion
 
 		public static void Setup()
 		{
 			// Setup IDT table
 			Memory.Clear(_idtTable, 6);
-			Native.Set16(_idtTable, (IDT_Size * 256) - 1);
+			Native.Set16(_idtTable, (Offset.TotalSize * 256) - 1);
 			Native.Set32(_idtTable + 2, _idtEntries);
 
 			SetTableEntries();
 
 			Native.Lidt(_idtTable);
-
 			Native.Sti();
 		}
 
@@ -51,11 +57,22 @@ namespace Mosa.Kernel.X86
 		/// <param name="flags">The flags.</param>
 		private static void Set(uint index, uint address, ushort select, byte flags)
 		{
-			Native.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseLow, (ushort)(address & 0xFFFF));
-			Native.Set16(_idtEntries + (index * IDT_Size) + IDT_BaseHigh, (ushort)((address >> 16) & 0xFFFF));
-			Native.Set16(_idtEntries + (index * IDT_Size) + IDT_Select, select);
-			Native.Set8(_idtEntries + (index * IDT_Size) + IDT_Always0, 0);
-			Native.Set8(_idtEntries + (index * IDT_Size) + IDT_Flags, flags);
+			uint entry = GetEntryLocation(index);
+			Native.Set16(entry + Offset.BaseLow, (ushort)(address & 0xFFFF));
+			Native.Set16(entry + Offset.BaseHigh, (ushort)((address >> 16) & 0xFFFF));
+			Native.Set16(entry + Offset.Select, select);
+			Native.Set8(entry + Offset.Always0, 0);
+			Native.Set8(entry + Offset.Flags, flags);
+		}
+
+		/// <summary>
+		/// Gets the idt entry location.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		private static uint GetEntryLocation(uint index)
+		{
+			return (uint)(_idtEntries + (index * Offset.TotalSize));
 		}
 
 		/// <summary>
@@ -64,7 +81,7 @@ namespace Mosa.Kernel.X86
 		private static void SetTableEntries()
 		{
 			// Clear out idt table
-			Memory.Clear(_idtEntries, IDT_Size * 256);
+			Memory.Clear(_idtEntries, Offset.TotalSize * 256);
 
 			// Note: GetIDTJumpLocation parameter must be a constant and not a variable
 			Set(0, Native.GetIDTJumpLocation(0), 0x08, 0x8E);

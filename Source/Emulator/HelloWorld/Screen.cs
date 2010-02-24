@@ -96,7 +96,7 @@ namespace Mosa.Kernel.X86
 		public static void Write(char chr)
 		{
 			uint address = GetAddress();
-			
+
 			Native.Set8(address, (byte)chr);
 			Native.Set8(address + 1, Color);
 

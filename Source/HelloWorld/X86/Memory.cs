@@ -27,15 +27,5 @@ namespace Mosa.Kernel.X86
 				Native.Set8(at, 0);
 		}
 
-		/// <summary>
-		/// Sets the specified value at location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <param name="value">The value.</param>
-		public static void Set8(uint location, byte value)
-		{
-			Native.Set8(location, value);
-		}
-
 	}
 }
