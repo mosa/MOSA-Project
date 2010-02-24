@@ -4,3 +4,5 @@ peter-bochs-debugger.jar
 setting.ini
 StopBochs.exe
 bochsout.txt
+breakpoint.xml
+memoryCombo.xml

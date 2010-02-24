@@ -61,8 +61,8 @@ namespace Mosa.Kernel.X86
 			Native.Set16(entry + Offset.BaseLow, (ushort)(address & 0xFFFF));
 			Native.Set16(entry + Offset.BaseHigh, (ushort)((address >> 16) & 0xFFFF));
 			Native.Set16(entry + Offset.Select, select);
-			Memory.Set8(entry + Offset.Always0, 0);
-			Memory.Set8(entry + Offset.Flags, flags);
+			Native.Set8(entry + Offset.Always0, 0);
+			Native.Set8(entry + Offset.Flags, flags);
 		}
 
 		/// <summary>

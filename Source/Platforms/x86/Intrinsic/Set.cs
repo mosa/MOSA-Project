@@ -10,12 +10,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+//using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.Metadata.Signatures;
+
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
@@ -38,7 +40,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 
 			RegisterOperand edx = new RegisterOperand(dest.Type, GeneralPurposeRegister.EDX);
 			RegisterOperand eax = new RegisterOperand(value.Type, GeneralPurposeRegister.EAX);
-			MemoryOperand memory = new MemoryOperand(value.Type, GeneralPurposeRegister.EDX, new IntPtr(0));
+			MemoryOperand memory = new MemoryOperand(new SigType(context.InvokeTarget.Signature.Parameters[1].Type), GeneralPurposeRegister.EDX, new IntPtr(0));
 
 			context.SetInstruction(CPUx86.Instruction.MovInstruction, edx, dest);
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, value);
