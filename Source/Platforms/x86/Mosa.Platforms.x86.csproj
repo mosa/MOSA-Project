@@ -78,11 +78,8 @@
     <Compile Include="CPUx86\FarJmpInstruction.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
     <Compile Include="Intrinsic\Get.cs" />
-    <Compile Include="Intrinsic\Set16.cs" />
-    <Compile Include="Intrinsic\Set32.cs" />
     <Compile Include="Intrinsic\Hlt.cs" />
-    <Compile Include="Intrinsic\Set64.cs" />
-    <Compile Include="Intrinsic\Set8.cs" />
+    <Compile Include="Intrinsic\Set.cs" />
     <Compile Include="Intrinsic\SpinUnlock.cs" />
     <Compile Include="Intrinsic\SpinLock.cs" />
     <Compile Include="Intrinsic\CpuIdEax.cs" />
