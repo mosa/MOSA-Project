@@ -1,7 +1,9 @@
-if exist peter-bochs-debugger.jar goto exit
+if exist peter-bochs-debugger20100220.jar goto exit
 
-..\wget\wget http://peter-bochs.googlecode.com/files/peter-bochs-debugger20100207.jar
+del peter-bochs-debugger*.jar
 
-rename peter-bochs-debugger20100207.jar peter-bochs-debugger.jar
+..\wget\wget http://peter-bochs.googlecode.com/files/peter-bochs-debugger20100220.jar
+
+copy peter-bochs-debugger20100220.jar peter-bochs-debugger.jar
 
 :exit
