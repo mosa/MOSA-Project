@@ -38,11 +38,6 @@ namespace Mosa.Platforms.x86.Intrinsic
 			Operand dest = context.Operand1;
 			Operand value = context.Operand2;
 
-			if (value is ConstantOperand)
-			{
-				Console.WriteLine();
-			}
-
 			RegisterOperand edx = new RegisterOperand(dest.Type, GeneralPurposeRegister.EDX);
 			RegisterOperand eax = new RegisterOperand(value.Type, GeneralPurposeRegister.EAX);
 			MemoryOperand memory = new MemoryOperand(new SigType(context.InvokeTarget.Signature.Parameters[1].Type), GeneralPurposeRegister.EDX, new IntPtr(0));

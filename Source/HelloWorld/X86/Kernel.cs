@@ -48,7 +48,7 @@ namespace Mosa.HelloWorld
 			ProcessManager.Setup();
 			Screen.Write('9');
 			Screen.SetCursor(24, 9);
-			ProcessManager.Setup();
+			TaskManager.Setup();
 			Screen.Write('A');
 			Screen.SetCursor(24, 10);
 		}
