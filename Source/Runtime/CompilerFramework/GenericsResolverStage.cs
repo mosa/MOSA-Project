@@ -32,6 +32,12 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					if (!HasGenericParameters(method))
 						continue;
+
+					// TODO:
+					// Scan for every instantiation for this method 
+					// and create new methods for every instantiation type.
+					// Then add them to a HashMap Type -> Method
+					// and also add them to the method list.
 				}
 			}
 		}
@@ -52,7 +58,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
-		private bool HasGenericParameters (RuntimeMethod method)
+		public static bool HasGenericParameters (RuntimeMethod method)
 		{
 			foreach (SigType parameter in method.Signature.Parameters)
 			{
@@ -62,7 +68,7 @@ namespace Mosa.Runtime.CompilerFramework
 			return false;
 		}
 
-		private bool IsGenericParameter(SigType parameter)
+		public static bool IsGenericParameter(SigType parameter)
 		{
 			return parameter.Type == CilElementType.Var;
 		}
