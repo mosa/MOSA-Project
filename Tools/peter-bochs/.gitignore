@@ -1,6 +1,6 @@
 ndisasm.exe
 PauseBochs.exe
-peter-bochs-debugger.jar
+peter-bochs-debugger*.jar
 setting.ini
 StopBochs.exe
 bochsout.txt
