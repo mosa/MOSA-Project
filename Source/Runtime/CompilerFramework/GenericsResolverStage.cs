@@ -23,6 +23,10 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public class GenericsResolverStage : IAssemblyCompilerStage, IMethodCompilerBuilder, IPipelineStage
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="compiler"></param>
 		void IAssemblyCompilerStage.Run (AssemblyCompiler compiler)
 		{
 			ReadOnlyRuntimeTypeListView types = RuntimeBase.Instance.TypeLoader.GetTypesFromModule (compiler.Assembly);
@@ -47,6 +51,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
+		#region IMethodCompilerBuilder
 		IEnumerable<MethodCompilerBase> IMethodCompilerBuilder.Scheduled
 		{
 			get
@@ -54,7 +59,9 @@ namespace Mosa.Runtime.CompilerFramework
 				return null;
 			}
 		}
+		#endregion
 
+		#region IPipelineStage
 		string IPipelineStage.Name
 		{
 			get
@@ -62,17 +69,35 @@ namespace Mosa.Runtime.CompilerFramework
 				return @"Generics Resolver";
 			}
 		}
+		#endregion
 
+		/// <summary>
+		/// Determines if the given method is a method 
+		/// of a generic class that uses a generic parameter.
+		/// </summary>
+		/// <param name="method">The method to check</param>
+		/// <returns>True if the method relies upon generic parameters</returns>
 		public static bool HasGenericParameters (RuntimeMethod method)
 		{
+			// Check return type
+			if (IsGenericParameter(method.Signature.ReturnType))
+				return true;
+
+			// Check parameters
 			foreach (SigType parameter in method.Signature.Parameters)
 			{
 				if (IsGenericParameter(parameter))
 					return true;
 			}
+
 			return false;
 		}
 
+		/// <summary>
+		/// Determines if the given SigType is generic
+		/// </summary>
+		/// <param name="parameter">The given SigType of the parameter</param>
+		/// <returns>True if the parameter is generic.</returns>
 		public static bool IsGenericParameter(SigType parameter)
 		{
 			return parameter.Type == CilElementType.Var;
