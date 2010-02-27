@@ -62,9 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
+    <Compile Include="TaskB.cs" />
+    <Compile Include="TaskA.cs" />
     <Compile Include="X86\CMOS.cs" />
     <Compile Include="X86\Panic.cs" />
     <Compile Include="X86\PageFaultHandler.cs" />
+    <Compile Include="X86\IdleTask.cs" />
     <Compile Include="X86\TaskManager.cs" />
     <Compile Include="X86\ProcessManager.cs" />
     <Compile Include="X86\Keyboard.cs" />
