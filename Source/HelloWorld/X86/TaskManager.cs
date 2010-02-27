@@ -19,6 +19,7 @@ namespace Mosa.Kernel.X86
 		private static uint _defaultStackSize = 1024 * 1024 * 4; // 4MB
 		private static uint _slots = 4096 * 8;
 		private static uint _table;
+		private static uint _currenttask; // Not SMP 
 		//private static uint _lock = 0;
 
 		#region Data members
@@ -78,6 +79,9 @@ namespace Mosa.Kernel.X86
 
 			// Create idle task
 			CreateTask(0, 0);
+
+			// Set current stack
+			_currenttask = 0;
 		}
 
 		/// <summary>
@@ -175,6 +179,39 @@ namespace Mosa.Kernel.X86
 		private static uint GetTaskLocation(uint slot)
 		{
 			return (uint)(_table + (Offset.TotalSize * slot));
+		}
+
+		public static void ThreadOut(uint esp)
+		{
+			// Get Stack Slot Location
+			uint task = GetTaskLocation(_currenttask);
+
+			// Save Stack location
+			Native.Set32(task + Offset.ESP, esp); 
+
+		}
+
+		/// <summary>
+		/// Switches the specified esp.
+		/// </summary>
+		/// <param name="esp">The esp.</param>
+		public static void Switch(uint nexttask)
+		{
+			PIC.SendEndOfInterrupt(0x20);
+
+			// Update current task
+			_currenttask = nexttask;
+
+			// Get Stack Slot Location
+			uint task = GetTaskLocation(_currenttask);
+
+			// Get Stack location
+			uint esp = Native.Get32(task + Offset.ESP);
+
+			// Switch task
+			Native.SwitchTask(esp);
+
+			// it will never reach here
 		}
 	}
 }

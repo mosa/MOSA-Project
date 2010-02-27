@@ -244,6 +244,13 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set))]
 		public static void Set64(uint address, ulong value) { ThrowPlatformNotSupported(); }
 
+		/// <summary>
+		/// Switches the task.
+		/// </summary>
+		/// <param name="esp">The esp.</param>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SwitchTask))]
+		public static void SwitchTask(uint esp) { ThrowPlatformNotSupported(); }
+
 		#endregion
 
 		/// <summary>
