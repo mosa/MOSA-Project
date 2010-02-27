@@ -88,7 +88,7 @@ namespace Mosa.Kernel.X86
 		/// Creates the task.
 		/// </summary>
 		/// <returns></returns>
-		public static uint CreateTask(uint processid)
+		public static uint CreateTask(uint processid, uint eip)
 		{
 			// TODO: Lock
 
@@ -97,7 +97,7 @@ namespace Mosa.Kernel.X86
 			if (slot == 0)
 				Panic.Now(5);
 
-			CreateTask(processid, slot);
+			CreateTask(processid, slot, eip);
 
 			// TODO: Unlock
 
@@ -108,7 +108,7 @@ namespace Mosa.Kernel.X86
 		/// Creates the task.
 		/// </summary>
 		/// <returns></returns>
-		private static uint CreateTask(uint processid, uint slot)
+		private static uint CreateTask(uint processid, uint slot, uint eip)
 		{
 			// TODO: Lock
 
@@ -126,9 +126,9 @@ namespace Mosa.Kernel.X86
 			Native.Set32(task + Offset.ESP, stack + StackSetupOffset.InitialSize); // TODO
 
 			// Setup Stack
-			Native.Set32(stacktop - StackSetupOffset.EFLAG, 0);	// TODO
-			Native.Set32(stacktop - StackSetupOffset.CS, 0);	// TODO
-			Native.Set32(stacktop - StackSetupOffset.EIP, 0);	// TODO
+			Native.Set32(stacktop - StackSetupOffset.EFLAG, 0);
+			Native.Set32(stacktop - StackSetupOffset.CS, 0);
+			Native.Set32(stacktop - StackSetupOffset.EIP, eip);
 			Native.Set32(stacktop - StackSetupOffset.ErrorCode, 0);
 			Native.Set32(stacktop - StackSetupOffset.IRQ, 0);
 			Native.Set32(stacktop - StackSetupOffset.EAX, 0);
@@ -187,8 +187,7 @@ namespace Mosa.Kernel.X86
 			uint task = GetTaskLocation(_currenttask);
 
 			// Save Stack location
-			Native.Set32(task + Offset.ESP, esp); 
-
+			Native.Set32(task + Offset.ESP, esp);
 		}
 
 		/// <summary>
@@ -211,7 +210,7 @@ namespace Mosa.Kernel.X86
 			// Switch task
 			Native.SwitchTask(esp);
 
-			// it will never reach here
+			// will never reach here
 		}
 	}
 }
