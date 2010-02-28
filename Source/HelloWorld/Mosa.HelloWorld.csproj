@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -37,7 +37,6 @@
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
-    <NoStdLib>false</NoStdLib>
     <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -55,7 +54,6 @@
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
-    <NoStdLib>false</NoStdLib>
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
@@ -82,6 +80,7 @@
     </Compile>
     <Compile Include="X86\Screen.cs" />
     <Compile Include="X86\VirtualPageAllocator.cs" />
+    <Compile Include="Testcases.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Platforms\x86\Mosa.Platforms.x86.csproj">
