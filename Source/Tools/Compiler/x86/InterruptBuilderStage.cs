@@ -87,7 +87,14 @@ namespace Mosa.Tools.Compiler.x86
 		{
 			// Get RuntimeMethod for the Mosa.Kernel.X86.IDT.InterruptHandler
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Kernel.X86.IDT");
+
+			if (rt == null)
+				return;
+
 			RuntimeMethod InterruptMethod = FindMethod(rt, "InterruptHandler");
+
+			if (InterruptMethod == null)
+				return;
 
 			SigType I1 = new SigType(CilElementType.I1);
 			SigType I4 = new SigType(CilElementType.I4);
