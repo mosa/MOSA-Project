@@ -7,32 +7,30 @@
 
 namespace Mosa.QuickTest
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	//public struct Struct
-	//{
-	//    public int x;
-	//    public int y;
-	//    public int z;
-	//}
 
 	/// <summary>
 	/// 
 	/// </summary>
 	public static class App
 	{
+		public delegate void Test();
+
 		/// <summary>
 		/// Main
 		/// </summary>
 		public static void Main()
 		{
-			bool result = boolAddConstantR4Left(18.2f, 1f);
+			Execute(MyTest);
 		}
 
-		static bool boolAddConstantR4Left(float expect, float x)
+		public static void MyTest()
 		{
-			return expect == (17.2f + x);
+			// DO NOTHING
+		}
+
+		public static void Execute(Test a)
+		{
+			a();
 		}
 
 	}
