@@ -392,10 +392,6 @@ namespace Mosa.Kernel.X86
 					byte scancode = Keyboard.ReadScanCode();
 					Screen.Write('-');
 					Screen.Write(scancode, 16, 2);
-					
-					if(scancode == 0x01) { // Crude escape key grab: run testcases.
-						Mosa.Testcases.Testcase.DoAllTests();
-					}
 				}
 			}
 
