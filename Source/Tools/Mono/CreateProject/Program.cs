@@ -49,8 +49,8 @@ namespace Mosa.Tools.Mono.CreateProject
 						case "-s": project.ReadSourceFile(args[i + 1]); break;
 						case "-x": project.ReadExcludeFile(args[i + 1]); break;
 						case "-c": project.Conditions.Add(args[i + 1]); break;
-						case "-project": project.ProjectReferences.Add(args[i + 1]); break;
-						case "-path": project.PathPrefix = args[i + 1] + System.IO.Path.PathSeparator; break;
+						case "-ref": if (!string.IsNullOrEmpty(args[i + 1])) project.ProjectReferences.Add(args[i + 1]); break;
+						case "-path": project.PathPrefix = args[i + 1] + System.IO.Path.DirectorySeparatorChar; break;
 						default:
 							Console.Error.WriteLine("ERROR: Invalid argument");
 							return -1;
@@ -92,7 +92,8 @@ namespace Mosa.Tools.Mono.CreateProject
 			public void ReadSourceFile(string source)
 			{
 				foreach (string file in System.IO.File.ReadAllLines(source))
-					Files.Add(file);
+					if (!string.IsNullOrEmpty(file.Trim()))
+						Files.Add(file.Trim().Replace('/', Path.DirectorySeparatorChar));
 			}
 
 			/// <summary>
@@ -121,7 +122,7 @@ namespace Mosa.Tools.Mono.CreateProject
 					writer.WriteLine("\t\t<ProductVersion>9.0.30729</ProductVersion>");
 					writer.WriteLine("\t\t<SchemaVersion>2.0</SchemaVersion>");
 					writer.WriteLine("\t\t<ProjectGuid>{" + Guid.NewGuid().ToString() + "}</ProjectGuid>");
-					writer.WriteLine("\t\t<OutputType>project</OutputType>");
+					writer.WriteLine("\t\t<OutputType>library</OutputType>");
 					writer.WriteLine("\t\t<AppDesignerFolder>Properties</AppDesignerFolder>");
 					writer.WriteLine("\t\t<RootNamespace>" + Name + "</RootNamespace>");
 					writer.WriteLine("\t\t<AssemblyName>" + Name + "</AssemblyName>");
@@ -166,7 +167,7 @@ namespace Mosa.Tools.Mono.CreateProject
 						writer.WriteLine("\t<ItemGroup>");
 						foreach (string project in ProjectReferences) {
 							writer.WriteLine("\t\t<ProjectReference Include=\"" + project + ".csproj\">");
-							writer.WriteLine("\t\t\t<Name=\"" + System.IO.Path.GetFileNameWithoutExtension(project) + "\">");
+							writer.WriteLine("\t\t\t<Name>" + System.IO.Path.GetFileNameWithoutExtension(project) + "</Name>");
 							writer.WriteLine("\t\t</ProjectReference>");
 						}
 						writer.WriteLine("\t</ItemGroup>");

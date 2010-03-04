@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework
 		void MoveReturnValue(Context ctx, Operand operand);
 
         /// <summary>
-        /// Retrieves the offset of the first local variable From the stack frame start.
+        /// Retrieves the offset of the first local variable from the stack frame start.
         /// </summary>
         int OffsetOfFirstLocal { get; }
 
