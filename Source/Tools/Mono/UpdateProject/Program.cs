@@ -20,7 +20,7 @@ namespace Mosa.Tools.Mono.UpdateProject
 	{
 		private static int Main(string[] args)
 		{
-			Console.WriteLine("UpdateProject v0.1 [www.mosa-project.org]");
+			Console.WriteLine("UpdateProject v0.2 [www.mosa-project.org]");
 			Console.WriteLine("Copyright 2009 by the MOSA Project. Licensed under the New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
@@ -33,8 +33,14 @@ namespace Mosa.Tools.Mono.UpdateProject
 			}
 
 			try {
-				Transform.Process(args[0]);
-				Add.Process(args[0]);
+
+				if (args[0].Contains(".csproj")) {
+					Transform2.ProcessProject(args[0]);
+					Add.Process(args[0]);
+				}
+				else {
+					Transform2.ProcessFile(args[0]);
+				}
 			}
 			catch (Exception e) {
 				Console.Error.WriteLine("Error: " + e);
