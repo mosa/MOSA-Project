@@ -19,6 +19,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     public class While : CodeDomTestRunner
     {
         #region WhileIncI4 test
+        //
+        // Tests basic increment loop
 
         delegate int I4_I4([MarshalAs(UnmanagedType.I4)]int start, [MarshalAs(UnmanagedType.I4)]int limit);
 
@@ -48,6 +50,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         #endregion
 
         #region WhileDecI4 test
+        //
+        // Tests basic decrement loop.
 
         [Row(20, 0)]
         [Row(0, -20)]
@@ -75,6 +79,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         #endregion
 
         #region WhileFalse() test
+        //
+        // Tests while(false)
+        // Ensures "unreachable code" is never reached.
 
         delegate bool BV();
 
@@ -102,6 +109,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         #endregion
 
         #region WhileContinueBreak() test
+        //
+        // Tests while(true)
+        // Tests break;
+        // Tests continue;
+        // Tests "unreachable code" after a continue or break is never reached.
 
         [Row()]
         [Test, Author("mincus", "phillmwebster@gmail.com")]
@@ -141,8 +153,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         #endregion
 
         #region WhileOverflowIncI1 test
+        //
+        // Tests overflowing a variable during an increment loop.
 
         [Row(254, 1)]
+        [Row(byte.MaxValue, byte.MinValue)]
         [Test, Author("mincus", "phillmwebster@gmail.com")]
         public void WhileOverflowIncI1(byte start, byte limit)
         {
@@ -166,10 +181,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         #endregion
 
         #region WhileOverflowDecI1 test
+        //
+        // Tests overflowing a variable in decrement loops.
 
         delegate int U1_U1([MarshalAs(UnmanagedType.U1)]byte start, [MarshalAs(UnmanagedType.U1)]byte limit);
 
         [Row(1, 254)]
+        [Row(byte.MinValue, byte.MaxValue)]
         [Test, Author("mincus", "phillmwebster@gmail.com")]
         public void WhileOverflowDecI1(byte start, byte limit)
         {
@@ -188,6 +206,55 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                 }
             }";
             Assert.AreEqual<int>((256 + (int)start) - limit, (int)Run<U1_U1>("", "Test", "WhileOverflowDecI1", start, limit));
+        }
+
+        #endregion
+
+        #region WhileNestedEqualsI4 test
+        //
+        // Tests nested looping (basic increment loop internally)
+        // Tests == operator on external loop
+
+        delegate int I4_I4_I4_I4([MarshalAs(UnmanagedType.I4)]int initialStatus, [MarshalAs(UnmanagedType.I4)]int wantedStatus, [MarshalAs(UnmanagedType.I4)]int start, [MarshalAs(UnmanagedType.I4)]int limit);
+
+        [Row(2, 3, 0, 20)]
+        [Row(0, 1, 100, 200)]
+        [Row(1, 0, -100, 100)]
+        [Row(int.MaxValue, int.MinValue, -2, 3)]
+        [Test, Author("mincus", "phillmwebster@gmail.com")]
+        public void WhileNestedEqualsI4(int initialStatus, int wantedStatus, int start, int limit)
+        {
+            CodeSource = @"static class Test {
+                static int WhileNestedEqualsI4(int initialStatus, int wantedStatus, int start, int limit)
+                {
+                    int count = 0;
+                    int start2 = start;
+                    int status = initialStatus;
+
+                    while (status == initialStatus)
+                    {
+                        start2 = start;
+
+                        while (start2 < limit)
+                        {
+                            ++start2;
+                            ++count;
+                        }
+
+                        ++start;
+
+                        if (start == limit)
+                        {
+                            status = wantedStatus;
+                        }
+                    }
+
+                    return count;
+                }
+            }";
+
+            int count = limit - start;
+            Assert.AreEqual<int>((int)((count * count) - ((count / 2.0f) * count) + (count / 2.0f)), (int)Run<I4_I4_I4_I4>("", "Test", "WhileNestedEqualsI4", initialStatus, wantedStatus, start, limit));
         }
 
         #endregion
