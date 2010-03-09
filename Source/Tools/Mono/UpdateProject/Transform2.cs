@@ -174,6 +174,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 			// Create partial file
 			if (methodNodes.Count != 0) {
+				File.Copy(Path.Combine(root, file), Path.Combine(root, Path.GetFileNameWithoutExtension(file) + ".Original.cs"));
+
 				string partialMosaFile = Path.Combine(root, file.Insert(file.Length - 2, "Mosa.Partial."));
 				Console.WriteLine(">" + Path.GetFileName(partialMosaFile));
 				CreatePartialFileForMosa(lines, rootNode, usings, namespaces, partialMosaFile);
@@ -181,10 +183,10 @@ namespace Mosa.Tools.Mono.UpdateProject
 				string partialMonoFile = Path.Combine(root, file.Insert(file.Length - 2, "Partial."));
 				Console.WriteLine(">" + Path.GetFileName(partialMonoFile));
 				CreatePartialFileForMono(lines, rootNode, usings, namespaces, partialMonoFile);
-			}
 
-			// Modify source file
-			CreateModifiedFile(lines, classNodes, methodNodes, Path.Combine(root, file));
+				// Modify source file
+				CreateModifiedFile(lines, classNodes, methodNodes, Path.Combine(root, file));
+			}
 		}
 
 		/// <summary>
