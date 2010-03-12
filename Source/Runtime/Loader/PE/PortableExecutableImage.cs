@@ -16,6 +16,7 @@ using System.IO;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker.PE;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Vm;
 
@@ -137,7 +138,7 @@ namespace Mosa.Runtime.Loader.PE
                 if (_cliHeader.EntryPointToken == 0)
                     return null;
 
-                return RuntimeBase.Instance.TypeLoader.GetMethod(this, (TokenTypes)_cliHeader.EntryPointToken);
+                return RuntimeBase.Instance.TypeLoader.GetMethod(DefaultSignatureContext.Instance, this, (TokenTypes)_cliHeader.EntryPointToken);
             }
         }
 

@@ -27,6 +27,8 @@ namespace Mosa.Tools.Compiler.Linkers
     public sealed class LinkerFormatSelector : IAssemblyLinker, IAssemblyCompilerStage, IHasOptions, IPipelineStage
     {
         #region Data Members
+		
+		private AssemblyCompiler compiler;
 
         /// <summary>
         /// Holds the real linker implementation to use.
@@ -96,17 +98,23 @@ namespace Mosa.Tools.Compiler.Linkers
         #endregion // Properties
 
         #region IAssemblyCompilerStage Members
+		
+		public void Setup(AssemblyCompiler compiler)
+		{
+            CheckImplementation();
+			this.compiler = compiler;
+			((IAssemblyCompilerStage)this.implementation).Setup(compiler);
+		}
 
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(AssemblyCompiler compiler)
+        public void Run()
         {
             CheckImplementation();
 
             // Set the default entry point in the linker, if no previous stage has replaced it.
-            RuntimeMethod entryPoint = compiler.Assembly.EntryPoint;
+            RuntimeMethod entryPoint = this.compiler.Assembly.EntryPoint;
             if (this.implementation.EntryPoint == null && entryPoint != null)
             {
                 this.implementation.EntryPoint = GetSymbol(entryPoint);
@@ -117,7 +125,7 @@ namespace Mosa.Tools.Compiler.Linkers
             Debug.Assert(acs != null, @"Linker doesn't implement IAssemblyCompilerStage.");
             if (acs != null)
             {
-                acs.Run(compiler);
+                acs.Run();
             }
         }
         

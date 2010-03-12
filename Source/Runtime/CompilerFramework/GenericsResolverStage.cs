@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2010 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -23,13 +23,16 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public class GenericsResolverStage : IAssemblyCompilerStage, IMethodCompilerBuilder, IPipelineStage
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="compiler"></param>
-		void IAssemblyCompilerStage.Run (AssemblyCompiler compiler)
+		private AssemblyCompiler compiler;
+		
+		public void Setup(AssemblyCompiler compiler)
 		{
-			ReadOnlyRuntimeTypeListView types = RuntimeBase.Instance.TypeLoader.GetTypesFromModule (compiler.Assembly);
+			this.compiler = compiler;
+		}
+		
+		public void Run()
+		{
+			ReadOnlyRuntimeTypeListView types = RuntimeBase.Instance.TypeLoader.GetTypesFromModule(this.compiler.Assembly);
 			foreach (RuntimeType type in types)
 			{
 				foreach (RuntimeMethod method in type.Methods)

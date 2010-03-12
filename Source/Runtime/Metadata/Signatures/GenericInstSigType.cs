@@ -23,12 +23,12 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <summary>
         /// The generic type of the signature type.
         /// </summary>
-        private SigType _baseType;
+        private TypeSigType baseType;
 
         /// <summary>
         /// Array of generic argument types to specify the generic type.
         /// </summary>
-        private SigType[] _genericArgs;
+        private SigType[] genericArguments;
 
         #endregion // Data members
 
@@ -38,12 +38,12 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// Initializes a new instance of the <see cref="GenericInstSigType"/> class.
         /// </summary>
         /// <param name="baseType">Type of the base.</param>
-        /// <param name="genericArgs">The generic args.</param>
-        public GenericInstSigType(SigType baseType, SigType[] genericArgs) : 
+        /// <param name="genericArguments">The generic args.</param>
+        public GenericInstSigType(TypeSigType baseType, SigType[] genericArguments) : 
             base(CilElementType.GenericInst)
         {
-            _baseType = baseType;
-            _genericArgs = genericArgs;
+            this.baseType = baseType;
+            this.genericArguments = genericArguments;
         }
 
         #endregion // Construction
@@ -54,13 +54,25 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// Gets the generic type of this signature type.
         /// </summary>
         /// <value>The type of the generic type.</value>
-        public SigType BaseType { get { return _baseType; } }
+        public TypeSigType BaseType 
+		{ 
+			get 
+			{ 
+				return this.baseType; 
+			} 
+		}
 
         /// <summary>
         /// Gets the generic parameter type signatures.
         /// </summary>
         /// <value>The generic type signatures.</value>
-        public SigType[] GenericArgs { get { return _genericArgs; } }
+        public SigType[] GenericArguments 
+		{ 
+			get 
+			{ 
+				return this.genericArguments; 
+			} 
+		}
 
         #endregion // Properties
 
@@ -79,7 +91,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (null == gist)
                 return false;
 
-            return (base.Equals(other) && _baseType == gist._baseType && SigType.Equals(_genericArgs, gist._genericArgs));
+            return (base.Equals(other) && this.baseType == gist.baseType && SigType.Equals(this.genericArguments, gist.genericArguments));
         }
 
         #endregion // SigType Overrides
@@ -90,16 +102,18 @@ namespace Mosa.Runtime.Metadata.Signatures
         public override string ToSymbolPart()
         {
             StringBuilder sb = new StringBuilder();
-            SigType[] genericArgs = this.GenericArgs;
+            
+			SigType[] genericArguments = this.GenericArguments;
             sb.Append(this.BaseType.ToSymbolPart());
             sb.Append('<');
-            for (int x = 0; x < genericArgs.GetLength(0); x++)
+            for (int x = 0; x < genericArguments.Length; x++)
             {
                 if (x > 0)
                     sb.Append(',');
-                sb.Append(genericArgs[x].ToSymbolPart());
+                sb.Append(genericArguments[x].ToSymbolPart());
             }
             sb.Append('>');
+			
             return sb.ToString();
         }
     }

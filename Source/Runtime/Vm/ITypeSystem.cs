@@ -15,6 +15,8 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.Vm
 {
+	using Mosa.Runtime.Metadata.Signatures;
+	
     /// <summary>
     /// The interface of the type system.
     /// </summary>
@@ -84,7 +86,7 @@ namespace Mosa.Runtime.Vm
         /// <param name="module">The module, which owns the token.</param>
         /// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
         /// <returns>The runtime type of the specified token.</returns>
-        RuntimeType GetType(IMetadataModule module, TokenTypes token);
+        RuntimeType GetType(ISignatureContext context, IMetadataModule module, TokenTypes token);
 
         /// <summary>
         /// Retrieves the runtime type for a given type name.
@@ -96,16 +98,17 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Retrieves the _stackFrameIndex definition identified by the given token in the scope.
         /// </summary>
-        /// <param name="scope">The scope of the token definition.</param>
+        /// <param name="context">The generic parameter resolution context.</param>
+        /// <param name="module">The module of the token definition.</param>
         /// <param name="token">The token of the _stackFrameIndex to retrieve.</param>
-        RuntimeField GetField(IMetadataModule scope, TokenTypes token);
+        RuntimeField GetField(ISignatureContext context, IMetadataModule module, TokenTypes token);
 
         /// <summary>
         /// Retrieves the method definition identified by the given token in the scope.
         /// </summary>
-        /// <param name="scope">The scope of the token definition.</param>
+        /// <param name="module">The scope of the token definition.</param>
         /// <param name="token">The token of the method to retrieve.</param>
-        RuntimeMethod GetMethod(IMetadataModule scope, TokenTypes token);
+        RuntimeMethod GetMethod(ISignatureContext context, IMetadataModule module, TokenTypes token);
 
         /// <summary>
         /// Retrieves the method for the named internal call.

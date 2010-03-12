@@ -131,7 +131,11 @@ namespace Mosa.Tools.Compiler.Metadata
             @"#~",
             @"#MOSA"
         };
+		
+		private AssemblyCompiler compiler;
 
+		private IAssemblyLinker linker;		
+		
         /// <summary>
         /// Holds the source metadata to emit in the target module.
         /// </summary>
@@ -178,14 +182,24 @@ namespace Mosa.Tools.Compiler.Metadata
         {
             get { return @"Metadata Builder Stage"; }
         }
+		
+		public void Setup(AssemblyCompiler compiler)
+		{
+			this.compiler = compiler;
+
+            this.linker = RetrieveAssemblyLinkerFromCompiler();
+            if (this.linker == null)
+            {
+                throw new InvalidOperationException(@"Can't build metadata without a linker.");
+            }
+		}
 
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(AssemblyCompiler compiler)
+        public void Run()
         {
-            Initialize(compiler);
+            Initialize();
             try
             {
                 WriteMetadata();
@@ -199,18 +213,11 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <summary>
         /// Initializes the metadata builder stage using the given assembly compiler.
         /// </summary>
-        /// <param name="compiler">The assembly compiler.</param>
-        private void Initialize(AssemblyCompiler compiler)
+        private void Initialize()
         {
-            IAssemblyLinker linker = RetrieveAssemblyLinkerFromCompiler(compiler);
-            if (linker == null)
-            {
-                throw new InvalidOperationException(@"Can't build metadata without a linker.");
-            }
-
-            _metadataStream = AllocateMetadataStream(linker);
+            _metadataStream = AllocateMetadataStream();
             _metadataWriter = new BinaryWriter(_metadataStream, Encoding.UTF8);
-            _metadataSource = compiler.Metadata;
+            _metadataSource = this.compiler.Metadata;
         }
 
         /// <summary>
@@ -227,21 +234,19 @@ namespace Mosa.Tools.Compiler.Metadata
         /// <summary>
         /// Allocates the metadata stream in the output assembly.
         /// </summary>
-        /// <param name="linker">The linker to allocate the metadata stream in.</param>
         /// <returns>The allocated metadata stream.</returns>
-        private static Stream AllocateMetadataStream(IAssemblyLinker linker)
+        private Stream AllocateMetadataStream()
         {
-            return linker.Allocate(Symbol.Name, SectionKind.Text, 0, 0);
+            return this.linker.Allocate(Symbol.Name, SectionKind.Text, 0, 0);
         }
 
         /// <summary>
         /// Retrieves the assembly linker From compiler.
         /// </summary>
-        /// <param name="compiler">The compiler.</param>
         /// <returns>The retrieved assembly linker.</returns>
-        private static IAssemblyLinker RetrieveAssemblyLinkerFromCompiler(AssemblyCompiler compiler)
+        private IAssemblyLinker RetrieveAssemblyLinkerFromCompiler()
         {
-            return compiler.Pipeline.FindFirst<IAssemblyLinker>();
+            return this.compiler.Pipeline.FindFirst<IAssemblyLinker>();
         }
 
         /// <summary>

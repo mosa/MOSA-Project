@@ -27,6 +27,10 @@ namespace Mosa.Tools.Compiler
 	{
 
 		#region Data members
+		
+		private AssemblyCompiler compiler;
+		
+		private IAssemblyLinker linker;
 
 		private CLI_HEADER _cliHeader;
 
@@ -39,30 +43,30 @@ namespace Mosa.Tools.Compiler
 		#endregion // IPipelineStage members
 
 		#region IAssemblyCompilerStage Members
+		
+		public void Setup(AssemblyCompiler compiler)
+		{
+			this.compiler = compiler;
+			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+			Debug.Assert(linker != null, @"No linker??");
+		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(AssemblyCompiler compiler)
+		public void Run()
 		{
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
-
-			IAssemblyLinker linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
-			Debug.Assert(linker != null, @"No linker??");
-
 			_cliHeader.Cb = 0x48;
 			_cliHeader.MajorRuntimeVersion = 2;
 			_cliHeader.MinorRuntimeVersion = 0;
 			_cliHeader.Flags = RuntimeImageFlags.ILOnly;
 			_cliHeader.EntryPointToken = 0x06000001; // FIXME: ??
 
-			LinkerSymbol metadata = linker.GetSymbol(Mosa.Runtime.Metadata.Symbol.Name);
-			_cliHeader.Metadata.VirtualAddress = (uint)(linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + metadata.SectionAddress);
+			LinkerSymbol metadata = this.linker.GetSymbol(Mosa.Runtime.Metadata.Symbol.Name);
+			_cliHeader.Metadata.VirtualAddress = (uint)(this.linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + metadata.SectionAddress);
 			_cliHeader.Metadata.Size = (int)metadata.Length;
 
-			WriteCilHeader(compiler, linker);
+			WriteCilHeader();
 		}
 
 		#endregion // IAssemblyCompilerStage Members
@@ -72,11 +76,9 @@ namespace Mosa.Tools.Compiler
 		/// <summary>
 		/// Writes the Cil _header.
 		/// </summary>
-		/// <param name="compiler">The assembly compiler.</param>
-		/// <param name="linker">The linker.</param>
-		private void WriteCilHeader(AssemblyCompiler compiler, IAssemblyLinker linker)
+		private void WriteCilHeader()
 		{
-			using (Stream stream = linker.Allocate(CLI_HEADER.SymbolName, SectionKind.Text, CLI_HEADER.Length, 4))
+			using (Stream stream = this.linker.Allocate(CLI_HEADER.SymbolName, SectionKind.Text, CLI_HEADER.Length, 4))
 			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII)) {
 				_cliHeader.Write(bw);
 			}

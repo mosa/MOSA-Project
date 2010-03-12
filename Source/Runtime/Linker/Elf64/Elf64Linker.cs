@@ -79,14 +79,13 @@ namespace Mosa.Runtime.Linker.Elf64
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public override void Run(Mosa.Runtime.CompilerFramework.AssemblyCompiler compiler)
+        public override void Run()
         {
             // Resolve all symbols first
-            base.Run(compiler);
+            base.Run();
           
             // Persist the Elf32 file now
-            CreateElf64File(compiler);
+            CreateElf64File(this.Compiler);
         }
 
         /// <summary>

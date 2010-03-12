@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -168,15 +168,20 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			switch (targetType) {
 				case TokenTypes.MethodDef:
-					method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method.Module, callTarget);
+					method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method, decoder.Method.Module, callTarget);
 					break;
 
 				case TokenTypes.MemberRef:
-					method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method.Module, callTarget);
+					method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method, decoder.Method.Module, callTarget);
+                    if (method.DeclaringType.IsGeneric == true)
+                    {
+                        ScheduleMethodForCompilation(decoder, method);
+                    }
 					break;
 
 				case TokenTypes.MethodSpec:
-					throw new NotImplementedException();
+                    method = DecodeMethodSpecification(decoder, callTarget);
+                    break;
 
 				default:
 					Debug.Assert(false, @"Should never reach this!");
@@ -185,6 +190,22 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			SetInvokeTarget(ctx, decoder.Compiler, method);
 		}
+
+        private static RuntimeMethod DecodeMethodSpecification(IInstructionDecoder decoder, TokenTypes callTarget)
+        {
+            RuntimeMethod method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method, decoder.Compiler.Assembly, callTarget);
+
+            ScheduleMethodForCompilation(decoder, method);
+
+            return method;
+        }
+
+        private static void ScheduleMethodForCompilation(IInstructionDecoder decoder, RuntimeMethod method)
+        {
+            ICompilationSchedulerStage compilationScheduler = decoder.Compiler.Scheduler;
+            compilationScheduler.ScheduleMethodForCompilation(method);
+
+        }
 
 		/// <summary>
 		/// Sets the invoke target.
@@ -311,6 +332,5 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		#endregion // Methods
-
 	}
 }

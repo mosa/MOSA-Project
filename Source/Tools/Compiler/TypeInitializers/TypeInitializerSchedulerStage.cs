@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -30,6 +30,8 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 	public sealed class TypeInitializerSchedulerStage : BaseStage, IAssemblyCompilerStage, IPipelineStage
 	{
 		#region Data Members
+		
+		private AssemblyCompiler compiler;
 
 		/// <summary>
 		/// Hold the current context
@@ -99,18 +101,22 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		#endregion // Methods
 
 		#region IAssemblyCompilerStage Members
+		
+		public void Setup(AssemblyCompiler compiler)
+		{
+			this.compiler = compiler;
+		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(AssemblyCompiler compiler)
+		public void Run()
 		{
-			_ctx.AppendInstruction(IR.Instruction.CallInstruction, compiler.Assembly.EntryPoint);
+			_ctx.AppendInstruction(IR.Instruction.CallInstruction, this.compiler.Assembly.EntryPoint);
 			_ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);
 			_ctx.Other = 0;
 
-			_method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", InstructionSet);
+			_method = LinkTimeCodeGenerator.Compile(this.compiler, @"AssemblyInit", InstructionSet);
 		}
 
 		#endregion // IAssemblyCompilerStage Members

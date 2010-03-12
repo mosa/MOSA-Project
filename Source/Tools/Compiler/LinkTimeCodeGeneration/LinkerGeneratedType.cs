@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -20,6 +20,8 @@ namespace Mosa.Tools.Compiler
     /// </summary>
     public sealed class CompilerGeneratedType : RuntimeType
     {
+		private readonly List<RuntimeMethod> methods;
+		
         #region Construction
 
         /// <summary>
@@ -36,9 +38,11 @@ namespace Mosa.Tools.Compiler
             if (null == name)
                 throw new ArgumentNullException(@"name");
             
+			this.methods = new List<RuntimeMethod>();
+			
             base.Namespace = @namespace;
             base.Name = name;
-            base.Methods = new List<RuntimeMethod>();
+			base.Methods = this.methods;
         }
 
         #endregion // Construction
@@ -74,5 +78,10 @@ namespace Mosa.Tools.Compiler
         }
 
         #endregion // RuntimeType Overrides
+		
+		public void AddMethod(RuntimeMethod method)
+		{
+			this.methods.Add(method);
+		}
     }
 }

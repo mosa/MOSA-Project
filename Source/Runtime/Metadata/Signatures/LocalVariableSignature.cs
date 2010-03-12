@@ -20,31 +20,24 @@ namespace Mosa.Runtime.Metadata.Signatures
     /// </summary>
     public class LocalVariableSignature : Signature
     {
-        #region Data members
-
         /// <summary>
         /// Holds the signature types of all local variables in order of definition.
         /// </summary>
-        private SigType[] _types;
+        private SigType[] types;
 
         /// <summary>
         /// A shared empty array for those signatures, who do not have local variables.
         /// </summary>
         private static SigType[] Empty = new SigType[0];
 
-        #endregion // Data members
-
-        #region Construction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
         /// </summary>
         public LocalVariableSignature()
         {
-            _types = LocalVariableSignature.Empty;
+            this.types = LocalVariableSignature.Empty;
         }
-
-        #endregion // Construction
 
 
         /// <summary>
@@ -53,7 +46,10 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <value>The types.</value>
         public SigType[] Types
         {
-            get { return _types; }
+            get 
+			{ 
+				return this.types; 
+			}
         }
 
         /// <summary>
@@ -61,7 +57,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// </summary>
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
-        protected override void ParseSignature(byte[] buffer, ref int index)
+        protected override void ParseSignature(ISignatureContext context, byte[] buffer, ref int index)
         {
             // Check signature identifier
             if (buffer[index++] != 0x07)
@@ -71,10 +67,10 @@ namespace Mosa.Runtime.Metadata.Signatures
             int count = Utilities.ReadCompressedInt32(buffer, ref index);
             if (0 != count)
             {
-                _types = new SigType[count];
+                this.types = new SigType[count];
                 for (int i = 0; i < count; i++)
                 {
-                    _types[i] = SigType.ParseTypeSignature(buffer, ref index);
+                    this.types[i] = SigType.ParseTypeSignature(context, buffer, ref index);
                 }
             }
         }
@@ -85,15 +81,11 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="provider">The provider.</param>
         /// <param name="token">The token.</param>
         /// <returns></returns>
-        public static LocalVariableSignature Parse(IMetadataProvider provider, TokenTypes token)
+        public static LocalVariableSignature Parse(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
         {
-            byte[] buffer;
-            int index = 0;
-            provider.Read(token, out buffer);
-            LocalVariableSignature sig = new LocalVariableSignature();
-            sig.ParseSignature(buffer, ref index);
-            Debug.Assert(index == buffer.Length, @"Signature parser didn't complete.");
-            return sig;
+            var signature = new LocalVariableSignature();
+			signature.LoadSignature(context, provider, token);
+			return signature;
         }
     }
 }

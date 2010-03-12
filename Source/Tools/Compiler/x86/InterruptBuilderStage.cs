@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -32,8 +32,10 @@ namespace Mosa.Tools.Compiler.x86
 	public sealed class InterruptBuilderStage : IAssemblyCompilerStage, IPipelineStage
 	{
 		#region Data Members
+		
+		private AssemblyCompiler compiler;
 
-		IAssemblyLinker _linker;
+		private IAssemblyLinker linker;
 
 		#endregion // Data Members
 
@@ -48,16 +50,19 @@ namespace Mosa.Tools.Compiler.x86
 		#endregion // IPipelineStage Members
 
 		#region IAssemblyCompilerStage Members
+		
+		public void Setup(AssemblyCompiler compiler)
+		{
+			this.compiler = compiler;
+			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(AssemblyCompiler compiler)
+		public void Run()
 		{
-			_linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
-
-			CreateISRMethods(compiler);
+			CreateISRMethods();
 		}
 
 		#endregion // IAssemblyCompilerStage Members
@@ -82,8 +87,7 @@ namespace Mosa.Tools.Compiler.x86
 		/// <summary>
 		/// Creates the ISR methods.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		private void CreateISRMethods(AssemblyCompiler compiler)
+		private void CreateISRMethods()
 		{
 			// Get RuntimeMethod for the Mosa.Kernel.X86.IDT.InterruptHandler
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Kernel.X86.IDT");
@@ -116,7 +120,7 @@ namespace Mosa.Tools.Compiler.x86
 				ctx.AppendInstruction(CPUx86.Instruction.StiInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.IRetdInstruction);
 
-				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"InterruptISR" + i.ToString(), set);
+				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"InterruptISR" + i.ToString(), set);
 			}
 		}
 

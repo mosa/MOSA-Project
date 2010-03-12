@@ -23,8 +23,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
     class TestCaseMethodCompiler : MethodCompilerBase
     {
-        public TestCaseMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, IMetadataModule module, RuntimeType type, RuntimeMethod method) :
-            base(linker, architecture, module, type, method)
+        public TestCaseMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, IMetadataModule module, RuntimeType type, RuntimeMethod method) :
+            base(linker, architecture, compilationScheduler, module, type, method)
         {
             // Populate the pipeline
             this.Pipeline.AddRange(new IMethodCompilerStage[] {

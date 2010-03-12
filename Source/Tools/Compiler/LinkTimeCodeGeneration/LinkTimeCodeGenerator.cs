@@ -68,9 +68,9 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 			// Create the method
 			// HACK: <$> prevents the method from being called from CIL
 			CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, "<$>" + methodName, compilerGeneratedType);
-			compilerGeneratedType.Methods.Add(method);
+			compilerGeneratedType.AddMethod(method);
 
-			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(compiler, method, instructionSet);
+			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(compiler, compiler.Pipeline.FindFirst<ICompilationSchedulerStage>(), method, instructionSet);
 			methodCompiler.Compile();
 			return method;
 		}

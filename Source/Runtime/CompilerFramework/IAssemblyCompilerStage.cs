@@ -17,7 +17,14 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        void Run(AssemblyCompiler compiler);
+        void Run();
+		
+		/// <summary>
+		/// Sets up the assembly compiler stage.
+		/// </summary>
+		/// <param name="compiler">
+		/// A <see cref="AssemblyCompiler"/> using the stage.
+		/// </param>
+		void Setup(AssemblyCompiler compiler);
     }
 }

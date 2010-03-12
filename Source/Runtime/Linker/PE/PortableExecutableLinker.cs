@@ -130,7 +130,7 @@ namespace Mosa.Runtime.Linker.PE
 			{
 				if (value < FILE_SECTION_ALIGNMENT)
 					throw new ArgumentException(@"Section alignment must not be less than 512 bytes.", @"value");
-				if ((value & (FILE_SECTION_ALIGNMENT - 1)) != 0)
+				if ((value & unchecked(FILE_SECTION_ALIGNMENT - 1)) != 0)
 					throw new ArgumentException(@"Section alignment must be a multiple of 512 bytes.", @"value");
 
 				this.fileAlignment = value;
@@ -148,7 +148,7 @@ namespace Mosa.Runtime.Linker.PE
 			{
 				if (value < SECTION_ALIGNMENT)
 					throw new ArgumentException(@"Section alignment must not be less than 4K.", @"value");
-				if ((value & (SECTION_ALIGNMENT - 1)) != 0)
+				if ((value & unchecked(SECTION_ALIGNMENT - 1)) != 0)
 					throw new ArgumentException(@"Section alignment must be a multiple of 4K.", @"value");
 
 				this.sectionAlignment = value;
@@ -271,8 +271,7 @@ namespace Mosa.Runtime.Linker.PE
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(AssemblyCompiler compiler)
+		public override void Run()
 		{
 			if (String.IsNullOrEmpty(this.OutputFile) == true)
 				throw new ArgumentException(@"Invalid argument.", @"outputFile");
@@ -281,7 +280,7 @@ namespace Mosa.Runtime.Linker.PE
 			LayoutSections();
 
 			// Resolve all symbols first
-			base.Run(compiler);
+			base.Run();
 
 			// Persist the PE file now
 			CreatePEFile();

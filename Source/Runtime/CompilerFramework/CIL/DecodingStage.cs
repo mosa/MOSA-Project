@@ -88,7 +88,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
                         StandAloneSigRow row;
                         IMetadataProvider md = _method.Module.Metadata;
                         md.Read(header.localsSignature, out row);
-                        MethodCompiler.SetLocalVariableSignature(LocalVariableSignature.Parse(md, row.SignatureBlobIdx));
+						
+						LocalVariableSignature localsSignature = new LocalVariableSignature();
+						localsSignature.LoadSignature(this._method, md, row.SignatureBlobIdx);
+                        this.MethodCompiler.SetLocalVariableSignature(localsSignature);
                     }
 
                     /* Decode the instructions */
@@ -172,7 +175,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
                         reader.ReadInt16();
                     }
 
-                    Debug.Assert(0x01 == (flags & 0x3F), @"Unsupported method datta section.");
+                    Debug.Assert(0x01 == (flags & 0x3F), @"Unsupported method data section.");
                     // Read the clause
                     for (int i = 0; i < blocks; i++)
                     {

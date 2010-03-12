@@ -76,10 +76,11 @@ namespace Mosa.Tools.Compiler
         /// <returns>
         /// An instance of a MethodCompilerBase for the given type/method pair.
         /// </returns>
-        public override MethodCompilerBase CreateMethodCompiler(RuntimeType type, RuntimeMethod method)
+        public override MethodCompilerBase CreateMethodCompiler(ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
         {
             MethodCompilerBase mc = new AotMethodCompiler(
                 this,
+			    compilationScheduler,
                 type,
                 method
             );

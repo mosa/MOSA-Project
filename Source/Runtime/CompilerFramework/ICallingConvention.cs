@@ -9,6 +9,7 @@
 
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -25,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-		void Expand(Context context, Metadata.IMetadataProvider metadata);
+		void Expand(ISignatureContext signatureContext, Context context, Metadata.IMetadataProvider metadata);
 
         /// <summary>
         /// Retrieves the stack requirements of a stack operand.

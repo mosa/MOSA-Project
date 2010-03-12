@@ -30,7 +30,7 @@ namespace Mosa.Tools.Compiler
 	public class Compiler
 	{
 		#region Fields
-
+		
 		/// <summary>
 		/// Holds the stage responsible for the architecture.
 		/// </summary>
@@ -206,7 +206,14 @@ namespace Mosa.Tools.Compiler
 
 			Console.WriteLine("Compiling ...");
 
-			Compile();
+			try
+			{
+				Compile();
+			}
+			catch (LinkerException e)
+			{
+				Console.WriteLine("\n\n{0}\n\n", e.Message);
+			}
 		}
 
 		/// <summary>
@@ -305,12 +312,12 @@ namespace Mosa.Tools.Compiler
                         bootFormatStage,
                         new TypeLayoutStage(),
 						new x86.InterruptBuilderStage(),
-                        new MethodCompilerBuilderStage(),
-						new GenericsResolverStage(),
-                        new MethodCompilerRunnerStage(),
+                        new AssemblyMemberCompilationSchedulerStage(),
+						//new GenericsResolverStage(),
+                        new MethodCompilerSchedulerStage(),
                         new TypeInitializers.TypeInitializerSchedulerStage(),
 						bootFormatStage,
-						new MetadataBuilderStage(),
+						new Metadata.MetadataBuilderStage(),
 						new CilHeaderBuilderStage(),
                         new ObjectFileLayoutStage(),
                         linkerStage,
