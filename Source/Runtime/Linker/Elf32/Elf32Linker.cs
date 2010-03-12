@@ -97,12 +97,11 @@ namespace Mosa.Runtime.Linker.Elf32
 			_nullSection = new Elf32NullSection();
 			_stringTableSection = new Elf32StringTableSection();
 		}
-
+		
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public override void Run(CompilerFramework.AssemblyCompiler compiler)
+		public override void Run()
 		{
 			if (String.IsNullOrEmpty(OutputFile))
 				throw new ArgumentException(@"Invalid argument.", "compiler");
@@ -111,10 +110,10 @@ namespace Mosa.Runtime.Linker.Elf32
 			LayoutSections();
 
 			// Resolve all symbols first
-			base.Run(compiler);
+			base.Run();
 
 			// Persist the Elf32 file now
-			CreateElf32File(compiler);
+			CreateElf32File(this.Compiler);
 		}
 
 		/// <summary>
@@ -146,7 +145,7 @@ namespace Mosa.Runtime.Linker.Elf32
 			{
 				if (value < FileSectionAlignment)
 					throw new ArgumentException(@"Section alignment must not be less than 512 bytes.", @"value");
-				if ((value & (FileSectionAlignment - 1)) != 0)
+				if ((value & unchecked(FileSectionAlignment - 1)) != 0)
 					throw new ArgumentException(@"Section alignment must be a multiple of 512 bytes.", @"value");
 
 				_fileAlignment = value;

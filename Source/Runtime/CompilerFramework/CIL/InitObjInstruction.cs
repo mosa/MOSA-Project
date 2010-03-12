@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			ctx.Token = token;
 
-			Mosa.Runtime.Vm.RuntimeType type = RuntimeBase.Instance.TypeLoader.GetType(decoder.Compiler.Assembly, token);
+			Mosa.Runtime.Vm.RuntimeType type = RuntimeBase.Instance.TypeLoader.GetType(decoder.Method, decoder.Compiler.Assembly, token);
 		}
 
 		/// <summary>

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -45,7 +45,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Read the _stackFrameIndex From the code
 			TokenTypes token;
 			decoder.Decode(out token);
-			ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
+			ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Method, decoder.Method.Module, token);
 
 			Debug.Assert((ctx.RuntimeField.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
 			ctx.Result = decoder.Compiler.CreateTemporary(ctx.RuntimeField.Type);

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -64,15 +64,19 @@ namespace Mosa.Tools.Compiler
 		{
 			get { return ((IPipelineStage)wrapped).Name; }
 		}
+		
+		public void Setup(AssemblyCompiler compiler)
+		{
+			this.wrapped.Setup(compiler);
+		}
 
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(AssemblyCompiler compiler)
+		public void Run()
 		{
-			wrapped.Run(compiler);
+			wrapped.Run();
 		}
 
 		#endregion // IAssemblyCompilerStage Members

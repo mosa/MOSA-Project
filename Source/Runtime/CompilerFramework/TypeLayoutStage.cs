@@ -32,7 +32,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the assembly Compiler.
 		/// </summary>
-		private AssemblyCompiler _compiler;
+		private AssemblyCompiler compiler;
 
 		/// <summary>
 		/// Holds the current type system during compilation.
@@ -47,21 +47,37 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"Type Layout"; } }
-
-		void IAssemblyCompilerStage.Run(AssemblyCompiler compiler)
+		public string Name 
+		{ 
+			get 
+			{ 
+				return @"Type Layout"; 
+			} 
+		}
+		
+		public void Setup(AssemblyCompiler compiler)
 		{
 			// Save the Compiler
-			_compiler = compiler;
+			this.compiler = compiler;
+
 			// The compilation target Architecture
 			_architecture = compiler.Architecture;
+			
 			// The type system
 			_typeSystem = RuntimeBase.Instance.TypeLoader;
-
+		}
+		
+		public void Run()
+		{
 			// Enumerate all types and do an appropriate type layout
-			ReadOnlyRuntimeTypeListView types = _typeSystem.GetTypesFromModule(compiler.Assembly);
-			foreach (RuntimeType type in types) {
-				switch (type.Attributes & TypeAttributes.LayoutMask) {
+			ReadOnlyRuntimeTypeListView types = _typeSystem.GetTypesFromModule(this.compiler.Assembly);
+			foreach (RuntimeType type in types) 
+			{
+				if (type.IsGeneric == true)
+					continue;
+				
+				switch (type.Attributes & TypeAttributes.LayoutMask) 
+				{
 					case TypeAttributes.AutoLayout: goto case TypeAttributes.SequentialLayout;
 
 					case TypeAttributes.SequentialLayout:
@@ -151,10 +167,10 @@ namespace Mosa.Runtime.CompilerFramework
 			_architecture.GetTypeRequirements(field.Type, out size, out alignment);
 
             if (field.Type.Type == CilElementType.ValueType)
-                size = ObjectModelUtility.ComputeTypeSize((field.Type as Metadata.Signatures.ValueTypeSigType).Token, _compiler.Metadata, _architecture);
+                size = ObjectModelUtility.ComputeTypeSize(field.DeclaringType, (field.Type as Metadata.Signatures.ValueTypeSigType).Token, this.compiler.Metadata, _architecture);
 
 			// Retrieve the linker
-			IAssemblyLinker linker = _compiler.Pipeline.FindFirst<IAssemblyLinker>();
+			IAssemblyLinker linker = this.compiler.Pipeline.FindFirst<IAssemblyLinker>();
 			// The linker section to move this field into
 			SectionKind section;
 			// Does this field have an RVA?
@@ -182,7 +198,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void InitializeStaticValueFromRVA(Stream stream, int size, RuntimeField field)
 		{
-			using (Stream source = _compiler.Assembly.GetDataSection(field.RVA.ToInt64())) {
+			using (Stream source = this.compiler.Assembly.GetDataSection(field.RVA.ToInt64())) {
 				byte[] data = new byte[size];
 				source.Read(data, 0, size);
 				stream.Write(data, 0, size);

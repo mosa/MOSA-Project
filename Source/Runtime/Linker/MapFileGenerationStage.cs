@@ -22,6 +22,8 @@ namespace Mosa.Runtime.Linker
 	public sealed class MapFileGenerationStage : IAssemblyCompilerStage, IPipelineStage
     {
         #region Data members
+		
+		private IAssemblyLinker linker;
 
         /// <summary>
         /// Holds the text writer used to emit the map file.
@@ -52,30 +54,31 @@ namespace Mosa.Runtime.Linker
 		#endregion // IPipelineStage members
 
         #region IAssemblyCompilerStage Members
+		
+		public void Setup(AssemblyCompiler compiler)
+		{
+			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+		}
 
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(AssemblyCompiler compiler)
+        public void Run()
         {
-            // Retrieve the linker
-            IAssemblyLinker linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
-
             // Emit map file _header
             _writer.WriteLine(linker.OutputFile);
             _writer.WriteLine();
-            _writer.WriteLine("Timestamp is {0}", linker.TimeStamp);
+            _writer.WriteLine("Timestamp is {0}", this.linker.TimeStamp);
             _writer.WriteLine();
-            _writer.WriteLine("Preferred load address is {0:x16}", linker.BaseAddress);
+            _writer.WriteLine("Preferred load address is {0:x16}", this.linker.BaseAddress);
             _writer.WriteLine();
 
             // Emit the sections
-            EmitSections(linker);
+            EmitSections(this.linker);
             _writer.WriteLine();
 
             // Emit all symbols
-            EmitSymbols(linker);
+            EmitSymbols(this.linker);
         }
 
         #endregion // IAssemblyCompilerStage Members

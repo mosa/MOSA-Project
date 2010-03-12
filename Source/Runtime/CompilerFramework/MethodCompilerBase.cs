@@ -15,6 +15,7 @@ using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Runtime;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 
@@ -33,7 +34,6 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </remarks>
 	public class MethodCompilerBase : CompilerBase, IMethodCompiler, IDisposable
 	{
-
 		#region Data Members
 
 		/// <summary>
@@ -41,10 +41,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private readonly List<Operand> _parameters;
 
+		private readonly ICompilationSchedulerStage compilationScheduler;
+		
 		/// <summary>
 		/// The Architecture of the compilation target.
 		/// </summary>
-		private IArchitecture _architecture;
+		private IArchitecture _architecture;		
 
 		/// <summary>
 		/// Holds the _linker used to resolve external symbols.
@@ -106,6 +108,7 @@ namespace Mosa.Runtime.CompilerFramework
 		protected MethodCompilerBase(
 			IAssemblyLinker linker,
 			IArchitecture architecture,
+		    ICompilationSchedulerStage compilationScheduler,
 			IMetadataModule module,
 			RuntimeType type,
 			RuntimeMethod method)
@@ -115,9 +118,13 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (linker == null)
 				throw new ArgumentNullException(@"linker");
+			
+			if (compilationScheduler == null)
+				throw new ArgumentNullException(@"compilationScheduler");
 
-			_architecture = architecture;
 			_linker = linker;
+			_architecture = architecture;
+			this.compilationScheduler = compilationScheduler;
 			_method = method;
 			_module = module;
 			_parameters = new List<Operand>(new Operand[_method.Parameters.Count]);
@@ -190,6 +197,11 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return _basicBlocks; }
 			set { _basicBlocks = value; }
 		}
+
+        public ICompilationSchedulerStage Scheduler
+        {
+            get { return this.compilationScheduler; }
+        }
 
 		#endregion // Properties
 
@@ -294,18 +306,20 @@ namespace Mosa.Runtime.CompilerFramework
 			// stage to a different memory location, it should actually be a new one so sharing object
 			// only saves runtime space/perf.
 			Debug.Assert(_localsSig != null, @"Method doesn't have _locals.");
-			Debug.Assert(index <= _localsSig.Types.Length, @"Invalid local index requested.");
-			if (_localsSig == null || _localsSig.Types.Length <= index)
+			Debug.Assert(index < _localsSig.Types.Length, @"Invalid local index requested.");
+			if (_localsSig == null || _localsSig.Types.Length < index)
 				throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
-
 
 			Operand local = null;
 			if (_locals.Count > index)
 				local = _locals[index];
 
 			if (local == null) {
-				local = new LocalVariableOperand(
-					_architecture.StackFrameRegister, String.Format("L_{0}", index), index, _localsSig.Types[index]);
+				
+				SigType signatureType = _localsSig.Types[index];
+				this.ScheduleDependencyForCompilation(signatureType);
+								
+				local = new LocalVariableOperand(_architecture.StackFrameRegister, String.Format("L_{0}", index), index, signatureType);
 				_locals[index] = local;
 			}
 
@@ -349,13 +363,46 @@ namespace Mosa.Runtime.CompilerFramework
 			if (_parameters.Count > index)
 				param = _parameters[index];
 
-			if (param == null) {
-				param = new ParameterOperand(
-					_architecture.StackFrameRegister, parameters[index], sig.Parameters[index]);
+			if (param == null) 
+			{
+				SigType parameterType = sig.Parameters[index];			
+				param = new ParameterOperand(_architecture.StackFrameRegister, parameters[index], parameterType);
 				_parameters[index] = param;
 			}
 
 			return param;
+		}
+		
+		private void ScheduleDependencyForCompilation(SigType signatureType)
+		{
+			RuntimeType runtimeType = null;
+			
+			TypeSigType typeSigType = signatureType as TypeSigType;
+			if (typeSigType != null)
+			{
+				runtimeType = this.LoadDependentType(typeSigType.Token);
+			}
+			else
+			{
+				GenericInstSigType genericSignatureType = signatureType as GenericInstSigType;
+				if (genericSignatureType != null)
+				{
+					RuntimeType genericType = this.LoadDependentType(genericSignatureType.BaseType.Token);
+					Console.WriteLine(@"Loaded generic type {0}", genericType.FullName);
+					
+					runtimeType = new CilGenericType(genericType, this.Assembly, genericSignatureType, this.Method);
+				} 
+			}
+			
+			if (runtimeType != null)
+			{
+				this.compilationScheduler.ScheduleTypeForCompilation(runtimeType);
+			}
+		}
+		
+		private RuntimeType LoadDependentType(TokenTypes tokenType)
+		{
+			return RuntimeBase.Instance.TypeLoader.GetType(this.Method, this.Assembly, tokenType);
 		}
 
 		/// <summary>
@@ -367,9 +414,13 @@ namespace Mosa.Runtime.CompilerFramework
 			if (localVariableSignature == null)
 				throw new ArgumentNullException(@"localVariableSignature");
 
-
 			_localsSig = localVariableSignature;
-			_locals = new List<Operand>(new Operand[_localsSig.Types.Length]);
+			
+			int count = _localsSig.Types.Length;
+			this._locals = new List<Operand>(count);
+			for (int index = 0; index < count; index++)
+				this._locals.Add(null);
+			
 			_nextStackSlot = _locals.Count + 1;
 		}
 

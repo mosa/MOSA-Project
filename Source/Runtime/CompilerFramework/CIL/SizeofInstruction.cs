@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			TokenTypes token;
 			decoder.Decode(out token);
 			//throw new NotImplementedException();
-			uint size = (uint)ObjectModelUtility.ComputeTypeSize(token, decoder.Compiler.Assembly.Metadata, decoder.Compiler.Architecture);
+			uint size = (uint)ObjectModelUtility.ComputeTypeSize(decoder.Method, token, decoder.Compiler.Assembly.Metadata, decoder.Compiler.Architecture);
 			ctx.Result = new Operands.ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.U4), size);
 			/*
 				TypeReference _typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);

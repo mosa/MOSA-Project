@@ -9,13 +9,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Tables;
-using System.Diagnostics;
 using Mosa.Runtime.Metadata.Blobs;
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Runtime.Vm 
 {
@@ -117,7 +118,7 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         private void LocateAttributeCtorMethod()
         {
-            _ctorMethod = RuntimeBase.Instance.TypeLoader.GetMethod(_module, _ctor);
+            _ctorMethod = RuntimeBase.Instance.TypeLoader.GetMethod(DefaultSignatureContext.Instance, _module, _ctor);
             Debug.Assert(null != _ctorMethod);
         }
 

@@ -118,7 +118,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="type">The type.</param>
 		/// <param name="method">The method to compile.</param>
 		/// <returns>An instance of a MethodCompilerBase for the given type/method pair.</returns>
-		public abstract MethodCompilerBase CreateMethodCompiler(RuntimeType type, RuntimeMethod method);
+		public abstract MethodCompilerBase CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method);
 
 		/// <summary>
 		/// Executes the compiler using the configured stages.
@@ -131,7 +131,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			BeginCompile();
 
-			Pipeline.Execute<IAssemblyCompilerStage>(delegate(IAssemblyCompilerStage stage) { stage.Run(this); });
+			Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Run());
 
 			EndCompile();
 		}
@@ -139,7 +139,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Called when compilation is about to begin.
 		/// </summary>
-		protected virtual void BeginCompile() { }
+		protected virtual void BeginCompile() 
+		{
+			Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Setup(this));
+		}
 
 		/// <summary>
 		/// Called when compilation has completed.

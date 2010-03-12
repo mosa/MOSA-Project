@@ -17,17 +17,8 @@ namespace Mosa.Runtime.Metadata.Signatures
     /// <summary>
     /// Represents a class type in a signature.
     /// </summary>
-    public sealed class ClassSigType : SigType
+    public sealed class ClassSigType : TypeSigType
     {
-        #region Data members
-
-        /// <summary>
-        /// The token of the class type in the signature.
-        /// </summary>
-        private TokenTypes _token;
-
-        #endregion // Data members
-
         #region Construction
 
         /// <summary>
@@ -35,22 +26,11 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// </summary>
         /// <param name="token">The class definition (a type definition, type reference or type specification) token.</param>
         public ClassSigType(TokenTypes token)
-            : base(CilElementType.Class)
+            : base(token, CilElementType.Class)
         {
-            _token = token;
         }
 
         #endregion // Construction
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the type definition, reference or specification token.
-        /// </summary>
-        /// <value>The token of the class.</value>
-        public TokenTypes Token { get { return _token; } }
-
-        #endregion // Properties
 
         #region SigType Overrides
 
@@ -67,7 +47,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (null == cst)
                 return false;
 
-            return (base.Equals(other) == true && _token == cst._token);
+            return (base.Equals(other) == true && this.Token == cst.Token);
         }
 
         #endregion // SigType Overrides

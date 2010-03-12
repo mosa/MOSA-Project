@@ -47,14 +47,14 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// </summary>
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
-        protected override void ParseSignature(byte[] buffer, ref int index)
+        protected override void ParseSignature(ISignatureContext context, byte[] buffer, ref int index)
         {
             if (Field != buffer[index]) 
                 return;
 
             index++;
             _customMods = CustomMod.ParseCustomMods(buffer, ref index);
-            _type = SigType.ParseTypeSignature(buffer, ref index);
+            _type = SigType.ParseTypeSignature(context, buffer, ref index);
         }
 
         /// <summary>

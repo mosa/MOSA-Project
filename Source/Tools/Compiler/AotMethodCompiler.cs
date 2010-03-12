@@ -40,8 +40,8 @@ namespace Mosa.Tools.Compiler
         /// <param name="compiler">The AOT assembly compiler.</param>
         /// <param name="type">The type.</param>
         /// <param name="method">The method.</param>
-        public AotMethodCompiler(AotCompiler compiler, RuntimeType type, RuntimeMethod method)
-            : base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compiler.Assembly, type, method)
+        public AotMethodCompiler(AotCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
+            : base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, compiler.Assembly, type, method)
         {
             aotCompiler = compiler;
             Pipeline.AddRange(new IMethodCompilerStage[] {

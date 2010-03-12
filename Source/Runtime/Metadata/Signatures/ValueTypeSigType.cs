@@ -12,40 +12,20 @@ namespace Mosa.Runtime.Metadata.Signatures
     /// <summary>
     /// Represents a value type in a signature.
     /// </summary>
-    public sealed class ValueTypeSigType : SigType
+    public sealed class ValueTypeSigType : TypeSigType
     {
-        #region Data members
-
-        /// <summary>
-        /// Holds the type definition, reference or specification token of the value type.
-        /// </summary>
-        private readonly TokenTypes _token;
-
-        #endregion // Data members
-
         #region Construction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValueTypeSigType"/> class.
         /// </summary>
         /// <param name="token">The type definition, reference or specification token of the value type.</param>
-        public ValueTypeSigType(TokenTypes token)
-            : base(CilElementType.ValueType)
+        public ValueTypeSigType(TokenTypes token) 
+			: base(token, CilElementType.ValueType)
         {
-            _token = token;
         }
 
         #endregion // Construction
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the value type token.
-        /// </summary>
-        /// <value>The token.</value>
-        public TokenTypes Token { get { return _token; } }
-
-        #endregion // Properties
 
         #region SigType Overrides
 
@@ -62,7 +42,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             if (vtst == null)
                 return false;
 
-            return (base.Equals(other) == true && _token == vtst._token);
+            return (base.Equals(other) == true && this.Token == vtst.Token);
         }
 
         #endregion // SigType Overrides

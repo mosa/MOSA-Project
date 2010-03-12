@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.CompilerFramework;
@@ -10,27 +10,30 @@ namespace Mosa.Runtime.Linker
 	/// </summary>
 	public class ObjectFileLayoutStage : IAssemblyCompilerStage, IPipelineStage
 	{
+		private IAssemblyLinker linker;
+		
 		#region Methods
 
 		/// <summary>
 		/// Lays out the sections in order of appearance.
 		/// </summary>
-		/// <param name="linker">The linker.</param>
-		protected virtual void LayoutSections(IAssemblyLinker linker)
+		protected virtual void LayoutSections()
 		{
-			long fileAlignment = linker.LoadSectionAlignment;
-			long sectionAlignment = linker.VirtualSectionAlignment;
+			long fileAlignment = this.linker.LoadSectionAlignment;
+			long sectionAlignment = this.linker.VirtualSectionAlignment;
 
 			// Reset the size of the image
 			long virtualSizeOfImage = sectionAlignment;
 			long fileSizeOfImage = fileAlignment;
 
 			// Move all sections to their right positions
-			foreach (LinkerSection ls in linker.Sections) {
+			foreach (LinkerSection ls in this.linker.Sections) 
+			{
 				// Only use a section with something inside
-				if (ls.Length > 0) {
+				if (ls.Length > 0) 
+				{
 					// Set the section virtualAddress
-					ls.VirtualAddress = new IntPtr(linker.BaseAddress + virtualSizeOfImage);
+					ls.VirtualAddress = new IntPtr(this.linker.BaseAddress + virtualSizeOfImage);
 					ls.Offset = fileSizeOfImage;
 
 					// Update the file size
@@ -47,11 +50,10 @@ namespace Mosa.Runtime.Linker
 		/// <summary>
 		/// Lays the symbols out according to their offset in the section.
 		/// </summary>
-		/// <param name="linker">The linker.</param>
-		protected virtual void LayoutSymbols(IAssemblyLinker linker)
+		protected virtual void LayoutSymbols()
 		{
 			// Adjust the symbol addresses
-			foreach (LinkerSymbol symbol in linker.Symbols) {
+			foreach (LinkerSymbol symbol in this.linker.Symbols) {
 				LinkerSection ls = linker.GetSection(symbol.Section);
 				symbol.Offset = ls.Offset + symbol.SectionAddress;
 				symbol.VirtualAddress = new IntPtr(ls.VirtualAddress.ToInt64() + symbol.SectionAddress);
@@ -78,19 +80,21 @@ namespace Mosa.Runtime.Linker
 		#endregion // IPipelineStage members
 
 		#region IAssemblyCompilerStage Overrides
+		
+		public void Setup(AssemblyCompiler compiler)
+		{
+			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+			if (linker == null)
+				throw new InvalidOperationException(@"ObjectFileLayoutStage needs a linker.");
+		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(AssemblyCompiler compiler)
+		public void Run()
 		{
-			IAssemblyLinker linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
-			if (linker == null)
-				throw new InvalidOperationException(@"ObjectFileLayoutStage needs a linker.");
-
-			LayoutSections(linker);
-			LayoutSymbols(linker);
+			LayoutSections();
+			LayoutSymbols();
 		}
 
 		#endregion // IAssemblyCompilerStage Overrides

@@ -21,7 +21,7 @@ namespace Mosa.Tools.Compiler.Boot
 	public class BootFormatSelector : IAssemblyCompilerStage, IHasOptions, IPipelineStage
 	{
 		#region Data Members
-
+		
 		/// <summary>
 		/// Holds the real stage implementation to use.
 		/// </summary>
@@ -104,15 +104,20 @@ namespace Mosa.Tools.Compiler.Boot
 				return ((IPipelineStage)implementation).Name;
 			}
 		}
+		
+		public void Setup(AssemblyCompiler compiler)
+		{
+			if (this.implementation != null)
+				this.implementation.Setup(compiler);
+		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(AssemblyCompiler compiler)
+		public void Run()
 		{
 			if (this.implementation != null)
-				implementation.Run(compiler);
+				this.implementation.Run();
 		}
 
 		#endregion // IAssemblyCompilerStage

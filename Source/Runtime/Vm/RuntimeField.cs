@@ -38,7 +38,7 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Holds the type of the field.
 		/// </summary>
-		private SigType type;
+		private FieldSignature signature;
 
 		#endregion // Data members
 
@@ -53,7 +53,7 @@ namespace Mosa.Runtime.Vm
 			base(0, module, declaringType, null)
 		{
 		}
-
+		
 		#endregion // Construction
 
 		#region Properties
@@ -77,6 +77,22 @@ namespace Mosa.Runtime.Vm
 			get { return rva; }
 			protected set { this.rva = value; }
 		}
+		
+		public FieldSignature Signature
+		{
+			get
+			{
+				if (this.signature == null)
+					this.signature = this.GetSignature();
+				
+				return this.signature;
+			}
+			
+			protected set
+			{
+				this.signature = value;
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the type.
@@ -86,15 +102,7 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				if (this.type != null)
-					return this.type;
-
-				this.type = this.GetFieldType();
-				return this.type;
-			}
-			set
-			{
-				type = value;
+				return this.Signature.Type;
 			}
 		}
 
@@ -106,7 +114,7 @@ namespace Mosa.Runtime.Vm
 		/// Gets the type of the field.
 		/// </summary>
 		/// <returns>The type of the field.</returns>
-		public abstract SigType GetFieldType();
+		protected abstract FieldSignature GetSignature();
 
 		#endregion // Methods
 

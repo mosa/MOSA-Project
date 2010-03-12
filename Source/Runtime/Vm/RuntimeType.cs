@@ -13,6 +13,7 @@ using System.Text;
 
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;
 using System.Diagnostics;
 
@@ -21,7 +22,7 @@ namespace Mosa.Runtime.Vm
     /// <summary>
     /// Internal runtime representation of a type.
     /// </summary>
-    public abstract class RuntimeType : RuntimeMember, IEquatable<RuntimeType>
+    public abstract class RuntimeType : RuntimeMember, IEquatable<RuntimeType>, ISignatureContext
     {
         #region Data members
 
@@ -58,7 +59,7 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Methods of the type.
         /// </summary>
-        private IList<RuntimeMethod> methods;
+        private IEnumerable<RuntimeMethod> methods;
 
         /// <summary>
         /// Holds the fields of this type.
@@ -143,7 +144,7 @@ namespace Mosa.Runtime.Vm
         /// Returns the methods of the type.
         /// </summary>
         /// <value>The methods.</value>
-        public IList<RuntimeMethod> Methods
+        public IEnumerable<RuntimeMethod> Methods
         {
             get { return this.methods; }
             protected set
@@ -355,5 +356,16 @@ namespace Mosa.Runtime.Vm
         }
 
         #endregion // Object Overrides
+		
+        public SigType GetGenericMethodArgument(int index)
+        {
+			return DefaultSignatureContext.Instance.GetGenericMethodArgument(index);
+        }
+        
+        
+        public virtual SigType GetGenericTypeArgument(int index)
+        {
+			return DefaultSignatureContext.Instance.GetGenericTypeArgument(index);
+        }
     }
 }

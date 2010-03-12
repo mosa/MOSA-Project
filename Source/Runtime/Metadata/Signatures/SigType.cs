@@ -146,69 +146,122 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        public static SigType ParseTypeSignature(byte[] buffer, ref int index)
+        public static SigType ParseTypeSignature(ISignatureContext context, byte[] buffer, ref int index)
         {
             SigType result;
             CilElementType type = (CilElementType)buffer[index++];
             switch (type)
             {
-                case CilElementType.Void: result = new SigType(type); break;
-                case CilElementType.Boolean: goto case CilElementType.Void;
-                case CilElementType.Char: goto case CilElementType.Void;
-                case CilElementType.I1: goto case CilElementType.Void;
-                case CilElementType.U1: goto case CilElementType.Void;
-                case CilElementType.I2: goto case CilElementType.Void;
-                case CilElementType.U2: goto case CilElementType.Void;
-                case CilElementType.I4: goto case CilElementType.Void;
-                case CilElementType.U4: goto case CilElementType.Void;
-                case CilElementType.I8: goto case CilElementType.Void;
-                case CilElementType.U8: goto case CilElementType.Void;
-                case CilElementType.R4: goto case CilElementType.Void;
-                case CilElementType.R8: goto case CilElementType.Void;
-                case CilElementType.String: goto case CilElementType.Void;
-                case CilElementType.Object: goto case CilElementType.Void;
-                case CilElementType.I: goto case CilElementType.Void;
-                case CilElementType.U: goto case CilElementType.Void;
-                case CilElementType.TypedByRef: goto case CilElementType.Void;
+                case CilElementType.Void: 
+					result = BuiltInSigType.Void; 
+					break;
+				
+                case CilElementType.Boolean: 
+					result = BuiltInSigType.Boolean;
+					break;
+				
+                case CilElementType.Char: 
+					result = BuiltInSigType.Char;
+					break;
+				
+                case CilElementType.I1: 
+					result = BuiltInSigType.SByte;
+					break;
+				
+                case CilElementType.U1: 
+					result = BuiltInSigType.Byte;
+					break;
+				
+                case CilElementType.I2: 
+					result = BuiltInSigType.Int16;
+					break;
+				
+                case CilElementType.U2: 
+					result = BuiltInSigType.UInt16;
+					break;
+				
+                case CilElementType.I4: 
+					result = BuiltInSigType.Int32;
+					break;
+				
+                case CilElementType.U4: 
+					result = BuiltInSigType.UInt32;
+					break;
+				
+                case CilElementType.I8: 
+					result = BuiltInSigType.Int64;
+					break;
+				
+                case CilElementType.U8: 
+					result = BuiltInSigType.UInt64;
+					break;
+				
+                case CilElementType.R4: 
+					result = BuiltInSigType.Single;
+					break;
+				
+                case CilElementType.R8: 
+					result = BuiltInSigType.Double;
+					break;
+				
+                case CilElementType.String: 
+					result = BuiltInSigType.String;
+					break;
+				
+                case CilElementType.Object: 
+					result = BuiltInSigType.Object;
+					break;
+				
+                case CilElementType.I: 
+					result = BuiltInSigType.IntPtr;
+					break;
+				
+                case CilElementType.U: 
+					result = BuiltInSigType.UIntPtr;
+					break;
+				
+                case CilElementType.TypedByRef: 
+					result = BuiltInSigType.TypedByRef;
+					break;
 
                 case CilElementType.Array:
-                    result = ParseArraySignature(buffer, ref index);
+                    result = ParseArraySignature(context, buffer, ref index);
                     break;
 
                 case CilElementType.Class:
-                    result = ParseClassSignature(buffer, ref index);
+                    result = ParseClassSignature(context, buffer, ref index);
                     break;
 
                 case CilElementType.FunctionPtr:
-                    result = ParseFunctionPointer(buffer, ref index);
+                    result = ParseFunctionPointer(context, buffer, ref index);
                     break;
 
                 case CilElementType.GenericInst:
-                    result = ParseGenericInstance(buffer, ref index);
+                    result = ParseGenericInstance(context, buffer, ref index);
                     break;
 
                 case CilElementType.MVar:
-                    result = ParseMVar(buffer, ref index);
+                    result = ParseMVar(context, buffer, ref index);
                     break;
 
                 case CilElementType.Ptr:
-                    result = ParsePointer(buffer, ref index);
+                    result = ParsePointer(context, buffer, ref index);
                     break;
 
                 case CilElementType.SZArray:
-                    result = ParseSZArraySignature(buffer, ref index);
+                    result = ParseSZArraySignature(context, buffer, ref index);
                     break;
 
                 case CilElementType.ValueType:
-                    result = ParseValueType(buffer, ref index);
+                    result = ParseValueType(context, buffer, ref index);
                     break;
 
                 case CilElementType.Var:
-                    result = ParseVar(buffer, ref index);
+                    result = ParseVar(context, buffer, ref index);
                     break;
 
                 case CilElementType.ByRef:
-                    result = ParseReference(buffer, ref index);
+                    result = ParseReference(context, buffer, ref index);
                     break;
 
                 default:
@@ -224,10 +277,10 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private static SigType ParseVar(byte[] buffer, ref int index)
+        private static SigType ParseVar(ISignatureContext context, byte[] buffer, ref int index)
         {
-            int varIdx = Utilities.ReadCompressedInt32(buffer, ref index);
-            return new VarSigType(varIdx);
+            int typeVariableIndex = Utilities.ReadCompressedInt32(buffer, ref index);
+			return context.GetGenericTypeArgument(typeVariableIndex);
         }
 
         /// <summary>
@@ -236,7 +289,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private static SigType ParseValueType(byte[] buffer, ref int index)
+        private static TypeSigType ParseValueType(ISignatureContext context, byte[] buffer, ref int index)
         {
             TokenTypes token = ReadTypeDefOrRefEncoded(buffer, ref index);
             return new ValueTypeSigType(token);
@@ -248,10 +301,10 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private static SigType ParsePointer(byte[] buffer, ref int index)
+        private static SigType ParsePointer(ISignatureContext context, byte[] buffer, ref int index)
         {
             CustomMod[] mods = CustomMod.ParseCustomMods(buffer, ref index);
-            SigType type = ParseTypeSignature(buffer, ref index);
+            SigType type = ParseTypeSignature(context, buffer, ref index);
             return new PtrSigType(mods, type);
         }
 
@@ -261,9 +314,9 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private static SigType ParseReference(byte[] buffer, ref int index)
+        private static SigType ParseReference(ISignatureContext context, byte[] buffer, ref int index)
         {
-            SigType type = ParseTypeSignature(buffer, ref index);
+            SigType type = ParseTypeSignature(context, buffer, ref index);
             return new RefSigType(type);
         }
 
@@ -273,10 +326,10 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private static SigType ParseMVar(byte[] buffer, ref int index)
+        private static SigType ParseMVar(ISignatureContext context, byte[] buffer, ref int index)
         {
-            int varIdx = Utilities.ReadCompressedInt32(buffer, ref index);
-            return new MVarSigType(varIdx);
+            int methodVariableIndex = Utilities.ReadCompressedInt32(buffer, ref index);			
+			return context.GetGenericMethodArgument(methodVariableIndex);
         }
 
         /// <summary>
@@ -285,18 +338,18 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private static SigType ParseGenericInstance(byte[] buffer, ref int index)
+        private static SigType ParseGenericInstance(ISignatureContext context, byte[] buffer, ref int index)
         {
-            SigType originalType;
+            TypeSigType originalType;
             CilElementType type = (CilElementType)buffer[index++];
             switch (type)
             {
                 case CilElementType.Class:
-                    originalType = ParseClassSignature(buffer, ref index);
+                    originalType = ParseClassSignature(context, buffer, ref index);
                     break;
 
                 case CilElementType.ValueType:
-                    originalType = ParseValueType(buffer, ref index);
+                    originalType = ParseValueType(context, buffer, ref index);
                     break;
 
                 default:
@@ -307,7 +360,7 @@ namespace Mosa.Runtime.Metadata.Signatures
             SigType[] genArgs = new SigType[genArgCount];
             for (int i = 0; i < genArgCount; i++)
             {
-                genArgs[i] = ParseTypeSignature(buffer, ref index);
+                genArgs[i] = ParseTypeSignature(context, buffer, ref index);
             }
 
             return new GenericInstSigType(originalType, genArgs);
@@ -319,7 +372,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private static SigType ParseFunctionPointer(byte[] buffer, ref int index)
+        private static SigType ParseFunctionPointer(ISignatureContext context, byte[] buffer, ref int index)
         {
             TokenTypes token = (TokenTypes)Utilities.ReadCompressedInt32(buffer, ref index);
             return new FnptrSigType(token);
@@ -331,7 +384,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private static SigType ParseClassSignature(byte[] buffer, ref int index)
+        private static TypeSigType ParseClassSignature(ISignatureContext context, byte[] buffer, ref int index)
         {
             TokenTypes token = ReadTypeDefOrRefEncoded(buffer, ref index);
             return new ClassSigType(token);
@@ -343,9 +396,9 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private static SigType ParseArraySignature(byte[] buffer, ref int index)
+        private static SigType ParseArraySignature(ISignatureContext context, byte[] buffer, ref int index)
         {
-            SigType elementType = ParseTypeSignature(buffer, ref index);
+            SigType elementType = ParseTypeSignature(context, buffer, ref index);
             int rank, count;
             int[] sizes, lowerBounds;
 
@@ -369,10 +422,10 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        private static SigType ParseSZArraySignature(byte[] buffer, ref int index)
+        private static SigType ParseSZArraySignature(ISignatureContext context, byte[] buffer, ref int index)
         {
             CustomMod[] customMods = CustomMod.ParseCustomMods(buffer, ref index);
-            SigType elementType = ParseTypeSignature(buffer, ref index);
+            SigType elementType = ParseTypeSignature(context, buffer, ref index);
             return new SZArraySigType(customMods, elementType);
         }
 

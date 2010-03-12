@@ -21,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Interface provided by method compilers.
     /// </summary>
-    public interface IMethodCompiler
+    public interface IMethodCompiler : IDisposable
     {
         /// <summary>
         /// Retrieves the architecture to compile for.
@@ -45,6 +45,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <value>The method being compiled.</value>
         RuntimeMethod Method { get; }
+
+        /// <summary>
+        /// Retrieves the compilation scheduler.
+        /// </summary>
+        /// <value>The compilation scheduler.</value>
+        ICompilationSchedulerStage Scheduler { get; }
 
         /// <summary>
         /// Creates a new temporary variable operand.
@@ -127,5 +133,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
 		BasicBlock CreateBlock(int label, int index);
+		
+		void Compile();
     }
 }

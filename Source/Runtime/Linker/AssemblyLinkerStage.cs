@@ -33,6 +33,8 @@ namespace Mosa.Runtime.Linker
 		/// Holds the base virtualAddress of the link result.
 		/// </summary>
 		private long baseAddress;
+		
+		private AssemblyCompiler compiler;
 
 		/// <summary>
 		/// Holds the entry point of the compiled binary.
@@ -81,12 +83,16 @@ namespace Mosa.Runtime.Linker
 		#endregion //  IPipelineStage Members
 
 		#region IAssemblyCompilerStage Members
+		
+		public virtual void Setup(AssemblyCompiler compiler)
+		{
+			this.compiler = compiler;
+		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public virtual void Run(AssemblyCompiler compiler)
+		public virtual void Run()
 		{
 			long address;
 
@@ -104,7 +110,16 @@ namespace Mosa.Runtime.Linker
 
 			Debug.Assert(_linkRequests.Count == 0, @"AssemblyLinker has found unresolved _symbols.");
 			if (_linkRequests.Count != 0)
-				throw new LinkerException(@"Unresolved _symbols.");
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine(@"Unresolved symbols:");
+				foreach (string member in _linkRequests.Keys)
+				{
+					sb.AppendFormat("\t{0}", member);
+				}
+				
+				throw new LinkerException(sb.ToString());
+			}
 		}
 
 		#endregion // IAssemblyCompilerStage Members
@@ -214,6 +229,7 @@ namespace Mosa.Runtime.Linker
 		{
 			// Create a canonical symbol name
 			string name = CreateSymbolName(member);
+            Debug.WriteLine(@"Allocating stream for symbol " + name);
 
 			// Create a stream
 			return Allocate(name, section, size, alignment);
@@ -422,6 +438,16 @@ namespace Mosa.Runtime.Linker
 		}
 
 		#endregion // IAssemblyLinker Members
+		
+		public AssemblyCompiler Compiler 
+		{
+			get 
+			{
+				return this.compiler;
+			}
+		}
+		
+		
 
 		#region Internals
 
@@ -458,49 +484,56 @@ namespace Mosa.Runtime.Linker
 
 		private string CreateSymbolName(RuntimeMethod symbol)
 		{
-			if (symbol == null)
-				throw new ArgumentNullException("symbol");
+            //if (symbol == null)
+            //    throw new ArgumentNullException("symbol");
 
-			// TODO: If it is a generic method instance, then the symbol name needs to be carefully constructed. ~BMarkham,2/18/09
-			if (symbol.IsGeneric)
-				throw new NotImplementedException();
+            //// TODO: If it is a generic method instance, then the symbol name needs to be carefully constructed. ~BMarkham,2/18/09
+            //if (symbol.IsGeneric)
+            //    throw new NotImplementedException();
 
-			StringBuilder sb = new StringBuilder();
-			sb.Append(CreateSymbolName(symbol.DeclaringType));
-			sb.Append('.');
-			sb.Append(symbol.Name);
-			sb.Append('(');
-			bool hasEmittedSignaturePart = false;
-			foreach (SigType parameterSignatureType in symbol.Signature.Parameters) {
-				if (hasEmittedSignaturePart)
-					sb.Append(',');
-				sb.Append(parameterSignatureType.ToSymbolPart()); // FIXME : This obviously doesn't work! We need to emit class names.
-				hasEmittedSignaturePart = true;
-			}
-			sb.Append(')');
-			return sb.ToString();
+            //StringBuilder sb = new StringBuilder();
+            //sb.Append(CreateSymbolName(symbol.DeclaringType));
+            //sb.Append('.');
+            //sb.Append(symbol.Name);
+            //sb.Append('(');
+            //bool hasEmittedSignaturePart = false;
+            //foreach (SigType parameterSignatureType in symbol.Signature.Parameters) {
+            //    if (hasEmittedSignaturePart)
+            //        sb.Append(',');
+            //    sb.Append(parameterSignatureType.ToSymbolPart()); // FIXME : This obviously doesn't work! We need to emit class names.
+            //    hasEmittedSignaturePart = true;
+            //}
+            //sb.Append(')');
+            //return sb.ToString();
+
+            string symbolName = symbol.ToString();
+            return symbolName;
 		}
 
 		private string CreateSymbolName(RuntimeType symbol)
 		{
-			if (symbol == null)
-				throw new ArgumentNullException("symbol");
-			if (symbol.IsGeneric)
-				throw new NotImplementedException();
-			StringBuilder sb = new StringBuilder();
-			if (symbol.DeclaringType != null) {
-				sb.Append(CreateSymbolName(symbol.DeclaringType));
-				sb.Append('+');
-			}
-			else {
-				if (!string.IsNullOrEmpty(symbol.Namespace)) {
-					sb.Append(symbol.Namespace);
-					sb.Append('.');
-				}
-			}
-			sb.Append(symbol.Name);
-			return sb.ToString();
-		}
+            //if (symbol == null)
+            //    throw new ArgumentNullException("symbol");
+            //if (symbol.IsGeneric)
+            //    throw new NotImplementedException();
+            //StringBuilder sb = new StringBuilder();
+            //if (symbol.DeclaringType != null) {
+            //    sb.Append(CreateSymbolName(symbol.DeclaringType));
+            //    sb.Append('+');
+            //}
+            //else {
+            //    if (!string.IsNullOrEmpty(symbol.Namespace)) {
+            //        sb.Append(symbol.Namespace);
+            //        sb.Append('.');
+            //    }
+            //}
+            //sb.Append(symbol.Name);
+            //return sb.ToString();
+
+
+            string symbolName = symbol.ToString();
+            return symbolName;
+        }
 
 		private string CreateSymbolName(SigType signatureType)
 		{

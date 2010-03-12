@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -56,6 +56,18 @@ namespace Mosa.Runtime.Metadata.Runtime
             //base.Offset = offset; ?
         }
 
+		public CilRuntimeField(RuntimeField genericField, IMetadataModule module, FieldSignature signature) :
+			base(module, genericField.DeclaringType)
+		{
+			this.Name = genericField.Name;
+			this.Attributes = genericField.Attributes;
+			this.RVA = genericField.RVA;
+			this.Signature = signature;
+			
+			this.SetAttributes(genericField.CustomAttributes);
+		}
+
+
         #endregion // Construction
 
         #region RuntimeField Overrides
@@ -80,11 +92,11 @@ namespace Mosa.Runtime.Metadata.Runtime
         /// Gets the type of the field.
         /// </summary>
         /// <returns>The type of the field.</returns>
-        public override SigType GetFieldType()
+        protected override FieldSignature GetSignature()
         {
             FieldSignature fsig = new FieldSignature();
-            fsig.LoadSignature(this.Module.Metadata, this.signature);
-            return fsig.Type;
+            fsig.LoadSignature(this.DeclaringType, this.Module.Metadata, this.signature);
+            return fsig;
         }
 
         /// <summary>
